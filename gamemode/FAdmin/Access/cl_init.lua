@@ -164,7 +164,7 @@ ContinueNewGroup = function(ply, name, admin_access)
 		if (Padmin_access - 1) <= admin_access then
 			chkBox:SetValue(true)
 			chkBox.Button:SetDisabled(true)
-			chkBox.Button:SetType("close")
+			chkBox.Button:SetText("X")
 			chkBox.Label.OnMouseReleased = function() end
 		end
 

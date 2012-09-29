@@ -1,5 +1,5 @@
 function GM:Notify(ply, msgtype, len, msg)
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 	umsg.Start("_Notify", ply)
 		umsg.String(msg)
 		umsg.Short(msgtype)
@@ -29,6 +29,12 @@ function GM:TalkToRange(ply, PlayerName, Message, size)
 	for k, v in pairs(ents) do
 		if v:IsPlayer() then
 			filter:AddPlayer(v)
+
+			for _, admin in pairs(player.GetAll()) do
+				if admin.FAdminSpectating == v then
+					filter:AddPlayer(admin)
+				end
+			end
 		end
 	end
 
@@ -109,4 +115,19 @@ function GM:IsEmpty(vector, ignore)
 		end
 	end
 	return a and b
+end
+
+function AdminLog(message, colour)
+	local RF = RecipientFilter()
+	for k,v in pairs(player.GetAll()) do
+		if v:IsAdmin() then
+			RF:AddPlayer(v)
+		end
+	end
+	umsg.Start("DRPLogMsg", RF)
+		umsg.Short(colour.r)
+		umsg.Short(colour.g)
+		umsg.Short(colour.b) -- Alpha is not needed
+		umsg.String(message)
+	umsg.End()
 end

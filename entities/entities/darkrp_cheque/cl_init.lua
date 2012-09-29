@@ -2,13 +2,13 @@ include("shared.lua")
 
 function ENT:Draw()
 	self:DrawModel()
-	if not ValidEntity(self.dt.owning_ent) or not ValidEntity(self.dt.recipient) then return end
+	if not IsValid(self.dt.owning_ent) or not IsValid(self.dt.recipient) then return end
 
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
 
 	local amount = tostring(self.dt.amount) or "0"
-	local owner = (ValidEntity(self.dt.owning_ent) and self.dt.owning_ent.Name and self.dt.owning_ent:Name()) or "N/A"
+	local owner = (IsValid(self.dt.owning_ent) and self.dt.owning_ent.Name and self.dt.owning_ent:Name()) or "N/A"
 	local recipient = (self.dt.recipient.Name and self.dt.recipient:Name()) or "N/A"
 
 	surface.SetFont("ChatFont")

@@ -39,7 +39,7 @@ function GM.ques:Create(question, quesid, ent, delay, callback, fromPly, toPly, 
 		umsg.Float(delay)
 	umsg.End()
 
-	timer.Create(quesid .. "timer", delay, 1, GAMEMODE.ques.HandleQuestionEnd, quesid, true)
+	timer.Create(quesid .. "timer", delay, 1, GAMEMODE.ques.HandleQuestionEnd, function() quesid(true) end)
 end
 
 function GM.ques.DestroyQuestionsWithEnt(ent)

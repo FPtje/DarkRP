@@ -1,19 +1,36 @@
-GM.Version = "2.4.2"
+GM.Version = "2.4.3"
 GM.Name = "DarkRP "..GM.Version
 GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
-
-require("datastream")
 
 DeriveGamemode("sandbox")
 util.PrecacheSound("earthquake.mp3")
 CUR = "$"
 
+/*---------------------------------------------------------------------------
+Fonts
+---------------------------------------------------------------------------*/
+surface.CreateFont ("DarkRPHUD1", {
+	size = 16,
+	weight = 600,
+	antialias = true,
+	shadow = true,
+	font = "DejaVu Sans"})
+surface.CreateFont ("DarkRPHUD2", {
+	size = 23,
+	weight = 400,
+	antialias = true,
+	shadow = false,
+	font = "coolvetica"})
+
+/*---------------------------------------------------------------------------
+Names
+---------------------------------------------------------------------------*/
 -- Make sure the client sees the RP name where they expect to see the name
 local pmeta = FindMetaTable("Player")
 
 pmeta.SteamName = pmeta.Name
 function pmeta:Name()
-	if not ValidEntity(self) then return "" end
+	if not self or not self.IsValid or not IsValid(self) then return "" end
 
 	self.DarkRPVars = self.DarkRPVars or {}
 	if GetConVarNumber("allowrpnames") == 0 then
@@ -57,14 +74,20 @@ local function DisplayNotify(msg)
 end
 usermessage.Hook("_Notify", DisplayNotify)
 
-local function LoadModules(msg)
-	local num = msg:ReadShort()
+local function LoadModules()
+	local root = GAMEMODE.FolderName.."/gamemode/modules/"
 
-	for n = 1, num do
-		include(GAMEMODE.FolderName.."/gamemode/modules/" .. msg:ReadString())
+	local _, folders = file.Find(root.."*", LUA_PATH)
+
+	for _, folder in SortedPairs(folders, true) do
+		for _, File in SortedPairs(file.Find(root .. folder .."/cl_*.lua", LUA_PATH), true) do
+			include(root.. folder .. "/" ..File)
+		end
+		for _, File in SortedPairs(file.Find(root .. folder .."/sh_*.lua", LUA_PATH), true) do
+			include(root.. folder .. "/" ..File)
+		end
 	end
 end
-usermessage.Hook("LoadModules", LoadModules)
 
 LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
 for k,v in pairs(player.GetAll()) do
@@ -96,7 +119,12 @@ include("FPP/client/FPP_HUD.lua")
 include("FPP/client/FPP_Buddies.lua")
 include("FPP/sh_CPPI.lua")
 
-surface.CreateFont("akbar", 20, 500, true, false, "AckBarWriting")
+surface.CreateFont("AckBarWriting", {
+	size = 20,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "akbar"})
 
 -- Copy from FESP(made by FPtje Falco)
 -- This is no stealing since I made FESP myself.
@@ -214,7 +242,7 @@ local function DoSpecialEffects(Type)
 		elseif thetype == "deathpov" then
 			hook.Add("CalcView", "rp_deathPOV", function(ply, origin, angles, fov)
 				local Ragdoll = ply:GetRagdollEntity()
-				if not ValidEntity(Ragdoll) then return end
+				if not IsValid(Ragdoll) then return end
 
 				local head = Ragdoll:LookupAttachment("eyes")
 				head = Ragdoll:GetAttachment(head)
@@ -274,16 +302,16 @@ local function RPSelectwhohearit(group)
 		local h = l - (#playercolors * 20) - 20
 		local AllTalk = GetConVarNumber("alltalk") == 1
 		if #playercolors <= 0 and ((HearMode ~= "talk through OOC" and HearMode ~= "advert" and not AllTalk) or (AllTalk and HearMode ~= "talk" and HearMode ~= "me") or HearMode == "speak" ) then
-			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_noone, HearMode), "ScoreboardText", Color(0,0,0,120), Color(255,0,0,255))
+			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_noone, HearMode), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
 		elseif HearMode == "talk through OOC" or HearMode == "advert" then
-			draw.WordBox(2, w, h, LANGUAGE.hear_everyone, "ScoreboardText", Color(0,0,0,120), Color(0,255,0,255))
+			draw.WordBox(2, w, h, LANGUAGE.hear_everyone, "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
 		elseif not AllTalk or (AllTalk and HearMode ~= "talk" and HearMode ~= "me") then
-			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_certain_persons, HearMode), "ScoreboardText", Color(0,0,0,120), Color(0,255,0,255))
+			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_certain_persons, HearMode), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
 		end
 
 		for k,v in pairs(playercolors) do
 			if v.Nick then
-				draw.WordBox(2, w, h + k*20, v:Nick(), "ScoreboardText", Color(0,0,0,120), Color(255,255,255,255))
+				draw.WordBox(2, w, h + k*20, v:Nick(), "DarkRPHUD1", Color(0,0,0,160), Color(255,255,255,255))
 			end
 		end
 	end)
@@ -391,12 +419,9 @@ function GM:ChatTextChanged(text)
 end
 
 function GM:PlayerStartVoice(ply)
-	if ply == LocalPlayer() and LocalPlayer().DarkRPVars and ValidEntity(LocalPlayer().DarkRPVars.phone) then
-		return
-	end
 	isSpeaking = true
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-	if ply == LocalPlayer() and GetConVarNumber("sv_alltalk") == 0 and GetConVarNumber("voiceradius") == 1 and not ValidEntity(LocalPlayer().DarkRPVars.phone) then
+	if ply == LocalPlayer() and GetConVarNumber("sv_alltalk") == 0 and GetConVarNumber("voiceradius") == 1 then
 		HearMode = "speak"
 		RPSelectwhohearit()
 	end
@@ -409,17 +434,6 @@ function GM:PlayerStartVoice(ply)
 end
 
 function GM:PlayerEndVoice(ply) //voice/icntlk_pl.vtf
-	if LocalPlayer().DarkRPVars and ValidEntity(LocalPlayer().DarkRPVars.phone) then
-		ply.DRPIsTalking = false
-		timer.Simple(0.2, function()
-			if ValidEntity(LocalPlayer().DarkRPVars.phone) then
-				LocalPlayer():ConCommand("+voicerecord")
-			end
-		end)
-		self.BaseClass:PlayerEndVoice(ply)
-		return
-	end
-
 	isSpeaking = false
 
 	if ply == LocalPlayer() and GetConVarNumber("sv_alltalk") == 0 and GetConVarNumber("voiceradius") == 1 then
@@ -439,7 +453,7 @@ end
 
 function GM:PlayerBindPress(ply,bind,pressed)
 	self.BaseClass:PlayerBindPress(ply, bind, pressed)
-	if ply == LocalPlayer() and ValidEntity(ply:GetActiveWeapon()) and string.find(string.lower(bind), "attack2") and ply:GetActiveWeapon():GetClass() == "weapon_bugbait" then
+	if ply == LocalPlayer() and IsValid(ply:GetActiveWeapon()) and string.find(string.lower(bind), "attack2") and ply:GetActiveWeapon():GetClass() == "weapon_bugbait" then
 		LocalPlayer():ConCommand("_hobo_emitsound")
 	end
 	return
@@ -461,7 +475,7 @@ local function AddToChat(msg)
 	local text = msg:ReadString()
 	if text and text ~= "" then
 		chat.AddText(col1, name, col2, ": "..text)
-		if ValidEntity(ply) then
+		if IsValid(ply) then
 			hook.Call("OnPlayerChat", nil, ply, text, false, ply:Alive())
 		end
 	else
@@ -480,35 +494,43 @@ local function GetAvailableVehicles()
 end
 concommand.Add("rp_getvehicles", GetAvailableVehicles)
 
-local function RetrieveDoorData(handler, id, encoded, decoded)
-	-- decoded[1] = Entity you were looking at
-	-- Decoded[2] = table of that door
-	if not decoded[1] or not decoded[1].IsValid or not ValidEntity(decoded[1]) then return end
+local function AdminLog(um)
+	local colour = Color(um:ReadShort(), um:ReadShort(), um:ReadShort())
+	local text = um:ReadString() .. "\n"
+	MsgC(Color(255,0,0), "[DarkRP] ")
+	MsgC(colour, text)
+end
+usermessage.Hook("DRPLogMsg", AdminLog)
 
-	if decoded[2].TeamOwn then
+local function RetrieveDoorData(len)
+	local door = net.ReadEntity()
+	local doorData = net.ReadTable()
+	if not door or not door.IsValid or not IsValid(door) then return end
+
+	if doorData.TeamOwn then
 		local tdata = {}
-		for k, v in pairs(string.Explode("\n", decoded[2].TeamOwn or "")) do
+		for k, v in pairs(string.Explode("\n", doorData.TeamOwn or "")) do
 			if v and v != "" then
 				tdata[tonumber(v)] = true
 			end
 		end
-		decoded[2].TeamOwn = tdata
+		doorData.TeamOwn = tdata
 	else
-		decoded[2].TeamOwn = nil
+		doorData.TeamOwn = nil
 	end
 
-	decoded[1].DoorData = decoded[2]
+	door.DoorData = doorData
 
 	local DoorString = "Data:\n"
-	for k,v in pairs(decoded[2]) do
+	for k,v in pairs(doorData) do
 		DoorString = DoorString .. k.."\t\t".. tostring(v) .. "\n"
 	end
 end
-datastream.Hook("DarkRP_DoorData", RetrieveDoorData)
+net.Receive("DarkRP_DoorData", RetrieveDoorData)
 
 local function UpdateDoorData(um)
 	local door = um:ReadEntity()
-	if not ValidEntity(door) then return end
+	if not IsValid(door) then return end
 
 	local var, value = um:ReadString(), um:ReadString()
 	value = tonumber(value) or value
@@ -545,7 +567,7 @@ usermessage.Hook("DRP_UpdateDoorData", UpdateDoorData)
 
 local function RetrievePlayerVar(um)
 	local ply = um:ReadEntity()
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 
 	ply.DarkRPVars = ply.DarkRPVars or {}
 
@@ -571,17 +593,17 @@ local function RetrievePlayerVar(um)
 end
 usermessage.Hook("DarkRP_PlayerVar", RetrievePlayerVar)
 
-local varsReceived
-local function InitializeDarkRPVars(handler, id, encoded, decoded)
-	if not decoded then return end
+local function InitializeDarkRPVars(len)
+	local ply = net.ReadEntity()
+	local vars = net.ReadTable()
+	if not vars then return end
+	ply.DarkRPVars = vars
 	varsReceived = true
-	for ply, vars in pairs(decoded) do
-		ply.DarkRPVars = vars
-	end
 end
-datastream.Hook("DarkRP_InitializeVars", InitializeDarkRPVars)
+net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 
 function GM:InitPostEntity()
+	LoadModules()
 	function VoiceNotify:Init()
 		self.LabelName = vgui.Create("DLabel", self)
 		self.Avatar = vgui.Create("SpawnIcon", self)
@@ -590,7 +612,7 @@ function GM:InitPostEntity()
 	function VoiceNotify:Setup(ply)
 		self.LabelName:SetText(ply:Nick())
 		self.Avatar:SetModel(ply:GetModel())
-		self.Avatar:SetIconSize(32)
+		self.Avatar:SetSize(32)
 
 		self.Color = team.GetColor(ply:Team())
 

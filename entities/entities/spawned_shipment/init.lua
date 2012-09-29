@@ -10,7 +10,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self.locked = true
-	timer.Simple(GetConVarNumber("shipmentspawntime"), function() if ValidEntity(self) then self.locked = false end end)
+	timer.Simple(GetConVarNumber("shipmentspawntime"), function() if IsValid(self) then self.locked = false end end)
 	self.damage = 100
 	self.ShareGravgun = true
 	local phys = self:GetPhysicsObject()
@@ -20,7 +20,7 @@ function ENT:Initialize()
 
 	-- Create a serverside gun model
 	-- it's required serverside to be able to get OBB information clientside
-	self.dt.gunModel = ValidEntity(self.dt.gunModel) and self.dt.gunModel or ents.Create("prop_physics")
+	self.dt.gunModel = IsValid(self.dt.gunModel) and self.dt.gunModel or ents.Create("prop_physics")
 	self.dt.gunModel:SetModel(contents.model)
 	self.dt.gunModel:SetPos(self:GetPos())
 	self.dt.gunModel:Spawn()
@@ -51,12 +51,12 @@ function ENT:Use()
 		self.locked = true -- One activation per second
 		self.sparking = true
 		self.dt.gunspawn = CurTime() + 1
-		timer.Create(self:EntIndex() .. "crate", 1, 1, self.SpawnItem, self)
+		timer.Create(self:EntIndex() .. "crate", 1, 1, function() self.SpawnItem(self) end)
 	end
 end
 
 function ENT:SpawnItem()
-	if not ValidEntity(self) then return end
+	if not IsValid(self) then return end
 	timer.Destroy(self:EntIndex() .. "crate")
 	self.sparking = false
 	local count = self.dt.count

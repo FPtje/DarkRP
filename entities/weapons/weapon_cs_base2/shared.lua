@@ -13,8 +13,18 @@ if CLIENT then
 	SWEP.CSMuzzleFlashes	= true
 
 	-- This is the font that's used to draw the death icons
-	surface.CreateFont("csd", ScreenScale(30), 500, true, true, "CSKillIcons")
-	surface.CreateFont("csd", ScreenScale(60), 500, true, true, "CSSelectIcons")
+	surface.CreateFont("CSKillIcons", {
+		size = ScreenScale(30),
+		weight = 500,
+		antialias = true,
+		shadow = true,
+		font = "csd"})
+	surface.CreateFont("CSSelectIcons", {
+		size = ScreenScale(60),
+		weight = 500,
+		antialias = true,
+		shadow = true,
+		font = "csd"})
 end
 
 SWEP.Base = "weapon_base"
@@ -104,7 +114,7 @@ function SWEP:Reload()
 	self.CurHoldType = self.HoldType
 	self.Owner:SetAnimation(PLAYER_RELOAD)
 	timer.Simple(2, function()
-		if not ValidEntity(self) then return end
+		if not IsValid(self) then return end
 		self.Reloading = false
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
@@ -175,8 +185,8 @@ function SWEP:PrimaryAttack( partofburst )
 
 	if self.FireMode == "burst" and not partofburst then
 
-		timer.Simple( 0.1, self.PrimaryAttack, self, true )
-		timer.Simple( 0.2, self.PrimaryAttack, self, true )
+		timer.Simple( 0.1, function() self:PrimaryAttack(true) end)
+		timer.Simple( 0.2, function() self:PrimaryAttack(true) end)
 
 		self.LastNonBurst = CurTime()
 
@@ -198,7 +208,7 @@ Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
 ---------------------------------------------------------*/
 function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
-	if not ValidEntity(self.Owner) then return end
+	if not IsValid(self.Owner) then return end
 	numbul = numbul or 1
 	cone = cone or 0.01
 
@@ -219,7 +229,7 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 	if ( self.Owner:IsNPC() ) then return end
 
 	// CUSTOM RECOIL !
-	if ( (SinglePlayer() && SERVER) || ( !SinglePlayer() && CLIENT && IsFirstTimePredicted() ) ) then
+	if ( (game.SinglePlayer() && SERVER) || ( !game.SinglePlayer() && CLIENT && IsFirstTimePredicted() ) ) then
 		local eyeang = self.Owner:EyeAngles()
 		eyeang.pitch = eyeang.pitch - recoil
 		self.Owner:SetEyeAngles( eyeang )
@@ -337,7 +347,7 @@ SetIronsights
 ---------------------------------------------------------*/
 
 function SWEP:SetIronsights(b)
-	if SinglePlayer() then -- Make ironsights work on SP
+	if game.SinglePlayer() then -- Make ironsights work on SP
 		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b))
 	end
 	if b then
@@ -424,7 +434,7 @@ if CLIENT then
 		local wep = um:ReadEntity()
 		local holdtype = um:ReadString()
 
-		if not ValidEntity(wep) then return end
+		if not IsValid( wep ) or not wep:IsWeapon() then return end
 
 		wep:SetWeaponHoldType(holdtype)
 	end)

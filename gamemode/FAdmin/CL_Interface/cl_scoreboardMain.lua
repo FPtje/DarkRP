@@ -10,11 +10,11 @@ function FAdmin.ScoreBoard.Main.Show()
 
 	FAdmin.ScoreBoard.ChangeView("Main")
 
-	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList = FAdmin.ScoreBoard.Main.Controls.FAdminPanelList or vgui.Create("FAdminPanelList")
-	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:EnableVerticalScrollbar(true)
-	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:SetSpacing(3)
+	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList = FAdmin.ScoreBoard.Main.Controls.FAdminPanelList or vgui.Create("DPanelList")
 	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:SetVisible(true)
 	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Clear(true)
+	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList.Padding = 3
+	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:EnableVerticalScrollbar(true)
 
 
 	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Clear(true)
@@ -52,21 +52,22 @@ function FAdmin.ScoreBoard.Main.Show()
 	Sort.Ping.Type = "Ping"
 	Sort.Ping:SetVisible(true)
 
-	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:EnableHorizontal(false)
 	FAdmin.ScoreBoard.Main.PlayerListView(Sorted:GetString(), SortDown:GetBool())
+
 	for k,v in pairs(Sort) do
 		v:SetFont("Trebuchet20")
 		v:SizeToContents()
 
 		local X, Y = v:GetPos()
 
-		v.BtnSort = vgui.Create("DSysButton")
-		v.BtnSort:SetType("down")
-		v.BtnSort.Type = "down"
+		v.BtnSort = vgui.Create("DButton")
+		v.BtnSort:SetText("")
+		v.BtnSort.Type = "Down"
+		v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "ButtonDown", panel, w, h ) end
+		v.BtnSort:SetSkin("DarkRP")
 		if Sorted:GetString() == v.Type then
 			v.BtnSort.Depressed = true
-			v.BtnSort:SetType((SortDown:GetBool() and "down") or "up")
-			v.BtnSort.Type = (SortDown:GetBool() and "down") or "up"
+			v.BtnSort.Type = (SortDown:GetBool() and "Down") or "Up"
 		end
 		v.BtnSort:SetSize(16, 16)
 		v.BtnSort:SetPos(X + v:GetWide() + 5, Y + 4)
@@ -74,13 +75,13 @@ function FAdmin.ScoreBoard.Main.Show()
 			for a,b in pairs(Sort) do
 				b.BtnSort.Depressed = (b.BtnSort == v.BtnSort)
 			end
-			v.BtnSort:SetType((v.BtnSort.Type == "down" and "up") or "down")
-			v.BtnSort.Type = (v.BtnSort.Type == "down" and "up") or "down"
+			v.BtnSort.Type = (v.BtnSort.Type == "Down" and "Up") or "Down"
+			v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "Button"..v.BtnSort.Type, panel, w, h ) end
 
 			RunConsoleCommand("FAdmin_SortPlayerList", v.Type)
-			RunConsoleCommand("FAdmin_SortPlayerListDown", (v.BtnSort.Type == "down" and "1") or "0")
+			RunConsoleCommand("FAdmin_SortPlayerListDown", (v.BtnSort.Type == "Down" and "1") or "0")
 			FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Clear(true)
-			FAdmin.ScoreBoard.Main.PlayerListView(v.Type, v.BtnSort.Type == "down")
+			FAdmin.ScoreBoard.Main.PlayerListView(v.Type, v.BtnSort.Type == "Down")
 		end
 		table.insert(FAdmin.ScoreBoard.Main.Controls, v) -- Add them to the table so they get removed when you close the scoreboard
 		table.insert(FAdmin.ScoreBoard.Main.Controls, v.BtnSort)

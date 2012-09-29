@@ -23,7 +23,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator, caller)
-	if activator:IsCP() and ValidEntity(self.dt.reporter) then
+	if activator:IsCP() and IsValid(self.dt.reporter) then
 		local memory = math.random(60, 125)
 		umsg.Start("darkrp_memory", activator)
 			umsg.Entity(self)

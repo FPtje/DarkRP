@@ -71,18 +71,18 @@ function SWEP:Think()
 				self.Weapon.reloading = false
 				return
 			end
-			
+
 			if self.queueattack then
 				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
 				self.Weapon.reloading = false
 				self.Weapon.queueattack = false
 				timer.Simple( 0.8, function()
-					if not ValidEntity( self ) then return end
+					if not IsValid( self ) then return end
 					self:PrimaryAttack()
 				end )
 				return
 			end
-			
+
 			-- Next cycle
 			self.Weapon:SetVar("reloadtimer", CurTime() + 0.3)
 			self.Weapon:SendWeaponAnim(ACT_VM_RELOAD)
@@ -100,15 +100,15 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	
+
 	if self.queueattack then return end
-	
+
 	if self.Weapon.reloading then
-	
+
 		self.queueattack = true -- this way it doesn't interupt the reload animation
 		return
 	end
 
 	self.BaseClass.PrimaryAttack( self )
-	
+
 end

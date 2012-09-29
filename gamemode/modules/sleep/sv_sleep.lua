@@ -1,4 +1,4 @@
-local KnockoutTime = 5
+KnockoutTime = 5
 
 local function ResetKnockouts(player)
 	player.SleepRagdoll = nil
@@ -7,22 +7,20 @@ end
 hook.Add("PlayerSpawn", "Knockout", ResetKnockouts)
 
 
-local function KnockoutToggle(player, command, args, caller)
+function KnockoutToggle(player, command, args, caller)
 	if not player.SleepSound then
 		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
 	end
 
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
-			if (player.Sleeping and ValidEntity(player.SleepRagdoll)) then
+			if (player.Sleeping and IsValid(player.SleepRagdoll)) then
 				player.OldHunger = player.DarkRPVars.Energy
 				player.SleepSound:Stop()
 				local ragdoll = player.SleepRagdoll
 				local health = player:Health()
-				local armor = player:Armor()
 				player:Spawn()
 				player:SetHealth(health)
-				player:SetArmor(armor)
 				player:SetPos(ragdoll:GetPos())
 				player:SetModel(ragdoll:GetModel())
 				player:SetAngles(Angle(0, ragdoll:GetPhysicsObjectNum(10):GetAngles().Yaw, 0))
@@ -124,24 +122,21 @@ AddChatCommand("/sleep", KnockoutToggle)
 AddChatCommand("/wake", KnockoutToggle)
 AddChatCommand("/wakeup", KnockoutToggle)
 
-function GM:KnockoutToggle(player, command, args, caller)
-	return KnockoutToggle(player, command, args, caller)
-end
-
 local function DamageSleepers(ent, inflictor, attacker, amount, dmginfo)
 	local ownerint = ent.OwnerINT
 	if ownerint and ownerint ~= 0 then
 		for k,v in pairs(player.GetAll()) do
 			if v:EntIndex() == ownerint then
-				if attacker == GetWorldEntity() then
+				if attacker == game.GetWorld() then
 					amount = 10
 					dmginfo:ScaleDamage(0.1)
 				end
 				v:SetHealth(v:Health() - amount)
 				if v:Health() <= 0 and v:Alive() then
-					v:Kill()
+					v:Spawn()
 					v:UnSpectate()
 					v:SetPos(ent:GetPos())
+					v:SetHealth(1)
 					v:TakeDamage(1, inflictor, attacker)
 					if v.SleepSound then
 						v.SleepSound:Stop()

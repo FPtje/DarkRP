@@ -42,7 +42,7 @@ function ENT:SpawnPlayer(pos, ang)
 		found = false
 		local find = ents.FindInSphere(pos, 20)
 		for k,v in pairs(find) do
-			if ValidEntity(v) and (v:IsPlayer() or v:GetClass() == ent_surfprop) and v ~= self and v ~= self.surfer then
+			if IsValid(v) and (v:IsPlayer() or v:GetClass() == ent_surfprop) and v ~= self and v ~= self.surfer then
 				pos = pos + Vector(0,0,100)
 				found = true
 				break
@@ -63,13 +63,13 @@ function ENT:SpawnPlayer(pos, ang)
 end
 
 function ENT:Think()
-	if not ValidEntity(self.surfer) then return end
+	if not IsValid(self.surfer) then return end
 	local ground = self.surfer:GetGroundEntity()
-	if ground ~= self and self.surfer:IsOnGround() and ValidEntity(self.raceGame) and not self.raceGame:HasFinished(self.surfer) then -- if not on the prop and not on something else
+	if ground ~= self and self.surfer:IsOnGround() and IsValid(self.raceGame) and not self.raceGame:HasFinished(self.surfer) then -- if not on the prop and not on something else
 		-- reset to last checkpoint :)
 		local checkpoint = self.dt.lastCheckpoint
 		local pos = checkpoint:GetPos() + Vector(0,0,20)
-		local ang = ValidEntity(checkpoint.dt.nextCheckpoint) and (checkpoint.dt.nextCheckpoint:GetPos() - checkpoint:GetPos()):Angle() or self:GetAngles()
+		local ang = IsValid(checkpoint.dt.nextCheckpoint) and (checkpoint.dt.nextCheckpoint:GetPos() - checkpoint:GetPos()):Angle() or self:GetAngles()
 
 		self:SpawnPlayer(pos, ang)
 	end

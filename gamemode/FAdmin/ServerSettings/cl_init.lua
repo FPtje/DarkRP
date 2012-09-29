@@ -11,27 +11,20 @@ local function SetLimits()
 	PanelList:EnableVerticalScrollbar(true)
 
 	local Form = vgui.Create("DForm", PanelList)
-	//Form:StretchToParent(5, 25, 5, 5)
 	Form:SetName("")
 
-	local Settings = util.KeyValuesToTable(file.Read("settings/server_settings/gmod.txt", true)) -- All SBox limits are in here :D
+	local Settings = util.KeyValuesToTable(file.Read("gamemodes/sandbox/sandbox.txt", "GAME")) -- All SBox limits are in here :D
 	for k, v in SortedPairs(Settings.settings or {}) do
 		if v.type == "Numeric" then
 			local left, right = Form:NumberWang(v.text, nil, v.low or 0, v.high or 1000, v.decimals or 0 )
-			left:SetFloatValue(GetConVarNumber(k))
-			left:SetValue(GetConVarNumber(k))
-			//left:GetTextArea():SetText(GetConVarNumber(k))
+			left:SetFloatValue(GetConVarNumber(v.name))
+			left:SetValue(GetConVarNumber(v.name))
 
-			local EndWang = left.EndWang
-			function left:EndWang()
-				EndWang(left)
-				RunConsoleCommand("_Fadmin", "ServerSetting", k, math.floor(self:GetFloatValue()))
-			end
-
-			function left.TextEntry:OnEnter()
-				left:SetFloatValue(tonumber(self:GetValue()))
-				left:SetValue(tonumber(self:GetValue()))
-				RunConsoleCommand("_Fadmin", "ServerSetting", k, tonumber(self:GetValue()))
+			function left:OnValueChanged(val)
+				if val == GetConVarNumber(v.name) then
+					return
+				end
+				RunConsoleCommand("_Fadmin", "ServerSetting", v.name, val)
 			end
 		end
 	end

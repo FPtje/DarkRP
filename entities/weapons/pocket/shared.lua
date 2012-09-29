@@ -1,4 +1,3 @@
-require("datastream")
 if SERVER then
 	AddCSLuaFile("shared.lua")
 end
@@ -56,7 +55,7 @@ function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
 	local trace = self.Owner:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or (SERVER and trace.Entity:IsPlayerHolding()) then
+	if not IsValid(trace.Entity) or (SERVER and trace.Entity:IsPlayerHolding()) then
 		return
 	end
 
@@ -65,7 +64,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	self:SetWeaponHoldType("pistol")
-	timer.Simple(0.2, function(wep) if wep:IsValid() then wep:SetWeaponHoldType("normal") end end, self)
+	timer.Simple(0.2, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
 
 	if CLIENT then return end
 
@@ -124,11 +123,11 @@ function SWEP:SecondaryAttack()
 	end
 
 	self:NewSetWeaponHoldType("pistol")
-	timer.Simple(0.2, function(wep) if wep:IsValid() then wep:NewSetWeaponHoldType("normal") end end, self)
+	timer.Simple(0.2, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
 
 	local ent = self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket]
 	self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket] = nil
-	if not ValidEntity(ent) then GAMEMODE:Notify(self.Owner, 1, 4, "Your pocket contains no items.") return end
+	if not IsValid(ent) then GAMEMODE:Notify(self.Owner, 1, 4, "Your pocket contains no items.") return end
 
 	local trace = {}
 	trace.start = self.Owner:EyePos()
@@ -162,7 +161,7 @@ function SWEP:Reload()
 	end
 
 	for k,v in pairs(self.Owner:GetTable().Pocket) do
-		if not ValidEntity(v) then
+		if not IsValid(v) then
 			self.Owner:GetTable().Pocket[k] = nil
 			self.Owner:GetTable().Pocket = table.ClearKeys(self.Owner:GetTable().Pocket)
 			if #self.Owner:GetTable().Pocket <= 0 then -- Recheck after the entities have been validated.
@@ -181,7 +180,7 @@ if CLIENT then
 		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
 
 		local ent = Entity(um:ReadShort())
-		if ValidEntity(ent) and not table.HasValue(LocalPlayer():GetTable().Pocket, ent) then
+		if IsValid(ent) and not table.HasValue(LocalPlayer():GetTable().Pocket, ent) then
 			table.insert(LocalPlayer():GetTable().Pocket, ent)
 		end
 	end
@@ -202,7 +201,7 @@ if CLIENT then
 		if frame and frame:IsValid() and frame:IsVisible() then return end
 		if LocalPlayer():GetActiveWeapon():GetClass() ~= "pocket" then return end
 		if not LocalPlayer():GetTable().Pocket then LocalPlayer():GetTable().Pocket = {} return end
-		for k,v in pairs(LocalPlayer():GetTable().Pocket) do if not ValidEntity(v) then table.remove(LocalPlayer():GetTable().Pocket, k) end end
+		for k,v in pairs(LocalPlayer():GetTable().Pocket) do if not IsValid(v) then table.remove(LocalPlayer():GetTable().Pocket, k) end end
 		if #LocalPlayer():GetTable().Pocket <= 0 then return end
 		LocalPlayer():GetTable().Pocket = table.ClearKeys(LocalPlayer():GetTable().Pocket)
 		frame = vgui.Create( "DFrame" )
@@ -215,10 +214,10 @@ if CLIENT then
 			frame:SetSize( #items * 64, 90 )
 			frame:Center()
 			for k,v in pairs(items) do
-				if not ValidEntity(v) then
+				if not IsValid(v) then
 					items[k] = nil
 					for a,b in pairs(LocalPlayer().Pocket) do
-						if b == v or not ValidEntity(b) then
+						if b == v or not IsValid(b) then
 							LocalPlayer():GetTable().Pocket[a] = nil
 						end
 					end
@@ -230,7 +229,7 @@ if CLIENT then
 				local icon = vgui.Create("SpawnIcon", frame)
 				icon:SetPos((k-1) * 64, 25)
 				icon:SetModel(v:GetModel())
-				icon:SetIconSize(64)
+				icon:SetSize(64, 64)
 				icon:SetToolTip()
 				icon.DoClick = function()
 					icon:SetToolTip()
@@ -248,7 +247,7 @@ if CLIENT then
 					items = table.ClearKeys(items)
 					Reload()
 					LocalPlayer():GetActiveWeapon():SetWeaponHoldType("pistol")
-					timer.Simple(0.2, function(wep) if wep:IsValid() then wep:SetWeaponHoldType("normal") end end, LocalPlayer():GetActiveWeapon())
+					timer.Simple(0.2, function() if LocalPlayer():GetActiveWeapon():IsValid() then LocalPlayer():GetActiveWeapon():SetWeaponHoldType("normal") end end)
 				end
 			end
 		end
@@ -261,7 +260,7 @@ elseif SERVER then
 		if ply:GetActiveWeapon():GetClass() ~= "pocket" then
 			return
 		end
-		if ply:GetTable().Pocket and ValidEntity(Entity(tonumber(args[1]))) then
+		if ply:GetTable().Pocket and IsValid(Entity(tonumber(args[1]))) then
 			local ent = Entity(tonumber(args[1]))
 			if not table.HasValue(ply.Pocket, ent) then return end
 
@@ -273,7 +272,7 @@ elseif SERVER then
 			ply:GetTable().Pocket = table.ClearKeys(ply:GetTable().Pocket)
 
 			ply:GetActiveWeapon():SetWeaponHoldType("pistol")
-			timer.Simple(0.2, function(wep) if wep:IsValid() then wep:SetWeaponHoldType("normal") end end, ply:GetActiveWeapon())
+			timer.Simple(0.2, function() if ply:GetActiveWeapon():IsValid() then ply:GetActiveWeapon():SetWeaponHoldType("normal") end end)
 
 			local trace = {}
 			trace.start = ply:EyePos()

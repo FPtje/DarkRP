@@ -4,7 +4,6 @@
 -- If a player uses /afk, they go into AFK mode, they will not be autodemoted and their salary is set to $0 (you can still be killed/vote demoted though!).
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
-GM:includeCS("AFK/cl_afk.lua")
 GM:AddToggleCommand("rp_afk_demote", "afkdemote", 0)
 GM:AddValueCommand("rp_afk_demotetime", "afkdemotetime", 600)
 
@@ -48,13 +47,13 @@ local function SetAFK(ply)
 		ply.AFKNpc = npc
 		npc.Owner = ply
 		npc.AFKPly = ply
-		if ValidEntity(ply:GetActiveWeapon()) then npc:Give(ply:GetActiveWeapon():GetClass()) end
+		if IsValid(ply:GetActiveWeapon()) then npc:Give(ply:GetActiveWeapon():GetClass()) end
 		npc:SetHealth(ply:Health())
 		npc:SetNoDraw(false)
 		ply:SetNoDraw(true)
 		ply:SetPos(Vector(0,0,-5000))
 		hook.Add("PlayerDeath", ply:EntIndex().."DRPNPCDeath", function(ply)
-			if not ValidEntity( ply.AFKNpc ) then hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath") return end
+			if not IsValid( ply.AFKNpc ) then hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath") return end
 			ply:SetEyeAngles(ply.AFKNpc:EyeAngles())
 			ply.AFKNpc:Remove()
 			hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath")
@@ -66,7 +65,7 @@ local function SetAFK(ply)
 	else
 		GAMEMODE:NotifyAll(1, 5, rpname .. " is no longer AFK.")
 		GAMEMODE:Notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
-		if ValidEntity(ply.AFKNpc) then
+		if IsValid(ply.AFKNpc) then
 			ply:SetEyeAngles(ply.AFKNpc:EyeAngles())
 			ply:SetPos(ply.AFKNpc:GetPos() + ply.AFKNpc:GetAimVector() * 10)
 			ply.AFKNpc:Remove()
@@ -124,7 +123,7 @@ end
 hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
 
 local function DamagePlayer(target, inflictor, attacker, damage, DmgInfo)
-	if target:IsNPC() and ValidEntity(target.AFKPly) then
+	if target:IsNPC() and IsValid(target.AFKPly) then
 		target.AFKPly:TakeDamageInfo(DmgInfo)
 	end
 end

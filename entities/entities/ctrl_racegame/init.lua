@@ -84,7 +84,7 @@ function ENT:CountDown()
 
 		if count == 0 then
 			timer.Simple(300, function()
-				if ValidEntity(self) then
+				if IsValid(self) then
 					self:CalculateWinner()-- Some people will never make it to the finish... :)
 				end
 			end)
@@ -95,7 +95,7 @@ end
 
 function ENT:Finish(ply)
 	for k,v in pairs(self.surfProps) do
-		if not ValidEntity(v.Owner) then
+		if not IsValid(v.Owner) then
 			SafeRemoveEntity(v)
 			table.remove(self.surfProps)
 		end
@@ -111,7 +111,7 @@ function ENT:Finish(ply)
 end
 
 function ENT:CalculateWinner()
-	if ValidEntity(self.Finishers[1]) then
+	if IsValid(self.Finishers[1]) then
 		for k,v in pairs(self.manager:getParticipants()) do
 			v:ChatPrint("The race has finished! ".. self.Finishers[1]:Nick() .." has won! Congratulations!")
 		end

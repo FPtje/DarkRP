@@ -27,7 +27,7 @@ function ENT:setPassed(bool)
 end
 
 function ENT:Draw()
-	if not ValidEntity(self.dt.manager) or self.dt.manager.dt.stage ~= 2 then return end
+	if not IsValid(self.dt.manager) or self.dt.manager.dt.stage ~= 2 then return end
 
 	local color = Color(self.dt.manager.participating and 0 or 255,self.dt.manager.participating and 255 or 0,0,80)
 	local ang = self:GetAngles()

@@ -4,18 +4,18 @@
 local meta = FindMetaTable("Entity")
 
 function meta:IsOwnable()
-	if not ValidEntity(self) then return false end
+	if not IsValid(self) then return false end
 	local class = self:GetClass()
 
 	if ((class == "func_door" or class == "func_door_rotating" or class == "prop_door_rotating") or
-			(tobool(GetConVarNumber("allowvehicleowning")) and self:IsVehicle() and (not ValidEntity(self:GetParent()) or not self:GetParent():IsVehicle()))) then
+			(tobool(GetConVarNumber("allowvehicleowning")) and self:IsVehicle() and (not IsValid(self:GetParent()) or not self:GetParent():IsVehicle()))) then
 			return true
 		end
 	return false
 end
 
 function meta:IsDoor()
-	if not ValidEntity(self) then return false end
+	if not IsValid(self) then return false end
 	local class = self:GetClass()
 
 	if class == "func_door" or
@@ -28,23 +28,23 @@ function meta:IsDoor()
 end
 
 function meta:DoorIndex()
-	return self:EntIndex() - MaxPlayers()
+	return self:EntIndex() - game.MaxPlayers()
 end
 
 function GM:DoorToEntIndex(num)
-	return num + MaxPlayers()
+	return num + game.MaxPlayers()
 end
 
 function meta:IsOwned()
 	self.DoorData = self.DoorData or {}
 
-	if ValidEntity(self.DoorData.Owner) then return true end
+	if IsValid(self.DoorData.Owner) then return true end
 
 	return false
 end
 
 function meta:GetDoorOwner()
-	if not ValidEntity(self) then return end
+	if not IsValid(self) then return end
 	self.DoorData = self.DoorData or {}
 	return self.DoorData.Owner
 end
@@ -89,7 +89,7 @@ if CLIENT then
 
 		local ownerstr = ""
 
-		if ValidEntity(self:GetDoorOwner()) and self:GetDoorOwner().Nick then
+		if IsValid(self:GetDoorOwner()) and self:GetDoorOwner().Nick then
 			ownerstr = self:GetDoorOwner():Nick() .. "\n"
 		end
 
@@ -102,12 +102,12 @@ if CLIENT then
 		if type(self.DoorData.AllowedToOwn) == "string" and self.DoorData.AllowedToOwn ~= "" and self.DoorData.AllowedToOwn ~= ";" then
 			local names = {}
 			for a,b in pairs(string.Explode(";", self.DoorData.AllowedToOwn)) do
-				if ValidEntity(Player(b)) then
+				if IsValid(Player(b)) then
 					table.insert(names, Player(b):Nick())
 				end
 			end
 			ownerstr = ownerstr .. string.format(LANGUAGE.keys_other_allowed).. table.concat(names, "\n").."\n"
-		elseif type(self.DoorData.AllowedToOwn) == "number" and ValidEntity(Player(self.DoorData.AllowedToOwn)) then
+		elseif type(self.DoorData.AllowedToOwn) == "number" and IsValid(Player(self.DoorData.AllowedToOwn)) then
 			ownerstr = ownerstr .. string.format(LANGUAGE.keys_other_allowed)..Player(self.DoorData.AllowedToOwn):Nick().."\n"
 		end
 
@@ -270,7 +270,7 @@ function meta:KeysLock()
 	end
 
 	-- Locks the vehicle if you're unlocking a passenger seat:
-	if ValidEntity(self:GetParent()) and self:GetParent():IsVehicle() then
+	if IsValid(self:GetParent()) and self:GetParent():IsVehicle() then
 		self:GetParent():KeysLock()
 	end
 end
@@ -286,7 +286,7 @@ function meta:KeysUnLock()
 	end
 
 	-- Unlocks the vehicle if you're unlocking a passenger seat:
-	if ValidEntity(self:GetParent()) and self:GetParent():IsVehicle() then
+	if IsValid(self:GetParent()) and self:GetParent():IsVehicle() then
 		self:GetParent():KeysUnLock()
 	end
 end
@@ -300,8 +300,8 @@ local function SetDoorOwnable(ply)
 	local ent = trace.Entity
 	if not ply:IsSuperAdmin() or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return end
 
-	if not ValidEntity(trace.Entity) then return "" end
-	if ValidEntity( trace.Entity:GetDoorOwner() ) then
+	if not IsValid(trace.Entity) then return "" end
+	if IsValid( trace.Entity:GetDoorOwner() ) then
 		trace.Entity:UnOwn(trace.Entity:GetDoorOwner())
 	end
 	ent.DoorData = ent.DoorData or {}
@@ -352,14 +352,14 @@ local function SetDoorTeamOwnable(ply, arg)
 	time4 = true
 	timer.Simple( 0.1, function() time4 = false end )
 	local trace = ply:GetEyeTrace()
-	if not ValidEntity(trace.Entity) then return "" end
+	if not IsValid(trace.Entity) then return "" end
 
 	local ent = trace.Entity
 	if not ply:IsSuperAdmin() or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return "" end
 
 	arg = tonumber(arg)
 	if not RPExtraTeams[arg] and arg ~= nil then GAMEMODE:Notify(ply, 1, 10, "Job does not exist!") return "" end
-	if ValidEntity(trace.Entity:GetDoorOwner()) then
+	if IsValid(trace.Entity:GetDoorOwner()) then
 		trace.Entity:UnOwn(trace.Entity:GetDoorOwner())
 	end
 
@@ -409,7 +409,7 @@ local function OwnDoor(ply)
 	local team = ply:Team()
 	local trace = ply:GetEyeTrace()
 
-	if ValidEntity(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 200 then
+	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 200 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		if ply:isArrested() then
 			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_unown_arrested)
@@ -481,7 +481,7 @@ local function OwnDoor(ply)
 			hook.Call( "PlayerBought"..( bVehicle && "Vehicle" || "Door" ), GAMEMODE, ply, trace.Entity, iCost );
 
 			if ply:GetTable().OwnedNumz == 0 then
-				timer.Create(ply:UniqueID() .. "propertytax", 270, 0, ply.DoPropertyTax, ply)
+				timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.DoPropertyTax(ply) end)
 			end
 
 			ply:GetTable().OwnedNumz = ply:GetTable().OwnedNumz + 1
@@ -525,14 +525,14 @@ function meta:RemoveAllowed(ply)
 end
 
 function meta:AddOwner(ply)
-	if not ValidEntity(self) then return end
+	if not IsValid(self) then return end
 	self.DoorData = self.DoorData or {}
 	self.DoorData.ExtraOwners = self.DoorData.ExtraOwners and self.DoorData.ExtraOwners .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
 	self:RemoveAllowed(ply)
 end
 
 function meta:RemoveOwner(ply)
-	if not ValidEntity(self) then return end
+	if not IsValid(self) then return end
 	self.DoorData = self.DoorData or {}
 	if self.DoorData.ExtraOwners then self.DoorData.ExtraOwners = string.gsub(self.DoorData.ExtraOwners, tostring(ply:UserID())..".?", "") end
 	if string.sub(self.DoorData.ExtraOwners or "", -1) == ";" then self.DoorData.ExtraOwners = string.sub(self.DoorData.ExtraOwners, 1, -2) end
@@ -547,13 +547,13 @@ function meta:Own(ply)
 
  	-- Increase vehicle count
 	if self:IsVehicle() then
-		if ValidEntity(ply) then
+		if IsValid(ply) then
 			ply.Vehicles = ply.Vehicles or 0
 			ply.Vehicles = ply.Vehicles + 1
 		end
 
 		-- Decrease vehicle count of the original owner
-		if ValidEntity(self.Owner) and self.Owner ~= ply then
+		if IsValid(self.Owner) and self.Owner ~= ply then
 			self.Owner.Vehicles = self.Owner.Vehicles or 1
 			self.Owner.Vehicles = self.Owner.Vehicles - 1
 		end
@@ -573,7 +573,7 @@ function meta:UnOwn(ply)
 	if not ply then
 		ply = self:GetDoorOwner()
 
-		if not ValidEntity(ply) then return end
+		if not IsValid(ply) then return end
 	end
 
 	if self:IsMasterOwner(ply) then
@@ -589,7 +589,7 @@ end
 local function SetDoorTitle(ply, args)
 	local trace = ply:GetEyeTrace()
 
-	if ValidEntity(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
+	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		if ply:IsSuperAdmin() then
 			if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
@@ -616,7 +616,7 @@ AddChatCommand("/title", SetDoorTitle)
 local function RemoveDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
-	if ValidEntity(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
+	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		target = GAMEMODE:FindPlayer(args)
 
@@ -650,7 +650,7 @@ AddChatCommand("/ro", RemoveDoorOwner)
 local function AddDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
-	if ValidEntity(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
+	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		target = GAMEMODE:FindPlayer(args)
 		if target then

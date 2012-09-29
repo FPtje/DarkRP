@@ -40,7 +40,12 @@ local HM = { }
 FoodAteAlpha = -1
 FoodAteY = 0
 
-surface.CreateFont("ChatFont", 70, 500, true, false, "HungerPlus")
+surface.CreateFont("HungerPlus", {
+	size = 70,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "ChatFont"})
 
 function HM.HUDPaint()
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}

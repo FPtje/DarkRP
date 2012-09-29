@@ -26,7 +26,7 @@ specCalcView
 Override the view for the player to look through the spectated player's eyes
 ---------------------------------------------------------------------------*/
 local function specCalcView(ply, origin, angles, fov)
-	if not ValidEntity(specEnt) then
+	if not IsValid(specEnt) then
 		stopSpectating()
 		return
 	end
@@ -91,7 +91,7 @@ stopSpectating = function()
 	hook.Remove("PlayerBindPress", "FAdminSpectate")
 	hook.Remove("ShouldDrawLocalPlayer", "FAdminSpectate")
 
-	if ValidEntity(specEnt) then
+	if IsValid(specEnt) then
 		specEnt:SetNoDraw(false)
 	end
 

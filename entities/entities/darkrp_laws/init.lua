@@ -134,7 +134,7 @@ local function PlaceLaws( ply, args )
 	ent:Spawn()
 	ent:Activate()
 
-	if ValidEntity( ent ) then
+	if IsValid( ent ) then
 
 		numlaws = numlaws + 1
 

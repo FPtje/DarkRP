@@ -1,7 +1,7 @@
 include('shared.lua')
 
 function ENT:Draw()
-	if self.dt.owner ~= LocalPlayer() or Color(self:GetColor()).a == 0 then return end
+	if self.dt.owner ~= LocalPlayer() or self:GetColor().a == 0 then return end
 
 	surface.SetFont("HUDNumber5")
 	local w,h = surface.GetTextSize(self:GetNWString("text"))

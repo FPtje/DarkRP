@@ -1,7 +1,7 @@
 local function ScoreboardAddTeam(Name, color)
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 
-	local cat = vgui.Create("FAdminPlayerCatagory")
+	local cat = FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Add("FAdminPlayerCatagory")
 	cat:SetLabel("  "..Name)
 	cat.CatagoryColor = color
 	cat:SetWide((FAdmin.ScoreBoard.Width - 40)/2)
@@ -10,14 +10,10 @@ local function ScoreboardAddTeam(Name, color)
 	end
 
 	local pan = vgui.Create("FAdminPanelList")
-	pan:SetSpacing(2)
-	pan:EnableHorizontal(true)
-	pan:EnableVerticalScrollbar(true)
 	pan:SizeToContents()
 
 	cat:SetContents(pan)
 
-	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:AddItem(cat)
 	return cat, pan
 end
 
@@ -51,10 +47,14 @@ local function SortedPairsByFunction(Table, Sorted, SortDown)
 end
 
 function FAdmin.ScoreBoard.Main.PlayerListView(Sorted, SortDown)
+	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Clear(true)
 	for k, ply in SortedPairsByFunction(player.GetAll(), Sorted, SortDown) do
-		local Row = vgui.Create("FadminPlayerRow", FAdmin.ScoreBoard.Main.Controls.FAdminPanelList)
+		fprint(ply:Nick())
+		local Row = vgui.Create("FadminPlayerRow")
 		Row:SetPlayer(ply)
+		Row:Dock(TOP)
 		Row:InvalidateLayout()
+
 		FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:AddItem(Row)
 	end
 end

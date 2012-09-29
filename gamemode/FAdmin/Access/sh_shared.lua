@@ -40,7 +40,7 @@ local oldplyIsAdmin = PLAYER.IsAdmin
 function PLAYER:IsAdmin(...)
 	local usergroup = self:GetNWString("usergroup")
 
-	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsAdmin(self, ...) or SinglePlayer() end
+	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsAdmin(self, ...) or game.SinglePlayer() end
 
 	if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 1/*1 = admin*/) or (self.IsListenServerHost and self:IsListenServerHost()) then
 		return true
@@ -48,18 +48,18 @@ function PLAYER:IsAdmin(...)
 
 	if CLIENT and tonumber(self:FAdmin_GetGlobal("FAdmin_admin")) and self:FAdmin_GetGlobal("FAdmin_admin") >= 1 then return true end
 
-	return oldplyIsAdmin(self, ...) or SinglePlayer()
+	return oldplyIsAdmin(self, ...) or game.SinglePlayer()
 end
 
 local oldplyIsSuperAdmin = PLAYER.IsSuperAdmin
 function PLAYER:IsSuperAdmin(...)
 	local usergroup = self:GetNWString("usergroup")
-	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsSuperAdmin(self, ...) or SinglePlayer() end
+	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsSuperAdmin(self, ...) or game.SinglePlayer() end
 	if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 2/*2 = superadmin*/) or (self.IsListenServerHost and self:IsListenServerHost()) then
 		return true
 	end
 	if CLIENT and tonumber(self:FAdmin_GetGlobal("FAdmin_admin")) and self:FAdmin_GetGlobal("FAdmin_admin") >= 2 then return true end
-	return oldplyIsSuperAdmin(self, ...) or SinglePlayer()
+	return oldplyIsSuperAdmin(self, ...) or game.SinglePlayer()
 end
 
 --Privileges
@@ -68,12 +68,12 @@ function FAdmin.Access.AddPrivilege(Name, admin_access)
 end
 
 function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
-	if ply:EntIndex() == 0 or SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end -- This is the server console
+	if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end -- This is the server console
 	if not FAdmin.Access.Privileges[priv] then return ply:IsAdmin() end
 
 	local Usergroup = ply:GetNWString("usergroup")
 
-	if FAdmin.GlobalSetting.Immunity and ValidEntity(target) and target ~= ply and FAdmin.Access.Groups[Usergroup] and
+	if FAdmin.GlobalSetting.Immunity and IsValid(target) and target ~= ply and FAdmin.Access.Groups[Usergroup] and
 	FAdmin.Access.Groups[target:GetNWString("usergroup")] and FAdmin.Access.Groups[target:GetNWString("usergroup")].ADMIN >= FAdmin.Access.Groups[Usergroup].ADMIN then
 		return false
 	end

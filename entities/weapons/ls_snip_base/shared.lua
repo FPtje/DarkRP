@@ -120,7 +120,7 @@ SecondaryAttack
 ---------------------------------------------------------*/
 
 function SWEP:SecondaryAttack()
-	if not ValidEntity(self.Owner) then return end
+	if not IsValid(self.Owner) then return end
 	if not self.IronSightsPos then return end
 
 	if (self.NextSecondaryAttack > CurTime()) then return end
@@ -158,7 +158,7 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Holster()
-	if not ValidEntity(self.Owner) then return end
+	if not IsValid(self.Owner) then return end
 	if (SERVER) then
 		self.Owner:SetFOV(0, 0)
 	end
@@ -170,7 +170,7 @@ function SWEP:Holster()
 end
 
 function SWEP:Reload()
-	if not ValidEntity(self.Owner) then return end
+	if not IsValid(self.Owner) then return end
 	if (SERVER) then
 		self.Owner:SetFOV(0, 0)
 	end

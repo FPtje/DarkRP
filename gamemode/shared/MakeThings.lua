@@ -12,7 +12,7 @@ function AddExtraTeam( Name, color, model, Description, Weapons, command, maximu
 	team.SetUp(#RPExtraTeams, Name, color)
 	local Team = #RPExtraTeams
 
-	timer.Simple(0, function(CustomTeam, maximum_amount_of_this_class) GAMEMODE:AddTeamCommands(CustomTeam, maximum_amount_of_this_class) end, CustomTeam, maximum_amount_of_this_class)
+	timer.Simple(0, function() GAMEMODE:AddTeamCommands(CustomTeam, maximum_amount_of_this_class) end)
 
 	// Precache model here. Not right before the job change is done
 	if type(model) == "table" then

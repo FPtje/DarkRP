@@ -43,21 +43,21 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
 function SWEP:Deploy()
-	if CLIENT or not ValidEntity(self:GetOwner()) then return end
-	self:SetColor(0,0,255,255)
+	if CLIENT or not IsValid(self:GetOwner()) then return end
+	self:SetColor(Color(0,0,255,255))
 	self:SetMaterial("models/shiny")
 	SendUserMessage("StunStickColour", self:GetOwner(), 0,0,255, "models/shiny")
 	return true
 end
 
 function SWEP:Holster()
-	if CLIENT or not ValidEntity(self:GetOwner()) then return end
+	if CLIENT or not IsValid(self:GetOwner()) then return end
 	SendUserMessage("StunStickColour", self:GetOwner(), 255, 255, 255, "")
 	return true
 end
 
 function SWEP:OnRemove()
-	if SERVER and ValidEntity(self:GetOwner()) then
+	if SERVER and IsValid(self:GetOwner()) then
 		SendUserMessage("StunStickColour", self:GetOwner(), 255, 255, 255, "")
 	end
 end
@@ -65,7 +65,7 @@ end
 usermessage.Hook("StunStickColour", function(um)
 	local viewmodel = LocalPlayer():GetViewModel()
 	local r,g,b,a = um:ReadLong(), um:ReadLong(), um:ReadLong(), 255
-	viewmodel:SetColor(r,g,b,a)
+	viewmodel:SetColor(Color(r,g,b,a))
 	viewmodel:SetMaterial(um:ReadString())
 end)
 
@@ -84,7 +84,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:DoFlash(ply)
-	if not ValidEntity(ply) or not ply:IsPlayer() then return end
+	if not IsValid(ply) or not ply:IsPlayer() then return end
 	umsg.Start("StunStickFlash", ply)
 	umsg.End()
 end
@@ -93,7 +93,7 @@ function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
 	self:SetWeaponHoldType("melee")
-	timer.Simple(0.3, function(wep) if wep:IsValid() then wep:SetWeaponHoldType("normal") end end, self)
+	timer.Simple(0.3, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.Weapon:EmitSound(self.Sound)
@@ -105,7 +105,7 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 100) then return end
+	if not IsValid(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 100) then return end
 
 	if not trace.Entity:IsDoor() then
 		trace.Entity:SetVelocity((trace.Entity:GetPos() - self.Owner:GetPos()) * 7)
@@ -136,13 +136,13 @@ function SWEP:SecondaryAttack()
 	self.NextStrike = CurTime() + .3
 
 	self:SetWeaponHoldType("melee")
-	timer.Simple(0.3, function(wep) if wep:IsValid() then wep:SetWeaponHoldType("normal") end end, self)
+	timer.Simple(0.3, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
 
 	if CLIENT then return end
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if (not ValidEntity(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 100)) then return end
+	if (not IsValid(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 100)) then return end
 
 	if SERVER then
 		if not trace.Entity:IsDoor() then
@@ -159,7 +159,7 @@ function SWEP:SecondaryAttack()
 		else
 			self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 			if FPP and FPP.PlayerCanTouchEnt(ply, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
-				if trace.Entity.SeizeReward then
+				if trace.Entity.SeizeReward and trace.Entity.dt.owning_ent != self.Owner then
 					self.Owner:AddMoney( trace.Entity.SeizeReward )
 					GAMEMODE:Notify( self.Owner, 1, 4, "You have recieved a $" .. trace.Entity.SeizeReward .. " bonus for destroying this illegal entity." )
 				end

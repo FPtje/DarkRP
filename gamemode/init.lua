@@ -1,19 +1,11 @@
-GM.Version = "2.4.2"
+GM.Version = "2.4.3"
 GM.Name = "DarkRP "..GM.Version
 GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
 
 CUR = "$"
 
 -- Checking if counterstrike is installed correctly
-local foundCSS = false
-for k,v in pairs(GetMountedContent()) do
-	if v == "cstrike" then
-		foundCSS = true
-		break
-	end
-end
-
-if not foundCSS then
+if table.Count(file.Find("*", "cstrike")) == 0 then
 	timer.Create("TheresNoCSS", 10, 0, function()
 		for k,v in pairs(player.GetAll()) do
 			v:ChatPrint("Counter Strike: Source is incorrectly installed!")
@@ -28,7 +20,7 @@ end
 local meta = FindMetaTable("Player")
 meta.SteamName = meta.Name
 meta.Name = function(self)
-	if not ValidEntity(self) then return "" end
+	if not IsValid(self) then return "" end
 	if GetConVarNumber("allowrpnames") == 1 then
 		self.DarkRPVars = self.DarkRPVars or {}
 		return self.DarkRPVars.rpname and tostring(self.DarkRPVars.rpname) or self:SteamName()
@@ -41,6 +33,13 @@ meta.GetName = meta.Name
 -- End
 
 DeriveGamemode("sandbox")
+
+util.AddNetworkString("DarkRP_InitializeVars")
+util.AddNetworkString("DarkRP_DoorData")
+util.AddNetworkString("FAdmin_retrievebans")
+util.AddNetworkString("FPP_Groups")
+util.AddNetworkString("FPP_GroupMembers")
+util.AddNetworkString("DarkRP_keypadData")
 
 AddCSLuaFile("addentities.lua")
 AddCSLuaFile("shared.lua")
@@ -65,6 +64,7 @@ AddCSLuaFile("shared/Workarounds.lua")
 resource.AddFile("sound/earthquake.mp3")
 util.PrecacheSound("earthquake.mp3")
 
+resource.AddFile("materials/DarkRP/DarkRPSkin.png")
 
 DB = {}
 
@@ -119,9 +119,30 @@ include("FPP/server/FPP_Core.lua")
 include("FPP/server/FPP_Antispam.lua")
 include("shared/FAdmin_DarkRP.lua")
 
-local files = file.Find("gamemodes/"..GM.FolderName.."/gamemode/modules/*.lua", true)
-for k, v in pairs(files) do
-	include("modules/" .. v)
+/*---------------------------------------------------------------------------
+Loading modules
+---------------------------------------------------------------------------*/
+local fol = GM.FolderName.."/gamemode/modules/"
+local files, folders = file.Find(fol .. "*", LUA_PATH)
+for k,v in pairs(files) do
+	include(fol .. v)
+end
+
+for _, folder in SortedPairs(folders, true) do
+	if folder ~= "." and folder ~= ".." then
+		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", LUA_PATH), true) do
+			AddCSLuaFile(fol..folder .. "/" ..File)
+			include(fol.. folder .. "/" ..File)
+		end
+
+		for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", LUA_PATH), true) do
+			include(fol.. folder .. "/" ..File)
+		end
+
+		for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", LUA_PATH), true) do
+			AddCSLuaFile(fol.. folder .. "/" ..File)
+		end
+	end
 end
 
 local function GetAvailableVehicles(ply)
@@ -134,22 +155,6 @@ local function GetAvailableVehicles(ply)
 	end
 end
 concommand.Add("rp_getvehicles_sv", GetAvailableVehicles)
-
--- Vehicle fix from tobba!
-function debug.getupvalues(f)
-	local t, i, k, v = {}, 1, debug.getupvalue(f, 1)
-	while k do
-		t[k] = v
-		i = i+1
-		k,v = debug.getupvalue(f, i)
-	end
-	return t
-end
-
-glon.encode_types = debug.getupvalues(glon.Write).encode_types
-glon.encode_types["Vehicle"] = glon.encode_types["Vehicle"] or {10, function(o)
-		return (ValidEntity(o) and o:EntIndex() or -1).."\1"
-	end}
 
 /*---------------------------------------------------------------------------
 Registering numpad data

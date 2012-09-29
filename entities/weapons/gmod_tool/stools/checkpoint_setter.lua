@@ -8,14 +8,14 @@ if CLIENT then
 end
 
 function TOOL:LeftClick(trace)
-	if not ValidEntity(self:GetSWEP():GetNWEntity("Game")) or CLIENT then return end
+	if not IsValid(self:GetSWEP():GetNWEntity("Game")) or CLIENT then return end
 
     local pos, ang = self:CalcPosAng(self:GetOwner())
 
 	if not self:GetWeapon():GetNWBool("RadiusMode") and pos then
 		local checkpoint = self:GetSWEP():GetNWEntity("Game"):addCheckpoint(pos, ang)
 
-		if ValidEntity(checkpoint) and checkpoint:GetClass() == "ent_checkpoint" then
+		if IsValid(checkpoint) and checkpoint:GetClass() == "ent_checkpoint" then
 			self:GetWeapon():SetNWBool("Radiusmode", true)
             self:GetOwner():ChatPrint("Now left click to select the radius!")
 			self.Checkpoint = checkpoint
@@ -30,18 +30,18 @@ end
 
 function TOOL:RightClick(trace)
     local pos, ang = self:CalcPosAng(self:GetOwner())
-	if not ValidEntity(self:GetSWEP():GetNWEntity("Game")) or CLIENT or not pos then return end
+	if not IsValid(self:GetSWEP():GetNWEntity("Game")) or CLIENT or not pos then return end
 	self:GetSWEP():GetNWEntity("Game"):createFinish(self:CalcPosAng(self:GetOwner()))
 end
 
 function TOOL:UpdateGhostCheckpoint(ent, ply)
-	if not ValidEntity(ent) then return end
+	if not IsValid(ent) then return end
 
 	local model = self:GetSWEP():GetNWString("nextEntity") == "start" and "models/props_c17/truss02a.mdl" or "models/XQM/Rails/gumball_1.mdl"
 	ent:SetModel(model)
 
     ent:SetNoDraw(false)
-    
+
     local pos, ang = self:CalcPosAng(self:GetOwner())
     if not pos then ent:SetNoDraw(true) return end
 
@@ -71,22 +71,22 @@ function TOOL:CalcPosAng(ply)
     Ang.pitch = Ang.pitch + 90
     Ang.yaw = self:GetOwner():EyeAngles().yaw
 
-    local min = ValidEntity(ent) and ent:OBBMins() or Vector(0,0,-128)
+    local min = IsValid(ent) and ent:OBBMins() or Vector(0,0,-128)
     local pos = trace.HitPos - trace.HitNormal * min.z * 0.5
     if self:GetSWEP():GetNWString("nextEntity") == "start" then
         pos = pos - Vector(0,0,67)
     end
-    
+
     return pos, Ang
 end
 
 function TOOL:Think()
-	--if SERVER and not ValidEntity(self:GetSWEP():GetNWEntity("Game")) then return end
+	--if SERVER and not IsValid(self:GetSWEP():GetNWEntity("Game")) then return end
     if not self.GhostEntity or not self.GhostEntity:IsValid() then
     	local model = self:GetSWEP():GetNWString("nextEntity") == "start" and "models/props_c17/truss02a.mdl" or "models/XQM/Rails/gumball_1.mdl"
         self:MakeGhostEntity(model, Vector(0,0,0), Angle(0,0,0) )
     end
-    
+
     self:UpdateGhostCheckpoint(self.GhostEntity, self:GetOwner())
 
     if SERVER and self:GetWeapon():GetNWBool("RadiusMode") then

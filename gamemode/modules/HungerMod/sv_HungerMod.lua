@@ -1,7 +1,3 @@
-GM:includeCS("HungerMod/cl_init.lua")
-
-include("HungerMod/player.lua")
-
 local HM = { }
 local FoodItems = { }
 
@@ -81,26 +77,28 @@ local function BuyFood(ply, args)
 		return ""
 	end
 
-	local food = FoodItems[string.lower(args)]
-	if not food then return "" end
-	local cost = GetConVarNumber("foodcost")
-	if ply:CanAfford(cost) then
-		ply:AddMoney(-cost)
-	else
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
-		return ""
+	for k,v in pairs(FoodItems) do
+		if string.lower(args) == k then
+			local cost = GetConVarNumber("foodcost")
+			if ply:CanAfford(cost) then
+				ply:AddMoney(-cost)
+			else
+				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
+				return ""
+			end
+			GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, k, tostring(cost)))
+			local SpawnedFood = ents.Create("spawned_food")
+			SpawnedFood.dt.owning_ent = ply
+			SpawnedFood.ShareGravgun = true
+			SpawnedFood:SetPos(tr.HitPos)
+			SpawnedFood.onlyremover = true
+			SpawnedFood.SID = ply.SID
+			SpawnedFood:SetModel(v.model)
+			SpawnedFood.FoodEnergy = v.amount
+			SpawnedFood:Spawn()
+			return ""
+		end
 	end
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, string.lower(args), tostring(cost)))
-	local SpawnedFood = ents.Create("spawned_food")
-	SpawnedFood.dt.owning_ent = ply
-	SpawnedFood.ShareGravgun = true
-	SpawnedFood:SetPos(tr.HitPos)
-	SpawnedFood.onlyremover = true
-	SpawnedFood.SID = ply.SID
-	SpawnedFood:SetModel(food.model)
-	SpawnedFood.FoodEnergy = food.amount
-	SpawnedFood:Spawn()
 	return ""
-
 end
 AddChatCommand("/buyfood", BuyFood)

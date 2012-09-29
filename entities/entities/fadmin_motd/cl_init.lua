@@ -29,7 +29,7 @@ function ENT:Initialize()
 	self.HTML:SetSize(ScrW(), ScrH() - 100)
 	self:LoadPage()
 
-	self.HTML:StartAnimate(100)
+	//self.HTML:StartAnimate(100)
 	self.HTML:SetVisible(true)
 end
 
@@ -57,9 +57,9 @@ function ENT:Draw()
 
 	self.LastDrawn = CurTime()
 	local IsAdmin = LocalPlayer():IsAdmin()
-	local HasPhysgun = (ValidEntity(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "weapon_physgun")
+	local HasPhysgun = (IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "weapon_physgun")
 
-	surface.SetFont("ScoreboardText")
+	surface.SetFont("TargetID")
 	local TextPosX = surface.GetTextSize("Physgun/use the button to see the MOTD!")*(-0.5)
 
 	local ang = self:GetAngles()

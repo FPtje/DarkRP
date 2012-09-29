@@ -4,7 +4,7 @@ local function Spectate(ply, cmd, args)
 
 	local target = FAdmin.FindPlayer(args[1])
 	target = target and target[1] or nil
-	if not ValidEntity(target) or target == ply then return end
+	if not IsValid(target) or target == ply then return end
 
 	ply.FAdminSpectating = target
 
@@ -16,7 +16,7 @@ local function Spectate(ply, cmd, args)
 end
 
 local function SpectateVisibility(ply, viewEnt)
-	if ValidEntity(ply.FAdminSpectating) then
+	if IsValid(ply.FAdminSpectating) then
 		AddOriginToPVS(ply.FAdminSpectating:GetShootPos())
 	end
 end

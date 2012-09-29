@@ -35,7 +35,7 @@ end );
 -- @param objEnt The door the player is buying
 hook.Add( "PlayerBuyDoor", "properties_AllowPurchase", function( objPl, objEnt )
 	if( properties.Enabled ) then
-		return ValidEntity( objPl ), "You aren't a valid player (wtf)", true;
+		return IsValid( objPl ), "You aren't a valid player (wtf)", true;
 	end
 end );
 

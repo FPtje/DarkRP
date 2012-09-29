@@ -1,15 +1,15 @@
 local function MuteChat(ply, cmd, args)
 	if not args[1] then return end
-	
+
 	local targets = FAdmin.FindPlayer(args[1]) or {}
-	if not targets or #targets == 1 and not ValidEntity(targets[1]) then
+	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
 		return
 	end
-	
+
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Chatmute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-		if ValidEntity(target) and not target:FAdmin_GetGlobal("FAdmin_chatmuted") then
+		if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_chatmuted") then
 			target:FAdmin_SetGlobal("FAdmin_chatmuted", true)
 		end
 	end
@@ -18,16 +18,16 @@ end
 
 local function UnMuteChat(ply, cmd, args)
 	if not args[1] then return end
-	
+
 	local targets = FAdmin.FindPlayer(args[1])
-	if not targets or #targets == 1 and not ValidEntity(targets[1]) then
+	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
 		return
 	end
-	
+
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Chatmute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-		if ValidEntity(target) and target:FAdmin_GetGlobal("FAdmin_chatmuted") then
+		if IsValid(target) and target:FAdmin_GetGlobal("FAdmin_chatmuted") then
 			target:FAdmin_SetGlobal("FAdmin_chatmuted", false)
 		end
 	end
@@ -37,7 +37,7 @@ end
 FAdmin.StartHooks["Chatmute"] = function()
 	FAdmin.Commands.AddCommand("Chatmute", MuteChat)
 	FAdmin.Commands.AddCommand("UnChatmute", UnMuteChat)
-	
+
 	FAdmin.Access.AddPrivilege("Chatmute", 2)
 end
 

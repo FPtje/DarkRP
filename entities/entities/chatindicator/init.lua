@@ -13,7 +13,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if not ValidEntity( self.ply ) then -- just in case
+	if not IsValid( self.ply ) then -- just in case
 
 		self:Remove()
 
@@ -26,7 +26,7 @@ end
 
 local function ToggleChatIndicator( ply )
 
-	if not ValidEntity( ply.ChatIndicator ) then
+	if not IsValid( ply.ChatIndicator ) then
 
 		ply.ChatIndicator = ents.Create( "chatindicator" )
 		ply.ChatIndicator.ply = ply -- plyception
@@ -45,7 +45,7 @@ concommand.Add( "_DarkRP_ToggleChat", ToggleChatIndicator )
 
 local function RemoveChatIndicator( ply )
 
-	if ValidEntity( ply.ChatIndicator ) then
+	if IsValid( ply.ChatIndicator ) then
 
 		ply.ChatIndicator:Remove()
 

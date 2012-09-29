@@ -1,7 +1,5 @@
 FPP = FPP or {}
 
-require("datastream")
-
 FPP.Blocked = {}
 	FPP.Blocked.Physgun1 = {}
 	FPP.Blocked.Spawning1 = {}
@@ -136,7 +134,7 @@ end
 concommand.Add("FPP_RemoveBlockedModel", RemoveBlockedModel)
 
 local function ShareProp(ply, cmd, args)
-	if not args[1] or not ValidEntity(Entity(args[1])) or not args[2] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+	if not args[1] or not IsValid(Entity(args[1])) or not args[2] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	local ent = Entity(args[1])
 
 	if not FPP.PlayerCanTouchEnt(ply, ent, "Toolgun1", "FPP_TOOLGUN1", true) then --Note: This returns false when it's someone elses shared entity, so that's not a glitch
@@ -144,7 +142,7 @@ local function ShareProp(ply, cmd, args)
 		return
 	end
 
-	if not ValidEntity(Player(args[2])) then -- This is for sharing prop per utility
+	if not IsValid(Player(args[2])) then -- This is for sharing prop per utility
 		ent[args[2]] = util.tobool(args[3])
 	else -- This is for sharing prop per player
 		local target = Player(args[2])
@@ -177,7 +175,7 @@ local function RetrieveSettings()
 				for key, value in pairs(data) do
 					FPP.Settings[k][value.var] = tonumber(value.setting)
 					i = i + 0.05
-					timer.Simple(i, RunConsoleCommand, "_"..k.."_"..value.var, tonumber(value.setting))
+					timer.Simple(i, function() RunConsoleCommand("_"..k.."_"..value.var, tonumber(value.setting)) end)
 				end
 			end
 		end)
@@ -364,18 +362,18 @@ local function RetrieveGroups()
 end
 
 local function SendSettings(ply)
-	timer.Simple(10, function(ply)
+	timer.Simple(10, function()
 		local i = 0
 		for k,v in pairs(FPP.Settings) do
 			for a,b in pairs(v) do
 				i = i + FrameTime()*2
 				timer.Simple(i, function()
 					RunConsoleCommand("_"..k.."_"..a, (b and b + 1) or 0)
-					timer.Simple(i, RunConsoleCommand, "_"..k.."_"..a, b or "")
+					timer.Simple(i, function() RunConsoleCommand("_"..k.."_"..a, b or "") end)
 				end)
 			end
 		end
-	end, ply)
+	end)
 end
 hook.Add("PlayerInitialSpawn", "FPP_SendSettings", SendSettings)
 
@@ -514,7 +512,7 @@ local function PlayerSetGroup(ply, cmd, args)
 
 	local name = args[1]
 	local group = string.lower(args[2])
-	if ValidEntity(Player(name)) then name = Player(name):SteamID()
+	if IsValid(Player(name)) then name = Player(name):SteamID()
 	elseif not string.find(name, "STEAM") and name ~= "UNKNOWN" then FPP.Notify(ply, "Invalid argument(s)", false) return end
 
 	if not FPP.Groups[group] and (not FAdmin or not FAdmin.Access.Groups[group]) then
@@ -537,14 +535,19 @@ concommand.Add("FPP_SetPlayerGroup", PlayerSetGroup)
 local function SendGroupData(ply, cmd, args)
 	-- Need superadmin so clients can't spam this on server
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
-	datastream.StreamToClients(ply, "FPP_Groups", FPP.Groups)
+	net.Start("FPP_Groups")
+		net.WriteTable(FPP.Groups)
+	net.Send(ply)
 end
 concommand.Add("FPP_SendGroups", SendGroupData)
 
 local function SendGroupMemberData(ply, cmd, args)
 	-- Need superadmin so clients can't spam this on server
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
-	datastream.StreamToClients(ply, "FPP_GroupMembers", FPP.GroupMembers)
+
+	net.Start("FPP_GroupMembers")
+		net.WriteTable(FPP.GroupMembers)
+	net.Send(ply)
 end
 concommand.Add("FPP_SendGroupMembers", SendGroupMemberData)
 
@@ -598,7 +601,7 @@ concommand.Add("FPP_SendRestrictTool", SendRestrictedTools)
 local function SetBuddy(ply, cmd, args)
 	if not args[6] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	local buddy = Player(args[1])
-	if not ValidEntity(buddy) then FPP.Notify(ply, "Player invalid", false) return end
+	if not IsValid(buddy) then FPP.Notify(ply, "Player invalid", false) return end
 
 	ply.Buddies = ply.Buddies or {}
 	for k,v in pairs(args) do args[k] = tonumber(v) end
@@ -611,13 +614,13 @@ local function CleanupDisconnected(ply, cmd, args)
 	if not args[1] then FPP.Notify(ply, "Invalid argument", false) return end
 	if args[1] == "disconnected" then
 		for k,v in pairs(ents.GetAll()) do
-			if v.Owner and not ValidEntity(v.Owner) then
+			if v.Owner and not IsValid(v.Owner) then
 				v:Remove()
 			end
 		end
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed all disconnected players' props", true)
 		return
-	elseif not ValidEntity(Player(args[1])) then FPP.Notify(ply, "Invalid player", false) return
+	elseif not IsValid(Player(args[1])) then FPP.Notify(ply, "Invalid player", false) return
 	end
 
 	for k,v in pairs(ents.GetAll()) do

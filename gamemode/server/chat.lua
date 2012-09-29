@@ -51,7 +51,7 @@ end
 
 local otherhooks = {}
 function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
-	local text2 = (teamonly and "" or "/g ") .. text
+	local text2 = (not teamonly and "" or "/g ") .. text
 	local callback
 
 	for k,v in SortedPairs(otherhooks, false) do
@@ -63,7 +63,7 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 	text2, callback, DoSayFunc = RP_PlayerChat(ply, text2)
 	if tostring(text2) == " " then text2, callback = callback, text2 end
 
-	if isDedicatedServer() then
+	if game.IsDedicated() then
 		ServerLog("\""..ply:Nick().."<"..ply:UserID()..">" .."<"..ply:SteamID()..">".."<"..team.GetName( ply:Team() )..">\" say \""..text.. "\"\n")
 	end
 

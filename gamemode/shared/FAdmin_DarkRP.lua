@@ -7,7 +7,7 @@ if SERVER then
 	include(GM.FolderName.."/gamemode/server/FAdmin_MySQL.lua")
 
 	local function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
-		local List = file.FindDir(dir.."/*", true)
+		local List = file.FindDir(dir.."/*", "GAME")
 
 		for _, fdir in pairs(List) do
 			if fdir != ".svn" then // don't spam people with useless .svn folders
@@ -15,51 +15,55 @@ if SERVER then
 			end
 		end
 
-		for k,v in pairs(file.Find(dir.."/*", true)) do
+		for k,v in pairs(file.Find(dir.."/*", "GAME")) do
 			resource.AddFile(dir.."/"..v)
 		end
 	end
 
 	AddDir("materials/FAdmin")
 
-	AddCSLuaFile("FAdmin.lua")
-
 	local function AddCSLuaFolder(fol)
-		for _, folder in SortedPairs(file.FindInLua(fol.."*"), true) do
+		fol = string.lower(fol)
+
+		local files, folders = file.Find(fol.."*", LUA_PATH)
+		for _, folder in SortedPairs(folders, true) do
 			if folder ~= "." and folder ~= ".." then
-				for _, File in SortedPairs(file.FindInLua(fol .. folder .."/sh_*.lua"), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", LUA_PATH)) do
 					AddCSLuaFile(fol..folder .. "/" ..File)
 					include(fol.. folder .. "/" ..File)
 				end
 
-				for _, File in SortedPairs(file.FindInLua(fol .. folder .."/sv_*.lua"), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", LUA_PATH), true) do
 					include(fol.. folder .. "/" ..File)
 				end
 
-				for _, File in SortedPairs(file.FindInLua(fol .. folder .."/cl_*.lua"), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", LUA_PATH), true) do
 					AddCSLuaFile(fol.. folder .. "/" ..File)
 				end
 			end
 		end
 	end
-	AddCSLuaFolder(GM.FolderName.."/gamemode/FAdmin/")
-	AddCSLuaFolder(GM.FolderName.."/gamemode/FAdmin/PlayerActions/")
+	AddCSLuaFolder(GM.FolderName.."/gamemode/fadmin/")
+	AddCSLuaFolder(GM.FolderName.."/gamemode/fadmin/playeractions/")
 elseif CLIENT then
 	local function IncludeFolder(fol)
-		for _, folder in SortedPairs(file.FindInLua(fol.."*"), true) do
+		fol = string.lower(fol)
+
+		local files, folders = file.Find(fol.."*", LUA_PATH)
+		for _, folder in SortedPairs(folders, true) do
 			if folder ~= "." and folder ~= ".." then
-				for _, File in SortedPairs(file.FindInLua(fol .. folder .."/sh_*.lua"), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", LUA_PATH), true) do
 					include(fol.. folder .. "/" ..File)
 				end
 
-				for _, File in SortedPairs(file.FindInLua(fol .. folder .."/cl_*.lua"), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", LUA_PATH), true) do
 					include(fol.. folder .. "/" ..File)
 				end
 			end
 		end
 	end
-	IncludeFolder(GM.FolderName.."/gamemode/FAdmin/")
-	IncludeFolder(GM.FolderName.."/gamemode/FAdmin/PlayerActions/")
+	IncludeFolder(GM.FolderName.."/gamemode/fadmin/")
+	IncludeFolder(GM.FolderName.."/gamemode/fadmin/playeractions/")
 end
 
 /*
@@ -152,7 +156,8 @@ end)
 
 local IP = ""
 if SERVER then
-	http.Get("http://automation.whatismyip.com/n09230945.asp", "", function(content, size)
+	-- Temporarily commented out because HTTP is broken
+	/*http.Get("http://automation.whatismyip.com/n09230945.asp", "", function(content, size)
 		local ip = string.match(content, "([0-9.]+)")
 		if not ip then return end
 		IP = ip..":"..GetConVarString("hostport")
@@ -166,7 +171,7 @@ if SERVER then
 			end)
 			return
 		end
-	end)
+	end)*/
 end
 
 /*
@@ -246,7 +251,8 @@ elseif CLIENT then
 	Vector = "ReadVector"}
 	usermessage.Hook("FAdmin_GlobalSetting", function(um)
 		FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
-		FAdmin.GlobalSetting[um:ReadString()] = um[GetTypes[um:ReadString()]](um)
+		local key, value = um:ReadString(), um:ReadString()
+		FAdmin.GlobalSetting[key] = um[GetTypes[value]](um)
 	end)
 	usermessage.Hook("FAdmin_PlayerSetting", function(um)
 		local ply = um:ReadEntity()

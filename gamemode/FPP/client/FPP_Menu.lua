@@ -1,7 +1,4 @@
-require("datastream")
-
 local AdminPanel
-local BuddiesPanel
 //local PrivateSettingsPanel
 local EditGroupTools
 local RetrieveRestrictedTool
@@ -15,12 +12,17 @@ FPP.Groups = {}
 FPP.GroupMembers = {}
 
 function FPP.AdminMenu(Panel)
-	AdminPanel = AdminPanel or Panel
-	Panel:ClearControls()
+	AdminPanel = Panel
+	AdminPanel:SetSize(100, 400)
+	AdminPanel:Clear(true)
+
+	AdminPanel.contents = AdminPanel.contents or vgui.Create("DListLayout")
+	AdminPanel.contents:Clear()
+
 	local superadmin = LocalPlayer():IsSuperAdmin()
 	if not superadmin then
-		Panel:AddControl("Label", {Text = "You are not a superadmin\nThe changes you make will not have any effect."})
-		local AmAdmin = vgui.Create("DButton")
+		AdminPanel.contents:Add(Label("You are not a superadmin\nThe changes you make will not have any effect."))
+		local AmAdmin = AdminPanel.contents:Add("DButton")
 		AmAdmin:SetText("Unlock buttons anyway")
 		AmAdmin:SetToolTip("If you're REALLY not an admin it won't work")
 
@@ -29,31 +31,27 @@ function FPP.AdminMenu(Panel)
 			AmAdmin:SetToolTip("The changes you make now DO have effect unless you're really not an admin")
 			superadmin = true
 		end
-		AdminPanel:AddPanel(AmAdmin)
 	end
 
 	local function MakeOption(Name)
-		local cat = vgui.Create("DCollapsibleCategory")
+		local cat = AdminPanel.contents:Add("DCollapsibleCategory")
 		cat:SetLabel(Name)
 		cat:SetExpanded(CatsOpened[Name])
 		cat.oldtoggle = cat.Toggle
 		function cat:Toggle()
 			self:oldtoggle()
 			CatsOpened[Name] = cat:GetExpanded()
+			AdminPanel:Toggle()
+			timer.Simple(0, function() AdminPanel:Toggle() end)
 		end
 
-		local pan = vgui.Create("DPanelList")
-		pan:SetSpacing(5)
-		pan:EnableHorizontal(false)
-		pan:EnableVerticalScrollbar(true)
-		pan:SetAutoSize(true)
+		local pan = vgui.Create("DListLayout")
 		cat:SetContents(pan)
-		AdminPanel:AddPanel(cat)
 		return cat, pan
 	end
 
 	local function addchk(label, command, plist)
-		local box = vgui.Create("DCheckBoxLabel")
+		local box = plist:Add("DCheckBoxLabel")
 		box:SetText(label)
 		box:SetValue(tobool(GetConVarNumber("_"..command[1].."_"..command[2])))
 		box.Button.Toggle = function()
@@ -68,28 +66,26 @@ function FPP.AdminMenu(Panel)
 			tonum[true] = "1"
 			RunConsoleCommand("FPP_Setting", command[1], command[2], tonum[box.Button:GetChecked()])
 		end
-		plist:AddItem(box)
 	end
 
 	local function addblock(pan, Type)
-		local label = vgui.Create("DLabel")
+		local label = pan:Add("DLabel")
 		label:SetText("\n"..Type.." black/whitelist entities:")
 		label:SizeToContents()
-		pan:AddItem(label)
 
-		local lview = vgui.Create("DListView")
+		local lview = pan:Add("DListView")
 		lview:AddColumn("Entity")
-		pan:AddItem(lview)
+
 		BlockedLists[string.lower(Type)] = lview
 		RunConsoleCommand("FPP_sendblocked", Type)
 
-		local RemoveSelected = vgui.Create("DButton")
+		local RemoveSelected = pan:Add("DButton")
 		RemoveSelected:SetText("Remove Selected items from the list")
 		RemoveSelected:SetDisabled(not superadmin)
 		RemoveSelected.DoClick = function()
 			for k,v in pairs(lview.Lines) do
-				if v:GetSelected() then
-					timer.Simple(k/10, RunConsoleCommand, "FPP_RemoveBlocked", Type, v.text)
+				if v:IsLineSelected() then
+					timer.Simple(k/10, function() RunConsoleCommand("FPP_RemoveBlocked", Type, v.text) end)
 					lview:RemoveLine(k)
 					lview:SetTall(17 + #lview:GetLines() * 17)
 					pan:InvalidateLayout()
@@ -97,14 +93,13 @@ function FPP.AdminMenu(Panel)
 				end
 			end
 		end
-		pan:AddItem(RemoveSelected)
 
-		local AddLA = vgui.Create("DButton")
+		local AddLA = pan:Add("DButton")
 		AddLA:SetText("Add the entity you're looking at")
 		AddLA:SetDisabled(not superadmin)
 		AddLA.DoClick = function()
-			local ent = LocalPlayer():GetEyeTrace().Entity
-			if not ValidEntity(ent) then return end
+			local ent = LocalPlayer():GetEyeTraceNoCursor().Entity
+			if not IsValid(ent) then return end
 			for k,v in pairs(lview.Lines) do
 				if v.text == string.lower(ent:GetClass()) then return end
 			end
@@ -115,9 +110,8 @@ function FPP.AdminMenu(Panel)
 			pan:InvalidateLayout()
 			pan:GetParent():GetParent():InvalidateLayout()
 		end
-		pan:AddItem(AddLA)
 
-		local AddManual = vgui.Create("DButton")
+		local AddManual = pan:Add("DButton")
 		AddManual:SetText("Add entity manually")
 		AddManual:SetDisabled(not superadmin)
 		AddManual.DoClick = function()
@@ -126,11 +120,10 @@ function FPP.AdminMenu(Panel)
 			RunConsoleCommand("FPP_AddBlocked", Type, a)
 			end, function() end )
 		end
-		pan:AddItem(AddManual)
 	end
 
 	local function addsldr(max, command, text, plist, decimals)
-		local sldr = vgui.Create("DNumSlider")
+		local sldr = plist:Add("DNumSlider")
 		sldr:SetMinMax(0, max)
 		decimals = decimals or 1
 		sldr:SetDecimals(decimals)
@@ -145,29 +138,11 @@ function FPP.AdminMenu(Panel)
 			end
 			RunConsoleCommand("FPP_Setting", command[1], command[2], sldr:GetValue())
 		end
-
-		function sldr.Wang:EndWang()
-			self:MouseCapture( false )
-			self.Dragging = false
-			self.HoldPos = nil
-			self.Wanger:SetCursor( "" )
-			if ( ValidPanel( self.IndicatorT ) ) then self.IndicatorT:Remove() end
-			if ( ValidPanel( self.IndicatorB ) ) then self.IndicatorB:Remove() end
-			if not superadmin then
-				sldr:SetValue(GetConVarNumber("_"..command[1].."_"..command[2]))
-				return
-			end
-			RunConsoleCommand("FPP_Setting", command[1], command[2], sldr:GetValue())
+		local KnobMouseReleased = sldr.Slider.Knob.OnMouseReleased
+		function sldr.Slider.Knob:OnMouseReleased(...)
+			KnobMouseReleased(self, ...)
+			sldr.Slider:OnMouseReleased()
 		end
-
-		function sldr.Wang.TextEntry:OnEnter()
-			if not superadmin then
-				sldr:SetValue(GetConVarNumber("_"..command[1].."_"..command[2]))
-				return
-			end
-			RunConsoleCommand("FPP_Setting", command[1], command[2], sldr:GetValue())
-		end
-		plist:AddItem(sldr)
 	end
 
 	local GeneralCat, general = MakeOption("General options")
@@ -177,29 +152,25 @@ function FPP.AdminMenu(Panel)
 	addchk("Anti speedhack(requires changelevel)", {"FPP_GLOBALSETTINGS1", "antispeedhack"}, general)
 	addchk("Anti E2 mingery (mass killing with E2)", {"FPP_GLOBALSETTINGS1", "antie2minge"}, general)
 
-	local delnow = vgui.Create("DButton")
+	local delnow = general:Add("DButton")
 	delnow:SetText("Delete disconnected players' entities")
 	delnow:SetConsoleCommand("FPP_cleanup", "disconnected")
 	delnow:SetDisabled(not superadmin)
-	general:AddItem(delnow)
 
-	local other = Label("\nDelete player's entities:")
+	local other = general:Add(Label("\nDelete player's entities:"))
 	other:SizeToContents()
-	general:AddItem(other)
 
 	local areplayers = false
 	for k,v in pairs(player.GetAll()) do
 		areplayers = true
-		local rm = vgui.Create("DButton")
+		local rm = general:Add("DButton")
 		rm:SetText(v:Nick())
 		rm:SetConsoleCommand("FPP_Cleanup", v:UserID())
 		rm:SetDisabled(not LocalPlayer():IsAdmin() and not superadmin)
-		general:AddItem(rm)
 	end
 	if not areplayers then
-		local nope = Label("<No players available>")
+		local nope = general:Add(Label("<No players available>"))
 		nope:SizeToContents()
-		general:AddItem(nope)
 	end
 
 	local Antispamcat, antispam = MakeOption("Antispam options")
@@ -268,9 +239,7 @@ function FPP.AdminMenu(Panel)
 	addblock(playeruse, "PlayerUse1")
 
 	local damagecat, damage = MakeOption("Entity damage options")
-	local descr = Label("Prevents players from damaging other players' props")
-	other:SizeToContents()
-	damage:AddItem(descr)
+	damage:Add(Label("Prevents players from damaging other players' props"))
 
 	addchk("Damage protection enabled", {"FPP_ENTITYDAMAGE1", "toggle"}, damage)
 	addchk("Prop damage protection", {"FPP_ENTITYDAMAGE1", "protectpropdamage"}, damage)
@@ -285,27 +254,26 @@ function FPP.AdminMenu(Panel)
 	addblock(damage, "EntityDamage1")
 
 	local blockedmodelscat, blockedmodels = MakeOption("Blocked models options")
-	local BlockedModelsLabel = vgui.Create("DLabel")
+	local BlockedModelsLabel = blockedmodels:Add("DLabel")
 	BlockedModelsLabel:SetText("\nTo add a model in the blocked models list:\nOpen the spawn menu, right click a prop and\nadd it to the blocked list")
 	BlockedModelsLabel:SizeToContents()
-	blockedmodels:AddItem(BlockedModelsLabel)
 
 	addchk("Blocked models enabled", {"FPP_BLOCKMODELSETTINGS1", "toggle"}, blockedmodels)
 	addchk("The blocked models list is a white list", {"FPP_BLOCKMODELSETTINGS1", "iswhitelist"}, blockedmodels)
 
-	local BlockedModelsAddLA = vgui.Create("DButton")
+	local BlockedModelsAddLA = blockedmodels:Add("DButton")
 	BlockedModelsAddLA:SetText("Add model of entity you're looking at")
 	function BlockedModelsAddLA:DoClick()
-		if not ValidEntity(LocalPlayer():GetEyeTrace().Entity) then return end
-		RunConsoleCommand("FPP_AddBlockedModel", LocalPlayer():GetEyeTrace().Entity:GetModel())
+		if not IsValid(LocalPlayer():GetEyeTraceNoCursor().Entity) then return end
+		RunConsoleCommand("FPP_AddBlockedModel", LocalPlayer():GetEyeTraceNoCursor().Entity:GetModel())
 	end
-	blockedmodels:AddItem(BlockedModelsAddLA)
 
-	local BlockedModelsList = vgui.Create("DButton")
+	local BlockedModelsList = blockedmodels:Add("DButton")
 	BlockedModelsList:SetText("Show blocked models")
 	BlockedModelsList:SetToolTip("If there are no models in the list THIS BUTTON WON'T DO ANYTHING")
 	function BlockedModelsList:DoClick()
 		RunConsoleCommand("FPP_sendblockedmodels")
+
 
 		local frame = vgui.Create("DFrame")
 		frame:MakePopup()
@@ -342,19 +310,19 @@ function FPP.AdminMenu(Panel)
 		frame.pan:SetAutoSize(false)
 		ShowBlockedModels = frame
 	end
-	blockedmodels:AddItem(BlockedModelsList)
 
 	local ToolRestrictCat, ToolRestrict = MakeOption("Tool restriction") --spawnmenu.GetTools()
 
-	FPP.DtreeToolRestrict = FPP.DtreeToolRestrict or vgui.Create("DTree")
-	FPP.multirestricttoollist = FPP.multirestricttoollist or vgui.Create("DListView")
+	FPP.DtreeToolRestrict = ToolRestrict:Add(FPP.DtreeToolRestrict or "DTree")
+	FPP.multirestricttoollist = ToolRestrict:Add(FPP.multirestricttoollist or "DListView")
 	FPP.DtreeToolRestrict:SetVisible(true)
 	FPP.DtreeToolRestrict:SetSize(0, 300)
 
 	local NodesTable = {}
 	FPP.SELECTEDRESTRICTNODE = FPP.SELECTEDRESTRICTNODE or "weld"
 
-	if not FPP.DtreeToolRestrict:GetItems() or #FPP.DtreeToolRestrict:GetItems() == 0 then
+	if not FPP.DtreeToolRestrict.Items then
+		FPP.DtreeToolRestrict.Items = true
 		for a,b in pairs(spawnmenu.GetTools()) do
 			for c,d in pairs(spawnmenu.GetTools()[a].Items) do
 				local addnodes = {}
@@ -390,9 +358,8 @@ function FPP.AdminMenu(Panel)
 			end
 		end
 	end
-	ToolRestrict:AddItem(FPP.DtreeToolRestrict)
 
-	local SingleEditTool = vgui.Create("DButton")
+	local SingleEditTool = ToolRestrict:Add("DButton")
 	SingleEditTool:SetText("Edit/view selected tool restrictions")
 	SingleEditTool:SetToolTip("Edit or view the restrictions of the selected tool!")
 	SingleEditTool.DoClick = function()
@@ -404,17 +371,15 @@ function FPP.AdminMenu(Panel)
 		end
 		SingleEditTool:SetText("No tool selected!")
 
-		timer.Simple(1, function(SEditTool)
-			if ValidPanel(SEditTool) then
-				SEditTool:SetText("Edit/view selected tool's restrictions")
+		timer.Simple(1, function()
+			if ValidPanel(SingleEditTool) then
+				SingleEditTool:SetText("Edit/view selected tool's restrictions")
 			end
-		end, SingleEditTool)
+		end)
 	end
-	ToolRestrict:AddItem(SingleEditTool)
 
-	local EditToolListLabel = Label("\nMultiple tool editor.\nAdd tools in this list by clicking on them,\nthen click \"Edit multiple tools\"\nto edit multiple tools at once!")
+	local EditToolListLabel = ToolRestrict:Add(Label("\nMultiple tool editor.\nAdd tools in this list by clicking on them,\nthen click \"Edit multiple tools\"\nto edit multiple tools at once!"))
 	EditToolListLabel:SizeToContents()
-	ToolRestrict:AddItem(EditToolListLabel)
 
 	if #FPP.multirestricttoollist.Columns ~= 1 then
 		FPP.multirestricttoollist:AddColumn("Tool names")
@@ -425,9 +390,8 @@ function FPP.AdminMenu(Panel)
 		line:SetSelected(true)
 		FPP.multirestricttoollist:RemoveLine(FPP.multirestricttoollist:GetSelectedLine())
 	end
-	ToolRestrict:AddItem(FPP.multirestricttoollist)
 
-	local StartEditMultiTool = vgui.Create("DButton")
+	local StartEditMultiTool = ToolRestrict:Add("DButton")
 	StartEditMultiTool:SetText("Edit multiple tools")
 	StartEditMultiTool:SetToolTip("Start editing the tools in above list!")
 	StartEditMultiTool:SetDisabled(not superadmin)
@@ -446,29 +410,30 @@ function FPP.AdminMenu(Panel)
 		StartEditMultiTool:SetText("List is empty!")
 
 
-		timer.Simple(1, function(StartEditMultiTool)
+		timer.Simple(1, function()
 			if ValidPanel(StartEditMultiTool) then
 				StartEditMultiTool:SetText("Edit multiple tools")
 			end
-		end, StartEditMultiTool)
+		end)
 	end
-	ToolRestrict:AddItem(StartEditMultiTool)
 
 	local GroupRestrictCat, GroupRestrict = MakeOption("Group tool restriction")
 
-	local PressLoadFirst = Label("Press \"Load groups and members\" first!")
-	GroupRestrict:AddItem(PressLoadFirst)
-	local LoadGroups = vgui.Create("DButton")
+	local PressLoadFirst = GroupRestrict:Add(Label("Press \"Load groups and members\" first!"))
+	local  membersLabel = Label("Group Members: NOTE: People who have the\nusergroup that matches with this group\nare automatically in this group!")
+	membersLabel:SizeToContents()
+	GroupRestrict:Add(membersLabel)
+
+	local LoadGroups = GroupRestrict:Add("DButton")
 	LoadGroups:SetText("Load groups and members")
 	LoadGroups.DoClick = function()
 		RunConsoleCommand("FPP_SendGroups")
 		RunConsoleCommand("FPP_SendGroupMembers")
 		PressLoadFirst:SetText("Groups loaded!")
 	end
-	GroupRestrict:AddItem(LoadGroups)
 
 	local ChkAllowDefault
-	local GroupList = vgui.Create("DListView")
+	local GroupList = GroupRestrict:Add("DListView")
 	GroupList:AddColumn("Group names")
 	GroupList:SetSize(0, 100)
 	function GroupList:OnClickLine(line)
@@ -476,10 +441,8 @@ function FPP.AdminMenu(Panel)
 		line:SetSelected(true)
 		ChkAllowDefault:SetValue(FPP.Groups[GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()].allowdefault)
 	end
-	GroupRestrict:AddItem(GroupList)
 
-
-	ChkAllowDefault = vgui.Create("DCheckBoxLabel")
+	ChkAllowDefault = GroupRestrict:Add("DCheckBoxLabel")
 	ChkAllowDefault:SetText("Allow all tools by default")
 	ChkAllowDefault:SetTooltip([[Ticked: All tools are allowed, EXCEPT for the tools in the tool list
 	Unticked: NO tools will be allowed, EXCEPT for the tools in the tool list]])
@@ -495,18 +458,16 @@ function FPP.AdminMenu(Panel)
 		RunConsoleCommand("FPP_ChangeGroupStatus", lineObj.Columns[1]:GetValue(), value)
 		ChkAllowDefault.Button:SetValue(not ChkAllowDefault.Button:GetChecked())
 	end
-	GroupRestrict:AddItem(ChkAllowDefault)
 
-	local AddGroupBtn = vgui.Create("DButton")
+	local AddGroupBtn = GroupRestrict:Add("DButton")
 	AddGroupBtn:SetText("Add a group")
 	AddGroupBtn.DoClick = function()
 		Derma_StringRequest("Name of the group", "What will be the name of the group?\nNOTE: YOU WILL NOT BE ABLE TO CHANGE THIS AFTERWARDS", "", function(text)
 			RunConsoleCommand("FPP_AddGroup", text)
 		end)
 	end
-	GroupRestrict:AddItem(AddGroupBtn)
 
-	local RemGroupBtn = vgui.Create("DButton")
+	local RemGroupBtn = GroupRestrict:Add("DButton")
 	RemGroupBtn:SetText("Remove selected group")
 	RemGroupBtn.DoClick = function()
 		if not GroupList:GetLine(GroupList:GetSelectedLine()) or not GroupList:GetLine(GroupList:GetSelectedLine()).Columns
@@ -518,9 +479,8 @@ function FPP.AdminMenu(Panel)
 		GroupList:RemoveLine(GroupList:GetSelectedLine())
 		PressLoadFirst:SetText("List might be corrupted, reload is recommended")
 	end
-	GroupRestrict:AddItem(RemGroupBtn)
 
-	local EditGroupBtn = vgui.Create("DButton")
+	local EditGroupBtn = GroupRestrict:Add("DButton")
 	EditGroupBtn:SetText("Edit selected group's tools")
 	EditGroupBtn.DoClick = function()
 		if not GroupList:GetLine(GroupList:GetSelectedLine()) or not GroupList:GetLine(GroupList:GetSelectedLine()).Columns
@@ -530,19 +490,15 @@ function FPP.AdminMenu(Panel)
 		end
 		EditGroupTools(GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
 	end
-	GroupRestrict:AddItem(EditGroupBtn)
 
-	local lblGroupRestrict = Label("Group Members: NOTE: People who have the\nusergroup that matches with this group\nare automatically in this group!")
-	lblGroupRestrict:SizeToContents()
-	GroupRestrict:AddItem(lblGroupRestrict)
-	local GroupMembers = vgui.Create("DListView")
+	GroupRestrict:Add(Label("Group Members:"))
+	local GroupMembers = GroupRestrict:Add("DListView")
 	GroupMembers:AddColumn("SteamID")
 	GroupMembers:AddColumn("Name")
 	GroupMembers:AddColumn("Member of")
 	GroupMembers:SetSize(0, 150)
-	GroupRestrict:AddItem(GroupMembers)
 
-	local AddPerson = vgui.Create("DButton")
+	local AddPerson = GroupRestrict:Add("DButton")
 	AddPerson:SetText("Change group of this person to selected")
 	AddPerson.DoClick = function()
 		if not GroupList:GetLine(GroupList:GetSelectedLine()) or not GroupList:GetLine(GroupList:GetSelectedLine()).Columns
@@ -552,12 +508,11 @@ function FPP.AdminMenu(Panel)
 		end
 
 		for k,v in pairs(GroupMembers:GetSelected()) do
-			timer.Simple(k/10, RunConsoleCommand, "FPP_SetPlayerGroup", v.Columns[1]:GetValue(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
+			timer.Simple(k/10, function() RunConsoleCommand("FPP_SetPlayerGroup", v.Columns[1]:GetValue(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()) end)
 		end
 	end
-	GroupRestrict:AddItem(AddPerson)
 
-	local AddPersonManual = vgui.Create("DButton")
+	local AddPersonManual = GroupRestrict:Add("DButton")
 	AddPersonManual:SetText("Add person/SteamID to selected group")
 	AddPersonManual.DoClick = function()
 		if not GroupList:GetLine(GroupList:GetSelectedLine()) or not GroupList:GetLine(GroupList:GetSelectedLine()).Columns
@@ -583,23 +538,22 @@ function FPP.AdminMenu(Panel)
 		end)
 		menu:Open()
 	end
-	GroupRestrict:AddItem(AddPersonManual)
 
-	local function RetrieveGroups(handler, id, encoded, decoded)
-		FPP.Groups = decoded
+	local function RetrieveGroups(len)
+		FPP.Groups = net.ReadTable()
 		GroupList:Clear()
-		for k,v in pairs(decoded) do
+		for k,v in pairs(FPP.Groups) do
 			GroupList:AddLine(k)
 		end
 		GroupList:SelectFirstItem()
 		ChkAllowDefault:SetValue(FPP.Groups[GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()].allowdefault)
 	end
-	datastream.Hook("FPP_Groups", RetrieveGroups)
+	net.Receive("FPP_Groups", RetrieveGroups)
 
-	local function RetrieveGroupMembers(handler, id, encoded, decoded)
-		FPP.GroupMembers = decoded
+	local function RetrieveGroupMembers(len)
+		FPP.GroupMembers = net.ReadTable()
 		GroupMembers:Clear()
-		for k,v in pairs(decoded) do
+		for k,v in pairs(FPP.GroupMembers) do
 			local name = "Unknown"
 			for _, ply in pairs(player.GetAll()) do
 				if ply:SteamID() == k then
@@ -611,9 +565,11 @@ function FPP.AdminMenu(Panel)
 		end
 		GroupMembers:SelectFirstItem()
 	end
-	datastream.Hook("FPP_GroupMembers", RetrieveGroupMembers)
+	net.Receive("FPP_GroupMembers", RetrieveGroupMembers)
 
-	Panel:AddControl("Label", {Text = "\nFalco's Prop Protection\nMade by Falco A.K.A. FPtje"})
+	AdminPanel.contents:Add(Label("\nFalco's Prop Protection\nMade by Falco A.K.A. FPtje")):SizeToContents()
+	AdminPanel:SetContents(AdminPanel.contents)
+	AdminPanel:Dock(FILL)
 end
 
 RetrieveBlockedModels = function(um)
@@ -705,9 +661,9 @@ RetrieveRestrictedTool = function(um)
 					RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
 				else
 					for a,b in pairs(tool) do
-						timer.Simple(a/10, function(b, GoodValue) -- Timer to prevent lag of executing multiple commands at the same time.
-							RunConsoleCommand("FPP_restricttool", b, "admin", GoodValue)
-						end, b, adminsCHKboxes[k].GoodValue)
+						timer.Simple(a/10, function() -- Timer to prevent lag of executing multiple commands at the same time.
+							RunConsoleCommand("FPP_restricttool", b, "admin", adminsCHKboxes[k].GoodValue)
+						end)
 					end
 				end
 			else
@@ -737,9 +693,9 @@ RetrieveRestrictedTool = function(um)
 					RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 2)
 				else
 					for a,b in pairs(tool) do
-						timer.Simple(a/10, function(b, userid, allow)
-							RunConsoleCommand("FPP_restricttoolplayer", b, userid, allow)
-						end, b, v:UserID(), 2)
+						timer.Simple(a/10, function()
+							RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 2)
+						end)
 					end
 				end
 			end)
@@ -750,9 +706,9 @@ RetrieveRestrictedTool = function(um)
 					RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 1)
 				else
 					for a,b in pairs(tool) do
-						timer.Simple(a/10, function(b, userid, allow)
-							RunConsoleCommand("FPP_restricttoolplayer", b, userid, allow)
-						end, b, v:UserID(), 1)
+						timer.Simple(a/10, function()
+							RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 1)
+						end)
 					end
 				end
 			end)
@@ -763,9 +719,9 @@ RetrieveRestrictedTool = function(um)
 					RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 0)
 				else
 					for a,b in pairs(tool) do
-						timer.Simple(a/10, function(b, userid, allow)
-							RunConsoleCommand("FPP_restricttoolplayer", b, userid, allow)
-						end, b, v:UserID(), 0)
+						timer.Simple(a/10, function()
+							RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 0)
+						end)
 					end
 				end
 			end)
@@ -802,9 +758,9 @@ RetrieveRestrictedTool = function(um)
 				RunConsoleCommand("FPP_restricttool", tool, "team", chkbx.Team, tonum[chkbx.Button:GetChecked()] )
 			else
 				for a,b in pairs(tool) do
-					timer.Simple(a/10, function(b, Team, checked)
-						RunConsoleCommand("FPP_restricttool", b, "team", Team, checked)
-					end, b, chkbx.Team, tonum[chkbx.Button:GetChecked()])
+					timer.Simple(a/10, function()
+						RunConsoleCommand("FPP_restricttool", b, "team", chkbx.Team, tonum[chkbx.Button:GetChecked()])
+					end)
 				end
 			end
 		end
@@ -891,7 +847,7 @@ EditGroupTools = function(groupname)
 				end
 				if not found then
 					GroupTools:AddLine(string.lower(v.Tool))
-					timer.Simple(k/10, RunConsoleCommand, "FPP_AddGroupTool", groupname, v.Tool)
+					timer.Simple(k/10, function() RunConsoleCommand("FPP_AddGroupTool", groupname, v.Tool) end)
 				end
 			end
 		end
@@ -903,11 +859,12 @@ EditGroupTools = function(groupname)
 	RemTool:SetText("<")
 	RemTool.DoClick = function()
 		for k,v in pairs(GroupTools:GetSelected()) do
-			timer.Simple(k/10, RunConsoleCommand, "FPP_RemoveGroupTool", groupname, v.Columns[1]:GetValue())
+			timer.Simple(k/10, function() RunConsoleCommand("FPP_RemoveGroupTool", groupname, v.Columns[1]:GetValue()) end)
 			GroupTools:RemoveLine(v.m_iID)
 		end
 	end
 end
+
 
 local function retrieveblocked(um)
 	local Type = string.lower(um:ReadString())
@@ -916,13 +873,15 @@ local function retrieveblocked(um)
 	local line = BlockedLists[Type]:AddLine(text)
 	line.text = text
 	BlockedLists[Type]:SetTall(18 + #BlockedLists[Type]:GetLines() * 17)
-	BlockedLists[Type]:GetParent():GetParent():GetParent():GetParent():InvalidateLayout()
+	//BlockedLists[Type]:GetParent():GetParent():GetParent():GetParent():InvalidateLayout()
 end
 usermessage.Hook("FPP_blockedlist", retrieveblocked)
 
+local BuddiesPanel
 function FPP.BuddiesMenu(Panel)
-	BuddiesPanel = BuddiesPanel or Panel
+	BuddiesPanel = Panel
 	Panel:ClearControls()
+	BuddiesPanel:Clear()
 
 	Panel:AddControl("Label", {Text = "\nBuddies menu\nNote: Your buddies are saved and will work in all servers with FPP\nThe buddies list includes players that aren't here\n\nYour buddies:"})
 	local BuddiesList = vgui.Create("DListView")
@@ -1083,7 +1042,7 @@ hook.Add("SpawnMenuOpen", "FPPMenus", UpdateMenus)
 
 function FPP.SharedMenu(um)
 	local ent = um:ReadEntity()
-	if not ValidEntity(ent) then frame:Close() return end
+	if not IsValid(ent) then frame:Close() return end
 	local frame = vgui.Create("DFrame")
 	frame:SetTitle("Share "..ent:GetClass())
 	frame:MakePopup()
@@ -1108,7 +1067,7 @@ function FPP.SharedMenu(um)
 		count = count + 1
 		box:SetValue(value)
 		box.Button.Toggle = function()
-			if not ValidEntity(ent) then frame:Close() return end
+			if not IsValid(ent) then frame:Close() return end
 			if box.Button:GetChecked() == nil or not box.Button:GetChecked() then
 				box.Button:SetValue( true )
 			else

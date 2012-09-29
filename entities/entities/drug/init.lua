@@ -3,7 +3,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 local function DrugPlayer(ply)
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 	local RP = RecipientFilter()
 	RP:RemoveAllPlayers()
 	RP:AddPlayer(ply)
@@ -21,15 +21,15 @@ local function DrugPlayer(ply)
 	if not timer.IsTimer(IDSteam.."DruggedHealth") and not timer.IsTimer(IDSteam) then
 		ply:SetHealth(ply:Health() + 100)
 		timer.Create(IDSteam.."DruggedHealth", 60/(100 + 5), 100 + 5, function()
-			if ValidEntity(ply) then ply:SetHealth(ply:Health() - 1) end
+			if IsValid(ply) then ply:SetHealth(ply:Health() - 1) end
 			if ply:Health() <= 0 then ply:Kill() end
 		end)
-		timer.Create(IDSteam, 60, 1, UnDrugPlayer, ply)
+		timer.Create(IDSteam, 60, 1, function() UnDrugPlayer(ply) end)
 	end
 end
 
 function UnDrugPlayer(ply) -- Global function, used in sv_gamemode_functions
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 	local RP = RecipientFilter()
 	RP:RemoveAllPlayers()
 	RP:AddPlayer(ply)
@@ -92,6 +92,6 @@ end
 
 function ENT:OnRemove()
 	local ply = self.dt.owning_ent
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 	ply.maxDrugs = ply.maxDrugs - 1
 end

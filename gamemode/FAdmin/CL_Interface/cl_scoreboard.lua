@@ -31,19 +31,14 @@ function FAdmin.ScoreBoard.ChangeGmodLogo(new)
 	for i = 0, 0.5, 0.01 do
 		timer.Simple(i, function() GmodLogoColor = Color(255,255,255,GmodLogoColor.a-5.1) end)
 	end
-	timer.Simple(0.5, function() GmodLogo = surface.GetTextureID(new) end, new)
+	timer.Simple(0.5, function() GmodLogo = surface.GetTextureID(new) end)
 	for i = 0.5, 1, 0.01 do
 		timer.Simple(i, function() GmodLogoColor = Color(255,255,255,GmodLogoColor.a+5.1) end)
 	end
 end
 
-local BackgroundTexture = surface.GetTextureID("pp/blurx")
 function FAdmin.ScoreBoard.Background()
-	DrawMotionBlur(1,1,0)
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-	surface.SetDrawColor(255,255,255,100)
-	surface.SetTexture(BackgroundTexture)
-	surface.DrawTexturedRect(FAdmin.ScoreBoard.X, FAdmin.ScoreBoard.Y, FAdmin.ScoreBoard.Width, FAdmin.ScoreBoard.Height)
 
 	surface.SetDrawColor(0,0,0,200)
 	surface.DrawRect(FAdmin.ScoreBoard.X, FAdmin.ScoreBoard.Y, FAdmin.ScoreBoard.Width, FAdmin.ScoreBoard.Height)
@@ -68,16 +63,18 @@ function FAdmin.ScoreBoard.ShowScoreBoard()
 	FAdmin.ScoreBoard.DontGoBack = input.IsMouseDown(MOUSE_4) or input.IsKeyDown(KEY_BACKSPACE)
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 
-	FAdmin.ScoreBoard.Controls.Hostname = FAdmin.ScoreBoard.Controls.Hostname or vgui.Create( "Label", self )
+	FAdmin.ScoreBoard.Controls.Hostname = FAdmin.ScoreBoard.Controls.Hostname or vgui.Create( "DLabel", self )
 	FAdmin.ScoreBoard.Controls.Hostname:SetText(GetHostName())
 	FAdmin.ScoreBoard.Controls.Hostname:SetFont("ScoreboardHeader")
+	FAdmin.ScoreBoard.Controls.Hostname:SetColor(Color(200,200,200,200))
 	FAdmin.ScoreBoard.Controls.Hostname:SetPos(FAdmin.ScoreBoard.X + 90, FAdmin.ScoreBoard.Y + 20)
 	FAdmin.ScoreBoard.Controls.Hostname:SizeToContents()
 	FAdmin.ScoreBoard.Controls.Hostname:SetVisible(true)
 
-	FAdmin.ScoreBoard.Controls.Description = FAdmin.ScoreBoard.Controls.Description or vgui.Create( "Label" )
+	FAdmin.ScoreBoard.Controls.Description = FAdmin.ScoreBoard.Controls.Description or vgui.Create( "DLabel" )
 	FAdmin.ScoreBoard.Controls.Description:SetText(GAMEMODE.Name .. "\n\t"..GAMEMODE.Author)
 	FAdmin.ScoreBoard.Controls.Description:SetFont("ScoreboardSubtitle")
+	FAdmin.ScoreBoard.Controls.Description:SetColor(Color(200,200,200,200))
 	FAdmin.ScoreBoard.Controls.Description:SetPos(FAdmin.ScoreBoard.X + 90, FAdmin.ScoreBoard.Y + 50)
 	FAdmin.ScoreBoard.Controls.Description:SizeToContents()
 	if FAdmin.ScoreBoard.X + FAdmin.ScoreBoard.Width / 9.5 + FAdmin.ScoreBoard.Controls.Description:GetWide() > FAdmin.ScoreBoard.Width - 150 then
@@ -86,9 +83,10 @@ function FAdmin.ScoreBoard.ShowScoreBoard()
 	end
 	FAdmin.ScoreBoard.Controls.Description:SetVisible(true)
 
-	FAdmin.ScoreBoard.Controls.ServerSettingsLabel = FAdmin.ScoreBoard.Controls.ServerSettingsLabel or vgui.Create("Label")
+	FAdmin.ScoreBoard.Controls.ServerSettingsLabel = FAdmin.ScoreBoard.Controls.ServerSettingsLabel or vgui.Create("DLabel")
 	FAdmin.ScoreBoard.Controls.ServerSettingsLabel:SetFont("ScoreboardSubtitle")
 	FAdmin.ScoreBoard.Controls.ServerSettingsLabel:SetText("Server settings")
+	FAdmin.ScoreBoard.Controls.ServerSettingsLabel:SetColor(Color(200,200,200,200))
 	FAdmin.ScoreBoard.Controls.ServerSettingsLabel:SizeToContents()
 	FAdmin.ScoreBoard.Controls.ServerSettingsLabel:SetPos(FAdmin.ScoreBoard.Width-150, FAdmin.ScoreBoard.Y + 68)
 	FAdmin.ScoreBoard.Controls.ServerSettingsLabel:SetVisible(true)

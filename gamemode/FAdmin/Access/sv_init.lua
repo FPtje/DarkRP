@@ -21,8 +21,8 @@ end)
 
 function FAdmin.Access.PlayerSetGroup(ply, group)
 	if not FAdmin.Access.Groups[group] then return end
-	local SteamID = type(ply) ~= "string" and ValidEntity(ply) and ply:SteamID() or ply
-	if type(ply) ~= "string" and ValidEntity(ply) then
+	local SteamID = type(ply) ~= "string" and IsValid(ply) and ply:SteamID() or ply
+	if type(ply) ~= "string" and IsValid(ply) then
 		ply:SetUserGroup(group)
 	end
 
@@ -33,13 +33,13 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
 	local targets = FAdmin.FindPlayer(args[1])
-	if not targets or #targets == 1 and not ValidEntity(targets[1]) then
+	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
 		return
 	end
 
 	for _, target in pairs(targets) do
-		if ValidEntity(target) then
+		if IsValid(target) then
 			FAdmin.Access.PlayerSetGroup(target, "superadmin")
 			if ULib and ULib.ucl and ULib.ucl.groups and ULib.ucl.groups["superadmin"] then --Add to ULX
 				ULib.ucl.addUser(target:SteamID(), nil, nil, "superadmin")
@@ -99,7 +99,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args) -- FAdmin SetAccess <player> gr
 	end
 
 	for _, target in pairs(targets) do
-		if ValidEntity(target) then
+		if IsValid(target) then
 			FAdmin.Access.PlayerSetGroup(target, args[2])
 			FAdmin.Messages.SendMessage(ply, 2, "User access set!")
 		end

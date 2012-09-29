@@ -298,7 +298,7 @@ local function EarthQuakeTest()
 		tremor:Fire("explode","",0.5)
 		util.ScreenShake(Vector(0,0,0), force, math.random(25,50), math.random(5,12), 9999999999)
 		table.insert(lastmagnitudes, math.floor((force / 10) + .5) / 10)
-		timer.Simple(10, TremorReport, alert)
+		timer.Simple(10, function() TremorReport(alert) end)
 		for k,e in pairs(en) do
 			local rand = math.random(650,1000)
 			if rand < force and rand % 2 == 0 then
@@ -306,7 +306,7 @@ local function EarthQuakeTest()
 				constraint.RemoveAll(e)
 			end
 			if e:IsOnGround() then
-				e:TakeDamage((force / 100) + 15, GetWorldEntity())
+				e:TakeDamage((force / 100) + 15, game.GetWorld())
 			end
 		end
 	end

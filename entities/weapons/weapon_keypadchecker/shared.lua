@@ -3,7 +3,7 @@ if SERVER then
 	AddCSLuaFile("cl_init.lua")
 end
 
-SWEP.Base = "weapon_cs_base"
+SWEP.Base = "weapon_base"
 
 SWEP.PrintName = "Admin keypad checker"
 SWEP.Author = "FPtje"
@@ -98,7 +98,9 @@ function SWEP:PrimaryAttack()
 		GAMEMODE:Notify(self.Owner, 1, 4, "This entity is controlled by "..#data .. " keypads")
 	end
 
-	datastream.StreamToClients(self.Owner, "DarkRP_keypadData", data)
+	net.Start("DarkRP_keypadData")
+		net.WriteTable(data)
+	net.Send(ply)
 end
 
 function SWEP:SecondaryAttack()

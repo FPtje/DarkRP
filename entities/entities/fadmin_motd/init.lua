@@ -18,7 +18,7 @@ function ENT:Initialize()
 end
 
 function ENT:OnRemove()
-	if not self.CanRemove and ValidEntity(self.target) then
+	if not self.CanRemove and IsValid(self.target) then
 		local Replace = ents.Create("fadmin_motd")
 
 		Replace:SetPos(self.SolidPos)

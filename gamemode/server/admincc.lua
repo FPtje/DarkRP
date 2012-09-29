@@ -35,9 +35,9 @@ function GM:ccValueCommand(ply, cmd, args)
 
 	self:NotifyAll(0, 4, nick .. " set " .. cmd .. " to " .. amount)
 	if ply.SteamName then
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..cmd.." to "..amount )
+		DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..cmd.." to "..amount, nil, Color(30, 30, 30))
 	else
-		DB.Log("Console set "..cmd.." to "..amount )
+		DB.Log("Console set "..cmd.." to "..amount, nil, Color(30, 30, 30))
 	end
 end
 
@@ -86,9 +86,9 @@ function GM:ccToggleCommand(ply, cmd, args)
 
 	self:NotifyAll(0, 3, nick .. " set " .. cmd .. " to " .. toggle)
 	if ply.SteamName then
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..cmd.." to "..toggle )
+		DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..cmd.." to "..toggle, nil, Color(30, 30, 30))
 	else
-		DB.Log("Console set "..cmd.." to "..toggle )
+		DB.Log("Console set "..cmd.." to "..toggle, nil, Color(30, 30, 30))
 	end
 end
 
@@ -107,14 +107,14 @@ local function ccDoorOwn(ply, cmd, args)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
 		return
 	end
 
 	trace.Entity:Fire("unlock", "", 0)
 	trace.Entity:UnOwn()
 	trace.Entity:Own(ply)
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-owned a door with rp_own" )
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-owned a door with rp_own", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_own", ccDoorOwn)
 
@@ -130,13 +130,13 @@ local function ccDoorUnOwn(ply, cmd, args)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
 		return
 	end
 
 	trace.Entity:Fire("unlock", "", 0)
 	trace.Entity:UnOwn()
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-unowned a door with rp_unown" )
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-unowned a door with rp_unown", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_unown", ccDoorUnOwn)
 
@@ -152,7 +152,7 @@ local function ccAddOwner(ply, cmd, args)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
 		return
 	end
 
@@ -171,7 +171,7 @@ local function ccAddOwner(ply, cmd, args)
 	else
 		ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
 	end
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-added a door owner with rp_addowner" )
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_addowner", ccAddOwner)
 
@@ -187,7 +187,7 @@ local function ccRemoveOwner(ply, cmd, args)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
 		return
 	end
 
@@ -204,7 +204,7 @@ local function ccRemoveOwner(ply, cmd, args)
 	else
 		ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
 	end
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner" )
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_removeowner", ccRemoveOwner)
 
@@ -220,7 +220,7 @@ local function ccLock(ply, cmd, args)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
 		return
 	end
 
@@ -228,7 +228,7 @@ local function ccLock(ply, cmd, args)
 
 	trace.Entity:KeysLock()
 	DB.Query("REPLACE INTO darkrp_door VALUES("..sql.SQLStr(trace.Entity:EntIndex())..", "..sql.SQLStr(string.lower(game.GetMap()))..", "..sql.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-locked a door with rp_lock (locked door is saved)" )
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-locked a door with rp_lock (locked door is saved)", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_lock", ccLock)
 
@@ -244,14 +244,14 @@ local function ccUnLock(ply, cmd, args)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
 		return
 	end
 
 	ply:PrintMessage(2, "Unlocked.")
 	trace.Entity:KeysUnLock()
 	DB.Query("REPLACE INTO darkrp_door VALUES("..sql.SQLStr(trace.Entity:EntIndex())..", "..sql.SQLStr(string.lower(game.GetMap()))..", "..sql.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)" )
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_unlock", ccUnLock)
 
@@ -279,9 +279,9 @@ local function ccTell(ply, cmd, args)
 		umsg.End()
 
 		if ply:EntIndex() == 0 then
-			DB.Log("Console did rp_tell \""..msg .. "\" on "..target:SteamName() )
+			DB.Log("Console did rp_tell \""..msg .. "\" on "..target:SteamName(), nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName() )
+			DB.Log(ply:SteamName().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName(), nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -312,9 +312,9 @@ local function ccTellAll(ply, cmd, args)
 	umsg.End()
 
 	if ply:EntIndex() == 0 then
-		DB.Log("Console did rp_tellall \""..msg .. "\"" )
+		DB.Log("Console did rp_tellall \""..msg .. "\"", nil, Color(30, 30, 30))
 	else
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") did rp_tellall \""..msg .. "\"" )
+		DB.Log(ply:SteamName().." ("..ply:SteamID()..") did rp_tellall \""..msg .. "\"", nil, Color(30, 30, 30))
 	end
 
 end
@@ -343,9 +343,9 @@ local function ccRemoveLetters(ply, cmd, args)
 	end
 
 	if ply:EntIndex() == 0 then
-		DB.Log("Console force-removed all letters" )
+		DB.Log("Console force-removed all letters", nil, Color(30, 30, 30))
 	else
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-removed all letters" )
+		DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-removed all letters", nil, Color(30, 30, 30))
 	end
 end
 concommand.Add("rp_removeletters", ccRemoveLetters)
@@ -376,9 +376,9 @@ local function ccArrest(ply, cmd, args)
 		end
 
 		if ply:EntIndex() == 0 then
-			DB.Log("Console force-arrested "..target:SteamName())
+			DB.Log("Console force-arrested "..target:SteamName(), nil, Color(0, 255, 255))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-arrested "..target:SteamName() )
+			DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-arrested "..target:SteamName(), nil, Color(0, 255, 255))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -405,9 +405,9 @@ local function ccUnarrest(ply, cmd, args)
 		if not target:Alive() then target:Spawn() end
 
 		if ply:EntIndex() == 0 then
-			DB.Log("Console force-unarrested "..target:SteamName())
+			DB.Log("Console force-unarrested "..target:SteamName(), nil, Color(0, 255, 255))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-unarrested "..target:SteamName() )
+			DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-unarrested "..target:SteamName(), nil, Color(0, 255, 255))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -454,9 +454,9 @@ local function ccSetMoney(ply, cmd, args)
 		end
 		target:PrintMessage(2, nick .. " set your money to: " .. CUR .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s money to "..CUR..amount )
+			DB.Log("Console set "..target:SteamName().."'s money to "..CUR..amount, nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..CUR..amount)
+			DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..CUR..amount, nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -511,9 +511,9 @@ local function ccSetSalary(ply, cmd, args)
 		end
 		target:PrintMessage(2, nick .. " set your Salary to: " .. CUR .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s salary to "..CUR..amount )
+			DB.Log("Console set "..target:SteamName().."'s salary to "..CUR..amount, nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..CUR..amount)
+			DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..CUR..amount, nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -533,8 +533,8 @@ local function ccSENTSPawn(ply, cmd, args)
 			return
 		end
 	end
-	CCSpawnSENT(ply, cmd, args)
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned SENT "..args[1] )
+	Spawn_SENT(ply, args[1])
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned SENT "..args[1], nil, Color(255, 255, 0))
 end
 concommand.Add("gm_spawnsent", ccSENTSPawn)
 
@@ -545,8 +545,8 @@ local function ccVehicleSpawn(ply, cmd, args)
 			return
 		end
 	end
-	CCSpawnVehicle(ply, cmd, args)
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned Vehicle "..args[1] )
+	Spawn_Vehicle(ply, args[1])
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned Vehicle "..args[1], nil, Color(255, 255, 0))
 end
 concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
 
@@ -557,8 +557,8 @@ local function ccNPCSpawn(ply, cmd, args)
 			return
 		end
 	end
-	CCSpawnNPC(ply, cmd, args)
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned NPC "..args[1] )
+	Spawn_NPC(ply, args[1])
+	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned NPC "..args[1], nil, Color(255, 255, 0))
 end
 concommand.Add("gm_spawnnpc", ccNPCSpawn)
 
@@ -593,9 +593,9 @@ local function ccSetRPName(ply, cmd, args)
 		end
 		target:PrintMessage(2, nick .. " set your name to: " .. args[2])
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s name to " .. args[2])
+			DB.Log("Console set "..target:SteamName().."'s name to " .. args[2], nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..target:SteamName().."'s name to " .. args[2])
+			DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..target:SteamName().."'s name to " .. args[2], nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

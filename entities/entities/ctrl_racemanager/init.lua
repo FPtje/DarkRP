@@ -20,7 +20,7 @@ function ENT:Initialize()
 
 	self.participants = {}
 	self.CheckPoints = {}
-	if not ValidEntity(self.Player) then self:Remove() end
+	if not IsValid(self.Player) then self:Remove() end
 	--self.Player:SendLua("Entity(".. self:EntIndex().."):Start()")
 	self.PlayerHasTool = self.Player:HasWeapon("gmod_tool")
 	self.Player:Give("gmod_tool")

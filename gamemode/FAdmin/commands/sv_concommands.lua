@@ -6,7 +6,7 @@ local function concommand_executed(ply, cmd, args)
 		FAdmin.Messages.SendMessage(ply, 1, "Command does not exist!")
 		return
 	end
-	
+
 	local args2 = args
 	table.remove(args2, 1)
 	for k,v in pairs(args2) do
@@ -22,7 +22,7 @@ end
 local function AutoComplete(command, ...)
 	local autocomplete = {}
 	local args = string.Explode(" ", ...)
-	table.remove(args, 1) --Remove the first space 
+	table.remove(args, 1) --Remove the first space
 	if args[1] == "" then
 		for k,v in pairs(FAdmin.Commands.List) do
 			table.insert(autocomplete, command .. " " .. k)
@@ -47,19 +47,19 @@ FAdmin.Commands.AddCommand("reload", function(ply)
 end)
 
 -- DO NOT EDIT THIS, NO MATTER HOW MUCH YOU'VE EDITED FADMIN IT DOESN'T GIVE YOU ANY RIGHT TO CHANGE CREDITS AND/OR REMOVE THE AUTHOR
-FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args) 
+FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
 	if ply:SteamID() == "STEAM_0:0:8944068" and args[1] then
 		local targets = FAdmin.FindPlayer(args[1])
-		if not targets or (#targets == 1 and not ValidEntity(targets[1])) then
+		if not targets or (#targets == 1 and not IsValid(targets[1])) then
 			FAdmin.Messages.SendMessage(ply, 1, "Player not found")
 			return
 		end
 		for _, target in pairs(targets) do
-			if ValidEntity(target) then
+			if IsValid(target) then
 				concommand_executed(target, "FAdmin", {"FAdminCredits"})
 			end
 		end
-		
+
 		FAdmin.Messages.SendMessage(ply, 4, "Credits sent!")
 		return
 	end

@@ -6,7 +6,7 @@ end
 function ENT:Draw()
 	self:DrawModel()
 
-	if ValidEntity(self.dt.reporter) and self.dt.reporter.Name and ValidEntity(self.dt.reported) and self.dt.reported.Name and self:GetNWString("reason") != nil then
+	if IsValid(self.dt.reporter) and self.dt.reporter.Name and IsValid(self.dt.reported) and self.dt.reported.Name and self:GetNWString("reason") != nil then
 		local reporter = self.dt.reporter:Name()
 		local reported = self.dt.reported:Name()
 		local reason = self:GetNWString("reason")
@@ -49,7 +49,7 @@ local function Memory(um)
 	local Reporter, Reported = ent.dt and ent.dt.reporter, ent.dt and ent.dt.reported
 
 	hook.Add("HUDPaint", "darkRP_memory", function()
-		if ValidEntity(Reporter) and ValidEntity(Reported) then
+		if IsValid(Reporter) and IsValid(Reported) then
 			local VicPos = ((Reporter.GetShootPos and Reporter:GetShootPos()) or Reporter:GetPos()) + Vector(0,0,10)
 			local VillainPos = ((Reported.GetShootPos and Reported:GetShootPos()) or Reported:GetPos()) + Vector(0,0,10)
 
@@ -65,7 +65,7 @@ local function Memory(um)
 		end
 	end)
 
-	timer.Simple(MemoryTime, hook.Remove, "HUDPaint", "darkRP_memory")
+	timer.Simple(MemoryTime, function() hook.Remove("HUDPaint", "darkRP_memory") end)
 end
 usermessage.Hook("darkrp_memory", Memory)
 

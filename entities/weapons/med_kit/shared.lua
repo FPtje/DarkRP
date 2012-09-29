@@ -35,8 +35,8 @@ function SWEP:createViewModels()
 	local viewmodel = self:GetOwner():GetViewModel()
 
 	self.viewModels = {}
-	self.viewModels[1] = self.viewModels[1] or ents.Create("prop_physics")
-	self.viewModels[2] = self.viewModels[2] or ents.Create("prop_physics")
+	self.viewModels[1] = self.viewModels[1] or ents.CreateClientProp()
+	self.viewModels[2] = self.viewModels[2] or ents.CreateClientProp()
 
 	self.viewModels[1]:SetAngles(viewmodel:GetAngles())
 	self.viewModels[2]:SetAngles(viewmodel:GetAngles())
@@ -57,9 +57,9 @@ function SWEP:createViewModels()
 	end)
 
 	for k,v in pairs(self.viewModels) do
-
+		v:SetRenderMode()
 		v:SetModel("models/Mechanics/roboticslarge/a2.mdl")
-		v:SetColor(255,0,0,255)
+		v:SetColor(Color(255,0,0,255))
 		v:SetMaterial("models/debug/debugwhite")
 
 		v:SetModelScale(Vector(0.1,0.1,0.1))
@@ -73,7 +73,7 @@ end
 
 function SWEP:Think()
 	if SERVER then return end
-	if not self.viewModels or not ValidEntity(self.viewModels[1]) then
+	if not self.viewModels or not IsValid(self.viewModels[1]) then
 		self:createViewModels()
 	end
 
@@ -96,7 +96,7 @@ function SWEP:Deploy()
 end
 
 function SWEP:Holster()
-	if SERVER and ValidEntity(self:GetOwner()) then
+	if SERVER and IsValid(self:GetOwner()) then
 		SendUserMessage("med_kit_model", self:GetOwner(), self)
 		return true
 	end
@@ -105,7 +105,7 @@ end
 if CLIENT then
 	usermessage.Hook("med_kit_model", function(um)
 		local ent = um:ReadEntity()
-		if ValidEntity(ent) then
+		if IsValid(ent) then
 			for k,v in pairs(ent.viewModels or {}) do
 				SafeRemoveEntity(v)
 			end
@@ -115,19 +115,29 @@ end
 
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	trace = {}
-	trace.start = self.Owner:GetShootPos()
-	trace.endpos = trace.start + (self.Owner:GetAimVector() * 85)
-	trace.filter = { self.Owner, self.Weapon }
-	tr = util.TraceLine(trace)
 
-	if (tr.HitNonWorld) and SERVER then
-		local enthit = tr.Entity
-		local maxhealth = enthit.StartHealth or 100
-		if enthit:IsPlayer() and enthit:Health() < maxhealth then
-			enthit:SetHealth(enthit:Health() + 1)
-			self.Owner:EmitSound("hl1/fvox/boop.wav", 150, enthit:Health())
+	local found
+	local lastDot = -1 -- the opposite of what you're looking at
+	local aimVec = self.Owner:GetAimVector()
+
+	for k,v in pairs(player.GetAll()) do
+		local maxhealth = v.StartHealth or 100
+		if v == self.Owner or v:GetShootPos():Distance(self.Owner:GetShootPos()) > 85 or v:Health() >= maxhealth then continue end
+
+		local direction = v:GetShootPos() - self.Owner:GetShootPos()
+		direction:Normalize()
+		local dot = direction:Dot(aimVec)
+
+		-- Looking more in the direction of this player
+		if dot > lastDot then
+			lastDot = dot
+			found = v
 		end
+	end
+
+	if found then
+		found:SetHealth(found:Health() + 1)
+		self.Owner:EmitSound("hl1/fvox/boop.wav", 150, found:Health())
 	end
 end
 
@@ -141,7 +151,7 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:OnRemove()
-	if SERVER and ValidEntity(self:GetOwner()) then
+	if SERVER and IsValid(self:GetOwner()) then
 		SendUserMessage("med_kit_model", self:GetOwner(), self)
 	end
 end

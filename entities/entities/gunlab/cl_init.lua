@@ -7,7 +7,7 @@ function ENT:Draw()
 	local Ang = self:GetAngles()
 
 	local owner = self.dt.owning_ent
-	owner = (ValidEntity(owner) and owner:Nick()) or "Unknown"
+	owner = (IsValid(owner) and owner:Nick()) or "Unknown"
 
 	surface.SetFont("HUDNumber5")
 	local TextWidth = surface.GetTextSize("Gunlab!")

@@ -47,12 +47,12 @@ if CLIENT then
 		wep.EndCheck = CurTime() + time
 
 		wep.Dots = wep.Dots or ""
-		timer.Create("WeaponCheckDots", 0.5, 0, function(wep)
+		timer.Create("WeaponCheckDots", 0.5, 0, function()
 			if not wep:IsValid() then timer.Destroy("WeaponCheckDots") return end
 			local len = string.len(wep.Dots)
 			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
 			wep.Dots = dots[len]
-		end, wep)
+		end)
 	end)
 end
 
@@ -69,7 +69,7 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
 		return
 	end
 
@@ -80,7 +80,7 @@ function SWEP:PrimaryAttack()
 		end
 	end
 	self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-	timer.Simple(0.3, function(ply) ply:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end, self.Owner)
+	timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
 	self.Owner:ChatPrint(trace.Entity:Nick() .."'s weapons:")
 	if result == "" then
 		self.Owner:ChatPrint(trace.Entity:Nick() .. " has no weapons")
@@ -103,7 +103,7 @@ function SWEP:SecondaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
 		return
 	end
 
@@ -118,10 +118,10 @@ function SWEP:SecondaryAttack()
 		umsg.End()
 		self.EndCheck = CurTime() + self.WeaponCheckTime
 
-		timer.Create("WeaponCheckSounds", 0.5, self.WeaponCheckTime * 2, function(wep)
-			if not ValidEntity(wep) then return end
-			wep:EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
-		end, self)
+		timer.Create("WeaponCheckSounds", 0.5, self.WeaponCheckTime * 2, function()
+			if not IsValid(self) then return end
+			self:EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
+		end)
 	end
 end
 
@@ -129,21 +129,18 @@ SWEP.OnceReload = true
 function SWEP:Reload()
 	if CLIENT or not self.Weapon.OnceReload then return end
 	self.Weapon.OnceReload = false
-	timer.Simple(1, function(wep) wep.OnceReload = true end, self.Weapon)
+	timer.Simple(1, function() self.Weapon.OnceReload = true end)
 	local trace = self.Owner:GetEyeTrace()
 
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
 		return
 	end
 
-	if not trace.Entity:GetTable().ConfisquatedWeapons then
+	if not trace.Entity:GetTable().ConfiscatedWeapons then
 		GAMEMODE:Notify(self.Owner, 1, 4, trace.Entity:Nick() .. " had no weapons confisquated!")
 		return
 	else
-		--[[ for k,v in pairs(trace.Entity:GetTable().ConfisquatedWeapons) do
-			trace.Entity:Give(v)
-		end ]]
-		for k,v in pairs(trace.Entity.ConfisquatedWeapons) do
+		for k,v in pairs(trace.Entity.ConfiscatedWeapons) do
 			local wep = trace.Entity:Give(v[1])
 			trace.Entity:RemoveAllAmmo()
 			trace.Entity:SetAmmo(v[2], v[3], false)
@@ -154,7 +151,7 @@ function SWEP:Reload()
 
 		end
 		GAMEMODE:Notify(self.Owner, 2, 4, "Returned "..trace.Entity:Nick() .. "'s confisquated weapons!")
-		trace.Entity:GetTable().ConfisquatedWeapons = nil
+		trace.Entity:GetTable().ConfiscatedWeapons = nil
 	end
 end
 
@@ -166,14 +163,14 @@ function SWEP:Holster()
 end
 
 function SWEP:Succeed()
-	if not ValidEntity(self.Owner) then return end
+	if not IsValid(self.Owner) then return end
 	self.IsWeaponChecking = false
 
 	if CLIENT then return end
 	local result = ""
 	local stripped = {}
 	local trace = self.Owner:GetEyeTrace()
-	if not ValidEntity(trace.Entity) or not trace.Entity:IsPlayer() then return end
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() then return end
 	for k,v in pairs(trace.Entity:GetWeapons()) do
 		if not table.HasValue(NoStripWeapons, string.lower(v:GetClass())) then
 			trace.Entity:StripWeapon(v:GetClass())
@@ -184,22 +181,22 @@ function SWEP:Succeed()
 		end
 	end
 
-	if not trace.Entity:GetTable().ConfisquatedWeapons then
-		trace.Entity:GetTable().ConfisquatedWeapons = stripped
+	if not trace.Entity:GetTable().ConfiscatedWeapons then
+		trace.Entity:GetTable().ConfiscatedWeapons = stripped
 	else
 		for k,v in pairs(stripped) do
 			local found = false
-			for a,b in pairs(trace.Entity:GetTable().ConfisquatedWeapons) do
+			for a,b in pairs(trace.Entity:GetTable().ConfiscatedWeapons) do
 				if b[1] == v[1] then
 					found = true
 					break
 				end
 			end
 			if not found then
-				table.insert(trace.Entity:GetTable().ConfisquatedWeapons, v)
+				table.insert(trace.Entity:GetTable().ConfiscatedWeapons, v)
 			end
-			--[[ if not table.HasValue(trace.Entity:GetTable().ConfisquatedWeapons, v) then
-				table.insert(trace.Entity:GetTable().ConfisquatedWeapons, v)
+			--[[ if not table.HasValue(trace.Entity:GetTable().ConfiscatedWeapons, v) then
+				table.insert(trace.Entity:GetTable().ConfiscatedWeapons, v)
 			end ]]
 		end
 	end
@@ -207,7 +204,7 @@ function SWEP:Succeed()
 	if result == "" then
 		self.Owner:ChatPrint(trace.Entity:Nick() .. " has no illegal weapons")
 		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-		timer.Simple(0.3, function(ply) ply:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end, self.Owner)
+		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
 	else
 		local endresult = string.sub(result, 3)
 		self.Owner:EmitSound("ambient/energy/zap1.wav", 50, 100)
@@ -233,7 +230,7 @@ end
 function SWEP:Think()
 	if self.IsWeaponChecking then
 		local trace = self.Owner:GetEyeTrace()
-		if not ValidEntity(trace.Entity) then
+		if not IsValid(trace.Entity) then
 			self:Fail()
 		end
 		if trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or not trace.Entity:IsPlayer() then

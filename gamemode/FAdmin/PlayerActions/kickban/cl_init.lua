@@ -241,6 +241,8 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 				self:SelectAllText(true)
 			end
 
+
+
 		local ButtonPanel = vgui.Create( "DPanel", Window )
 		ButtonPanel:SetTall( 30 )
 
@@ -309,7 +311,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		BanList:AddColumn("SteamID")
 		BanList:AddColumn("Name")
 		BanList:AddColumn("Time")
-		BanList:AddColumn("Reason")
+				BanList:AddColumn("Reason")
 		BanList:AddColumn("Banned by")
 		BanList:AddColumn("Banned by SteamID")
 
@@ -334,9 +336,9 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			Frame:Close()
 		end
 
-		local function RetrieveBans(handler, id, encoded, decoded)
-			for k,v in pairs(decoded) do
-				local Line = BanList:AddLine(
+	local function RetrieveBans(len)
+		local bans = net.ReadTable()
+		for k,v in pairs(bans) do				local Line = BanList:AddLine(
 					k,
 					v.name or "N/A",
 					(v.time and FAdmin.PlayerActions.ConvertBanTime((tonumber(v.time) - os.time())/60)) or "N/A",
@@ -352,7 +354,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 				end
 			end
 		end
-		datastream.Hook("FAdmin_retrievebans", RetrieveBans)
+		net.Receive("FAdmin_retrievebans", RetrieveBans)
 		RunConsoleCommand("_FAdmin", "RequestBans")
 
 		Frame:Center()

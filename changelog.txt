@@ -1,4 +1,8 @@
-DarkRP 2.4.2 SVN
+This list is missing content. For a full list see:
+http://code.google.com/p/darkrp/source/list
+for the latest changes
+
+DarkRP 2.4.3
 [ADD] Laws system! Use /placelaws to spawn a screen displaying the laws, /addlaw and /removelaw to edit them. rp_maxlawboards to set the limit.
 [ADD] AFK NPC
 [ADD] Signing of letters
@@ -7,6 +11,8 @@ DarkRP 2.4.2 SVN
 [CHANGE] Updated Notifies to work better with the newer ones
 [CHANGE] Lots of function/network optimisation
 [CHANGE] Remade HUD
+...
+
 
 DarkRP 2.4.2
 [CHANGE Drakehawke] Fixed the default GMod admin cleanup from unowning/resetting doors.
@@ -265,7 +271,7 @@ DarkRP 2.3.5:
 Updated by: FPtje Falco
 
 [ADD] Cops can arrest sleeping people
-[ADD] Admins can disable the No-respawning when changing job with rp_norespawn 
+[ADD] Admins can disable the No-respawning when changing job with rp_norespawn
 [ADD] Admins can allow/disallow hobo's by doing rp_allowhobos <1/0>
 [ADD] Every door and vehicle controls are put in the reload function of the keys SWEP
 [ADD] Re-added the earthquake sound
@@ -286,7 +292,7 @@ Updated by: FPtje Falco
 [ADD] /advert command: Say /advert <advertisement>  to advert!
 [ADD] Rp_BabyGod: Players are immortal when they've just spawned.
 [ADD] Rp_<job> for every job, not only cp, mayor and cpchief
-[ADD] Color codes when rp_alltalk = 0: People can see who can hear them whisper/talk normally/yell and who cannot hear them. 
+[ADD] Color codes when rp_alltalk = 0: People can see who can hear them whisper/talk normally/yell and who cannot hear them.
 [ADD] Expanded /buyfood, Now you can do more than /buyfood melon. It's also in the F4 menu!
 [CHANGE] All door controls are now done though reload with the Keys weapon.
 [CHANGE] Descriptions in the change job VGUI(thanks james hutchins)
@@ -326,7 +332,7 @@ Updated by: FPtje Falco
 [FIX] Prices etc. resetting to 0
 [FIX] HUGE FUCKING MAJOR EXPLOIT where you enter a console command after doing /votecop or /votemayor and just become a cop without anyone voting yes.
 [FIX] The ability of people to somehow get <nothing> as RP name(Always happened with bots too)
-[FIX] People being able to get less than 0 money. DarkRP just doesn't work with depts 
+[FIX] People being able to get less than 0 money. DarkRP just doesn't work with depts
 [FIX] rp_grant and rp_revoke not working properly, Philxyz fucked the caching system up(Phil look at my code to fix it for your release :D)
 [FIX] Demote: the demoter can't vote anymore now.
 [FIX] Unable to select keys when you got a different weapon(like the 357)
@@ -781,7 +787,7 @@ Updated by: Zorblet
 [Add] rp_doorcost <amount> - The Cost to buy a door.
 [Add] rp_zombiescore <amount> - The money awarded for a NPC Kill.
 [Add] Player's now spawn with Cameras
-[Add] Grenades to BuyShipment 
+[Add] Grenades to BuyShipment
 [Add] Flashbangs to Buyshipment
 [Add] /sleep for 10 seconds then /sleep again to unsleep
 [Add] CfgVar "physgun"
@@ -820,7 +826,7 @@ Updated by: Pcwizdan
 [Add] rp_doorcost <amount> - The Cost to buy a door.
 [Add] rp_zombiescore <amount> - The money awarded for a NPC Kill.
 1[Add] Player's now spawn with Cameras
-1[Add] Grenades to BuyShipment 
+1[Add] Grenades to BuyShipment
 1[Add] Flashbangs to Buyshipment
 1[Add] /sleep for 10 seconds then /sleep again to unsleep
 [Add] flash/gren so only 2 spawns...
@@ -876,7 +882,7 @@ February 1, 2007
 [Fix] Console can now do rp admin commands
 [Fix] Help menu reorganized
 [Fix] Changing chat prefix would glitch up the help menu
-[Fix] You can lock/unlock owned vehicles 
+[Fix] You can lock/unlock owned vehicles
 [Fix] You can vote anytime you're in gui "clicker" mode.
 [Fix] /give and /drop money can't do negative money
 

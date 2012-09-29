@@ -1,33 +1,33 @@
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!
 	if ply.anim_DroppingItem then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_DROP)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_DROP, true)
 		ply.anim_DroppingItem = nil
 	end
 
 	-- Giving items!
 	if ply.anim_GivingItem then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_GIVE)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_GIVE, true)
 		ply.anim_GivingItem = nil
 	end
 
 	if CLIENT and ply.SaidHi then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
 		ply.SaidHi = nil
 	end
 
 	if CLIENT and ply.ThrewPoop then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_THROW)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_THROW, true)
 		ply.ThrewPoop = nil
 	end
 
 	if CLIENT and ply.knocking then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 		ply.knocking = nil
 	end
 
 	if CLIENT and ply.usekeys then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_PLACE)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_PLACE, true)
 		ply.usekeys = nil
 	end
 
@@ -35,9 +35,9 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 
 	-- Hobo throwing poop!
 	local Weapon = ply:GetActiveWeapon()
-	if ply:Team() == TEAM_HOBO and not ply.ThrewPoop and ValidEntity(Weapon) and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
+	if ply:Team() == TEAM_HOBO and not ply.ThrewPoop and IsValid(Weapon) and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
 		ply.ThrewPoop = true
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_THROW)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_THROW, true)
 
 
 		local RP = RecipientFilter()
@@ -51,11 +51,11 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 	end
 
 	-- Saying hi/hello to a player
-	if not ply.SaidHi and ValidEntity(Weapon) and Weapon:GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
+	if not ply.SaidHi and IsValid(Weapon) and Weapon:GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
 		local ent = ply:GetEyeTrace().Entity
-		if ValidEntity(ent) and ent:IsPlayer() then
+		if IsValid(ent) and ent:IsPlayer() then
 			ply.SaidHi = true
-			ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP)
+			ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
 
 			local RP = RecipientFilter()
 			RP:AddAllPlayers()
@@ -72,7 +72,6 @@ end)
 if SERVER then
 	local function CustomAnim(ply, cmd, args)
 		local Gesture = tonumber(args[1] or 0)
-		if Gesture < 1782 or Gesture > 1900 then return end
 		local RP = RecipientFilter()
 		RP:AddAllPlayers()
 
@@ -87,7 +86,7 @@ end
 
 local function DropItem(um)
 	local ply = um:ReadEntity()
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 
 	ply.anim_DroppingItem = true
 end
@@ -95,7 +94,7 @@ usermessage.Hook("anim_dropitem", DropItem)
 
 local function GiveItem(um)
 	local ply = um:ReadEntity()
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 
 	ply.anim_GivingItem = true
 end
@@ -103,7 +102,7 @@ usermessage.Hook("anim_giveitem", GiveItem)
 
 local function ThrowPoop(um)
 	local ply = um:ReadEntity()
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 
 	ply.ThrewPoop = true
 end
@@ -111,7 +110,7 @@ usermessage.Hook("anim_throwpoop", ThrowPoop)
 
 local function PhysgunHi(um)
 	local ply = um:ReadEntity()
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 
 	ply.SaidHi = true
 end
@@ -119,7 +118,7 @@ usermessage.Hook("anim_sayhi", PhysgunHi)
 
 local function KeysAnims(um)
 	local ply = um:ReadEntity()
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 	local Type = um:ReadString()
 	ply[Type] = true
 end
@@ -129,17 +128,20 @@ usermessage.Hook("anim_keys", KeysAnims)
 local function CustomAnimation(um)
 	local ply = um:ReadEntity()
 	local act = um:ReadShort()
-	ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act)
+	ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
 end
 usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
 
 local Anims = {}
-Anims["Thumbs up"] = ACT_GMOD_GESTURE_AGREE
-Anims["Non-verbal no"] = ACT_GMOD_GESTURE_DISAGREE
-Anims["Salute"] = ACT_GMOD_GESTURE_SALUTE
 Anims["Bow"] = ACT_GMOD_GESTURE_BOW
-Anims["Wave"] = ACT_GMOD_GESTURE_WAVE
+Anims["Dance"] = ACT_GMOD_TAUNT_MUSCLE
 Anims["Follow me!"] = ACT_GMOD_GESTURE_BECON
+Anims["Laugh"] = ACT_GMOD_TAUNT_LAUGH
+Anims["Lion Pose"] = ACT_GMOD_TAUNT_PERSISTENCE
+Anims["Non-verbal no"] = ACT_GMOD_GESTURE_DISAGREE
+Anims["Salute"] = ACT_GMOD_TAUNT_SALUTE
+Anims["Thumbs up"] = ACT_GMOD_GESTURE_AGREE
+Anims["Wave"] = ACT_GMOD_GESTURE_WAVE
 
 local AnimFrame
 local function AnimationMenu()
@@ -153,8 +155,8 @@ local function AnimationMenu()
 	end
 
 	AnimFrame = AnimFrame or vgui.Create("DFrame", Panel)
-	local Height = table.Count(Anims) * 110
-	AnimFrame:SetSize(200, Height)
+	local Height = table.Count(Anims) * 60
+	AnimFrame:SetSize(130, Height)
 	AnimFrame:SetPos(ScrW()/2 + ScrW() * 0.1, ScrH()/2 - (Height/2))
 	AnimFrame:SetTitle("Custom animation!")
 	AnimFrame:SetVisible(true)
@@ -167,11 +169,11 @@ local function AnimationMenu()
 	end
 
 	local i = 0
-	for k,v in pairs(Anims) do
+	for k,v in SortedPairs(Anims) do
 		i = i + 1
 		local button = vgui.Create("DButton", AnimFrame)
-		button:SetPos(10, (i-1)*105 + 30)
-		button:SetSize(180, 100)
+		button:SetPos(10, (i-1)*55 + 30)
+		button:SetSize(110, 50)
 		button:SetText(k)
 
 		button.DoClick = function()

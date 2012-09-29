@@ -40,12 +40,12 @@ if SERVER then
 		local count = 0
 		for k,v in pairs(GAMEMODE.ToggleCmds) do
 			count = count + 1
-			timer.Simple(count * 0.1, RunConsoleCommand, v.var, v.default)
+			timer.Simple(count * 0.1, function() RunConsoleCommand(v.var, v.default) end)
 		end
 
 		for k,v in pairs(GAMEMODE.ValueCmds) do
 			count = count + 1
-			timer.Simple(count * 0.1, RunConsoleCommand, v.var, v.default)
+			timer.Simple(count * 0.1, function() RunConsoleCommand(v.var, v.default) end)
 		end
 	end)
 end

@@ -41,7 +41,7 @@ Setting owner when someone spawns something
 if cleanup then
 	FPP.oldcleanup = FPP.oldcleanup or cleanup.Add
 	function cleanup.Add(ply, Type, ent)
-		if ValidEntity(ply) and ValidEntity(ent) then
+		if IsValid(ply) and IsValid(ent) then
 			--Set the owner of the entity
 			ent.Owner = ply
 			ent.OwnerID = ply:SteamID()
@@ -72,7 +72,7 @@ function _R.PhysObj.ApplyForceCenter(self, force, ...)
 		i = i + 1
 		local DebugLevel = debug.getinfo(i, "Sln")
 		if not DebugLevel then break end
-		if DebugLevel and string.find(DebugLevel.short_src, "gmod_wire_expression2") and ValidEntity(self:GetEntity()) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) then
+		if DebugLevel and string.find(DebugLevel.short_src, "gmod_wire_expression2") and IsValid(self:GetEntity()) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) then
 			self:GetEntity():SetCollisionGroup(COLLISION_GROUP_WEAPON)
 			local ConstrainedEnts = constraint.GetAllConstrainedEntities(self:GetEntity())
 
@@ -91,7 +91,7 @@ local PLAYER = FindMetaTable("Player")
 if PLAYER.AddCount then
 	FPP.oldcount = FPP.oldcount or PLAYER.AddCount
 	function PLAYER:AddCount(Type, ent)
-		if not ValidEntity(self) or not ValidEntity(ent) then return FPP.oldcount(self, Type, ent) end
+		if not IsValid(self) or not IsValid(ent) then return FPP.oldcount(self, Type, ent) end
 		--Set the owner of the entity
 		ent.Owner = self
 		ent.OwnerID = self:SteamID()
@@ -104,7 +104,7 @@ if undo then
 	local Undo = {}
 	local UndoPlayer
 	function undo.AddEntity(ent, ...)
-		if type(ent) ~= "boolean" and ValidEntity(ent) then table.insert(Undo, ent) end
+		if type(ent) ~= "boolean" and IsValid(ent) then table.insert(Undo, ent) end
 		AddEntity(ent, ...)
 	end
 
@@ -114,7 +114,7 @@ if undo then
 	end
 
 	function undo.Finish(...)
-		if ValidEntity(UndoPlayer) then
+		if IsValid(UndoPlayer) then
 			for k,v in pairs(Undo) do
 				v.Owner = UndoPlayer
 			end
@@ -131,14 +131,14 @@ end
 --When you can't touch something
 --------------------------------------------------------------------------------------
 function FPP.CanTouch(ply, Type, Owner, Toggle)
-	if not ValidEntity(ply) or not FPP.Settings[Type] or not tobool(FPP.Settings[Type].shownocross) or tobool(ply:GetInfoNum("FPP_PrivateSettings_ShowIcon")) then return false end
+	if not IsValid(ply) or not FPP.Settings[Type] or not tobool(FPP.Settings[Type].shownocross) or tobool(ply:GetInfoNum("FPP_PrivateSettings_ShowIcon")) then return false end
 	if ply.FPP_LastCanTouch and ply.FPP_LastCanTouch > CurTime() - 1 then return end
 	ply.FPP_LastCanTouch = CurTime()
 
 	umsg.Start("FPP_CanTouch", ply)
 		if type(Owner) == "string" then
 			umsg.String(Owner)
-		elseif ValidEntity(Owner) then
+		elseif IsValid(Owner) then
 			umsg.String(Owner:Nick())
 		else
 			umsg.String("No owner!")
@@ -157,12 +157,12 @@ end
 FPP.Protect = {}
 
 local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
-	if not ValidEntity( ply ) then
+	if not IsValid( ply ) then
 		return false
 	end
 	local OnlyMine = tobool(ply:GetInfoNum("FPP_PrivateSettings_OtherPlayerProps"))
 	-- prevent player pickup when you don't want to
-	if ValidEntity(ent) and ent:IsPlayer() and not tobool(ply:GetInfoNum("FPP_PrivateSettings_Players")) and Type1 == "Physgun1" then
+	if IsValid(ent) and ent:IsPlayer() and not tobool(ply:GetInfoNum("FPP_PrivateSettings_Players")) and Type1 == "Physgun1" then
 		return false
 	end
 	-- Blocked entity
@@ -185,7 +185,7 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 		end
 	end
 
-	Returnal = Returnal and ValidEntity(ply) and not tobool(ply:GetInfoNum("FPP_PrivateSettings_BlockedProps"))
+	Returnal = Returnal and IsValid(ply) and not tobool(ply:GetInfoNum("FPP_PrivateSettings_BlockedProps"))
 	if Returnal ~= nil then return Returnal, "Blocked!" end
 
 	-- Shared entity
@@ -211,18 +211,18 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	end
 
 	-- Misc.
-	if ent.Owner ~= ply and ValidEntity(ply) then
+	if ent.Owner ~= ply and IsValid(ply) then
 		-- A buddy's prop
-		if not TryingToShare and ValidEntity(ent.Owner) and ent.Owner.Buddies and ent.Owner.Buddies[ply] and ent.Owner.Buddies[ply][string.lower(Type1)] then
+		if not TryingToShare and IsValid(ent.Owner) and ent.Owner.Buddies and ent.Owner.Buddies[ply] and ent.Owner.Buddies[ply][string.lower(Type1)] then
 			return not OnlyMine, ent.Owner
 		-- An admin touching it
 		elseif ent.Owner and ply:IsAdmin() and tobool(FPP.Settings[Type2].adminall) then -- if not world prop AND admin allowed
 			return not OnlyMine, ent.Owner
 		-- Misc entities
-		elseif ent == GetWorldEntity() or ent:GetClass() == "gmod_anchor" then
+		elseif ent == game.GetWorld() or ent:GetClass() == "gmod_anchor" then
 			return true
 		--If world prop or a prop belonging to someone who left
-		elseif not ValidEntity(ent.Owner) then
+		elseif not IsValid(ent.Owner) then
 			local world = "World prop"
 			local Restrict = "WorldProps"
 			if ent.Owner then
@@ -278,7 +278,7 @@ function FPP.ShowOwner()
 	for _, ply in pairs(player.GetAll()) do
 		local wep = ply:GetActiveWeapon()
 		local trace = ply:GetEyeTrace()
-		if ValidEntity(wep) and ValidEntity(trace.Entity) and trace.Entity ~= GetWorldEntity() and not trace.Entity:IsPlayer() and ply.FPP_LOOKINGAT ~= trace.Entity then
+		if IsValid(wep) and IsValid(trace.Entity) and trace.Entity ~= game.GetWorld() and not trace.Entity:IsPlayer() and ply.FPP_LOOKINGAT ~= trace.Entity then
 			ply.FPP_LOOKINGAT = trace.Entity -- Easy way to prevent spamming the usermessages
 			local class, cantouch, why = wep:GetClass()
 			if class == "weapon_physgun" then
@@ -337,7 +337,7 @@ function FPP.Protect.PhysgunReload(weapon, ply)
 
 	local ent = ply:GetEyeTrace().Entity
 
-	if not ValidEntity(ent) then return end
+	if not IsValid(ent) then return end
 
 	if type(ent.OnPhysgunReload) == "function" then
 		local val = ent:OnPhysgunReload(weapon, ply)
@@ -370,7 +370,7 @@ hook.Add("OnPhysgunFreeze", "FPP.Protect.PhysgunFreeze", FPP.PhysgunFreeze)
 function FPP.Protect.GravGunPickup(ply, ent)
 	if not tobool(FPP.Settings.FPP_GRAVGUN1.toggle) then return end
 
-	if not ValidEntity(ent) then return false end-- You don't want a cross when looking at the floor while holding right mouse
+	if not IsValid(ent) then return false end-- You don't want a cross when looking at the floor while holding right mouse
 
 	if ent:IsPlayer() then return false end
 
@@ -400,7 +400,7 @@ hook.Add("GravGunOnPickedUp", "FPP.Protect.GravGunPickup", FPP.Protect.GravGunPi
 function FPP.Protect.GravGunPunt(ply, ent)
 	if tobool(FPP.Settings.FPP_GRAVGUN1.noshooting) then DropEntityIfHeld(ent) return false end
 
-	if not ValidEntity(ent) then DropEntityIfHeld(ent) return FPP.CanTouch(ply, "FPP_GRAVGUN1", "Not valid!", false) end
+	if not IsValid(ent) then DropEntityIfHeld(ent) return FPP.CanTouch(ply, "FPP_GRAVGUN1", "Not valid!", false) end
 
 	if type(ent.GravGunPunt) == "function" then
 		local val = ent:GravGunPunt(ply, ent)
@@ -428,7 +428,7 @@ hook.Add("GravGunPunt", "FPP.Protect.GravGunPunt", FPP.Protect.GravGunPunt)
 function FPP.Protect.PlayerUse(ply, ent)
 	if not tobool(FPP.Settings.FPP_PLAYERUSE1.toggle) then return end
 
-	if not ValidEntity(ent) then return FPP.CanTouch(ply, "FPP_PLAYERUSE1", "Not valid!", false) end
+	if not IsValid(ent) then return FPP.CanTouch(ply, "FPP_PLAYERUSE1", "Not valid!", false) end
 
 	if type(ent.PlayerUse) == "function" then
 		local val = ent:PlayerUse(ply, ent)
@@ -459,7 +459,7 @@ function FPP.Protect.EntityDamage(ent, inflictor, attacker, amount, dmginfo)
 	if not tobool(FPP.Settings.FPP_ENTITYDAMAGE1.toggle) then return end
 
 	if not attacker:IsPlayer() then
-		if ValidEntity(attacker.Owner) and ValidEntity(ent.Owner) then
+		if IsValid(attacker.Owner) and IsValid(ent.Owner) then
 			local cantouch, why = FPP.PlayerCanTouchEnt(attacker.Owner, ent, "EntityDamage1", "FPP_ENTITYDAMAGE1")
 			if why then
 				FPP.CanTouch(attacker.Owner, "FPP_ENTITYDAMAGE1", why, cantouch)
@@ -479,16 +479,16 @@ function FPP.Protect.EntityDamage(ent, inflictor, attacker, amount, dmginfo)
 			return
 		end
 
-		if attacker == GetWorldEntity() and ent.FPPAntiDamageWorld then
+		if attacker == game.GetWorld() and ent.FPPAntiDamageWorld then
 			dmginfo:SetDamage(0)
 		end
 		return
 	end
 
-	if not ValidEntity(ent) then return FPP.CanTouch(attacker, "FPP_ENTITYDAMAGE1", "Not valid!", false) end
+	if not IsValid(ent) then return FPP.CanTouch(attacker, "FPP_ENTITYDAMAGE1", "Not valid!", false) end
 
 	local cantouch, why = FPP.PlayerCanTouchEnt(attacker, ent, "EntityDamage1", "FPP_ENTITYDAMAGE1")
-	if why /*and (not ValidEntity(attacker:GetActiveWeapon()) or (ValidEntity(attacker:GetActiveWeapon()) and attacker:GetActiveWeapon():GetClass() == "weapon_physcannon")) */then
+	if why /*and (not IsValid(attacker:GetActiveWeapon()) or (IsValid(attacker:GetActiveWeapon()) and attacker:GetActiveWeapon():GetClass() == "weapon_physcannon")) */then
 		FPP.CanTouch(attacker, "FPP_ENTITYDAMAGE1", why, cantouch)
 	end
 
@@ -534,9 +534,7 @@ local invalidToolData = {
 	-- Limit wheel torque
 	["rx"] = 360,
 	["ry"] = 360,
-	["rz"] = 360,
-	-- Limit RT camera's
-	["key"] = 20
+	["rz"] = 360
 }
 
 function FPP.Protect.CanTool(ply, trace, tool, ENT)
@@ -593,7 +591,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 	end
 
 	-- Anti server crash
-	if ValidEntity(ply:GetActiveWeapon()) and ply:GetActiveWeapon().GetToolObject and ply:GetActiveWeapon():GetToolObject() then
+	if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().GetToolObject and ply:GetActiveWeapon():GetToolObject() then
 		local tool = ply:GetActiveWeapon():GetToolObject()
 		for t, block in pairs(invalidToolData) do
 			local clientInfo = string.lower(tool:GetClientInfo(t) or "")
@@ -627,7 +625,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 		return ent.CanTool
 	end
 
-	if tobool(FPP.Settings.FPP_TOOLGUN1.toggle) and ValidEntity(ent) then
+	if tobool(FPP.Settings.FPP_TOOLGUN1.toggle) and IsValid(ent) then
 
 		local cantouch, why = FPP.PlayerCanTouchEnt(ply, ent, "Toolgun1", "FPP_TOOLGUN1")
 		if why then
@@ -739,9 +737,29 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 end
 hook.Add("CanTool", "FPP.Protect.CanTool", FPP.Protect.CanTool)
 
+function FPP.Protect.CanProperty(ply, property, ent)
+	-- Use physgun because I'm way too lazy to make a new type
+	local cantouch, why = FPP.PlayerCanTouchEnt(ply, ent, "Physgun1", "FPP_PHYSGUN1")
+	if why then
+		FPP.CanTouch(ply, "FPP_PHYSGUN1", why, cantouch)
+	end
+	if not cantouch then return false end
+end
+hook.Add("CanProperty", "FPP.Protect.CanProperty", FPP.Protect.CanProperty)
+
+function FPP.Protect.CanDrive(ply, ent)
+	-- Use physgun because I'm way too lazy to make a new type
+	local cantouch, why = FPP.PlayerCanTouchEnt(ply, ent, "Physgun1", "FPP_PHYSGUN1")
+	if why then
+		FPP.CanTouch(ply, "FPP_PHYSGUN1", why, cantouch)
+	end
+	if not cantouch then return false end
+end
+hook.Add("CanDrive", "FPP.Protect.CanDrive", FPP.Protect.CanDrive)
+
 --Player disconnect, not part of the Protect table.
 function FPP.PlayerDisconnect(ply)
-	if ValidEntity(ply) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) and FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime then
+	if IsValid(ply) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) and FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime then
 		if ply:IsAdmin() and not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupadmin) then return end
 
 		FPP.DisconnectedPlayers[ply:SteamID()] = true
@@ -755,7 +773,7 @@ function FPP.PlayerDisconnect(ply)
 				end
 			end
 			for k,v in pairs(ents.GetAll()) do
-				if ValidEntity(v) and v.OwnerID == SteamID then
+				if IsValid(v) and v.OwnerID == SteamID then
 					v:Remove()
 				end
 			end
@@ -770,7 +788,7 @@ function FPP.PlayerInitialSpawn(ply)
 	local RP = RecipientFilter()
 
 	timer.Simple(5, function()
-		if not ValidEntity(ply) then return end
+		if not IsValid(ply) then return end
 		RP:AddAllPlayers()
 		RP:RemovePlayer(ply)
 		umsg.Start("FPP_CheckBuddy", RP)--Message everyone that a new player has joined
@@ -780,7 +798,7 @@ function FPP.PlayerInitialSpawn(ply)
 
 	if FPP.DisconnectedPlayers[ply:SteamID()] then -- Check if the player has rejoined within the auto remove time
 		for k,v in pairs(ents.GetAll()) do
-			if ValidEntity(v) and v.OwnerID == ply:SteamID() then
+			if IsValid(v) and v.OwnerID == ply:SteamID() then
 				v.Owner = ply
 			end
 		end
@@ -803,7 +821,7 @@ end
 function FPP.Protect.LeaveVehicle(ply, vehicle)
 	local pos = vehicle:GetPos()
 	timer.Simple(0.1, function()
-		if not ValidEntity(ply) then return end
+		if not IsValid(ply) then return end
 
 		local PlyPos = ply:GetPos()
 		local diff = pos - PlyPos

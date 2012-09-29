@@ -8,12 +8,16 @@ end
 -- FAdminPanelList
 local PANEL = {}
 
+function PANEL:Init()
+	self.Padding = 5
+end
+
 function PANEL:SizeToContents()
-	local w, h = self.pnlCanvas:GetSize()
+	local w, h = self:GetSize()
 
 	w = math.Clamp(w, ScrW()*0.9, ScrW()*0.9) -- Fix size of w to have the same size as the scoreboard
 	h = math.Min(h, ScrH()*0.95)
-	if #self.Items == 1 then -- It fucks up when there's only one icon in
+	if #self:GetChildren() == 1 then -- It fucks up when there's only one icon in
 		h = math.Max(y or 0, 120)
 	end
 
@@ -45,8 +49,9 @@ function PANEL3:Init()
 		self.Header:Remove() -- the old header is still there don't ask me why
 	end
 	self.Header = vgui.Create("FAdminPlayerCatagoryHeader", self)
-	self.Header:SetTall(25)
+	self.Header:SetSize(20, 25)
 	self:SetPadding(5)
+	self.Header:Dock( TOP )
 
 	self:SetExpanded(true)
 	self:SetMouseInputEnabled(true)
@@ -74,11 +79,11 @@ CreateClientConVar("FAdmin_PlayerRowSize", 30, true, false)
 function PANEL:Init()
 	self.Size = GetConVarNumber("FAdmin_PlayerRowSize")
 
-	self.lblName 	= vgui.Create("Label", self)
-	self.lblFrags 	= vgui.Create("Label", self)
-	self.lblTeam	= vgui.Create("Label", self)
-	self.lblDeaths 	= vgui.Create("Label", self)
-	self.lblPing 	= vgui.Create("Label", self)
+	self.lblName 	= vgui.Create("DLabel", self)
+	self.lblFrags 	= vgui.Create("DLabel", self)
+	self.lblTeam	= vgui.Create("DLabel", self)
+	self.lblDeaths 	= vgui.Create("DLabel", self)
+	self.lblPing 	= vgui.Create("DLabel", self)
 
 	// If you don't do this it'll block your clicks
 	self.lblName:SetMouseInputEnabled(false)
@@ -87,13 +92,19 @@ function PANEL:Init()
 	self.lblDeaths:SetMouseInputEnabled(false)
 	self.lblPing:SetMouseInputEnabled(false)
 
+	self.lblName:SetColor(Color(255,255,255,200))
+	self.lblTeam:SetColor(Color(255,255,255,200))
+	self.lblFrags:SetColor(Color(255,255,255,200))
+	self.lblDeaths:SetColor(Color(255,255,255,200))
+	self.lblPing:SetColor(Color(255,255,255,200))
+
 	self.imgAvatar = vgui.Create("AvatarImage", self)
 
 	self:SetCursor("hand")
 end
 
 function PANEL:Paint()
-	if not ValidEntity(self.Player) then return end
+	if not IsValid(self.Player) then return end
 
 	self.Size = GetConVarNumber("FAdmin_PlayerRowSize")
 	self.imgAvatar:SetSize(self.Size - 4, self.Size - 4)
@@ -169,7 +180,7 @@ function PANEL:ApplySchemeSettings()
 end
 
 function PANEL:DoClick(x, y)
-	if not ValidEntity(self.Player) then self:Remove() return end
+	if not IsValid(self.Player) then self:Remove() return end
 	FAdmin.ScoreBoard.ChangeView("Player", self.Player)
 end
 
@@ -223,6 +234,7 @@ function PANEL6:Init()
 	self:SetSize(120, 40)
 
 	self.TextLabel = vgui.Create("DLabel", self)
+	self.TextLabel:SetColor(Color(200,200,200,200))
 	self.TextLabel:SetFont("ChatFont")
 
 	self.m_Image2 = vgui.Create("DImage", self)

@@ -36,7 +36,7 @@ end
 
 local ENTITY = FindMetaTable("Entity")
 function ENTITY:CPPIGetOwner()
-	if not ValidEntity(self.Owner) then return nil, CPPI.CPPI_NOTIMPLEMENTED end
+	if not IsValid(self.Owner) then return nil, CPPI.CPPI_NOTIMPLEMENTED end
 	return self.Owner, self.Owner:UniqueID()
 end
 
@@ -63,10 +63,9 @@ if SERVER then
 	end
 
 	function ENTITY:CPPICanTool(ply, tool)
-		local trace = ply:GetEyeTrace()
-		local Value = FPP.Protect.CanTool(ply, trace, tool, self)
+		local Value = FPP.Protect.CanTool(ply, nil, tool, self)
 		if Value ~= false and Value ~= true then Value = true end
-		return  Value-- fourth argument is entity, to avoid traces.
+		return Value-- fourth argument is entity, to avoid traces.
 	end
 
 	function ENTITY:CPPICanPhysgun(ply)

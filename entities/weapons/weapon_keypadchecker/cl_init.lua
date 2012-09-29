@@ -3,8 +3,8 @@ include("shared.lua")
 
 local DrawData = {}
 
-datastream.Hook("DarkRP_keypadData", function(handler, id, encoded, decoded)
-	DrawData = decoded
+net.Receive("DarkRP_keypadData", function(len)
+	DrawData = net.ReadTable()
 end)
 
 local lineMat = Material("cable/chain")
@@ -16,7 +16,7 @@ function SWEP:DrawHUD()
 
 	local entMessages = {}
 	for k,v in pairs(DrawData or {}) do
-		if not ValidEntity(v.ent) or not ValidEntity(v.original) then continue end
+		if not IsValid(v.ent) or not IsValid(v.original) then continue end
 		entMessages[v.ent] = (entMessages[v.ent] or 0) + 1
 		local pos = v.ent:LocalToWorld(v.ent:OBBCenter()):ToScreen()
 
@@ -26,10 +26,21 @@ function SWEP:DrawHUD()
 
 		cam.Start3D(EyePos(), EyeAngles())
 			render.SetMaterial(lineMat)
-			render.DrawBeam(v.original:GetPos(), v.ent:GetPos(), 3, 0.01, 20, Color(0, 255, 0, 255))
+			render.DrawBeam(v.original:GetPos(), v.ent:GetPos(), 2, 0.01, 20, Color(0, 255, 0, 255))
 		cam.End3D()
 	end
 end
+
+hook.Add("PreDrawHalos", "KeypadCheckerHalos", function()
+	local drawEnts = {}
+	for k,v in pairs(DrawData) do
+		if IsValid(v.ent) then
+			table.insert(drawEnts, v.ent)
+		end
+	end
+
+	halo.Add(drawEnts, Color(0, 255, 0, 255), 5, 5, 5, nil, true)
+end)
 
 function SWEP:SecondaryAttack()
 	DrawData = {}

@@ -10,13 +10,13 @@ function HelpPanel:Init()
 	self.StartHelpX = -ScrW()
 	self.HelpX = self.StartHelpX
 
-	self.title = vgui.Create("Label", self)
+	self.title = vgui.Create("DLabel", self)
 	self.title:SetText(GAMEMODE.Name)
 
-	self.modinfo = vgui.Create("Label", self)
+	self.modinfo = vgui.Create("DLabel", self)
 	self.modinfo:SetText(LANGUAGE.get_mod)
 
-	self.scrolltext = vgui.Create("Label", self)
+	self.scrolltext = vgui.Create("DLabel", self)
 	self.scrolltext:SetText(LANGUAGE.mouse_wheel_to_scroll)
 
 	self.HelpInfo = vgui.Create("Panel", self)
@@ -78,12 +78,12 @@ function HelpPanel:FillHelpInfo(force)
 			local labelh = GetTextHeight("ChatFont", "A")
 
 			for i = 1, #HelpText do
-				self.vguiHelpLabels[i + v.id * 100] = vgui.Create("Label", self.HelpInfo)
+				self.vguiHelpLabels[i + v.id * 100] = vgui.Create("DLabel", self.HelpInfo)
 				self.vguiHelpLabels[i + v.id * 100]:SetText(HelpText[i])
 				self.vguiHelpLabels[i + v.id * 100].OrigY = yoffset + 25 + (i - 1) * (maxpertable * labelh)
 				self.vguiHelpLabels[i + v.id * 100]:SetPos(5, yoffset + 25 + (i - 1) * (maxpertable * labelh))
 				self.vguiHelpLabels[i + v.id * 100]:SetFont("ChatFont")
-				self.vguiHelpLabels[i + v.id * 100]:SetFGColor(Color(255, 255, 255, 200))
+				self.vguiHelpLabels[i + v.id * 100]:SetColor(Color(255, 255, 255, 200))
 			end
 
 			local cath = GetTextHeight("GModToolSubtitle", "A")

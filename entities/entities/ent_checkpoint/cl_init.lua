@@ -47,13 +47,13 @@ function ENT:Draw()
 	render.SuppressEngineLighting(true)
 	render.SetBlend(0.3)
 	render.SetColorModulation(1, self.Passed and 0 or 1, 0)
-	if ValidEntity(self.Visual) then
+	if IsValid(self.Visual) then
 		self.Visual:DrawModel()
 	end
 
-	if ValidEntity(self.Arrow) then
+	if IsValid(self.Arrow) then
 
-		render.SetBlend(Color(self.Arrow:GetColor()).a/255)
+		render.SetBlend(self.Arrow:GetColor().a/255)
 		render.SetColorModulation(0,0,255)
 		self.Arrow:DrawModel()
 	end
@@ -66,7 +66,7 @@ function ENT:setPassed(bool)
 end
 
 function ENT:Think()
-	if ValidEntity(LocalPlayer():GetNWEntity("SurfProp")) and LocalPlayer():GetNWEntity("SurfProp").dt.lastCheckpoint == self then
+	if IsValid(LocalPlayer():GetNWEntity("SurfProp")) and LocalPlayer():GetNWEntity("SurfProp").dt.lastCheckpoint == self then
 		self:setPassed(true)
 	end
 
@@ -76,10 +76,10 @@ function ENT:Think()
 		self.Visual:SetModelScale(Vector(size, size, size))
 	end
 
-	if not ValidEntity(self.dt.nextCheckpoint) and ValidEntity(self.Arrow) then
+	if not IsValid(self.dt.nextCheckpoint) and IsValid(self.Arrow) then
 		self.Arrow:SetNoDraw(true)
 		self.Arrow:SetColor(0,0,255,0)
-	elseif ValidEntity(self.Arrow) then
+	elseif IsValid(self.Arrow) then
 		--self.Arrow:SetNoDraw(false)
 		self.Arrow:SetColor(0,0,255,255)
 		local ang = (self.dt.nextCheckpoint:GetPos() - self:GetPos()):Angle()

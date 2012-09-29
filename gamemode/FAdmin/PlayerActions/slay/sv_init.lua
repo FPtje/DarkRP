@@ -1,16 +1,16 @@
 local function Slay(ply, cmd, args)
 	if not args[1] then return end
-	
+
 	local targets = FAdmin.FindPlayer(args[1])
-	if not targets or #targets == 1 and not ValidEntity(targets[1]) then
+	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
 		return
 	end
 	local SlayType = string.lower(FAdmin.PlayerActions.SlayTypes[tonumber(args[2])] or args[2] or "Normal")
-	
+
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Slay", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-		if ValidEntity(target) then
+		if IsValid(target) then
 			if SlayType == "normal" then
 				target:Kill()
 			elseif SlayType == "silent" then
@@ -44,6 +44,6 @@ end
 
 FAdmin.StartHooks["Slay"] = function()
 	FAdmin.Commands.AddCommand("Slay", Slay)
-	
+
 	FAdmin.Access.AddPrivilege("Slay", 2)
 end

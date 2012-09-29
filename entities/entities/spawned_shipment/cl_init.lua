@@ -1,4 +1,10 @@
 include("shared.lua")
+surface.CreateFont("HUDNumber5", {
+	size = 44,
+	weight = 800,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet"})
 
 local matBallGlow = Material("models/props_combine/tpballglow")
 function ENT:Draw()
@@ -18,18 +24,19 @@ function ENT:Draw()
 end
 
 function ENT:drawSpawning()
-	SetMaterialOverride(matBallGlow)
+	render.MaterialOverride(matBallGlow)
 
 	render.SetColorModulation(self.colr, self.colg, 0)
 
 	self:DrawModel()
 
+	render.MaterialOverride()
 	self.colr = 1 - ((CurTime() - self.StartTime) / GetConVarNumber("shipmentspawntime"))
 	self.colg = (CurTime() - self.StartTime) / GetConVarNumber("shipmentspawntime")
 
 	render.SetColorModulation(1, 1, 1)
 
-	SetMaterialOverride()
+	render.MaterialOverride()
 
 	local normal = - self:GetAngles():Up()
 	local pos = self:LocalToWorld(Vector(0, 0, self:OBBMins().z + self.height))
@@ -45,7 +52,7 @@ end
 
 function ENT:drawFloatingGun()
 	local contents = CustomShipments[self.dt.contents or ""]
-	if not contents or not ValidEntity(self.dt.gunModel) then return end
+	if not contents or not IsValid(self.dt.gunModel) then return end
 	self.dt.gunModel:SetNoDraw(true)
 
 	local pos = self:GetPos()
@@ -74,10 +81,10 @@ function ENT:drawFloatingGun()
 	min, max = self.dt.gunModel:LocalToWorld(min), self.dt.gunModel:LocalToWorld(max)
 
 	-- Draw the ghosted weapon
-	SetMaterialOverride(matBallGlow)
+	render.MaterialOverride(matBallGlow)
 	render.SetColorModulation(1 - delta, delta, 0) -- From red to green
 	self.dt.gunModel:DrawModel()
-	SetMaterialOverride()
+	render.MaterialOverride()
 	render.SetColorModulation(1, 1, 1)
 
 	-- Draw the cut-off weapon

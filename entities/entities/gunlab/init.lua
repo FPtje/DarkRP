@@ -55,19 +55,21 @@ function ENT:Use(activator)
 	local discounted = math.ceil(185 * 0.88)
 	local cash = self:SalePrice(activator)
 
-	if not activator:CanAfford(self:SalePrice(activator)) then
-		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase this gun.")
-		return ""
-	end
-	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
-	if diff < 0 and not owner:CanAfford(math.abs(diff)) then
-		GAMEMODE:Notify(activator, 2, 3, "Gun Lab owner is too poor to subsidize this sale!")
-		return ""
-	end
-	self.sparking = true
-
 	if not self.Once then
 		self.Once = true
+
+		if not activator:CanAfford(self:SalePrice(activator)) then
+			GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase this gun.")
+			return ""
+		end
+		local diff = (self:SalePrice(activator) - self:SalePrice(owner))
+		if diff < 0 and not owner:CanAfford(math.abs(diff)) then
+			GAMEMODE:Notify(activator, 2, 3, "Gun Lab owner is too poor to subsidize this sale!")
+			return ""
+		end
+		self.sparking = true
+
+
 		activator:AddMoney(cash * -1)
 		GAMEMODE:Notify(activator, 0, 3, "You purchased a P228 for " .. CUR .. tostring(cash) .. "!")
 
@@ -88,7 +90,7 @@ function ENT:Use(activator)
 			end
 		end
 	end
-	timer.Create(self:EntIndex() .. "spawned_weapon", 1, 1, self.createGun, self)
+	timer.Create(self:EntIndex() .. "spawned_weapon", 1, 1, function() self:createGun() end)
 end
 
 function ENT:createGun()

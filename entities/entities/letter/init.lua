@@ -17,7 +17,7 @@ end
 
 function ENT:OnRemove()
 	local ply = self.dt.owning_ent
-	if not ValidEntity(ply) then return end
+	if not IsValid(ply) then return end
 	if not ply.maxletters then
 		ply.maxletters = 0
 	end

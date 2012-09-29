@@ -47,21 +47,21 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if CLIENT or not ValidEntity(self:GetOwner()) then return end
-	self:SetColor(255,0,0,255)
+	if CLIENT or not IsValid(self:GetOwner()) then return end
+	self:SetColor(Color(255,0,0,255))
 	self:SetMaterial("models/shiny")
 	SendUserMessage("StunStickColour", self:GetOwner(), 255,0,0, "models/shiny")
 	return true
 end
 
 function SWEP:Holster()
-	if CLIENT or not ValidEntity(self:GetOwner()) then return end
+	if CLIENT or not IsValid(self:GetOwner()) then return end
 	SendUserMessage("StunStickColour", self:GetOwner(), 255, 255, 255, "")
 	return true
 end
 
 function SWEP:OnRemove()
-	if SERVER and ValidEntity(self:GetOwner()) then
+	if SERVER and IsValid(self:GetOwner()) then
 		SendUserMessage("StunStickColour", self:GetOwner(), 255, 255, 255, "")
 	end
 end
@@ -69,7 +69,7 @@ end
 usermessage.Hook("StunStickColour", function(um)
 	local viewmodel = LocalPlayer():GetViewModel()
 	local r,g,b,a = um:ReadLong(), um:ReadLong(), um:ReadLong(), 255
-	viewmodel:SetColor(r,g,b,a)
+	viewmodel:SetColor(Color(r,g,b,a))
 	viewmodel:SetMaterial(um:ReadString())
 end)
 
@@ -77,7 +77,7 @@ function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
 	self:SetWeaponHoldType("melee")
-	timer.Simple(0.3, function(wep) if wep:IsValid() then wep:SetWeaponHoldType("normal") end end, self)
+	timer.Simple(0.3, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.Weapon:EmitSound(self.Sound)
@@ -89,7 +89,7 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if ValidEntity(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and GetConVarNumber("cpcanarrestcp") == 0 then
+	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and GetConVarNumber("cpcanarrestcp") == 0 then
 		GAMEMODE:Notify(self.Owner, 1, 5, "You can not arrest other CPs!")
 		return
 	end
@@ -103,7 +103,7 @@ function SWEP:PrimaryAttack()
 		end
 	end
 
-	if not ValidEntity(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 115) or (not trace.Entity:IsPlayer() and not trace.Entity:IsNPC()) then
+	if not IsValid(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 115) or (not trace.Entity:IsPlayer() and not trace.Entity:IsNPC()) then
 		return
 	end
 
@@ -135,7 +135,7 @@ function SWEP:PrimaryAttack()
 				GAMEMODE:Notify(trace.Entity, 0, 20, "You've been arrested by " .. self.Owner:Nick())
 
 				if self.Owner.SteamName then
-					DB.Log(self.Owner:SteamName().." ("..self.Owner:SteamID()..") arrested "..trace.Entity:Nick())
+					DB.Log(self.Owner:SteamName().." ("..self.Owner:SteamID()..") arrested "..trace.Entity:Nick(), nil, Color(0, 255, 255))
 				end
 			else
 				GAMEMODE:Notify(self.Owner, 1, 4, "You can't arrest players who are spawning.")

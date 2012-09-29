@@ -9,18 +9,11 @@ local function CanTouch(um)
 	if TouchAlpha > 0 then return end
 	CantTouchOwner = um:ReadString()
 	cantouch = um:ReadBool()
+
+	TouchAlpha = 255
 	timer.Simple(1, function()
 		TouchAlpha = 0
 	end)
-	for i = 1, 511, 1 do
-		timer.Simple(i/510, function(i)
-			if i <= 255 then
-				TouchAlpha = i
-			else
-				TouchAlpha = 255 - (i-255)
-			end
-		end, i)
-	end
 end
 usermessage.Hook("FPP_CanTouch", CanTouch)
 
@@ -34,11 +27,11 @@ end
 usermessage.Hook("FPP_Owner", RetrieveOwner)
 
 hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool) -- Prevent client from SEEING his toolgun shoot while it doesn't shoot serverside.
-	if ValidEntity(trace.Entity) and FPP.CanTouchEntities[trace.Entity] == false then
+	if IsValid(trace.Entity) and FPP.CanTouchEntities[trace.Entity] == false then
 		return false
 	end
 
-	if ValidEntity(ply:GetActiveWeapon()) and ply:GetActiveWeapon().GetToolObject and ply:GetActiveWeapon():GetToolObject() and
+	if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().GetToolObject and ply:GetActiveWeapon():GetToolObject() and
 	(string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "model" ) or "", "*") or
 	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "material" ) or "", "*") or
 	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "model" ) or "", "\\")
@@ -151,28 +144,28 @@ local function HUDPaint()
 
 	--Show the owner:
 	local LAEnt = LocalPlayer():GetEyeTraceNoCursor().Entity
-	if CanTouchLookingAt ~= nil and ValidEntity(LAEnt) and (LAEnt == LookingatEntity or (LookingatEntity == NULL and LAEnt:EntIndex() ~= 0)) then--LookingatEntity is null when you look at a prop you just spawned(haven't spawned on client yet)
+	if CanTouchLookingAt ~= nil and IsValid(LAEnt) and (LAEnt == LookingatEntity or (LookingatEntity == NULL and LAEnt:EntIndex() ~= 0)) then--LookingatEntity is null when you look at a prop you just spawned(haven't spawned on client yet)
 
 		surface.SetFont("Default")
 		local w,h = surface.GetTextSize(Why)
 		local col = Color(255,0,0,255)
 		if CanTouchLookingAt then col = Color(0,255,0,255) end
-		if comingAroundAgain < (w + 28) then
-			comingAroundAgain = math.Min(comingAroundAgain + (FrameTime()*600), w + 28)
+		if comingAroundAgain < w then
+			comingAroundAgain = math.Min(comingAroundAgain + (RealFrameTime()*600), w)
 		end
 
-		draw.RoundedBox(4, comingAroundAgain - (w + 28), ScrH()/2 - h, w + 28, 16, Color(50,50,50,100))
-		draw.DrawText(Why, "Default", 24 - (w+28) + comingAroundAgain, ScrH()/2 - h, col, 0)
+		draw.RoundedBox(4, comingAroundAgain - w, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
+		draw.DrawText(Why, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
 		surface.SetDrawColor(255,255,255,255)
 	elseif CanTouchLookingAt ~= nil then
 		if comingAroundAgain > 0 then
-			comingAroundAgain = math.Max(comingAroundAgain - (FrameTime()*600), 0)
+			comingAroundAgain = math.Max(comingAroundAgain - (RealFrameTime()*600), 0)
 			surface.SetFont("Default")
 			local w,h = surface.GetTextSize(Why)
-			local col = Color(255,0,0,255)
+			local col = CanTouchLookingAt and Color(0,255,0,255) or Color(255,0,0,255)
 
-			draw.RoundedBox(4, comingAroundAgain - (w + 28), ScrH()/2 - h, w + 28, 16, Color(50,50,50,100))
-			draw.DrawText(Why, "Default", 24 - (w+28) + comingAroundAgain, ScrH()/2 - h, col, 0)
+			draw.RoundedBox(4, comingAroundAgain - w, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
+			draw.DrawText(Why, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
 			surface.SetDrawColor(255,255,255,255)
 		else
 			comingAroundAgain = 0
@@ -180,16 +173,14 @@ local function HUDPaint()
 		end
 	end
 	-- Messsage when you can't touch something
-	if TouchAlpha > 0 then
+	if TouchAlpha > 0 and CantTouchOwner and CantTouchOwner ~= "" then
 		surface.SetDrawColor(255,255,255,TouchAlpha)
 
-		if CantTouchOwner and CantTouchOwner ~= "" then
-			surface.SetFont("Default")
-			local w,h = surface.GetTextSize(CantTouchOwner)
-			local col = Color(255,0,0,255)
-			if cantouch then col = Color(0,255,0,255) end
-			draw.WordBox(4, ScrW()/2 - 0.51*w, ScrH()/2 + h, CantTouchOwner, "Default", Color(50,50,50,100), col)
-		end
+		surface.SetFont("Default")
+		local w,h = surface.GetTextSize(CantTouchOwner)
+		local col = cantouch and Color(0,255,0,255) or Color(255,0,0,255)
+
+		draw.WordBox(4, ScrW()/2 - 0.51*w, ScrH()/2 + h, CantTouchOwner, "Default", Color(0, 0, 0, 110), col)
 	end
 
 	if not HUDNotes then return end

@@ -1,13 +1,13 @@
 local meta = FindMetaTable("Player")
 
 function meta:NewHungerData()
-	if not ValidEntity(self) then return end
+	if not IsValid(self) then return end
 	self:SetSelfDarkRPVar("Energy", 100)
 	self:GetTable().LastHungerUpdate = 0
 end
 
 function meta:HungerUpdate()
-	if not ValidEntity(self) then return end
+	if not IsValid(self) then return end
 	if not GetConVarNumber("hungerspeed") then return end
 	self:SetSelfDarkRPVar("Energy", math.Clamp(self.DarkRPVars.Energy - GetConVarNumber("hungerspeed") / 10, 0, 100))
 	self:GetTable().LastHungerUpdate = CurTime()

@@ -20,7 +20,7 @@ function ENT:SetCanRemove(bool)
 end
 
 function ENT:OnRemove()
-	if not self.CanRemove and ValidEntity(self.target) then
+	if not self.CanRemove and IsValid(self.target) then
 		local Replace = ents.Create("fadmin_jail")
 
 		Replace:SetPos(self.SolidPos)
@@ -41,7 +41,7 @@ function ENT:OnRemove()
 end
 
 function ENT:Think()
-	if not ValidEntity(self.target) then
+	if not IsValid(self.target) then
 		self:SetCanRemove(true)
 		self:Remove()
 		return
