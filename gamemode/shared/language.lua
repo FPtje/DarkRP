@@ -1173,31 +1173,32 @@ rp_languages.swedish = {
 
 // French language, by Sadness (http://steamcommunity.com/id/Sadness81)
 rp_languages.french = {
-	-- Admin things
+	-- Pour que les accents fonctionnent, il faut sélectionner tout le contenu du fichier language.lua faire copié, et passer l'encodage en UTF-8 et coller ce que vous avez copié sur tout l'ancien contenu présent dans le fichier.
+	-- Admin things (Message d'Admin)
 	need_admin = "Vous devez être admin pour avoir le droit de %s",
 	need_sadmin = "Vous devez être super admin pour avoir le droit de %s",
 	no_jail_pos = "Aucune prison enregistrée",
 	invalid_x = "Invalide %s ! %s",
 
-	-- F1 menu
+	-- F1 menu (Menu F1 Aide)
 	get_mod = "Obtenez le mod sur garrysmod.org !",
 	mouse_wheel_to_scroll = "Utilisez la molette pour naviguer",
 
-	-- Money things:
+	-- Money things: (Message d'Argent)
 	customer_price = "Prix consommateur: ",
 	reset_money = "%s à remis à zéro l'argent de tous les joueurs !",
 	has_given = "%s vous a donné %s",
 	you_gave = "Vous donnez à %s %s",
-	npc_killpay = "%s vous sont crédités pour avoir tué un NPCs !",
+	npc_killpay = "%s vous sont crédités pour avoir tué un NPC !",
 
 	payday_message = "Jour de paye ! Vous recevez %s !",
 	payday_unemployed = "N'ayant aucun emploi, vous ne recevez aucun salaire !",
-	payday_missed = "Jour de paye annulé ! (Vous êtes arrêté !)",
+	payday_missed = "Jour de paye annulé ! (Vous êtes arrêté)",
 
 	property_tax = "Taxe de propriété: %s",
 	property_tax_cant_afford = "Vous ne disposez pas d'assez d'argent pour payer vos taxes ! Propriété(s) retirer(s) !",
 
-	-- Players
+	-- Players (Joueurs)
 	wanted = "Rechercher par la police !",
 	youre_arrested = "Vous avez été emprisonné pour %d secondes !",
 	hes_arrested = "%s a été emprisonné pour %d secondes !",
@@ -1216,7 +1217,7 @@ rp_languages.french = {
 	wanted_expired = "%s n'est plus recherché par la police.",
 	rpname_changed = "Mr. %s a changé son nom RP en Mr. %s",
 
-	-- Teams
+	-- Teams (Équipes/Métiers)
 	need_to_be_before = "Vous devez être %s avant de pouvoir devenir %s",
 	need_to_make_vote = "Vous devez créer un vote pour devenir %s !",
 	team_limit_reached = "Vous ne pouvez pas devenir %s car la limite est atteinte",
@@ -1224,47 +1225,47 @@ rp_languages.french = {
 	has_not_been_made_team = "%s n'est pas devenu %s !",
 	job_has_become = "%s est devenu %s !",
 
-	-- Disasters
-	zombie_approaching = "ALERTE: Les zombies arrivent !!",
-	zombie_leaving = "Les zombies repartent.",
+	-- Disasters (Catastrophes)
+	zombie_approaching = "ALERTE: Le gouvernement vous annonce que des hordes de zombies approchent de la ville, veuillez rentrer chez vous !",
+	zombie_leaving = "Les hordes de zombies ont cessé d'arrivée.",
 	zombie_spawn_not_exist = "Le point de spawn %s n'existe pas.",
 	zombie_spawn_removed = "Vous avez supprimé ce spawn de zombie.",
 	zombie_spawn_added = "Vous avez ajouté un spawn de zombie.",
 	zombie_maxset = "Le nombre max de zombie est maintenant à %s",
 	zombie_enabled = "Zombie activés.",
 	zombie_disabled = "Zombie désactivés.",
-	meteor_approaching = "ALERTE: Météo France prévoit des pluies de météorites rentrées chez vous !!",
-	meteor_passing = "La pluie de météorites est passée.",
-	meteor_enabled = "Pluie de météorites.",
-	meteor_disabled = "Plus aucune pluie de météorites n'est prevue pour le moment.",
+	meteor_approaching = "ALERTE: La météo prévoit des pluies de météorites, veuillez rentrer chez vous !",
+	meteor_passing = "Les pluies de météorites ont cessé de tomber.",
+	meteor_enabled = "Météorite activés.",
+	meteor_disabled = "Météorite désactivés.",
 	earthquake_report = "Séisme reporté à magnitude %sMw",
 	earthtremor_report = "Température térrestre reportée à %sMw",
 
-	-- Keys, vehicles and doors
-	keys_allowed_to_coown = "Vous êtes autorisé à co-habiter\n(Appuyer sur F2 ou sur RECHARGER avec les clefs)\n",
+	-- Keys, vehicles and doors (Clés, vehicules et portes)
+	keys_allowed_to_coown = "Vous êtes autorisé à co-habiter\n(Appuyer sur RECHARGER ou sur F2 avec les clefs)\n",
 	keys_other_allowed = "Autorisé à co-habiter:\n",
-	keys_allow_ownership = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour autoriser achat)",
-	keys_disallow_ownership = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour ne pas autoriser achat)",
+	keys_allow_ownership = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour autoriser l'achat)",
+	keys_disallow_ownership = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour ne pas autoriser l'achat)",
 	keys_owned_by = "Propriétaire(s): ",
 	keys_cops_and_mayor = "Equipe policière et Mr. le Maire",
-	keys_unowned = "Inhabité\n(Appuyer sur RECHARGER avec les clefs ou sur F2 pour acheter propriété)",
-	keys_everyone = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour rendre cette porte publique)",
+	keys_unowned = "Inhabité\n(Appuyer sur RECHARGER avec les clefs ou sur F2 pour acheter la propriété)",
+	keys_everyone = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour rendre cette propriété publique)",
 	keys_cops = "(Appuyez sur RECHARGER avec les clefs ou sur F2 pour n'autoriser l'accès qu'au maire et aux policiers)",
-	door_unown_arrested = "Vous ne pouvez pas vendre des choses une fois arrêté !",
-	door_unownable = "Cette porte ne peut être achetée ou vendue !",
-	door_sold = "Vous avez vendu celà pour %s",
-	door_already_owned = "Cette porte appartient déjà à quelqu'un !",
-	door_cannot_afford = "Vous ne pouvez pas acheter cette porte !",
-	door_hobo_unable = "Vous ne pouvez pas acheter une porte si vous êtes un sans-abri !",
+	door_unown_arrested = "Vous ne pouvez pas vendre de propriété quand vous êtes arrêté !",
+	door_unownable = "Cette propriété ne peut être achetée ou vendue !",
+	door_sold = "Vous avez vendu cette propriété pour %s",
+	door_already_owned = "Cette propriété appartient déjà à quelqu'un !",
+	door_cannot_afford = "Vous ne pouvez pas acheter cette propriété !",
+	door_hobo_unable = "Vous ne pouvez pas acheter une propriété si vous êtes un sans-abri !",
 	vehicle_cannot_afford = "Vous ne pouvez pas acheter ce vehicule !",
-	door_bought = "Vous avez acheté cette porte pour %s",
+	door_bought = "Vous avez acheté cette propriété pour %s",
 	vehicle_bought = "Vous avez acheté ce vehicule pour %s",
-	door_need_to_own = "Vous devez acheter cette porte pour pouvoir %s",
-	door_rem_owners_unownable = "Vous ne pouvez pas supprimer de propriétaires sur une porte indisponible à l'achat !",
-	door_add_owners_unownable = "Vous ne pouvez pas ajouter de propriétaires sur une porte indisponible à l'achat !",
-	rp_addowner_already_owns_door = "%s possède déjà (ou est deja autorisé à acheter) cette porte !",
+	door_need_to_own = "Vous devez acheter cette propriété pour pouvoir %s",
+	door_rem_owners_unownable = "Vous ne pouvez pas supprimer de propriétaire sur une porte indisponible à l'achat !",
+	door_add_owners_unownable = "Vous ne pouvez pas ajouter de propriétaire sur une porte indisponible à l'achat !",
+	rp_addowner_already_owns_door = "%s possède déjà (ou est déjà autorisé à acheter) cette propriété !",
 
-	-- Talking
+	-- Talking (Parole)
 	hear_noone = "Personne ne peut vous entendre %s !",
 	hear_everyone = "Tout le monde peut vous entendre !",
 	hear_certain_persons = "Joueur pouvant vous entendre en %s: ",
@@ -1276,7 +1277,7 @@ rp_languages.french = {
 	request = "(REQUETE!)",
 	group = "(groupe)",
 
-	-- Notifies
+	-- Notifies (Notification)
 	disabled = "%s est désactivé ! %s",
 	limit = "Vous avez atteint la limite de %s !",
 	have_to_wait = "Vous devez attendre encore %d secondes avant d'utiliser %s !",
@@ -1298,176 +1299,175 @@ rp_languages.french = {
 	cannot_drop_weapon = "Impossible de lacher cette arme !",
 	team_switch = "Métier changé avec succès !",
 
-	-- Misc
+	-- Misc (Divers)
 	could_not_find = "Impossible de trouver %s",
 	f3tovote = "Appuyez sur F3 pour voter",
-	listen_up = "Ecoutez tous:", -- In rp_tell or rp_tellall
+	listen_up = "Ecoutez tous:", -- In rp_tell or rp_tellall (Avec rp_tell ou rp_tellall)
 	nlr = "Règle de nouvelle vie: Pas de revanche/arrestation/mise à mort.",
-	reset_settings = "Vous avez reset tous les paramètres !",
+	reset_settings = "Vous avez réinitialiser tous les paramètres !",
 	must_be_x = "Vous devez être un %s pour avoir la capacité de %s.",
 	agenda_updated = "L'agenda a été mis à jour",
 	job_set = "%s change son métier en '%s'",
 	demoted = "%s a été viré !",
 	demoted_not = "%s n'a pas été viré",
 	demote_vote_started = "%s a commencé un vote pour %s",
-	demote_vote_text = "Licenciement de:\n%s", -- '%s' is the reason here
+	demote_vote_text = "Licenciement de:\n%s", -- '%s' is the reason here ('%s' ici c'est la raison)
 	lockdown_started = "Le maire a initié un couvre-feu, merci de tous rentrez chez vous !",
 	lockdown_ended = "Couvre-feu terminé",
-	gunlicense_requested = "%s demande à %s une licence d'armes",
-	gunlicense_granted = "%s donne à %s une licence d'armes",
-	gunlicense_denied = "%s a refusé a %s une licence d'armes",
-	gunlicense_question_text = "Donné à %s une licence d'armes ?",
+	gunlicense_requested = "%s demande à %s une licence d'arme",
+	gunlicense_granted = "%s donne à %s une licence d'arme",
+	gunlicense_denied = "%s a refusé a %s une licence d'arme",
+	gunlicense_question_text = "Donné à %s une licence d'arme ?",
 	gunlicense_remove_vote_text = "%s lance un vote pour une suppression de la licence de %s",
-	gunlicense_remove_vote_text2 = "Annuler une licence d'armes:\n%s", -- Where %s is the reason
+	gunlicense_remove_vote_text2 = "Annuler une licence d'armes:\n%s", -- '%s' is the reason here ('%s' ici c'est la raison)
 	gunlicense_removed = "La licence de %s a expirée !",
-	gunlicense_not_removed = "La licence de %s n'a pas ete supprimée !",
-	vote_specify_reason = "Vous devez specifier une raison !",
+	gunlicense_not_removed = "La licence de %s n'a pas été supprimée !",
+	vote_specify_reason = "Vous devez spécifier une raison !",
 	vote_started = "Le vote est créer !",
 	vote_alone = "Votre vote est accepté direct car vous êtes le seul sur le serveur.",
 	jail_punishment = "Punition de déconnexion ! Emprisonné pour: %d secondes.",
-	admin_only = "Vous ne pouvez pas ajouter de position de cellule car vous n'êtes pas administrateur !", -- When doing /addjailpos
-	chief_or = "Chef ou",-- When doing /addjailpos
+	admin_only = "Vous ne pouvez pas ajouter de position de cellule car vous n'êtes pas administrateur !", -- When doing /addjailpos (Quand vous faites /addjailpos)
+	chief_or = "Chef ou",-- When doing /addjailpos (Quand vous faites /addjailpos)
 
 	dead_in_jail = "Vous êtes mort avant la fin de votre arrestation !",
 	died_in_jail = "%s est mort en prison !",
 
-	-- The lottery
-	lottery_started = "Il y a une lotterie ! Participer pour %s ?",
-	lottery_entered = "Vous achetez un billet de lotterie pour %s",
-	lottery_not_entered = "%s n'a pas participé a la lotterie",
-	lottery_noone_entered = "Personne n'a participé à la lotterie",
-	lottery_won = "La chance de %s à tournée ! Il remporte %s à la lotterie, bravo à lui !",
+	-- The lottery (La loterie)
+	lottery_started = "Il y a une loterie ! Voulez-vous participer pour %s ?",
+	lottery_entered = "Vous venez d'achetez un billet de loterie à %s",
+	lottery_not_entered = "%s n'a pas participé à la loterie",
+	lottery_noone_entered = "Personne n'a participé à la loterie",
+	lottery_won = "La chance de %s à tournée ! Il remporte %s à la loterie, bravo à lui !",
 
-	-- Hungermod
+	-- Hungermod (Mod permettant la faim)
 	starving = "Affamé !",
 
-	-- F4menu
-	-- Tab 1
+	-- F4menu (Menu F4 Money/Action)
+	-- Tab 1 (Premier onglet)
 	give_money = "Donner de l'argent à la personne que vous regardez",
 	drop_money = "Deposer de l'argent",
 	change_name = "Changer votre nom RP",
 	go_to_sleep = "Se coucher/réveiller",
 	drop_weapon = "Lacher l'arme actuelle",
-	buy_health = "Acheter santé(%s)",
+	buy_health = "Acheter santé (%s%)",
 	request_gunlicense = "Demander une licence d'arme",
 	demote_player_menu = "Virer un joueur",
 
 
-	searchwarrantbutton = "Lancer un mandat sur un joueur",
-	unwarrantbutton = "Annuler le mandat sur un joueur",
+	searchwarrantbutton = "Lancer un mandat sur un citoyen",
+	unwarrantbutton = "Annuler le mandat sur un citoyen",
 	noone_available = "Aucune personne",
-	request_warrant = "Demander un mandat sur un joueur",
-	make_wanted = "Rechercher quelqu'un",
-	make_unwanted = "Ne plus rechercher quelqu'un",
-	set_jailpos = "Choisir la prison",
-	add_jailpos = "Ajouter une position de cellule ici",
+	request_warrant = "Demander un mandat sur un citoyen",
+	make_wanted = "Lancer une recherche sur un citoyen",
+	make_unwanted = "Annuler la recherche sur un citoyen",
+	set_jailpos = "Supprimer toutes les positions de cellule et en ajouter une ici",
+	add_jailpos = "Ajouter une position de cellule supplémentaire ici",
 
-	set_custom_job = "Choisir un métier secondaire (appuyez sur UTILISER pour activer)",
+	set_custom_job = "Choisir un métier secondaire (appuyez sur UTILISER pour accepter)",
 
-	set_agenda = "Ecrire dans l'agenda (appuyez sur UTILISER pour activer)",
+	set_agenda = "Ecrire dans l'agenda (appuyez sur UTILISER pour accepter)",
 
 	initiate_lockdown = "Initier un couvre-feu",
 	stop_lockdown = "Arreter le couvre-feu",
-	start_lottery = "Commencer une lotterie",
+	start_lottery = "Commencer une loterie",
 	give_license_lookingat = "Donner une licence d'armes à <regard>",
 
-	-- Second tab
+	-- Second tab (Deuxième onglet)
 	job_name = "Nom: ",
 	job_description = "Description: " ,
 	job_weapons = "Arme(s): ",
 
-	-- Entities tab
+	-- Entities tab (Onglet Entitées)
 	buy_a = "Acheté un(e) %s pour %s",
 
-	-- Licenseweaponstab
-	license_tab = [[Armes a licence
+	-- Licenseweaponstab (Menu F4 Licence d'armes)
+	license_tab = [[Armes à licence
 
 	Cocher les armes pouvant êtres utilisées SANS licence d'armes !
 	]],
 	license_tab_other_weapons = "Autres armes:",
 
 
-	-- Help!
+	-- Help! (Aide !)
 	cophelp = [[Pas d'abus.
-	Après arrestation, l'arreté est téléporté.
+	Après l'arrestation, l'arreté est téléporté en prison.
 	Ils sortent de prison après %d secondes.
-	Tapez /warrant [Surnom|SteamID|Status ID] pour lancer un mandat sur un joueur.
-	Tapez /wanted [Surnom|SteamID|Status ID] pour alerter tout le
-	monde d'un suspect.
-	Tapez /unwanted [Surnom|SteamID|Status ID] pour annuler les recherches.
-	Tapez /jailpos pour choisir une prison.
+	Tapez /warrant [Nom RP|SteamID|Status ID] pour lancer un mandat sur un joueur.
+	Tapez /wanted [Nom RP|SteamID|Status ID] pour rechercher un suspect.
+	Tapez /unwanted [Nom RP|SteamID|Status ID] pour annuler les recherches.
+	Tapez /jailpos pour supprimer toutes les positions de cellule et en ajouter une ici.
 	Tapez /cophelp pour afficher ce menu, /x pour le fermer.]],
 
-	mayorhelp = [[Tapez /warrant [Pseudo|SteamID|Status ID] pour lancer un mandat sur un joueur.
-	Tapez /wanted [Pseudo|SteamID|Status ID] pour alerter le
-	monde d'un suspect.
-	Tapez /unwanted [Pseudo|SteamID|Status ID] pour ne plus alerter le monde du suspect.
+	mayorhelp = [[Tapez /warrant [Nom RP|SteamID|Status ID] pour lancer un mandat sur un joueur.
+	Tapez /wanted [Nom RP|SteamID|Status ID] pour rechercher un suspect.
+	Tapez /unwanted [Nom RP|SteamID|Status ID] pour annuler les recherches.
 	Tapez /lockdown pour initier un couvre-feu.
 	Tapez /unlockdown pour terminer le couvre-feu.
 	Tapez /mayorhelp pour afficher ce menu, /x pour le fermer.]],
 
-	adminhelp = [[/enablestorm activer pluies de météorites.
-	/disablestorm désactiver pluies de météorites.
+	adminhelp = [[/enablestorm activer les pluies de météorites.
+	/disablestorm désactiver les pluies de météorites.
 	Vous pouvez changer tous les prix,
 	pour ce faire appuyez sur F1 celà affichera toutes les commandes.
 	Si vous editez le fichier init.lua vous pouvez sauvegarder les variables.
-	/jailpos définit la prison.
-	/setspawn <métier> - Entrer le nom du metier Ex. police, mayor, gangster.
+	/jailpos supprime toutes les positions de cellule et en ajouter une ici.
+	/setspawn <métier> - Entrer le nom du metier Ex. mayor, gangster, gundealer.
 	/adminhelp afficher ce menu, /x le fermer.]],
 
 	bosshelp = [[Vous décidez de ce que les gangsters doivent faire.
 	Utilisez une matraque de désarrestation pour faire sortir les gens de prison.
-	/agenda <message> écrire dans l'agenda des gangsters.
+	/agenda <message> pour écrire dans l'agenda des gangsters.
 	Utilisez // pour aller a la ligne.
 	Tapez /mobbosshelp pour afficher ce menu, /x pour le fermer.]],
 
 	hints =
 	-- French hints:
 	{"Le RP s'accorde aux règles du serveur !",
+	"Tapez /rpname <nom> pour choisir votre nom RP.",
+	"En tant que maire, organiser des proplympics avec /proplympics dans le chat !",
 	"Vous pouvez être arreté pour l'achat illégal d'une arme !",
-	"Tapez /sleep pour dormir.",
+	"Tapez /sleep pour dormir et de nouveau /sleep pour vous réveiller.",
 	"Vous pouvez acheter un pistolet, mais ne l'utilisez qu'en légitime défense.",
 	"Toutes les armes ne peuvent pas tirer sans viser.",
 	"Si vous êtes policier, soyez sérieux sous peine de licenciement voir d'une sanction plus grave.",
-	"Tapez /buyshipment <nom arme> pour acheter un pack d'armes (ex: /buyshipment ak47).",
-	"Tapez /buy <nom pistolet> pour acheter un pistolet, ex: /buy glock.",
+	"Tapez /buyshipment <nom arme> pour acheter une caisse d'armes (ex: /buyshipment ak47).",
+	"Tapez /buy <nom pistolet> pour acheter un pistolet (ex: /buy glock).",
 	"Tapez /buyammo <type munition> pour acheter des munitions, les types de munition sont: [pistol|shotgun|rifle]",
-	"Pour faire sortir votre ami de prison négociez avec la police !",
+	"Pour faire sortir votre ami de prison vous pouvez négociez avec la police !",
 	"Appuyez sur F1 pour voir l'aide RP.",
 	"Si vous êtes arrêté vous sortirez automatiquement de prison quelques minutes plus tard.",
 	"Si vous êtes commandant de police ou maire, tapez /jailpos ou /addjail pour paramétrer les positions des cellules.",
-	"Vous serez téléporté en prison si vous êtes arrêté !",
+	"Vous serez automatiquement téléporté en prison si vous vous faite arrêté !",
 	"Si vous êtes policier et que vous voyez quelqu'un avec une arme illégale, arrêtez-le.",
-	"Tapez /sleep pour dormir.",
+	"Tapez /sleep pour dormir et de nouveau /sleep pour vous réveiller.",
 	"Votre argent et votre nom RP sont sauvegardés par le serveur.",
 	"Tapez /buyhealth pour vous rendre votre vie à 100% s'il n'y a pas de docteur.",
-	"Tapez /buydruglab pour acheter un laboratoire de drogues, mais soyez sur de vendre vos drogues ou d'être un bon consommateur !",
-	"Appuyez sur F2 ou UTILISER avec les clefs pour ouvrir le menu des clefs.",
-	"Vous serez téléporté en prison si vous êtes arrêté !",
-	"Tapez /price <prix> en regardant un laboratoire de drogues, armes ou un micro-ondes pour changer le prix de consommation.",
+	"Tapez /buydruglab pour acheter un laboratoire de drogue, mais soyez sur de vendre vos drogues ou d'être un bon consommateur !",
+	"Vous serez automatiquement téléporté en prison si vous vous faite arrêté !",
+	"Tapez /price <prix> en regardant un laboratoire de drogue, d'armes ou un micro-ondes pour changer le prix de consommation.",
 	"Tapez /warrant [Nom RP|SteamID|UserID] pour obtenir un mandat sur un joueur.",
-	"Tapez /wanted ou /unwanted [Nom RP|SteamID|UserID] pour rechercher/ne plus rechercher un joueur par la police.",
-	"Tapez /drop pour lâcher l'arme que vous tenez.",
-	"Tapez /gangster pour devenir mafieu.",
-	"Tapez /mobboss pour devenir parrain.",
-	"Tapez /buymicrowave pour acheter un micro-ondes qui spawn de la nourriture.",
+	"Tapez /wanted ou /unwanted [Nom RP|SteamID|UserID] pour faire rechercher/ne plus rechercher un joueur par la police.",
+	"Tapez /drop pour lâcher l'arme que vous tenez dans vos mains.",
+	"Tapez /gangster pour devenir un gangster.",
+	"Tapez /mobboss pour devenir mobboss.",
+	"Tapez /buymicrowave pour acheter un micro-ondes qui fait apparaitre de la nourriture.",
 	"Tapez /dropmoney <nombre> pour poser une somme d'argent.",
 	"Tapez /buymoneyprinter pour acheter une imprimante d'argent.",
 	"Tapez /medic pour devenir médecin.",
 	"Tapez /gundealer pour devenir vendeur d'armes.",
 	"Tapez /buygunlab pour acheter un laboratoire d'armes.",
 	"Tapez /cook pour devenir cuisinier.",
-	"Tapez /cophelp pour voir ce que vous devez savoir sur la police.",
-	"Tapez /buyfood <type> pour acheter de la nourriture (ex: /buyfood melon)",
+	"Tapez /cophelp pour voir ce que vous devez savoir quand vous êtes policier.",
+	"Tapez /buyfood <nom nourriture> pour acheter de la nourriture (ex: /buyfood melon)",
 	"Tapez /rpname <nom> pour choisir votre nom RP.",
-	"Tapez /call <nom> pour appeler quelqu'un !",
+	"Tapez /call <nom> pour appeler quelqu'un avec votre téléphone portable !",
 	"Si vous êtes un policier vous pouvez utiliser les ordinateurs de la police pour répondre aux appels 911.",
 	"Utilisez /911 pour appeler la police (fonctionne seulement si vous avez récemment subit des dommages).",
 	"Vous avez trouvé quelque chose d'illégal ? Regardez le et tapez /report pour alerter la police.",
-	"Vous serez automatiquement viré si vous êtes AFK pendant "..GetConVarNumber("afkdemotetime").." secondes, utilisez /afk pour eviter celà.",
+	"Vous serez automatiquement viré si vous êtes AFK pendant "..GetConVarNumber("afkdemotetime").." secondes, utilisez la commande /afk pour eviter celà.",
 	"Tapez /dropmoney <nombre> pour deposer de l'argent au sol.",
-	"Tapez /give <nombre> pour donner de l'argent au joueur que vous regardez.",
-	"Tapez /cheque <joueur> <nombre> pour créer un cheque, seul le joueur mentionné peut le prendre."
+	"Tapez /give <nombre> pour donner de l'argent à la personne que vous regardez.",
+	"Tapez /cheque <joueur> <nombre> pour créer un cheque, seul la personne mentionné pourras le prendre."
 	}
 }
 
