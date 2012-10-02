@@ -156,7 +156,6 @@ if CLIENT then
 
 		if self:IsVehicle() then
 			for k,v in pairs(player.GetAll()) do
-				print("player", v,v:GetVehicle(), self )
 				if v:GetVehicle() == self then
 					whiteText = true
 					st = st .. "\n" .. "Driver: " .. v:Nick()
