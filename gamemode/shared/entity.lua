@@ -154,6 +154,16 @@ if CLIENT then
 			end
 		end
 
+		if self:IsVehicle() then
+			for k,v in pairs(player.GetAll()) do
+				print("player", v,v:GetVehicle(), self )
+				if v:GetVehicle() == self then
+					whiteText = true
+					st = st .. "\n" .. "Driver: " .. v:Nick()
+				end
+			end
+		end
+
 		if whiteText then
 			draw.DrawText(st, "TargetID", pos.x + 1, pos.y + 1, Color(0, 0, 0, 200), 1)
 			draw.DrawText(st, "TargetID", pos.x, pos.y, Color(255, 255, 255, 200), 1)
