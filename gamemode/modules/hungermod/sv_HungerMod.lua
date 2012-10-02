@@ -1,3 +1,7 @@
+GM:includeCS("hungermod/cl_init.lua")
+
+include("hungermod/player.lua")
+
 local HM = { }
 local FoodItems = { }
 

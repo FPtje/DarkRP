@@ -20,7 +20,7 @@ if SERVER then
 		end
 	end
 
-	AddDir("materials/FAdmin")
+	AddDir("materials/fadmin")
 
 	local function AddCSLuaFolder(fol)
 		fol = string.lower(fol)
