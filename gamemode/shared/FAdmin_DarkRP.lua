@@ -20,7 +20,7 @@ if SERVER then
 		end
 	end
 
-	AddDir("materials/FAdmin")
+	AddDir("materials/fadmin")
 
 	AddCSLuaFile("FAdmin.lua")
 
@@ -42,8 +42,8 @@ if SERVER then
 			end
 		end
 	end
-	AddCSLuaFolder(GM.FolderName.."/gamemode/FAdmin/")
-	AddCSLuaFolder(GM.FolderName.."/gamemode/FAdmin/PlayerActions/")
+	AddCSLuaFolder(GM.FolderName.."/gamemode/fadmin/")
+	AddCSLuaFolder(GM.FolderName.."/gamemode/fadmin/playeractions/")
 elseif CLIENT then
 	local function IncludeFolder(fol)
 		for _, folder in SortedPairs(file.FindInLua(fol.."*"), true) do
@@ -58,8 +58,8 @@ elseif CLIENT then
 			end
 		end
 	end
-	IncludeFolder(GM.FolderName.."/gamemode/FAdmin/")
-	IncludeFolder(GM.FolderName.."/gamemode/FAdmin/PlayerActions/")
+	IncludeFolder(GM.FolderName.."/gamemode/fadmin/")
+	IncludeFolder(GM.FolderName.."/gamemode/fadmin/playeractions/")
 end
 
 /*

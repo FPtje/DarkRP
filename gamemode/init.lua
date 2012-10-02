@@ -103,20 +103,20 @@ include("server/votes.lua")
 local BlockedModelsExist = sql.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS;") ~= false
 if not BlockedModelsExist then
 	sql.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS('model' TEXT NOT NULL PRIMARY KEY);")
-	include("FPP/FPP_DefaultBlockedModels.lua") -- Load the default blocked models
+	include("fpp/FPP_DefaultBlockedModels.lua") -- Load the default blocked models
 end
-AddCSLuaFile("FPP/sh_CPPI.lua")
-AddCSLuaFile("FPP/sh_settings.lua")
-AddCSLuaFile("FPP/client/FPP_Menu.lua")
-AddCSLuaFile("FPP/client/FPP_HUD.lua")
-AddCSLuaFile("FPP/client/FPP_Buddies.lua")
+AddCSLuaFile("fpp/sh_CPPI.lua")
+AddCSLuaFile("fpp/sh_settings.lua")
+AddCSLuaFile("fpp/client/FPP_Menu.lua")
+AddCSLuaFile("fpp/client/FPP_HUD.lua")
+AddCSLuaFile("fpp/client/FPP_Buddies.lua")
 AddCSLuaFile("shared/FAdmin_DarkRP.lua")
 
-include("FPP/sh_settings.lua")
-include("FPP/sh_CPPI.lua")
-include("FPP/server/FPP_Settings.lua")
-include("FPP/server/FPP_Core.lua")
-include("FPP/server/FPP_Antispam.lua")
+include("fpp/sh_settings.lua")
+include("fpp/sh_CPPI.lua")
+include("fpp/server/FPP_Settings.lua")
+include("fpp/server/FPP_Core.lua")
+include("fpp/server/FPP_Antispam.lua")
 include("shared/FAdmin_DarkRP.lua")
 
 local files = file.Find("gamemodes/"..GM.FolderName.."/gamemode/modules/*.lua", true)

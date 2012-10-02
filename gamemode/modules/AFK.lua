@@ -4,7 +4,7 @@
 -- If a player uses /afk, they go into AFK mode, they will not be autodemoted and their salary is set to $0 (you can still be killed/vote demoted though!).
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
-GM:includeCS("AFK/cl_afk.lua")
+GM:includeCS("afk/cl_afk.lua")
 GM:AddToggleCommand("rp_afk_demote", "afkdemote", 0)
 GM:AddValueCommand("rp_afk_demotetime", "afkdemotetime", 600)
 

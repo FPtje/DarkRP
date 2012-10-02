@@ -90,11 +90,11 @@ include("shared.lua")
 include("addentities.lua")
 include("ammotypes.lua")
 
-include("FPP/sh_settings.lua")
-include("FPP/client/FPP_Menu.lua")
-include("FPP/client/FPP_HUD.lua")
-include("FPP/client/FPP_Buddies.lua")
-include("FPP/sh_CPPI.lua")
+include("fpp/sh_settings.lua")
+include("fpp/client/FPP_Menu.lua")
+include("fpp/client/FPP_HUD.lua")
+include("fpp/client/FPP_Buddies.lua")
+include("fpp/sh_CPPI.lua")
 
 surface.CreateFont("akbar", 20, 500, true, false, "AckBarWriting")
 
