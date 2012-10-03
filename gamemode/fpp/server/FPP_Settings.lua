@@ -680,7 +680,7 @@ local function RestrictToolPerson(ply, cmd, args)
 	FPP.RestrictedToolsPlayers[toolname] = FPP.RestrictedToolsPlayers[toolname] or {}
 
 	if access == 0 or access == 1 then -- Disallow, even if other people can use it
-		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = false
+		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = access == 1
 
 		DB.Query("REPLACE INTO FPP_TOOLRESTRICTPERSON1 VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(target:SteamID())..", ".. access ..");")
 	elseif access == 2 then -- reset tool status(make him like everyone else)
