@@ -49,7 +49,6 @@ end
 function FAdmin.ScoreBoard.Main.PlayerListView(Sorted, SortDown)
 	FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Clear(true)
 	for k, ply in SortedPairsByFunction(player.GetAll(), Sorted, SortDown) do
-		fprint(ply:Nick())
 		local Row = vgui.Create("FadminPlayerRow")
 		Row:SetPlayer(ply)
 		Row:Dock(TOP)

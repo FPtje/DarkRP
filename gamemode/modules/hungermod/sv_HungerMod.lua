@@ -1,6 +1,6 @@
-GM:includeCS("hungermod/cl_init.lua")
+AddCSLuaFile(GM.FolderName.."/gamemode/modules/hungermod/cl_init.lua")
 
-include("hungermod/player.lua")
+include(GM.FolderName.."/gamemode/modules/hungermod/sv_player.lua")
 
 local HM = { }
 local FoodItems = { }
