@@ -850,7 +850,7 @@ end
 hook.Add("PlayerLeaveVehicle", "FPP.PlayerLeaveVehicle", FPP.Protect.LeaveVehicle)
 
 hook.Add("EntityRemoved","jeepWorkaround",function(ent)
-    if ValidEntity(ent) and ent:IsVehicle() and ValidEntity(ent:GetPassenger()) then
+    if IsValid(ent) and ent:IsVehicle() and IsValid(ent:GetPassenger()) then
         ent:GetPassenger():ExitVehicle()
     end
 end)
