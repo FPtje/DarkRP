@@ -7,15 +7,15 @@ if SERVER then
 	include(GM.FolderName.."/gamemode/server/FAdmin_MySQL.lua")
 
 	local function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
-		local List = file.FindDir(dir.."/*", "GAME")
+		local files, folders = file.Find(dir.."/*", "GAME")
 
-		for _, fdir in pairs(List) do
+		for _, fdir in pairs(folders) do
 			if fdir != ".svn" then // don't spam people with useless .svn folders
 				AddDir(dir.."/"..fdir)
 			end
 		end
 
-		for k,v in pairs(file.Find(dir.."/*", "GAME")) do
+		for k,v in pairs(files) do
 			resource.AddFile(dir.."/"..v)
 		end
 	end
@@ -25,19 +25,19 @@ if SERVER then
 	local function AddCSLuaFolder(fol)
 		fol = string.lower(fol)
 
-		local files, folders = file.Find(fol.."*", LUA_PATH)
+		local _, folders = file.Find(fol.."*", "LUA")
 		for _, folder in SortedPairs(folders, true) do
 			if folder ~= "." and folder ~= ".." then
-				for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", LUA_PATH)) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA")) do
 					AddCSLuaFile(fol..folder .. "/" ..File)
 					include(fol.. folder .. "/" ..File)
 				end
 
-				for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", LUA_PATH), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", "LUA"), true) do
 					include(fol.. folder .. "/" ..File)
 				end
 
-				for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", LUA_PATH), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", "LUA"), true) do
 					AddCSLuaFile(fol.. folder .. "/" ..File)
 				end
 			end
@@ -49,14 +49,14 @@ elseif CLIENT then
 	local function IncludeFolder(fol)
 		fol = string.lower(fol)
 
-		local files, folders = file.Find(fol.."*", LUA_PATH)
+		local files, folders = file.Find(fol.."*", "LUA")
 		for _, folder in SortedPairs(folders, true) do
 			if folder ~= "." and folder ~= ".." then
-				for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", LUA_PATH), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 					include(fol.. folder .. "/" ..File)
 				end
 
-				for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", LUA_PATH), true) do
+				for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", "LUA"), true) do
 					include(fol.. folder .. "/" ..File)
 				end
 			end
