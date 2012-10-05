@@ -1117,31 +1117,32 @@ end
 usermessage.Hook("FPP_ShareSettings", FPP.SharedMenu)
 
 
-local OldVGUICreate = vgui.Create
-function vgui.Create(classname, parent, name, ...)
-	if classname == "SpawnIcon" and parent and parent.IconList and parent.PropList then
-		local SpawnIcon = OldVGUICreate(classname, parent, name, ...)
-		timer.Simple(0, function() -- The .OpenMenu function will be there the next frame
-			if not SpawnIcon.OpenMenu or not SpawnIcon.strTooltipText then return end
+properties.Add("addFPPBlocked",
+{
+	MenuLabel	=	"Add to FPP blocked models",
+	Order		=	1001,
+	MenuIcon	=	"icon16/cross.png",
 
-			local model = string.match(SpawnIcon.strTooltipText, "(.*.mdl)")
-			if not model then return end
-			function SpawnIcon:OpenMenu()
-				local menu = DermaMenu()
-					menu:AddOption("Copy to Clipboard", function() SetClipboardText(model) end)
-					local submenu = menu:AddSubMenu("Re-Render", function() SpawnIcon:RebuildSpawnIcon() end)
-						submenu:AddOption("This Icon", function() SpawnIcon:RebuildSpawnIcon() end)
-						submenu:AddOption("All Icons", function()
-							if ValidPanel(self:GetParent():GetParent():GetParent()) then self:GetParent():GetParent():GetParent():RebuildAll() end
-						end)
-					menu:AddSpacer()
-					menu:AddOption("Delete", function() self:DeleteIcon(self.m_strCategoryName, SpawnIcon, model) end)
-					menu:AddOption("Add to FPP blocked models", function() RunConsoleCommand("FPP_AddBlockedModel", model) end)
-					menu:AddOption("Remove from FPP blocked models", function() RunConsoleCommand("FPP_RemoveBlockedModel", model) end)
-				menu:Open()
-			end
-		end)
-		return SpawnIcon
-	end
-	return OldVGUICreate(classname, parent, name, ...)
-end
+	Filter		=	function(self, ent, ply)
+						return ply:IsSuperAdmin()
+					end,
+
+	Action		=	function(self, ent)
+						RunConsoleCommand("FPP_AddBlockedModel", ent:GetModel())
+					end
+})
+
+properties.Add("removeFPPBlocked",
+{
+	MenuLabel	=	"Remove from FPP blocked models",
+	Order		=	1002,
+	MenuIcon	=	"icon16/tick.png",
+
+	Filter		=	function(self, ent, ply)
+						return ply:IsSuperAdmin()
+					end,
+
+	Action		=	function(self, ent)
+						RunConsoleCommand("FPP_RemoveBlockedModel", ent:GetModel())
+					end
+})
