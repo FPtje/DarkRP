@@ -141,7 +141,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			CatColor = Color(236, 181, 113, 255)
 		end
 	end
-	FAdmin.ScoreBoard.Player.Controls.ButtonCat = FAdmin.ScoreBoard.Player.Controls.ButtonCat or  vgui.Create("FAdminPlayerCatagory")
+	FAdmin.ScoreBoard.Player.Controls.ButtonCat = FAdmin.ScoreBoard.Player.Controls.ButtonCat or vgui.Create("FAdminPlayerCatagory")
 	FAdmin.ScoreBoard.Player.Controls.ButtonCat:SetLabel("  Player options!")
 	FAdmin.ScoreBoard.Player.Controls.ButtonCat.CatagoryColor = CatColor
 	FAdmin.ScoreBoard.Player.Controls.ButtonCat:SetSize(FAdmin.ScoreBoard.Width - 40, 100)
@@ -151,7 +151,10 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	function FAdmin.ScoreBoard.Player.Controls.ButtonCat:Toggle()
 	end
 
-	FAdmin.ScoreBoard.Player.Controls.ButtonPanel = FAdmin.ScoreBoard.Player.Controls.ButtonPanel or vgui.Create("FAdminPanelList")
+	FAdmin.ScoreBoard.Player.Controls.ButtonPanel = FAdmin.ScoreBoard.Player.Controls.ButtonPanel or vgui.Create("FAdminPanelList", FAdmin.ScoreBoard.Player.Controls.ButtonCat)
+	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:SetSpacing(5)
+	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:EnableHorizontal(true)
+	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:EnableVerticalScrollbar(true)
 	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:SizeToContents()
 	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:SetVisible(true)
 	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:SetSize(0, (ScreenHeight - FAdmin.ScoreBoard.Y - 40) - (FAdmin.ScoreBoard.Y + 100 + FAdmin.ScoreBoard.Player.Controls.InfoPanel2:GetTall() + 5))
@@ -182,14 +185,13 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			function ActionButton:DoClick()
 				return v.Action(FAdmin.ScoreBoard.Player.Player, self)
 			end
-			FAdmin.ScoreBoard.Player.Controls.ButtonPanel:Add(ActionButton)
+			FAdmin.ScoreBoard.Player.Controls.ButtonPanel:AddItem(ActionButton)
 			if v.OnButtonCreated then
 				v.OnButtonCreated(FAdmin.ScoreBoard.Player.Player, ActionButton)
 			end
 		end
 	end
-
-	FAdmin.ScoreBoard.Player.Controls.ButtonCat:SetContents(FAdmin.ScoreBoard.Player.Controls.ButtonPanel )
+	FAdmin.ScoreBoard.Player.Controls.ButtonPanel:Dock(TOP)
 end
 
 function FAdmin.ScoreBoard.Player:AddInformation(name, func, ForceNewPanel) -- ForeNewPanel is to start a new column

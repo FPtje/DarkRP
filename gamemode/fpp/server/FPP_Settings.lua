@@ -674,6 +674,7 @@ concommand.Add("FPP_restricttool", SetToolRestrict)
 local function RestrictToolPerson(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
 	if not args[3] then FPP.Notify(ply, "Invalid argument(s)", false) return end--FPP_restricttoolperson <toolname> <userid> <disallow, allow, remove(0,1,2)>
+
 	local toolname = args[1]
 	local target = Player(tonumber(args[2]))
 	local access = tonumber(args[3])
@@ -683,7 +684,7 @@ local function RestrictToolPerson(ply, cmd, args)
 	FPP.RestrictedToolsPlayers[toolname] = FPP.RestrictedToolsPlayers[toolname] or {}
 
 	if access == 0 or access == 1 then -- Disallow, even if other people can use it
-		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = false
+		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = access == 1
 
 		DB.Query("REPLACE INTO FPP_TOOLRESTRICTPERSON1 VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(target:SteamID())..", ".. access ..");")
 	elseif access == 2 then -- reset tool status(make him like everyone else)
