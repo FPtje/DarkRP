@@ -137,7 +137,7 @@ function PANEL:Paint()
 
 	draw.RoundedBox(4, 0, 0, self:GetWide(), self.Size, color)
 
-	//surface.SetTexture(texGradient)
+	surface.SetTexture(0)
 	if self.Player == LocalPlayer() or self.Player:GetFriendStatus() == "friend" then
 		surface.SetDrawColor(255, 255, 255, 50 + math.sin(RealTime() * 2) * 50)
 	end
