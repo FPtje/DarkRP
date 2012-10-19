@@ -204,7 +204,7 @@ if SERVER then
 		umsg.End()
 	end
 
-	getmetatable("player").FAdmin_SetGlobal = function(setting, value)
+	getmetatable(Player(0)).FAdmin_SetGlobal = function(self, setting, value)
 		self.GlobalSetting = self.GlobalSetting or {}
 		if self.GlobalSetting[setting] == value then return end -- If the value didn't change, we don't need to resend it.
 		self.GlobalSetting[setting] = value
