@@ -56,9 +56,18 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 		http.Fetch(FAdmin.SteamToProfile(SteamID).."?xml=true", GetBigAvatar)
 	end
 
+	FAdmin.ScoreBoard.Player.InfoPanels = FAdmin.ScoreBoard.Player.InfoPanels or {}
+	for k,v in pairs(FAdmin.ScoreBoard.Player.InfoPanels) do
+		if ValidPanel(v) then
+			v:Remove()
+			FAdmin.ScoreBoard.Player.InfoPanels[k] = nil
+		end
+	end
+
 	if ValidPanel(FAdmin.ScoreBoard.Player.Controls.InfoPanel1) then
 		FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Remove()
 	end
+
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1 = vgui.Create("DListLayout")
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100 + 218 + 5 /* + Avatar size*/)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetSize(213, ScreenHeight*0.1 + 2)
@@ -71,18 +80,18 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetVisible(true)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:Clear(true)
 
-	local InfoPanels = {}
 	local function AddInfoPanel()
 		local pan = FAdmin.ScoreBoard.Player.Controls.InfoPanel2:Add("DListLayout")
 		pan:SetSize(1, FAdmin.ScoreBoard.Player.Controls.InfoPanel2:GetTall())
 
-		table.insert(InfoPanels, pan)
+		table.insert(FAdmin.ScoreBoard.Player.InfoPanels, pan)
 		return pan
 	end
 
 	local SelectedPanel = AddInfoPanel() -- Make first panel to put the first things in
 
 	for k, v in pairs(FAdmin.ScoreBoard.Player.Information) do
+		SelectedPanel:Dock(LEFT)
 		local Value = v.func(FAdmin.ScoreBoard.Player.Player)
 		--if not Value or Value == "" then return --[[ Value = "N/A" ]] end
 		if Value and Value ~= "" then
@@ -208,11 +217,3 @@ FAdmin.ScoreBoard.Player:AddInformation("Kills", function(ply) return ply:Frags(
 FAdmin.ScoreBoard.Player:AddInformation("Deaths", function(ply) return ply:Deaths() end)
 FAdmin.ScoreBoard.Player:AddInformation("Health", function(ply) return ply:Health() end)
 FAdmin.ScoreBoard.Player:AddInformation("Ping", function(ply) return ply:Ping() end)
-
-FAdmin.ScoreBoard.Player:AddInformation("Props", function(ply) return ply:GetCount("Props") + ply:GetCount("ragdolls") + ply:GetCount("effects") end, true)
-FAdmin.ScoreBoard.Player:AddInformation("HoverBalls", function(ply) return ply:GetCount("hoverballs") end)
-FAdmin.ScoreBoard.Player:AddInformation("Thrusters", function(ply) return ply:GetCount("thrusters") end)
-FAdmin.ScoreBoard.Player:AddInformation("Balloons", function(ply) return ply:GetCount("balloons") end)
-FAdmin.ScoreBoard.Player:AddInformation("Buttons", function(ply) return ply:GetCount("buttons") end)
-FAdmin.ScoreBoard.Player:AddInformation("Dynamite", function(ply) return ply:GetCount("dynamite") end)
-FAdmin.ScoreBoard.Player:AddInformation("SENTs", function(ply) return ply:GetCount("sents") end)
