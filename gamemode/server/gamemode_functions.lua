@@ -15,11 +15,11 @@ function GM:PlayerSellDoor( objPl, objEnt )
 end
 
 function GM:GetDoorCost( objPl, objEnt )
-	return GetConVarNumber("doorcost") ~= 0 and  GetConVarNumber("doorcost") or 30;
+	return GAMEMODE.Config.doorcost ~= 0 and  GAMEMODE.Config.doorcost or 30;
 end
 
 function GM:GetVehicleCost( objPl, objEnt )
-	return GetConVarNumber("vehiclecost") ~= 0 and  GetConVarNumber("vehiclecost") or 40;
+	return GAMEMODE.Config.vehiclecost ~= 0 and  GAMEMODE.Config.vehiclecost or 40;
 end
 
 function GM:CanChangeRPName(ply, RPname)
@@ -74,7 +74,7 @@ end
 
 function GM:PlayerSpawnProp(ply, model)
 	-- If prop spawning is enabled or the user has admin or prop privileges
-	local allowed = ((GetConVarNumber("propspawning") == 1 or (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_prop")) or ply:IsAdmin()) and true) or false
+	local allowed = ((GAMEMODE.Config.propspawning or (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_prop")) or ply:IsAdmin()) and true) or false
 
 	if ply:isArrested() then return false end
 	model = string.gsub(tostring(model), "\\", "/")
@@ -90,8 +90,8 @@ function GM:PlayerSpawnSENT(ply, model)
 end
 
 local function canSpawnWeapon(ply, class)
-	if (GetConVarNumber("adminweapons") == 0 and ply:IsAdmin()) or
-	(GetConVarNumber("adminweapons") == 1 and ply:IsSuperAdmin()) then
+	if (not GAMEMODE.Config.adminweapons and ply:IsAdmin()) or
+	(GAMEMODE.Config.adminweapons and ply:IsSuperAdmin()) then
 		return true
 	end
 	GAMEMODE:Notify(ply, 1, 4, "You can't spawn weapons")
@@ -116,7 +116,7 @@ function GM:PlayerSpawnVehicle(ply, model)
 end
 
 function GM:PlayerSpawnNPC(ply, model)
-	if tobool(GetConVarNumber("adminnpcs")) and not ply:IsAdmin() then return false end
+	if GAMEMODE.Config.adminnpcs and not ply:IsAdmin() then return false end
 
 	return self.BaseClass:PlayerSpawnNPC(ply, model) and not ply:isArrested()
 end
@@ -134,12 +134,12 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 		ent.RPOriginalMass = phys:GetMass()
 	end
 
-	if GetConVarNumber("proppaying") == 1 then
-		if ply:CanAfford(GetConVarNumber("propcost")) then
-			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. CUR .. GetConVarNumber("propcost"))
-			ply:AddMoney(-GetConVarNumber("propcost"))
+	if GAMEMODE.Config.proppaying then
+		if ply:CanAfford(GAMEMODE.Config.propcost) then
+			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. CUR .. GAMEMODE.Config.propcost)
+			ply:AddMoney(-GAMEMODE.Config.propcost)
 		else
-			GAMEMODE:Notify(ply, 1, 4, "Need " .. CUR .. GetConVarNumber("propcost"))
+			GAMEMODE:Notify(ply, 1, 4, "Need " .. CUR .. GAMEMODE.Config.propcost)
 			return false
 		end
 	end
@@ -194,9 +194,9 @@ function GM:OnNPCKilled(victim, ent, weapon)
 		end
 
 		-- If we know by now who killed the NPC, pay them.
-		if IsValid(ent) and GetConVarNumber("npckillpay") > 0 then
-			ent:AddMoney(GetConVarNumber("npckillpay"))
-			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, CUR .. GetConVarNumber("npckillpay")))
+		if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
+			ent:AddMoney(GAMEMODE.Config.npckillpay)
+			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, CUR .. GAMEMODE.Config.npckillpay))
 		end
 	end
 end
@@ -214,23 +214,23 @@ local function IsInRoom(listener, talker) -- IsInRoom function to see if the pla
 	return not trace.HitWorld
 end
 
-local threed = GetConVar( "3dvoice" )
-local vrad = GetConVar( "voiceradius" )
-local dynv = GetConVar( "dynamicvoice" )
+local threed = GM.Config.voice3D
+local vrad = GM.Config.voiceradius
+local dynv = GM.Config.dynamicvoice
 function GM:PlayerCanHearPlayersVoice(listener, talker, other)
-	if vrad:GetBool() and listener:GetShootPos():Distance(talker:GetShootPos()) < 550 then
-		if dynv:GetBool() then
-			if IsInRoom( listener, talker ) then
-				return true, threed:GetBool()
+	if vrad and listener:GetShootPos():Distance(talker:GetShootPos()) < 550 then
+		if dynv then
+			if IsInRoom(listener, talker) then
+				return true, threed
 			else
-				return false, threed:GetBool()
+				return false, threed
 			end
 		end
-		return true, threed:GetBool()
-	elseif vrad:GetBool() then
-		return false, threed:GetBool()
+		return true, threed
+	elseif vrad then
+		return false, threed
 	end
-	return true, threed:GetBool()
+	return true, threed
 end
 
 function GM:CanTool(ply, trace, mode)
@@ -253,7 +253,7 @@ function GM:CanTool(ply, trace, mode)
 			return false
 		end
 
-		if trace.Entity:IsVehicle() and mode == "nocollide" and GetConVarNumber("allowvnocollide") == 0 then
+		if trace.Entity:IsVehicle() and mode == "nocollide" and not GAMEMODE.Config.allowvnocollide then
 			return false
 		end
 	end
@@ -269,7 +269,7 @@ function GM:CanPlayerSuicide(ply)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide"))
 		return false
 	end
-	if tobool(GetConVarNumber("wantedsuicide")) and ply.DarkRPVars.wanted then
+	if GAMEMODE.Config.wantedsuicide and ply.DarkRPVars.wanted then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide"))
 		return false
 	end
@@ -287,14 +287,14 @@ function GM:CanProperty(ply, property, ent)
 end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
-	if tobool(GetConVarNumber("dropweapondeath")) and IsValid(ply:GetActiveWeapon()) then
+	if GAMEMODE.Config.dropweapondeath and IsValid(ply:GetActiveWeapon()) then
 		ply:DropDRPWeapon(ply:GetActiveWeapon())
 	end
 	self.BaseClass:DoPlayerDeath(ply, attacker, dmginfo, ...)
 end
 
 function GM:PlayerDeath(ply, weapon, killer)
-	if tobool(GetConVarNumber("deathblack")) then
+	if GAMEMODE.Config.deathblack then
 		local RP = RecipientFilter()
 		RP:RemoveAllPlayers()
 		RP:AddPlayer(ply)
@@ -304,7 +304,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		umsg.End()
 		RP:AddAllPlayers()
 	end
-	if tobool(GetConVarNumber("deathpov")) then
+	if GAMEMODE.Config.deathpov then
 		SendUserMessage("DarkRPEffects", ply, "deathPOV", "1")
 	end
 	UnDrugPlayer(ply)
@@ -321,7 +321,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 	end
 	ServerLog(ply:Nick().." was killed by "..KillerName.." with " .. WeaponName)
 
-	if GetConVarNumber("deathnotice") == 1 then
+	if GAMEMODE.Config.showdeaths then
 		self.BaseClass:PlayerDeath(ply, weapon, killer)
 	end
 
@@ -329,22 +329,22 @@ function GM:PlayerDeath(ply, weapon, killer)
 
 	if ply:InVehicle() then ply:ExitVehicle() end
 
-	if ply:isArrested() and not tobool(GetConVarNumber("respawninjail"))  then
+	if ply:isArrested() and not GAMEMODE.Config.respawninjail  then
 		-- If the player died in jail, make sure they can't respawn until their jail sentance is over
-		ply.NextSpawnTime = CurTime() + math.ceil(GetConVarNumber("jailtimer") - (CurTime() - ply.LastJailed)) + 1
+		ply.NextSpawnTime = CurTime() + math.ceil(GAMEMODE.Config.jailtimer - (CurTime() - ply.LastJailed)) + 1
 		for a, b in pairs(player.GetAll()) do
 			b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.died_in_jail, ply:Nick()))
 		end
 		GAMEMODE:Notify(ply, 4, 4, LANGUAGE.dead_in_jail)
 	else
 		-- Normal death, respawning.
-		ply.NextSpawnTime = CurTime() + math.Clamp(GetConVarNumber("respawntime"), 0, 10)
+		ply.NextSpawnTime = CurTime() + math.Clamp(GAMEMODE.Config.respawntime, 0, 10)
 	end
 	ply.DeathPos = ply:GetPos()
 
-	if tobool(GetConVarNumber("dropmoneyondeath")) then
-		local amount = GetConVarNumber("deathfee")
-		if not ply:CanAfford(GetConVarNumber("deathfee")) then
+	if GAMEMODE.Config.dropmoneyondeath then
+		local amount = GAMEMODE.Config.deathfee
+		if not ply:CanAfford(GAMEMODE.Config.deathfee) then
 			amount = ply.DarkRPVars.money
 		end
 
@@ -354,13 +354,13 @@ function GM:PlayerDeath(ply, weapon, killer)
 		end
 	end
 
-	if GetConVarNumber("dmautokick") == 1 and killer and killer:IsPlayer() and killer ~= ply then
+	if GAMEMODE.Config.dmautokick and killer and killer:IsPlayer() and killer ~= ply then
 		if not killer.kills or killer.kills == 0 then
 			killer.kills = 1
-			timer.Simple(GetConVarNumber("dmgracetime"), function() if IsValid(killer) and killer:IsPlayer() then killer:ResetDMCounter(killer) end end)
+			timer.Simple(GAMEMODE.Config.dmgracetime, function() if IsValid(killer) and killer:IsPlayer() then killer:ResetDMCounter(killer) end end)
 		else
 			-- If this player is going over their limit, kick their ass
-			if killer.kills + 1 > GetConVarNumber("dmmaxkills") then
+			if killer.kills + 1 > GAMEMODE.Config.dmmaxkills then
 				game.ConsoleCommand("kickid " .. killer:UserID() .. " Auto-kicked. Excessive Deathmatching.\n")
 			else
 				-- Killed another player
@@ -376,7 +376,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 	end
 
 	ply:GetTable().ConfiscatedWeapons = nil
-	if tobool(GetConVarNumber("droppocketdeath")) then
+	if GAMEMODE.Config.droppocketdeath then
 		if ply.Pocket then
 			for k, v in pairs(ply.Pocket) do
 				if IsValid(v) then
@@ -400,9 +400,10 @@ end
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
 	if ply:isArrested() then return false end
-	if ply:IsAdmin() and GetConVarNumber("AdminsCopWeapons") == 1 then return true end
-	if GetConVarNumber("license") == 1 and not ply.DarkRPVars.HasGunlicense and not ply:GetTable().RPLicenseSpawn then
-		if GetConVarNumber("licenseweapon_"..string.lower(weapon:GetClass())) == 1 or not weapon:IsWeapon() then
+	if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
+	
+	if GAMEMODE.Config.license and not ply.DarkRPVars.HasGunlicense and not ply:GetTable().RPLicenseSpawn then
+		if GAMEMODE.NoLicense[string.lower(weapon:GetClass())] or not weapon:IsWeapon() then
 			return true
 		end
 		return false
@@ -423,7 +424,7 @@ concommand.Add("_rp_ChosenModel", SetPlayerModel)
 
 function GM:PlayerSetModel(ply)
 	local EndModel = ""
-	if GetConVarNumber("enforceplayermodel") == 1 then
+	if GAMEMODE.Config.enforceplayermodel then
 		local TEAM = RPExtraTeams[ply:Team()]
 		if not TEAM then return end
 
@@ -449,7 +450,7 @@ function GM:PlayerSetModel(ply)
 
 		ply:SetModel(EndModel)
 	else
-		local cl_playermodel = ply:GetInfo( "cl_playermodel" )
+		local cl_playermodel = ply:GetInfo("cl_playermodel")
         local modelname = player_manager.TranslatePlayerModel( cl_playermodel )
         ply:SetModel( modelname )
 	end
@@ -536,12 +537,12 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	local CustomSpawnPos = DB.RetrieveTeamSpawnPos(ply)
-	if GetConVarNumber("customspawns") == 1 and not ply:isArrested() and CustomSpawnPos then
+	if GAMEMODE.Config.customspawns and not ply:isArrested() and CustomSpawnPos then
 		POS = CustomSpawnPos[math.random(1, #CustomSpawnPos)]
 	end
 
 	-- Spawn where died in certain cases
-	if GetConVarNumber("strictsuicide") == 1 and ply:GetTable().DeathPos then
+	if GAMEMODE.Config.strictsuicide and ply:GetTable().DeathPos then
 		POS = ply:GetTable().DeathPos
 	end
 
@@ -587,9 +588,9 @@ end
 function GM:PlayerSpawn(ply)
 	ply:CrosshairEnable()
 	ply:UnSpectate()
-	ply:SetHealth(tonumber(GetConVarNumber("startinghealth")) or 100)
+	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
 
-	if GetConVarNumber("xhair") == 0 then
+	if not GAMEMODE.Config.showcrosshairs then
 		ply:CrosshairDisable()
 	end
 
@@ -605,7 +606,7 @@ function GM:PlayerSpawn(ply)
 	umsg.End()
 	RP:AddAllPlayers()
 
-	if GetConVarNumber("babygod") == 1 and not ply.IsSleeping and not ply.Babygod then
+	if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
 		timer.Destroy(ply:EntIndex() .. "babygod")
 
 		ply.Babygod = true
@@ -613,7 +614,7 @@ function GM:PlayerSpawn(ply)
 		local c = ply:GetColor()
 		ply:SetColor(c.r, c.g, c.b, 100)
 		ply:SetCollisionGroup(COLLISION_GROUP_WORLD)
-		timer.Create(ply:EntIndex() .. "babygod", GetConVarNumber("babygodtime"), 1, function()
+		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime, 1, function()
 			if not IsValid(ply) or not ply.Babygod then return end
 			ply.Babygod = nil
 			ply:SetColor(c.r, c.g, c.b, c.a)
@@ -623,13 +624,13 @@ function GM:PlayerSpawn(ply)
 	end
 	ply.IsSleeping = false
 
-	GAMEMODE:SetPlayerSpeed(ply, GetConVarNumber("wspd"), GetConVarNumber("rspd"))
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 	if ply:Team() == TEAM_CHIEF or ply:Team() == TEAM_POLICE then
-		GAMEMODE:SetPlayerSpeed(ply, GetConVarNumber("wspd"), GetConVarNumber("rspd") + 10)
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed + 10)
 	end
 
 	if ply:isArrested() then
-		GAMEMODE:SetPlayerSpeed(ply, GetConVarNumber("aspd"), GetConVarNumber("aspd"))
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 	end
 
 	ply:Extinguish()
@@ -668,7 +669,7 @@ function GM:PlayerLoadout(ply)
 	ply:Give("weapon_physcannon")
 	ply:Give("gmod_camera")
 
-	if GetConVarNumber("toolgun") == 1 or (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin()  then
+	if GAMEMODE.Config.toolgun or (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin()  then
 		ply:Give("gmod_tool")
 	end
 
@@ -676,13 +677,13 @@ function GM:PlayerLoadout(ply)
 		ply:Give("weapon_keypadchecker")
 	end
 
-	if GetConVarNumber("pocket") == 1 then
+	if GAMEMODE.Config.pocket then
 		ply:Give("pocket")
 	end
 
 	ply:Give("weapon_physgun")
 
-	if ply:HasPriv("rp_commands") and GetConVarNumber("AdminsCopWeapons") == 1 then
+	if ply:HasPriv("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
 		ply:Give("door_ram")
 		ply:Give("arrest_stick")
 		ply:Give("unarrest_stick")
@@ -696,7 +697,7 @@ function GM:PlayerLoadout(ply)
 	end
 
 	-- Switch to prefered weapon if they have it
-	local cl_defaultweapon = ply:GetInfo( "cl_defaultweapon" )
+	local cl_defaultweapon = ply:GetInfo("cl_defaultweapon")
 
 	if ply:HasWeapon( cl_defaultweapon ) then
 		ply:SelectWeapon( cl_defaultweapon )
@@ -704,7 +705,7 @@ function GM:PlayerLoadout(ply)
 end
 
 local function removeDelayed(ent, ply)
-	local removedelay = GetConVarNumber("entremovedelay")
+	local removedelay = GAMEMODE.Config.entremovedelay
 
 	ent.deleteSteamID = ply:SteamID()
 	timer.Create("Remove"..ent:EntIndex(), removedelay, 1, function()
@@ -833,7 +834,7 @@ function GM:InitPostEntity()
 
 	for k, v in pairs( ents.GetAll() ) do
 		local class = v:GetClass()
-		if GetConVarNumber("unlockdoorsonstart") == 1 and v:IsDoor() then
+		if GAMEMODE.Config.unlockdoorsonstart and v:IsDoor() then
 			v:Fire("unlock", "", 0)
 		end
     end
@@ -842,22 +843,22 @@ function GM:InitPostEntity()
 end
 
 function GM:PlayerLeaveVehicle(ply, vehicle)
-	if GetConVarNumber("autovehiclelock") == 1 and vehicle:OwnedBy(ply) then
+	if GAMEMODE.Config.autovehiclelock and vehicle:OwnedBy(ply) then
 		vehicle:KeysLock()
 	end
 	self.BaseClass:PlayerLeaveVehicle(ply, vehicle)
 end
 
 local function ClearDecals()
-	if GetConVarNumber("decalcleaner") == 1 then
+	if GAMEMODE.Config.decalcleaner then
 		for _, p in pairs( player.GetAll() ) do
 			p:ConCommand("r_cleardecals")
 		end
 	end
 end
-timer.Create("RP_DecalCleaner", GetConVarNumber("decaltimer"), 0, ClearDecals)
+timer.Create("RP_DecalCleaner", GM.Config.decaltimer, 0, ClearDecals)
 
 function GM:PlayerSpray()
 
-	return( GetConVarNumber( "allowsprays" ) == 0 )
+	return not GAMEMODE.Config.allowsprays
 end

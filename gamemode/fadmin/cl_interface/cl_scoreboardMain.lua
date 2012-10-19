@@ -63,7 +63,7 @@ function FAdmin.ScoreBoard.Main.Show()
 		v.BtnSort = vgui.Create("DButton")
 		v.BtnSort:SetText("")
 		v.BtnSort.Type = "Down"
-		v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "ButtonDown", panel, w, h ) end
+		v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook("Paint", "ButtonDown", panel, w, h ) end
 		v.BtnSort:SetSkin("DarkRP")
 		if Sorted:GetString() == v.Type then
 			v.BtnSort.Depressed = true
@@ -76,7 +76,7 @@ function FAdmin.ScoreBoard.Main.Show()
 				b.BtnSort.Depressed = (b.BtnSort == v.BtnSort)
 			end
 			v.BtnSort.Type = (v.BtnSort.Type == "Down" and "Up") or "Down"
-			v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "Button"..v.BtnSort.Type, panel, w, h ) end
+			v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook("Paint", "Button"..v.BtnSort.Type, panel, w, h ) end
 
 			RunConsoleCommand("FAdmin_SortPlayerList", v.Type)
 			RunConsoleCommand("FAdmin_SortPlayerListDown", (v.BtnSort.Type == "Down" and "1") or "0")

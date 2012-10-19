@@ -92,7 +92,6 @@ function AddEntity(name, entity, model, price, max, command, classes, CustomChec
 		classes = {classes}
 	end
 	table.insert(DarkRPEntities, {name = name, ent = entity, model = model, price = price, max = max, cmd = command, allowed = classes, customCheck = CustomCheck})
-	GM:AddEntityCommands(name, entity, max, price)
 end
 
 DarkRPAgendas = {}

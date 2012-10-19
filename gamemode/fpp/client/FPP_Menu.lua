@@ -688,7 +688,7 @@ RetrieveRestrictedTool = function(um)
 			local submenu = menu:AddSubMenu(v:Nick())
 
 
-			submenu:AddOption( "Default", function()
+			submenu:AddOption("Default", function()
 				if type(tool) ~= "table" then
 					RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 2)
 				else
@@ -701,7 +701,7 @@ RetrieveRestrictedTool = function(um)
 			end)
 
 
-			submenu:AddOption( "Allow", function()
+			submenu:AddOption("Allow", function()
 				if type(tool) ~= "table" then
 					RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 1)
 				else
@@ -714,7 +714,7 @@ RetrieveRestrictedTool = function(um)
 			end)
 
 
-			submenu:AddOption( "Disallow", function()
+			submenu:AddOption("Disallow", function()
 				if type(tool) ~= "table" then
 					RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 0)
 				else
@@ -1024,9 +1024,9 @@ function FPP.PrivateSettings(Panel)
 end
 
 local function makeMenus()
-	spawnmenu.AddToolMenuOption( "Utilities", "Falco's prop protection", "Falco's prop protection admin settings", "Admin settings", "", "", FPP.AdminMenu)
-	spawnmenu.AddToolMenuOption( "Utilities", "Falco's prop protection", "Falco's prop protection buddies", "Buddies", "", "", FPP.BuddiesMenu)
-	spawnmenu.AddToolMenuOption( "Utilities", "Falco's prop protection", "Falco's prop protection Private settings", "Private Settings", "", "", FPP.PrivateSettings)
+	spawnmenu.AddToolMenuOption("Utilities", "Falco's prop protection", "Falco's prop protection admin settings", "Admin settings", "", "", FPP.AdminMenu)
+	spawnmenu.AddToolMenuOption("Utilities", "Falco's prop protection", "Falco's prop protection buddies", "Buddies", "", "", FPP.BuddiesMenu)
+	spawnmenu.AddToolMenuOption("Utilities", "Falco's prop protection", "Falco's prop protection Private settings", "Private Settings", "", "", FPP.PrivateSettings)
 end
 hook.Add("PopulateToolMenu", "FPPMenus", makeMenus)
 

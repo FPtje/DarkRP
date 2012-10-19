@@ -70,7 +70,7 @@ local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) then return "" end
 
-	if GetConVarNumber("RestrictDrop") == 1 then
+	if GAMEMODE.Config.RestrictDrop then
 		local found = false
 		for k,v in pairs(CustomShipments) do
 			if v.entity == ent:GetClass() then
@@ -128,7 +128,7 @@ local function SetWarrant(ply, target, reason)
 	hook.Call("PlayerWarranted", GAMEMODE, ply, target, reason)
 
 	target.warranted = true
-	timer.Simple(GetConVarNumber("searchtime"), function() UnWarrant(ply, target) end)
+	timer.Simple(GAMEMODE.Config.searchtime, function() UnWarrant(ply, target) end)
 	for a, b in pairs(player.GetAll()) do
 		b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.warrant_approved, target:Nick()).."\nReason: "..tostring(reason))
 		if b:IsAdmin() then
@@ -258,7 +258,7 @@ local function PlayerWanted(ply, args)
 					b:PrintMessage( HUD_PRINTCONSOLE, ply:Nick() .. " has made " .. p:Nick() .. " wanted by police for " ..tostring(reason) )
 				end
 			end
-			timer.Create(p:UniqueID() .. " wantedtimer", GetConVarNumber("wantedtime"), 1, function() TimerUnwanted(ply, p) end)
+			timer.Create(p:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function() TimerUnwanted(ply, p) end)
 		else
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
 		end
@@ -439,7 +439,7 @@ end
 concommand.Add("rp_lookup", LookPersonUp)
 
 local function GiveHint()
-	if GetConVarNumber("advertisements") ~= 1 then return end
+	if not GAMEMODE.Config.advertisements then return end
 	local text = LANGUAGE.hints[math.random(1, #LANGUAGE.hints)]
 
 	for k,v in pairs(player.GetAll()) do
@@ -453,12 +453,12 @@ timer.Create("hints", 60, 0, GiveHint)
  Items
  ---------------------------------------------------------*/
 local function MakeLetter(ply, args, type)
-	if GetConVarNumber("letters") == 0 then
+	if not GAMEMODE.Config.letters then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "/write / /type", ""))
 		return ""
 	end
 
-	if ply.maxletters and ply.maxletters >= GetConVarNumber("maxletters") then
+	if ply.maxletters and ply.maxletters >= GAMEMODE.Config.maxletters then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, "letter"))
 		return ""
 	end
@@ -542,7 +542,7 @@ local function SetPrice(ply, args)
 
 	local a = tonumber(args)
 	if not a then return "" end
-	local b = math.Clamp(math.floor(a), GetConVarNumber("pricemin"), (GetConVarNumber("pricecap") ~= 0 and GetConVarNumber("pricecap")) or 500)
+	local b = math.Clamp(math.floor(a), GAMEMODE.Config.pricemin, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 500)
 	local trace = {}
 
 	trace.start = ply:EyePos()
@@ -568,11 +568,11 @@ local function BuyPistol(ply, args)
 	if args == "" then return "" end
 	if ply:isArrested() then return "" end
 
-	if GetConVarNumber("enablebuypistol") == 0 then
+	if not GAMEMODE.Config.enablebuypistol then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "/buy", ""))
 		return ""
 	end
-	if GetConVarNumber("noguns") == 1 then
+	if GAMEMODE.Config.noguns then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "/buy", ""))
 		return ""
 	end
@@ -596,9 +596,9 @@ local function BuyPistol(ply, args)
 			model = v.model
 			price = v.pricesep
 			local canbuy = false
-			local RestrictBuyPistol = tonumber(GetConVarNumber("restrictbuypistol"))
-			if RestrictBuyPistol == 0 or
-			(RestrictBuyPistol == 1 and (not v.allowed[1] or table.HasValue(v.allowed, ply:Team()))) then
+			
+			if not GAMEMODE.Config.restrictbuypistol or
+			(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, ply:Team()))) then
 				canbuy = true
 			end
 
@@ -617,14 +617,6 @@ local function BuyPistol(ply, args)
 	if not class then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unavailable, "weapon"))
 		return ""
-	end
-
-	if not custom then
-		if ply:Team() == TEAM_GUN then
-			price = math.ceil(GetConVarNumber(args .. "cost") * 0.88)
-		else
-			price = GetConVarNumber(args .. "cost")
-		end
 	end
 
 	if not ply:CanAfford(price) then
@@ -653,7 +645,7 @@ AddChatCommand("/buy", BuyPistol)
 local function BuyShipment(ply, args)
 	if args == "" then return "" end
 
-	if ply.LastShipmentSpawn and ply.LastShipmentSpawn > (CurTime() - GetConVarNumber("ShipmentSpamTime")) then
+	if ply.LastShipmentSpawn and ply.LastShipmentSpawn > (CurTime() - GAMEMODE.Config.ShipmentSpamTime) then
 		GAMEMODE:Notify(ply, 1, 4, "Please wait before spawning another shipment.")
 		return ""
 	end
@@ -743,7 +735,7 @@ local function BuyVehicle(ply, args)
 	if found.allowed and not table.HasValue(found.allowed, ply:Team()) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, "/buyvehicle")) return "" end
 
 	if not ply.Vehicles then ply.Vehicles = 0 end
-	if GetConVarNumber("maxvehicles") ~= 0 and ply.Vehicles >= GetConVarNumber("maxvehicles") then
+	if GAMEMODE.Config.maxvehicles and ply.Vehicles >= GAMEMODE.Config.maxvehicles then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, "vehicle"))
 		return ""
 	end
@@ -801,11 +793,6 @@ for k,v in pairs(DarkRPEntities) do
 			return ""
 		end
 		local cmdname = string.gsub(v.ent, " ", "_")
-		local disabled = tobool(GetConVarNumber("disable"..cmdname))
-		if disabled then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, v.cmd, ""))
-			return ""
-		end
 
 		if v.customCheck and not v.customCheck(ply) then
 			GAMEMODE:Notify(ply, 1, 4, "You're not allowed to purchase this item")
@@ -819,16 +806,11 @@ for k,v in pairs(DarkRPEntities) do
 			return ""
 		end
 
-		local price = GetConVarNumber(cmdname.."_price")
-		if price == 0 then
-			price = v.price
-		end
-
-		if not ply:CanAfford(price) then
+		if not ply:CanAfford(v.price) then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, v.cmd))
 			return ""
 		end
-		ply:AddMoney(-price)
+		ply:AddMoney(-v.price)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -844,7 +826,7 @@ for k,v in pairs(DarkRPEntities) do
 		item.SID = ply.SID
 		item.onlyremover = true
 		item:Spawn()
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, v.name, CUR..price))
+		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, v.name, CUR..v.price))
 		if not ply["max"..cmdname] then
 			ply["max"..cmdname] = 0
 		end
@@ -859,7 +841,7 @@ local function BuyAmmo(ply, args)
 
 	if ply:isArrested() then return "" end
 
-	if GetConVarNumber("noguns") == 1 then
+	if GAMEMODE.Config.noguns then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "ammo", ""))
 		return ""
 	end
@@ -892,8 +874,8 @@ end
 AddChatCommand("/buyammo", BuyAmmo)
 
 local function BuyHealth(ply)
-	local cost = GetConVarNumber("healthcost")
-	if not tobool(GetConVarNumber("enablebuyhealth")) then
+	local cost = GAMEMODE.Config.healthcost
+	if not tobool(GAMEMODE.Config.enablebuyhealth) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "/buyhealth", ""))
 		return ""
 	end
@@ -967,7 +949,7 @@ local function ChangeJob(ply, args)
 		return ""
 	end
 
-	if GetConVarNumber("customjobs") ~= 1 then
+	if not GAMEMODE.Config.customjobs then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "/job", ""))
 		return ""
 	end
@@ -1075,7 +1057,7 @@ local function ExecSwitchJob(answer, ent, ply, target)
 end
 
 local function SwitchJob(ply) --Idea by Godness.
-	if GetConVarNumber("allowjobswitch") ~= 1 then return "" end
+	if not GAMEMODE.Config.allowjobswitch then return "" end
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
 	GAMEMODE.ques:Create("Switch job with "..ply:Nick().."?", "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
@@ -1240,7 +1222,7 @@ local function Me(ply, args)
 
 	local DoSay = function(text)
 		if text == "" then return "" end
-		if GetConVarNumber("alltalk") == 1 then
+		if GAMEMODE.Config.alltalk then
 			for _, target in pairs(player.GetAll()) do
 				GAMEMODE:TalkToPerson(target, team.GetColor(ply:Team()), ply:Nick() .. " " .. text)
 			end
@@ -1253,7 +1235,7 @@ end
 AddChatCommand("/me", Me)
 
 local function OOC(ply, args)
-	if GetConVarNumber("ooc") == 0 then
+	if not GAMEMODE.Config.ooc then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "OOC", ""))
 		return ""
 	end
@@ -1613,7 +1595,7 @@ local function DoLottery(ply, amount)
 		return ""
 	end
 
-	if GetConVarNumber("lottery") ~= 1 then
+	if not GAMEMODE.Config.lottery then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "/lottery", ""))
 		return ""
 	end
@@ -1630,11 +1612,11 @@ local function DoLottery(ply, amount)
 
 	amount = tonumber(amount)
 	if not amount then
-		GAMEMODE:Notify(ply, 1, 5, string.format("Please specify an entry cost ($%i-%i)", GetConVarNumber("minlotterycommitcost"), GetConVarNumber("maxlotterycommitcost")))
+		GAMEMODE:Notify(ply, 1, 5, string.format("Please specify an entry cost ($%i-%i)", GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost))
 		return ""
 	end
 
-	LotteryAmount = math.Clamp(math.floor(amount), GetConVarNumber("minlotterycommitcost"), GetConVarNumber("maxlotterycommitcost"))
+	LotteryAmount = math.Clamp(math.floor(amount), GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)
 
 	GAMEMODE:NotifyAll(0, 4, "A lottery has started!")
 
@@ -1693,7 +1675,7 @@ local function MayorSetSalary(ply, cmd, args)
 		return
 	end
 
-	if GetConVarNumber("enablemayorsetsalary") == 0 then
+	if not GAMEMODE.Config.enablemayorsetsalary then
 		ply:PrintMessage(2, string.format(LANGUAGE.disabled, "rp_setsalary", ""))
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "rp_setsalary", ""))
 		return
@@ -1711,8 +1693,8 @@ local function MayorSetSalary(ply, cmd, args)
 		return
 	end
 
-	if amount > GetConVarNumber("maxmayorsetsalary") then
-		ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "salary", "< " .. GetConVarNumber("maxmayorsetsalary")))
+	if amount > GAMEMODE.Config.maxmayorsetsalary then
+		ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "salary", "< " .. GAMEMODE.Config.maxmayorsetsalary))
 		return
 	end
 
@@ -1727,8 +1709,8 @@ local function MayorSetSalary(ply, cmd, args)
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "rp_setsalary", ""))
 			return
 		elseif targetteam == TEAM_POLICE or targetteam == TEAM_CHIEF then
-			if amount > GetConVarNumber("maxcopsalary") then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "salary", "< " .. GetConVarNumber("maxcopsalary")))
+			if amount > GAMEMODE.Config.maxcopsalary then
+				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "salary", "< " .. GAMEMODE.Config.maxcopsalary))
 				return
 			else
 				DB.StoreSalary(target, amount)
@@ -1736,8 +1718,8 @@ local function MayorSetSalary(ply, cmd, args)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. CUR .. amount)
 			end
 		elseif targetteam == TEAM_CITIZEN or targetteam == TEAM_GUN or targetteam == TEAM_MEDIC or targetteam == TEAM_COOK then
-			if amount > GetConVarNumber("maxnormalsalary") then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "salary", "< " .. GetConVarNumber("maxnormalsalary")))
+			if amount > GAMEMODE.Config.maxnormalsalary then
+				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "salary", "< " .. GAMEMODE.Config.maxnormalsalary))
 				return
 			else
 				DB.StoreSalary(target, amount)
@@ -2005,15 +1987,15 @@ AddChatCommand("/demotelicense", VoteRemoveLicense)
 local function ReportAttacker(ply, cmd, args)
 
 	if cmd != "rp_reportattacker" then // It must be a chat command, so the arguments will be passed to the second argument (cmd)
-		args = string.Explode( " ", cmd )
+		args = string.Explode(" ", cmd )
 	end
 
 	local name = args[1]
 	args[1] = "" // Keep name/reason separate
 
-	local reason = table.concat( args, " " )
+	local reason = table.concat( args, " ")
 
-	if reason and string.len( reason ) > 22 then GAMEMODE:Notify( ply, 1, 4, string.format( LANGUAGE.unable, "/911", "Reason >22" ) ) return "" end
+	if reason and string.len( reason ) > 22 then GAMEMODE:Notify( ply, 1, 4, string.format( LANGUAGE.unable, "/911", "Reason >22") ) return "" end
 
 	local target = GAMEMODE:FindPlayer( name )
 	if target then

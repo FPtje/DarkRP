@@ -21,7 +21,7 @@ local meta = FindMetaTable("Player")
 meta.SteamName = meta.Name
 meta.Name = function(self)
 	if not IsValid(self) then return "" end
-	if GetConVarNumber("allowrpnames") == 1 then
+	if GAMEMODE.Config.allowrpnames then
 		self.DarkRPVars = self.DarkRPVars or {}
 		return self.DarkRPVars.rpname and tostring(self.DarkRPVars.rpname) or self:SteamName()
 	else
@@ -45,6 +45,7 @@ AddCSLuaFile("addentities.lua")
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("ammotypes.lua")
 AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("config.lua")
 
 AddCSLuaFile("client/DRPDermaSkin.lua")
 AddCSLuaFile("client/help.lua")
@@ -67,6 +68,8 @@ util.PrecacheSound("earthquake.mp3")
 resource.AddFile("materials/DarkRP/DarkRPSkin.png")
 
 DB = {}
+GM.Config = {}
+GM.NoLicense = {}
 
 -- sv_alltalk must be 0
 -- Note, everyone will STILL hear everyone UNLESS rp_voiceradius is 1!!!
@@ -74,6 +77,8 @@ DB = {}
 game.ConsoleCommand("sv_alltalk 0\n")
 
 include("_MySQL.lua")
+include("config.lua")
+include("licenseweapons.lua")
 
 include("server/chat.lua")
 include("server/admincc.lua")

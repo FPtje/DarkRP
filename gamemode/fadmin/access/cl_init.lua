@@ -138,8 +138,8 @@ end
 ContinueNewGroup = function(ply, name, admin_access)
 	local privs = {}
 
-	local Window = vgui.Create( "DFrame" )
-	Window:SetTitle( "Set the privileges" )
+	local Window = vgui.Create("DFrame")
+	Window:SetTitle("Set the privileges")
 	Window:SetDraggable(false)
 	Window:ShowCloseButton(true)
 	Window:SetBackgroundBlur(true)

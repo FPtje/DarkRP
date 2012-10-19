@@ -1,7 +1,7 @@
-AddCSLuaFile( "shared.lua" )
-AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile("shared.lua")
+AddCSLuaFile("cl_init.lua")
 
-include( "cl_init.lua" )
+include("cl_init.lua")
 
 function ENT:Initialize()
 
@@ -28,7 +28,7 @@ local function ToggleChatIndicator( ply )
 
 	if not IsValid( ply.ChatIndicator ) then
 
-		ply.ChatIndicator = ents.Create( "chatindicator" )
+		ply.ChatIndicator = ents.Create("chatindicator")
 		ply.ChatIndicator.ply = ply -- plyception
 		ply.ChatIndicator:SetPos( ply:GetPos() + Vector( 0, 0, 85 ) )
 		ply.ChatIndicator:Spawn()
@@ -41,7 +41,7 @@ local function ToggleChatIndicator( ply )
 	end
 
 end
-concommand.Add( "_DarkRP_ToggleChat", ToggleChatIndicator )
+concommand.Add("_DarkRP_ToggleChat", ToggleChatIndicator )
 
 local function RemoveChatIndicator( ply )
 
@@ -52,6 +52,6 @@ local function RemoveChatIndicator( ply )
 	end
 
 end
-hook.Add( "PlayerDisconnected", "Disc_RemoveIndicator", RemoveChatIndicator )
-hook.Add( "KeyPress", "Move_RemoveIndicator", RemoveChatIndicator ) -- so people can't abuse the command.
-hook.Add( "PlayerDeath", "Die_RemoveIndicator", RemoveChatIndicator )
+hook.Add("PlayerDisconnected", "Disc_RemoveIndicator", RemoveChatIndicator )
+hook.Add("KeyPress", "Move_RemoveIndicator", RemoveChatIndicator ) -- so people can't abuse the command.
+hook.Add("PlayerDeath", "Die_RemoveIndicator", RemoveChatIndicator )

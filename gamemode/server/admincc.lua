@@ -1,98 +1,4 @@
 /*---------------------------------------------------------------------------
-Concommands to change DarkRP ConVars
----------------------------------------------------------------------------*/
-function GM:ccValueCommand(ply, cmd, args)
-	local valuecmd = self.ValueCmds[cmd]
-
-	if not valuecmd then return end
-
-	if #args < 1 or not tonumber(args[1]) then
-		if ply:EntIndex() == 0 then
-			print(cmd .. " = " .. tostring(GetConVarNumber(valuecmd.var)))
-		else
-			ply:PrintMessage(2, cmd .. " = " .. tostring(GetConVarNumber(valuecmd.var)))
-		end
-		return
-	end
-
-	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, cmd))
-		return
-	end
-
-	local amount = math.floor(tonumber(args[1]))
-	if amount == GetConVarNumber(valuecmd.var) then return end
-	RunConsoleCommand(valuecmd.var, amount)
-	DB.SaveSetting(valuecmd.var, amount)
-
-	local nick = ""
-
-	if ply:EntIndex() == 0 then
-		nick = "Console"
-	else
-		nick = ply:Nick()
-	end
-
-	self:NotifyAll(0, 4, nick .. " set " .. cmd .. " to " .. amount)
-	if ply.SteamName then
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..cmd.." to "..amount, nil, Color(30, 30, 30))
-	else
-		DB.Log("Console set "..cmd.." to "..amount, nil, Color(30, 30, 30))
-	end
-end
-
-function GM:ccToggleCommand(ply, cmd, args)
-	local togglecmd = GAMEMODE.ToggleCmds[cmd]
-
-	if not togglecmd then return end
-
-	if #args < 1 or not tonumber(args[1]) then
-		if ply:EntIndex() == 0 then
-			print(cmd .. " = " .. GetConVarNumber(togglecmd.var))
-		else
-			ply:PrintMessage(2, cmd .. " = " .. GetConVarNumber(togglecmd.var))
-		end
-
-		return
-	end
-
-	if (ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands")) or (togglecmd.superadmin and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin()) then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, cmd))
-		return
-	end
-
-	local toggle = tonumber(args[1])
-	if toggle == GetConVarNumber(togglecmd.var) then return end
-
-	if not toggle or (toggle ~= 1 and toggle ~= 0) then
-		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.invalid_x, "argument", "1/0"))
-		else
-			ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "argument", "1/0"))
-		end
-		return
-	end
-
-	RunConsoleCommand(togglecmd.var, toggle)
-	DB.SaveSetting(togglecmd.var, toggle)
-
-	local nick = ""
-
-	if ply:EntIndex() == 0 then
-		nick = "Console"
-	else
-		nick = ply:Nick()
-	end
-
-	self:NotifyAll(0, 3, nick .. " set " .. cmd .. " to " .. toggle)
-	if ply.SteamName then
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") set "..cmd.." to "..toggle, nil, Color(30, 30, 30))
-	else
-		DB.Log("Console set "..cmd.." to "..toggle, nil, Color(30, 30, 30))
-	end
-end
-
-/*---------------------------------------------------------------------------
 Doors
 ---------------------------------------------------------------------------*/
 local function ccDoorOwn(ply, cmd, args)
@@ -527,7 +433,7 @@ end
 concommand.Add("rp_setsalary", ccSetSalary)
 
 local function ccSENTSPawn(ply, cmd, args)
-	if GetConVarNumber("adminsents") == 1 then
+	if not GAMEMODE.Config.adminsents then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnsent"))
 			return
@@ -539,7 +445,7 @@ end
 concommand.Add("gm_spawnsent", ccSENTSPawn)
 
 local function ccVehicleSpawn(ply, cmd, args)
-	if GetConVarNumber("adminvehicles") == 1 then
+	if not GAMEMODE.Config.adminvehicles then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnvehicle"))
 			return
@@ -551,7 +457,7 @@ end
 concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
 
 local function ccNPCSpawn(ply, cmd, args)
-	if GetConVarNumber("adminnpcs") == 1 then
+	if not GAMEMODE.Config.adminnpcs then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnnpc"))
 			return

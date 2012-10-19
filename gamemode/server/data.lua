@@ -422,7 +422,7 @@ function DB.UpdateDatabase()
 				DB.Query([[INSERT INTO darkrp_player VALUES(]]
 					..uniqueID..[[,]]
 					..((v.name == "NULL" or not v.name) and "NULL" or sql.SQLStr(v.name))..[[,]]
-					..((v.salary == "NULL" or not v.salary) and GetConVarNumber("normalsalary") or v.salary)..[[,]]
+					..((v.salary == "NULL" or not v.salary) and GAMEMODE.Config.normalsalary or v.salary)..[[,]]
 					..v.amount..[[);]])
 			end
 
@@ -677,7 +677,7 @@ function DB.StoreRPName(ply, name)
 	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
 		ply:UniqueID() .. [[, ]] ..
 		sql.SQLStr(name) .. [[, ]] ..
-		GetConVarNumber("normalsalary") .. [[, ]] ..
+		GAMEMODE.Config.normalsalary .. [[, ]] ..
 		ply.DarkRPVars.money .. [[);]])
 end
 
@@ -699,13 +699,13 @@ function DB.StoreMoney(ply, amount)
 	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
 		ply:UniqueID() .. [[, ]] ..
 		(ply.DarkRPVars.rpname and sql.SQLStr(ply.DarkRPVars.rpname) or "NULL") .. [[, ]] ..
-		GetConVarNumber("normalsalary") .. [[, ]] ..
+		GAMEMODE.Config.normalsalary .. [[, ]] ..
 		amount .. [[);]])
 end
 
 function DB.RetrieveMoney(ply) -- This is only run once when the player joins, there's no need for a cache unless the player keeps rejoining.
 	if not IsValid(ply) then return 0 end
-	local startingAmount = GetConVarNumber("startingmoney")
+	local startingAmount = GAMEMODE.Config.startingmoney
 
 	DB.QueryValue("SELECT wallet FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
 		if r then
@@ -719,9 +719,9 @@ end
 
 function DB.ResetAllMoney(ply,cmd,args)
 	if not ply:IsSuperAdmin() then return end
-	DB.Query("UPDATE darkrp_player SET wallet = "..GetConVarNumber("startingmoney").." ;")
+	DB.Query("UPDATE darkrp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
 	for k,v in pairs(player.GetAll()) do
-		v:SetDarkRPVar("money", GetConVarNumber("startingmoney"))
+		v:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
 	end
 	if ply:IsPlayer() then
 		GAMEMODE:NotifyAll(0,4, string.format(LANGUAGE.reset_money, ply:Nick()))
@@ -743,7 +743,7 @@ function DB.StoreSalary(ply, amount)
 		ply:UniqueID() .. [[, ]] ..
 		(ply.DarkRPVars.rpname and sql.SQLStr(ply.DarkRPVars.rpname) or "NULL") .. [[, ]] ..
 		ply.DarkRPVars.salary .. [[, ]] ..
-		(ply.DarkRPVars.money or GetConVarNumber("startingmoney")) .. [[);]])
+		(ply.DarkRPVars.money or GAMEMODE.Config.startingmoney) .. [[);]])
 
 	return amount
 end
@@ -754,7 +754,7 @@ function DB.RetrieveSalary(ply, callback)
 	if ply.DarkRPVars.salary then return callback and callback(ply.DarkRPVars.salary) end -- First check the cache.
 
 	DB.QueryValue("SELECT salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
-		local normal = GetConVarNumber("normalsalary")
+		local normal = GAMEMODE.Config.normalsalary
 		if not r then
 			ply:SetSelfDarkRPVar("salary", normal)
 			callback(normal)
@@ -932,7 +932,7 @@ function DB.Log(text, force, colour)
 	if colour then
 		AdminLog(text, colour)
 	end
-	if (not util.tobool(GetConVarNumber("logging")) or not text) and not force then return end
+	if (not GAMEMODE.Config.logging or not text) and not force then return end
 	if not DB.File then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("DarkRP_logs", "DATA") then
 			file.CreateDir("DarkRP_logs")

@@ -1,7 +1,7 @@
-AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "shared.lua" )
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
 
-include( "shared.lua" )
+include("shared.lua")
 
 -- These are the default laws, they're unchangeable in-game.
 local Laws = {
@@ -14,7 +14,7 @@ local FixedLaws = table.Copy( Laws )
 
 function ENT:Initialize()
 
-	self:SetModel( "models/props/cs_assault/Billboard.mdl" )
+	self:SetModel("models/props/cs_assault/Billboard.mdl")
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
@@ -33,25 +33,25 @@ local function AddLaw( ply, args )
 
 	if ply:Team() ~= TEAM_MAYOR then
 
-		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to set laws!" )
+		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to set laws!")
 		return ""
 	end
 
 	if string.len( args ) < 3 then
 
-		GAMEMODE:Notify( ply, 1, 4, "Law too short." )
+		GAMEMODE:Notify( ply, 1, 4, "Law too short.")
 		return ""
 	end
 
 	if #Laws >= 12 then
 
-		GAMEMODE:Notify( ply, 1, 4, "The laws are full." )
+		GAMEMODE:Notify( ply, 1, 4, "The laws are full.")
 		return ""
 	end
 
 	table.insert( Laws, args )
 
-	umsg.Start( "DRP_AddLaw" )
+	umsg.Start("DRP_AddLaw")
 
 		umsg.String( args )
 
@@ -59,37 +59,37 @@ local function AddLaw( ply, args )
 
 	return ""
 end
-AddChatCommand( "/addlaw", AddLaw )
+AddChatCommand("/addlaw", AddLaw )
 
 local function RemoveLaw( ply, args )
 
 	if ply:Team() ~= TEAM_MAYOR then
 
-		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to remove laws!" )
+		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to remove laws!")
 		return ""
 	end
 
 	if not tonumber( args ) then
 
-		GAMEMODE:Notify( ply, 1, 4, "Invalid arguments." )
+		GAMEMODE:Notify( ply, 1, 4, "Invalid arguments.")
 		return ""
 	end
 
 	if not Laws[ tonumber( args ) ] then
 
-		GAMEMODE:Notify( ply, 1, 4, "Invalid law." )
+		GAMEMODE:Notify( ply, 1, 4, "Invalid law.")
 		return ""
 	end
 
 	if FixedLaws[ tonumber( args ) ] then
 
-		GAMEMODE:Notify( ply, 1, 4, "You are not allowed to change the default laws." )
+		GAMEMODE:Notify( ply, 1, 4, "You are not allowed to change the default laws.")
 		return ""
 	end
 
 	table.remove( Laws, tonumber( args ) )
 
-	umsg.Start( "DRP_RemoveLaw" )
+	umsg.Start("DRP_RemoveLaw")
 
 		umsg.Char( tonumber( args ) )
 
@@ -97,20 +97,20 @@ local function RemoveLaw( ply, args )
 
 	return ""
 end
-AddChatCommand( "/removelaw", RemoveLaw )
+AddChatCommand("/removelaw", RemoveLaw )
 
 local numlaws = 0
 local function PlaceLaws( ply, args )
 
 	if ply:Team() ~= TEAM_MAYOR then
 
-		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to place a list of laws." )
+		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to place a list of laws.")
 		return ""
 	end
 
-	if numlaws >= GetConVarNumber( "maxlawboards" ) then
+	if numlaws >= GAMEMODE.Config.maxlawboards then
 
-		GAMEMODE:Notify( ply, 1, 4, "You have reached the max number of laws you can place!" )
+		GAMEMODE:Notify( ply, 1, 4, "You have reached the max number of laws you can place!")
 		return ""
 	end
 
@@ -121,7 +121,7 @@ local function PlaceLaws( ply, args )
 
 	local tr = util.TraceLine( trace )
 
-	local ent = ents.Create( "darkrp_laws" )
+	local ent = ents.Create("darkrp_laws")
 	ent:SetPos( tr.HitPos + Vector( 0, 0, 100 ) )
 
 	local ang = ply:GetAngles()
@@ -145,7 +145,7 @@ local function PlaceLaws( ply, args )
 
 	return ""
 end
-AddChatCommand( "/placelaws", PlaceLaws )
+AddChatCommand("/placelaws", PlaceLaws )
 
 function ENT:OnRemove()
 
@@ -153,7 +153,7 @@ function ENT:OnRemove()
 
 end
 
-hook.Add( "PlayerInitialSpawn", "SendLaws", function( ply )
+hook.Add("PlayerInitialSpawn", "SendLaws", function( ply )
 
 	if numlaws <= 0 then return end
 
@@ -161,7 +161,7 @@ hook.Add( "PlayerInitialSpawn", "SendLaws", function( ply )
 
 		if FixedLaws[ i ] then continue end
 
-		umsg.Start( "DRP_AddLaw", ply )
+		umsg.Start("DRP_AddLaw", ply )
 
 			umsg.String( law )
 

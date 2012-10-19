@@ -65,8 +65,8 @@ if cleanup then
 	end
 end
 
-FPP.ApplyForceCenter = FPP.ApplyForceCenter or _R.PhysObj.ApplyForceCenter
-function _R.PhysObj.ApplyForceCenter(self, force, ...)
+FPP.ApplyForceCenter = FPP.ApplyForceCenter or debug.getregistry().PhysObj.ApplyForceCenter
+debug.getregistry().PhysObj.ApplyForceCenter = function(self, force, ...)
 	local i = 0
 	while true and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) do
 		i = i + 1
@@ -131,7 +131,7 @@ end
 --When you can't touch something
 --------------------------------------------------------------------------------------
 function FPP.CanTouch(ply, Type, Owner, Toggle)
-	if not IsValid(ply) or not FPP.Settings[Type] or not tobool(FPP.Settings[Type].shownocross) or tobool(ply:GetInfoNum("FPP_PrivateSettings_ShowIcon")) then return false end
+	if not IsValid(ply) or not FPP.Settings[Type] or not tobool(FPP.Settings[Type].shownocross) or tobool(ply:GetInfo("FPP_PrivateSettings_ShowIcon")) then return false end
 	if ply.FPP_LastCanTouch and ply.FPP_LastCanTouch > CurTime() - 1 then return end
 	ply.FPP_LastCanTouch = CurTime()
 
@@ -160,9 +160,9 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	if not IsValid( ply ) then
 		return false
 	end
-	local OnlyMine = tobool(ply:GetInfoNum("FPP_PrivateSettings_OtherPlayerProps"))
+	local OnlyMine = tobool(ply:GetInfo("FPP_PrivateSettings_OtherPlayerProps"))
 	-- prevent player pickup when you don't want to
-	if IsValid(ent) and ent:IsPlayer() and not tobool(ply:GetInfoNum("FPP_PrivateSettings_Players")) and Type1 == "Physgun1" then
+	if IsValid(ent) and ent:IsPlayer() and not tobool(ply:GetInfo("FPP_PrivateSettings_Players")) and Type1 == "Physgun1" then
 		return false
 	end
 	-- Blocked entity
@@ -185,7 +185,7 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 		end
 	end
 
-	Returnal = Returnal and IsValid(ply) and not tobool(ply:GetInfoNum("FPP_PrivateSettings_BlockedProps"))
+	Returnal = Returnal and IsValid(ply) and not tobool(ply:GetInfo("FPP_PrivateSettings_BlockedProps"))
 	if Returnal ~= nil then return Returnal, "Blocked!" end
 
 	-- Shared entity
@@ -230,9 +230,9 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 				Restrict =  "OtherPlayerProps"
 			end
 			if ply:IsAdmin() and tobool(FPP.Settings[Type2].adminworldprops) then -- if admin and admin allowed
-				return not tobool(ply:GetInfoNum("FPP_PrivateSettings_"..Restrict)), world
+				return not tobool(ply:GetInfo("FPP_PrivateSettings_"..Restrict)), world
 			elseif tobool(FPP.Settings[Type2].worldprops) then -- if worldprop allowed
-				return not tobool(ply:GetInfoNum("FPP_PrivateSettings_"..Restrict)), world
+				return not tobool(ply:GetInfo("FPP_PrivateSettings_"..Restrict)), world
 			end -- if not allowed then
 			return false, world
 		else -- You don't own this, simple
@@ -240,7 +240,7 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 		end
 	end
 
-	return true and not tobool(ply:GetInfoNum("FPP_PrivateSettings_OwnProps"))
+	return true and not tobool(ply:GetInfo("FPP_PrivateSettings_OwnProps"))
 end
 
 --Global cantouch function
@@ -448,7 +448,11 @@ end
 hook.Add("PlayerUse", "FPP.Protect.PlayerUse", FPP.Protect.PlayerUse)
 
 --EntityDamage
-function FPP.Protect.EntityDamage(ent, inflictor, attacker, amount, dmginfo)
+function FPP.Protect.EntityDamage(ent, dmginfo)
+	local inflictor = dmginfo:GetInflictor()
+	local attacker = dmginfo:GetAttacker()
+	local amount = dmginfo:GetDamage()
+	
 	if type(ent.EntityDamage) == "function" then
 		local val = ent:EntityDamage(ent, inflictor, attacker, amount, dmginfo)
 		if val ~= nil then return val end
@@ -708,7 +712,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 				for c, d in pairs(allweapons) do
 					if string.lower(v.Class) == string.lower(d) or string.find(v.Class:lower(), "ai_") == 1 or string.find(v.Class:lower(), "item_ammo_") == 1 then
 						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply:UniqueIDTable( "Duplicator" ).Entities[k] = nil
+						ply:UniqueIDTable("Duplicator").Entities[k] = nil
 					end
 				end
 			end
@@ -717,7 +721,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 				for c, d in pairs(FPP.Blocked.Spawning1) do
 					if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then
 						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply:UniqueIDTable( "Duplicator" ).Entities[k] = nil
+						ply:UniqueIDTable("Duplicator").Entities[k] = nil
 						break
 					end
 					if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then -- if the whitelist is on you can't spawn it unless it's found
@@ -728,7 +732,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 				end
 				if setspawning then
 					FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-					ply:UniqueIDTable( "Duplicator" ).Entities[k] = nil
+					ply:UniqueIDTable("Duplicator").Entities[k] = nil
 				end
 			end
 		end

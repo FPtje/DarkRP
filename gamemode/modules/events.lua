@@ -284,9 +284,9 @@ local function TremorReport(mag)
 end
 
 local function EarthQuakeTest()
-	if GetConVarNumber("earthquakes") ~= 1 then return end
+	if not GAMEMODE.Config.earthquakes then return end
 
-	if GetConVarNumber("quakechance") ~= 0 and math.random(0, GetConVarNumber("quakechance")) < 1 then
+	if GAMEMODE.Config.quakechance and math.random(0, GAMEMODE.Config.quakechance) < 1 then
 		local en = ents.FindByClass("prop_physics")
 		local plys = player.GetAll()
 

@@ -13,7 +13,7 @@ function ENT:Initialize()
 	phys:Wake()
 	self.sparking = false
 	self.damage = 100
-	self.dt.price = math.Clamp((GetConVarNumber("pricemin") ~= 0 and GetConVarNumber("pricemin")) or 30, (GetConVarNumber("pricecap") ~= 0 and GetConVarNumber("pricecap")) or 30)
+	self.dt.price = math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 30, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 30)
 end
 
 function ENT:OnTakeDamage(dmg)
@@ -35,14 +35,14 @@ end
 
 function ENT:SalePrice(activator)
 	local owner = self.dt.owning_ent
-	local discounted = math.ceil(GetConVarNumber("microwavefoodcost") * 0.82)
+	local discounted = math.ceil(GAMEMODE.Config.microwavefoodcost * 0.82)
 
 	if activator == owner then
 		-- If they are still a cook, sell them the food at the discounted rate
 		if activator:Team() == TEAM_COOK then
 			return discounted
 		else -- Otherwise, sell it to them at full price
-			return math.floor(GetConVarNumber("microwavefoodcost"))
+			return math.floor(GAMEMODE.Config.microwavefoodcost)
 		end
 	else
 		return self.dt.price
@@ -62,13 +62,13 @@ function ENT:Use(activator,caller)
 		GAMEMODE:Notify(activator, 2, 3, "Microwave owner is too poor to subsidize this sale!")
 		return ""
 	end
-	if activator.maxFoods and activator.maxFoods >= GetConVarNumber("maxfoods") then
+	if activator.maxFoods and activator.maxFoods >= GAMEMODE.Config.maxfoods then
 		GAMEMODE:Notify(activator, 1, 3, "You have reached the food limit.")
 	elseif not self.Once then
 		self.Once = true
 		self.sparking = true
 
-		local discounted = math.ceil(GetConVarNumber("microwavefoodcost") * 0.82)
+		local discounted = math.ceil(GAMEMODE.Config.microwavefoodcost * 0.82)
 		local cash = self:SalePrice(activator)
 
 		activator:AddMoney(cash * -1)
@@ -79,7 +79,7 @@ function ENT:Use(activator,caller)
 			if owner:Team() == TEAM_COOK then
 				gain = math.floor(self.dt.price - discounted)
 			else
-				gain = math.floor(self.dt.price - GetConVarNumber("microwavefoodcost"))
+				gain = math.floor(self.dt.price - GAMEMODE.Config.microwavefoodcost)
 			end
 			if gain == 0 then
 				GAMEMODE:Notify(owner, 2, 3, "You sold some food but made no profit!")

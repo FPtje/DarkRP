@@ -98,7 +98,7 @@ end
 function SWEP:Holster()
 	if CLIENT then return end
 	if self:GetIronsights() then
-		GAMEMODE:SetPlayerSpeed(self.Owner, GetConVarNumber("wspd"), GetConVarNumber("rspd"))
+		GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 	end
 	return true
 end
@@ -134,19 +134,19 @@ function SWEP:PrimaryAttack( partofburst )
 
 			self.FireMode = "burst"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to burst-fire mode." )
+			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to burst-fire mode.")
 
 		elseif self.FireMode == "burst" then
 
 			self.FireMode = "auto"
 			self.Primary.Automatic = true
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to fully automatic fire mode." )
+			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to fully automatic fire mode.")
 
 		elseif self.FireMode == "auto" then
 
 			self.FireMode = "semi"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to semi-automatic fire mode." )
+			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to semi-automatic fire mode.")
 
 		end
 
@@ -176,7 +176,7 @@ function SWEP:PrimaryAttack( partofburst )
 	end
 
 	if not self:CanPrimaryAttack() then self:SetIronsights(false) return end
-	if not self.Ironsights and GetConVarNumber("ironshoot") ~= 0 then return end
+	if not self.Ironsights and GAMEMODE.Config.ironshoot then return end
 	-- Play shoot sound
 	self.Weapon:EmitSound(self.Primary.Sound)
 
@@ -299,7 +299,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	local fIronTime = self.fIronTime or 0
 
-	if GetConVarNumber("ironshoot") ~= 0 then
+	if GAMEMODE.Config.ironshoot then
 		ang:RotateAroundAxis(ang:Right(), -15)
 	end
 
@@ -324,7 +324,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		ang:RotateAroundAxis(ang:Forward(), 	self.IronSightsAng.z * Mul)
 	end
 
-	if GetConVarNumber("ironshoot") ~= 0 then
+	if GAMEMODE.Config.ironshoot then
 		ang:RotateAroundAxis(ang:Right(), Mul * 15)
 	else
 		ang:RotateAroundAxis(ang:Right(), Mul)
@@ -353,11 +353,11 @@ function SWEP:SetIronsights(b)
 	if b then
 		self:NewSetWeaponHoldType(self.HoldType)
 		self.CurHoldType = self.HoldType
-		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GetConVarNumber("wspd") / 3, GetConVarNumber("rspd") / 3) end
+		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3) end
 	else
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
-		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GetConVarNumber("wspd"), GetConVarNumber("rspd")) end
+		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed) end
 	end
 	self.Ironsights = b
 end

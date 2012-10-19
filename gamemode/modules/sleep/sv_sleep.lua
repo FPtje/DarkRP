@@ -38,7 +38,7 @@ function KnockoutToggle(player, command, args, caller)
 						wep:SetClip2(v[7])
 
 					end
-					local cl_defaultweapon = player:GetInfo( "cl_defaultweapon" )
+					local cl_defaultweapon = player:GetInfo("cl_defaultweapon")
 					if ( player:HasWeapon( cl_defaultweapon )  ) then
 						player:SelectWeapon( cl_defaultweapon )
 					end
@@ -63,7 +63,7 @@ function KnockoutToggle(player, command, args, caller)
 				player.OldHunger = nil
 
 				if player.DarkRPVars.Arrested then
-					GAMEMODE:SetPlayerSpeed(player, GetConVarNumber("aspd"), GetConVarNumber("aspd") )
+					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed )
 				end
 			else
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do

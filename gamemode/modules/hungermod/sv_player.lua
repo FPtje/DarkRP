@@ -8,12 +8,12 @@ end
 
 function meta:HungerUpdate()
 	if not IsValid(self) then return end
-	if not GetConVarNumber("hungerspeed") then return end
-	self:SetSelfDarkRPVar("Energy", math.Clamp(self.DarkRPVars.Energy - GetConVarNumber("hungerspeed") / 10, 0, 100))
+	if not GAMEMODE.Config.hungerspeed then return end
+	self:SetSelfDarkRPVar("Energy", math.Clamp(self.DarkRPVars.Energy - GAMEMODE.Config.hungerspeed / 10, 0, 100))
 	self:GetTable().LastHungerUpdate = CurTime()
 
 	if self.DarkRPVars.Energy == 0 then
-		self:SetHealth(self:Health() - GetConVarNumber("starverate"))
+		self:SetHealth(self:Health() - GAMEMODE.Config.starverate)
 		if self:Health() <= 0 then
 			self:GetTable().Slayed = true
 			self:Kill()

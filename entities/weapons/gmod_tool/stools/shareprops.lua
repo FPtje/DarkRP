@@ -48,7 +48,7 @@ function TOOL:LeftClick(trace)
 end
 
 if CLIENT then
-	language.Add( "Tool_shareprops_name", "Share tool" )
-	language.Add( "Tool_shareprops_desc", "Change sharing settings per prop" )
-	language.Add( "Tool_shareprops_0", "Left click: shares a prop. Right click unshares a prop")
+	language.Add("Tool_shareprops_name", "Share tool")
+	language.Add("Tool_shareprops_desc", "Change sharing settings per prop")
+	language.Add("Tool_shareprops_0", "Left click: shares a prop. Right click unshares a prop")
 end

@@ -10,7 +10,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self.locked = true
-	timer.Simple(GetConVarNumber("shipmentspawntime"), function() if IsValid(self) then self.locked = false end end)
+	timer.Simple(GAMEMODE.Config.shipmentspawntime, function() if IsValid(self) then self.locked = false end end)
 	self.damage = 100
 	self.ShareGravgun = true
 	local phys = self:GetPhysicsObject()

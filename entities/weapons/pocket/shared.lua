@@ -89,8 +89,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if not GetConVarNumber("pocketitems") then RunConsoleCommand("pocketitems", 10) end
-	if #self.Owner:GetTable().Pocket >= GetConVarNumber("pocketitems") then
+	if #self.Owner:GetTable().Pocket >= GAMEMODE.Config.pocketitems then
 		GAMEMODE:Notify(self.Owner, 1, 4, "Your pocket is full!")
 		return
 	end
@@ -204,8 +203,8 @@ if CLIENT then
 		for k,v in pairs(LocalPlayer():GetTable().Pocket) do if not IsValid(v) then table.remove(LocalPlayer():GetTable().Pocket, k) end end
 		if #LocalPlayer():GetTable().Pocket <= 0 then return end
 		LocalPlayer():GetTable().Pocket = table.ClearKeys(LocalPlayer():GetTable().Pocket)
-		frame = vgui.Create( "DFrame" )
-		frame:SetTitle( "Drop item" )
+		frame = vgui.Create("DFrame")
+		frame:SetTitle("Drop item")
 		frame:SetVisible( true )
 		frame:MakePopup( )
 

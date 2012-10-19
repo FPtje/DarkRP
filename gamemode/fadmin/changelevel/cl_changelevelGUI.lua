@@ -30,19 +30,19 @@ end
 ---------------------------------------------------------*/
 function PANEL:CreateControls()
 
-	self.StartGame = vgui.Create( "FAdmin_StartGame", self )
-	self.MapSheet = vgui.Create( "DPropertySheet", self )
+	self.StartGame = vgui.Create("FAdmin_StartGame", self )
+	self.MapSheet = vgui.Create("DPropertySheet", self )
 
-	self.MapIcons = vgui.Create( "MapListIcons" )
+	self.MapIcons = vgui.Create("MapListIcons")
 	self.MapIcons:SetController( self.StartGame )
 	self.MapIcons:Setup()
 
-	local Options = vgui.Create( "FAdmin_MapListOptions", self )
+	local Options = vgui.Create("FAdmin_MapListOptions", self )
 	Options.Controller = self.StartGame
 	Options:SetupSinglePlayer()
 
-	self.MapSheet:AddSheet( "Icons", self.MapIcons, "icon16/application_view_tile.png" )
-	self.MapSheet:AddSheet( "Options", Options, "icon16/application_view_detail.png" )
+	self.MapSheet:AddSheet("Icons", self.MapIcons, "icon16/application_view_tile.png")
+	self.MapSheet:AddSheet("Options", Options, "icon16/application_view_detail.png")
 
 end
 
@@ -70,4 +70,4 @@ function PANEL:RebuildFavourites()
 
 end
 
-vgui.Register( "FAdmin_Changelevel", PANEL, "DFrame" )
+vgui.Register("FAdmin_Changelevel", PANEL, "DFrame")

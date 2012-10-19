@@ -253,12 +253,6 @@ local function ChangeJobVGUI()
 		F4Menu:MakePopup( )
 		F4Menu:SetTitle("Options menu")
 		F4Tabs = {GAMEMODE:MoneyTab(), GAMEMODE:JobsTab(), GAMEMODE:EntitiesTab(), GAMEMODE:RPHUDTab()}
-		if LocalPlayer():IsAdmin() then
-			table.insert(F4Tabs, GAMEMODE:RPAdminTab())
-		end
-		if LocalPlayer():IsSuperAdmin() then
-			table.insert(F4Tabs, GAMEMODE:RPLicenseWeaponsTab())
-		end
 		F4Menu:SetSkin("DarkRP")
 	else
 		F4Menu:SetVisible(true)
@@ -283,7 +277,7 @@ local function ChangeJobVGUI()
 	end
 
 	if not F4MenuTabs or not F4MenuTabs:IsValid() then
-		F4MenuTabs = vgui.Create( "DPropertySheet", F4Menu)
+		F4MenuTabs = vgui.Create("DPropertySheet", F4Menu)
 		F4MenuTabs:SetPos(5, 25)
 		F4MenuTabs:SetSize(760, 550)
 		--The tabs: Look in showteamtabs.lua for more info

@@ -15,7 +15,7 @@ local function DrugPlayer(ply)
 	RP:AddAllPlayers()
 
 	ply:SetJumpPower(300)
-	GAMEMODE:SetPlayerSpeed(ply, GetConVarNumber("wspd") * 2, GetConVarNumber("rspd") * 2)
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
 
 	local IDSteam = ply:UniqueID()
 	if not timer.IsTimer(IDSteam.."DruggedHealth") and not timer.IsTimer(IDSteam) then
@@ -42,7 +42,7 @@ function UnDrugPlayer(ply) -- Global function, used in sv_gamemode_functions
 	umsg.End()
 	RP:AddAllPlayers()
 	ply:SetJumpPower(190)
-	GAMEMODE:SetPlayerSpeed(ply, GetConVarNumber("wspd"), GetConVarNumber("rspd") )
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed )
 end
 
 function ENT:Initialize()
@@ -57,7 +57,7 @@ function ENT:Initialize()
 
 	self.damage = 10
 	self.dt.price = self.dt.price or 100
-	self.SeizeReward = GetConVarNumber( "pricemin" ) or 35
+	self.SeizeReward = GAMEMODE.Config.pricemin or 35
 end
 
 function ENT:OnTakeDamage(dmg)

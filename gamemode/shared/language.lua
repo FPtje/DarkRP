@@ -294,7 +294,6 @@ Typing /mobbosshelp toggles this menu, /x closes it]],
 	"If you are a cop you can use the CP console in the Police Station to respond to 911 calls.",
 	"Use /911 to call the police (only works if you have taken damage recently).",
 	"Found an illegal item? Look at it and type /report to alert the police.",
-	"You will be automatically demoted if you go AFK for "..GetConVarNumber("afkdemotetime").." seconds, use /afk to avoid this.",
 	"Type /dropmoney <Amount> to drop money on the floor.",
 	"Type /give <Amount> to give money to the player you are looking at.",
 	"Type /cheque <Name> <Amount> to create a cheque, only the player you assign can pick it up."
@@ -1464,7 +1463,6 @@ rp_languages.french = {
 	"Si vous êtes un policier vous pouvez utiliser les ordinateurs de la police pour répondre aux appels 911.",
 	"Utilisez /911 pour appeler la police (fonctionne seulement si vous avez récemment subit des dommages).",
 	"Vous avez trouvé quelque chose d'illégal ? Regardez le et tapez /report pour alerter la police.",
-	"Vous serez automatiquement viré si vous êtes AFK pendant "..GetConVarNumber("afkdemotetime").." secondes, utilisez la commande /afk pour eviter celà.",
 	"Tapez /dropmoney <nombre> pour deposer de l'argent au sol.",
 	"Tapez /give <nombre> pour donner de l'argent à la personne que vous regardez.",
 	"Tapez /cheque <joueur> <nombre> pour créer un cheque, seul la personne mentionné pourras le prendre."

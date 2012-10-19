@@ -127,9 +127,9 @@ function FAdmin.IsEmpty(vector)
 end
 
 function FAdmin.SteamToProfile(steamid) -- Thanks decodaman
-		local x, y, z = string.match( steamid, "STEAM_(%d+):(%d+):(%d+)" )
+		local x, y, z = string.match( steamid, "STEAM_(%d+):(%d+):(%d+)")
 	if ( x and y and z ) then
-		local friendid = string.format( "765%0.f", z * 2 + 61197960265728 + y )
+		local friendid = string.format("765%0.f", z * 2 + 61197960265728 + y )
 		return "http://steamcommunity.com/profiles/"..friendid
 	else
 		return "http://steamcommunity.com/profiles/"..steamid
@@ -180,7 +180,7 @@ end
 FAdmin.GlobalSetting = {}
 
 
-function _R.Player:FAdmin_GetGlobal(setting)
+getmetatable(Player(0)).FAdmin_GetGlobal = function(self, setting)
 	return self.GlobalSetting and self.GlobalSetting[setting]
 end
 
@@ -204,7 +204,7 @@ if SERVER then
 		umsg.End()
 	end
 
-	function _R.Player:FAdmin_SetGlobal(setting, value)
+	getmetatable("player").FAdmin_SetGlobal = function(setting, value)
 		self.GlobalSetting = self.GlobalSetting or {}
 		if self.GlobalSetting[setting] == value then return end -- If the value didn't change, we don't need to resend it.
 		self.GlobalSetting[setting] = value

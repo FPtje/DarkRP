@@ -18,7 +18,7 @@ end
 
 local function CleanUp(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "CleanUp") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	RunConsoleCommand( "gmod_admin_cleanup" ) // This way if DarkRPs installed it will use the over-ride that fixes clean-up breaking stuff.
+	RunConsoleCommand("gmod_admin_cleanup") // This way if DarkRPs installed it will use the over-ride that fixes clean-up breaking stuff.
 	
 	FAdmin.Messages.ActionMessage(ply, player.GetAll(), "You have cleaned up the map", "The map has been cleaned up", "Cleaned up the map")
 end

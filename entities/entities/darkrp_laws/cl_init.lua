@@ -1,5 +1,5 @@
 
-include( "shared.lua" )
+include("shared.lua")
 
 -- These are the default laws, they're unchangeable in-game.
 local Laws = {
@@ -24,7 +24,7 @@ function ENT:Draw()
 		surface.DrawRect( 0, 0, 558, 290 )
 		
 		draw.RoundedBox( 4, 0, 0, 558, 30, Color( 0, 0, 70, 200 ) )
-		draw.DrawText( "LAWS OF THE LAND", "TargetID", 279, 5, Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER )
+		draw.DrawText("LAWS OF THE LAND", "TargetID", 279, 5, Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER )
 		
 		local y = 35
 		for i, law in pairs( Laws ) do
@@ -44,11 +44,11 @@ local function AddLaw( um )
 	table.insert( Laws, um:ReadString() )
 
 end
-usermessage.Hook( "DRP_AddLaw", AddLaw )
+usermessage.Hook("DRP_AddLaw", AddLaw )
 
 local function RemoveLaw( um )
 
 	table.remove( Laws, um:ReadChar() )
 	
 end
-usermessage.Hook( "DRP_RemoveLaw", RemoveLaw )
+usermessage.Hook("DRP_RemoveLaw", RemoveLaw )

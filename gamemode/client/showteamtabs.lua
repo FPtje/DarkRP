@@ -315,7 +315,7 @@ function GM:MoneyTab()
 					Drop:SetText(LANGUAGE.drop_weapon)
 					Drop.DoClick = function() LocalPlayer():ConCommand("say /drop") end
 					local health = MoneyPanel:Add("DButton")
-					health:SetText(string.format(LANGUAGE.buy_health, tostring(GetConVarNumber("healthcost"))))
+					health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
 					health.DoClick = function() LocalPlayer():ConCommand("say /Buyhealth") end
 
 				if LocalPlayer():Team() ~= TEAM_MAYOR then
@@ -377,7 +377,7 @@ function GM:JobsTab()
 		if Panel and Panel:IsValid() then
 			Panel:Remove()
 		end
-		Panel = vgui.Create( "DPanelList")
+		Panel = vgui.Create("DPanelList")
 		Panel:SetSize(390, 540)
 		Panel:EnableHorizontal( true )
 		Panel:EnableVerticalScrollbar( true )
@@ -391,7 +391,7 @@ function GM:JobsTab()
 			if Information and Information:IsValid() then
 				Information:Remove()
 			end
-			Information = vgui.Create( "DPanelList" )
+			Information = vgui.Create("DPanelList")
 			Information:SetPos(378,0)
 			Information:SetSize(370, 540)
 			Information:SetSpacing(10)
@@ -498,8 +498,8 @@ function GM:JobsTab()
 
 				if type(Model) == "table" and #Model > 0 then
 					hordiv:GetParent():GetParent():Close()
-					local frame = vgui.Create( "DFrame" )
-					frame:SetTitle( "Choose model" )
+					local frame = vgui.Create("DFrame")
+					frame:SetTitle("Choose model")
 					frame:SetVisible(true)
 					frame:MakePopup()
 
@@ -600,8 +600,8 @@ function GM:EntitiesTab()
 					end
 
 					for k,v in pairs(CustomShipments) do
-						if (v.seperate and (GetConVarNumber("restrictbuypistol") == 0 or
-							(GetConVarNumber("restrictbuypistol") == 1 and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
+						if (v.seperate and (not GAMEMODE.Config.restrictbuypistol or
+							(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
 							and (not v.customCheck or v.customCheck and v.customCheck(LocalPlayer())) then
 							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, CUR..(v.pricesep or "")), "/buy "..v.name)
 						end
@@ -639,17 +639,11 @@ function GM:EntitiesTab()
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
 							local cmdname = string.gsub(v.ent, " ", "_")
 
-							if not tobool(GetConVarNumber("disable"..cmdname)) then
-								local price = GetConVarNumber(cmdname.."_price")
-								if price == 0 then
-									price = v.price
-								end
-								AddEntIcon(v.model, "Buy a " .. v.name .." " .. CUR .. price, v.cmd)
-							end
+							AddEntIcon(v.model, "Buy a " .. v.name .." " .. CUR .. v.price, v.cmd)
 						end
 					end
 
-					if FoodItems and (GetConVarNumber("foodspawn") ~= 0 or LocalPlayer():Team() == TEAM_COOK) and (GetConVarNumber("hungermod") == 1 or LocalPlayer():Team() == TEAM_COOK) then
+					if FoodItems and (GAMEMODE.Config.foodspawn or LocalPlayer():Team() == TEAM_COOK) and (GAMEMODE.Config.hungermod or LocalPlayer():Team() == TEAM_COOK) then
 						for k,v in pairs(FoodItems) do
 							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..k, "a few bucks"), "/buyfood "..k)
 						end
@@ -949,126 +943,6 @@ function GM:RPHUDTab()
 	return HUDTABpanel
 end
 
-function GM:RPAdminTab()
-	local AdminPanel = vgui.Create("DPanelList")
-	AdminPanel:SetSpacing(1)
-	AdminPanel:EnableHorizontal( false	)
-	AdminPanel:EnableVerticalScrollbar( true )
-		function AdminPanel:Update()
-			self:Clear(true)
-			local ToggleCat = vgui.Create("DCollapsibleCategory")
-			ToggleCat:SetLabel("Toggle commands")
-				local TogglePanel = vgui.Create("DListLayout")
-				TogglePanel:SetSize(470, 230)
-
-				local ValueCat = vgui.Create("DCollapsibleCategory")
-				ValueCat:SetLabel("Value commands")
-				local ValuePanel = vgui.Create("DListLayout")
-				ValuePanel:SetSize(470, 230)
-
-				for k, v in SortedPairsByMemberValue(GAMEMODE.ToggleCmds, "var") do
-					local found = false
-					for a,b in pairs(GAMEMODE:getHelpLabels()) do
-						if string.find(b.text, k) then
-							found = b.text
-							break
-						end
-					end
-					if found and type(v) == "table" then
-						local checkbox = TogglePanel:Add("DCheckBoxLabel")
-						checkbox:SetValue(GetConVarNumber(v.var))
-						checkbox:SetText(found)
-						function checkbox.Button:Toggle()
-							if self:GetChecked() == nil or not self:GetChecked() then
-								self:SetValue( true )
-							else
-								self:SetValue( false )
-							end
-							local tonum = {}
-							tonum[false] = "0"
-							tonum[true] = "1"
-							RunConsoleCommand(k, tonum[self:GetChecked()])
-						end
-					end
-				end
-			ToggleCat:SetContents(TogglePanel)
-			ToggleCat:SetSkin("DarkRP")
-			self:AddItem(ToggleCat)
-			function ToggleCat:Toggle()
-				self:SetExpanded( !self:GetExpanded() )
-				self.animSlide:Start( self:GetAnimTime(), { From = self:GetTall() } )
-				if not self:GetExpanded() and ValueCat:GetExpanded() then
-					ValuePanel:SetTall(470)
-				elseif self:GetExpanded() and ValueCat:GetExpanded() then
-					ValuePanel:SetTall(230)
-					TogglePanel:SetTall(230)
-				elseif self:GetExpanded() and not ValueCat:GetExpanded() then
-					TogglePanel:SetTall(470)
-				end
-				self:InvalidateLayout( true )
-				self:GetParent():InvalidateLayout()
-				self:GetParent():GetParent():InvalidateLayout()
-				local cookie = '1'
-				if ( !self:GetExpanded() ) then cookie = '0' end
-				self:SetCookie( "Open", cookie )
-			end
-
-			function ValueCat:Toggle()
-				self:SetExpanded( !self:GetExpanded() )
-				self.animSlide:Start( self:GetAnimTime(), { From = self:GetTall() } )
-
-				if not self:GetExpanded() and ToggleCat:GetExpanded() then
-					TogglePanel:SetTall(470)
-				elseif self:GetExpanded() and ToggleCat:GetExpanded() then
-					TogglePanel:SetTall(230)
-					ValuePanel:SetTall(230)
-				elseif self:GetExpanded() and not ToggleCat:GetExpanded() then
-					ValuePanel:SetTall(470)
-				end
-				self:InvalidateLayout( true )
-				self:GetParent():InvalidateLayout()
-				self:GetParent():GetParent():InvalidateLayout()
-				local cookie = '1'
-				if ( !self:GetExpanded() ) then cookie = '0' end
-				self:SetCookie( "Open", cookie )
-			end
-				for k, v in SortedPairsByMemberValue(GAMEMODE.ValueCmds, "var") do
-					local found = false
-					for a,b in pairs(GAMEMODE:getHelpLabels()) do
-						if string.find(b.text, k) then
-							found = b.text
-							break
-						end
-					end
-					if found and type(v) == "table" then
-						local slider = ValuePanel:Add("DNumSlider")
-						slider:SetDecimals(0)
-						slider:SetMin(0)
-						slider:SetMax(3000)
-						slider:SetText(found)
-						slider:SetValue(GetConVarNumber(v.var))
-
-						function slider.Slider:OnMouseReleased()
-							self:SetDragging( false )
-							self:MouseCapture( false )
-							RunConsoleCommand(k, slider:GetValue())
-						end
-						local KnobMouseReleased = slider.Slider.Knob.OnMouseReleased
-						function slider.Slider.Knob:OnMouseReleased(...)
-							KnobMouseReleased(self, ...)
-							slider.Slider:OnMouseReleased()
-						end
-					end
-				end
-			ValueCat:SetContents(ValuePanel)
-			ValueCat:SetSkin("DarkRP")
-			self:AddItem(ValueCat)
-		end
-		AdminPanel:Update()
-	AdminPanel:SetSkin("DarkRP")
-	return AdminPanel
-end
-
 local DefaultWeapons = {
 {name = "GravGun",class = "weapon_physcannon"},
 {name = "Physgun",class = "weapon_physgun"},
@@ -1083,69 +957,3 @@ local DefaultWeapons = {
 {name = "BugBait",	class = "weapon_bugbait"},
 {name = "RPG", class = "weapon_rpg"}
 }
-
-function GM:RPLicenseWeaponsTab()
-	local weaponspanel = vgui.Create("DPanelList")
-	weaponspanel:SetSpacing(1)
-	weaponspanel:EnableHorizontal(false)
-	weaponspanel:EnableVerticalScrollbar(true)
-		function weaponspanel:Update()
-			self:Clear(true)
-			local Explanation = vgui.Create("DLabel")
-			Explanation:SetText(LANGUAGE.license_tab)
-			Explanation:SizeToContents()
-			self:AddItem(Explanation)
-
-			for k,v in pairs(DefaultWeapons) do
-				if type(v) == "table" and v.name then
-					local checkbox = vgui.Create("DCheckBoxLabel")
-					checkbox:SetText(v.name)
-					checkbox:SetValue(GetConVarNumber("licenseweapon_"..v.class))
-					function checkbox.Button:Toggle()
-						if ( self:GetChecked() == nil || !self:GetChecked() ) then
-							self:SetValue( true )
-						else
-							self:SetValue( false )
-						end
-						local tonum = {}
-						tonum[false] = "0"
-						tonum[true] = "1"
-						RunConsoleCommand("rp_licenseweapon_".. v.class, tonum[self:GetChecked()])
-					end
-					self:AddItem(checkbox)
-				end
-			end
-
-			local OtherWeps = vgui.Create("DLabel")
-			OtherWeps:SetText(LANGUAGE.license_tab_other_weapons)
-			OtherWeps:SizeToContents()
-			self:AddItem(OtherWeps)
-			for k,v in pairs(weapons.GetList()) do
-				if type(v) == "table" and v.Classname then
-					if v.Classname and not string.find(string.lower(v.Classname), "base") and v.Classname ~= "" then
-						local checkbox = vgui.Create("DCheckBoxLabel")
-						if v.PrintName then
-							checkbox:SetText(v.PrintName)
-						else
-							checkbox:SetText(v.Classname)
-						end
-						checkbox:SetValue(GetConVarNumber("licenseweapon_"..v.Classname))
-						function checkbox.Button:Toggle()
-							if ( self:GetChecked() == nil || !self:GetChecked() ) then
-								self:SetValue( true )
-							else
-								self:SetValue( false )
-							end
-							local tonum = {}
-							tonum[false] = "0"
-							tonum[true] = "1"
-							RunConsoleCommand("rp_licenseweapon_".. string.lower(v.Classname), tonum[self:GetChecked()])
-						end
-						self:AddItem(checkbox)
-					end
-				end
-			end
-		end
-	weaponspanel:Update()
-	return weaponspanel
-end

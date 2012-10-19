@@ -89,7 +89,7 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and GetConVarNumber("cpcanarrestcp") == 0 then
+	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and GAMEMODE.Config.cpcanarrestcp then
 		GAMEMODE:Notify(self.Owner, 1, 5, "You can not arrest other CPs!")
 		return
 	end
@@ -107,11 +107,11 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if not tobool(GetConVarNumber("npcarrest")) and trace.Entity:IsNPC() then
+	if not GAMEMODE.Config.npcarrest and trace.Entity:IsNPC() then
 		return
 	end
 
-	if GetConVarNumber("needwantedforarrest") == 1 and not trace.Entity:IsNPC() and not trace.Entity.DarkRPVars.wanted then
+	if GAMEMODE.Config.needwantedforarrest and not trace.Entity:IsNPC() and not trace.Entity.DarkRPVars.wanted then
 		GAMEMODE:Notify(self.Owner, 1, 5, "The player must be wanted in order to be able to arrest them.")
 		return
 	end

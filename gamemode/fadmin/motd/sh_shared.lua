@@ -30,10 +30,10 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 				self:SelectAllText(true)
 			end
 		
-			local ButtonPanel = vgui.Create( "DPanel", Window )
+			local ButtonPanel = vgui.Create("DPanel", Window )
 			ButtonPanel:SetTall( 30 )
 				
-			local Button = vgui.Create( "DButton", ButtonPanel )
+			local Button = vgui.Create("DButton", ButtonPanel )
 				Button:SetText("OK")
 				Button:SizeToContents()
 				Button:SetTall( 20 )

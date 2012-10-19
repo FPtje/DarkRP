@@ -82,7 +82,7 @@ function ENT:CreateMoneybag()
 
 	if math.random(1, 22) == 3 then self:BurstIntoFlames() end
 
-	local amount = GetConVarNumber("mprintamount")
+	local amount = GAMEMODE.Config.mprintamount
 	if amount == 0 then
 		amount = 250
 	end

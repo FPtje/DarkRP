@@ -1,4 +1,4 @@
-include( "shared.lua" )
+include("shared.lua")
 
 function ENT:Draw()
 	
@@ -12,8 +12,8 @@ end
 
 local function ToggleChat()
 
-	RunConsoleCommand( "_DarkRP_ToggleChat" )
+	RunConsoleCommand("_DarkRP_ToggleChat")
 	
 end
-hook.Add( "StartChat", "StartChatIndicator", ToggleChat )
-hook.Add( "FinishChat", "EndChatIndicator", ToggleChat )
+hook.Add("StartChat", "StartChatIndicator", ToggleChat )
+hook.Add("FinishChat", "EndChatIndicator", ToggleChat )

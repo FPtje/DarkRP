@@ -4,8 +4,6 @@
 -- To disble them completey, use the command rp_chatsounds 0 or delete this file.
 -- TODO: Add female sounds & detect gender of model, Use combine sounds for CPs.
 
-GM:AddToggleCommand( "rp_chatsounds", "chatsounds", 1 )
-
 local sounds = {}
 sounds[ "hi" ] = { "vo/npc/male01/hi01.wav", "vo/npc/male01/hi02.wav" }
 sounds[ "hello" ] = sounds[ "hi" ]
@@ -61,14 +59,14 @@ sounds[ "yes" ] = sounds[ "yeah" ]
 
 local function CheckChat( ply, text )
 
-	if GetConVarNumber( "chatsounds" ) == 0 then return end
+	if not GAMEMODE.Config.chatsounds then return end
 	local prefix = string.sub( text, 0, 1 )
 	if prefix ~= "/" and prefix ~= "!" and prefix ~= "@" then -- should cover most chat commands for various mods/addons
 
 		for k, v in pairs( sounds ) do
 
 			local res1, res2 = string.find( string.lower( text ), k )
-			if res1 and ( not text[ res1 - 1 ] or text[ res1 - 1 ] == "" or text[ res1 - 1 ] == " " ) and ( not text[ res2 + 1 ] or text[ res2 + 1 ] == "" or text[ res2 + 1 ] == " " ) then
+			if res1 and ( not text[ res1 - 1 ] or text[ res1 - 1 ] == "" or text[ res1 - 1 ] == " ") and ( not text[ res2 + 1 ] or text[ res2 + 1 ] == "" or text[ res2 + 1 ] == " ") then
 
 				ply:EmitSound( table.Random( v ), 80, 100 )
 				break
@@ -80,4 +78,4 @@ local function CheckChat( ply, text )
 
 end
 
-hook.Add( "PlayerSay", "ChatSounds", CheckChat )
+hook.Add("PlayerSay", "ChatSounds", CheckChat )

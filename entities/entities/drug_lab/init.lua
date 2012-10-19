@@ -17,7 +17,7 @@ function ENT:Initialize()
 	local ply = self.dt.owning_ent
 	self.SID = ply.SID
 	self.SID = ply.SID
-	self.dt.price = math.Clamp((GetConVarNumber("pricemin") ~= 0 and GetConVarNumber("pricemin")) or 100, (GetConVarNumber("pricecap") ~= 0 and GetConVarNumber("pricecap")) or 100)
+	self.dt.price = math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 100, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 100)
 	self.CanUse = true
 	self.ShareGravgun = true
 end
@@ -42,7 +42,7 @@ function ENT:Use(activator,caller)
 	if not self.CanUse then return false end
 	self.CanUse = false
 	self.drug_user = activator
-	if activator.maxDrugs and activator.maxDrugs >= GetConVarNumber("maxdrugs") then
+	if activator.maxDrugs and activator.maxDrugs >= GAMEMODE.Config.maxdrugs then
 		GAMEMODE:Notify(activator, 1, 3, "You can't make anymore drugs as the limit is reached.")
 		timer.Simple(0.5, function() self.CanUse = true end)
 	else

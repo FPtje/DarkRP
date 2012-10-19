@@ -5,8 +5,8 @@
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
 AddCSLuaFile(GM.FolderName.."/gamemode/modules/afk/cl_afk.lua")
-GM:AddToggleCommand("rp_afk_demote", "afkdemote", 0)
-GM:AddValueCommand("rp_afk_demotetime", "afkdemotetime", 600)
+GM.Config.afkdemote = false
+GM.Config.afkdemotetime = 600
 
 local function AFKDemote(ply)
 	local rpname = ply.DarkRPVars.rpname
@@ -42,7 +42,7 @@ local function SetAFK(ply)
 		npc:Activate()
 		npc:SetNPCState(NPC_STATE_ALERT)
 		npc:IdleSound()
-		npc:CapabilitiesAdd(CAP_USE | CAP_OPEN_DOORS)
+		npc:CapabilitiesAdd(bit.bor(CAP_USE, CAP_OPEN_DOORS))
 		for _,v in pairs(ents.FindByClass("prop_physics")) do npc:AddEntityRelationship(v, D_LI, 99) end
 		for _,v in pairs(player.GetAll()) do if v == ply then npc:AddEntityRelationship(v, D_FR, 99) npc:SetEnemy(v) end end
 		ply.AFKNpc = npc
@@ -82,17 +82,17 @@ end
 
 local function StartAFKOnPlayer(ply)
 	local demotetime
-	if GetConVarNumber("afkdemote") == 0 then
+	if GAMEMODE.Config.afkdemote == 0 then
 		demotetime = math.huge
 	else
-		demotetime = GetConVarNumber("afkdemotetime")
+		demotetime = GAMEMODE.Config.afkdemotetime
 	end
 	ply.AFKDemote = CurTime() + demotetime
 end
 hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 
 local function ToggleAFK(ply)
-	if GetConVarNumber("afkdemote") == 0 then
+	if GAMEMODE.Config.afkdemote == 0 then
 		GAMEMODE:Notify( ply, 1, 5, "AFK mode is disabled.")
 		return ""
 	end
@@ -103,8 +103,8 @@ end
 AddChatCommand("/afk", ToggleAFK)
 
 local function AFKTimer(ply, key)
-	if GetConVarNumber("afkdemote") == 0 then return end
-	ply.AFKDemote = CurTime() + GetConVarNumber("afkdemotetime")
+	if GAMEMODE.Config.afkdemote == 0 then return end
+	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply.DarkRPVars.AFKDemoted then
 		ply:SetDarkRPVar("job", "Citizen")
 		timer.Simple(3, function() ply:SetSelfDarkRPVar("AFKDemoted", false) end)

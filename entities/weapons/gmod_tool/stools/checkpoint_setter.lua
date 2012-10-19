@@ -4,7 +4,7 @@ TOOL.AddToMenu = false
 if CLIENT then
     language.Add("Tool_checkpoint_setter_name", "Checkpoint setter")
     language.Add("Tool_checkpoint_setter_desc", "Set checkpoints for the race")
-    language.Add("Tool_checkpoint_setter_0", "Left mouse to add a start/checkpoint, Right mouse to set the finish" )
+    language.Add("Tool_checkpoint_setter_0", "Left mouse to add a start/checkpoint, Right mouse to set the finish")
 end
 
 function TOOL:LeftClick(trace)

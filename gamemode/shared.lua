@@ -103,7 +103,7 @@ You can make extra classes here. Set everything up here and the rest will be don
 Ok here's how:
 
 To make an extra class do this:
-AddExtraTeam( "<NAME OF THE CLASS>", Color(<red>, <Green>, <blue>, 255), "<Player model>" , [[<the description(it can have enters)>]], { "<first extra weapon>","<second extra weapon>", etc...}, "<chat command to become it(WITHOUT THE /!)>", <maximum amount of this team> <the salary he gets>, 0/1/2 = public /admin only / superadmin only, <1/0/true/false Do you have to vote to become it>,  true/false DOES THIS TEAM HAVE A GUN LICENSE?, TEAM: Which team you need to be to become this team)
+AddExtraTeam("<NAME OF THE CLASS>", Color(<red>, <Green>, <blue>, 255), "<Player model>" , [[<the description(it can have enters)>]], { "<first extra weapon>","<second extra weapon>", etc...}, "<chat command to become it(WITHOUT THE /!)>", <maximum amount of this team> <the salary he gets>, 0/1/2 = public /admin only / superadmin only, <1/0/true/false Do you have to vote to become it>,  true/false DOES THIS TEAM HAVE A GUN LICENSE?, TEAM: Which team you need to be to become this team)
 
 The real example is here: it's the Hobo:		*/
 

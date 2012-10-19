@@ -9,7 +9,7 @@ function FAdmin.Messages.AddMessage( MsgType, Message )
 	tab.recv 	= SysTime()
 	tab.velx	= 0
 	tab.vely	= -5
-	surface.SetFont( "GModNotify" )
+	surface.SetFont("GModNotify")
 	local w, h = surface.GetTextSize( Message )
 	tab.x		= ScrW() / 2 + w*0.5 + (ScrW()/20)
 	tab.y		= ScrH()
@@ -36,7 +36,7 @@ local function DrawNotice( self, k, v, i )
 	local x = v.x - 75 * H
 	local y = v.y - 20 * H
 
-	surface.SetFont( "GModNotify" )
+	surface.SetFont("GModNotify")
 	local w, h = surface.GetTextSize( v.text )
 
 	w = w + 16

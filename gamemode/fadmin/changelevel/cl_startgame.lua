@@ -13,14 +13,14 @@ local PANEL = {}
 
 ---------------------------------------------------------*/
 function PANEL:Init()
-	self.StartGame = vgui.Create( "DButton", self )
-	self.StartGame:SetText( "Change level!" )
+	self.StartGame = vgui.Create("DButton", self )
+	self.StartGame:SetText("Change level!")
 	self.StartGame:SetSize( 100, 20 )
 	self.StartGame.DoClick = function() self:LaunchGame() end
 	self.StartGame:SetDisabled( true )
 	
-	self.Help = vgui.Create( "DLabel", self )
-	self.Help:SetText( "Click on the map you want to change the level to.\nClick Change level! to actually change level" )
+	self.Help = vgui.Create("DLabel", self )
+	self.Help:SetText("Click on the map you want to change the level to.\nClick Change level! to actually change level")
 	self.Help:SetTextColor( Color( 0, 0, 0, 230 ) )
 end
 

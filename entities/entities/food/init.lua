@@ -30,7 +30,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator,caller)
-	if GetConVarNumber("hungermod") == 0 then
+	if GAMEMODE.Config.hungermod == 0 then
 		caller:SetHealth(caller:Health() + (100 - caller:Health()))
 	else
 		caller:SetSelfDarkRPVar("Energy", math.Clamp(caller.DarkRPVars.Energy + 100, 0, 100))

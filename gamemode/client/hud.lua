@@ -67,7 +67,7 @@ local Health = 0
 local function DrawHealth()
 	Health = math.min(100, (Health == LocalPlayer():Health() and Health) or Lerp(0.1, Health, LocalPlayer():Health()))
 
-	local DrawHealth = math.Min(Health / GetConVarNumber("startinghealth"), 1)
+	local DrawHealth = math.Min(Health / GAMEMODE.Config.startinghealth, 1)
 	local Border = math.Min(6, math.pow(2, math.Round(3*DrawHealth)))
 	draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
 	draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * DrawHealth, 18, ConVars.Healthforeground)
@@ -85,7 +85,7 @@ local function DrawInfo()
 
 	local wep = LocalPlayer( ):GetActiveWeapon( );
 
-	if IsValid( wep ) and GetConVarNumber("weaponhud") == 1 then
+	if IsValid( wep ) and GAMEMODE.Config.weaponhud then
         local name = wep:GetPrintName();
 		draw.DrawText("Weapon: "..name, "UiBold", RelativeX + 5, RelativeY - HUDHeight - 18, Color(255, 255, 255, 255), 0)
 	end
@@ -125,7 +125,7 @@ local function JobHelp()
 			draw.RoundedBox(10, 12, 12, 586, 190, Color(51, 58, 51, 200))
 			draw.RoundedBox(10, 12, 12, 586, 20, Color(0, 0, 70, 200))
 			draw.DrawText(v.." Help", "DarkRPHUD1", 30, 12, Color(255,0,0,255),0)
-			draw.DrawText(string.format(LANGUAGE[v:lower().."help"], GetConVarNumber("jailtimer")), "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
+			draw.DrawText(string.format(LANGUAGE[v:lower().."help"], GAMEMODE.Config.jailtimer), "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
 		end
 	end
 end
@@ -244,14 +244,14 @@ local function DrawPlayerInfo(ply)
 	pos = pos:ToScreen()
 	pos.y = pos.y - 50 -- Move the text up a few pixels to compensate for the height of the text
 
-	if GetConVarNumber("nametag") == 1 then
+	if GAMEMODE.Config.showname then
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, Color(0, 0, 0, 255), 1)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 		draw.DrawText(LANGUAGE.health ..ply:Health(), "DarkRPHUD2", pos.x + 1, pos.y + 21, Color(0, 0, 0, 255), 1)
 		draw.DrawText(LANGUAGE.health..ply:Health(), "DarkRPHUD2", pos.x, pos.y + 20, Color(255,255,255,200), 1)
 	end
 
-	if GetConVarNumber("jobtag") == 1 then
+	if GAMEMODE.Config.showjob then
 		draw.DrawText(ply.DarkRPVars.job or "", "DarkRPHUD2", pos.x + 1, pos.y + 41, Color(0, 0, 0, 255), 1)
 		draw.DrawText(ply.DarkRPVars.job or "", "DarkRPHUD2", pos.x, pos.y + 40, Color(255, 255, 255, 200), 1)
 	end
@@ -272,7 +272,7 @@ local function DrawWantedInfo(ply)
 	pos.z = pos.z + 14
 	pos = pos:ToScreen()
 
-	if GetConVarNumber("nametag") == 1 then
+	if GAMEMODE.Config.showname then
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, Color(0, 0, 0, 255), 1)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 	end
@@ -295,10 +295,10 @@ local function DrawEntityDisplay()
 		ply.DarkRPVars = ply.DarkRPVars or {}
 		if ply.DarkRPVars.wanted then DrawWantedInfo(ply) end
 
-		if GetConVarNumber("globalshow") == 1 and ply ~= LocalPlayer() then
+		if GAMEMODE.Config.globalshow and ply ~= LocalPlayer() then
 			DrawPlayerInfo(ply)
 		-- Draw when you're (almost) looking at him
-		elseif not tobool(GetConVarNumber("globalshow")) and hisPos:Distance(shootPos) < 400 then
+		elseif not GAMEMODE.Config.globalshow and hisPos:Distance(shootPos) < 400 then
 			local pos = (hisPos - shootPos):GetNormalized()
 			if pos:Dot(aimVec) > 0.95 then
 				local trace = util.QuickTrace(shootPos, pos * 400, LocalPlayer())

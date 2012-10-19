@@ -33,7 +33,7 @@ function pmeta:Name()
 	if not self or not self.IsValid or not IsValid(self) then return "" end
 
 	self.DarkRPVars = self.DarkRPVars or {}
-	if GetConVarNumber("allowrpnames") == 0 then
+	if not GAMEMODE.Config.allowrpnames then
 		return self:SteamName()
 	end
 	return self.DarkRPVars.rpname and tostring(self.DarkRPVars.rpname) or self:SteamName()
@@ -60,7 +60,7 @@ function ENT:IsVehicle()
 end
 
 function GM:DrawDeathNotice(x, y)
-	if GetConVarNumber("deathnotice") ~= 1 then return end
+	if not GAMEMODE.Config.showdeaths then return end
 	self.BaseClass:DrawDeathNotice(x, y)
 end
 
@@ -94,6 +94,9 @@ for k,v in pairs(player.GetAll()) do
 	v.DarkRPVars = v.DarkRPVars or {}
 end
 
+GM.Config = {} -- config table
+
+include("config.lua")
 include("client/help.lua")
 
 include("client/DRPDermaSkin.lua")
@@ -300,8 +303,8 @@ local function RPSelectwhohearit(group)
 	hook.Add("HUDPaint", "RPinstructionsOnSayColors", function()
 		local w, l = ScrW()/80, ScrH() /1.75
 		local h = l - (#playercolors * 20) - 20
-		local AllTalk = GetConVarNumber("alltalk") == 1
-		if #playercolors <= 0 and ((HearMode ~= "talk through OOC" and HearMode ~= "advert" and not AllTalk) or (AllTalk and HearMode ~= "talk" and HearMode ~= "me") or HearMode == "speak" ) then
+		local AllTalk = GAMEMODE.Config.alltalk
+		if #playercolors <= 0 and ((HearMode ~= "talk through OOC" and HearMode ~= "advert" and not AllTalk) or (AllTalk and HearMode ~= "talk" and HearMode ~= "me") or HearMode == "speak") then
 			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_noone, HearMode), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
 		elseif HearMode == "talk through OOC" or HearMode == "advert" then
 			draw.WordBox(2, w, h, LANGUAGE.hear_everyone, "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
@@ -328,16 +331,16 @@ local function RPSelectwhohearit(group)
 				elseif HearMode == "yell" and distance < 550 and not table.HasValue(playercolors, v) then
 					table.insert(playercolors, v)
 				elseif HearMode == "speak" and distance < 550 and not table.HasValue(playercolors, v) then
-					if GetConVarNumber("dynamicvoice") == 1 then
+					if GAMEMODE.Config.dynamicvoice then
 						if CL_IsInRoom( v ) then
 							table.insert(playercolors, v)
 						end
 					else
 						table.insert(playercolors, v)
 					end
-				elseif HearMode == "talk" and GetConVarNumber("alltalk") ~= 1 and distance < 250 and not table.HasValue(playercolors, v) then
+				elseif HearMode == "talk" and not GAMEMODE.Config.alltalk and distance < 250 and not table.HasValue(playercolors, v) then
 					table.insert(playercolors, v)
-				elseif HearMode == "me" and GetConVarNumber("alltalk") ~= 1 and distance < 250 and not table.HasValue(playercolors, v) then
+				elseif HearMode == "me" and not GAMEMODE.Config.alltalk and distance < 250 and not table.HasValue(playercolors, v) then
 					table.insert(playercolors, v)
 				end
 			end
@@ -359,7 +362,7 @@ function GM:ChatTextChanged(text)
 	if not Messagemode or HearMode == "speak" then return end
 	local old = HearMode
 	HearMode = "talk"
-	if GetConVarNumber("alltalk") == 0 then
+	if not GAMEMODE.Config.alltalk then
 		if string.sub(text, 1, 2) == "//" or string.sub(string.lower(text), 1, 4) == "/ooc" or string.sub(string.lower(text), 1, 4) == "/a" then
 			HearMode = "talk through OOC"
 		elseif string.sub(string.lower(text), 1, 7) == "/advert" then
@@ -421,7 +424,7 @@ end
 function GM:PlayerStartVoice(ply)
 	isSpeaking = true
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-	if ply == LocalPlayer() and GetConVarNumber("sv_alltalk") == 0 and GetConVarNumber("voiceradius") == 1 then
+	if ply == LocalPlayer() and not GAMEMODE.Config.sv_alltalk and GAMEMODE.Config.voiceradius then
 		HearMode = "speak"
 		RPSelectwhohearit()
 	end
@@ -436,7 +439,7 @@ end
 function GM:PlayerEndVoice(ply) //voice/icntlk_pl.vtf
 	isSpeaking = false
 
-	if ply == LocalPlayer() and GetConVarNumber("sv_alltalk") == 0 and GetConVarNumber("voiceradius") == 1 then
+	if ply == LocalPlayer() and not GAMEMODE.Config.sv_alltalk and GAMEMODE.Config.voiceradius then
 		HearMode = "talk"
 		hook.Remove("Think", "RPGetRecipients")
 		hook.Remove("HUDPaint", "RPinstructionsOnSayColors")
@@ -554,7 +557,7 @@ local function UpdateDoorData(um)
 				decoded[tonumber(v)] = true
 			end
 		end
-		if table.Count( decoded ) == 0 then
+		if table.Count(decoded) == 0 then
 			value = nil
 		else
 			value = decoded
@@ -579,8 +582,8 @@ local function RetrievePlayerVar(um)
 		value = Entity(string.match(stringvalue, "Entity .([0-9]*)"))
 	end
 
-	if string.match(stringvalue, "(-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+)") then
-		local x,y,z = string.match(value, "(-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+)")
+	if string.match(stringvalue, [[(-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+)]]) then
+		local x,y,z = string.match(value, [[(-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+)]])
 		value = Vector(x,y,z)
 	end
 

@@ -41,7 +41,7 @@ function ENT:SpawnFunction(ply, tr)
 
 	local SpawnPos = tr.HitPos + tr.HitNormal * 16 + Vector(0,0,50)
 
-	local ent = ents.Create( "fadmin_motd" )
+	local ent = ents.Create("fadmin_motd")
 	ent:SetPos(SpawnPos)
 	local Ang = ply:EyeAngles()
 	ent:SetAngles(Angle(0, Ang.y-180, Ang.r))

@@ -32,10 +32,10 @@ hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool) -- Prevent clie
 	end
 
 	if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().GetToolObject and ply:GetActiveWeapon():GetToolObject() and
-	(string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "model" ) or "", "*") or
-	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "material" ) or "", "*") or
-	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "model" ) or "", "\\")
-	/*or string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "tool" ), "/")*/) then
+	(string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo("model") or "", "*") or
+	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo("material") or "", "*") or
+	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo("model") or "", "\\")
+	/*or string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo("tool"), "/")*/) then
 		return false
 	end
 end)
@@ -57,7 +57,7 @@ function FPP.AddNotify( str, type )
 	tab.recv 	= SysTime()
 	tab.velx	= 0
 	tab.vely	= -5
-	surface.SetFont( "TabLarge" )
+	surface.SetFont("TabLarge")
 	local w, h = surface.GetTextSize( str )
 	tab.x		= ScrW() / 2 + w*0.5 + (ScrW()/20)
 	tab.y		= ScrH()
@@ -85,7 +85,7 @@ local function DrawNotice( self, k, v, i )
 	local x = v.x - 75 * H
 	local y = v.y - 20 * H - 2
 
-	surface.SetFont( "TabLarge" )
+	surface.SetFont("TabLarge")
 	local w, h = surface.GetTextSize( v.text )
 
 	w = w

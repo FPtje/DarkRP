@@ -16,24 +16,18 @@ AddFoodItem("bottle2", "models/props_junk/garbage_glassbottle002a.mdl", 10)
 AddFoodItem("bottle3", "models/props_junk/garbage_glassbottle003a.mdl", 10)
 AddFoodItem("orange", "models/props/cs_italy/orange.mdl", 20)
 
-local HELP_CATEGORY_HUNGERMOD = 4
-
-GAMEMODE:AddHelpCategory(HELP_CATEGORY_HUNGERMOD, "HungerMod - Rick Darkaliono")
-
-GAMEMODE:AddToggleCommand("rp_hungermod", "hungermod", 0)
-GAMEMODE:AddToggleCommand("rp_foodspawn", "foodspawn", 1)
-GAMEMODE:AddToggleCommand("rp_foodspecialcost", "foodpay", 1)
-GAMEMODE:AddValueCommand("rp_foodcost", "foodcost", 15)
-GAMEMODE:AddValueCommand("rp_hungerspeed", "hungerspeed", 2)
-GAMEMODE:AddValueCommand("rp_starverate", "starverate", 3)
-
-
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_HUNGERMOD, "rp_hungermod <1 or 0> - Enable/disable hunger mod")
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_ADMINTOGGLE, "rp_foodspawn - Whether players(non-cooks) can spawn food props or not")
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_HUNGERMOD, "rp_foodspecialcost <1 or 0> - Enable/disable whether spawning food props have a special cost")
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_HUNGERMOD, "rp_foodcost <Amount> - Set food cost")
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_HUNGERMOD, "rp_hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)")
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_HUNGERMOD, "rp_starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)")
+-- hungermod - Enable/disable hunger mod
+GAMEMODE.Config.hungermod = false
+-- foodspawn - Whether players(non-cooks) can spawn food props or not
+GAMEMODE.Config.foodspawn = true
+-- foodspecialcost <1 or 0> - Enable/disable whether spawning food props have a special cost
+GAMEMODE.Config.foodpay = true
+-- foodcost <Amount> - Set food cost
+GAMEMODE.Config.foodcost = 15
+-- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)
+GAMEMODE.Config.hungerspeed = 2
+-- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
+GAMEMODE.Config.starverate = 3
 
 local HM = { }
 
@@ -51,7 +45,7 @@ function HM.HUDPaint()
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
 	LocalPlayer().DarkRPVars.Energy = LocalPlayer().DarkRPVars.Energy or 0
 
-	if GetConVarNumber("hungermod") == 1 or LocalPlayer().DarkRPVars.LocalHungerMod == 1 then
+	if GAMEMODE.Config.hungermod or LocalPlayer().DarkRPVars.LocalHungerMod == 1 then
 		local x = 5
 		local y = ScrH() - 9
 

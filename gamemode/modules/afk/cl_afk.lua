@@ -1,11 +1,11 @@
-GAMEMODE:AddToggleCommand("rp_afk_demote", "afkdemote", 0)
-GAMEMODE:AddValueCommand("rp_afk_demotetime", "afkdemotetime", 120)
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_ADMINCMD, "rp_afk_demote <1/0> - If set to 1, players who don't do anything for ".. GetConVarNumber("afkdemotetime") .." seconds will be demoted if they do not use AFK mode.")
-GAMEMODE:AddHelpLabel(-1, HELP_CATEGORY_ADMINCMD, "rp_afk_demotetime <time> - Sets the time a player has to be AFK for before they are demoted (in seconds).")
+-- afkdemote - If set to 1, players who don't do anything for x seconds will be demoted if they do not use AFK mode.
+GAMEMODE.Config.afkdemote = false
+-- afkdemotetime <time> - Sets the time a player has to be AFK for before they are demoted (in seconds).
+GAMEMODE.Config.afkdemotetime = 120
 
 local TextColor = Color(GetConVarNumber("Healthforeground1"), GetConVarNumber("Healthforeground2"), GetConVarNumber("Healthforeground3"), GetConVarNumber("Healthforeground4"))
 local function AFKHUDPaint()
-	if GetConVarNumber("afkdemote") == 0 then return end
+	if GAMEMODE.Config.afkdemote == 0 then return end
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
 	LocalPlayer().DarkRPVars.AFK = LocalPlayer().DarkRPVars.AFK or false
 

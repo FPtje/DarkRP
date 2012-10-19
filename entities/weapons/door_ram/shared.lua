@@ -62,7 +62,7 @@ end
 function SWEP:Holster()
 	if not self.Ready or not SERVER then return true end
 
-	GAMEMODE:SetPlayerSpeed(self.Owner, GetConVarNumber("wspd"), GetConVarNumber("rspd"))
+	GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 	self.Owner:SetJumpPower(200)
 
 	return true
@@ -95,8 +95,8 @@ function SWEP:PrimaryAttack()
 	self.Owner:EmitSound(self.Sound)
 
 
-	local a = GetConVarNumber("copscanunfreeze") == 1
-	local d = GetConVarNumber("copscanunweld") == 1
+	local a = GAMEMODE.Config.copscanunfreeze
+	local d = GAMEMODE.Config.copscanunweld
 	local b = trace.Entity:GetClass() == "prop_physics"
 	local c = true
 	if trace.Entity.Owner then
@@ -106,7 +106,7 @@ function SWEP:PrimaryAttack()
 		local allowed = false
 		local team = self.Owner:Team()
 		-- if we need a warrant to get in
-		if GetConVarNumber("doorwarrants") == 1 and trace.Entity:IsOwned() and not trace.Entity:OwnedBy(self.Owner) then
+		if GAMEMODE.Config.doorwarrants and trace.Entity:IsOwned() and not trace.Entity:OwnedBy(self.Owner) then
 			-- if anyone who owns this door has a warrant for their arrest
 			-- allow the police to smash the door in
 			for k, v in pairs(player.GetAll()) do
@@ -120,7 +120,7 @@ function SWEP:PrimaryAttack()
 			allowed = true
 		end
 
-		if GetConVarNumber("doorwarrants") == 1 and trace.Entity.DoorData.GroupOwn and RPExtraTeamDoors[trace.Entity.DoorData.GroupOwn] then -- Be able to open the door if anyone is warranted
+		if GAMEMODE.Config.doorwarrants and trace.Entity.DoorData.GroupOwn and RPExtraTeamDoors[trace.Entity.DoorData.GroupOwn] then -- Be able to open the door if anyone is warranted
 			allowed = false
 			for k,v in pairs(player.GetAll()) do
 				if table.HasValue(RPExtraTeamDoors[trace.Entity.DoorData.GroupOwn], v:Team()) and v.warranted then
@@ -160,7 +160,7 @@ function SWEP:PrimaryAttack()
 	end
 	if d and b and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if c then
-			constraint.RemoveConstraints( trace.Entity, "Weld" )
+			constraint.RemoveConstraints( trace.Entity, "Weld")
 		else
 			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to unweld this prop.")
 		end
@@ -175,13 +175,13 @@ function SWEP:SecondaryAttack()
 		self:SetWeaponHoldType("rpg")
 		if SERVER then
 			-- Prevent them from being able to run and jump
-			GAMEMODE:SetPlayerSpeed(self.Owner, GetConVarNumber("wspd") / 3, GetConVarNumber("rspd") / 3)
+			GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
 			self.Owner:SetJumpPower(0)
 		end
 	else
 		self:SetWeaponHoldType("normal")
 		if SERVER then
-			GAMEMODE:SetPlayerSpeed(self.Owner, GetConVarNumber("wspd"), GetConVarNumber("rspd"))
+			GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 			self.Owner:SetJumpPower(200)
 		end
 	end

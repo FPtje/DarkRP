@@ -13,7 +13,7 @@ function ENT:Draw()
 	self.colg = self.colg or 0
 	self.StartTime = self.StartTime or CurTime()
 
-	if GetConVarNumber("shipmentspawntime") > 0 and self.height < self:OBBMaxs().z then
+	if GAMEMODE.Config.shipmentspawntime > 0 and self.height < self:OBBMaxs().z then
 		self:drawSpawning()
 	else
 		self:DrawModel()
@@ -31,8 +31,8 @@ function ENT:drawSpawning()
 	self:DrawModel()
 
 	render.MaterialOverride()
-	self.colr = 1 - ((CurTime() - self.StartTime) / GetConVarNumber("shipmentspawntime"))
-	self.colg = (CurTime() - self.StartTime) / GetConVarNumber("shipmentspawntime")
+	self.colr = 1 - ((CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime)
+	self.colg = (CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime
 
 	render.SetColorModulation(1, 1, 1)
 
@@ -41,7 +41,7 @@ function ENT:drawSpawning()
 	local normal = - self:GetAngles():Up()
 	local pos = self:LocalToWorld(Vector(0, 0, self:OBBMins().z + self.height))
 	local distance = normal:Dot(pos)
-	self.height = self:OBBMaxs().z * ((CurTime() - self.StartTime) / GetConVarNumber("shipmentspawntime"))
+	self.height = self:OBBMaxs().z * ((CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime)
 	render.EnableClipping(true)
 	render.PushCustomClipPlane(normal, distance);
 

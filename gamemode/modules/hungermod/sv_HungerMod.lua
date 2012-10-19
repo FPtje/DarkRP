@@ -5,18 +5,12 @@ include(GM.FolderName.."/gamemode/modules/hungermod/sv_player.lua")
 local HM = { }
 local FoodItems = { }
 
-GM:AddToggleCommand("rp_hungermod", "hungermod", 0)
-GM:AddToggleCommand("rp_foodspawn", "foodspawn", 1)
-GM:AddToggleCommand("rp_foodspecialcost", "foodpay", 1)
-GM:AddValueCommand("rp_foodcost", "foodcost", 15)
-GM:AddValueCommand("rp_hungerspeed", "hungerspeed", 2)
-GM:AddValueCommand("rp_starverate", "starverate", 3)
-
-concommand.Add("rp_hungerspeed", function(ply, cmd, args)
-	if not ply:IsAdmin() then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_admin, "rp_hungerspeed")) return end
-	if not tonumber(args[1]) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "argument", "")) return end
-	DB.SaveSetting("hungerspeed", tonumber(args[1]) / 10)
-end)
+GM.Config.hungermod = false
+GM.Config.foodspawn = true
+GM.Config.foodpay = true
+GM.Config.foodcost = 15
+GM.Config.hungerspeed = 2
+GM.Config.starverate = 3
 
 local function AddFoodItem(name, mdl, amount)
 	FoodItems[name] = { model = mdl, amount = amount }
@@ -28,9 +22,9 @@ end
 hook.Add("PlayerSpawn", "HM.PlayerSpawn", HM.PlayerSpawn)
 
 function HM.Think()
-	if GetConVarNumber("hungermod") ~= 1 then return end
+	if not GAMEMODE.Config.hungermod then return end
 
-	if GetConVarNumber("hungerspeed") == 0 then return end
+	if not GAMEMODE.Config.hungerspeed then return end
 
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() and CurTime() - v:GetTable().LastHungerUpdate > 1 then
@@ -71,7 +65,7 @@ local function BuyFood(ply, args)
 
 	local tr = util.TraceLine(trace)
 
-	if GetConVarNumber("hungermod") == 0 and ply:Team() ~= TEAM_COOK then
+	if not GAMEMODE.Config.hungermod and ply:Team() ~= TEAM_COOK then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "hungermod", ""))
 		return ""
 	end
@@ -83,7 +77,7 @@ local function BuyFood(ply, args)
 
 	for k,v in pairs(FoodItems) do
 		if string.lower(args) == k then
-			local cost = GetConVarNumber("foodcost")
+			local cost = GAMEMODE.Config.foodcost
 			if ply:CanAfford(cost) then
 				ply:AddMoney(-cost)
 			else

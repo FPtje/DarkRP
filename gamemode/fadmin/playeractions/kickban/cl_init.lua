@@ -59,17 +59,17 @@ local function showBanWindow(SteamID, NICK, time, reason)
 
 	RunConsoleCommand("_FAdmin", "ban", SteamID, "start")
 
-	local Window = vgui.Create( "DFrame" )
-	Window:SetTitle( "Ban Details" )
+	local Window = vgui.Create("DFrame")
+	Window:SetTitle("Ban Details")
 	Window:SetDraggable( false )
 	Window:ShowCloseButton(false)
 	Window:SetBackgroundBlur( true )
 	Window:SetDrawOnTop( true )
 
-	local InnerPanel = vgui.Create( "DPanel", Window )
+	local InnerPanel = vgui.Create("DPanel", Window )
 
-	local Text = vgui.Create( "DLabel", InnerPanel )
-		Text:SetText( "Ban " .. NICK .. "" )
+	local Text = vgui.Create("DLabel", InnerPanel )
+		Text:SetText("Ban " .. NICK .. "")
 		Text:SizeToContents()
 		Text:SetContentAlignment( 5 )
 
@@ -138,10 +138,10 @@ local function showBanWindow(SteamID, NICK, time, reason)
 	function Weeks:OnValueChanged(val) if val == W then return end W = val update() end
 	function Years:OnValueChanged(val) if val == Y then return end Y = val update() end
 
-	local ButtonPanel = vgui.Create( "DPanel", Window )
+	local ButtonPanel = vgui.Create("DPanel", Window )
 	ButtonPanel:SetTall( 25 )
 
-	local Button = vgui.Create( "DButton", ButtonPanel )
+	local Button = vgui.Create("DButton", ButtonPanel )
 		Button:SetText("OK")
 		Button:SizeToContents()
 		Button:SetTall( 20 )
@@ -154,8 +154,8 @@ local function showBanWindow(SteamID, NICK, time, reason)
 			RunConsoleCommand("_FAdmin", "ban", SteamID, BanTime, (TextEntry and TextEntry:GetValue()) or "")
 		end
 
-	local ButtonCancel = vgui.Create( "DButton", ButtonPanel )
-		ButtonCancel:SetText("Cancel" )
+	local ButtonCancel = vgui.Create("DButton", ButtonPanel )
+		ButtonCancel:SetText("Cancel")
 		ButtonCancel:SizeToContents()
 		ButtonCancel:SetTall( 20 )
 		ButtonCancel:SetWide( Button:GetWide() + 20 )
@@ -215,22 +215,22 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		local NICK = ply:Nick()
 
 		LocalPlayer():ConCommand("FAdmin kick "..UserID.." start")
-		local Window = vgui.Create( "DFrame" )
-		Window:SetTitle( "Reason for kicking" )
+		local Window = vgui.Create("DFrame")
+		Window:SetTitle("Reason for kicking")
 		Window:SetDraggable( false )
 		Window:ShowCloseButton( false )
 		Window:SetBackgroundBlur( true )
 		Window:SetDrawOnTop( true )
 
-		local InnerPanel = vgui.Create( "DPanel", Window )
+		local InnerPanel = vgui.Create("DPanel", Window )
 
-		local Text = vgui.Create( "DLabel", InnerPanel )
-			Text:SetText( NICK.. " knows he is getting kicked\nTake all your time entering the reason, he can't do anything anymore" )
+		local Text = vgui.Create("DLabel", InnerPanel )
+			Text:SetText( NICK.. " knows he is getting kicked\nTake all your time entering the reason, he can't do anything anymore")
 			Text:SizeToContents()
 			Text:SetContentAlignment( 5 )
 			Text:SetTextColor( color_white )
 
-		local TextEntry = vgui.Create( "DTextEntry", InnerPanel )
+		local TextEntry = vgui.Create("DTextEntry", InnerPanel )
 			function TextEntry:OnTextChanged()
 				RunConsoleCommand("_FAdmin", "kick", UserID, "update", self:GetValue())
 			end
@@ -243,10 +243,10 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 
 
 
-		local ButtonPanel = vgui.Create( "DPanel", Window )
+		local ButtonPanel = vgui.Create("DPanel", Window )
 		ButtonPanel:SetTall( 30 )
 
-		local Button = vgui.Create( "DButton", ButtonPanel )
+		local Button = vgui.Create("DButton", ButtonPanel )
 			Button:SetText("OK")
 			Button:SizeToContents()
 			Button:SetTall( 20 )
@@ -254,8 +254,8 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			Button:SetPos( 5, 5 )
 			Button.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", UserID, "execute", TextEntry:GetValue()) end
 
-		local ButtonCancel = vgui.Create( "DButton", ButtonPanel )
-			ButtonCancel:SetText("Cancel" )
+		local ButtonCancel = vgui.Create("DButton", ButtonPanel )
+			ButtonCancel:SetText("Cancel")
 			ButtonCancel:SizeToContents()
 			ButtonCancel:SetTall( 20 )
 			ButtonCancel:SetWide( Button:GetWide() + 20 )

@@ -43,7 +43,7 @@ function ENT:Think()
 end
 
 
-local gripTexture = surface.GetTextureID( "sprites/grip" )
+local gripTexture = surface.GetTextureID("sprites/grip")
 local ArrowTexture = surface.GetTextureID("gui/arrow")
 function ENT:Draw()
 	self:DrawModel()
