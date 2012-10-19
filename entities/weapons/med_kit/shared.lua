@@ -62,7 +62,7 @@ function SWEP:createViewModels()
 		v:SetColor(Color(255,0,0,255))
 		v:SetMaterial("models/debug/debugwhite")
 
-		v:SetModelScale(Vector(0.1,0.1,0.1))
+		v:SetModelScale(0.1, 0)
 		v:SetParent(viewmodel)
 		v:SetPos(viewmodel:GetPos() + viewmodel:GetAngles():Forward() * 13 + viewmodel:GetAngles():Right() * 8 - viewmodel:GetAngles():Up() * 6)
 		v:Spawn()

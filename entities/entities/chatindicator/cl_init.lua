@@ -2,7 +2,7 @@ include("shared.lua")
 
 function ENT:Draw()
 	
-	//self:SetModelScale( Vector( 0.6, 0.6, 0.6 ) )
+	self:SetModelScale(0.6, 0)
 	self:DrawModel()
 
 	--Going to let the client handle the rotations, less server strain. (Feel free to change back). ~Eusion.

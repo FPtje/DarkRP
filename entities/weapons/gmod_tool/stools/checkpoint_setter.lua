@@ -48,7 +48,7 @@ function TOOL:UpdateGhostCheckpoint(ent, ply)
     if self:GetSWEP():GetNWString("nextEntity") == "checkpoint" and CLIENT then
         ent:SetMaterial("models/debug/debugwhite")
         ent:SetColor(255,255,0,80)
-        ent:SetModelScale(Vector(10,10,10))
+        ent:SetModelScale(10, 0)
     else
         pos = pos + Vector(0,0,68)
         ent:SetColor(255,255,255,255)
