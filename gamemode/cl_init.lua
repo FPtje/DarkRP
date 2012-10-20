@@ -715,3 +715,83 @@ FAdmin.StartHooks["DarkRP"] = function()
 	FAdmin.ScoreBoard.Player:AddActionButton("Unban from job", function() return "FAdmin/icons/changeteam", "FAdmin/icons/disable" end, Color(200, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamban)
 end
+
+-- These fonts used to exist in GMod 12 but were removed in 13.
+surface.CreateFont("Trebuchet18", {
+	size = 18,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet MS"})
+surface.CreateFont("Trebuchet19", {
+	size = 19,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet MS"})
+surface.CreateFont("Trebuchet20", {
+	size = 20,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet MS"})
+surface.CreateFont("Trebuchet22", {
+	size = 22,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet MS"})
+surface.CreateFont("Trebuchet24", {
+	size = 24,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet MS"})
+surface.CreateFont("TabLarge", {
+	size = 17,
+	weight = 700,
+	antialias = true,
+	shadow = false,
+	font = "Trebuchet MS"})
+surface.CreateFont("UiBold", {
+	size = 16,
+	weight = 800,
+	antialias = true,
+	shadow = false,
+	font = "Default"})
+surface.CreateFont("HUDNumber5", {
+	size = 30,
+	weight = 800,
+	antialias = true,
+	shadow = false,
+	font = "Default"})
+surface.CreateFont("ScoreboardHeader", {
+	size = 32,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "coolvetica"})
+surface.CreateFont("ScoreboardSubtitle", {
+	size = 22,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "coolvetica"})
+surface.CreateFont("ScoreboardPlayerName", {
+	size = 19,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "coolvetica"})
+surface.CreateFont("ScoreboardPlayerName2", {
+	size = 15,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "coolvetica"})
+surface.CreateFont("ScoreboardPlayerNameBig", {
+	size = 22,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "coolvetica"})

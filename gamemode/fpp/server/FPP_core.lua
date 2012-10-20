@@ -12,7 +12,7 @@ local function isBlocked(model)
 
 	model = string.lower(model or "")
 	model = string.Replace(model, "\\", "/")
-	model = string.Replace(model, "//", "/")
+	model = string.gsub(model, "[\\/]+", "/")
 
 	local found = FPP.BlockedModels[model]
 	if tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.iswhitelist) and not found then

@@ -5,7 +5,7 @@
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
 AddCSLuaFile(GM.FolderName.."/gamemode/modules/afk/cl_afk.lua")
-GM.Config.afkdemote = false
+GM.Config.afkdemote = true
 GM.Config.afkdemotetime = 600
 
 local function AFKDemote(ply)
@@ -82,7 +82,7 @@ end
 
 local function StartAFKOnPlayer(ply)
 	local demotetime
-	if GAMEMODE.Config.afkdemote == 0 then
+	if not GAMEMODE.Config.afkdemote then
 		demotetime = math.huge
 	else
 		demotetime = GAMEMODE.Config.afkdemotetime
@@ -92,7 +92,7 @@ end
 hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 
 local function ToggleAFK(ply)
-	if GAMEMODE.Config.afkdemote == 0 then
+	if not GAMEMODE.Config.afkdemote then
 		GAMEMODE:Notify( ply, 1, 5, "AFK mode is disabled.")
 		return ""
 	end
@@ -103,7 +103,7 @@ end
 AddChatCommand("/afk", ToggleAFK)
 
 local function AFKTimer(ply, key)
-	if GAMEMODE.Config.afkdemote == 0 then return end
+	if not GAMEMODE.Config.afkdemote then return end
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply.DarkRPVars.AFKDemoted then
 		ply:SetDarkRPVar("job", "Citizen")

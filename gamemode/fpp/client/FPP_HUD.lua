@@ -58,7 +58,7 @@ function FPP.AddNotify( str, type )
 	tab.velx	= 0
 	tab.vely	= -5
 	surface.SetFont("TabLarge")
-	local w, h = surface.GetTextSize( str )
+	local w, h = surface.GetTextSize(str)
 	tab.x		= ScrW() / 2 + w*0.5 + (ScrW()/20)
 	tab.y		= ScrH()
 	tab.a		= 255
