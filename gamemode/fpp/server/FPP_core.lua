@@ -12,6 +12,7 @@ local function isBlocked(model)
 
 	model = string.lower(model or "")
 	model = string.Replace(model, "\\", "/")
+	model = string.Replace(model, "//", "/")
 
 	local found = FPP.BlockedModels[model]
 	if tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.iswhitelist) and not found then
@@ -452,7 +453,7 @@ function FPP.Protect.EntityDamage(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()
 	local attacker = dmginfo:GetAttacker()
 	local amount = dmginfo:GetDamage()
-	
+
 	if type(ent.EntityDamage) == "function" then
 		local val = ent:EntityDamage(ent, inflictor, attacker, amount, dmginfo)
 		if val ~= nil then return val end
