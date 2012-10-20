@@ -129,17 +129,17 @@ GM.Config.restrictbuypistol 			= false
 GM.Config.restrictdrop 					= false
 -- strictsuicide - Whether or not players should spawn where they suicided
 GM.Config.strictsuicide 				= false
--- tax - Whether players pay taxes on their wallets.
-GM.Config.telefromjail 					= true
 -- telefromjail - Enable/disable teleporting from jail.
-GM.Config.teletojail 					= true
+GM.Config.telefromjail 					= true
 -- teletojail - Enable/disable teleporting to jail.
-GM.Config.toolgun 						= true
+GM.Config.teletojail 					= true
 -- toolgun - Whether or not non-admin players spawn with toolguns.
-GM.Config.unlockdoorsonstart 			= false
+GM.Config.toolgun 						= true
 -- unlockdoorsonstart - Enable/Disable unlocking all doors on map start.
-GM.Config.voiceradius 					= false
+GM.Config.unlockdoorsonstart 			= false
 -- voiceradius - Enable/disable local voice chat.
+GM.Config.voiceradius 					= false
+-- tax - Whether players pay taxes on their wallets.
 GM.Config.wallettax 					= false
 -- wantedsuicide - Enable/Disable suiciding while you are wanted by the police.
 GM.Config.wantedsuicide 				= false
