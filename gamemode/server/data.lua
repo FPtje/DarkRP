@@ -739,10 +739,11 @@ end
 
 function DB.StoreSalary(ply, amount)
 	ply:SetSelfDarkRPVar("salary", math.floor(amount))
+
 	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
 		ply:UniqueID() .. [[, ]] ..
 		(ply.DarkRPVars.rpname and sql.SQLStr(ply.DarkRPVars.rpname) or "NULL") .. [[, ]] ..
-		ply.DarkRPVars.salary .. [[, ]] ..
+		amount .. [[, ]] ..
 		(ply.DarkRPVars.money or GAMEMODE.Config.startingmoney) .. [[);]])
 
 	return amount
