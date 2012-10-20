@@ -26,7 +26,7 @@ GM.Config.allowvehicleowning 			= true
 -- allowvnocollide - Enable/disable the ability to no-collide a vehicle (for security).
 GM.Config.allowvnocollide 				= false
 -- alltalk - Enable for global chat, disable for local chat.
-GM.Config.alltalk 						= true
+GM.Config.alltalk 						= false
 -- autovehiclelock - Enable/Disable automatic locking of a vehicle when a player exits it.
 GM.Config.autovehiclelock 				= false
 -- babygod - people spawn godded (prevent spawn killing)

@@ -851,7 +851,7 @@ function DB.SetUpGroupDoors()
 		for _, row in pairs(data) do
 			local ent = ents.GetByIndex(GAMEMODE:DoorToEntIndex(tonumber(row.idx)))
 
-			if not ValidEntity(ent) then
+			if not IsValid(ent) then
 				continue
 			end
 

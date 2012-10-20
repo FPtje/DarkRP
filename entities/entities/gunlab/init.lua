@@ -38,7 +38,7 @@ function ENT:SalePrice(activator)
 	local owner = self.dt.owning_ent
 	local discounted = math.ceil(185 * 0.88)
 
-	if activator == owner and ValidEntity(owner) then
+	if activator == owner and IsValid(owner) then
 		if activator:Team() == TEAM_GUN then
 			return discounted
 		else
@@ -73,7 +73,7 @@ function ENT:Use(activator)
 		activator:AddMoney(cash * -1)
 		GAMEMODE:Notify(activator, 0, 3, "You purchased a P228 for " .. CUR .. tostring(cash) .. "!")
 
-		if activator ~= owner and ValidEntity(owner) then
+		if activator ~= owner and IsValid(owner) then
 			local gain = 0
 			if owner:Team() == TEAM_GUN then
 				gain = math.floor(self.dt.price - discounted)

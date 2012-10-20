@@ -91,10 +91,6 @@ if CLIENT then
 
 		local ownerstr = ""
 
-		if IsValid(self:GetDoorOwner()) and self:GetDoorOwner().Nick then
-			ownerstr = self:GetDoorOwner():Nick() .. "\n"
-		end
-
 		for k,v in pairs(player.GetAll()) do
 			if self:OwnedBy(v) then
 				ownerstr = ownerstr .. v:Nick() .. "\n"
@@ -245,7 +241,7 @@ local function SetDoorGroupOwnable(ply, arg)
 	timer.Simple(0.1, function() time3 = false end)
 
 	local trace = ply:GetEyeTrace()
-	if not ValidEntity(trace.Entity) then return "" end
+	if not IsValid(trace.Entity) then return "" end
 
 	local ent = trace.Entity
 	if not ply:IsSuperAdmin() or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return end

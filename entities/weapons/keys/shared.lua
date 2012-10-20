@@ -79,7 +79,7 @@ function SWEP:PrimaryAttack()
 				umsg.Entity(self.Owner)
 				umsg.String("usekeys")
 			umsg.End()
-			self.Owner:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_PLACE, true)
+			self.Owner:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
 		end
 		self.Weapon:SetNextPrimaryFire(CurTime() + 0.3)
 	else
@@ -129,7 +129,7 @@ function SWEP:SecondaryAttack()
 				umsg.Entity(self.Owner)
 				umsg.String("usekeys")
 			umsg.End()
-			self.Owner:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_PLACE, true)
+			self.Owner:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
 		end
 		self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
 	else

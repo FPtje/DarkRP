@@ -1,13 +1,13 @@
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!
 	if ply.anim_DroppingItem then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_DROP, true)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_DROP, true)
 		ply.anim_DroppingItem = nil
 	end
 
 	-- Giving items!
 	if ply.anim_GivingItem then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_GIVE, true)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_GIVE, true)
 		ply.anim_GivingItem = nil
 	end
 
@@ -17,7 +17,7 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 	end
 
 	if CLIENT and ply.ThrewPoop then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_THROW, true)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
 		ply.ThrewPoop = nil
 	end
 
@@ -27,7 +27,7 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 	end
 
 	if CLIENT and ply.usekeys then
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_PLACE, true)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
 		ply.usekeys = nil
 	end
 
@@ -37,7 +37,7 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 	local Weapon = ply:GetActiveWeapon()
 	if ply:Team() == TEAM_HOBO and not ply.ThrewPoop and IsValid(Weapon) and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
 		ply.ThrewPoop = true
-		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_ITEM_THROW, true)
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
 
 
 		local RP = RecipientFilter()

@@ -7,6 +7,6 @@ ENT.AdminSpawnable = false
 
 function ENT:SetupDataTables()
 	self:DTVar("Entity", 1, "reporter")
-	self:DTVar("Bool", false, "alarm")
+	self:DTVar("Bool", 0, "alarm")
 	self:DTVar("Entity", 2, "reported")
 end

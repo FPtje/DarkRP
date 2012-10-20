@@ -39,7 +39,7 @@ local function RP_ActualDoSay(ply, text, callback)
 		col = col2
 	end
 
-	if not GAMEMODE.Config.alltalk then
+	if GAMEMODE.Config.alltalk then
 		for k,v in pairs(player.GetAll()) do
 			GAMEMODE:TalkToPerson(v, col, callback..ply:Name(), col2, text, ply)
 		end
