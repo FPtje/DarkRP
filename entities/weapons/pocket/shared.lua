@@ -101,14 +101,11 @@ function SWEP:PrimaryAttack()
 
 	table.insert(self.Owner:GetTable().Pocket, trace.Entity)
 	trace.Entity:SetNoDraw(true)
-	trace.Entity:SetCollisionGroup(0)
+	trace.Entity:SetPos(trace.Entity:GetPos())
 	local phys = trace.Entity:GetPhysicsObject()
-	phys:EnableMotion(true)
-	trace.Entity:SetMoveType(MOVETYPE_VPHYSICS)
-	if phys:IsValid() then
-		phys:EnableCollisions(false)
-		phys:Wake()
-	end
+	phys:EnableMotion(false)
+	trace.Entity:SetCollisionGroup(COLLISION_GROUP_WORLD)
+	trace.Entity.PhysgunPickup = false
 end
 
 function SWEP:SecondaryAttack()
@@ -135,17 +132,19 @@ function SWEP:SecondaryAttack()
 	local tr = util.TraceLine(trace)
 	ent:SetMoveType(MOVETYPE_VPHYSICS)
 	ent:SetNoDraw(false)
-	ent:SetCollisionGroup(4)
+	ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	ent:SetPos(tr.HitPos)
 	ent:SetSolid(SOLID_VPHYSICS)
 	local phys = ent:GetPhysicsObject()
 	if phys:IsValid() then
 		phys:EnableCollisions(true)
+		phys:EnableMotion(true)
 		phys:Wake()
 	end
 	umsg.Start("Pocket_RemoveItem", self.Owner)
 		umsg.Short(ent:EntIndex())
 	umsg.End()
+	ent.PhysgunPickup = nil
 end
 
 SWEP.OnceReload = false
