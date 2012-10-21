@@ -55,6 +55,7 @@ AddChatCommand("/name", RPName)
 AddChatCommand("/nick", RPName)
 
 function meta:IsCP()
+	if not IsValid(self) then return false end
 	local Team = self:Team()
 	return Team == TEAM_POLICE or Team == TEAM_CHIEF or Team == TEAM_MAYOR
 end
@@ -494,7 +495,7 @@ function meta:Unarrest()
 	if self:isArrested() then
 		self:setArrested(false)
 
-		GAMEMODE:SetPlayerSpeed(self, GM.Config.walkspeed, GAMEMODE.Config.runspeed)
+		GAMEMODE:SetPlayerSpeed(self, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 		GAMEMODE:PlayerLoadout(self)
 		if GAMEMODE.Config.telefromjail and (not FAdmin or not self:FAdmin_GetGlobal("fadmin_jailed")) then
 			local _, pos = GAMEMODE:PlayerSelectSpawn(self)
