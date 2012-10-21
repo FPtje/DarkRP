@@ -1,6 +1,6 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
- 
+
 include('shared.lua')
 
 ENT.manager = NULL
@@ -31,7 +31,7 @@ function ENT:SetBase(ent_start, BtnNumber)
 	pos = pos - BtnNumber * Vector(0,0,38) -- This button is below the previous one
 
 	ang:RotateAroundAxis(ang:Forward(), 90) -- Rotate it correctly
-	
+
 	self:SetPos(pos)
 	self:SetAngles(ang)
 	self:SetParent(ent_start)
@@ -41,7 +41,7 @@ end
 
 function ENT:SetDisabled(bool)
 	self.Disabled = bool
-	self:SetColor(255,255,255, bool and 0 or 255)
+	self:SetColor(Color(255,255,255, bool and 0 or 255))
 end
 
 function ENT:SetText(text)

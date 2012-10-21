@@ -1,5 +1,5 @@
 -- afkdemote - If set to 1, players who don't do anything for x seconds will be demoted if they do not use AFK mode.
-GAMEMODE.Config.afkdemote = true
+GAMEMODE.Config.afkdemote = false
 -- afkdemotetime <time> - Sets the time a player has to be AFK for before they are demoted (in seconds).
 GAMEMODE.Config.afkdemotetime = 120
 

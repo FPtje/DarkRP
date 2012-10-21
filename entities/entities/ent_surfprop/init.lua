@@ -16,7 +16,7 @@ function ENT:Initialize()
 	phys:EnableMotion(false)
 
 	self:SetMaterial("phoenix_storms/wire/pcb_blue")
-	self:SetColor(math.random(0,255), math.random(0,255), math.random(0,255), 255) -- Nice random colour per contestant
+	self:SetColor(Color(math.random(0,255), math.random(0,255), math.random(0,255), 255)) -- Nice random colour per contestant
 
 	self.GravGunPickup = false
 	self.GravGunPunt = false

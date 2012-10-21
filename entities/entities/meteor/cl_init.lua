@@ -22,6 +22,6 @@ function ENT:Think()
 	particle:SetStartSize(math.Rand(8, 16))
 	particle:SetEndSize(math.Rand(32, 64))
 	particle:SetRoll(math.Rand(-0.2, 0.2))
-	particle:SetColor(200, 200, 210)
+	particle:SetColor(Color(200, 200, 210))
 	self.emitter:Finish()
 end

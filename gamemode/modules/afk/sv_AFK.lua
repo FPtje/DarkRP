@@ -5,7 +5,7 @@
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
 AddCSLuaFile(GM.FolderName.."/gamemode/modules/afk/cl_afk.lua")
-GM.Config.afkdemote = true
+GM.Config.afkdemote = false
 GM.Config.afkdemotetime = 600
 
 local function AFKDemote(ply)

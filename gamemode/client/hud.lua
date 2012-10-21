@@ -252,8 +252,9 @@ local function DrawPlayerInfo(ply)
 	end
 
 	if GAMEMODE.Config.showjob then
-		draw.DrawText(ply.DarkRPVars.job or "", "DarkRPHUD2", pos.x + 1, pos.y + 41, Color(0, 0, 0, 255), 1)
-		draw.DrawText(ply.DarkRPVars.job or "", "DarkRPHUD2", pos.x, pos.y + 40, Color(255, 255, 255, 200), 1)
+		local teamname = team.GetName(ply:Team())
+		draw.DrawText(ply.DarkRPVars.job or teamname, "DarkRPHUD2", pos.x + 1, pos.y + 41, Color(0, 0, 0, 255), 1)
+		draw.DrawText(ply.DarkRPVars.job or teamname, "DarkRPHUD2", pos.x, pos.y + 40, Color(255, 255, 255, 200), 1)
 	end
 
 	if ply.DarkRPVars.HasGunlicense then

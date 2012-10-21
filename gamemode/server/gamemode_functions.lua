@@ -401,7 +401,7 @@ end
 function GM:PlayerCanPickupWeapon(ply, weapon)
 	if ply:isArrested() then return false end
 	if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
-	
+
 	if GAMEMODE.Config.license and not ply.DarkRPVars.HasGunlicense and not ply:GetTable().RPLicenseSpawn then
 		if GAMEMODE.NoLicense[string.lower(weapon:GetClass())] or not weapon:IsWeapon() then
 			return true
@@ -612,12 +612,13 @@ function GM:PlayerSpawn(ply)
 		ply.Babygod = true
 		ply:GodEnable()
 		local c = ply:GetColor()
-		ply:SetColor(c.r, c.g, c.b, 100)
+		ply:SetRenderMode(RENDERMODE_TRANSALPHA)
+		ply:SetColor(Color(c.r, c.g, c.b, 100))
 		ply:SetCollisionGroup(COLLISION_GROUP_WORLD)
 		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime, 1, function()
 			if not IsValid(ply) or not ply.Babygod then return end
 			ply.Babygod = nil
-			ply:SetColor(c.r, c.g, c.b, c.a)
+			ply:SetColor(Color(c.r, c.g, c.b, c.a))
 			ply:GodDisable()
 			ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
 		end)

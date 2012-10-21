@@ -23,7 +23,7 @@ end
 
 function ENT:setPassed(bool)
 	self.Passed = bool
-	self.Visual:SetColor(255,255,255,255)
+	self.Visual:SetColor(Color(255,255,255,255))
 end
 
 function ENT:Draw()
