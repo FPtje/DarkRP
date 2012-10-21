@@ -823,39 +823,8 @@ function ENTITY:FireBullets(bullet, ...)
 	return backup(self, bullet, ...)
 end
 
-function FPP.Protect.LeaveVehicle(ply, vehicle)
-	local pos = vehicle:GetPos()
-	timer.Simple(0.1, function()
-		if not IsValid(ply) then return end
-
-		local PlyPos = ply:GetPos()
-		local diff = pos - PlyPos
-
-		local trace = {}
-		trace.start = pos
-		trace.endpos = PlyPos
-		trace.filter = {ply,vehicle}
-		trace.mask = -1
-		local TraceResult = util.TraceLine(trace)
-
-		if not TraceResult.Hit then
-			return
-		end
-
-		trace.endpos = pos + diff
-		TraceResult = util.TraceLine(trace)
-		if not TraceResult.Hit then
-			ply:SetPos(pos + diff*1.1)
-			return
-		end
-
-		ply:SetPos(pos + Vector(0,0,70) + 0.1 * diff)
-	end)
-end
-hook.Add("PlayerLeaveVehicle", "FPP.PlayerLeaveVehicle", FPP.Protect.LeaveVehicle)
-
 hook.Add("EntityRemoved","jeepWorkaround",function(ent)
-    if IsValid(ent) and ent:IsVehicle() and IsValid(ent:GetPassenger()) then
-        ent:GetPassenger():ExitVehicle()
+    if IsValid(ent) and ent:IsVehicle() and IsValid(ent:GetPassenger(1)) then
+        ent:GetPassenger(1):ExitVehicle()
     end
 end)
