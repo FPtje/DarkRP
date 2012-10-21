@@ -120,7 +120,7 @@ end
 function meta:InitiateTax()
 	local taxtime = GAMEMODE.Config.wallettaxtime
 	local uniqueid = self:UniqueID() -- so we can destroy the timer if the player leaves
-	timer.Create("rp_tax_"..uniqueid, taxtime ~= 0 and taxtime or 600, 0, function()
+	timer.Create("rp_tax_"..uniqueid, taxtime or 600, 0, function()
 		if not IsValid(self) then
 			timer.Destroy("rp_tax_"..uniqueid)
 			return
@@ -462,7 +462,7 @@ function meta:Arrest(time, rejoin)
 		-- If the player has no remaining jail time,
 		-- set it back to the max for this new sentence
 		if not time or time == 0 then
-			time = (GAMEMODE.Config.jailtimer and GAMEMODE.Config.jailtimer) or 120
+			time = GAMEMODE.Config.jailtimer or 120
 		end
 
 		self:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.youre_arrested, time))

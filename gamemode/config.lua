@@ -169,8 +169,8 @@ GM.Config.dmgracetime					= 30
 GM.Config.dmmaxkills					= 3
 -- doorcost - Sets the cost of a door.
 GM.Config.doorcost						= 30
--- EntityRemoveDelay - how long to wait before removing a bought entity after disconnect.
-GM.Config.EntityRemoveDelay				= 0
+-- entremovedelay - how long to wait before removing a bought entity after disconnect.
+GM.Config.entremovedelay				= 0
 -- healthcost - Sets the cost of health.
 GM.Config.healthcost					= 60
 -- jailtimer - Sets the jailtimer. (in seconds)
