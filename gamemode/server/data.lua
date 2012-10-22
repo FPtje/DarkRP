@@ -3,7 +3,7 @@ include("static_data.lua")
 /*---------------------------------------------------------------------------
 MySQL and SQLite connectivity
 ---------------------------------------------------------------------------*/
-if file.Exists("lua/bin/gmsv_mysqloo.dll", "GAME") or file.Exists("lua/bin/gmsv_mysqloo_i486.dll", "GAME") then
+if RP_MySQLConfig.EnableMySQL then
 	require("mysqloo")
 end
 
