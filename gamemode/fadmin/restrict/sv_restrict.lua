@@ -4,7 +4,7 @@ local Restricted = {}
 Restricted.Weapons = {}
 
 local function RetrieveRestricted()
-	local Query = sql.Query("SELECT * FROM FADMIN_RESTRICTED") or {}
+	local Query = sql.Query("SELECT * FROM FADMIN_RESTRICTEDENTS") or {}
 	for k,v in pairs(Query) do
 		if Restricted[v.TYPE] then
 			Restricted[v.TYPE][v.ENTITY] = v.ADMIN_GROUP
@@ -28,10 +28,10 @@ end
 
 local function RestrictWeapons(ply, Weapon, WeaponTable)
 	local Group = ply:GetNWString("usergroup")
-	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[Group] 
+	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[Group]
 	or not FAdmin.Access.Groups[Restricted.Weapons[Weapon]] then return end
 	local RequiredGroup = Restricted.Weapons[Weapon]
-	
+
 	if Group ~= RequiredGroup and FAdmin.Access.Groups[Group].ADMIN <= FAdmin.Access.Groups[RequiredGroup].ADMIN then return false end
 end
 hook.Add("PlayerGiveSWEP", "FAdmin_RestrictWeapons", RestrictWeapons)
@@ -39,6 +39,6 @@ hook.Add("PlayerSpawnSWEP", "FAdmin_RestrictWeapons", RestrictWeapons)
 
 FAdmin.StartHooks["Restrict"] = function()
 	FAdmin.Commands.AddCommand("RestrictWeapon", DoRestrictWeapons)
-	
+
 	FAdmin.Access.AddPrivilege("Restrict", 3)
 end

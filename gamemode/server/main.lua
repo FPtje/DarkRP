@@ -70,7 +70,7 @@ local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) then return "" end
 
-	if GAMEMODE.Config.RestrictDrop then
+	if GAMEMODE.Config.restrictdrop then
 		local found = false
 		for k,v in pairs(CustomShipments) do
 			if v.entity == ent:GetClass() then
@@ -596,7 +596,7 @@ local function BuyPistol(ply, args)
 			model = v.model
 			price = v.pricesep
 			local canbuy = false
-			
+
 			if not GAMEMODE.Config.restrictbuypistol or
 			(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, ply:Team()))) then
 				canbuy = true
