@@ -1,4 +1,3 @@
---if there's no CPPI thing then make it
 CPPI = CPPI or {}
 CPPI.CPPI_DEFER = 102112 --\102\112 = fp
 CPPI.CPPI_NOTIMPLEMENTED = 7080// FP
