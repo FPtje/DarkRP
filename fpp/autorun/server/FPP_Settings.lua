@@ -137,6 +137,9 @@ local function RemoveBlockedModel(ply, cmd, args)
 	if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	local model = string.lower(args[1])
 
+	model = string.lower(model or "")
+	model = string.Replace(model, "\\", "/")
+
 	FPP.BlockedModels[model] = nil
 
 	DB.Query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = "..sql.SQLStr(model)..";")
