@@ -282,9 +282,11 @@ elseif SERVER then
 			ent:SetCollisionGroup(4)
 			ent:SetPos(tr.HitPos)
 			ent:SetSolid(SOLID_VPHYSICS)
+			ent.PhysgunPickup = nil
 			local phys = ent:GetPhysicsObject()
 			if phys:IsValid() then
 				phys:EnableCollisions(true)
+				phys:EnableMotion(true)
 				phys:Wake()
 			end
 		end
