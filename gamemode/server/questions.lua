@@ -39,7 +39,7 @@ function GM.ques:Create(question, quesid, ent, delay, callback, fromPly, toPly, 
 		umsg.Float(delay)
 	umsg.End()
 
-	timer.Create(quesid .. "timer", delay, 1, GAMEMODE.ques.HandleQuestionEnd, function() quesid(true) end)
+	timer.Create(quesid .. "timer", delay, 1, function() GAMEMODE.ques.HandleQuestionEnd(quesid) end)
 end
 
 function GM.ques.DestroyQuestionsWithEnt(ent)
@@ -53,7 +53,7 @@ function GM.ques.DestroyQuestionsWithEnt(ent)
 	end
 end
 
-function GM.ques.HandleQuestionEnd(id, TimeIsUp)
+function GM.ques.HandleQuestionEnd(id)
 	if not Questions[id] then return end
 	local q = Questions[id]
 	q.Callback(q.yn, q.Ent, q.Initiator, q.Target, unpack(q.Args))
