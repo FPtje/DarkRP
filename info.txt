@@ -1,0 +1,11 @@
+"AddonInfo"
+{
+	"name"				"Falco Prop Protection"
+	"version"			"standalone SVN"
+	"up_date"			"yesterday"
+	"author_name"			"(FPtje) Falco"
+	"author_email"			"fpeijnenburg@gmail.com"
+	"author_url"			"fptje.blogspot.com"
+	"info"				""
+	"override"			"0"
+}
