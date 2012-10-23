@@ -545,7 +545,7 @@ function meta:DoPropertyTax()
 
 	local numowned = self.OwnedNumz
 
-	if numowned <= 0 then return end
+	if not numowned or numowned <= 0 then return end
 
 	local price = 10
 	local tax = price * numowned + math.random(-5, 5)

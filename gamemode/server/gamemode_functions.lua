@@ -400,6 +400,7 @@ end
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
 	if ply:isArrested() then return false end
+	if weapon.PlayerUse == false then return false end
 	if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
 
 	if GAMEMODE.Config.license and not ply.DarkRPVars.HasGunlicense and not ply:GetTable().RPLicenseSpawn then

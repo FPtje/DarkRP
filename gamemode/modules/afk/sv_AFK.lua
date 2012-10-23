@@ -123,7 +123,7 @@ local function KillAFKTimer()
 end
 hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
 
-local function DamagePlayer(target, inflictor, attacker, damage, DmgInfo)
+local function DamagePlayer(target, DmgInfo)
 	if target:IsNPC() and IsValid(target.AFKPly) then
 		target.AFKPly:TakeDamageInfo(DmgInfo)
 	end

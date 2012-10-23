@@ -149,6 +149,7 @@ local function Agenda()
 
 		local AgendaText = ""
 		for k,v in pairs(team.GetPlayers(AgendaManager)) do
+			if not v.DarkRPVars then continue end
 			AgendaText = AgendaText .. (v.DarkRPVars.agenda or "")
 		end
 		draw.DrawText(string.gsub(string.gsub(AgendaText, "//", "\n"), "\\n", "\n"), "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)

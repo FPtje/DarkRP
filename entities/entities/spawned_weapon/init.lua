@@ -16,6 +16,7 @@ end
 
 
 function ENT:Use(activator, caller)
+	if self.PlayerUse == false then return end
 	local class = self.weaponclass
 	local weapon = ents.Create(class)
 

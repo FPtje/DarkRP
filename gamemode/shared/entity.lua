@@ -100,8 +100,8 @@ if CLIENT then
 		if type(self.DoorData.AllowedToOwn) == "string" and self.DoorData.AllowedToOwn ~= "" and self.DoorData.AllowedToOwn ~= ";" then
 			local names = {}
 			for a,b in pairs(string.Explode(";", self.DoorData.AllowedToOwn)) do
-				if IsValid(Player(b)) then
-					table.insert(names, Player(b):Nick())
+				if IsValid(Player(tonumber(b))) then
+					table.insert(names, Player(tonumber(b)):Nick())
 				end
 			end
 			ownerstr = ownerstr .. string.format(LANGUAGE.keys_other_allowed).. table.concat(names, "\n").."\n"

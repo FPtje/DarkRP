@@ -21,9 +21,6 @@ local function MayorOptns()
 								end, function() end ) end)
 					end
 				end
-				if #menu.Items == 0 then
-					menu:AddOption(LANGUAGE.noone_available, function() end)
-				end
 				menu:Open()
 			end
 
@@ -39,9 +36,6 @@ local function MayorOptns()
 								end, function() end ) end)
 					end
 				end
-				if #menu.Items == 0 then
-					menu:AddOption("Noone available", function() end)
-				end
 				menu:Open()
 			end
 
@@ -53,9 +47,6 @@ local function MayorOptns()
 					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("say /unwanted " .. tostring(ply:UserID())) end)
 					end
-				end
-				if #menu.Items == 0 then
-					menu:AddOption(LANGUAGE.noone_available, function() end)
 				end
 				menu:Open()
 			end
@@ -138,9 +129,6 @@ local function CPOptns()
 								end, function() end ) end)
 					end
 				end
-				if #menu.Items == 0 then
-					menu:AddOption(LANGUAGE.noone_available, function() end)
-				end
 				menu:Open()
 			end
 
@@ -156,9 +144,6 @@ local function CPOptns()
 								end, function() end ) end)
 					end
 				end
-				if #menu.Items == 0 then
-					menu:AddOption(LANGUAGE.noone_available, function() end)
-				end
 				menu:Open()
 			end
 
@@ -170,9 +155,6 @@ local function CPOptns()
 					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("say /unwanted " .. tostring(ply:UserID())) end)
 					end
-				end
-				if #menu.Items == 0 then
-					menu:AddOption(LANGUAGE.noone_available, function() end)
 				end
 				menu:Open()
 			end
@@ -337,9 +319,6 @@ function GM:MoneyTab()
 									end, function() end )
 							end)
 						end
-					end
-					if #menu.Items == 0 then
-						menu:AddOption(LANGUAGE.noone_available, function() end)
 					end
 					menu:Open()
 				end

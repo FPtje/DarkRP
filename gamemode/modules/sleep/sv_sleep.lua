@@ -122,7 +122,11 @@ AddChatCommand("/sleep", KnockoutToggle)
 AddChatCommand("/wake", KnockoutToggle)
 AddChatCommand("/wakeup", KnockoutToggle)
 
-local function DamageSleepers(ent, inflictor, attacker, amount, dmginfo)
+local function DamageSleepers(ent, dmginfo)
+	local inflictor = dmginfo:GetInflictor()
+	local attacker = dmginfo:GetAttacker()
+	local amount = dmginfo:GetDamage()
+
 	local ownerint = ent.OwnerINT
 	if ownerint and ownerint ~= 0 then
 		for k,v in pairs(player.GetAll()) do

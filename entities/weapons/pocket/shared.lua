@@ -106,6 +106,7 @@ function SWEP:PrimaryAttack()
 	phys:EnableMotion(false)
 	trace.Entity:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	trace.Entity.PhysgunPickup = false
+	trace.Entity.PlayerUse = false
 end
 
 function SWEP:SecondaryAttack()
@@ -145,6 +146,7 @@ function SWEP:SecondaryAttack()
 		umsg.Short(ent:EntIndex())
 	umsg.End()
 	ent.PhysgunPickup = nil
+	ent.PlayerUse = nil
 end
 
 SWEP.OnceReload = false
@@ -289,6 +291,7 @@ elseif SERVER then
 				phys:EnableMotion(true)
 				phys:Wake()
 			end
+			ent.PlayerUse = false
 		end
 	end
 	concommand.Add("_RPSpawnPocketItem", Spawn)
