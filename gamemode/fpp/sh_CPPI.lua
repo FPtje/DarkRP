@@ -35,8 +35,9 @@ end
 
 local ENTITY = FindMetaTable("Entity")
 function ENTITY:CPPIGetOwner()
-	if not IsValid(self.Owner) then return nil, CPPI.CPPI_NOTIMPLEMENTED end
-	return self.Owner, self.Owner:UniqueID()
+	local Owner = self.Owner
+	if not IsValid(Owner) or not Owner:IsPlayer() then return nil, CPPI.CPPI_NOTIMPLEMENTED end
+	return Owner, Owner:UniqueID()
 end
 
 if SERVER then
