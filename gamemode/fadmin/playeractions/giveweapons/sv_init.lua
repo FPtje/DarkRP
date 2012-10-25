@@ -10,7 +10,7 @@ local function GiveWeapon(ply, cmd, args)
 
 	local weapon = weapons.GetStored(args[2])
 	if table.HasValue(FAdmin.HL2Guns, args[2]) then weapon = args[2]
-	elseif weapon and weapon.Classname then weapon = weapon.Classname end
+	elseif weapon and weapon.ClassName then weapon = weapon.ClassName end
 
 	if not weapon then return end
 

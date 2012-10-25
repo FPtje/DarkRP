@@ -19,7 +19,7 @@ end
 
 function PANEL:PerformLayout()
 	self.Label:SizeToContents()
-	self.Label:SetFont("DefaultSmallDropShadow")
+	self.Label:SetFont("TabLarge")
 	self.Label:SetTextColor(color_white)
 	self.Label:SetContentAlignment(5)
 	self.Label:SetWide(self:GetWide())
