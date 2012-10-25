@@ -1,28 +1,28 @@
 include("_MySQL.lua")
-DB = {}
+FPPDB = {}
 
 if file.Exists("lua/includes/modules/gmsv_mysqloo.dll", "GAME") or file.Exists("lua/includes/modules/gmsv_mysqloo_i486.dll", "GAME") then
 	require("mysqloo")
 end
 
 local CONNECTED_TO_MYSQL = false
-DB.MySQLDB = nil
+FPPDB.MySQLDB = nil
 
-function DB.Begin()
+function FPPDB.Begin()
 	if not CONNECTED_TO_MYSQL then sql.Begin() end
 end
 
-function DB.Commit()
+function FPPDB.Commit()
 	if not CONNECTED_TO_MYSQL then sql.Commit() end
 end
 
-function DB.Query(query, callback)
+function FPPDB.Query(query, callback)
 	if CONNECTED_TO_MYSQL then
-		if DB.MySQLDB and DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED then
-			DB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
+		if FPPDB.MySQLDB and FPPDB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED then
+			FPPDB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
 		end
 
-		local query = DB.MySQLDB:query(query)
+		local query = FPPDB.MySQLDB:query(query)
 		local data
 		query.onData = function(Q, D)
 			data = data or {}
@@ -34,7 +34,7 @@ function DB.Query(query, callback)
 			if callback then
 				callback()
 			end
-			DB.Log("MySQL Error: ".. E)
+			FPPDB.Log("MySQL Error: ".. E)
 		end
 
 		query.onSuccess = function()
@@ -51,13 +51,13 @@ function DB.Query(query, callback)
 	return Result
 end
 
-function DB.QueryValue(query, callback)
+function FPPDB.QueryValue(query, callback)
 	if CONNECTED_TO_MYSQL then
-		if DB.MySQLDB and DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED then
-			DB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
+		if FPPDB.MySQLDB and FPPDB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED then
+			FPPDB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
 		end
 
-		local query = DB.MySQLDB:query(query)
+		local query = FPPDB.MySQLDB:query(query)
 		local data
 		query.onData = function(Q, D)
 			data = D
@@ -69,7 +69,7 @@ function DB.QueryValue(query, callback)
 			end
 			callback()
 		end
-		query.onError = function(Q, E) callback() DB.Log("MySQL Error: ".. E) ErrorNoHalt(E) end
+		query.onError = function(Q, E) callback() FPPDB.Log("MySQL Error: ".. E) ErrorNoHalt(E) end
 		query:start()
 		return
 	end
@@ -79,37 +79,37 @@ function DB.QueryValue(query, callback)
 	return val
 end
 
-function DB.ConnectToMySQL(host, username, password, database_name, database_port)
-	if not mysqloo then Error("MySQL modules aren't installed properly!") DB.Log("MySQL Error: MySQL modules aren't installed properly!") end
+function FPPDB.ConnectToMySQL(host, username, password, database_name, database_port)
+	if not mysqloo then Error("MySQL modules aren't installed properly!") FPPDB.Log("MySQL Error: MySQL modules aren't installed properly!") end
 	local databaseObject = mysqloo.connect(host, username, password, database_name, database_port)
 
 	databaseObject.onConnectionFailed = function(msg)
 		Error("Connection failed! " ..tostring(msg))
-		DB.Log("MySQL Error: Connection failed! "..tostring(msg))
+		FPPDB.Log("MySQL Error: Connection failed! "..tostring(msg))
 	end
 
 	databaseObject.onConnected = function()
-		DB.Log("MySQL: Connection to external database "..host.." succeeded!")
+		FPPDB.Log("MySQL: Connection to external database "..host.." succeeded!")
 		CONNECTED_TO_MYSQL = true
 
-		DB.Init() -- Initialize database
+		FPPDB.Init() -- Initialize database
 	end
 	databaseObject:connect()
-	DB.MySQLDB = databaseObject
+	FPPDB.MySQLDB = databaseObject
 end
 
 if FPP_MySQLConfig and FPP_MySQLConfig.EnableMySQL then
-	DB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
+	FPPDB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
 end
 
-function DB.Log(text)
-	if not DB.File then -- The log file of this session, if it's not there then make it!
+function FPPDB.Log(text)
+	if not FPPDB.File then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("FPP_logs", "DATA") then
 			file.CreateDir("FPP_logs")
 		end
-		DB.File = "FPP_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
-		file.Write(DB.File, os.date().. "\t".. text)
+		FPPDB.File = "FPP_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
+		file.Write(FPPDB.File, os.date().. "\t".. text)
 		return
 	end
-	file.Append(DB.File, "\n"..os.date().. "\t"..(text or ""))
+	file.Append(FPPDB.File, "\n"..os.date().. "\t"..(text or ""))
 end
