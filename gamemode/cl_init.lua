@@ -28,7 +28,7 @@ Names
 -- Make sure the client sees the RP name where they expect to see the name
 local pmeta = FindMetaTable("Player")
 
-pmeta.SteamName = pmeta.Name
+pmeta.SteamName = pmeta.SteamName or pmeta.Name
 function pmeta:Name()
 	if not self or not self.IsValid or not IsValid(self) then return "" end
 
@@ -601,7 +601,10 @@ local function InitializeDarkRPVars(len)
 	local vars = net.ReadTable()
 	if not vars then return end
 	ply.DarkRPVars = vars
-	varsReceived = true
+
+	-- RPnames don't always come through
+	-- Everyone has this variable set, regardless of whether they have a custom name
+	varsReceived = ply.DarkRPVars.rpname ~= nil
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 

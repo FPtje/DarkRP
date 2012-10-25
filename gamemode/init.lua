@@ -18,7 +18,7 @@ end
 -- RP Name Overrides
 
 local meta = FindMetaTable("Player")
-meta.SteamName = meta.Name
+meta.SteamName = meta.SteamName or meta.Name
 meta.Name = function(self)
 	if not IsValid(self) then return "" end
 	if GAMEMODE.Config.allowrpnames then
