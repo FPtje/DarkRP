@@ -616,7 +616,7 @@ function GM:PlayerSpawn(ply)
 		ply:SetRenderMode(RENDERMODE_TRANSALPHA)
 		ply:SetColor(Color(c.r, c.g, c.b, 100))
 		ply:SetCollisionGroup(COLLISION_GROUP_WORLD)
-		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime, 1, function()
+		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime or 0, 1, function()
 			if not IsValid(ply) or not ply.Babygod then return end
 			ply.Babygod = nil
 			ply:SetColor(Color(c.r, c.g, c.b, c.a))
