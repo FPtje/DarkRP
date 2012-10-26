@@ -604,7 +604,7 @@ local function InitializeDarkRPVars(len)
 
 	-- RPnames don't always come through
 	-- Everyone has this variable set, regardless of whether they have a custom name
-	varsReceived = ply.DarkRPVars.rpname ~= nil
+	varsReceived = ply.DarkRPVars ~= nil and ply.DarkRPVars.rpname ~= nil
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 
