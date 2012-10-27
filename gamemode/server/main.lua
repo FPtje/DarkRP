@@ -39,7 +39,7 @@ local function FireSpread(e)
 		else
 			local color = v:GetColor()
 			if (color.r - 51) >= 0 then color.r = color.r - 51 end
-			if (g - 51) >= 0 then g = g - 51 end
+			if (color.g - 51) >= 0 then color.g = color.g - 51 end
 			if (color.b - 51) >= 0 then color.b = color.b - 51 end
 			v:SetColor(color)
 			if (color.r + color.g + color.b) < 103 and math.random(1, 100) < 35 then

@@ -281,7 +281,22 @@ function GM:CanDrive(ply, ent)
 	return false -- Disabled until people can't minge with it anymore
 end
 
+local allowedProperty = {
+	remover = true,
+	ignite = true,
+	extinguish = true,
+	keepupright = true,
+	gravity = true,
+	collision = true
+}
 function GM:CanProperty(ply, property, ent)
+	if allowedProperty[property] and ent:CPPICanTool(ply, "remover") then
+		return true
+	end
+
+	if property == "persist" and ply:IsSuperAdmin() then
+		return true
+	end
 	GAMEMODE:Notify(ply, 1, 4, "Property disabled for now.")
 	return false -- Disabled until antiminge measure is found
 end
