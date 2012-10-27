@@ -86,6 +86,12 @@ function GM:PlayerSpawnProp(ply, model)
 end
 
 function GM:PlayerSpawnSENT(ply, model)
+	if GAMEMODE.Config.adminsents then
+		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnsent"))
+			return
+		end
+	end
 	return self.BaseClass:PlayerSpawnSENT(ply, model) and not ply:isArrested()
 end
 
@@ -602,6 +608,7 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 function GM:PlayerSpawn(ply)
+	self.BaseClass:PlayerSpawn(ply)
 	ply:CrosshairEnable()
 	ply:UnSpectate()
 	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
@@ -672,7 +679,6 @@ function GM:PlayerSpawn(ply)
 	ply:SetPos(pos)
 
 	ply:AllowFlashlight(true)
-	self.BaseClass:PlayerSpawn(ply)
 	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned")
 end
 

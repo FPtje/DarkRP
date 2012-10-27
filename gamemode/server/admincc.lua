@@ -433,7 +433,7 @@ end
 concommand.Add("rp_setsalary", ccSetSalary)
 
 local function ccSENTSPawn(ply, cmd, args)
-	if not GAMEMODE.Config.adminsents then
+	if GAMEMODE.Config.adminsents then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnsent"))
 			return
@@ -445,7 +445,7 @@ end
 concommand.Add("gm_spawnsent", ccSENTSPawn)
 
 local function ccVehicleSpawn(ply, cmd, args)
-	if not GAMEMODE.Config.adminvehicles then
+	if GAMEMODE.Config.adminvehicles then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnvehicle"))
 			return
@@ -457,7 +457,7 @@ end
 concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
 
 local function ccNPCSpawn(ply, cmd, args)
-	if not GAMEMODE.Config.adminnpcs then
+	if GAMEMODE.Config.adminnpcs then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnnpc"))
 			return
