@@ -13,7 +13,7 @@ function GM:AddTeamCommands(CTeam, max)
 		end
 	end
 
-	if CTeam.Vote then
+	if CTeam.vote then
 		AddChatCommand("/vote"..CTeam.command, function(ply)
 			if type(CTeam.NeedToChangeFrom) == "number" and ply:Team() ~= CTeam.NeedToChangeFrom then
 				GAMEMODE:Notify(ply, 1,4, string.format(LANGUAGE.need_to_be_before, team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
@@ -107,7 +107,7 @@ function GM:AddTeamCommands(CTeam, max)
 			return
 		end
 
-		if CTeam.Vote then
+		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 				ply:PrintMessage(2, string.format(LANGUAGE.need_admin, cmd))
 				return

@@ -536,16 +536,16 @@ function GM:JobsTab()
 
 				if nodude then
 					local weps = "no extra weapons"
-					if #v.Weapons > 0 then
-						weps = table.concat(v.Weapons, "\n")
+					if #v.weapons > 0 then
+						weps = table.concat(v.weapons, "\n")
 					end
-					if v.Vote then
+					if v.vote then
 						local condition = ((v.admin == 0 and LocalPlayer():IsAdmin()) or (v.admin == 1 and LocalPlayer():IsSuperAdmin()) or LocalPlayer().DarkRPVars["Priv"..v.command])
-						if not v.model or not v.name or not v.Des or not v.command then chat.AddText(Color(255,0,0,255), "Incorrect team! Fix your shared.lua!") return end
-						AddIcon(v.model, v.name, v.Des, weps, "/vote"..v.command, condition, "/"..v.command)
+						if not v.model or not v.name or not v.description or not v.command then chat.AddText(Color(255,0,0,255), "Incorrect team! Fix your shared.lua!") return end
+						AddIcon(v.model, v.name, v.description, weps, "/vote"..v.command, condition, "/"..v.command)
 					else
-						if not v.model or not v.name or not v.Des or not v.command then chat.AddText(Color(255,0,0,255), "Incorrect team! Fix your shared.lua!") return end
-						AddIcon(v.model, v.name, v.Des, weps, "/"..v.command)
+						if not v.model or not v.name or not v.description or not v.command then chat.AddText(Color(255,0,0,255), "Incorrect team! Fix your shared.lua!") return end
+						AddIcon(v.model, v.name, v.description, weps, "/"..v.command)
 					end
 				end
 			end

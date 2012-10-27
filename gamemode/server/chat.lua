@@ -4,7 +4,7 @@ function AddChatCommand(cmd, callback, prefixconst)
 	for k,v in pairs(ChatCommands) do
 		if cmd == v.cmd then return end
 	end
-	ChatCommands[string.lower( cmd )] = {
+	ChatCommands[string.lower(cmd)] = {
 		cmd = cmd,
 		callback = callback,
 		prefixconst = prefixconst,

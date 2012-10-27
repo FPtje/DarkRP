@@ -694,7 +694,7 @@ function GM:PlayerLoadout(ply)
 	end
 
 	if not RPExtraTeams[Team] then return end
-	for k,v in pairs(RPExtraTeams[Team].Weapons) do
+	for k,v in pairs(RPExtraTeams[Team].weapons) do
 		ply:Give(v)
 	end
 

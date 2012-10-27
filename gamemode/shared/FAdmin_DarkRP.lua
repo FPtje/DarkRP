@@ -282,7 +282,7 @@ hook.Add("InitPostEntity", "FAdmin_DarkRP_privs", function()
 	FAdmin.Access.AddPrivilege("rp_phys", 2)
 	FAdmin.Access.AddPrivilege("rp_prop", 2)
 	for k,v in pairs(RPExtraTeams) do
-		if v.Vote then
+		if v.vote then
 			FAdmin.Access.AddPrivilege("rp_"..v.command, (v.admin or 0) + 2) -- Add privileges for the teams that are voted for
 		end
 	end

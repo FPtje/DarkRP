@@ -279,7 +279,7 @@ function meta:ChangeTeam(t, force)
 	if self.DarkRPVars.HasGunlicense then
 		self:SetDarkRPVar("HasGunlicense", false)
 	end
-	if TEAM.Haslicense and GAMEMODE.Config.license then
+	if TEAM.hasLicense and GAMEMODE.Config.license then
 		self:SetDarkRPVar("HasGunlicense", true)
 	end
 

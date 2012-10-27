@@ -1,4 +1,4 @@
-NEWS: I've MERGED THE BETA BRANCH WITH MASTER!, SWITCH TO MASTER!(10-23-2012)
+NEWS: (10-27-2012) CUSTOM TEAM/SHIPMENT/ENTITY SYNTAX CHANGED. STILL COMPATIBLE WITH OLDER SYNTAX. YOUR CUSTOM FILES CHANGED.
 ======
 
 Please try to use the git protocol instead of SVN to get access to DarkRP. GitHub has a very nice program for it:
