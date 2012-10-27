@@ -656,6 +656,7 @@ function GM:PlayerSpawn(ply)
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
 
+	ply:AllowFlashlight(true)
 	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned")
 end
 
