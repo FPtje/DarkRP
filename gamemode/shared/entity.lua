@@ -100,7 +100,7 @@ if CLIENT then
 		if type(self.DoorData.AllowedToOwn) == "string" and self.DoorData.AllowedToOwn ~= "" and self.DoorData.AllowedToOwn ~= ";" then
 			local names = {}
 			for a,b in pairs(string.Explode(";", self.DoorData.AllowedToOwn)) do
-				if IsValid(Player(tonumber(b))) then
+				if b ~= "" and IsValid(Player(tonumber(b))) then
 					table.insert(names, Player(tonumber(b)):Nick())
 				end
 			end
