@@ -858,7 +858,7 @@ function GM:InitPostEntity()
 	game.ConsoleCommand("sv_allowcslua 1\n")
 	game.ConsoleCommand("sv_airaccellerate 100\n")
 
-	for k, v in pairs( ents.GetAll() ) do
+	for k, v in pairs(ents.GetAll()) do
 		local class = v:GetClass()
 		if GAMEMODE.Config.unlockdoorsonstart and v:IsDoor() then
 			v:Fire("unlock", "", 0)

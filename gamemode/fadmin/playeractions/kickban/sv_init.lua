@@ -113,7 +113,11 @@ local function Ban(ply, cmd, args)
 	local stage = string.lower(args[2])
 	local Reason = args[4] or ply.FAdminKickReason or ""
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Ban", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if (type(target) == "string" and not FAdmin.Access.PlayerHasPrivilege(ply, "Ban")) or
+		not FAdmin.Access.PlayerHasPrivilege(ply, "Ban", target) then
+			FAdmin.Messages.SendMessage(ply, 5, "No access!")
+			return
+		end
 		if stage == "start" and type(target) ~= "string" and IsValid(target) then
 			SendUserMessage("FAdmin_ban_start", target) -- Tell him he's getting banned
 			target:Lock() -- Make sure he can't remove the hook clientside and keep minging.
