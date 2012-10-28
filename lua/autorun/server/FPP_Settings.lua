@@ -203,7 +203,7 @@ local function RetrieveBlocked()
 				table.insert(FPP.Blocked[v.var], v.setting)
 			end
 		else
-			data = FPPDB.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")
+			data = FPPDB.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")
 			FPP.Blocked.Physgun1 = {
 				"func_breakable_surf",
 				"func_brush",
