@@ -330,7 +330,7 @@ local time2 = false
 local function OwnDoor(ply)
 	if time2 then return "" end
 	time2 = true
-	timer.Simple(0.1, function()  time2 = false end)
+	timer.Simple(0.1, function() time2 = false end)
 	local team = ply:Team()
 	local trace = ply:GetEyeTrace()
 
