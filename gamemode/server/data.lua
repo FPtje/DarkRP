@@ -621,6 +621,7 @@ function DB.AddTeamSpawnPos(t, pos)
 	DB.Query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. sql.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
 		, function()
 		DB.QueryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. sql.SQLStr(map) .. [[ AND type = "T";]], function(id)
+			if type(id) == "boolean" then return end
 			DB.Query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
 			table.insert(DB.TeamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
 		end)
