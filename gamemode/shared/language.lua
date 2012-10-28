@@ -226,8 +226,7 @@ Type /unwanted [Nick|SteamID|Status ID] to clear the suspect
 Type /jailpos to set the jail position
 Type /cophelp to toggle this menu, /x to close it]],
 
-	mayorhelp = [[Type /proplympics to organise Propylympics!
-Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.
+	mayorhelp = [[Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.
 Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect.
 Type /unwanted [Nick|SteamID|Status ID] to clear the suspect.
 Type /lockdown to initiate a lockdown
@@ -252,7 +251,7 @@ Typing /mobbosshelp toggles this menu, /x closes it]],
 
 	hints =
 	-- English hints:
-	{"As mayor, organize proplympics with /proplympics in chat!",
+	{
 	"Roleplay according to the server rules!",
 	"You can be arrested for buying or owning an illegal weapon!",
 	"Type /sleep to fall asleep.",
@@ -1423,7 +1422,6 @@ rp_languages.french = {
 	-- French hints:
 	{"Le RP s'accorde aux règles du serveur !",
 	"Tapez /rpname <nom> pour choisir votre nom RP.",
-	"En tant que maire, organiser des proplympics avec /proplympics dans le chat !",
 	"Vous pouvez être arreté pour l'achat illégal d'une arme !",
 	"Tapez /sleep pour dormir et de nouveau /sleep pour vous réveiller.",
 	"Vous pouvez acheter un pistolet, mais ne l'utilisez qu'en légitime défense.",

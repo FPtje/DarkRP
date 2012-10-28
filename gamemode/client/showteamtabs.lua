@@ -76,12 +76,6 @@ local function MayorOptns()
 				LocalPlayer():ConCommand("say /givelicense")
 			end
 
-			local Proplympics = maypanel:Add("DButton")
-			Proplympics:SetText("Organize proplympics!")
-			Proplympics.DoClick = function()
-				LocalPlayer():ConCommand("say /proplympics")
-			end
-
 			local PlaceLaws = maypanel:Add("DButton")
 			PlaceLaws:SetText("Place a screen containing the laws.")
 			PlaceLaws.DoClick = function()

@@ -111,8 +111,6 @@ GM.Config.ooc 							= true
 GM.Config.pocket 						= true
 -- propertytax - Enable/disable property tax.
 GM.Config.propertytax 					= false
--- proplympics - Allow/Disallow the mayor to start proplympics races.
-GM.Config.proplympics 					= false
 -- proppaying - Whether or not players should pay for spawning props.
 GM.Config.proppaying 					= false
 -- propspawning - Enable/disable props spawning for non-admins.
