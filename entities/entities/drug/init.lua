@@ -18,7 +18,7 @@ local function DrugPlayer(ply)
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
 
 	local IDSteam = ply:UniqueID()
-	if not timer.IsTimer(IDSteam.."DruggedHealth") and not timer.IsTimer(IDSteam) then
+	if not timer.Exists(IDSteam.."DruggedHealth") and not timer.Exists(IDSteam) then
 		ply:SetHealth(ply:Health() + 100)
 		timer.Create(IDSteam.."DruggedHealth", 60/(100 + 5), 100 + 5, function()
 			if IsValid(ply) then ply:SetHealth(ply:Health() - 1) end
