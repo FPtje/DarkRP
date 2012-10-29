@@ -80,6 +80,10 @@ function GM:PlayerSpawnProp(ply, model)
 	model = string.gsub(tostring(model), "\\", "/")
 	model = string.gsub(tostring(model), "//", "/")
 
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSpawnProp then
+		RPExtraTeams[ply:Team()].PlayerSpawnProp(ply, model)
+	end
+
 	if not allowed then return false end
 
 	return self.BaseClass:PlayerSpawnProp(ply, model)
@@ -180,11 +184,17 @@ function GM:EntityRemoved(ent)
 end
 
 function GM:ShowSpare1(ply)
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare1 then
+		return RPExtraTeams[ply:Team()].ShowSpare1(ply)
+	end
 	umsg.Start("ToggleClicker", ply)
 	umsg.End()
 end
 
 function GM:ShowSpare2(ply)
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare2 then
+		return RPExtraTeams[ply:Team()].ShowSpare2(ply)
+	end
 	umsg.Start("ChangeJobVGUI", ply)
 	umsg.End()
 end
@@ -279,6 +289,10 @@ function GM:CanPlayerSuicide(ply)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide"))
 		return false
 	end
+
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].CanPlayerSuicide then
+		return RPExtraTeams[ply:Team()].CanPlayerSuicide(ply)
+	end
 	return true
 end
 
@@ -315,6 +329,10 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
 end
 
 function GM:PlayerDeath(ply, weapon, killer)
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDeath then
+		RPExtraTeams[ply:Team()].PlayerDeath(ply, weapon, killer)
+	end
+
 	if GAMEMODE.Config.deathblack then
 		local RP = RecipientFilter()
 		RP:RemoveAllPlayers()
@@ -431,6 +449,10 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 		end
 		return false
 	end
+
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerCanPickupWeapon then
+		RPExtraTeams[ply:Team()].PlayerCanPickupWeapon(ply, weapon)
+	end
 	return true
 end
 
@@ -446,6 +468,10 @@ end
 concommand.Add("_rp_ChosenModel", SetPlayerModel)
 
 function GM:PlayerSetModel(ply)
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSetModel then
+		return RPExtraTeams[ply:Team()].PlayerSetModel(ply)
+	end
+
 	local EndModel = ""
 	if GAMEMODE.Config.enforceplayermodel then
 		local TEAM = RPExtraTeams[ply:Team()]
@@ -552,6 +578,11 @@ concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 
 function GM:PlayerSelectSpawn(ply)
 	local spawn = self.BaseClass:PlayerSelectSpawn(ply)
+
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSelectSpawn then
+		RPExtraTeams[ply:Team()].PlayerSelectSpawn(ply, spawn)
+	end
+
 	local POS
 	if spawn.GetPos then
 		POS = spawn:GetPos()
@@ -679,6 +710,10 @@ function GM:PlayerSpawn(ply)
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
 
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSpawn then
+		RPExtraTeams[ply:Team()].PlayerSpawn(ply)
+	end
+
 	ply:AllowFlashlight(true)
 	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned")
 end
@@ -722,11 +757,15 @@ function GM:PlayerLoadout(ply)
 		ply:Give(v)
 	end
 
+	if RPExtraTeams[ply:Team()].PlayerLoadout then
+		RPExtraTeams[ply:Team()].PlayerLoadout(ply)
+	end
+
 	-- Switch to prefered weapon if they have it
 	local cl_defaultweapon = ply:GetInfo("cl_defaultweapon")
 
-	if ply:HasWeapon( cl_defaultweapon ) then
-		ply:SelectWeapon( cl_defaultweapon )
+	if ply:HasWeapon(cl_defaultweapon) then
+		ply:SelectWeapon(cl_defaultweapon)
 	end
 end
 
@@ -785,6 +824,10 @@ function GM:PlayerDisconnected(ply)
 
 	ply:UnownAll()
 	DB.Log(ply:SteamName().." ("..ply:SteamID()..") disconnected", nil, Color(0, 130, 255))
+
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
+		RPExtraTeams[ply:Team()].PlayerDisconnected(ply)
+	end
 end
 
 local function PlayerDoorCheck()

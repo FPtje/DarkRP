@@ -246,7 +246,7 @@ function meta:ChangeTeam(t, force)
 	end
 
 	local TEAM = RPExtraTeams[t]
-	if not TEAM then return end
+	if not TEAM then return false end
 
 	if TEAM.customCheck and not TEAM.customCheck(self) then
 		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
@@ -317,6 +317,13 @@ function meta:ChangeTeam(t, force)
 			if IsValid(ent) then
 				ent:Remove()
 			end
+		end
+	end
+
+	if TEAM.PlayerChangeTeam then
+		local val = TEAM.PlayerChangeTeam(self, self:Team(), t)
+		if val ~= nil then
+			return val
 		end
 	end
 
