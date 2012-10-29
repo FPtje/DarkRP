@@ -332,16 +332,6 @@ function GM:PlayerDeath(ply, weapon, killer)
 
 	if weapon:IsVehicle() and weapon:GetDriver():IsPlayer() then killer = weapon:GetDriver() end
 
-	local KillerName = (killer:IsPlayer() and killer:Nick()) or killer:GetClass()
-	if KillerName == "prop_physics" then
-		KillerName = killer.Owner and killer.Owner:Nick() or "unknown"
-	end
-	local WeaponName = (IsValid(weapon) and (weapon:IsPlayer() and IsValid(weapon:GetActiveWeapon()) and weapon:GetActiveWeapon():GetClass()) or weapon:GetClass()) or "unknown"
-	if WeaponName == "prop_physics" then
-		WeaponName = weapon:GetClass() .. " (" .. weapon:GetModel() or "unknown" .. ")"
-	end
-	ServerLog(ply:Nick().." was killed by "..KillerName.." with " .. WeaponName)
-
 	if GAMEMODE.Config.showdeaths then
 		self.BaseClass:PlayerDeath(ply, weapon, killer)
 	end
@@ -375,7 +365,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		end
 	end
 
-	if GAMEMODE.Config.dmautokick and killer and killer:IsPlayer() and killer ~= ply then
+	if GAMEMODE.Config.dmautokick and IsValid(killer) and killer:IsPlayer() and killer ~= ply then
 		if not killer.kills or killer.kills == 0 then
 			killer.kills = 1
 			timer.Simple(GAMEMODE.Config.dmgracetime, function() if IsValid(killer) and killer:IsPlayer() then killer:ResetDMCounter(killer) end end)
@@ -414,9 +404,20 @@ function GM:PlayerDeath(ply, weapon, killer)
 		end
 		ply.Pocket = nil
 	end
-	if weapon:IsPlayer() then weapon = weapon:GetActiveWeapon() killer = killer:SteamName() if ( !weapon || weapon == NULL ) then weapon = killer else weapon = weapon:GetClass() end end
-	if killer == ply then killer = "Himself" weapon = "suicide trick" end
-	DB.Log(ply:SteamName() .. " was killed by "..tostring(killer) .. " with a "..tostring(weapon), nil, Color(255, 190, 0))
+
+	local KillerName = (killer:IsPlayer() and killer:Nick()) or tostring(killer)
+
+	local WeaponName = (IsValid(weapon) and (weapon:IsPlayer() and IsValid(weapon:GetActiveWeapon()) and weapon:GetActiveWeapon():GetClass()) or weapon:GetClass()) or "unknown"
+	if weapon:GetClass() == "prop_physics" then
+		WeaponName = weapon:GetClass() .. " (" .. weapon:GetModel() or "unknown" .. ")"
+	end
+
+	if killer == ply then
+		KillerName = "Himself"
+		WeaponName = "suicide trick"
+	end
+
+	DB.Log(ply:SteamName() .. " was killed by " .. KillerName .. " with a " .. WeaponName, nil, Color(255, 190, 0))
 end
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
