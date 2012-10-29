@@ -270,6 +270,13 @@ function meta:ChangeTeam(t, force)
 		end
 	end
 
+	if TEAM.PlayerChangeTeam then
+		local val = TEAM.PlayerChangeTeam(self, self:Team(), t)
+		if val ~= nil then
+			return val
+		end
+	end
+
 	if self:Team() == TEAM_MAYOR and tobool(GetConVarNumber("DarkRP_LockDown")) then
 		GAMEMODE:UnLockdown(self)
 	end
@@ -317,13 +324,6 @@ function meta:ChangeTeam(t, force)
 			if IsValid(ent) then
 				ent:Remove()
 			end
-		end
-	end
-
-	if TEAM.PlayerChangeTeam then
-		local val = TEAM.PlayerChangeTeam(self, self:Team(), t)
-		if val ~= nil then
-			return val
 		end
 	end
 
