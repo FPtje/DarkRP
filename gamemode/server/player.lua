@@ -349,10 +349,11 @@ end
 
 function meta:UpdateJob(job)
 	self:SetDarkRPVar("job", job)
-	self:GetTable().Pay = 1
-	self:GetTable().LastPayDay = CurTime()
 
-	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function() self:PayDay() end)
+	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
+		if not IsValid(self) then return end
+		self:PayDay()
+	end)
 end
 
 /*---------------------------------------------------------
@@ -370,7 +371,7 @@ function meta:AddMoney(amount)
 end
 
 function meta:PayDay()
-	if not IsValid(self) or self:GetTable().Pay ~= 1 then return end
+	if not IsValid(self) then return end
 	if not self:isArrested() then
 		DB.RetrieveSalary(self, function(amount)
 			amount = math.floor(amount or GAMEMODE.Config.normalsalary)
