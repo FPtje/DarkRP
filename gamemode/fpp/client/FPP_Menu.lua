@@ -1078,11 +1078,11 @@ function FPP.SharedMenu(um)
 		end
 		box:SizeToContents()
 	end
-	AddChk("Physgun", "SharePhysgun", um:ReadBool())
-	AddChk("Gravgun", "ShareGravgun", um:ReadBool())
-	AddChk("Use", "SharePlayerUse", um:ReadBool())
-	AddChk("Damage", "ShareEntityDamage", um:ReadBool())
-	AddChk("Toolgun", "ShareToolgun", um:ReadBool())
+	AddChk("Physgun", "SharePhysgun1", um:ReadBool())
+	AddChk("Gravgun", "ShareGravgun1", um:ReadBool())
+	AddChk("Use", "SharePlayerUse1", um:ReadBool())
+	AddChk("Damage", "ShareEntityDamage1", um:ReadBool())
+	AddChk("Toolgun", "ShareToolgun1", um:ReadBool())
 
 	local long = um:ReadLong()
 	local SharedWith = {}
