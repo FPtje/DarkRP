@@ -147,6 +147,13 @@ local function RemoveBlockedModel(ply, cmd, args)
 end
 concommand.Add("FPP_RemoveBlockedModel", RemoveBlockedModel)
 
+local allowedShares = {
+	SharePhysgun1 = true,
+	ShareGravgun1 = true,
+	SharePlayerUse1 = true,
+	ShareEntityDamage1 = true,
+	ShareToolgun1 = true
+}
 local function ShareProp(ply, cmd, args)
 	if not args[1] or not IsValid(Entity(args[1])) or not args[2] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	local ent = Entity(args[1])
@@ -156,10 +163,14 @@ local function ShareProp(ply, cmd, args)
 		return
 	end
 
-	if not IsValid(Player(args[2])) then -- This is for sharing prop per utility
+	if not tonumber(args[2]) or not IsValid(Player(tonumber(args[2]))) then -- This is for sharing prop per utility
+		if not allowedShares[args[2]] then
+			FPP.Notify(ply, "Argument(s) invalid", false)
+			return
+		end
 		ent[args[2]] = util.tobool(args[3])
 	else -- This is for sharing prop per player
-		local target = Player(args[2])
+		local target = Player(tonumber(args[2]))
 		local toggle = util.tobool(args[3])
 		if not ent.AllowedPlayers and toggle then -- Make the table if it isn't there
 			ent.AllowedPlayers = {target}
