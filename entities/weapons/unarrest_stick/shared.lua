@@ -68,6 +68,7 @@ end
 
 usermessage.Hook("StunStickColour", function(um)
 	local viewmodel = LocalPlayer():GetViewModel()
+	if not IsValid(viewmodel) then return end
 	local r,g,b,a = um:ReadLong(), um:ReadLong(), um:ReadLong(), 255
 	viewmodel:SetColor(Color(r,g,b,a))
 	viewmodel:SetMaterial(um:ReadString())
