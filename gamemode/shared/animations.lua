@@ -128,6 +128,8 @@ usermessage.Hook("anim_keys", KeysAnims)
 local function CustomAnimation(um)
 	local ply = um:ReadEntity()
 	local act = um:ReadShort()
+
+	if not IsValid(ply) then return end
 	ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
 end
 usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
