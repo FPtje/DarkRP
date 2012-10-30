@@ -73,7 +73,7 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 
 	local Usergroup = ply:GetNWString("usergroup")
 
-	if FAdmin.GlobalSetting.Immunity and IsValid(target) and target ~= ply and FAdmin.Access.Groups[Usergroup] and
+	if FAdmin.GlobalSetting.Immunity and type(target) ~= "string" and IsValid(target) and target ~= ply and FAdmin.Access.Groups[Usergroup] and
 	FAdmin.Access.Groups[target:GetNWString("usergroup")] and FAdmin.Access.Groups[target:GetNWString("usergroup")].ADMIN >= FAdmin.Access.Groups[Usergroup].ADMIN then
 		return false
 	end
