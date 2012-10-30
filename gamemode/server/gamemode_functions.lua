@@ -278,15 +278,15 @@ end
 
 function GM:CanPlayerSuicide(ply)
 	if ply.IsSleeping then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide"))
+		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
 		return false
 	end
 	if ply:isArrested() then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide"))
+		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
 		return false
 	end
 	if GAMEMODE.Config.wantedsuicide and ply.DarkRPVars.wanted then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide"))
+		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
 		return false
 	end
 
