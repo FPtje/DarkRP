@@ -1,5 +1,5 @@
 FPP = FPP or {}
-FPP.DisconnectedPlayers = {}
+FPP.DisconnectedPlayers = FPP.DisconnectedPlayers or {}
 
 
 /*---------------------------------------------------------------------------

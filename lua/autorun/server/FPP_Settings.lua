@@ -12,21 +12,21 @@ if not BlockedModelsExist then
 	include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models
 end
 
-FPP.Blocked = {}
-	FPP.Blocked.Physgun1 = {}
-	FPP.Blocked.Spawning1 = {}
-	FPP.Blocked.Gravgun1 = {}
-	FPP.Blocked.Toolgun1 = {}
-	FPP.Blocked.PlayerUse1 = {}
-	FPP.Blocked.EntityDamage1 = {}
+FPP.Blocked = FPP.Blocked or {}
+	FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
+	FPP.Blocked.Spawning1 = FPP.Blocked.Spawning1 or {}
+	FPP.Blocked.Gravgun1 = FPP.Blocked.Gravgun1 or {}
+	FPP.Blocked.Toolgun1 = FPP.Blocked.Toolgun1 or {}
+	FPP.Blocked.PlayerUse1 = FPP.Blocked.PlayerUse1 or {}
+	FPP.Blocked.EntityDamage1 = FPP.Blocked.EntityDamage1 or {}
 
-FPP.BlockedModels = {}
+FPP.BlockedModels = FPP.BlockedModels or {}
 
-FPP.RestrictedTools = {}
-FPP.RestrictedToolsPlayers = {}
+FPP.RestrictedTools = FPP.RestrictedTools or {}
+FPP.RestrictedToolsPlayers = FPP.RestrictedToolsPlayers or {}
 
-FPP.Groups = {}
-FPP.GroupMembers = {}
+FPP.Groups = FPP.Groups or {}
+FPP.GroupMembers = FPP.GroupMembers or {}
 
 function FPP.Notify(ply, text, bool)
 	if ply:EntIndex() == 0 then
