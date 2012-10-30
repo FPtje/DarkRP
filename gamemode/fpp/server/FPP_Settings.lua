@@ -1,20 +1,32 @@
 FPP = FPP or {}
 
-FPP.Blocked = {}
-	FPP.Blocked.Physgun1 = {}
-	FPP.Blocked.Spawning1 = {}
-	FPP.Blocked.Gravgun1 = {}
-	FPP.Blocked.Toolgun1 = {}
-	FPP.Blocked.PlayerUse1 = {}
-	FPP.Blocked.EntityDamage1 = {}
+include("FPP_MySQLCore.lua")
 
-FPP.BlockedModels = {}
+AddCSLuaFile("autorun/client/fpp_menu.lua")
+AddCSLuaFile("autorun/client/fpp_hud.lua")
+AddCSLuaFile("autorun/client/fpp_buddies.lua")
+AddCSLuaFile("autorun/sh_cppi.lua")
+AddCSLuaFile("autorun/sh_settings.lua")
 
-FPP.RestrictedTools = {}
-FPP.RestrictedToolsPlayers = {}
+if not BlockedModelsExist then
+	include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models
+end
 
-FPP.Groups = {}
-FPP.GroupMembers = {}
+FPP.Blocked = FPP.Blocked or {}
+	FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
+	FPP.Blocked.Spawning1 = FPP.Blocked.Spawning1 or {}
+	FPP.Blocked.Gravgun1 = FPP.Blocked.Gravgun1 or {}
+	FPP.Blocked.Toolgun1 = FPP.Blocked.Toolgun1 or {}
+	FPP.Blocked.PlayerUse1 = FPP.Blocked.PlayerUse1 or {}
+	FPP.Blocked.EntityDamage1 = FPP.Blocked.EntityDamage1 or {}
+
+FPP.BlockedModels = FPP.BlockedModels or {}
+
+FPP.RestrictedTools = FPP.RestrictedTools or {}
+FPP.RestrictedToolsPlayers = FPP.RestrictedToolsPlayers or {}
+
+FPP.Groups = FPP.Groups or {}
+FPP.GroupMembers = FPP.GroupMembers or {}
 
 function FPP.Notify(ply, text, bool)
 	if ply:EntIndex() == 0 then
