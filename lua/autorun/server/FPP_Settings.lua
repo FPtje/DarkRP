@@ -625,7 +625,7 @@ concommand.Add("FPP_SendRestrictTool", SendRestrictedTools)
 --Buddies!
 local function SetBuddy(ply, cmd, args)
 	if not args[6] then FPP.Notify(ply, "Argument(s) invalid", false) return end
-	local buddy = Player(args[1])
+	local buddy = tonumber(args[1]) and Player(tonumber(args[1]))
 	if not IsValid(buddy) then FPP.Notify(ply, "Player invalid", false) return end
 
 	ply.Buddies = ply.Buddies or {}
@@ -645,7 +645,9 @@ local function CleanupDisconnected(ply, cmd, args)
 		end
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed all disconnected players' props", true)
 		return
-	elseif not IsValid(Player(args[1])) then FPP.Notify(ply, "Invalid player", false) return
+	elseif not tonumber(args[1]) or not IsValid(Player(tonumber(args[1]))) then
+		FPP.Notify(ply, "Invalid player", false)
+		return
 	end
 
 	for k,v in pairs(ents.GetAll()) do
