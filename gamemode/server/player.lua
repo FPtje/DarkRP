@@ -159,7 +159,10 @@ end
 function meta:TeamBan(t)
 	if not self.bannedfrom then self.bannedfrom = {} end
 	self.bannedfrom[t or self:Team()] = 1
-	timer.Simple(GAMEMODE.Config.demotetime, function() self:TeamUnBan(self:Team()) end)
+	timer.Simple(GAMEMODE.Config.demotetime, function()
+		if not IsValid(self) then return end
+		self:TeamUnBan(self:Team())
+	end)
 end
 
 function meta:CompleteSentence()
@@ -176,7 +179,10 @@ function meta:NewData()
 	if not IsValid(self) then return end
 
 	-- Restoring data delayed the player handle will not be valid on the player otherwise
-	timer.Simple(5, function() self:RestorePlayerData() end)
+	timer.Simple(5, function()
+		if not IsValid(self) then return end
+		self:RestorePlayerData()
+	end)
 
 	self:InitiateTax()
 
