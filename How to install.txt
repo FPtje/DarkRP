@@ -1,4 +1,6 @@
-Put the DarkRP folder in garrysmod/gamemodes
+Put the darkrp folder in garrysmod/gamemodes
+
+Note: The darkrp must be full lowercase or will result in the gamemode not being found
 
 IF YOU PUT DARKRP IN ADDONS IT WON'T WORK!
 
