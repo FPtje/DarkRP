@@ -2,16 +2,6 @@ FPP = FPP or {}
 
 include("FPP_MySQLCore.lua")
 
-AddCSLuaFile("autorun/client/fpp_menu.lua")
-AddCSLuaFile("autorun/client/fpp_hud.lua")
-AddCSLuaFile("autorun/client/fpp_buddies.lua")
-AddCSLuaFile("autorun/sh_cppi.lua")
-AddCSLuaFile("autorun/sh_settings.lua")
-
-if not BlockedModelsExist then
-	include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models
-end
-
 FPP.Blocked = FPP.Blocked or {}
 	FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
 	FPP.Blocked.Spawning1 = FPP.Blocked.Spawning1 or {}
