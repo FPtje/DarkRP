@@ -604,37 +604,8 @@ function GM:PlayerSelectSpawn(ply)
 		POS = DB.RetrieveJailPos() or ply:GetTable().DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
 	end
 
-	if not GAMEMODE:IsEmpty(POS, {ply}) then
-		for i = 40, 600, 30 do
-			if GAMEMODE:IsEmpty(POS + Vector(i, 0, 0), {ply}) and GAMEMODE:IsEmpty(POS + Vector(i + 20, 0, 0), {ply}) then
-				return spawn, POS + Vector(i, 0, 0)
-			end
-		end
-
-
-		for i = 40, 600, 30 do
-			if GAMEMODE:IsEmpty(POS + Vector(0, i, 0), {ply}) and GAMEMODE:IsEmpty(POS + Vector(0, i + 20, 0), {ply}) then
-				return spawn, POS + Vector(0, i, 0)
-			end
-		end
-
-
-		for i = 40, 600, 30 do
-			if GAMEMODE:IsEmpty(POS + Vector(0, -i, 0), {ply}) and GAMEMODE:IsEmpty(POS + Vector(0, -i - 20, 0), {ply}) then
-				return spawn, POS + Vector(0, -i, 0)
-			end
-		end
-
-
-		for i = 40, 600, 30 do
-			if GAMEMODE:IsEmpty(POS + Vector(-i, 0, 0), {ply}) and GAMEMODE:IsEmpty(POS + Vector(-i - 20, 0, 0), {ply}) then
-				return spawn, POS + Vector(-i, 0, 0)
-			end
-		end
-
-		-- last resort
-		return spawn, POS + Vector(0,0,70)
-	end
+	-- Make sure the player doesn't get stuck in something
+	POS = GAMEMODE:FindEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
 
 	return spawn, POS
 end

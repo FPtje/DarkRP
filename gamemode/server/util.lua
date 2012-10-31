@@ -117,6 +117,47 @@ function GM:IsEmpty(vector, ignore)
 	return a and b
 end
 
+
+/*---------------------------------------------------------------------------
+Find an empty position near the position given in the first parameter
+pos - The position to use as a center for looking around
+ignore - what entities to ignore when looking for the position (the position can be within the entity)
+distance - how far to look
+step - how big the steps are
+area - the position relative to pos that should also be free
+
+Performance: O(N^2) (The Lua part, that is, I don't know about the C++ counterpart)
+Don't call this function too often or with big inputs.
+---------------------------------------------------------------------------*/
+function GM:FindEmptyPos(pos, ignore, distance, step, area)
+	if GAMEMODE:IsEmpty(pos, ignore) and GAMEMODE:IsEmpty(pos + area, ignore) then
+		return pos
+	end
+
+	for j = step, distance, step do
+		for i = -1, 1, 2 do -- alternate in direction
+			local k = j * i
+
+			-- Look North/South
+			if GAMEMODE:IsEmpty(pos + Vector(k, 0, 0), ignore) and GAMEMODE:IsEmpty(pos + Vector(k, 0, 0) + area, ignore) then
+				return pos + Vector(k, 0, 0)
+			end
+
+			-- Look East/West
+			if GAMEMODE:IsEmpty(pos + Vector(0, k, 0), ignore) and GAMEMODE:IsEmpty(pos + Vector(0, k, 0) + area, ignore) then
+				return pos + Vector(0, k, 0)
+			end
+
+			-- Look Up/Down
+			if GAMEMODE:IsEmpty(pos + Vector(0, 0, k), ignore) and GAMEMODE:IsEmpty(pos + Vector(0, 0, k) + area, ignore) then
+				return pos + Vector(0, 0, k)
+			end
+		end
+	end
+
+	return pos
+end
+
 function AdminLog(message, colour)
 	local RF = RecipientFilter()
 	for k,v in pairs(player.GetAll()) do

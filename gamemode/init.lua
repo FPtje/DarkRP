@@ -67,9 +67,9 @@ util.PrecacheSound("earthquake.mp3")
 
 resource.AddFile("materials/DarkRP/DarkRPSkin.png")
 
-DB = {}
-GM.Config = {}
-GM.NoLicense = {}
+DB = DB or {}
+GM.Config = GM.Config or {}
+GM.NoLicense = GM.NoLicense or {}
 
 -- sv_alltalk must be 0
 -- Note, everyone will STILL hear everyone UNLESS rp_voiceradius is 1!!!

@@ -298,8 +298,8 @@ function DB.Init()
 		end
 	end)
 
-	DB.JailPos = {}
-	zombieSpawns = {}
+	DB.JailPos = DB.JailPos or {}
+	zombieSpawns = zombieSpawns or {}
 	DB.Query([[SELECT * FROM darkrp_position WHERE type IN("J", "Z") AND map = ]] .. map .. [[;]], function(data)
 		for k,v in pairs(data or {}) do
 			if v.type == "J" then
@@ -494,46 +494,9 @@ function DB.RetrieveRandomZombieSpawnPos()
 	if #zombieSpawns < 1 then return end
 	local r = table.Random(zombieSpawns)
 
-	if not GAMEMODE:IsEmpty(r) then
-		local found = false
-		for i = 40, 200, 10 do
-			if GAMEMODE:IsEmpty(r + Vector(i, 0, 0)) then
-				found = true
-				return r + Vector(i, 0, 0)
-			end
-		end
+	local pos = GAMEMODE:FindEmptyPos(r, nil, 200, 10)
 
-		if not found then
-			for i = 40, 200, 10 do
-				if GAMEMODE:IsEmpty(r + Vector(0, i, 0)) then
-					found = true
-					return r + Vector(0, i, 0)
-				end
-			end
-		end
-
-		if not found then
-			for i = 40, 200, 10 do
-				if GAMEMODE:IsEmpty(r + Vector(-i, 0, 0)) then
-					found = true
-					return r + Vector(-i, 0, 0)
-				end
-			end
-		end
-
-		if not found then
-			for i = 40, 200, 10 do
-				if GAMEMODE:IsEmpty(r + Vector(0, -i, 0)) then
-					found = true
-					return r + Vector(0, -i, 0)
-				end
-			end
-		end
-	else
-		return r
-	end
-
-	return r + Vector(0,0,70)
+	return pos
 end
 
 function DB.CreateJailPos()
