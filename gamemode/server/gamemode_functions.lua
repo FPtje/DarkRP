@@ -303,7 +303,7 @@ end
 
 local allowedProperty = {
 	remover = true,
-	ignite = true,
+	ignite = false,
 	extinguish = true,
 	keepupright = true,
 	gravity = true,
@@ -853,7 +853,6 @@ local function PlayerDoorCheck()
 			else
 				for key, v in pairs(trace.Entity.DoorData) do
 					if not ply.DRP_DoorMemory[trace.Entity][key] or ply.DRP_DoorMemory[trace.Entity][key] ~= v then
-						MsgN("Door update")
 						ply.DRP_DoorMemory[trace.Entity][key] = v
 						umsg.Start("DRP_UpdateDoorData", ply)
 							umsg.Entity(trace.Entity)
@@ -865,7 +864,6 @@ local function PlayerDoorCheck()
 
 				for key, v in pairs(ply.DRP_DoorMemory[trace.Entity]) do
 					if not trace.Entity.DoorData[key] then
-						MsgN("Door update")
 						ply.DRP_DoorMemory[trace.Entity][key] = nil
 						umsg.Start("DRP_UpdateDoorData", ply)
 							umsg.Entity(trace.Entity)
