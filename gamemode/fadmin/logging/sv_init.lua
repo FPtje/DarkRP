@@ -31,6 +31,7 @@ hook.Add("PlayerGiveSWEP", "FAdmin_Log", function(ply, class) FAdmin.Log(ply:Nic
 hook.Add("PlayerSpawnSENT", "FAdmin_Log", function(ply, class) FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..class)  end)
 hook.Add("PlayerSpawnSWEP", "FAdmin_Log", function(ply, class) FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..class)  end)
 hook.Add("PlayerSpawnProp", "FAdmin_Log", function(ply, class)
+	if not IsValid(ply) then return end
 	for k,v in pairs(player.GetAll()) do
 		if v:IsAdmin() then
 			v:PrintMessage(HUD_PRINTCONSOLE, ply:Nick().." ("..ply:SteamID()..") Spawned a "..class)
