@@ -152,10 +152,10 @@ end
 
 local function GetAvailableVehicles(ply)
 	if not ply:IsAdmin() then return end
-	ServerLog("Available vehicles for custom vehicles:")
+	ServerLog("Available vehicles for custom vehicles:" .. "\n")
 	print("Available vehicles for custom vehicles:")
 	for k,v in pairs(list.Get("Vehicles")) do
-		ServerLog("\""..k.."\"")
+		ServerLog("\""..k.."\"" .. "\n")
 		print("\""..k.."\"")
 	end
 end
