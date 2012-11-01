@@ -610,20 +610,6 @@ net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 
 function GM:InitPostEntity()
 	LoadModules()
-	function VoiceNotify:Init()
-		self.LabelName = vgui.Create("DLabel", self)
-		self.Avatar = vgui.Create("SpawnIcon", self)
-	end
-
-	function VoiceNotify:Setup(ply)
-		self.LabelName:SetText(ply:Nick())
-		self.Avatar:SetModel(ply:GetModel())
-		self.Avatar:SetSize(32)
-
-		self.Color = team.GetColor(ply:Team())
-
-		self:InvalidateLayout()
-	end
 
 	RunConsoleCommand("_sendDarkRPvars")
 	timer.Create("DarkRPCheckifitcamethrough", 30, 0, function()
