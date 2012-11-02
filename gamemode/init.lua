@@ -65,7 +65,7 @@ AddCSLuaFile("shared/Workarounds.lua")
 resource.AddFile("sound/earthquake.mp3")
 util.PrecacheSound("earthquake.mp3")
 
-resource.AddFile("materials/DarkRP/DarkRPSkin.png")
+resource.AddFile("materials/darkrp/DarkRPSkin.png")
 
 DB = DB or {}
 GM.Config = GM.Config or {}
