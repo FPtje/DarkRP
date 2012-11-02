@@ -36,6 +36,14 @@ hook.Add("PlayerSpawnProp", "FPP_SpawnProp", function(ply, model)
 	end
 end)
 
+--------------------------------------------------------------------------------------
+--Helper function to get a setting from a player
+--------------------------------------------------------------------------------------
+local function getPlySetting(ply, settingName)
+	local info = ply:GetInfo(settingName)
+	return info ~= "" and tobool(info)
+end
+
 /*---------------------------------------------------------------------------
 Setting owner when someone spawns something
 ---------------------------------------------------------------------------*/
@@ -132,7 +140,7 @@ end
 --When you can't touch something
 --------------------------------------------------------------------------------------
 function FPP.CanTouch(ply, Type, Owner, Toggle)
-	if not IsValid(ply) or not FPP.Settings[Type] or not tobool(FPP.Settings[Type].shownocross) or tobool(ply:GetInfo("FPP_PrivateSettings_ShowIcon")) then return false end
+	if not IsValid(ply) or not FPP.Settings[Type] or not tobool(FPP.Settings[Type].shownocross) or getPlySetting(ply, "FPP_PrivateSettings_ShowIcon") then return false end
 	if ply.FPP_LastCanTouch and ply.FPP_LastCanTouch > CurTime() - 1 then return end
 	ply.FPP_LastCanTouch = CurTime()
 
@@ -150,7 +158,6 @@ function FPP.CanTouch(ply, Type, Owner, Toggle)
 	return Toggle, Owner
 end
 
-
 --------------------------------------------------------------------------------------
 --The protecting itself
 --------------------------------------------------------------------------------------
@@ -161,9 +168,9 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	if not IsValid(ply) then
 		return false
 	end
-	local OnlyMine = tobool(ply:GetInfo("FPP_PrivateSettings_OtherPlayerProps"))
+	local OnlyMine = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
 	-- prevent player pickup when you don't want to
-	if IsValid(ent) and ent:IsPlayer() and not tobool(ply:GetInfo("FPP_PrivateSettings_Players")) and Type1 == "Physgun1" then
+	if IsValid(ent) and ent:IsPlayer() and not getPlySetting(ply, "FPP_PrivateSettings_Players") and Type1 == "Physgun1" then
 		return false
 	end
 	-- Blocked entity
@@ -186,7 +193,7 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 		end
 	end
 
-	Returnal = Returnal and IsValid(ply) and not tobool(ply:GetInfo("FPP_PrivateSettings_BlockedProps"))
+	Returnal = Returnal and IsValid(ply) and not getPlySetting(ply, "FPP_PrivateSettings_BlockedProps")
 	if Returnal ~= nil then return Returnal, "Blocked!" end
 
 	-- Shared entity
@@ -230,10 +237,11 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 				world = "Disconnected player's prop"
 				Restrict =  "OtherPlayerProps"
 			end
+
 			if ply:IsAdmin() and tobool(FPP.Settings[Type2].adminworldprops) then -- if admin and admin allowed
-				return not tobool(ply:GetInfo("FPP_PrivateSettings_"..Restrict)), world
+				return not getPlySetting(ply, "FPP_PrivateSettings_"..Restrict), world
 			elseif tobool(FPP.Settings[Type2].worldprops) then -- if worldprop allowed
-				return not tobool(ply:GetInfo("FPP_PrivateSettings_"..Restrict)), world
+				return not getPlySetting(ply, "FPP_PrivateSettings_"..Restrict), world
 			end -- if not allowed then
 			return false, world
 		else -- You don't own this, simple
@@ -241,7 +249,7 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 		end
 	end
 
-	return true and not tobool(ply:GetInfo("FPP_PrivateSettings_OwnProps"))
+	return not getPlySetting(ply, "FPP_PrivateSettings_OwnProps")
 end
 
 --Global cantouch function
