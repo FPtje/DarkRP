@@ -1,7 +1,5 @@
 FPP = FPP or {}
 
-include("FPP_MySQLCore.lua")
-
 FPP.Blocked = FPP.Blocked or {}
 	FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
 	FPP.Blocked.Spawning1 = FPP.Blocked.Spawning1 or {}
