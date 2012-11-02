@@ -158,7 +158,7 @@ end
 FPP.Protect = {}
 
 local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
-	if not IsValid( ply ) then
+	if not IsValid(ply) then
 		return false
 	end
 	local OnlyMine = tobool(ply:GetInfo("FPP_PrivateSettings_OtherPlayerProps"))
@@ -454,6 +454,8 @@ function FPP.Protect.EntityDamage(ent, dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	local amount = dmginfo:GetDamage()
 
+	if not IsValid(ent) then return end
+
 	if type(ent.EntityDamage) == "function" then
 		local val = ent:EntityDamage(ent, inflictor, attacker, amount, dmginfo)
 		if val ~= nil then return val end
@@ -463,7 +465,7 @@ function FPP.Protect.EntityDamage(ent, dmginfo)
 
 	if not tobool(FPP.Settings.FPP_ENTITYDAMAGE1.toggle) then return end
 
-	if not attacker:IsPlayer() then
+	if not attacker:IsPlayer() and not ent:IsPlayer() then
 		if IsValid(attacker.Owner) and IsValid(ent.Owner) then
 			local cantouch, why = FPP.PlayerCanTouchEnt(attacker.Owner, ent, "EntityDamage1", "FPP_ENTITYDAMAGE1")
 			if why then
@@ -490,7 +492,8 @@ function FPP.Protect.EntityDamage(ent, dmginfo)
 		return
 	end
 
-	if not IsValid(ent) then return FPP.CanTouch(attacker, "FPP_ENTITYDAMAGE1", "Not valid!", false) end
+	-- Don't say anything about players
+	if ent:IsPlayer() then return end
 
 	local cantouch, why = FPP.PlayerCanTouchEnt(attacker, ent, "EntityDamage1", "FPP_ENTITYDAMAGE1")
 	if why /*and (not IsValid(attacker:GetActiveWeapon()) or (IsValid(attacker:GetActiveWeapon()) and attacker:GetActiveWeapon():GetClass() == "weapon_physcannon")) */then
