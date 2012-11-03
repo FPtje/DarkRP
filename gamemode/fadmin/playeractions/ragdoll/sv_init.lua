@@ -228,7 +228,7 @@ local function Ragdoll(ply, cmd, args)
 						if phys and phys:IsValid() then
 							phys:EnableCollisions(false)
 							phys:EnableMotion(true)
-							phys:SetVelocity((aimVec:Normalize() + Vector(0, 0, 1)) * 1000)
+							phys:SetVelocity((aimVec:GetNormalized() + Vector(0, 0, 1)) * 1000)
 						end
 					end
 				end end)

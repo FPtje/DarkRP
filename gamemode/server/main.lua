@@ -1167,7 +1167,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 		return ""
 	end
 	if not target.bannedfrom then target.bannedfrom = {} end
-	target.bannedfrom[Team] = 0
+	target.bannedfrom[tonumber(Team)] = nil
 	GAMEMODE:NotifyAll(1, 5, ply:Nick() .. " has unbanned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
 	return ""
 end
