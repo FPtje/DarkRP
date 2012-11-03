@@ -357,6 +357,9 @@ hook.Add("FinishChat", "RPCloseRadiusDetection", function()
 	end
 end)
 
+function GM:OnPlayerChat()
+end
+
 function GM:ChatTextChanged(text)
 	if PlayerColorsOn:GetInt() == 0 then return end
 	if not Messagemode or HearMode == "speak" then return end
@@ -479,7 +482,7 @@ local function AddToChat(msg)
 	if text and text ~= "" then
 		chat.AddText(col1, name, col2, ": "..text)
 		if IsValid(ply) then
-			hook.Call("OnPlayerChat", nil, ply, text, false, ply:Alive())
+			hook.Call("OnPlayerChat", nil, ply, text, false, not ply:Alive())
 		end
 	else
 		chat.AddText(col1, name)

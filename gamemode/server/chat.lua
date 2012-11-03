@@ -68,7 +68,7 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 	end
 
 	if DoSayFunc then DoSayFunc(text2) return "" end
-	text2 = RP_ActualDoSay(ply, text2, callback)
+	RP_ActualDoSay(ply, text2, callback)
 	return ""
 end
 
