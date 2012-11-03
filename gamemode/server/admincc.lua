@@ -328,22 +328,13 @@ end
 concommand.Add("rp_unarrest", ccUnarrest)
 
 local function ccSetMoney(ply, cmd, args)
-	if not args[1] then return end
+	if not tonumber(args[2] or 0) then ply:PrintMessage("Invalid arguments") return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setmoney"))
 		return
 	end
 
 	local amount = math.floor(tonumber(args[2]))
-
-	if not amount then
-		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.invalid_x, "argument", args[2]))
-		else
-			ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "argument", args[2]))
-		end
-		return
-	end
 
 	local target = GAMEMODE:FindPlayer(args[1])
 
@@ -376,7 +367,7 @@ end
 concommand.Add("rp_setmoney", ccSetMoney)
 
 local function ccSetSalary(ply, cmd, args)
-	if not args[1] then return end
+	if not tonumber(args[2] or 0) then ply:PrintMessage("Invalid arguments") return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setsalary"))
 		return
@@ -384,7 +375,7 @@ local function ccSetSalary(ply, cmd, args)
 
 	local amount = math.floor(tonumber(args[2]))
 
-	if not amount or amount < 0 then
+	if amount < 0 then
 		if ply:EntIndex() == 0 then
 			print(string.format(LANGUAGE.invalid_x, "argument", args[2]))
 		else
