@@ -85,7 +85,8 @@ function FPP.AdminMenu(Panel)
 		RemoveSelected.DoClick = function()
 			for k,v in pairs(lview.Lines) do
 				if v:IsLineSelected() then
-					timer.Simple(k/10, function() RunConsoleCommand("FPP_RemoveBlocked", Type, v.text) end)
+					local text = v.text
+					timer.Simple(k/10, function() RunConsoleCommand("FPP_RemoveBlocked", Type, text) end)
 					lview:RemoveLine(k)
 					lview:SetTall(17 + #lview:GetLines() * 17)
 					pan:InvalidateLayout()
