@@ -867,8 +867,15 @@ function GM:InitPostEntity()
 		DB.Init()
 	end)
 
+	local physData = physenv.GetPerformanceSettings()
+	physData.MaxVelocity = 2000
+	physData.MaxAngularVelocity	= 3636
+
+	physenv.SetPerformanceSettings(physData)
+
 	-- Scriptenforcer enabled by default? Fuck you, not gonna happen.
 	game.ConsoleCommand("sv_allowcslua 1\n")
+	game.ConsoleCommand("physgun_DampingFactor 0.9\n")
 	game.ConsoleCommand("sv_airaccellerate 100\n")
 
 	for k, v in pairs(ents.GetAll()) do
