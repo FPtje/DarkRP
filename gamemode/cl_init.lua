@@ -567,6 +567,7 @@ local function UpdateDoorData(um)
 		end
 	end
 
+	door.DoorData = door.DoorData or {}
 	door.DoorData[var] = value
 end
 usermessage.Hook("DRP_UpdateDoorData", UpdateDoorData)
