@@ -93,6 +93,7 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
+	if not IsValid(self) then return end
+	timer.Destroy(self:EntIndex() .. "drug")
 	self:Destruct()
-	timer.Destroy(self)
 end

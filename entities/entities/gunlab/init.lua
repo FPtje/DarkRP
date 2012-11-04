@@ -123,5 +123,6 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-	timer.Destroy(self)
+	if not IsValid(self) then return end
+	timer.Destroy(self:EntIndex() .. "spawned_weapon")
 end
