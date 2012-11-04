@@ -69,15 +69,18 @@ function ENT:Fireball()
 end
 
 PrintMore = function(ent)
-	if IsValid(ent) then
-		ent.sparking = true
-		timer.Simple(3, function() ent:CreateMoneybag() end)
-	end
+	if not IsValid(ent) then return end
+
+	ent.sparking = true
+	timer.Simple(3, function()
+		if not IsValid(ent) then return end
+		ent:CreateMoneybag()
+	end)
 end
 
 function ENT:CreateMoneybag()
-	if not IsValid(self) then return end
-	if self:IsOnFire() then return end
+	if not IsValid(self) or self:IsOnFire() then return end
+
 	local MoneyPos = self:GetPos()
 
 	if math.random(1, 22) == 3 then self:BurstIntoFlames() end
