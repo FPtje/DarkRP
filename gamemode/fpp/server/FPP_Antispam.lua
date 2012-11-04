@@ -74,7 +74,13 @@ function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
 
 	if not IsDuplicate then
 		ply.FPPAntiSpamCount = (ply.FPPAntiSpamCount or 0) + 1
-		timer.Simple(ply.FPPAntiSpamCount / FPP.Settings.FPP_ANTISPAM1.smallpropdowngradecount, function() if IsValid(ply) then ply.FPPAntiSpamCount = ply.FPPAntiSpamCount - 1 end end)
+		local time = math.Max(1, FPP.Settings.FPP_ANTISPAM1.smallpropdowngradecount)
+		timer.Simple(ply.FPPAntiSpamCount / time, function()
+			if IsValid(ply) then
+				ply.FPPAntiSpamCount = ply.FPPAntiSpamCount - 1
+			end
+		end)
+
 		if ply.FPPAntiSpamCount >= FPP.Settings.FPP_ANTISPAM1.smallpropghostlimit and ply.FPPAntiSpamCount <= FPP.Settings.FPP_ANTISPAM1.smallpropdenylimit
 			and not ent:IsVehicle()--[[Vehicles don't like being ghosted, they tend to crash the server]] then
 			FPP.AntiSpam.GhostFreeze(ent, phys)

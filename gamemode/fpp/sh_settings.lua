@@ -1,6 +1,6 @@
 -- These are the default settings. Don't mind changing these.
 FPP = FPP or {}
-FPP.Settings = {}
+FPP.Settings = FPP.Settings or {}
 FPP.Settings.FPP_PHYSGUN1 = {
 	toggle = 1,
 	adminall = 1,
