@@ -10,9 +10,9 @@ end)
 local lineMat = Material("cable/chain")
 
 function SWEP:DrawHUD()
-	draw.WordBox(2, 20, ScrH() / 2, "Shoot a keypad to see what it controls.", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, 20, ScrH() / 2 + 16, "Shoot a Fading door/thruster/whatever to see which keypads are connected to it.", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, 20, ScrH() / 2 + 32, "Right click to clear.", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2, "Shoot a keypad to see what it controls.", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2 + 20, "Shoot a Fading door/thruster/whatever to see which keypads are connected to it.", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2 + 40, "Right click to clear.", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 
 	local entMessages = {}
 	for k,v in pairs(DrawData or {}) do

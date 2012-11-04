@@ -12,6 +12,7 @@ SWEP.Slot = 5
 SWEP.SlotPos = 1
 SWEP.DrawAmmo = false
 SWEP.ViewModelFlip = false
+SWEP.Primary.ClipSize = 0
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
@@ -100,7 +101,7 @@ function SWEP:PrimaryAttack()
 
 	net.Start("DarkRP_keypadData")
 		net.WriteTable(data)
-	net.Send(ply)
+	net.Send(self.Owner)
 end
 
 function SWEP:SecondaryAttack()
