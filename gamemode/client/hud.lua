@@ -106,19 +106,12 @@ local function DrawInfo()
 	draw.DrawText(JobWallet, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + h + 5, ConVars.Job2, 0)
 end
 
-local Page = surface.GetTextureID("icon16/page.png")
+local Page = Material("icon16/page_white_text.png")
 local function GunLicense()
 	if LocalPlayer().DarkRPVars.HasGunlicense then
-		local QuadTable = {}
-
-		QuadTable.texture 	= Page
-		QuadTable.color		= Color( 255, 255, 255, 100 )
-
-		QuadTable.x = RelativeX + HUDWidth + 31
-		QuadTable.y = ScrH() - 32
-		QuadTable.w = 32
-		QuadTable.h = 32
-		draw.TexturedQuad(QuadTable)
+		surface.SetMaterial(Page)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.DrawTexturedRect(RelativeX + HUDWidth, ScrH() - 34, 32, 32)
 	end
 end
 
@@ -265,7 +258,7 @@ local function DrawPlayerInfo(ply)
 	end
 
 	if ply.DarkRPVars.HasGunlicense then
-		surface.SetTexture(surface.GetTextureID("icon16/page.png"))
+		surface.SetMaterial(Page)
 		surface.SetDrawColor(255,255,255,255)
 		surface.DrawTexturedRect(pos.x-16, pos.y + 60, 32, 32)
 	end

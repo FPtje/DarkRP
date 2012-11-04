@@ -285,12 +285,6 @@ local function ChangeJobVGUI()
 		F4MenuTabs:AddSheet("Jobs", F4Tabs[2], "icon16/user_suit.png", false, false)
 		F4MenuTabs:AddSheet("Entities/weapons", F4Tabs[3], "icon16/cart.png", false, false)
 		F4MenuTabs:AddSheet("HUD", F4Tabs[4], "icon16/camera.png", false, false)
-		if LocalPlayer():IsAdmin() or LocalPlayer().DarkRPVars.Privadmin then
-			F4MenuTabs:AddSheet("Admin", F4Tabs[5], "icon16/cog.png", false, false)
-		end
-		if LocalPlayer():IsSuperAdmin() then
-			F4MenuTabs:AddSheet("License weapons", F4Tabs[6], "icon16/cog.png", false, false)
-		end
 	end
 
 	for _, panel in pairs(F4Tabs) do panel:Update() panel:SetSkin("DarkRP") end
