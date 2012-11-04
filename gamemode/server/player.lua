@@ -555,8 +555,8 @@ function meta:UnownAll()
 end
 
 function meta:DoPropertyTax()
-	if GAMEMODE.Config.propertytax == 0 then return end
-	if (self:IsCP()) and GAMEMODE.Config.cit_propertytax == 1 then return end
+	if not GAMEMODE.Config.propertytax then return end
+	if self:IsCP() and GAMEMODE.Config.cit_propertytax then return end
 
 	local numowned = self.OwnedNumz
 
