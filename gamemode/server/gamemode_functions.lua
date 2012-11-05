@@ -568,11 +568,10 @@ local function SendDarkRPVars(ply)
 				sendtable[v][a] = b
 			end
 		end
-		net.Start("DarkRP_InitializeVars")
-			net.WriteEntity(v)
-			net.WriteTable(sendtable[v])
-		net.Send(ply)
 	end
+	net.Start("DarkRP_InitializeVars")
+		net.WriteTable(sendtable)
+	net.Send(ply)
 end
 concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 
