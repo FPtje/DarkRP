@@ -223,6 +223,7 @@ end
 
 hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 	local RetrieveBans = hook.Call("FAdmin_RetrieveBans", nil)
+	file.CreateDir("FAdmin")
 
 	if RetrieveBans then
 		for k,v in pairs(RetrieveBans) do
@@ -230,7 +231,8 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 		end
 		return
 	end
-	if file.Exists("FAdmin/Bans.txt", "DATA") then		local bans = util.KeyValuesToTable(file.Read("FAdmin/Bans.txt"))
+	if file.Exists("FAdmin/Bans.txt", "DATA") then
+		local bans = util.KeyValuesToTable(file.Read("FAdmin/bans.txt", "DATA") or {})
 		for k,v in pairs(bans) do
 			FAdmin.BANS[string.upper(k)] = v
 		end
