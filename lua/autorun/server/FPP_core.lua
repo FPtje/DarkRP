@@ -717,14 +717,15 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 		return --No further questions sir!
 	end
 
-	if tool == "duplicator" and ply:UniqueIDTable("Duplicator").Entities then
-		local Ents = ply:UniqueIDTable("Duplicator").Entities
+	if tool == "duplicator" and ply.CurrentDupe then
+		local Ents = ply.CurrentDupe.Entities or {}
+
 		for k,v in pairs(Ents) do
 			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
 				for c, d in pairs(allweapons) do
 					if string.lower(v.Class) == string.lower(d) or string.find(v.Class:lower(), "ai_") == 1 or string.find(v.Class:lower(), "item_ammo_") == 1 then
 						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply:UniqueIDTable("Duplicator").Entities[k] = nil
+						ply.CurrentDupe.Entities[k] = nil
 					end
 				end
 			end
@@ -733,7 +734,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 				for c, d in pairs(FPP.Blocked.Spawning1) do
 					if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then
 						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply:UniqueIDTable("Duplicator").Entities[k] = nil
+						ply.CurrentDupe.Entities[k] = nil
 						break
 					end
 					if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then -- if the whitelist is on you can't spawn it unless it's found
@@ -744,7 +745,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 				end
 				if setspawning then
 					FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-					ply:UniqueIDTable("Duplicator").Entities[k] = nil
+					ply.CurrentDupe.Entities[k] = nil
 				end
 			end
 		end
