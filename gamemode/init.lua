@@ -37,8 +37,6 @@ DeriveGamemode("sandbox")
 util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_DoorData")
 util.AddNetworkString("FAdmin_retrievebans")
-util.AddNetworkString("FPP_Groups")
-util.AddNetworkString("FPP_GroupMembers")
 util.AddNetworkString("DarkRP_keypadData")
 
 AddCSLuaFile("addentities.lua")
