@@ -128,7 +128,7 @@ hook.Add("InitPostEntity", "FPP.InitializePreventSpawnInProp", function()
 		if not tobool(FPP.Settings.FPP_ANTISPAM1.antispawninprop) then return ent end
 
 		local PropInProp = IsEmpty(ent)
-		if not PropInProp:IsValid() then return ent end
+		if not IsValid(PropInProp) then return ent end
 		local pos = PropInProp:NearestPoint(ply:EyePos()) + ply:GetAimVector() * -1 * ent:BoundingRadius()
 		ent:SetPos(pos)
 		return ent
