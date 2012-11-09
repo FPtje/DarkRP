@@ -812,7 +812,7 @@ EditGroupTools = function(groupname)
 				node1.Tool = d.ItemName
 				for e,f in pairs(addnodes) do
 					local node2 = node1:AddNode(f[1])
-					node2.Icon:SetImage("gui/silkicons/wrench")
+					node2.Icon:SetImage("icon16/wrench.png")
 					node2.Tool = f[2]
 				end
 			end
@@ -859,7 +859,8 @@ EditGroupTools = function(groupname)
 	RemTool:SetText("<")
 	RemTool.DoClick = function()
 		for k,v in pairs(GroupTools:GetSelected()) do
-			timer.Simple(k/10, function() RunConsoleCommand("FPP_RemoveGroupTool", groupname, v.Columns[1]:GetValue()) end)
+			local toolname = v.Columns[1]:GetValue()
+			timer.Simple(k/10, function() RunConsoleCommand("FPP_RemoveGroupTool", groupname, toolname) end)
 			GroupTools:RemoveLine(v.m_iID)
 		end
 	end

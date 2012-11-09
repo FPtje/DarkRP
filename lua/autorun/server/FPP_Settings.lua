@@ -1,5 +1,8 @@
 FPP = FPP or {}
 
+util.AddNetworkString("FPP_Groups")
+util.AddNetworkString("FPP_GroupMembers")
+
 include("FPP_MySQLCore.lua")
 
 AddCSLuaFile("autorun/client/fpp_menu.lua")
