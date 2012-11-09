@@ -59,7 +59,7 @@ end
 timer.Create("FAdminCheckBans", 60, 0, function()
 	local changed = false
 	for k,v in pairs(FAdmin.BANS) do
-		if v.time and tonumber(v.time) < os.time() and v.time ~= 0 then
+		if v.time and type(v.time) ~= "string" and tonumber(v.time) < os.time() and v.time ~= 0 then
 			FAdmin.BANS[k] = nil
 			changed = true
 		end
@@ -182,6 +182,7 @@ local function Ban(ply, cmd, args)
 		end
 	end
 end
+
 -- Unbanning
 local function UnBan(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
@@ -238,7 +239,7 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 		end
 
 		for k,v in pairs(FAdmin.BANS) do
-			if tonumber(v.time) < os.time() and v ~= 0 then
+			if tonumber(v.time) and tonumber(v.time) < os.time() then
 				FAdmin.BANS[string.upper(k)] = nil
 			end
 			if v.time == 0 then
