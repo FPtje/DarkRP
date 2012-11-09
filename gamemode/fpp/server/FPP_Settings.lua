@@ -528,7 +528,7 @@ local function PlayerSetGroup(ply, cmd, args)
 
 	local name = args[1]
 	local group = string.lower(args[2])
-	if IsValid(Player(name)) then name = Player(name):SteamID()
+	if IsValid(Player(tonumber(name) or 0)) then name = Player(tonumber(name)):SteamID()
 	elseif not string.find(name, "STEAM") and name ~= "UNKNOWN" then FPP.Notify(ply, "Invalid argument(s)", false) return end
 
 	if not FPP.Groups[group] and (not FAdmin or not FAdmin.Access.Groups[group]) then
