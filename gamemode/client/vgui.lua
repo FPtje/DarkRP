@@ -12,6 +12,7 @@ local function MsgDoVote(msg)
 	end
 	local OldTime = CurTime()
 	if string.find(voteid, LocalPlayer():EntIndex()) then return end --If it's about you then go away
+	if not IsValid(LocalPlayer()) then return end -- Sent right before player initialisation
 
 	LocalPlayer():EmitSound("Town.d1_town_02_elevbell1", 100, 100)
 	local panel = vgui.Create("DFrame")
@@ -387,7 +388,13 @@ local function KeysMenu(um)
 			RemoveOwner.m_bDisabled = true
 		end
 		DoorTitle.DoClick = function()
-			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text) LocalPlayer():ConCommand("say /title ".. text) Frame:Close() end, function() end, "OK!", "CANCEL!")
+			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text)
+				LocalPlayer():ConCommand("say /title ".. text)
+				if ValidPanel(Frame) then
+					Frame:Close()
+				end
+			end,
+			function() end, "OK!", "CANCEL!")
 		end
 
 		if LocalPlayer():IsSuperAdmin() and not Vehicle then

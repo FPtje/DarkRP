@@ -35,8 +35,8 @@ function SWEP:createViewModels()
 	local viewmodel = self:GetOwner():GetViewModel()
 
 	self.viewModels = {}
-	self.viewModels[1] = self.viewModels[1] or ents.CreateClientProp()
-	self.viewModels[2] = self.viewModels[2] or ents.CreateClientProp()
+	self.viewModels[1] = IsValid(self.viewModels[1]) and self.viewModels[1] or ents.CreateClientProp()
+	self.viewModels[2] = IsValid(self.viewModels[2]) and self.viewModels[2] or ents.CreateClientProp()
 
 	self.viewModels[1]:SetAngles(viewmodel:GetAngles())
 	self.viewModels[2]:SetAngles(viewmodel:GetAngles())
@@ -77,8 +77,10 @@ function SWEP:Think()
 		self:createViewModels()
 	end
 
+	if not IsValid(self:GetOwner()) or not IsValid(self:GetOwner():GetViewModel()) then return end
 	self:GetOwner():GetViewModel():SetNoDraw(true)
 	for k,v in pairs(self.viewModels) do
+		if not IsValid(v) then continue end
 		v:SetNoDraw(false)
 	end
 
@@ -90,7 +92,7 @@ function SWEP:Think()
 end
 
 function SWEP:Deploy()
-	if SERVER then
+	if SERVER and IsValid(self.Owner) then
 		self.Owner:DrawViewModel(false)
 	end
 end

@@ -134,7 +134,8 @@ local function CPOptns()
 					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
-								LocalPlayer():ConCommand("say /wanted ".. tostring(ply:UserID()).." ".. a)
+									if not IsValid(ply) then return end
+									LocalPlayer():ConCommand("say /wanted ".. tostring(ply:UserID()).." ".. a)
 								end, function() end ) end)
 					end
 				end

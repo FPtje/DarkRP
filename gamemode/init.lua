@@ -115,14 +115,14 @@ AddCSLuaFile("fpp/sh_settings.lua")
 AddCSLuaFile("fpp/client/FPP_Menu.lua")
 AddCSLuaFile("fpp/client/FPP_HUD.lua")
 AddCSLuaFile("fpp/client/FPP_Buddies.lua")
-AddCSLuaFile("shared/FAdmin_DarkRP.lua")
+AddCSLuaFile("shared/fadmin_darkrp.lua")
 
 include("fpp/sh_settings.lua")
 include("fpp/sh_CPPI.lua")
 include("fpp/server/FPP_Settings.lua")
 include("fpp/server/FPP_Core.lua")
 include("fpp/server/FPP_Antispam.lua")
-include("shared/FAdmin_DarkRP.lua")
+include("shared/fadmin_darkrp.lua")
 
 /*---------------------------------------------------------------------------
 Loading modules
