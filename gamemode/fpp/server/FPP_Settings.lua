@@ -1,5 +1,8 @@
 FPP = FPP or {}
 
+util.AddNetworkString("FPP_Groups")
+util.AddNetworkString("FPP_GroupMembers")
+
 FPP.Blocked = FPP.Blocked or {}
 	FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
 	FPP.Blocked.Spawning1 = FPP.Blocked.Spawning1 or {}
