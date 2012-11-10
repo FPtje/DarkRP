@@ -590,11 +590,16 @@ local function InitializeDarkRPVars(len)
 	if not vars then return end
 	for k,v in pairs(vars) do
 		if not IsValid(k) then continue end
-		k.DarkRPVars = v
+		k.DarkRPVars = k.DarkRPVars or {}
+
+		-- Merge the tables
+		for a, b in pairs(v) do
+			k.DarkRPVars[a] = b
+		end
 
 		-- RPnames don't always come through
 		-- Everyone has this variable set, regardless of whether they have a custom name
-		varsReceived = k.DarkRPVars ~= nil and k.DarkRPVars.rpname ~= nil
+		varsReceived = k.DarkRPVars.rpname ~= nil
 	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
