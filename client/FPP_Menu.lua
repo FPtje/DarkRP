@@ -1123,10 +1123,12 @@ properties.Add("addFPPBlocked",
 	MenuIcon	=	"icon16/cross.png",
 
 	Filter		=	function(self, ent, ply)
+						if not IsValid(ent) then return end
 						return ply:IsSuperAdmin()
 					end,
 
 	Action		=	function(self, ent)
+						if not IsValid(ent) then return end
 						RunConsoleCommand("FPP_AddBlockedModel", ent:GetModel())
 					end
 })
@@ -1138,10 +1140,12 @@ properties.Add("removeFPPBlocked",
 	MenuIcon	=	"icon16/tick.png",
 
 	Filter		=	function(self, ent, ply)
+						if not IsValid(ent) then return end
 						return ply:IsSuperAdmin()
 					end,
 
 	Action		=	function(self, ent)
+						if not IsValid(ent) then return end
 						RunConsoleCommand("FPP_RemoveBlockedModel", ent:GetModel())
 					end
 })
