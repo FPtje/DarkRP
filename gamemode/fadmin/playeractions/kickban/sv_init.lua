@@ -32,7 +32,8 @@ local function Kick(ply, cmd, args)
 				ply.FAdminKickReason = args[3]
 				SendUserMessage("FAdmin_kick_update", target, args[3])
 			else//if stage == "execute" or stage == "" then--execute or no stage = kick instantly
-				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), Reason or ""))
+				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), "Kicked by " .. ply:Nick() ..
+					" (" .. (Reason or "No reason provided") .. ")"))
 				ply.FAdminKickReason = nil
 			end
 		end
@@ -163,9 +164,10 @@ local function Ban(ply, cmd, args)
 						break
 					end
 				end
-				SaveBan(target:SteamID(), target:Nick(), time, Reason, ply.Nick and ply:Nick() or "console", ply.SteamID and ply:SteamID() or "Console")
+				local nick = ply.Nick and ply:Nick() or "console"
+				SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
 				game.ConsoleCommand("banid " .. time.." ".. target:SteamID().."\n") -- Don't use banid in combination with RunConsoleCommand
-				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), " banned for "..TimeText..": "..Reason))
+				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), " banned by "..nick.." for "..TimeText.." ("..Reason .. ")" ))
 			else
 				for k,v in pairs(StartBannedUsers) do
 					if v == args[1] then
