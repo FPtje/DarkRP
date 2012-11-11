@@ -57,6 +57,45 @@ sounds[ "whoops" ] = sounds[ "oops" ]
 sounds[ "yeah" ] = { "vo/npc/male01/yeah02.wav" }
 sounds[ "yes" ] = sounds[ "yeah" ]
 
+sounds[ "hacks" ] = { "vo/npc/male01/hacks01.wav",  "vo/npc/male01/hacks02.wav", "vo/npc/male01/thehacks01.wav", "vo/npc/male01/thehacks02.wav"}
+sounds[ "hax" ] = sounds [ "hacks" ]
+sounds[ "hax" ] = sounds [ "hacks" ]
+
+sounds[ "ammo" ] = { "vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav" }
+
+sounds[ "behind you" ] = { "vo/npc/male01/behindyou01.wav", "vo/npc/male01/behindyou02.wav" }
+
+sounds[ "freeman" ] = { "vo/npc/male01/freeman.wav", "vo/npc/male01/docfreeman01.wav", "vo/npc/male01/docfreeman02.wav" }
+
+sounds[ "get down" ] = { "vo/npc/male01/getdown02.wav" }
+
+sounds[ "gtfo" ] = { "gethellout.wav" }
+sounds[ "get out" ] = sounds [ "gtfo" ]
+
+sounds[ "gotta reload" ] = { "vo/npc/male01/gottareload01.wav" }
+
+sounds[ "better reload" ] = { "vo/npc/male01/youdbetterreload01.wav" }
+
+sounds[ "help" ] = { "vo/npc/male01/help01.wav" }
+
+sounds[ "incoming" ] = { "vo/npc/male01/heretheycome01.wav", "vo/npc/male01/incoming02.wav" }
+sounds[ "here they come" ] = sounds [ "incoming" ]
+
+sounds[ "okay" ] = { "vo/npc/male01/ok01.wav", "vo/npc/male01/ok02.wav" }
+sounds[ "ok" ] = sounds[ "okay" ]
+sounds[ "kay" ] = sounds[ "okay" ]
+
+sounds[ "run" ] = { "vo/npc/male01/strider_run.wav" }
+
+sounds[ "watch out" ] = { "vo/npc/male01/watchout.wav" }
+
+sounds[ "cp" ] = { "vo/npc/male01/civilprotection01.wav", "vo/npc/male01/civilprotection02.wav", "vo/npc/male01/cps01.wav", "vo/npc/male01/cps02.wav" }
+sounds[ "cps" ] = sounds[ "cp" ]
+sounds[ "cops" ] = sounds[ "cp" ]
+
+sounds[ "got one" ] = { "vo/npc/male01/gotone01.wav", "vo/npc/male01/gotone01.wav"}
+
+
 local function CheckChat( ply, text )
 
 	if not GAMEMODE.Config.chatsounds then return end
