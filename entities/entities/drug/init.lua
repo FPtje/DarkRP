@@ -21,7 +21,8 @@ local function DrugPlayer(ply)
 	if not timer.Exists(IDSteam.."DruggedHealth") and not timer.Exists(IDSteam) then
 		ply:SetHealth(ply:Health() + 100)
 		timer.Create(IDSteam.."DruggedHealth", 60/(100 + 5), 100 + 5, function()
-			if IsValid(ply) then ply:SetHealth(ply:Health() - 1) end
+			if not IsValid(ply) then return end
+			ply:SetHealth(ply:Health() - 1)
 			if ply:Health() <= 0 then ply:Kill() end
 		end)
 		timer.Create(IDSteam, 60, 1, function() UnDrugPlayer(ply) end)
