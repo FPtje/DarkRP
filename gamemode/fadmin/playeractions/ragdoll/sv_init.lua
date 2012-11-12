@@ -137,7 +137,7 @@ local function Ragdoll(ply, cmd, args)
 				target:SpectateEntity(Ragdoll)
 
 				local HangOn
-				for k,v in pairs(HangProps) do
+				for k,v in ipairs(HangProps) do
 					local prop = ents.Create("fadmin_jail")
 					prop.target = prop
 					prop:SetModel(v.model)
