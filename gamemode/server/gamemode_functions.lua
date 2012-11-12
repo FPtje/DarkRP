@@ -206,7 +206,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 
 		-- If it wasn't a player directly, find out who owns the prop that did the killing
 		if not ent:IsPlayer() then
-			ent = Player(ent.SID)
+			ent = Player(tonumber(ent.SID) or 0)
 		end
 
 		-- If we know by now who killed the NPC, pay them.
