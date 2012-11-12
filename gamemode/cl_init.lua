@@ -511,11 +511,6 @@ local function RetrieveDoorData(len)
 	end
 
 	door.DoorData = doorData
-
-	local DoorString = "Data:\n"
-	for k,v in pairs(doorData) do
-		DoorString = DoorString .. k.."\t\t".. tostring(v) .. "\n"
-	end
 end
 net.Receive("DarkRP_DoorData", RetrieveDoorData)
 
