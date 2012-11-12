@@ -107,7 +107,7 @@ end)
 Anti crash exploit
 ---------------------------------------------------------------------------*/
 hook.Add("PropBreak", "drp_AntiExploit", function(attacker, ent)
-	if IsValid(ent) then
+	if IsValid(ent) and ent:GetPhysicsObject():IsValid() then
 		constraint.RemoveAll(ent)
 	end
 end)
