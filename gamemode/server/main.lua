@@ -1489,7 +1489,7 @@ AddChatCommand("/moneydrop", DropMoney)
 local function CreateCheque(ply, args)
 	local argt = string.Explode(" ", args)
 	local recipient = GAMEMODE:FindPlayer(argt[1])
-	local amount = tonumber(argt[2])
+	local amount = tonumber(argt[2]) or 0
 
 	if not recipient then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "argument", "recipient (1)"))
