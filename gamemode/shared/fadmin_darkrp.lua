@@ -180,7 +180,7 @@ end
 FAdmin.GlobalSetting = {}
 
 
-getmetatable(Player(0)).FAdmin_GetGlobal = function(self, setting)
+FindMetaTable("Player").FAdmin_GetGlobal = function(self, setting)
 	return self.GlobalSetting and self.GlobalSetting[setting]
 end
 
