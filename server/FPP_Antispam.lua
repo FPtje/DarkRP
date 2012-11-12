@@ -1,5 +1,5 @@
 FPP = FPP or {}
-FPP.AntiSpam = {}
+FPP.AntiSpam = FPP.AntiSpam or {}
 
 function FPP.AntiSpam.GhostFreeze(ent, phys)
 	ent:SetRenderMode(RENDERMODE_TRANSALPHA)
