@@ -32,10 +32,10 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
 		end
 		return
 	end
-	
+
 	FPP.Buddies[SteamID] = FPP.Buddies[SteamID] or {name = Name, physgun = 0, gravgun = 0, toolgun = 0, playeruse = 0, entitydamage = 0} -- Create if not there
 	FPP.Buddies[SteamID][Type] = value
-	
+
 	local data = sql.Query("SELECT * FROM FPP_Buddies WHERE steamid = "..sql.SQLStr(SteamID) ..";")
 	if data then
 		sql.Query("UPDATE FPP_Buddies SET "..Type.." = "..value.." WHERE steamid = ".. sql.SQLStr(SteamID) ..";")
@@ -44,7 +44,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
 	else
 		sql.Query("INSERT INTO FPP_Buddies VALUES(".. sql.SQLStr(SteamID) ..", "..sql.SQLStr(Name)..", ".. FPP.Buddies[SteamID].physgun ..", ".. FPP.Buddies[SteamID].gravgun ..", ".. FPP.Buddies[SteamID].toolgun ..", ".. FPP.Buddies[SteamID].playeruse ..", ".. FPP.Buddies[SteamID].entitydamage..");")
 	end
-	
+
 	--Let the server know of your changes
 	for k,v in pairs(player.GetAll()) do
 		if v:SteamID() == SteamID then -- If the person you're adding is in the server then add him serverside
@@ -52,15 +52,15 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
 			--Don't break because there can be people(bots actually) with the same steam ID
 		end
 	end
-	
+
 	local ShouldRemove = true -- Remove the buddy if he isn't buddy in anything anymore
 	for k,v in pairs(FPP.Buddies[SteamID]) do
-		if v == 1 or v == "1" then 
+		if v == 1 or v == "1" then
 			ShouldRemove = false
 			break
 		end
 	end
-	
+
 	if ShouldRemove then -- If everything = 0 then he's not your friend anymore
 		FPP.Buddies[SteamID] = nil
 		sql.Query("DELETE FROM FPP_Buddies WHERE steamid = "..sql.SQLStr(SteamID)..";")
@@ -74,7 +74,7 @@ end
 
 function FPP.NewBuddy(um)
 	local ply = um:ReadEntity()
-	if not ply:IsValid() then return end
+	if not IsValid(ply) or not ply:IsPlayer() then return end
 	local SteamID = ply:SteamID()
 	local data = sql.Query("SELECT * FROM FPP_Buddies")
 	if data then
