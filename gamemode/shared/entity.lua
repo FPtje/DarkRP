@@ -83,6 +83,7 @@ end
 /*---------------------------------------------------------
  Clientside part
  ---------------------------------------------------------*/
+local lastDataRequested = 0 -- Last time doordata was requested
 if CLIENT then
 	function meta:DrawOwnableInfo()
 		if LocalPlayer():InVehicle() then return end
@@ -90,6 +91,13 @@ if CLIENT then
 		local pos = {x = ScrW()/2, y = ScrH() / 2}
 
 		local ownerstr = ""
+
+		if self.DoorData == nil and lastDataRequested < (CurTime() - 0.7) then
+			RunConsoleCommand("_RefreshDoorData", self:EntIndex())
+			lastDataRequested = CurTime()
+
+			return
+		end
 
 		for k,v in pairs(player.GetAll()) do
 			if self:OwnedBy(v) then

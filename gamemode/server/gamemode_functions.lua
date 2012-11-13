@@ -575,6 +575,22 @@ local function SendDarkRPVars(ply)
 end
 concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 
+local function refreshDoorData(ply, _, args)
+	if ply.DoorDataSent and ply.DoorDataSent > (CurTime() - 0.5) then return end
+	ply.DoorDataSent = CurTime()
+
+	local ent = Entity(tonumber(args[1]) or -1)
+	if not IsValid(ent) or not ent.DoorData then return end
+
+	net.Start("DarkRP_DoorData")
+		net.WriteEntity(ent)
+		net.WriteTable(ent.DoorData)
+	net.Send(ply)
+	ply.DRP_DoorMemory = ply.DRP_DoorMemory or {}
+	ply.DRP_DoorMemory[ent] = table.Copy(ent.DoorData)
+end
+concommand.Add("_RefreshDoorData", refreshDoorData)
+
 function GM:PlayerSelectSpawn(ply)
 	local spawn = self.BaseClass:PlayerSelectSpawn(ply)
 
