@@ -494,7 +494,7 @@ function DB.RetrieveRandomZombieSpawnPos()
 	if #zombieSpawns < 1 then return end
 	local r = table.Random(zombieSpawns)
 
-	local pos = GAMEMODE:FindEmptyPos(r, nil, 200, 10)
+	local pos = GAMEMODE:FindEmptyPos(r, nil, 200, 10, Vector(2, 2, 2))
 
 	return pos
 end
