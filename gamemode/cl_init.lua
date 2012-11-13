@@ -566,8 +566,8 @@ local function RetrievePlayerVar(um)
 		value = Entity(string.match(stringvalue, "Entity .([0-9]*)"))
 	end
 
-	if string.match(stringvalue, [[(-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+)]]) then
-		local x,y,z = string.match(value, [[(-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+) (-?[0-9]+\.[0-9]+)]])
+	if string.match(stringvalue, [[(-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+)]]) then
+		local x,y,z = string.match(value, [[(-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+)]])
 		value = Vector(x,y,z)
 	end
 
