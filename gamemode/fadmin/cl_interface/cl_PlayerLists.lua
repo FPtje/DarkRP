@@ -26,6 +26,7 @@ local function SortedPairsByFunction(Table, Sorted, SortDown)
 
 	local SortedTable = {}
 	for k,v in ipairs(CopyTable) do
+		if not IsValid(v.PLY) or not v.PLY[Sorted] then continue end
 		local SortBy = (Sorted ~= "Team" and v.PLY[Sorted](v.PLY)) or team.GetName(v.PLY[Sorted](v.PLY))
 		SortedTable[SortBy] = SortedTable[SortBy] or {}
 		table.insert(SortedTable[SortBy], v.PLY)
