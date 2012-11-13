@@ -496,7 +496,7 @@ usermessage.Hook("DRPLogMsg", AdminLog)
 local function RetrieveDoorData(len)
 	local door = net.ReadEntity()
 	local doorData = net.ReadTable()
-	if not door or not door.IsValid or not IsValid(door) then return end
+	if not door or not door.IsValid or not IsValid(door) or not doorData then return end
 
 	if doorData.TeamOwn then
 		local tdata = {}
