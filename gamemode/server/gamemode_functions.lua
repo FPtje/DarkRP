@@ -509,7 +509,7 @@ function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
 	DB.Log(ply:SteamName().." ("..ply:SteamID()..") has joined the game", nil, Color(0, 130, 255))
 	ply.bannedfrom = {}
-	ply.DarkRPVars = {}
+	ply.DarkRPVars = ply.DarkRPVars or {}
 	ply:NewData()
 	ply.SID = ply:UserID()
 	DB.RetrieveSalary(ply, function() end)

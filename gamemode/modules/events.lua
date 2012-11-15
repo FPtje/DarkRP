@@ -53,7 +53,7 @@ local function LoadTable(ply)
 	ply:SetSelfDarkRPVar("numPoints", table.getn(zombieSpawns))
 
 	for k, v in pairs(zombieSpawns) do
-		ply:SetSelfDarkRPVar("zPoints" .. k, tostring(v))
+		ply:SetSelfDarkRPVar("zPoints" .. k, v)
 	end
 end
 
@@ -64,7 +64,7 @@ local function ReMoveZombie(ply, index)
 		else
 			DB.RetrieveZombies(function()
 				GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_spawn_removed)
-				table.remove(zombieSpawns,index)
+				table.remove(zombieSpawns, index)
 				DB.StoreZombies()
 				if ply.DarkRPVars.zombieToggle then
 					LoadTable(ply)

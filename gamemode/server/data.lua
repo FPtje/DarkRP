@@ -300,7 +300,7 @@ function DB.Init()
 
 	DB.JailPos = DB.JailPos or {}
 	zombieSpawns = zombieSpawns or {}
-	DB.Query([[SELECT * FROM darkrp_position WHERE type IN("J", "Z") AND map = ]] .. map .. [[;]], function(data)
+	DB.Query([[SELECT * FROM darkrp_position WHERE type IN('J', 'Z') AND map = ]] .. map .. [[;]], function(data)
 		for k,v in pairs(data or {}) do
 			if v.type == "J" then
 				table.insert(DB.JailPos, v)
@@ -468,9 +468,9 @@ end
 function DB.StoreZombies()
 	local map = string.lower(game.GetMap())
 	DB.Begin()
-	DB.Query([[DELETE FROM darkrp_position WHERE type = "Z" AND map = ]] .. sql.SQLStr(map) .. ";", function()
+	DB.Query([[DELETE FROM darkrp_position WHERE type = 'Z' AND map = ]] .. sql.SQLStr(map) .. ";", function()
 		for k, v in pairs(zombieSpawns) do
-			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. sql.SQLStr(map) .. ", \"Z\", " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
+			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. sql.SQLStr(map) .. ", 'Z', " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
 		end
 	end)
 	DB.Commit()
@@ -481,10 +481,10 @@ function DB.RetrieveZombies(callback)
 	if zombieSpawns and table.Count(zombieSpawns) > 0 and not FirstZombieSpawn then callback() return zombieSpawns end
 	FirstZombieSpawn = false
 	zombieSpawns = {}
-	DB.Query([[SELECT * FROM darkrp_position WHERE type = "Z" AND map = ]] .. sql.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
+	DB.Query([[SELECT * FROM darkrp_position WHERE type = 'Z' AND map = ]] .. sql.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
 		if not r then callback() return end
-		for map, row in pairs(r) do
-			zombieSpawns[map] = Vector(row.x, row.y, row.z)
+		for k,v in pairs(r) do
+			zombieSpawns[k] = Vector(v.x, v.y, v.z)
 		end
 		callback()
 	end)
