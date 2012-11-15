@@ -592,10 +592,6 @@ local function InitializeDarkRPVars(len)
 		for a, b in pairs(v) do
 			k.DarkRPVars[a] = b
 		end
-
-		-- RPnames don't always come through
-		-- Everyone has this variable set, regardless of whether they have a custom name
-		varsReceived = k.DarkRPVars.rpname ~= nil
 	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
@@ -604,13 +600,13 @@ function GM:InitPostEntity()
 	LoadModules()
 
 	RunConsoleCommand("_sendDarkRPvars")
-	timer.Create("DarkRPCheckifitcamethrough", 30, 0, function()
-		if not varsReceived then
+	timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
+		for k,v in pairs(player.GetAll()) do
+			if v.DarkRPVars and v.DarkRPVars.rpname then continue end
+
 			RunConsoleCommand("_sendDarkRPvars")
 			return
 		end
-
-		timer.Destroy("DarkRPCheckifitcamethrough")
 	end)
 end
 
