@@ -133,7 +133,7 @@ local function Agenda()
 	local DrawAgenda, AgendaManager = DarkRPAgendas[LocalPlayer():Team()], LocalPlayer():Team()
 	if not DrawAgenda then
 		for k,v in pairs(DarkRPAgendas) do
-			if table.HasValue(v.Listeners, LocalPlayer():Team()) then
+			if table.HasValue(v.Listeners or {}, LocalPlayer():Team()) then
 				DrawAgenda, AgendaManager = DarkRPAgendas[k], k
 				break
 			end
