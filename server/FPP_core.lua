@@ -219,12 +219,12 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	end
 
 	-- Misc.
-	if ent.Owner ~= ply and IsValid(ply) then
+	if ent.Owner ~= ply then
 		-- A buddy's prop
 		if not TryingToShare and IsValid(ent.Owner) and ent.Owner.Buddies and ent.Owner.Buddies[ply] and ent.Owner.Buddies[ply][string.lower(Type1)] then
 			return not OnlyMine, ent.Owner
 		-- An admin touching it
-		elseif ent.Owner and ply:IsAdmin() and tobool(FPP.Settings[Type2].adminall) then -- if not world prop AND admin allowed
+		elseif IsValid(ent.Owner) and ply:IsAdmin() and tobool(FPP.Settings[Type2].adminall) then -- if not world prop AND admin allowed
 			return not OnlyMine, ent.Owner
 		-- Misc entities
 		elseif ent == game.GetWorld() or ent:GetClass() == "gmod_anchor" then
@@ -776,27 +776,33 @@ hook.Add("CanDrive", "FPP.Protect.CanDrive", FPP.Protect.CanDrive)
 
 --Player disconnect, not part of the Protect table.
 function FPP.PlayerDisconnect(ply)
-	if IsValid(ply) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) and FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime then
-		if ply:IsAdmin() and not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupadmin) then return end
+	if not IsValid(ply) then return end
 
-		FPP.DisconnectedPlayers[ply:SteamID()] = true
+	local SteamID = ply:SteamID()
+	FPP.DisconnectedPlayers[SteamID] = true
 
-		local SteamID = ply:SteamID()
-		timer.Simple(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime, function()
-			if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) then return end -- Settings can change in time.
-			for k,v in pairs(player.GetAll()) do
-				if v:SteamID() == SteamID then
-					return
-				end
-			end
-			for k,v in pairs(ents.GetAll()) do
-				if IsValid(v) and v.OwnerID == SteamID then
-					v:Remove()
-				end
-			end
-			FPP.DisconnectedPlayers[SteamID] = nil -- Player out of the Disconnect table
-		end)
+	if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) or
+	not FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime then
+		return
 	end
+
+	if ply:IsAdmin() and not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupadmin) then return end
+
+	timer.Simple(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime, function()
+		if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) then return end -- Settings can change in time.
+
+		for k,v in pairs(player.GetAll()) do
+			if v:SteamID() == SteamID then
+				return
+			end
+		end
+		for k,v in pairs(ents.GetAll()) do
+			if IsValid(v) and v.OwnerID == SteamID then
+				v:Remove()
+			end
+		end
+		FPP.DisconnectedPlayers[SteamID] = nil -- Player out of the Disconnect table
+	end)
 end
 hook.Add("PlayerDisconnected", "FPP.PlayerDisconnect", FPP.PlayerDisconnect)
 
