@@ -434,7 +434,7 @@ if CLIENT then
 		local wep = um:ReadEntity()
 		local holdtype = um:ReadString()
 
-		if not IsValid( wep ) or not wep:IsWeapon() then return end
+		if not IsValid(wep) or not wep:IsWeapon() or not wep.SetWeaponHoldType then return end
 
 		wep:SetWeaponHoldType(holdtype)
 	end)
