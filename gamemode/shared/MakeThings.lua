@@ -66,6 +66,7 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
 
 	customShipment.name = name
+	customShipment.allowed = customShipment.allowed or {}
 
 	if SERVER and not util.IsValidModel(customShipment.model) then
 		local text = "The model of shipment "..name.." is incorrect! can not create custom shipment!"

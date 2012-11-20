@@ -118,7 +118,7 @@ function SWEP:SecondaryAttack()
 		end
 		DoorData.TeamOwn = decoded
 	end
-	if trace.Entity:OwnedBy(self.Owner) or (DoorData.GroupOwn and table.HasValue(RPExtraTeamDoors[DoorData.GroupOwn], Team)) or (DoorData.TeamOwn and DoorData.TeamOwn[Team]) then
+	if trace.Entity:OwnedBy(self.Owner) or (DoorData.GroupOwn and table.HasValue(RPExtraTeamDoors[DoorData.GroupOwn] or {}, Team)) or (DoorData.TeamOwn and DoorData.TeamOwn[Team]) then
 		if SERVER then
 			self.Owner:EmitSound("npc/metropolice/gear".. math.floor(math.Rand(1,7)) ..".wav")
 			trace.Entity:KeysUnLock() -- Unlock the door immediately so it won't annoy people
