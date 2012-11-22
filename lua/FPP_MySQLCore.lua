@@ -1,7 +1,7 @@
 include("_MySQL.lua")
 FPPDB = {}
 
-if file.Exists("lua/includes/modules/gmsv_mysqloo.dll", "GAME") or file.Exists("lua/includes/modules/gmsv_mysqloo_i486.dll", "GAME") then
+if FPP_MySQLConfig.EnableMySQL then
 	require("mysqloo")
 end
 
