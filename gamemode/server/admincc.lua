@@ -328,7 +328,7 @@ end
 concommand.Add("rp_unarrest", ccUnarrest)
 
 local function ccSetMoney(ply, cmd, args)
-	if not tonumber(args[2] or 0) then ply:PrintMessage("Invalid arguments") return end
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setmoney"))
 		return
@@ -367,7 +367,7 @@ end
 concommand.Add("rp_setmoney", ccSetMoney)
 
 local function ccSetSalary(ply, cmd, args)
-	if not tonumber(args[2] or 0) then ply:PrintMessage("Invalid arguments") return end
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setsalary"))
 		return
