@@ -181,9 +181,9 @@ sounds[ "uh oh" ]  = sounds[ "uhoh" ]
 
 sounds[ "wait" ] = { "vo/trainyard/man_waitaminute.wav" }
 
-sounds[ "wait for me" ] = { "vo/npc/male01/squad_reinforce_group04.wav" }
+sounds[ "wait for me" ] = { "vo/npc/male01/squad_reinforce_single04.wav" }
 
-sounds[ "wait for us" ] = { "vo/npc/male01/squad_reinforce_single04.wav" }
+sounds[ "wait for us" ] = { "vo/npc/male01/squad_reinforce_group04.wav" }
 
 sounds[ "wanna bet" ] = { "vo/npc/male01/answer27.wav" }
 
