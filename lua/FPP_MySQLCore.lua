@@ -1,5 +1,5 @@
 include("_MySQL.lua")
-FPPDB = {}
+FPPDB = FPPDB or {}
 
 if FPP_MySQLConfig.EnableMySQL then
 	require("mysqloo")
@@ -92,7 +92,7 @@ function FPPDB.ConnectToMySQL(host, username, password, database_name, database_
 		FPPDB.Log("MySQL: Connection to external database "..host.." succeeded!")
 		CONNECTED_TO_MYSQL = true
 
-		FPPDB.Init() -- Initialize database
+		FPP.Init() -- Initialize database
 	end
 	databaseObject:connect()
 	FPPDB.MySQLDB = databaseObject
