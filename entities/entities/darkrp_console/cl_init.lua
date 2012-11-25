@@ -58,9 +58,9 @@ local function Memory(um)
 			local VillainX, VillainY = VillainPos:ToScreen()
 			VillainX, VillainY = VillainX.x, VillainX.y
 
-			draw.SimpleText("Reported person "..math.Round(VillainPos:Distance(LocalPlayer():GetPos()) / 25.4) .. "m", "HUDNumber3", VillainX, VillainY, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+			draw.SimpleText("Reported person "..math.Round(VillainPos:Distance(LocalPlayer():GetPos()) / 25.4) .. "m", "Trebuchet24", VillainX, VillainY, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 			if Reporter ~= Reported then
-				draw.SimpleText("Caller "..math.Round(VicPos:Distance(LocalPlayer():GetPos()) / 25.4) .. "m", "HUDNumber3", VicX, VicY, Color(0, 255, 0, 255), TEXT_ALIGN_CENTER)
+				draw.SimpleText("Caller "..math.Round(VicPos:Distance(LocalPlayer():GetPos()) / 25.4) .. "m", "Trebuchet24", VicX, VicY, Color(0, 255, 0, 255), TEXT_ALIGN_CENTER)
 			end
 		end
 	end)
