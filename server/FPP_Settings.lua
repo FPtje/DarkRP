@@ -712,9 +712,8 @@ concommand.Add("FPP_restricttoolplayer", RestrictToolPerson)
 /*---------------------------------------------------------------------------
 Load all FPP settings
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "FPP_LoadSQL", function()
-	timer.Simple(2, function()
-		DB.Begin()
+function FPP.Init()
+	DB.Begin()
 			DB.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var VARCHAR(40) NOT NULL, setting VARCHAR(100) NOT NULL, PRIMARY KEY(id));")
 			DB.Query("CREATE TABLE IF NOT EXISTS FPP_PHYSGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
 			DB.Query("CREATE TABLE IF NOT EXISTS FPP_GRAVGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
@@ -740,6 +739,13 @@ hook.Add("InitPostEntity", "FPP_LoadSQL", function()
 		RetrieveRestrictedTools()
 		RetrieveGroups()
 		RetrieveSettings()
+end
+
+hook.Add("InitPostEntity", "FPP_LoadSQL", function()
+	timer.Simple(2, function()
+		if not FPP_MySQLConfig or not FPP_MySQLConfig.EnableMySQL then
+			FPP.Init()
+		end
 	end)
 end)
 
