@@ -158,10 +158,11 @@ end
 
 function meta:TeamBan(t)
 	if not self.bannedfrom then self.bannedfrom = {} end
-	self.bannedfrom[t or self:Team()] = 1
+	t = t or self:Team()
+	self.bannedfrom[t] = 1
 	timer.Simple(GAMEMODE.Config.demotetime, function()
 		if not IsValid(self) then return end
-		self:TeamUnBan(self:Team())
+		self:TeamUnBan(t)
 	end)
 end
 
