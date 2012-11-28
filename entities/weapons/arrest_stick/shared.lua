@@ -89,7 +89,7 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 
-	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and GAMEMODE.Config.cpcanarrestcp then
+	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and not GAMEMODE.Config.cpcanarrestcp then
 		GAMEMODE:Notify(self.Owner, 1, 5, "You can not arrest other CPs!")
 		return
 	end
