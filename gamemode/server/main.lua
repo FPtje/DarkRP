@@ -705,6 +705,7 @@ local function BuyShipment(ply, args)
 	crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z))
 	crate.nodupe = true
 	crate:Spawn()
+	crate:SetPlayer(ply)
 	if found.shipmodel then
 		crate:SetModel(found.shipmodel)
 		crate:PhysicsInit(SOLID_VPHYSICS)
