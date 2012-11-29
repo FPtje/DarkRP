@@ -627,6 +627,7 @@ end
 
 function GM:PlayerSpawn(ply)
 	self.BaseClass:PlayerSpawn(ply)
+	ply:SetNoCollideWithTeammates(false)
 	ply:CrosshairEnable()
 	ply:UnSpectate()
 	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
