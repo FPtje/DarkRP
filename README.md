@@ -7,10 +7,5 @@ http://windows.github.com/
 
 If you really can't/don't want to use git, you can still use SVN.
 
-SVN links:
-
-For GMod 12:
+SVN link:
 https://github.com/FPtje/DarkRP/trunk
-
-STOP USING THIS ONE:
-https://github.com/FPtje/DarkRP/branches/beta
