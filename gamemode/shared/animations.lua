@@ -141,7 +141,6 @@ Anims["Follow me!"] = ACT_GMOD_GESTURE_BECON
 Anims["Laugh"] = ACT_GMOD_TAUNT_LAUGH
 Anims["Lion Pose"] = ACT_GMOD_TAUNT_PERSISTENCE
 Anims["Non-verbal no"] = ACT_GMOD_GESTURE_DISAGREE
-Anims["Salute"] = ACT_GMOD_TAUNT_SALUTE
 Anims["Thumbs up"] = ACT_GMOD_GESTURE_AGREE
 Anims["Wave"] = ACT_GMOD_GESTURE_WAVE
 
