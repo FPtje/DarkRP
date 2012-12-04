@@ -427,7 +427,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 
 	local WeaponName = (IsValid(weapon) and (weapon:IsPlayer() and IsValid(weapon:GetActiveWeapon()) and weapon:GetActiveWeapon():GetClass()) or weapon:GetClass()) or "unknown"
 	if weapon:GetClass() == "prop_physics" then
-		WeaponName = weapon:GetClass() .. " (" .. weapon:GetModel() or "unknown" .. ")"
+		WeaponName = weapon:GetClass() .. " (" .. (weapon:GetModel() or "unknown") .. ")"
 	end
 
 	if killer == ply then

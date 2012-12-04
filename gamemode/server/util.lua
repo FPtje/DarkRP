@@ -157,18 +157,3 @@ function GM:FindEmptyPos(pos, ignore, distance, step, area)
 
 	return pos
 end
-
-function AdminLog(message, colour)
-	local RF = RecipientFilter()
-	for k,v in pairs(player.GetAll()) do
-		if v:IsAdmin() then
-			RF:AddPlayer(v)
-		end
-	end
-	umsg.Start("DRPLogMsg", RF)
-		umsg.Short(colour.r)
-		umsg.Short(colour.g)
-		umsg.Short(colour.b) -- Alpha is not needed
-		umsg.String(message)
-	umsg.End()
-end

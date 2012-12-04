@@ -893,6 +893,22 @@ concommand.Add("rp_removeallconsoles", DB.RemoveConsoles)
 /*---------------------------------------------------------
  Logging
  ---------------------------------------------------------*/
+
+local function AdminLog(message, colour)
+	local RF = RecipientFilter()
+	for k,v in pairs(player.GetAll()) do
+		if v:IsAdmin() then
+			RF:AddPlayer(v)
+		end
+	end
+	umsg.Start("DRPLogMsg", RF)
+		umsg.Short(colour.r)
+		umsg.Short(colour.g)
+		umsg.Short(colour.b) -- Alpha is not needed
+		umsg.String(message)
+	umsg.End()
+end
+
 function DB.Log(text, force, colour)
 	if colour then
 		AdminLog(text, colour)
