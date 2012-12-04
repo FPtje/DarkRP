@@ -91,8 +91,6 @@ function SWEP:PrimaryAttack()
 	if (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.HitPos) > 100) then
 		return
 	end
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
-	self.Owner:EmitSound(self.Sound)
 
 
 	local a = GAMEMODE.Config.copscanunfreeze
@@ -136,6 +134,7 @@ function SWEP:PrimaryAttack()
 			trace.Entity:Fire("setanimation", "open", .6)
 		else
 			GAMEMODE:Notify(self.Owner, 1, 5, "You need a warrant in order to be able to unlock this door.")
+			return
 		end
 	elseif (trace.Entity:IsVehicle()) then
 		trace.Entity:Fire("unlock", "", .5)
@@ -143,28 +142,35 @@ function SWEP:PrimaryAttack()
 		if driver and driver.ExitVehicle then
 			driver:ExitVehicle()
 		end
-	elseif a and b and (not trace.Entity:GetPhysicsObject():IsMoveable() or trace.Entity.isFadingDoor) and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
-		if c then
-			if trace.Entity.isFadingDoor and trace.Entity.fadeActivate then
-				if not trace.Entity.fadeActive then
-					trace.Entity:fadeActivate()
-					timer.Simple(5, function() if trace.Entity.fadeActive then trace.Entity:fadeDeactivate() end end)
-				end
-			else
-				trace.Entity:GetPhysicsObject( ):EnableMotion( true )
-			end
-		else
-			local FadingProp = (trace.Entity.isFadingDoor and "open fading door.") or "unfreeze this prop"
-			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to "..FadingProp)
+	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
+		if not c then
+			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to open the fading door.")
+			return
 		end
+
+		if trace.Entity.isFadingDoor and trace.Entity.fadeActivate and not trace.Entity.fadeActive then
+			trace.Entity:fadeActivate()
+			timer.Simple(5, function() if trace.Entity.fadeActive then trace.Entity:fadeDeactivate() end end)
+		end
+	elseif a and b and not trace.Entity:GetPhysicsObject():IsMoveable() and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
+		if not c then
+			GAMEMODE:Notify(self.Owner, 1, 5, "You need a warrant in order to be able to unfreeze this prop")
+			return
+		end
+
+		trace.Entity:GetPhysicsObject():EnableMotion(true)
 	end
 	if d and b and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
-		if c then
-			constraint.RemoveConstraints( trace.Entity, "Weld")
-		else
+		if not c then
 			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to unweld this prop.")
+			return
 		end
+
+		constraint.RemoveConstraints(trace.Entity, "Weld")
 	end
+
+	self.Owner:SetAnimation(PLAYER_ATTACK1)
+	self.Owner:EmitSound(self.Sound)
 	self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0))
 end
 
