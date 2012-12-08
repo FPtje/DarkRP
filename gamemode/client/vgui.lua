@@ -4,6 +4,8 @@ local PanelNum = 0
 local LetterWritePanel
 
 local function MsgDoVote(msg)
+	local _, chatY = chat.GetChatBoxPos()
+
 	local question = msg:ReadString()
 	local voteid = msg:ReadString()
 	local timeleft = msg:ReadFloat()
@@ -16,7 +18,7 @@ local function MsgDoVote(msg)
 
 	LocalPlayer():EmitSound("Town.d1_town_02_elevbell1", 100, 100)
 	local panel = vgui.Create("DFrame")
-	panel:SetPos(3 + PanelNum, ScrH() / 2 - 50)
+	panel:SetPos(3 + PanelNum, chatY - 145)
 	panel:SetTitle("Vote")
 	panel:SetSize(140, 140)
 	panel:SetSizable(false)
