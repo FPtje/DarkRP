@@ -53,10 +53,9 @@ function DB.Query(query, callback)
 		query:start()
 		return
 	end
-	sql.Begin()
+
 	local Result = sql.Query(query)
 
-	sql.Commit() -- Otherwise it won't save, don't ask me why
 	if callback then callback(Result) end
 	return Result
 end
@@ -83,6 +82,7 @@ function DB.QueryValue(query, callback)
 		query:start()
 		return
 	end
+
 	local val = sql.QueryValue(query)
 
 	if callback then callback(val) end
@@ -533,8 +533,8 @@ function DB.StoreJailPos(ply, addingPos)
 		else
 			DB.Begin()
 			DB.Query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. sql.SQLStr(map) .. ";", function()
-				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. sql.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
-				DB.Commit()
+				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. sql.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");", DB.Commit)
+
 
 				DB.JailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
 				GAMEMODE:Notify(ply, 0, 5,  LANGUAGE.reset_add_jailpos)
