@@ -279,7 +279,7 @@ local function RetrieveBlocked()
 			for k,v in pairs(FPP.Blocked) do
 				for a,b in pairs(v) do
 					count = count + 1
-					FPPDB.Query("INSERT INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(b) .. ");")
+					FPPDB.Query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(b) .. ");")
 				end
 			end
 			FPPDB.Commit()
@@ -353,7 +353,7 @@ end
 local function RetrieveGroups()
 	FPPDB.Query("SELECT * FROM FPP_GROUPS3;", function(data)
 		if type(data) ~= "table" then
-			FPPDB.Query("INSERT INTO FPP_GROUPS3 VALUES('default', 1);")
+			FPPDB.Query("REPLACE INTO FPP_GROUPS3 VALUES('default', 1);")
 			FPP.Groups['default'] = {}
 			FPP.Groups['default'].tools = {}
 			FPP.Groups['default'].allowdefault = true

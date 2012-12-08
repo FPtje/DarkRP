@@ -43,10 +43,9 @@ function FPPDB.Query(query, callback)
 		query:start()
 		return
 	end
-	sql.Begin()
+
 	local Result = sql.Query(query)
 
-	sql.Commit() -- Otherwise it won't save, don't ask me why
 	if callback then callback(Result) end
 	return Result
 end
@@ -73,6 +72,7 @@ function FPPDB.QueryValue(query, callback)
 		query:start()
 		return
 	end
+
 	local val = sql.QueryValue(query)
 
 	if callback then callback(val) end
