@@ -519,7 +519,7 @@ function GM:PlayerInitialSpawn(ply)
 	end
 
 	for k,v in pairs(ents.GetAll()) do
-		if IsValid(v) and v.deleteSteamID == ply:SteamID() then
+		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.dt then
 			v.SID = ply.SID
 			v.dt.owning_ent = ply
 			v.deleteSteamID = nil
