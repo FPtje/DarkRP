@@ -300,9 +300,10 @@ local function DrawEntityDisplay()
 			DrawPlayerInfo(ply)
 		-- Draw when you're (almost) looking at him
 		elseif not GAMEMODE.Config.globalshow and hisPos:Distance(shootPos) < 400 then
-			local pos = (hisPos - shootPos):GetNormalized()
-			if pos:Dot(aimVec) > 0.95 then
-				local trace = util.QuickTrace(shootPos, pos * 400, LocalPlayer())
+			local pos = hisPos - shootPos
+			local unitPos = pos:GetNormalized()
+			if unitPos:Dot(aimVec) > 0.95 then
+				local trace = util.QuickTrace(shootPos, pos, LocalPlayer())
 				if trace.Hit and trace.Entity ~= ply then return end
 				DrawPlayerInfo(ply)
 			end
