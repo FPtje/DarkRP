@@ -14,7 +14,7 @@ function ENT:LoadPage()
 	local Page = GetConVarString("_FAdmin_MOTDPage")
 	if string.lower(string.sub(Page, -4)) == ".txt" and string.lower(string.sub(Page, 1, 5)) == "data/" then -- If it's a text file somewhere in data...
 		Page = string.sub(Page, 6)
-		self.HTML:SetHTML(file.Read(Page) or "")
+		self.HTML:SetHTML(file.Read(Page, "DATA") or "")
 	else
 		self.HTML:OpenURL(Page)
 	end

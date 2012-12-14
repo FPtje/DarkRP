@@ -1,5 +1,5 @@
 FAdmin.MOTD = {}
-resource.AddFile("data/FAdmin/MOTD.txt")
+resource.AddFile("data/fadmin/MOTD.txt")
 
 
 sql.Query([[CREATE TABLE IF NOT EXISTS FADMIN_MOTD(
@@ -20,12 +20,12 @@ hook.Add("InitPostEntity", "PlaceMOTD", function()
 
 	local ent = ents.Create("fadmin_motd")
 	ent:SetPos(Vector(MOTD.x, MOTD.y, MOTD.z))
-	ent:SetAngles(Angle(MOTD.pitch, MOTD.yaw, MOTD.roll))
+	ent:SetAngles(Angle(MOTD.pitch % 360, MOTD.yaw % 360, MOTD.roll % 360))
 	ent:Spawn()
 	ent:Activate()
 
-	if file.Exists("FAdmin/CurMOTDPage.txt", "DATA") and file.Read("FAdmin/CurMOTDPage.txt") ~= "" then
-		game.ConsoleCommand("_FAdmin_MOTDPage \""..file.Read("FAdmin/CurMOTDPage.txt").."\"\n")
+	if file.Exists("FAdmin/CurMOTDPage.txt", "DATA") and file.Read("FAdmin/CurMOTDPage.txt", "DATA") ~= "" then
+		game.ConsoleCommand("_FAdmin_MOTDPage \""..file.Read("FAdmin/CurMOTDPage.txt", "DATA").."\"\n")
 	end
 end)
 
