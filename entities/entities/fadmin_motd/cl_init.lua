@@ -29,7 +29,6 @@ function ENT:Initialize()
 	self.HTML:SetSize(ScrW(), ScrH() - 100)
 	self:LoadPage()
 
-	//self.HTML:StartAnimate(100)
 	self.HTML:SetVisible(true)
 end
 
@@ -98,11 +97,18 @@ function ENT:Draw()
 					self.CanClickAgain = CurTime() + 1
 				end
 			end
-		elseif self.HTMLMat then
+		elseif not self.HTMLMat then
+			self.HTML:SetPaintedManually(false)
+
+			timer.Simple(0, function() -- Fix HTML material
+				self.HTML:SetPaintedManually(true)
+			end)
+		else
 			surface.SetMaterial(self.HTMLMat)
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(-512, -256, 1520, 780)
 		end
+
 	cam.End3D2D()
 	render.SuppressEngineLighting(false)
 	if self.HTMLCloseButton then return end
