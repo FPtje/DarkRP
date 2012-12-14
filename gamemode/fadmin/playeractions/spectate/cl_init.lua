@@ -79,9 +79,10 @@ local function spectatePlayer(um)
 
 	hook.Add("CalcView", "FAdminSpectate", specCalcView)
 	hook.Add("PlayerBindPress", "FAdminSpectate", specBinds)
-	hook.Add("ShouldDrawLocalPlayer", "FAdminSpectate", function() return true end)
+	hook.Add("ShouldDrawLocalPlayer", "FAdminSpectate", function() return thirdperson end)
 end
 usermessage.Hook("FAdminSpectate", spectatePlayer)
+
 /*---------------------------------------------------------------------------
 stopSpectating
 Stop spectating a player
