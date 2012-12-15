@@ -8,6 +8,7 @@ function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
+	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
 
 	self.dt.price = 200
@@ -55,42 +56,41 @@ function ENT:Use(activator)
 	local discounted = math.ceil(185 * 0.88)
 	local cash = self:SalePrice(activator)
 
-	if not self.Once then
-		self.Once = true
+	if self.Once then return end
 
-		if not activator:CanAfford(self:SalePrice(activator)) then
-			GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase this gun.")
-			return ""
+	if not activator:CanAfford(self:SalePrice(activator)) then
+		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase this gun.")
+		return ""
+	end
+	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
+	if diff < 0 and not owner:CanAfford(math.abs(diff)) then
+		GAMEMODE:Notify(activator, 2, 3, "Gun Lab owner is too poor to subsidize this sale!")
+		return ""
+	end
+	self.sparking = true
+
+
+	activator:AddMoney(cash * -1)
+	GAMEMODE:Notify(activator, 0, 3, "You purchased a P228 for " .. CUR .. tostring(cash) .. "!")
+
+	if activator ~= owner and IsValid(owner) then
+		local gain = 0
+		if owner:Team() == TEAM_GUN then
+			gain = math.floor(self.dt.price - discounted)
+		else
+			gain = math.floor(self.dt.price - 185)
 		end
-		local diff = (self:SalePrice(activator) - self:SalePrice(owner))
-		if diff < 0 and not owner:CanAfford(math.abs(diff)) then
-			GAMEMODE:Notify(activator, 2, 3, "Gun Lab owner is too poor to subsidize this sale!")
-			return ""
-		end
-		self.sparking = true
-
-
-		activator:AddMoney(cash * -1)
-		GAMEMODE:Notify(activator, 0, 3, "You purchased a P228 for " .. CUR .. tostring(cash) .. "!")
-
-		if activator ~= owner and IsValid(owner) then
-			local gain = 0
-			if owner:Team() == TEAM_GUN then
-				gain = math.floor(self.dt.price - discounted)
-			else
-				gain = math.floor(self.dt.price - 185)
-			end
-			if gain == 0 then
-				GAMEMODE:Notify(owner, 3, 3, "You sold a P228 but made no profit!")
-			else
-				owner:AddMoney(gain)
-				local word = "profit"
-				if gain < 0 then word = "loss" end
-				GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. CUR .. tostring(math.abs(gain)) .. " by selling a P228 from a Gun Lab!")
-			end
+		if gain == 0 then
+			GAMEMODE:Notify(owner, 3, 3, "You sold a P228 but made no profit!")
+		else
+			owner:AddMoney(gain)
+			local word = "profit"
+			if gain < 0 then word = "loss" end
+			GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. CUR .. tostring(math.abs(gain)) .. " by selling a P228 from a Gun Lab!")
 		end
 	end
 
+	self.Once = true
 	timer.Create(self:EntIndex() .. "spawned_weapon", 1, 1, function()
 		if not IsValid(self) then return end
 		self:createGun()
