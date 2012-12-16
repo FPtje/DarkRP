@@ -874,7 +874,9 @@ function GM:GetFallDamage( ply, flFallSpeed )
 	return 10
 end
 
+local InitPostEntityCalled = false
 function GM:InitPostEntity()
+	InitPostEntityCalled = true
 	timer.Simple(1, function()
 		if RP_MySQLConfig and RP_MySQLConfig.EnableMySQL then
 			DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
@@ -903,6 +905,11 @@ function GM:InitPostEntity()
 
     self:ReplaceChatHooks()
 end
+timer.Simple(0.1, function()
+	if not InitPostEntityCalled then
+		GAMEMODE:InitPostEntity()
+	end
+end)
 
 function GM:PlayerLeaveVehicle(ply, vehicle)
 	if GAMEMODE.Config.autovehiclelock and vehicle:OwnedBy(ply) then
