@@ -90,6 +90,8 @@ end
 specBinds
 Change binds to perform spectate specific tasks
 ---------------------------------------------------------------------------*/
+-- Manual keysDown table, so I can return true in plyBindPress and still detect key presses
+local keysDown = {}
 local function specBinds(ply, bind, pressed)
 	if bind == "+jump" then
 		stopSpectating()
@@ -108,6 +110,13 @@ local function specBinds(ply, bind, pressed)
 		end
 
 		return true
+	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
+		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
+		if not key or key == "use" then return end
+
+		keysDown[key:upper()] = pressed
+
+		return true
 	end
 	-- Do not return otherwise, spectating admins should be able to move to avoid getting detected
 end
@@ -119,27 +128,27 @@ Free roaming position updates
 local function specThink()
 	local ply = LocalPlayer()
 
-	if not isRoaming or ply:KeyDown(IN_USE) then return end
+	if not isRoaming or keysDown["USE"] then return end
 
 	local roamSpeed = 15
 	local aimVec = ply:GetAimVector()
 	local direction = Vector(0)
 
-	if ply:KeyDown(IN_FORWARD) then
+	if keysDown["FORWARD"] then
 		direction = aimVec
-	elseif ply:KeyDown(IN_BACK) then
+	elseif keysDown["BACK"] then
 		direction = -aimVec
 	end
 
-	if ply:KeyDown(IN_MOVELEFT) then
+	if keysDown["MOVELEFT"] then
 		direction = direction - aimVec:Angle():Right()
-	elseif ply:KeyDown(IN_MOVERIGHT) then
+	elseif keysDown["MOVERIGHT"] then
 		direction = direction + aimVec:Angle():Right()
 	end
 
-	if ply:KeyDown(IN_SPEED) then
+	if keysDown["SPEED"] then
 		roamSpeed = 30
-	elseif ply:KeyDown(IN_WALK) then
+	elseif keysDown["WALK"] then
 		roamSpeed = 5
 	end
 
