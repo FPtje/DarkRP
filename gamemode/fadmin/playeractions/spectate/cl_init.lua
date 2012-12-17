@@ -179,6 +179,7 @@ startFreeRoam = function()
 
 	specEnt = nil
 	isRoaming = true
+	keysDown = {}
 end
 
 /*---------------------------------------------------------------------------
