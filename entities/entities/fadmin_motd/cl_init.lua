@@ -26,7 +26,7 @@ function ENT:Initialize()
 	self.HTML = self.HTMLControl or vgui.Create("HTML")
 	self.HTML:SetPaintedManually(true)
 	self.HTML:SetPos(-512, -256)
-	self.HTML:SetSize(ScrW(), ScrH() - 100)
+	self.HTML:SetSize(ScrW() / 2, ScrH() / 2)
 	self:LoadPage()
 
 	self.HTML:SetVisible(true)
