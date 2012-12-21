@@ -130,10 +130,10 @@ local function SetWarrant(ply, target, reason)
 	target.warranted = true
 	timer.Simple(GAMEMODE.Config.searchtime, function() UnWarrant(ply, target) end)
 	for a, b in pairs(player.GetAll()) do
-		b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.warrant_approved, target:Nick()).."\nReason: "..tostring(reason))
-		if b:IsAdmin() then
-			b:PrintMessage( HUD_PRINTCONSOLE, ply:Nick() .. " ordered a search warrant for " .. target:Nick() .. ", reason: " .. tostring(reason) )
-		end
+		b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.warrant_approved, target:Nick()) ..
+			"\nReason: " .. tostring(reason) ..
+			"\nOrdered by: " .. (IsValid(ply) and ply:Nick() or "Disconnected player"))
+		b:PrintMessage(HUD_PRINTCONSOLE, ply:Nick() .. " ordered a search warrant for " .. target:Nick() .. ", reason: " .. tostring(reason))
 	end
 	GAMEMODE:Notify(ply, 0, 4, LANGUAGE.warrant_approved2)
 end
@@ -253,10 +253,10 @@ local function PlayerWanted(ply, args)
 			p:SetDarkRPVar("wanted", true)
 			p:SetDarkRPVar("wantedReason", tostring(reason))
 			for a, b in pairs(player.GetAll()) do
-				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_by_police, p:Nick()).."\nReason: "..tostring(reason))
-				if b:IsAdmin() then
-					b:PrintMessage( HUD_PRINTCONSOLE, ply:Nick() .. " has made " .. p:Nick() .. " wanted by police for " ..tostring(reason) )
-				end
+				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_by_police, p:Nick()) ..
+					"\nReason: " .. tostring(reason) ..
+					"\nOrdered by: " .. (IsValid(ply) and ply:Nick() or "Disconnected player"))
+				b:PrintMessage(HUD_PRINTCONSOLE, ply:Nick() .. " has made " .. p:Nick() .. " wanted by police for " ..tostring(reason))
 			end
 			timer.Create(p:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function() TimerUnwanted(ply, p) end)
 		else
