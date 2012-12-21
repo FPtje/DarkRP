@@ -69,6 +69,8 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 
 	if DoSayFunc then DoSayFunc(text2) return "" end
 	RP_ActualDoSay(ply, text2, callback)
+
+	hook.Call("PostPlayerSay", nil, ply, text2, teamonly, dead)
 	return ""
 end
 

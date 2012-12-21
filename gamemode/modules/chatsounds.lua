@@ -242,4 +242,4 @@ local function CheckChat( ply, text )
 
 end
 
-hook.Add("PlayerSay", "ChatSounds", CheckChat )
+hook.Add("PostPlayerSay", "ChatSounds", CheckChat )
