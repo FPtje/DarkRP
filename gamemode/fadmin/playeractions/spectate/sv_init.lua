@@ -8,6 +8,8 @@ local function Spectate(ply, cmd, args)
 	ply.FAdminSpectatingEnt = target
 	ply.FAdminSpectating = true
 
+	ply:ExitVehicle()
+
 	umsg.Start("FAdminSpectate", ply)
 		umsg.Bool(target == nil) -- Is the player roaming?
 		umsg.Entity(ply.FAdminSpectatingEnt)
