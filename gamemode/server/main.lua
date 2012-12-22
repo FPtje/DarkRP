@@ -277,7 +277,10 @@ local function PlayerUnWanted(ply, args)
 			hook.Call("PlayerUnWanted", GAMEMODE, ply, p)
 			p:SetDarkRPVar("wanted", false)
 			for a, b in pairs(player.GetAll()) do
-				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_expired, p:Nick()))
+				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_expired, p:Nick()) ..
+					"\nRevoked by: " .. ply:Nick())
+				b:PrintMessage(HUD_PRINTCONSOLE, string.format(LANGUAGE.wanted_expired, p:Nick()) ..
+					"\nRevoked by: " .. ply:Nick())
 			end
 			timer.Destroy(p:UniqueID() .. " wantedtimer")
 		else
