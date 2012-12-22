@@ -43,6 +43,7 @@ end
 if SERVER then
 	function ENTITY:CPPISetOwner(ply)
 		self.Owner = ply
+		self.OwnerID = ply:SteamID()
 		return true
 	end
 
@@ -57,6 +58,7 @@ if SERVER then
 			return true
 		elseif ply:IsValid() then
 			self.Owner = ply
+			self.OwnerID = ply:SteamID()
 			return true
 		end
 		return false

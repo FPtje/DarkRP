@@ -126,6 +126,7 @@ if undo then
 		if IsValid(UndoPlayer) then
 			for k,v in pairs(Undo) do
 				v.Owner = UndoPlayer
+				v.OwnerID = UndoPlayer:SteamID()
 			end
 		end
 		Undo = {}
