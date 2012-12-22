@@ -895,6 +895,7 @@ function GM:InitPostEntity()
 	-- Scriptenforcer enabled by default? Fuck you, not gonna happen.
 	game.ConsoleCommand("sv_allowcslua 1\n")
 	game.ConsoleCommand("physgun_DampingFactor 0.9\n")
+	game.ConsoleCommand("sv_sticktoground 0\n")
 	game.ConsoleCommand("sv_airaccellerate 100\n")
 
 	for k, v in pairs(ents.GetAll()) do
