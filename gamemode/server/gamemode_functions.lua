@@ -139,6 +139,7 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 	self.BaseClass:PlayerSpawnedProp(ply, model, ent)
 	ent.SID = ply.SID
 	ent.Owner = ply
+	ent.OwnerID = ply:SteamID()
 	local phys = ent:GetPhysicsObject()
 	if phys and phys:IsValid() then
 		ent.RPOriginalMass = phys:GetMass()

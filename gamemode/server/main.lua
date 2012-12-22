@@ -772,6 +772,7 @@ local function BuyVehicle(ply, args)
 	ent.VehicleName = found.name
 	ent.VehicleTable = Vehicle
 	ent.Owner = ply
+	ent.OwnerID = ply:SteamID()
 	ent:Spawn()
 	ent:Activate()
 	ent.SID = ply.SID

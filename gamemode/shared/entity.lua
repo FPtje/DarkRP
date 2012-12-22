@@ -494,6 +494,7 @@ function meta:Own(ply)
 
 	if self:IsVehicle() then
 		self.Owner = ply
+		self.OwnerID = ply:SteamID()
 	end
 
 	if not self:IsOwned() and not self:OwnedBy(ply) then
