@@ -23,12 +23,10 @@ SWEP.IconLetter = ""
 
 if not SERVER then return end
 
-/*---------------------------------------------------------------------------
-Get the entities that are affected by the keypad
----------------------------------------------------------------------------*/
-local function getKeypadInfo(keypad)
-	local keyPass = keypad:GetNWInt("keypad_keygroup1")
-	local keyDenied = keypad:GetNWInt("keypad_keygroup2")
+/*
+	Gets which entities are controlled by which keyboard keys
+*/
+local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 	local targets = {}
 
 	for k,v in pairs(numpad.OnDownItems or {}) do
@@ -42,15 +40,40 @@ local function getKeypadInfo(keypad)
 
 	for k,v in pairs(numpad.OnUpItems or {}) do
 		if v.key == keyPass and v.ply == keypad.Owner then
-			table.insert(targets, {type = "after having entered the right password", name = v.name, delay = math.Round(keypad:GetNWInt("keypad_length1"), 2), ent = v.ent, original = keypad})
+			table.insert(targets, {type = "after having entered the right password", name = v.name, delay = math.Round(delayPass, 2), ent = v.ent, original = keypad})
 		end
 		if v.key == keyDenied and v.ply == keypad.Owner then
-			table.insert(targets, {type = "after having entered wrong password", name = v.name, delay = math.Round(keypad:GetNWInt("keypad_length2"), 2), ent = v.ent, original = keypad})
+			table.insert(targets, {type = "after having entered wrong password", name = v.name, delay = math.Round(delayDenied, 2), ent = v.ent, original = keypad})
 		end
 	end
 
 	return targets
 end
+
+/*---------------------------------------------------------------------------
+Get the entities that are affected by the keypad
+---------------------------------------------------------------------------*/
+local function get_sent_keypad_Info(keypad)
+	local keyPass = keypad:GetNWInt("keypad_keygroup1")
+	local keyDenied = keypad:GetNWInt("keypad_keygroup2")
+	local delayPass = keypad:GetNWInt("keypad_length1")
+	local delayDenied = keypad:GetNWInt("keypad_length2")
+
+	return getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
+end
+
+/*---------------------------------------------------------------------------
+Overload for a different keypad addon
+---------------------------------------------------------------------------*/
+local function get_keypad_Info(keypad)
+	local keyPass = tonumber(keypad.KeypadData.KeyGranted) or 0
+	local keyDenied = tonumber(keypad.KeypadData.KeyDenied) or 0
+	local delayPass = tonumber(keypad.KeypadData.LengthGranted) or 0
+	local delayDenied = tonumber(keypad.KeypadData.LengthDenied) or 0
+
+	return getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
+end
+
 
 /*---------------------------------------------------------------------------
 Get the keypads that trigger this entity
@@ -80,6 +103,15 @@ local function getEntityKeypad(ent)
 		end
 	end
 
+	for k,v in pairs(ents.FindByClass("keypad")) do
+		if v.Owner == ent.Owner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then
+			table.insert(targets, {type = "Right password entered", ent = v, original = ent})
+		end
+		if v.Owner == ent.Owner and  table.HasValue(doorKeys, tonumber(v.KeypadData.KeyDenied) or 0) then
+			table.insert(targets, {type = "Wrong password entered", ent = v, original = ent})
+		end
+	end
+
 	return targets
 end
 
@@ -92,7 +124,10 @@ function SWEP:PrimaryAttack()
 	local data
 
 	if class == "sent_keypad" then
-		data = getKeypadInfo(ent)
+		data = get_sent_keypad_Info(ent)
+		GAMEMODE:Notify(self.Owner, 1, 4, "This keypad controls "..#data / 2 .. " entities")
+	elseif class == "keypad" then
+		data = get_keypad_Info(ent)
 		GAMEMODE:Notify(self.Owner, 1, 4, "This keypad controls "..#data / 2 .. " entities")
 	else
 		data = getEntityKeypad(ent)
