@@ -202,6 +202,10 @@ local function RetrieveBlocked()
 	DB.Query("SELECT * FROM FPP_BLOCKED1;", function(data)
 		if type(data) == "table" then
 			for k,v in pairs(data) do
+				if not FPP.Blocked[v.var] then
+					ErrorNoHalt((v.var or "(nil var)") .. " blocked type does not exist! (Setting: " .. (v.setting or "") .. ")")
+					continue
+				end
 				table.insert(FPP.Blocked[v.var], v.setting)
 			end
 		else
