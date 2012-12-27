@@ -10,8 +10,7 @@ microwave = true,
 money_printer = true,
 spawned_shipment = true,
 spawned_weapon = true,
-spawned_money = true,
-prop_physics = true}
+spawned_money = true}
 
 local function IsFlammable(ent)
 	return FlammableProps[ent:GetClass()] ~= nil
