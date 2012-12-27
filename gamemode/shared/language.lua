@@ -762,7 +762,7 @@ rp_languages.danish = {
 	change_name = "Skift dit DarkRP navn",
 	go_to_sleep = "fald i søvn / vågne op",
 	drop_weapon = "Smid nuværende våben",
-	buy_health = "Køb Helbred (% s)",
+	buy_health = "Køb Helbred (%s)",
 	request_gunlicense = "Anmodning gunlicense",
 	demote_player_menu = "degradering af en spiller",
 
@@ -1347,7 +1347,7 @@ rp_languages.french = {
 	change_name = "Changer votre nom RP",
 	go_to_sleep = "Se coucher/réveiller",
 	drop_weapon = "Lacher l'arme actuelle",
-	buy_health = "Acheter santé (%s%)",
+	buy_health = "Acheter santé (%s)",
 	request_gunlicense = "Demander une licence d'arme",
 	demote_player_menu = "Virer un joueur",
 
