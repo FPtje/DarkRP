@@ -213,13 +213,8 @@ end
  ---------------------------------------------------------*/
 function meta:ChangeTeam(t, force)
 	if self:isArrested() and not force then
-		if not self:Alive() then
-			GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
-			return false
-		else
-			GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
-			return false
-		end
+		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
+		return false
 	end
 
 	self:SetSelfDarkRPVar("helpBoss",false)
