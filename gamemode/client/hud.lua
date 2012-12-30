@@ -91,7 +91,7 @@ local function DrawInfo()
 
 	local wep = LocalPlayer( ):GetActiveWeapon( );
 
-	if IsValid( wep ) and GAMEMODE.Config.weaponhud then
+	if IsValid(wep) and GAMEMODE.Config.weaponhud then
         local name = wep:GetPrintName();
 		draw.DrawText("Weapon: "..name, "UiBold", RelativeX + 5, RelativeY - HUDHeight - 18, Color(255, 255, 255, 255), 0)
 	end
@@ -244,7 +244,7 @@ local function DrawPlayerInfo(ply)
 	pos = pos:ToScreen()
 	pos.y = pos.y - 50 -- Move the text up a few pixels to compensate for the height of the text
 
-	if GAMEMODE.Config.showname then
+	if GAMEMODE.Config.showname and not ply.DarkRPVars.wanted then
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, Color(0, 0, 0, 255), 1)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 		draw.DrawText(LANGUAGE.health ..ply:Health(), "DarkRPHUD2", pos.x + 1, pos.y + 21, Color(0, 0, 0, 255), 1)
