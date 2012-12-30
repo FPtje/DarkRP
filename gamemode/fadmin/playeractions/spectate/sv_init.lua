@@ -50,7 +50,7 @@ local function endSpectate(ply, cmd, args)
 end
 concommand.Add("_FAdmin_StopSpectating", endSpectate)
 
-function playerVoice(listener, talker)
+local function playerVoice(listener, talker)
 	if not IsValid(listener.FAdminSpectatingEnt) then return end
 
 	-- You can hear someone if your spectate target can hear them
