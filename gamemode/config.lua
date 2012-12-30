@@ -136,7 +136,7 @@ GM.Config.toolgun 						= true
 -- unlockdoorsonstart - Enable/Disable unlocking all doors on map start.
 GM.Config.unlockdoorsonstart 			= false
 -- voiceradius - Enable/disable local voice chat.
-GM.Config.voiceradius 					= false
+GM.Config.voiceradius 					= true
 -- tax - Whether players pay taxes on their wallets.
 GM.Config.wallettax 					= false
 -- wantedsuicide - Enable/Disable suiciding while you are wanted by the police.

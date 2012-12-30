@@ -50,13 +50,15 @@ local function endSpectate(ply, cmd, args)
 end
 concommand.Add("_FAdmin_StopSpectating", endSpectate)
 
-local function playerVoice(listener, talker)
-	local canhear, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
-	for k,v in pairs(player.GetAll()) do
-		if (v.FAdminSpectatingEnt == listener and canhear) or v.FAdminSpectatingEnt == talker then
-			return true, surround
-		end
-	end
+function playerVoice(listener, talker)
+	if not IsValid(listener.FAdminSpectatingEnt) then return end
+
+	-- You can hear someone if your spectate target can hear them
+	canhear, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener.FAdminSpectatingEnt, talker)
+	canHearLocal = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
+
+	-- you can always hear the person you're spectating
+	return canhear or canHearLocal or listener.FAdminSpectatingEnt == talker, surround
 end
 hook.Add("PlayerCanHearPlayersVoice", "FAdminSpectate", playerVoice)
 
