@@ -682,7 +682,7 @@ function DB.RetrieveMoney(ply) -- This is only run once when the player joins, t
 end
 
 function DB.ResetAllMoney(ply,cmd,args)
-	if not ply:IsSuperAdmin() then return end
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
 	DB.Query("UPDATE darkrp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
 	for k,v in pairs(player.GetAll()) do
 		v:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
