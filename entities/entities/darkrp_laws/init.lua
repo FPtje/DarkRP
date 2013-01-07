@@ -10,107 +10,88 @@ local Laws = {
 	"Money printers/drugs are illegal."
 }
 
-local FixedLaws = table.Copy( Laws )
+local FixedLaws = table.Copy(Laws)
 
 function ENT:Initialize()
-
 	self:SetModel("models/props/cs_assault/Billboard.mdl")
-	self:PhysicsInit( SOLID_VPHYSICS )
-	self:SetMoveType( MOVETYPE_VPHYSICS )
-	self:SetSolid( SOLID_VPHYSICS )
+	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetMoveType(MOVETYPE_VPHYSICS)
+	self:SetSolid(SOLID_VPHYSICS)
 
 	local phys = self:GetPhysicsObject()
+
 	if phys and phys:IsValid() then
-
 		phys:Wake()
-		phys:EnableMotion( false )
-
+		phys:EnableMotion(false)
 	end
-
 end
 
-local function AddLaw( ply, args )
-
+local function AddLaw(ply, args)
 	if ply:Team() ~= TEAM_MAYOR then
-
-		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to set laws!")
+		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to set laws!")
 		return ""
 	end
 
-	if string.len( args ) < 3 then
-
-		GAMEMODE:Notify( ply, 1, 4, "Law too short.")
+	if string.len(args) < 3 then
+		GAMEMODE:Notify(ply, 1, 4, "Law too short.")
 		return ""
 	end
 
 	if #Laws >= 12 then
-
-		GAMEMODE:Notify( ply, 1, 4, "The laws are full.")
+		GAMEMODE:Notify(ply, 1, 4, "The laws are full.")
 		return ""
 	end
 
-	table.insert( Laws, args )
+	table.insert(Laws, args)
 
 	umsg.Start("DRP_AddLaw")
-
-		umsg.String( args )
-
+		umsg.String(args)
 	umsg.End()
 
 	return ""
 end
-AddChatCommand("/addlaw", AddLaw )
+AddChatCommand("/addlaw", AddLaw)
 
-local function RemoveLaw( ply, args )
-
+local function RemoveLaw(ply, args)
 	if ply:Team() ~= TEAM_MAYOR then
-
-		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to remove laws!")
+		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to remove laws!")
 		return ""
 	end
 
-	if not tonumber( args ) then
-
-		GAMEMODE:Notify( ply, 1, 4, "Invalid arguments.")
+	if not tonumber(args) then
+		GAMEMODE:Notify(ply, 1, 4, "Invalid arguments.")
 		return ""
 	end
 
-	if not Laws[ tonumber( args ) ] then
-
-		GAMEMODE:Notify( ply, 1, 4, "Invalid law.")
+	if not Laws[ tonumber(args) ] then
+		GAMEMODE:Notify(ply, 1, 4, "Invalid law.")
 		return ""
 	end
 
-	if FixedLaws[ tonumber( args ) ] then
-
-		GAMEMODE:Notify( ply, 1, 4, "You are not allowed to change the default laws.")
+	if FixedLaws[ tonumber(args) ] then
+		GAMEMODE:Notify(ply, 1, 4, "You are not allowed to change the default laws.")
 		return ""
 	end
 
-	table.remove( Laws, tonumber( args ) )
+	table.remove(Laws, tonumber(args))
 
 	umsg.Start("DRP_RemoveLaw")
-
-		umsg.Char( tonumber( args ) )
-
+		umsg.Char(tonumber(args))
 	umsg.End()
 
 	return ""
 end
-AddChatCommand("/removelaw", RemoveLaw )
+AddChatCommand("/removelaw", RemoveLaw)
 
 local numlaws = 0
-local function PlaceLaws( ply, args )
-
+local function PlaceLaws(ply, args)
 	if ply:Team() ~= TEAM_MAYOR then
-
-		GAMEMODE:Notify( ply, 1, 4, "You must be the mayor to place a list of laws.")
+		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to place a list of laws.")
 		return ""
 	end
 
 	if numlaws >= GAMEMODE.Config.maxlawboards then
-
-		GAMEMODE:Notify( ply, 1, 4, "You have reached the max number of laws you can place!")
+		GAMEMODE:Notify(ply, 1, 4, "You have reached the max number of laws you can place!")
 		return ""
 	end
 
@@ -119,14 +100,14 @@ local function PlaceLaws( ply, args )
 	trace.endpos = trace.start + ply:GetAimVector() * 85
 	trace.filter = ply
 
-	local tr = util.TraceLine( trace )
+	local tr = util.TraceLine(trace)
 
 	local ent = ents.Create("darkrp_laws")
-	ent:SetPos( tr.HitPos + Vector( 0, 0, 100 ) )
+	ent:SetPos(tr.HitPos + Vector(0, 0, 100))
 
 	local ang = ply:GetAngles()
-	ang:RotateAroundAxis( ang:Up(), 180 )
-	ent:SetAngles( ang )
+	ang:RotateAroundAxis(ang:Up(), 180)
+	ent:SetAngles(ang)
 
 	ent.Owner = ply
 	ent.SID = ply.SID
@@ -134,39 +115,27 @@ local function PlaceLaws( ply, args )
 	ent:Spawn()
 	ent:Activate()
 
-	if IsValid( ent ) then
-
+	if IsValid(ent) then
 		numlaws = numlaws + 1
-
 	end
 
 	ply.lawboards = ply.lawboards or {}
-	table.insert( ply.lawboards, ent )
+	table.insert(ply.lawboards, ent)
 
 	return ""
 end
-AddChatCommand("/placelaws", PlaceLaws )
+AddChatCommand("/placelaws", PlaceLaws)
 
 function ENT:OnRemove()
-
 	numlaws = numlaws - 1
-
 end
 
-hook.Add("PlayerInitialSpawn", "SendLaws", function( ply )
+hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
+	for i, law in pairs(Laws) do
+		if FixedLaws[i] then continue end
 
-	if numlaws <= 0 then return end
-
-	for i, law in pairs( Laws ) do
-
-		if FixedLaws[ i ] then continue end
-
-		umsg.Start("DRP_AddLaw", ply )
-
-			umsg.String( law )
-
+		umsg.Start("DRP_AddLaw", ply)
+			umsg.String(law)
 		umsg.End()
-
 	end
-
-end )
+end)
