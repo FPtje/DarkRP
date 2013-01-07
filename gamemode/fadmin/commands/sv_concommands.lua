@@ -10,7 +10,7 @@ local function concommand_executed(ply, cmd, args)
 	local args2 = args
 	table.remove(args2, 1)
 	for k,v in pairs(args2) do
-		if string.sub(v, -1) == "," then
+		if string.sub(v, -1) == "," and args2[k+1] then
 			args2[k] = args2[k] .. args2[k+1]
 			table.remove(args2, k+1)
 		end

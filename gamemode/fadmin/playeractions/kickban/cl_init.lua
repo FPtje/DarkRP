@@ -332,6 +332,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		edit:SetPos(650, 25)
 		edit:SetSize(40, 25)
 		function edit:DoClick()
+			if not selectedLine then return end
 			showBanWindow(selectedLine:GetValue(1), selectedLine.name, selectedLine.time > os.time() and (selectedLine.time - os.time())/60 or 0, selectedLine.reason)
 			Frame:Close()
 		end
