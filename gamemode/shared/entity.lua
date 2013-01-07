@@ -80,6 +80,13 @@ function meta:AllowedToOwn(ply)
 	return false
 end
 
+local playerMeta = FindMetaTable("Player")
+function playerMeta:IsCP()
+	if not IsValid(self) then return false end
+	local Team = self:Team()
+	return Team == TEAM_POLICE or Team == TEAM_CHIEF or Team == TEAM_MAYOR
+end
+
 /*---------------------------------------------------------
  Clientside part
  ---------------------------------------------------------*/

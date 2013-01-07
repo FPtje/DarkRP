@@ -381,18 +381,14 @@ function GM:ChatTextChanged(text)
 		HearMode = "group chat"
 		local t = LocalPlayer():Team()
 		playercolors = {}
-		if t == TEAM_POLICE or t == TEAM_CHIEF or t == TEAM_MAYOR then
-			for k, v in pairs(player.GetAll()) do
-				if v ~= LocalPlayer() then
-					local vt = v:Team()
-					if vt == TEAM_POLICE or vt == TEAM_CHIEF or vt == TEAM_MAYOR then table.insert(playercolors, v) end
-				end
-			end
-		elseif t == TEAM_MOB or t == TEAM_GANG then
-			for k, v in pairs(player.GetAll()) do
-				if v ~= LocalPlayer() then
-					local vt = v:Team()
-					if vt == TEAM_MOB or vt == TEAM_GANG then table.insert(playercolors, v) end
+
+		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
+			-- not the group of the player
+			if not func(LocalPlayer()) then continue end
+
+			for _, target in pairs(player.GetAll()) do
+				if func(target) and target ~= LocalPlayer() then
+					table.insert(playercolors, target)
 				end
 			end
 		end

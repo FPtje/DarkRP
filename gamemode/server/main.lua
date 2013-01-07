@@ -1336,25 +1336,22 @@ AddChatCommand("/cr", CombineRequest)
 
 local function GroupMsg(ply, args)
 	if args == "" then return "" end
+
 	local DoSay = function(text)
 		if text == "" then return end
+
 		local t = ply:Team()
-		local audience = {}
+		local col = team.GetColor(ply:Team())
 
-		if ply:IsCP() then
-			for k, v in pairs(player.GetAll()) do
-				if v:IsCP() then table.insert(audience, v) end
-			end
-		elseif t == TEAM_MOB or t == TEAM_GANG then
-			for k, v in pairs(player.GetAll()) do
-				local vt = v:Team()
-				if vt == TEAM_MOB or vt == TEAM_GANG then table.insert(audience, v) end
-			end
-		end
+		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
+			-- not the group of the player
+			if not func(ply) then continue end
 
-		for k, v in pairs(audience) do
-			local col = team.GetColor(ply:Team())
-			GAMEMODE:TalkToPerson(v, col, LANGUAGE.group..ply:Nick(),Color(255,255,255,255), text, ply)
+			for _, target in pairs(player.GetAll()) do
+				if func(target) then
+					GAMEMODE:TalkToPerson(target, col, LANGUAGE.group .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
+				end
+			end
 		end
 	end
 	return args, DoSay

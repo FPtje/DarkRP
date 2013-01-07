@@ -251,3 +251,20 @@ The default agenda's, can also be used as examples:
 */
 AddAgenda("Gangster's agenda", TEAM_MOB, {TEAM_GANG})
 AddAgenda("Police agenda", TEAM_MAYOR, {TEAM_CHIEF, TEAM_POLICE})
+
+
+/*
+---------------------------------------------------------------------------
+HOW TO MAKE A GROUP CHAT
+---------------------------------------------------------------------------
+Pick one!
+GAMEMODE:AddGroupChat(List of team variables separated by comma)
+
+or
+
+GAMEMODE:AddGroupChat(a function with ply as argument that returns whether a random player is in one chat group)
+This one is for people who know how to script Lua.
+
+*/
+GM:AddGroupChat(function(ply) return ply:IsCP() end)
+GM:AddGroupChat(TEAM_MOB, TEAM_GANG)

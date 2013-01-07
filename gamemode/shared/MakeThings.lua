@@ -137,6 +137,17 @@ function AddAgenda(Title, Manager, Listeners)
 	DarkRPAgendas[Manager] = {Title = Title, Listeners = Listeners}
 end
 
+GM.DarkRPGroupChats = {}
+function GM:AddGroupChat(funcOrTeam, ...)
+	-- People can enter either functions or a list of teams as parameter(s)
+	if type(funcOrTeam) == "function" then
+		table.insert(self.DarkRPGroupChats, funcOrTeam)
+	else
+		local teams = {funcOrTeam, ...}
+		table.insert(self.DarkRPGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
+	end
+end
+
 GM.AmmoTypes = {}
 
 function GM:AddAmmoType(ammoType, name, model, price, amountGiven, customCheck)
