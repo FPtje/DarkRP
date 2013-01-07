@@ -38,6 +38,10 @@ function SWEP:createViewModels()
 	self.viewModels[1] = IsValid(self.viewModels[1]) and self.viewModels[1] or ents.CreateClientProp()
 	self.viewModels[2] = IsValid(self.viewModels[2]) and self.viewModels[2] or ents.CreateClientProp()
 
+	if not IsValid(self.viewModels[1]) or not IsValid(self.viewModels[2]) then
+		return -- Too many clientside models, couldn't create the medkit ones
+	end
+
 	self.viewModels[1]:SetAngles(viewmodel:GetAngles())
 	self.viewModels[2]:SetAngles(viewmodel:GetAngles())
 
