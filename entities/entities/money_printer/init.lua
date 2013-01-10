@@ -42,11 +42,11 @@ function ENT:Destruct()
 	effectdata:SetOrigin(vPoint)
 	effectdata:SetScale(1)
 	util.Effect("Explosion", effectdata)
-	GAMEMODE:Notify(self.dt.owning_ent, 1, 4, "Your money printer has exploded!")
+	GAMEMODE:Notify(self:Getowning_ent(), 1, 4, "Your money printer has exploded!")
 end
 
 function ENT:BurstIntoFlames()
-	GAMEMODE:Notify(self.dt.owning_ent, 0, 4, "Your money printer is overheating!")
+	GAMEMODE:Notify(self:Getowning_ent(), 0, 4, "Your money printer is overheating!")
 	self.burningup = true
 	local burntime = math.random(8, 18)
 	self:Ignite(burntime, 0)

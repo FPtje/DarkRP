@@ -19,17 +19,17 @@ end
 
 
 function ENT:Use(activator,caller)
-	local amount = self.dt.amount
+	local amount = self:Getamount()
 
 	activator:AddMoney(amount or 0)
-	GAMEMODE:Notify(activator, 0, 4, "You have found " .. CUR .. (self.dt.amount or 0) .. "!")
+	GAMEMODE:Notify(activator, 0, 4, "You have found " .. CUR .. (self:Getamount() or 0) .. "!")
 	self:Remove()
 end
 
 function DarkRPCreateMoneyBag(pos, amount)
 	local moneybag = ents.Create("spawned_money")
 	moneybag:SetPos(pos)
-	moneybag.dt.amount = amount
+	moneybag:Setamount(amount)
 	moneybag:Spawn()
 	moneybag:Activate()
 	return moneybag
@@ -41,5 +41,5 @@ function ENT:Touch(ent)
 	ent.hasMerged = true
 
 	ent:Remove()
-	self.dt.amount = self.dt.amount + ent.dt.amount
+	self:Setamount(self:Getamount() + ent:Getamount())
 end

@@ -6,11 +6,11 @@ end
 function ENT:Draw()
 	self:DrawModel()
 
-	if IsValid(self.dt.reporter) and self.dt.reporter.Name and IsValid(self.dt.reported) and self.dt.reported.Name and self:GetNWString("reason") != nil then
-		local reporter = self.dt.reporter:Name()
-		local reported = self.dt.reported:Name()
+	if IsValid(self:Getreporter()) and self:Getreporter().Name and IsValid(self:Getreported()) and self:Getreported().Name and self:GetNWString("reason") != nil then
+		local reporter = self:Getreporter():Name()
+		local reported = self:Getreported():Name()
 		local reason = self:GetNWString("reason")
-		local distance = math.Round(self.dt.reporter:GetPos():Distance(self:GetPos()) / 25.4) .. "m" -- In metres sir!
+		local distance = math.Round(self:Getreporter():GetPos():Distance(self:GetPos()) / 25.4) .. "m" -- In metres sir!
 
 		local ang = self:GetAngles()
 		ang:RotateAroundAxis(ang:Right(), -103)
@@ -23,7 +23,7 @@ function ENT:Draw()
 		cam.End3D2D()
 	end
 
-	if self.dt.alarm then
+	if self:Getalarm() then
 		local dlight = DynamicLight(self:EntIndex())
 		if dlight then
 			dlight.Pos = self:GetPos()
@@ -46,7 +46,7 @@ local function Memory(um)
 	local Memory = um:ReadBool()
 	local MemoryTime = um:ReadShort()
 
-	local Reporter, Reported = ent.dt and ent.dt.reporter, ent.dt and ent.dt.reported
+	local Reporter, Reported = ent.dt and ent:Getreporter(), ent.dt and ent:Getreported()
 
 	hook.Add("HUDPaint", "darkRP_memory", function()
 		if IsValid(Reporter) and IsValid(Reported) then

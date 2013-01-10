@@ -86,7 +86,7 @@ local function BuyFood(ply, args)
 			end
 			GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, k, tostring(cost)))
 			local SpawnedFood = ents.Create("spawned_food")
-			SpawnedFood.dt.owning_ent = ply
+			SpawnedFood:Setowning_ent(ply)
 			SpawnedFood.ShareGravgun = true
 			SpawnedFood:SetPos(tr.HitPos)
 			SpawnedFood.onlyremover = true

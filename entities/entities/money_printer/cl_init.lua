@@ -9,7 +9,7 @@ function ENT:Draw()
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
 
-	local owner = self.dt.owning_ent
+	local owner = self:Getowning_ent()
 	owner = (IsValid(owner) and owner:Nick()) or "unknown"
 
 	surface.SetFont("HUDNumber5")

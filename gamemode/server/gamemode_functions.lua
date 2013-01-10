@@ -172,8 +172,8 @@ function GM:EntityRemoved(ent)
 	end
 
 	for k,v in pairs(DarkRPEntities or {}) do
-		if ent:IsValid() and ent:GetClass() == v.ent and ent.dt and IsValid(ent.dt.owning_ent) and not ent.IsRemoved then
-			local ply = ent.dt.owning_ent
+		if ent:IsValid() and ent:GetClass() == v.ent and ent.dt and IsValid(ent:Getowning_ent()) and not ent.IsRemoved then
+			local ply = ent:Getowning_ent()
 			local cmdname = string.gsub(v.ent, " ", "_")
 			if not ply["max"..cmdname] then
 				ply["max"..cmdname] = 1
@@ -522,11 +522,11 @@ function GM:PlayerInitialSpawn(ply)
 	for k,v in pairs(ents.GetAll()) do
 		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.dt then
 			v.SID = ply.SID
-			v.dt.owning_ent = ply
+			v:Setowning_ent(ply)
 			v.deleteSteamID = nil
 			timer.Destroy("Remove"..v:EntIndex())
 			ply["max"..v:GetClass()] = (ply["max"..v:GetClass()] or 0) + 1
-			if v.dt then v.dt.owning_ent = ply end
+			if v.dt then v:Setowning_ent(ply) end
 		end
 	end
 	timer.Simple(10, function() ply:CompleteSentence() end)

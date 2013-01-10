@@ -13,7 +13,7 @@ function ENT:Initialize()
 	phys:Wake()
 	self.sparking = false
 	self.damage = 100
-	self.dt.price = math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 30, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 30)
+	self:Setprice(math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 30, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 30))
 end
 
 function ENT:OnTakeDamage(dmg)
@@ -34,7 +34,7 @@ function ENT:Destruct()
 end
 
 function ENT:SalePrice(activator)
-	local owner = self.dt.owning_ent
+	local owner = self:Getowning_ent()
 	local discounted = math.ceil(GAMEMODE.Config.microwavefoodcost * 0.82)
 
 	if activator == owner then
@@ -45,13 +45,13 @@ function ENT:SalePrice(activator)
 			return math.floor(GAMEMODE.Config.microwavefoodcost)
 		end
 	else
-		return self.dt.price
+		return self:Getprice()
 	end
 end
 
 ENT.Once = false
 function ENT:Use(activator,caller)
-	local owner = self.dt.owning_ent
+	local owner = self:Getowning_ent()
 	self.user = activator
 	if not activator:CanAfford(self:SalePrice(activator)) then
 		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase food!")
@@ -77,9 +77,9 @@ function ENT:Use(activator,caller)
 		if activator ~= owner then
 			local gain = 0
 			if owner:Team() == TEAM_COOK then
-				gain = math.floor(self.dt.price - discounted)
+				gain = math.floor(self:Getprice() - discounted)
 			else
-				gain = math.floor(self.dt.price - GAMEMODE.Config.microwavefoodcost)
+				gain = math.floor(self:Getprice() - GAMEMODE.Config.microwavefoodcost)
 			end
 			if gain == 0 then
 				GAMEMODE:Notify(owner, 2, 3, "You sold some food but made no profit!")
@@ -100,7 +100,7 @@ function ENT:createFood()
 	local foodPos = self:GetPos()
 	food = ents.Create("food")
 	food:SetPos(Vector(foodPos.x,foodPos.y,foodPos.z + 23))
-	food.dt.owning_ent = activator
+	food:Setowning_ent(activator)
 	food.ShareGravgun = true
 	food.nodupe = true
 	food:Spawn()
@@ -124,6 +124,6 @@ end
 
 function ENT:OnRemove()
 	timer.Destroy(self:EntIndex())
-	local ply = self.dt.owning_ent
+	local ply = self:Getowning_ent()
 	if not IsValid(ply) then return end
 end

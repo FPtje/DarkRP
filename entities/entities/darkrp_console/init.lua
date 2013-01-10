@@ -23,7 +23,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator, caller)
-	if activator:IsCP() and IsValid(self.dt.reporter) then
+	if activator:IsCP() and IsValid(self:Getreporter()) then
 		local memory = math.random(60, 125)
 		umsg.Start("darkrp_memory", activator)
 			umsg.Entity(self)
@@ -39,11 +39,11 @@ function ENT:Alarm()
 	self.Sound = CreateSound(self, "ambient/alarms/alarm_citizen_loop1.wav")
 	self.Sound:Play()
 
-	self.dt.alarm = true
+	self:Setalarm(true)
 	timer.Simple(30, function()
 		if self.Sound then self.Sound:Stop() end
-		self.dt.alarm = false
-		self.dt.reporter = 1
+		self:Setalarm(false)
+		self:Setreporter(1)
 	end)
 end
 

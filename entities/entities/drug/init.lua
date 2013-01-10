@@ -57,7 +57,7 @@ function ENT:Initialize()
 	phys:Wake()
 
 	self.damage = 10
-	self.dt.price = self.dt.price or 100
+	self:Setprice(self:Getprice() or 100)
 	self.SeizeReward = GAMEMODE.Config.pricemin or 35
 end
 
@@ -77,14 +77,14 @@ end
 
 function ENT:Use(activator,caller)
 	if not self.CanUse then return false end
-	local Owner = self.dt.owning_ent
+	local Owner = self:Getowning_ent()
 	if activator ~= Owner then
-		if not activator:CanAfford(self.dt.price) then
+		if not activator:CanAfford(self:Getprice()) then
 			return false
 		end
-		DB.PayPlayer(activator, Owner, self.dt.price)
-		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. CUR .. self.dt.price .. " for using drugs.")
-		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. CUR .. self.dt.price .. " for selling drugs.")
+		DB.PayPlayer(activator, Owner, self:Getprice())
+		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. CUR .. self:Getprice() .. " for using drugs.")
+		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. CUR .. self:Getprice() .. " for selling drugs.")
 	end
 	DrugPlayer(caller)
 	self.CanUse = false
@@ -92,7 +92,7 @@ function ENT:Use(activator,caller)
 end
 
 function ENT:OnRemove()
-	local ply = self.dt.owning_ent
+	local ply = self:Getowning_ent()
 	if not IsValid(ply) then return end
 	ply.maxDrugs = ply.maxDrugs - 1
 end

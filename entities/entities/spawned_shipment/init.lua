@@ -16,19 +16,19 @@ function ENT:Initialize()
 	local phys = self:GetPhysicsObject()
 	phys:Wake()
 
-	local contents = CustomShipments[self.dt.contents or ""]
+	local contents = CustomShipments[self:Getcontents() or ""]
 
 	-- Create a serverside gun model
 	-- it's required serverside to be able to get OBB information clientside
-	self.dt.gunModel = IsValid(self.dt.gunModel) and self.dt.gunModel or ents.Create("prop_physics")
-	self.dt.gunModel:SetModel(contents.model)
-	self.dt.gunModel:SetPos(self:GetPos())
-	self.dt.gunModel:Spawn()
-	self.dt.gunModel:Activate()
-	self.dt.gunModel:SetSolid(SOLID_NONE)
-	self.dt.gunModel:SetParent(self)
+	self:SetgunModel(IsValid(self:GetgunModel()) and self:GetgunModel() or ents.Create("prop_physics"))
+	self:GetgunModel():SetModel(contents.model)
+	self:GetgunModel():SetPos(self:GetPos())
+	self:GetgunModel():Spawn()
+	self:GetgunModel():Activate()
+	self:GetgunModel():SetSolid(SOLID_NONE)
+	self:GetgunModel():SetParent(self)
 
-	phys = self.dt.gunModel:GetPhysicsObject()
+	phys = self:GetgunModel():GetPhysicsObject()
 	phys:EnableMotion(false)
 end
 
@@ -42,15 +42,15 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:SetContents(s, c)
-	self.dt.contents = s
-	self.dt.count = c
+	self:Setcontents(s)
+	self:Setcount(c)
 end
 
 function ENT:Use()
 	if not self.locked then
 		self.locked = true -- One activation per second
 		self.sparking = true
-		self.dt.gunspawn = CurTime() + 1
+		self:Setgunspawn(CurTime() + 1)
 		timer.Create(self:EntIndex() .. "crate", 1, 1, function() self.SpawnItem(self) end)
 	end
 end
@@ -59,10 +59,10 @@ function ENT:SpawnItem()
 	if not IsValid(self) then return end
 	timer.Destroy(self:EntIndex() .. "crate")
 	self.sparking = false
-	local count = self.dt.count
+	local count = self:Getcount()
 	local pos = self:GetPos()
 	if count <= 1 then self:Remove() end
-	local contents = self.dt.contents
+	local contents = self:Getcontents()
 	local weapon = ents.Create("spawned_weapon")
 
 	local weaponAng = self:GetAngles()
@@ -87,7 +87,7 @@ function ENT:SpawnItem()
 	weapon.nodupe = true
 	weapon:Spawn()
 	count = count - 1
-	self.dt.count = count
+	self:Setcount(count)
 	self.locked = false
 end
 
@@ -106,8 +106,8 @@ function ENT:Destruct()
 	if self.Destructed then return end
 	self.Destructed = true
 	local vPoint = self:GetPos()
-	local contents = self.dt.contents
-	local count = self.dt.count
+	local contents = self:Getcontents()
+	local count = self:Getcount()
 	local class = nil
 	local model = nil
 
@@ -134,12 +134,12 @@ end
 
 function ENT:Touch(ent)
 	if ent:GetClass() ~= "spawned_shipment" or
-		self.dt.contents ~= ent.dt.contents or
+		self:Getcontents() ~= ent:Getcontents() or
 		self.locked or ent.locked or
 		self.hasMerged or ent.hasMerged then return end
 
 	ent.hasMerged = true
 
-	self.dt.count = self.dt.count + ent.dt.count
+	self:Setcount(self:Getcount() + ent:Getcount())
 	ent:Remove()
 end

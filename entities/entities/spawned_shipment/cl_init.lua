@@ -51,53 +51,53 @@ function ENT:drawSpawning()
 end
 
 function ENT:drawFloatingGun()
-	local contents = CustomShipments[self.dt.contents or ""]
-	if not contents or not IsValid(self.dt.gunModel) then return end
-	self.dt.gunModel:SetNoDraw(true)
+	local contents = CustomShipments[self:Getcontents() or ""]
+	if not contents or not IsValid(self:GetgunModel()) then return end
+	self:GetgunModel():SetNoDraw(true)
 
 	local pos = self:GetPos()
 	local ang = self:GetAngles()
 
 	-- Position the gun
 	local gunPos = self:GetAngles():Up() * 40 + ang:Up() * (math.sin(CurTime() * 3) * 8)
-	self.dt.gunModel:SetPos(pos + gunPos)
+	self:GetgunModel():SetPos(pos + gunPos)
 
 
 	-- Make it dance
 	ang:RotateAroundAxis(ang:Up(), (CurTime() * 180) % 360)
-	self.dt.gunModel:SetAngles(ang)
+	self:GetgunModel():SetAngles(ang)
 
 	-- Draw the model
-	if self.dt.gunspawn < CurTime() - 2 then
-		self.dt.gunModel:DrawModel()
+	if self:Getgunspawn() < CurTime() - 2 then
+		self:GetgunModel():DrawModel()
 		return
-	elseif self.dt.gunspawn < CurTime() then -- Not when a gun just spawned
+	elseif self:Getgunspawn() < CurTime() then -- Not when a gun just spawned
 		return
 	end
 
 	-- Draw the spawning effect
-	local delta = self.dt.gunspawn - CurTime()
-	local min, max = self.dt.gunModel:OBBMins(), self.dt.gunModel:OBBMaxs()
-	min, max = self.dt.gunModel:LocalToWorld(min), self.dt.gunModel:LocalToWorld(max)
+	local delta = self:Getgunspawn() - CurTime()
+	local min, max = self:GetgunModel():OBBMins(), self:GetgunModel():OBBMaxs()
+	min, max = self:GetgunModel():LocalToWorld(min), self:GetgunModel():LocalToWorld(max)
 
 	-- Draw the ghosted weapon
 	render.MaterialOverride(matBallGlow)
 	render.SetColorModulation(1 - delta, delta, 0) -- From red to green
-	self.dt.gunModel:DrawModel()
+	self:GetgunModel():DrawModel()
 	render.MaterialOverride()
 	render.SetColorModulation(1, 1, 1)
 
 	-- Draw the cut-off weapon
 	render.EnableClipping(true)
 	-- The clipping plane only draws objects that face the plane
-	local normal = -self.dt.gunModel:GetAngles():Forward()
+	local normal = -self:GetgunModel():GetAngles():Forward()
 	local cutPosition = LerpVector(delta, max, min) -- Where it cuts
 	local cutDistance = normal:Dot(cutPosition)-- Project the vector onto the normal to get the shortest distance between the plane and origin
 
 	-- Activate the plane
 	render.PushCustomClipPlane(normal, cutDistance);
 	-- Draw the partial model
-	self.dt.gunModel:DrawModel()
+	self:GetgunModel():DrawModel()
 	-- Remove the plane
 	render.PopCustomClipPlane()
 
@@ -108,7 +108,7 @@ function ENT:drawInfo()
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
 
-	local content = self.dt.contents or ""
+	local content = self:Getcontents() or ""
 	local contents = CustomShipments[content]
 	if not contents then return end
 	contents = contents.name
@@ -125,10 +125,10 @@ function ENT:drawInfo()
 	Ang:RotateAroundAxis(Ang:Forward(), 90)
 
 	TextWidth = surface.GetTextSize("Amount left:")
-	TextWidth2 = surface.GetTextSize(self.dt.count)
+	TextWidth2 = surface.GetTextSize(self:Getcount())
 
 	cam.Start3D2D(Pos + Ang:Up() * 17, Ang, 0.14)
 		draw.WordBox(2, -TextWidth*0.5 + 5, -150, "Amount left:", "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
-		draw.WordBox(2, -TextWidth2*0.5 + 0, -102, self.dt.count, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+		draw.WordBox(2, -TextWidth2*0.5 + 0, -102, self:Getcount(), "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 	cam.End3D2D()
 end

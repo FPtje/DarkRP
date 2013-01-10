@@ -6,7 +6,7 @@ ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
 function ENT:SetupDataTables()
-	self:DTVar("Int",0,"amount")
+	self:NetworkVar("Int",0,"amount")
 end
 
 local ENTITY = FindMetaTable("Entity")

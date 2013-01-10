@@ -41,6 +41,6 @@ function ENT:Use(activator,caller)
 end
 
 function ENT:OnRemove()
-	local ply = self.dt.owning_ent
+	local ply = self:Getowning_ent()
 	ply.maxFoods = ply.maxFoods and ply.maxFoods - 1 or 0
 end

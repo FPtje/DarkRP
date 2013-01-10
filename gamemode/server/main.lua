@@ -488,7 +488,7 @@ local function MakeLetter(ply, args, type)
 
 	local letter = ents.Create("letter")
 	letter:SetModel("models/props_c17/paper01.mdl")
-	letter.dt.owning_ent = ply
+	letter:Setowning_ent(ply)
 	letter.ShareGravgun = true
 	letter:SetPos(trace.HitPos)
 	letter.nodupe = true
@@ -557,7 +557,7 @@ local function SetPrice(ply, args)
 
 	local class = tr.Entity:GetClass()
 	if IsValid(tr.Entity) and (class == "gunlab" or class == "microwave" or class == "drug_lab") and tr.Entity.SID == ply.SID then
-		tr.Entity.dt.price = b
+		tr.Entity:Setprice(b)
 	else
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.must_be_looking_at, "gunlab / druglab / microwave"))
 	end
@@ -701,7 +701,7 @@ local function BuyShipment(ply, args)
 
 	local crate = ents.Create("spawned_shipment")
 	crate.SID = ply.SID
-	crate.dt.owning_ent = ply
+	crate:Setowning_ent(ply)
 	crate:SetContents(foundKey, found.amount, found.weight)
 
 	crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z))
@@ -825,7 +825,7 @@ for k,v in pairs(DarkRPEntities) do
 
 		local item = ents.Create(v.ent)
 		item.dt = item.dt or {}
-		item.dt.owning_ent = ply
+		item:Setowning_ent(ply)
 		item:SetPos(tr.HitPos)
 		item.SID = ply.SID
 		item.onlyremover = true
@@ -1526,10 +1526,10 @@ local function CreateCheque(ply, args)
 			local tr = util.TraceLine(trace)
 			local Cheque = ents.Create("darkrp_cheque")
 			Cheque:SetPos(tr.HitPos)
-			Cheque.dt.owning_ent = ply
-			Cheque.dt.recipient = recipient
+			Cheque:Setowning_ent(ply)
+			Cheque:Setrecipient(recipient)
 
-			Cheque.dt.amount = amount
+			Cheque:Setamount(amount)
 			Cheque:Spawn()
 		end
 	end)
@@ -2001,8 +2001,8 @@ local function ReportAttacker(ply, cmd, args)
 	local target = GAMEMODE:FindPlayer( name )
 	if target then
 		for k, v in pairs(ents.FindByClass("darkrp_console")) do
-			v.dt.reporter = ply
-			v.dt.reported = target
+			v:Setreporter(ply)
+			v:Setreported(target)
 			v:SetNWString("reason", reason or "(Being) attacked!")
 			v:Alarm(30)
 			GAMEMODE:Notify(ply, 0, 4, "You have called 911!")
@@ -2023,10 +2023,10 @@ local function ReportEntity(ply, cmd, args)
 	tr = util.TraceLine(tracedata).Entity
 
 	local illegal = {"money_printer", "drug_lab", "drug"}
-	if IsValid(tr) and tr.dt and IsValid(tr.dt.owning_ent) and (table.HasValue(illegal, tr:GetClass()) or tr.Illegal) then
+	if IsValid(tr) and tr.dt and IsValid(tr:Getowning_ent()) and (table.HasValue(illegal, tr:GetClass()) or tr.Illegal) then
 		for k, v in pairs(ents.FindByClass("darkrp_console")) do
-			v.dt.reporter = ply
-			v.dt.reported = tr.dt.owning_ent
+			v:Setreporter(ply)
+			v:Setreported(tr:Getowning_ent())
 			v:SetNWString("reason", tr:GetClass()) -- DTVars dont't handle strings.
 			v:Alarm(30)
 		end

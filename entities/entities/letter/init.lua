@@ -12,11 +12,11 @@ function ENT:Initialize()
 	local phys = self:GetPhysicsObject()
 
 	phys:Wake()
-	local ply = self.dt.owning_ent
+	local ply = self:Getowning_ent()
 end
 
 function ENT:OnRemove()
-	local ply = self.dt.owning_ent
+	local ply = self:Getowning_ent()
 	if not IsValid(ply) then return end
 	if not ply.maxletters then
 		ply.maxletters = 0
@@ -41,7 +41,7 @@ function ENT:Use(ply)
 end
 
 function ENT:SignLetter(ply)
-	self.dt.signed = ply
+	self:Setsigned(ply)
 end
 
 concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)

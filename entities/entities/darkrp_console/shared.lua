@@ -6,7 +6,7 @@ ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
 function ENT:SetupDataTables()
-	self:DTVar("Entity", 1, "reporter")
-	self:DTVar("Bool", 0, "alarm")
-	self:DTVar("Entity", 2, "reported")
+	self:NetworkVar("Entity", 1, "reporter")
+	self:NetworkVar("Bool", 0, "alarm")
+	self:NetworkVar("Entity", 2, "reported")
 end

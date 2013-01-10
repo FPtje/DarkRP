@@ -14,10 +14,10 @@ function ENT:Initialize()
 	phys:Wake()
 	self.sparking = false
 	self.damage = 100
-	local ply = self.dt.owning_ent
+	local ply = self:Getowning_ent()
 	self.SID = ply.SID
 	self.SID = ply.SID
-	self.dt.price = math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 100, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 100)
+	self:Setprice(math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 100, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 100))
 	self.CanUse = true
 	self.ShareGravgun = true
 end
@@ -47,7 +47,7 @@ function ENT:Use(activator,caller)
 		timer.Simple(0.5, function() self.CanUse = true end)
 	else
 
-		local productioncost = math.random(self.dt.price / 8, self.dt.price / 4)
+		local productioncost = math.random(self:Getprice() / 8, self:Getprice() / 4)
 		if not activator:CanAfford(productioncost) then
 			GAMEMODE:Notify(activator, 1, 4, "You do not have enough money to produce drugs.")
 			return false
@@ -65,11 +65,11 @@ function ENT:createDrug()
 	local drugPos = self:GetPos()
 	drug = ents.Create("drug")
 	drug:SetPos(Vector(drugPos.x,drugPos.y,drugPos.z + 35))
-	drug.dt.owning_ent = userb
+	drug:Setowning_ent(userb)
 	drug.SID = userb.SID
 	drug.ShareGravgun = true
 	drug.nodupe = true
-	drug.dt.price = self.dt.price or 100
+	drug:Setprice(self:Getprice() or 100)
 	drug:Spawn()
 	if not userb.maxDrugs then
 		userb.maxDrugs = 0
@@ -80,7 +80,7 @@ end
 
 function ENT:Think()
 	if not self.SID then
-		self.SID = self.dt.price
+		self.SID = self:Getprice()
 	end
 	if self.sparking then
 		local effectdata = EffectData()

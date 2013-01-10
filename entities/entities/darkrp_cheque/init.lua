@@ -20,9 +20,9 @@ end
 
 
 function ENT:Use(activator, caller)
-	local owner = self.dt.owning_ent
-	local recipient = self.dt.recipient
-	local amount = self.dt.amount or 0
+	local owner = self:Getowning_ent()
+	local recipient = self:Getrecipient()
+	local amount = self:Getamount() or 0
 
 	if (IsValid(activator) and IsValid(recipient)) and activator == recipient then
 		owner = (IsValid(owner) and owner:Nick()) or "Disconnected player"
@@ -33,7 +33,7 @@ function ENT:Use(activator, caller)
 		GAMEMODE:Notify(activator, 0, 4, "This cheque is made out to " .. recipient:Name() .. ".")
 	elseif IsValid(owner) and owner == activator then
 		GAMEMODE:Notify(activator, 0, 4, "You have torn up the cheque.")
-		owner:AddMoney(self.dt.amount) -- return the money on the cheque to the owner.
+		owner:AddMoney(self:Getamount()) -- return the money on the cheque to the owner.
 		self:Remove()
 	elseif not IsValid(recipient) then self:Remove()
 	end

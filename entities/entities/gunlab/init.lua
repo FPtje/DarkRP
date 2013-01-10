@@ -11,7 +11,7 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
 
-	self.dt.price = 200
+	self:Setprice(200)
 	phys:Wake()
 
 	self.sparking = false
@@ -36,7 +36,7 @@ function ENT:Destruct()
 end
 
 function ENT:SalePrice(activator)
-	local owner = self.dt.owning_ent
+	local owner = self:Getowning_ent()
 	local discounted = math.ceil(185 * 0.88)
 
 	if activator == owner and IsValid(owner) then
@@ -46,13 +46,13 @@ function ENT:SalePrice(activator)
 			return 185
 		end
 	else
-		return self.dt.price
+		return self:Getprice()
 	end
 end
 
 ENT.Once = false
 function ENT:Use(activator)
-	local owner = self.dt.owning_ent
+	local owner = self:Getowning_ent()
 	local discounted = math.ceil(185 * 0.88)
 	local cash = self:SalePrice(activator)
 
@@ -76,9 +76,9 @@ function ENT:Use(activator)
 	if activator ~= owner and IsValid(owner) then
 		local gain = 0
 		if owner:Team() == TEAM_GUN then
-			gain = math.floor(self.dt.price - discounted)
+			gain = math.floor(self:Getprice() - discounted)
 		else
-			gain = math.floor(self.dt.price - 185)
+			gain = math.floor(self:Getprice() - 185)
 		end
 		if gain == 0 then
 			GAMEMODE:Notify(owner, 3, 3, "You sold a P228 but made no profit!")
