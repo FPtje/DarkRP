@@ -55,6 +55,8 @@ if cleanup then
 			ent.Owner = ply
 			ent.OwnerID = ply:SteamID()
 
+			local model = ent.GetModel and ent:GetModel()
+
 			local blocked, msg = isBlocked(model)
 			if blocked then
 				FPP.Notify(ply, msg, false)
