@@ -114,6 +114,7 @@ function GM:IsEmpty(vector, ignore)
 			break
 		end
 	end
+
 	return a and b
 end
 

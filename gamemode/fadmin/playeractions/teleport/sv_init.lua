@@ -1,48 +1,27 @@
-local function FindSpace(POS)
-	if not FAdmin.IsEmpty(POS) then
-		local found = false
-		for i = 40, 300, 15 do
-			if FAdmin.IsEmpty(POS + Vector(i, 0, 0)) then
-				POS = POS + Vector(i, 0, 0)
-				--Yeah I found a nice position to put the player in!
-				found = true
-				break
-			end
-		end
-		if not found then
-			for i = 40, 300, 15 do
-				if FAdmin.IsEmpty(POS + Vector(0, i, 0)) then
-					POS = POS + Vector(0, i, 0)
-					found = true
-					break
-				end
-			end
-		end
-		if not found then
-			for i = 40, 300, 15 do
-				if FAdmin.IsEmpty(POS + Vector(0, -i, 0)) then
-					POS = POS + Vector(0, -i, 0)
-					found = true
-					break
-				end
-			end
-		end
-		if not found then
-			for i = 40, 300, 15 do
-				if FAdmin.IsEmpty(POS + Vector(-i, 0, 0)) then
-					POS = POS + Vector(-i, 0, 0)
-					--Yeah I found a nice position to put the player in!
-					found = true
-					break
-				end
-			end
-		end
-		-- If you STILL can't find it, you'll just put him on top of the other player lol
-		if not found then
-			POS = POS + Vector(0,0,70)
-		end
-	end
-	return POS
+local function zapEffect(target)
+	local effectdata = EffectData()
+	effectdata:SetStart(target:GetShootPos())
+	effectdata:SetOrigin(target:GetShootPos())
+	effectdata:SetScale(1)
+	effectdata:SetMagnitude(1)
+	effectdata:SetScale(3)
+	effectdata:SetRadius(1)
+	effectdata:SetEntity(target)
+	for i = 1, 100 do timer.Simple(1/i, function() util.Effect("TeslaHitBoxes", effectdata, true, true) end) end
+	local Zap = math.random(1,9)
+	if Zap == 4 then Zap = 3 end
+	target:EmitSound("ambient/energy/zap"..Zap..".wav")
+end
+
+local function TPToPos(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+
+	local x, y, z = string.match(args[1] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
+
+	if not args[1] or not x or not y or not z then return end
+
+	ply:SetPos(Vector(tonumber(x), tonumber(y), tonumber(z)))
+	zapEffect(ply)
 end
 
 local function Teleport(ply, cmd, args)
@@ -63,28 +42,15 @@ local function Teleport(ply, cmd, args)
 			tracedata.filter = ply
 
 			local trace = util.TraceLine(tracedata)
-			local InitialPosition = FindSpace(trace.HitPos - ply:GetAimVector() * 60)
+			local offset = Vector(0, 0, 1)
+			if trace.HitNormal ~= Vector(0, 0, 1) then
+				offset = trace.HitNormal * 16
+			end
+
+			local InitialPosition = GAMEMODE:FindEmptyPos(trace.HitPos + offset, {ply}, 600, 20, Vector(16, 16, 64))
 			target:SetPos(InitialPosition)
 
-
-			local vFlushPoint = trace.HitPos - ( trace.HitNormal * 512 )
-			vFlushPoint = target:NearestPoint( vFlushPoint )
-			vFlushPoint = target:GetPos() - vFlushPoint
-			vFlushPoint = trace.HitPos + vFlushPoint
-			target:SetPos(vFlushPoint)
-
-			local effectdata = EffectData()
-			effectdata:SetStart(target:GetShootPos())
-			effectdata:SetOrigin(target:GetShootPos())
-			effectdata:SetScale( 1 )
-			effectdata:SetMagnitude( 1 )
-			effectdata:SetScale( 3 )
-			effectdata:SetRadius( 1 )
-			effectdata:SetEntity(target)
-			for i = 1, 100 do timer.Simple(1/i, function() util.Effect("TeslaHitBoxes", effectdata, true, true) end) end
-			local Zap = math.random(1,9)
-			if Zap == 4 then Zap = 3 end
-			target:EmitSound("ambient/energy/zap"..Zap..".wav")
+			zapEffect(target)
 		end
 	end
 end
@@ -123,27 +89,10 @@ local function Bring(ply, cmd, args)
 					trace = util.TraceLine(tracedata)
 				end
 
-				target:SetPos(FindSpace(trace.HitPos))
+				target:SetPos(GAMEMODE:FindEmptyPos(ply:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
 
-				/*local vFlushPoint = trace.HitPos - ( trace.HitNormal * 512 )
-				vFlushPoint = target:NearestPoint( vFlushPoint )
-				vFlushPoint = target:GetPos() - vFlushPoint
-				vFlushPoint = trace.HitPos + vFlushPoint*2
-				target:SetPos(vFlushPoint)*/
+				zapEffect(target)
 
-
-				local effectdata = EffectData()
-				effectdata:SetStart(target:GetShootPos())
-				effectdata:SetOrigin(target:GetShootPos())
-				effectdata:SetScale( 1 )
-				effectdata:SetMagnitude( 1 )
-				effectdata:SetScale( 3 )
-				effectdata:SetRadius( 1 )
-				effectdata:SetEntity(target)
-				for i = 1, 100 do timer.Simple(1/i, function() util.Effect("TeslaHitBoxes", effectdata, true, true) end) end
-				local Zap = math.random(1,9)
-				if Zap == 4 then Zap = 3 end
-				target:EmitSound("ambient/energy/zap"..Zap..".wav")
 				if PHYSGUN then timer.Simple(0.5, function() target:Give("weapon_physgun") target:SelectWeapon("weapon_physgun") end) end
 			end)
 		end
@@ -161,38 +110,9 @@ local function Goto(ply, cmd, args)
 	ply:ExitVehicle()
 	if not ply:Alive() then ply:Spawn() end
 
-	local tracedata = {}
-	tracedata.start = target:GetShootPos()
-	tracedata.endpos = tracedata.start + target:GetAimVector()*50
-	tracedata.filter = target
+	ply:SetPos(GAMEMODE:FindEmptyPos(target:GetPos(), {ply}, 600, 30, Vector(16, 16, 64)))
 
-	local trace = util.TraceLine(tracedata)
-	if trace.HitPos:Distance(target:GetShootPos()) < 45 then
-		tracedata.endpos = tracedata.start - target:GetAimVector()*50
-		trace = util.TraceLine(tracedata)
-	end
-
-	ply:SetPos(FindSpace(trace.HitPos))
-
-	/*local vFlushPoint = trace.HitPos - ( trace.HitNormal * 512 )
-	vFlushPoint = ply:NearestPoint( vFlushPoint )
-	vFlushPoint = ply:GetPos() - vFlushPoint
-	vFlushPoint = trace.HitPos + vFlushPoint*2
-	ply:SetPos(vFlushPoint)*/
-
-
-	local effectdata = EffectData()
-	effectdata:SetStart(ply:GetShootPos())
-	effectdata:SetOrigin(ply:GetShootPos())
-	effectdata:SetScale( 1 )
-	effectdata:SetMagnitude( 1 )
-	effectdata:SetScale( 3 )
-	effectdata:SetRadius( 1 )
-	effectdata:SetEntity(ply)
-	for i = 1, 100 do timer.Simple(1/i, function() util.Effect("TeslaHitBoxes", effectdata, true, true) end) end
-	local Zap = math.random(1,9)
-	if Zap == 4 then Zap = 3 end
-	ply:EmitSound("ambient/energy/zap"..Zap..".wav")
+	zapEffect(ply)
 end
 
 FAdmin.StartHooks["Teleport"] = function()
@@ -202,4 +122,5 @@ FAdmin.StartHooks["Teleport"] = function()
 	FAdmin.Commands.AddCommand("TP", Teleport)
 	FAdmin.Commands.AddCommand("Bring", Bring)
 	FAdmin.Commands.AddCommand("Goto", Goto)
+	FAdmin.Commands.AddCommand("TPToPos", TPToPos)
 end

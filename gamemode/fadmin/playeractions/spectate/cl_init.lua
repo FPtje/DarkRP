@@ -95,6 +95,11 @@ local keysDown = {}
 local function specBinds(ply, bind, pressed)
 	if bind == "+jump" then
 		stopSpectating()
+
+		if keysDown["ATTACK2"] then
+			local pos = getCalcView().origin - Vector(0, 0, 64)
+			RunConsoleCommand("FAdmin", "TPToPos", string.format("%d, %d, %d", pos.x, pos.y, pos.z))
+		end
 		return true
 	elseif bind == "+attack" and pressed then
 		thirdperson = not thirdperson
@@ -108,6 +113,8 @@ local function specBinds(ply, bind, pressed)
 				RunConsoleCommand("FAdmin", "Spectate", trace.Entity:UserID())
 			end
 		end
+
+		keysDown["ATTACK2"] = pressed
 
 		return true
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
@@ -146,7 +153,7 @@ local function specThink()
 		direction = direction + aimVec:Angle():Right()
 	end
 
-	if keysDown["SPEED"] then
+	if ply:KeyDown(IN_SPEED) then
 		roamSpeed = 30
 	elseif keysDown["WALK"] then
 		roamSpeed = 5
@@ -164,6 +171,7 @@ local function drawHelp()
 	draw.WordBox(2, 10, ScrH() / 2, "Left mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2 + 60, "Right mouse + Jump: Teleport to spectate pos", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 end
 
 /*---------------------------------------------------------------------------
