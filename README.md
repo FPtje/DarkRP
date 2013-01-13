@@ -1,4 +1,5 @@
-NEWS: (10-27-2012) CUSTOM TEAM/SHIPMENT/ENTITY SYNTAX CHANGED. STILL COMPATIBLE WITH OLDER SYNTAX. YOUR CUSTOM FILES CHANGED.
+NEWS: READ THIS BEFORE REPORTING BUGS:
+https://github.com/FPtje/DarkRP/wiki/HOW-TO-REPORT-ISSUES
 ======
 
 Please try to use the git protocol instead of SVN to get access to DarkRP. GitHub has a very nice program for it:
