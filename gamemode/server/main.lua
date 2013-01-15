@@ -2024,10 +2024,10 @@ local function ReportEntity(ply, cmd, args)
 	tr = util.TraceLine(tracedata).Entity
 
 	local illegal = {"money_printer", "drug_lab", "drug"}
-	if IsValid(tr) and tr.dt and IsValid(tr:Getowning_ent()) and (table.HasValue(illegal, tr:GetClass()) or tr.Illegal) then
+	if IsValid(tr) and tr.dt and IsValid(tr.dt.owning_ent) and (table.HasValue(illegal, tr:GetClass()) or tr.Illegal) then
 		for k, v in pairs(ents.FindByClass("darkrp_console")) do
 			v:Setreporter(ply)
-			v:Setreported(tr:Getowning_ent())
+			v:Setreported(tr.dt.owning_ent)
 			v:SetNWString("reason", tr:GetClass()) -- DTVars dont't handle strings.
 			v:Alarm(30)
 		end
