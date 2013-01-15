@@ -825,7 +825,7 @@ for k,v in pairs(DarkRPEntities) do
 
 		local item = ents.Create(v.ent)
 		item.dt = item.dt or {}
-		item:Setowning_ent(ply)
+		if item.Setowning_ent then item:Setowning_ent(ply) end
 		item:SetPos(tr.HitPos)
 		item.SID = ply.SID
 		item.onlyremover = true
