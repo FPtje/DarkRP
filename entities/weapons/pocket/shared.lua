@@ -34,6 +34,8 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
+local DropItem
+
 if CLIENT then
 	SWEP.FrameVisible = false
 end
@@ -126,27 +128,7 @@ function SWEP:SecondaryAttack()
 	self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket] = nil
 	if not IsValid(ent) then GAMEMODE:Notify(self.Owner, 1, 4, "Your pocket contains no items.") return end
 
-	local trace = {}
-	trace.start = self.Owner:EyePos()
-	trace.endpos = trace.start + self.Owner:GetAimVector() * 85
-	trace.filter = self.Owner
-	local tr = util.TraceLine(trace)
-	ent:SetMoveType(MOVETYPE_VPHYSICS)
-	ent:SetNoDraw(false)
-	ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
-	ent:SetPos(tr.HitPos)
-	ent:SetSolid(SOLID_VPHYSICS)
-	local phys = ent:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:EnableCollisions(true)
-		phys:EnableMotion(true)
-		phys:Wake()
-	end
-	umsg.Start("Pocket_RemoveItem", self.Owner)
-		umsg.Short(ent:EntIndex())
-	umsg.End()
-	ent.PhysgunPickup = nil
-	ent.PlayerUse = nil
+	DropItem(self.Owner, ent)
 end
 
 SWEP.OnceReload = false
@@ -295,4 +277,40 @@ elseif SERVER then
 		end
 	end
 	concommand.Add("_RPSpawnPocketItem", Spawn)
+
+	DropItem = function(ply, ent)
+		local trace = {}
+		trace.start = ply:EyePos()
+		trace.endpos = trace.start + ply:GetAimVector() * 85
+		trace.filter = ply
+		local tr = util.TraceLine(trace)
+		ent:SetMoveType(MOVETYPE_VPHYSICS)
+		ent:SetNoDraw(false)
+		ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
+		ent:SetPos(tr.HitPos)
+		ent:SetSolid(SOLID_VPHYSICS)
+		local phys = ent:GetPhysicsObject()
+		if phys:IsValid() then
+			phys:EnableCollisions(true)
+			phys:EnableMotion(true)
+			phys:Wake()
+		end
+		umsg.Start("Pocket_RemoveItem", ply)
+			umsg.Short(ent:EntIndex())
+		umsg.End()
+		ent.PhysgunPickup = nil
+		ent.PlayerUse = nil
+	end
+
+	hook.Add("PlayerDeath", "DropPocketItems", function(ply)
+		local pocket = ply.Pocket
+		ply.Pocket = nil
+		if not GAMEMODE.Config.droppocketdeath or not pocket then return end
+
+		for k, v in pairs(pocket) do
+			if IsValid(v) then
+				DropItem(ply, v)
+			end
+		end
+	end)
 end
