@@ -51,8 +51,9 @@ hook.Add("OnNPCKilled", "FAdmin_Log", function(NPC, Killer, Weapon) FAdmin.Log(N
 hook.Add("OnPlayerChangedTeam", "FAdmin_Log", function(ply, oldteam, newteam) FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") changed from "..team.GetName(oldteam).. " to ".. team.GetName(newteam)) end)
 hook.Add("WeaponEquip", "FAdmin_Log", function(weapon)
 		timer.Simple(0, function()
+			if not IsValid(weapon) then return end
 			local ply = weapon:GetOwner()
-			if not IsValid(weapon) or not IsValid(ply) or not ply:IsPlayer() then return end
+			if not IsValid(ply) or not ply:IsPlayer() then return end
 			FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Attempted to pick up a "..weapon:GetClass())
 		end)
 end)
