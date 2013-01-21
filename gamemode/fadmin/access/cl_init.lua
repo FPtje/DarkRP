@@ -42,7 +42,10 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 		menu:AddPanel(Title)
 
 		for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
-			menu:AddOption(k, function() RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), k) end)
+			menu:AddOption(k, function()
+				if not IsValid(ply) then return end
+				RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), k)
+			end)
 		end
 
 		local Other = menu:AddSubMenu("Other")
