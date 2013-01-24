@@ -1,45 +1,12 @@
 FAdmin.ScoreBoard.Player.Information = {}
 FAdmin.ScoreBoard.Player.ActionButtons = {}
 
-local CancelRetrieveAvatar = false
-local function GetBigAvatar(content, size)
-	if not FAdmin.ScoreBoard.Player.Controls.AvatarBackground or not FAdmin.ScoreBoard.Player.Controls.AvatarBackground:IsVisible() or CancelRetrieveAvatar then
-		if FAdmin.ScoreBoard.Player.Controls.AvatarLarge then
-			FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(false)
-		end
-		return
-	end
-	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-	local _, firstplace = string.find(content, "<avatarFull><!%[CDATA%[")
-	local endplace = string.find(content, "]]></avatarFull>")
-	if not firstplace or not endplace then if FAdmin.ScoreBoard.Player.Controls.AvatarLarge then FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(false) end return end
-
-	local match = string.sub(content, firstplace + 1, endplace - 1)
-
-	FAdmin.ScoreBoard.Player.Controls.AvatarLarge = FAdmin.ScoreBoard.Player.Controls.AvatarLarge or vgui.Create("HTML")
-	FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100)
-	FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetSize(213, 218)
-	FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(false)
-	FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetHTML("<body bgcolor=black> <img SRC=\""..match.."\"/></body>")
-	function FAdmin.ScoreBoard.Player.Controls.AvatarLarge:FinishedURL(url)
-		if CancelRetrieveAvatar or not FAdmin.ScoreBoard.Player.Controls.AvatarBackground or not FAdmin.ScoreBoard.Player.Controls.AvatarBackground:IsVisible() then
-			if FAdmin.ScoreBoard.Player.Controls.AvatarLarge then
-				FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(false)
-			end
-			return
-		end
-		FAdmin.ScoreBoard.Player.Controls.AvatarLarge.Player = FAdmin.ScoreBoard.Player.Player
-		FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(true)
-	end
-end
-
 function FAdmin.ScoreBoard.Player.Show(ply)
-	CancelRetrieveAvatar = false
 	local OldPly = FAdmin.ScoreBoard.Player.Player
 	ply = ply or FAdmin.ScoreBoard.Player.Player
 	FAdmin.ScoreBoard.Player.Player = ply
 
-	if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) then CancelRetrieveAvatar = true FAdmin.ScoreBoard.ChangeView("Main") return end
+	if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) then FAdmin.ScoreBoard.ChangeView("Main") return end
 
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 	local SteamID = ply:SteamID()
@@ -47,13 +14,11 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground = FAdmin.ScoreBoard.Player.Controls.AvatarBackground or vgui.Create("AvatarImage")
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(213, 218)
-	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPlayer(ply)
+	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPlayer(ply, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetVisible(true)
 
 	if FAdmin.ScoreBoard.Player.Controls.AvatarLarge and FAdmin.ScoreBoard.Player.Controls.AvatarLarge:IsValid() and FAdmin.ScoreBoard.Player.Controls.AvatarLarge.Player == ply then
 		FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(true)
-	else
-		http.Fetch(FAdmin.SteamToProfile(SteamID).."?xml=true", GetBigAvatar)
 	end
 
 	FAdmin.ScoreBoard.Player.InfoPanels = FAdmin.ScoreBoard.Player.InfoPanels or {}
@@ -114,7 +79,6 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			timer.Create("FAdmin_Scoreboard_text_update_"..v.name, 1, 0, function()
 				if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) or not ValidPanel(Text) then
 					timer.Destroy("FAdmin_Scoreboard_text_update_"..v.name)
-					CancelRetrieveAvatar = true
 					if FAdmin.ScoreBoard.Visible and (not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player)) then FAdmin.ScoreBoard.ChangeView("Main") end
 					return
 				end
