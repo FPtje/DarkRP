@@ -342,7 +342,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		for k,v in pairs(bans) do				local Line = BanList:AddLine(
 					k,
 					v.name or "N/A",
-					(v.time and FAdmin.PlayerActions.ConvertBanTime((tonumber(v.time) - os.time())/60)) or "N/A",
+					(tonumber(v.time or "") and FAdmin.PlayerActions.ConvertBanTime((tonumber(v.time) - os.time())/60)) or "N/A",
 					v.reason or "",
 					v.adminname or "",
 					v.adminsteam or "")
