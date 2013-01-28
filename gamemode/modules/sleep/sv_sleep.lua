@@ -22,7 +22,12 @@ function KnockoutToggle(player, command, args, caller)
 				player:Spawn()
 				player:SetHealth(health)
 				player:SetPos(ragdoll:GetPos())
-				player:SetModel(ragdoll:GetModel())
+				local model = ragdoll:GetModel()
+				// TEMPORARY WORKAROUND
+				if string.lower(model) == "models/humans/corpse1.mdl" then
+					model = "models/player/corpse1.mdl"
+				end
+				player:SetModel(model)
 				player:SetAngles(Angle(0, ragdoll:GetPhysicsObjectNum(10):GetAngles().Yaw, 0))
 				player:UnSpectate()
 				player:StripWeapons()
@@ -83,7 +88,12 @@ function KnockoutToggle(player, command, args, caller)
 				local ragdoll = ents.Create("prop_ragdoll")
 				ragdoll:SetPos(player:GetPos())
 				ragdoll:SetAngles(Angle(0,player:GetAngles().Yaw,0))
-				ragdoll:SetModel(player:GetModel())
+				local model = player:GetModel()
+				// TEMPORARY WORKAROUND
+				if string.lower(model) == "models/player/corpse1.mdl" then
+					model = "models/Humans/corpse1.mdl"
+				end
+				ragdoll:SetModel(model)
 				ragdoll:Spawn()
 				ragdoll:Activate()
 				ragdoll:SetVelocity(player:GetVelocity())
