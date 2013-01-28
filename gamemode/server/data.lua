@@ -241,7 +241,7 @@ function DB.Init()
 						CREATE TRIGGER JobPositionFKDelete
 							AFTER DELETE ON darkrp_position
 							FOR EACH ROW
-								IF OLD.type = "J" THEN
+								IF OLD.type = "T" THEN
 									DELETE FROM darkrp_jobspawn WHERE darkrp_jobspawn.id = OLD.id;
 								ELSEIF OLD.type = "C" THEN
 									DELETE FROM darkrp_console WHERE darkrp_console.id = OLD.id;
@@ -255,7 +255,7 @@ function DB.Init()
 				CREATE TRIGGER IF NOT EXISTS JobPositionFKDelete
 					AFTER DELETE ON darkrp_position
 					FOR EACH ROW
-					WHEN OLD.type = "J"
+					WHEN OLD.type = "T"
 					BEGIN
 						DELETE FROM darkrp_jobspawn WHERE darkrp_jobspawn.id = OLD.id;
 					END;
@@ -565,10 +565,12 @@ end
 
 function DB.StoreTeamSpawnPos(t, pos)
 	local map = string.lower(game.GetMap())
-	DB.Query([[DELETE FROM darkrp_position WHERE type = "T" AND map = ]] .. sql.SQLStr(map) .. [[;]])
+
+	DB.Query([[DELETE FROM darkrp_position WHERE map = ]] .. sql.SQLStr(map) .. [[ AND id IN (SELECT id FROM darkrp_jobspawn WHERE team = ]] .. t .. [[)]])
+
 	DB.Query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. sql.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
 		, function()
-		DB.QueryValue([[SELECT id FROM darkrp_position WHERE map = ]] .. sql.SQLStr(map) .. [[ AND type = "T";]], function(id)
+		DB.QueryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. sql.SQLStr(map) .. [[ AND type = "T";]], function(id)
 			if not id then return end
 			DB.Query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
 			table.insert(DB.TeamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
