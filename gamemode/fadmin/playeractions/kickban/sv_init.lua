@@ -244,7 +244,10 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 			v.time = tonumber(v.time)
 			if v.time and v.time < os.time() then
 				FAdmin.BANS[string.upper(k)] = nil
+			elseif not v.time then
+				continue
 			end
+
 			if v.time == 0 then
 				game.ConsoleCommand("banid 0 "..k.. "\n")
 			else
