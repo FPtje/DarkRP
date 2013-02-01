@@ -1,8 +1,3 @@
--- afkdemote - If set to 1, players who don't do anything for x seconds will be demoted if they do not use AFK mode.
-GAMEMODE.Config.afkdemote = false
--- afkdemotetime <time> - Sets the time a player has to be AFK for before they are demoted (in seconds).
-GAMEMODE.Config.afkdemotetime = 120
-
 local TextColor = Color(GetConVarNumber("Healthforeground1"), GetConVarNumber("Healthforeground2"), GetConVarNumber("Healthforeground3"), GetConVarNumber("Healthforeground4"))
 local function AFKHUDPaint()
 	if GAMEMODE.Config.afkdemote == 0 then return end

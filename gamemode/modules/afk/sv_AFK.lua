@@ -1,12 +1,6 @@
 -- How to use:
--- Use rp_afk_demote 1 to enable AFK mode.
--- Use rp_afk_demotetime to set the time someone has to be AFK before they are demoted.
 -- If a player uses /afk, they go into AFK mode, they will not be autodemoted and their salary is set to $0 (you can still be killed/vote demoted though!).
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
-
-AddCSLuaFile(GM.FolderName.."/gamemode/modules/afk/cl_afk.lua")
-GM.Config.afkdemote = false
-GM.Config.afkdemotetime = 600
 
 local function AFKDemote(ply)
 	local rpname = ply.DarkRPVars.rpname

@@ -59,7 +59,7 @@ end
 usermessage.Hook("_Notify", DisplayNotify)
 
 local function LoadModules()
-	local root = GAMEMODE.FolderName.."/gamemode/modules/"
+	local root = GM.FolderName.."/gamemode/modules/"
 
 	local _, folders = file.Find(root.."*", "LUA")
 
@@ -105,6 +105,8 @@ include("fpp/client/FPP_Menu.lua")
 include("fpp/client/FPP_HUD.lua")
 include("fpp/client/FPP_Buddies.lua")
 include("fpp/sh_CPPI.lua")
+
+LoadModules()
 
 surface.CreateFont("AckBarWriting", {
 	size = 20,
@@ -593,8 +595,6 @@ end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 
 function GM:InitPostEntity()
-	LoadModules()
-
 	RunConsoleCommand("_sendDarkRPvars")
 	timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 		for k,v in pairs(player.GetAll()) do

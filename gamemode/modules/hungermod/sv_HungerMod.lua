@@ -1,16 +1,5 @@
-AddCSLuaFile(GM.FolderName.."/gamemode/modules/hungermod/cl_init.lua")
-
-include(GM.FolderName.."/gamemode/modules/hungermod/sv_player.lua")
-
 local HM = { }
 local FoodItems = { }
-
-GM.Config.hungermod = false
-GM.Config.foodspawn = true
-GM.Config.foodpay = true
-GM.Config.foodcost = 15
-GM.Config.hungerspeed = 2
-GM.Config.starverate = 3
 
 local function AddFoodItem(name, mdl, amount)
 	FoodItems[name] = { model = mdl, amount = amount }
