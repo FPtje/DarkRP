@@ -241,7 +241,8 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 		end
 
 		for k,v in pairs(FAdmin.BANS) do
-			if tonumber(v.time) and tonumber(v.time) < os.time() then
+			v.time = tonumber(v.time)
+			if v.time and v.time < os.time() then
 				FAdmin.BANS[string.upper(k)] = nil
 			end
 			if v.time == 0 then
