@@ -9,10 +9,12 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
+
+	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 	local phys = self:GetPhysicsObject()
 
 	phys:Wake()
-	local ply = self:Getowning_ent()
+	hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end
 
 function ENT:OnRemove()
@@ -42,6 +44,12 @@ end
 
 function ENT:SignLetter(ply)
 	self:Setsigned(ply)
+end
+
+function ENT:onPlayerDisconnected(ply)
+	if self.dt.owning_ent == ply then
+		self:Remove()
+	end
 end
 
 concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)

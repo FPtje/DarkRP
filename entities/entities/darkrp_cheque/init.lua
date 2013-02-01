@@ -15,7 +15,8 @@ function ENT:Initialize()
 	self.ShareGravgun = true
 
 	phys:Wake()
-	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
+
+	hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end
 
 
@@ -36,5 +37,22 @@ function ENT:Use(activator, caller)
 		owner:AddMoney(self:Getamount()) -- return the money on the cheque to the owner.
 		self:Remove()
 	elseif not IsValid(recipient) then self:Remove()
+	end
+end
+
+function ENT:Touch(ent)
+	if ent:GetClass() ~= "darkrp_cheque" or self.hasMerged or ent.hasMerged then return end
+	if ent.dt.owning_ent ~= self.dt.owning_ent then return end
+	if ent.dt.recipient ~= self.dt.recipient then return end
+
+	ent.hasMerged = true
+
+	ent:Remove()
+	self:Setamount(self:Getamount() + ent:Getamount())
+end
+
+function ENT:onPlayerDisconnected(ply)
+	if self.dt.owning_ent == ply or self.dt.recipient == ply then
+		self:Remove()
 	end
 end
