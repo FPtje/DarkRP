@@ -177,6 +177,9 @@ function meta:NewData()
 	timer.Simple(5, function()
 		if not IsValid(self) then return end
 		self:RestorePlayerData()
+		if GetConVarNumber("DarkRP_Lockdown") == 1 then
+			RunConsoleCommand("DarkRP_Lockdown", 1) -- so new players who join know there's a lockdown
+		end
 	end)
 
 	self:InitiateTax()
