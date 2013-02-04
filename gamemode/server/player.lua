@@ -582,6 +582,7 @@ function meta:DropDRPWeapon(weapon)
 		if not found then return end
 	end
 
+	local ammo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
 	self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
 
 	local ent = ents.Create("spawned_weapon")
@@ -595,6 +596,7 @@ function meta:DropDRPWeapon(weapon)
 	ent.nodupe = true
 	ent.clip1 = weapon:Clip1()
 	ent.clip2 = weapon:Clip2()
+	ent.ammo = ammo
 
 	ent:Spawn()
 

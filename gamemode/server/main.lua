@@ -96,11 +96,6 @@ local function DropWeapon(ply)
 
 	timer.Simple(1, function()
 		if IsValid(ply) and IsValid(ent) and ent:GetModel() then
-			local ammohax = false
-			local ammotype = ent:GetPrimaryAmmoType()
-			local ammo = ply:GetAmmoCount(ammotype)
-			local clip = (ent.Primary and ent.Primary.ClipSize) or 0
-
 			ply:DropDRPWeapon(ent)
 		end
 	end)
