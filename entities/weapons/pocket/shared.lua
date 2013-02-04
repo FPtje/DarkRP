@@ -108,6 +108,7 @@ function SWEP:PrimaryAttack()
 	phys:EnableMotion(false)
 	trace.Entity:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	trace.Entity.PhysgunPickup = false
+	trace.Entity.OldPlayerUse = trace.Entity.PlayerUse
 	trace.Entity.PlayerUse = false
 end
 
@@ -299,7 +300,8 @@ elseif SERVER then
 			umsg.Short(ent:EntIndex())
 		umsg.End()
 		ent.PhysgunPickup = nil
-		ent.PlayerUse = nil
+		ent.PlayerUse = ent.OldPlayerUse
+		ent.OldPlayerUse = nil
 	end
 
 	hook.Add("PlayerDeath", "DropPocketItems", function(ply)
