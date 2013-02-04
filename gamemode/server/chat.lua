@@ -49,12 +49,12 @@ local function RP_ActualDoSay(ply, text, callback)
 	return ""
 end
 
-local otherhooks = {}
+GM.OldChatHooks = GM.OldChatHooks or {}
 function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
 	local text2 = (not teamonly and "" or "/g ") .. text
 	local callback
 
-	for k,v in SortedPairs(otherhooks, false) do
+	for k,v in SortedPairs(self.OldChatHooks, false) do
 		if type(v) == "function" then
 			text2 = v(ply, text, teamonly, dead) or text2
 		end
@@ -77,12 +77,12 @@ end
 function GM:ReplaceChatHooks()
 	if not hook.GetTable().PlayerSay then return end
 	for k,v in pairs(hook.GetTable().PlayerSay) do -- Remove all PlayerSay hooks, they all interfere with DarkRP's PlayerSay
-		otherhooks[k] = v
+		self.OldChatHooks[k] = v
 		hook.Remove("PlayerSay", k)
 	end
-	for a,b in pairs(otherhooks) do
+	for a,b in pairs(self.OldChatHooks) do
 		if type(b) ~= "function" then
-			otherhooks[a] = nil
+			self.OldChatHooks[a] = nil
 		end
 	end
 end
