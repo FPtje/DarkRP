@@ -117,6 +117,9 @@ local function specBinds(ply, bind, pressed)
 		keysDown["ATTACK2"] = pressed
 
 		return true
+	elseif bind == "+attack2" and not pressed then
+		keysDown["ATTACK2"] = pressed
+		return
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
 		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
 		if not key or key == "use" then return end

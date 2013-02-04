@@ -29,12 +29,6 @@ function GM:TalkToRange(ply, PlayerName, Message, size)
 	for k, v in pairs(ents) do
 		if v:IsPlayer() then
 			filter:AddPlayer(v)
-
-			for _, admin in pairs(player.GetAll()) do
-				if admin.FAdminSpectating == v then
-					filter:AddPlayer(admin)
-				end
-			end
 		end
 	end
 

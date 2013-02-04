@@ -1,3 +1,5 @@
+local OnPlayerSay
+
 local function Spectate(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "Spectate") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
@@ -15,6 +17,7 @@ local function Spectate(ply, cmd, args)
 		umsg.Entity(ply.FAdminSpectatingEnt)
 	umsg.End()
 
+	hook.Add("PlayerSay", ply, OnPlayerSay)
 
 	local targetText = IsValid(target) and (target:Nick() .. " ("..target:SteamID()..")") or ""
 	FAdmin.Messages.SendMessage(ply, 4, "You are now spectating "..targetText)
@@ -47,6 +50,7 @@ local function endSpectate(ply, cmd, args)
 	ply.FAdminSpectatingEnt = nil
 	ply.FAdminSpectating = nil
 	ply.FAdminSpectatePos = nil
+	hook.Remove("PlayerSay", ply)
 end
 concommand.Add("_FAdmin_StopSpectating", endSpectate)
 
@@ -61,6 +65,25 @@ local function playerVoice(listener, talker)
 	return canhear or canHearLocal or listener.FAdminSpectatingEnt == talker, surround
 end
 hook.Add("PlayerCanHearPlayersVoice", "FAdminSpectate", playerVoice)
+
+OnPlayerSay = function(spectator, sender, message, isTeam)
+	-- the person is saying it close to where you are roaming
+	if sender:GetShootPos():Distance(spectator.FAdminSpectatePos) <= 400 and
+		sender:GetShootPos():Distance(spectator:GetShootPos()) > 250 then-- Make sure you don't get it twice
+
+		GAMEMODE:TalkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
+		return message
+	end
+
+	-- The person you're spectating or someone near the person you're spectating is saying it
+	if IsValid(spectator.FAdminSpectatingEnt) and
+		sender:GetShootPos():Distance(spectator.FAdminSpectatingEnt:GetShootPos()) <= 300 and
+		sender:GetShootPos():Distance(spectator:GetShootPos()) > 250 then
+		GAMEMODE:TalkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
+	end
+
+	return message
+end
 
 FAdmin.StartHooks["Spectate"] = function()
 	FAdmin.Commands.AddCommand("Spectate", Spectate)
