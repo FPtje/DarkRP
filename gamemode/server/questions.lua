@@ -42,13 +42,18 @@ function GM.ques:Create(question, quesid, ent, delay, callback, fromPly, toPly, 
 	timer.Create(quesid .. "timer", delay, 1, function() GAMEMODE.ques.HandleQuestionEnd(quesid) end)
 end
 
-function GM.ques.DestroyQuestionsWithEnt(ent)
+function GM.ques:Destroy(id)
+	umsg.Start("KillQuestionVGUI", Questions[id].Ent)
+		umsg.String(Questions[id].ID)
+	umsg.End()
+
+	Questions[id] = nil
+end
+
+function GM.ques:DestroyQuestionsWithEnt(ent)
 	for k, v in pairs(Questions) do
 		if v.Ent == ent then
-			umsg.Start("KillQuestionVGUI", v.Ent)
-				umsg.String(v.ID)
-			umsg.End()
-			Questions[k] = nil
+			self:Destroy(v.ID)
 		end
 	end
 end
