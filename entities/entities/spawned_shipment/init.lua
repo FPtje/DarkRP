@@ -47,6 +47,13 @@ function ENT:SetContents(s, c)
 end
 
 function ENT:Use()
+	if type(self.PlayerUse) == "function" then
+		local val = self:PlayerUse(activator, caller)
+		if val ~= nil then return val end
+	elseif self.PlayerUse ~= nil then
+		return self.PlayerUse
+	end
+
 	if not self.locked then
 		self.locked = true -- One activation per second
 		self.sparking = true
