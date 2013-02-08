@@ -61,6 +61,7 @@ local function Bring(ply, cmd, args)
 
 	local targets = FAdmin.FindPlayer(args[1])
 	local BringTo = FAdmin.FindPlayer(args[2])
+
 	BringTo = (BringTo and BringTo[1]) or ply
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
@@ -89,7 +90,7 @@ local function Bring(ply, cmd, args)
 					trace = util.TraceLine(tracedata)
 				end
 
-				target:SetPos(GAMEMODE:FindEmptyPos(ply:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
+				target:SetPos(GAMEMODE:FindEmptyPos(BringTo:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
 
 				zapEffect(target)
 
