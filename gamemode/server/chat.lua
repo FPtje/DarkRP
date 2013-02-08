@@ -64,7 +64,7 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 	if tostring(text2) == " " then text2, callback = callback, text2 end
 
 	if game.IsDedicated() then
-		ServerLog("\""..ply:Nick().."<"..ply:UserID()..">" .."<"..ply:SteamID()..">".."<"..team.GetName( ply:Team() )..">\" say \""..text.. "\"\n" .. "\n")
+		ServerLog("\""..ply:Nick().."<"..ply:UserID()..">" .."<"..ply:SteamID()..">".."<"..team.GetName(ply:Team())..">\" say \""..text.. "\"\n" .. "\n")
 	end
 
 	if DoSayFunc then DoSayFunc(text2) return "" end

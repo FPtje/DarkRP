@@ -68,11 +68,11 @@ hook.Add("PlayerCanHearPlayersVoice", "FAdminSpectate", playerVoice)
 
 OnPlayerSay = function(spectator, sender, message, isTeam)
 	-- the person is saying it close to where you are roaming
-	if sender:GetShootPos():Distance(spectator.FAdminSpectatePos) <= 400 and
+	if spectator.FAdminSpectatePos and sender:GetShootPos():Distance(spectator.FAdminSpectatePos) <= 400 and
 		sender:GetShootPos():Distance(spectator:GetShootPos()) > 250 then-- Make sure you don't get it twice
 
 		GAMEMODE:TalkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
-		return message
+		return
 	end
 
 	-- The person you're spectating or someone near the person you're spectating is saying it
@@ -81,8 +81,6 @@ OnPlayerSay = function(spectator, sender, message, isTeam)
 		sender:GetShootPos():Distance(spectator:GetShootPos()) > 250 then
 		GAMEMODE:TalkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
 	end
-
-	return message
 end
 
 FAdmin.StartHooks["Spectate"] = function()
