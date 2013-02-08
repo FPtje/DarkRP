@@ -8,7 +8,6 @@ rp_languages.english = {
 	invalid_x = "Invalid %s! %s",
 
 	-- F1 menu
-	get_mod = "Get the mod at garrysmod.org!",
 	mouse_wheel_to_scroll = "Use mousewheel to scroll",
 
 	-- Money things:
@@ -308,7 +307,6 @@ rp_languages.dutch = {
 	invalid_x = "Ongeldig(e) %s! %s",
 
 	-- F1 menu
-	get_mod = "Verkrijg DarkRP op garrysmod.org!",
 	mouse_wheel_to_scroll = "Gebruik je muiswiel om te scrollen",
 
 	-- Money things:
@@ -596,7 +594,6 @@ rp_languages.danish = {
 	invalid_x = "Ugyldig %s! %s",
 
 	-- F1 menu
-	get_mod = "Få denne mod på garrysmod.org!",
 	mouse_wheel_to_scroll = "Brug musehjulet til at pladra",
 
 	-- Money things:
@@ -886,7 +883,6 @@ rp_languages.swedish = {
 	invalid_x = "Inte godkänd %s! %s",
 
 	-- F1 menu
-	get_mod = "Hämta modden på garrysmod.org!",
 	mouse_wheel_to_scroll = "Använd mushjulet för att skrolla",
 
 	-- Money things:
@@ -1179,7 +1175,6 @@ rp_languages.french = {
 	invalid_x = "Invalide %s ! %s",
 
 	-- F1 menu (Menu F1 Aide)
-	get_mod = "Obtenez le mod sur garrysmod.org !",
 	mouse_wheel_to_scroll = "Utilisez la molette pour naviguer",
 
 	-- Money things: (Message d'Argent)

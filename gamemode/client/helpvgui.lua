@@ -13,9 +13,6 @@ function HelpPanel:Init()
 	self.title = vgui.Create("DLabel", self)
 	self.title:SetText(GAMEMODE.Name)
 
-	self.modinfo = vgui.Create("DLabel", self)
-	self.modinfo:SetText(LANGUAGE.get_mod)
-
 	self.scrolltext = vgui.Create("DLabel", self)
 	self.scrolltext:SetText(LANGUAGE.mouse_wheel_to_scroll)
 
@@ -26,71 +23,48 @@ function HelpPanel:Init()
 	self.Scroll = 0
 end
 
-function HelpPanel:FillHelpInfo(force)
+function HelpPanel:FillHelpInfo()
 	self.Filled = true
-	local maxpertable = 11
-	local helptable = 1
+	local LabelIndex = 0
 	local yoffset = 0
 
-	if force then
-		for k, v in pairs(self.vguiHelpCategories) do
-			v:Remove()
-			self.vguiHelpCategories[k] = nil
+	for k, v in ipairs(GAMEMODE:getHelpCategories()) do
+		if self.vguiHelpCategories[k] then continue end
+
+		self.vguiHelpCategories[k] = vgui.Create("DLabel", self.HelpInfo)
+		self.vguiHelpCategories[k]:SetText(v.name)
+		self.vguiHelpCategories[k].OrigY = yoffset
+		self.vguiHelpCategories[k]:SetPos(5, yoffset)
+		self.vguiHelpCategories[k]:SetFont("GModToolSubtitle")
+		self.vguiHelpCategories[k]:SetColor(Color(140, 0, 0, 200))
+		self.vguiHelpCategories[k]:SetExpensiveShadow(2, Color(0,0,0,255))
+
+		surface.SetFont("ChatFont")
+
+		local labelh = GetTextHeight("ChatFont", "A")
+		local index = 0
+		local labelCount = table.Count(v.labels)
+		for i, label in pairs(v.labels) do
+			local labelw = surface.GetTextSize(label)
+			LabelIndex = LabelIndex + 1
+
+			self.vguiHelpLabels[LabelIndex] = vgui.Create("DLabel", self.HelpInfo)
+			self.vguiHelpLabels[LabelIndex]:SetFont("ChatFont")
+			self.vguiHelpLabels[LabelIndex]:SetText(label)
+			self.vguiHelpLabels[LabelIndex]:SetWidth(labelw)
+			self.vguiHelpLabels[LabelIndex].OrigY = yoffset + 25 + index * labelh
+			self.vguiHelpLabels[LabelIndex]:SetPos(5, yoffset + 25 + index * labelh)
+			self.vguiHelpLabels[LabelIndex]:SetColor(Color(255, 255, 255, 200))
+
+			index = index + 1
 		end
-		for k, v in pairs(self.vguiHelpLabels) do
-			v:Remove()
-			self.vguiHelpLabels[k] = nil
-		end
+
+		local cath = GetTextHeight("GModToolSubtitle", "A")
+
+		yoffset = yoffset + (cath + 15) + labelCount * labelh
 	end
 
-	for k, v in SortedPairsByMemberValue(GAMEMODE:getHelpCategories(), "id") do
-		if not self.vguiHelpCategories[v.id] or force then
-			local helptext = ""
-			local Labels = {}
-
-			self.vguiHelpCategories[v.id] = vgui.Create("DLabel", self.HelpInfo)
-			self.vguiHelpCategories[v.id]:SetText(v.name)
-			self.vguiHelpCategories[v.id].OrigY = yoffset
-			self.vguiHelpCategories[v.id]:SetPos(5, yoffset)
-			self.vguiHelpCategories[v.id]:SetFont("GModToolSubtitle")
-			self.vguiHelpCategories[v.id]:SetColor(Color(140, 0, 0, 200))
-			self.vguiHelpCategories[v.id]:SetExpensiveShadow(2, Color(0,0,0,255))
-
-			for n, m in pairs(GAMEMODE:getHelpLabels()) do
-				if m.category == v.id then
-					table.insert(Labels, m.text)
-				end
-			end
-
-			local index = 1
-			local HelpText = {}
-
-			for i = 1, math.ceil(#Labels / maxpertable) do
-				for n = index, maxpertable * i do
-					if n > #Labels then break end
-					if not HelpText[i] then HelpText[i] = "" end
-					HelpText[i] = HelpText[i] .. Labels[n] .. "\n"
-				end
-
-				index = index + maxpertable
-			end
-
-			local labelh = GetTextHeight("ChatFont", "A")
-
-			for i = 1, #HelpText do
-				self.vguiHelpLabels[i + v.id * 100] = vgui.Create("DLabel", self.HelpInfo)
-				self.vguiHelpLabels[i + v.id * 100]:SetText(HelpText[i])
-				self.vguiHelpLabels[i + v.id * 100].OrigY = yoffset + 25 + (i - 1) * (maxpertable * labelh)
-				self.vguiHelpLabels[i + v.id * 100]:SetPos(5, yoffset + 25 + (i - 1) * (maxpertable * labelh))
-				self.vguiHelpLabels[i + v.id * 100]:SetFont("ChatFont")
-				self.vguiHelpLabels[i + v.id * 100]:SetColor(Color(255, 255, 255, 200))
-			end
-
-			local cath = GetTextHeight("GModToolSubtitle", "A")
-
-			yoffset = yoffset + (cath + 15) + #Labels * labelh
-		end
-	end
+	self.ScrollSize = yoffset
 end
 
 function HelpPanel:PerformLayout()
@@ -113,9 +87,6 @@ function HelpPanel:PerformLayout()
 	self.title:SetPos(5, 5)
 	self.title:SizeToContents()
 
-	self.modinfo:SetPos(5, 50)
-	self.modinfo:SizeToContents()
-
 	self.scrolltext:SetPos(250, 25)
 	self.scrolltext:SizeToContents()
 end
@@ -124,16 +95,13 @@ function HelpPanel:ApplySchemeSettings()
 	self.title:SetFont("GModToolName")
 	self.title:SetFGColor(Color(255, 255, 255, 255))
 
-	self.modinfo:SetFont("TargetID")
-	self.modinfo:SetFGColor(Color(255, 255, 255, 255))
-
 	self.scrolltext:SetFont("GModToolSubtitle")
 	self.scrolltext:SetFGColor(Color(150, 50, 50, 255))
 end
 
 function HelpPanel:OnMouseWheeled(delta)
 	local scroll = math.Max(self.Scroll - delta * FrameTime() * 2000, 0)
-	scroll = math.Min(scroll, #GAMEMODE:getHelpCategories() * 20 + #GAMEMODE:getHelpLabels() * 17)
+	scroll = math.Min(scroll, self.ScrollSize)
 	self.Scroll = scroll
 	self:InvalidateLayout()
 end
