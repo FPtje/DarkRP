@@ -680,6 +680,7 @@ local function SetToolRestrict(ply, cmd, args)
 
 		--Save to database!
 		FPPDB.Query("REPLACE INTO FPP_TOOLADMINONLY VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(args[3])..");")
+		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " changed the admin status of " .. toolname , true)
 	elseif RestrictWho == "team" then
 		FPP.RestrictedTools[toolname]["team"] = FPP.RestrictedTools[toolname]["team"] or {}
 		if teamtoggle == 0 then
@@ -694,8 +695,10 @@ local function SetToolRestrict(ply, cmd, args)
 		end--Remove from the table if it's in there AND it's 0 otherwise do nothing
 
 		if tobool(teamtoggle) then -- if the team restrict is enabled
+			FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " restricted " .. toolname .. " to certain teams", true)
 			FPPDB.Query("REPLACE INTO FPP_TOOLTEAMRESTRICT VALUES("..sql.SQLStr(toolname) ..", "..tonumber(args[3])..");")
 		else -- otherwise if the restriction for the team is being removed
+			FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed teamrestrictions from " .. toolname, true)
 			FPPDB.Query("DELETE FROM FPP_TOOLTEAMRESTRICT WHERE toolname = "..sql.SQLStr(toolname).. " AND team = ".. tonumber(args[3]))
 		end
 	end
