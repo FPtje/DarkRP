@@ -534,7 +534,9 @@ local invalidToolData = {
 		"*",
 		"\\",
 		" ",
-		"effects/highfive_red"
+		"effects/highfive_red",
+		"pp/copy",
+		"skybox/"
 	},
 	["sound"] = {
 		"?",
@@ -555,6 +557,7 @@ local invalidToolData = {
 	["ry"] = 360,
 	["rz"] = 360
 }
+invalidToolData.override = invalidToolData.material
 
 function FPP.Protect.CanTool(ply, trace, tool, ENT)
 	-- Toolgun restrict
