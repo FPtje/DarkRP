@@ -13,7 +13,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground = FAdmin.ScoreBoard.Player.Controls.AvatarBackground or vgui.Create("AvatarImage")
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100)
-	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(213, 218)
+	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(184, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPlayer(ply, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetVisible(true)
 
@@ -34,14 +34,14 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	end
 
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1 = vgui.Create("DListLayout")
-	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100 + 218 + 5 /* + Avatar size*/)
-	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetSize(213, ScreenHeight*0.1 + 2)
+	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100 + 184 + 5 /* + Avatar size*/)
+	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetSize(184, ScreenHeight*0.1 + 2)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetVisible(true)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Clear(true)
 
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel2 = FAdmin.ScoreBoard.Player.Controls.InfoPanel2 or vgui.Create("FAdminPanelList")
-	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetPos(FAdmin.ScoreBoard.X + 25 + 213/*+ Avatar*/, FAdmin.ScoreBoard.Y + 100)
-	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetSize(FAdmin.ScoreBoard.Width - 213 - 30 - 10, 218 + 5 + ScreenHeight*0.1 + 2)
+	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetPos(FAdmin.ScoreBoard.X + 25 + 184/*+ Avatar*/, FAdmin.ScoreBoard.Y + 100)
+	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetSize(FAdmin.ScoreBoard.Width - 184 - 30 - 10, 184 + 5 + ScreenHeight*0.1 + 2)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetVisible(true)
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel2:Clear(true)
 
