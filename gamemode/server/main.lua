@@ -1356,12 +1356,14 @@ local function GroupMsg(ply, args)
 		local t = ply:Team()
 		local col = team.GetColor(ply:Team())
 
+		local hasReceived = {}
 		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
 			-- not the group of the player
 			if not func(ply) then continue end
 
 			for _, target in pairs(player.GetAll()) do
-				if func(target) then
+				if func(target) and not hasReceived[target] then
+					hasReceived[target] = true
 					GAMEMODE:TalkToPerson(target, col, LANGUAGE.group .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
 				end
 			end

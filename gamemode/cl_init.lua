@@ -384,12 +384,14 @@ function GM:ChatTextChanged(text)
 		local t = LocalPlayer():Team()
 		playercolors = {}
 
+		local hasReceived = {}
 		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
 			-- not the group of the player
 			if not func(LocalPlayer()) then continue end
 
 			for _, target in pairs(player.GetAll()) do
-				if func(target) and target ~= LocalPlayer() then
+				if func(target) and target ~= LocalPlayer() and not hasReceived[target] then
+					hasReceived[target] = true
 					table.insert(playercolors, target)
 				end
 			end
