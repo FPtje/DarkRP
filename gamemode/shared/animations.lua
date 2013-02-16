@@ -1,3 +1,13 @@
+local Anims = {}
+Anims[ACT_GMOD_GESTURE_BOW] = "Bow"
+Anims[ACT_GMOD_TAUNT_MUSCLE] = "Dance"
+Anims[ACT_GMOD_GESTURE_BECON] = "Follow me!"
+Anims[ACT_GMOD_TAUNT_LAUGH] = "Laugh"
+Anims[ACT_GMOD_TAUNT_PERSISTENCE] = "Lion Pose"
+Anims[ACT_GMOD_GESTURE_DISAGREE] = "Non-verbal no"
+Anims[ACT_GMOD_GESTURE_AGREE] = "Thumbs up"
+Anims[ACT_GMOD_GESTURE_WAVE] = "Wave"
+
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!
 	if ply.anim_DroppingItem then
@@ -72,6 +82,8 @@ end)
 if SERVER then
 	local function CustomAnim(ply, cmd, args)
 		local Gesture = tonumber(args[1] or 0)
+		if not Anims[Gesture] then return end
+
 		local RP = RecipientFilter()
 		RP:AddAllPlayers()
 
@@ -134,16 +146,6 @@ local function CustomAnimation(um)
 end
 usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
 
-local Anims = {}
-Anims["Bow"] = ACT_GMOD_GESTURE_BOW
-Anims["Dance"] = ACT_GMOD_TAUNT_MUSCLE
-Anims["Follow me!"] = ACT_GMOD_GESTURE_BECON
-Anims["Laugh"] = ACT_GMOD_TAUNT_LAUGH
-Anims["Lion Pose"] = ACT_GMOD_TAUNT_PERSISTENCE
-Anims["Non-verbal no"] = ACT_GMOD_GESTURE_DISAGREE
-Anims["Thumbs up"] = ACT_GMOD_GESTURE_AGREE
-Anims["Wave"] = ACT_GMOD_GESTURE_WAVE
-
 local AnimFrame
 local function AnimationMenu()
 	if AnimFrame then return end
@@ -175,10 +177,10 @@ local function AnimationMenu()
 		local button = vgui.Create("DButton", AnimFrame)
 		button:SetPos(10, (i-1)*55 + 30)
 		button:SetSize(110, 50)
-		button:SetText(k)
+		button:SetText(v)
 
 		button.DoClick = function()
-			RunConsoleCommand("_DarkRP_DoAnimation", v)
+			RunConsoleCommand("_DarkRP_DoAnimation", k)
 		end
 	end
 	AnimFrame:SetSkin("DarkRP")
