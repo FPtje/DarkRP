@@ -93,7 +93,7 @@ function DB.ConnectToMySQL(host, username, password, database_name, database_por
 	if not mysqloo then DB.Log("MySQL Error: MySQL modules aren't installed properly!") Error("MySQL modules aren't installed properly!") end
 	local databaseObject = mysqloo.connect(host, username, password, database_name, database_port)
 
-	databaseObject.onConnectionFailed = function(msg)
+	databaseObject.onConnectionFailed = function(_, msg)
 		DB.Log("MySQL Error: Connection failed! "..tostring(msg))
 		Error("Connection failed! " ..tostring(msg))
 	end
