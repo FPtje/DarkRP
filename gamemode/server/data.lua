@@ -28,10 +28,6 @@ end
 
 function DB.Query(query, callback)
 	if CONNECTED_TO_MYSQL then
-		if DB.MySQLDB and DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED then
-			DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
-		end
-
 		local query = DB.MySQLDB:query(query)
 		local data
 		query.onData = function(Q, D)
@@ -45,6 +41,9 @@ function DB.Query(query, callback)
 				callback()
 			end
 			DB.Log("MySQL Error: ".. E)
+			if (DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED) then
+				table.insert(DB.MySQLDB.cachedQueries, {query, callback, false})
+			end
 		end
 
 		query.onSuccess = function()
@@ -62,10 +61,6 @@ end
 
 function DB.QueryValue(query, callback)
 	if CONNECTED_TO_MYSQL then
-		if DB.MySQLDB and DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED then
-			DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
-		end
-
 		local query = DB.MySQLDB:query(query)
 		local data
 		query.onData = function(Q, D)
@@ -78,7 +73,15 @@ function DB.QueryValue(query, callback)
 			end
 			callback()
 		end
-		query.onError = function(Q, E) callback() DB.Log("MySQL Error: ".. E) ErrorNoHalt(E) end
+		query.onError = function(Q, E)
+			callback() 
+			DB.Log("MySQL Error: ".. E) 
+			ErrorNoHalt(E) 
+			if (DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED) then
+				table.insert(DB.MySQLDB.cachedQueries, {query, callback, true})
+			end
+		end
+	
 		query:start()
 		return
 	end
@@ -92,7 +95,7 @@ end
 function DB.ConnectToMySQL(host, username, password, database_name, database_port)
 	if not mysqloo then DB.Log("MySQL Error: MySQL modules aren't installed properly!") Error("MySQL modules aren't installed properly!") end
 	local databaseObject = mysqloo.connect(host, username, password, database_name, database_port)
-
+	if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
 	databaseObject.onConnectionFailed = function(_, msg)
 		DB.Log("MySQL Error: Connection failed! "..tostring(msg))
 		Error("Connection failed! " ..tostring(msg))
@@ -101,7 +104,23 @@ function DB.ConnectToMySQL(host, username, password, database_name, database_por
 	databaseObject.onConnected = function()
 		DB.Log("MySQL: Connection to external database "..host.." succeeded!")
 		CONNECTED_TO_MYSQL = true
-
+		if DB.MySQLDB.cachedQueries then 
+			for _, v in pairs(DB.MySQLDB.cachedQueries) do
+				if v[3] then 
+					DB:QueryValue(v[1], v[2])
+				else
+					DB:Query(v[1], v[2])
+				end
+			end
+		end
+		DB.MySQLDB.cachedQueries = {}
+				
+		timer.Create("darkrp_check_mysql_status", 60, 0, function()
+			if (DB.MySQLDB and DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED) then
+				DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
+			end
+		end)
+	
 		DB.Init() -- Initialize database
 	end
 	databaseObject:connect()
