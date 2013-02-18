@@ -646,7 +646,8 @@ local function CleanupDisconnected(ply, cmd, args)
 	if not args[1] then FPP.Notify(ply, "Invalid argument", false) return end
 	if args[1] == "disconnected" then
 		for k,v in pairs(ents.GetAll()) do
-			if v.Owner and not IsValid(v.Owner) then
+			local Owner = v:CPPIGetOwner()
+			if Owner and not IsValid(Owner) then
 				v:Remove()
 			end
 		end
@@ -658,7 +659,8 @@ local function CleanupDisconnected(ply, cmd, args)
 	end
 
 	for k,v in pairs(ents.GetAll()) do
-		if v.Owner == Player(args[1]) and not v:IsWeapon() then
+		local Owner = v:CPPIGetOwner()
+		if Owner == Player(args[1]) and not v:IsWeapon() then
 			v:Remove()
 		end
 	end
