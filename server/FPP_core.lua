@@ -52,8 +52,7 @@ if cleanup then
 	function cleanup.Add(ply, Type, ent)
 		if IsValid(ply) and IsValid(ent) then
 			--Set the owner of the entity
-			ent.Owner = ply
-			ent.OwnerID = ply:SteamID()
+			ent:CPPISetOwner(ply)
 
 			local model = ent.GetModel and ent:GetModel()
 
@@ -104,8 +103,7 @@ if PLAYER.AddCount then
 	function PLAYER:AddCount(Type, ent)
 		if not IsValid(self) or not IsValid(ent) then return FPP.oldcount(self, Type, ent) end
 		--Set the owner of the entity
-		ent.Owner = self
-		ent.OwnerID = self:SteamID()
+		ent:CPPISetOwner(self)
 		return FPP.oldcount(self, Type, ent)
 	end
 end
@@ -127,8 +125,7 @@ if undo then
 	function undo.Finish(...)
 		if IsValid(UndoPlayer) then
 			for k,v in pairs(Undo) do
-				v.Owner = UndoPlayer
-				v.OwnerID = UndoPlayer:SteamID()
+				v:CPPISetOwner(UndoPlayer)
 			end
 		end
 		Undo = {}
@@ -172,10 +169,14 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 		return false
 	end
 	local OnlyMine = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
+
 	-- prevent player pickup when you don't want to
 	if IsValid(ent) and ent:IsPlayer() and not getPlySetting(ply, "FPP_PrivateSettings_Players") and Type1 == "Physgun1" then
 		return false
 	end
+
+	local Owner = ent:CPPIGetOwner()
+
 	-- Blocked entity
 	local Returnal
 	if not FPP.Blocked[Type1] then
@@ -200,10 +201,10 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	if Returnal ~= nil then return Returnal, "Blocked!" end
 
 	-- Shared entity
-	if ent["Share"..Type1] then return not OnlyMine, ent.Owner end
+	if ent["Share"..Type1] then return not OnlyMine, Owner end
 
 	if not TryingToShare and ent.AllowedPlayers and table.HasValue(ent.AllowedPlayers, ply) then
-		return not OnlyMine, ent.Owner
+		return not OnlyMine, Owner
 	end
 
 	-- Whitelist checks
@@ -222,21 +223,21 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	end
 
 	-- Misc.
-	if ent.Owner ~= ply then
+	if Owner ~= ply then
 		-- A buddy's prop
-		if not TryingToShare and IsValid(ent.Owner) and ent.Owner.Buddies and ent.Owner.Buddies[ply] and ent.Owner.Buddies[ply][string.lower(Type1)] then
-			return not OnlyMine, ent.Owner
+		if not TryingToShare and IsValid(Owner) and Owner.Buddies and Owner.Buddies[ply] and Owner.Buddies[ply][string.lower(Type1)] then
+			return not OnlyMine, Owner
 		-- An admin touching it
-		elseif IsValid(ent.Owner) and ply:IsAdmin() and tobool(FPP.Settings[Type2].adminall) then -- if not world prop AND admin allowed
-			return not OnlyMine, ent.Owner
+		elseif IsValid(Owner) and ply:IsAdmin() and tobool(FPP.Settings[Type2].adminall) then -- if not world prop AND admin allowed
+			return not OnlyMine, Owner
 		-- Misc entities
 		elseif ent == game.GetWorld() or ent:GetClass() == "gmod_anchor" then
 			return true
 		--If world prop or a prop belonging to someone who left
-		elseif not IsValid(ent.Owner) then
+		elseif not IsValid(Owner) then
 			local world = "World prop"
 			local Restrict = "WorldProps"
-			if ent.Owner then
+			if Owner then
 				world = "Disconnected player's prop"
 				Restrict =  "OtherPlayerProps"
 			end
@@ -248,7 +249,7 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 			end -- if not allowed then
 			return false, world
 		else -- You don't own this, simple
-			return false, ent.Owner
+			return false, Owner
 		end
 	end
 
@@ -291,20 +292,21 @@ function FPP.ShowOwner()
 		local wep = ply:GetActiveWeapon()
 		local trace = ply:GetEyeTrace()
 		if IsValid(wep) and IsValid(trace.Entity) and trace.Entity ~= game.GetWorld() and not trace.Entity:IsPlayer() and ply.FPP_LOOKINGAT ~= trace.Entity then
+			local Owner = trace.Entity:CPPIGetOwner()
 			ply.FPP_LOOKINGAT = trace.Entity -- Easy way to prevent spamming the usermessages
 			local class, cantouch, why = wep:GetClass()
 			if class == "weapon_physgun" then
 				cantouch, why = FPP.PlayerCanTouchEnt(ply, trace.Entity, "Physgun1", "FPP_PHYSGUN1")
-				why = why or trace.Entity.Owner or "World prop"
+				why = why or Owner or "World prop"
 			elseif class == "weapon_physcannon" then
 				cantouch, why = FPP.PlayerCanTouchEnt(ply, trace.Entity, "Gravgun1", "FPP_GRAVGUN1")
-				why = why or trace.Entity.Owner or "World prop"
+				why = why or Owner or "World prop"
 			elseif class == "gmod_tool" then
 				cantouch, why = FPP.PlayerCanTouchEnt(ply, trace.Entity, "Toolgun1", "FPP_TOOLGUN1")
-				why = why or trace.Entity.Owner or "World prop"
+				why = why or Owner or "World prop"
 			else
 				cantouch, why = FPP.PlayerCanTouchEnt(ply, trace.Entity, "EntityDamage1", "FPP_ENTITYDAMAGE1")
-				why = why or trace.Entity.Owner or "World prop"
+				why = why or Owner or "World prop"
 			end
 			if type(why) == "Player" and why:IsValid() then why = why:Nick() end
 			DoShowOwner(ply, trace.Entity, cantouch, why)
@@ -477,10 +479,12 @@ function FPP.Protect.EntityDamage(ent, dmginfo)
 	if not tobool(FPP.Settings.FPP_ENTITYDAMAGE1.toggle) then return end
 
 	if not attacker:IsPlayer() and not ent:IsPlayer() then
-		if IsValid(attacker.Owner) and IsValid(ent.Owner) then
-			local cantouch, why = FPP.PlayerCanTouchEnt(attacker.Owner, ent, "EntityDamage1", "FPP_ENTITYDAMAGE1")
+		local attackerOwner = attacker:CPPIGetOwner()
+		local entOwner = ent:CPPIGetOwner()
+		if IsValid(attackerOwner) and IsValid(entOwner) then
+			local cantouch, why = FPP.PlayerCanTouchEnt(attackerOwner, ent, "EntityDamage1", "FPP_ENTITYDAMAGE1")
 			if why then
-				FPP.CanTouch(attacker.Owner, "FPP_ENTITYDAMAGE1", why, cantouch)
+				FPP.CanTouch(attackerOwner, "FPP_ENTITYDAMAGE1", why, cantouch)
 			end
 			if not cantouch then
 				dmginfo:SetDamage(0)
@@ -828,7 +832,7 @@ function FPP.PlayerInitialSpawn(ply)
 	if FPP.DisconnectedPlayers[ply:SteamID()] then -- Check if the player has rejoined within the auto remove time
 		for k,v in pairs(ents.GetAll()) do
 			if IsValid(v) and v.OwnerID == ply:SteamID() then
-				v.Owner = ply
+				v:CPPISetOwner(ply)
 			end
 		end
 	end
