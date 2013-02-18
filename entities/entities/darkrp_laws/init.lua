@@ -109,7 +109,7 @@ local function PlaceLaws(ply, args)
 	ang:RotateAroundAxis(ang:Up(), 180)
 	ent:SetAngles(ang)
 
-	ent.Owner = ply
+	ent:CPPISetOwner(ply)
 	ent.SID = ply.SID
 
 	ent:Spawn()

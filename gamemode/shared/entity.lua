@@ -350,6 +350,8 @@ local function OwnDoor(ply)
 	local trace = ply:GetEyeTrace()
 
 	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 200 then
+		local Owner = trace.Entity:CPPIGetOwner()
+
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		if ply:isArrested() then
 			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_unown_arrested)
@@ -402,7 +404,7 @@ local function OwnDoor(ply)
 
 			local bVehicle = trace.Entity:IsVehicle();
 
-			if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and trace.Entity.Owner ~= ply then
+			if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and Owner ~= ply then
 				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, "vehicle"))
 				return ""
 			end
@@ -485,6 +487,8 @@ function meta:Own(ply)
 		return
 	end
 
+	local Owner = self:CPPIGetOwner()
+
  	-- Increase vehicle count
 	if self:IsVehicle() then
 		if IsValid(ply) then
@@ -493,15 +497,14 @@ function meta:Own(ply)
 		end
 
 		-- Decrease vehicle count of the original owner
-		if IsValid(self.Owner) and self.Owner ~= ply then
-			self.Owner.Vehicles = self.Owner.Vehicles or 1
-			self.Owner.Vehicles = self.Owner.Vehicles - 1
+		if IsValid(Owner) and Owner ~= ply then
+			Owner.Vehicles = Owner.Vehicles or 1
+			Owner.Vehicles = Owner.Vehicles - 1
 		end
 	end
 
 	if self:IsVehicle() then
-		self.Owner = ply
-		self.OwnerID = ply:SteamID()
+		self:CPPISetOwner(ply)
 	end
 
 	if not self:IsOwned() and not self:OwnedBy(ply) then

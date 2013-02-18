@@ -40,8 +40,7 @@ local function SetAFK(ply)
 		for _,v in pairs(ents.FindByClass("prop_physics")) do npc:AddEntityRelationship(v, D_LI, 99) end
 		for _,v in pairs(player.GetAll()) do if v == ply then npc:AddEntityRelationship(v, D_FR, 99) npc:SetEnemy(v) end end
 		ply.AFKNpc = npc
-		npc.Owner = ply
-		npc.OwnerID = ply:SteamID()
+		npc:CPPISetOwner(ply)
 		npc.AFKPly = ply
 		if IsValid(ply:GetActiveWeapon()) then npc:Give(ply:GetActiveWeapon():GetClass()) end
 		npc:SetHealth(ply:Health())

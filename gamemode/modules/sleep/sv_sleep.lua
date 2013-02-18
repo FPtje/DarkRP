@@ -108,7 +108,7 @@ function KnockoutToggle(player, command, args, caller)
 				player.KnockoutTimer = CurTime()
 				player:GetTable().BeforeSleepTeam = player:Team()
 				--Make sure noone can pick it up:
-				ragdoll.Owner = player
+				ragdoll:CPPISetOwner(player)
 				ragdoll.OwnerID = player:SteamID()
 				local RP = RecipientFilter()
 				RP:RemoveAllPlayers()

@@ -138,8 +138,8 @@ end
 function GM:PlayerSpawnedProp(ply, model, ent)
 	self.BaseClass:PlayerSpawnedProp(ply, model, ent)
 	ent.SID = ply.SID
-	ent.Owner = ply
-	ent.OwnerID = ply:SteamID()
+	ent:CPPISetOwner(ply)
+
 	local phys = ent:GetPhysicsObject()
 	if phys and phys:IsValid() then
 		ent.RPOriginalMass = phys:GetMass()
@@ -164,7 +164,7 @@ end
 function GM:EntityRemoved(ent)
 	self.BaseClass:EntityRemoved(ent)
 	if ent:IsVehicle() then
-		local found = ent.Owner
+		local found = ent:CPPIGetOwner()
 		if IsValid(found) then
 			found.Vehicles = found.Vehicles or 1
 			found.Vehicles = found.Vehicles - 1
