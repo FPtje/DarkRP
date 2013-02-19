@@ -58,16 +58,10 @@ local function RequestBans(ply, cmd, args)
 end
 
 timer.Create("FAdminCheckBans", 60, 0, function()
-	local changed = false
 	for k,v in pairs(FAdmin.BANS) do
 		if v.time and type(v.time) ~= "string" and tonumber(v.time) < os.time() and v.time ~= 0 then
 			FAdmin.BANS[k] = nil
-			changed = true
 		end
-	end
-
-	if changed then
-		file.Write("FAdmin/Bans.txt", util.TableToKeyValues(FAdmin.BANS))
 	end
 end)
 
@@ -91,7 +85,6 @@ local function SaveBan(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
 	end
 
 	if StoreBans == true then return end
-	file.Write("FAdmin/Bans.txt", util.TableToKeyValues(FAdmin.BANS))
 end
 
 local function Ban(ply, cmd, args)
@@ -207,7 +200,6 @@ local function UnBan(ply, cmd, args)
 		end
 	end
 
-	file.Write("FAdmin/Bans.txt", util.TableToKeyValues(FAdmin.BANS))
 	game.ConsoleCommand("removeid ".. SteamID .. "\n")
 	FAdmin.Messages.SendMessage(ply, 4, "Unban successful!")
 end
@@ -226,7 +218,6 @@ end
 
 hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 	local RetrieveBans = hook.Call("FAdmin_RetrieveBans", nil)
-	file.CreateDir("FAdmin")
 
 	if RetrieveBans then
 		for k,v in pairs(RetrieveBans) do
@@ -234,6 +225,7 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 		end
 		return
 	end
+
 	if file.Exists("FAdmin/Bans.txt", "DATA") then
 		local bans = util.KeyValuesToTable(file.Read("FAdmin/bans.txt", "DATA") or {})
 		for k,v in pairs(bans) do
@@ -244,6 +236,7 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 			v.time = tonumber(v.time)
 			if v.time and v.time < os.time() then
 				FAdmin.BANS[string.upper(k)] = nil
+				continue
 			elseif not v.time then
 				continue
 			end
@@ -253,7 +246,8 @@ hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
 			else
 				game.ConsoleCommand("banid ".. (v.time - os.time())/60 .." " .. k.. "\n")
 			end
+			hook.Call("FAdmin_StoreBan", nil, string.upper(k), v.name, (v.time - os.time()) / 60, v.reason, v.adminname, v.adminsteam)
 		end
-		file.Write("FAdmin/Bans.txt", util.TableToKeyValues(FAdmin.BANS))
+		file.Delete("FAdmin/Bans.txt", "DATA")
 	end
 end)
