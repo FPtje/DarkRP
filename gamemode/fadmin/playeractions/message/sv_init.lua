@@ -8,6 +8,8 @@ local function DoMessage(ply, cmd, args)
 		return
 	end
 
+	ply.FAdmin_LastMessageTime = CurTime()
+
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) or not args[3] then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
