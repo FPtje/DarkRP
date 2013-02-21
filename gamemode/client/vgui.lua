@@ -355,7 +355,7 @@ local function KeysMenu(um)
 			for k,v in pairs(player.GetAll()) do
 				if not trace.Entity:OwnedBy(v) and not trace.Entity:AllowedToOwn(v) then
 					menu.found = true
-					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("say /ao ".. v:UserID()) end)
+					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("darkrp /ao ".. v:UserID()) end)
 				end
 			end
 			if not menu.found then
@@ -373,7 +373,7 @@ local function KeysMenu(um)
 			for k,v in pairs(player.GetAll()) do
 				if (trace.Entity:OwnedBy(v) and not trace.Entity:IsMasterOwner(v)) or trace.Entity:AllowedToOwn(v) then
 					menu.found = true
-					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("say /ro ".. v:UserID()) end)
+					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("darkrp /ro ".. v:UserID()) end)
 				end
 			end
 			if not menu.found then
@@ -391,7 +391,7 @@ local function KeysMenu(um)
 		end
 		DoorTitle.DoClick = function()
 			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text)
-				LocalPlayer():ConCommand("say /title ".. text)
+				LocalPlayer():ConCommand("darkrp /title ".. text)
 				if ValidPanel(Frame) then
 					Frame:Close()
 				end
@@ -544,7 +544,7 @@ local function KeysMenu(um)
 		DoorTitle:SetSize(180, 100)
 		DoorTitle:SetText("Set "..Entiteh.." title")
 		DoorTitle.DoClick = function()
-			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text) LocalPlayer():ConCommand("say /title ".. text) Frame:Close() end, function() end, "OK!", "CANCEL!")
+			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text) LocalPlayer():ConCommand("darkrp /title ".. text) Frame:Close() end, function() end, "OK!", "CANCEL!")
 		end
 	elseif LocalPlayer():IsSuperAdmin() and not trace.Entity:OwnedBy(LocalPlayer()) and trace.Entity:IsOwned() and not trace.Entity:AllowedToOwn(LocalPlayer()) then
 		Frame:SetSize(200, 250)

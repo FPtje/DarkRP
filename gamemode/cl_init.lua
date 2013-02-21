@@ -661,7 +661,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply) local t = LocalPlayer():Team() return t == TEAM_POLICE or t == TEAM_MAYOR or t == TEAM_CHIEF end,
 		function(ply, button)
 			Derma_StringRequest("Warrant reason", "Enter the reason for the warrant", "", function(Reason)
-				LocalPlayer():ConCommand("say /warrant ".. ply:UserID().." ".. Reason)
+				LocalPlayer():ConCommand("darkrp /warrant ".. ply:UserID().." ".. Reason)
 			end)
 		end)
 
@@ -675,10 +675,10 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply, button)
 			if not ply.DarkRPVars.wanted  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)
-					LocalPlayer():ConCommand("say /wanted ".. ply:UserID().." ".. Reason)
+					LocalPlayer():ConCommand("darkrp /wanted ".. ply:UserID().." ".. Reason)
 				end)
 			else
-				LocalPlayer():ConCommand("say /unwanted ".. ply:UserID())
+				LocalPlayer():ConCommand("darkrp /unwanted ".. ply:UserID())
 			end
 		end)
 

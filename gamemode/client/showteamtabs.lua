@@ -17,7 +17,7 @@ local function MayorOptns()
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("say /warrant ".. tostring(ply:UserID()).." ".. a)
+								LocalPlayer():ConCommand("darkrp /warrant ".. tostring(ply:UserID()).." ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -32,7 +32,7 @@ local function MayorOptns()
 					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
-								LocalPlayer():ConCommand("say /wanted ".. tostring(ply:UserID()).." ".. a)
+								LocalPlayer():ConCommand("darkrp /wanted ".. tostring(ply:UserID()).." ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -45,7 +45,7 @@ local function MayorOptns()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
 					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
-						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("say /unwanted " .. tostring(ply:UserID())) end)
+						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted " .. tostring(ply:UserID())) end)
 					end
 				end
 				menu:Open()
@@ -54,39 +54,39 @@ local function MayorOptns()
 			local Lockdown = maypanel:Add("DButton")
 			Lockdown:SetText(LANGUAGE.initiate_lockdown)
 			Lockdown.DoClick = function()
-				LocalPlayer():ConCommand("say /lockdown")
+				LocalPlayer():ConCommand("darkrp /lockdown")
 			end
 
 
 			local UnLockdown = maypanel:Add("DButton")
 			UnLockdown:SetText(LANGUAGE.stop_lockdown)
 			UnLockdown.DoClick = function()
-				LocalPlayer():ConCommand("say /unlockdown")
+				LocalPlayer():ConCommand("darkrp /unlockdown")
 			end
 
 			local Lottery = maypanel:Add("DButton")
 			Lottery:SetText(LANGUAGE.start_lottery)
 			Lottery.DoClick = function()
-				LocalPlayer():ConCommand("say /lottery")
+				LocalPlayer():ConCommand("darkrp /lottery")
 			end
 
 			local GiveLicense = maypanel:Add("DButton")
 			GiveLicense:SetText(LANGUAGE.give_license_lookingat)
 			GiveLicense.DoClick = function()
-				LocalPlayer():ConCommand("say /givelicense")
+				LocalPlayer():ConCommand("darkrp /givelicense")
 			end
 
 			local PlaceLaws = maypanel:Add("DButton")
 			PlaceLaws:SetText("Place a screen containing the laws.")
 			PlaceLaws.DoClick = function()
-				LocalPlayer():ConCommand("say /placelaws")
+				LocalPlayer():ConCommand("darkrp /placelaws")
 			end
 
 			local AddLaws = maypanel:Add("DButton")
 			AddLaws:SetText("Add a law.")
 			AddLaws.DoClick = function()
 				Derma_StringRequest("Add a law", "Type the law you would like to add here.", "", function(law)
-					LocalPlayer():ConCommand("say /addlaw " .. law)
+					LocalPlayer():ConCommand("darkrp /addlaw " .. law)
 				end)
 			end
 
@@ -94,7 +94,7 @@ local function MayorOptns()
 			RemLaws:SetText("Remove a law.")
 			RemLaws.DoClick = function()
 				Derma_StringRequest("Remove a law", "Enter the number of the law you would like to remove here.", "", function(num)
-					LocalPlayer():ConCommand("say /removelaw " .. num)
+					LocalPlayer():ConCommand("darkrp /removelaw " .. num)
 				end)
 			end
 	MayCat:SetContents(maypanel)
@@ -119,7 +119,7 @@ local function CPOptns()
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("say /warrant ".. tostring(ply:UserID()).." ".. a)
+								LocalPlayer():ConCommand("darkrp /warrant ".. tostring(ply:UserID()).." ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -135,7 +135,7 @@ local function CPOptns()
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
 									if not IsValid(ply) then return end
-									LocalPlayer():ConCommand("say /wanted ".. tostring(ply:UserID()).." ".. a)
+									LocalPlayer():ConCommand("darkrp /wanted ".. tostring(ply:UserID()).." ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -148,7 +148,7 @@ local function CPOptns()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
 					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
-						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("say /unwanted " .. tostring(ply:UserID())) end)
+						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted " .. tostring(ply:UserID())) end)
 					end
 				end
 				menu:Open()
@@ -157,11 +157,11 @@ local function CPOptns()
 			if LocalPlayer():Team() == TEAM_CHIEF or LocalPlayer():IsAdmin() then
 				local SetJailPos = CPpanel:Add("DButton")
 				SetJailPos:SetText(LANGUAGE.set_jailpos)
-				SetJailPos.DoClick = function() LocalPlayer():ConCommand("say /jailpos") end
+				SetJailPos.DoClick = function() LocalPlayer():ConCommand("darkrp /jailpos") end
 
 				local AddJailPos = CPpanel:Add("DButton")
 				AddJailPos:SetText(LANGUAGE.add_jailpos)
-				AddJailPos.DoClick = function() LocalPlayer():ConCommand("say /addjailpos") end
+				AddJailPos.DoClick = function() LocalPlayer():ConCommand("darkrp /addjailpos") end
 			end
 
 			local ismayor -- Firstly look if there's a mayor
@@ -187,7 +187,7 @@ local function CPOptns()
 				local GiveLicense = CPpanel:Add("DButton")
 				GiveLicense:SetText(LANGUAGE.give_license_lookingat)
 				GiveLicense.DoClick = function()
-					LocalPlayer():ConCommand("say /givelicense")
+					LocalPlayer():ConCommand("darkrp /givelicense")
 				end
 			end
 	CPCat:SetContents(CPpanel)
@@ -211,7 +211,7 @@ local function CitOptns()
 		local jobentry = Citpanel:Add("DTextEntry")
 		jobentry:SetValue(LocalPlayer().DarkRPVars.job or "")
 		jobentry.OnEnter = function()
-			LocalPlayer():ConCommand("say /job " .. tostring(jobentry:GetValue()))
+			LocalPlayer():ConCommand("darkrp /job " .. tostring(jobentry:GetValue()))
 		end
 		jobentry.OnLoseFocus = jobentry.OnEnter
 
@@ -236,7 +236,7 @@ local function MobOptns()
 		local agendaentry = Mobpanel:Add("DTextEntry")
 		agendaentry:SetValue(LocalPlayer().DarkRPVars.agenda or "")
 		agendaentry.OnEnter = function()
-			LocalPlayer():ConCommand("say /agenda " .. tostring(agendaentry:GetValue()))
+			LocalPlayer():ConCommand("darkrp /agenda " .. tostring(agendaentry:GetValue()))
 		end
 		agendaentry.OnLoseFocus = agendaentry.OnEnter
 
@@ -258,13 +258,13 @@ function GM:MoneyTab()
 				local GiveMoneyButton = MoneyPanel:Add("DButton")
 				GiveMoneyButton:SetText(LANGUAGE.give_money)
 				GiveMoneyButton.DoClick = function()
-					Derma_StringRequest("Amount of money", "How much money do you want to give?", "", function(a) LocalPlayer():ConCommand("say /give " .. tostring(a)) end)
+					Derma_StringRequest("Amount of money", "How much money do you want to give?", "", function(a) LocalPlayer():ConCommand("darkrp /give " .. tostring(a)) end)
 				end
 
 				local SpawnMoneyButton = MoneyPanel:Add("DButton")
 				SpawnMoneyButton:SetText(LANGUAGE.drop_money)
 				SpawnMoneyButton.DoClick = function()
-					Derma_StringRequest("Amount of money", "How much money do you want to drop?", "", function(a) LocalPlayer():ConCommand("say /dropmoney " .. tostring(a)) end)
+					Derma_StringRequest("Amount of money", "How much money do you want to drop?", "", function(a) LocalPlayer():ConCommand("darkrp /dropmoney " .. tostring(a)) end)
 				end
 
 			MoneyCat:SetContents(MoneyPanel)
@@ -280,25 +280,25 @@ function GM:MoneyTab()
 
 					local rpnameTextbox = ActionsPanel:Add("DTextEntry")
 					rpnameTextbox:SetText(LocalPlayer():Nick())
-					rpnameTextbox.OnEnter = function() LocalPlayer():ConCommand("say /rpname " .. tostring(rpnameTextbox:GetValue())) end
-					rpnameTextbox.OnLoseFocus = function() LocalPlayer():ConCommand("say /rpname " .. tostring(rpnameTextbox:GetValue())) end
+					rpnameTextbox.OnEnter = function() LocalPlayer():ConCommand("darkrp /rpname " .. tostring(rpnameTextbox:GetValue())) end
+					rpnameTextbox.OnLoseFocus = function() LocalPlayer():ConCommand("darkrp /rpname " .. tostring(rpnameTextbox:GetValue())) end
 
 					local sleep = ActionsPanel:Add("DButton")
 					sleep:SetText(LANGUAGE.go_to_sleep)
 					sleep.DoClick = function()
-						LocalPlayer():ConCommand("say /sleep")
+						LocalPlayer():ConCommand("darkrp /sleep")
 					end
 					local Drop = ActionsPanel:Add("DButton")
 					Drop:SetText(LANGUAGE.drop_weapon)
-					Drop.DoClick = function() LocalPlayer():ConCommand("say /drop") end
+					Drop.DoClick = function() LocalPlayer():ConCommand("darkrp /drop") end
 					local health = MoneyPanel:Add("DButton")
 					health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
-					health.DoClick = function() LocalPlayer():ConCommand("say /Buyhealth") end
+					health.DoClick = function() LocalPlayer():ConCommand("darkrp /Buyhealth") end
 
 				if LocalPlayer():Team() ~= TEAM_MAYOR then
 					local RequestLicense = ActionsPanel:Add("DButton")
 						RequestLicense:SetText(LANGUAGE.request_gunlicense)
-						RequestLicense.DoClick = function() LocalPlayer():ConCommand("say /requestlicense") end
+						RequestLicense.DoClick = function() LocalPlayer():ConCommand("darkrp /requestlicense") end
 				end
 
 				local Demote = ActionsPanel:Add("DButton")
@@ -310,7 +310,7 @@ function GM:MoneyTab()
 							menu:AddOption(ply:Nick(), function()
 								Derma_StringRequest("Demote reason", "Why would you demote "..ply:Nick().."?", nil,
 									function(a)
-									LocalPlayer():ConCommand("say /demote ".. tostring(ply:UserID()).." ".. a)
+									LocalPlayer():ConCommand("darkrp /demote ".. tostring(ply:UserID()).." ".. a)
 									end, function() end )
 							end)
 						end
@@ -320,7 +320,7 @@ function GM:MoneyTab()
 
 				local UnOwnAllDoors = ActionsPanel:Add("DButton")
 						UnOwnAllDoors:SetText("Sell all of your doors")
-						UnOwnAllDoors.DoClick = function() LocalPlayer():ConCommand("say /unownalldoors") end
+						UnOwnAllDoors.DoClick = function() LocalPlayer():ConCommand("darkrp /unownalldoors") end
 			Commands:SetContents(ActionsPanel)
 		FirstTabPanel:AddItem(MoneyCat)
 		Commands:SetSkin("DarkRP")
@@ -462,10 +462,10 @@ function GM:JobsTab()
 					if special then
 						local menu = DermaMenu()
 						menu:AddOption("Vote", function() LocalPlayer():ConCommand("darkrp "..command) frame:Close() end)
-						menu:AddOption("Do not vote", function() LocalPlayer():ConCommand("say " .. specialcommand) frame:Close() end)
+						menu:AddOption("Do not vote", function() LocalPlayer():ConCommand("darkrp " .. specialcommand) frame:Close() end)
 						menu:Open()
 					else
-						LocalPlayer():ConCommand("say " .. command)
+						LocalPlayer():ConCommand("darkrp " .. command)
 						frame:Close()
 					end
 				end
