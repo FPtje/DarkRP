@@ -4,7 +4,7 @@ FAdmin.PlayerActions = {}
 FAdmin.StartHooks = {}
 
 if SERVER then
-	include(GM.FolderName.."/gamemode/server/FAdmin_MySQL.lua")
+	include(GM.FolderName.."/gamemode/server/FAdmin_SQL.lua")
 
 	local function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
 		local files, folders = file.Find(dir.."/*", "GAME")

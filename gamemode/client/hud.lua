@@ -115,20 +115,6 @@ local function GunLicense()
 	end
 end
 
-local function JobHelp()
-	local Helps = {"Cop", "Mayor", "Admin", "Boss"}
-
-	for k,v in pairs(Helps) do
-		if LocalPlayer().DarkRPVars["help"..v] then
-			draw.RoundedBox(10, 10, 10, 590, 194, Color(0, 0, 0, 255))
-			draw.RoundedBox(10, 12, 12, 586, 190, Color(51, 58, 51, 200))
-			draw.RoundedBox(10, 12, 12, 586, 20, Color(0, 0, 70, 200))
-			draw.DrawText(v.." Help", "DarkRPHUD1", 30, 12, Color(255,0,0,255),0)
-			draw.DrawText(string.format(LANGUAGE[v:lower().."help"], GAMEMODE.Config.jailtimer), "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
-		end
-	end
-end
-
 local function Agenda()
 	local DrawAgenda, AgendaManager = DarkRPAgendas[LocalPlayer():Team()], LocalPlayer():Team()
 	if not DrawAgenda then
@@ -226,7 +212,6 @@ local function DrawHUD()
 	DrawInfo()
 	GunLicense()
 	Agenda()
-	JobHelp()
 	DrawVoiceChat()
 	LockDown()
 

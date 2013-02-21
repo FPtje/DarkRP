@@ -362,42 +362,6 @@ local function RemoveSpawnPos(ply, args)
 end
 AddChatCommand("/removespawn", RemoveSpawnPos)
 
-/*---------------------------------------------------------
- Helps
- ---------------------------------------------------------*/
-local function HelpCop(ply)
-	ply:SetSelfDarkRPVar("helpCop", not ply.DarkRPVars.helpCop)
-	return ""
-end
-AddChatCommand("/cophelp", HelpCop)
-
-local function HelpMayor(ply)
-	ply:SetSelfDarkRPVar("helpMayor", not ply.DarkRPVars.helpMayor)
-	return ""
-end
-AddChatCommand("/mayorhelp", HelpMayor)
-
-local function HelpBoss(ply)
-	ply:SetSelfDarkRPVar("helpBoss", not ply.DarkRPVars.helpBoss)
-	return ""
-end
-AddChatCommand("/mobbosshelp", HelpBoss)
-
-local function HelpAdmin(ply)
-	ply:SetSelfDarkRPVar("helpAdmin", not ply.DarkRPVars.helpAdmin)
-	return ""
-end
-AddChatCommand("/adminhelpmenu", HelpAdmin)
-
-local function closeHelp(ply)
-	ply:SetSelfDarkRPVar("helpCop", false)
-	ply:SetSelfDarkRPVar("helpBoss", false)
-	ply:SetSelfDarkRPVar("helpMayor", false)
-	ply:SetSelfDarkRPVar("helpAdmin", false)
-	return ""
-end
-AddChatCommand("/x", closeHelp)
-
 function GM:ShowTeam(ply)
 	umsg.Start("KeysMenu", ply)
 		umsg.Bool(ply:GetEyeTrace().Entity:IsVehicle())

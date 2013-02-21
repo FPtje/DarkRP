@@ -234,15 +234,6 @@ Type /placelaws to place a screen containing the laws.
 Type /addlaw and /removelaw to edit the laws.
 Type /mayorhelp toggles this menu, /x closes it]],
 
-	adminhelp = [[/enablestorm Enables meteor storms
-/disablestorm Disables meteor storms
-You can change the price of weapons, jailtime, max gangsters, etc.
-To do this press F1 then scroll down and you will see all of the console commands
-If you edit the init.lua file you can save the vars.
-/jailpos sets the jailposition!
-/setspawn <team> - Enter teamname Ex. police, mayor, gangster
-/adminhelpmenu toggles this menu, /x closes it]],
-
 	bosshelp = [[As the mob boss, you decide what you want the other Gangsters to do.
 You get an Unarrest Stick which you can use to break people out of jail.
 /agenda <Message> (Sets the Gangsters' agenda. Use // to go to the next line.
@@ -530,14 +521,6 @@ rp_languages.dutch = {
 	Typ /unlockdown om een lockdown te eindigen
 	Typ /mayorhelp om dit menu tevoorschijn te halen, /x om het te sluiten]],
 
-	adminhelp = [[/enablestorm zet meteoor stormen aan
-	/disablestorm zet meteoor stormen uit
-	Je kan de wapenprijzen, de jailtimer en de maximalen van dingen veranderen
-	om dit te doen druk je F1 en scroll je naar beneden en je zult alle commandos zien
-	/jailpos zet de gevangenispositie!
-	/setspawn <team> - om een spawnpositie van een bepaalde baan te zetten
-	Typ /adminhelpmenu om dit menu tevoorschijn te halen, /x om het te sluiten]],
-
 	bosshelp = [[De mob boss bepaalt wat andere gangsters doen
 	met de unarrest stick kun je anderen uit de gevangenis bevrijden
 	/agenda <bericht> (verandert de gangster agenda. Gebruik // of \n om naar de volgende lijn te gaan
@@ -814,15 +797,6 @@ rp_languages.danish = {
 	Skriv /lockdown for at indlede en Nedlåsning
 	Skriv /unlockdown for at afslutte en Nedlåsning
 	Skriv /mayorhelp åbner/lukker denne menu, /x lukker den]],
-
-	adminhelp = [[/enablestorm Aktiver meteor storm
-	/disablestorm Deaktiver meteor storm
-	Du kan ændre prisen for våben, fængslestid, max gangstere, ect.
-	For at gøre dette skal du trykke på F1 rul derefter ned og du vil se alle de konsol kommandoer
-	Hvis du redigerer init.lua fil, du kan gemme vars.
-	Skriv /jailpos sætter Fængsels Position
-	Skriv /setspawn <team> - Indtast Hold navn Ex. politi, borgmester, gangster
-	Skriv /adminhelpmenu åbner/lukker denne menu, /x lukker den]],
 
 	bosshelp = [[Som mafiabossen, beslutter du, hvad du ønsker, at andre gangstere skal gøre.
 	Du får en Unarrest Stick, som du kan bruge til at bryde folk ud af fængsel.
@@ -1106,21 +1080,10 @@ rp_languages.swedish = {
 	Skriv /unlockdown för att tabort en "lockdown"
 	Skriv /mayorhelp för att "toggla" denna meny, /x för att stänga den.]],
 
-	adminhelp = [[/enablestorm Aktiverar meteor stormar
-	/disablestorm Deaktiverar meteor stormar
-	Du kan ändra priset på vapen, jailtiden, max gangstrars, etc..
-	För att göra det tryck F1 och sen skrolla ner för att se dina krafter.
-	Om du ändrar init.lua kan du spara "vars"
-	/jailpos ändrar jailpositionen!
-	/setspawn <team> - Lägg till ett teamnamn, tex Police, Gangster...
-	/adminhelpmenu för att "toggla" denna meny, /x för att stänga den.]],
-
 	bosshelp = [[Som mob boss, bestämmer du vad alla gangstrar ska göra.
 	Du får en "unarrest stick" som du använder för att bryta andra ur fängelset.
 	/agenda <Message> Ändrar gangstrars agenda. Använd // för att gå till en ny rad.
 	Skriv /mobbosshelp för att "toggla" denna meny, /x för att stänga den.]],
-
-
 
 	hints =
 	-- Swedish hints:
@@ -1397,15 +1360,6 @@ rp_languages.french = {
 	Tapez /lockdown pour initier un couvre-feu.
 	Tapez /unlockdown pour terminer le couvre-feu.
 	Tapez /mayorhelp pour afficher ce menu, /x pour le fermer.]],
-
-	adminhelp = [[/enablestorm activer les pluies de météorites.
-	/disablestorm désactiver les pluies de météorites.
-	Vous pouvez changer tous les prix,
-	pour ce faire appuyez sur F1 celà affichera toutes les commandes.
-	Si vous editez le fichier init.lua vous pouvez sauvegarder les variables.
-	/jailpos supprime toutes les positions de cellule et en ajouter une ici.
-	/setspawn <métier> - Entrer le nom du metier Ex. mayor, gangster, gundealer.
-	/adminhelp afficher ce menu, /x le fermer.]],
 
 	bosshelp = [[Vous décidez de ce que les gangsters doivent faire.
 	Utilisez une matraque de désarrestation pour faire sortir les gens de prison.

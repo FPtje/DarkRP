@@ -608,6 +608,16 @@ function GM:InitPostEntity()
 	end)
 end
 
+function GAMEMODE:TeamChanged(before, after)
+	print("Team changed", before, after)
+end
+
+local function OnChangedTeam(um)
+	hook.Call("TeamChanged", GAMEMODE, um:ReadInt(), um:ReadInt())
+end
+usermessage.Hook("OnChangedTeam", OnChangedTeam)
+
+
 -- Please only ADD to the credits
 -- Removing people from the credits will make at least one person very angry.
 local creds =
