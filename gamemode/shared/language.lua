@@ -218,7 +218,7 @@ rp_languages.english = {
 	cophelp = {
 	"Please don't abuse your job",
 	"When you arrest someone they are auto transported to jail.",
-	"They are auto let out of jail after %d seconds",
+	"They are auto let out of jail after some time",
 	"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
 	"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect",
 	"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect",
@@ -503,7 +503,7 @@ rp_languages.dutch = {
 	cophelp = {
 	"Maak geen misbruik van je baan",
 	"Als je iemand arresteerd teleporteert hij naar de gevangenis",
-	"Ze komen daar weer uit na %d seconden",
+	"Ze komen daar na een tijdje weer uit",
 	"Typ /warrant [Nick|SteamID|Status ID] om een huiszoekingsbevel te verzoeken/krijgen",
 	"Typ /wanted [Nick|SteamID|Status ID] om iemand gezocht te maken",
 	"Typ /unwanted [Nick|SteamID|Status ID] om iemand niet meer gezocht te maken",
@@ -776,7 +776,7 @@ rp_languages.danish = {
 	cophelp = {
 	"Vær venlig ikke at misbruge dit job",
 	"Når du anholde en person, de er automatisk transporteret til fængsel.",
-	"De er automatisk læsladt fra fængslet efter %d sekunder",
+	"De fængslet er automatisk løsladt fra fængslet efter få minutter",
 	"Skriv /warrant [Nick|SteamID|Status ID] for at lave en ransagningskendelse for en spiller.",
 	"Skriv /wanted [Nick|SteamID|Status ID] til at advare alle om en eftersøgt mistænkt",
 	"Skriv /unwanted [Nick|SteamID|Status ID] for at Rense en mistænkte.",
@@ -1052,7 +1052,7 @@ rp_languages.swedish = {
 	cophelp = {
 	"Abusa inte ditt jobb.",
 	"När du arresterar någon är dom automatiskt teleporterade till fängelset.",
-	"Dom är automatiskt utsläppta efter %d sekunder",
+	"De är automatiskt utsläppta efter ett par minuter",
 	"Skriv /warrant [Namn|SteamID|Status ID] för att göra en husrannsakan mot en spelare.",
 	"Skriv /wanted [Namn|SteamID|Status ID] för att göra en spelare efterlyst.",
 	"Skriv /unwanted [Namn|SteamID|Status ID] för att tabort efterlysningen på en spelare.",
@@ -1329,7 +1329,7 @@ rp_languages.french = {
 	-- Help! (Aide !)
 	cophelp = {"Pas d'abus.",
 	"Après l'arrestation, l'arreté est téléporté en prison.",
-	"Ils sortent de prison après %d secondes.",
+	"Ils sortent de prison après quelques minutes",
 	"Tapez /warrant [Nom RP|SteamID|Status ID] pour lancer un mandat sur un joueur.",
 	"Tapez /wanted [Nom RP|SteamID|Status ID] pour rechercher un suspect.",
 	"Tapez /unwanted [Nom RP|SteamID|Status ID] pour annuler les recherches.",
