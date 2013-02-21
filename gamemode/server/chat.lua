@@ -1,13 +1,13 @@
 local ChatCommands = {}
 
-function AddChatCommand(cmd, callback, prefixconst)
+function AddChatCommand(cmd, callback, delay)
 	for k,v in pairs(ChatCommands) do
 		if cmd == v.cmd then return end
 	end
 	ChatCommands[string.lower(cmd)] = {
 		cmd = cmd,
 		callback = callback,
-		prefixconst = prefixconst,
+		delay = delay
 	}
 end
 
@@ -86,3 +86,25 @@ function GM:ReplaceChatHooks()
 		end
 	end
 end
+
+function ConCommand(ply, _, args)
+	if not args[1] then for k,v in pairs(ChatCommands) do print(k) end return end
+
+	local cmd = string.lower(args[1])
+	local arg = table.concat(args, ' ', 2)
+	local tbl = ChatCommands[cmd]
+	local time = CurTime()
+
+	if not tbl then return end
+
+	ply.DrpCommandDelays = ply.DrpCommandDelays or {}
+
+	if tbl.delay and ply.DrpCommandDelays[cmd] and ply.DrpCommandDelays[cmd] > time - tbl.delay then
+		return
+	end
+
+	ply.DrpCommandDelays[cmd] = time
+
+	tbl.callback(ply, arg)
+end
+concommand.Add("darkrp", ConCommand)

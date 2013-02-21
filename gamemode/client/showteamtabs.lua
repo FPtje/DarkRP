@@ -461,7 +461,7 @@ function GM:JobsTab()
 				local function DoChatCommand(frame)
 					if special then
 						local menu = DermaMenu()
-						menu:AddOption("Vote", function() LocalPlayer():ConCommand("say "..command) frame:Close() end)
+						menu:AddOption("Vote", function() LocalPlayer():ConCommand("darkrp "..command) frame:Close() end)
 						menu:AddOption("Do not vote", function() LocalPlayer():ConCommand("say " .. specialcommand) frame:Close() end)
 						menu:Open()
 					else
@@ -569,7 +569,7 @@ function GM:EntitiesTab()
 						icon:SetModel(Model)
 						icon:SetSize(64, 64)
 						icon:SetToolTip(description)
-						icon.DoClick = function() LocalPlayer():ConCommand("say "..command) end
+						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
 						WepPanel:AddItem(icon)
 					end
 
@@ -604,7 +604,7 @@ function GM:EntitiesTab()
 						icon:SetModel(Model)
 						icon:SetSize(64, 64)
 						icon:SetToolTip(description)
-						icon.DoClick = function() LocalPlayer():ConCommand("say "..command) end
+						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
 						EntPanel:AddItem(icon)
 					end
 
@@ -649,7 +649,7 @@ function GM:EntitiesTab()
 					icon:SetSkin(skin)
 					icon:SetSize(64, 64)
 					icon:SetToolTip(description)
-					icon.DoClick = function() LocalPlayer():ConCommand("say "..command) end
+					icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
 					VehiclePanel:AddItem(icon)
 				end
 
