@@ -59,16 +59,17 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
 
 		for k, v in pairs(data) do
 			if tonumber(v.SteamID) or not v.SteamID then continue end
+			local duration = v.duration == "NULL" and 0 or (os.time() + v.duration)
 
 			FAdmin.BANS[string.upper(v.SteamID)] = {
-				time = os.time() + (v.duration or 0),
+				time = duration,
 				name = v.Nick,
 				reason = v.Reason,
 				adminname = v.AdminName,
 				adminsteam = v.Admin_steam
 			}
 
-			game.ConsoleCommand("banid ".. (v.duration or 0) * 60 .." " .. v.SteamID.. " kick\n")
+			game.ConsoleCommand("banid ".. duration * 60 .." " .. v.SteamID.. " kick\n")
 		end
 	end)
 end)
