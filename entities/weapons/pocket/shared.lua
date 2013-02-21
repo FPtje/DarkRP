@@ -75,7 +75,7 @@ function SWEP:PrimaryAttack()
 	local mass = trace.Entity.RPOriginalMass and trace.Entity.RPOriginalMass or phys:GetMass()
 
 	self.Owner:GetTable().Pocket = self.Owner:GetTable().Pocket or {}
-	if not trace.Entity:CPPICanPickup(self.Owner) or table.HasValue(self.Owner:GetTable().Pocket, trace.Entity) or trace.Entity.jailWall then
+	if not trace.Entity:CPPICanPickup(self.Owner) or trace.Entity.IsPocketed or trace.Entity.jailWall then
 		GAMEMODE:Notify(self.Owner, 1, 4, "You can not put this object in your pocket!")
 		return
 	end
@@ -111,6 +111,7 @@ function SWEP:PrimaryAttack()
 	trace.Entity.PhysgunPickup = false
 	trace.Entity.OldPlayerUse = trace.Entity.PlayerUse
 	trace.Entity.PlayerUse = false
+	trace.Entity.IsPocketed = true
 end
 
 function SWEP:SecondaryAttack()
@@ -303,6 +304,7 @@ elseif SERVER then
 		ent.PhysgunPickup = nil
 		ent.PlayerUse = ent.OldPlayerUse
 		ent.OldPlayerUse = nil
+		ent.IsPocketed = nil
 	end
 
 	hook.Add("PlayerDeath", "DropPocketItems", function(ply)
