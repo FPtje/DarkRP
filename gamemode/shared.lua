@@ -50,7 +50,8 @@ TEAM_POLICE = AddExtraTeam("Civil Protection", {
 	salary = 65,
 	admin = 0,
 	vote = true,
-	hasLicense = true
+	hasLicense = true,
+	help = LANGUAGE.cophelp
 })
 
 TEAM_GANG = AddExtraTeam("Gangster", {
@@ -96,7 +97,8 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	salary = 60,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	help = LANGUAGE.bosshelp
 })
 
 TEAM_GUN = AddExtraTeam("Gun Dealer", {
@@ -170,7 +172,8 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	admin = 0,
 	vote = false,
 	hasLicense = true,
-	NeedToChangeFrom = TEAM_POLICE
+	NeedToChangeFrom = TEAM_POLICE,
+	help = LANGUAGE.cophelp
 })
 
 TEAM_MAYOR = AddExtraTeam("Mayor", {
@@ -191,7 +194,8 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 	salary = 85,
 	admin = 0,
 	vote = true,
-	hasLicense = false
+	hasLicense = false,
+	help = LANGUAGE.mayorhelp
 })
 
 TEAM_HOBO = AddExtraTeam("Hobo", {

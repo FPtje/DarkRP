@@ -13,8 +13,18 @@ function GM:AddHelpLabel(category, text)
 	addLabel(category, text)
 end
 
+function GM:AddHelpLabels(category, labels)
+	for k,v in pairs(labels) do
+		table.insert(HelpCategories[category].labels, v)
+	end
+end
+
 function GM:AddHelpCategory(id, name)
 	addCategory(id, name)
+end
+
+function GM:RemoveHelpCategory(id)
+	HelpCategories[id] = nil
 end
 
 function GM:getHelpCategories()

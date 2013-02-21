@@ -185,6 +185,7 @@ local function ToggleHelp()
 	HelpToggled = not HelpToggled
 
 	HelpVGUI.HelpX = HelpVGUI.StartHelpX
+	HelpVGUI:FillHelpInfo()
 	HelpVGUI:SetVisible(HelpToggled)
 	gui.EnableScreenClicker(HelpToggled)
 end
@@ -608,12 +609,16 @@ function GM:InitPostEntity()
 	end)
 end
 
-function GAMEMODE:TeamChanged(before, after)
-	print("Team changed", before, after)
+function GM:TeamChanged(before, after)
+	self:RemoveHelpCategory(0)
+	if RPExtraTeams[after] and RPExtraTeams[after].help then
+		self:AddHelpCategory(0, RPExtraTeams[after].name .. " help")
+		self:AddHelpLabels(0, RPExtraTeams[after].help)
+	end
 end
 
 local function OnChangedTeam(um)
-	hook.Call("TeamChanged", GAMEMODE, um:ReadInt(), um:ReadInt())
+	hook.Call("TeamChanged", GAMEMODE, um:ReadShort(), um:ReadShort())
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
 

@@ -24,13 +24,11 @@ function HelpPanel:Init()
 end
 
 function HelpPanel:FillHelpInfo()
-	self.Filled = true
 	local LabelIndex = 0
 	local yoffset = 0
 
-	for k, v in ipairs(GAMEMODE:getHelpCategories()) do
-		if self.vguiHelpCategories[k] then continue end
-
+	self.HelpInfo:Clear()
+	for k, v in pairs(GAMEMODE:getHelpCategories()) do
 		self.vguiHelpCategories[k] = vgui.Create("DLabel", self.HelpInfo)
 		self.vguiHelpCategories[k]:SetText(v.name)
 		self.vguiHelpCategories[k].OrigY = yoffset
@@ -38,6 +36,7 @@ function HelpPanel:FillHelpInfo()
 		self.vguiHelpCategories[k]:SetFont("GModToolSubtitle")
 		self.vguiHelpCategories[k]:SetColor(Color(140, 0, 0, 200))
 		self.vguiHelpCategories[k]:SetExpensiveShadow(2, Color(0,0,0,255))
+		self.vguiHelpCategories[k]:SizeToContents()
 
 		surface.SetFont("ChatFont")
 
@@ -68,15 +67,18 @@ function HelpPanel:FillHelpInfo()
 end
 
 function HelpPanel:PerformLayout()
-	if not self.Filled then self:FillHelpInfo() end
 	self:SetSize(-self.StartHelpX, ScrH() - 70)
 
 	for k, v in pairs(self.vguiHelpCategories) do
+		if not ValidPanel(v) then self.vguiHelpCategories[k] = nil continue end
+
 		v:SetPos(5, v.OrigY - self.Scroll)
 		v:SizeToContents()
 	end
 
 	for k, v in pairs(self.vguiHelpLabels) do
+		if not ValidPanel(v) then self.vguiHelpLabels[k] = nil continue end
+
 		v:SetPos(5, v.OrigY - self.Scroll)
 		v:SizeToContents()
 	end
