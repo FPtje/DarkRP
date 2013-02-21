@@ -15,13 +15,13 @@ Store a ban in the MySQL tables
 hook.Add("FAdmin_StoreBan", "MySQLBans", function(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
 	local steam = SQLStr(SteamID)
 	local nick = Nick and SQLStr(Nick) or "NULL"
-	local bandate = CONNECTED_TO_MYSQL and "NOW()" or "datetime('now')"
+	local bandate = DB.CONNECTED_TO_MYSQL and "NOW()" or "datetime('now')"
 	local reason = Reason and SQLStr(Reason) or "NULL"
 	local admin = AdminName and SQLStr(AdminName) or "NULL"
 	local adminsteam = Admin_steam and SQLStr(Admin_steam) or "NULL"
 
 	local duration
-	if CONNECTED_TO_MYSQL then
+	if DB.CONNECTED_TO_MYSQL then
 		duration = Duration == 0 and "NULL" or "DATE_ADD(NOW(), INTERVAL ".. tonumber(Duration or 60) .. " MINUTE)"
 	else
 		duration = Duration == 0 and "NULL" or "datetime('now', '+".. tonumber(Duration or 60) .. " minutes')"
@@ -49,17 +49,17 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
 	FAdmin.BANS = FAdmin.BANS or {}
 
 	-- Small SQLite and MySQL syntax difference
-	local diffSeconds = CONNECTED_TO_MYSQL and "TIMESTAMPDIFF(SECOND, NOW(), UnbanDate)" or
+	local diffSeconds = DB.CONNECTED_TO_MYSQL and "TIMESTAMPDIFF(SECOND, NOW(), UnbanDate)" or
 		"strftime('%s', UnbanDate) - strftime('%s','now')"
 
-	local now = CONNECTED_TO_MYSQL and "NOW()" or "datetime('now')"
+	local now = DB.CONNECTED_TO_MYSQL and "NOW()" or "datetime('now')"
 
 	DB.Query("SELECT SteamID, Nick, " .. diffSeconds .. " AS duration, Reason, AdminName, Admin_steam FROM FAdminBans WHERE (UnbanDate > " .. now .. " OR UnbanDate IS NULL);", function(data)
 		if not data then return end
 
 		for k, v in pairs(data) do
 			if tonumber(v.SteamID) or not v.SteamID then continue end
-			local duration = v.duration == "NULL" and 0 or (os.time() + v.duration)
+			local duration = (not v.duration or v.duration == "NULL") and 0 or (os.time() + v.duration)
 
 			FAdmin.BANS[string.upper(v.SteamID)] = {
 				time = duration,

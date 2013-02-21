@@ -7,11 +7,11 @@ if RP_MySQLConfig.EnableMySQL then
 	require("mysqloo")
 end
 
-local CONNECTED_TO_MYSQL = false
+DB.CONNECTED_TO_MYSQL = false
 DB.MySQLDB = nil
 
 function DB.Begin()
-	if not CONNECTED_TO_MYSQL then
+	if not DB.CONNECTED_TO_MYSQL then
 		sql.Begin()
 	else
 		DB.Query("START TRANSACTION")
@@ -19,7 +19,7 @@ function DB.Begin()
 end
 
 function DB.Commit()
-	if not CONNECTED_TO_MYSQL then
+	if not DB.CONNECTED_TO_MYSQL then
 		sql.Commit()
 	else
 		DB.Query("COMMIT")
@@ -27,7 +27,7 @@ function DB.Commit()
 end
 
 function DB.Query(sqlText, callback)
-	if CONNECTED_TO_MYSQL then
+	if DB.CONNECTED_TO_MYSQL then
 		local query = DB.MySQLDB:query(sqlText)
 		local data
 		query.onData = function(Q, D)
@@ -63,7 +63,7 @@ function DB.Query(sqlText, callback)
 end
 
 function DB.QueryValue(sqlText, callback)
-	if CONNECTED_TO_MYSQL then
+	if DB.CONNECTED_TO_MYSQL then
 		local query = DB.MySQLDB:query(sqlText)
 		local data
 		query.onData = function(Q, D)
@@ -111,7 +111,7 @@ function DB.ConnectToMySQL(host, username, password, database_name, database_por
 
 	databaseObject.onConnected = function()
 		DB.Log("MySQL: Connection to external database "..host.." succeeded!")
-		CONNECTED_TO_MYSQL = true
+		DB.CONNECTED_TO_MYSQL = true
 		if DB.cachedQueries then
 			for _, v in pairs(DB.cachedQueries) do
 				if v[3] then
@@ -142,7 +142,7 @@ function DB.Init()
 	local map = SQLStr(string.lower(game.GetMap()))
 	DB.Begin()
 		-- Gotta love the difference between SQLite and MySQL
-		local AUTOINCREMENT = CONNECTED_TO_MYSQL and "AUTO_INCREMENT" or "AUTOINCREMENT"
+		local AUTOINCREMENT = DB.CONNECTED_TO_MYSQL and "AUTO_INCREMENT" or "AUTOINCREMENT"
 
 		-- Create the table for the convars used in DarkRP
 		DB.Query([[
@@ -240,7 +240,7 @@ function DB.Init()
 		-- For now it's deletion only, since updating of the common attribute doesn't happen.
 
 		-- MySQL trigger
-		if CONNECTED_TO_MYSQL then
+		if DB.CONNECTED_TO_MYSQL then
 			DB.Query("show triggers", function(data)
 				-- Check if the trigger exists first
 				if data then
@@ -303,7 +303,7 @@ function DB.Init()
 	-- Update older version of database to the current database
 	-- Only run when one of the older tables exist
 	local updateQuery = [[SELECT name FROM sqlite_master WHERE type="table" AND name="darkrp_cvars";]]
-	if CONNECTED_TO_MYSQL then
+	if DB.CONNECTED_TO_MYSQL then
 		updateQuery = [[show tables like "darkrp_cvars";]]
 	end
 
@@ -360,7 +360,7 @@ function DB.Init()
 		DB.TeamSpawns = data
 	end)
 
-	if CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
+	if DB.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
 								--so he walks around with the settings from the SQLite database
 		for k,v in pairs(player.GetAll()) do
 			local UniqueID = sql.SQLStr(v:UniqueID())
