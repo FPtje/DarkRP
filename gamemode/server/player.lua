@@ -217,6 +217,7 @@ function meta:ChangeTeam(t, force)
 	self:SetSelfDarkRPVar("helpBoss",false)
 	self:SetSelfDarkRPVar("helpCop",false)
 	self:SetSelfDarkRPVar("helpMayor",false)
+	self:SetDarkRPVar("agenda", nil)
 
 	if t ~= TEAM_CITIZEN and not self:ChangeAllowed(t) and not force then
 		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), "banned/demoted"))
