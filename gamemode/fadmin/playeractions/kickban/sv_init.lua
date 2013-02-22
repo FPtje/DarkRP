@@ -32,7 +32,8 @@ local function Kick(ply, cmd, args)
 				ply.FAdminKickReason = args[3]
 				SendUserMessage("FAdmin_kick_update", target, args[3])
 			else//if stage == "execute" or stage == "" then--execute or no stage = kick instantly
-				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), "Kicked by " .. ply:Nick() ..
+				local name = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
+				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), "Kicked by " .. name ..
 					" (" .. (Reason or "No reason provided") .. ")"))
 				ply.FAdminKickReason = nil
 			end
