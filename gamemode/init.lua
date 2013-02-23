@@ -160,6 +160,28 @@ end
 concommand.Add("rp_getvehicles_sv", GetAvailableVehicles)
 
 /*---------------------------------------------------------------------------
+DarkRP blocked entities
+---------------------------------------------------------------------------*/
+local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
+FPP.AddDefaultBlocked(blockTypes, "chatindicator")
+FPP.AddDefaultBlocked(blockTypes, "darkrp_cheque")
+FPP.AddDefaultBlocked(blockTypes, "darkp_console")
+FPP.AddDefaultBlocked(blockTypes, "darkrp_laws")
+FPP.AddDefaultBlocked(blockTypes, "drug")
+FPP.AddDefaultBlocked(blockTypes, "drug_lab")
+FPP.AddDefaultBlocked(blockTypes, "fadmin_jail")
+FPP.AddDefaultBlocked(blockTypes, "fadmin_motd")
+FPP.AddDefaultBlocked(blockTypes, "food")
+FPP.AddDefaultBlocked(blockTypes, "gunlab")
+FPP.AddDefaultBlocked(blockTypes, "letter")
+FPP.AddDefaultBlocked(blockTypes, "meteor")
+FPP.AddDefaultBlocked(blockTypes, "spawned_food")
+FPP.AddDefaultBlocked(blockTypes, "spawned_money")
+FPP.AddDefaultBlocked(blockTypes, "spawned_shipment")
+FPP.AddDefaultBlocked(blockTypes, "spawned_weapon")
+
+
+/*---------------------------------------------------------------------------
 Registering numpad data
 ---------------------------------------------------------------------------*/
 local oldNumpadUp = numpad.OnUp

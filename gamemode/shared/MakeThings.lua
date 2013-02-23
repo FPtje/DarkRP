@@ -1,3 +1,6 @@
+-- automatically block players from doing certain things with their DarkRP entities
+local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
+
 RPExtraTeams = {}
 function AddExtraTeam(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
 	local tableSyntaxUsed = colorOrTable.r == nil -- the color is not a color table.
@@ -68,6 +71,10 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
 
+	if SERVER then
+		FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
+	end
+
 	if SERVER and not util.IsValidModel(customShipment.model) then
 		local text = "The model of shipment "..name.." is incorrect! can not create custom shipment!"
 		print(text)
@@ -121,6 +128,10 @@ function AddEntity(name, entity, model, price, max, command, classes, CustomChec
 
 	if type(tblEnt.allowed) == "number" then
 		tblEnt.allowed = {tblEnt.allowed}
+	end
+
+	if SERVER then
+		FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
 	end
 
 	table.insert(DarkRPEntities, tblEnt)
