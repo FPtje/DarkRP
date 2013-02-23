@@ -23,19 +23,31 @@ function FAdmin.Messages.SendMessageAll(text, MsgType)
 	end
 end
 
+function FAdmin.Messages.ConsoleNotify(ply, message)
+	umsg.Start("FAdmin_ConsoleMessage", ply)
+		umsg.String(message)
+	umsg.End()
+end
+
 function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarget, LogMSG)
 	if not target then return end
 	local Targets = (target.IsPlayer and target:IsPlayer() and target:Nick()) or ""
+
+	local plyNick = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
+	local plySteamID = IsValid(ply) and ply:IsPlayer() and ply:SteamID() or "Console"
+
 	if ply ~= target then
 		if type(target) == "table" then
 			for k,v in pairs(target) do
 				local suffix = ((k == #target-1) and " and ") or (k ~= #target and ", ") or ""
 				local Name = (v == ply and "yourself") or v:Nick()
 
-				if v ~= ply then FAdmin.Messages.SendMessage(v, 2, string.format(MessageToTarget, ply:Nick())) end
+				if v ~= ply then FAdmin.Messages.SendMessage(v, 2, string.format(MessageToTarget, plyNick)) end
 				Targets = Targets..Name..suffix
 				break
 			end
+		else
+			FAdmin.Messages.SendMessage(target, 2, string.format(MessageToTarget, plyNick))
 		end
 
 		FAdmin.Messages.SendMessage(ply, 4, string.format(messageToPly, Targets))
@@ -44,5 +56,7 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
 		FAdmin.Messages.SendMessage(ply, 4, string.format(messageToPly, "yourself"))
 	end
 
-	FAdmin.Log("FAdmin Action: "..ply:Nick().." (".. ply:SteamID() .. ") ".. string.format(LogMSG, Targets:gsub("yourself", "themselves")))
+	local action = plyNick.." (".. plySteamID .. ") ".. string.format(LogMSG, Targets:gsub("yourself", "themselves"))
+	FAdmin.Log("FAdmin Action: " .. action)
+	FAdmin.Messages.ConsoleNotify(player.GetAll(), action)
 end

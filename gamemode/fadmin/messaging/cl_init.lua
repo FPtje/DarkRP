@@ -112,3 +112,9 @@ local function HUDPaint()
 	end
 end
 hook.Add("HUDPaint", "FAdin_MessagePaint", HUDPaint)
+
+local function ConsoleMessage(um)
+	MsgC(Color(255,0,0,255), "(FAdmin) ")
+	MsgC(Color(200,0,200,255), um:ReadString() .. "\n")
+end
+usermessage.Hook("FAdmin_ConsoleMessage", ConsoleMessage)

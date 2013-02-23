@@ -33,6 +33,9 @@ local function Kick(ply, cmd, args)
 				SendUserMessage("FAdmin_kick_update", target, args[3])
 			else//if stage == "execute" or stage == "" then--execute or no stage = kick instantly
 				local name = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
+
+				FAdmin.Messages.ActionMessage(ply, target, "You have kicked %s", "You were kicked by %s", "Kicked %s")
+
 				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), "Kicked by " .. name ..
 					" (" .. (Reason or "No reason provided") .. ")"))
 				ply.FAdminKickReason = nil
@@ -160,6 +163,8 @@ local function Ban(ply, cmd, args)
 				end
 				local nick = ply.Nick and ply:Nick() or "console"
 				SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
+
+				FAdmin.Messages.ActionMessage(ply, target, "You have Banned %s for " .. TimeText, "You were Banned by %s", "Banned %s (".. TimeText.. ") (".. Reason.. ")")
 				game.ConsoleCommand("banid " .. time.." ".. target:SteamID().."\n") -- Don't use banid in combination with RunConsoleCommand
 				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), " banned by "..nick.." for "..TimeText.." ("..Reason .. ")" ))
 			else
@@ -172,7 +177,8 @@ local function Ban(ply, cmd, args)
 
 				SaveBan(target, nil, time, Reason ~= "" and Reason, ply.Nick and ply:Nick() or "console", ply.SteamID and ply:SteamID() or "Console") -- Again default to one hour
 				game.ConsoleCommand("banid ".. time.." ".. target.."\n")
-				FAdmin.Messages.SendMessage(ply, 4, "Ban successful")
+
+				FAdmin.Messages.ActionMessage(ply, {}, "You have Banned "..target.." for " .. TimeText, "", "Banned "..target.." (".. TimeText.. ") (".. Reason.. ")")
 			end
 			ply.FAdminKickReason = nil
 		end
@@ -202,7 +208,7 @@ local function UnBan(ply, cmd, args)
 	end
 
 	game.ConsoleCommand("removeid ".. SteamID .. "\n")
-	FAdmin.Messages.SendMessage(ply, 4, "Unban successful!")
+	FAdmin.Messages.ActionMessage(ply, {}, "You have Unbanned "..SteamID, "", "Unbanned "..SteamID)
 end
 
 -- Commands and privileges

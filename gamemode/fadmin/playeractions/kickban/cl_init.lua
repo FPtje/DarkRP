@@ -293,6 +293,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		local SteamID = ply:SteamID()
 		local NICK = ply:Nick()
 
+		if ply:IsBot() then SteamID = "BOT" end
 		showBanWindow(SteamID, NICK)
 	end)
 
