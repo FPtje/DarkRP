@@ -14,6 +14,8 @@ function GM:AddHelpLabel(category, text)
 end
 
 function GM:AddHelpLabels(category, labels)
+	if type(labels) == "string" then return self:AddHelpLabel(category, labels) end
+
 	for k,v in pairs(labels) do
 		table.insert(HelpCategories[category].labels, v)
 	end
