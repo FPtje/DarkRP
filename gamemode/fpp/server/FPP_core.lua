@@ -185,15 +185,13 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	end
 
 	-- Blacklist checks
-	for k,v in pairs(FPP.Blocked[Type1]) do
-		if (not tobool(FPP.Settings[Type2].iswhitelist) and string.find(string.lower(ent:GetClass()), string.lower(v))) then
-			if ply:IsAdmin() and tobool(FPP.Settings[Type2].admincanblocked) then
-				Returnal = true
-			elseif tobool(FPP.Settings[Type2].canblocked) then
-				Returnal = true
-			else
-				Returnal = false
-			end
+	if not tobool(FPP.Settings[Type2].iswhitelist) and FPP.Blocked[Type1][string.lower(ent:GetClass())] then
+		if ply:IsAdmin() and tobool(FPP.Settings[Type2].admincanblocked) then
+			Returnal = true
+		elseif tobool(FPP.Settings[Type2].canblocked) then
+			Returnal = true
+		else
+			Returnal = false
 		end
 	end
 
@@ -209,12 +207,11 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 
 	-- Whitelist checks
 	if tobool(FPP.Settings[Type2].iswhitelist) then
-		for k,v in pairs(FPP.Blocked[Type1]) do
-			if string.find(string.lower(ent:GetClass()), string.lower(v)) then --If it's a whitelist and the entity is found in the whitelist
-				Returnal = true
-				break
-			end
+		--If it's a whitelist and the entity is found in the whitelist
+		if FPP.Blocked[Type1][string.lower(ent:GetClass())] then
+			Returnal = true
 		end
+
 		-- If the whitelist says you can't touch it, then you can't
 		if not Returnal and (not tobool(FPP.Settings[Type2].canblocked) and (not ply:IsAdmin() or not tobool(FPP.Settings[Type2].admincanblocked))) then
 			return false, "Blocked!"
@@ -521,11 +518,27 @@ end
 hook.Add("EntityTakeDamage", "FPP.Protect.EntityTakeDamage", FPP.Protect.EntityDamage)
 
 --Toolgun
-local allweapons = {"weapon_crowbar", "weapon_physgun", "weapon_physcannon", "weapon_pistol", "weapon_stunstick", "weapon_357", "weapon_smg1",
-	"weapon_ar2", "weapon_shotgun", "weapon_crossbow", "weapon_frag", "weapon_rpg", "gmod_camera", "gmod_tool", "weapon_bugbait"} --for advanced duplicator, you can't use any IsWeapon...
+--for advanced duplicator, you can't use the IsWeapon function
+local allweapons = {
+["weapon_crowbar"] = true,
+["weapon_physgun"] = true,
+["weapon_physcannon"] = true,
+["weapon_pistol"] = true,
+["weapon_stunstick"] = true,
+["weapon_357"] = true,
+["weapon_smg1"] = true,
+["weapon_ar2"] = true,
+["weapon_shotgun"] = true,
+["weapon_crossbow"] = true,
+["weapon_frag"] = true,
+["weapon_rpg"] = true,
+["gmod_camera"] = true,
+["gmod_tool"] = true,
+["weapon_bugbait"] = true}
+
 timer.Simple(5, function()
 	for k,v in pairs(weapons.GetList()) do
-		if v.ClassName then table.insert(allweapons, v.ClassName) end
+		if v.ClassName then allweapons[string.lower(v.ClassName or "")] = true end
 	end
 end)
 
@@ -583,6 +596,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 			ignoreGeneralRestrictTool = true --If someone is allowed, then he's allowed even though he's not admin, so don't check for further restrictions
 		end
 	end
+
 
 	if not ignoreGeneralRestrictTool then
 		local Group = FPP.Groups[FPP.GroupMembers[SteamID]] or FPP.Groups[ply:GetNWString("usergroup")] or FPP.Groups.default  -- What group is the player in. If not in a special group, then he's in default group
@@ -663,100 +677,41 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 	if tool ~= "adv_duplicator" and tool ~= "duplicator" and tool ~= "advdupe2" then return end
 	if not ENT and not FPP.AntiSpam.DuplicatorSpam(ply) then return false end
 
-	if tool == "adv_duplicator" and ply:GetActiveWeapon():GetToolObject().Entities then
-		for k,v in pairs(ply:GetActiveWeapon():GetToolObject().Entities) do
-			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
-				for c, d in pairs(allweapons) do
-					if string.lower(v.Class) == string.lower(d) or string.find(v.Class:lower(), "ai_") == 1 or string.find(v.Class:lower(), "item_ammo_") == 1 then
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply:GetActiveWeapon():GetToolObject().Entities[k] = nil
-					end
-				end
-			end
-			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatorprotect) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanblocked))) then
-				local setspawning = tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist)
-				for c, d in pairs(FPP.Blocked.Spawning1) do
-					if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply:GetActiveWeapon():GetToolObject().Entities[k] = nil
-						break
-					end
-					if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then -- if the whitelist is on you can't spawn it unless it's found
-						setspawning = false
-						break
-					end
-				end
-				if setspawning then
-					FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-					ply:GetActiveWeapon():GetToolObject().Entities[k] = nil
-				end
+	local EntTable =
+		(tool == "adv_duplicator" and ply:GetActiveWeapon():GetToolObject().Entities) or
+		(tool == "advdupe2" and ply.AdvDupe2 and ply.AdvDupe2.Entities) or
+		(tool == "duplicator" and ply.CurrentDupe and ply.CurrentDupe.Entities)
+
+	if not EntTable then return end
+
+
+	for k,v in pairs(EntTable) do
+		local lowerClass = string.lower(v.Class)
+
+		if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
+			if allweapons[lowerClass] or string.find(lowerClass, "ai_") == 1 or string.find(lowerClass, "item_ammo_") == 1 then
+				FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
+				EntTable[k] = nil
 			end
 		end
-		return --No further questions sir!
-	end
+		if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatorprotect) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanblocked))) then
+			local setspawning = tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist)
 
-	if tool == "advdupe2" and ply.AdvDupe2 and ply.AdvDupe2.Entities then
-		for k,v in pairs(ply.AdvDupe2.Entities) do
-			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
-				for c, d in pairs(allweapons) do
-					if string.lower(v.Class) == string.lower(d) or string.find(v.Class:lower(), "ai_") == 1 or string.find(v.Class:lower(), "item_ammo_") == 1 then
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply.AdvDupe2.Entities[k] = nil
-					end
-				end
+			if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and FPP.Blocked.Spawning1[string.lower(v.Class)] then
+				FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
+				EntTable[k] = nil
+				break
 			end
-			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatorprotect) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanblocked))) then
-				local setspawning = tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist)
-				for c, d in pairs(FPP.Blocked.Spawning1) do
-					if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply.AdvDupe2.Entities[k] = nil
-						break
-					end
-					if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then -- if the whitelist is on you can't spawn it unless it's found
-						setspawning = false
-						break
-					end
-				end
-				if setspawning then
-					FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-					ply.AdvDupe2.Entities[k] = nil
-				end
-			end
-		end
-		return --No further questions sir!
-	end
 
-	if tool == "duplicator" and ply.CurrentDupe then
-		local Ents = ply.CurrentDupe.Entities or {}
-
-		for k,v in pairs(Ents) do
-			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
-				for c, d in pairs(allweapons) do
-					if string.lower(v.Class) == string.lower(d) or string.find(v.Class:lower(), "ai_") == 1 or string.find(v.Class:lower(), "item_ammo_") == 1 then
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply.CurrentDupe.Entities[k] = nil
-					end
-				end
+			-- if the whitelist is on you can't spawn it unless it's found
+			if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and FPP.Blocked.Spawning1[string.lower(v.Class)] then
+				setspawning = false
+				break
 			end
-			if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatorprotect) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanblocked))) then
-				local setspawning = tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist)
-				for c, d in pairs(FPP.Blocked.Spawning1) do
-					if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						ply.CurrentDupe.Entities[k] = nil
-						break
-					end
-					if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and string.find(v.Class, d) then -- if the whitelist is on you can't spawn it unless it's found
-						FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-						setspawning = false
-						break
-					end
-				end
-				if setspawning then
-					FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-					ply.CurrentDupe.Entities[k] = nil
-				end
+
+			if setspawning then
+				FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
+				EntTables[k] = nil
 			end
 		end
 	end
