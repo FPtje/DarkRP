@@ -71,7 +71,7 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
 
-	if SERVER then
+	if SERVER and FPP then
 		FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
 	end
 
@@ -130,7 +130,7 @@ function AddEntity(name, entity, model, price, max, command, classes, CustomChec
 		tblEnt.allowed = {tblEnt.allowed}
 	end
 
-	if SERVER then
+	if SERVER and FPP then
 		FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
 	end
 
