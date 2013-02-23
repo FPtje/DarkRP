@@ -76,8 +76,8 @@ concommand.Add("FPP_setting", FPP_SetSetting)
 local function AddBlocked(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
-	if table.HasValue(FPP.Blocked[args[1]], string.lower(args[2])) then return end
-	table.insert(FPP.Blocked[args[1]], string.lower(args[2]))
+	if FPP.Blocked[args[1]][string.lower(args[2])] then return end
+	FPP.Blocked[args[1]][string.lower(args[2])] = true
 
 	FPPDB.Query("SELECT * FROM FPP_BLOCKED1;", function(data)
 		if type(data) == "table" then
@@ -124,11 +124,7 @@ local function RemoveBlocked(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 
-	for k,v in pairs(FPP.Blocked[args[1]]) do
-		if v == args[2] then
-			table.remove(FPP.Blocked[args[1]], k)
-		end
-	end
+	FPP.Blocked[args[1]][args[2]] = nil
 
 	FPPDB.Query("DELETE FROM FPP_BLOCKED1 WHERE var = "..sql.SQLStr(args[1]) .. " AND setting = "..sql.SQLStr(args[2])..";")
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. args[2] .. " from the "..args[1] .. " black/whitelist", false)
@@ -218,63 +214,35 @@ local function RetrieveBlocked()
 					ErrorNoHalt((v.var or "(nil var)") .. " blocked type does not exist! (Setting: " .. (v.setting or "") .. ")")
 					continue
 				end
-				table.insert(FPP.Blocked[v.var], v.setting)
+
+				FPP.Blocked[v.var][v.setting] = true
 			end
 		else
 			data = FPPDB.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")
+
 			FPP.Blocked.Physgun1 = {
-				"func_breakable_surf",
-				"func_brush",
-				"func_door",
-				"prop_door_rotating",
-				"drug",
-				"drug_lab",
-				"food",
-				"gunlab",
-				"letter",
-				"meteor",
-				"microwave",
-				"money_printer",
-				"spawned_shipment",
-				"spawned_weapon",
-				"spawned_food",}
-			FPP.Blocked.Spawning1 = {"func_breakable_surf",
-				"player",
-				"func_door",
-				"prop_door_rotating",
-				"drug",
-				"drug_lab",
-				"food",
-				"gunlab",
-				"letter",
-				"meteor",
-				"microwave",
-				"money_printer",
-				"spawned_shipment",
-				"spawned_weapon",
-				"spawned_food",
-				"spawned_money",
-				"ent_explosivegrenade",
-				"ent_mad_grenade",
-				"ent_flashgrenade",
-				"gmod_wire_field_device"}
-			FPP.Blocked.Gravgun1 = {"func_breakable_surf", "vehicle_"}
-			FPP.Blocked.Toolgun1 = {"func_breakable_surf",
-				"player",
-				"func_door",
-				"prop_door_rotating",
-				"drug",
-				"drug_lab",
-				"food",
-				"gunlab",
-				"letter",
-				"meteor",
-				"microwave",
-				"money_printer",
-				"spawned_shipment",
-				"spawned_weapon",
-				"spawned_food",
-				"spawned_money"}
+				["func_breakable_surf"] = true,
+				["func_brush"] = true,
+				["func_door"] = true,
+				["prop_door_rotating"] = true
+			}
+			FPP.Blocked.Spawning1 = {
+				["func_breakable_surf"] = true,
+				["player"] = true,
+				["func_door"] = true,
+				["prop_door_rotating"] = true,
+				["ent_explosivegrenade"] = true,
+				["ent_mad_grenade"] = true,
+				["ent_flashgrenade"] = true,
+				["gmod_wire_field_device"] = true
+			}
+			FPP.Blocked.Gravgun1 = {["func_breakable_surf"] = true, ["vehicle_"] = true}
+			FPP.Blocked.Toolgun1 = {
+				["func_breakable_surf"] = true,
+				["player"] = true,
+				["func_door"] = true,
+				["prop_door_rotating"] = true
+			}
 			FPP.Blocked.PlayerUse1 = {}
 			FPP.Blocked.EntityDamage1 = {}
 
@@ -283,7 +251,7 @@ local function RetrieveBlocked()
 			for k,v in pairs(FPP.Blocked) do
 				for a,b in pairs(v) do
 					count = count + 1
-					FPPDB.Query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(b) .. ");")
+					FPPDB.Query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(a) .. ");")
 				end
 			end
 			FPPDB.Commit()
@@ -589,7 +557,7 @@ local function SendBlocked(ply, cmd, args)
 	for k,v in pairs(FPP.Blocked[args[1]]) do
 		umsg.Start("FPP_blockedlist", ply)
 			umsg.String(args[1])
-			umsg.String(v)
+			umsg.String(k)
 		umsg.End()
 	end
 end
