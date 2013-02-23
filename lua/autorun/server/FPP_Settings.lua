@@ -259,6 +259,23 @@ local function RetrieveBlocked()
 	end)
 end
 
+/*---------------------------------------------------------------------------
+Default blocked entities
+Don't save them in the database, but always block them.
+---------------------------------------------------------------------------*/
+function FPP.AddDefaultBlocked(types, classname)
+	classname = string.lower(classname)
+
+	if type(types) == "string" then
+		FPP.Blocked[types][classname] = true
+		return
+	end
+
+	for k,v in pairs(types) do
+		FPP.Blocked[v][classname] = true
+	end
+end
+
 local function RetrieveBlockedModels()
 	FPP.BlockedModels = FPP.BlockedModels or {}
 	-- Sometimes when the database retrieval is corrupt,
