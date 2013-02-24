@@ -557,8 +557,13 @@ end
 concommand.Add("FPP_SendGroupMembers", SendGroupMemberData)
 
 local function SendBlocked(ply, cmd, args)
-	--I don't need an admin check here since people should be able to find out without having admin
 	if not args[1] or not FPP.Blocked[args[1]] then return end
+
+	ply.FPPUmsg1 = ply.FPPUmsg1 or {}
+	ply.FPPUmsg1[args[1]] = ply.FPPUmsg1[args[1]] or 0
+	if ply.FPPUmsg1[args[1]] > CurTime() - 5 then return end
+	ply.FPPUmsg1[args[1]] = CurTime()
+
 	for k,v in pairs(FPP.Blocked[args[1]]) do
 		umsg.Start("FPP_blockedlist", ply)
 			umsg.String(args[1])
@@ -569,7 +574,10 @@ end
 concommand.Add("FPP_sendblocked", SendBlocked)
 
 local function SendBlockedModels(ply, cmd, args)
-	--I don't need an admin check here since people should be able to find out without having admin
+	ply.FPPUmsg2 = ply.FPPUmsg2 or 0
+	if ply.FPPUmsg2 > CurTime() - 10 then return end
+	ply.FPPUmsg2 = CurTime()
+
 	local i = 0
 	for k,v in pairs(FPP.BlockedModels) do
 		timer.Simple(i*0.01, function()
@@ -582,6 +590,10 @@ end
 concommand.Add("FPP_sendblockedmodels", SendBlockedModels)
 
 local function SendRestrictedTools(ply, cmd, args)
+	ply.FPPUmsg3 = ply.FPPUmsg3 or 0
+	if ply.FPPUmsg3 > CurTime() - 5 then return end
+	ply.FPPUmsg3 = CurTime()
+
 	if not args[1] then return end
 	umsg.Start("FPP_RestrictedToolList", ply)
 		umsg.String(args[1])
