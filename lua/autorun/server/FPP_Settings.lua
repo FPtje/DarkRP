@@ -747,12 +747,10 @@ function FPP.Init()
 	RetrieveSettings()
 end
 
-hook.Add("InitPostEntity", "FPP_LoadSQL", function()
-	timer.Simple(2, function()
-		if not FPP_MySQLConfig or not FPP_MySQLConfig.EnableMySQL then
-			FPP.Init()
-		end
-	end)
+timer.Simple(2, function()
+	if not FPP_MySQLConfig or not FPP_MySQLConfig.EnableMySQL then
+		FPP.Init()
+	end
 end)
 
 local assbackup = ASS_RegisterPlugin -- Suddenly after witing this code, ASS spamprotection and propprotection broke. I have no clue why. I guess you should use FPP then
