@@ -7,7 +7,7 @@ function CPPI:GetName()
 end
 
 function CPPI:GetVersion()
-	return "addon.1"
+	return "addon.2"
 end
 
 function CPPI:GetInterfaceVersion()
@@ -36,7 +36,7 @@ end
 local ENTITY = FindMetaTable("Entity")
 function ENTITY:CPPIGetOwner()
 	local Owner = self.Owner
-	if not IsValid(Owner) or not Owner:IsPlayer() then return nil, CPPI.CPPI_NOTIMPLEMENTED end
+	if not IsValid(Owner) or not Owner:IsPlayer() then return Owner, self.OwnerID end
 	return Owner, Owner:UniqueID()
 end
 
