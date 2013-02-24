@@ -619,7 +619,7 @@ function GM:EntitiesTab()
 
 					if FoodItems and (GAMEMODE.Config.foodspawn or LocalPlayer():Team() == TEAM_COOK) and (GAMEMODE.Config.hungermod or LocalPlayer():Team() == TEAM_COOK) then
 						for k,v in pairs(FoodItems) do
-							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..k, "$" .. v.amount), "/buyfood "..k)
+							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..k, "$15"), "/buyfood "..k)
 						end
 					end
 					for k,v in pairs(CustomShipments) do
