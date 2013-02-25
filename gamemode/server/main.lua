@@ -696,6 +696,11 @@ local function BuyVehicle(ply, args)
 	if not found then return "" end
 	if found.allowed and not table.HasValue(found.allowed, ply:Team()) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, "/buyvehicle")) return "" end
 
+	if found.customCheck and not found.customCheck(ply) then
+		GAMEMODE:Notify(ply, 1, 4, "You're not allowed to purchase this item")
+		return ""
+	end
+
 	if not ply.Vehicles then ply.Vehicles = 0 end
 	if GAMEMODE.Config.maxvehicles and ply.Vehicles >= GAMEMODE.Config.maxvehicles then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, "vehicle"))

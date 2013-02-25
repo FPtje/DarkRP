@@ -87,7 +87,7 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 	util.PrecacheModel(customShipment.model)
 end
 
-function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it)
+function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
 	local function warn(add)
 		local text
 		if Name_of_vehicle then text = Name_of_vehicle end
@@ -108,7 +108,7 @@ function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it)
 		warn("Vehicle not found!")
 		return
 	end
-	table.insert(CustomVehicles, {name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it})
+	table.insert(CustomVehicles, {name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck})
 end
 
 DarkRPEntities = {}
