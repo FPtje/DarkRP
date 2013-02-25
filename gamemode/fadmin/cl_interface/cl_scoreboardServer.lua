@@ -103,6 +103,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 	local function AddInfoPanel()
 		local pan = vgui.Create("FAdminPanelList")
 		pan:SetSize(1, FAdmin.ScoreBoard.Server.Controls.InfoPanel:GetTall())
+		pan:Dock(LEFT)
 		FAdmin.ScoreBoard.Server.Controls.InfoPanel:Add(pan)
 
 		table.insert(InfoPanels, pan)
@@ -115,6 +116,8 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		local Text = vgui.Create("DLabel")
 		Text:SetFont("TabLarge")
 		Text:SetColor(Color(255,255,255,200))
+		Text:Dock(TOP)
+		Text.Func = v.Func
 
 		local EndText
 		local function RefreshText()
