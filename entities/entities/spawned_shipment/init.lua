@@ -58,7 +58,10 @@ function ENT:Use()
 		self.locked = true -- One activation per second
 		self.sparking = true
 		self:Setgunspawn(CurTime() + 1)
-		timer.Create(self:EntIndex() .. "crate", 1, 1, function() self.SpawnItem(self) end)
+		timer.Create(self:EntIndex() .. "crate", 1, 1, function()
+			if not IsValid(self) then return end
+			self.SpawnItem(self)
+		end)
 	end
 end
 

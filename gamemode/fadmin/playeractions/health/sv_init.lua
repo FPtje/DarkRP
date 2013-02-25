@@ -2,6 +2,8 @@ local function SetHealth(ply, cmd, args)
 	if not args[1] then return end
 
 	local Health = tonumber(args[2] or 100)
+	if not Health then return end
+
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) or not targets then
 		targets = {ply}
