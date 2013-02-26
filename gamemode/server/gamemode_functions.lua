@@ -308,7 +308,9 @@ local allowedProperty = {
 	extinguish = true,
 	keepupright = true,
 	gravity = true,
-	collision = true
+	collision = true,
+	skin = true,
+	bodygroups = true
 }
 function GM:CanProperty(ply, property, ent)
 	if allowedProperty[property] and ent:CPPICanTool(ply, "remover") then
