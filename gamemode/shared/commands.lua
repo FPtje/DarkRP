@@ -24,6 +24,11 @@ function GM:AddTeamCommands(CTeam, max)
 				GAMEMODE:Notify(ply, 1,4, string.format(LANGUAGE.need_to_be_before, string.sub(teamnames, 5), CTeam.name))
 				return ""
 			end
+
+			if CTeam.customCheck and not CTeam.customCheck(ply) then
+				GAMEMODE:Notify(ply, 1, 4, CTeam.CustomCheckFailMsg or string.format(LANGUAGE.unable, team.GetName(t), ""))
+				return ""
+			end
 			if #player.GetAll() == 1 then
 				GAMEMODE:Notify(ply, 0, 4, LANGUAGE.vote_alone)
 				ply:ChangeTeam(k)
