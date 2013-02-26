@@ -564,7 +564,7 @@ local function BuyPistol(ply, args)
 			end
 
 			if v.customCheck and not v.customCheck(ply) then
-				GAMEMODE:Notify(ply, 1, 4, "You're not allowed to purchase this item")
+				GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
 				return ""
 			end
 
@@ -635,7 +635,7 @@ local function BuyShipment(ply, args)
 			end
 
 			if v.customCheck and not v.customCheck(ply) then
-				GAMEMODE:Notify(ply, 1, 4, "You're not allowed to purchase this item")
+				GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
 				return ""
 			end
 
@@ -697,7 +697,7 @@ local function BuyVehicle(ply, args)
 	if found.allowed and not table.HasValue(found.allowed, ply:Team()) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, "/buyvehicle")) return "" end
 
 	if found.customCheck and not found.customCheck(ply) then
-		GAMEMODE:Notify(ply, 1, 4, "You're not allowed to purchase this item")
+		GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
 		return ""
 	end
 
@@ -762,7 +762,7 @@ for k,v in pairs(DarkRPEntities) do
 		local cmdname = string.gsub(v.ent, " ", "_")
 
 		if v.customCheck and not v.customCheck(ply) then
-			GAMEMODE:Notify(ply, 1, 4, "You're not allowed to purchase this item")
+			GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
 			return ""
 		end
 
@@ -823,7 +823,7 @@ local function BuyAmmo(ply, args)
 	end
 
 	if not found or (found.customCheck and not found.customCheck(ply)) then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unavailable, "ammo"))
+		GAMEMODE:Notify(ply, 1, 4, found.CustomCheckFailMsg or string.format(LANGUAGE.unavailable, "ammo"))
 		return ""
 	end
 

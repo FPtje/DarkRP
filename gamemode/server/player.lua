@@ -248,7 +248,7 @@ function meta:ChangeTeam(t, force)
 	if not TEAM then return false end
 
 	if TEAM.customCheck and not TEAM.customCheck(self) then
-		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
+		GAMEMODE:Notify(self, 1, 4, TEAM.CustomCheckFailMsg or string.format(LANGUAGE.unable, team.GetName(t), ""))
 		return false
 	end
 
