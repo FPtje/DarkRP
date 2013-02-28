@@ -259,24 +259,7 @@ elseif SERVER then
 			ply:GetActiveWeapon():SetWeaponHoldType("pistol")
 			timer.Simple(0.2, function() if ply:GetActiveWeapon():IsValid() then ply:GetActiveWeapon():SetWeaponHoldType("normal") end end)
 
-			local trace = {}
-			trace.start = ply:EyePos()
-			trace.endpos = trace.start + ply:GetAimVector() * 85
-			trace.filter = ply
-			local tr = util.TraceLine(trace)
-			ent:SetMoveType(MOVETYPE_VPHYSICS)
-			ent:SetNoDraw(false)
-			ent:SetCollisionGroup(4)
-			ent:SetPos(tr.HitPos)
-			ent:SetSolid(SOLID_VPHYSICS)
-			ent.PhysgunPickup = nil
-			local phys = ent:GetPhysicsObject()
-			if phys:IsValid() then
-				phys:EnableCollisions(true)
-				phys:EnableMotion(true)
-				phys:Wake()
-			end
-			ent.PlayerUse = false
+			DropItem(ply, ent)
 		end
 	end
 	concommand.Add("_RPSpawnPocketItem", Spawn)
