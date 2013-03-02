@@ -64,27 +64,15 @@ timer.Create("FlammableProps", 0.1, 0, FlammablePropThink)
 /*---------------------------------------------------------
  Shipments
  ---------------------------------------------------------*/
-local NoDrop = {} -- Drop blacklist
+
 local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) then return "" end
 
-	if GAMEMODE.Config.restrictdrop then
-		local found = false
-		for k,v in pairs(CustomShipments) do
-			if v.entity == ent:GetClass() then
-				found = true
-				break
-			end
-		end
-
-		if not found then
-			GAMEMODE:Notify(ply, 1, 4, LANGUAGE.cannot_drop_weapon)
-			return ""
-		end
+	if not GAMEMODE:CanDropWeapon(ply, ent) then
+		GAMEMODE:Notify(ply, 1, 4, LANGUAGE.cannot_drop_weapon)
+		return ""
 	end
-
-	if table.HasValue(NoDrop, ent:GetClass()) then return "" end
 
 	local RP = RecipientFilter()
 	RP:AddAllPlayers()
