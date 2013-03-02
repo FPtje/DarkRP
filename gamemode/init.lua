@@ -37,6 +37,7 @@ DeriveGamemode("sandbox")
 util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_DoorData")
 util.AddNetworkString("FAdmin_retrievebans")
+util.AddNetworkString("FADMIN_SendGroups")
 util.AddNetworkString("DarkRP_keypadData")
 
 -- Falco's prop protection

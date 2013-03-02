@@ -6,15 +6,52 @@ end)
 
 hook.Add("InitPostEntity", "InitializeFAdminGroups", function()
 	timer.Simple(2, function()
-		DB.Query("CREATE TABLE IF NOT EXISTS FADMIN_GROUP(NAME VARCHAR(40) NOT NULL PRIMARY KEY, ADMIN_ACCESS INTEGER NOT NULL, PRIVS VARCHAR(100));")
+		DB.Query("CREATE TABLE IF NOT EXISTS FADMIN_GROUPS(NAME VARCHAR(40) NOT NULL PRIMARY KEY, ADMIN_ACCESS INTEGER NOT NULL);")
 		DB.Query("CREATE TABLE IF NOT EXISTS FAdmin_PlayerGroup(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
+		DB.Query([[CREATE TABLE IF NOT EXISTS FADMIN_PRIVILEGES(
+			NAME VARCHAR(40),
+			PRIVILEGE VARCHAR(100),
+			PRIMARY KEY(NAME, PRIVILEGE),
+			FOREIGN KEY(NAME) REFERENCES FADMIN_GROUPS(NAME)
+				ON UPDATE CASCADE
+				ON DELETE CASCADE
+		);]])
 
-		DB.Query("SELECT * FROM FADMIN_GROUP", function(data)
+		DB.Query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME;", function(data)
 			if not data then return end
-			for k,v in pairs(data) do
-				if v.PRIVS == "NULL" then v.PRIVS = nil else v.PRIVS = string.Explode(";", v.PRIVS) end
-				FAdmin.Access.Groups[v.NAME] = {ADMIN = tonumber(v.ADMIN_ACCESS), PRIVS = v.PRIVS or {}}
+
+			for _, v in pairs(data) do
+				FAdmin.Access.Groups[v.NAME] = FAdmin.Access.Groups[v.NAME] or
+					{ADMIN = tonumber(v.ADMIN_ACCESS), PRIVS = {}}
+
+				if v.PRIVILEGE and v.PRIVILEGE ~= "NULL" then
+					FAdmin.Access.Groups[v.NAME].PRIVS[v.PRIVILEGE] = true
+				end
 			end
+
+			-- Send groups to early joiners and listen server hosts
+			for k,v in pairs(player.GetAll()) do
+				FAdmin.Access.SendGroups(v)
+			end
+		end)
+
+		FAdmin.Access.AddGroup("superadmin", 2)
+		FAdmin.Access.AddGroup("admin", 1)
+		FAdmin.Access.AddGroup("user", 0)
+		FAdmin.Access.AddGroup("noaccess", 0)
+
+		DB.QueryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
+			if val ~= "0" then return end
+
+			local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
+
+			DB.Begin()
+			for priv, access in pairs(FAdmin.Access.Privileges) do
+				for i = access + 1, #hasPrivs, 1 do
+					DB.Query("INSERT INTO FADMIN_PRIVILEGES VALUES(".. sql.SQLStr(hasPrivs[i]) .. ", " .. sql.SQLStr(priv) .. ");")
+				end
+			end
+			DB.Commit()
 		end)
 	end)
 end)
@@ -22,6 +59,7 @@ end)
 function FAdmin.Access.PlayerSetGroup(ply, group)
 	if not FAdmin.Access.Groups[group] then return end
 	local SteamID = type(ply) ~= "string" and IsValid(ply) and ply:SteamID() or ply
+
 	if type(ply) ~= "string" and IsValid(ply) then
 		ply:SetUserGroup(group)
 	end
@@ -49,29 +87,48 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
 	end
 end
 
-local nosend = {"user", "admin", "superadmin", "noaccess"}
-local function SendCustomGroups(ply)
-	for k,v in pairs(FAdmin.Access.Groups) do
-		if not table.HasValue(nosend, k) then
-			SendUserMessage("FADMIN_SendGroups", ply, k, v.ADMIN)
-			local privs = {}
-			local SendAmount = 1
-			privs[SendAmount] = ""
-			for k,v in pairs(v.PRIVS) do
-				if string.len(privs[SendAmount]) > 200 then
-					SendAmount = SendAmount + 1
-					privs[SendAmount] = ""
-				end
-				privs[SendAmount] = privs[SendAmount].. ((privs[SendAmount] ~= "" and ";") or "")..v
-			end
-			for i = 1, SendAmount do
-				SendUserMessage("FAdmin_SendPrivs", ply, k, privs[SendAmount])
-			end
-		end
+local function AddPrivilege(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+
+	local group, priv = args[1], args[2]
+	if not FAdmin.Access.Groups[group] or not FAdmin.Access.Privileges[priv] then
+		FAdmin.Messages.SendMessage(ply, 5, "Invalid arguments")
+		return
 	end
+
+	FAdmin.Access.Groups[group].PRIVS[priv] = true
+
+	DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(".. sql.SQLStr(group) .. ", " .. sql.SQLStr(priv) .. ");")
+	SendUserMessage("FAdmin_AddPriv", player.GetAll(), group, priv)
+	FAdmin.Messages.SendMessage(ply, 4, "Privilege Added!")
 end
 
-function FAdmin.Access.SetAccess(ply, cmd, args) -- FAdmin SetAccess <player> groupname [new_groupadmin, new_groupprivs]
+local function RemovePrivilege(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+
+	local group, priv = args[1], args[2]
+	if not FAdmin.Access.Groups[group] or not FAdmin.Access.Privileges[priv] then
+		FAdmin.Messages.SendMessage(ply, 5, "Invalid arguments")
+		return
+	end
+
+	FAdmin.Access.Groups[group].PRIVS[priv] = nil
+
+	DB.Query("DELETE FROM FADMIN_PRIVILEGES WHERE NAME = ".. sql.SQLStr(group) .. " AND PRIVILEGE = " .. sql.SQLStr(priv) .. ";")
+	SendUserMessage("FAdmin_RemovePriv", player.GetAll(), group, priv)
+	FAdmin.Messages.SendMessage(ply, 4, "Privilege Removed!")
+end
+
+function FAdmin.Access.SendGroups(ply)
+	if not FAdmin.Access.Groups then return end
+
+	net.Start("FADMIN_SendGroups")
+		net.WriteTable(FAdmin.Access.Groups)
+	net.Send(ply)
+end
+
+-- FAdmin SetAccess <player> groupname [new_groupadmin, new_groupprivs]
+function FAdmin.Access.SetAccess(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
 	local targets = FAdmin.FindPlayer(args[1])
@@ -80,13 +137,14 @@ function FAdmin.Access.SetAccess(ply, cmd, args) -- FAdmin SetAccess <player> gr
 		FAdmin.Messages.SendMessage(ply, 1, "Group not found")
 		return
 	elseif args[2] and not FAdmin.Access.Groups[args[2]] and tonumber(args[3]) then
-		local Privs = table.Copy(args)
-		Privs[1], Privs[2], Privs[3] = nil, nil, nil, nil
-		Privs = table.ClearKeys(Privs)
+		local Privs = {}
+		for i = 4, #args, 1 do
+			Privs[args[i]] = true
+		end
 
 		FAdmin.Access.AddGroup(args[2], tonumber(args[3]), Privs)-- Add new group
 		FAdmin.Messages.SendMessage(ply, 2, "Group created")
-		SendCustomGroups()
+		FAdmin.Access.SendGroups()
 	end
 
 	if not targets and string.find(args[1], "STEAM_") then
@@ -115,17 +173,15 @@ hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
 
 		if FAdmin.Access.Groups[Group] then
 			ply:FAdmin_SetGlobal("FAdmin_admin", FAdmin.Access.Groups[Group].ADMIN_ACCESS)
-
-			for k,v in pairs(FAdmin.Access.Groups[Group].PRIVS) do
-				SendUserMessage("FADMIN_RetrievePrivs", ply, tostring(v))
-			end
 		end
-		SendCustomGroups(ply)
+		FAdmin.Access.SendGroups(ply)
 	end)
 end)
 
 local function SetImmunity(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end -- SetAccess privilege because they can handle immunity settings
+	-- SetAccess privilege because they can handle immunity settings
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+
 	if not args[1] then FAdmin.Messages.SendMessage(ply, 5, "Invalid argument!") return end
 	RunConsoleCommand("_FAdmin_immunity", args[1])
 	FAdmin.Messages.SendMessage(ply, 4, "turned " .. ((tonumber(args[1]) == 1 and "on") or "off") .. " admin immunity!")
@@ -135,13 +191,10 @@ FAdmin.StartHooks["Access"] = function() --Run all functions that depend on othe
 	FAdmin.Commands.AddCommand("setroot", FAdmin.Access.SetRoot)
 	FAdmin.Commands.AddCommand("setaccess", FAdmin.Access.SetAccess)
 
+	FAdmin.Commands.AddCommand("AddPrivilege", AddPrivilege)
+	FAdmin.Commands.AddCommand("RemovePrivilege", RemovePrivilege)
+
 	FAdmin.Commands.AddCommand("immunity", SetImmunity)
 
 	FAdmin.SetGlobalSetting("Immunity", (GetConVarNumber("_FAdmin_immunity") == 1 and true) or false)
 end
-
-concommand.Add("_FAdmin_SendUserGroups", function(ply)
-	for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
-		SendUserMessage("FADMIN_RetrieveGroup", ply, k)
-	end
-end)

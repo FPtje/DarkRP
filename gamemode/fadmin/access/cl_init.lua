@@ -1,31 +1,20 @@
 local StarterGroups = {"superadmin", "admin", "user", "noaccess"}
 local ContinueNewGroup
 
-local function RetrievePrivs(um)
-	local Priv = um:ReadString()
-	if not Priv then return end
-	LocalPlayer().FADMIN_PRIVS = LocalPlayer().FADMIN_PRIVS or {}
-	table.insert(LocalPlayer().FADMIN_PRIVS or {}, Priv)
+local function RetrievePRIVS(len)
+	FAdmin.Access.Groups = net.ReadTable()
 end
-usermessage.Hook("FADMIN_RetrievePrivs", RetrievePrivs)
+net.Receive("FADMIN_SendGroups", RetrievePRIVS)
 
-local function RetrieveGroups(um)
-	FAdmin.Access.AddGroup(um:ReadString(), um:ReadShort(), {})
+local function addPriv(um)
+	FAdmin.Access.Groups[um:ReadString()].PRIVS[um:ReadString()] = true
 end
-usermessage.Hook("FADMIN_SendGroups", RetrieveGroups)
+usermessage.Hook("FAdmin_AddPriv", addPriv)
 
-local function RetrievePRIVS(um)
-	local name, Privs = um:ReadString(), um:ReadString()
-	if not FAdmin.Access.Groups[name] then return end
-
-	Privs = string.Explode(";", Privs)
-
-	FAdmin.Access.Groups[name].PRIVS = FAdmin.Access.Groups[name].PRIVS or {}
-	for k,v in pairs(Privs) do
-		table.insert(FAdmin.Access.Groups[name].PRIVS, v) -- Insert since there could be more privs coming
-	end
+local function removePriv(um)
+	FAdmin.Access.Groups[um:ReadString()].PRIVS[um:ReadString()] = nil
 end
-usermessage.Hook("FAdmin_SendPrivs", RetrievePRIVS)
+usermessage.Hook("FAdmin_RemovePriv", removePriv)
 
 FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be executed first.
 	FAdmin.Commands.AddCommand("setaccess", nil, "<Player>", "<Group name>", "[new group based on (number)]", "[new group privileges]")
@@ -48,21 +37,6 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 			end)
 		end
 
-		local Other = menu:AddSubMenu("Other")
-		local NoOthers = Other:AddOption("Loading/no other groups")
-		local function ReceiveGroup(um)
-			local GroupName = um:ReadString()
-			if not table.HasValue(StarterGroups, GroupName) then
-				Other:AddOption(GroupName, function() RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), GroupName) end)
-
-				for k,v in pairs(Other.Items or {}) do
-					if v:GetValue() == "Loading/no other groups" then Other.Items[k] = nil v:Remove() break end
-				end
-			end
-		end
-		usermessage.Hook("FADMIN_RetrieveGroup", ReceiveGroup)
-		RunConsoleCommand("_FAdmin_SendUserGroups")
-
 		menu:AddOption("New...", function()
 			local name = ""
 
@@ -75,8 +49,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 				Derma_Query("On what access will this team be based? (the new group will inherit all the privileges from the group)", "Admin access",
 					"user", function() ContinueNewGroup(ply, name, 0) end,
 					"admin", function() ContinueNewGroup(ply, name, 1) end,
-					"superadmin", function() ContinueNewGroup(ply, name, 2) end,
-					"root user", function() ContinueNewGroup(ply, name, 3) end)
+					"superadmin", function() ContinueNewGroup(ply, name, 2) end)
 			end)
 		end)
 		menu:Open()
@@ -101,24 +74,21 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 			end
 		end
 
-		local NoOthers = Panel:AddLine("Loading/no custom groups")
+		local NoOthers = Panel:AddLine("No custom groups")
 		local RemoveFirst = true
-		local function ReceiveGroup(um)
-			local GroupName = um:ReadString()
+		for name, tbl in pairs(FAdmin.Access.Groups) do
+			if table.HasValue(FAdmin.Access.ADMIN, name) then continue end
 
-			if not table.HasValue(StarterGroups, GroupName) then
-				if RemoveFirst then Panel:RemoveLine(1) end -- remove the "Loading/no custom groups" line
-				RemoveFirst = false
+			-- remove the "Loading/no custom groups" line
+			if RemoveFirst then Panel:RemoveLine(1) end
+			RemoveFirst = false
 
-				local Line = Panel:AddLine(GroupName)
-				function Line:OnSelect()
-					RunConsoleCommand("_FAdmin", "RemoveGroup", self:GetValue(1))
-					Panel:RemoveLine(self:GetID())
-				end
+			local Line = Panel:AddLine(name)
+			function Line:OnSelect()
+				RunConsoleCommand("_FAdmin", "RemoveGroup", self:GetValue(1))
+				Panel:RemoveLine(self:GetID())
 			end
 		end
-		usermessage.Hook("FADMIN_RetrieveGroup", ReceiveGroup)
-		RunConsoleCommand("_FAdmin_SendUserGroups")
 	end)
 
 	-- Admin immunity
@@ -134,7 +104,6 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 
 			RunConsoleCommand("_Fadmin", "immunity", (FAdmin.GlobalSetting.Immunity and 0) or 1)
 		end
-
 	)
 end
 
@@ -166,17 +135,15 @@ ContinueNewGroup = function(ply, name, admin_access)
 
 		if (Padmin_access - 1) <= admin_access then
 			chkBox:SetValue(true)
-			chkBox.Button:SetDisabled(true)
-			chkBox.Button:SetText("X")
-			chkBox.Label.OnMouseReleased = function() end
+			table.insert(privs, Pname)
 		end
 
 		function chkBox.Button:Toggle()
-			if ( self:GetChecked() == nil || !self:GetChecked() ) then
-				self:SetValue( true )
+			if not self:GetChecked() then
+				self:SetValue(true)
 				table.insert(privs, Pname)
 			else
-				self:SetValue( false )
+				self:SetValue(false)
 				for k,v in pairs(privs) do
 					if v == Pname then
 						table.remove(privs, k)
