@@ -64,7 +64,7 @@ timer.Create("FlammableProps", 0.1, 0, FlammablePropThink)
 /*---------------------------------------------------------
  Shipments
  ---------------------------------------------------------*/
-local NoDrop = {} -- Drop blacklist
+NoDrop = {} -- Drop blacklist
 local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) then return "" end

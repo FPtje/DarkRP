@@ -1,4 +1,3 @@
-
 /*---------------------------------------------------------------------------
 DarkRP hooks
 ---------------------------------------------------------------------------*/
@@ -325,7 +324,8 @@ function GM:CanProperty(ply, property, ent)
 end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
-	if GAMEMODE.Config.dropweapondeath and IsValid(ply:GetActiveWeapon()) then
+	local ent = ply:GetActiveWeapon()
+	if GAMEMODE.Config.dropweapondeath and IsValid(ply:GetActiveWeapon()) and !table.HasValue(NoDrop, ent:GetClass()) then
 		ply:DropDRPWeapon(ply:GetActiveWeapon())
 	end
 	self.BaseClass:DoPlayerDeath(ply, attacker, dmginfo, ...)
