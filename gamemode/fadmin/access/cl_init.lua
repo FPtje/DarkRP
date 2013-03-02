@@ -1,5 +1,6 @@
 local StarterGroups = {"superadmin", "admin", "user", "noaccess"}
 local ContinueNewGroup
+local EditGroups
 
 local function RetrievePRIVS(len)
 	FAdmin.Access.Groups = net.ReadTable()
@@ -15,6 +16,19 @@ local function removePriv(um)
 	FAdmin.Access.Groups[um:ReadString()].PRIVS[um:ReadString()] = nil
 end
 usermessage.Hook("FAdmin_RemovePriv", removePriv)
+
+local function addGroupUI(ply, func)
+	Derma_StringRequest("Set name",
+	"What will be the name of the new group?",
+	"",
+	function(text)
+		if text == "" then return end
+		Derma_Query("On what access will this team be based? (the new group will inherit all the privileges from the group)", "Admin access",
+			"user", function() ContinueNewGroup(ply, text, 0, func) end,
+			"admin", function() ContinueNewGroup(ply, text, 1, func) end,
+			"superadmin", function() ContinueNewGroup(ply, text, 2, func) end)
+	end)
+end
 
 FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be executed first.
 	FAdmin.Commands.AddCommand("setaccess", nil, "<Player>", "<Group name>", "[new group based on (number)]", "[new group privileges]")
@@ -37,25 +51,12 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 			end)
 		end
 
-		menu:AddOption("New...", function()
-			local name = ""
-
-			Derma_StringRequest("Set name",
-			"What will be the name of the new group?",
-			"",
-			function(text)
-				if text == "" then return end
-				name = text
-				Derma_Query("On what access will this team be based? (the new group will inherit all the privileges from the group)", "Admin access",
-					"user", function() ContinueNewGroup(ply, name, 0) end,
-					"admin", function() ContinueNewGroup(ply, name, 1) end,
-					"superadmin", function() ContinueNewGroup(ply, name, 2) end)
-			end)
-		end)
+		menu:AddOption("New...", function() addGroupUI(ply) end)
 		menu:Open()
 	end)
 
-	--Removing groups
+	FAdmin.ScoreBoard.Server:AddPlayerAction("Edit groups", "FAdmin/icons/access", Color(0, 155, 0, 255), true, EditGroups)
+	/*--Removing groups
 	FAdmin.ScoreBoard.Server:AddPlayerAction("Remove custom group", "FAdmin/icons/access", Color(0, 155, 0, 255), true, function(button)
 		local Panel = vgui.Create("DListView")
 		Panel:AddColumn("Group names:")
@@ -89,7 +90,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 				Panel:RemoveLine(self:GetID())
 			end
 		end
-	end)
+	end)*/
 
 	-- Admin immunity
 	FAdmin.ScoreBoard.Server:AddServerSetting(function()
@@ -107,7 +108,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 	)
 end
 
-ContinueNewGroup = function(ply, name, admin_access)
+ContinueNewGroup = function(ply, name, admin_access, func)
 	local privs = {}
 
 	local Window = vgui.Create("DFrame")
@@ -157,14 +158,24 @@ ContinueNewGroup = function(ply, name, admin_access)
 
 	Window:SetTall(math.Min(#TickBoxPanel.Items*20 + 30 + 30, ScrH()))
 	Window:Center()
+	Window:RequestFocus()
+	Window:MakePopup()
 	TickBoxPanel:StretchToParent(5, 25, 5, 35)
 
 	local OKButton = vgui.Create("DButton", Window)
 	OKButton:SetText("OK")
 	OKButton:StretchToParent(5, 30 + TickBoxPanel:GetTall(), Window:GetWide()/2 + 2, 5)
 	function OKButton:DoClick()
-		RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access, unpack(privs))
+		if ply then
+			RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access, unpack(privs))
+		else
+			RunConsoleCommand("_FAdmin", "AddGroup", name, admin_access, unpack(privs))
+		end
 		Window:Close()
+
+		if func then
+			func(name, admin_access, privs)
+		end
 	end
 
 	local CancelButton = vgui.Create("DButton", Window)
@@ -172,5 +183,127 @@ ContinueNewGroup = function(ply, name, admin_access)
 	CancelButton:StretchToParent(Window:GetWide()/2 + 2, 30 + TickBoxPanel:GetTall(), 5, 5)
 	function CancelButton:DoClick()
 		Window:Close()
+	end
+end
+
+EditGroups = function()
+	local frame, SelectedGroup, AddGroup, RemGroup, Privileges, SelectedPrivs, AddPriv, RemPriv
+
+	frame = vgui.Create("DFrame")
+	frame:SetTitle("Create, edit and remove groups")
+	frame:MakePopup()
+	frame:SetVisible(true)
+	frame:SetSize(640, 480)
+	frame:Center()
+
+	SelectedGroup = vgui.Create("DComboBox", frame)
+	SelectedGroup:SetPos(5, 30)
+	SelectedGroup:SetWidth(145)
+
+	for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
+		SelectedGroup:AddChoice(k)
+	end
+
+	AddGroup = vgui.Create("DButton", frame)
+	AddGroup:SetPos(155, 30)
+	AddGroup:SetSize(60, 22)
+	AddGroup:SetText("Add Group")
+	AddGroup.DoClick = function()
+		addGroupUI(nil, function(name, admin, privs)
+			SelectedGroup:AddChoice(name)
+			SelectedGroup:SetValue(name)
+			RemGroup:SetDisabled(false)
+
+			Privileges:Clear()
+			SelectedPrivs:Clear()
+
+			for priv, _ in SortedPairs(FAdmin.Access.Privileges) do
+				if table.HasValue(privs, priv) then
+					SelectedPrivs:AddLine(priv)
+				else
+					Privileges:AddLine(priv)
+				end
+			end
+		end)
+	end
+
+	RemGroup = vgui.Create("DButton", frame)
+	RemGroup:SetPos(220, 30)
+	RemGroup:SetSize(85, 22)
+	RemGroup:SetText("Remove Group")
+	RemGroup.DoClick = function()
+		RunConsoleCommand("_FAdmin", "RemoveGroup", SelectedGroup:GetValue())
+
+		for k,v in pairs(SelectedGroup.Choices) do
+			if v ~= SelectedGroup:GetValue() then continue end
+
+			SelectedGroup.Choices[k] = nil
+			break
+		end
+		table.ClearKeys(SelectedGroup.Choices)
+
+		SelectedGroup:SetValue("user")
+		SelectedGroup:OnSelect(1, "user", data)
+	end
+
+	Privileges = vgui.Create("DListView", frame)
+	Privileges:SetPos(5, 55)
+	Privileges:SetSize(300, 420)
+	Privileges:AddColumn("Available privileges")
+
+	SelectedPrivs = vgui.Create("DListView", frame)
+	SelectedPrivs:SetPos(340, 25)
+	SelectedPrivs:SetSize(295, 450)
+	SelectedPrivs:AddColumn("Selected Privileges")
+
+	function SelectedGroup:OnSelect(index, value, data)
+		if not FAdmin.Access.Groups[value] then return end
+
+		RemGroup:SetDisabled(false)
+		if table.HasValue(FAdmin.Access.ADMIN, value) then
+			RemGroup:SetDisabled(true)
+		end
+
+		Privileges:Clear()
+		SelectedPrivs:Clear()
+
+		for priv, _ in SortedPairs(FAdmin.Access.Privileges) do
+			if FAdmin.Access.Groups[value].PRIVS[priv] then
+				SelectedPrivs:AddLine(priv)
+			else
+				Privileges:AddLine(priv)
+			end
+		end
+	end
+	SelectedGroup:SetValue("user")
+	SelectedGroup:OnSelect(1, "user", data)
+
+	AddPriv = vgui.Create("DButton", frame)
+	AddPriv:SetPos(310, 45)
+	AddPriv:SetSize(25, 25)
+	AddPriv:SetText(">")
+	AddPriv.DoClick = function()
+		for k,v in pairs(Privileges:GetSelected()) do
+			local priv = v.Columns[1]:GetValue()
+			RunConsoleCommand("FAdmin", "AddPrivilege", SelectedGroup:GetValue(), priv)
+			SelectedPrivs:AddLine(priv)
+			Privileges:RemoveLine(v.m_iID)
+		end
+	end
+
+	RemPriv = vgui.Create("DButton", frame)
+	RemPriv:SetPos(310, 75)
+	RemPriv:SetSize(25, 25)
+	RemPriv:SetText("<")
+	RemPriv.DoClick = function()
+		for k,v in pairs(SelectedPrivs:GetSelected()) do
+			local priv = v.Columns[1]:GetValue()
+			if SelectedGroup:GetValue() == LocalPlayer():GetNWString("usergroup") and priv == "SetAccess" then
+				return Derma_Message("You shouldn't be removing SetAccess. It will make you unable to edit the groups. This is preventing you from locking yourself out of the system.", "Clever move.")
+			end
+			RunConsoleCommand("FAdmin", "RemovePrivilege", SelectedGroup:GetValue(), priv)
+			Privileges:AddLine(priv)
+			SelectedPrivs:RemoveLine(v.m_iID)
+		end
 	end
 end

@@ -87,6 +87,20 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
 	end
 end
 
+-- AddGroup <Groupname> <Adminstatus> <Privileges>
+local function AddGroup(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+
+	local Privs = {}
+	for i = 3, #args, 1 do
+		Privs[args[i]] = true
+	end
+
+	FAdmin.Access.AddGroup(args[1], tonumber(args[2]), Privs)-- Add new group
+	FAdmin.Messages.SendMessage(ply, 4, "Group created")
+	FAdmin.Access.SendGroups()
+end
+
 local function AddPrivilege(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
@@ -127,7 +141,7 @@ function FAdmin.Access.SendGroups(ply)
 	net.Send(ply)
 end
 
--- FAdmin SetAccess <player> groupname [new_groupadmin, new_groupprivs]
+-- FAdmin SetAccess <player> <groupname> [new_groupadmin, new_groupprivs]
 function FAdmin.Access.SetAccess(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
@@ -190,6 +204,8 @@ end
 FAdmin.StartHooks["Access"] = function() --Run all functions that depend on other plugins
 	FAdmin.Commands.AddCommand("setroot", FAdmin.Access.SetRoot)
 	FAdmin.Commands.AddCommand("setaccess", FAdmin.Access.SetAccess)
+
+	FAdmin.Commands.AddCommand("AddGroup", AddGroup)
 
 	FAdmin.Commands.AddCommand("AddPrivilege", AddPrivilege)
 	FAdmin.Commands.AddCommand("RemovePrivilege", RemovePrivilege)
