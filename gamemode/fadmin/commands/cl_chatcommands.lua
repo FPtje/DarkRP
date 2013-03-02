@@ -37,7 +37,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
 		end
 		if DidMakeShorter then Options[#Options] = "..." end
 
-		local xPos = (ChatBoxPosX == 12 and 412) or (ChatBoxPosX == 22 and 627) or 526
+		local xPos = (ChatBoxPosX == 12 and 412) or (ChatBoxPosX == 22 and 627) or (ChatBoxPosX == 21 and 741) or 526
 		hook.Add("HUDPaint", "FAdmin_Chat_autocomplete", function()
 			for k,v in SortedPairs(Options) do
 				draw.WordBox(4, xPos, ChatBoxPosY + (k-1)*24, v, "UiBold", Color(0,0,0,200), Color(255,255,255,255))
