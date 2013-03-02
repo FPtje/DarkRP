@@ -379,10 +379,18 @@ local function LookPersonUp(ply, cmd, args)
 		ply:PrintMessage(2, "Nick: ".. P:Nick())
 		ply:PrintMessage(2, "Steam name: "..P:SteamName())
 		ply:PrintMessage(2, "Steam ID: "..P:SteamID())
+		ply:PrintMessage(2, "Job: ".. team.GetName(P:Team()))
+		ply:PrintMessage(2, "Kills: ".. P:Frags())
+		ply:PrintMessage(2, "Deaths: ".. P:Deaths())
 	else
 		print("Nick: ".. P:Nick())
 		print("Steam name: "..P:SteamName())
 		print("Steam ID: "..P:SteamID())
+		print("Job: ".. team.GetName(P:Team()))
+		print("Kills: ".. P:Frags())
+		print("Deaths: ".. P:Deaths())
+
+		print("Money: $" .. P.DarkRPVars.money)
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)
