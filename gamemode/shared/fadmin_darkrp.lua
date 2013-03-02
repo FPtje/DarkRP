@@ -278,6 +278,7 @@ end)
 hook.Add("InitPostEntity", "FAdmin_DarkRP_privs", function()
 	if not FAdmin or not FAdmin.StartHooks then return end
 	FAdmin.Access.AddPrivilege("rp_commands", 2)
+	FAdmin.Access.AddPrivilege("rp_doorManipulation", 3)
 	FAdmin.Access.AddPrivilege("rp_tool", 2)
 	FAdmin.Access.AddPrivilege("rp_phys", 2)
 	FAdmin.Access.AddPrivilege("rp_prop", 2)

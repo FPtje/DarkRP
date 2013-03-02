@@ -232,9 +232,15 @@ local function SetDoorOwnable(ply)
 	if time then return "" end
 	time = true
 	timer.Simple(0.1, function()  time = false end)
+
+	if not ply:HasPriv("rp_doorManipulation") then
+		GAMEMODE:Notify(ply, 1, 4, "You need the rp_doorManipulation privilege")
+		return ""
+	end
+
 	local trace = ply:GetEyeTrace()
 	local ent = trace.Entity
-	if not ply:IsSuperAdmin() or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return end
+	if (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return end
 
 	if not IsValid(trace.Entity) then return "" end
 	if IsValid( trace.Entity:GetDoorOwner() ) then
@@ -258,8 +264,14 @@ local function SetDoorGroupOwnable(ply, arg)
 	local trace = ply:GetEyeTrace()
 	if not IsValid(trace.Entity) then return "" end
 
+	if not ply:HasPriv("rp_doorManipulation") then
+		GAMEMODE:Notify(ply, 1, 4, "You need the rp_doorManipulation privilege")
+		return ""
+	end
+
 	local ent = trace.Entity
-	if not ply:IsSuperAdmin() or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return end
+
+	if (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return end
 
 	if not RPExtraTeamDoors[arg] and arg ~= "" then Notify(ply, 1, 10, "Door group does not exist!") return "" end
 
@@ -295,7 +307,12 @@ local function SetDoorTeamOwnable(ply, arg)
 	if not IsValid(trace.Entity) then return "" end
 
 	local ent = trace.Entity
-	if not ply:IsSuperAdmin() or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return "" end
+	if not ply:HasPriv("rp_doorManipulation") then
+		GAMEMODE:Notify(ply, 1, 4, "You need the rp_doorManipulation privilege")
+		return ""
+	end
+
+	if (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then return "" end
 
 	arg = tonumber(arg)
 	if not RPExtraTeams[arg] and arg ~= nil then GAMEMODE:Notify(ply, 1, 10, "Job does not exist!") return "" end

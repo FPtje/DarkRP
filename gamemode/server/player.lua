@@ -98,7 +98,10 @@ end
  Admin/automatic stuff
  ---------------------------------------------------------*/
 function meta:HasPriv(priv)
-	return (FAdmin and FAdmin.Access.PlayerHasPrivilege(self, priv)) or self:IsAdmin()
+	if FAdmin then
+		return FAdmin.Access.PlayerHasPrivilege(self, priv)
+	end
+	return self:IsAdmin()
 end
 
 function meta:ChangeAllowed(t)
