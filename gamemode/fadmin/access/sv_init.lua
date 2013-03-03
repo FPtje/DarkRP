@@ -48,6 +48,7 @@ hook.Add("InitPostEntity", "InitializeFAdminGroups", function()
 			DB.Begin()
 			for priv, access in pairs(FAdmin.Access.Privileges) do
 				for i = access + 1, #hasPrivs, 1 do
+					FAdmin.Access.Groups[hasPrivs[i]].PRIVS[priv] = true
 					DB.Query("INSERT INTO FADMIN_PRIVILEGES VALUES(".. sql.SQLStr(hasPrivs[i]) .. ", " .. sql.SQLStr(priv) .. ");")
 				end
 			end
@@ -163,7 +164,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
 
 	if not targets and string.find(args[1], "STEAM_") then
 		FAdmin.Access.PlayerSetGroup(args[1], args[2])
-		FAdmin.Messages.SendMessage(ply, 2, "User access set!")
+		FAdmin.Messages.SendMessage(ply, 4, "User access set!")
 		return
 	elseif not targets then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
@@ -173,7 +174,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
 	for _, target in pairs(targets) do
 		if IsValid(target) then
 			FAdmin.Access.PlayerSetGroup(target, args[2])
-			FAdmin.Messages.SendMessage(ply, 2, "User access set!")
+			FAdmin.Messages.SendMessage(ply, 4, "User access set!")
 		end
 	end
 end
