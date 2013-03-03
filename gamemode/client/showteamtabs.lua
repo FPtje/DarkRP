@@ -9,7 +9,7 @@ local function MayorOptns()
 		local maypanel = vgui.Create("DListLayout")
 		maypanel:SetSize(740,170)
 			local SearchWarrant = maypanel:Add("DButton")
-			SearchWarrant:SetText(LANGUAGE.give_money)
+			SearchWarrant:SetText(LANGUAGE.searchwarrantbutton)
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
