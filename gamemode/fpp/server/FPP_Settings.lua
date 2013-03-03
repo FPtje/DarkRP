@@ -212,13 +212,15 @@ local function RetrieveBlocked()
 				["func_breakable_surf"] = true,
 				["func_brush"] = true,
 				["func_door"] = true,
-				["prop_door_rotating"] = true
+				["prop_door_rotating"] = true,
+				["func_door_rotating"] = true
 			}
 			FPP.Blocked.Spawning1 = {
 				["func_breakable_surf"] = true,
 				["player"] = true,
 				["func_door"] = true,
 				["prop_door_rotating"] = true,
+				["func_door_rotating"] = true,
 				["ent_explosivegrenade"] = true,
 				["ent_mad_grenade"] = true,
 				["ent_flashgrenade"] = true,
@@ -229,7 +231,8 @@ local function RetrieveBlocked()
 				["func_breakable_surf"] = true,
 				["player"] = true,
 				["func_door"] = true,
-				["prop_door_rotating"] = true
+				["prop_door_rotating"] = true,
+				["func_door_rotating"] = true
 			}
 			FPP.Blocked.PlayerUse1 = {}
 			FPP.Blocked.EntityDamage1 = {}
