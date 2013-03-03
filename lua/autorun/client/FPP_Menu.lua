@@ -837,7 +837,7 @@ EditGroupTools = function(groupname)
 			RunConsoleCommand("FPP_AddGroupTool", groupname, SelectedTool)
 			GroupTools:AddLine(SelectedTool)
 		else--if it's a folder:
-			for k,v in pairs(ToolList.m_pSelectedItem.ChildNodes:GetItems()) do
+			for k,v in pairs(ToolList.m_pSelectedItem.ChildNodes:GetChildren()) do
 				local found = false
 				for a,b in pairs(GroupTools:GetLines()) do
 					if b.Columns[1]:GetValue() == string.lower(v.Tool) then
