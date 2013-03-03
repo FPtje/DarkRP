@@ -3,7 +3,7 @@ CreateConVar("PlayersCanPickUpPlayers", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_E
 
 hook.Add("PhysgunPickup", "FAdmin_PickUpPlayers", function(ply, ent)
 	if not IsValid(ent) or not ent:IsPlayer() then return end
-	if tobool(GetConVarNumber("PlayersCanPickUpPlayers")) or (tobool(GetConVarNumber("AdminsCanPickUpPlayers")) and FAdmin.Access.PlayerHasPrivilege(ply, "AdminsCanPickUpPlayers", ent)) and not tobool(ply:GetInfo("FPP_PrivateSettings_Players")) then
+	if tobool(GetConVarNumber("PlayersCanPickUpPlayers")) or (tobool(GetConVarNumber("AdminsCanPickUpPlayers")) and FAdmin.Access.PlayerHasPrivilege(ply, "PickUpPlayers", ent)) and not tobool(ply:GetInfo("FPP_PrivateSettings_Players")) then
 		ent:SetMoveType(MOVETYPE_NONE)
 		ent:Freeze(true)
 		return true
@@ -49,4 +49,7 @@ FAdmin.StartHooks["PickUpPlayers"] = function()
 	FAdmin.Access.AddPrivilege("PickUpPlayers", 2)
 	FAdmin.Commands.AddCommand("AdminsCanPickUpPlayers", ChangeAdmin)
 	FAdmin.Commands.AddCommand("PlayersCanPickUpPlayers", ChangeUser)
+
+	-- One mod defining player pickup is enough.
+	hook.Remove("PhysgunPickup", "ulxPlayerPickup")
 end
