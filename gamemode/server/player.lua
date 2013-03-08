@@ -82,7 +82,9 @@ end
 function meta:RestorePlayerData()
 	if not IsValid(self) then return end
 	DB.RetrievePlayerData(self, function(data)
-		if not IsValid(self) then return end
+		if not IsValid(self) or not data then return end
+
+		self.DarkRPUnInitialized = nil
 
 		local info = data and data[1] or {}
 		if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
@@ -175,11 +177,12 @@ end
 
 function meta:NewData()
 	if not IsValid(self) then return end
+	self.DarkRPUnInitialized = true
+	self:RestorePlayerData()
 
-	-- Restoring data delayed the player handle will not be valid on the player otherwise
 	timer.Simple(5, function()
 		if not IsValid(self) then return end
-		self:RestorePlayerData()
+
 		if GetConVarNumber("DarkRP_Lockdown") == 1 then
 			RunConsoleCommand("DarkRP_Lockdown", 1) -- so new players who join know there's a lockdown
 		end
@@ -366,6 +369,7 @@ end
 function meta:AddMoney(amount)
 	if not amount then return false end
 	hook.Call("PlayerWalletChanged", GAMEMODE, ply, amount)
+	if self.DarkRPUnInitialized then return end
 	DB.StoreMoney(self, self.DarkRPVars.money + math.floor(amount))
 end
 

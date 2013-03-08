@@ -26,7 +26,7 @@ function DB.Commit()
 	end
 end
 
-function DB.Query(sqlText, callback)
+function DB.Query(sqlText, callback, errorCallback)
 	if DB.CONNECTED_TO_MYSQL then
 		local query = DB.MySQLDB:query(sqlText)
 		local data
@@ -41,8 +41,8 @@ function DB.Query(sqlText, callback)
 				return
 			end
 
-			if callback then
-				callback()
+			if errorCallback then
+				errorCallback()
 			end
 
 			DB.Log("MySQL Error: ".. E)
@@ -62,7 +62,7 @@ function DB.Query(sqlText, callback)
 	return Result
 end
 
-function DB.QueryValue(sqlText, callback)
+function DB.QueryValue(sqlText, callback, errorCallback)
 	if DB.CONNECTED_TO_MYSQL then
 		local query = DB.MySQLDB:query(sqlText)
 		local data
@@ -82,7 +82,9 @@ function DB.QueryValue(sqlText, callback)
 				return
 			end
 
-			callback()
+			if errorCallback then
+				errorCallback()
+			end
 
 			DB.Log("MySQL Error: ".. E)
 			ErrorNoHalt(E)
@@ -680,8 +682,14 @@ function DB.RetrieveRPNames(ply, name, callback)
 	end)
 end
 
-function DB.RetrievePlayerData(ply, callback)
-	DB.Query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback)
+function DB.RetrievePlayerData(ply, callback, attempts)
+	attempts = attempts or 0
+
+	if attempts > 3 then return end
+
+	DB.Query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
+		DB.RetrievePlayerData(ply, callback, attempts + 1)
+	end)
 end
 
 function DB.StoreMoney(ply, amount)
