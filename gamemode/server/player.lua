@@ -460,7 +460,7 @@ function meta:Arrest(time, rejoin)
 	end
 
 	-- Always get sent to jail when Arrest() is called, even when already under arrest
-	if GAMEMODE.Config.teletojail and DB.CountJailPos() and DB.CountJailPos() ~= 0 then
+	if GAMEMODE.Config.teletojail and DB.CountJailPos() ~= 0 then
 		local jailpos = DB.RetrieveJailPos()
 		if jailpos then
 			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))

@@ -543,6 +543,7 @@ function DB.CreateJailPos()
 	DB.Commit()
 end
 
+local JailIndex = 1 -- Used to circulate through the jailpos table
 function DB.StoreJailPos(ply, addingPos)
 	local map = string.lower(game.GetMap())
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
@@ -570,9 +571,10 @@ function DB.StoreJailPos(ply, addingPos)
 			end)
 		end
 	end)
+
+	JailIndex = 1
 end
 
-local JailIndex = 1 -- Used to circulate through the jailpos table
 function DB.RetrieveJailPos()
 	local map = string.lower(game.GetMap())
 	if not DB.JailPos then return Vector(0,0,0) end
