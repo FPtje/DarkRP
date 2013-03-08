@@ -102,6 +102,15 @@ local function Ban(ply, cmd, args)
 		return
 	elseif not targets and (string.find(args[1], "STEAM_") == 1 or string.find(args[2], "STEAM_") == 1) then
 		targets = {(args[1] ~= "execute" and args[1]) or args[2]}
+		if args[1] == "STEAM_0" then
+			targets[1] = table.concat(args, "", 1, 5)
+			args[1] = targets[1]
+			args[2] = args[6]
+			args[3] = args[7]
+			for i = 2, #args do
+				if i >= 4 then args[i] = nil end
+			end
+		end
 	end
 
 	local CanBan = hook.Call("FAdmin_CanBan", nil, ply, targets)
