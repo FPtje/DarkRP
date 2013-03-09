@@ -56,41 +56,6 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 	end)
 
 	FAdmin.ScoreBoard.Server:AddPlayerAction("Edit groups", "FAdmin/icons/access", Color(0, 155, 0, 255), true, EditGroups)
-	/*--Removing groups
-	FAdmin.ScoreBoard.Server:AddPlayerAction("Remove custom group", "FAdmin/icons/access", Color(0, 155, 0, 255), true, function(button)
-		local Panel = vgui.Create("DListView")
-		Panel:AddColumn("Group names:")
-		Panel:SetPos(gui.MouseX(), gui.MouseY())
-		Panel:SetSize(150, 200)
-		function Panel:Think()
-			if not FAdmin.ScoreBoard.Visible then self:Remove() return end
-			if input.IsMouseDown(MOUSE_FIRST) then
-				local X, Y = self:GetPos()
-				local W, H = self:GetWide(), self:GetTall()
-				local MX, MY = gui.MouseX(), gui.MouseY()
-				if MX < X or MY < Y
-				or MX > X+W or MY > Y+H then
-					self:Remove()
-				end
-			end
-		end
-
-		local NoOthers = Panel:AddLine("No custom groups")
-		local RemoveFirst = true
-		for name, tbl in pairs(FAdmin.Access.Groups) do
-			if table.HasValue(FAdmin.Access.ADMIN, name) then continue end
-
-			-- remove the "Loading/no custom groups" line
-			if RemoveFirst then Panel:RemoveLine(1) end
-			RemoveFirst = false
-
-			local Line = Panel:AddLine(name)
-			function Line:OnSelect()
-				RunConsoleCommand("_FAdmin", "RemoveGroup", self:GetValue(1))
-				Panel:RemoveLine(self:GetID())
-			end
-		end
-	end)*/
 
 	-- Admin immunity
 	FAdmin.ScoreBoard.Server:AddServerSetting(function()
