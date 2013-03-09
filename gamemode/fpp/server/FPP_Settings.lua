@@ -749,11 +749,6 @@ function FPP.Init()
 		RetrieveGroups()
 		RetrieveSettings()
 end
-if FPP_MySQLConfig and FPP_MySQLConfig.EnableMySQL then
-	FPPDB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
-else
-	FPP.Init()
-end
 
 local assbackup = ASS_RegisterPlugin -- Suddenly after witing this code, ASS spamprotection and propprotection broke. I have no clue why. I guess you should use FPP then
 if assbackup then
