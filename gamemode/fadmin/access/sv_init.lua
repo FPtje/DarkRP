@@ -195,8 +195,8 @@ hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
 		if FAdmin.Access.Groups[Group] then
 			ply:FAdmin_SetGlobal("FAdmin_admin", FAdmin.Access.Groups[Group].ADMIN_ACCESS)
 		end
-		FAdmin.Access.SendGroups(ply)
 	end)
+	FAdmin.Access.SendGroups(ply)
 end)
 
 local function SetImmunity(ply, cmd, args)
