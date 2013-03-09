@@ -132,6 +132,7 @@ function DB.ConnectToMySQL(host, username, password, database_name, database_por
 		end)
 
 		DB.Init() -- Initialize database
+		FPP.Init()
 	end
 	databaseObject:connect()
 	DB.MySQLDB = databaseObject
