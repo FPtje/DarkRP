@@ -527,11 +527,13 @@ function GM:PlayerInitialSpawn(ply)
 	for k,v in pairs(ents.GetAll()) do
 		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.dt then
 			v.SID = ply.SID
-			v:Setowning_ent(ply)
+			if v.Setowning_ent then
+				v:Setowning_ent(ply)
+			end
 			v.deleteSteamID = nil
 			timer.Destroy("Remove"..v:EntIndex())
 			ply["max"..v:GetClass()] = (ply["max"..v:GetClass()] or 0) + 1
-			if v.dt then v:Setowning_ent(ply) end
+			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
 		end
 	end
 	timer.Simple(10, function() ply:CompleteSentence() end)
