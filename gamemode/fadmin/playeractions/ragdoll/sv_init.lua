@@ -294,6 +294,14 @@ end)
 
 hook.Add("PlayerDisconnected", "FAdmin_ragdoll", function(ply)
 	if not ply.FAdminRagdoll then return end
+
+	if IsValid(ply.FAdminRagdoll) then
+		ply.FAdminRagdoll:Remove()
+		return
+	end
+
+	if type(ply.FAdminRagdoll) ~= "table" then return end
+
 	for k,v in pairs(ply.FAdminRagdoll or {}) do
 			if IsValid(v) then v:Remove() end
 	end
