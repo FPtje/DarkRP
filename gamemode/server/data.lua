@@ -56,7 +56,11 @@ function DB.Query(sqlText, callback, errorCallback)
 		return
 	end
 
+	local lastError = sql.LastError()
 	local Result = sql.Query(sqlText)
+	if sql.LastError() ~= lastError then
+		error("SQLite error: " .. lastError)
+	end
 
 	if callback then callback(Result) end
 	return Result
@@ -94,7 +98,11 @@ function DB.QueryValue(sqlText, callback, errorCallback)
 		return
 	end
 
+	local lastError = sql.LastError()
 	local val = sql.QueryValue(sqlText)
+	if sql.LastError() ~= lastError then
+		error("SQLite error: " .. lastError)
+	end
 
 	if callback then callback(val) end
 	return val
@@ -672,11 +680,7 @@ function DB.StoreRPName(ply, name)
 	if not name or string.len(name) < 2 then return end
 	ply:SetDarkRPVar("rpname", name)
 
-	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
-		ply:UniqueID() .. [[, ]] ..
-		sql.SQLStr(name) .. [[, ]] ..
-		GAMEMODE.Config.normalsalary .. [[, ]] ..
-		ply.DarkRPVars.money .. [[);]])
+	DB.Query([[UPDATE darkrp_player SET rpname = ]] .. sql.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
 function DB.RetrieveRPNames(ply, name, callback)
@@ -685,40 +689,29 @@ function DB.RetrieveRPNames(ply, name, callback)
 	end)
 end
 
-function DB.RetrievePlayerData(ply, callback, attempts)
+function DB.RetrievePlayerData(ply, callback, failed, attempts)
 	attempts = attempts or 0
 
-	if attempts > 3 then return end
+	if attempts > 3 then return failed() end
 
 	DB.Query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
-		DB.RetrievePlayerData(ply, callback, attempts + 1)
+		DB.RetrievePlayerData(ply, callback, failed, attempts + 1)
 	end)
+end
+
+function DB.CreatePlayerData(ply, name, wallet, salary)
+	DB.Query([[INSERT INTO darkrp_player VALUES(]] ..
+			ply:UniqueID() .. [[, ]] ..
+			sql.SQLStr(name)  .. [[, ]] ..
+			salary  .. [[, ]] ..
+			wallet .. ");")
 end
 
 function DB.StoreMoney(ply, amount)
 	if not IsValid(ply) then return end
 	if amount < 0  then return end
-	ply:SetDarkRPVar("money", math.floor(amount))
 
-	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
-		ply:UniqueID() .. [[, ]] ..
-		(ply.DarkRPVars.rpname and sql.SQLStr(ply.DarkRPVars.rpname) or "NULL") .. [[, ]] ..
-		GAMEMODE.Config.normalsalary .. [[, ]] ..
-		amount .. [[);]])
-end
-
-function DB.RetrieveMoney(ply) -- This is only run once when the player joins, there's no need for a cache unless the player keeps rejoining.
-	if not IsValid(ply) then return 0 end
-	local startingAmount = GAMEMODE.Config.startingmoney
-
-	DB.QueryValue("SELECT wallet FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
-		if r then
-			ply:SetDarkRPVar("money", math.floor(r))
-		else
-			-- No record yet, setting starting cash to 500
-			DB.StoreMoney(ply, startingAmount)
-		end
-	end)
+	DB.Query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 end
 
 function DB.ResetAllMoney(ply,cmd,args)
@@ -744,11 +737,7 @@ end
 function DB.StoreSalary(ply, amount)
 	ply:SetSelfDarkRPVar("salary", math.floor(amount))
 
-	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
-		ply:UniqueID() .. [[, ]] ..
-		(ply.DarkRPVars.rpname and sql.SQLStr(ply.DarkRPVars.rpname) or "NULL") .. [[, ]] ..
-		amount .. [[, ]] ..
-		(ply.DarkRPVars.money or GAMEMODE.Config.startingmoney) .. [[);]])
+	DB.Query([[UPDATE darkrp_player SET salary = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 
 	return amount
 end

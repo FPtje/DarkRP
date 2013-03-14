@@ -521,8 +521,6 @@ function GM:PlayerInitialSpawn(ply)
 	ply.DarkRPVars = ply.DarkRPVars or {}
 	ply:NewData()
 	ply.SID = ply:UserID()
-	DB.RetrieveSalary(ply, function() end)
-	DB.RetrieveMoney(ply)
 
 	for k,v in pairs(ents.GetAll()) do
 		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.dt then

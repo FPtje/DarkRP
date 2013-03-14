@@ -4,9 +4,19 @@ function AddChatCommand(cmd, callback, delay)
 	for k,v in pairs(ChatCommands) do
 		if cmd == v.cmd then return end
 	end
+
+	local detour = function(ply, arg, ...)
+		if ply.DarkRPUnInitialized then
+			GAMEMODE:Notify(ply, 1, 4, "Your data has not been loaded yet. Please wait.")
+			GAMEMODE:Notify(ply, 1, 4, "If this persists, try rejoining or contacting an admin.")
+			return ""
+		end
+		return callback(ply, arg, ...)
+	end
+
 	ChatCommands[string.lower(cmd)] = {
 		cmd = cmd,
-		callback = callback,
+		callback = detour,
 		delay = delay
 	}
 end

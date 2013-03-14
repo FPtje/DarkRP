@@ -82,17 +82,32 @@ end
 function meta:RestorePlayerData()
 	if not IsValid(self) then return end
 	DB.RetrievePlayerData(self, function(data)
-		if not IsValid(self) or not data then return end
+		if not IsValid(self) then return end
 
 		self.DarkRPUnInitialized = nil
 
 		local info = data and data[1] or {}
 		if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
 
-		self:SetDarkRPVar("money", info.wallet or GAMEMODE.Config.startingmoney)
-		self:SetDarkRPVar("salary", info.salary or GAMEMODE.Config.normalsalary)
+		info.wallet = info.wallet or GAMEMODE.Config.startingmoney
+		info.salary = info.salary or GAMEMODE.Config.normalsalary
+
+		self:SetDarkRPVar("money", info.wallet)
+		self:SetDarkRPVar("salary", info.salary)
 
 		self:SetDarkRPVar("rpname", info.rpname)
+
+		if not data then
+			DB.CreatePlayerData(self, info.rpname, info.wallet, info.salary)
+		end
+	end, function() -- Retrieving data failed, go on without it
+		self.DarkRPUnInitialized = nil
+
+		self:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
+		self:SetDarkRPVar("salary", GAMEMODE.Config.normalsalary)
+		self:SetDarkRPVar(string.gsub(self:SteamName(), "\\\"", "\""))
+
+		ErrorNoHalt("Failed to retrieve player information")
 	end)
 end
 
@@ -368,9 +383,13 @@ end
 
 function meta:AddMoney(amount)
 	if not amount then return false end
-	hook.Call("PlayerWalletChanged", GAMEMODE, ply, amount)
+	hook.Call("PlayerWalletChanged", GAMEMODE, self, amount)
+	local total = self.DarkRPVars.money + math.floor(amount)
+
+	self:SetDarkRPVar("money", total)
+
 	if self.DarkRPUnInitialized then return end
-	DB.StoreMoney(self, self.DarkRPVars.money + math.floor(amount))
+	DB.StoreMoney(self, total)
 end
 
 function meta:PayDay()
