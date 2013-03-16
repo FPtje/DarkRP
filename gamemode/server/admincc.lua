@@ -341,7 +341,7 @@ local function ccSetMoney(ply, cmd, args)
 	if target then
 		local nick = ""
 		DB.StoreMoney(target, amount)
-		ply:SetDarkRPVar("money", amount)
+		target:SetDarkRPVar("money", amount)
 
 		if ply:EntIndex() == 0 then
 			print("Set " .. target:Nick() .. "'s money to: " .. CUR .. amount)
