@@ -6,6 +6,11 @@ local function Kick(ply, cmd, args)
 		return
 	end
 
+	if #targets > 1 then
+		FAdmin.Messages.SendMessage(ply, 1, "You can't kick more than one player at once")
+		return
+	end
+
 	local CanKick = hook.Call("FAdmin_CanKick", nil, ply, targets)
 
 	if CanKick == false then return end
@@ -111,6 +116,11 @@ local function Ban(ply, cmd, args)
 				if i >= 4 then args[i] = nil end
 			end
 		end
+	end
+
+	if #targets > 1 then
+		FAdmin.Messages.SendMessage(ply, 1, "You can't ban more than one player at once")
+		return
 	end
 
 	local CanBan = hook.Call("FAdmin_CanBan", nil, ply, targets)
