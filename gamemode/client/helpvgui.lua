@@ -114,7 +114,7 @@ end
 
 function HelpPanel:Think()
 	if self.HelpX < 0 then
-		self.HelpX = self.HelpX + 600 * FrameTime()
+		self.HelpX = self.HelpX + 2400 * FrameTime()
 	end
 
 	if self.HelpX > 0 then
