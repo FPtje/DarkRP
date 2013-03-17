@@ -548,7 +548,8 @@ function meta:SetDarkRPVar(var, value, target)
 	self.DarkRPVars[var] = value
 
 	umsg.Start("DarkRP_PlayerVar", target)
-		umsg.Entity(self)
+		-- The index because the player handle might not exist clientside yet
+		umsg.Short(self:EntIndex())
 		umsg.String(var)
 		if value == nil then value = "nil" end
 		umsg.String(tostring(value))

@@ -553,13 +553,20 @@ local function UpdateDoorData(um)
 end
 usermessage.Hook("DRP_UpdateDoorData", UpdateDoorData)
 
-local function RetrievePlayerVar(um)
-	local ply = um:ReadEntity()
-	if not IsValid(ply) then return end
+local function RetrievePlayerVar(entIndex, var, value, tries)
+	local ply = Entity(entIndex)
+
+	-- Usermessages _can_ arrive before the player is valid.
+	-- In this case, chances are huge that this player will become valid.
+	if not IsValid(ply) then
+		if tries >= 5 then return end
+
+		timer.Simple(0.5, function() RetrievePlayerVar(entIndex, var, value, tries + 1) end)
+		return
+	end
 
 	ply.DarkRPVars = ply.DarkRPVars or {}
 
-	local var, value = um:ReadString(), um:ReadString()
 	local stringvalue = value
 	value = tonumber(value) or value
 
@@ -579,7 +586,17 @@ local function RetrievePlayerVar(um)
 	hook.Call("DarkRPVarChanged", nil, ply, var, ply.DarkRPVars[var], value)
 	ply.DarkRPVars[var] = value
 end
-usermessage.Hook("DarkRP_PlayerVar", RetrievePlayerVar)
+
+/*---------------------------------------------------------------------------
+Retrieve a player var.
+Read the usermessage and attempt to set the DarkRP var
+---------------------------------------------------------------------------*/
+local function doRetrieve(um)
+	local entIndex = um:ReadShort()
+	local var, value = um:ReadString(), um:ReadString()
+	RetrievePlayerVar(entIndex, var, value, 0)
+end
+usermessage.Hook("DarkRP_PlayerVar", doRetrieve)
 
 local function InitializeDarkRPVars(len)
 	local vars = net.ReadTable()
