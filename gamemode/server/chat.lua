@@ -64,8 +64,12 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 	local text2 = (not teamonly and "" or "/g ") .. text
 	local callback
 
-	for k,v in SortedPairs(self.OldChatHooks, false) do
-		if type(v) == "function" then
+	for k,v in pairs(self.OldChatHooks) do
+		if type(v) ~= "function" then continue end
+
+		if type(k) == "Entity" or type(k) == "Player" then
+			text2 = v(k, ply, text, teamonly, dead) or text2
+		else
 			text2 = v(ply, text, teamonly, dead) or text2
 		end
 	end
@@ -95,6 +99,14 @@ function GM:ReplaceChatHooks()
 			self.OldChatHooks[a] = nil
 		end
 	end
+
+	table.sort(self.OldChatHooks, function(a, b)
+		if type(a) == "string" and type(b) == "string" then
+			return a > b
+		end
+
+		return true
+	end)
 end
 
 function ConCommand(ply, _, args)

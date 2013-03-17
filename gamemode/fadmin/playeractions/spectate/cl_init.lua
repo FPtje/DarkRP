@@ -1,6 +1,6 @@
 local stopSpectating, startFreeRoam
 local specEnt
-local thirdperson = false
+local thirdperson = true
 local isRoaming = false
 local roamPos = Vector(0) -- the position when roaming free
 
@@ -87,6 +87,38 @@ local function specCalcView(ply, origin, angles, fov)
 end
 
 /*---------------------------------------------------------------------------
+Spectate the person you're looking at while you're roaming
+---------------------------------------------------------------------------*/
+local function spectateLookingAt()
+	local aimvec = LocalPlayer():GetAimVector()
+
+	local foundPly, foundDot = nil, 0
+
+	for _, ply in pairs(player.GetAll()) do
+		if ply == LocalPlayer() then continue end
+
+		local pos = ply:GetShootPos()
+		local dot = (pos - roamPos):GetNormalized():Dot(aimvec)
+		local distance = pos:Distance(roamPos)
+
+		-- Discard players you're not looking at
+		if dot < 0.97 then continue end
+		-- not a better alternative
+		if dot < foundDot then continue end
+
+		local trace = util.QuickTrace(roamPos, pos - roamPos, ply)
+
+		if trace.Hit then continue end
+
+		foundPly, foundDot = ply, dot
+	end
+
+	if not IsValid(foundPly) then return end
+
+	RunConsoleCommand("FAdmin", "Spectate", foundPly:UserID())
+end
+
+/*---------------------------------------------------------------------------
 specBinds
 Change binds to perform spectate specific tasks
 ---------------------------------------------------------------------------*/
@@ -102,16 +134,17 @@ local function specBinds(ply, bind, pressed)
 		end
 		return true
 	elseif bind == "+attack" and pressed then
+		if isRoaming then
+			roamPos = roamPos + LocalPlayer():GetAimVector() * 500
+			return true
+		end
 		thirdperson = not thirdperson
 		return true
 	elseif bind == "+attack2" and pressed then
 		if not isRoaming then
 			startFreeRoam()
 		else
-			local trace = util.QuickTrace(roamPos, LocalPlayer():GetAimVector() * 25000)
-			if IsValid(trace.Entity) and trace.Entity:IsPlayer() then
-				RunConsoleCommand("FAdmin", "Spectate", trace.Entity:UserID())
-			end
+			spectateLookingAt()
 		end
 
 		keysDown["ATTACK2"] = pressed
@@ -171,7 +204,11 @@ end
 Draw help on the screen
 ---------------------------------------------------------------------------*/
 local function drawHelp()
-	draw.WordBox(2, 10, ScrH() / 2, "Left mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	if isRoaming then
+		draw.WordBox(2, 10, ScrH() / 2, "Left mouse: teleport forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	else
+		draw.WordBox(2, 10, ScrH() / 2, "Left mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	end
 	draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	draw.WordBox(2, 10, ScrH() / 2 + 60, "Right mouse + Jump: Teleport to spectate pos", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
