@@ -91,8 +91,9 @@ function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, c
 	end
 
 	local vehicle = {name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
-	local corrupt = checkValid(customShipment, validVehicle)
+	local corrupt = checkValid(vehicle, validVehicle)
 	if corrupt then error("Corrupt vehicle \"" .. (Name_of_vehicle or "") .. "\": element " .. corrupt .. " is corrupt.", 2) end
+	if not found then error("Vehicle invalid: " .. Name_of_vehicle .. ". Unknown vehicle name.") end
 
 	table.insert(CustomVehicles, vehicle)
 end
