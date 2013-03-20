@@ -4,6 +4,8 @@ FAdmin.PlayerActions = {}
 FAdmin.StartHooks = {}
 
 if SERVER then
+	util.AddNetworkString("FAdmin_retrievebans")
+	util.AddNetworkString("FADMIN_SendGroups")
 	include(GM.FolderName.."/gamemode/server/FAdmin_SQL.lua")
 
 	local function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
