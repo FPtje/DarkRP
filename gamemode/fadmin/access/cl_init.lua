@@ -47,7 +47,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 		for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
 			menu:AddOption(k, function()
 				if not IsValid(ply) then return end
-				RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), k)
+				RunConsoleCommand("_FAdmin", "setaccess", ply:SteamID(), k)
 			end)
 		end
 
@@ -132,7 +132,7 @@ ContinueNewGroup = function(ply, name, admin_access, func)
 	OKButton:StretchToParent(5, 30 + TickBoxPanel:GetTall(), Window:GetWide()/2 + 2, 5)
 	function OKButton:DoClick()
 		if ply then
-			RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access, unpack(privs))
+			RunConsoleCommand("_FAdmin", "setaccess", ply:SteamID(), name, admin_access, unpack(privs))
 		else
 			RunConsoleCommand("_FAdmin", "AddGroup", name, admin_access, unpack(privs))
 		end

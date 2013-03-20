@@ -204,7 +204,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 	FAdmin.Commands.AddCommand("unban", "<SteamID>")
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Quick Kick", function(ply, Panel)
-		RunConsoleCommand("_FAdmin", "kick", ply:UserID(), "Quick kick")
+		RunConsoleCommand("_FAdmin", "kick", ply:SteamID(), "Quick kick")
 		if ValidPanel(Panel) then Panel:Remove() end
 	end)
 
@@ -212,10 +212,10 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 	-- Kick button
 	FAdmin.ScoreBoard.Player:AddActionButton("Kick", "FAdmin/icons/kick", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Kick", ply) end, function(ply)
 		if not IsValid(ply) then return end
-		local UserID = ply:UserID()
+		local SteamID = ply:SteamID()
 		local NICK = ply:Nick()
 
-		LocalPlayer():ConCommand("FAdmin kick "..UserID.." start")
+		LocalPlayer():ConCommand("FAdmin kick "..SteamID.." start")
 		local Window = vgui.Create("DFrame")
 		Window:SetTitle("Reason for kicking")
 		Window:SetDraggable( false )
@@ -233,10 +233,10 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 
 		local TextEntry = vgui.Create("DTextEntry", InnerPanel )
 			function TextEntry:OnTextChanged()
-				RunConsoleCommand("_FAdmin", "kick", UserID, "update", self:GetValue())
+				RunConsoleCommand("_FAdmin", "kick", SteamID, "update", self:GetValue())
 			end
 			TextEntry:SetText("Enter reason here")
-			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", UserID, "execute") end
+			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", SteamID, "execute") end
 			function TextEntry:OnFocusChanged(changed)
 				self:RequestFocus()
 				self:SelectAllText(true)
@@ -253,7 +253,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			Button:SetTall( 20 )
 			Button:SetWide( Button:GetWide() + 20 )
 			Button:SetPos( 5, 5 )
-			Button.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", UserID, "execute", TextEntry:GetValue()) end
+			Button.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", SteamID, "execute", TextEntry:GetValue()) end
 
 		local ButtonCancel = vgui.Create("DButton", ButtonPanel )
 			ButtonCancel:SetText("Cancel")
@@ -261,7 +261,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			ButtonCancel:SetTall( 20 )
 			ButtonCancel:SetWide( Button:GetWide() + 20 )
 			ButtonCancel:SetPos( 5, 5 )
-			ButtonCancel.DoClick = function() Window:Close() LocalPlayer():ConCommand("_FAdmin ".. "kick ".. UserID.. " cancel") end
+			ButtonCancel.DoClick = function() Window:Close() LocalPlayer():ConCommand("_FAdmin ".. "kick ".. SteamID.. " cancel") end
 			ButtonCancel:MoveRightOf( Button, 5 )
 
 		ButtonPanel:SetWide( Button:GetWide() + 5 + ButtonCancel:GetWide() + 10 )

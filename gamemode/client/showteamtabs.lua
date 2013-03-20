@@ -17,7 +17,7 @@ local function MayorOptns()
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /warrant ".. tostring(ply:UserID()).." ".. a)
+								LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -32,7 +32,7 @@ local function MayorOptns()
 					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /wanted ".. tostring(ply:UserID()).." ".. a)
+								LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -45,7 +45,7 @@ local function MayorOptns()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
 					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
-						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted " .. tostring(ply:UserID())) end)
+						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted \"" .. ply:SteamID() .. "\"") end)
 					end
 				end
 				menu:Open()
@@ -119,7 +119,7 @@ local function CPOptns()
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /warrant ".. tostring(ply:UserID()).." ".. a)
+								LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -135,7 +135,7 @@ local function CPOptns()
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
 									if not IsValid(ply) then return end
-									LocalPlayer():ConCommand("darkrp /wanted ".. tostring(ply:UserID()).." ".. a)
+									LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. a)
 								end, function() end ) end)
 					end
 				end
@@ -148,7 +148,7 @@ local function CPOptns()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
 					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
-						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted " .. tostring(ply:UserID())) end)
+						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted \"" .. ply:SteamID() .. "\"") end)
 					end
 				end
 				menu:Open()
@@ -310,7 +310,7 @@ function GM:MoneyTab()
 							menu:AddOption(ply:Nick(), function()
 								Derma_StringRequest("Demote reason", "Why would you demote "..ply:Nick().."?", nil,
 									function(a)
-									LocalPlayer():ConCommand("darkrp /demote ".. tostring(ply:UserID()).." ".. a)
+									LocalPlayer():ConCommand("darkrp /demote \"".. ply:SteamID().."\" ".. a)
 									end, function() end )
 							end)
 						end

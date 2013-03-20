@@ -14,12 +14,12 @@ FAdmin.StartHooks["zzSpectate"] = function()
 
 	-- Right click option
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Spectate", function(ply)
-		LocalPlayer():ConCommand("FAdmin Spectate "..ply:UserID())
+		LocalPlayer():ConCommand("FAdmin Spectate "..ply:SteamID())
 	end)
 
 	-- Slap option in player menu
 	FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "FAdmin/icons/spectate", Color(0, 200, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Spectate") and ply ~= LocalPlayer() end, function(ply)
-		RunConsoleCommand("_FAdmin", "Spectate", ply:UserID())
+		RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
 	end)
 end
 
@@ -115,7 +115,7 @@ local function spectateLookingAt()
 
 	if not IsValid(foundPly) then return end
 
-	RunConsoleCommand("FAdmin", "Spectate", foundPly:UserID())
+	RunConsoleCommand("FAdmin", "Spectate", foundPly:SteamID())
 end
 
 /*---------------------------------------------------------------------------

@@ -21,9 +21,9 @@ FAdmin.StartHooks["Voicemute"] = function()
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Voicemute", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_voicemuted") then
-			RunConsoleCommand("_FAdmin", "Voicemute", ply:UserID())
+			RunConsoleCommand("_FAdmin", "Voicemute", ply:SteamID())
 		else
-			RunConsoleCommand("_FAdmin", "UnVoicemute", ply:UserID())
+			RunConsoleCommand("_FAdmin", "UnVoicemute", ply:SteamID())
 		end
 
 		if not ply:FAdmin_GetGlobal("FAdmin_voicemuted") then button:SetImage2("null") button:SetText("Unmute voice") button:GetParent():InvalidateLayout() return end
