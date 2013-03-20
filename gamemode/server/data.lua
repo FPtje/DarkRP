@@ -58,8 +58,8 @@ function DB.Query(sqlText, callback, errorCallback)
 
 	local lastError = sql.LastError()
 	local Result = sql.Query(sqlText)
-	if sql.LastError() ~= lastError then
-		error("SQLite error: " .. lastError)
+	if sql.LastError() and sql.LastError() ~= lastError then
+		error("SQLite error: " .. sql.LastError())
 	end
 
 	if callback then callback(Result) end
@@ -100,7 +100,7 @@ function DB.QueryValue(sqlText, callback, errorCallback)
 
 	local lastError = sql.LastError()
 	local val = sql.QueryValue(sqlText)
-	if sql.LastError() ~= lastError then
+	if sql.LastError() and sql.LastError() ~= lastError then
 		error("SQLite error: " .. lastError)
 	end
 
@@ -700,7 +700,7 @@ function DB.RetrievePlayerData(ply, callback, failed, attempts)
 end
 
 function DB.CreatePlayerData(ply, name, wallet, salary)
-	DB.Query([[INSERT INTO darkrp_player VALUES(]] ..
+	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
 			ply:UniqueID() .. [[, ]] ..
 			sql.SQLStr(name)  .. [[, ]] ..
 			salary  .. [[, ]] ..

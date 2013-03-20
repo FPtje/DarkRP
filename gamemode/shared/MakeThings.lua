@@ -3,7 +3,7 @@ local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
 
 local requiredTeamItems = {"color", "model", "description", "weapons", "command", "max", "salary", "admin", "vote"}
-local validShipment = {model = util.IsValidModel, "entity", "price", "amount", "seperate"}
+local validShipment = {model = util.IsValidModel, "entity", "price", "amount", "seperate", "allowed"}
 local validVehicle = {"name", model = util.IsValidModel, "price"}
 local validEntity = {"ent", model = util.IsValidModel, "price", "max", "cmd", "name"}
 local function checkValid(tbl, requiredItems)
