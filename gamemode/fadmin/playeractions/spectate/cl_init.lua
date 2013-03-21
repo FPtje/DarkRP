@@ -2,7 +2,7 @@ local stopSpectating, startFreeRoam
 local specEnt
 local thirdperson = true
 local isRoaming = false
-local roamPos = Vector(0) -- the position when roaming free
+local roamPos -- the position when roaming free
 
 /*---------------------------------------------------------------------------
 startHooks
@@ -57,6 +57,8 @@ local function getCalcView()
 			view.origin = specEnt:GetShootPos()
 			view.angles = specEnt:EyeAngles()
 		end
+
+		roamPos = view.origin
 
 		return view
 	end
@@ -222,7 +224,7 @@ startFreeRoam = function()
 		roamPos = thirdperson and getThirdPersonPos(specEnt) or specEnt:GetShootPos()
 		specEnt:SetNoDraw(false)
 	else
-		roamPos = LocalPlayer():GetShootPos()
+		roamPos = roamPos or LocalPlayer():GetShootPos()
 	end
 
 	specEnt = nil
