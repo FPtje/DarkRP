@@ -17,10 +17,12 @@ local function TPToPos(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
 	local x, y, z = string.match(args[1] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
+	local vx, vy, vz = string.match(args[2] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
 
 	if not args[1] or not x or not y or not z then return end
 
 	ply:SetPos(Vector(tonumber(x), tonumber(y), tonumber(z)))
+	if vx and vy and vz then ply:SetVelocity(Vector(tonumber(vx), tonumber(vy), tonumber(vz))) end
 	zapEffect(ply)
 end
 
