@@ -1,0 +1,11 @@
+{
+	"title"		:	"Falco's Prop Protection (FPP)",
+	"type"		:	"tool",
+	"tags"		:	[ "build" ],
+	"ignore"	:
+	[
+		"*.git*",
+		"*.bat",
+		"*.jpg"
+	]
+}
