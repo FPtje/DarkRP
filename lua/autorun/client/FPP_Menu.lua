@@ -546,6 +546,7 @@ function FPP.AdminMenu(Panel)
 			GroupList:AddLine(k)
 		end
 		GroupList:SelectFirstItem()
+		if #FPP.Groups == 0 then return end
 		ChkAllowDefault:SetValue(FPP.Groups[GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()].allowdefault)
 	end
 	net.Receive("FPP_Groups", RetrieveGroups)

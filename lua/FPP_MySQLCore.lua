@@ -83,7 +83,7 @@ function FPPDB.ConnectToMySQL(host, username, password, database_name, database_
 	if not mysqloo then Error("MySQL modules aren't installed properly!") FPPDB.Log("MySQL Error: MySQL modules aren't installed properly!") end
 	local databaseObject = mysqloo.connect(host, username, password, database_name, database_port)
 
-	databaseObject.onConnectionFailed = function(msg)
+	databaseObject.onConnectionFailed = function(_, msg)
 		Error("Connection failed! " ..tostring(msg))
 		FPPDB.Log("MySQL Error: Connection failed! "..tostring(msg))
 	end
@@ -96,10 +96,6 @@ function FPPDB.ConnectToMySQL(host, username, password, database_name, database_
 	end
 	databaseObject:connect()
 	FPPDB.MySQLDB = databaseObject
-end
-
-if FPP_MySQLConfig and FPP_MySQLConfig.EnableMySQL then
-	FPPDB.ConnectToMySQL(FPP_MySQLConfig.Host, FPP_MySQLConfig.Username, FPP_MySQLConfig.Password, FPP_MySQLConfig.Database_name, FPP_MySQLConfig.Database_port)
 end
 
 function FPPDB.Log(text)
