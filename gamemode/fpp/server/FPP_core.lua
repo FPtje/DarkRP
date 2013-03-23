@@ -697,16 +697,14 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 		if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatorprotect) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanblocked))) then
 			local setspawning = tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist)
 
-			if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and FPP.Blocked.Spawning1[string.lower(v.Class)] then
+			if not tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and FPP.Blocked.Spawning1[lowerClass] then
 				FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
 				EntTable[k] = nil
-				break
 			end
 
 			-- if the whitelist is on you can't spawn it unless it's found
-			if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and FPP.Blocked.Spawning1[string.lower(v.Class)] then
+			if tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist) and FPP.Blocked.Spawning1[lowerClass] then
 				setspawning = false
-				break
 			end
 
 			if setspawning then
