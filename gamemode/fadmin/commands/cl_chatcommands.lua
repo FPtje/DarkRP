@@ -51,7 +51,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
 		targets = table.concat(players, ", ")
 	end
 
-	local xPos = (ChatBoxPosX == 12 and 412) or (ChatBoxPosX == 22 and 627) or (ChatBoxPosX == 21 and 741) or 526
+	local xPos = (ChatBoxPosX == 12 and 412) or (ChatBoxPosX == 22 and 745) or (ChatBoxPosX == 21 and 741) or 526
 	hook.Add("HUDPaint", "FAdmin_Chat_autocomplete", function()
 		local i = 0
 		for option, args in pairs(Options) do
