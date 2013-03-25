@@ -7,22 +7,6 @@ util.PrecacheSound("earthquake.mp3")
 CUR = "$"
 
 /*---------------------------------------------------------------------------
-Fonts
----------------------------------------------------------------------------*/
-surface.CreateFont ("DarkRPHUD1", {
-	size = 16,
-	weight = 600,
-	antialias = true,
-	shadow = true,
-	font = "DejaVu Sans"})
-surface.CreateFont ("DarkRPHUD2", {
-	size = 23,
-	weight = 400,
-	antialias = true,
-	shadow = false,
-	font = "coolvetica"})
-
-/*---------------------------------------------------------------------------
 Names
 ---------------------------------------------------------------------------*/
 -- Make sure the client sees the RP name where they expect to see the name
@@ -115,24 +99,6 @@ surface.CreateFont("AckBarWriting", {
 	shadow = false,
 	font = "akbar"})
 
--- Copy from FESP(made by FPtje Falco)
--- This is no stealing since I made FESP myself.
-local vector = FindMetaTable("Vector")
-function vector:RPIsInSight(v, ply)
-	ply = ply or LocalPlayer()
-	local trace = {}
-	trace.start = ply:EyePos()
-	trace.endpos = self
-	trace.filter = v
-	trace.mask = -1
-	local TheTrace = util.TraceLine(trace)
-	if TheTrace.Hit then
-		return false, TheTrace.HitPos
-	else
-		return true, TheTrace.HitPos
-	end
-end
-
 function GM:HUDShouldDraw(name)
 	if name == "CHudHealth" or
 		name == "CHudBattery" or
@@ -146,31 +112,6 @@ end
 
 function GM:HUDDrawTargetID()
     return false
-end
-
-function GM:FindPlayer(info)
-	if not info or info == "" then return nil end
-	local pls = player.GetAll()
-
-	for k = 1, #pls do -- Proven to be faster than pairs loop.
-		local v = pls[k]
-		if tonumber(info) == v:UserID() then
-			return v
-		end
-
-		if info == v:SteamID() then
-			return v
-		end
-
-		if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
-			return v
-		end
-
-		if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
-			return v
-		end
-	end
-	return nil
 end
 
 local GUIToggled = false
@@ -273,15 +214,6 @@ local function RPStopMessageMode()
 	playercolors = {}
 end
 
-local function CL_IsInRoom(listener) -- IsInRoom function to see if the player is in the same room.
-	local tracedata = {}
-	tracedata.start = LocalPlayer():GetShootPos()
-	tracedata.endpos = listener:GetShootPos()
-	local trace = util.TraceLine( tracedata )
-
-	return not trace.HitWorld
-end
-
 local PlayerColorsOn = CreateClientConVar("rp_showchatcolors", 1, true, false)
 local function RPSelectwhohearit(group)
 	if PlayerColorsOn:GetInt() == 0 then return end
@@ -319,7 +251,7 @@ local function RPSelectwhohearit(group)
 					table.insert(playercolors, v)
 				elseif HearMode == "speak" and distance < 550 and not table.HasValue(playercolors, v) then
 					if GAMEMODE.Config.dynamicvoice then
-						if CL_IsInRoom( v ) then
+						if v:IsInRoom() then
 							table.insert(playercolors, v)
 						end
 					else
@@ -477,14 +409,6 @@ local function AddToChat(msg)
 	chat.PlaySound()
 end
 usermessage.Hook("DarkRP_Chat", AddToChat)
-
-local function GetAvailableVehicles()
-	print("Available vehicles for custom vehicles:")
-	for k,v in pairs(list.Get("Vehicles")) do
-		print("\""..k.."\"")
-	end
-end
-concommand.Add("rp_getvehicles", GetAvailableVehicles)
 
 local function AdminLog(um)
 	local colour = Color(um:ReadShort(), um:ReadShort(), um:ReadShort())
@@ -722,83 +646,3 @@ FAdmin.StartHooks["DarkRP"] = function()
 	FAdmin.ScoreBoard.Player:AddActionButton("Unban from job", function() return "FAdmin/icons/changeteam", "FAdmin/icons/disable" end, Color(200, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamban)
 end
-
--- These fonts used to exist in GMod 12 but were removed in 13.
-surface.CreateFont("Trebuchet18", {
-	size = 18,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "Trebuchet MS"})
-surface.CreateFont("Trebuchet19", {
-	size = 19,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "Trebuchet MS"})
-surface.CreateFont("Trebuchet20", {
-	size = 20,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "Trebuchet MS"})
-surface.CreateFont("Trebuchet22", {
-	size = 22,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "Trebuchet MS"})
-surface.CreateFont("Trebuchet24", {
-	size = 24,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "Trebuchet MS"})
-surface.CreateFont("TabLarge", {
-	size = 17,
-	weight = 700,
-	antialias = true,
-	shadow = false,
-	font = "Trebuchet MS"})
-surface.CreateFont("UiBold", {
-	size = 16,
-	weight = 800,
-	antialias = true,
-	shadow = false,
-	font = "Default"})
-surface.CreateFont("HUDNumber5", {
-	size = 30,
-	weight = 800,
-	antialias = true,
-	shadow = false,
-	font = "Default"})
-surface.CreateFont("ScoreboardHeader", {
-	size = 32,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "coolvetica"})
-surface.CreateFont("ScoreboardSubtitle", {
-	size = 22,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "coolvetica"})
-surface.CreateFont("ScoreboardPlayerName", {
-	size = 19,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "coolvetica"})
-surface.CreateFont("ScoreboardPlayerName2", {
-	size = 15,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "coolvetica"})
-surface.CreateFont("ScoreboardPlayerNameBig", {
-	size = 22,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "coolvetica"})
