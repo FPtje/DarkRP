@@ -587,7 +587,7 @@ end
 usermessage.Hook("DarkRP_Credits", credits)
 
 -- DarkRP plugin for FAdmin. It's this simple to make a plugin. If FAdmin isn't installed, this code won't bother anyone
-include(GM.FolderName.."/gamemode/shared/fadmin_darkrp.lua")
+
 
 if not FAdmin or not FAdmin.StartHooks then return end
 FAdmin.StartHooks["DarkRP"] = function()
