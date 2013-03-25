@@ -34,8 +34,6 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
-local DropItem
-
 if CLIENT then
 	SWEP.FrameVisible = false
 end
@@ -131,7 +129,7 @@ function SWEP:SecondaryAttack()
 	self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket] = nil
 	if not IsValid(ent) then GAMEMODE:Notify(self.Owner, 1, 4, "Your pocket contains no items.") return end
 
-	DropItem(self.Owner, ent)
+	self.Owner:DropPocketItem(ent)
 end
 
 SWEP.OnceReload = false
@@ -259,16 +257,17 @@ elseif SERVER then
 			ply:GetActiveWeapon():SetWeaponHoldType("pistol")
 			timer.Simple(0.2, function() if ply:GetActiveWeapon():IsValid() then ply:GetActiveWeapon():SetWeaponHoldType("normal") end end)
 
-			DropItem(ply, ent)
+			ply:DropPocketItem(ent)
 		end
 	end
 	concommand.Add("_RPSpawnPocketItem", Spawn)
 
-	DropItem = function(ply, ent)
+	local meta = FindMetaTable("Player")
+	function meta:DropPocketItem(ent)
 		local trace = {}
-		trace.start = ply:EyePos()
-		trace.endpos = trace.start + ply:GetAimVector() * 85
-		trace.filter = ply
+		trace.start = self:EyePos()
+		trace.endpos = trace.start + self:GetAimVector() * 85
+		trace.filter = self
 		local tr = util.TraceLine(trace)
 		ent:SetMoveType(MOVETYPE_VPHYSICS)
 		ent:SetNoDraw(false)
@@ -281,7 +280,7 @@ elseif SERVER then
 			phys:EnableMotion(true)
 			phys:Wake()
 		end
-		umsg.Start("Pocket_RemoveItem", ply)
+		umsg.Start("Pocket_RemoveItem", self)
 			umsg.Short(ent:EntIndex())
 		umsg.End()
 		ent.PhysgunPickup = nil
@@ -297,7 +296,7 @@ elseif SERVER then
 
 		for k, v in pairs(pocket) do
 			if IsValid(v) then
-				DropItem(ply, v)
+				ply:DropPocketItem(v)
 			end
 		end
 	end)
