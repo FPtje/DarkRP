@@ -29,7 +29,7 @@ function AddExtraTeam(Name, colorOrTable, model, Description, Weapons, command, 
 	CustomTeam.name = Name
 
 	local corrupt = checkValid(CustomTeam, requiredTeamItems)
-	if corrupt then error("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.", 2) end
+	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end 
 
 	table.insert(RPExtraTeams, CustomTeam)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
@@ -75,7 +75,7 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 	customShipment.allowed = customShipment.allowed or {}
 
 	local corrupt = checkValid(customShipment, validShipment)
-	if corrupt then error("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.", 2) end
+	if corrupt then ErrorNoHalt("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
 
 	if SERVER and FPP then
 		FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
@@ -93,8 +93,8 @@ function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, c
 
 	local vehicle = {name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
 	local corrupt = checkValid(vehicle, validVehicle)
-	if corrupt then error("Corrupt vehicle \"" .. (Name_of_vehicle or "") .. "\": element " .. corrupt .. " is corrupt.", 2) end
-	if not found then error("Vehicle invalid: " .. Name_of_vehicle .. ". Unknown vehicle name.") end
+	if corrupt then ErrorNoHalt("Corrupt vehicle \"" .. (Name_of_vehicle or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
+	if not found then ErrorNoHalt("Vehicle invalid: " .. Name_of_vehicle .. ". Unknown v\nehicle name.") end
 
 	table.insert(CustomVehicles, vehicle)
 end
@@ -113,7 +113,7 @@ function AddEntity(name, entity, model, price, max, command, classes, CustomChec
 	end
 
 	local corrupt = checkValid(tblEnt, validEntity)
-	if corrupt then error("Corrupt Entity \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.", 2) end
+	if corrupt then ErrorNoHalt("Corrupt Entity \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
 
 	if SERVER and FPP then
 		FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
