@@ -318,6 +318,48 @@ local function DrawZombieInfo()
 end
 
 /*---------------------------------------------------------------------------
+Drawing death notices
+---------------------------------------------------------------------------*/
+function GM:DrawDeathNotice(x, y)
+	if not GAMEMODE.Config.showdeaths then return end
+	self.BaseClass:DrawDeathNotice(x, y)
+end
+
+/*---------------------------------------------------------------------------
+Display notifications
+---------------------------------------------------------------------------*/
+local function DisplayNotify(msg)
+	local txt = msg:ReadString()
+	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
+	surface.PlaySound("buttons/lightswitch2.wav")
+
+	-- Log to client console
+	print(txt)
+end
+usermessage.Hook("_Notify", DisplayNotify)
+
+/*---------------------------------------------------------------------------
+Remove some elements from the HUD in favour of the DarkRP HUD
+---------------------------------------------------------------------------*/
+function GM:HUDShouldDraw(name)
+	if name == "CHudHealth" or
+		name == "CHudBattery" or
+		name == "CHudSuitPower" or
+		(HelpToggled and name == "CHudChat") then
+			return false
+	else
+		return true
+	end
+end
+
+/*---------------------------------------------------------------------------
+Disable players' names popping up when looking at them
+---------------------------------------------------------------------------*/
+function GM:HUDDrawTargetID()
+    return false
+end
+
+/*---------------------------------------------------------------------------
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
 function GM:HUDPaint()

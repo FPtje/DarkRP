@@ -107,3 +107,10 @@ surface.CreateFont("ScoreboardPlayerNameBig", {
 	antialias = true,
 	shadow = false,
 	font = "coolvetica"})
+
+surface.CreateFont("AckBarWriting", {
+	size = 20,
+	weight = 500,
+	antialias = true,
+	shadow = false,
+	font = "akbar"})

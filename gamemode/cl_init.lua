@@ -27,21 +27,6 @@ pmeta.GetName = pmeta.Name
 pmeta.Nick = pmeta.Name
 -- End
 
-function GM:DrawDeathNotice(x, y)
-	if not GAMEMODE.Config.showdeaths then return end
-	self.BaseClass:DrawDeathNotice(x, y)
-end
-
-local function DisplayNotify(msg)
-	local txt = msg:ReadString()
-	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
-	surface.PlaySound("buttons/lightswitch2.wav")
-
-	-- Log to client console
-	print(txt)
-end
-usermessage.Hook("_Notify", DisplayNotify)
-
 local function LoadModules()
 	local root = GM.FolderName.."/gamemode/modules/"
 
@@ -91,28 +76,6 @@ include("fpp/client/FPP_Buddies.lua")
 include("fpp/sh_CPPI.lua")
 
 LoadModules()
-
-surface.CreateFont("AckBarWriting", {
-	size = 20,
-	weight = 500,
-	antialias = true,
-	shadow = false,
-	font = "akbar"})
-
-function GM:HUDShouldDraw(name)
-	if name == "CHudHealth" or
-		name == "CHudBattery" or
-		name == "CHudSuitPower" or
-		(HelpToggled and name == "CHudChat") then
-			return false
-	else
-		return true
-	end
-end
-
-function GM:HUDDrawTargetID()
-    return false
-end
 
 local GUIToggled = false
 local HelpToggled = false
