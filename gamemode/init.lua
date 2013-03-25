@@ -57,7 +57,7 @@ include("fpp/server/FPP_Core.lua")
 include("fpp/server/FPP_Antispam.lua")
 
 AddCSLuaFile("config/addentities.lua")
-AddCSLuaFile("shared.lua")
+AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("config/config.lua")
@@ -106,7 +106,7 @@ include("shared/language.lua")
 include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 
-include("shared.lua")
+include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
 

@@ -65,7 +65,7 @@ include("shared/language.lua")
 include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 
-include("shared.lua")
+include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
 
