@@ -49,7 +49,6 @@ AddCSLuaFile("fpp/sh_settings.lua")
 AddCSLuaFile("fpp/client/FPP_Menu.lua")
 AddCSLuaFile("fpp/client/FPP_HUD.lua")
 AddCSLuaFile("fpp/client/FPP_Buddies.lua")
-AddCSLuaFile("shared/fadmin_darkrp.lua")
 
 include("fpp/sh_settings.lua")
 include("fpp/sh_CPPI.lua")
@@ -120,7 +119,6 @@ include("server/util.lua")
 include("server/votes.lua")
 
 
-include("shared/fadmin_darkrp.lua")
 
 if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
 	FPP.Init()
