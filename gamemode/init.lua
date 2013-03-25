@@ -56,11 +56,11 @@ include("fpp/server/FPP_Settings.lua")
 include("fpp/server/FPP_Core.lua")
 include("fpp/server/FPP_Antispam.lua")
 
-AddCSLuaFile("addentities.lua")
+AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("shared.lua")
-AddCSLuaFile("ammotypes.lua")
+AddCSLuaFile("config/ammotypes.lua")
 AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("config.lua")
+AddCSLuaFile("config/config.lua")
 
 AddCSLuaFile("client/DRPDermaSkin.lua")
 AddCSLuaFile("client/help.lua")
@@ -91,9 +91,9 @@ GM.NoLicense = GM.NoLicense or {}
 -- This will fix the rp_voiceradius not working
 game.ConsoleCommand("sv_alltalk 0\n")
 
-include("_MySQL.lua")
-include("config.lua")
-include("licenseweapons.lua")
+include("config/_MySQL.lua")
+include("config/config.lua")
+include("config/licenseweapons.lua")
 
 include("server/chat.lua")
 include("server/admincc.lua")
@@ -107,8 +107,8 @@ include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 
 include("shared.lua")
-include("addentities.lua")
-include("ammotypes.lua")
+include("config/addentities.lua")
+include("config/ammotypes.lua")
 
 include("server/data.lua")
 include("server/gamemode_functions.lua")

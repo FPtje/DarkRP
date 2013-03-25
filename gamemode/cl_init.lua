@@ -49,7 +49,7 @@ end
 
 GM.Config = {} -- config table
 
-include("config.lua")
+include("config/config.lua")
 include("client/help.lua")
 
 include("client/DRPDermaSkin.lua")
@@ -66,8 +66,8 @@ include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 
 include("shared.lua")
-include("addentities.lua")
-include("ammotypes.lua")
+include("config/addentities.lua")
+include("config/ammotypes.lua")
 
 include("fpp/sh_settings.lua")
 include("fpp/client/FPP_Menu.lua")
