@@ -38,24 +38,6 @@ util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_DoorData")
 util.AddNetworkString("DarkRP_keypadData")
 
--- Falco's prop protection
-local BlockedModelsExist = sql.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS;") ~= false
-if not BlockedModelsExist then
-	sql.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS('model' TEXT NOT NULL PRIMARY KEY);")
-	include("fpp/FPP_DefaultBlockedModels.lua") -- Load the default blocked models
-end
-AddCSLuaFile("fpp/sh_CPPI.lua")
-AddCSLuaFile("fpp/sh_settings.lua")
-AddCSLuaFile("fpp/client/FPP_Menu.lua")
-AddCSLuaFile("fpp/client/FPP_HUD.lua")
-AddCSLuaFile("fpp/client/FPP_Buddies.lua")
-
-include("fpp/sh_settings.lua")
-include("fpp/sh_CPPI.lua")
-include("fpp/server/FPP_Settings.lua")
-include("fpp/server/FPP_Core.lua")
-include("fpp/server/FPP_Antispam.lua")
-
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
@@ -118,12 +100,6 @@ include("server/questions.lua")
 include("server/util.lua")
 include("server/votes.lua")
 
-
-
-if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
-	FPP.Init()
-end
-
 /*---------------------------------------------------------------------------
 Loading modules
 ---------------------------------------------------------------------------*/
@@ -149,27 +125,6 @@ for _, folder in SortedPairs(folders, true) do
 		end
 	end
 end
-
-/*---------------------------------------------------------------------------
-DarkRP blocked entities
----------------------------------------------------------------------------*/
-local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
-FPP.AddDefaultBlocked(blockTypes, "chatindicator")
-FPP.AddDefaultBlocked(blockTypes, "darkrp_cheque")
-FPP.AddDefaultBlocked(blockTypes, "darkp_console")
-FPP.AddDefaultBlocked(blockTypes, "drug")
-FPP.AddDefaultBlocked(blockTypes, "drug_lab")
-FPP.AddDefaultBlocked(blockTypes, "fadmin_jail")
-FPP.AddDefaultBlocked(blockTypes, "food")
-FPP.AddDefaultBlocked(blockTypes, "gunlab")
-FPP.AddDefaultBlocked(blockTypes, "letter")
-FPP.AddDefaultBlocked(blockTypes, "meteor")
-FPP.AddDefaultBlocked(blockTypes, "spawned_food")
-FPP.AddDefaultBlocked(blockTypes, "spawned_money")
-FPP.AddDefaultBlocked(blockTypes, "spawned_shipment")
-FPP.AddDefaultBlocked(blockTypes, "spawned_weapon")
-
-FPP.AddDefaultBlocked("Spawning1", "darkrp_laws")
 
 
 /*---------------------------------------------------------------------------

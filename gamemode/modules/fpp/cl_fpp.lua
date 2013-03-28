@@ -1,0 +1,5 @@
+include("pp/sh_settings.lua")
+include("pp/client/FPP_Menu.lua")
+include("pp/client/FPP_HUD.lua")
+include("pp/client/FPP_Buddies.lua")
+include("pp/sh_CPPI.lua")

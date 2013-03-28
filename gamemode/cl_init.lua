@@ -69,12 +69,6 @@ include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
 
-include("fpp/sh_settings.lua")
-include("fpp/client/FPP_Menu.lua")
-include("fpp/client/FPP_HUD.lua")
-include("fpp/client/FPP_Buddies.lua")
-include("fpp/sh_CPPI.lua")
-
 LoadModules()
 
 local GUIToggled = false
