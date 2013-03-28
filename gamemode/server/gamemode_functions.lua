@@ -705,6 +705,15 @@ function GM:PlayerSpawn(ply)
 	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned")
 end
 
+local function selectDefaultWeapon(ply)
+	-- Switch to prefered weapon if they have it
+	local cl_defaultweapon = ply:GetInfo("cl_defaultweapon")
+
+	if ply:HasWeapon(cl_defaultweapon) then
+		ply:SelectWeapon(cl_defaultweapon)
+	end
+end
+
 function GM:PlayerLoadout(ply)
 	if ply:isArrested() then return end
 
@@ -712,6 +721,19 @@ function GM:PlayerLoadout(ply)
 	timer.Simple(1, function() removelicense(ply) end)
 
 	local Team = ply:Team() or 1
+
+	if not RPExtraTeams[Team] then return end
+	for k,v in pairs(RPExtraTeams[Team].weapons or {}) do
+		ply:Give(v)
+	end
+
+	if RPExtraTeams[ply:Team()].PlayerLoadout then
+		local val = RPExtraTeams[ply:Team()].PlayerLoadout(ply)
+		if val == true then
+			selectDefaultWeapon(ply)
+			return
+		end
+	end
 
 	ply:Give("keys")
 	ply:Give("weapon_physcannon")
@@ -739,21 +761,7 @@ function GM:PlayerLoadout(ply)
 		ply:Give("weaponchecker")
 	end
 
-	if not RPExtraTeams[Team] then return end
-	for k,v in pairs(RPExtraTeams[Team].weapons or {}) do
-		ply:Give(v)
-	end
-
-	if RPExtraTeams[ply:Team()].PlayerLoadout then
-		RPExtraTeams[ply:Team()].PlayerLoadout(ply)
-	end
-
-	-- Switch to prefered weapon if they have it
-	local cl_defaultweapon = ply:GetInfo("cl_defaultweapon")
-
-	if ply:HasWeapon(cl_defaultweapon) then
-		ply:SelectWeapon(cl_defaultweapon)
-	end
+	selectDefaultWeapon(ply)
 end
 
 local function removeDelayed(ent, ply)
