@@ -270,3 +270,13 @@ This one is for people who know how to script Lua.
 */
 GM:AddGroupChat(function(ply) return ply:IsCP() end)
 GM:AddGroupChat(TEAM_MOB, TEAM_GANG)
+
+/*---------------------------------------------------------------------------
+Define which teams belong to civil protection
+Civil protection can set warrants, make people wanted and do some other police related things
+---------------------------------------------------------------------------*/
+GM.CivilProtection = {
+	[TEAM_POLICE] = true,
+	[TEAM_CHIEF] = true,
+	[TEAM_MAYOR] = true,
+}
