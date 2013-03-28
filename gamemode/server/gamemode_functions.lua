@@ -324,16 +324,9 @@ function GM:CanProperty(ply, property, ent)
 	return false -- Disabled until antiminge measure is found
 end
 
--- Drop blacklist
-local NoDrop = {
-	["weapon_keypadchecker"] = true,
-	["keys"] = true,
-	["pocket"] = true
-}
-
 function GM:CanDropWeapon(ply, weapon)
 	local class = string.lower(weapon:GetClass())
-	if NoDrop[class] then return false end
+	if self.Config.DisallowDrop[class] then return false end
 
 	if not GAMEMODE.Config.restrictdrop then return true end
 

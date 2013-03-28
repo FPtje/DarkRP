@@ -123,7 +123,7 @@ GM.Config.respawninjail 				= true
 GM.Config.restrictallteams 				= false
 -- restrictbuypistol - Enabling this feature makes /buy available only to Gun Dealers.
 GM.Config.restrictbuypistol 			= false
--- restrictdrop - Enable/disable restricting which weapons players can drop.
+-- restrictdrop - Enable/disable restricting the weapons players can drop. Setting this to true disallows weapons from shipments from being dropped
 GM.Config.restrictdrop 					= false
 -- strictsuicide - Whether or not players should spawn where they suicided
 GM.Config.strictsuicide 				= false
@@ -241,3 +241,9 @@ GM.Config.wallettaxtime					= 600
 GM.Config.wantedtime					= 120
 -- walkspeed - Sets the max walking speed.
 GM.Config.walkspeed						= 160
+-- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
+GM.Config.DisallowDrop = {
+	["weapon_keypadchecker"] = true,
+	["keys"] = true,
+	["pocket"] = true
+}
