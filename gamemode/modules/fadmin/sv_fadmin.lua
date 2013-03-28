@@ -1,6 +1,5 @@
 util.AddNetworkString("FAdmin_retrievebans")
 util.AddNetworkString("FADMIN_SendGroups")
-include(GM.FolderName.."/gamemode/server/FAdmin_SQL.lua")
 
 local function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
 	local files, folders = file.Find(dir.."/*", "GAME")
@@ -39,8 +38,8 @@ local function AddCSLuaFolder(fol)
 		end
 	end
 end
-AddCSLuaFolder(GM.FolderName.."/gamemode/fadmin/")
-AddCSLuaFolder(GM.FolderName.."/gamemode/fadmin/playeractions/")
+AddCSLuaFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/")
+AddCSLuaFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/playeractions/")
 
 /*---------------------------------------------------------------------------
 FAdmin global settings

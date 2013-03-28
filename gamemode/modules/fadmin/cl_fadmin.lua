@@ -14,8 +14,8 @@ local function IncludeFolder(fol)
 		end
 	end
 end
-IncludeFolder(GM.FolderName.."/gamemode/fadmin/")
-IncludeFolder(GM.FolderName.."/gamemode/fadmin/playeractions/")
+IncludeFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/")
+IncludeFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/playeractions/")
 
 /*---------------------------------------------------------------------------
 FAdmin global settings
