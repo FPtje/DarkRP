@@ -386,7 +386,12 @@ local function OwnDoor(ply)
 		end
 
 		if trace.Entity:OwnedBy(ply) then
-			trace.Entity:Fire("unlock", "", 0)
+			if trace.Entity:IsMasterOwner(ply) then
+				trace.Entity.DoorData.AllowedToOwn = nil
+				trace.Entity.DoorData.ExtraOwners = nil
+				trace.Entity:Fire("unlock", "", 0)
+			end
+
 			trace.Entity:UnOwn(ply)
 			ply:GetTable().Ownedz[trace.Entity:EntIndex()] = nil
 			ply:GetTable().OwnedNumz = math.abs(ply:GetTable().OwnedNumz - 1)
