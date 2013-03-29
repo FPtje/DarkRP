@@ -54,7 +54,6 @@ include("client/help.lua")
 
 include("client/DRPDermaSkin.lua")
 include("client/helpvgui.lua")
-include("client/hud.lua")
 include("client/showteamtabs.lua")
 include("client/vgui.lua")
 
