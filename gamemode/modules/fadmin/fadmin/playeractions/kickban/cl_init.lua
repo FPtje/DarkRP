@@ -215,7 +215,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		local SteamID = ply:SteamID()
 		local NICK = ply:Nick()
 
-		LocalPlayer():ConCommand("FAdmin kick "..SteamID.." start")
+		RunConsoleCommand("FAdmin", "kick", SteamID, "start")
 		local Window = vgui.Create("DFrame")
 		Window:SetTitle("Reason for kicking")
 		Window:SetDraggable( false )
@@ -261,7 +261,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			ButtonCancel:SetTall( 20 )
 			ButtonCancel:SetWide( Button:GetWide() + 20 )
 			ButtonCancel:SetPos( 5, 5 )
-			ButtonCancel.DoClick = function() Window:Close() LocalPlayer():ConCommand("_FAdmin ".. "kick ".. SteamID.. " cancel") end
+			ButtonCancel.DoClick = function() Window:Close() RunConsoleCommand("FAdmin", "kick", SteamID, "cancel") end
 			ButtonCancel:MoveRightOf( Button, 5 )
 
 		ButtonPanel:SetWide( Button:GetWide() + 5 + ButtonCancel:GetWide() + 10 )
