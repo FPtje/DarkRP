@@ -16,10 +16,9 @@ include("pp/server/FPP_Settings.lua")
 include("pp/server/FPP_Core.lua")
 include("pp/server/FPP_Antispam.lua")
 
-
-if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
+hook.Add("DatabaseInitialized", "FPPInit", function()
 	FPP.Init()
-end
+end)
 
 /*---------------------------------------------------------------------------
 DarkRP blocked entities

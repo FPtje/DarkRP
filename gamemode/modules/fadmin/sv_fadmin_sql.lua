@@ -1,12 +1,10 @@
 /*---------------------------------------------------------------------------
 Create the tables used for banning
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "FAdmin_CreateMySQLTables", function()
-	timer.Simple(2, function()
-		DB.Query("CREATE TABLE IF NOT EXISTS FAdminBans(SteamID VARCHAR(25) NOT NULL PRIMARY KEY, Nick VARCHAR(40), BanDate DATETIME, UnbanDate DATETIME, Reason VARCHAR(100), AdminName VARCHAR(40), Admin_steam VARCHAR(25));")
+hook.Add("DatabaseInitialized", "FAdmin_CreateMySQLTables", function()
+	DB.Query("CREATE TABLE IF NOT EXISTS FAdminBans(SteamID VARCHAR(25) NOT NULL PRIMARY KEY, Nick VARCHAR(40), BanDate DATETIME, UnbanDate DATETIME, Reason VARCHAR(100), AdminName VARCHAR(40), Admin_steam VARCHAR(25));")
 
-		hook.Call("FAdmin_RetrieveBans", nil)
-	end)
+	hook.Call("FAdmin_RetrieveBans", nil)
 end)
 
 /*---------------------------------------------------------------------------

@@ -47,7 +47,6 @@ AddCSLuaFile("config/config.lua")
 AddCSLuaFile("client/DRPDermaSkin.lua")
 AddCSLuaFile("client/help.lua")
 AddCSLuaFile("client/helpvgui.lua")
-AddCSLuaFile("client/hud.lua")
 AddCSLuaFile("client/showteamtabs.lua")
 AddCSLuaFile("client/vgui.lua")
 
@@ -99,6 +98,10 @@ include("server/player.lua")
 include("server/questions.lua")
 include("server/util.lua")
 include("server/votes.lua")
+
+if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
+	hook.Call("DatabaseInitialized", GAMEMODE)
+end
 
 /*---------------------------------------------------------------------------
 Loading modules
