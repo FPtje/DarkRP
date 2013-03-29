@@ -146,17 +146,19 @@ local function specBinds(ply, bind, pressed)
 		thirdperson = not thirdperson
 		return true
 	elseif bind == "+attack2" and pressed then
-		if not isRoaming then
-			startFreeRoam()
-		else
-			spectateLookingAt()
-		end
 
 		keysDown["ATTACK2"] = pressed
 
 		return true
 	elseif bind == "+attack2" and not pressed then
 		keysDown["ATTACK2"] = pressed
+
+		if not isRoaming then
+			startFreeRoam()
+		else
+			spectateLookingAt()
+		end
+
 		return
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
 		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
