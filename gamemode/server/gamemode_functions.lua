@@ -68,6 +68,11 @@ function GM:DarkRPVarChanged(ply, var, oldvar, newvalue)
 
 end
 
+function GM:DatabaseInitialized()
+	DB.Init()
+	FPP.Init()
+end
+
 /*---------------------------------------------------------
  Gamemode functions
  ---------------------------------------------------------*/
@@ -890,7 +895,6 @@ function GM:InitPostEntity()
 			DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
 			return
 		end
-		DB.Init()
 	end)
 
 	local physData = physenv.GetPerformanceSettings()

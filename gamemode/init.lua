@@ -123,7 +123,7 @@ include("server/votes.lua")
 include("shared/fadmin_darkrp.lua")
 
 if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
-	FPP.Init()
+	hook.Call("DatabaseInitialized", GAMEMODE)
 end
 
 /*---------------------------------------------------------------------------

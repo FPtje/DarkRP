@@ -139,8 +139,7 @@ function DB.ConnectToMySQL(host, username, password, database_name, database_por
 			end
 		end)
 
-		DB.Init() -- Initialize database
-		FPP.Init()
+		hook.Call("DatabaseInitialized", GAMEMODE)
 	end
 	databaseObject:connect()
 	DB.MySQLDB = databaseObject

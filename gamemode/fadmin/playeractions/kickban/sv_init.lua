@@ -233,14 +233,16 @@ FAdmin.StartHooks["KickBan"] = function()
 end
 
 hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
-	local RetrieveBans = hook.Call("FAdmin_RetrieveBans", nil)
+	timer.Simple(2, function()
+		local RetrieveBans = hook.Call("FAdmin_RetrieveBans", nil)
 
-	if RetrieveBans then
-		for k,v in pairs(RetrieveBans) do
-			FAdmin.BANS[string.upper(k)] = v
+		if RetrieveBans then
+			for k,v in pairs(RetrieveBans) do
+				FAdmin.BANS[string.upper(k)] = v
+			end
+			return
 		end
-		return
-	end
+	end)
 
 	if file.Exists("FAdmin/Bans.txt", "DATA") then
 		local bans = util.KeyValuesToTable(file.Read("FAdmin/bans.txt", "DATA") or {})
