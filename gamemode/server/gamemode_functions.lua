@@ -68,6 +68,14 @@ function GM:DarkRPVarChanged(ply, var, oldvar, newvalue)
 
 end
 
+function GM:PlayerBoughtVehicle(ply, ent)
+
+end
+
+function GM:PlayerBoughtDoor(ply, ent)
+
+end
+
 function GM:DatabaseInitialized()
 	DB.Init()
 	FPP.Init()
