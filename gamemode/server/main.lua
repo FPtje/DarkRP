@@ -69,7 +69,8 @@ local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) then return "" end
 
-	if not GAMEMODE:CanDropWeapon(ply, ent) then
+	local canDrop = hook.Call("CanDropWeapon", GAMEMODE, ply, ent)
+	if not canDrop then
 		GAMEMODE:Notify(ply, 1, 4, LANGUAGE.cannot_drop_weapon)
 		return ""
 	end
