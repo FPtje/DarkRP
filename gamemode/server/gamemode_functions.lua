@@ -899,6 +899,10 @@ end
 
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
+	if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
+		hook.Call("DatabaseInitialized", self)
+	end
+
 	InitPostEntityCalled = true
 	timer.Simple(1, function()
 		if RP_MySQLConfig and RP_MySQLConfig.EnableMySQL then
