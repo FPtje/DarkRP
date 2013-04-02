@@ -750,23 +750,17 @@ function GM:PlayerLoadout(ply)
 		end
 	end
 
-	ply:Give("keys")
-	ply:Give("weapon_physcannon")
-	ply:Give("gmod_camera")
+	for k, v in pairs(self.Config.DefaultWeapons) do
+		ply:Give(v)
+	end
 
-	if GAMEMODE.Config.toolgun or (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin()  then
+	if (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin()  then
 		ply:Give("gmod_tool")
 	end
 
 	if (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin() then
 		ply:Give("weapon_keypadchecker")
 	end
-
-	if GAMEMODE.Config.pocket then
-		ply:Give("pocket")
-	end
-
-	ply:Give("weapon_physgun")
 
 	if ply:HasPriv("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
 		ply:Give("door_ram")
