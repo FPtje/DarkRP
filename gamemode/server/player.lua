@@ -340,7 +340,7 @@ function meta:ChangeTeam(t, force)
 	end
 
 	self:SetTeam(t)
-	DB.Log(self:SteamName().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
+	DB.Log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
 	if self:InVehicle() then self:ExitVehicle() end
 	if GAMEMODE.Config.norespawn and self:Alive() then
 		self:StripWeapons()
