@@ -107,8 +107,6 @@ GM.Config.norespawn 					= true
 GM.Config.npcarrest 					= true
 -- ooc - Whether or not OOC tags are enabled.
 GM.Config.ooc 							= true
--- pocket - Enable/disable pocket swep.
-GM.Config.pocket 						= true
 -- propertytax - Enable/disable property tax.
 GM.Config.propertytax 					= false
 -- proppaying - Whether or not players should pay for spawning props.
@@ -131,8 +129,6 @@ GM.Config.strictsuicide 				= false
 GM.Config.telefromjail 					= true
 -- teletojail - Enable/disable teleporting to jail.
 GM.Config.teletojail 					= true
--- toolgun - Whether or not non-admin players spawn with toolguns.
-GM.Config.toolgun 						= true
 -- unlockdoorsonstart - Enable/Disable unlocking all doors on map start.
 GM.Config.unlockdoorsonstart 			= false
 -- voiceradius - Enable/disable local voice chat.
@@ -246,4 +242,13 @@ GM.Config.DisallowDrop = {
 	["weapon_keypadchecker"] = true,
 	["keys"] = true,
 	["pocket"] = true
+}
+
+GM.Config.DefaultWeapons = {
+	"keys",
+	"weapon_physcannon",
+	"gmod_camera",
+	"gmod_tool",
+	"pocket",
+	"weapon_physgun"
 }

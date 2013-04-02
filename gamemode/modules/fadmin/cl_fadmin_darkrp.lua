@@ -8,7 +8,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 
 	-- Warrant
 	FAdmin.ScoreBoard.Player:AddActionButton("Warrant", "FAdmin/icons/Message",	Color(0, 0, 200, 255),
-		function(ply) local t = LocalPlayer():Team() return t == TEAM_POLICE or t == TEAM_MAYOR or t == TEAM_CHIEF end,
+		function(ply) return LocalPlayer():IsCP() end,
 		function(ply, button)
 			Derma_StringRequest("Warrant reason", "Enter the reason for the warrant", "", function(Reason)
 				LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. Reason)
@@ -21,7 +21,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		end,
 		function(ply) return "FAdmin/icons/jail", ply.DarkRPVars.wanted and "FAdmin/icons/disable" end,
 		Color(0, 0, 200, 255),
-		function(ply) local t = LocalPlayer():Team() return t == TEAM_POLICE or t == TEAM_MAYOR or t == TEAM_CHIEF end,
+		function(ply) return LocalPlayer():IsCP() end,
 		function(ply, button)
 			if not ply.DarkRPVars.wanted  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)
