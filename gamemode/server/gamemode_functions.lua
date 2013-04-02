@@ -683,7 +683,7 @@ function GM:PlayerSpawn(ply)
 	ply.IsSleeping = false
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	if ply:Team() == TEAM_CHIEF or ply:Team() == TEAM_POLICE then
+	if ply:IsCP() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed + 10)
 	end
 
