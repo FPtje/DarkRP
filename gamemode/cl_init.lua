@@ -33,6 +33,8 @@ local function LoadModules()
 	local _, folders = file.Find(root.."*", "LUA")
 
 	for _, folder in SortedPairs(folders, true) do
+		if GM.Config.DisabledModules[folder] then continue end
+
 		for _, File in SortedPairs(file.Find(root .. folder .."/sh_*.lua", "LUA"), true) do
 			include(root.. folder .. "/" ..File)
 		end
