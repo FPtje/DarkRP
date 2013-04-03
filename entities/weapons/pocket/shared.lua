@@ -43,9 +43,23 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if SERVER then
-		self.Owner:DrawViewModel(false)
-		self.Owner:DrawWorldModel(false)
+	if not SERVER then return end
+
+	self.Owner:DrawViewModel(false)
+	self.Owner:DrawWorldModel(false)
+end
+
+function SWEP:Equip(newOwner)
+	if not SERVER then return end
+
+	local t = self.Owner:Team()
+	self.MaxPocketItems = RPExtraTeams[t] and RPExtraTeams[t].maxpocket or GAMEMODE.Config.pocketitems
+
+	local i = self.Owner.Pocket and #self.Owner.Pocket or 0
+	while i > self.MaxPocketItems do
+		self.Owner:DropPocketItem(self.Owner.Pocket[i])
+		self.Owner.Pocket[i] = nil
+		i = i - 1
 	end
 end
 
@@ -89,7 +103,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if #self.Owner:GetTable().Pocket >= GAMEMODE.Config.pocketitems then
+	if #self.Owner:GetTable().Pocket >= self.MaxPocketItems then
 		GAMEMODE:Notify(self.Owner, 1, 4, "Your pocket is full!")
 		return
 	end
