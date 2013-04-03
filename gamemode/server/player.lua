@@ -383,8 +383,8 @@ end
 
 function meta:AddMoney(amount)
 	if not amount then return false end
-	hook.Call("PlayerWalletChanged", GAMEMODE, self, amount)
 	local total = self.DarkRPVars.money + math.floor(amount)
+	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self.DarkRPVars.money) or total
 
 	self:SetDarkRPVar("money", total)
 
