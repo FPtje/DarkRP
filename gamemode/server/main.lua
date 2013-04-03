@@ -1523,25 +1523,6 @@ end
 AddChatCommand("/cheque", CreateCheque, 0.3)
 AddChatCommand("/check", CreateCheque, 0.3) -- for those of you who can't spell
 
-local function MakeZombieSoundsAsHobo(ply)
-	if not ply.nospamtime then
-		ply.nospamtime = CurTime() - 2
-	end
-	if not TEAM_HOBO or ply:Team() ~= TEAM_HOBO or CurTime() < (ply.nospamtime + 1.3) or (IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() ~= "weapon_bugbait") then
-		return
-	end
-	ply.nospamtime = CurTime()
-	local ran = math.random(1,3)
-	if ran == 1 then
-		ply:EmitSound("npc/zombie/zombie_voice_idle"..tostring(math.random(1,14))..".wav", 100,100)
-	elseif ran == 2 then
-		ply:EmitSound("npc/zombie/zombie_pain"..tostring(math.random(1,6))..".wav", 100,100)
-	elseif ran == 3 then
-		ply:EmitSound("npc/zombie/zombie_alert"..tostring(math.random(1,3))..".wav", 100,100)
-	end
-end
-concommand.Add("_hobo_emitsound", MakeZombieSoundsAsHobo)
-
 /*---------------------------------------------------------
  Mayor stuff
  ---------------------------------------------------------*/
