@@ -485,7 +485,7 @@ end
 function meta:RemoveAllowed(ply)
 	self.DoorData = self.DoorData or {}
 	if self.DoorData.AllowedToOwn then self.DoorData.AllowedToOwn = string.gsub(self.DoorData.AllowedToOwn, tostring(ply:UserID())..".?", "") end
-	if string.sub(self.DoorData.AllowedToOwn, -1) == ";" then self.DoorData.AllowedToOwn = string.sub(self.DoorData.AllowedToOwn, 1, -2) end
+	if string.sub(self.DoorData.AllowedToOwn or "", -1) == ";" then self.DoorData.AllowedToOwn = string.sub(self.DoorData.AllowedToOwn, 1, -2) end
 end
 
 function meta:AddOwner(ply)
