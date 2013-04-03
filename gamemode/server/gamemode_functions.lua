@@ -128,8 +128,8 @@ function GM:PlayerSpawnSENT(ply, model)
 end
 
 local function canSpawnWeapon(ply, class)
-	if (not GAMEMODE.Config.adminweapons and ply:IsAdmin()) or
-	(GAMEMODE.Config.adminweapons and ply:IsSuperAdmin()) then
+	if (not GAMEMODE.Config.adminweapons == 0 and ply:IsAdmin()) or
+	(GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
 		return true
 	end
 	GAMEMODE:Notify(ply, 1, 4, "You can't spawn weapons")
