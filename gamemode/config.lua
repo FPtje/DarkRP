@@ -252,3 +252,15 @@ GM.Config.DefaultWeapons = {
 	"pocket",
 	"weapon_physgun"
 }
+
+-- The list of modules that are disabled. Set to true to disable, false to enable.
+-- Modules that are not in this list are enabled by default.
+GM.Config.DisabledModules = {
+	["afk"] = true,
+	["chatsounds"] = false,
+	["events"] = false,
+	["hungermod"] = true,
+	["playerscale"] = false,
+	["properties"] = true,
+	["sleep"] = false
+}

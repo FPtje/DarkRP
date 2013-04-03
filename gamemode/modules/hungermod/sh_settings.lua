@@ -1,5 +1,3 @@
--- hungermod - Enable/disable hunger mod
-GM.Config.hungermod = false
 -- foodspawn - Whether players(non-cooks) can spawn food props or not
 GM.Config.foodspawn = true
 -- foodspecialcost <1 or 0> - Enable/disable whether spawning food props have a special cost

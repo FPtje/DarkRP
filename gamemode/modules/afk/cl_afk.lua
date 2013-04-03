@@ -1,6 +1,5 @@
 local TextColor = Color(GetConVarNumber("Healthforeground1"), GetConVarNumber("Healthforeground2"), GetConVarNumber("Healthforeground3"), GetConVarNumber("Healthforeground4"))
 local function AFKHUDPaint()
-	if GAMEMODE.Config.afkdemote == 0 then return end
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
 	LocalPlayer().DarkRPVars.AFK = LocalPlayer().DarkRPVars.AFK or false
 

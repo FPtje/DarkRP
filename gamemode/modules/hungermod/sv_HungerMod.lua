@@ -11,8 +11,6 @@ end
 hook.Add("PlayerSpawn", "HM.PlayerSpawn", HM.PlayerSpawn)
 
 function HM.Think()
-	if not GAMEMODE.Config.hungermod then return end
-
 	if not GAMEMODE.Config.hungerspeed then return end
 
 	for k, v in pairs(player.GetAll()) do
@@ -53,11 +51,6 @@ local function BuyFood(ply, args)
 	trace.filter = ply
 
 	local tr = util.TraceLine(trace)
-
-	if not GAMEMODE.Config.hungermod and ply:Team() ~= TEAM_COOK then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.disabled, "hungermod", ""))
-		return ""
-	end
 
 	if ply:Team() ~= TEAM_COOK and team.NumPlayers(TEAM_COOK) > 0 then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/buyfood", "cooks"))

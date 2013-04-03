@@ -73,31 +73,14 @@ local function SetAFK(ply)
 	ply:SetDarkRPVar("job", ply.DarkRPVars.AFK and "AFK" or ply.OldJob)
 	ply.DarkRPVars.salary = ply.DarkRPVars.AFK and 0 or ply.OldSalary or 0
 end
+AddChatCommand("/afk", SetAFK)
 
 local function StartAFKOnPlayer(ply)
-	local demotetime
-	if not GAMEMODE.Config.afkdemote then
-		demotetime = math.huge
-	else
-		demotetime = GAMEMODE.Config.afkdemotetime
-	end
-	ply.AFKDemote = CurTime() + demotetime
+	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 end
 hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 
-local function ToggleAFK(ply)
-	if not GAMEMODE.Config.afkdemote then
-		GAMEMODE:Notify( ply, 1, 5, "AFK mode is disabled.")
-		return ""
-	end
-
-	SetAFK(ply)
-	return ""
-end
-AddChatCommand("/afk", ToggleAFK)
-
 local function AFKTimer(ply, key)
-	if not GAMEMODE.Config.afkdemote then return end
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply.DarkRPVars.AFKDemoted then
 		ply:SetDarkRPVar("job", "Citizen")

@@ -128,11 +128,13 @@ Loading modules
 local fol = GM.FolderName.."/gamemode/modules/"
 local files, folders = file.Find(fol .. "*", "LUA")
 for k,v in pairs(files) do
+	if GM.Config.DisabledModules[k] then continue end
+
 	include(fol .. v)
 end
 
 for _, folder in SortedPairs(folders, true) do
-	if folder ~= "." and folder ~= ".." then
+	if folder ~= "." and folder ~= ".." and not GM.Config.DisabledModules[folder] then
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 			AddCSLuaFile(fol..folder .. "/" ..File)
 			include(fol.. folder .. "/" ..File)
