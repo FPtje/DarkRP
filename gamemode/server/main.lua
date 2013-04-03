@@ -548,7 +548,7 @@ local function BuyPistol(ply, args)
 	local custom = false
 	local price = 0
 	for k,v in pairs(CustomShipments) do
-		if v.seperate and string.lower(v.name) == string.lower(args) then
+		if v.seperate and string.lower(v.name) == string.lower(args) and GAMEMODE:CustomObjFitsMap(v) then
 			custom = v
 			class = v.entity
 			model = v.model
@@ -621,7 +621,7 @@ local function BuyShipment(ply, args)
 	local found = false
 	local foundKey
 	for k,v in pairs(CustomShipments) do
-		if string.lower(args) == string.lower(v.name) and not v.noship then
+		if string.lower(args) == string.lower(v.name) and not v.noship and GAMEMODE:CustomObjFitsMap(v) then
 			found = v
 			foundKey = k
 			local canbecome = false
