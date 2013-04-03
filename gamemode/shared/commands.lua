@@ -6,6 +6,8 @@ CreateConVar("DarkRP_LockDown", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
 
 function GM:AddTeamCommands(CTeam, max)
 	if CLIENT then return end
+
+	if not self:CustomObjFitsMap(CTeam) then return end
 	local k = 0
 	for num,v in pairs(RPExtraTeams) do
 		if v.command == CTeam.command then

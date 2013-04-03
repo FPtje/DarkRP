@@ -29,7 +29,7 @@ function AddExtraTeam(Name, colorOrTable, model, Description, Weapons, command, 
 	CustomTeam.name = Name
 
 	local corrupt = checkValid(CustomTeam, requiredTeamItems)
-	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end 
+	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end
 
 	table.insert(RPExtraTeams, CustomTeam)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
@@ -97,6 +97,19 @@ function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, c
 	if not found then ErrorNoHalt("Vehicle invalid: " .. Name_of_vehicle .. ". Unknown v\nehicle name.") end
 
 	table.insert(CustomVehicles, vehicle)
+end
+
+/*---------------------------------------------------------------------------
+Decides whether a custom job or shipmet or whatever can be used in a certain map
+---------------------------------------------------------------------------*/
+function GM:CustomObjFitsMap(obj)
+	if not obj or not obj.maps then return true end
+
+	local map = string.lower(game.GetMap())
+	for k,v in pairs(obj.maps) do
+		if string.lower(v) == map then return true end
+	end
+	return false
 end
 
 DarkRPEntities = {}

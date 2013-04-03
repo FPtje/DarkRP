@@ -513,7 +513,7 @@ function GM:JobsTab()
 		end
 
 		for k,v in ipairs(RPExtraTeams) do
-			if LocalPlayer():Team() ~= k then
+			if LocalPlayer():Team() ~= k and GAMEMODE:CustomObjFitsMap(v) then
 				local nodude = true
 				if v.admin == 1 and not LocalPlayer():IsAdmin() then
 					nodude = false
@@ -574,6 +574,7 @@ function GM:EntitiesTab()
 					end
 
 					for k,v in pairs(CustomShipments) do
+						if not GAMEMODE:CustomObjFitsMap(v) then continue end
 						if (v.seperate and (not GAMEMODE.Config.restrictbuypistol or
 							(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
 							and (not v.customCheck or v.customCheck and v.customCheck(LocalPlayer())) then
@@ -623,6 +624,7 @@ function GM:EntitiesTab()
 						end
 					end
 					for k,v in pairs(CustomShipments) do
+						if not GAMEMODE:CustomObjFitsMap(v) then continue end
 						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
 							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", CUR .. tostring(v.price)), "/buyshipment "..v.name)
