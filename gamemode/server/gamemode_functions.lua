@@ -452,7 +452,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		WeaponName = "suicide trick"
 	end
 
-	DB.Log(ply:SteamName() .. " was killed by " .. KillerName .. " with a " .. WeaponName, nil, Color(255, 190, 0))
+	DB.Log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, nil, Color(255, 190, 0))
 end
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
@@ -524,7 +524,7 @@ end
 
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") has joined the game", nil, Color(0, 130, 255))
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") has joined the game", nil, Color(0, 130, 255))
 	ply.bannedfrom = {}
 	ply.DarkRPVars = ply.DarkRPVars or {}
 	ply:NewData()
@@ -717,7 +717,7 @@ function GM:PlayerSpawn(ply)
 	end
 
 	ply:AllowFlashlight(true)
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") spawned")
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned")
 end
 
 local function selectDefaultWeapon(ply)
@@ -827,7 +827,7 @@ function GM:PlayerDisconnected(ply)
 	end
 
 	ply:UnownAll()
-	DB.Log(ply:SteamName().." ("..ply:SteamID()..") disconnected", nil, Color(0, 130, 255))
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") disconnected", nil, Color(0, 130, 255))
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
 		RPExtraTeams[ply:Team()].PlayerDisconnected(ply)

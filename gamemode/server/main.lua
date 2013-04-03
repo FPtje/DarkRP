@@ -1871,11 +1871,11 @@ local function rp_GiveLicense(ply, cmd, args)
 
 		GAMEMODE:Notify(target, 1, 4, string.format(LANGUAGE.gunlicense_granted, nick, target:Nick()))
 		GAMEMODE:Notify(ply, 2, 4, string.format(LANGUAGE.gunlicense_granted, nick, target:Nick()))
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-gave "..target:Nick().." a gun license")
+		DB.Log(ply:Nick().." ("..ply:SteamID()..") force-gave "..target:Nick().." a gun license")
 		if ply:EntIndex() == 0 then
 			DB.Log("Console force-gave "..target:Nick().." a gun license", nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-gave "..target:Nick().." a gun license", nil, Color(30, 30, 30))
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") force-gave "..target:Nick().." a gun license", nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -1907,11 +1907,11 @@ local function rp_RevokeLicense(ply, cmd, args)
 
 		GAMEMODE:Notify(target, 1, 4, string.format(LANGUAGE.gunlicense_denied, nick, target:Nick()))
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.gunlicense_denied, nick, target:Nick()))
-		DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-removed "..target:Nick().."'s gun license")
+		DB.Log(ply:Nick().." ("..ply:SteamID()..") force-removed "..target:Nick().."'s gun license")
 		if ply:EntIndex() == 0 then
 			DB.Log("Console force-removed "..target:Nick().."'s gun license", nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:SteamName().." ("..ply:SteamID()..") force-removed "..target:Nick().."'s gun license", nil, Color(30, 30, 30))
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") force-removed "..target:Nick().."'s gun license", nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

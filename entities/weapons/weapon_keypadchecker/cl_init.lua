@@ -2,9 +2,11 @@ include("shared.lua")
 
 
 local DrawData = {}
+local KeypadCheckerHalos
 
 net.Receive("DarkRP_keypadData", function(len)
 	DrawData = net.ReadTable()
+	hook.Add("PreDrawHalos", "KeypadCheckerHalos", KeypadCheckerHalos)
 end)
 
 local lineMat = Material("cable/chain")
@@ -31,7 +33,7 @@ function SWEP:DrawHUD()
 	end
 end
 
-hook.Add("PreDrawHalos", "KeypadCheckerHalos", function()
+KeypadCheckerHalos = function()
 	local drawEnts = {}
 	for k,v in pairs(DrawData) do
 		if IsValid(v.ent) then
@@ -39,9 +41,11 @@ hook.Add("PreDrawHalos", "KeypadCheckerHalos", function()
 		end
 	end
 
+	if #drawEnts == 0 then return end
 	halo.Add(drawEnts, Color(0, 255, 0, 255), 5, 5, 5, nil, true)
-end)
+end
 
 function SWEP:SecondaryAttack()
 	DrawData = {}
+	hook.Remove("PreDrawHalos", "KeypadCheckerHalos")
 end

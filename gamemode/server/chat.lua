@@ -22,7 +22,7 @@ function AddChatCommand(cmd, callback, delay)
 end
 
 local function RP_PlayerChat(ply, text)
-	DB.Log(ply:SteamName().." ("..ply:SteamID().."): "..text )
+	DB.Log(ply:Nick().." ("..ply:SteamID().."): "..text )
 	local callback = ""
 	local DoSayFunc
 	local tblCmd = ChatCommands[string.lower( string.Explode(" ", text )[1] )];

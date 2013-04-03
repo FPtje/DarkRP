@@ -340,7 +340,7 @@ function meta:ChangeTeam(t, force)
 	end
 
 	self:SetTeam(t)
-	DB.Log(self:SteamName().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
+	DB.Log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
 	if self:InVehicle() then self:ExitVehicle() end
 	if GAMEMODE.Config.norespawn and self:Alive() then
 		self:StripWeapons()
@@ -383,8 +383,8 @@ end
 
 function meta:AddMoney(amount)
 	if not amount then return false end
-	hook.Call("PlayerWalletChanged", GAMEMODE, self, amount)
 	local total = self.DarkRPVars.money + math.floor(amount)
+	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self.DarkRPVars.money) or total
 
 	self:SetDarkRPVar("money", total)
 
