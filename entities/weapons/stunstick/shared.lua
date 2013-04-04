@@ -172,7 +172,10 @@ end
 function SWEP:Reload()
 	self:SetWeaponHoldType("melee")
 	timer.Destroy("rp_stunstick_threaten")
-	timer.Create("rp_stunstick_threaten", 1, 1, function() self:SetWeaponHoldType("normal") end)
+	timer.Create("rp_stunstick_threaten", 1, 1, function()
+		if not IsValid(self) then return end
+		self:SetWeaponHoldType("normal")
+	end)
 
 	if not SERVER then return end
 
