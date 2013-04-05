@@ -64,8 +64,9 @@ concommand.Add("FPP_setting", FPP_SetSetting)
 local function AddBlocked(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
-	if FPP.Blocked[args[1]][string.lower(args[2])] then return end
-	FPP.Blocked[args[1]][string.lower(args[2])] = true
+	args[2] = string.lower(args[2])
+	if FPP.Blocked[args[1]][args[2]] then return end
+	FPP.Blocked[args[1]][args[2]] = true
 
 	DB.Query("SELECT * FROM FPP_BLOCKED1;", function(data)
 		if type(data) == "table" then
@@ -203,7 +204,7 @@ local function RetrieveBlocked()
 					continue
 				end
 
-				FPP.Blocked[v.var][v.setting] = true
+				FPP.Blocked[v.var][string.lower(v.setting)] = true
 			end
 		else
 			data = DB.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")

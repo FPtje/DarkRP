@@ -54,6 +54,7 @@ GM.Config = {} -- config table
 include("config/config.lua")
 include("client/help.lua")
 
+include("client/cl_chatlisteners.lua")
 include("client/DRPDermaSkin.lua")
 include("client/helpvgui.lua")
 include("client/showteamtabs.lua")
@@ -159,154 +160,7 @@ local function DoSpecialEffects(Type)
 end
 usermessage.Hook("DarkRPEffects", DoSpecialEffects)
 
-local Messagemode = false
-local playercolors = {}
-local HearMode = "talk"
-local isSpeaking = false
-local GroupChat = false
-
-local function RPStopMessageMode()
-	Messagemode = false
-	hook.Remove("Think", "RPGetRecipients")
-	hook.Remove("HUDPaint", "RPinstructionsOnSayColors")
-	playercolors = {}
-end
-
-local PlayerColorsOn = CreateClientConVar("rp_showchatcolors", 1, true, false)
-local function RPSelectwhohearit(group)
-	if PlayerColorsOn:GetInt() == 0 then return end
-	Messagemode = true
-	GroupChat = group
-	hook.Add("HUDPaint", "RPinstructionsOnSayColors", function()
-		local w, l = ScrW()/80, ScrH() /1.75
-		local h = l - (#playercolors * 20) - 20
-		local AllTalk = GAMEMODE.Config.alltalk
-		if #playercolors <= 0 and ((HearMode ~= "talk through OOC" and HearMode ~= "advert" and not AllTalk) or (AllTalk and HearMode ~= "talk" and HearMode ~= "me") or HearMode == "speak") then
-			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_noone, HearMode), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
-		elseif HearMode == "talk through OOC" or HearMode == "advert" then
-			draw.WordBox(2, w, h, LANGUAGE.hear_everyone, "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
-		elseif not AllTalk or (AllTalk and HearMode ~= "talk" and HearMode ~= "me") then
-			draw.WordBox(2, w, h, string.format(LANGUAGE.hear_certain_persons, HearMode), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
-		end
-
-		for k,v in pairs(playercolors) do
-			if v.Nick then
-				draw.WordBox(2, w, h + k*20, v:Nick(), "DarkRPHUD1", Color(0,0,0,160), Color(255,255,255,255))
-			end
-		end
-	end)
-
-	hook.Add("Think", "RPGetRecipients", function()
-		if not Messagemode then RPStopMessageMode() hook.Remove("Think", "RPGetRecipients") return end
-		if HearMode ~= "whisper" and HearMode ~= "yell" and HearMode ~= "talk" and HearMode ~= "speak" and HearMode ~= "me" then return end
-		playercolors = {}
-		for k,v in pairs(player.GetAll()) do
-			if v ~= LocalPlayer() then
-				local distance = LocalPlayer():GetPos():Distance(v:GetPos())
-				if HearMode == "whisper" and distance < 90 and not table.HasValue(playercolors, v) then
-					table.insert(playercolors, v)
-				elseif HearMode == "yell" and distance < 550 and not table.HasValue(playercolors, v) then
-					table.insert(playercolors, v)
-				elseif HearMode == "speak" and distance < 550 and not table.HasValue(playercolors, v) then
-					if GAMEMODE.Config.dynamicvoice then
-						if v:IsInRoom() then
-							table.insert(playercolors, v)
-						end
-					else
-						table.insert(playercolors, v)
-					end
-				elseif HearMode == "talk" and not GAMEMODE.Config.alltalk and distance < 250 and not table.HasValue(playercolors, v) then
-					table.insert(playercolors, v)
-				elseif HearMode == "me" and not GAMEMODE.Config.alltalk and distance < 250 and not table.HasValue(playercolors, v) then
-					table.insert(playercolors, v)
-				end
-			end
-		end
-	end)
-end
-hook.Add("StartChat", "RPDoSomethingWithChat", RPSelectwhohearit)
-hook.Add("FinishChat", "RPCloseRadiusDetection", function()
-	if not isSpeaking then
-		Messagemode = false
-		RPStopMessageMode()
-	else
-		HearMode = "speak"
-	end
-end)
-
-function GM:OnPlayerChat()
-end
-
-function GM:ChatTextChanged(text)
-	if PlayerColorsOn:GetInt() == 0 then return end
-	if not Messagemode or HearMode == "speak" then return end
-	local old = HearMode
-	HearMode = "talk"
-	if not GAMEMODE.Config.alltalk then
-		if string.sub(text, 1, 2) == "//" or string.sub(string.lower(text), 1, 4) == "/ooc" or string.sub(string.lower(text), 1, 4) == "/a" then
-			HearMode = "talk through OOC"
-		elseif string.sub(string.lower(text), 1, 7) == "/advert" then
-			HearMode = "advert"
-		end
-	end
-
-	if string.sub(string.lower(text), 1, 3) == "/pm" then
-		local plyname = string.sub(text, 5)
-		if string.find(plyname, " ") then
-			plyname = string.sub(plyname, 1, string.find(plyname, " ") - 1)
-		end
-		HearMode = "pm"
-		playercolors = {}
-		if plyname ~= "" and self:FindPlayer(plyname) then
-			playercolors = {self:FindPlayer(plyname)}
-		end
-	elseif string.sub(string.lower(text), 1, 5) == "/call" then
-		local plyname = string.sub(text, 7)
-		if string.find(plyname, " ") then
-			plyname = string.sub(plyname, 1, string.find(plyname, " ") - 1)
-		end
-		HearMode = "call"
-		playercolors = {}
-		if plyname ~= "" and self:FindPlayer(plyname) then
-			playercolors = {self:FindPlayer(plyname)}
-		end
-	elseif string.sub(string.lower(text), 1, 3) == "/g " or GroupChat then
-		HearMode = "group chat"
-		local t = LocalPlayer():Team()
-		playercolors = {}
-
-		local hasReceived = {}
-		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
-			-- not the group of the player
-			if not func(LocalPlayer()) then continue end
-
-			for _, target in pairs(player.GetAll()) do
-				if func(target) and target ~= LocalPlayer() and not hasReceived[target] then
-					hasReceived[target] = true
-					table.insert(playercolors, target)
-				end
-			end
-		end
-	elseif string.sub(string.lower(text), 1, 3) == "/w " then
-		HearMode = "whisper"
-	elseif string.sub(string.lower(text), 1, 2) == "/y" then
-		HearMode = "yell"
-	elseif string.sub(string.lower(text), 1, 3) == "/me" then
-		HearMode = "me"
-	end
-	if old ~= HearMode then
-		playercolors = {}
-	end
-end
-
 function GM:PlayerStartVoice(ply)
-	isSpeaking = true
-	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-	if ply == LocalPlayer() and not GAMEMODE.Config.sv_alltalk and GAMEMODE.Config.voiceradius then
-		HearMode = "speak"
-		RPSelectwhohearit()
-	end
-
 	if ply == LocalPlayer() then
 		ply.DRPIsTalking = true
 		return -- Not the original rectangle for yourself! ugh!
@@ -314,22 +168,25 @@ function GM:PlayerStartVoice(ply)
 	self.BaseClass:PlayerStartVoice(ply)
 end
 
-function GM:PlayerEndVoice(ply) //voice/icntlk_pl.vtf
-	isSpeaking = false
-
-	if ply == LocalPlayer() and not GAMEMODE.Config.sv_alltalk and GAMEMODE.Config.voiceradius then
-		HearMode = "talk"
-		hook.Remove("Think", "RPGetRecipients")
-		hook.Remove("HUDPaint", "RPinstructionsOnSayColors")
-		Messagemode = false
-		playercolors = {}
-	end
-
+function GM:PlayerEndVoice(ply)
 	if ply == LocalPlayer() then
 		ply.DRPIsTalking = false
 		return
 	end
+
 	self.BaseClass:PlayerEndVoice(ply)
+end
+
+
+function GM:OnPlayerChat()
+end
+
+function GM:PlayerBindPress(ply,bind,pressed)
+	self.BaseClass:PlayerBindPress(ply, bind, pressed)
+	if ply == LocalPlayer() and IsValid(ply:GetActiveWeapon()) and string.find(string.lower(bind), "attack2") and ply:GetActiveWeapon():GetClass() == "weapon_bugbait" then
+		LocalPlayer():ConCommand("_hobo_emitsound")
+	end
+	return
 end
 
 local function AddToChat(msg)

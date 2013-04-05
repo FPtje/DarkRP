@@ -44,6 +44,7 @@ AddCSLuaFile("config/ammotypes.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("config/config.lua")
 
+AddCSLuaFile("client/cl_chatlisteners.lua")
 AddCSLuaFile("client/DRPDermaSkin.lua")
 AddCSLuaFile("client/help.lua")
 AddCSLuaFile("client/helpvgui.lua")

@@ -57,7 +57,7 @@ end
 Decides whether a given player is in the same room as the local player
 note: uses a heuristic
 ---------------------------------------------------------------------------*/
-function meta:IsInRoom()
+function plyMeta:IsInRoom()
 	local tracedata = {}
 	tracedata.start = LocalPlayer():GetShootPos()
 	tracedata.endpos = self:GetShootPos()

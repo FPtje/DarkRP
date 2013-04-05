@@ -1012,6 +1012,8 @@ local function Demote(ply, args)
 		else
 			GAMEMODE:TalkToPerson(p, team.GetColor(ply:Team()), "(DEMOTE) "..ply:Nick(),Color(255,0,0,255), "I want to demote you. Reason: "..reason, p)
 			GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.demote_vote_started, ply:Nick(), p:Nick()))
+			DB.Log(string.format(LANGUAGE.demote_vote_started, ply:Nick(), p:Nick()) .. " (" .. reason .. ")",
+				false, Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
 			GAMEMODE.vote:Create(p:Nick() .. ":\n"..string.format(LANGUAGE.demote_vote_text, reason), p:EntIndex() .. "votecop"..ply:EntIndex(), p, 20, FinishDemote, true)
 			ply:GetTable().LastVoteCop = CurTime()
