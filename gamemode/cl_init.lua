@@ -54,7 +54,6 @@ GM.Config = {} -- config table
 include("config/config.lua")
 include("client/help.lua")
 
-include("client/cl_chatlisteners.lua")
 include("client/DRPDermaSkin.lua")
 include("client/helpvgui.lua")
 include("client/showteamtabs.lua")
