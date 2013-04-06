@@ -73,23 +73,6 @@ include("config/ammotypes.lua")
 LoadModules()
 
 local GUIToggled = false
-local HelpToggled = false
-
-local HelpVGUI
-local function ToggleHelp()
-	if not HelpVGUI then
-		HelpVGUI = vgui.Create("HelpVGUI")
-	end
-
-	HelpToggled = not HelpToggled
-
-	HelpVGUI.HelpX = HelpVGUI.StartHelpX
-	HelpVGUI:FillHelpInfo()
-	HelpVGUI:SetVisible(HelpToggled)
-	gui.EnableScreenClicker(HelpToggled)
-end
-usermessage.Hook("ToggleHelp", ToggleHelp)
-
 local function ToggleClicker()
 	GUIToggled = not GUIToggled
 	gui.EnableScreenClicker(GUIToggled)

@@ -123,5 +123,23 @@ function HelpPanel:Think()
 
 	self:SetPos(self.HelpX, 20)
 end
-
 vgui.Register("HelpVGUI", HelpPanel, "Panel")
+
+/*---------------------------------------------------------------------------
+Creating the help panel
+---------------------------------------------------------------------------*/
+local HelpVGUI
+local function ToggleHelp()
+	if not HelpVGUI then
+		HelpVGUI = vgui.Create("HelpVGUI")
+		HelpVGUI:SetVisible(false)
+	end
+
+	local visible = HelpVGUI:IsVisible()
+
+	HelpVGUI.HelpX = HelpVGUI.StartHelpX
+	HelpVGUI:FillHelpInfo()
+	HelpVGUI:SetVisible(not visible)
+	gui.EnableScreenClicker(not visible)
+end
+usermessage.Hook("ToggleHelp", ToggleHelp)
