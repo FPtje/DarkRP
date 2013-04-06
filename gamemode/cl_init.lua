@@ -180,14 +180,6 @@ end
 function GM:OnPlayerChat()
 end
 
-function GM:PlayerBindPress(ply,bind,pressed)
-	self.BaseClass:PlayerBindPress(ply, bind, pressed)
-	if ply == LocalPlayer() and IsValid(ply:GetActiveWeapon()) and string.find(string.lower(bind), "attack2") and ply:GetActiveWeapon():GetClass() == "weapon_bugbait" then
-		LocalPlayer():ConCommand("_hobo_emitsound")
-	end
-	return
-end
-
 local function AddToChat(msg)
 	local col1 = Color(msg:ReadShort(), msg:ReadShort(), msg:ReadShort())
 
