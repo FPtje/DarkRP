@@ -551,7 +551,7 @@ end
 /*---------------------------------------------------------------------------
 Fonts
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "fonts", function()
+local function createFonts()
 	surface.CreateFont ("DarkRPHUD1", {
 		size = 16,
 		weight = 600,
@@ -644,4 +644,6 @@ hook.Add("InitPostEntity", "fonts", function()
 		antialias = true,
 		shadow = false,
 		font = "coolvetica"})
-end)
+end
+createFonts()
+hook.Add("InitPostEntity", "fonts", createFonts)
