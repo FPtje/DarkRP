@@ -760,7 +760,7 @@ function FPP.PlayerDisconnect(ply)
 			end
 		end
 		for k,v in pairs(ents.GetAll()) do
-			if IsValid(v) and v.OwnerID == SteamID then
+			if IsValid(v) and v.FPPOwnerID == SteamID then
 				v:Remove()
 			end
 		end
@@ -784,7 +784,7 @@ function FPP.PlayerInitialSpawn(ply)
 
 	if FPP.DisconnectedPlayers[ply:SteamID()] then -- Check if the player has rejoined within the auto remove time
 		for k,v in pairs(ents.GetAll()) do
-			if IsValid(v) and v.OwnerID == ply:SteamID() then
+			if IsValid(v) and v.FPPOwnerID == ply:SteamID() then
 				v:CPPISetOwner(ply)
 			end
 		end
