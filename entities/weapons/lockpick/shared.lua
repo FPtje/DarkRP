@@ -74,36 +74,43 @@ function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 	local e = trace.Entity
 	if SERVER and e.isFadingDoor then SendUserMessage("IsFadingDoor", self.Owner, e) end -- The fading door tool only sets isFadingDoor serverside, for the lockpick to work we need this to be set clientside too.
-	if IsValid(e) and trace.HitPos:Distance(self.Owner:GetShootPos()) <= 100 and (e:IsDoor() or e:IsVehicle() or string.find(string.lower(e:GetClass()), "vehicle") or e.isFadingDoor) then
-		self.IsLockPicking = true
-		self.StartPick = CurTime()
-		if SERVER then
-			self.LockPickTime = math.Rand(10, 30)
-			umsg.Start("lockpick_time", self.Owner)
-				umsg.Entity(self)
-				umsg.Long(self.LockPickTime)
-			umsg.End()
-		end
+	if not IsValid(e) or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
+		(not e:IsDoor() and not e:IsVehicle() and not string.find(string.lower(e:GetClass()), "vehicle") and not e.isFadingDoor) then
+		return
+	end
 
-		self.EndPick = CurTime() + self.LockPickTime
+	if not GAMEMODE.Config.canforcedooropen and e.DoorData.NonOwnable then
+		return
+	end
 
-		self:SetWeaponHoldType("pistol")
+	self.IsLockPicking = true
+	self.StartPick = CurTime()
+	if SERVER then
+		self.LockPickTime = math.Rand(10, 30)
+		umsg.Start("lockpick_time", self.Owner)
+			umsg.Entity(self)
+			umsg.Long(self.LockPickTime)
+		umsg.End()
+	end
 
-		if SERVER then
-			timer.Create("LockPickSounds", 1, self.LockPickTime, function()
-				if not IsValid(self) then return end
-				local snd = {1,3,4}
-				self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
-			end)
-		elseif CLIENT then
-			self.Dots = self.Dots or ""
-			timer.Create("LockPickDots", 0.5, 0, function()
-				if not self:IsValid() then timer.Destroy("LockPickDots") return end
-				local len = string.len(self.Dots)
-				local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
-				self.Dots = dots[len]
-			end)
-		end
+	self.EndPick = CurTime() + self.LockPickTime
+
+	self:SetWeaponHoldType("pistol")
+
+	if SERVER then
+		timer.Create("LockPickSounds", 1, self.LockPickTime, function()
+			if not IsValid(self) then return end
+			local snd = {1,3,4}
+			self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
+		end)
+	elseif CLIENT then
+		self.Dots = self.Dots or ""
+		timer.Create("LockPickDots", 0.5, 0, function()
+			if not self:IsValid() then timer.Destroy("LockPickDots") return end
+			local len = string.len(self.Dots)
+			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
+			self.Dots = dots[len]
+		end)
 	end
 end
 
