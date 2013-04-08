@@ -35,21 +35,21 @@ end
 
 local ENTITY = FindMetaTable("Entity")
 function ENTITY:CPPIGetOwner()
-	local Owner = self.Owner
-	if not IsValid(Owner) or not Owner:IsPlayer() then return Owner, self.OwnerID end
+	local Owner = self.FPPOwner
+	if not IsValid(Owner) or not Owner:IsPlayer() then return Owner, self.FPPOwnerID end
 	return Owner, Owner:UniqueID()
 end
 
 if SERVER then
 	function ENTITY:CPPISetOwner(ply)
-		self.Owner = ply
-		self.OwnerID = ply:SteamID()
+		self.FPPOwner = ply
+		self.FPPOwnerID = ply:SteamID()
 		return true
 	end
 
 	function ENTITY:CPPISetOwnerUID(UID)
 		local ply = player.GetByUniqueID(tostring(UID))
-		if self.Owner and ply:IsValid() then
+		if self.FPPOwner and ply:IsValid() then
 			if self.AllowedPlayers then
 				table.insert(self.AllowedPlayers, ply)
 			else
@@ -57,8 +57,8 @@ if SERVER then
 			end
 			return true
 		elseif ply:IsValid() then
-			self.Owner = ply
-			self.OwnerID = ply:SteamID()
+			self.FPPOwner = ply
+			self.FPPOwnerID = ply:SteamID()
 			return true
 		end
 		return false
