@@ -132,12 +132,16 @@ local function Agenda()
 
 		draw.DrawText(DrawAgenda.Title, "DarkRPHUD1", 30, 12, Color(255,0,0,255),0)
 
-		local AgendaText = ""
+		local AgendaText = {}
 		for k,v in pairs(team.GetPlayers(AgendaManager)) do
 			if not v.DarkRPVars then continue end
-			AgendaText = AgendaText .. (v.DarkRPVars.agenda or "") .. "\n"
+			table.insert(AgendaText, v.DarkRPVars.agenda)
 		end
-		draw.DrawText(string.gsub(string.gsub(AgendaText, "//", "\n"), "\\n", "\n"), "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
+
+		local text = table.concat(AgendaText, "\n")
+		text = text:gsub("//", "\n"):gsub("\\n", "\n")
+		text = GAMEMODE:TextWrap(text, "DarkRPHUD1", 440)
+		draw.DrawText(text, "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
 	end
 end
 

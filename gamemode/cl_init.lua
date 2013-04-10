@@ -464,6 +464,29 @@ local function OnChangedTeam(um)
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
 
+function GM:TextWrap(text, font, pxWidth)
+	local total = 0
+
+	surface.SetFont(font)
+	text = text:gsub(".", function(char)
+		if char == "\n" then
+			total = 0
+		end
+
+		total = total + surface.GetTextSize(char)
+
+		-- Wrap around when the max width is reached
+		if total >= pxWidth then
+			total = 0
+			return "\n" .. char
+		end
+
+		return char
+	end)
+
+	return text
+end
+
 
 -- Please only ADD to the credits
 -- Removing people from the credits will make at least one person very angry.
