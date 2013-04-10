@@ -28,7 +28,8 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	candemote = false
 })
 
 TEAM_POLICE = AddExtraTeam("Civil Protection", {
@@ -213,7 +214,8 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 	salary = 0,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	candemote = false
 })
 
 //ADD CUSTOM TEAMS UNDER THIS LINE:

@@ -1007,7 +1007,7 @@ local function Demote(ply, args)
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.have_to_wait, math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
 			return ""
 		end
-		if p:Team() == TEAM_CITIZEN then
+		if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/demote", ""))
 		else
 			GAMEMODE:TalkToPerson(p, team.GetColor(ply:Team()), "(DEMOTE) "..ply:Nick(),Color(255,0,0,255), "I want to demote you. Reason: "..reason, p)

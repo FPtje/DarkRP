@@ -31,6 +31,8 @@ GM.Config.alltalk 						= false
 GM.Config.autovehiclelock 				= false
 -- babygod - people spawn godded (prevent spawn killing)
 GM.Config.babygod 						= true
+-- canforcedooropen - whether players can force an unownable door open with lockpick or battering ram or w/e
+GM.Config.canforcedooropen				= true
 -- chatsounds - sounds are played when some things are said in chat
 GM.Config.chatsounds					= true
 -- chiefjailpos - Allow the Chief to set the jail positions.

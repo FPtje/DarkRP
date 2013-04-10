@@ -84,14 +84,14 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if (trace.Entity:IsDoor() and self.Owner:EyePos():Distance(trace.HitPos) > 45) then
+	if trace.Entity:IsDoor() and (self.Owner:EyePos():Distance(trace.HitPos) > 45 or
+		(not GAMEMODE.Config.canforcedooropen and trace.Entity.DoorData.NonOwnable)) then
 		return
 	end
 
 	if (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.HitPos) > 100) then
 		return
 	end
-
 
 	local a = GAMEMODE.Config.copscanunfreeze
 	local d = GAMEMODE.Config.copscanunweld

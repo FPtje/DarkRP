@@ -952,3 +952,8 @@ function GM:PlayerSpray()
 
 	return not GAMEMODE.Config.allowsprays
 end
+
+function GM:PlayerNoClip(ply)
+	-- Default action for noclip is to disallow it
+	return false
+end

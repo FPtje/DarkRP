@@ -54,6 +54,32 @@ function GM:FindPlayer(info)
 end
 
 /*---------------------------------------------------------------------------
+Wrap strings to not become wider than the given amount of pixels
+---------------------------------------------------------------------------*/
+function GM:TextWrap(text, font, pxWidth)
+	local total = 0
+
+	surface.SetFont(font)
+	text = text:gsub(".", function(char)
+		if char == "\n" then
+			total = 0
+		end
+
+		total = total + surface.GetTextSize(char)
+
+		-- Wrap around when the max width is reached
+		if total >= pxWidth then
+			total = 0
+			return "\n" .. char
+		end
+
+		return char
+	end)
+
+	return text
+end
+
+/*---------------------------------------------------------------------------
 Decides whether a given player is in the same room as the local player
 note: uses a heuristic
 ---------------------------------------------------------------------------*/

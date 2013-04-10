@@ -330,7 +330,7 @@ function GM:MoneyTab()
 			FirstTabPanel:AddItem(MayorOptns())
 		elseif LocalPlayer():Team() == TEAM_CITIZEN then
 			FirstTabPanel:AddItem(CitOptns())
-		elseif LocalPlayer():Team() == TEAM_POLICE or LocalPlayer():Team() == TEAM_CHIEF then
+		elseif LocalPlayer():IsCP() then
 			FirstTabPanel:AddItem(CPOptns())
 		elseif LocalPlayer():Team() == TEAM_MOB then
 			FirstTabPanel:AddItem(MobOptns())

@@ -61,7 +61,7 @@ function SWEP:createViewModels()
 	end)
 
 	for k,v in pairs(self.viewModels) do
-		v:SetRenderMode()
+		v:SetRenderMode(RENDERMODE_TRANSALPHA)
 		v:SetModel("models/Mechanics/roboticslarge/a2.mdl")
 		v:SetColor(Color(255,0,0,255))
 		v:SetMaterial("models/debug/debugwhite")
