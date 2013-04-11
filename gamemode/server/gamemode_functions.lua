@@ -96,6 +96,10 @@ function GM:DatabaseInitialized()
 	FPP.Init()
 end
 
+function GM:CanSeeLogMessage(ply, message, colour)
+	return ply:IsAdmin()
+end
+
 /*---------------------------------------------------------
  Gamemode functions
  ---------------------------------------------------------*/
