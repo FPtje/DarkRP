@@ -12,8 +12,19 @@ function ENT:Initialize()
 
 	phys:Wake()
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
+
+	self:Setamount(1)
 end
 
+function ENT:DecreaseAmount()
+	local amount = self.dt.amount
+
+	self.dt.amount = amount - 1
+
+	if self.dt.amount == 0 then
+		self:Remove()
+	end
+end
 
 function ENT:Use(activator, caller)
 	if type(self.PlayerUse) == "function" then
@@ -33,7 +44,7 @@ function ENT:Use(activator, caller)
 		weapon:SetAngles(self:GetAngles())
 		weapon:Spawn()
 		weapon:Activate()
-		self:Remove()
+		self:DecreaseAmount()
 		return
 	end
 
@@ -55,5 +66,5 @@ function ENT:Use(activator, caller)
 	-- The ammo bullshit gets as bad as having four variables to handle ammo exploits
 	activator:GiveAmmo(self.ammoadd or 0, weapon:GetPrimaryAmmoType())
 
-	self:Remove()
+	self:DecreaseAmount()
 end

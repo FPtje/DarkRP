@@ -130,16 +130,17 @@ function ENT:Destruct()
 		return
 	end
 
-	for i=1, count, 1 do
-		local weapon = ents.Create("spawned_weapon")
-		weapon:SetModel(model)
-		weapon.weaponclass = class
-		weapon.ShareGravgun = true
-		weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + (i*5)))
-		weapon.ammoadd = weapons.Get(class) and weapons.Get(class).Primary.DefaultClip
-		weapon.nodupe = true
-		weapon:Spawn()
-	end
+
+	local weapon = ents.Create("spawned_weapon")
+	weapon:SetModel(model)
+	weapon.weaponclass = class
+	weapon.ShareGravgun = true
+	weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
+	weapon.ammoadd = weapons.Get(class) and weapons.Get(class).Primary.DefaultClip
+	weapon.nodupe = true
+	weapon:Spawn()
+	weapon.dt.amount = count
+
 	self:Remove()
 end
 
