@@ -17,7 +17,7 @@ function GM:AddTeamCommands(CTeam, max)
 
 	if CTeam.vote or CTeam.RequiresVote then
 		AddChatCommand("/vote"..CTeam.command, function(ply)
-			if CTeam.RequiresVote and not CTeam.RequiresVote(ply) then
+			if CTeam.RequiresVote and not CTeam.RequiresVote(ply, k) then
 				GAMEMODE:Notify(ply, 1,4, "This job does not require a vote at this moment!")
 				return ""
 			end
@@ -85,7 +85,7 @@ function GM:AddTeamCommands(CTeam, max)
 				(a == 0 and not ply:IsAdmin()
 				or a == 1 and not ply:IsSuperAdmin()
 				or a == 2)
-			or CTeam.RequiresVote and CTeam.RequiresVote(ply)
+			or CTeam.RequiresVote and CTeam.RequiresVote(ply, k)
 			then
 				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_to_make_vote, CTeam.name))
 				return ""
