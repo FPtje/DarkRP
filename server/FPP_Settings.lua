@@ -340,33 +340,31 @@ local function RetrieveGroups()
 			FPP.Groups['default'].allowdefault = true
 			return
 		end -- if there are no groups then there isn't much to load
+
 		for k,v in pairs(data) do
 			FPP.Groups[v.groupname] = {}
 			FPP.Groups[v.groupname].tools = {}
 			FPP.Groups[v.groupname].allowdefault = util.tobool(v.allowdefault)
 		end
-	end)
 
-	DB.Query("SELECT * FROM FPP_GROUPTOOL;", function(data)
-		if not data then return end
 
-		for k,v in pairs(data) do
-			FPP.Groups[v.groupname] = FPP.Groups[v.groupname] or {}
-			FPP.Groups[v.groupname].tools = FPP.Groups[v.groupname].tools or {}
+		DB.Query("SELECT * FROM FPP_GROUPTOOL;", function(data)
+			if not data then return end
 
-			table.insert(FPP.Groups[v.groupname].tools, v.tool)
-		end
-	end)
+			for k,v in pairs(data) do
+				FPP.Groups[v.groupname] = FPP.Groups[v.groupname] or {}
+				FPP.Groups[v.groupname].tools = FPP.Groups[v.groupname].tools or {}
 
-	DB.Query("SELECT * FROM FPP_GROUPMEMBERS1;", function(members)
-		if type(members) ~= "table" then return end
-		for _,v in pairs(members) do
-			FPP.GroupMembers[v.steamid] = v.groupname
-			if not FPP.Groups[v.groupname] and (not FAdmin or not FAdmin.Access.Groups[group]) then -- if group does not exist then set to default
-				FPP.GroupMembers[v.steamid] = nil
-				DB.Query("DELETE FROM FPP_GROUPMEMBERS1 WHERE steamid = "..sql.SQLStr(v.steamid)..";")
+				table.insert(FPP.Groups[v.groupname].tools, v.tool)
 			end
-		end
+		end)
+
+		DB.Query("SELECT * FROM FPP_GROUPMEMBERS1;", function(members)
+			if type(members) ~= "table" then return end
+			for _,v in pairs(members) do
+				FPP.GroupMembers[v.steamid] = v.groupname
+			end
+		end)
 	end)
 end
 
