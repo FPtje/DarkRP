@@ -27,5 +27,6 @@ local function RestrictWeaponMenu()
 end
 
 FAdmin.StartHooks["Restrict"] = function()
+	FAdmin.Access.AddPrivilege("Restrict", 3)
 	FAdmin.ScoreBoard.Server:AddPlayerAction("Restrict weapons", "FAdmin/icons/weapon", Color(0, 155, 0, 255), true, RestrictWeaponMenu)
 end
