@@ -4,7 +4,7 @@ local specEnt
 local thirdperson = true
 local isRoaming = false
 local roamPos -- the position when roaming free
-local roamVelocity
+local roamVelocity = Vector(0)
 
 /*---------------------------------------------------------------------------
 startHooks
