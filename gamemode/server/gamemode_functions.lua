@@ -77,6 +77,7 @@ function GM:PlayerBoughtDoor(ply, ent, cost)
 end
 
 function GM:CanDropWeapon(ply, weapon)
+	if not IsValid(weapon) then return false end
 	local class = string.lower(weapon:GetClass())
 	if self.Config.DisallowDrop[class] then return false end
 
