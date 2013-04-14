@@ -89,8 +89,8 @@ function GM.vote.DestroyVotesWithEnt(ent)
 end
 
 function GM.vote.DestroyLast()
-	local lastVote = table.ClearKeys(table.Copy(Votes))
-	lastVote = lastVote[#lastVote]
+	local lastVote
+	for k,v in pairs(Votes) do lastVote = v end
 
 	if not lastVote then return end
 
@@ -107,7 +107,7 @@ function GM.vote.DestroyLast()
 		b.VotesVoted[lastVote.ID] = nil
 	end
 
-	Votes[#Votes] = nil
+	Votes[lastVote.ID] = nil
 end
 
 function GM.vote.HandleVoteEnd(id, OnePlayer)
