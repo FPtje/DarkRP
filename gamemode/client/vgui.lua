@@ -355,7 +355,7 @@ local function KeysMenu(um)
 			for k,v in pairs(player.GetAll()) do
 				if not trace.Entity:OwnedBy(v) and not trace.Entity:AllowedToOwn(v) then
 					menu.found = true
-					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("darkrp /ao \"".. v:SteamID() .. "\"") end)
+					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "/ao", v:SteamID()) end)
 				end
 			end
 			if not menu.found then
@@ -373,7 +373,7 @@ local function KeysMenu(um)
 			for k,v in pairs(player.GetAll()) do
 				if (trace.Entity:OwnedBy(v) and not trace.Entity:IsMasterOwner(v)) or trace.Entity:AllowedToOwn(v) then
 					menu.found = true
-					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("darkrp /ro \"".. v:SteamID() .. "\"") end)
+					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "/ro", v:SteamID()) end)
 				end
 			end
 			if not menu.found then
