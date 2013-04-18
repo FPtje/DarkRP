@@ -612,7 +612,9 @@ function meta:DropDRPWeapon(weapon)
 	ent.nodupe = true
 	ent.clip1 = weapon:Clip1()
 	ent.clip2 = weapon:Clip2()
-	ent.ammo = ammo
+	ent.ammoadd = ammo
+
+	self:RemoveAmmo(ammo, weapon:GetPrimaryAmmoType())
 
 	ent:Spawn()
 
