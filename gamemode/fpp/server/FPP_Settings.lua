@@ -347,7 +347,6 @@ local function RetrieveGroups()
 			FPP.Groups[v.groupname].allowdefault = util.tobool(v.allowdefault)
 		end
 
-
 		DB.Query("SELECT * FROM FPP_GROUPTOOL;", function(data)
 			if not data then return end
 
