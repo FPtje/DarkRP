@@ -72,7 +72,7 @@ end
 /*---------------------------------------------------------------------------
 When a stub is called, the calling of the method is delayed
 ---------------------------------------------------------------------------*/
-local function not_implemented(name, args)
+local function notImplemented(name, args)
 	delayedCalls[name] = delayedCalls[name] or {}
 	table.insert(delayedCalls[name], args)
 
@@ -90,7 +90,7 @@ function stub(tbl)
 
 	stubs[tbl.name] = tbl
 
-	return function(...) return not_implemented(tbl.name, {...}) end
+	return function(...) return notImplemented(tbl.name, {...}) end
 end
 
 /*---------------------------------------------------------------------------
@@ -116,7 +116,7 @@ end
 /*---------------------------------------------------------------------------
 Load the interface files
 ---------------------------------------------------------------------------*/
-local function LoadInterfaces()
+local function loadInterfaces()
 	local root = GM.FolderName.."/gamemode/modules/"
 
 	local _, folders = file.Find(root.."*", "LUA")
@@ -140,4 +140,4 @@ local function LoadInterfaces()
 
 	entity, player, vector = nil, nil, nil
 end
-LoadInterfaces()
+loadInterfaces()
