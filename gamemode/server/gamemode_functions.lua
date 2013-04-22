@@ -373,19 +373,8 @@ function GM:PlayerDeath(ply, weapon, killer)
 	end
 
 	if GAMEMODE.Config.deathblack then
-		local RP = RecipientFilter()
-		RP:RemoveAllPlayers()
-		RP:AddPlayer(ply)
-		umsg.Start("DarkRPEffects", RP)
-			umsg.String("colormod")
-			umsg.String("1")
-		umsg.End()
-		RP:AddAllPlayers()
+		SendUserMessage("blackScreen", ply, true)
 	end
-	if GAMEMODE.Config.deathpov then
-		SendUserMessage("DarkRPEffects", ply, "deathPOV", "1")
-	end
-	UnDrugPlayer(ply)
 
 	if weapon:IsVehicle() and weapon:GetDriver():IsPlayer() then killer = weapon:GetDriver() end
 
@@ -656,17 +645,8 @@ function GM:PlayerSpawn(ply)
 		ply:CrosshairDisable()
 	end
 
-	SendUserMessage("DarkRPEffects", ply, "deathPOV", "0") -- No checks to prevent bugs
-
 	-- Kill any colormod
-	local RP = RecipientFilter()
-	RP:RemoveAllPlayers()
-	RP:AddPlayer(ply)
-	umsg.Start("DarkRPEffects", RP)
-		umsg.String("colormod")
-		umsg.String("0")
-	umsg.End()
-	RP:AddAllPlayers()
+	SendUserMessage("blackScreen", ply, false)
 
 	if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
 		timer.Destroy(ply:EntIndex() .. "babygod")

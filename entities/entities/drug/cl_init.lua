@@ -29,3 +29,18 @@ end
 
 function ENT:Think()
 end
+
+local function drugEffects(um)
+	local toggle = um:ReadBool()
+
+	if toggle then
+		hook.Add("RenderScreenspaceEffects", "drugged", function()
+			DrawSharpen(-1, 2)
+			DrawMaterialOverlay("models/props_lab/Tank_Glass001", 0)
+			DrawMotionBlur(0.13, 1, 0.00)
+		end)
+	else
+		hook.Remove("RenderScreenspaceEffects", "drugged")
+	end
+end
+usermessage.Hook("DrugEffects", drugEffects)

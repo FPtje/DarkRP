@@ -2,17 +2,25 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
+local function UnDrugPlayer(ply)
+	if not IsValid(ply) then return end
+	local IDSteam = ply:UniqueID()
+
+	timer.Remove(IDSteam.."DruggedHealth")
+	timer.Remove(IDSteam)
+
+	SendUserMessage("DrugEffects", ply, false)
+
+	ply:SetJumpPower(190)
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+
+	hook.Remove("PlayerDeath", ply)
+end
+
 local function DrugPlayer(ply)
 	if not IsValid(ply) then return end
-	local RP = RecipientFilter()
-	RP:RemoveAllPlayers()
-	RP:AddPlayer(ply)
-	umsg.Start("DarkRPEffects", RP)
-		umsg.String("Drugged")
-		umsg.String("1")
-	umsg.End()
 
-	RP:AddAllPlayers()
+	SendUserMessage("DrugEffects", ply, true)
 
 	ply:SetJumpPower(300)
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
@@ -27,23 +35,8 @@ local function DrugPlayer(ply)
 		end)
 		timer.Create(IDSteam, 60, 1, function() UnDrugPlayer(ply) end)
 	end
-end
 
-function UnDrugPlayer(ply) -- Global function, used in sv_gamemode_functions
-	if not IsValid(ply) then return end
-	local RP = RecipientFilter()
-	RP:RemoveAllPlayers()
-	RP:AddPlayer(ply)
-	local IDSteam = ply:UniqueID()
-	timer.Remove(IDSteam.."DruggedHealth")
-	timer.Remove(IDSteam)
-	umsg.Start("DarkRPEffects", RP)
-		umsg.String("Drugged")
-		umsg.String("0")
-	umsg.End()
-	RP:AddAllPlayers()
-	ply:SetJumpPower(190)
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed )
+	hook.Add("PlayerDeath", ply, UnDrugPlayer)
 end
 
 function ENT:Initialize()
