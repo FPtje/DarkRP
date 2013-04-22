@@ -79,21 +79,6 @@ local function ToggleClicker()
 end
 usermessage.Hook("ToggleClicker", ToggleClicker)
 
-local function blackScreen(um)
-	local toggle = um:ReadBool()
-	if toggle then
-		local black = Color(0, 0, 0)
-		local w, h = ScrW(), ScrH()
-		hook.Add("HUDPaintBackground", "BlackScreen", function()
-			surface.SetDrawColor(black)
-			surface.DrawRect(0, 0, w, h)
-		end)
-	else
-		hook.Remove("HUDPaintBackground", "BlackScreen")
-	end
-end
-usermessage.Hook("blackScreen", blackScreen)
-
 function GM:PlayerStartVoice(ply)
 	if ply == LocalPlayer() then
 		ply.DRPIsTalking = true
