@@ -81,4 +81,4 @@ local function BuyFood(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/buyfood", BuyFood)
+GM:AddChatCommand("/buyfood", BuyFood)

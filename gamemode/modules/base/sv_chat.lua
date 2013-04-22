@@ -1,6 +1,6 @@
 local ChatCommands = {}
 
-function AddChatCommand(cmd, callback, delay)
+function GM:AddChatCommand(cmd, callback, delay)
 	for k,v in pairs(ChatCommands) do
 		if cmd == v.cmd then return end
 	end
@@ -109,7 +109,7 @@ function GM:ReplaceChatHooks()
 	end)
 end
 
-function ConCommand(ply, _, args)
+local function ConCommand(ply, _, args)
 	if not args[1] then for k,v in pairs(ChatCommands) do print(k) end return end
 
 	local cmd = string.lower(args[1])

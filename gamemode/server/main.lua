@@ -90,9 +90,9 @@ local function DropWeapon(ply)
 	end)
 	return ""
 end
-AddChatCommand("/drop", DropWeapon)
-AddChatCommand("/dropweapon", DropWeapon)
-AddChatCommand("/weapondrop", DropWeapon)
+GM:AddChatCommand("/drop", DropWeapon)
+GM:AddChatCommand("/dropweapon", DropWeapon)
+GM:AddChatCommand("/weapondrop", DropWeapon)
 
 /*---------------------------------------------------------
  Warrants/wanted
@@ -200,8 +200,8 @@ local function SearchWarrant(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/warrant", SearchWarrant)
-AddChatCommand("/warrent", SearchWarrant) -- Most players can't spell for some reason
+GM:AddChatCommand("/warrant", SearchWarrant)
+GM:AddChatCommand("/warrent", SearchWarrant) -- Most players can't spell for some reason
 
 local function PlayerWanted(ply, args)
 	if not ply:IsCP() then
@@ -248,8 +248,8 @@ local function PlayerWanted(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/wanted", PlayerWanted)
-AddChatCommand("/wantid", PlayerWanted)
+GM:AddChatCommand("/wanted", PlayerWanted)
+GM:AddChatCommand("/wantid", PlayerWanted)
 
 local function PlayerUnWanted(ply, args)
 	if not ply:IsCP() then
@@ -272,8 +272,8 @@ local function PlayerUnWanted(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/unwanted", PlayerUnWanted)
-AddChatCommand("/unwantid", PlayerUnWanted) -- Can also do like /wantid but for now it's also for grammar mistakes made by people.
+GM:AddChatCommand("/unwanted", PlayerUnWanted)
+GM:AddChatCommand("/unwantid", PlayerUnWanted) -- Can also do like /wantid but for now it's also for grammar mistakes made by people.
 
 
 /*---------------------------------------------------------
@@ -301,7 +301,7 @@ local function SetSpawnPos(ply, args)
 
 	return ""
 end
-AddChatCommand("/setspawn", SetSpawnPos)
+GM:AddChatCommand("/setspawn", SetSpawnPos)
 
 local function AddSpawnPos(ply, args)
 	if not ply:HasPriv("rp_commands") then return "" end
@@ -325,7 +325,7 @@ local function AddSpawnPos(ply, args)
 
 	return ""
 end
-AddChatCommand("/addspawn", AddSpawnPos)
+GM:AddChatCommand("/addspawn", AddSpawnPos)
 
 local function RemoveSpawnPos(ply, args)
 	if not ply:HasPriv("rp_commands") then return "" end
@@ -349,7 +349,7 @@ local function RemoveSpawnPos(ply, args)
 
 	return ""
 end
-AddChatCommand("/removespawn", RemoveSpawnPos)
+GM:AddChatCommand("/removespawn", RemoveSpawnPos)
 
 function GM:ShowTeam(ply)
 	umsg.Start("KeysMenu", ply)
@@ -477,14 +477,14 @@ local function WriteLetter(ply, args)
 	MakeLetter(ply, args, 1)
 	return ""
 end
-AddChatCommand("/write", WriteLetter)
+GM:AddChatCommand("/write", WriteLetter)
 
 local function TypeLetter(ply, args)
 	if args == "" then return "" end
 	MakeLetter(ply, args, 2)
 	return ""
 end
-AddChatCommand("/type", TypeLetter)
+GM:AddChatCommand("/type", TypeLetter)
 
 local function RemoveLetters(ply)
 	for k, v in pairs(ents.FindByClass("letter")) do
@@ -493,7 +493,7 @@ local function RemoveLetters(ply)
 	GAMEMODE:Notify(ply, 4, 4, string.format(LANGUAGE.cleaned_up, "mails"))
 	return ""
 end
-AddChatCommand("/removeletters", RemoveLetters)
+GM:AddChatCommand("/removeletters", RemoveLetters)
 
 local function SetPrice(ply, args)
 	if args == "" then return "" end
@@ -519,8 +519,8 @@ local function SetPrice(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/price", SetPrice)
-AddChatCommand("/setprice", SetPrice)
+GM:AddChatCommand("/price", SetPrice)
+GM:AddChatCommand("/setprice", SetPrice)
 
 local function BuyPistol(ply, args)
 	if args == "" then return "" end
@@ -598,7 +598,7 @@ local function BuyPistol(ply, args)
 
 	return ""
 end
-AddChatCommand("/buy", BuyPistol, 0.2)
+GM:AddChatCommand("/buy", BuyPistol, 0.2)
 
 local function BuyShipment(ply, args)
 	if args == "" then return "" end
@@ -681,7 +681,7 @@ local function BuyShipment(ply, args)
 
 	return ""
 end
-AddChatCommand("/buyshipment", BuyShipment)
+GM:AddChatCommand("/buyshipment", BuyShipment)
 
 local function BuyVehicle(ply, args)
 	if ply:isArrested() then return "" end
@@ -747,7 +747,7 @@ local function BuyVehicle(ply, args)
 
 	return ""
 end
-AddChatCommand("/buyvehicle", BuyVehicle)
+GM:AddChatCommand("/buyvehicle", BuyVehicle)
 
 for k,v in pairs(DarkRPEntities) do
 	local function buythis(ply, args)
@@ -798,7 +798,7 @@ for k,v in pairs(DarkRPEntities) do
 		ply["max"..cmdname] = ply["max"..cmdname] + 1
 		return ""
 	end
-	AddChatCommand(v.cmd, buythis)
+	GM:AddChatCommand(v.cmd, buythis)
 end
 
 local function BuyAmmo(ply, args)
@@ -853,7 +853,7 @@ local function BuyAmmo(ply, args)
 
 	return ""
 end
-AddChatCommand("/buyammo", BuyAmmo, 1)
+GM:AddChatCommand("/buyammo", BuyAmmo, 1)
 
 local function BuyHealth(ply)
 	local cost = GAMEMODE.Config.healthcost
@@ -883,7 +883,7 @@ local function BuyHealth(ply)
 	ply:SetHealth(ply.StartHealth)
 	return ""
 end
-AddChatCommand("/buyhealth", BuyHealth)
+GM:AddChatCommand("/buyhealth", BuyHealth)
 
 /*---------------------------------------------------------
  Jobs
@@ -903,14 +903,14 @@ local function CreateAgenda(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/agenda", CreateAgenda, 0.1)
+GM:AddChatCommand("/agenda", CreateAgenda, 0.1)
 
 local function GetHelp(ply, args)
 	umsg.Start("ToggleHelp", ply)
 	umsg.End()
 	return ""
 end
-AddChatCommand("/help", GetHelp)
+GM:AddChatCommand("/help", GetHelp)
 
 local function ChangeJob(ply, args)
 	if args == "" then return "" end
@@ -960,7 +960,7 @@ local function ChangeJob(ply, args)
 	ply:UpdateJob(args)
 	return ""
 end
-AddChatCommand("/job", ChangeJob)
+GM:AddChatCommand("/job", ChangeJob)
 
 local function FinishDemote(choice, v)
 	v.IsBeingDemoted = nil
@@ -1024,7 +1024,7 @@ local function Demote(ply, args)
 		return ""
 	end
 end
-AddChatCommand("/demote", Demote)
+GM:AddChatCommand("/demote", Demote)
 
 local function ExecSwitchJob(answer, ent, ply, target)
 	ply.RequestedJobSwitch = nil
@@ -1052,9 +1052,9 @@ local function SwitchJob(ply) --Idea by Godness.
 	GAMEMODE.ques:Create("Switch job with "..ply:Nick().."?", "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
 	return ""
 end
-AddChatCommand("/switchjob", SwitchJob)
-AddChatCommand("/switchjobs", SwitchJob)
-AddChatCommand("/jobswitch", SwitchJob)
+GM:AddChatCommand("/switchjob", SwitchJob)
+GM:AddChatCommand("/switchjobs", SwitchJob)
+GM:AddChatCommand("/jobswitch", SwitchJob)
 
 
 local function DoTeamBan(ply, args, cmdargs)
@@ -1108,7 +1108,7 @@ local function DoTeamBan(ply, args, cmdargs)
 	GAMEMODE:NotifyAll(0, 5, ply:Nick() .. " has banned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
 	return ""
 end
-AddChatCommand("/teamban", DoTeamBan)
+GM:AddChatCommand("/teamban", DoTeamBan)
 concommand.Add("rp_teamban", DoTeamBan)
 
 local function DoTeamUnBan(ply, args, cmdargs)
@@ -1160,7 +1160,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	GAMEMODE:NotifyAll(1, 5, ply:Nick() .. " has unbanned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
 	return ""
 end
-AddChatCommand("/teamunban", DoTeamUnBan)
+GM:AddChatCommand("/teamunban", DoTeamUnBan)
 concommand.Add("rp_teamunban", DoTeamUnBan)
 
 
@@ -1186,7 +1186,7 @@ local function PM(ply, args)
 
 	return ""
 end
-AddChatCommand("/pm", PM, 1.5)
+GM:AddChatCommand("/pm", PM, 1.5)
 
 local function Whisper(ply, args)
 	local DoSay = function(text)
@@ -1195,7 +1195,7 @@ local function Whisper(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/w", Whisper, 1.5)
+GM:AddChatCommand("/w", Whisper, 1.5)
 
 local function Yell(ply, args)
 	local DoSay = function(text)
@@ -1204,7 +1204,7 @@ local function Yell(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/y", Yell, 1.5)
+GM:AddChatCommand("/y", Yell, 1.5)
 
 local function Me(ply, args)
 	if args == "" then return "" end
@@ -1221,7 +1221,7 @@ local function Me(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/me", Me, 1.5)
+GM:AddChatCommand("/me", Me, 1.5)
 
 local function OOC(ply, args)
 	if not GAMEMODE.Config.ooc then
@@ -1243,9 +1243,9 @@ local function OOC(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("//", OOC, true, 1.5)
-AddChatCommand("/a", OOC, true, 1.5)
-AddChatCommand("/ooc", OOC, true, 1.5)
+GM:AddChatCommand("//", OOC, true, 1.5)
+GM:AddChatCommand("/a", OOC, true, 1.5)
+GM:AddChatCommand("/ooc", OOC, true, 1.5)
 
 local function PlayerAdvertise(ply, args)
 	if args == "" then return "" end
@@ -1258,7 +1258,7 @@ local function PlayerAdvertise(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/advert", PlayerAdvertise, 1.5)
+GM:AddChatCommand("/advert", PlayerAdvertise, 1.5)
 
 local function MayorBroadcast(ply, args)
 	if args == "" then return "" end
@@ -1272,7 +1272,7 @@ local function MayorBroadcast(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/broadcast", MayorBroadcast, 1.5)
+GM:AddChatCommand("/broadcast", MayorBroadcast, 1.5)
 
 local function SetRadioChannel(ply,args)
 	if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 99 then
@@ -1283,7 +1283,7 @@ local function SetRadioChannel(ply,args)
 	ply.RadioChannel = tonumber(args)
 	return ""
 end
-AddChatCommand("/channel", SetRadioChannel)
+GM:AddChatCommand("/channel", SetRadioChannel)
 
 local function SayThroughRadio(ply,args)
 	if not ply.RadioChannel then ply.RadioChannel = 1 end
@@ -1301,7 +1301,7 @@ local function SayThroughRadio(ply,args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/radio", SayThroughRadio, 1.5)
+GM:AddChatCommand("/radio", SayThroughRadio, 1.5)
 
 local function CombineRequest(ply, args)
 	if args == "" then return "" end
@@ -1317,7 +1317,7 @@ local function CombineRequest(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/cr", CombineRequest, 1.5)
+GM:AddChatCommand("/cr", CombineRequest, 1.5)
 
 local function GroupMsg(ply, args)
 	if args == "" then return "" end
@@ -1343,7 +1343,7 @@ local function GroupMsg(ply, args)
 	end
 	return args, DoSay
 end
-AddChatCommand("/g", GroupMsg, 1.5)
+GM:AddChatCommand("/g", GroupMsg, 1.5)
 
 -- here's the new easter egg. Easier to find, more subtle, doesn't only credit FPtje and unib5
 -- WARNING: DO NOT EDIT THIS
@@ -1372,7 +1372,7 @@ local function GetDarkRPAuthors(ply, args)
 
 	return ""
 end
-AddChatCommand("/credits", GetDarkRPAuthors, 50)
+GM:AddChatCommand("/credits", GetDarkRPAuthors, 50)
 
 /*---------------------------------------------------------
  Money
@@ -1427,7 +1427,7 @@ local function GiveMoney(ply, args)
 	end
 	return ""
 end
-AddChatCommand("/give", GiveMoney, 0.2)
+GM:AddChatCommand("/give", GiveMoney, 0.2)
 
 local function DropMoney(ply, args)
 	if args == "" then return "" end
@@ -1471,8 +1471,8 @@ local function DropMoney(ply, args)
 
 	return ""
 end
-AddChatCommand("/dropmoney", DropMoney, 0.3)
-AddChatCommand("/moneydrop", DropMoney, 0.3)
+GM:AddChatCommand("/dropmoney", DropMoney, 0.3)
+GM:AddChatCommand("/moneydrop", DropMoney, 0.3)
 
 local function CreateCheque(ply, args)
 	local argt = string.Explode(" ", args)
@@ -1522,8 +1522,8 @@ local function CreateCheque(ply, args)
 	end)
 	return ""
 end
-AddChatCommand("/cheque", CreateCheque, 0.3)
-AddChatCommand("/check", CreateCheque, 0.3) -- for those of you who can't spell
+GM:AddChatCommand("/cheque", CreateCheque, 0.3)
+GM:AddChatCommand("/check", CreateCheque, 0.3) -- for those of you who can't spell
 
 /*---------------------------------------------------------
  Mayor stuff
@@ -1599,7 +1599,7 @@ local function DoLottery(ply, amount)
 	timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
 	return ""
 end
-AddChatCommand("/lottery", DoLottery, 1)
+GM:AddChatCommand("/lottery", DoLottery, 1)
 
 local lstat = false
 local wait_lockdown = false
@@ -1623,7 +1623,7 @@ function GM:Lockdown(ply)
 	return ""
 end
 concommand.Add("rp_lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
-AddChatCommand("/lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
+GM:AddChatCommand("/lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
 
 function GM:UnLockdown(ply)
 	if lstat and not wait_lockdown and ply:Team() == TEAM_MAYOR then
@@ -1636,7 +1636,7 @@ function GM:UnLockdown(ply)
 	return ""
 end
 concommand.Add("rp_unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
-AddChatCommand("/unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
+GM:AddChatCommand("/unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
 
 local function MayorSetSalary(ply, cmd, args)
 	if ply:EntIndex() == 0 then
@@ -1781,7 +1781,7 @@ local function RequestLicense(ply)
 	GAMEMODE.ques:Create(string.format(LANGUAGE.gunlicense_question_text, ply:Nick()), "Gunlicense"..ply:EntIndex(), LookingAt, 20, GrantLicense, ply, LookingAt)
 	return ""
 end
-AddChatCommand("/requestlicense", RequestLicense)
+GM:AddChatCommand("/requestlicense", RequestLicense)
 
 local function GiveLicense(ply)
 	local ismayor--first look if there's a mayor
@@ -1833,7 +1833,7 @@ local function GiveLicense(ply)
 	LookingAt:SetDarkRPVar("HasGunlicense", true)
 	return ""
 end
-AddChatCommand("/givelicense", GiveLicense)
+GM:AddChatCommand("/givelicense", GiveLicense)
 
 local function rp_GiveLicense(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
@@ -1953,7 +1953,7 @@ local function VoteRemoveLicense(ply, args)
 		return ""
 	end
 end
-AddChatCommand("/demotelicense", VoteRemoveLicense)
+GM:AddChatCommand("/demotelicense", VoteRemoveLicense)
 
 local function ReportAttacker(ply, cmd, args)
 
@@ -1983,7 +1983,7 @@ local function ReportAttacker(ply, cmd, args)
 	return ""
 end
 concommand.Add("rp_reportattacker", ReportAttacker)
-AddChatCommand("/911", ReportAttacker, 1)
+GM:AddChatCommand("/911", ReportAttacker, 1)
 
 local function ReportEntity(ply, cmd, args)
 	local tracedata = {}
@@ -2004,4 +2004,4 @@ local function ReportEntity(ply, cmd, args)
 	return ""
 end
 concommand.Add("rp_reportentity", ReportEntity)
-AddChatCommand("/report", ReportEntity, 1)
+GM:AddChatCommand("/report", ReportEntity, 1)

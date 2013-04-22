@@ -2,6 +2,11 @@
 Player DarkRPVars
 ---------------------------------------------------------------------------*/
 
+LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
+for k,v in pairs(player.GetAll()) do
+	v.DarkRPVars = v.DarkRPVars or {}
+end
+
 /*---------------------------------------------------------------------------
 Retrieve the information of a player var
 ---------------------------------------------------------------------------*/

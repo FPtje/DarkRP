@@ -253,7 +253,7 @@ local function SetDoorOwnable(ply)
 	ply.LookingAtDoor = nil -- Send the new data to the client who is looking at the door :D
 	return ""
 end
-AddChatCommand("/toggleownable", SetDoorOwnable)
+GM:AddChatCommand("/toggleownable", SetDoorOwnable)
 
 local time3 = false
 local function SetDoorGroupOwnable(ply, arg)
@@ -296,7 +296,7 @@ local function SetDoorGroupOwnable(ply, arg)
 	GAMEMODE:Notify(ply, 0, 8, "Door group set successfully")
 	return ""
 end
-AddChatCommand("/togglegroupownable", SetDoorGroupOwnable)
+GM:AddChatCommand("/togglegroupownable", SetDoorGroupOwnable)
 
 local time4 = false
 local function SetDoorTeamOwnable(ply, arg)
@@ -356,7 +356,7 @@ local function SetDoorTeamOwnable(ply, arg)
 	ply.LookingAtDoor = nil
 	return ""
 end
-AddChatCommand("/toggleteamownable", SetDoorTeamOwnable)
+GM:AddChatCommand("/toggleteamownable", SetDoorTeamOwnable)
 
 local time2 = false
 local function OwnDoor(ply)
@@ -458,7 +458,7 @@ local function OwnDoor(ply)
 	GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.must_be_looking_at, "vehicle/door"))
 	return ""
 end
-AddChatCommand("/toggleown", OwnDoor)
+GM:AddChatCommand("/toggleown", OwnDoor)
 
 local function UnOwnAll(ply, cmd, args)
 	local amount = 0
@@ -475,7 +475,7 @@ local function UnOwnAll(ply, cmd, args)
 	GAMEMODE:Notify(ply, 2, 4, string.format("You have sold "..amount.." doors for " .. CUR .. amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)) .. "!"))
 	return ""
 end
-AddChatCommand("/unownalldoors", UnOwnAll)
+GM:AddChatCommand("/unownalldoors", UnOwnAll)
 
 function meta:AddAllowed(ply)
 	self.DoorData = self.DoorData or {}
@@ -577,7 +577,7 @@ local function SetDoorTitle(ply, args)
 	ply.LookingAtDoor = nil
 	return ""
 end
-AddChatCommand("/title", SetDoorTitle)
+GM:AddChatCommand("/title", SetDoorTitle)
 
 local function RemoveDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
@@ -610,8 +610,8 @@ local function RemoveDoorOwner(ply, args)
 	ply.LookingAtDoor = nil
 	return ""
 end
-AddChatCommand("/removeowner", RemoveDoorOwner)
-AddChatCommand("/ro", RemoveDoorOwner)
+GM:AddChatCommand("/removeowner", RemoveDoorOwner)
+GM:AddChatCommand("/ro", RemoveDoorOwner)
 
 local function AddDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
@@ -642,5 +642,5 @@ local function AddDoorOwner(ply, args)
 	ply.LookingAtDoor = nil
 	return ""
 end
-AddChatCommand("/addowner", AddDoorOwner)
-AddChatCommand("/ao", AddDoorOwner)
+GM:AddChatCommand("/addowner", AddDoorOwner)
+GM:AddChatCommand("/ao", AddDoorOwner)

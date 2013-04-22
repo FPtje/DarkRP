@@ -44,11 +44,6 @@ local function LoadModules()
 	end
 end
 
-LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-for k,v in pairs(player.GetAll()) do
-	v.DarkRPVars = v.DarkRPVars or {}
-end
-
 GM.Config = {} -- config table
 
 include("config/config.lua")

@@ -35,7 +35,7 @@ local function createShipment(ply, args)
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
 end
-AddChatCommand("/makeshipment", createShipment)
+GAMEMODE:AddChatCommand("/makeshipment", createShipment)
 
 /*---------------------------------------------------------------------------
 Split a shipment in two
@@ -67,4 +67,4 @@ local function splitShipment(ply, args)
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
 end
-AddChatCommand("/splitshipment", splitShipment)
+GAMEMODE:AddChatCommand("/splitshipment", splitShipment)

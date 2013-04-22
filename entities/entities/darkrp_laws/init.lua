@@ -50,7 +50,7 @@ local function AddLaw(ply, args)
 
 	return ""
 end
-AddChatCommand("/addlaw", AddLaw)
+GAMEMODE:AddChatCommand("/addlaw", AddLaw)
 
 local function RemoveLaw(ply, args)
 	if ply:Team() ~= TEAM_MAYOR then
@@ -81,7 +81,7 @@ local function RemoveLaw(ply, args)
 
 	return ""
 end
-AddChatCommand("/removelaw", RemoveLaw)
+GAMEMODE:AddChatCommand("/removelaw", RemoveLaw)
 
 local numlaws = 0
 local function PlaceLaws(ply, args)
@@ -124,7 +124,7 @@ local function PlaceLaws(ply, args)
 
 	return ""
 end
-AddChatCommand("/placelaws", PlaceLaws)
+GAMEMODE:AddChatCommand("/placelaws", PlaceLaws)
 
 function ENT:OnRemove()
 	numlaws = numlaws - 1

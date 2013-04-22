@@ -76,7 +76,6 @@ include("config/_MySQL.lua")
 include("config/config.lua")
 include("config/licenseweapons.lua")
 
-include("server/chat.lua")
 include("server/admincc.lua")
 
 include("shared/animations.lua")
