@@ -30,13 +30,10 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator,caller)
-	if not GAMEMODE.Config.hungermod then
-		caller:SetHealth(caller:Health() + (100 - caller:Health()))
-	else
-		caller:SetSelfDarkRPVar("Energy", math.Clamp(caller.DarkRPVars.Energy + 100, 0, 100))
-		umsg.Start("AteFoodIcon", caller)
-		umsg.End()
-	end
+	caller:SetSelfDarkRPVar("Energy", math.Clamp(caller.DarkRPVars.Energy + 100, 0, 100))
+	umsg.Start("AteFoodIcon", caller)
+	umsg.End()
+
 	self:Remove()
 end
 

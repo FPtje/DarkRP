@@ -52,7 +52,7 @@ local function BuyFood(ply, args)
 
 	local tr = util.TraceLine(trace)
 
-	if ply:Team() ~= TEAM_COOK and team.NumPlayers(TEAM_COOK) > 0 then
+	if ply:Team() ~= TEAM_COOK then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/buyfood", "cooks"))
 		return ""
 	end

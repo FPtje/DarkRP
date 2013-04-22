@@ -355,7 +355,7 @@ local function KeysMenu(um)
 			for k,v in pairs(player.GetAll()) do
 				if not trace.Entity:OwnedBy(v) and not trace.Entity:AllowedToOwn(v) then
 					menu.found = true
-					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("darkrp /ao \"".. v:SteamID() .. "\"") end)
+					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "/ao", v:SteamID()) end)
 				end
 			end
 			if not menu.found then
@@ -373,7 +373,7 @@ local function KeysMenu(um)
 			for k,v in pairs(player.GetAll()) do
 				if (trace.Entity:OwnedBy(v) and not trace.Entity:IsMasterOwner(v)) or trace.Entity:AllowedToOwn(v) then
 					menu.found = true
-					menu:AddOption(v:Nick(), function() LocalPlayer():ConCommand("darkrp /ro \"".. v:SteamID() .. "\"") end)
+					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "/ro", v:SteamID()) end)
 				end
 			end
 			if not menu.found then
@@ -399,7 +399,7 @@ local function KeysMenu(um)
 			function() end, "OK!", "CANCEL!")
 		end
 
-		if LocalPlayer():IsSuperAdmin() and not Vehicle then
+		if (FAdmin and FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_doorManipulation") or LocalPlayer():IsAdmin()) and not Vehicle then
 			Frame:SetSize(200, Frame:GetTall() + 110)
 			local SetCopsOnly = vgui.Create("DButton", Frame)
 			SetCopsOnly:SetPos(10, Frame:GetTall() - 110)
@@ -440,7 +440,7 @@ local function KeysMenu(um)
 			Owndoor.DoClick = function() RunConsoleCommand("darkrp", "/toggleown") Frame:Close() end
 		end
 
-		if LocalPlayer():IsSuperAdmin() then
+		if (FAdmin and FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_doorManipulation") or LocalPlayer():IsAdmin()) then
 			if trace.Entity.DoorData.GroupOwn then
 				Frame:SetSize(200, 250)
 			else
@@ -495,7 +495,7 @@ local function KeysMenu(um)
 		Owndoor:SetText("Co-own " .. Entiteh)
 		Owndoor.DoClick = function() RunConsoleCommand("darkrp", "/toggleown") Frame:Close() end
 
-		if LocalPlayer():IsSuperAdmin() then
+		if (FAdmin and FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_doorManipulation") or LocalPlayer():IsAdmin()) then
 			Frame:SetSize(200, Frame:GetTall() + 110)
 			local SetCopsOnly = vgui.Create("DButton", Frame)
 			SetCopsOnly:SetPos(10, Frame:GetTall() - 110)
@@ -531,7 +531,7 @@ local function KeysMenu(um)
 			KeyFrameVisible = true
 			timer.Simple(0.3, function() KeyFrameVisible = false end)
 		end
-	elseif LocalPlayer():IsSuperAdmin() and trace.Entity.DoorData.NonOwnable then
+	elseif (FAdmin and FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_doorManipulation") or LocalPlayer():IsAdmin()) and trace.Entity.DoorData.NonOwnable then
 		Frame:SetSize(200, 250)
 		local EnableOwnage = vgui.Create("DButton", Frame)
 		EnableOwnage:SetPos(10, 30)
@@ -546,7 +546,7 @@ local function KeysMenu(um)
 		DoorTitle.DoClick = function()
 			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text) LocalPlayer():ConCommand("darkrp /title ".. text) Frame:Close() end, function() end, "OK!", "CANCEL!")
 		end
-	elseif LocalPlayer():IsSuperAdmin() and not trace.Entity:OwnedBy(LocalPlayer()) and trace.Entity:IsOwned() and not trace.Entity:AllowedToOwn(LocalPlayer()) then
+	elseif (FAdmin and FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_doorManipulation") or LocalPlayer():IsAdmin()) and not trace.Entity:OwnedBy(LocalPlayer()) and trace.Entity:IsOwned() and not trace.Entity:AllowedToOwn(LocalPlayer()) then
 		Frame:SetSize(200, 250)
 		local DisableOwnage = vgui.Create("DButton", Frame)
 		DisableOwnage:SetPos(10, 30)

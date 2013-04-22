@@ -658,7 +658,7 @@ local function BuyShipment(ply, args)
 	local crate = ents.Create("spawned_shipment")
 	crate.SID = ply.SID
 	crate:Setowning_ent(ply)
-	crate:SetContents(foundKey, found.amount, found.weight)
+	crate:SetContents(foundKey, found.amount)
 
 	crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z))
 	crate.nodupe = true

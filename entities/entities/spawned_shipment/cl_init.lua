@@ -126,3 +126,23 @@ function ENT:drawInfo()
 		draw.WordBox(2, -TextWidth2*0.5 + 0, -102, self:Getcount(), "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 	cam.End3D2D()
 end
+
+/*---------------------------------------------------------------------------
+Create a shipment from a spawned_weapon
+---------------------------------------------------------------------------*/
+properties.Add("splitShipment",
+{
+	MenuLabel	=	"Split this shipment",
+	Order		=	2003,
+	MenuIcon	=	"icon16/arrow_divide.png",
+
+	Filter		=	function(self, ent, ply)
+						if not IsValid(ent) then return false end
+						return ent:GetClass() == "spawned_shipment"
+					end,
+
+	Action		=	function(self, ent)
+						if not IsValid(ent) then return end
+						RunConsoleCommand("darkrp", "/splitshipment", ent:EntIndex())
+					end
+})

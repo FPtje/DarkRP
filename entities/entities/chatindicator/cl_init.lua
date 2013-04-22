@@ -1,8 +1,10 @@
 include("shared.lua")
 
-function ENT:Draw()
-	
+function ENT:Initialize()
 	self:SetModelScale(0.6, 0)
+end
+
+function ENT:Draw()
 	self:DrawModel()
 
 	--Going to let the client handle the rotations, less server strain. (Feel free to change back). ~Eusion.
@@ -13,7 +15,7 @@ end
 local function ToggleChat()
 
 	RunConsoleCommand("_DarkRP_ToggleChat")
-	
+
 end
 hook.Add("StartChat", "StartChatIndicator", ToggleChat )
 hook.Add("FinishChat", "EndChatIndicator", ToggleChat )

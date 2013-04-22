@@ -3,10 +3,12 @@ include("shared.lua")
 
 -- These are the default laws, they're unchangeable in-game.
 local Laws = {
-	"Do not attack other citizens except in self-defence.",
-	"Do not steal or break in to peoples homes.",
-	"Money printers/drugs are illegal."
+	"1. Do not attack other citizens except in self-defence.",
+	"2. Do not steal or break in to peoples homes.",
+	"3. Money printers/drugs are illegal."
 }
+
+local drawLaws = table.concat(Laws, "\n")
 
 function ENT:Draw()
 	self:DrawModel()
@@ -25,14 +27,7 @@ function ENT:Draw()
 		draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
 		draw.DrawText("LAWS OF THE LAND", "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
-		local y = 35
-		for i, law in pairs(Laws) do
-
-			draw.DrawText(i .. ": " .. law, "TargetID", 5, y, Color(255, 255, 255, 255))
-
-			y = y + 20
-
-		end
+		draw.DrawText(drawLaws, "TargetID", 5, 35, Color(255, 255, 255, 255))
 
 	cam.End3D2D()
 end
@@ -41,11 +36,20 @@ local function AddLaw(um)
 	local law = um:ReadString()
 	law = GAMEMODE:TextWrap(law, "TargetID", 522)
 
-	table.insert(Laws, law)
+	Laws[#Laws + 1] = (#Laws + 1).. ". " .. law
+	drawLaws = table.concat(Laws, "\n")
 end
 usermessage.Hook("DRP_AddLaw", AddLaw)
 
 local function RemoveLaw(um)
-	table.remove(Laws, um:ReadChar())
+	local i = um:ReadChar()
+
+	while i < #Laws do
+		Laws[i] = i .. string.sub(Laws[i], 2)
+		i = i + 1
+	end
+	Laws[i] = nil
+
+	drawLaws = table.concat(Laws, "\n")
 end
 usermessage.Hook("DRP_RemoveLaw", RemoveLaw)

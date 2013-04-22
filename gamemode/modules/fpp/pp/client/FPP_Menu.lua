@@ -1124,7 +1124,7 @@ properties.Add("addFPPBlocked",
 	MenuIcon	=	"icon16/cross.png",
 
 	Filter		=	function(self, ent, ply)
-						if not IsValid(ent) then return end
+						if not IsValid(ent) or ent:IsPlayer() then return false end
 						return ply:IsSuperAdmin()
 					end,
 
@@ -1141,7 +1141,7 @@ properties.Add("removeFPPBlocked",
 	MenuIcon	=	"icon16/tick.png",
 
 	Filter		=	function(self, ent, ply)
-						if not IsValid(ent) then return end
+						if not IsValid(ent) or ent:IsPlayer() then return false end
 						return ply:IsSuperAdmin()
 					end,
 

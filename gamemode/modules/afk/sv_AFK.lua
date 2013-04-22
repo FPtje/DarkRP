@@ -17,10 +17,7 @@ local function SetAFK(ply)
 	local rpname = ply.DarkRPVars.rpname
 	ply:SetSelfDarkRPVar("AFK", not ply.DarkRPVars.AFK)
 
-	umsg.Start("DarkRPEffects", ply)
-		umsg.String("colormod")
-		umsg.String(ply.DarkRPVars.AFK and "1" or "0")
-	umsg.End()
+	SendUserMessage("blackScreen", ply, ply.DarkRPVars.AFK)
 
 	if ply.DarkRPVars.AFK then
 		DB.RetrieveSalary(ply, function(amount) ply.OldSalary = amount end)

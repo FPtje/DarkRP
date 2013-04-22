@@ -925,7 +925,9 @@ concommand.Add("rp_removeallconsoles", DB.RemoveConsoles)
 local function AdminLog(message, colour)
 	local RF = RecipientFilter()
 	for k,v in pairs(player.GetAll()) do
-		if v:IsAdmin() then
+		local canHear = hook.Call("CanSeeLogMessage", GAMEMODE, v, message, colour)
+
+		if canHear then
 			RF:AddPlayer(v)
 		end
 	end

@@ -534,7 +534,7 @@ function GM:JobsTab()
 					if #v.weapons > 0 then
 						weps = table.concat(v.weapons, "\n")
 					end
-					if v.vote then
+					if (not v.RequiresVote and v.vote) or (v.RequiresVote and v.RequiresVote(LocalPlayer(), k)) then
 						local condition = ((v.admin == 0 and LocalPlayer():IsAdmin()) or (v.admin == 1 and LocalPlayer():IsSuperAdmin()) or LocalPlayer().DarkRPVars["Priv"..v.command])
 						if not v.model or not v.name or not v.description or not v.command then chat.AddText(Color(255,0,0,255), "Incorrect team! Fix your shared.lua!") return end
 						AddIcon(v.model, v.name, v.description, weps, "/vote"..v.command, condition, "/"..v.command)
@@ -618,7 +618,7 @@ function GM:EntitiesTab()
 						end
 					end
 
-					if FoodItems and (GAMEMODE.Config.foodspawn or LocalPlayer():Team() == TEAM_COOK) and (GAMEMODE.Config.hungermod or LocalPlayer():Team() == TEAM_COOK) then
+					if FoodItems and (GAMEMODE.Config.foodspawn or LocalPlayer():Team() == TEAM_COOK) and LocalPlayer():Team() == TEAM_COOK then
 						for k,v in pairs(FoodItems) do
 							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..k, "$15"), "/buyfood "..k)
 						end

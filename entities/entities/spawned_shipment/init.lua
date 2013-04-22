@@ -2,6 +2,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
+include("commands.lua")
 
 function ENT:Initialize()
 	self.Destructed = false
@@ -91,7 +92,9 @@ function ENT:SpawnItem()
 
 	weapon.weaponclass = class
 	weapon:SetModel(model)
-	weapon.ammoadd = weapons.Get(class) and weapons.Get(class).Primary.DefaultClip
+	weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
+	weapon.clip1 = self.clip1
+	weapon.clip2 = self.clip2
 	weapon.ShareGravgun = true
 	weapon:SetPos(self:GetPos() + weaponPos)
 	weapon:SetAngles(weaponAng)
@@ -130,16 +133,17 @@ function ENT:Destruct()
 		return
 	end
 
-	for i=1, count, 1 do
-		local weapon = ents.Create("spawned_weapon")
-		weapon:SetModel(model)
-		weapon.weaponclass = class
-		weapon.ShareGravgun = true
-		weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + (i*5)))
-		weapon.ammoadd = weapons.Get(class) and weapons.Get(class).Primary.DefaultClip
-		weapon.nodupe = true
-		weapon:Spawn()
-	end
+
+	local weapon = ents.Create("spawned_weapon")
+	weapon:SetModel(model)
+	weapon.weaponclass = class
+	weapon.ShareGravgun = true
+	weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
+	weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
+	weapon.nodupe = true
+	weapon:Spawn()
+	weapon.dt.amount = count
+
 	self:Remove()
 end
 
@@ -151,6 +155,22 @@ function ENT:Touch(ent)
 
 	ent.hasMerged = true
 
-	self:Setcount(self:Getcount() + ent:Getcount())
+	local selfCount, entCount = self:Getcount(), ent:Getcount()
+	local count = selfCount + entCount
+	self:Setcount(count)
+
+	-- Merge ammo information (avoid ammo exploits)
+	if self.clip1 or ent.clip1 then -- If neither have a clip, use default clip, otherwise merge the two
+		self.clip1 = math.floor(((ent.clip1 or 0) * entCount + (self.clip1 or 0) * selfCount) / count)
+	end
+
+	if self.clip2 or ent.clip2 then
+		self.clip2 = math.floor(((ent.clip2 or 0) * entCount + (self.clip2 or 0) * selfCount) / count)
+	end
+
+	if self.ammoadd or ent.ammoadd then
+		self.ammoadd = math.floor(((ent.ammoadd or 0) * entCount + (self.ammoadd or 0) * selfCount) / count)
+	end
+
 	ent:Remove()
 end

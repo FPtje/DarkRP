@@ -38,9 +38,11 @@ util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_DoorData")
 util.AddNetworkString("DarkRP_keypadData")
 
+
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
+
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("config/config.lua")
 
@@ -126,4 +128,3 @@ for _, folder in SortedPairs(folders, true) do
 		end
 	end
 end
-
