@@ -81,4 +81,4 @@ local function BuyFood(ply, args)
 	end
 	return ""
 end
-GM:AddChatCommand("/buyfood", BuyFood)
+DarkRP.AddChatCommand("/buyfood", BuyFood)

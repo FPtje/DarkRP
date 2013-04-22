@@ -76,7 +76,7 @@ local function ReMoveZombie(ply, index)
 	end
 	return ""
 end
-GM:AddChatCommand("/removezombie", ReMoveZombie)
+DarkRP.AddChatCommand("/removezombie", ReMoveZombie)
 
 local function AddZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -91,7 +91,7 @@ local function AddZombie(ply)
 	end
 	return ""
 end
-GM:AddChatCommand("/addzombie", AddZombie)
+DarkRP.AddChatCommand("/addzombie", AddZombie)
 
 local function ToggleZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -108,7 +108,7 @@ local function ToggleZombie(ply)
 	end
 	return ""
 end
-GM:AddChatCommand("/showzombie", ToggleZombie)
+DarkRP.AddChatCommand("/showzombie", ToggleZombie)
 
 local function GetAliveZombie()
 	local zombieCount = 0
@@ -148,9 +148,9 @@ local function ZombieMax(ply, args)
 
 	return ""
 end
-GM:AddChatCommand("/zombiemax", ZombieMax)
-GM:AddChatCommand("/maxzombie", ZombieMax)
-GM:AddChatCommand("/maxzombies", ZombieMax)
+DarkRP.AddChatCommand("/zombiemax", ZombieMax)
+DarkRP.AddChatCommand("/maxzombie", ZombieMax)
+DarkRP.AddChatCommand("/maxzombies", ZombieMax)
 
 local function StartZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -159,7 +159,7 @@ local function StartZombie(ply)
 	end
 	return ""
 end
-GM:AddChatCommand("/enablezombie", StartZombie)
+DarkRP.AddChatCommand("/enablezombie", StartZombie)
 
 local function StopZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -171,7 +171,7 @@ local function StopZombie(ply)
 	end
 	return ""
 end
-GM:AddChatCommand("/disablezombie", StopZombie)
+DarkRP.AddChatCommand("/disablezombie", StopZombie)
 
 timer.Create("start2", 1, 0, SpawnZombie)
 timer.Create("zombieControl", 1, 0, ControlZombie)
@@ -240,7 +240,7 @@ local function StartStorm(ply)
 	end
 	return ""
 end
-GM:AddChatCommand("/enablestorm", StartStorm)
+DarkRP.AddChatCommand("/enablestorm", StartStorm)
 
 local function StopStorm(ply)
 	if ply:HasPriv("rp_commands") then
@@ -252,7 +252,7 @@ local function StopStorm(ply)
 	end
 	return ""
 end
-GM:AddChatCommand("/disablestorm", StopStorm)
+DarkRP.AddChatCommand("/disablestorm", StopStorm)
 
 timer.Create("start", 1, 0, StartShower)
 timer.Create("stormControl", 1, 0, ControlStorm)

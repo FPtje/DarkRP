@@ -1,6 +1,6 @@
 local ChatCommands = {}
 
-function GM:AddChatCommand(cmd, callback, delay)
+function DarkRP.AddChatCommand(cmd, callback, delay)
 	for k,v in pairs(ChatCommands) do
 		if cmd == v.cmd then return end
 	end

@@ -47,6 +47,7 @@ end
 GM.Config = {} -- config table
 
 include("config/config.lua")
+include("sh_interfaceloader.lua")
 include("client/help.lua")
 
 include("client/DRPDermaSkin.lua")
@@ -66,6 +67,8 @@ include("config/addentities.lua")
 include("config/ammotypes.lua")
 
 LoadModules()
+
+DarkRP.finish()
 
 local GUIToggled = false
 local function ToggleClicker()

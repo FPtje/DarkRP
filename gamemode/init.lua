@@ -36,6 +36,7 @@ DeriveGamemode("sandbox")
 
 util.AddNetworkString("DarkRP_keypadData")
 
+AddCSLuaFile("sh_interfaceloader.lua")
 
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
@@ -76,6 +77,8 @@ include("config/_MySQL.lua")
 include("config/config.lua")
 include("config/licenseweapons.lua")
 
+include("sh_interfaceloader.lua")
+
 include("server/admincc.lua")
 
 include("shared/animations.lua")
@@ -113,10 +116,13 @@ for _, folder in SortedPairs(folders, true) do
 	if folder ~= "." and folder ~= ".." and not GM.Config.DisabledModules[folder] then
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 			AddCSLuaFile(fol..folder .. "/" ..File)
+
+			if File == "sh_interface.lua" then continue end
 			include(fol.. folder .. "/" ..File)
 		end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", "LUA"), true) do
+			if File == "sv_interface.lua" then continue end
 			include(fol.. folder .. "/" ..File)
 		end
 
@@ -125,3 +131,5 @@ for _, folder in SortedPairs(folders, true) do
 		end
 	end
 end
+
+DarkRP.finish()
