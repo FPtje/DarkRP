@@ -45,24 +45,28 @@ FAdmin.StartHooks["ServerSettings"] = function()
 		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_godmode", (tobool(GetConVarNumber("sbox_godmode")) and 0) or 1)
 	end)
 
-	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (not tobool(GetConVarNumber("sbox_plpldamage")) and "Disable" or "Enable").." player vs player damage" end,
-	function() return "FAdmin/icons/weapon", not tobool(GetConVarNumber("sbox_plpldamage")) and "FAdmin/icons/disable" end,
+	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (tobool(GetConVarNumber("sbox_playershurtplayers")) and "Disable" or "Enable").." player vs player damage" end,
+	function() return "FAdmin/icons/weapon", tobool(GetConVarNumber("sbox_playershurtplayers")) and "FAdmin/icons/disable" end,
 	Color(0, 0, 155, 255), true, function(button)
-		button:SetImage2((tobool(GetConVarNumber("sbox_plpldamage")) and "FAdmin/icons/disable") or "null")
-		button:SetText((tobool(GetConVarNumber("sbox_plpldamage")) and "Disable" or "Enable").." player vs player damage")
+		local val = tobool(GetConVarNumber("sbox_playershurtplayers"))
+
+		button:SetImage2(val and "FAdmin/icons/disable" or "null")
+		button:SetText((val and "Disable" or "Enable").." player vs player damage")
 		button:GetParent():InvalidateLayout()
 
-		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_plpldamage", (tobool(GetConVarNumber("sbox_plpldamage")) and 0) or 1)
+		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_playershurtplayers", val and 0 or 1)
 	end)
 
 	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (tobool(GetConVarNumber("sbox_noclip")) and "Disable" or "Enable").." global noclip" end,
 	function() return "FAdmin/icons/noclip", tobool(GetConVarNumber("sbox_noclip")) and "FAdmin/icons/disable" end,
 	Color(0, 0, 155, 255), true, function(button)
-		button:SetImage2((not tobool(GetConVarNumber("sbox_noclip")) and "FAdmin/icons/disable") or "null")
-		button:SetText((not tobool(GetConVarNumber("sbox_noclip")) and "Disable" or "Enable").." global noclip")
+		local val = tobool(GetConVarNumber("sbox_noclip"))
+
+		button:SetImage2(not val and "FAdmin/icons/disable" or "null")
+		button:SetText(not val and "Disable" or "Enable".." global noclip")
 		button:GetParent():InvalidateLayout()
 
-		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_noclip", (tobool(GetConVarNumber("sbox_noclip")) and 0) or 1)
+		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_noclip", val and 0 or 1)
 	end)
 
 
