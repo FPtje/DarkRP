@@ -34,8 +34,6 @@ meta.GetName = meta.Name
 
 DeriveGamemode("sandbox")
 
-util.AddNetworkString("DarkRP_InitializeVars")
-util.AddNetworkString("DarkRP_DoorData")
 util.AddNetworkString("DarkRP_keypadData")
 
 
