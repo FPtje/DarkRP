@@ -6,7 +6,7 @@ if CLIENT then
 	SWEP.PrintName = "MP5"
 	SWEP.Author = "Rickster"
 	SWEP.Slot = 2
-	SWEP.SlotPos = 3
+	SWEP.SlotPos = 0
 	SWEP.IconLetter = "x"
 
 	killicon.AddFont("weapon_mp5", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))

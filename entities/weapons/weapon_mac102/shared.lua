@@ -6,7 +6,7 @@ if (CLIENT) then
 	SWEP.PrintName = "Mac10"
 	SWEP.Author = "Rickster"
 	SWEP.Slot = 2
-	SWEP.SlotPos = 4
+	SWEP.SlotPos = 0
 	SWEP.IconLetter = "l"
 
 	killicon.AddFont("weapon_mac10", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))

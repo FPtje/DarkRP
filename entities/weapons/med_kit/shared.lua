@@ -5,7 +5,7 @@ end
 SWEP.PrintName = "Medic Kit"
 SWEP.Author = "Jake Johnson"
 SWEP.Slot = 4
-SWEP.SlotPos = 3
+SWEP.SlotPos = 0
 SWEP.Description = "Heals the wounded."
 SWEP.Contact = ""
 SWEP.Purpose = ""
