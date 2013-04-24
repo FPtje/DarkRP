@@ -422,21 +422,6 @@ function GM:PlayerDeath(ply, weapon, killer)
 		end
 	end
 
-	if GAMEMODE.Config.dmautokick and IsValid(killer) and killer:IsPlayer() and killer ~= ply then
-		if not killer.kills or killer.kills == 0 then
-			killer.kills = 1
-			timer.Simple(GAMEMODE.Config.dmgracetime, function() if IsValid(killer) and killer:IsPlayer() then killer:ResetDMCounter(killer) end end)
-		else
-			-- If this player is going over their limit, kick their ass
-			if killer.kills + 1 > GAMEMODE.Config.dmmaxkills then
-				game.ConsoleCommand("kickid " .. killer:UserID() .. " Auto-kicked. Excessive Deathmatching.\n")
-			else
-				-- Killed another player
-				killer.kills = killer.kills + 1
-			end
-		end
-	end
-
 	if IsValid(ply) and (ply ~= killer or ply.Slayed) and not ply:isArrested() then
 		ply:SetDarkRPVar("wanted", false)
 		ply.DeathPos = nil

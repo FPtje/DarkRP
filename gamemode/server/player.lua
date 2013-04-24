@@ -126,12 +126,6 @@ function meta:ChangeAllowed(t)
 	if self.bannedfrom[t] == 1 then return false else return true end
 end
 
-function meta:ResetDMCounter()
-	if not IsValid(self) then return end
-	self.kills = 0
-	return true
-end
-
 function meta:InitiateTax()
 	local taxtime = GAMEMODE.Config.wallettaxtime
 	local uniqueid = self:UniqueID() -- so we can destroy the timer if the player leaves
