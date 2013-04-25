@@ -50,9 +50,9 @@ local function RPName(ply, args)
 	ply.LastNameChange = CurTime()
 	return ""
 end
-DarkRP.AddChatCommand("/rpname", RPName)
-DarkRP.AddChatCommand("/name", RPName)
-DarkRP.AddChatCommand("/nick", RPName)
+DarkRP.addChatCommand("/rpname", RPName)
+DarkRP.addChatCommand("/name", RPName)
+DarkRP.addChatCommand("/nick", RPName)
 
 function meta:SetRPName(name, firstRun)
 	-- Make sure nobody on this server already has this RP name
@@ -427,7 +427,7 @@ local function JailPos(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/jailpos", JailPos)
+DarkRP.addChatCommand("/jailpos", JailPos)
 
 local function AddJailPos(ply)
 	-- Admin or Chief can add Jail Positions
@@ -443,7 +443,7 @@ local function AddJailPos(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/addjailpos", AddJailPos)
+DarkRP.addChatCommand("/addjailpos", AddJailPos)
 
 local arrestedPlayers = {}
 function meta:isArrested()

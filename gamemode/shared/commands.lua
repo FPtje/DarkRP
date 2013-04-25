@@ -16,7 +16,7 @@ function GM:AddTeamCommands(CTeam, max)
 	end
 
 	if CTeam.vote or CTeam.RequiresVote then
-		DarkRP.AddChatCommand("/vote"..CTeam.command, function(ply)
+		DarkRP.addChatCommand("/vote"..CTeam.command, function(ply)
 			if CTeam.RequiresVote and not CTeam.RequiresVote(ply, k) then
 				GAMEMODE:Notify(ply, 1,4, "This job does not require a vote at this moment!")
 				return ""
@@ -67,7 +67,7 @@ function GM:AddTeamCommands(CTeam, max)
 			ply:GetTable().LastVoteCop = CurTime()
 			return ""
 		end)
-		DarkRP.AddChatCommand("/"..CTeam.command, function(ply)
+		DarkRP.addChatCommand("/"..CTeam.command, function(ply)
 			if ply:HasPriv("rp_"..CTeam.command) then
 				ply:ChangeTeam(k, true)
 				return ""
@@ -95,7 +95,7 @@ function GM:AddTeamCommands(CTeam, max)
 			return ""
 		end)
 	else
-		DarkRP.AddChatCommand("/"..CTeam.command, function(ply)
+		DarkRP.addChatCommand("/"..CTeam.command, function(ply)
 			if CTeam.admin == 1 and not ply:IsAdmin() then
 				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_admin, "/"..CTeam.command))
 				return ""

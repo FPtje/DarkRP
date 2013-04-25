@@ -76,7 +76,7 @@ local function ReMoveZombie(ply, index)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/removezombie", ReMoveZombie)
+DarkRP.addChatCommand("/removezombie", ReMoveZombie)
 
 local function AddZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -91,7 +91,7 @@ local function AddZombie(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/addzombie", AddZombie)
+DarkRP.addChatCommand("/addzombie", AddZombie)
 
 local function ToggleZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -108,7 +108,7 @@ local function ToggleZombie(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/showzombie", ToggleZombie)
+DarkRP.addChatCommand("/showzombie", ToggleZombie)
 
 local function GetAliveZombie()
 	local zombieCount = 0
@@ -148,9 +148,9 @@ local function ZombieMax(ply, args)
 
 	return ""
 end
-DarkRP.AddChatCommand("/zombiemax", ZombieMax)
-DarkRP.AddChatCommand("/maxzombie", ZombieMax)
-DarkRP.AddChatCommand("/maxzombies", ZombieMax)
+DarkRP.addChatCommand("/zombiemax", ZombieMax)
+DarkRP.addChatCommand("/maxzombie", ZombieMax)
+DarkRP.addChatCommand("/maxzombies", ZombieMax)
 
 local function StartZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -159,7 +159,7 @@ local function StartZombie(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/enablezombie", StartZombie)
+DarkRP.addChatCommand("/enablezombie", StartZombie)
 
 local function StopZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -171,7 +171,7 @@ local function StopZombie(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/disablezombie", StopZombie)
+DarkRP.addChatCommand("/disablezombie", StopZombie)
 
 timer.Create("start2", 1, 0, SpawnZombie)
 timer.Create("zombieControl", 1, 0, ControlZombie)
@@ -240,7 +240,7 @@ local function StartStorm(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/enablestorm", StartStorm)
+DarkRP.addChatCommand("/enablestorm", StartStorm)
 
 local function StopStorm(ply)
 	if ply:HasPriv("rp_commands") then
@@ -252,7 +252,7 @@ local function StopStorm(ply)
 	end
 	return ""
 end
-DarkRP.AddChatCommand("/disablestorm", StopStorm)
+DarkRP.addChatCommand("/disablestorm", StopStorm)
 
 timer.Create("start", 1, 0, StartShower)
 timer.Create("stormControl", 1, 0, ControlStorm)

@@ -797,8 +797,6 @@ function GM:InitPostEntity()
 			v:Fire("unlock", "", 0)
 		end
     end
-
-    self:ReplaceChatHooks()
 end
 timer.Simple(0.1, function()
 	if not InitPostEntityCalled then

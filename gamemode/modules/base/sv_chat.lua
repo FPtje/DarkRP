@@ -1,6 +1,6 @@
 local ChatCommands = {}
 
-function DarkRP.AddChatCommand(cmd, callback, delay)
+function DarkRP.addChatCommand(cmd, callback, delay)
 	for k,v in pairs(ChatCommands) do
 		if cmd == v.cmd then return end
 	end
@@ -88,19 +88,19 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 	return ""
 end
 
-function GM:ReplaceChatHooks()
+local function ReplaceChatHooks()
 	if not hook.GetTable().PlayerSay then return end
 	for k,v in pairs(hook.GetTable().PlayerSay) do -- Remove all PlayerSay hooks, they all interfere with DarkRP's PlayerSay
-		self.OldChatHooks[k] = v
+		GAMEMODE.OldChatHooks[k] = v
 		hook.Remove("PlayerSay", k)
 	end
-	for a,b in pairs(self.OldChatHooks) do
+	for a,b in pairs(GAMEMODE.OldChatHooks) do
 		if type(b) ~= "function" then
-			self.OldChatHooks[a] = nil
+			GAMEMODE.OldChatHooks[a] = nil
 		end
 	end
 
-	table.sort(self.OldChatHooks, function(a, b)
+	table.sort(GAMEMODE.OldChatHooks, function(a, b)
 		if type(a) == "string" and type(b) == "string" then
 			return a > b
 		end
@@ -108,6 +108,7 @@ function GM:ReplaceChatHooks()
 		return true
 	end)
 end
+hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
 local function ConCommand(ply, _, args)
 	if not args[1] then for k,v in pairs(ChatCommands) do print(k) end return end

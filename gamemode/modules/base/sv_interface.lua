@@ -1,5 +1,5 @@
-DarkRP.AddChatCommand = DarkRP.stub{
-	name = "AddChatCommand",
+DarkRP.addChatCommand = DarkRP.stub{
+	name = "addChatCommand",
 	description = "Create a chat command that calls the function",
 	parameters = {
 		{
