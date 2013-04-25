@@ -1,3 +1,24 @@
+DarkRP.findPlayer = DarkRP.stub{
+	name = "findPlayer",
+	description = "Find a player based on vague information",
+	parameters = {
+		{
+			name = "info",
+			description = "The information of the player (UserID, SteamID, name)",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "found",
+			description = "The player that matches the description",
+			type = "Player"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.VECTOR.isInSight = DarkRP.stub{
 	name = "isInSight",
 	description = "Decides whether the vector could be seen by the player if they were to look at it",

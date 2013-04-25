@@ -25,7 +25,7 @@ end
 /*---------------------------------------------------------------------------
 Find a player based on given information
 ---------------------------------------------------------------------------*/
-function GM:FindPlayer(info)
+function DarkRP.findPlayer(info)
 	if not info or info == "" then return nil end
 	local pls = player.GetAll()
 

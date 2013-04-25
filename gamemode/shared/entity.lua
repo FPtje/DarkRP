@@ -584,7 +584,7 @@ local function RemoveDoorOwner(ply, args)
 
 	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		target = GAMEMODE:FindPlayer(args)
+		target = DarkRP.FindPlayer(args)
 
 		if trace.Entity.DoorData.NonOwnable then
 			GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_rem_owners_unownable)
@@ -618,7 +618,7 @@ local function AddDoorOwner(ply, args)
 
 	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		target = GAMEMODE:FindPlayer(args)
+		target = DarkRP.FindPlayer(args)
 		if target then
 			if trace.Entity.DoorData.NonOwnable then
 				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_add_owners_unownable)

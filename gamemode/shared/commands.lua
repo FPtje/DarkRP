@@ -131,7 +131,7 @@ function GM:AddTeamCommands(CTeam, max)
 		end
 
 		if not args[1] then return end
-		local target = GAMEMODE:FindPlayer(args[1])
+		local target = DarkRP.FindPlayer(args[1])
 
         if (target) then
 			target:ChangeTeam(k, true)

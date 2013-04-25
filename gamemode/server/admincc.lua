@@ -62,7 +62,7 @@ local function ccAddOwner(ply, cmd, args)
 		return
 	end
 
-	target = GAMEMODE:FindPlayer(args[1])
+	target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		if trace.Entity:IsOwned() then
@@ -97,7 +97,7 @@ local function ccRemoveOwner(ply, cmd, args)
 		return
 	end
 
-	target = GAMEMODE:FindPlayer(args[1])
+	target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		if trace.Entity:AllowedToOwn(target) then
@@ -171,7 +171,7 @@ local function ccTell(ply, cmd, args)
 		return
 	end
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		local msg = ""
@@ -235,7 +235,7 @@ local function ccRemoveLetters(ply, cmd, args)
 		return
 	end
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		for k, v in pairs(ents.FindByClass("letter")) do
@@ -272,7 +272,7 @@ local function ccArrest(ply, cmd, args)
 		return
 	end
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 	if target then
 		local length = tonumber(args[2])
 		if length then
@@ -304,7 +304,7 @@ local function ccUnarrest(ply, cmd, args)
 		return
 	end
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		target:Unarrest()
@@ -336,7 +336,7 @@ local function ccSetMoney(ply, cmd, args)
 
 	local amount = math.floor(tonumber(args[2]))
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		local nick = ""
@@ -394,7 +394,7 @@ local function ccSetSalary(ply, cmd, args)
 		return
 	end
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 
 	if target then
 		local nick = ""
@@ -467,7 +467,7 @@ local function ccSetRPName(ply, cmd, args)
 		return
 	end
 
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.FindPlayer(args[1])
 
 	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
 		if ply:EntIndex() == 0 then
