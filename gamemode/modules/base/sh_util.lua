@@ -5,7 +5,6 @@ Utility functions
 -----------------------------------------------------------------------------]]
 
 local vector = FindMetaTable("Vector")
-local plyMeta = FindMetaTable("Player")
 
 /*---------------------------------------------------------------------------
 Decides whether the vector could be seen by the player if they were to look at it
@@ -48,19 +47,6 @@ function DarkRP.findPlayer(info)
 		end
 	end
 	return nil
-end
-
-/*---------------------------------------------------------------------------
-Decides whether a given player is in the same room as the local player
-note: uses a heuristic
----------------------------------------------------------------------------*/
-function plyMeta:IsInRoom()
-	local tracedata = {}
-	tracedata.start = LocalPlayer():GetShootPos()
-	tracedata.endpos = self:GetShootPos()
-	local trace = util.TraceLine(tracedata)
-
-	return not trace.HitWorld
 end
 
 /*---------------------------------------------------------------------------

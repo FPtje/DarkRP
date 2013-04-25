@@ -160,7 +160,7 @@ GM:AddChatReceiver("speak", "speak", function(ply)
 	if not LocalPlayer().DRPIsTalking then return nil end
 	if LocalPlayer():GetPos():Distance(ply:GetPos()) > 550 then return false end
 
-	return not GAMEMODE.Config.dynamicvoice or ply:IsInRoom()
+	return not GAMEMODE.Config.dynamicvoice or ply:isInRoom()
 end)
 
 /*---------------------------------------------------------------------------

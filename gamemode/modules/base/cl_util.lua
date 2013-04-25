@@ -1,3 +1,5 @@
+local plyMeta = FindMetaTable("Player")
+
 /*---------------------------------------------------------------------------
 Show a black screen
 ---------------------------------------------------------------------------*/
@@ -40,4 +42,17 @@ function GM:TextWrap(text, font, pxWidth)
 	end)
 
 	return text
+end
+
+/*---------------------------------------------------------------------------
+Decides whether a given player is in the same room as the local player
+note: uses a heuristic
+---------------------------------------------------------------------------*/
+function plyMeta:isInRoom()
+	local tracedata = {}
+	tracedata.start = LocalPlayer():GetShootPos()
+	tracedata.endpos = self:GetShootPos()
+	local trace = util.TraceLine(tracedata)
+
+	return not trace.HitWorld
 end
