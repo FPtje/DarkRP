@@ -65,31 +65,6 @@ function GM:TalkToPerson(receiver, col1, text1, col2, text2, sender)
 	umsg.End()
 end
 
-function GM:FindPlayer(info)
-	if not info or info == "" then return nil end
-	local pls = player.GetAll()
-
-	for k = 1, #pls do -- Proven to be faster than pairs loop.
-		local v = pls[k]
-		if tonumber(info) == v:UserID() then
-			return v
-		end
-
-		if info == v:SteamID() then
-			return v
-		end
-
-		if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
-			return v
-		end
-
-		if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
-			return v
-		end
-	end
-	return nil
-end
-
 function GM:IsEmpty(vector, ignore)
 	ignore = ignore or {}
 

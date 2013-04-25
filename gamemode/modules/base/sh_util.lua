@@ -10,19 +10,16 @@ local plyMeta = FindMetaTable("Player")
 /*---------------------------------------------------------------------------
 Decides whether the vector could be seen by the player if they were to look at it
 ---------------------------------------------------------------------------*/
-function vector:RPIsInSight(v, ply)
+function vector:isInSight(filter, ply)
 	ply = ply or LocalPlayer()
 	local trace = {}
 	trace.start = ply:EyePos()
 	trace.endpos = self
-	trace.filter = v
+	trace.filter = filter
 	trace.mask = -1
 	local TheTrace = util.TraceLine(trace)
-	if TheTrace.Hit then
-		return false, TheTrace.HitPos
-	else
-		return true, TheTrace.HitPos
-	end
+
+	return not TheTrace.Hit, TheTrace.HitPos
 end
 
 /*---------------------------------------------------------------------------
