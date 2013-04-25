@@ -50,10 +50,10 @@ ZombieEnd = function()
 end
 
 local function LoadTable(ply)
-	ply:SetSelfDarkRPVar("numPoints", table.getn(zombieSpawns))
+	ply:setSelfDarkRPVar("numPoints", table.getn(zombieSpawns))
 
 	for k, v in pairs(zombieSpawns) do
-		ply:SetSelfDarkRPVar("zPoints" .. k, v)
+		ply:setSelfDarkRPVar("zPoints" .. k, v)
 	end
 end
 
@@ -97,11 +97,11 @@ local function ToggleZombie(ply)
 	if ply:HasPriv("rp_commands") then
 		if not ply.DarkRPVars.zombieToggle then
 			DB.RetrieveZombies(function()
-				ply:SetSelfDarkRPVar("zombieToggle", true)
+				ply:setSelfDarkRPVar("zombieToggle", true)
 				LoadTable(ply)
 			end)
 		else
-			ply:SetSelfDarkRPVar("zombieToggle", false)
+			ply:setSelfDarkRPVar("zombieToggle", false)
 		end
 	else
 		GAMEMODE:Notify(ply, 1, 6, LANGUAGE.string.format(LANGUAGE.need_admin, "/showzombie"))

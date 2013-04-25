@@ -121,9 +121,9 @@ local function loadInterfaces()
 
 	local _, folders = file.Find(root.."*", "LUA")
 
-	entity = FindMetaTable("Entity")
-	player = FindMetaTable("Player")
-	vector = FindMetaTable("Vector")
+	ENTITY = FindMetaTable("Entity")
+	PLAYER = FindMetaTable("Player")
+	VECTOR = FindMetaTable("Vector")
 
 	for _, folder in SortedPairs(folders, true) do
 		if GM.Config.DisabledModules[folder] then continue end
@@ -138,6 +138,6 @@ local function loadInterfaces()
 		end
 	end
 
-	entity, player, vector = nil, nil, nil
+	ENTITY, PLAYER, VECTOR = nil, nil, nil
 end
 loadInterfaces()

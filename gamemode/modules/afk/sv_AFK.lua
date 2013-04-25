@@ -7,15 +7,15 @@ local function AFKDemote(ply)
 
 	if ply:Team() ~= TEAM_CITIZEN then
 		ply:ChangeTeam(TEAM_CITIZEN, true)
-		ply:SetSelfDarkRPVar("AFKDemoted", true)
+		ply:setSelfDarkRPVar("AFKDemoted", true)
 		GAMEMODE:NotifyAll(0, 5, rpname .. " has been demoted for being AFK for too long.")
 	end
-	ply:SetDarkRPVar("job", "AFK")
+	ply:setDarkRPVar("job", "AFK")
 end
 
 local function SetAFK(ply)
 	local rpname = ply.DarkRPVars.rpname
-	ply:SetSelfDarkRPVar("AFK", not ply.DarkRPVars.AFK)
+	ply:setSelfDarkRPVar("AFK", not ply.DarkRPVars.AFK)
 
 	SendUserMessage("blackScreen", ply, ply.DarkRPVars.AFK)
 
@@ -67,7 +67,7 @@ local function SetAFK(ply)
 		hook.Remove("PlayerDisconnected", ply:EntIndex().."DRPNPCDisconnect")
 		hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath")
 	end
-	ply:SetDarkRPVar("job", ply.DarkRPVars.AFK and "AFK" or ply.OldJob)
+	ply:setDarkRPVar("job", ply.DarkRPVars.AFK and "AFK" or ply.OldJob)
 	ply.DarkRPVars.salary = ply.DarkRPVars.AFK and 0 or ply.OldSalary or 0
 end
 DarkRP.addChatCommand("/afk", SetAFK)
@@ -80,8 +80,8 @@ hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply.DarkRPVars.AFKDemoted then
-		ply:SetDarkRPVar("job", "Citizen")
-		timer.Simple(3, function() ply:SetSelfDarkRPVar("AFKDemoted", false) end)
+		ply:setDarkRPVar("job", "Citizen")
+		timer.Simple(3, function() ply:setSelfDarkRPVar("AFKDemoted", false) end)
 	end
 end
 hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)

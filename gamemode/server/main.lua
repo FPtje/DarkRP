@@ -132,7 +132,7 @@ end
 
 local function TimerUnwanted(ply, target)
 	if IsValid(target) and target:Alive() and target.DarkRPVars.wanted then
-		target:SetDarkRPVar("wanted", false)
+		target:setDarkRPVar("wanted", false)
 		for a, b in pairs(player.GetAll()) do
 			b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_expired, target:Nick()))
 			timer.Destroy(target:Nick() .. " wantedtimer")
@@ -233,8 +233,8 @@ local function PlayerWanted(ply, args)
 		if p and p:Alive() and not p:isArrested() and not p.DarkRPVars.wanted then
 			hook.Call("PlayerWanted", GAMEMODE, ply, p, reason)
 
-			p:SetDarkRPVar("wanted", true)
-			p:SetDarkRPVar("wantedReason", tostring(reason))
+			p:setDarkRPVar("wanted", true)
+			p:setDarkRPVar("wantedReason", tostring(reason))
 			for a, b in pairs(player.GetAll()) do
 				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_by_police, p:Nick()) ..
 					"\nReason: " .. tostring(reason) ..
@@ -258,7 +258,7 @@ local function PlayerUnWanted(ply, args)
 		local p = GAMEMODE:FindPlayer(args)
 		if p and p:Alive() and p.DarkRPVars.wanted then
 			hook.Call("PlayerUnWanted", GAMEMODE, ply, p)
-			p:SetDarkRPVar("wanted", false)
+			p:setDarkRPVar("wanted", false)
 			for a, b in pairs(player.GetAll()) do
 				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_expired, p:Nick()) ..
 					"\nRevoked by: " .. ply:Nick())
@@ -890,7 +890,7 @@ DarkRP.addChatCommand("/buyhealth", BuyHealth)
  ---------------------------------------------------------*/
 local function CreateAgenda(ply, args)
 	if DarkRPAgendas[ply:Team()] then
-		ply:SetDarkRPVar("agenda", args)
+		ply:setDarkRPVar("agenda", args)
 
 		GAMEMODE:Notify(ply, 2, 4, LANGUAGE.agenda_updated)
 		for k,v in pairs(DarkRPAgendas[ply:Team()].Listeners) do
@@ -1714,7 +1714,7 @@ local function GrantLicense(answer, Ent, Initiator, Target)
 	if answer == 1 then
 		GAMEMODE:Notify(Initiator, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		GAMEMODE:Notify(Target, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
-		Initiator:SetDarkRPVar("HasGunlicense", true)
+		Initiator:setDarkRPVar("HasGunlicense", true)
 	else
 		GAMEMODE:Notify(Initiator, 1, 4, string.format(LANGUAGE.gunlicense_denied, Target:Nick(), Initiator:Nick()))
 	end
@@ -1830,7 +1830,7 @@ local function GiveLicense(ply)
 	end
 	GAMEMODE:Notify(LookingAt, 0, 4, string.format(LANGUAGE.gunlicense_granted, ply:Nick(), LookingAt:Nick()))
 	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.gunlicense_granted, ply:Nick(), LookingAt:Nick()))
-	LookingAt:SetDarkRPVar("HasGunlicense", true)
+	LookingAt:setDarkRPVar("HasGunlicense", true)
 	return ""
 end
 DarkRP.addChatCommand("/givelicense", GiveLicense)
@@ -1844,7 +1844,7 @@ local function rp_GiveLicense(ply, cmd, args)
 	local target = GAMEMODE:FindPlayer(args[1])
 
 	if target then
-		target:SetDarkRPVar("HasGunlicense", true)
+		target:setDarkRPVar("HasGunlicense", true)
 
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
@@ -1880,7 +1880,7 @@ local function rp_RevokeLicense(ply, cmd, args)
 	local target = GAMEMODE:FindPlayer(args[1])
 
 	if target then
-		target:SetDarkRPVar("HasGunlicense", false)
+		target:setDarkRPVar("HasGunlicense", false)
 
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
@@ -1909,7 +1909,7 @@ concommand.Add("rp_revokelicense", rp_RevokeLicense)
 
 local function FinishRevokeLicense(choice, v)
 	if choice == 1 then
-		v:SetDarkRPVar("HasGunlicense", false)
+		v:setDarkRPVar("HasGunlicense", false)
 		v:StripWeapons()
 		GAMEMODE:PlayerLoadout(v)
 		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_removed, v:Nick()))

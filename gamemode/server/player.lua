@@ -92,10 +92,10 @@ function meta:RestorePlayerData()
 		info.wallet = info.wallet or GAMEMODE.Config.startingmoney
 		info.salary = info.salary or GAMEMODE.Config.normalsalary
 
-		self:SetDarkRPVar("money", info.wallet)
-		self:SetDarkRPVar("salary", info.salary)
+		self:setDarkRPVar("money", info.wallet)
+		self:setDarkRPVar("salary", info.salary)
 
-		self:SetDarkRPVar("rpname", info.rpname)
+		self:setDarkRPVar("rpname", info.rpname)
 
 		if not data then
 			DB.CreatePlayerData(self, info.rpname, info.wallet, info.salary)
@@ -103,9 +103,9 @@ function meta:RestorePlayerData()
 	end, function() -- Retrieving data failed, go on without it
 		self.DarkRPUnInitialized = nil
 
-		self:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
-		self:SetDarkRPVar("salary", GAMEMODE.Config.normalsalary)
-		self:SetDarkRPVar(string.gsub(self:SteamName(), "\\\"", "\""))
+		self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
+		self:setDarkRPVar("salary", GAMEMODE.Config.normalsalary)
+		self:setDarkRPVar(string.gsub(self:SteamName(), "\\\"", "\""))
 
 		ErrorNoHalt("Failed to retrieve player information")
 	end)
@@ -237,7 +237,7 @@ function meta:ChangeTeam(t, force)
 		return false
 	end
 
-	self:SetDarkRPVar("agenda", nil)
+	self:setDarkRPVar("agenda", nil)
 
 	if t ~= TEAM_CITIZEN and not self:ChangeAllowed(t) and not force then
 		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), "banned/demoted"))
@@ -301,13 +301,13 @@ function meta:ChangeTeam(t, force)
 		GAMEMODE:UnLockdown(self)
 	end
 	self:UpdateJob(TEAM.name)
-	self:SetSelfDarkRPVar("salary", TEAM.salary)
+	self:setSelfDarkRPVar("salary", TEAM.salary)
 	GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.job_has_become, self:Nick(), TEAM.name))
 	if self.DarkRPVars.HasGunlicense then
-		self:SetDarkRPVar("HasGunlicense", false)
+		self:setDarkRPVar("HasGunlicense", false)
 	end
 	if TEAM.hasLicense and GAMEMODE.Config.license then
-		self:SetDarkRPVar("HasGunlicense", true)
+		self:setDarkRPVar("HasGunlicense", true)
 	end
 
 	self.LastJob = CurTime()
@@ -365,7 +365,7 @@ function meta:ChangeTeam(t, force)
 end
 
 function meta:UpdateJob(job)
-	self:SetDarkRPVar("job", job)
+	self:setDarkRPVar("job", job)
 
 	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
 		if not IsValid(self) then return end
@@ -386,7 +386,7 @@ function meta:AddMoney(amount)
 	local total = self.DarkRPVars.money + math.floor(amount)
 	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self.DarkRPVars.money) or total
 
-	self:SetDarkRPVar("money", total)
+	self:setDarkRPVar("money", total)
 
 	if self.DarkRPUnInitialized then return end
 	DB.StoreMoney(self, total)
@@ -456,10 +456,10 @@ end
 
 function meta:Arrest(time, rejoin)
 	hook.Call("PlayerArrested", GAMEMODE, self, time)
-	self:SetDarkRPVar("wanted", false)
+	self:setDarkRPVar("wanted", false)
 	self.warranted = false
-	self:SetSelfDarkRPVar("HasGunlicense", false)
-	self:SetDarkRPVar("Arrested", true)
+	self:setSelfDarkRPVar("HasGunlicense", false)
+	self:setDarkRPVar("Arrested", true)
 	GAMEMODE:SetPlayerSpeed(self, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 	self:StripWeapons()
 
@@ -507,7 +507,7 @@ end
 function meta:Unarrest()
 	hook.Call("PlayerUnarrested", GAMEMODE, self)
 
-	self:SetDarkRPVar("Arrested", false)
+	self:setDarkRPVar("Arrested", false)
 	if not IsValid(self) then
 		return
 	end

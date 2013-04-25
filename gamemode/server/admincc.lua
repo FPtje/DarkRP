@@ -341,7 +341,7 @@ local function ccSetMoney(ply, cmd, args)
 	if target then
 		local nick = ""
 		DB.StoreMoney(target, amount)
-		target:SetDarkRPVar("money", amount)
+		target:setDarkRPVar("money", amount)
 
 		if ply:EntIndex() == 0 then
 			print("Set " .. target:Nick() .. "'s money to: " .. CUR .. amount)
@@ -399,7 +399,7 @@ local function ccSetSalary(ply, cmd, args)
 	if target then
 		local nick = ""
 		DB.StoreSalary(target, amount)
-		target:SetSelfDarkRPVar("salary", amount)
+		target:setSelfDarkRPVar("salary", amount)
 		if ply:EntIndex() == 0 then
 			print("Set " .. target:Nick() .. "'s Salary to: " .. CUR .. amount)
 			nick = "Console"
@@ -481,7 +481,7 @@ local function ccSetRPName(ply, cmd, args)
 		local oldname = target:Nick()
 		local nick = ""
 		DB.StoreRPName(target, args[2])
-		target:SetDarkRPVar("rpname", args[2])
+		target:setDarkRPVar("rpname", args[2])
 		if ply:EntIndex() == 0 then
 			print("Set " .. oldname .. "'s name to: " .. args[2])
 			nick = "Console"

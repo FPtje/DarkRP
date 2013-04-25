@@ -6,7 +6,7 @@ local function AddFoodItem(name, mdl, amount)
 end
 
 function HM.PlayerSpawn(ply)
-	ply:SetSelfDarkRPVar("Energy", 100)
+	ply:setSelfDarkRPVar("Energy", 100)
 end
 hook.Add("PlayerSpawn", "HM.PlayerSpawn", HM.PlayerSpawn)
 

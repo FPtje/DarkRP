@@ -59,7 +59,7 @@ function KnockoutToggle(player, command, args, caller)
 					player:Arrest()
 				end
 				player.Sleeping = false
-				player:SetSelfDarkRPVar("Energy", player.OldHunger)
+				player:setSelfDarkRPVar("Energy", player.OldHunger)
 				player.OldHunger = nil
 
 				if player.DarkRPVars.Arrested then

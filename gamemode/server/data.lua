@@ -378,9 +378,9 @@ function DB.Init()
 				if not data or not data[1] then return end
 
 				local Data = data[1]
-				v:SetDarkRPVar("rpname", Data.rpname)
-				v:SetSelfDarkRPVar("salary", Data.salary)
-				v:SetDarkRPVar("money", Data.wallet)
+				v:setDarkRPVar("rpname", Data.rpname)
+				v:setSelfDarkRPVar("salary", Data.salary)
+				v:setDarkRPVar("money", Data.wallet)
 			end)
 		end
 	end
@@ -677,7 +677,7 @@ Players
  ---------------------------------------------------------*/
 function DB.StoreRPName(ply, name)
 	if not name or string.len(name) < 2 then return end
-	ply:SetDarkRPVar("rpname", name)
+	ply:setDarkRPVar("rpname", name)
 
 	DB.Query([[UPDATE darkrp_player SET rpname = ]] .. sql.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
@@ -717,7 +717,7 @@ function DB.ResetAllMoney(ply,cmd,args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
 	DB.Query("UPDATE darkrp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
 	for k,v in pairs(player.GetAll()) do
-		v:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
+		v:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
 	end
 	if ply:IsPlayer() then
 		GAMEMODE:NotifyAll(0,4, string.format(LANGUAGE.reset_money, ply:Nick()))
@@ -734,7 +734,7 @@ function DB.PayPlayer(ply1, ply2, amount)
 end
 
 function DB.StoreSalary(ply, amount)
-	ply:SetSelfDarkRPVar("salary", math.floor(amount))
+	ply:setSelfDarkRPVar("salary", math.floor(amount))
 
 	DB.Query([[UPDATE darkrp_player SET salary = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 
@@ -749,7 +749,7 @@ function DB.RetrieveSalary(ply, callback)
 	DB.QueryValue("SELECT salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
 		local normal = GAMEMODE.Config.normalsalary
 		if not r then
-			ply:SetSelfDarkRPVar("salary", normal)
+			ply:setSelfDarkRPVar("salary", normal)
 			callback(normal)
 		else
 			callback(r)

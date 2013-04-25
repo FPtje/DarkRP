@@ -13,7 +13,7 @@ Player vars
 /*---------------------------------------------------------------------------
 Set a player's DarkRPVar
 ---------------------------------------------------------------------------*/
-function meta:SetDarkRPVar(var, value, target)
+function meta:setDarkRPVar(var, value, target)
 	if not IsValid(self) then return end
 	target = target or RecipientFilter():AddAllPlayers()
 
@@ -34,11 +34,11 @@ end
 /*---------------------------------------------------------------------------
 Set a private DarkRPVar
 ---------------------------------------------------------------------------*/
-function meta:SetSelfDarkRPVar(var, value)
+function meta:setSelfDarkRPVar(var, value)
 	self.privateDRPVars = self.privateDRPVars or {}
 	self.privateDRPVars[var] = true
 
-	self:SetDarkRPVar(var, value, self)
+	self:setDarkRPVar(var, value, self)
 end
 
 /*---------------------------------------------------------------------------
