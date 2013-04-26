@@ -36,6 +36,7 @@ AddCSLuaFile("sh_interfaceloader.lua")
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
+
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("config/config.lua")
 
