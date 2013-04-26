@@ -19,14 +19,9 @@ end
 
 local meta = FindMetaTable("Player")
 meta.SteamName = meta.SteamName or meta.Name
-meta.Name = function(self)
-	if not IsValid(self) then return "" end
-	if GAMEMODE.Config.allowrpnames then
-		self.DarkRPVars = self.DarkRPVars or {}
-		return self.DarkRPVars.rpname and tostring(self.DarkRPVars.rpname) or self:SteamName()
-	else
-		return self:SteamName()
-	end
+function meta:Name()
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self.DarkRPVars.rpname
+		or self:SteamName()
 end
 meta.Nick = meta.Name
 meta.GetName = meta.Name

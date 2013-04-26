@@ -57,8 +57,6 @@ GM.Config.showdeaths 					= true
 GM.Config.deathpov 						= false
 -- decalcleaner - Enable/Disable clearing ever players decals.
 GM.Config.decalcleaner 					= false
--- dmautokick - Enable/disable Auto-kick of deathmatchers.
-GM.Config.dmautokick 					= true
 -- doorwarrants - Enable/disable Warrant requirement to enter property.
 GM.Config.doorwarrants 					= true
 -- dropmoneyondeath - Enable/disable whether people drop money on death.
@@ -159,10 +157,6 @@ GM.Config.deathfee						= 30
 GM.Config.decaltimer					= 120
 -- demotetime - Number of seconds before a player can rejoin a team after demotion from that team.
 GM.Config.demotetime					= 120
--- dmgracetime - Number of seconds after killing a player that the killer will be watched for DM.
-GM.Config.dmgracetime					= 30
--- dmmaxkills - Max number of kills allowed during rp_dm_gracetime to avoid being auto-kicked for DM.
-GM.Config.dmmaxkills					= 3
 -- doorcost - Sets the cost of a door.
 GM.Config.doorcost						= 30
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
