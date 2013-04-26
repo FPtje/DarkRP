@@ -14,13 +14,8 @@ local pmeta = FindMetaTable("Player")
 
 pmeta.SteamName = pmeta.SteamName or pmeta.Name
 function pmeta:Name()
-	if not self or not self.IsValid or not IsValid(self) then return "" end
-
-	self.DarkRPVars = self.DarkRPVars or {}
-	if not GAMEMODE.Config.allowrpnames then
-		return self:SteamName()
-	end
-	return self.DarkRPVars.rpname and tostring(self.DarkRPVars.rpname) or self:SteamName()
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self.DarkRPVars.rpname
+		or self:SteamName()
 end
 
 pmeta.GetName = pmeta.Name

@@ -107,7 +107,7 @@ function meta:RestorePlayerData()
 		self:setDarkRPVar("salary", GAMEMODE.Config.normalsalary)
 		self:setDarkRPVar(string.gsub(self:SteamName(), "\\\"", "\""))
 
-		ErrorNoHalt("Failed to retrieve player information")
+		error("Failed to retrieve player information from MySQL server")
 	end)
 end
 
@@ -124,12 +124,6 @@ end
 function meta:ChangeAllowed(t)
 	if not self.bannedfrom then return true end
 	if self.bannedfrom[t] == 1 then return false else return true end
-end
-
-function meta:ResetDMCounter()
-	if not IsValid(self) then return end
-	self.kills = 0
-	return true
 end
 
 function meta:InitiateTax()
@@ -284,7 +278,9 @@ function meta:ChangeTeam(t, force)
 			return false
 		end
 		local max = TEAM.max
-		if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(t) >= max) or (max % 1 ~= 0 and (team.NumPlayers(t) + 1) / #player.GetAll() > max)) then
+		if max ~= 0 and -- No limit
+		(max >= 1 and team.NumPlayers(t) >= max or -- absolute maximum
+		max < 1 and (team.NumPlayers(t) + 1) / #player.GetAll() > max) then -- fractional limit (in percentages)
 			GAMEMODE:Notify(self, 1, 4,  string.format(LANGUAGE.team_limit_reached, TEAM.name))
 			return false
 		end
