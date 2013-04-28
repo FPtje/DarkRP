@@ -156,11 +156,6 @@ function SWEP:PrimaryAttack( partofburst )
 		return
 	end
 
-	if self.CurHoldType == "normal" then
-		self:NewSetWeaponHoldType(self.HoldType)
-		self.CurHoldType = self.HoldType
-	end
-
 	if self.FireMode != "burst" then
 
 		self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
