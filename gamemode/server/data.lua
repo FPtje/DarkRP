@@ -10,20 +10,70 @@ end
 DB.CONNECTED_TO_MYSQL = false
 DB.MySQLDB = nil
 
+local QueuedQueries
 function DB.Begin()
 	if not DB.CONNECTED_TO_MYSQL then
 		sql.Begin()
 	else
-		DB.Query("START TRANSACTION")
+		if QueuedQueries then
+			debug.Trace()
+			error("Transaction ongoing!")
+		end
+		QueuedQueries = {}
 	end
 end
 
-function DB.Commit()
+function DB.Commit(onFinished)
 	if not DB.CONNECTED_TO_MYSQL then
 		sql.Commit()
+		if onFinished then onFinished() end
 	else
-		DB.Query("COMMIT")
+		if not QueuedQueries then
+			error("No queued queries! Call DB.Begin() first!")
+		end
+
+		if #QueuedQueries == 0 then
+			QueuedQueries = nil
+			return
+		end
+
+		-- Copy the table so other scripts can create their own queue
+		local queue = table.Copy(QueuedQueries)
+		QueuedQueries = nil
+
+		-- Handle queued queries in order
+		local queuePos = 0
+		local call
+
+		-- Recursion invariant: queuePos > 0 and queue[queuePos] <= #queue
+		call = function(...)
+			queuePos = queuePos + 1
+
+			if queue[queuePos].callback then
+				queue[queuePos].callback(...)
+			end
+
+			-- Base case, end of the queue
+			if queuePos + 1 > #queue then
+				if onFinished then onFinished() end -- All queries have finished
+				return
+			end
+
+			-- Reqursion
+			local nextQuery = queue[queuePos + 1]
+			DB.Query(nextQuery.query, call, nextQuery.onError)
+		end
+
+		DB.Query(queue[1].query, call, queue[1].onError)
 	end
+end
+
+function DB.QueueQuery(sqlText, callback, errorCallback)
+	if DB.CONNECTED_TO_MYSQL then
+		table.insert(QueuedQueries, {query = sqlText, callback = callback, onError = errorCallback})
+	end
+	-- SQLite is instantaneous, simply running the query is equal to queueing it
+	DB.Query(sqlText, callback, errorCallback)
 end
 
 function DB.Query(sqlText, callback, errorCallback)
@@ -46,7 +96,7 @@ function DB.Query(sqlText, callback, errorCallback)
 			end
 
 			DB.Log("MySQL Error: ".. E)
-			ErrorNoHalt(E)
+			ErrorNoHalt(E .. " (" .. sqlText .. ")\n")
 		end
 
 		query.onSuccess = function()
@@ -91,7 +141,7 @@ function DB.QueryValue(sqlText, callback, errorCallback)
 			end
 
 			DB.Log("MySQL Error: ".. E)
-			ErrorNoHalt(E)
+			ErrorNoHalt(E .. " (" .. sqlText .. ")\n")
 		end
 
 		query:start()
@@ -139,7 +189,7 @@ function DB.ConnectToMySQL(host, username, password, database_name, database_por
 			end
 		end)
 
-		hook.Call("DatabaseInitialized", GAMEMODE)
+		hook.Call("DatabaseInitialized")
 	end
 	databaseObject:connect()
 	DB.MySQLDB = databaseObject
@@ -163,7 +213,9 @@ function DB.Init()
 		]])
 
 		-- Table that holds all position data (jail, consoles, zombie spawns etc.)
-		DB.Query([[
+		-- Queue these queries because other queries depend on the existence of the darkrp_position table
+		-- Race conditions could occur if the queries are executed simultaneously
+		DB.QueueQuery([[
 			CREATE TABLE IF NOT EXISTS darkrp_position(
 				id INTEGER NOT NULL PRIMARY KEY ]]..AUTOINCREMENT..[[,
 				map VARCHAR(45) NOT NULL,
@@ -175,19 +227,24 @@ function DB.Init()
 		]])
 
 		-- team spawns require extra data
-		DB.Query([[
+		DB.QueueQuery([[
 			CREATE TABLE IF NOT EXISTS darkrp_jobspawn(
 				id INTEGER NOT NULL PRIMARY KEY,
-				team INTEGER NOT NULL,
-
-				FOREIGN KEY(id) REFERENCES darkrp_position(id)
-					ON UPDATE CASCADE
-					ON DELETE CASCADE
+				team INTEGER NOT NULL
 			);
 		]])
 
+		if DB.CONNECTED_TO_MYSQL then
+			DB.QueueQuery([[
+				ALTER TABLE darkrp_jobspawn ADD FOREIGN KEY(id) REFERENCES darkrp_position(id)
+					ON UPDATE CASCADE
+					ON DELETE CASCADE;
+			]])
+		end
+
+
 		-- Consoles have to be spawned in an angle
-		DB.Query([[
+		DB.QueueQuery([[
 			CREATE TABLE IF NOT EXISTS darkrp_console(
 				id INTEGER NOT NULL PRIMARY KEY,
 				pitch INTEGER NOT NULL,
@@ -273,7 +330,6 @@ function DB.Init()
 					end
 
 					if not found then return end
-
 					DB.Query([[
 						CREATE TRIGGER JobPositionFKDelete
 							AFTER DELETE ON darkrp_position
@@ -308,82 +364,83 @@ function DB.Init()
 					END;
 			]])
 		end
-	DB.Commit()
+	DB.Commit(function() -- Initialize the data after all the tables have been created
 
-	-- Update older version of database to the current database
-	-- Only run when one of the older tables exist
-	local updateQuery = [[SELECT name FROM sqlite_master WHERE type="table" AND name="darkrp_cvars";]]
-	if DB.CONNECTED_TO_MYSQL then
-		updateQuery = [[show tables like "darkrp_cvars";]]
-	end
-
-	DB.QueryValue(updateQuery, function(data)
-		if data == "darkrp_cvars" then
-			print("UPGRADING DATABASE!")
-			DB.UpdateDatabase()
+		-- Update older version of database to the current database
+		-- Only run when one of the older tables exist
+		local updateQuery = [[SELECT name FROM sqlite_master WHERE type="table" AND name="darkrp_cvars";]]
+		if DB.CONNECTED_TO_MYSQL then
+			updateQuery = [[show tables like "darkrp_cvars";]]
 		end
-	end)
 
-	DB.SetUpNonOwnableDoors()
-	DB.SetUpTeamOwnableDoors()
-	DB.SetUpGroupDoors()
-	DB.LoadConsoles()
+		DB.QueryValue(updateQuery, function(data)
+			if data == "darkrp_cvars" then
+				print("UPGRADING DATABASE!")
+				DB.UpdateDatabase()
+			end
+		end)
 
-	DB.Query("SELECT * FROM darkrp_cvar;", function(settings)
-		for k,v in pairs(settings or {}) do
-			RunConsoleCommand(v.var, v.value)
-		end
-	end)
+		DB.SetUpNonOwnableDoors()
+		DB.SetUpTeamOwnableDoors()
+		DB.SetUpGroupDoors()
+		DB.LoadConsoles()
 
-	DB.JailPos = DB.JailPos or {}
-	zombieSpawns = zombieSpawns or {}
-	DB.Query([[SELECT * FROM darkrp_position WHERE type IN('J', 'Z') AND map = ]] .. map .. [[;]], function(data)
-		for k,v in pairs(data or {}) do
-			if v.type == "J" then
-				table.insert(DB.JailPos, v)
-			elseif v.type == "Z" then
-				table.insert(zombieSpawns, v)
+		DB.Query("SELECT * FROM darkrp_cvar;", function(settings)
+			for k,v in pairs(settings or {}) do
+				RunConsoleCommand(v.var, v.value)
+			end
+		end)
+
+		DB.JailPos = DB.JailPos or {}
+		zombieSpawns = zombieSpawns or {}
+		DB.Query([[SELECT * FROM darkrp_position WHERE type IN('J', 'Z') AND map = ]] .. map .. [[;]], function(data)
+			for k,v in pairs(data or {}) do
+				if v.type == "J" then
+					table.insert(DB.JailPos, v)
+				elseif v.type == "Z" then
+					table.insert(zombieSpawns, v)
+				end
+			end
+
+			if table.Count(DB.JailPos) == 0 then
+				DB.CreateJailPos()
+				return
+			end
+			if table.Count(zombieSpawns) == 0 then
+				DB.CreateZombiePos()
+				return
+			end
+
+			jail_positions = nil
+		end)
+
+		DB.TeamSpawns = {}
+		DB.Query("SELECT * FROM darkrp_position NATURAL JOIN darkrp_jobspawn WHERE map = "..map..";", function(data)
+			if not data or table.Count(data) == 0 then
+				DB.CreateSpawnPos()
+				return
+			end
+
+			team_spawn_positions = nil
+
+			DB.TeamSpawns = data
+		end)
+
+		if DB.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
+									--so he walks around with the settings from the SQLite database
+			for k,v in pairs(player.GetAll()) do
+				local UniqueID = sql.SQLStr(v:UniqueID())
+				DB.Query([[SELECT * FROM darkrp_player WHERE uid = ]].. UniqueID ..[[;]], function(data)
+					if not data or not data[1] then return end
+
+					local Data = data[1]
+					v:setDarkRPVar("rpname", Data.rpname)
+					v:setSelfDarkRPVar("salary", Data.salary)
+					v:setDarkRPVar("money", Data.wallet)
+				end)
 			end
 		end
-
-		if table.Count(DB.JailPos) == 0 then
-			DB.CreateJailPos()
-			return
-		end
-		if table.Count(zombieSpawns) == 0 then
-			DB.CreateZombiePos()
-			return
-		end
-
-		jail_positions = nil
 	end)
-
-	DB.TeamSpawns = {}
-	DB.Query("SELECT * FROM darkrp_position NATURAL JOIN darkrp_jobspawn WHERE map = "..map..";", function(data)
-		if not data or table.Count(data) == 0 then
-			DB.CreateSpawnPos()
-			return
-		end
-
-		team_spawn_positions = nil
-
-		DB.TeamSpawns = data
-	end)
-
-	if DB.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
-								--so he walks around with the settings from the SQLite database
-		for k,v in pairs(player.GetAll()) do
-			local UniqueID = sql.SQLStr(v:UniqueID())
-			DB.Query([[SELECT * FROM darkrp_player WHERE uid = ]].. UniqueID ..[[;]], function(data)
-				if not data or not data[1] then return end
-
-				local Data = data[1]
-				v:setDarkRPVar("rpname", Data.rpname)
-				v:setSelfDarkRPVar("salary", Data.salary)
-				v:setDarkRPVar("money", Data.wallet)
-			end)
-		end
-	end
 end
 
 /*---------------------------------------------------------------------------

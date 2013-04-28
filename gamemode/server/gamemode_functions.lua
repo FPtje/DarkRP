@@ -93,8 +93,8 @@ function GM:CanDropWeapon(ply, weapon)
 end
 
 function GM:DatabaseInitialized()
-	DB.Init()
 	FPP.Init()
+	DB.Init()
 end
 
 function GM:CanSeeLogMessage(ply, message, colour)
@@ -753,7 +753,7 @@ end
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
 	if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
-		hook.Call("DatabaseInitialized", self)
+		hook.Call("DatabaseInitialized")
 	end
 
 	InitPostEntityCalled = true

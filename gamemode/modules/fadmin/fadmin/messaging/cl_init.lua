@@ -15,6 +15,7 @@ function FAdmin.Messages.AddMessage( MsgType, Message )
 	tab.y		= ScrH()
 	tab.a		= 255
 	local MsgTypeNames = {"ERROR", "NOTIFY", "QUESTION", "GOOD", "BAD"}
+	if not MsgTypeNames[MsgType] then return end
 	tab.col = FAdmin.Messages.MsgTypes[MsgTypeNames[MsgType]].COLOR
 
 	tab.MsgType = Material(FAdmin.Messages.MsgTypes[MsgTypeNames[MsgType]].TEXTURE or "")
