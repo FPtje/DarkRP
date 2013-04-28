@@ -11,11 +11,15 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 	FAdmin.Access.Groups[name] = FAdmin.Access.Groups[name] or {ADMIN = admin_access, PRIVS = privs or {}}
 	if not SERVER then return end
 
-	DB.Query("REPLACE INTO FADMIN_GROUPS VALUES(".. sql.SQLStr(name) .. ", " .. admin_access..");")
+	DB.QueryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = "..sql.SQLStr(name) .. ";", function(val)
+		if tonumber(val) > 0 then return end
 
-	for priv, _ in pairs(privs or {}) do
-		DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. sql.SQLStr(name) .. ", " .. sql.SQLStr(priv) .. ");")
-	end
+		DB.Query("REPLACE INTO FADMIN_GROUPS VALUES(".. sql.SQLStr(name) .. ", " .. admin_access..");")
+
+		for priv, _ in pairs(privs or {}) do
+			DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. sql.SQLStr(name) .. ", " .. sql.SQLStr(priv) .. ");")
+		end
+	end)
 
 	if FAdmin.Access.SendGroups and privs then
 		for k,v in pairs(player.GetAll()) do
