@@ -372,11 +372,6 @@ end
 /*---------------------------------------------------------
  Money
  ---------------------------------------------------------*/
-function meta:CanAfford(amount)
-	if not amount or self.DarkRPUnInitialized then return false end
-	return math.floor(amount) >= 0 and self.DarkRPVars.money - math.floor(amount) >= 0
-end
-
 function meta:AddMoney(amount)
 	if not amount then return false end
 	local total = self.DarkRPVars.money + math.floor(amount)
@@ -570,7 +565,7 @@ function meta:DoPropertyTax()
 	local price = 10
 	local tax = price * numowned + math.random(-5, 5)
 
-	if self:CanAfford(tax) then
+	if self:canAfford(tax) then
 		if tax ~= 0 then
 			self:AddMoney(-tax)
 			GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.property_tax, CUR .. tax))

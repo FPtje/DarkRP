@@ -72,7 +72,7 @@ function ENT:Use(activator,caller)
 	if not self.CanUse then return false end
 	local Owner = self:Getowning_ent()
 	if activator ~= Owner then
-		if not activator:CanAfford(self:Getprice()) then
+		if not activator:canAfford(self:Getprice()) then
 			return false
 		end
 		DB.PayPlayer(activator, Owner, self:Getprice())

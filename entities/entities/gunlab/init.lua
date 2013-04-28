@@ -58,12 +58,12 @@ function ENT:Use(activator)
 
 	if self.Once then return end
 
-	if not activator:CanAfford(self:SalePrice(activator)) then
+	if not activator:canAfford(self:SalePrice(activator)) then
 		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase this gun.")
 		return ""
 	end
 	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
-	if diff < 0 and not owner:CanAfford(math.abs(diff)) then
+	if diff < 0 and not owner:canAfford(math.abs(diff)) then
 		GAMEMODE:Notify(activator, 2, 3, "Gun Lab owner is too poor to subsidize this sale!")
 		return ""
 	end

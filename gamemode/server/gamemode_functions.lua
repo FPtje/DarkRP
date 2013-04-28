@@ -179,7 +179,7 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 	end
 
 	if GAMEMODE.Config.proppaying then
-		if ply:CanAfford(GAMEMODE.Config.propcost) then
+		if ply:canAfford(GAMEMODE.Config.propcost) then
 			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. CUR .. GAMEMODE.Config.propcost)
 			ply:AddMoney(-GAMEMODE.Config.propcost)
 		else
@@ -401,7 +401,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 
 	if GAMEMODE.Config.dropmoneyondeath then
 		local amount = GAMEMODE.Config.deathfee
-		if not ply:CanAfford(GAMEMODE.Config.deathfee) then
+		if not ply:canAfford(GAMEMODE.Config.deathfee) then
 			amount = ply.DarkRPVars.money
 		end
 

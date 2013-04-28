@@ -577,7 +577,7 @@ local function BuyPistol(ply, args)
 		return ""
 	end
 
-	if not ply:CanAfford(price) then
+	if not ply:canAfford(price) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "/buy"))
 		return ""
 	end
@@ -650,7 +650,7 @@ local function BuyShipment(ply, args)
 
 	local cost = found.price
 
-	if not ply:CanAfford(cost) then
+	if not ply:canAfford(cost) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "shipment"))
 		return ""
 	end
@@ -704,7 +704,7 @@ local function BuyVehicle(ply, args)
 		return ""
 	end
 
-	if not ply:CanAfford(found.price) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "vehicle")) return "" end
+	if not ply:canAfford(found.price) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "vehicle")) return "" end
 	ply:AddMoney(-found.price)
 	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, CUR .. found.price))
 
@@ -770,7 +770,7 @@ for k,v in pairs(DarkRPEntities) do
 			return ""
 		end
 
-		if not ply:CanAfford(v.price) then
+		if not ply:canAfford(v.price) then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, v.cmd))
 			return ""
 		end
@@ -824,7 +824,7 @@ local function BuyAmmo(ply, args)
 		return ""
 	end
 
-	if not ply:CanAfford(found.price) then
+	if not ply:canAfford(found.price) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "ammo"))
 		return ""
 	end
@@ -865,7 +865,7 @@ local function BuyHealth(ply)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/buyhealth", ""))
 		return ""
 	end
-	if not ply:CanAfford(cost) then
+	if not ply:canAfford(cost) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "/buyhealth"))
 		return ""
 	end
@@ -1393,7 +1393,7 @@ local function GiveMoney(ply, args)
 			return
 		end
 
-		if not ply:CanAfford(amount) then
+		if not ply:canAfford(amount) then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
 			return ""
 		end
@@ -1410,7 +1410,7 @@ local function GiveMoney(ply, args)
 			if IsValid(ply) then
 				local trace2 = ply:GetEyeTrace()
 				if IsValid(trace2.Entity) and trace2.Entity:IsPlayer() and trace2.Entity:GetPos():Distance(ply:GetPos()) < 150 then
-					if not ply:CanAfford(amount) then
+					if not ply:canAfford(amount) then
 						GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
 						return ""
 					end
@@ -1442,7 +1442,7 @@ local function DropMoney(ply, args)
 		return ""
 	end
 
-	if not ply:CanAfford(amount) then
+	if not ply:canAfford(amount) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
 		return ""
 	end
@@ -1489,7 +1489,7 @@ local function CreateCheque(ply, args)
 		return ""
 	end
 
-	if not ply:CanAfford(amount) then
+	if not ply:canAfford(amount) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
 		return ""
 	end
@@ -1534,7 +1534,7 @@ local LotteryAmount = 0
 local CanLottery = CurTime()
 local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 	if answer == 1 and not table.HasValue(LotteryPeople, target) then
-		if not target:CanAfford(LotteryAmount) then
+		if not target:canAfford(LotteryAmount) then
 			GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.cant_afford, "lottery"))
 			return
 		end

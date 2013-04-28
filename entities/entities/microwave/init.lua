@@ -53,12 +53,12 @@ ENT.Once = false
 function ENT:Use(activator,caller)
 	local owner = self:Getowning_ent()
 	self.user = activator
-	if not activator:CanAfford(self:SalePrice(activator)) then
+	if not activator:canAfford(self:SalePrice(activator)) then
 		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase food!")
 		return ""
 	end
 	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
-	if diff < 0 and not owner:CanAfford(math.abs(diff)) then
+	if diff < 0 and not owner:canAfford(math.abs(diff)) then
 		GAMEMODE:Notify(activator, 2, 3, "Microwave owner is too poor to subsidize this sale!")
 		return ""
 	end

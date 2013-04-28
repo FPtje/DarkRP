@@ -411,7 +411,7 @@ local function OwnDoor(ply)
 			end
 
 			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle( ) && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
-			if( !ply:CanAfford( iCost ) ) then
+			if( !ply:canAfford( iCost ) ) then
 				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle( ) && LANGUAGE.vehicle_cannot_afford || LANGUAGE.door_cannot_afford );
 				return "";
 			end

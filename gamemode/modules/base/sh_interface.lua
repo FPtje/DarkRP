@@ -19,6 +19,27 @@ DarkRP.findPlayer = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.PLAYER.canAfford = DarkRP.stub{
+	name = "canAfford",
+	description = "Whether the player can afford the given amount of money",
+	parameters = {
+		{
+			name = "amount",
+			description = "The amount of money",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "Whether the player can afford it",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.VECTOR.isInSight = DarkRP.stub{
 	name = "isInSight",
 	description = "Decides whether the vector could be seen by the player if they were to look at it",

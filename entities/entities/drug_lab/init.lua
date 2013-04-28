@@ -48,7 +48,7 @@ function ENT:Use(activator,caller)
 	else
 
 		local productioncost = math.random(self:Getprice() / 8, self:Getprice() / 4)
-		if not activator:CanAfford(productioncost) then
+		if not activator:canAfford(productioncost) then
 			GAMEMODE:Notify(activator, 1, 4, "You do not have enough money to produce drugs.")
 			return false
 		end

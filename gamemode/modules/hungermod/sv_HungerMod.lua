@@ -60,7 +60,7 @@ local function BuyFood(ply, args)
 	for k,v in pairs(FoodItems) do
 		if string.lower(args) == k then
 			local cost = GAMEMODE.Config.foodcost
-			if ply:CanAfford(cost) then
+			if ply:canAfford(cost) then
 				ply:AddMoney(-cost)
 			else
 				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, ""))
