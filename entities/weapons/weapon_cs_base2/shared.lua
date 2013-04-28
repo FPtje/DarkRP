@@ -156,7 +156,7 @@ function SWEP:PrimaryAttack( partofburst )
 		return
 	end
 
-	if self.CurHoldType == "normal" then
+	if self.CurHoldType == "normal" and not GAMEMODE.Config.ironshoot then
 		self:NewSetWeaponHoldType(self.HoldType)
 		self.CurHoldType = self.HoldType
 	end
