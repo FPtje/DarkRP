@@ -59,7 +59,7 @@ function DB.Commit(onFinished)
 				return
 			end
 
-			-- Reqursion
+			-- Recursion
 			local nextQuery = queue[queuePos + 1]
 			DB.Query(nextQuery.query, call, nextQuery.onError)
 		end
