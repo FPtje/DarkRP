@@ -7,13 +7,70 @@ end
 
 local CONNECTED_TO_MYSQL = false
 FPPDB.MySQLDB = nil
-
+local QueuedQueries
 function FPPDB.Begin()
-	if not CONNECTED_TO_MYSQL then sql.Begin() end
+	if not CONNECTED_TO_MYSQL then
+		sql.Begin()
+	else
+		if QueuedQueries then
+			debug.Trace()
+			error("Transaction ongoing!")
+		end
+		QueuedQueries = {}
+	end
 end
 
-function FPPDB.Commit()
-	if not CONNECTED_TO_MYSQL then sql.Commit() end
+function FPPDB.Commit(onFinished)
+	if not CONNECTED_TO_MYSQL then
+		sql.Commit()
+		if onFinished then onFinished() end
+	else
+		if not QueuedQueries then
+			error("No queued queries! Call FPPDB.Begin() first!")
+		end
+
+		if #QueuedQueries == 0 then
+			QueuedQueries = nil
+			return
+		end
+
+		-- Copy the table so other scripts can create their own queue
+		local queue = table.Copy(QueuedQueries)
+		QueuedQueries = nil
+
+		-- Handle queued queries in order
+		local queuePos = 0
+		local call
+
+		-- Recursion invariant: queuePos > 0 and queue[queuePos] <= #queue
+		call = function(...)
+			queuePos = queuePos + 1
+
+			if queue[queuePos].callback then
+				queue[queuePos].callback(...)
+			end
+
+			-- Base case, end of the queue
+			if queuePos + 1 > #queue then
+				if onFinished then onFinished() end -- All queries have finished
+				return
+			end
+
+			-- Reqursion
+			local nextQuery = queue[queuePos + 1]
+			FPPDB.Query(nextQuery.query, call, nextQuery.onError)
+		end
+
+		FPPDB.Query(queue[1].query, call, queue[1].onError)
+	end
+end
+
+function FPPDB.QueueQuery(sqlText, callback, errorCallback)
+	if CONNECTED_TO_MYSQL then
+		table.insert(QueuedQueries, {query = sqlText, callback = callback, onError = errorCallback})
+	end
+	-- SQLite is instantaneous, simply running the query is equal to queueing it
+	FPPDB.Query(sqlText, callback, errorCallback)
 end
 
 function FPPDB.Query(query, callback)
