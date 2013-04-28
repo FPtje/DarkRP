@@ -230,13 +230,17 @@ function DB.Init()
 		DB.QueueQuery([[
 			CREATE TABLE IF NOT EXISTS darkrp_jobspawn(
 				id INTEGER NOT NULL PRIMARY KEY,
-				team INTEGER NOT NULL,
-
-				FOREIGN KEY(id) REFERENCES darkrp_position(id)
-					ON UPDATE CASCADE
-					ON DELETE CASCADE
+				team INTEGER NOT NULL
 			);
 		]])
+
+		if DB.CONNECTED_TO_MYSQL then
+			DB.QueueQuery([[
+				ALTER TABLE darkrp_jobspawn ADD FOREIGN KEY(id) REFERENCES darkrp_position(id)
+					ON UPDATE CASCADE
+					ON DELETE CASCADE;
+			]])
+		end
 
 
 		-- Consoles have to be spawned in an angle
