@@ -97,10 +97,10 @@ function SWEP:Think()
 			end
 		end
 	end
+	self.BaseClass.Think(self)
 end
 
 function SWEP:PrimaryAttack()
-
 	if self.queueattack then return end
 
 	if self.Weapon.reloading then
@@ -109,6 +109,5 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	self.BaseClass.PrimaryAttack( self )
-
+	self.BaseClass.PrimaryAttack(self)
 end
