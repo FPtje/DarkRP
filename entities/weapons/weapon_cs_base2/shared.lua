@@ -36,6 +36,7 @@ SWEP.Instructions = ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = false
+SWEP.UseHands = true
 
 SWEP.HoldType = "normal"
 SWEP.CurHoldType = "normal"
