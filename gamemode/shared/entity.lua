@@ -375,11 +375,6 @@ local function OwnDoor(ply)
 			return ""
 		end
 
-		if not GAMEMODE.Config.hobownership and team == TEAM_HOBO then
-			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_hobo_unable)
-			return ""
-		end
-
 		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
 			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_unownable)
 			return ""
