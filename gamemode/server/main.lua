@@ -749,58 +749,6 @@ local function BuyVehicle(ply, args)
 end
 AddChatCommand("/buyvehicle", BuyVehicle)
 
-for k,v in pairs(DarkRPEntities) do
-	local function buythis(ply, args)
-		if ply:isArrested() then return "" end
-		if type(v.allowed) == "table" and not table.HasValue(v.allowed, ply:Team()) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, v.cmd))
-			return ""
-		end
-		local cmdname = string.gsub(v.ent, " ", "_")
-
-		if v.customCheck and not v.customCheck(ply) then
-			GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
-			return ""
-		end
-
-		local max = tonumber(v.max or 3)
-
-		if ply["max"..cmdname] and tonumber(ply["max"..cmdname]) >= tonumber(max) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, v.cmd))
-			return ""
-		end
-
-		if not ply:CanAfford(v.price) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, v.cmd))
-			return ""
-		end
-		ply:AddMoney(-v.price)
-
-		local trace = {}
-		trace.start = ply:EyePos()
-		trace.endpos = trace.start + ply:GetAimVector() * 85
-		trace.filter = ply
-
-		local tr = util.TraceLine(trace)
-
-		local item = ents.Create(v.ent)
-		item.dt = item.dt or {}
-		item.dt.owning_ent = ply
-		if item.Setowning_ent then item:Setowning_ent(ply) end
-		item:SetPos(tr.HitPos)
-		item.SID = ply.SID
-		item.onlyremover = true
-		item:Spawn()
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, v.name, CUR..v.price))
-		if not ply["max"..cmdname] then
-			ply["max"..cmdname] = 0
-		end
-		ply["max"..cmdname] = ply["max"..cmdname] + 1
-		return ""
-	end
-	AddChatCommand(v.cmd, buythis)
-end
-
 local function BuyAmmo(ply, args)
 	if args == "" then return "" end
 
