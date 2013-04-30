@@ -147,7 +147,7 @@ for _, folder in SortedPairs(folders, true) do
 end
 
 local function GetAvailableVehicles(ply)
-	if not ply:IsAdmin() then return end
+	if IsValid(ply) and not ply:IsAdmin() then return end
 	ServerLog("Available vehicles for custom vehicles:" .. "\n")
 	print("Available vehicles for custom vehicles:")
 	for k,v in pairs(list.Get("Vehicles")) do
