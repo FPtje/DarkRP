@@ -104,7 +104,6 @@ function KnockoutToggle(player, command, args, caller)
 				player:GetTable().BeforeSleepTeam = player:Team()
 				--Make sure noone can pick it up:
 				ragdoll:CPPISetOwner(player)
-				ragdoll.FPPOwner = player:SteamID()
 
 				SendUserMessage("blackScreen", ply, true)
 

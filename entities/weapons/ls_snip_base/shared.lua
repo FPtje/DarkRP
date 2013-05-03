@@ -138,6 +138,8 @@ function SWEP:SecondaryAttack()
 
 		self.ScopeLevel = 1
 		self.Ironsights = true
+		self:NewSetWeaponHoldType(self.HoldType)
+		self.CurHoldType = self.HoldType
 	else
 		if self.ScopeLevel == 1 then
 			if (SERVER) then
@@ -146,6 +148,9 @@ function SWEP:SecondaryAttack()
 
 			self.ScopeLevel = 2
 			self.Ironsights = true
+
+			self:NewSetWeaponHoldType(self.HoldType)
+			self.CurHoldType = self.HoldType
 		else
 			if (SERVER) then
 				self.Owner:SetFOV(0, 0)
@@ -153,6 +158,9 @@ function SWEP:SecondaryAttack()
 
 			self.ScopeLevel = 0
 			self.Ironsights = false
+
+			self:NewSetWeaponHoldType("normal")
+			self.CurHoldType = "normal"
 		end
 	end
 end

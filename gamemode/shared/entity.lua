@@ -375,11 +375,6 @@ local function OwnDoor(ply)
 			return ""
 		end
 
-		if not GAMEMODE.Config.hobownership and team == TEAM_HOBO then
-			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_hobo_unable)
-			return ""
-		end
-
 		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
 			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_unownable)
 			return ""
@@ -584,7 +579,7 @@ local function RemoveDoorOwner(ply, args)
 
 	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		target = DarkRP.FindPlayer(args)
+		target = DarkRP.findPlayer(args)
 
 		if trace.Entity.DoorData.NonOwnable then
 			GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_rem_owners_unownable)
@@ -618,7 +613,7 @@ local function AddDoorOwner(ply, args)
 
 	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		target = DarkRP.FindPlayer(args)
+		target = DarkRP.findPlayer(args)
 		if target then
 			if trace.Entity.DoorData.NonOwnable then
 				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_add_owners_unownable)

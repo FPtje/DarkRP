@@ -53,7 +53,7 @@ end
 Print the currently available vehicles
 ---------------------------------------------------------------------------*/
 local function GetAvailableVehicles(ply)
-	if SERVER and not ply:IsAdmin() then return end
+	if SERVER and IsValid(ply) and not ply:IsAdmin() then return end
 	local print = SERVER and ServerLog or Msg
 
 	print("Available vehicles for custom vehicles:" .. "\n")

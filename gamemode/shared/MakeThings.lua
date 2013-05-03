@@ -133,6 +133,7 @@ function AddEntity(name, entity, model, price, max, command, classes, CustomChec
 	end
 
 	table.insert(DarkRPEntities, tblEnt)
+	timer.Simple(0, function() GAMEMODE:AddEntityCommands(tblEnt) end)
 end
 
 DarkRPAgendas = {}

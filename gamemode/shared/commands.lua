@@ -131,7 +131,7 @@ function GM:AddTeamCommands(CTeam, max)
 		end
 
 		if not args[1] then return end
-		local target = DarkRP.FindPlayer(args[1])
+		local target = DarkRP.findPlayer(args[1])
 
         if (target) then
 			target:ChangeTeam(k, true)
@@ -150,4 +150,58 @@ function GM:AddTeamCommands(CTeam, max)
 			return
         end
 	end)
+end
+
+function GM:AddEntityCommands(tblEnt)
+	if CLIENT then return end
+
+	local function buythis(ply, args)
+		if ply:isArrested() then return "" end
+		if type(tblEnt.allowed) == "table" and not table.HasValue(tblEnt.allowed, ply:Team()) then
+			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, tblEnt.cmd))
+			return ""
+		end
+		local cmdname = string.gsub(tblEnt.ent, " ", "_")
+
+		if tblEnt.customCheck and not tblEnt.customCheck(ply) then
+			GAMEMODE:Notify(ply, 1, 4, tblEnt.CustomCheckFailMsg or "You're not allowed to purchase this item")
+			return ""
+		end
+
+		local max = tonumber(tblEnt.max or 3)
+
+		if ply["max"..cmdname] and tonumber(ply["max"..cmdname]) >= tonumber(max) then
+			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, tblEnt.cmd))
+			return ""
+		end
+
+		if not ply:canAfford(tblEnt.price) then
+			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, tblEnt.cmd))
+			return ""
+		end
+		ply:AddMoney(-tblEnt.price)
+
+		local trace = {}
+		trace.start = ply:EyePos()
+		trace.endpos = trace.start + ply:GetAimVector() * 85
+		trace.filter = ply
+
+		local tr = util.TraceLine(trace)
+
+		local item = ents.Create(tblEnt.ent)
+		item.dt = item.dt or {}
+		item.dt.owning_ent = ply
+		if item.Setowning_ent then item:Setowning_ent(ply) end
+		item:SetPos(tr.HitPos)
+		item.SID = ply.SID
+		item.onlyremover = true
+		item:Spawn()
+		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, CUR..tblEnt.price))
+		if not ply["max"..cmdname] then
+			ply["max"..cmdname] = 0
+		end
+		ply["max"..cmdname] = ply["max"..cmdname] + 1
+		return ""
+	end
+	DarkRP.addChatCommand(tblEnt.cmd, buythis)
 end

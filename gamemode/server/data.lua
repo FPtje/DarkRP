@@ -100,7 +100,7 @@ function DB.Query(sqlText, callback, errorCallback)
 		end
 
 		query.onSuccess = function()
-			if callback then callback(data) end
+			if callback then callback(data, query:lastInsert()) end
 		end
 		query:start()
 		return
@@ -449,7 +449,7 @@ Updating the older database to work with the current version
 ---------------------------------------------------------------------------*/
 function DB.UpdateDatabase()
 	print("CONVERTING DATABASE")
-	-- Start transaction. The queries must either all be executed or rolled back
+	-- Start transaction.
 	DB.Begin()
 
 	-- CVars
@@ -626,9 +626,8 @@ function DB.StoreJailPos(ply, addingPos)
 			table.insert(DB.JailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
 			GAMEMODE:Notify(ply, 0, 4,  LANGUAGE.added_jailpos)
 		else
-			DB.Begin()
 			DB.Query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. sql.SQLStr(map) .. ";", function()
-				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. sql.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");", DB.Commit)
+				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. sql.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 
 				DB.JailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}

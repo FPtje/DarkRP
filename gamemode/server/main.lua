@@ -168,7 +168,7 @@ local function SearchWarrant(ply, args)
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/warrant", "<25 chars"))
 			return ""
 		end
-		local p = DarkRP.FindPlayer(tableargs[1])
+		local p = DarkRP.findPlayer(tableargs[1])
 
 		if p and p:Alive() then
 			-- If we're the Mayor, set the search warrant
@@ -228,7 +228,7 @@ local function PlayerWanted(ply, args)
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/wanted", "<23 chars"))
 			return ""
 		end
-		local p = DarkRP.FindPlayer(tableargs[1])
+		local p = DarkRP.findPlayer(tableargs[1])
 
 		if p and p:Alive() and not p:isArrested() and not p.DarkRPVars.wanted then
 			hook.Call("PlayerWanted", GAMEMODE, ply, p, reason)
@@ -255,7 +255,7 @@ local function PlayerUnWanted(ply, args)
 	if not ply:IsCP() then
 		GAMEMODE:Notify(ply, 1, 6, string.format(LANGUAGE.must_be_x, "cop/mayor", "/unwanted"))
 	else
-		local p = DarkRP.FindPlayer(args)
+		local p = DarkRP.findPlayer(args)
 		if p and p:Alive() and p.DarkRPVars.wanted then
 			hook.Call("PlayerUnWanted", GAMEMODE, ply, p)
 			p:setDarkRPVar("wanted", false)
@@ -367,7 +367,7 @@ local function LookPersonUp(ply, cmd, args)
 		ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "argument", ""))
 		return
 	end
-	local P = DarkRP.FindPlayer(args[1])
+	local P = DarkRP.findPlayer(args[1])
 	if not IsValid(P) then
 		if ply:EntIndex() ~= 0 then
 			ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
@@ -749,58 +749,6 @@ local function BuyVehicle(ply, args)
 end
 DarkRP.addChatCommand("/buyvehicle", BuyVehicle)
 
-for k,v in pairs(DarkRPEntities) do
-	local function buythis(ply, args)
-		if ply:isArrested() then return "" end
-		if type(v.allowed) == "table" and not table.HasValue(v.allowed, ply:Team()) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, v.cmd))
-			return ""
-		end
-		local cmdname = string.gsub(v.ent, " ", "_")
-
-		if v.customCheck and not v.customCheck(ply) then
-			GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
-			return ""
-		end
-
-		local max = tonumber(v.max or 3)
-
-		if ply["max"..cmdname] and tonumber(ply["max"..cmdname]) >= tonumber(max) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, v.cmd))
-			return ""
-		end
-
-		if not ply:canAfford(v.price) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, v.cmd))
-			return ""
-		end
-		ply:AddMoney(-v.price)
-
-		local trace = {}
-		trace.start = ply:EyePos()
-		trace.endpos = trace.start + ply:GetAimVector() * 85
-		trace.filter = ply
-
-		local tr = util.TraceLine(trace)
-
-		local item = ents.Create(v.ent)
-		item.dt = item.dt or {}
-		item.dt.owning_ent = ply
-		if item.Setowning_ent then item:Setowning_ent(ply) end
-		item:SetPos(tr.HitPos)
-		item.SID = ply.SID
-		item.onlyremover = true
-		item:Spawn()
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, v.name, CUR..v.price))
-		if not ply["max"..cmdname] then
-			ply["max"..cmdname] = 0
-		end
-		ply["max"..cmdname] = ply["max"..cmdname] + 1
-		return ""
-	end
-	DarkRP.addChatCommand(v.cmd, buythis)
-end
-
 local function BuyAmmo(ply, args)
 	if args == "" then return "" end
 
@@ -996,7 +944,7 @@ local function Demote(ply, args)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/demote", "<100"))
 		return ""
 	end
-	local p = DarkRP.FindPlayer(tableargs[1])
+	local p = DarkRP.findPlayer(tableargs[1])
 	if p == ply then
 		GAMEMODE:Notify(ply, 1, 4, "Can't demote yourself.")
 		return ""
@@ -1075,7 +1023,7 @@ local function DoTeamBan(ply, args, cmdargs)
 		Team = string.sub(args, a + 1)
 	end
 
-	local target = DarkRP.FindPlayer(ent)
+	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player!"))
 		return ""
@@ -1132,7 +1080,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 		Team = string.sub(args, a + 1)
 	end
 
-	local target = DarkRP.FindPlayer(ent)
+	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player!"))
 		return ""
@@ -1174,7 +1122,7 @@ local function PM(ply, args)
 	local name = string.sub(args, 1, namepos - 1)
 	local msg = string.sub(args, namepos + 1)
 	if msg == "" then return "" end
-	target = DarkRP.FindPlayer(name)
+	target = DarkRP.findPlayer(name)
 
 	if target then
 		local col = team.GetColor(ply:Team())
@@ -1351,7 +1299,7 @@ DarkRP.addChatCommand("/g", GroupMsg, 1.5)
 -- You even have to credit all the previous authors when you rename the gamemode.
 local CreditsWait = true
 local function GetDarkRPAuthors(ply, args)
-	local target = DarkRP.FindPlayer(args); -- Only send to one player. Prevents spamming
+	local target = DarkRP.findPlayer(args); -- Only send to one player. Prevents spamming
 	if not IsValid(target) then
 		GAMEMODE:Notify(ply, 1, 4, "Player does not exist")
 		return ""
@@ -1476,7 +1424,7 @@ DarkRP.addChatCommand("/moneydrop", DropMoney, 0.3)
 
 local function CreateCheque(ply, args)
 	local argt = string.Explode(" ", args)
-	local recipient = DarkRP.FindPlayer(argt[1])
+	local recipient = DarkRP.findPlayer(argt[1])
 	local amount = tonumber(argt[2]) or 0
 
 	if not recipient then
@@ -1668,7 +1616,7 @@ local function MayorSetSalary(ply, cmd, args)
 	end
 
 	local plynick = ply:Nick()
-	local target = DarkRP.FindPlayer(args[1])
+	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		local targetteam = target:Team()
@@ -1841,7 +1789,7 @@ local function rp_GiveLicense(ply, cmd, args)
 		return
 	end
 
-	local target = DarkRP.FindPlayer(args[1])
+	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		target:setDarkRPVar("HasGunlicense", true)
@@ -1877,7 +1825,7 @@ local function rp_RevokeLicense(ply, cmd, args)
 		return
 	end
 
-	local target = DarkRP.FindPlayer(args[1])
+	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		target:setDarkRPVar("HasGunlicense", false)
@@ -1933,7 +1881,7 @@ local function VoteRemoveLicense(ply, args)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/demotelicense", "<23"))
 		return ""
 	end
-	local p = DarkRP.FindPlayer(tableargs[1])
+	local p = DarkRP.findPlayer(tableargs[1])
 	if p then
 		if CurTime() - ply:GetTable().LastVoteCop < 80 then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.have_to_wait, math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demotelicense"))
@@ -1968,7 +1916,7 @@ local function ReportAttacker(ply, cmd, args)
 
 	if reason and string.len( reason ) > 22 then GAMEMODE:Notify( ply, 1, 4, string.format( LANGUAGE.unable, "/911", "Reason >22") ) return "" end
 
-	local target = DarkRP.FindPlayer( name )
+	local target = DarkRP.findPlayer( name )
 	if target then
 		for k, v in pairs(ents.FindByClass("darkrp_console")) do
 			v:Setreporter(ply)
