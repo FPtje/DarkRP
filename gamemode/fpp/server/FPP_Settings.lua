@@ -103,7 +103,7 @@ local function AddBlockedModel(ply, cmd, args)
 	if FPP.BlockedModels[model] then FPP.Notify(ply, "This model is already in the black/whitelist", false) return end
 
 	FPP.BlockedModels[model] = true
-	DB.Query("INSERT INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(model)..");")
+	DB.Query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(model)..");")
 
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. model .. " to the blocked models black/whitelist", true)
 end
