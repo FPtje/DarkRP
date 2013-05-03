@@ -449,7 +449,7 @@ Updating the older database to work with the current version
 ---------------------------------------------------------------------------*/
 function DB.UpdateDatabase()
 	print("CONVERTING DATABASE")
-	-- Start transaction. The queries must either all be executed or rolled back
+	-- Start transaction.
 	DB.Begin()
 
 	-- CVars
