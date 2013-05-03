@@ -53,7 +53,7 @@ function KnockoutToggle(player, command, args, caller)
 				end
 				player.WeaponsForSleep = {}
 
-				SendUserMessage("blackScreen", ply, false)
+				SendUserMessage("blackScreen", player, false)
 
 				if command == true then
 					player:Arrest()
@@ -105,7 +105,7 @@ function KnockoutToggle(player, command, args, caller)
 				--Make sure noone can pick it up:
 				ragdoll:CPPISetOwner(player)
 
-				SendUserMessage("blackScreen", ply, true)
+				SendUserMessage("blackScreen", player, true)
 
 				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
 				player.SleepSound:PlayEx(0.10, 100)
