@@ -260,6 +260,7 @@ function FPP.AdminMenu(Panel)
 	BlockedModelsLabel:SizeToContents()
 
 	addchk("Blocked models enabled", {"FPP_BLOCKMODELSETTINGS1", "toggle"}, blockedmodels)
+	addchk("Apply to props only", {"FPP_BLOCKMODELSETTINGS1", "propsonly"}, blockedmodels)
 	addchk("The blocked models list is a white list", {"FPP_BLOCKMODELSETTINGS1", "iswhitelist"}, blockedmodels)
 
 	local BlockedModelsAddLA = blockedmodels:Add("DButton")
