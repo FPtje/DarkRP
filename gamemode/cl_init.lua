@@ -173,8 +173,15 @@ local function ToggleHelp()
 end
 usermessage.Hook("ToggleHelp", ToggleHelp)
 
+local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 local function ToggleClicker()
 	GUIToggled = not GUIToggled
+
+	if GUIToggled then
+		gui.SetMousePos(mouseX, mouseY)
+	else
+		mouseX, mouseY = gui.MousePos()
+	end
 	gui.EnableScreenClicker(GUIToggled)
 end
 usermessage.Hook("ToggleClicker", ToggleClicker)
