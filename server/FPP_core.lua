@@ -50,27 +50,31 @@ Setting owner when someone spawns something
 if cleanup then
 	FPP.oldcleanup = FPP.oldcleanup or cleanup.Add
 	function cleanup.Add(ply, Type, ent)
-		if IsValid(ply) and IsValid(ent) then
-			--Set the owner of the entity
-			ent:CPPISetOwner(ply)
+		if not IsValid(ply) or not IsValid(ent) then return FPP.oldcleanup(ply, Type, ent) end
 
+		--Set the owner of the entity
+		ent:CPPISetOwner(ply)
+
+		if not tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.propsonly) then
 			local model = ent.GetModel and ent:GetModel()
-
 			local blocked, msg = isBlocked(model)
+
 			if blocked then
 				FPP.Notify(ply, msg, false)
 				ent:Remove()
+
 				return
 			end
-
-			if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and (not ent.IsVehicle() or not ent:IsVehicle()) then
-				FPP.AntiSpam.CreateEntity(ply, ent, Type == "duplicates")
-			end
-
-			if ent:GetClass() == "gmod_wire_expression2" then
-				ent:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-			end
 		end
+
+		if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and (not ent.IsVehicle() or not ent:IsVehicle()) then
+			FPP.AntiSpam.CreateEntity(ply, ent, Type == "duplicates")
+		end
+
+		if ent:GetClass() == "gmod_wire_expression2" then
+			ent:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+		end
+
 		return FPP.oldcleanup(ply, Type, ent)
 	end
 end
