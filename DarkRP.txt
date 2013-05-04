@@ -9,8 +9,6 @@
     "author_email"  ""
     "author_url"    "https://github.com/FPtje/DarkRP"
 
-    "maps"  "^rp_"
-
     "icon"  ""
     "info"  ""
     "hide"  "0"
