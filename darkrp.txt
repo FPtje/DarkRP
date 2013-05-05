@@ -1,4 +1,4 @@
-"Gamemode"
+"darkrp"
 {
 	"base"		"sandbox"
     "title"  "DarkRP"
