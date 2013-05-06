@@ -23,7 +23,7 @@ local receiverConfigs = {
 local currentConfig = receiverConfigs[""] -- Default config is normal talk
 
 /*---------------------------------------------------------------------------
-Interface function, AddChatReceiver
+AddChatReceiver
 Add a chat command with specific receivers
 
 prefix: the chat command itself ("/pm", "/ooc", "/me" are some examples)
@@ -38,6 +38,16 @@ function GM:AddChatReceiver(prefix, text, hearFunc)
 		text = text,
 		hearFunc = hearFunc
 	}
+end
+
+/*---------------------------------------------------------------------------
+removeChatReceiver
+Remove a chat command.
+
+prefix: the command, like in addChatReceiver
+---------------------------------------------------------------------------*/
+function GM:removeChatReceiver(prefix)
+	receiverConfigs[prefix] = nil
 end
 
 /*---------------------------------------------------------------------------
