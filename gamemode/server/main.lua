@@ -910,22 +910,24 @@ local function ChangeJob(ply, args)
 end
 AddChatCommand("/job", ChangeJob)
 
-local function FinishDemote(choice, v)
-	v.IsBeingDemoted = nil
+local function FinishDemote(vote, choice)
+	local target = vote.target
+
+	target.IsBeingDemoted = nil
 	if choice == 1 then
-		v:TeamBan()
-		if v:Alive() then
-			v:ChangeTeam(TEAM_CITIZEN, true)
-			if v:isArrested() then
-				v:Arrest()
+		target:TeamBan()
+		if target:Alive() then
+			target:ChangeTeam(TEAM_CITIZEN, true)
+			if target:isArrested() then
+				target:Arrest()
 			end
 		else
-			v.demotedWhileDead = true
+			target.demotedWhileDead = true
 		end
 
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.demoted, v:Nick()))
+		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.demoted, target:Nick()))
 	else
-		GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.demoted_not, v:Nick()))
+		GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.demoted_not, target:Nick()))
 	end
 end
 
@@ -963,7 +965,15 @@ local function Demote(ply, args)
 			DB.Log(string.format(LANGUAGE.demote_vote_started, ply:Nick(), p:Nick()) .. " (" .. reason .. ")",
 				false, Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
-			GAMEMODE.vote:Create(p:Nick() .. ":\n"..string.format(LANGUAGE.demote_vote_text, reason), p:EntIndex() .. "votecop"..ply:EntIndex(), p, 20, FinishDemote, true)
+
+			GAMEMODE.vote:create(p:Nick() .. ":\n"..string.format(LANGUAGE.demote_vote_text, reason), "demote", p, 20, FinishDemote,
+			{
+				[p] = true,
+				[ply] = true
+			}, function(vote)
+				if not IsValid(vote.target) then return end
+				vote.target.IsBeingDemoted = nil
+			end)
 			ply:GetTable().LastVoteCop = CurTime()
 		end
 		return ""
@@ -1874,14 +1884,14 @@ local function rp_RevokeLicense(ply, cmd, args)
 end
 concommand.Add("rp_revokelicense", rp_RevokeLicense)
 
-local function FinishRevokeLicense(choice, v)
+local function FinishRevokeLicense(vote, win)
 	if choice == 1 then
-		v:SetDarkRPVar("HasGunlicense", false)
-		v:StripWeapons()
-		GAMEMODE:PlayerLoadout(v)
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_removed, v:Nick()))
+		vote.target:SetDarkRPVar("HasGunlicense", false)
+		vote.target:StripWeapons()
+		GAMEMODE:PlayerLoadout(vote.target)
+		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_removed, vote.target:Nick()))
 	else
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_not_removed, v:Nick()))
+		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_not_removed, vote.target:Nick()))
 	end
 end
 
@@ -1910,7 +1920,11 @@ local function VoteRemoveLicense(ply, args)
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/demotelicense", ""))
 		else
 			GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_remove_vote_text, ply:Nick(), p:Nick()))
-			GAMEMODE.vote:Create(p:Nick() .. ":\n"..string.format(LANGUAGE.gunlicense_remove_vote_text2, reason), p:EntIndex() .. "votecop"..ply:EntIndex(), p, 20, FinishRevokeLicense, true)
+			GAMEMODE.vote:create(p:Nick() .. ":\n"..string.format(LANGUAGE.gunlicense_remove_vote_text2, reason), "removegunlicense", p, 20,  FinishRevokeLicense,
+			{
+				[p] = true,
+				[ply] = true
+			})
 			ply:GetTable().LastVoteCop = CurTime()
 			GAMEMODE:Notify(ply, 0, 4, LANGUAGE.vote_started)
 		end

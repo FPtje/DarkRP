@@ -57,8 +57,11 @@ function GM:AddTeamCommands(CTeam, max)
 				GAMEMODE:Notify(ply, 1, 4,  string.format(LANGUAGE.team_limit_reached,CTeam.name))
 				return ""
 			end
-			GAMEMODE.vote:Create(string.format(LANGUAGE.wants_to_be, ply:Nick(), CTeam.name), ply:EntIndex() .. "votecop", ply, 20, function(choice, ply)
-				if choice == 1 then
+			GAMEMODE.vote:create(string.format(LANGUAGE.wants_to_be, ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
+				local ply = vote.target
+
+				if not IsValid(ply) then return end
+				if choice >= 0 then
 					ply:ChangeTeam(k)
 				else
 					GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.has_not_been_made_team, ply:Nick(), CTeam.name))

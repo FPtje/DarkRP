@@ -7,13 +7,12 @@ local function MsgDoVote(msg)
 	local _, chatY = chat.GetChatBoxPos()
 
 	local question = msg:ReadString()
-	local voteid = msg:ReadString()
+	local voteid = msg:ReadShort()
 	local timeleft = msg:ReadFloat()
 	if timeleft == 0 then
 		timeleft = 100
 	end
 	local OldTime = CurTime()
-	if string.find(voteid, LocalPlayer():EntIndex()) then return end --If it's about you then go away
 	if not IsValid(LocalPlayer()) then return end -- Sent right before player initialisation
 
 	LocalPlayer():EmitSound("Town.d1_town_02_elevbell1", 100, 100)
@@ -82,7 +81,7 @@ local function MsgDoVote(msg)
 	ybutton:SetText("Yes")
 	ybutton:SetVisible(true)
 	ybutton.DoClick = function()
-		LocalPlayer():ConCommand("vote " .. voteid .. " 1\n")
+		LocalPlayer():ConCommand("vote " .. voteid .. " yea\n")
 		panel:Close()
 	end
 
@@ -94,7 +93,7 @@ local function MsgDoVote(msg)
 	nbutton:SetText("No")
 	nbutton:SetVisible(true)
 	nbutton.DoClick = function()
-		LocalPlayer():ConCommand("vote " .. voteid .. " 2\n")
+		LocalPlayer():ConCommand("vote " .. voteid .. " nay\n")
 		panel:Close()
 	end
 
@@ -105,7 +104,7 @@ end
 usermessage.Hook("DoVote", MsgDoVote)
 
 local function KillVoteVGUI(msg)
-	local id = msg:ReadString()
+	local id = msg:ReadShort()
 
 	if VoteVGUI[id .. "vote"] and VoteVGUI[id .. "vote"]:IsValid() then
 		VoteVGUI[id.."vote"]:Close()
