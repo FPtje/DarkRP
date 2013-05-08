@@ -21,6 +21,10 @@ function DarkRP.addChatCommand(cmd, callback, delay)
 	}
 end
 
+function removeChatCommand(cmd)
+	ChatCommands[string.lower(cmd)] = nil
+end
+
 local function RP_PlayerChat(ply, text)
 	DB.Log(ply:Nick().." ("..ply:SteamID().."): "..text )
 	local callback = ""

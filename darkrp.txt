@@ -1,4 +1,4 @@
-"Gamemode"
+"darkrp"
 {
 	"base"		"sandbox"
     "title"  "DarkRP"
@@ -8,8 +8,6 @@
     "author_name"   "LightRP: Rick darkalonio, DarkRP: Rickster, Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
     "author_email"  ""
     "author_url"    "https://github.com/FPtje/DarkRP"
-
-    "maps"  "^rp_"
 
     "icon"  ""
     "info"  ""

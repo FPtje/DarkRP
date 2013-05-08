@@ -68,8 +68,15 @@ LoadModules()
 DarkRP.finish()
 
 local GUIToggled = false
+
 local function ToggleClicker()
 	GUIToggled = not GUIToggled
+
+	if GUIToggled then
+		gui.SetMousePos(mouseX, mouseY)
+	else
+		mouseX, mouseY = gui.MousePos()
+	end
 	gui.EnableScreenClicker(GUIToggled)
 end
 usermessage.Hook("ToggleClicker", ToggleClicker)
