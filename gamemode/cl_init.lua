@@ -71,6 +71,7 @@ include("client/hud.lua")
 include("client/showteamtabs.lua")
 include("client/vgui.lua")
 
+include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")

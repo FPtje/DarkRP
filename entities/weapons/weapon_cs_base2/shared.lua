@@ -9,7 +9,7 @@ if CLIENT then
 	SWEP.DrawAmmo			= true
 	SWEP.DrawCrosshair		= false
 	SWEP.ViewModelFOV		= 82
-	SWEP.ViewModelFlip		= true
+	SWEP.ViewModelFlip		= false
 	SWEP.CSMuzzleFlashes	= true
 
 	-- This is the font that's used to draw the death icons

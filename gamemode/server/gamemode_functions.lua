@@ -629,6 +629,9 @@ end
 
 function GM:PlayerSpawn(ply)
 	self.BaseClass:PlayerSpawn(ply)
+
+	player_manager.SetPlayerClass(ply, "player_DarkRP")
+
 	ply:SetNoCollideWithTeammates(false)
 	ply:CrosshairEnable()
 	ply:UnSpectate()
@@ -709,6 +712,8 @@ end
 
 function GM:PlayerLoadout(ply)
 	if ply:isArrested() then return end
+
+	player_manager.RunClass(ply, "Spawn")
 
 	ply:GetTable().RPLicenseSpawn = true
 	timer.Simple(1, function() removelicense(ply) end)

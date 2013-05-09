@@ -17,7 +17,7 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_shot_m3super90.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_m3super90.mdl"
 
 SWEP.Weight = 5
@@ -42,8 +42,8 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector (5.7515, -3.2305, 3.1898)
-SWEP.IronSightsAng = Vector (0.4467, 0.1261, 0)
+SWEP.IronSightsPos = Vector(-7.63, -10, 3.4)
+SWEP.IronSightsAng = Vector(0.3, 0, 0)
 
 
 function SWEP:Reload()

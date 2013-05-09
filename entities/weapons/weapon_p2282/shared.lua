@@ -19,7 +19,7 @@ SWEP.AdminSpawnable = true
 
 SWEP.HoldType = "pistol"
 
-SWEP.ViewModel = "models/weapons/v_pist_p228.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_pist_p228.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_p228.mdl"
 
 SWEP.Weight = 5
@@ -42,5 +42,5 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector(4.7287, -2.5911, 2.7307)
-SWEP.IronSightsAng = Vector(0, 0, 0)
+SWEP.IronSightsPos = Vector(-6.3, -12, 2.6)
+SWEP.IronSightsAng = Vector(0.3, 0, 0)

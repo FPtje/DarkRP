@@ -21,7 +21,7 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_pist_glock18.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_pist_glock18.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_glock18.mdl"
 SWEP.HoldType = "pistol"
 
@@ -36,7 +36,7 @@ SWEP.Primary.Damage = 10
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.1
 SWEP.Primary.ClipSize = 20
-SWEP.Primary.Delay = 0.06 
+SWEP.Primary.Delay = 0.06
 SWEP.Primary.DefaultClip = 20
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
@@ -47,5 +47,5 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
 --Start of Firemode configuration
-SWEP.IronSightsPos = Vector(4.34,-2,2.8)
-SWEP.IronSightsAng = Vector(.74,0,0)
+SWEP.IronSightsPos = Vector(-5.78, -15, 2.8)
+SWEP.IronSightsAng = -Vector(-1, 0, 0)

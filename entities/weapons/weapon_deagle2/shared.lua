@@ -17,7 +17,7 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_pist_deagle.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
 
 SWEP.Weight = 5
@@ -42,6 +42,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector(5.1293, -2.1574, 2.5218)
-SWEP.IronSightsAng = Vector(0.5756, -0.0499, 0)
+SWEP.IronSightsPos = Vector(-6.85, -12, 2.6)
+SWEP.IronSightsAng = Vector(0, 0, 0)
 

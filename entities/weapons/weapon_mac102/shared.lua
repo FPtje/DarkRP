@@ -17,7 +17,7 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_smg_mac10.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_smg_mac10.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_mac10.mdl"
 
 SWEP.Weight = 5
@@ -43,6 +43,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector (7.1437, -2.6467, 3.0592)
-SWEP.IronSightsAng = Vector (0.4833, 11.1981, 7.2364)
+SWEP.IronSightsPos = Vector(-8.9, -10, 2.8)
+SWEP.IronSightsAng = Vector(1, -6.7, -5)
 
