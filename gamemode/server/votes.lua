@@ -51,7 +51,10 @@ function Vote:getFilter()
 		if self.exclude[v] then continue end
 		local canVote = hook.Call("CanVote", GAMEMODE, v, self)
 
-		if canVote == false then continue end
+		if canVote == false then
+			self.exclude[v] = true
+			continue
+		end
 
 		filter:AddPlayer(v)
 	end
