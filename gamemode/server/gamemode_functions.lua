@@ -32,6 +32,10 @@ function GM:CanChangeRPName(ply, RPname)
 	end
 end
 
+function GM:CanDemote(ply, target, reason)
+
+end
+
 function GM:CanVote(ply, vote)
 
 end

@@ -952,6 +952,13 @@ local function Demote(ply, args)
 		return ""
 	end
 
+	local canDemote, message = hook.Call("CanDemote", GAMEMODE, ply, p, reason)
+	if canDemote == false then
+		GAMEMODE:Notify(ply, 1, 4, message or string.format(LANGUAGE.unable, "demote", ""))
+
+		return ""
+	end
+
 	if p then
 		if CurTime() - ply.LastVoteCop < 80 then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.have_to_wait, math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
