@@ -32,6 +32,10 @@ function GM:CanChangeRPName(ply, RPname)
 	end
 end
 
+function GM:CanVote(ply, vote)
+
+end
+
 function GM:PlayerArrested(ply, time)
 
 end

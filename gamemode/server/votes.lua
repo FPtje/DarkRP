@@ -8,8 +8,10 @@ local function ccDoVote(ply, cmd, args)
 	if not vote then return end
 	if args[2] ~= "yea" and args[2] ~= "nay" then return end
 
-	if vote.voters[ply] then
-		GAMEMODE:Notify(ply, 1, 4, "You cannot vote!")
+	local canVote, message = hook.Call("CanVote", GAMEMODE, ply, vote)
+
+	if vote.voters[ply] or vote.exclude[ply] or canVote == false then
+		GAMEMODE:Notify(ply, 1, 4, message or "You cannot vote!")
 		return
 	end
 	vote.voters[ply] = true
@@ -44,9 +46,13 @@ end
 
 function Vote:getFilter()
 	local filter = RecipientFilter()
-	filter:RemoveAllPlayers()
+
 	for k,v in pairs(player.GetAll()) do
 		if self.exclude[v] then continue end
+		local canVote = hook.Call("CanVote", GAMEMODE, v, self)
+
+		if canVote == false then continue end
+
 		filter:AddPlayer(v)
 	end
 
