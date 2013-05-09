@@ -255,5 +255,6 @@ GM.Config.DisabledModules = {
 	["events"] = false,
 	["hungermod"] = true,
 	["playerscale"] = false,
-	["sleep"] = false
+	["sleep"] = false,
+	["voterestrictions"] = true
 }
