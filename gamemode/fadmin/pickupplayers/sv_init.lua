@@ -3,7 +3,9 @@ CreateConVar("PlayersCanPickUpPlayers", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_E
 
 hook.Add("PhysgunPickup", "FAdmin_PickUpPlayers", function(ply, ent)
 	if not IsValid(ent) or not ent:IsPlayer() then return end
-	if tobool(GetConVarNumber("PlayersCanPickUpPlayers")) or (tobool(GetConVarNumber("AdminsCanPickUpPlayers")) and FAdmin.Access.PlayerHasPrivilege(ply, "PickUpPlayers", ent)) and not tobool(ply:GetInfo("FPP_PrivateSettings_Players")) then
+
+	if tobool(GetConVarNumber("PlayersCanPickUpPlayers")) or
+	tobool(GetConVarNumber("AdminsCanPickUpPlayers")) and FAdmin.Access.PlayerHasPrivilege(ply, "PickUpPlayers", ent) and ply:GetInfo("FPP_PrivateSettings_Players") ~= "1" then
 		ent:SetMoveType(MOVETYPE_NONE)
 		ent:Freeze(true)
 		return true
