@@ -199,6 +199,9 @@ function GM:AddEntityCommands(tblEnt)
 		item.SID = ply.SID
 		item.onlyremover = true
 		item:Spawn()
+		local phys = item:GetPhysicsObject()
+		if phys:IsValid() then phys:Wake() end
+
 		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, CUR..tblEnt.price))
 		if not ply["max"..cmdname] then
 			ply["max"..cmdname] = 0
