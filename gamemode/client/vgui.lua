@@ -244,8 +244,20 @@ usermessage.Hook("DoLetter", DoLetter)
 
 local F4Menu
 local F4MenuTabs
-local F4Tabs
+local F4Tabs = {}
 local hasReleasedF4 = false
+function GM:addF4MenuTab(name, tabControl, icon)
+	return table.insert(F4Tabs, {name = name, ctrl = tabControl, icon = icon})
+end
+
+function GM:switchTabOrder(from, to)
+	F4Tabs[from], F4Tabs[to] = F4Tabs[to], F4Tabs[from]
+end
+
+function GM:removeTab(tabNr)
+	table.remove(F4Tabs, tabNr)
+end
+
 local function ChangeJobVGUI()
 	if not F4Menu or not F4Menu:IsValid() then
 		F4Menu = vgui.Create("DFrame")
@@ -254,7 +266,12 @@ local function ChangeJobVGUI()
 		F4Menu:SetVisible( true )
 		F4Menu:MakePopup( )
 		F4Menu:SetTitle("Options menu")
-		F4Tabs = {GAMEMODE:MoneyTab(), GAMEMODE:JobsTab(), GAMEMODE:EntitiesTab(), GAMEMODE:RPHUDTab()}
+		GAMEMODE:addF4MenuTab("Money/Commands", GAMEMODE:MoneyTab(), "icon16/money.png")
+		GAMEMODE:addF4MenuTab("Jobs", GAMEMODE:JobsTab(), "icon16/user_suit.png")
+		GAMEMODE:addF4MenuTab("Entities/weapons", GAMEMODE:EntitiesTab(), "icon16/cart.png")
+		GAMEMODE:addF4MenuTab("HUD", GAMEMODE:RPHUDTab(), "icon16/camera.png")
+
+		hook.Call("F4MenuTabs", nil)
 		F4Menu:SetSkin("DarkRP")
 	else
 		F4Menu:SetVisible(true)
@@ -282,14 +299,16 @@ local function ChangeJobVGUI()
 		F4MenuTabs = vgui.Create("DPropertySheet", F4Menu)
 		F4MenuTabs:SetPos(5, 25)
 		F4MenuTabs:SetSize(760, 550)
-		--The tabs: Look in showteamtabs.lua for more info
-		F4MenuTabs:AddSheet("Money/Commands", F4Tabs[1], "icon16/money.png", false, false)
-		F4MenuTabs:AddSheet("Jobs", F4Tabs[2], "icon16/user_suit.png", false, false)
-		F4MenuTabs:AddSheet("Entities/weapons", F4Tabs[3], "icon16/cart.png", false, false)
-		F4MenuTabs:AddSheet("HUD", F4Tabs[4], "icon16/camera.png", false, false)
+
+		for k, v in pairs(F4Tabs) do
+			F4MenuTabs:AddSheet(v.name, v.ctrl, v.icon, false, false)
+		end
 	end
 
-	for _, panel in pairs(F4Tabs) do panel:Update() panel:SetSkin("DarkRP") end
+	for _, panel in pairs(F4Tabs) do
+		if panel.ctrl.Update then panel.ctrl:Update() end
+		panel.ctrl:SetSkin("DarkRP")
+	end
 
  	function F4Menu:Close()
 		F4Menu:SetVisible(false)
