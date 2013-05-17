@@ -19,8 +19,8 @@ function ENT:Initialize()
 	self.IsMoneyPrinter = true
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
 
-	self.sound = CreateSound(self, Sound("ambient/command_center.wav"))
-	self.sound:SetSoundLevel(57)
+	self.sound = CreateSound(self, Sound("ambient/levels/labs/equipment_printer_loop1.wav"))
+	self.sound:SetSoundLevel(52)
 	self.sound:PlayEx(1, 100)
 end
 
