@@ -160,7 +160,7 @@ local GUIToggled = false
 local HelpToggled = false
 
 local HelpVGUI
-local function ToggleHelp()
+function GM:ShowHelp()
 	if not HelpVGUI then
 		HelpVGUI = vgui.Create("HelpVGUI")
 	end
@@ -172,10 +172,9 @@ local function ToggleHelp()
 	HelpVGUI:SetVisible(HelpToggled)
 	gui.EnableScreenClicker(HelpToggled)
 end
-usermessage.Hook("ToggleHelp", ToggleHelp)
 
 local mouseX, mouseY = ScrW() / 2, ScrH() / 2
-local function ToggleClicker()
+function GM:ShowSpare1()
 	GUIToggled = not GUIToggled
 
 	if GUIToggled then
@@ -185,7 +184,6 @@ local function ToggleClicker()
 	end
 	gui.EnableScreenClicker(GUIToggled)
 end
-usermessage.Hook("ToggleClicker", ToggleClicker)
 
 local function blackScreen(um)
 	local toggle = um:ReadBool()
@@ -222,11 +220,24 @@ end
 function GM:OnPlayerChat()
 end
 
-function GM:PlayerBindPress(ply,bind,pressed)
+local FKeyBinds = {
+	["gm_showhelp"] = "ShowHelp",
+	["gm_showteam"] = "ShowTeam",
+	["gm_showspare1"] = "ShowSpare1",
+	["gm_showspare2"] = "ShowSpare2"
+}
+
+function GM:PlayerBindPress(ply, bind, pressed)
 	self.BaseClass:PlayerBindPress(ply, bind, pressed)
 	if ply == LocalPlayer() and IsValid(ply:GetActiveWeapon()) and string.find(string.lower(bind), "attack2") and ply:GetActiveWeapon():GetClass() == "weapon_bugbait" then
 		LocalPlayer():ConCommand("_hobo_emitsound")
 	end
+
+	local bnd = string.match(string.lower(bind), "gm_[a-z]+[12]?")
+	if bnd and FKeyBinds[bnd] then
+		GAMEMODE[FKeyBinds[bnd]](GAMEMODE)
+	end
+
 	return
 end
 

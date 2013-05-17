@@ -352,14 +352,9 @@ end
 AddChatCommand("/removespawn", RemoveSpawnPos)
 
 function GM:ShowTeam(ply)
-	umsg.Start("KeysMenu", ply)
-		umsg.Bool(ply:GetEyeTrace().Entity:IsVehicle())
-	umsg.End()
 end
 
 function GM:ShowHelp(ply)
-	umsg.Start("ToggleHelp", ply)
-	umsg.End()
 end
 
 local function LookPersonUp(ply, cmd, args)

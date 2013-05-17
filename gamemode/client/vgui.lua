@@ -317,11 +317,12 @@ local function ChangeJobVGUI()
 
 	F4Menu:SetSkin("DarkRP")
 end
-usermessage.Hook("ChangeJobVGUI", ChangeJobVGUI)
+GM.ShowSpare2 = ChangeJobVGUI
 
 local KeyFrameVisible = false
 local function KeysMenu(um)
-	local Vehicle = um:ReadBool()
+	local Vehicle = LocalPlayer():GetEyeTrace().Entity
+	Vehicle = IsValid(Vehicle) and Vehicle:IsVehicle()
 	if KeyFrameVisible then return end
 	local trace = LocalPlayer():GetEyeTrace()
 	local Frame = vgui.Create("DFrame")
@@ -606,4 +607,4 @@ local function KeysMenu(um)
 
 	Frame:SetSkin("DarkRP")
 end
-usermessage.Hook("KeysMenu", KeysMenu)
+GM.ShowTeam = KeysMenu

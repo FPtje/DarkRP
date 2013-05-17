@@ -229,16 +229,12 @@ function GM:ShowSpare1(ply)
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare1 then
 		return RPExtraTeams[ply:Team()].ShowSpare1(ply)
 	end
-	umsg.Start("ToggleClicker", ply)
-	umsg.End()
 end
 
 function GM:ShowSpare2(ply)
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare2 then
 		return RPExtraTeams[ply:Team()].ShowSpare2(ply)
 	end
-	umsg.Start("ChangeJobVGUI", ply)
-	umsg.End()
 end
 
 function GM:OnNPCKilled(victim, ent, weapon)
