@@ -45,10 +45,12 @@ local function LoadModules()
 	for _, folder in SortedPairs(folders, true) do
 		if GM.Config.DisabledModules[folder] then continue end
 
-		for _, File in SortedPairs(file.Find(root .. folder .."/cl_*.lua", "LUA"), true) do
+		for _, File in SortedPairs(file.Find(root .. folder .."/sh_*.lua", "LUA"), true) do
+			if File == "sh_interface.lua" then continue end
 			include(root.. folder .. "/" ..File)
 		end
-		for _, File in SortedPairs(file.Find(root .. folder .."/sh_*.lua", "LUA"), true) do
+		for _, File in SortedPairs(file.Find(root .. folder .."/cl_*.lua", "LUA"), true) do
+			if File == "cl_interface.lua" then continue end
 			include(root.. folder .. "/" ..File)
 		end
 	end
@@ -62,6 +64,7 @@ end
 GM.Config = {} -- config table
 
 include("config.lua")
+include("sh_interfaceloader.lua")
 include("client/help.lua")
 
 include("client/cl_chatlisteners.lua")
@@ -90,6 +93,8 @@ include("fpp/client/FPP_Buddies.lua")
 include("fpp/sh_CPPI.lua")
 
 LoadModules()
+
+DarkRP.finish()
 
 surface.CreateFont("AckBarWriting", {
 	size = 20,

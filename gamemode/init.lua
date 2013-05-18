@@ -33,6 +33,8 @@ util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_DoorData")
 util.AddNetworkString("DarkRP_keypadData")
 
+AddCSLuaFile("sh_interfaceloader.lua")
+
 -- Falco's prop protection
 local BlockedModelsExist = sql.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") ~= false
 if not BlockedModelsExist then
@@ -93,6 +95,8 @@ include("_MySQL.lua")
 include("config.lua")
 include("licenseweapons.lua")
 
+include("sh_interfaceloader.lua")
+
 include("server/chat.lua")
 include("server/admincc.lua")
 
@@ -135,10 +139,13 @@ for _, folder in SortedPairs(folders, true) do
 	if folder ~= "." and folder ~= ".." and not GM.Config.DisabledModules[folder] then
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 			AddCSLuaFile(fol..folder .. "/" ..File)
+
+			if File == "sh_interface.lua" then continue end
 			include(fol.. folder .. "/" ..File)
 		end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", "LUA"), true) do
+			if File == "sv_interface.lua" then continue end
 			include(fol.. folder .. "/" ..File)
 		end
 
@@ -147,6 +154,8 @@ for _, folder in SortedPairs(folders, true) do
 		end
 	end
 end
+
+DarkRP.finish()
 
 local function GetAvailableVehicles(ply)
 	if IsValid(ply) and not ply:IsAdmin() then return end
