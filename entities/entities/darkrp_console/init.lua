@@ -64,20 +64,20 @@ function ENT:OnPhysgunFreeze(weapon, phys, ent, ply)
 			pos.x, pos.y, pos.z,
 			ang.p, ang.y, ang.r
 
-		DB.Query("SELECT id FROM darkrp_position WHERE TYPE = 'C' AND map = " .. sql.SQLStr(map) .. ";", function(data)
+		DB.Query("SELECT id FROM darkrp_position WHERE TYPE = 'C' AND map = " .. DB.SQLStr(map) .. ";", function(data)
 			if data then
 				for k,v in pairs(data) do
 					if tonumber(v.id) == tonumber(self.ID) then
 						DB.Query([[UPDATE darkrp_position SET ]]
-						.. "x = " .. SQLStr(x)..", "
-						.. "y = " .. SQLStr(y)..", "
-						.. "z = " .. SQLStr(z).." "
+						.. "x = " .. DB.SQLStr(x)..", "
+						.. "y = " .. DB.SQLStr(y)..", "
+						.. "z = " .. DB.SQLStr(z).." "
 						.. " WHERE id = "..v.id..";")
 
 						DB.Query([[UPDATE darkrp_console SET ]]
-						.. "pitch = " .. SQLStr(pitch)..", "
-						.. "yaw = " .. SQLStr(yaw)..", "
-						.. "roll = " .. SQLStr(roll)
+						.. "pitch = " .. DB.SQLStr(pitch)..", "
+						.. "yaw = " .. DB.SQLStr(yaw)..", "
+						.. "roll = " .. DB.SQLStr(roll)
 						.. " WHERE id = "..v.id..";")
 
 						GAMEMODE:Notify(ply, 0, 4, "CP console position updated!")
@@ -100,17 +100,17 @@ function ENT:OnPhysgunFreeze(weapon, phys, ent, ply)
 			end
 			if found or ID == 0 then ID = ID + 1 end
 			DB.Query([[INSERT INTO darkrp_position VALUES(]].. (self.ID or ID) .. [[, ]]
-			.. SQLStr(map)..", "
+			.. DB.SQLStr(map)..", "
 			.."'C', "
-			.. SQLStr(x)..", "
-			.. SQLStr(y)..", "
-			.. SQLStr(z)
+			.. DB.SQLStr(x)..", "
+			.. DB.SQLStr(y)..", "
+			.. DB.SQLStr(z)
 			.. ");")
 
 			DB.Query([[INSERT INTO darkrp_console VALUES(]].. (self.ID or ID) .. [[, ]]
-			.. SQLStr(pitch)..", "
-			.. SQLStr(yaw)..", "
-			.. SQLStr(roll)
+			.. DB.SQLStr(pitch)..", "
+			.. DB.SQLStr(yaw)..", "
+			.. DB.SQLStr(roll)
 			.. ");")
 
 			GAMEMODE:Notify(ply, 0, 4, "CP console position created!")

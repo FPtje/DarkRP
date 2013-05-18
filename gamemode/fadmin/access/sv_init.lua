@@ -51,7 +51,7 @@ timer.Simple(3, function()
 		for priv, access in pairs(FAdmin.Access.Privileges) do
 			for i = access + 1, #hasPrivs, 1 do
 				FAdmin.Access.Groups[hasPrivs[i]].PRIVS[priv] = true
-				DB.Query("INSERT INTO FADMIN_PRIVILEGES VALUES(".. sql.SQLStr(hasPrivs[i]) .. ", " .. sql.SQLStr(priv) .. ");")
+				DB.Query("INSERT INTO FADMIN_PRIVILEGES VALUES(" .. DB.SQLStr(hasPrivs[i]) .. ", " .. DB.SQLStr(priv) .. ");")
 			end
 		end
 	end)
@@ -65,7 +65,7 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 		ply:SetUserGroup(group)
 	end
 
-	DB.Query("REPLACE INTO FAdmin_PlayerGroup VALUES("..sql.SQLStr(SteamID)..", "..sql.SQLStr(group)..");")
+	DB.Query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. DB.SQLStr(SteamID)..", " .. DB.SQLStr(group)..");")
 end
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
@@ -113,7 +113,7 @@ local function AddPrivilege(ply, cmd, args)
 
 	FAdmin.Access.Groups[group].PRIVS[priv] = true
 
-	DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(".. sql.SQLStr(group) .. ", " .. sql.SQLStr(priv) .. ");")
+	DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. DB.SQLStr(group) .. ", " .. DB.SQLStr(priv) .. ");")
 	SendUserMessage("FAdmin_AddPriv", player.GetAll(), group, priv)
 	FAdmin.Messages.SendMessage(ply, 4, "Privilege Added!")
 end
@@ -129,7 +129,7 @@ local function RemovePrivilege(ply, cmd, args)
 
 	FAdmin.Access.Groups[group].PRIVS[priv] = nil
 
-	DB.Query("DELETE FROM FADMIN_PRIVILEGES WHERE NAME = ".. sql.SQLStr(group) .. " AND PRIVILEGE = " .. sql.SQLStr(priv) .. ";")
+	DB.Query("DELETE FROM FADMIN_PRIVILEGES WHERE NAME = " .. DB.SQLStr(group) .. " AND PRIVILEGE = " .. DB.SQLStr(priv) .. ";")
 	SendUserMessage("FAdmin_RemovePriv", player.GetAll(), group, priv)
 	FAdmin.Messages.SendMessage(ply, 4, "Privilege Removed!")
 end
@@ -188,7 +188,7 @@ end
 --hooks and stuff
 
 hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
-	DB.QueryValue("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = "..sql.SQLStr(ply:SteamID())..";", function(Group)
+	DB.QueryValue("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = " .. DB.SQLStr(ply:SteamID())..";", function(Group)
 		if not Group then return end
 		ply:SetUserGroup(Group)
 

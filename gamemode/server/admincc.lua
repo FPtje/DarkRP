@@ -133,7 +133,7 @@ local function ccLock(ply, cmd, args)
 	ply:PrintMessage(2, "Locked.")
 
 	trace.Entity:KeysLock()
-	DB.Query("REPLACE INTO darkrp_door VALUES("..sql.SQLStr(trace.Entity:EntIndex())..", "..sql.SQLStr(string.lower(game.GetMap()))..", "..sql.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
+	DB.Query("REPLACE INTO darkrp_door VALUES("..DB.SQLStr(trace.Entity:EntIndex())..", "..DB.SQLStr(string.lower(game.GetMap()))..", "..DB.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
 	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-locked a door with rp_lock (locked door is saved)", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_lock", ccLock)
@@ -156,7 +156,7 @@ local function ccUnLock(ply, cmd, args)
 
 	ply:PrintMessage(2, "Unlocked.")
 	trace.Entity:KeysUnLock()
-	DB.Query("REPLACE INTO darkrp_door VALUES("..sql.SQLStr(trace.Entity:EntIndex())..", "..sql.SQLStr(string.lower(game.GetMap()))..", "..sql.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
+	DB.Query("REPLACE INTO darkrp_door VALUES("..DB.SQLStr(trace.Entity:EntIndex())..", "..DB.SQLStr(string.lower(game.GetMap()))..", "..DB.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
 	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_unlock", ccUnLock)

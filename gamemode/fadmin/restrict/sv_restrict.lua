@@ -18,9 +18,9 @@ local function DoRestrictWeapons(ply, cmd, args)
 	local Group = args[2]
 	if not Group or not FAdmin.Access.Groups[Group] or not Weapon then print("no2") return end
 	if Restricted.Weapons[Weapon] then
-		sql.Query("UPDATE FADMIN_RESTRICTEDENTS SET ADMIN_GROUP = "..sql.SQLStr(Group).." WHERE ENTITY = "..sql.SQLStr(Weapon).." AND TYPE = "..sql.SQLStr("Weapons")..";")
+		sql.Query("UPDATE FADMIN_RESTRICTEDENTS SET ADMIN_GROUP = " .. DB.SQLStr(Group).." WHERE ENTITY = " .. DB.SQLStr(Weapon).." AND TYPE = " .. DB.SQLStr("Weapons")..";")
 	else
-		sql.Query("INSERT INTO FADMIN_RESTRICTEDENTS VALUES("..sql.SQLStr("Weapons")..", "..sql.SQLStr(Weapon)..", "..sql.SQLStr(Group)..");")
+		sql.Query("INSERT INTO FADMIN_RESTRICTEDENTS VALUES(" .. DB.SQLStr("Weapons")..", " .. DB.SQLStr(Weapon)..", " .. DB.SQLStr(Group)..");")
 	end
 	Restricted.Weapons[Weapon] = Group
 	FAdmin.Messages.SendMessage(ply, 4, "Weapon restricted!")
