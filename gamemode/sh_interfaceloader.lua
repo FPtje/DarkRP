@@ -1,7 +1,11 @@
 module("DarkRP", package.seeall)
 
--- Variable that maintains the existing stubs
+-- Variables that maintain the existing stubs and hooks
 local stubs = {}
+local hookStubs = {}
+
+-- Contains the functions that the hooks call by default
+hooks = {}
 
 -- Delay the calling of methods until the functions are implemented
 local delayedCalls = {}
@@ -10,6 +14,8 @@ local returnsLayout, isreturns
 local parmeterLayout, isparameters
 local isreturns
 local checkStub
+
+local hookLayout
 
 /*---------------------------------------------------------------------------
 Methods that check whether certain fields are valid
@@ -25,13 +31,13 @@ end
 isparameters = function(tbl)
 	if not istable(tbl) then return false end
 	for k,v in pairs(tbl) do
-		if not checkStub(v, returnsLayout) then return false end
+		if not checkStub(v, parmeterLayout) then return false end
 	end
 	return true
 end
 
 /*---------------------------------------------------------------------------
-The layout of a method stub
+The layouts of stubs
 ---------------------------------------------------------------------------*/
 local stubLayout = {
 	name = isstring,
@@ -39,6 +45,13 @@ local stubLayout = {
 	parameters = isparameters, -- the parameters of a method
 	returns = isreturns, -- the return values of a method
 	metatable = istable -- DarkRP, Player, Entity, Vector, ...
+}
+
+local hookLayout = {
+	name = isstring,
+	description = isstring,
+	parameters = isreturns, -- doesn't have the 'optional' field
+	returns = isreturns,
 }
 
 returnsLayout = {
@@ -94,10 +107,29 @@ function stub(tbl)
 end
 
 /*---------------------------------------------------------------------------
+Generate a hook stub
+---------------------------------------------------------------------------*/
+function hookStub(tbl)
+	local isStub, field = checkStub(tbl, hookLayout)
+	if not isStub then
+		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
+	end
+
+	hookStubs[tbl.name] = tbl
+end
+
+/*---------------------------------------------------------------------------
 Retrieve the stubs
 ---------------------------------------------------------------------------*/
 function getStubs()
 	return table.Copy(stubs)
+end
+
+/*---------------------------------------------------------------------------
+Retrieve the hooks
+---------------------------------------------------------------------------*/
+function getHooks()
+	return table.Copy(hookStubs)
 end
 
 /*---------------------------------------------------------------------------
