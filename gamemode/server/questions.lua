@@ -11,11 +11,11 @@ end
 concommand.Add("ans", ccDoQuestion)
 
 function Question:HandleNewQuestion(ply, response)
-	if response == 1 or response == 2 then
-		self.yn = response
+	if response == 1 or response == 0 then
+		self.yn = tobool(response)
 	end
 
-	GAMEMODE.ques.HandleQuestionEnd(self.ID, false)
+	GAMEMODE.ques.HandleQuestionEnd(self.ID)
 end
 
 function GM.ques:Create(question, quesid, ent, delay, callback, fromPly, toPly, ...)

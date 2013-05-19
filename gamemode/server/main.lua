@@ -122,7 +122,7 @@ local function SetWarrant(ply, target, reason)
 end
 
 local function FinishWarrant(choice, mayor, initiator, target, reason)
-	if choice == 1 then
+	if choice then
 		SetWarrant(initiator, target, reason)
 	else
 		GAMEMODE:Notify(initiator, 1, 4, string.format(LANGUAGE.warrant_denied, mayor:Nick()))
@@ -988,7 +988,7 @@ AddChatCommand("/demote", Demote)
 
 local function ExecSwitchJob(answer, ent, ply, target)
 	ply.RequestedJobSwitch = nil
-	if answer ~= 1 then return end
+	if not answer then return end
 	local Pteam = ply:Team()
 	local Tteam = target:Team()
 
@@ -1512,7 +1512,7 @@ local LotteryON = false
 local LotteryAmount = 0
 local CanLottery = CurTime()
 local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
-	if answer == 1 and not table.HasValue(LotteryPeople, target) then
+	if answer and not table.HasValue(LotteryPeople, target) then
 		if not target:CanAfford(LotteryAmount) then
 			GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.cant_afford, "lottery"))
 			return
@@ -1520,7 +1520,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 		table.insert(LotteryPeople, target)
 		target:AddMoney(-LotteryAmount)
 		GAMEMODE:Notify(target, 0,4, string.format(LANGUAGE.lottery_entered, CUR..tostring(LotteryAmount)))
-	elseif answer and not table.HasValue(LotteryPeople, target) then
+	elseif answer ~= nil and not table.HasValue(LotteryPeople, target) then
 		GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.lottery_not_entered, "You"))
 	end
 
@@ -1690,7 +1690,7 @@ concommand.Add("rp_mayor_setsalary", MayorSetSalary)
  ---------------------------------------------------------*/
 local function GrantLicense(answer, Ent, Initiator, Target)
 	Initiator.LicenseRequested = nil
-	if answer == 1 then
+	if answer then
 		GAMEMODE:Notify(Initiator, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		GAMEMODE:Notify(Target, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		Initiator:SetDarkRPVar("HasGunlicense", true)

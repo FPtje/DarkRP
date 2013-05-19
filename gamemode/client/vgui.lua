@@ -209,7 +209,7 @@ usermessage.Hook("KillQuestionVGUI", KillQuestionVGUI)
 local function DoVoteAnswerQuestion(ply, cmd, args)
 	if not args[1] then return end
 
-	local vote = 2
+	local vote = 0
 	if tonumber(args[1]) == 1 or string.lower(args[1]) == "yes" or string.lower(args[1]) == "true" then vote = 1 end
 
 	for k,v in pairs(VoteVGUI) do
