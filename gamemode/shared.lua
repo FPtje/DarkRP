@@ -266,3 +266,9 @@ GM.CivilProtection = {
 	[TEAM_CHIEF] = true,
 	[TEAM_MAYOR] = true,
 }
+
+/*---------------------------------------------------------------------------
+Enable hitman goodies on this team
+---------------------------------------------------------------------------*/
+DarkRP.addHitmanTeam(TEAM_MOB)
+
