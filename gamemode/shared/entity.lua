@@ -87,6 +87,11 @@ function playerMeta:IsCP()
 	return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team]
 end
 
+function playerMeta:CanAfford(amount)
+	if not amount or self.DarkRPUnInitialized then return false end
+	return math.floor(amount) >= 0 and self.DarkRPVars.money - math.floor(amount) >= 0
+end
+
 /*---------------------------------------------------------
  Clientside part
  ---------------------------------------------------------*/

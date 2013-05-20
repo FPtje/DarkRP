@@ -372,11 +372,6 @@ end
 /*---------------------------------------------------------
  Money
  ---------------------------------------------------------*/
-function meta:CanAfford(amount)
-	if not amount or self.DarkRPUnInitialized then return false end
-	return math.floor(amount) >= 0 and self.DarkRPVars.money - math.floor(amount) >= 0
-end
-
 function meta:AddMoney(amount)
 	if not amount then return false end
 	local total = self.DarkRPVars.money + math.floor(amount)
