@@ -84,7 +84,7 @@ function plyMeta:finishHit()
 end
 
 function questionCallback(answer, hitman, customer, target, price)
-	if not answer then
+	if not tobool(answer) then
 		GAMEMODE:Notify(customer, 1, 4, "The hitman declined the hit!")
 		return
 	end
