@@ -111,7 +111,10 @@ AddChatCommand("/requesthit", function(ply, args)
 	local traceEnt = ply:GetEyeTrace().Entity
 	local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1))
 
-	if not IsValid(hitman) or not IsValid(target) or not hitman:IsPlayer() then return "" end
+	if not IsValid(hitman) or not IsValid(target) or not hitman:IsPlayer() then
+		GAMEMODE:Notify(ply, 1, 4, "Invalid arguments!")
+		return ""
+	end
 
 	hitman:requestHit(ply, target, hitman:getHitPrice())
 
