@@ -69,6 +69,14 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
 	DarkRP.openHitMenu(hitman)
 end)
 
+hook.Add("InitPostEntity", "HitmanMenu", function()
+	for k, v in pairs(player.GetAll()) do
+		if v:isHitman() and v:hasHit() then
+			v:drawHitInfo()
+		end
+	end
+end)
+
 function postPlayerDraw(ply)
 	if not activeHitmen[ply] then return end
 	local pos, ang = ply:GetShootPos(), ply:EyeAngles()
