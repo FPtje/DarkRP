@@ -136,37 +136,47 @@ end
 Call the cached methods
 ---------------------------------------------------------------------------*/
 function finish()
-	for name, log in pairs(delayedCalls) do
+	local calls = table.Copy(delayedCalls) -- Loop through a copy, so the notImplemented function doesn't get called again
+	for name, log in pairs(calls) do
 		if not stubs[name] then ErrorNoHalt("Calling non-existing stub \"" .. name .. "\"") continue end
 
 		for _, args in pairs(log) do
 			stubs[name].metatable[name](unpack(args))
 		end
 	end
+
+	delayedCalls = {}
 end
 
 /*---------------------------------------------------------------------------
 Load the interface files
 ---------------------------------------------------------------------------*/
 local function loadInterfaces()
-	local root = GM.FolderName.."/gamemode/modules/"
+	local root = GM.FolderName .. "/gamemode/modules"
 
-	local _, folders = file.Find(root.."*", "LUA")
+	local _, folders = file.Find(root.."/*", "LUA")
 
 	ENTITY = FindMetaTable("Entity")
 	PLAYER = FindMetaTable("Player")
 	VECTOR = FindMetaTable("Vector")
 
 	for _, folder in SortedPairs(folders, true) do
-		if GM.Config.DisabledModules[folder] then continue end
+		local interfacefile = string.format("%s/%s/%s_interface.lua", root, folder, "%s")
+		local client = string.format(interfacefile, "cl")
+		local shared = string.format(interfacefile, "sh")
+		local server = string.format(interfacefile, "sv")
 
-		for _, File in SortedPairs(file.Find(root .. folder .."/sh_interface.lua", "LUA"), true) do
-			include(root.. folder .. "/" ..File)
+		if file.Exists(shared, "LUA") then
+			if SERVER then AddCSLuaFile(shared) end
+			include(shared)
 		end
 
-		local realmInterface = CLIENT and "cl" or "sv"
-		for _, File in SortedPairs(file.Find(root .. folder .."/" .. realmInterface .. "_interface.lua", "LUA"), true) do
-			include(root.. folder .. "/" ..File)
+		if SERVER and file.Exists(client, "LUA") then
+			AddCSLuaFile(client)
+		end
+
+		if CLIENT and file.Exists(client, "LUA") then
+			include(client)
 		end
 	end
 
