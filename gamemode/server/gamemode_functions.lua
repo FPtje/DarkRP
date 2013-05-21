@@ -528,6 +528,15 @@ function GM:PlayerInitialSpawn(ply)
 	timer.Simple(10, function() ply:CompleteSentence() end)
 end
 
+local function formatDarkRPValue(value)
+	if value == nil then return "nil" end
+
+	if isentity(value) and not IsValid(value) then return "NULL" end
+	if isentity(value) and value:IsPlayer() then return string.format("Entity [%s][Player]", value:EntIndex()) end
+
+	return tostring(value)
+end
+
 local meta = FindMetaTable("Player")
 function meta:SetDarkRPVar(var, value, target)
 	if not IsValid(self) then return end
@@ -538,12 +547,13 @@ function meta:SetDarkRPVar(var, value, target)
 	self.DarkRPVars = self.DarkRPVars or {}
 	self.DarkRPVars[var] = value
 
+	value = formatDarkRPValue(value)
+
 	umsg.Start("DarkRP_PlayerVar", target)
 		-- The index because the player handle might not exist clientside yet
 		umsg.Short(self:EntIndex())
 		umsg.String(var)
-		if value == nil then value = "nil" end
-		umsg.String(tostring(value))
+		umsg.String(value)
 	umsg.End()
 end
 
