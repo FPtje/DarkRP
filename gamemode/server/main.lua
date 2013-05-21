@@ -1512,7 +1512,7 @@ local LotteryON = false
 local LotteryAmount = 0
 local CanLottery = CurTime()
 local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
-	if answer and not table.HasValue(LotteryPeople, target) then
+	if tobool(answer) and not table.HasValue(LotteryPeople, target) then
 		if not target:CanAfford(LotteryAmount) then
 			GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.cant_afford, "lottery"))
 			return
