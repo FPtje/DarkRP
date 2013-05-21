@@ -5,6 +5,19 @@ local ConVars = {}
 local HUDWidth
 local HUDHeight
 
+local Color = Color
+local cvars = cvars
+local draw = draw
+local GetConVar = GetConVar
+local Lerp = Lerp
+local localplayer
+local pairs = pairs
+local SortedPairs = SortedPairs
+local string = string
+local surface = surface
+local table = table
+local tostring = tostring
+
 CreateClientConVar("weaponhud", 0, true, false)
 
 local function ReloadConVars()
@@ -44,13 +57,9 @@ end
 ReloadConVars()
 
 local function formatNumber(n)
-	n = tonumber(n)
-	if (!n) then
-		return 0
-	end
 	if n >= 1e14 then return tostring(n) end
     n = tostring(n)
-    sep = sep or ","
+    local sep = sep or ","
     local dp = string.find(n, "%.") or #n+1
 	for i=dp-4, 1, -3 do
 		n = n:sub(1, i) .. sep .. n:sub(i+1)
@@ -65,31 +74,33 @@ HUD Seperate Elements
 ---------------------------------------------------------------------------*/
 local Health = 0
 local function DrawHealth()
-	Health = math.min(100, (Health == LocalPlayer():Health() and Health) or Lerp(0.1, Health, LocalPlayer():Health()))
+	Health = math.min(100, (Health == localplayer:Health() and Health) or Lerp(0.1, Health, localplayer:Health()))
 
 	local DrawHealth = math.Min(Health / GAMEMODE.Config.startinghealth, 1)
 	local Border = math.Min(6, math.pow(2, math.Round(3*DrawHealth)))
 	draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
 	draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * DrawHealth, 18, ConVars.Healthforeground)
 
-	draw.DrawText(math.Max(0, math.Round(LocalPlayer():Health())), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8)/2, RelativeY - 32, ConVars.HealthText, 1)
+	draw.DrawText(math.Max(0, math.Round(localplayer:Health())), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8)/2, RelativeY - 32, ConVars.HealthText, 1)
 
 	-- Armor
-	local armor = LocalPlayer():Armor()
+	local armor = localplayer:Armor()
 	if armor ~= 0 then
 		draw.RoundedBox(2, RelativeX + 4, RelativeY - 15, (HUDWidth - 8) * armor / 100, 5, Color(0, 0, 255, 255))
 	end
 end
 
 local function DrawInfo()
-	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-	local Salary = 	LANGUAGE.salary .. CUR .. (LocalPlayer().DarkRPVars.salary or 0)
+	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
+	local Salary = 	LANGUAGE.salary .. CUR .. (localplayer.DarkRPVars.salary or 0)
 
-	local JobWallet =
-	LANGUAGE.job .. (LocalPlayer().DarkRPVars.job or "") .. "\n"..
-	LANGUAGE.wallet .. CUR .. (formatNumber(LocalPlayer().DarkRPVars.money) or 0)
+	local JobWallet = {
+		LANGUAGE.job, (localplayer.DarkRPVars.job or ""), "\n",
+		LANGUAGE.wallet, CUR, (formatNumber(localplayer.DarkRPVars.money) or 0)
+	}
+	JobWallet = table.concat(JobWallet)
 
-	local wep = LocalPlayer( ):GetActiveWeapon( );
+	local wep = localplayer:GetActiveWeapon()
 
 	if IsValid(wep) and GAMEMODE.Config.weaponhud then
         local name = wep:GetPrintName();
@@ -108,7 +119,7 @@ end
 
 local Page = Material("icon16/page_white_text.png")
 local function GunLicense()
-	if LocalPlayer().DarkRPVars.HasGunlicense then
+	if localplayer.DarkRPVars.HasGunlicense then
 		surface.SetMaterial(Page)
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.DrawTexturedRect(RelativeX + HUDWidth, ScrH() - 34, 32, 32)
@@ -116,10 +127,10 @@ local function GunLicense()
 end
 
 local function Agenda()
-	local DrawAgenda, AgendaManager = DarkRPAgendas[LocalPlayer():Team()], LocalPlayer():Team()
+	local DrawAgenda, AgendaManager = DarkRPAgendas[localplayer:Team()], localplayer:Team()
 	if not DrawAgenda then
 		for k,v in pairs(DarkRPAgendas) do
-			if table.HasValue(v.Listeners or {}, LocalPlayer():Team()) then
+			if table.HasValue(v.Listeners or {}, localplayer:Team()) then
 				DrawAgenda, AgendaManager = DarkRPAgendas[k], k
 				break
 			end
@@ -147,7 +158,7 @@ end
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
 local function DrawVoiceChat()
-	if LocalPlayer().DRPIsTalking then
+	if localplayer.DRPIsTalking then
 		local chbxX, chboxY = chat.GetChatBoxPos()
 
 		local Rotating = math.sin(CurTime()*3)
@@ -178,9 +189,9 @@ usermessage.Hook("GotArrested", function(msg)
 	local ArrestedUntil = msg:ReadFloat()
 
 	Arrested = function()
-		if CurTime() - StartArrested <= ArrestedUntil and LocalPlayer().DarkRPVars.Arrested then
+		if CurTime() - StartArrested <= ArrestedUntil and localplayer.DarkRPVars.Arrested then
 		draw.DrawText(string.format(LANGUAGE.youre_arrested, math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", ScrW()/2, ScrH() - ScrH()/12, Color(255,255,255,255), 1)
-		elseif not LocalPlayer().DarkRPVars.Arrested then
+		elseif not localplayer.DarkRPVars.Arrested then
 			Arrested = function() end
 		end
 	end
@@ -206,8 +217,11 @@ end)
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------*/
 local function DrawHUD()
+	localplayer = localplayer or LocalPlayer()
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
+
+	localplayer.DarkRPVars.money = isnumber(localplayer.DarkRPVars.money) and localplayer.DarkRPVars.money or tonumber(localplayer.DarkRPVars.money)
 
 	--Background
 	draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
@@ -257,7 +271,7 @@ local function DrawWantedInfo(ply)
 	if not ply:Alive() then return end
 
 	local pos = ply:EyePos()
-	if not pos:RPIsInSight({LocalPlayer(), ply}) then return end
+	if not pos:RPIsInSight({localplayer, ply}) then return end
 
 	pos.z = pos.z + 14
 	pos = pos:ToScreen()
@@ -267,16 +281,18 @@ local function DrawWantedInfo(ply)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 	end
 
-	draw.DrawText(LANGUAGE.wanted.."\nReason: "..tostring(ply.DarkRPVars["wantedReason"]), "DarkRPHUD2", pos.x, pos.y - 40, Color(255, 255, 255, 200), 1)
-	draw.DrawText(LANGUAGE.wanted.."\nReason: "..tostring(ply.DarkRPVars["wantedReason"]), "DarkRPHUD2", pos.x + 1, pos.y - 41, Color(255, 0, 0, 255), 1)
+	local wantedText = string.format("%s\nReason: %s", LANGUAGE.wanted, tostring(ply.DarkRPVars["wantedReason"]))
+
+	draw.DrawText(wantedText, "DarkRPHUD2", pos.x, pos.y - 40, Color(255, 255, 255, 200), 1)
+	draw.DrawText(wantedText, "DarkRPHUD2", pos.x + 1, pos.y - 41, Color(255, 0, 0, 255), 1)
 end
 
 /*---------------------------------------------------------------------------
 The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------*/
 local function DrawEntityDisplay()
-	local shootPos = LocalPlayer():GetShootPos()
-	local aimVec = LocalPlayer():GetAimVector()
+	local shootPos = localplayer:GetShootPos()
+	local aimVec = localplayer:GetAimVector()
 
 	for k, ply in pairs(player.GetAll()) do
 		if not ply:Alive() then continue end
@@ -285,23 +301,23 @@ local function DrawEntityDisplay()
 		ply.DarkRPVars = ply.DarkRPVars or {}
 		if ply.DarkRPVars.wanted then DrawWantedInfo(ply) end
 
-		if GAMEMODE.Config.globalshow and ply ~= LocalPlayer() then
+		if GAMEMODE.Config.globalshow and ply ~= localplayer then
 			DrawPlayerInfo(ply)
 		-- Draw when you're (almost) looking at him
 		elseif not GAMEMODE.Config.globalshow and hisPos:Distance(shootPos) < 400 then
 			local pos = hisPos - shootPos
 			local unitPos = pos:GetNormalized()
 			if unitPos:Dot(aimVec) > 0.95 then
-				local trace = util.QuickTrace(shootPos, pos, LocalPlayer())
+				local trace = util.QuickTrace(shootPos, pos, localplayer)
 				if trace.Hit and trace.Entity ~= ply then return end
 				DrawPlayerInfo(ply)
 			end
 		end
 	end
 
-	local tr = LocalPlayer():GetEyeTrace()
+	local tr = localplayer:GetEyeTrace()
 
-	if tr.Entity:IsOwnable() and tr.Entity:GetPos():Distance(LocalPlayer():GetPos()) < 200 then
+	if tr.Entity:IsOwnable() and tr.Entity:GetPos():Distance(localplayer:GetPos()) < 200 then
 		tr.Entity:DrawOwnableInfo()
 	end
 end
@@ -310,9 +326,9 @@ end
 Zombie display
 ---------------------------------------------------------------------------*/
 local function DrawZombieInfo()
-	if not LocalPlayer().DarkRPVars.zombieToggle then return end
-	for x=1, LocalPlayer().DarkRPVars.numPoints, 1 do
-		local zPoint = LocalPlayer().DarkRPVars["zPoints".. x]
+	if not localplayer.DarkRPVars.zombieToggle then return end
+	for x=1, localplayer.DarkRPVars.numPoints, 1 do
+		local zPoint = localplayer.DarkRPVars["zPoints".. x]
 		if zPoint then
 			zPoint = zPoint:ToScreen()
 			draw.DrawText("Zombie Spawn (" .. x .. ")", "DarkRPHUD2", zPoint.x, zPoint.y - 20, Color(255, 255, 255, 200), 1)
