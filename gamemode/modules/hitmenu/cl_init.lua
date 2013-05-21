@@ -39,15 +39,22 @@ end
 hook.Add("HUDPaint", "DrawHitOption", function()
 	localplayer = localplayer or LocalPlayer()
 	hudText = hudText or GAMEMODE.Config.hudText
-
+	local x, y
 	local ply = localplayer:GetEyeTrace().Entity
 
-	if not IsValid(ply) or not ply:IsPlayer() or not ply:isHitman() or localplayer:GetPos():Distance(ply:GetPos()) > GAMEMODE.Config.minHitDistance then return end
+	if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and localplayer:GetPos():Distance(ply:GetPos()) < GAMEMODE.Config.minHitDistance then
+		x, y = ScrW() / 2, ScrH() / 2 + 30
 
-	local x, y = ScrW() / 2, ScrH() / 2 + 30
+		draw.DrawText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)
+		draw.DrawText(hudText, "TargetID", x, y, textCol2, 1)
+	end
 
-	draw.DrawText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)
-	draw.DrawText(hudText, "TargetID", x, y, textCol2, 1)
+	if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
+		x, y = chat.GetChatBoxPos()
+		local text = "Hit: " .. localplayer:getHitTarget():Nick()
+		draw.DrawText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
+		draw.DrawText(text, "HUDNumber5", x, y, textCol2, 0)
+	end
 end)
 
 local lastKeyPress = 0
