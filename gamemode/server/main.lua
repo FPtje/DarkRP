@@ -122,7 +122,7 @@ local function SetWarrant(ply, target, reason)
 end
 
 local function FinishWarrant(choice, mayor, initiator, target, reason)
-	if choice then
+	if tobool(choice) then
 		SetWarrant(initiator, target, reason)
 	else
 		GAMEMODE:Notify(initiator, 1, 4, string.format(LANGUAGE.warrant_denied, mayor:Nick()))
@@ -988,7 +988,7 @@ AddChatCommand("/demote", Demote)
 
 local function ExecSwitchJob(answer, ent, ply, target)
 	ply.RequestedJobSwitch = nil
-	if not answer then return end
+	if not tobool(answer) then return end
 	local Pteam = ply:Team()
 	local Tteam = target:Team()
 
@@ -1690,7 +1690,7 @@ concommand.Add("rp_mayor_setsalary", MayorSetSalary)
  ---------------------------------------------------------*/
 local function GrantLicense(answer, Ent, Initiator, Target)
 	Initiator.LicenseRequested = nil
-	if answer then
+	if tobool(answer) then
 		GAMEMODE:Notify(Initiator, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		GAMEMODE:Notify(Target, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		Initiator:SetDarkRPVar("HasGunlicense", true)
