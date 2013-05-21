@@ -84,10 +84,24 @@ function plyMeta:finishHit()
 end
 
 function questionCallback(answer, hitman, customer, target, price)
+	if not IsValid(customer) then return end
+
+	if not IsValid(customer) then
+		GAMEMODE:Notify(hitman, 1, 4, "The customer has left the server!")
+		return
+	end
+
+	if not IsValid(target) then
+		GAMEMODE:Notify(hitman, 1, 4, "The target has left the server!")
+		return
+	end
+
 	if not tobool(answer) then
 		GAMEMODE:Notify(customer, 1, 4, "The hitman declined the hit!")
 		return
 	end
+
+	GAMEMODE:Notify(hitman, 1, 4, "Hit accepted!")
 
 	hitman:placeHit(customer, target, price)
 end
@@ -144,7 +158,9 @@ function DarkRP.hooks:onHitCompleted(hitman, target)
 
 	GAMEMODE:NotifyAll(0, 6, "Hit by " .. hitman:Nick() .. " completed!")
 
-	DB.Log("Hitman " .. hitman:Nick() .. " finished a hit on " .. target:Nick() .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
+	local targetname = IsValid(target) and target:Nick() or "disconnected player"
+
+	DB.Log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
 		false, Color(255, 0, 255))
 
 	hitman:finishHit()
@@ -157,7 +173,9 @@ function DarkRP.hooks:onHitFailed(hitman, target, reason)
 		net.WriteString(reason)
 	net.Broadcast()
 
-	DB.Log("Hit on " .. target:Nick() .. " failed. Reason: " .. reason, false, Color(255, 0, 255))
+	local targetname = IsValid(target) and target:Nick() or "disconnected player"
+
+	DB.Log("Hit on " .. targetname .. " failed. Reason: " .. reason, false, Color(255, 0, 255))
 end
 
 hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacker)
@@ -174,6 +192,22 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 	for hitman, hit in pairs(hits) do
 		if hitman:getHitTarget() == ply then
 			hitman:abortHit("The target has died!")
+		end
+	end
+end)
+
+hook.Add("PlayerDisconnected", "Hitman system", function(ply)
+	if hits[ply] then
+		ply:abortHit("Hitman disconnected!")
+	end
+
+	for hitman, hit in pairs(hits) do
+		if hitman:getHitTarget() == ply then
+			hitman:abortHit("Target disconnected!")
+		end
+
+		if hit.customer == ply then
+			hitman:abortHit("Customer disconnected!")
 		end
 	end
 end)
