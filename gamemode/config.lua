@@ -231,6 +231,15 @@ GM.Config.wallettaxtime					= 600
 GM.Config.wantedtime					= 120
 -- walkspeed - Sets the max walking speed.
 GM.Config.walkspeed						= 160
+
+/*---------------------------------------------------------------------------
+Other settings
+---------------------------------------------------------------------------*/
+
+-- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
+GM.Config.DarkRPSkin = "DarkRP"
+
+
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
 GM.Config.DisallowDrop = {
 	["weapon_keypadchecker"] = true,

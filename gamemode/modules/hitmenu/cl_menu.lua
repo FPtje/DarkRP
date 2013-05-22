@@ -43,7 +43,7 @@ function PANEL:Init()
 	self.btnCancel:SetText("Cancel")
 	self.btnCancel.DoClick = function() self:Remove() end
 
-	self:SetSkin("DarkRP")
+	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 	self:InvalidateLayout()
 end

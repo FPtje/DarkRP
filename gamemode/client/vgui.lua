@@ -99,7 +99,7 @@ local function MsgDoVote(msg)
 
 	PanelNum = PanelNum + 140
 	VoteVGUI[voteid .. "vote"] = panel
-	panel:SetSkin("DarkRP")
+	panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 usermessage.Hook("DoVote", MsgDoVote)
 
@@ -193,7 +193,7 @@ local function MsgDoQuestion(msg)
 	PanelNum = PanelNum + 300
 	QuestionVGUI[quesid .. "ques"] = panel
 
-	panel:SetSkin("DarkRP")
+	panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 usermessage.Hook("DoQuestion", MsgDoQuestion)
 
@@ -272,10 +272,10 @@ local function ChangeJobVGUI()
 		GAMEMODE:addF4MenuTab("HUD", GAMEMODE:RPHUDTab(), "icon16/camera.png")
 
 		hook.Call("F4MenuTabs", nil)
-		F4Menu:SetSkin("DarkRP")
+		F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	else
 		F4Menu:SetVisible(true)
-		F4Menu:SetSkin("DarkRP")
+		F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 
 	hasReleasedF4 = false
@@ -307,15 +307,15 @@ local function ChangeJobVGUI()
 
 	for _, panel in pairs(F4Tabs) do
 		if panel.ctrl.Update then panel.ctrl:Update() end
-		panel.ctrl:SetSkin("DarkRP")
+		panel.ctrl:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 
  	function F4Menu:Close()
 		F4Menu:SetVisible(false)
-		F4Menu:SetSkin("DarkRP")
+		F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 
-	F4Menu:SetSkin("DarkRP")
+	F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 GM.ShowSpare2 = ChangeJobVGUI
 
@@ -605,6 +605,6 @@ local function KeysMenu(um)
 		Frame:Close()
 	end
 
-	Frame:SetSkin("DarkRP")
+	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 GM.ShowTeam = KeysMenu

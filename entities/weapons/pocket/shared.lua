@@ -249,7 +249,7 @@ if CLIENT then
 			end
 		end
 		Reload()
-		frame:SetSkin("DarkRP")
+		frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 	usermessage.Hook("StartPocketMenu", PocketMenu)
 elseif SERVER then

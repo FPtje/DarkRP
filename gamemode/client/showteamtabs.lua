@@ -98,7 +98,7 @@ local function MayorOptns()
 				end)
 			end
 	MayCat:SetContents(maypanel)
-	MayCat:SetSkin("DarkRP")
+	MayCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return MayCat
 end
 
@@ -191,7 +191,7 @@ local function CPOptns()
 				end
 			end
 	CPCat:SetContents(CPpanel)
-	CPCat:SetSkin("DarkRP")
+	CPCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return CPCat
 end
 
@@ -216,7 +216,7 @@ local function CitOptns()
 		jobentry.OnLoseFocus = jobentry.OnEnter
 
 	CitCat:SetContents(Citpanel)
-	CitCat:SetSkin("DarkRP")
+	CitCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return CitCat
 end
 
@@ -241,7 +241,7 @@ local function MobOptns()
 		agendaentry.OnLoseFocus = agendaentry.OnEnter
 
 	MobCat:SetContents(Mobpanel)
-	MobCat:SetSkin("DarkRP")
+	MobCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return MobCat
 end
 
@@ -268,7 +268,7 @@ function GM:MoneyTab()
 				end
 
 			MoneyCat:SetContents(MoneyPanel)
-			MoneyCat:SetSkin("DarkRP")
+			MoneyCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 
 			local Commands = vgui.Create("DCollapsibleCategory")
@@ -323,7 +323,7 @@ function GM:MoneyTab()
 						UnOwnAllDoors.DoClick = function() LocalPlayer():ConCommand("darkrp /unownalldoors") end
 			Commands:SetContents(ActionsPanel)
 		FirstTabPanel:AddItem(MoneyCat)
-		Commands:SetSkin("DarkRP")
+		Commands:SetSkin(GAMEMODE.Config.DarkRPSkin)
 		FirstTabPanel:AddItem(Commands)
 
 		if LocalPlayer():Team() == TEAM_MAYOR then
@@ -355,7 +355,7 @@ function GM:JobsTab()
 		Panel:SetSize(390, 540)
 		Panel:EnableHorizontal( true )
 		Panel:EnableVerticalScrollbar( true )
-		Panel:SetSkin("DarkRP")
+		Panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 
 		local Info = {}
@@ -371,7 +371,7 @@ function GM:JobsTab()
 			Information:SetSpacing(10)
 			Information:EnableHorizontal( false )
 			Information:EnableVerticalScrollbar( true )
-			Information:SetSkin("DarkRP")
+			Information:SetSkin(GAMEMODE.Config.DarkRPSkin)
 			function Information:Rebuild() -- YES IM OVERRIDING IT AND CHANGING ONLY ONE LINE BUT I HAVE A FUCKING GOOD REASON TO DO IT!
 				local Offset = 0
 				if ( self.Horizontal ) then
@@ -588,7 +588,7 @@ function GM:EntitiesTab()
 						end
 					end
 			WepCat:SetContents(WepPanel)
-			WepCat:SetSkin("DarkRP")
+			WepCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 			self:AddItem(WepCat)
 
 			local EntCat = vgui.Create("DCollapsibleCategory")
@@ -631,7 +631,7 @@ function GM:EntitiesTab()
 						end
 					end
 			EntCat:SetContents(EntPanel)
-			EntCat:SetSkin("DarkRP")
+			EntCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 			self:AddItem(EntCat)
 
 
@@ -665,14 +665,14 @@ function GM:EntitiesTab()
 				end
 			if founds ~= 0 then
 				VehicleCat:SetContents(VehiclePanel)
-				VehicleCat:SetSkin("DarkRP")
+				VehicleCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 				self:AddItem(VehicleCat)
 			else
 				VehiclePanel:Remove()
 				VehicleCat:Remove()
 			end
 		end
-	EntitiesPanel:SetSkin("DarkRP")
+	EntitiesPanel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	EntitiesPanel:Update()
 	return EntitiesPanel
 end
@@ -704,7 +704,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("background4 100")
 			end
 		backgrndcat:SetContents(backgrndpanel)
-		backgrndcat:SetSkin("DarkRP")
+		backgrndcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		hforegrndcat = HUDTABpanel:Add("DCollapsibleCategory")
 		hforegrndcat:SetSize(230, 130)
@@ -728,7 +728,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Healthforeground4 180")
 			end
 		hforegrndcat:SetContents(hforegrndpanel)
-		hforegrndcat:SetSkin("DarkRP")
+		hforegrndcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 
 		hbackgrndcat = HUDTABpanel:Add("DCollapsibleCategory")
@@ -753,7 +753,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Healthbackground4 200")
 			end
 		hbackgrndcat:SetContents(hbackgrndpanel)
-		hbackgrndcat:SetSkin("DarkRP")
+		hbackgrndcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		hTextcat = HUDTABpanel:Add("DCollapsibleCategory")
 		hTextcat:SetSize(230, 130)
@@ -777,7 +777,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("HealthText4 200")
 			end
 		hTextcat:SetContents(hTextpanel)
-		hTextcat:SetSkin("DarkRP")
+		hTextcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		jobs1cat = HUDTABpanel:Add("DCollapsibleCategory")
 		jobs1cat:SetSize(230, 130)
@@ -801,7 +801,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Job24 255")
 			end
 		jobs1cat:SetContents(jobs1panel)
-		jobs1cat:SetSkin("DarkRP")
+		jobs1cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		jobs2cat = HUDTABpanel:Add("DCollapsibleCategory")
 		jobs2cat:SetSize(230, 130)
@@ -825,7 +825,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Job14 200")
 			end
 		jobs2cat:SetContents(jobs2panel)
-		jobs2cat:SetSkin("DarkRP")
+		jobs2cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		salary1cat = HUDTABpanel:Add("DCollapsibleCategory")
 		salary1cat:SetSize(230, 130)
@@ -849,7 +849,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("salary24 255")
 			end
 		salary1cat:SetContents(salary1panel)
-		salary1cat:SetSkin("DarkRP")
+		salary1cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		salary2cat = HUDTABpanel:Add("DCollapsibleCategory")
 		salary2cat:SetSize(230, 130)
@@ -873,7 +873,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("salary14 200")
 			end
 		salary2cat:SetContents(salary2panel)
-		salary2cat:SetSkin("DarkRP")
+		salary2cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		local HudWidthCat = HUDTABpanel:Add("DCollapsibleCategory")
 		HudWidthCat:SetSize(230, 130)
@@ -893,7 +893,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("HudW 240")
 			end
 		HudWidthCat:SetContents(HudWidthpanel)
-		HudWidthCat:SetSkin("DarkRP")
+		HudWidthCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		local HudHeightCat = HUDTABpanel:Add("DCollapsibleCategory")
 		HudHeightCat:SetSize(230, 130)
@@ -913,9 +913,9 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("HudH 110")
 			end
 		HudHeightCat:SetContents(HudHeightpanel)
-		HudHeightCat:SetSkin("DarkRP")
+		HudHeightCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
-	HUDTABpanel:SetSkin("DarkRP")
+	HUDTABpanel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return HUDTABpanel
 end
 

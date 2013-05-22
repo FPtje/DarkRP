@@ -75,7 +75,7 @@ function FAdmin.ScoreBoard.Main.Show()
 		v.BtnSort:SetText("")
 		v.BtnSort.Type = "Down"
 		v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook("Paint", "ButtonDown", panel, w, h ) end
-		v.BtnSort:SetSkin("DarkRP")
+		v.BtnSort:SetSkin(GAMEMODE.Config.DarkRPSkin)
 		if Sorted:GetString() == v.Type then
 			v.BtnSort.Depressed = true
 			v.BtnSort.Type = (SortDown:GetBool() and "Down") or "Up"
