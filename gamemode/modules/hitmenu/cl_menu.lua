@@ -74,8 +74,11 @@ function PANEL:PerformLayout()
 	self.title:SetPos(20 + 128 + 20, 20)
 	self.title:SizeToContents(true)
 
+	self.name:SizeToContents(true)
 	self.name:SetText(string.format("Name: %s", self:GetHitman():Nick()))
 	self.name:SetPos(20 + 128 + 20, 20 + self.title:GetTall())
+
+	self.price:SizeToContents(true)
 	self.price:SetText(string.format("Price:  $%s", self:GetHitman():getHitPrice()))
 	self.price:SetPos(20 + 128 + 20, 20 + self.title:GetTall() + 20)
 
