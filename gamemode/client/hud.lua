@@ -57,6 +57,7 @@ end
 ReloadConVars()
 
 local function formatNumber(n)
+	if not n then return "" end
 	if n >= 1e14 then return tostring(n) end
     n = tostring(n)
     local sep = sep or ","
@@ -217,10 +218,13 @@ end)
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------*/
 local function DrawHUD()
-	localplayer = localplayer or LocalPlayer()
+	localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
+	if not IsValid(localplayer) then return end
+
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
 
+	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
 	localplayer.DarkRPVars.money = isnumber(localplayer.DarkRPVars.money) and localplayer.DarkRPVars.money or tonumber(localplayer.DarkRPVars.money)
 
 	--Background
