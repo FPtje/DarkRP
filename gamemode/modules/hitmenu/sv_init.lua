@@ -29,6 +29,8 @@ function plyMeta:requestHit(customer, target, price)
 		price
 	)
 
+	GAMEMODE:Notify(customer, 1, 4, "Hit requested!")
+
 	return true
 end
 
@@ -133,7 +135,7 @@ AddChatCommand("/requesthit", function(ply, args)
 	hitman:requestHit(ply, target, hitman:getHitPrice())
 
 	return ""
-end, 5)
+end, 20)
 
 /*---------------------------------------------------------------------------
 Hooks
