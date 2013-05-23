@@ -25,6 +25,7 @@ function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 	if not hitman:isHitman() then return false, "This player is not a hitman!" end
 	if customer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return false, "Distance too big" end
 	if hitman == target then return false, "The hitman won't kill himself" end
+	if hitman == customer then return false, "The hitman cannot order a hit for himself" end
 	if not customer:CanAfford(price) then return false, "Cannot afford!" end
 	if price < GAMEMODE.Config.minHitPrice then return false, "Price too low!" end
 	if hitman:hasHit() then return false, "Hitman already has a hit ongoing" end
