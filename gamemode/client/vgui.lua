@@ -608,3 +608,4 @@ local function KeysMenu(um)
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 GM.ShowTeam = KeysMenu
+usermessage.Hook("KeysMenu", KeysMenu)

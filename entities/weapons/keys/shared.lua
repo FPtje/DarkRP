@@ -162,7 +162,6 @@ function SWEP:Reload()
 	end
 	if SERVER then
 		umsg.Start("KeysMenu", self.Owner)
-			umsg.Bool(self.Owner:GetEyeTrace().Entity:IsVehicle())
 		umsg.End()
 	end
 end
