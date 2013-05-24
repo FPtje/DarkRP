@@ -38,6 +38,7 @@ end
 
 hook.Add("HUDPaint", "DrawHitOption", function()
 	localplayer = localplayer or LocalPlayer()
+	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
 	hudText = hudText or GAMEMODE.Config.hudText
 	local x, y
 	local ply = localplayer:GetEyeTrace().Entity
