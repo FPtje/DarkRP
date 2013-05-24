@@ -154,7 +154,7 @@ local function CPOptns()
 				menu:Open()
 			end
 
-			if LocalPlayer():Team() == TEAM_CHIEF or LocalPlayer():IsAdmin() then
+			if LocalPlayer():Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos or LocalPlayer():IsAdmin() then
 				local SetJailPos = CPpanel:Add("DButton")
 				SetJailPos:SetText(LANGUAGE.set_jailpos)
 				SetJailPos.DoClick = function() LocalPlayer():ConCommand("darkrp /jailpos") end
