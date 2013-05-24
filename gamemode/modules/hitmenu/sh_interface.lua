@@ -96,7 +96,7 @@ DarkRP.hookStub{
 		{
 			name = "price",
 			description = "The agreed upon price",
-			type = "Player"
+			type = "number"
 		}
 	},
 	returns = {
