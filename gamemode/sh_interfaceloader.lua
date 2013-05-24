@@ -17,6 +17,8 @@ local checkStub
 
 local hookLayout
 
+local realm -- State variable to manage the realm of the stubs
+
 /*---------------------------------------------------------------------------
 Methods that check whether certain fields are valid
 ---------------------------------------------------------------------------*/
@@ -101,6 +103,7 @@ function stub(tbl)
 		error("Invalid DarkRP method stub! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
+	tbl.realm = realm
 	stubs[tbl.name] = tbl
 
 	return function(...) return notImplemented(tbl.name, {...}) end
@@ -115,6 +118,7 @@ function hookStub(tbl)
 		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
+	tbl.realm = realm
 	hookStubs[tbl.name] = tbl
 end
 
@@ -168,6 +172,7 @@ local function loadInterfaces()
 
 		if file.Exists(shared, "LUA") then
 			if SERVER then AddCSLuaFile(shared) end
+			realm = "Shared"
 			include(shared)
 		end
 
@@ -176,10 +181,12 @@ local function loadInterfaces()
 		end
 
 		if SERVER and file.Exists(server, "LUA") then
+			realm = "Server"
 			include(server)
 		end
 
 		if CLIENT and file.Exists(client, "LUA") then
+			realm = "Client"
 			include(client)
 		end
 	end
