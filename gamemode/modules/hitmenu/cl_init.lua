@@ -79,6 +79,7 @@ end)
 
 hook.Add("InitPostEntity", "HitmanMenu", function()
 	for k, v in pairs(player.GetAll()) do
+		v.DarkRPVars = v.DarkRPVars or {}
 		if v:isHitman() and v:hasHit() then
 			v:drawHitInfo()
 		end
