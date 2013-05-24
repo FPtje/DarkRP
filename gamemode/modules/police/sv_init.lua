@@ -98,7 +98,7 @@ function plyMeta:unArrest(unarrester)
 	if not self:isArrested() then return end
 
 	self:SetDarkRPVar("Arrested", false)
-	arrestedPlayers[self] = nil
+	arrestedPlayers[self:SteamID()] = nil
 	hook.Call("playerUnArrested", DarkRP.hooks, self)
 end
 
@@ -178,28 +178,29 @@ end
 Hooks
 ---------------------------------------------------------------------------*/
 function DarkRP.hooks:playerArrested(ply, time, arrester)
-	ply:unWanted(ply)
-	ply:unWarrant(ply)
+	ply:unWanted(arrester)
+	ply:unWarrant(arrester)
 	ply:SetSelfDarkRPVar("HasGunlicense", false)
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 	ply:StripWeapons()
 
-	if not ply:isArrested() then -- hasn't been arrested before
-		ply.LastJailed = CurTime()
+	if ply:isArrested() then return end -- hasn't been arrested before
 
-		ply:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.youre_arrested, time))
-		for k, v in pairs(player.GetAll()) do
-			if v ~= ply then
-				v:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.hes_arrested, ply:Name(), time))
-			end
-		end
-
-		timer.Create(ply:UniqueID() .. "jailtimer", time, 1, function() if IsValid(ply) then ply:unArrest() end end)
-		umsg.Start("GotArrested", ply)
-			umsg.Float(time)
-		umsg.End()
+	ply:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.youre_arrested, time))
+	for k, v in pairs(player.GetAll()) do
+		if v == ply then continue end
+		v:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.hes_arrested, ply:Name(), time))
 	end
+
+	local steamID = ply:SteamID()
+	timer.Create(ply:UniqueID() .. "jailtimer", time, 1, function()
+		if IsValid(ply) then ply:unArrest() end
+		arrestedPlayers[steamID] = nil
+	end)
+	umsg.Start("GotArrested", ply)
+		umsg.Float(time)
+	umsg.End()
 end
 
 function DarkRP.hooks:playerUnArrested(ply, actor)
@@ -219,3 +220,10 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 	timer.Destroy(ply:SteamID() .. "jailtimer")
 	GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.hes_unarrested, ply:Name()))
 end
+
+hook.Add("PlayerInitialSpawn", "Arrested", function(ply)
+	if not arrestedPlayers[ply:SteamID()] then return end
+	local time = GAMEMODE.Config.jailtimer
+	ply:arrest(time)
+	GAMEMODE:Notify(ply, 0, 5, string.format(LANGUAGE.jail_punishment, time))
+end)

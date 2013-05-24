@@ -501,7 +501,6 @@ function GM:PlayerInitialSpawn(ply)
 			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
 		end
 	end
-	timer.Simple(10, function() ply:CompleteSentence() end)
 end
 
 local function formatDarkRPValue(value)

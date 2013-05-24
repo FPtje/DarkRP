@@ -174,16 +174,6 @@ function meta:TeamBan(t)
 	end)
 end
 
-function meta:CompleteSentence()
-	if not IsValid(self) then return end
-
-	if IsValid(self) and self:isArrested() then
-		local time = GAMEMODE.Config.jailtimer
-		self:arrest(time)
-		GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.jail_punishment, time))
-	end
-end
-
 function meta:NewData()
 	if not IsValid(self) then return end
 	self.DarkRPUnInitialized = true

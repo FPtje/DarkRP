@@ -175,6 +175,10 @@ local function loadInterfaces()
 			AddCSLuaFile(client)
 		end
 
+		if SERVER and file.Exists(server, "LUA") then
+			include(server)
+		end
+
 		if CLIENT and file.Exists(client, "LUA") then
 			include(client)
 		end
