@@ -214,7 +214,7 @@ hook.Add("PlayerDisconnected", "Hitman system", function(ply)
 	end
 end)
 
-hook.Add("PlayerArrested", "Hitman system", function(ply)
+hook.Add("playerArrested", "Hitman system", function(ply)
 	if not hits[ply] or not IsValid(hits[ply].customer) then return end
 
 	local filter = RecipientFilter()

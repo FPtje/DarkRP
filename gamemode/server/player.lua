@@ -179,7 +179,7 @@ function meta:CompleteSentence()
 
 	if IsValid(self) and self:isArrested() then
 		local time = GAMEMODE.Config.jailtimer
-		self:Arrest(time, true)
+		self:arrest(time)
 		GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.jail_punishment, time))
 	end
 end
@@ -435,94 +435,6 @@ local function AddJailPos(ply)
 	return ""
 end
 AddChatCommand("/addjailpos", AddJailPos)
-
-local arrestedPlayers = {}
-function meta:isArrested()
-	return arrestedPlayers[self:SteamID()]
-end
-
-function meta:setArrested(bool)
-	arrestedPlayers[self:SteamID()] = bool or nil
-end
-
-function meta:Arrest(time, rejoin)
-	hook.Call("PlayerArrested", GAMEMODE, self, time)
-	self:SetDarkRPVar("wanted", false)
-	self.warranted = false
-	self:SetSelfDarkRPVar("HasGunlicense", false)
-	self:SetDarkRPVar("Arrested", true)
-	GAMEMODE:SetPlayerSpeed(self, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	self:StripWeapons()
-
-	if GAMEMODE.Config.droppocketarrest and self.Pocket then
-		for k, v in pairs(self.Pocket) do
-			if not IsValid(v) then continue end
-			self:DropPocketItem(v)
-		end
-		self.Pocket = nil
-	end
-
-	-- Always get sent to jail when Arrest() is called, even when already under arrest
-	if GAMEMODE.Config.teletojail and DB.CountJailPos() ~= 0 then
-		local jailpos = DB.RetrieveJailPos()
-		if jailpos then
-			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
-			self:SetPos(jailpos)
-		end
-	end
-
-	if not self:isArrested() or rejoin then
-		self:setArrested(true)
-		self.LastJailed = CurTime()
-
-		-- If the player has no remaining jail time,
-		-- set it back to the max for this new sentence
-		if not time or time == 0 then
-			time = GAMEMODE.Config.jailtimer or 120
-		end
-
-		self:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.youre_arrested, time))
-		for k, v in pairs(player.GetAll()) do
-			if v ~= self then
-				v:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.hes_arrested, self:Name(), time))
-			end
-		end
-
-		timer.Create(self:UniqueID() .. "jailtimer", time, 1, function() if IsValid(self) then self:Unarrest() end end)
-		umsg.Start("GotArrested", self)
-			umsg.Float(time)
-		umsg.End()
-	end
-end
-
-function meta:Unarrest()
-	hook.Call("PlayerUnarrested", GAMEMODE, self)
-
-	self:SetDarkRPVar("Arrested", false)
-	if not IsValid(self) then
-		return
-	end
-
-	if self.Sleeping and GAMEMODE.KnockoutToggle then
-		GAMEMODE:KnockoutToggle(self, "force")
-	end
-
-	if self:isArrested() then
-		self:setArrested(false)
-
-		GAMEMODE:SetPlayerSpeed(self, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-		GAMEMODE:PlayerLoadout(self)
-		if GAMEMODE.Config.telefromjail and (not FAdmin or not self:FAdmin_GetGlobal("fadmin_jailed")) then
-			local _, pos = GAMEMODE:PlayerSelectSpawn(self)
-			self:SetPos(pos)
-		elseif FAdmin and self:FAdmin_GetGlobal("fadmin_jailed") then
-			self:SetPos(self.FAdminJailPos)
-		end
-
-		timer.Destroy(self:SteamID() .. "jailtimer")
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.hes_unarrested, self:Name()))
-	end
-end
 
 /*---------------------------------------------------------
  Items

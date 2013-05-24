@@ -40,30 +40,6 @@ function GM:CanVote(ply, vote)
 
 end
 
-function GM:PlayerArrested(ply, time)
-
-end
-
-function GM:PlayerUnarrested(ply)
-
-end
-
-function GM:PlayerWanted(ply, target, reason)
-
-end
-
-function GM:PlayerUnWanted(ply, target)
-
-end
-
-function GM:PlayerWarranted(ply, target, reason)
-
-end
-
-function GM:PlayerUnWarranted(ply, target)
-
-end
-
 function GM:PlayerWalletChanged(ply, amount)
 
 end

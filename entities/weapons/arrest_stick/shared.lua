@@ -131,7 +131,7 @@ function SWEP:PrimaryAttack()
 			trace.Entity:SetPos(DB.RetrieveJailPos())
 		else
 			if not trace.Entity.Babygod then
-				trace.Entity:Arrest()
+				trace.Entity:arrest(nil, self.Owner)
 				GAMEMODE:Notify(trace.Entity, 0, 20, "You've been arrested by " .. self.Owner:Nick())
 
 				if self.Owner.SteamName then

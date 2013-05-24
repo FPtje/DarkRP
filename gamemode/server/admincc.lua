@@ -276,9 +276,9 @@ local function ccArrest(ply, cmd, args)
 	if target then
 		local length = tonumber(args[2])
 		if length then
-			target:Arrest(length)
+			target:arrest(length, ply)
 		else
-			target:Arrest()
+			target:arrest(nil, ply)
 		end
 
 		if ply:EntIndex() == 0 then
@@ -307,7 +307,7 @@ local function ccUnarrest(ply, cmd, args)
 	local target = GAMEMODE:FindPlayer(args[1])
 
 	if target then
-		target:Unarrest()
+		target:unArrest(ply)
 		if not target:Alive() then target:Spawn() end
 
 		if ply:EntIndex() == 0 then
