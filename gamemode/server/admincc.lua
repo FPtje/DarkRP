@@ -336,6 +336,10 @@ local function ccSetMoney(ply, cmd, args)
 
 	local amount = math.floor(tonumber(args[2]))
 
+	if args[3] then
+		amount = args[3] == "-" and math.Max(0, ply.DarkRPVars.money - amount) or ply.DarkRPVars.money + amount
+	end
+
 	local target = GAMEMODE:FindPlayer(args[1])
 
 	if target then
@@ -365,7 +369,7 @@ local function ccSetMoney(ply, cmd, args)
 		return
 	end
 end
-concommand.Add("rp_setmoney", ccSetMoney)
+concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
 
 local function ccSetSalary(ply, cmd, args)
 	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
