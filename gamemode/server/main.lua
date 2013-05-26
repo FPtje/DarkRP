@@ -489,7 +489,7 @@ local function BuyShipment(ply, args)
 
 	if IsValid( crate ) then
 		ply:AddMoney(-cost)
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, args, CUR .. tostring(cost)))
+		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, args, GAMEMODE.Config.currency .. tostring(cost)))
 	end
 
 	return ""
@@ -519,7 +519,7 @@ local function BuyVehicle(ply, args)
 
 	if not ply:CanAfford(found.price) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "vehicle")) return "" end
 	ply:AddMoney(-found.price)
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, CUR .. found.price))
+	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, GAMEMODE.Config.currency .. found.price))
 
 	local Vehicle = list.Get("Vehicles")[found.name]
 	if not Vehicle then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "argument", "")) return "" end
@@ -590,7 +590,7 @@ local function BuyAmmo(ply, args)
 		return ""
 	end
 
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, CUR..tostring(found.price)))
+	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, GAMEMODE.Config.currency..tostring(found.price)))
 	ply:AddMoney(-found.price)
 
 	local trace = {}
@@ -640,7 +640,7 @@ local function BuyHealth(ply)
 	end
 	ply.StartHealth = ply.StartHealth or 100
 	ply:AddMoney(-cost)
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, "health", CUR .. tostring(cost)))
+	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, "health", GAMEMODE.Config.currency .. tostring(cost)))
 	ply:SetHealth(ply.StartHealth)
 	return ""
 end
@@ -1194,9 +1194,9 @@ local function GiveMoney(ply, args)
 					end
 					DB.PayPlayer(ply, trace2.Entity, amount)
 
-					GAMEMODE:Notify(trace2.Entity, 0, 4, string.format(LANGUAGE.has_given, ply:Nick(), CUR .. tostring(amount)))
-					GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_gave, trace2.Entity:Nick(), CUR .. tostring(amount)))
-					DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..CUR .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+					GAMEMODE:Notify(trace2.Entity, 0, 4, string.format(LANGUAGE.has_given, ply:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
+					GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_gave, trace2.Entity:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
+					DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..GAMEMODE.Config.currency .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
 				end
 			end
 		end)
@@ -1243,7 +1243,7 @@ local function DropMoney(ply, args)
 
 			local tr = util.TraceLine(trace)
 			DarkRPCreateMoneyBag(tr.HitPos, amount)
-			DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..CUR .. tostring(amount))
+			DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..GAMEMODE.Config.currency .. tostring(amount))
 		end
 	end)
 
@@ -1337,7 +1337,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 		end
 		table.insert(LotteryPeople, target)
 		target:AddMoney(-LotteryAmount)
-		GAMEMODE:Notify(target, 0,4, string.format(LANGUAGE.lottery_entered, CUR..tostring(LotteryAmount)))
+		GAMEMODE:Notify(target, 0,4, string.format(LANGUAGE.lottery_entered, GAMEMODE.Config.currency..tostring(LotteryAmount)))
 	elseif answer ~= nil and not table.HasValue(LotteryPeople, target) then
 		GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.lottery_not_entered, "You"))
 	end
@@ -1351,7 +1351,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 		end
 		local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
 		chosen:AddMoney(#LotteryPeople * LotteryAmount)
-		GAMEMODE:NotifyAll(0,10, string.format(LANGUAGE.lottery_won, chosen:Nick(), CUR .. tostring(#LotteryPeople * LotteryAmount) ))
+		GAMEMODE:NotifyAll(0,10, string.format(LANGUAGE.lottery_won, chosen:Nick(), GAMEMODE.Config.currency .. tostring(#LotteryPeople * LotteryAmount) ))
 	end
 end
 
@@ -1390,7 +1390,7 @@ local function DoLottery(ply, amount)
 	LotteryPeople = {}
 	for k,v in pairs(player.GetAll()) do
 		if v ~= ply then
-			GAMEMODE.ques:Create("There is a lottery! Participate for " ..CUR.. tostring(LotteryAmount) .. "?", "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
+			GAMEMODE.ques:Create("There is a lottery! Participate for " ..GAMEMODE.Config.currency.. tostring(LotteryAmount) .. "?", "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
 		end
 	end
 	timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
@@ -1480,8 +1480,8 @@ local function MayorSetSalary(ply, cmd, args)
 				return
 			else
 				DB.StoreSalary(target, amount)
-				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. CUR .. amount)
-				target:PrintMessage(2, plynick .. " set your Salary to: " .. CUR .. amount)
+				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
+				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
 		elseif targetteam == TEAM_CITIZEN or targetteam == TEAM_GUN or targetteam == TEAM_MEDIC or targetteam == TEAM_COOK then
 			if amount > GAMEMODE.Config.maxnormalsalary then
@@ -1489,8 +1489,8 @@ local function MayorSetSalary(ply, cmd, args)
 				return
 			else
 				DB.StoreSalary(target, amount)
-				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. CUR .. amount)
-				target:PrintMessage(2, plynick .. " set your Salary to: " .. CUR .. amount)
+				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
+				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
 		elseif targetteam == TEAM_GANG or targetteam == TEAM_MOB then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "rp_setsalary", ""))

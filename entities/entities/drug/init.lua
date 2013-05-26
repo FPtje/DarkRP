@@ -76,8 +76,8 @@ function ENT:Use(activator,caller)
 			return false
 		end
 		DB.PayPlayer(activator, Owner, self:Getprice())
-		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. CUR .. self:Getprice() .. " for using drugs.")
-		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. CUR .. self:Getprice() .. " for selling drugs.")
+		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. GAMEMODE.Config.currency .. self:Getprice() .. " for using drugs.")
+		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. GAMEMODE.Config.currency .. self:Getprice() .. " for selling drugs.")
 	end
 	DrugPlayer(caller)
 	self.CanUse = false

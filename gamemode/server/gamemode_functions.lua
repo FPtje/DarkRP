@@ -164,10 +164,10 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if GAMEMODE.Config.proppaying then
 		if ply:CanAfford(GAMEMODE.Config.propcost) then
-			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. CUR .. GAMEMODE.Config.propcost)
+			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. GAMEMODE.Config.currency .. GAMEMODE.Config.propcost)
 			ply:AddMoney(-GAMEMODE.Config.propcost)
 		else
-			GAMEMODE:Notify(ply, 1, 4, "Need " .. CUR .. GAMEMODE.Config.propcost)
+			GAMEMODE:Notify(ply, 1, 4, "Need " .. GAMEMODE.Config.currency .. GAMEMODE.Config.propcost)
 			return false
 		end
 	end
@@ -226,7 +226,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 		-- If we know by now who killed the NPC, pay them.
 		if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
 			ent:AddMoney(GAMEMODE.Config.npckillpay)
-			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, CUR .. GAMEMODE.Config.npckillpay))
+			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
 		end
 	end
 end

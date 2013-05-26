@@ -93,11 +93,11 @@ end
 
 local function DrawInfo()
 	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
-	local Salary = 	LANGUAGE.salary .. CUR .. (localplayer.DarkRPVars.salary or 0)
+	local Salary = 	LANGUAGE.salary .. GAMEMODE.Config.currency .. (localplayer.DarkRPVars.salary or 0)
 
 	local JobWallet = {
 		LANGUAGE.job, (localplayer.DarkRPVars.job or ""), "\n",
-		LANGUAGE.wallet, CUR, (formatNumber(localplayer.DarkRPVars.money) or 0)
+		LANGUAGE.wallet, GAMEMODE.Config.currency, (formatNumber(localplayer.DarkRPVars.money) or 0)
 	}
 	JobWallet = table.concat(JobWallet)
 

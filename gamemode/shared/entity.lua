@@ -400,7 +400,7 @@ local function OwnDoor(ply)
 			ply:AddMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("HideSellDoorMessage", GAMEMODE, ply, trace.Entity );
 			if( !bSuppress ) then
-				GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.door_sold,  CUR..(GiveMoneyBack)))
+				GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.door_sold,  GAMEMODE.Config.currency..(GiveMoneyBack)))
 			end
 
 			ply.LookingAtDoor = nil
@@ -438,7 +438,7 @@ local function OwnDoor(ply)
 
 			ply:AddMoney( -( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) );
 			if( !bSuppress ) then
-				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && LANGUAGE.vehicle_bought || LANGUAGE.door_bought, CUR..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
+				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && LANGUAGE.vehicle_bought || LANGUAGE.door_bought, GAMEMODE.Config.currency..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
 			end
 
 			trace.Entity:Own(ply)
@@ -472,7 +472,7 @@ local function UnOwnAll(ply, cmd, args)
 		end
 	end
 	ply:GetTable().OwnedNumz = 0
-	GAMEMODE:Notify(ply, 2, 4, string.format("You have sold "..amount.." doors for " .. CUR .. amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)) .. "!"))
+	GAMEMODE:Notify(ply, 2, 4, string.format("You have sold "..amount.." doors for " .. GAMEMODE.Config.currency .. amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)) .. "!"))
 	return ""
 end
 AddChatCommand("/unownalldoors", UnOwnAll)

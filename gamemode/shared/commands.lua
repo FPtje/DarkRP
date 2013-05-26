@@ -202,7 +202,7 @@ function GM:AddEntityCommands(tblEnt)
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
 
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, CUR..tblEnt.price))
+		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, GAMEMODE.Config.currency..tblEnt.price))
 		if not ply["max"..cmdname] then
 			ply["max"..cmdname] = 0
 		end

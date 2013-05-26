@@ -4,7 +4,6 @@ GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome 
 
 DeriveGamemode("sandbox")
 util.PrecacheSound("earthquake.mp3")
-CUR = "$"
 
 /*---------------------------------------------------------------------------
 Names

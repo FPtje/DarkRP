@@ -72,7 +72,7 @@ function ENT:Use(activator,caller)
 		local cash = self:SalePrice(activator)
 
 		activator:AddMoney(cash * -1)
-		GAMEMODE:Notify(activator, 0, 3, "You have purchased food for " .. CUR .. tostring(cash) .. "!")
+		GAMEMODE:Notify(activator, 0, 3, "You have purchased food for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
 
 		if activator ~= owner then
 			local gain = 0
@@ -87,7 +87,7 @@ function ENT:Use(activator,caller)
 				owner:AddMoney(gain)
 				local word = "profit"
 				if gain < 0 then word = "loss" end
-				GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. CUR .. tostring(math.abs(gain)) .. " by selling food!")
+				GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. " by selling food!")
 			end
 		end
 		timer.Create(self:EntIndex() .. "food", 1, 1, function() self:createFood() end)

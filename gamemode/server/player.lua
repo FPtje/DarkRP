@@ -383,7 +383,7 @@ function meta:PayDay()
 				GAMEMODE:Notify(self, 4, 4, LANGUAGE.payday_unemployed)
 			else
 				self:AddMoney(amount)
-				GAMEMODE:Notify(self, 4, 4, string.format(LANGUAGE.payday_message, CUR .. amount))
+				GAMEMODE:Notify(self, 4, 4, string.format(LANGUAGE.payday_message, GAMEMODE.Config.currency .. amount))
 			end
 		end)
 	else
@@ -470,7 +470,7 @@ function meta:DoPropertyTax()
 	if self:CanAfford(tax) then
 		if tax ~= 0 then
 			self:AddMoney(-tax)
-			GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.property_tax, CUR .. tax))
+			GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.property_tax, GAMEMODE.Config.currency .. tax))
 		end
 	else
 		GAMEMODE:Notify(self, 1, 8, LANGUAGE.property_tax_cant_afford)

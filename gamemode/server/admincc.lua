@@ -344,17 +344,17 @@ local function ccSetMoney(ply, cmd, args)
 		target:SetDarkRPVar("money", amount)
 
 		if ply:EntIndex() == 0 then
-			print("Set " .. target:Nick() .. "'s money to: " .. CUR .. amount)
+			print("Set " .. target:Nick() .. "'s money to: " .. GAMEMODE.Config.currency .. amount)
 			nick = "Console"
 		else
-			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s money to: " .. CUR .. amount)
+			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s money to: " .. GAMEMODE.Config.currency .. amount)
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, nick .. " set your money to: " .. CUR .. amount)
+		target:PrintMessage(2, nick .. " set your money to: " .. GAMEMODE.Config.currency .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s money to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -401,17 +401,17 @@ local function ccSetSalary(ply, cmd, args)
 		DB.StoreSalary(target, amount)
 		target:SetSelfDarkRPVar("salary", amount)
 		if ply:EntIndex() == 0 then
-			print("Set " .. target:Nick() .. "'s Salary to: " .. CUR .. amount)
+			print("Set " .. target:Nick() .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 			nick = "Console"
 		else
-			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s Salary to: " .. CUR .. amount)
+			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, nick .. " set your Salary to: " .. CUR .. amount)
+		target:PrintMessage(2, nick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s salary to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

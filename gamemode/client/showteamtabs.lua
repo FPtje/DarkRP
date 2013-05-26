@@ -578,13 +578,13 @@ function GM:EntitiesTab()
 						if (v.seperate and (not GAMEMODE.Config.restrictbuypistol or
 							(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
 							and (not v.customCheck or v.customCheck and v.customCheck(LocalPlayer())) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, CUR..(v.pricesep or "")), "/buy "..v.name)
+							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, GAMEMODE.Config.currency..(v.pricesep or "")), "/buy "..v.name)
 						end
 					end
 
 					for k,v in pairs(GAMEMODE.AmmoTypes) do
 						if not v.customCheck or v.customCheck(LocalPlayer()) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, v.name, CUR .. v.price), "/buyammo " .. v.ammoType)
+							AddIcon(v.model, string.format(LANGUAGE.buy_a, v.name, GAMEMODE.Config.currency .. v.price), "/buyammo " .. v.ammoType)
 						end
 					end
 			WepCat:SetContents(WepPanel)
@@ -614,7 +614,7 @@ function GM:EntitiesTab()
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
 							local cmdname = string.gsub(v.ent, " ", "_")
 
-							AddEntIcon(v.model, "Buy a " .. v.name .." " .. CUR .. v.price, v.cmd)
+							AddEntIcon(v.model, "Buy a " .. v.name .." " .. GAMEMODE.Config.currency .. v.price, v.cmd)
 						end
 					end
 
@@ -627,7 +627,7 @@ function GM:EntitiesTab()
 						if not GAMEMODE:CustomObjFitsMap(v) then continue end
 						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
-							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", CUR .. tostring(v.price)), "/buyshipment "..v.name)
+							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", GAMEMODE.Config.currency .. tostring(v.price)), "/buyshipment "..v.name)
 						end
 					end
 			EntCat:SetContents(EntPanel)
@@ -659,7 +659,7 @@ function GM:EntitiesTab()
 				for k,v in pairs(CustomVehicles) do
 					if (not v.allowed or table.HasValue(v.allowed, LocalPlayer():Team())) and (not v.customCheck or v.customCheck(LocalPlayer())) then
 						local Skin = (list.Get("Vehicles")[v.name] and list.Get("Vehicles")[v.name].KeyValues and list.Get("Vehicles")[v.name].KeyValues.Skin) or "0"
-						AddVehicleIcon(v.model or "models/buggy.mdl", Skin, "Buy a "..v.name.." for "..CUR..v.price, "/buyvehicle "..v.name)
+						AddVehicleIcon(v.model or "models/buggy.mdl", Skin, "Buy a "..v.name.." for "..GAMEMODE.Config.currency..v.price, "/buyvehicle "..v.name)
 						founds = founds + 1
 					end
 				end
