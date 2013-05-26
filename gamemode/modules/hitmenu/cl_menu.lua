@@ -51,6 +51,7 @@ end
 function PANEL:Think()
 	if not IsValid(self:GetHitman()) or self:GetHitman():GetPos():Distance(LocalPlayer():GetPos()) > GAMEMODE.Config.minHitDistance then
 		self:Remove()
+		return
 	end
 
 	-- update the price (so the hitman can't scam)
@@ -183,6 +184,7 @@ end
 
 function PANEL:PerformLayout()
 	local ply = self:GetPlayer()
+	if not IsValid(ply) then self:Remove() return end
 
 	self.lblName:SetFont("UiBold")
 	self.lblName:SetText(ply:Nick())
@@ -196,7 +198,7 @@ function PANEL:PerformLayout()
 end
 
 function PANEL:Paint()
-	if not IsValid(self:GetPlayer()) then return end
+	if not IsValid(self:GetPlayer()) then self:Remove() return end
 
 	local color = team.GetColor(self:GetPlayer():Team())
 	color.a = self:GetSelected() and 70 or 255
