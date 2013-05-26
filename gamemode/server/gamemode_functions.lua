@@ -646,7 +646,7 @@ function GM:PlayerSpawn(ply)
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 	if ply:IsCP() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed + 10)
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
 	end
 
 	if ply:isArrested() then

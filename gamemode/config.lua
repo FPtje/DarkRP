@@ -209,6 +209,8 @@ GM.Config.quakechance					= 4000
 GM.Config.respawntime					= 1
 -- runspeed - Sets the max running speed.
 GM.Config.runspeed						= 240
+-- runspeed - Sets the max running speed for CP teams
+GM.Config.runspeedcp					= 255
 -- searchtime - Number of seconds for which a search warrant is valid.
 GM.Config.searchtime					= 30
 -- ShipmentSpawnTime - Antispam time between spawning shipments.
