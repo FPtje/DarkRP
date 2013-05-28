@@ -211,7 +211,7 @@ local function CitOptns()
 		local jobentry = Citpanel:Add("DTextEntry")
 		jobentry:SetValue(LocalPlayer().DarkRPVars.job or "")
 		jobentry.OnEnter = function()
-			LocalPlayer():ConCommand("darkrp /job " .. tostring(jobentry:GetValue()))
+			RunConsoleCommand("DarkRP", "/job", tostring(jobentry:GetValue()))
 		end
 
 	CitCat:SetContents(Citpanel)
@@ -279,7 +279,7 @@ function GM:MoneyTab()
 
 					local rpnameTextbox = ActionsPanel:Add("DTextEntry")
 					rpnameTextbox:SetText(LocalPlayer():Nick())
-					rpnameTextbox.OnEnter = function() LocalPlayer():ConCommand("darkrp /rpname " .. tostring(rpnameTextbox:GetValue())) end
+					rpnameTextbox.OnEnter = function() RunConsoleCommand("darkrp", "/rpname", tostring(rpnameTextbox:GetValue())) end
 
 					local sleep = ActionsPanel:Add("DButton")
 					sleep:SetText(LANGUAGE.go_to_sleep)
