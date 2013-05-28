@@ -691,6 +691,9 @@ local function selectDefaultWeapon(ply)
 	end
 end
 
+function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
+end
+
 function GM:PlayerLoadout(ply)
 	if ply:isArrested() then return end
 
