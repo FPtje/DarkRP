@@ -291,9 +291,11 @@ function GM:MoneyTab()
 					local Drop = ActionsPanel:Add("DButton")
 					Drop:SetText(LANGUAGE.drop_weapon)
 					Drop.DoClick = function() LocalPlayer():ConCommand("darkrp /drop") end
-					local health = MoneyPanel:Add("DButton")
-					health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
-					health.DoClick = function() LocalPlayer():ConCommand("darkrp /Buyhealth") end
+					if GAMEMODE.Config.enablebuyhealth then
+						local health = MoneyPanel:Add("DButton")
+						health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
+						health.DoClick = function() LocalPlayer():ConCommand("darkrp /Buyhealth") end
+					end
 
 				if LocalPlayer():Team() ~= TEAM_MAYOR then
 					local RequestLicense = ActionsPanel:Add("DButton")
