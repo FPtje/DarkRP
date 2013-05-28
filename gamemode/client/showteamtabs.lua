@@ -209,6 +209,7 @@ local function CitOptns()
 		joblabel:SetText(LANGUAGE.set_custom_job)
 
 		local jobentry = Citpanel:Add("DTextEntry")
+		jobentry:SetAllowNonAsciiCharacters(true)
 		jobentry:SetValue(LocalPlayer().DarkRPVars.job or "")
 		jobentry.OnEnter = function()
 			RunConsoleCommand("DarkRP", "/job", tostring(jobentry:GetValue()))
@@ -233,6 +234,7 @@ local function MobOptns()
 		agendalabel:SetText(LANGUAGE.set_agenda)
 
 		local agendaentry = Mobpanel:Add("DTextEntry")
+		agendaentry:SetAllowNonAsciiCharacters(true)
 		agendaentry:SetValue(LocalPlayer().DarkRPVars.agenda or "")
 		agendaentry.OnEnter = function()
 			LocalPlayer():ConCommand("darkrp /agenda " .. tostring(agendaentry:GetValue()))
@@ -278,6 +280,7 @@ function GM:MoneyTab()
 					rpnamelabel:SetText(LANGUAGE.change_name)
 
 					local rpnameTextbox = ActionsPanel:Add("DTextEntry")
+					rpnameTextbox:SetAllowNonAsciiCharacters(true)
 					rpnameTextbox:SetText(LocalPlayer():Nick())
 					rpnameTextbox.OnEnter = function() RunConsoleCommand("darkrp", "/rpname", tostring(rpnameTextbox:GetValue())) end
 
