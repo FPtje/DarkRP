@@ -2,6 +2,15 @@ local plyMeta = FindMetaTable("Player")
 local hits = {}
 local questionCallback
 
+-- AddCSLuaFile shit.
+
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("cl_interface.lua")
+AddCSLuaFile("cl_menu.lua")
+AddCSLuaFile("sh_init.lua")
+AddCSLuaFile("sh_interface.lua")
+AddCSLuaFile("sh_settings.lua")
+
 /*---------------------------------------------------------------------------
 Net messages
 ---------------------------------------------------------------------------*/
