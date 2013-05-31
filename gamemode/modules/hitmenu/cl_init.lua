@@ -25,14 +25,17 @@ end
 Hooks
 ---------------------------------------------------------------------------*/
 function DarkRP.hooks:onHitAccepted(hitman, target)
+	if not IsValid(hitman) then return end
 	hitman:drawHitInfo()
 end
 
 function DarkRP.hooks:onHitCompleted(hitman, target)
+	if not IsValid(hitman) then return end
 	hitman:stopHitInfo()
 end
 
 function DarkRP.hooks:onHitFailed(hitman, target, reason)
+	if not IsValid(hitman) then return end
 	hitman:stopHitInfo()
 end
 
