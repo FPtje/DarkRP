@@ -581,7 +581,7 @@ local function BuyAmmo(ply, args)
 	end
 
 	if not found or (found.customCheck and not found.customCheck(ply)) then
-		GAMEMODE:Notify(ply, 1, 4, found.CustomCheckFailMsg or string.format(LANGUAGE.unavailable, "ammo"))
+		GAMEMODE:Notify(ply, 1, 4, found and found.CustomCheckFailMsg or string.format(LANGUAGE.unavailable, "ammo"))
 		return ""
 	end
 
