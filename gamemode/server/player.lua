@@ -338,6 +338,7 @@ function meta:ChangeTeam(t, force)
 		effectdata:SetOrigin( vPoint )
 		effectdata:SetScale(1)
 		util.Effect("entity_remove", effectdata)
+		GAMEMODE:UpdatePlayerSpeed(self)
 		GAMEMODE:PlayerSetModel(self)
 		GAMEMODE:PlayerLoadout(self)
 	else
