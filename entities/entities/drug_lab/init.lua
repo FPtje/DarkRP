@@ -46,10 +46,10 @@ function ENT:Use(activator,caller)
 		GAMEMODE:Notify(activator, 1, 3, "You can't make anymore drugs as the limit is reached.")
 		timer.Simple(0.5, function() self.CanUse = true end)
 	else
-
-		local productioncost = math.random(self:Getprice() / 8, self:Getprice() / 4)
+		local productioncost = math.random(math.Round(self:Getprice() / 8), math.Round(self:Getprice() / 4))
 		if not activator:CanAfford(productioncost) then
 			GAMEMODE:Notify(activator, 1, 4, "You do not have enough money to produce drugs.")
+			timer.Simple(0.5, function() self.CanUse = true end)
 			return false
 		end
 		activator:AddMoney(-productioncost)
