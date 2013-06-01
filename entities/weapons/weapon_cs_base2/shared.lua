@@ -99,7 +99,7 @@ end
 function SWEP:Holster()
 	if CLIENT then return end
 	if self:GetIronsights() then
-		GAMEMODE:UpdatePlayerSpeed(self.Owner)
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	end
 	return true
 end
@@ -351,20 +351,20 @@ function SWEP:SetIronsights(b)
 	if game.SinglePlayer() then -- Make ironsights work on SP
 		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b))
 	end
+	self.Ironsights = b
 	if b then
 		self:NewSetWeaponHoldType(self.HoldType)
 		self.CurHoldType = self.HoldType
 		if SERVER then
-			GAMEMODE:UpdatePlayerSpeed(self.Owner, 1/3)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
 	else
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
 		if SERVER then
-			GAMEMODE:UpdatePlayerSpeed(self.Owner)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
 	end
-	self.Ironsights = b
 end
 
 function SWEP:GetIronsights()
@@ -444,3 +444,12 @@ if CLIENT then
 		wep:SetWeaponHoldType(holdtype)
 	end)
 end
+
+hook.Add("UpdatePlayerSpeed", "DarkRP_WeaponSpeed", function(ply)
+	local wep = ply:GetActiveWeapon()
+	if not IsValid(wep) or not wep.Ironsights then return end
+
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
+
+	return true
+end)

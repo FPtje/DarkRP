@@ -61,8 +61,8 @@ end
 
 function SWEP:Holster()
 	if not self.Ready or not SERVER then return true end
-
-	GAMEMODE:UpdatePlayerSpeed(self.Owner)
+	self.Ironsights = false
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	self.Owner:SetJumpPower(200)
 
 	return true
@@ -179,17 +179,18 @@ end
 function SWEP:SecondaryAttack()
 	self.LastIron = CurTime()
 	self.Ready = not self.Ready
+	self.Ironsights = not self.Ironsights
 	if self.Ready then
 		self:SetWeaponHoldType("rpg")
 		if SERVER then
 			-- Prevent them from being able to run and jump
-			GAMEMODE:UpdatePlayerSpeed(self.Owner, 1/3)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 			self.Owner:SetJumpPower(0)
 		end
 	else
 		self:SetWeaponHoldType("normal")
 		if SERVER then
-			GAMEMODE:UpdatePlayerSpeed(self.Owner)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 			self.Owner:SetJumpPower(200)
 		end
 	end
