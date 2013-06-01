@@ -1008,7 +1008,6 @@ local PrivateSettings = {
 	["touch my own entities"] = "OwnProps",
 	["touch world entities"] = "WorldProps",
 	["touch other people's entities"] = "OtherPlayerProps",
-	["touch players"] = "Players",
 	["touch blocked entities"] = "BlockedProps",
 	["see an icon in the middle of the screen"] = "ShowIcon"
 }
@@ -1016,6 +1015,7 @@ local PrivateSettings = {
 for k,v in pairs(PrivateSettings) do
 	CreateClientConVar("FPP_PrivateSettings_"..v, 0, true, true)
 end
+CreateClientConVar("cl_pickupplayers", 1, true, true)
 
 function FPP.PrivateSettings(Panel)
 	//PrivateSettingsPanel = PrivateSettingsPanel or Panel
@@ -1023,6 +1023,7 @@ function FPP.PrivateSettings(Panel)
 	for k,v in pairs(PrivateSettings) do
 		Panel:AddControl("CheckBox", {Label = "I don't want to "..k, Command = "FPP_PrivateSettings_"..v})
 	end
+	Panel:AddControl("CheckBox", {Label = "I want to pick up players", Command = "cl_pickupplayers"})
 end
 
 local function makeMenus()
