@@ -17,8 +17,10 @@ local function MayorOptns()
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/warrant", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -32,8 +34,10 @@ local function MayorOptns()
 					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -86,7 +90,7 @@ local function MayorOptns()
 			AddLaws:SetText("Add a law.")
 			AddLaws.DoClick = function()
 				Derma_StringRequest("Add a law", "Type the law you would like to add here.", "", function(law)
-					LocalPlayer():ConCommand("darkrp /addlaw " .. law)
+					RunConsoleCommand("darkrp", "/addlaw", law)
 				end)
 			end
 
@@ -119,8 +123,10 @@ local function CPOptns()
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/warrant", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -132,11 +138,14 @@ local function CPOptns()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
 					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
-						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
+						menu:AddOption(ply:Nick(), function()
+							Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
 									if not IsValid(ply) then return end
-									LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -237,9 +246,8 @@ local function MobOptns()
 		agendaentry:SetAllowNonAsciiCharacters(true)
 		agendaentry:SetValue(LocalPlayer().DarkRPVars.agenda or "")
 		agendaentry.OnEnter = function()
-			LocalPlayer():ConCommand("darkrp /agenda " .. tostring(agendaentry:GetValue()))
+			RunConsoleCommand("darkrp", "/agenda", tostring(agendaentry:GetValue()))
 		end
-		agendaentry.OnLoseFocus = agendaentry.OnEnter
 
 	MobCat:SetContents(Mobpanel)
 	MobCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
@@ -313,8 +321,9 @@ function GM:MoneyTab()
 							menu:AddOption(ply:Nick(), function()
 								Derma_StringRequest("Demote reason", "Why would you demote "..ply:Nick().."?", nil,
 									function(a)
-									LocalPlayer():ConCommand("darkrp /demote \"".. ply:SteamID().."\" ".. a)
-									end, function() end )
+										RunConsoleCommand("darkrp", "/demote", ply:SteamID(), a)
+									end,
+								function() end )
 							end)
 						end
 					end
