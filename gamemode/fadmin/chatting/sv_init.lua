@@ -19,4 +19,5 @@ end
 
 FAdmin.StartHooks["Chatting"] = function()
 	FAdmin.Commands.AddCommand("adminhelp", ToAdmins)
+	FAdmin.Commands.AddCommand("//", ToAdmins)
 end
