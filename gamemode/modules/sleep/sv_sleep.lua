@@ -51,7 +51,6 @@ function KnockoutToggle(player, command, args, caller)
 				else
 					GAMEMODE:PlayerLoadout(player)
 				end
-				player.WeaponsForSleep = {}
 
 				SendUserMessage("blackScreen", player, false)
 
@@ -73,12 +72,14 @@ function KnockoutToggle(player, command, args, caller)
 					end
 				end
 
-				player.WeaponsForSleep = {}
-				for k,v in pairs(player:GetWeapons( )) do
-					player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
-					v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
-					v:Clip1(), v:Clip2()}
-					/*{class, ammocount primary, type primary, ammo count secondary, type secondary, clip primary, clip secondary*/
+				if not player:isArrested() then
+					player.WeaponsForSleep = {}
+					for k,v in pairs(player:GetWeapons( )) do
+						player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
+						v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
+						v:Clip1(), v:Clip2()}
+						/*{class, ammocount primary, type primary, ammo count secondary, type secondary, clip primary, clip secondary*/
+					end
 				end
 				local ragdoll = ents.Create("prop_ragdoll")
 				ragdoll:SetPos(player:GetPos())
