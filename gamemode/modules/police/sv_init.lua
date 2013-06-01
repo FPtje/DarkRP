@@ -182,6 +182,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
 	ply:unWarrant(arrester)
 	ply:SetSelfDarkRPVar("HasGunlicense", false)
 
+	-- GAMEMODE:UpdatePlayerSpeed(ply) won't work here as the "Arrested" DarkRPVar is set AFTER this hook
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 	ply:StripWeapons()
 
@@ -208,7 +209,8 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 		GAMEMODE:KnockoutToggle(ply, "force")
 	end
 
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	-- "Arrested" DarkRPVar is set to false BEFORE this hook however, so it is safe here.
+	GAMEMODE:UpdatePlayerSpeed(ply)
 	GAMEMODE:PlayerLoadout(ply)
 	if GAMEMODE.Config.telefromjail and (not FAdmin or not ply:FAdmin_GetGlobal("fadmin_jailed")) then
 		local _, pos = GAMEMODE:PlayerSelectSpawn(ply)

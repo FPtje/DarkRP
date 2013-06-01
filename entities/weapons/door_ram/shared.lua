@@ -62,7 +62,7 @@ end
 function SWEP:Holster()
 	if not self.Ready or not SERVER then return true end
 
-	GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	GAMEMODE:UpdatePlayerSpeed(self.Owner)
 	self.Owner:SetJumpPower(200)
 
 	return true
@@ -183,13 +183,13 @@ function SWEP:SecondaryAttack()
 		self:SetWeaponHoldType("rpg")
 		if SERVER then
 			-- Prevent them from being able to run and jump
-			GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
+			GAMEMODE:UpdatePlayerSpeed(self.Owner, 1/3)
 			self.Owner:SetJumpPower(0)
 		end
 	else
 		self:SetWeaponHoldType("normal")
 		if SERVER then
-			GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+			GAMEMODE:UpdatePlayerSpeed(self.Owner)
 			self.Owner:SetJumpPower(200)
 		end
 	end

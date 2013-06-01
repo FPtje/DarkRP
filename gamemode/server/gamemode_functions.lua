@@ -85,6 +85,16 @@ function GM:CanSeeLogMessage(ply, message, colour)
 	return ply:IsAdmin()
 end
 
+function GM:UpdatePlayerSpeed(ply, multiplier)
+	if ply:isArrested() then
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed * (multiplier or 1), GAMEMODE.Config.arrestspeed * (multiplier or 1))
+	elseif ply:IsCP() then
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * (multiplier or 1), GAMEMODE.Config.runspeedcp * (multiplier or 1))
+	else
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * (multiplier or 1), GAMEMODE.Config.runspeed * (multiplier or 1))
+	end
+end
+
 /*---------------------------------------------------------
  Gamemode functions
  ---------------------------------------------------------*/
