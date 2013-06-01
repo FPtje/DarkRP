@@ -41,6 +41,9 @@ Generic InitPostEntity workarounds
 ---------------------------------------------------------------------------*/
 hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 	game.ConsoleCommand("durgz_witty_sayings 0\n") -- Deals with the cigarettes exploit. I'm fucking tired of them. I hate having to fix other people's mods, but this mod maker is retarded and refuses to update his mod.
+
+	-- Remove ULX /me command. (the /me command is the only thing this hook does)
+	hook.Remove("PlayerSay", "ULXMeCheck")
 end)
 
 /*---------------------------------------------------------------------------
