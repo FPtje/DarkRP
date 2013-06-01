@@ -12,7 +12,7 @@ local function UnDrugPlayer(ply)
 	SendUserMessage("DrugEffects", ply, false)
 
 	ply:SetJumpPower(190)
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	GAMEMODE:UpdatePlayerSpeed(ply)
 
 	hook.Remove("PlayerDeath", ply)
 end
@@ -23,7 +23,7 @@ local function DrugPlayer(ply)
 	SendUserMessage("DrugEffects", ply, true)
 
 	ply:SetJumpPower(300)
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
+	GAMEMODE:UpdatePlayerSpeed(ply, 2)
 
 	local IDSteam = ply:UniqueID()
 	if not timer.Exists(IDSteam.."DruggedHealth") and not timer.Exists(IDSteam) then

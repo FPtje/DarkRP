@@ -99,7 +99,7 @@ end
 function SWEP:Holster()
 	if CLIENT then return end
 	if self:GetIronsights() then
-		GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+		GAMEMODE:UpdatePlayerSpeed(self.Owner)
 	end
 	return true
 end
@@ -354,11 +354,15 @@ function SWEP:SetIronsights(b)
 	if b then
 		self:NewSetWeaponHoldType(self.HoldType)
 		self.CurHoldType = self.HoldType
-		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3) end
+		if SERVER then
+			GAMEMODE:UpdatePlayerSpeed(self.Owner, 1/3)
+		end
 	else
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
-		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed) end
+		if SERVER then
+			GAMEMODE:UpdatePlayerSpeed(self.Owner)
+		end
 	end
 	self.Ironsights = b
 end
