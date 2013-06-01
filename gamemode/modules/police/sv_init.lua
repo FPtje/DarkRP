@@ -178,7 +178,7 @@ end
 Hooks
 ---------------------------------------------------------------------------*/
 function DarkRP.hooks:playerArrested(ply, time, arrester)
-	ply:unWanted(arrester)
+	if ply:isWanted() then ply:unWanted(arrester) end
 	ply:unWarrant(arrester)
 	ply:SetSelfDarkRPVar("HasGunlicense", false)
 
