@@ -823,10 +823,10 @@ local function SwitchJob(ply) --Idea by Godness.
 	if not GAMEMODE.Config.allowjobswitch then return "" end
 
 	if ply.RequestedJobSwitch then return end
-	ply.RequestedJobSwitch = true
 
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
+	ply.RequestedJobSwitch = true
 	GAMEMODE.ques:Create("Switch job with "..ply:Nick().."?", "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
 	return ""
 end
