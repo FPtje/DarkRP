@@ -838,19 +838,12 @@ AddChatCommand("/jobswitch", SwitchJob)
 local function DoTeamBan(ply, args, cmdargs)
 	if not args or args == "" then return "" end
 
-	local ent = args
-	local Team = args
-	if cmdargs then
-		if not cmdargs[1] then
-			ply:PrintMessage(HUD_PRINTNOTIFY, "rp_teamban [player name/ID] [team name/id] Use this to ban a player from a certain team")
-			return ""
-		end
-		ent = cmdargs[1]
-		Team = cmdargs[2]
-	else
-		local a,b = string.find(args, " ")
-		ent = string.sub(args, 1, a - 1)
-		Team = string.sub(args, a + 1)
+	args = cmdargs or string.Explode(" ", args)
+	local ent = args[1]
+	local Team = args[2]
+	if cmdargs and not cmdargs[1]  then
+		ply:PrintMessage(HUD_PRINTNOTIFY, "rp_teamban [player name/ID] [team name/id] Use this to ban a player from a certain team")
+		return
 	end
 
 	local target = GAMEMODE:FindPlayer(ent)
@@ -866,12 +859,8 @@ local function DoTeamBan(ply, args, cmdargs)
 
 	local found = false
 	for k,v in pairs(RPExtraTeams) do
-		if string.lower(v.name) == string.lower(Team) or  string.lower(v.command) == string.lower(Team) then
+		if string.lower(v.name) == string.lower(Team) or string.lower(v.command) == string.lower(Team) or k == tonumber(Team or -1) then
 			Team = k
-			found = true
-			break
-		end
-		if k == tonumber(Team or -1) then
 			found = true
 			break
 		end
@@ -881,8 +870,8 @@ local function DoTeamBan(ply, args, cmdargs)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "job!"))
 		return ""
 	end
-	if not target.bannedfrom then target.bannedfrom = {} end
-	target.bannedfrom[tonumber(Team)] = 1
+
+	target:TeamBan(tonumber(Team), tonumber(args[3] or 0))
 	GAMEMODE:NotifyAll(0, 5, ply:Nick() .. " has banned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
 	return ""
 end

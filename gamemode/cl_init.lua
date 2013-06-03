@@ -538,7 +538,11 @@ FAdmin.StartHooks["DarkRP"] = function()
 
 		menu:AddPanel(Title)
 		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
-			menu:AddOption(v.name, function() RunConsoleCommand(command, ply:UserID(), k) end)
+			local submenu = menu:AddSubMenu(v.name)
+			submenu:AddOption("2 minutes", function() RunConsoleCommand(command, ply:UserID(), k, 120) end)
+			submenu:AddOption("Half an hour", function() RunConsoleCommand(command, ply:UserID(), k, 1800) end)
+			submenu:AddOption("An hour", function() RunConsoleCommand(command, ply:UserID(), k, 3600) end)
+			submenu:AddOption("Until restart", function() RunConsoleCommand(command, ply:UserID(), k, 0) end)
 		end
 		menu:Open()
 	end
