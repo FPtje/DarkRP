@@ -527,14 +527,13 @@ FAdmin.StartHooks["DarkRP"] = function()
 
 	--Teamban
 	local function teamban(ply, button)
-
 		local menu = DermaMenu()
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Jobs:\n")
 		Title:SetFont("UiBold")
 		Title:SizeToContents()
 		Title:SetTextColor(color_black)
-		local command = (button.TextLabel:GetText() == "Unban from job") and "rp_teamunban" or "rp_teamban"
+		local command = "rp_teamban"
 
 		menu:AddPanel(Title)
 		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
@@ -549,6 +548,21 @@ FAdmin.StartHooks["DarkRP"] = function()
 	FAdmin.ScoreBoard.Player:AddActionButton("Ban from job", "FAdmin/icons/changeteam", Color(200, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamban)
 
+	local function teamunban(ply, button)
+		local menu = DermaMenu()
+		local Title = vgui.Create("DLabel")
+		Title:SetText("  Jobs:\n")
+		Title:SetFont("UiBold")
+		Title:SizeToContents()
+		Title:SetTextColor(color_black)
+		local command = "rp_teamunban"
+
+		menu:AddPanel(Title)
+		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
+			menu:AddOption(v.name, function() RunConsoleCommand(command, ply:UserID(), k) end)
+		end
+		menu:Open()
+	end
 	FAdmin.ScoreBoard.Player:AddActionButton("Unban from job", function() return "FAdmin/icons/changeteam", "FAdmin/icons/disable" end, Color(200, 0, 0, 255),
-	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamban)
+	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamunban)
 end
