@@ -184,7 +184,7 @@ function meta:NewData()
 	timer.Simple(5, function()
 		if not IsValid(self) then return end
 
-		if GetConVarNumber("DarkRP_Lockdown") == 1 then
+		if tobool(GetConVarNumber("DarkRP_Lockdown")) then
 			RunConsoleCommand("DarkRP_Lockdown", 1) -- so new players who join know there's a lockdown
 		end
 	end)
