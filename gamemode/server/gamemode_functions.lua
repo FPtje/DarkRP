@@ -556,7 +556,7 @@ local function SendDarkRPVars(ply)
 	local sendtable = {}
 	for k,v in pairs(player.GetAll()) do
 		sendtable[v] = {}
-		for a,b in pairs(v.DarkRPVars) do
+		for a,b in pairs(v.DarkRPVars or {}) do
 			if not (v.privateDRPVars or {})[a] or ply == v then
 				sendtable[v][a] = b
 			end
