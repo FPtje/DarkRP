@@ -200,7 +200,7 @@ function DB.SQLStr(str)
 		return sql.SQLStr(str)
 	end
 
-	return "\"" .. DB.MySQLDB:escape(str) .. "\""
+	return "\"" .. DB.MySQLDB:escape(tostring(str)) .. "\""
 end
 
 /*---------------------------------------------------------
