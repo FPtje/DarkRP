@@ -97,10 +97,11 @@ function SWEP:Deploy()
 end
 
 function SWEP:Holster()
+	self.Ironsights = false
+
 	if CLIENT then return end
-	if self:GetIronsights() then
-		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
-	end
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+
 	return true
 end
 
