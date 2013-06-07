@@ -18,6 +18,10 @@ function plyMeta:getHitPrice()
 end
 
 function DarkRP.addHitmanTeam(job)
+	if not job or not RPExtraTeams[job] then
+		error([[The server owner is trying to add a hitman job, but the job doesn't exist. Get them to fix this.
+		Note: This is the fault of the owner/scripter of this server.]], 0)
+	end
 	hitmanTeams[job] = true
 end
 
