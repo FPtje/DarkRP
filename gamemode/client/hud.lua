@@ -96,7 +96,7 @@ local function DrawInfo()
 
 	local JobWallet = {
 		LANGUAGE.job, (localplayer:getDarkRPVar("job") or ""), "\n",
-		LANGUAGE.wallet, GAMEMODE.Config.currency, (formatNumber(localplayer:getDarkRPVar("money")) or 0)
+		LANGUAGE.wallet, GAMEMODE.Config.currency, (formatNumber(localplayer:getDarkRPVar("money") or 0) or 0)
 	}
 	JobWallet = table.concat(JobWallet)
 
@@ -222,8 +222,6 @@ local function DrawHUD()
 
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
-	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
-	localplayer.DarkRPVars.money = isnumber(localplayer.DarkRPVars.money) and localplayer.DarkRPVars.money or tonumber(localplayer.DarkRPVars.money or 0)
 
 	--Background
 	draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)

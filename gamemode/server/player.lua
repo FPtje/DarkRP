@@ -92,8 +92,8 @@ function meta:RestorePlayerData()
 		info.wallet = info.wallet or GAMEMODE.Config.startingmoney
 		info.salary = info.salary or GAMEMODE.Config.normalsalary
 
-		self:SetDarkRPVar("money", info.wallet)
-		self:SetDarkRPVar("salary", info.salary)
+		self:SetDarkRPVar("money", tonumber(info.wallet))
+		self:SetDarkRPVar("salary", tonumber(info.salary))
 
 		self:SetDarkRPVar("rpname", info.rpname)
 
