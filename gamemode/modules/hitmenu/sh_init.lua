@@ -10,11 +10,11 @@ function plyMeta:hasHit()
 end
 
 function plyMeta:getHitTarget()
-	return self.DarkRPVars.hitTarget
+	return self:getDarkRPVar("hitTarget")
 end
 
 function plyMeta:getHitPrice()
-	return self.DarkRPVars.hitPrice or GAMEMODE.Config.minHitPrice
+	return self:getDarkRPVar("hitPrice") or GAMEMODE.Config.minHitPrice
 end
 
 function DarkRP.addHitmanTeam(job)

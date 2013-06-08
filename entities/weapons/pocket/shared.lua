@@ -204,7 +204,7 @@ if CLIENT then
 		frame = vgui.Create("DFrame")
 		frame:SetTitle("Drop item")
 		frame:SetVisible( true )
-		frame:MakePopup( )
+		frame:MakePopup()
 
 		local items = LocalPlayer():GetTable().Pocket
 		local function Reload()

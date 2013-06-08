@@ -139,7 +139,7 @@ function meta:InitiateTax()
 			return -- Don't remove the hook in case it's turned on afterwards.
 		end
 
-		local money = self.DarkRPVars.money
+		local money = self:getDarkRPVar("money")
 		local mintax = GAMEMODE.Config.wallettaxmin / 100
 		local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
 		local startMoney = GAMEMODE.Config.startingmoney
@@ -291,7 +291,7 @@ function meta:ChangeTeam(t, force)
 	self:UpdateJob(TEAM.name)
 	self:SetSelfDarkRPVar("salary", TEAM.salary)
 	GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.job_has_become, self:Nick(), TEAM.name))
-	if self.DarkRPVars.HasGunlicense then
+	if self:getDarkRPVar("HasGunlicense") then
 		self:SetDarkRPVar("HasGunlicense", false)
 	end
 	if TEAM.hasLicense and GAMEMODE.Config.license then
@@ -368,8 +368,8 @@ end
  ---------------------------------------------------------*/
 function meta:AddMoney(amount)
 	if not amount then return false end
-	local total = self.DarkRPVars.money + math.floor(amount)
-	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self.DarkRPVars.money) or total
+	local total = self:getDarkRPVar("money") + math.floor(amount)
+	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
 
 	self:SetDarkRPVar("money", total)
 

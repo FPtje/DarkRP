@@ -337,7 +337,7 @@ local function ccSetMoney(ply, cmd, args)
 	local amount = math.floor(tonumber(args[2]))
 
 	if args[3] then
-		amount = args[3] == "-" and math.Max(0, ply.DarkRPVars.money - amount) or ply.DarkRPVars.money + amount
+		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
 	end
 
 	local target = GAMEMODE:FindPlayer(args[1])

@@ -89,7 +89,7 @@ end
 
 function playerMeta:CanAfford(amount)
 	if not amount or self.DarkRPUnInitialized then return false end
-	return math.floor(amount) >= 0 and self.DarkRPVars.money - math.floor(amount) >= 0
+	return math.floor(amount) >= 0 and self:getDarkRPVar("money") - math.floor(amount) >= 0
 end
 
 /*---------------------------------------------------------
@@ -410,13 +410,13 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle( ) && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
+			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle() && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
 			if( !ply:CanAfford( iCost ) ) then
-				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle( ) && LANGUAGE.vehicle_cannot_afford || LANGUAGE.door_cannot_afford );
+				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() && LANGUAGE.vehicle_cannot_afford || LANGUAGE.door_cannot_afford );
 				return "";
 			end
 
-			local bAllowed, strReason, bSuppress = hook.Call("PlayerBuy"..( trace.Entity:IsVehicle( ) && "Vehicle" || "Door"), GAMEMODE, ply, trace.Entity );
+			local bAllowed, strReason, bSuppress = hook.Call("PlayerBuy"..( trace.Entity:IsVehicle() && "Vehicle" || "Door"), GAMEMODE, ply, trace.Entity );
 			if( bAllowed == false ) then
 				if( strReason && strReason != "") then
 					GAMEMODE:Notify( ply, 1, 4, strReason );

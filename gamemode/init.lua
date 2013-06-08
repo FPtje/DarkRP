@@ -7,7 +7,7 @@ GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome 
 local meta = FindMetaTable("Player")
 meta.SteamName = meta.SteamName or meta.Name
 function meta:Name()
-	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self.DarkRPVars.rpname
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
 		or self:SteamName()
 end
 meta.Nick = meta.Name

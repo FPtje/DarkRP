@@ -3,7 +3,7 @@
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
 local function AFKDemote(ply)
-	local rpname = ply.DarkRPVars.rpname
+	local rpname = ply:getDarkRPVar("rpname")
 
 	if ply:Team() ~= TEAM_CITIZEN then
 		ply:ChangeTeam(TEAM_CITIZEN, true)
@@ -14,14 +14,14 @@ local function AFKDemote(ply)
 end
 
 local function SetAFK(ply)
-	local rpname = ply.DarkRPVars.rpname
-	ply:SetSelfDarkRPVar("AFK", not ply.DarkRPVars.AFK)
+	local rpname = ply:getDarkRPVar("rpname")
+	ply:SetSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
-	SendUserMessage("blackScreen", ply, ply.DarkRPVars.AFK)
+	SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
 
-	if ply.DarkRPVars.AFK then
+	if ply:getDarkRPVar("AFK") then
 		DB.RetrieveSalary(ply, function(amount) ply.OldSalary = amount end)
-		ply.OldJob = ply.DarkRPVars.job
+		ply.OldJob = ply:getDarkRPVar("job")
 		GAMEMODE:NotifyAll(0, 5, rpname .. " is now AFK.")
 
 		-- NPC code partially by _Undefined
@@ -67,8 +67,8 @@ local function SetAFK(ply)
 		hook.Remove("PlayerDisconnected", ply:EntIndex().."DRPNPCDisconnect")
 		hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath")
 	end
-	ply:SetDarkRPVar("job", ply.DarkRPVars.AFK and "AFK" or ply.OldJob)
-	ply.DarkRPVars.salary = ply.DarkRPVars.AFK and 0 or ply.OldSalary or 0
+	ply:SetDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
+	ply:getDarkRPVar("salary") = ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0
 end
 AddChatCommand("/afk", SetAFK)
 
@@ -79,7 +79,7 @@ hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 
 local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
-	if ply.DarkRPVars.AFKDemoted then
+	if ply:getDarkRPVar("AFKDemoted") then
 		ply:SetDarkRPVar("job", "Citizen")
 		timer.Simple(3, function() ply:SetSelfDarkRPVar("AFKDemoted", false) end)
 	end
@@ -88,7 +88,7 @@ hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)
 
 local function KillAFKTimer()
 	for id, ply in pairs(player.GetAll()) do
-		if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply.DarkRPVars.AFK then
+		if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getDarkRPVar("AFK") then
 			SetAFK(ply)
 			AFKDemote(ply)
 			ply.AFKDemote = math.huge

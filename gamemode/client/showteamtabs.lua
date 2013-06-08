@@ -13,7 +13,7 @@ local function MayorOptns()
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.warrant and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("warrant") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
@@ -31,7 +31,7 @@ local function MayorOptns()
 			Warrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
 									RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), a)
@@ -48,7 +48,7 @@ local function MayorOptns()
 			UnWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted \"" .. ply:SteamID() .. "\"") end)
 					end
 				end
@@ -119,7 +119,7 @@ local function CPOptns()
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.warrant and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("warrant") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
@@ -137,7 +137,7 @@ local function CPOptns()
 			Warrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
@@ -156,7 +156,7 @@ local function CPOptns()
 			UnWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted \"" .. ply:SteamID() .. "\"") end)
 					end
 				end
@@ -219,7 +219,7 @@ local function CitOptns()
 
 		local jobentry = Citpanel:Add("DTextEntry")
 		jobentry:SetAllowNonAsciiCharacters(true)
-		jobentry:SetValue(LocalPlayer().DarkRPVars.job or "")
+		jobentry:SetValue(LocalPlayer():getDarkRPVar("job") or "")
 		jobentry.OnEnter = function()
 			RunConsoleCommand("DarkRP", "/job", tostring(jobentry:GetValue()))
 		end
@@ -244,7 +244,7 @@ local function MobOptns()
 
 		local agendaentry = Mobpanel:Add("DTextEntry")
 		agendaentry:SetAllowNonAsciiCharacters(true)
-		agendaentry:SetValue(LocalPlayer().DarkRPVars.agenda or "")
+		agendaentry:SetValue(LocalPlayer():getDarkRPVar("agenda") or "")
 		agendaentry.OnEnter = function()
 			RunConsoleCommand("darkrp", "/agenda", tostring(agendaentry:GetValue()))
 		end

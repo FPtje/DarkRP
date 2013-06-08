@@ -13,7 +13,7 @@ local pmeta = FindMetaTable("Player")
 
 pmeta.SteamName = pmeta.SteamName or pmeta.Name
 function pmeta:Name()
-	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self.DarkRPVars.rpname
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
 		or self:SteamName()
 end
 
@@ -53,11 +53,6 @@ local function LoadModules()
 			include(root.. folder .. "/" ..File)
 		end
 	end
-end
-
-LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-for k,v in pairs(player.GetAll()) do
-	v.DarkRPVars = v.DarkRPVars or {}
 end
 
 GM.Config = {} -- config table
@@ -390,6 +385,11 @@ local function RetrievePlayerVar(entIndex, var, value, tries)
 	ply.DarkRPVars[var] = value
 end
 
+function pmeta:getDarkRPVar(var)
+	self.DarkRPVars = self.DarkRPVars or {}
+	return self.DarkRPVars[var]
+end
+
 /*---------------------------------------------------------------------------
 Retrieve a player var.
 Read the usermessage and attempt to set the DarkRP var
@@ -421,7 +421,7 @@ function GM:InitPostEntity()
 	RunConsoleCommand("_sendDarkRPvars")
 	timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 		for k,v in pairs(player.GetAll()) do
-			if v.DarkRPVars and v.DarkRPVars.rpname then continue end
+			if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
 
 			RunConsoleCommand("_sendDarkRPvars")
 			return
@@ -495,8 +495,8 @@ if not FAdmin or not FAdmin.StartHooks then return end
 FAdmin.StartHooks["DarkRP"] = function()
 	-- DarkRP information:
 	FAdmin.ScoreBoard.Player:AddInformation("Steam name", function(ply) return ply:SteamName() end, true)
-	FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() and ply.DarkRPVars and ply.DarkRPVars.money then return "$"..ply.DarkRPVars.money end end)
-	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply.DarkRPVars and ply.DarkRPVars.wanted then return tostring(ply.DarkRPVars["wantedReason"] or "N/A") end end)
+	FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() and ply.DarkRPVars and ply:getDarkRPVar("money") then return "$"..ply:getDarkRPVar("money") end end)
+	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply.DarkRPVars and ply:getDarkRPVar("wanted") then return tostring(ply.DarkRPVars["wantedReason"] or "N/A") end end)
 	FAdmin.ScoreBoard.Player:AddInformation("Community link", function(ply) return FAdmin.SteamToProfile(ply:SteamID()) end)
 	FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply) return ply:GetNWString("usergroup") end)
 
@@ -511,13 +511,13 @@ FAdmin.StartHooks["DarkRP"] = function()
 
 	--wanted
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
-			return ((ply.DarkRPVars.wanted and "Unw") or "W") .. "anted"
+			return ((ply:getDarkRPVar("wanted") and "Unw") or "W") .. "anted"
 		end,
-		function(ply) return "FAdmin/icons/jail", ply.DarkRPVars.wanted and "FAdmin/icons/disable" end,
+		function(ply) return "FAdmin/icons/jail", ply:getDarkRPVar("wanted") and "FAdmin/icons/disable" end,
 		Color(0, 0, 200, 255),
 		function(ply) local t = LocalPlayer():Team() return t == TEAM_POLICE or t == TEAM_MAYOR or t == TEAM_CHIEF end,
 		function(ply, button)
-			if not ply.DarkRPVars.wanted  then
+			if not ply:getDarkRPVar("wanted")  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)
 					LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. Reason)
 				end)

@@ -4,15 +4,15 @@ local plyMeta = FindMetaTable("Player")
 Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:isArrested()
-	return self.DarkRPVars.Arrested
+	return self:getDarkRPVar("Arrested")
 end
 
 function plyMeta:isWanted()
-	return self.DarkRPVars.wanted
+	return self:getDarkRPVar("wanted")
 end
 
 function plyMeta:getWantedReason()
-	return self.DarkRPVars.wantedReason
+	return self:getDarkRPVar("wantedReason")
 end
 
 /*---------------------------------------------------------------------------

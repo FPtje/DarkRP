@@ -100,7 +100,7 @@ function SWEP:PrimaryAttack()
 
 	local Owner = trace.Entity:CPPIGetOwner()
 	if Owner then
-		c = Owner.warranted or (Owner.DarkRPVars and Owner.DarkRPVars.wanted)
+		c = Owner.warranted or (Owner.DarkRPVars and Owner:getDarkRPVar("wanted"))
 	end
 	if (trace.Entity:IsDoor()) then
 		local allowed = false

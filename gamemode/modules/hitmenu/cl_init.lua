@@ -41,7 +41,6 @@ end
 
 hook.Add("HUDPaint", "DrawHitOption", function()
 	localplayer = localplayer or LocalPlayer()
-	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
 	hudText = hudText or GAMEMODE.Config.hudText
 	local x, y
 	local ply = localplayer:GetEyeTrace().Entity
@@ -82,7 +81,6 @@ end)
 
 hook.Add("InitPostEntity", "HitmanMenu", function()
 	for k, v in pairs(player.GetAll()) do
-		v.DarkRPVars = v.DarkRPVars or {}
 		if v:isHitman() and v:hasHit() then
 			v:drawHitInfo()
 		end

@@ -36,7 +36,7 @@ function DarkRPCreateMoneyBag(pos, amount)
 end
 
 function ENT:Touch(ent)
-	if ent:GetClass( ) ~= "spawned_money" or self.hasMerged or ent.hasMerged then return end
+	if ent:GetClass() ~= "spawned_money" or self.hasMerged or ent.hasMerged then return end
 
 	ent.hasMerged = true
 

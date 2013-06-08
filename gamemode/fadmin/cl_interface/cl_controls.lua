@@ -158,7 +158,7 @@ function PANEL:UpdatePlayerData()
 	if not self.Player:IsValid() then return end
 
 	self.lblName:SetText(self.Player:Nick())
-	self.lblTeam:SetText((self.Player.DarkRPVars and self.Player.DarkRPVars.job) or team.GetName(self.Player:Team()))
+	self.lblTeam:SetText((self.Player.DarkRPVars and self.Player:getDarkRPVar("job")) or team.GetName(self.Player:Team()))
 	self.lblTeam:SizeToContents()
 	self.lblFrags:SetText(self.Player:Frags())
 	self.lblDeaths:SetText(self.Player:Deaths())

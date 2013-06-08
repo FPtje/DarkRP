@@ -15,7 +15,7 @@ function KnockoutToggle(player, command, args, caller)
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
 			if (player.Sleeping and IsValid(player.SleepRagdoll)) then
-				player.OldHunger = player.DarkRPVars.Energy
+				player.OldHunger = player:getDarkRPVar("Energy")
 				player.SleepSound:Stop()
 				local ragdoll = player.SleepRagdoll
 				local health = player:Health()
@@ -74,7 +74,7 @@ function KnockoutToggle(player, command, args, caller)
 
 				if not player:isArrested() then
 					player.WeaponsForSleep = {}
-					for k,v in pairs(player:GetWeapons( )) do
+					for k,v in pairs(player:GetWeapons()) do
 						player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
 						v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
 						v:Clip1(), v:Clip2()}

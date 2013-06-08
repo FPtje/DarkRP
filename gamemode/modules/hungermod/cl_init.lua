@@ -30,16 +30,16 @@ surface.CreateFont("HungerPlus", {
 
 function HM.HUDPaint()
 	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-	LocalPlayer().DarkRPVars.Energy = LocalPlayer().DarkRPVars.Energy or 0
+	LocalPlayer():getDarkRPVar("Energy") = LocalPlayer():getDarkRPVar("Energy") or 0
 
 	local x = 5
 	local y = ScrH() - 9
 
 	draw.RoundedBox(4, x - 1, y - 1, GetConVarNumber("HudW") - 8, 9, Color(0, 0, 0, 255))
 
-	if LocalPlayer().DarkRPVars.Energy > 0 then
-		draw.RoundedBox(4, x, y, (GetConVarNumber("HudW") - 9) * (math.Clamp(LocalPlayer().DarkRPVars.Energy, 0, 100) / 100), 7, Color(30, 30, 120, 255))
-		draw.DrawText(math.ceil(LocalPlayer().DarkRPVars.Energy) .. "%", "DefaultSmall", GetConVarNumber("HudW") / 2, y - 2, Color(255, 255, 255, 255), 1)
+	if LocalPlayer():getDarkRPVar("Energy") > 0 then
+		draw.RoundedBox(4, x, y, (GetConVarNumber("HudW") - 9) * (math.Clamp(LocalPlayer():getDarkRPVar("Energy"), 0, 100) / 100), 7, Color(30, 30, 120, 255))
+		draw.DrawText(math.ceil(LocalPlayer():getDarkRPVar("Energy")) .. "%", "DefaultSmall", GetConVarNumber("HudW") / 2, y - 2, Color(255, 255, 255, 255), 1)
 	else
 		draw.DrawText(LANGUAGE.starving, "ChatFont", GetConVarNumber("HudW") / 2, y - 4, Color(200, 0, 0, 255), 1)
 	end
