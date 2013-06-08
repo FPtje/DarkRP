@@ -222,6 +222,7 @@ local function DrawHUD()
 
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
+	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
 	localplayer.DarkRPVars.money = isnumber(localplayer.DarkRPVars.money) and localplayer.DarkRPVars.money or tonumber(localplayer.DarkRPVars.money)
 
 	--Background
