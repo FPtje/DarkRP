@@ -223,7 +223,7 @@ local function DrawHUD()
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
 	localplayer.DarkRPVars = localplayer.DarkRPVars or {}
-	localplayer.DarkRPVars.money = isnumber(localplayer.DarkRPVars.money) and localplayer.DarkRPVars.money or tonumber(localplayer.DarkRPVars.money)
+	localplayer.DarkRPVars.money = isnumber(localplayer.DarkRPVars.money) and localplayer.DarkRPVars.money or tonumber(localplayer.DarkRPVars.money or 0)
 
 	--Background
 	draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
