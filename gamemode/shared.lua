@@ -203,7 +203,22 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 })
 
 //ADD CUSTOM TEAMS UNDER THIS LINE:
-
+*/Example Job:
+TEAM_SWAT = AddExtraTeam("SWAT", { <-- Name of job and the TEAM_ Name.
+	color = Color(0, 0, 255, 255), <-- What color the job should appear in, in chat and on the scoreboard.
+	model = "models/player/urban.mdl",  <-- The model, If you don't know how to find it, google it.
+	description = [[Raid people and shit	   <---Description, Put what you should do in the job here
+			Protect and serve bitch.], <---Description, Put what you should do in the job here
+	weapons = {"weapon_m42"}, <--What weapons you want them to spawn with
+	command = "swat", <-- What command you have to type in chat or console to become the job, eg: /swat "Noob has become a SWAT!"
+	max = 3, <-- How much people you want to be that job.
+	salary = 100, <-- How much they earn
+	admin = 0, <-- This to be enabled for admins or  higher in fadmin. 1 for yes, 0 for no.
+	vote = false, <-- Requires a vote to become the job. Must be false for no, or true for yes.
+	hasLicense = false, <-- Automatically has a gun licence when made that job. Must be false for no, or true for yes.
+	candemote = true <-- If they can demote or not. Must be false for no, or true for yes.
+})
+/*
 
 
 
