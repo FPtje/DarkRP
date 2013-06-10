@@ -315,7 +315,7 @@ local function DrawEntityDisplay()
 
 	local tr = localplayer:GetEyeTrace()
 
-	if tr.Entity:IsOwnable() and tr.Entity:GetPos():Distance(localplayer:GetPos()) < 200 then
+	if IsValid(tr.Entity) and tr.Entity:IsOwnable() and tr.Entity:GetPos():Distance(localplayer:GetPos()) < 200 then
 		tr.Entity:DrawOwnableInfo()
 	end
 end
