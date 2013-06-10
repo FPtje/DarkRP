@@ -709,14 +709,8 @@ local function ChangeJob(ply, args)
 		return ""
 	end
 
-	local jl = string.lower(args)
-	local t = ply:Team()
-
-	for k,v in pairs(RPExtraTeams) do
-		if jl == v.name then
-			ply:ChangeTeam(k)
-		end
-	end
+	local canChangeJob = hook.Call("canChangeJob", nil, ply, args)
+	if not canChangeJob then return "" end
 	GAMEMODE:NotifyAll(2, 4, string.format(LANGUAGE.job_has_become, ply:Nick(), args))
 	ply:UpdateJob(args)
 	return ""
