@@ -305,8 +305,9 @@ elseif SERVER then
 
 	hook.Add("PlayerDeath", "DropPocketItems", function(ply)
 		local pocket = ply.Pocket
-		ply.Pocket = nil
 		if not GAMEMODE.Config.droppocketdeath or not pocket then return end
+
+		ply.Pocket = nil
 
 		for k, v in pairs(pocket) do
 			if IsValid(v) then
