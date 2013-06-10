@@ -557,6 +557,7 @@ local invalidToolData = {
 		" ",
 		"effects/highfive_red",
 		"pp/copy",
+		".v",
 		"skybox/"
 	},
 	["sound"] = {
