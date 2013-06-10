@@ -709,10 +709,17 @@ local function ChangeJob(ply, args)
 		return ""
 	end
 
-	local canChangeJob = hook.Call("canChangeJob", nil, ply, args)
-	if not canChangeJob then return "" end
-	GAMEMODE:NotifyAll(2, 4, string.format(LANGUAGE.job_has_become, ply:Nick(), args))
-	ply:UpdateJob(args)
+	local canChangeJob, message, replace = hook.Call("canChangeJob", nil, ply, args)
+	if canChangeJob == false then
+		if message then
+			GAMEMODE:Notify(ply, 1, 4, message)
+		end
+		return ""
+	end
+
+	local job = replace or args
+	GAMEMODE:NotifyAll(2, 4, string.format(LANGUAGE.job_has_become, ply:Nick(), job))
+	ply:UpdateJob(job)
 	return ""
 end
 AddChatCommand("/job", ChangeJob)
