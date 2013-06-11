@@ -98,7 +98,10 @@ AddChatCommand("/weapondrop", DropWeapon)
 Spawning
  ---------------------------------------------------------*/
 local function SetSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then return "" end
+	if not ply:HasPriv("rp_commands") then
+		GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "setspawn"))
+		return ""
+	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	local selection = "citizen"
@@ -122,7 +125,10 @@ end
 AddChatCommand("/setspawn", SetSpawnPos)
 
 local function AddSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then return "" end
+	if not ply:HasPriv("rp_commands") then
+		GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "addspawn"))
+		return ""
+	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	local selection = "citizen"
@@ -146,7 +152,10 @@ end
 AddChatCommand("/addspawn", AddSpawnPos)
 
 local function RemoveSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then return "" end
+	if not ply:HasPriv("rp_commands") then
+		GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "remove spawn"))
+		return ""
+	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	local selection = "citizen"
