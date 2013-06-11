@@ -597,7 +597,7 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	local POS
-	if spawn.GetPos then
+	if spawn and spawn.GetPos then
 		POS = spawn:GetPos()
 	else
 		POS = ply:GetPos()
