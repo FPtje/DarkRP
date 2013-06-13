@@ -1052,7 +1052,7 @@ end
 AddChatCommand("/broadcast", MayorBroadcast, 1.5)
 
 local function SetRadioChannel(ply,args)
-	if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 99 then
+	if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 100 then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/channel", "0<channel<100"))
 		return ""
 	end
