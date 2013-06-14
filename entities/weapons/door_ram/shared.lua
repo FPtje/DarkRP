@@ -139,11 +139,11 @@ function SWEP:PrimaryAttack()
 			return
 		end
 	elseif (trace.Entity:IsVehicle()) then
-		trace.Entity:Fire("unlock", "", .5)
 		local driver = trace.Entity:GetDriver()
 		if driver and driver.ExitVehicle then
 			driver:ExitVehicle()
 		end
+		trace.Entity:Fire("lock", "", 0)
 	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
 			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to open the fading door.")
