@@ -304,6 +304,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	local fIronTime = self.fIronTime or 0
 
+	pos = pos + ang:Forward() * -5
 	if GAMEMODE.Config.ironshoot then
 		ang:RotateAroundAxis(ang:Right(), -15)
 	end
