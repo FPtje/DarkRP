@@ -93,6 +93,9 @@ function SWEP:Deploy()
 	self.LASTOWNER = self.Owner
 
 	self:SetIronsights(self:GetIronsights())
+
+	// WORKAROUND: Some models have shit viewmodel positions until they fire
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	return true
 end
 
