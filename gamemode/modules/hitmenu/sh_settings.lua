@@ -6,3 +6,5 @@ GM.Config.minHitDistance = 150
 GM.Config.hudText = "I am a hitman.\nPress E on me to request a hit!"
 -- The text above a hitman when he's got a hit
 GM.Config.hitmanText = "Hit\naccepted!"
+-- The cooldown time for a hit target (so they aren't spam killed)
+GM.Config.hitTargetCooldown = 120

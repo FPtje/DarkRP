@@ -165,6 +165,8 @@ function DarkRP.hooks:onHitCompleted(hitman, target)
 	DB.Log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
 		false, Color(255, 0, 255))
 
+	target:SetDarkRPVar("lastHitTime", CurTime())
+
 	hitman:finishHit()
 end
 
