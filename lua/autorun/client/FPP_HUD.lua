@@ -182,7 +182,7 @@ local function HUDPaint()
 	end
 
 	-- Messsage when you can't touch something
-	if TouchAlpha > 0 and LAEnt.FPPOwner ~= "" then
+	if TouchAlpha > 0 and LAEnt.FPPOwner then
 		surface.SetDrawColor(255,255,255,TouchAlpha)
 
 		surface.SetFont("Default")
