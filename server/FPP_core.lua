@@ -281,8 +281,13 @@ function FPP.PlayerCanTouchEnt(ply, ent, Type1, Type2, TryingToShare, antiloop)
 end
 
 local function DoShowOwner(ply, ent, cantouch, why)
+	ply.FPPEntOwnershipMemory = ply.FPPEntOwnershipMemory or {}
+
+	if ply.FPPEntOwnershipMemory[ent] == cantouch then return end
+	ply.FPPEntOwnershipMemory[ent] = cantouch
+
 	umsg.Start("FPP_Owner", ply)
-		umsg.Entity(ent)
+		umsg.Short(ent:EntIndex())
 		umsg.Bool(cantouch)
 		umsg.String(tostring(why))
 	umsg.End()
