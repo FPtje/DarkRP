@@ -155,7 +155,7 @@ GM:AddChatReceiver("/g", "talk to your group", function(ply)
 end)
 
 GM:AddChatReceiver("/pm", "PM", function(ply, text)
-	if not text[2] then return false end
+	if not isstring(text[2]) then return false end
 	text[2] = text[2]:lower()
 
 	return string.find(ply:Nick():lower(), text[2]) ~= nil or
