@@ -232,3 +232,9 @@ hook.Add("playerArrested", "Hitman system", function(ply)
 
 	ply:abortHit("The hitman was arrested!")
 end)
+
+hook.Add("OnPlayerChangedTeam", "Hitman system", function(ply, prev, new)
+	if hits[ply] then
+		ply:abortHit("Player changed team!")
+	end
+end)
