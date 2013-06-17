@@ -585,6 +585,7 @@ local invalidToolData = {
 	["rz"] = 360
 }
 invalidToolData.override = invalidToolData.material
+invalidToolData.rope_material = invalidToolData.material
 
 function FPP.Protect.CanTool(ply, trace, tool, ENT)
 	-- Toolgun restrict
