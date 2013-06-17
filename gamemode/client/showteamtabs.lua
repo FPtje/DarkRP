@@ -317,7 +317,7 @@ function GM:MoneyTab()
 				Demote.DoClick = function()
 					local menu = DermaMenu()
 					for _,ply in pairs(player.GetAll()) do
-						if ply ~= LocalPlayer() then
+						if ply ~= LocalPlayer() and IsValid(ply) then
 							menu:AddOption(ply:Nick(), function()
 								Derma_StringRequest("Demote reason", "Why would you demote "..ply:Nick().."?", nil,
 									function(a)
