@@ -156,11 +156,11 @@ end)
 
 GM:AddChatReceiver("/pm", "PM", function(ply, text)
 	if not isstring(text[2]) then return false end
-	text[2] = text[2]:lower()
+	text[2] = string.lower(tostring(text[2]))
 
-	return string.find(ply:Nick():lower(), text[2]) ~= nil or
-		string.find(ply:SteamName():lower(), text[2]) ~= nil or
-		ply:SteamID():lower() == text[2]
+	return string.find(string.lower(ply:Nick()), text[2], 1, true) ~= nil or
+		string.find(string.lower(ply:SteamName()), text[2], 1, true) ~= nil or
+		string.lower(ply:SteamID()) == text[2]
 end)
 
 /*---------------------------------------------------------------------------
