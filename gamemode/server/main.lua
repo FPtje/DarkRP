@@ -213,7 +213,7 @@ local function LookPersonUp(ply, cmd, args)
 		print("Kills: ".. P:Frags())
 		print("Deaths: ".. P:Deaths())
 
-		print("Money: $" .. P:getDarkRPVar("money"))
+		print("Money: " .. GAMEMODE.Config.currency .. P:getDarkRPVar("money"))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)
