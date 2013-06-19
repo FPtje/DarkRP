@@ -288,7 +288,7 @@ function GM:MoneyTab()
 					rpnamelabel:SetText(LANGUAGE.change_name)
 
 					local rpnameTextbox = ActionsPanel:Add("DTextEntry")
-					rpnameTextbox:SetAllowNonAsciiCharacters(true)
+					--/rpname does not support non-ASCII characters
 					rpnameTextbox:SetText(LocalPlayer():Nick())
 					rpnameTextbox.OnEnter = function() RunConsoleCommand("darkrp", "/rpname", tostring(rpnameTextbox:GetValue())) end
 

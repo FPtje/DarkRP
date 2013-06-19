@@ -19,7 +19,7 @@ function plyMeta:requestHit(customer, target, price)
 		return false
 	end
 
-	GAMEMODE.ques:Create("Accept hit from " .. customer:Nick() .. "\nregarding " .. target:Nick() .. " for $" .. price .. "?",
+	GAMEMODE.ques:Create("Accept hit from " .. customer:Nick() .. "\nregarding " .. target:Nick() .. " for " .. GAMEMODE.Config.currency .. price .. "?",
 		"hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
 		self,
 		20,
@@ -116,7 +116,7 @@ AddChatCommand("/hitprice", function(ply, args)
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
 
-	GAMEMODE:Notify(ply, 2, 4, "Hit price set to $" .. price)
+	GAMEMODE:Notify(ply, 2, 4, "Hit price set to " .. GAMEMODE.Config.currency .. price)
 
 	return ""
 end)
