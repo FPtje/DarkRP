@@ -1,4 +1,4 @@
-//if IsMounted("cstrike") and util.IsValidModel("models/props/cs_assault/money.mdl") then return end
+if IsMounted("cstrike") and util.IsValidModel("models/props/cs_assault/money.mdl") then return end
 local texts = {
 	"Counter Strike Source is not mounted!",
 	"Common symptoms: money and guns floating in the air",
@@ -9,7 +9,6 @@ local texts = {
 	"http://wiki.garrysmod.com/page/Mounting_Content_on_a_DS"
 }
 
-print("RUNNING")
 hook.Add("PlayerInitialSpawn", "CSSCheck", function(ply)
 	timer.Simple(5, function()
 		for _, text in pairs(texts) do
