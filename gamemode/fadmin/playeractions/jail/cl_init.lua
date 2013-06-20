@@ -4,7 +4,7 @@ FAdmin.StartHooks["Jail"] = function()
 	FAdmin.Commands.AddCommand("UnJail", nil, "<Player>")
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Jail", function(ply)
-		LocalPlayer():ConCommand("FAdmin jail "..ply:SteamID())
+		RunConsoleCommand("_FAdmin", "jail", ply:SteamID())
 	end)
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)

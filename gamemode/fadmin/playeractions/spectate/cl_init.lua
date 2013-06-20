@@ -16,7 +16,7 @@ FAdmin.StartHooks["zzSpectate"] = function()
 
 	-- Right click option
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Spectate", function(ply)
-		LocalPlayer():ConCommand("FAdmin Spectate "..ply:SteamID())
+		RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
 	end)
 
 	-- Slap option in player menu
