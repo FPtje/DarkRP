@@ -17,7 +17,7 @@ SWEP.Base = "ls_snip_base"
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_snip_g3sg1.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_snip_g3sg1.mdl"
 SWEP.WorldModel = "models/weapons/w_snip_g3sg1.mdl"
 
 SWEP.Weight = 3

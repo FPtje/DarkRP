@@ -66,7 +66,7 @@ local function ReMoveZombie(ply, index)
 				GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_spawn_removed)
 				table.remove(zombieSpawns, index)
 				DB.StoreZombies()
-				if ply.DarkRPVars.zombieToggle then
+				if ply:getDarkRPVar("zombieToggle") then
 					LoadTable(ply)
 				end
 			end)
@@ -83,7 +83,7 @@ local function AddZombie(ply)
 		DB.RetrieveZombies(function()
 			table.insert(zombieSpawns, ply:GetPos())
 			DB.StoreZombies()
-			if ply.DarkRPVars.zombieToggle then LoadTable(ply) end
+			if ply:getDarkRPVar("zombieToggle") then LoadTable(ply) end
 			GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_spawn_added)
 		end)
 	else
@@ -95,7 +95,7 @@ DarkRP.addChatCommand("/addzombie", AddZombie)
 
 local function ToggleZombie(ply)
 	if ply:HasPriv("rp_commands") then
-		if not ply.DarkRPVars.zombieToggle then
+		if not ply:getDarkRPVar("zombieToggle") then
 			DB.RetrieveZombies(function()
 				ply:setSelfDarkRPVar("zombieToggle", true)
 				LoadTable(ply)

@@ -18,6 +18,10 @@ function ENT:Initialize()
 	self.damage = 100
 	self.IsMoneyPrinter = true
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
+
+	self.sound = CreateSound(self, Sound("ambient/levels/labs/equipment_printer_loop1.wav"))
+	self.sound:SetSoundLevel(52)
+	self.sound:PlayEx(1, 100)
 end
 
 function ENT:OnTakeDamage(dmg)
@@ -111,4 +115,10 @@ function ENT:Think()
 	effectdata:SetScale(1)
 	effectdata:SetRadius(2)
 	util.Effect("Sparks", effectdata)
+end
+
+function ENT:OnRemove()
+	if self.sound then
+		self.sound:Stop()
+	end
 end

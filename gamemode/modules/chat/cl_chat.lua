@@ -10,26 +10,32 @@ Add a message to chat
 local function AddToChat(msg)
 	local col1 = Color(msg:ReadShort(), msg:ReadShort(), msg:ReadShort())
 
-	local name = msg:ReadString()
+	local prefixText = msg:ReadString()
 	local ply = msg:ReadEntity()
 	ply = IsValid(ply) and ply or LocalPlayer()
 
-	if name == "" or not name then
-		name = ply:Nick()
-		name = name ~= "" and name or ply:SteamName()
+	if prefixText == "" or not prefixText then
+		prefixText = ply:Nick()
+		prefixText = prefixText ~= "" and prefixText or ply:SteamName()
 	end
 
 	local col2 = Color(msg:ReadShort(), msg:ReadShort(), msg:ReadShort())
 
 	local text = msg:ReadString()
+	local shouldShow
 	if text and text ~= "" then
-		chat.AddText(col1, name, col2, ": "..text)
 		if IsValid(ply) then
-			hook.Call("OnPlayerChat", nil, ply, text, false, not ply:Alive())
+			shouldShow = hook.Call("OnPlayerChat", nil, ply, text, false, not ply:Alive(), prefixText, col1, col2)
+		end
+
+		if shouldShow ~= true then
+			chat.AddText(col1, prefixText, col2, ": "..text)
 		end
 	else
-		chat.AddText(col1, name)
-		hook.Call("ChatText", nil, "0", name, name, "none")
+		shouldShow = hook.Call("ChatText", nil, "0", prefixText, prefixText, "none")
+		if shouldShow ~= true then
+			chat.AddText(col1, prefixText)
+		end
 	end
 	chat.PlaySound()
 end

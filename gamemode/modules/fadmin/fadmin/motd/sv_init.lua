@@ -12,7 +12,7 @@ sql.Query([[CREATE TABLE IF NOT EXISTS FADMIN_MOTD(
 	roll INTEGER NOT NULL
 	);]])
 
-local MOTD = sql.Query("SELECT * FROM FADMIN_MOTD WHERE LOWER(map) = "..SQLStr(string.lower(game.GetMap()))..";")
+local MOTD = sql.Query("SELECT * FROM FADMIN_MOTD WHERE LOWER(map) = " .. DB.SQLStr(string.lower(game.GetMap()))..";")
 
 hook.Add("InitPostEntity", "PlaceMOTD", function()
 	if not MOTD or (not MOTD[1] and not MOTD["1"]) then return end
@@ -25,7 +25,7 @@ hook.Add("InitPostEntity", "PlaceMOTD", function()
 	ent:Activate()
 
 	if file.Exists("FAdmin/CurMOTDPage.txt", "DATA") and file.Read("FAdmin/CurMOTDPage.txt", "DATA") ~= "" then
-		game.ConsoleCommand("_FAdmin_MOTDPage \""..file.Read("FAdmin/CurMOTDPage.txt", "DATA").."\"\n")
+		game.ConsoleCommand("_FAdmin_MOTDPage \"" .. file.Read("FAdmin/CurMOTDPage.txt", "DATA").."\"\n")
 	end
 end)
 
@@ -39,39 +39,39 @@ function FAdmin.MOTD.SaveMOTD(ent, ply)
 		ang.p, ang.y, ang.r
 	if MOTD then
 		sql.Query([[UPDATE FADMIN_MOTD SET ]]
-		.. "x = " .. SQLStr(x)..", "
-		.. "y = " .. SQLStr(y)..", "
-		.. "z = " .. SQLStr(z)..", "
-		.. "pitch = " .. SQLStr(pitch)..", "
-		.. "yaw = " .. SQLStr(yaw)..", "
-		.. "roll = " .. SQLStr(roll)
-		.. " WHERE map = "..SQLStr(map)..";")
+		.. "x = " .. DB.SQLStr(x)..", "
+		.. "y = " .. DB.SQLStr(y)..", "
+		.. "z = " .. DB.SQLStr(z)..", "
+		.. "pitch = " .. DB.SQLStr(pitch)..", "
+		.. "yaw = " .. DB.SQLStr(yaw)..", "
+		.. "roll = " .. DB.SQLStr(roll)
+		.. " WHERE map = " .. DB.SQLStr(map)..";")
 	else
 		sql.Query([[INSERT INTO FADMIN_MOTD VALUES(]]
-		.. SQLStr(map)..", "
-		.. SQLStr(x)..", "
-		.. SQLStr(y)..", "
-		.. SQLStr(z)..", "
-		.. SQLStr(pitch)..", "
-		.. SQLStr(yaw)..", "
-		.. SQLStr(roll)
+		.. DB.SQLStr(map)..", "
+		.. DB.SQLStr(x)..", "
+		.. DB.SQLStr(y)..", "
+		.. DB.SQLStr(z)..", "
+		.. DB.SQLStr(pitch)..", "
+		.. DB.SQLStr(yaw)..", "
+		.. DB.SQLStr(roll)
 		.. ");")
 	end
 	FAdmin.Messages.SendMessage(ply, 4, "MOTD position saved!")
 end
 
 function FAdmin.MOTD.RemoveMOTD(ent, ply)
-	sql.Query("DELETE FROM FADMIN_MOTD WHERE map = "..SQLStr(string.lower(game.GetMap()))..";")
+	sql.Query("DELETE FROM FADMIN_MOTD WHERE map = " .. DB.SQLStr(string.lower(game.GetMap()))..";")
 	FAdmin.Messages.SendMessage(ply, 4, "MOTD removed!")
 end
 
 function FAdmin.MOTD.SetMOTDPage(ply, cmd, args)
 	if not args[1] then
-		FAdmin.Messages.SendMessage(ply, 4, "MOTD is set to: "..GetConVarString("_FAdmin_MOTDPage"))
+		FAdmin.Messages.SendMessage(ply, 4, "MOTD is set to: " .. GetConVarString("_FAdmin_MOTDPage"))
 		return
 	end
 	if ply:EntIndex() ~= 0 and (not ply.IsSuperAdmin or not ply:IsSuperAdmin()) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	game.ConsoleCommand("_FAdmin_MOTDPage \""..args[1].."\"\n")
+	game.ConsoleCommand("_FAdmin_MOTDPage \"" .. args[1].."\"\n")
 	file.Write("FAdmin/CurMOTDPage.txt", args[1])
 end
 

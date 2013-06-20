@@ -133,7 +133,7 @@ local function ccLock(ply, cmd, args)
 	ply:PrintMessage(2, "Locked.")
 
 	trace.Entity:KeysLock()
-	DB.Query("REPLACE INTO darkrp_door VALUES("..sql.SQLStr(trace.Entity:EntIndex())..", "..sql.SQLStr(string.lower(game.GetMap()))..", "..sql.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
+	DB.Query("REPLACE INTO darkrp_door VALUES("..DB.SQLStr(trace.Entity:EntIndex())..", "..DB.SQLStr(string.lower(game.GetMap()))..", "..DB.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
 	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-locked a door with rp_lock (locked door is saved)", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_lock", ccLock)
@@ -156,7 +156,7 @@ local function ccUnLock(ply, cmd, args)
 
 	ply:PrintMessage(2, "Unlocked.")
 	trace.Entity:KeysUnLock()
-	DB.Query("REPLACE INTO darkrp_door VALUES("..sql.SQLStr(trace.Entity:EntIndex())..", "..sql.SQLStr(string.lower(game.GetMap()))..", "..sql.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
+	DB.Query("REPLACE INTO darkrp_door VALUES("..DB.SQLStr(trace.Entity:EntIndex())..", "..DB.SQLStr(string.lower(game.GetMap()))..", "..DB.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
 	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", nil, Color(30, 30, 30))
 end
 concommand.Add("rp_unlock", ccUnLock)
@@ -276,9 +276,9 @@ local function ccArrest(ply, cmd, args)
 	if target then
 		local length = tonumber(args[2])
 		if length then
-			target:Arrest(length)
+			target:arrest(length, ply)
 		else
-			target:Arrest()
+			target:arrest(nil, ply)
 		end
 
 		if ply:EntIndex() == 0 then
@@ -307,7 +307,7 @@ local function ccUnarrest(ply, cmd, args)
 	local target = DarkRP.findPlayer(args[1])
 
 	if target then
-		target:Unarrest()
+		target:unArrest(ply)
 		if not target:Alive() then target:Spawn() end
 
 		if ply:EntIndex() == 0 then
@@ -336,6 +336,10 @@ local function ccSetMoney(ply, cmd, args)
 
 	local amount = math.floor(tonumber(args[2]))
 
+	if args[3] then
+		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
+	end
+
 	local target = DarkRP.findPlayer(args[1])
 
 	if target then
@@ -344,17 +348,17 @@ local function ccSetMoney(ply, cmd, args)
 		target:setDarkRPVar("money", amount)
 
 		if ply:EntIndex() == 0 then
-			print("Set " .. target:Nick() .. "'s money to: " .. CUR .. amount)
+			print("Set " .. target:Nick() .. "'s money to: " .. GAMEMODE.Config.currency .. amount)
 			nick = "Console"
 		else
-			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s money to: " .. CUR .. amount)
+			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s money to: " .. GAMEMODE.Config.currency .. amount)
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, nick .. " set your money to: " .. CUR .. amount)
+		target:PrintMessage(2, nick .. " set your money to: " .. GAMEMODE.Config.currency .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s money to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -365,7 +369,7 @@ local function ccSetMoney(ply, cmd, args)
 		return
 	end
 end
-concommand.Add("rp_setmoney", ccSetMoney)
+concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
 
 local function ccSetSalary(ply, cmd, args)
 	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
@@ -401,17 +405,17 @@ local function ccSetSalary(ply, cmd, args)
 		DB.StoreSalary(target, amount)
 		target:setSelfDarkRPVar("salary", amount)
 		if ply:EntIndex() == 0 then
-			print("Set " .. target:Nick() .. "'s Salary to: " .. CUR .. amount)
+			print("Set " .. target:Nick() .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 			nick = "Console"
 		else
-			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s Salary to: " .. CUR .. amount)
+			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, nick .. " set your Salary to: " .. CUR .. amount)
+		target:PrintMessage(2, nick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s salary to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..CUR..amount, nil, Color(30, 30, 30))
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

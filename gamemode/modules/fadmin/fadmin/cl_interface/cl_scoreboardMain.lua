@@ -1,4 +1,12 @@
 local Sorted, SortDown = CreateClientConVar("FAdmin_SortPlayerList", "Team", true), CreateClientConVar("FAdmin_SortPlayerListDown", 1, true)
+local allowedSorts = {
+	["Name"] = true,
+	["Team"] = true,
+	["Frags"] = true,
+	["Deaths"] = true,
+	["Ping"] = true
+}
+
 function FAdmin.ScoreBoard.Main.Show()
 	local Sort = {}
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
@@ -52,7 +60,10 @@ function FAdmin.ScoreBoard.Main.Show()
 	Sort.Ping.Type = "Ping"
 	Sort.Ping:SetVisible(true)
 
-	FAdmin.ScoreBoard.Main.PlayerListView(Sorted:GetString(), SortDown:GetBool())
+	local sortBy = Sorted:GetString()
+	sortBy = allowedSorts[sortBy] and sortBy or "Team"
+
+	FAdmin.ScoreBoard.Main.PlayerListView(sortBy, SortDown:GetBool())
 
 	for k,v in pairs(Sort) do
 		v:SetFont("Trebuchet20")
@@ -64,7 +75,7 @@ function FAdmin.ScoreBoard.Main.Show()
 		v.BtnSort:SetText("")
 		v.BtnSort.Type = "Down"
 		v.BtnSort.Paint = function( panel, w, h ) derma.SkinHook("Paint", "ButtonDown", panel, w, h ) end
-		v.BtnSort:SetSkin("DarkRP")
+		v.BtnSort:SetSkin(GAMEMODE.Config.DarkRPSkin)
 		if Sorted:GetString() == v.Type then
 			v.BtnSort.Depressed = true
 			v.BtnSort.Type = (SortDown:GetBool() and "Down") or "Up"

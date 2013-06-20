@@ -2,25 +2,12 @@ GM.Version = "2.4.3"
 GM.Name = "DarkRP"
 GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
 
-CUR = "$"
-
--- Checking if counterstrike is installed correctly
-if table.Count(file.Find("*", "cstrike")) == 0 then
-	timer.Create("TheresNoCSS", 10, 0, function()
-		for k,v in pairs(player.GetAll()) do
-			v:ChatPrint("Counter Strike: Source is incorrectly installed!")
-			v:ChatPrint("You need it for DarkRP to work!")
-			print("Counter Strike: Source is incorrectly installed!\nYou need it for DarkRP to work!")
-		end
-	end)
-end
-
 -- RP Name Overrides
 
 local meta = FindMetaTable("Player")
 meta.SteamName = meta.SteamName or meta.Name
 function meta:Name()
-	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self.DarkRPVars.rpname
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
 		or self:SteamName()
 end
 meta.Nick = meta.Name
@@ -46,6 +33,7 @@ AddCSLuaFile("client/helpvgui.lua")
 AddCSLuaFile("client/showteamtabs.lua")
 AddCSLuaFile("client/vgui.lua")
 
+AddCSLuaFile("shared/player_class.lua")
 AddCSLuaFile("shared/animations.lua")
 AddCSLuaFile("shared/commands.lua")
 AddCSLuaFile("shared/entity.lua")
@@ -76,6 +64,7 @@ include("sh_interfaceloader.lua")
 
 include("server/admincc.lua")
 
+include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
@@ -110,6 +99,8 @@ end
 for _, folder in SortedPairs(folders, true) do
 	if folder ~= "." and folder ~= ".." and not GM.Config.DisabledModules[folder] then
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
+			if File == "sh_interface.lua" then continue end
+
 			AddCSLuaFile(fol..folder .. "/" ..File)
 
 			if File == "sh_interface.lua" then continue end
@@ -122,6 +113,7 @@ for _, folder in SortedPairs(folders, true) do
 		end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", "LUA"), true) do
+			if File == "cl_interface.lua" then continue end
 			AddCSLuaFile(fol.. folder .. "/" ..File)
 		end
 	end

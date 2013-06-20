@@ -21,7 +21,7 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_rif_m4a1.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.HoldType = "ar2"
 
@@ -48,7 +48,7 @@ SWEP.Secondary.Ammo = "none"
 
 -- Start of Firemode configuration
 
-SWEP.IronSightsPos = Vector(5.95, -4.0283, 1.1023)
-SWEP.IronSightsAng = Vector(3.0803, 2.5, 3.674)
+SWEP.IronSightsPos = Vector(-8.05, -5, 0.5)
+SWEP.IronSightsAng = Vector(3, -4, -4)
 
 SWEP.MultiMode = true

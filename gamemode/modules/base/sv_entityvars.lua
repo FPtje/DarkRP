@@ -13,6 +13,15 @@ Player vars
 /*---------------------------------------------------------------------------
 Set a player's DarkRPVar
 ---------------------------------------------------------------------------*/
+local function formatDarkRPValue(value)
+	if value == nil then return "nil" end
+
+	if isentity(value) and not IsValid(value) then return "NULL" end
+	if isentity(value) and value:IsPlayer() then return string.format("Entity [%s][Player]", value:EntIndex()) end
+
+	return tostring(value)
+end
+
 function meta:setDarkRPVar(var, value, target)
 	if not IsValid(self) then return end
 	target = target or RecipientFilter():AddAllPlayers()
@@ -22,12 +31,13 @@ function meta:setDarkRPVar(var, value, target)
 	self.DarkRPVars = self.DarkRPVars or {}
 	self.DarkRPVars[var] = value
 
+	value = formatDarkRPValue(value)
+
 	umsg.Start("DarkRP_PlayerVar", target)
 		-- The index because the player handle might not exist clientside yet
 		umsg.Short(self:EntIndex())
 		umsg.String(var)
-		if value == nil then value = "nil" end
-		umsg.String(tostring(value))
+		umsg.String(value)
 	umsg.End()
 end
 
@@ -42,6 +52,14 @@ function meta:setSelfDarkRPVar(var, value)
 end
 
 /*---------------------------------------------------------------------------
+Get a DarkRPVar
+---------------------------------------------------------------------------*/
+function meta:getDarkRPVar(var)
+	self.DarkRPVars = self.DarkRPVars or {}
+	return self.DarkRPVars[var]
+end
+
+/*---------------------------------------------------------------------------
 Send the DarkRPVars to a client
 ---------------------------------------------------------------------------*/
 local function SendDarkRPVars(ply)
@@ -51,7 +69,7 @@ local function SendDarkRPVars(ply)
 	local sendtable = {}
 	for k,v in pairs(player.GetAll()) do
 		sendtable[v] = {}
-		for a,b in pairs(v.DarkRPVars) do
+		for a,b in pairs(v.DarkRPVars or {}) do
 			if not (v.privateDRPVars or {})[a] or ply == v then
 				sendtable[v][a] = b
 			end

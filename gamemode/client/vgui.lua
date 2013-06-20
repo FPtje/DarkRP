@@ -7,13 +7,12 @@ local function MsgDoVote(msg)
 	local _, chatY = chat.GetChatBoxPos()
 
 	local question = msg:ReadString()
-	local voteid = msg:ReadString()
+	local voteid = msg:ReadShort()
 	local timeleft = msg:ReadFloat()
 	if timeleft == 0 then
 		timeleft = 100
 	end
 	local OldTime = CurTime()
-	if string.find(voteid, LocalPlayer():EntIndex()) then return end --If it's about you then go away
 	if not IsValid(LocalPlayer()) then return end -- Sent right before player initialisation
 
 	LocalPlayer():EmitSound("Town.d1_town_02_elevbell1", 100, 100)
@@ -82,7 +81,7 @@ local function MsgDoVote(msg)
 	ybutton:SetText("Yes")
 	ybutton:SetVisible(true)
 	ybutton.DoClick = function()
-		LocalPlayer():ConCommand("vote " .. voteid .. " 1\n")
+		LocalPlayer():ConCommand("vote " .. voteid .. " yea\n")
 		panel:Close()
 	end
 
@@ -94,18 +93,18 @@ local function MsgDoVote(msg)
 	nbutton:SetText("No")
 	nbutton:SetVisible(true)
 	nbutton.DoClick = function()
-		LocalPlayer():ConCommand("vote " .. voteid .. " 2\n")
+		LocalPlayer():ConCommand("vote " .. voteid .. " nay\n")
 		panel:Close()
 	end
 
 	PanelNum = PanelNum + 140
 	VoteVGUI[voteid .. "vote"] = panel
-	panel:SetSkin("DarkRP")
+	panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 usermessage.Hook("DoVote", MsgDoVote)
 
 local function KillVoteVGUI(msg)
-	local id = msg:ReadString()
+	local id = msg:ReadShort()
 
 	if VoteVGUI[id .. "vote"] and VoteVGUI[id .. "vote"]:IsValid() then
 		VoteVGUI[id.."vote"]:Close()
@@ -194,7 +193,7 @@ local function MsgDoQuestion(msg)
 	PanelNum = PanelNum + 300
 	QuestionVGUI[quesid .. "ques"] = panel
 
-	panel:SetSkin("DarkRP")
+	panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 usermessage.Hook("DoQuestion", MsgDoQuestion)
 
@@ -210,7 +209,7 @@ usermessage.Hook("KillQuestionVGUI", KillQuestionVGUI)
 local function DoVoteAnswerQuestion(ply, cmd, args)
 	if not args[1] then return end
 
-	local vote = 2
+	local vote = 0
 	if tonumber(args[1]) == 1 or string.lower(args[1]) == "yes" or string.lower(args[1]) == "true" then vote = 1 end
 
 	for k,v in pairs(VoteVGUI) do
@@ -245,21 +244,38 @@ usermessage.Hook("DoLetter", DoLetter)
 
 local F4Menu
 local F4MenuTabs
-local F4Tabs
+local F4Tabs = {}
 local hasReleasedF4 = false
+function GM:addF4MenuTab(name, tabControl, icon)
+	return table.insert(F4Tabs, {name = name, ctrl = tabControl, icon = icon})
+end
+
+function GM:switchTabOrder(from, to)
+	F4Tabs[from], F4Tabs[to] = F4Tabs[to], F4Tabs[from]
+end
+
+function GM:removeTab(tabNr)
+	table.remove(F4Tabs, tabNr)
+end
+
 local function ChangeJobVGUI()
 	if not F4Menu or not F4Menu:IsValid() then
 		F4Menu = vgui.Create("DFrame")
 		F4Menu:SetSize(770, 580)
 		F4Menu:Center()
 		F4Menu:SetVisible( true )
-		F4Menu:MakePopup( )
+		F4Menu:MakePopup()
 		F4Menu:SetTitle("Options menu")
-		F4Tabs = {GAMEMODE:MoneyTab(), GAMEMODE:JobsTab(), GAMEMODE:EntitiesTab(), GAMEMODE:RPHUDTab()}
-		F4Menu:SetSkin("DarkRP")
+		GAMEMODE:addF4MenuTab("Money/Commands", GAMEMODE:MoneyTab(), "icon16/money.png")
+		GAMEMODE:addF4MenuTab("Jobs", GAMEMODE:JobsTab(), "icon16/user_suit.png")
+		GAMEMODE:addF4MenuTab("Entities/weapons", GAMEMODE:EntitiesTab(), "icon16/cart.png")
+		GAMEMODE:addF4MenuTab("HUD", GAMEMODE:RPHUDTab(), "icon16/camera.png")
+
+		hook.Call("F4MenuTabs", nil)
+		F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	else
 		F4Menu:SetVisible(true)
-		F4Menu:SetSkin("DarkRP")
+		F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 
 	hasReleasedF4 = false
@@ -283,27 +299,30 @@ local function ChangeJobVGUI()
 		F4MenuTabs = vgui.Create("DPropertySheet", F4Menu)
 		F4MenuTabs:SetPos(5, 25)
 		F4MenuTabs:SetSize(760, 550)
-		--The tabs: Look in showteamtabs.lua for more info
-		F4MenuTabs:AddSheet("Money/Commands", F4Tabs[1], "icon16/money.png", false, false)
-		F4MenuTabs:AddSheet("Jobs", F4Tabs[2], "icon16/user_suit.png", false, false)
-		F4MenuTabs:AddSheet("Entities/weapons", F4Tabs[3], "icon16/cart.png", false, false)
-		F4MenuTabs:AddSheet("HUD", F4Tabs[4], "icon16/camera.png", false, false)
+
+		for k, v in pairs(F4Tabs) do
+			F4MenuTabs:AddSheet(v.name, v.ctrl, v.icon, false, false)
+		end
 	end
 
-	for _, panel in pairs(F4Tabs) do panel:Update() panel:SetSkin("DarkRP") end
+	for _, panel in pairs(F4Tabs) do
+		if panel.ctrl.Update then panel.ctrl:Update() end
+		panel.ctrl:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	end
 
  	function F4Menu:Close()
 		F4Menu:SetVisible(false)
-		F4Menu:SetSkin("DarkRP")
+		F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 
-	F4Menu:SetSkin("DarkRP")
+	F4Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-usermessage.Hook("ChangeJobVGUI", ChangeJobVGUI)
+GM.ShowSpare2 = ChangeJobVGUI
 
 local KeyFrameVisible = false
 local function KeysMenu(um)
-	local Vehicle = um:ReadBool()
+	local Vehicle = LocalPlayer():GetEyeTrace().Entity
+	Vehicle = IsValid(Vehicle) and Vehicle:IsVehicle()
 	if KeyFrameVisible then return end
 	local trace = LocalPlayer():GetEyeTrace()
 	local Frame = vgui.Create("DFrame")
@@ -586,6 +605,7 @@ local function KeysMenu(um)
 		Frame:Close()
 	end
 
-	Frame:SetSkin("DarkRP")
+	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
+GM.ShowTeam = KeysMenu
 usermessage.Hook("KeysMenu", KeysMenu)

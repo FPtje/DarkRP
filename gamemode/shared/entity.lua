@@ -87,6 +87,11 @@ function playerMeta:IsCP()
 	return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team]
 end
 
+function playerMeta:CanAfford(amount)
+	if not amount or self.DarkRPUnInitialized then return false end
+	return math.floor(amount) >= 0 and (self:getDarkRPVar("money") or 0) - math.floor(amount) >= 0
+end
+
 /*---------------------------------------------------------
  Clientside part
  ---------------------------------------------------------*/
@@ -395,7 +400,7 @@ local function OwnDoor(ply)
 			ply:AddMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("HideSellDoorMessage", GAMEMODE, ply, trace.Entity );
 			if( !bSuppress ) then
-				GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.door_sold,  CUR..(GiveMoneyBack)))
+				GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.door_sold,  GAMEMODE.Config.currency..(GiveMoneyBack)))
 			end
 
 			ply.LookingAtDoor = nil
@@ -405,13 +410,13 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle( ) && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
+			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle() && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
 			if( !ply:canAfford( iCost ) ) then
-				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle( ) && LANGUAGE.vehicle_cannot_afford || LANGUAGE.door_cannot_afford );
+				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() && LANGUAGE.vehicle_cannot_afford || LANGUAGE.door_cannot_afford );
 				return "";
 			end
 
-			local bAllowed, strReason, bSuppress = hook.Call("PlayerBuy"..( trace.Entity:IsVehicle( ) && "Vehicle" || "Door"), GAMEMODE, ply, trace.Entity );
+			local bAllowed, strReason, bSuppress = hook.Call("PlayerBuy"..( trace.Entity:IsVehicle() && "Vehicle" || "Door"), GAMEMODE, ply, trace.Entity );
 			if( bAllowed == false ) then
 				if( strReason && strReason != "") then
 					GAMEMODE:Notify( ply, 1, 4, strReason );
@@ -433,7 +438,7 @@ local function OwnDoor(ply)
 
 			ply:AddMoney( -( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) );
 			if( !bSuppress ) then
-				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && LANGUAGE.vehicle_bought || LANGUAGE.door_bought, CUR..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
+				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && LANGUAGE.vehicle_bought || LANGUAGE.door_bought, GAMEMODE.Config.currency..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
 			end
 
 			trace.Entity:Own(ply)
@@ -467,7 +472,7 @@ local function UnOwnAll(ply, cmd, args)
 		end
 	end
 	ply:GetTable().OwnedNumz = 0
-	GAMEMODE:Notify(ply, 2, 4, string.format("You have sold "..amount.." doors for " .. CUR .. amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)) .. "!"))
+	GAMEMODE:Notify(ply, 2, 4, string.format("You have sold "..amount.." doors for " .. GAMEMODE.Config.currency .. amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)) .. "!"))
 	return ""
 end
 DarkRP.addChatCommand("/unownalldoors", UnOwnAll)

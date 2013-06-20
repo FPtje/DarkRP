@@ -204,7 +204,7 @@ if CLIENT then
 		frame = vgui.Create("DFrame")
 		frame:SetTitle("Drop item")
 		frame:SetVisible( true )
-		frame:MakePopup( )
+		frame:MakePopup()
 
 		local items = LocalPlayer():GetTable().Pocket
 		local function Reload()
@@ -249,7 +249,7 @@ if CLIENT then
 			end
 		end
 		Reload()
-		frame:SetSkin("DarkRP")
+		frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 	usermessage.Hook("StartPocketMenu", PocketMenu)
 elseif SERVER then
@@ -305,8 +305,9 @@ elseif SERVER then
 
 	hook.Add("PlayerDeath", "DropPocketItems", function(ply)
 		local pocket = ply.Pocket
-		ply.Pocket = nil
 		if not GAMEMODE.Config.droppocketdeath or not pocket then return end
+
+		ply.Pocket = nil
 
 		for k, v in pairs(pocket) do
 			if IsValid(v) then

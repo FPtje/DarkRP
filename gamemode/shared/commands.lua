@@ -57,8 +57,11 @@ function GM:AddTeamCommands(CTeam, max)
 				GAMEMODE:Notify(ply, 1, 4,  string.format(LANGUAGE.team_limit_reached,CTeam.name))
 				return ""
 			end
-			GAMEMODE.vote:Create(string.format(LANGUAGE.wants_to_be, ply:Nick(), CTeam.name), ply:EntIndex() .. "votecop", ply, 20, function(choice, ply)
-				if choice == 1 then
+			GAMEMODE.vote:create(string.format(LANGUAGE.wants_to_be, ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
+				local ply = vote.target
+
+				if not IsValid(ply) then return end
+				if choice >= 0 then
 					ply:ChangeTeam(k)
 				else
 					GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.has_not_been_made_team, ply:Nick(), CTeam.name))
@@ -196,7 +199,10 @@ function GM:AddEntityCommands(tblEnt)
 		item.SID = ply.SID
 		item.onlyremover = true
 		item:Spawn()
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, CUR..tblEnt.price))
+		local phys = item:GetPhysicsObject()
+		if phys:IsValid() then phys:Wake() end
+
+		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, GAMEMODE.Config.currency..tblEnt.price))
 		if not ply["max"..cmdname] then
 			ply["max"..cmdname] = 0
 		end

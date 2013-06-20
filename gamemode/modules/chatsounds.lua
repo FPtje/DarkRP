@@ -43,7 +43,7 @@ sounds[ "finally" ] = { "vo/npc/male01/finally.wav" }
 
 sounds[ "follow" ] = { "vo/coast/odessa/male01/stairman_follow01.wav", "vo/npc/male01/squad_away03.wav", "vo/coast/cardock/le_followme.wav" }
 
-sounds[ "focus" ] = { "vo/npc/male01/answer18.wav",{ "vo/npc/male01/answer19.wav" } }
+sounds[ "focus" ] = { "vo/npc/male01/answer18.wav", "vo/npc/male01/answer19.wav" }
 
 sounds[ "freeman" ] = { "vo/npc/male01/freeman.wav", "vo/npc/male01/docfreeman01.wav", "vo/npc/male01/docfreeman02.wav" }
 

@@ -4,6 +4,7 @@ include("shared.lua")
 
 local function UnDrugPlayer(ply)
 	if not IsValid(ply) then return end
+	ply.isDrugged = false
 	local IDSteam = ply:UniqueID()
 
 	timer.Remove(IDSteam.."DruggedHealth")
@@ -12,7 +13,7 @@ local function UnDrugPlayer(ply)
 	SendUserMessage("DrugEffects", ply, false)
 
 	ply:SetJumpPower(190)
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
 
 	hook.Remove("PlayerDeath", ply)
 end
@@ -23,7 +24,8 @@ local function DrugPlayer(ply)
 	SendUserMessage("DrugEffects", ply, true)
 
 	ply:SetJumpPower(300)
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
+	ply.isDrugged = true
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
 
 	local IDSteam = ply:UniqueID()
 	if not timer.Exists(IDSteam.."DruggedHealth") and not timer.Exists(IDSteam) then
@@ -76,8 +78,8 @@ function ENT:Use(activator,caller)
 			return false
 		end
 		DB.PayPlayer(activator, Owner, self:Getprice())
-		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. CUR .. self:Getprice() .. " for using drugs.")
-		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. CUR .. self:Getprice() .. " for selling drugs.")
+		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. GAMEMODE.Config.currency .. self:Getprice() .. " for using drugs.")
+		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. GAMEMODE.Config.currency .. self:Getprice() .. " for selling drugs.")
 	end
 	DrugPlayer(caller)
 	self.CanUse = false
@@ -89,3 +91,10 @@ function ENT:OnRemove()
 	if not IsValid(ply) then return end
 	ply.maxDrugs = ply.maxDrugs - 1
 end
+
+hook.Add("UpdatePlayerSpeed", "DruggedPlayer", function(ply)
+	if not ply.isDrugged then return end
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
+
+	return true -- Prevent the gamemode setting the runspeed
+end)

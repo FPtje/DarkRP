@@ -13,12 +13,14 @@ local function MayorOptns()
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.warrant and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("warrant") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/warrant", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -29,11 +31,13 @@ local function MayorOptns()
 			Warrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -44,7 +48,7 @@ local function MayorOptns()
 			UnWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted \"" .. ply:SteamID() .. "\"") end)
 					end
 				end
@@ -86,7 +90,7 @@ local function MayorOptns()
 			AddLaws:SetText("Add a law.")
 			AddLaws.DoClick = function()
 				Derma_StringRequest("Add a law", "Type the law you would like to add here.", "", function(law)
-					LocalPlayer():ConCommand("darkrp /addlaw " .. law)
+					RunConsoleCommand("darkrp", "/addlaw", law)
 				end)
 			end
 
@@ -98,7 +102,7 @@ local function MayorOptns()
 				end)
 			end
 	MayCat:SetContents(maypanel)
-	MayCat:SetSkin("DarkRP")
+	MayCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return MayCat
 end
 
@@ -115,12 +119,14 @@ local function CPOptns()
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.warrant and ply ~= LocalPlayer() then
+					if not ply:getDarkRPVar("warrant") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function()
 							Derma_StringRequest("Warrant", "Why would you warrant "..ply:Nick().."?", nil,
 								function(a)
-								LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/warrant", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -131,12 +137,15 @@ local function CPOptns()
 			Warrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if not ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
-						menu:AddOption(ply:Nick(), function() Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
+					if not ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
+						menu:AddOption(ply:Nick(), function()
+							Derma_StringRequest("wanted", "Why would you make "..ply:Nick().." wanted?", nil,
 								function(a)
 									if not IsValid(ply) then return end
-									LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. a)
-								end, function() end ) end)
+									RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), a)
+								end,
+							function() end )
+						end)
 					end
 				end
 				menu:Open()
@@ -147,14 +156,14 @@ local function CPOptns()
 			UnWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
-					if ply.DarkRPVars.wanted and ply ~= LocalPlayer() then
+					if ply:getDarkRPVar("wanted") and ply ~= LocalPlayer() then
 						menu:AddOption(ply:Nick(), function() LocalPlayer():ConCommand("darkrp /unwanted \"" .. ply:SteamID() .. "\"") end)
 					end
 				end
 				menu:Open()
 			end
 
-			if LocalPlayer():Team() == TEAM_CHIEF or LocalPlayer():IsAdmin() then
+			if LocalPlayer():Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos or LocalPlayer():IsAdmin() then
 				local SetJailPos = CPpanel:Add("DButton")
 				SetJailPos:SetText(LANGUAGE.set_jailpos)
 				SetJailPos.DoClick = function() LocalPlayer():ConCommand("darkrp /jailpos") end
@@ -191,7 +200,7 @@ local function CPOptns()
 				end
 			end
 	CPCat:SetContents(CPpanel)
-	CPCat:SetSkin("DarkRP")
+	CPCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return CPCat
 end
 
@@ -209,14 +218,14 @@ local function CitOptns()
 		joblabel:SetText(LANGUAGE.set_custom_job)
 
 		local jobentry = Citpanel:Add("DTextEntry")
-		jobentry:SetValue(LocalPlayer().DarkRPVars.job or "")
+		jobentry:SetAllowNonAsciiCharacters(true)
+		jobentry:SetValue(LocalPlayer():getDarkRPVar("job") or "")
 		jobentry.OnEnter = function()
-			LocalPlayer():ConCommand("darkrp /job " .. tostring(jobentry:GetValue()))
+			RunConsoleCommand("DarkRP", "/job", tostring(jobentry:GetValue()))
 		end
-		jobentry.OnLoseFocus = jobentry.OnEnter
 
 	CitCat:SetContents(Citpanel)
-	CitCat:SetSkin("DarkRP")
+	CitCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return CitCat
 end
 
@@ -234,14 +243,14 @@ local function MobOptns()
 		agendalabel:SetText(LANGUAGE.set_agenda)
 
 		local agendaentry = Mobpanel:Add("DTextEntry")
-		agendaentry:SetValue(LocalPlayer().DarkRPVars.agenda or "")
+		agendaentry:SetAllowNonAsciiCharacters(true)
+		agendaentry:SetValue(LocalPlayer():getDarkRPVar("agenda") or "")
 		agendaentry.OnEnter = function()
-			LocalPlayer():ConCommand("darkrp /agenda " .. tostring(agendaentry:GetValue()))
+			RunConsoleCommand("darkrp", "/agenda", tostring(agendaentry:GetValue()))
 		end
-		agendaentry.OnLoseFocus = agendaentry.OnEnter
 
 	MobCat:SetContents(Mobpanel)
-	MobCat:SetSkin("DarkRP")
+	MobCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return MobCat
 end
 
@@ -268,7 +277,7 @@ function GM:MoneyTab()
 				end
 
 			MoneyCat:SetContents(MoneyPanel)
-			MoneyCat:SetSkin("DarkRP")
+			MoneyCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 
 			local Commands = vgui.Create("DCollapsibleCategory")
@@ -279,9 +288,9 @@ function GM:MoneyTab()
 					rpnamelabel:SetText(LANGUAGE.change_name)
 
 					local rpnameTextbox = ActionsPanel:Add("DTextEntry")
+					rpnameTextbox:SetAllowNonAsciiCharacters(true)
 					rpnameTextbox:SetText(LocalPlayer():Nick())
-					rpnameTextbox.OnEnter = function() LocalPlayer():ConCommand("darkrp /rpname " .. tostring(rpnameTextbox:GetValue())) end
-					rpnameTextbox.OnLoseFocus = function() LocalPlayer():ConCommand("darkrp /rpname " .. tostring(rpnameTextbox:GetValue())) end
+					rpnameTextbox.OnEnter = function() RunConsoleCommand("darkrp", "/rpname", tostring(rpnameTextbox:GetValue())) end
 
 					local sleep = ActionsPanel:Add("DButton")
 					sleep:SetText(LANGUAGE.go_to_sleep)
@@ -291,9 +300,11 @@ function GM:MoneyTab()
 					local Drop = ActionsPanel:Add("DButton")
 					Drop:SetText(LANGUAGE.drop_weapon)
 					Drop.DoClick = function() LocalPlayer():ConCommand("darkrp /drop") end
-					local health = MoneyPanel:Add("DButton")
-					health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
-					health.DoClick = function() LocalPlayer():ConCommand("darkrp /Buyhealth") end
+					if GAMEMODE.Config.enablebuyhealth then
+						local health = MoneyPanel:Add("DButton")
+						health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
+						health.DoClick = function() LocalPlayer():ConCommand("darkrp /Buyhealth") end
+					end
 
 				if LocalPlayer():Team() ~= TEAM_MAYOR then
 					local RequestLicense = ActionsPanel:Add("DButton")
@@ -306,12 +317,13 @@ function GM:MoneyTab()
 				Demote.DoClick = function()
 					local menu = DermaMenu()
 					for _,ply in pairs(player.GetAll()) do
-						if ply ~= LocalPlayer() then
+						if ply ~= LocalPlayer() and IsValid(ply) then
 							menu:AddOption(ply:Nick(), function()
 								Derma_StringRequest("Demote reason", "Why would you demote "..ply:Nick().."?", nil,
 									function(a)
-									LocalPlayer():ConCommand("darkrp /demote \"".. ply:SteamID().."\" ".. a)
-									end, function() end )
+										RunConsoleCommand("darkrp", "/demote", ply:SteamID(), a)
+									end,
+								function() end )
 							end)
 						end
 					end
@@ -323,7 +335,7 @@ function GM:MoneyTab()
 						UnOwnAllDoors.DoClick = function() LocalPlayer():ConCommand("darkrp /unownalldoors") end
 			Commands:SetContents(ActionsPanel)
 		FirstTabPanel:AddItem(MoneyCat)
-		Commands:SetSkin("DarkRP")
+		Commands:SetSkin(GAMEMODE.Config.DarkRPSkin)
 		FirstTabPanel:AddItem(Commands)
 
 		if LocalPlayer():Team() == TEAM_MAYOR then
@@ -355,7 +367,7 @@ function GM:JobsTab()
 		Panel:SetSize(390, 540)
 		Panel:EnableHorizontal( true )
 		Panel:EnableVerticalScrollbar( true )
-		Panel:SetSkin("DarkRP")
+		Panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 
 		local Info = {}
@@ -371,7 +383,7 @@ function GM:JobsTab()
 			Information:SetSpacing(10)
 			Information:EnableHorizontal( false )
 			Information:EnableVerticalScrollbar( true )
-			Information:SetSkin("DarkRP")
+			Information:SetSkin(GAMEMODE.Config.DarkRPSkin)
 			function Information:Rebuild() -- YES IM OVERRIDING IT AND CHANGING ONLY ONE LINE BUT I HAVE A FUCKING GOOD REASON TO DO IT!
 				local Offset = 0
 				if ( self.Horizontal ) then
@@ -578,17 +590,17 @@ function GM:EntitiesTab()
 						if (v.seperate and (not GAMEMODE.Config.restrictbuypistol or
 							(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
 							and (not v.customCheck or v.customCheck and v.customCheck(LocalPlayer())) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, CUR..(v.pricesep or "")), "/buy "..v.name)
+							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, GAMEMODE.Config.currency..(v.pricesep or "")), "/buy "..v.name)
 						end
 					end
 
 					for k,v in pairs(GAMEMODE.AmmoTypes) do
 						if not v.customCheck or v.customCheck(LocalPlayer()) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, v.name, CUR .. v.price), "/buyammo " .. v.ammoType)
+							AddIcon(v.model, string.format(LANGUAGE.buy_a, v.name, GAMEMODE.Config.currency .. v.price), "/buyammo " .. v.ammoType)
 						end
 					end
 			WepCat:SetContents(WepPanel)
-			WepCat:SetSkin("DarkRP")
+			WepCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 			self:AddItem(WepCat)
 
 			local EntCat = vgui.Create("DCollapsibleCategory")
@@ -614,7 +626,7 @@ function GM:EntitiesTab()
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
 							local cmdname = string.gsub(v.ent, " ", "_")
 
-							AddEntIcon(v.model, "Buy a " .. v.name .." " .. CUR .. v.price, v.cmd)
+							AddEntIcon(v.model, "Buy a " .. v.name .." " .. GAMEMODE.Config.currency .. v.price, v.cmd)
 						end
 					end
 
@@ -627,11 +639,11 @@ function GM:EntitiesTab()
 						if not GAMEMODE:CustomObjFitsMap(v) then continue end
 						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
-							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", CUR .. tostring(v.price)), "/buyshipment "..v.name)
+							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", GAMEMODE.Config.currency .. tostring(v.price)), "/buyshipment "..v.name)
 						end
 					end
 			EntCat:SetContents(EntPanel)
-			EntCat:SetSkin("DarkRP")
+			EntCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 			self:AddItem(EntCat)
 
 
@@ -659,20 +671,20 @@ function GM:EntitiesTab()
 				for k,v in pairs(CustomVehicles) do
 					if (not v.allowed or table.HasValue(v.allowed, LocalPlayer():Team())) and (not v.customCheck or v.customCheck(LocalPlayer())) then
 						local Skin = (list.Get("Vehicles")[v.name] and list.Get("Vehicles")[v.name].KeyValues and list.Get("Vehicles")[v.name].KeyValues.Skin) or "0"
-						AddVehicleIcon(v.model or "models/buggy.mdl", Skin, "Buy a "..v.name.." for "..CUR..v.price, "/buyvehicle "..v.name)
+						AddVehicleIcon(v.model or "models/buggy.mdl", Skin, "Buy a "..v.name.." for "..GAMEMODE.Config.currency..v.price, "/buyvehicle "..v.name)
 						founds = founds + 1
 					end
 				end
 			if founds ~= 0 then
 				VehicleCat:SetContents(VehiclePanel)
-				VehicleCat:SetSkin("DarkRP")
+				VehicleCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 				self:AddItem(VehicleCat)
 			else
 				VehiclePanel:Remove()
 				VehicleCat:Remove()
 			end
 		end
-	EntitiesPanel:SetSkin("DarkRP")
+	EntitiesPanel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	EntitiesPanel:Update()
 	return EntitiesPanel
 end
@@ -704,7 +716,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("background4 100")
 			end
 		backgrndcat:SetContents(backgrndpanel)
-		backgrndcat:SetSkin("DarkRP")
+		backgrndcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		hforegrndcat = HUDTABpanel:Add("DCollapsibleCategory")
 		hforegrndcat:SetSize(230, 130)
@@ -728,7 +740,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Healthforeground4 180")
 			end
 		hforegrndcat:SetContents(hforegrndpanel)
-		hforegrndcat:SetSkin("DarkRP")
+		hforegrndcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 
 		hbackgrndcat = HUDTABpanel:Add("DCollapsibleCategory")
@@ -753,7 +765,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Healthbackground4 200")
 			end
 		hbackgrndcat:SetContents(hbackgrndpanel)
-		hbackgrndcat:SetSkin("DarkRP")
+		hbackgrndcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		hTextcat = HUDTABpanel:Add("DCollapsibleCategory")
 		hTextcat:SetSize(230, 130)
@@ -777,7 +789,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("HealthText4 200")
 			end
 		hTextcat:SetContents(hTextpanel)
-		hTextcat:SetSkin("DarkRP")
+		hTextcat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		jobs1cat = HUDTABpanel:Add("DCollapsibleCategory")
 		jobs1cat:SetSize(230, 130)
@@ -801,7 +813,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Job24 255")
 			end
 		jobs1cat:SetContents(jobs1panel)
-		jobs1cat:SetSkin("DarkRP")
+		jobs1cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		jobs2cat = HUDTABpanel:Add("DCollapsibleCategory")
 		jobs2cat:SetSize(230, 130)
@@ -825,7 +837,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("Job14 200")
 			end
 		jobs2cat:SetContents(jobs2panel)
-		jobs2cat:SetSkin("DarkRP")
+		jobs2cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		salary1cat = HUDTABpanel:Add("DCollapsibleCategory")
 		salary1cat:SetSize(230, 130)
@@ -849,7 +861,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("salary24 255")
 			end
 		salary1cat:SetContents(salary1panel)
-		salary1cat:SetSkin("DarkRP")
+		salary1cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		salary2cat = HUDTABpanel:Add("DCollapsibleCategory")
 		salary2cat:SetSize(230, 130)
@@ -873,7 +885,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("salary14 200")
 			end
 		salary2cat:SetContents(salary2panel)
-		salary2cat:SetSkin("DarkRP")
+		salary2cat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		local HudWidthCat = HUDTABpanel:Add("DCollapsibleCategory")
 		HudWidthCat:SetSize(230, 130)
@@ -893,7 +905,7 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("HudW 240")
 			end
 		HudWidthCat:SetContents(HudWidthpanel)
-		HudWidthCat:SetSkin("DarkRP")
+		HudWidthCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
 		local HudHeightCat = HUDTABpanel:Add("DCollapsibleCategory")
 		HudHeightCat:SetSize(230, 130)
@@ -913,9 +925,9 @@ function GM:RPHUDTab()
 				LocalPlayer():ConCommand("HudH 110")
 			end
 		HudHeightCat:SetContents(HudHeightpanel)
-		HudHeightCat:SetSkin("DarkRP")
+		HudHeightCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
-	HUDTABpanel:SetSkin("DarkRP")
+	HUDTABpanel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	return HUDTABpanel
 end
 

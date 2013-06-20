@@ -252,6 +252,7 @@ local function startSpectate(um)
 	end
 
 	isSpectating = true
+	keysDown = {}
 
 	hook.Add("CalcView", "FAdminSpectate", specCalcView)
 	hook.Add("PlayerBindPress", "FAdminSpectate", specBinds)

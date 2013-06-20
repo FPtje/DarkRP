@@ -61,8 +61,8 @@ end
 
 function SWEP:Holster()
 	if not self.Ready or not SERVER then return true end
-
-	GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	self.Ironsights = false
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	self.Owner:SetJumpPower(200)
 
 	return true
@@ -100,7 +100,7 @@ function SWEP:PrimaryAttack()
 
 	local Owner = trace.Entity:CPPIGetOwner()
 	if Owner then
-		c = Owner.warranted or (Owner.DarkRPVars and Owner.DarkRPVars.wanted)
+		c = Owner.warranted or (Owner.DarkRPVars and Owner:getDarkRPVar("wanted"))
 	end
 	if (trace.Entity:IsDoor()) then
 		local allowed = false
@@ -139,11 +139,11 @@ function SWEP:PrimaryAttack()
 			return
 		end
 	elseif (trace.Entity:IsVehicle()) then
-		trace.Entity:Fire("unlock", "", .5)
 		local driver = trace.Entity:GetDriver()
 		if driver and driver.ExitVehicle then
 			driver:ExitVehicle()
 		end
+		trace.Entity:Fire("lock", "", 0)
 	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
 			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to open the fading door.")
@@ -179,17 +179,18 @@ end
 function SWEP:SecondaryAttack()
 	self.LastIron = CurTime()
 	self.Ready = not self.Ready
+	self.Ironsights = not self.Ironsights
 	if self.Ready then
 		self:SetWeaponHoldType("rpg")
 		if SERVER then
 			-- Prevent them from being able to run and jump
-			GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 			self.Owner:SetJumpPower(0)
 		end
 	else
 		self:SetWeaponHoldType("normal")
 		if SERVER then
-			GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 			self.Owner:SetJumpPower(200)
 		end
 	end

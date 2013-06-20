@@ -3,131 +3,129 @@ local Votes = {}
 GM.vote = {}
 
 local function ccDoVote(ply, cmd, args)
-	if not Votes[args[1]] then return end
-	if not Votes[args[1]][tonumber(args[2])] then return end
+	local vote = Votes[tonumber(args[1] or 0)]
 
-	-- If the player has never voted for anything then he doesn't have a table of things he has voted for. so create it.
-	ply.VotesVoted = ply.VotesVoted or {}
+	if not vote then return end
+	if args[2] ~= "yea" and args[2] ~= "nay" then return end
 
-	if ply:GetTable().VotesVoted[args[1]] then
-		GAMEMODE:Notify(ply, 1, 4, "You cannot vote!")
+	local canVote, message = hook.Call("CanVote", GAMEMODE, ply, vote)
+
+	if vote.voters[ply] or vote.exclude[ply] or canVote == false then
+		GAMEMODE:Notify(ply, 1, 4, message or "You cannot vote!")
 		return
 	end
-	ply:GetTable().VotesVoted[args[1]] = true
+	vote.voters[ply] = true
 
-	Votes[args[1]]:HandleNewVote(ply, tonumber(args[2]))
+	vote:handleNewVote(ply, args[2])
 end
 concommand.Add("vote", ccDoVote)
 
-function Vote:HandleNewVote(ply, id)
-	self[id] = self[id] + 1
+function Vote:handleNewVote(ply, choice)
+	self[choice] = self[choice] + 1
 
-	if (self[1] + self[2] >= (#player.GetAll() - 1) and not self.special) or (self.special and self[1] + self[2] >= (#player.GetAll() - 2)) then
-		GAMEMODE.vote.HandleVoteEnd(self.ID)
+	local excludeCount = table.Count(self.exclude)
+	local voteCount = table.Count(self.voters)
+
+	if voteCount >= #player.GetAll() - excludeCount then
+		self:handleEnd()
 	end
 end
 
-function GM.vote:Create(question, voteid, ent, delay, callback, special)
-	if #player.GetAll() == 1 then
-		GAMEMODE:Notify(ent, 0, 4, LANGUAGE.vote_alone)
-		callback(1, ent)
-		return
-	end
+function Vote:handleEnd()
+	local win = self.yea > self.nay and 1 or self.nay > self.yea and -1 or 0
 
-	if special and #player.GetAll() <= 2 then
-		GAMEMODE:Notify(ent, 0, 4, LANGUAGE.vote_alone)
-		callback(1, ent)
-		return
-	end
-
-	-- If the player has never voted for anything then he doesn't have a table of things he has voted for. So create it.
-	if not ent:GetTable().VotesVoted then
-		ent:GetTable().VotesVoted = {}
-	end
-
-	ent:GetTable().VotesVoted[voteid] = true
-	local newvote = { }
-	for k, v in pairs(Vote) do newvote[k] = v end
-
-	newvote.ID = voteid
-	newvote.Callback = callback
-	newvote.Ent = ent
-	newvote.special = special
-
-
-	newvote[1] = 0
-	newvote[2] = 0
-
-	Votes[voteid] = newvote
-	if ent:IsPlayer() then
-		GAMEMODE:Notify(ent,1,4, LANGUAGE.vote_started)
-	end
-	umsg.Start("DoVote")
-		umsg.String(question)
-		umsg.String(voteid)
-		umsg.Float(delay)
+	umsg.Start("KillVoteVGUI", self:getFilter())
+		umsg.String(self.id)
 	umsg.End()
 
-	timer.Create(voteid .. "timer", delay, 1, function() GAMEMODE.vote.HandleVoteEnd(voteid) end)
+	Votes[self.id] = nil
+	timer.Destroy(self.id .. "DarkRPVote")
+
+	self:callback(win)
+end
+
+function Vote:getFilter()
+	local filter = RecipientFilter()
+
+	for k,v in pairs(player.GetAll()) do
+		if self.exclude[v] then continue end
+		local canVote = hook.Call("CanVote", GAMEMODE, v, self)
+
+		if canVote == false then
+			self.exclude[v] = true
+			continue
+		end
+
+		filter:AddPlayer(v)
+	end
+
+	return filter
+end
+
+function GM.vote:create(question, voteType, target, time, callback, excludeVoters, fail)
+	excludeVoters = excludeVoters or {[target] = true}
+
+	local newvote = {}
+	setmetatable(newvote, {__index = Vote})
+
+	newvote.id = table.insert(Votes, newvote)
+	newvote.question = question
+	newvote.votetype = voteType
+	newvote.target = target
+	newvote.time = time
+	newvote.callback = callback
+	newvote.fail = fail or function() end
+	newvote.exclude = excludeVoters
+	newvote.voters = {}
+
+	newvote.yea = 0
+	newvote.nay = 0
+
+	if #player.GetAll() <= table.Count(excludeVoters) then
+		GAMEMODE:Notify(target, 0, 4, LANGUAGE.vote_alone)
+		newvote:callback(1)
+		return
+	end
+
+	if target:IsPlayer() then
+		GAMEMODE:Notify(target, 1, 4, LANGUAGE.vote_started)
+	end
+
+	umsg.Start("DoVote", newvote:getFilter())
+		umsg.String(question)
+		umsg.Short(newvote.id)
+		umsg.Float(time)
+	umsg.End()
+
+	timer.Create(newvote.id .. "DarkRPVote", time, 1, function() newvote:handleEnd() end)
 end
 
 function GM.vote.DestroyVotesWithEnt(ent)
 	for k, v in pairs(Votes) do
-		if v.Ent == ent then
-			timer.Destroy(v.ID .. "timer")
-			umsg.Start("KillVoteVGUI")
-				umsg.String(v.ID)
-			umsg.End()
-			for a, b in pairs(player.GetAll()) do
-				b.VotesVoted = b.VotesVoted or {}
-				b.VotesVoted[v.ID] = nil
-			end
+		if v.target ~= ent then continue end
 
-			Votes[k] = nil
-		end
+		timer.Destroy(v.id .. "DarkRPVote")
+		umsg.Start("KillVoteVGUI", v:getFilter())
+			umsg.Short(v.id)
+		umsg.End()
+
+		v:fail()
+
+		Votes[k] = nil
 	end
 end
 
 function GM.vote.DestroyLast()
-	local lastVote
-	for k,v in pairs(Votes) do lastVote = v end
+	local lastVote = Votes[#Votes]
 
 	if not lastVote then return end
 
-	if IsValid(lastVote.Ent) then
-		lastVote.Ent.IsBeingDemoted = nil
-	end
-
-	timer.Destroy(lastVote.ID .. "timer")
-	umsg.Start("KillVoteVGUI")
-		umsg.String(lastVote.ID)
-	umsg.End()
-	for a, b in pairs(player.GetAll()) do
-		b.VotesVoted = b.VotesVoted or {}
-		b.VotesVoted[lastVote.ID] = nil
-	end
-
-	Votes[lastVote.ID] = nil
-end
-
-function GM.vote.HandleVoteEnd(id, OnePlayer)
-	if not Votes[id] then return end
-
-	local choice = 1
-
-	if Votes[id][2] >= Votes[id][1] then choice = 2 end
-
-	Votes[id].Callback(choice, Votes[id].Ent)
-
-	for a, b in pairs(player.GetAll()) do
-		if not b:GetTable().VotesVoted then
-			b:GetTable().VotesVoted = {}
-		end
-		b:GetTable().VotesVoted[id] = nil
-	end
-	umsg.Start("KillVoteVGUI")
-		umsg.String(id)
+	timer.Destroy(lastVote.id .. "DarkRPVote")
+	umsg.Start("KillVoteVGUI", lastVote:getFilter())
+		umsg.Short(lastVote.id)
 	umsg.End()
 
-	Votes[id] = nil
+	lastVote:fail()
+
+	Votes[lastVote.id] = nil
 end

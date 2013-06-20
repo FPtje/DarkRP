@@ -34,7 +34,7 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 
 TEAM_POLICE = AddExtraTeam("Civil Protection", {
 	color = Color(25, 25, 170, 255),
-	model = "models/player/police.mdl",
+	model = {"models/player/police.mdl", "models/player/police_fem.mdl"},
 	description = [[The protector of every citizen that lives in the city .
 		You have the power to arrest criminals and protect innocents.
 		Hit them with your arrest baton to put them in jail
@@ -266,3 +266,9 @@ GM.CivilProtection = {
 	[TEAM_CHIEF] = true,
 	[TEAM_MAYOR] = true,
 }
+
+/*---------------------------------------------------------------------------
+Enable hitman goodies on this team
+---------------------------------------------------------------------------*/
+DarkRP.addHitmanTeam(TEAM_MOB)
+

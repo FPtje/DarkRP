@@ -1,10 +1,10 @@
 /*---------------------------------------------------------------------------
-Player DarkRPVars
+interface functions
 ---------------------------------------------------------------------------*/
-
-LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-for k,v in pairs(player.GetAll()) do
-	v.DarkRPVars = v.DarkRPVars or {}
+local pmeta = FindMetaTable("Player")
+function pmeta:getDarkRPVar(var)
+	self.DarkRPVars = self.DarkRPVars or {}
+	return self.DarkRPVars[var]
 end
 
 /*---------------------------------------------------------------------------
@@ -29,6 +29,14 @@ local function RetrievePlayerVar(entIndex, var, value, tries)
 
 	if string.match(stringvalue, "Entity .([0-9]*)") then
 		value = Entity(string.match(stringvalue, "Entity .([0-9]*)"))
+	end
+
+	if string.match(stringvalue, "^Player .([0-9]+).") then
+		value = player.GetAll()[tonumber(string.match(stringvalue, "^Player .([0-9]+)."))]
+	end
+
+	if stringvalue == "NULL" then
+		value = NULL
 	end
 
 	if string.match(stringvalue, [[(-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+)]]) then
@@ -81,7 +89,7 @@ hook.Add("InitPostEntity", "CheckDarkRPVars", function()
 	RunConsoleCommand("_sendDarkRPvars")
 	timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 		for k,v in pairs(player.GetAll()) do
-			if v.DarkRPVars and v.DarkRPVars.rpname then continue end
+			if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
 
 			RunConsoleCommand("_sendDarkRPvars")
 			return

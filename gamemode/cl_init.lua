@@ -4,7 +4,6 @@ GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome 
 
 DeriveGamemode("sandbox")
 util.PrecacheSound("earthquake.mp3")
-CUR = "$"
 
 /*---------------------------------------------------------------------------
 Names
@@ -14,7 +13,7 @@ local pmeta = FindMetaTable("Player")
 
 pmeta.SteamName = pmeta.SteamName or pmeta.Name
 function pmeta:Name()
-	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self.DarkRPVars.rpname
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
 		or self:SteamName()
 end
 
@@ -52,6 +51,7 @@ include("client/helpvgui.lua")
 include("client/showteamtabs.lua")
 include("client/vgui.lua")
 
+include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
@@ -68,8 +68,24 @@ LoadModules()
 DarkRP.finish()
 
 local GUIToggled = false
+local HelpToggled = false
 
-local function ToggleClicker()
+local HelpVGUI
+function GM:ShowHelp()
+	if not HelpVGUI then
+		HelpVGUI = vgui.Create("HelpVGUI")
+	end
+
+	HelpToggled = not HelpToggled
+
+	HelpVGUI.HelpX = HelpVGUI.StartHelpX
+	HelpVGUI:FillHelpInfo()
+	HelpVGUI:SetVisible(HelpToggled)
+	gui.EnableScreenClicker(HelpToggled)
+end
+
+local mouseX, mouseY = ScrW() / 2, ScrH() / 2
+function GM:ShowSpare1()
 	GUIToggled = not GUIToggled
 
 	if GUIToggled then
@@ -79,7 +95,6 @@ local function ToggleClicker()
 	end
 	gui.EnableScreenClicker(GUIToggled)
 end
-usermessage.Hook("ToggleClicker", ToggleClicker)
 
 function GM:PlayerStartVoice(ply)
 	if ply == LocalPlayer() then
@@ -98,6 +113,32 @@ function GM:PlayerEndVoice(ply)
 	self.BaseClass:PlayerEndVoice(ply)
 end
 
+function GM:OnPlayerChat()
+end
+
+local FKeyBinds = {
+	["gm_showhelp"] = "ShowHelp",
+	["gm_showteam"] = "ShowTeam",
+	["gm_showspare1"] = "ShowSpare1",
+	["gm_showspare2"] = "ShowSpare2"
+}
+
+function GM:PlayerBindPress(ply, bind, pressed)
+	self.BaseClass:PlayerBindPress(ply, bind, pressed)
+
+	local bnd = string.match(string.lower(bind), "gm_[a-z]+[12]?")
+	if bnd and FKeyBinds[bnd] and GAMEMODE[FKeyBinds[bnd]] then
+		GAMEMODE[FKeyBinds[bnd]](GAMEMODE)
+	end
+
+	return
+end
+
+
+function GM:InitPostEntity()
+	
+end
+
 function GM:TeamChanged(before, after)
 	self:RemoveHelpCategory(0)
 	if RPExtraTeams[after] and RPExtraTeams[after].help then
@@ -110,3 +151,4 @@ local function OnChangedTeam(um)
 	hook.Call("TeamChanged", GAMEMODE, um:ReadShort(), um:ReadShort())
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
+

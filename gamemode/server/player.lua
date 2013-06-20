@@ -92,8 +92,8 @@ function meta:RestorePlayerData()
 		info.wallet = info.wallet or GAMEMODE.Config.startingmoney
 		info.salary = info.salary or GAMEMODE.Config.normalsalary
 
-		self:setDarkRPVar("money", info.wallet)
-		self:setDarkRPVar("salary", info.salary)
+		self:setDarkRPVar("money", tonumber(info.wallet))
+		self:setDarkRPVar("salary", tonumber(info.salary))
 
 		self:setDarkRPVar("rpname", info.rpname)
 
@@ -139,7 +139,7 @@ function meta:InitiateTax()
 			return -- Don't remove the hook in case it's turned on afterwards.
 		end
 
-		local money = self.DarkRPVars.money
+		local money = self:getDarkRPVar("money")
 		local mintax = GAMEMODE.Config.wallettaxmin / 100
 		local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
 		local startMoney = GAMEMODE.Config.startingmoney
@@ -164,24 +164,16 @@ function meta:TeamUnBan(Team)
 	self.bannedfrom[Team] = 0
 end
 
-function meta:TeamBan(t)
+function meta:TeamBan(t, time)
 	if not self.bannedfrom then self.bannedfrom = {} end
 	t = t or self:Team()
 	self.bannedfrom[t] = 1
-	timer.Simple(GAMEMODE.Config.demotetime, function()
+
+	if time == 0 then return end
+	timer.Simple(time or GAMEMODE.Config.demotetime, function()
 		if not IsValid(self) then return end
 		self:TeamUnBan(t)
 	end)
-end
-
-function meta:CompleteSentence()
-	if not IsValid(self) then return end
-
-	if IsValid(self) and self:isArrested() then
-		local time = GAMEMODE.Config.jailtimer
-		self:Arrest(time, true)
-		GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.jail_punishment, time))
-	end
 end
 
 function meta:NewData()
@@ -192,7 +184,7 @@ function meta:NewData()
 	timer.Simple(5, function()
 		if not IsValid(self) then return end
 
-		if GetConVarNumber("DarkRP_Lockdown") == 1 then
+		if tobool(GetConVarNumber("DarkRP_Lockdown")) then
 			RunConsoleCommand("DarkRP_Lockdown", 1) -- so new players who join know there's a lockdown
 		end
 	end)
@@ -299,7 +291,8 @@ function meta:ChangeTeam(t, force)
 	self:UpdateJob(TEAM.name)
 	self:setSelfDarkRPVar("salary", TEAM.salary)
 	GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.job_has_become, self:Nick(), TEAM.name))
-	if self.DarkRPVars.HasGunlicense then
+
+	if self:getDarkRPVar("HasGunlicense") then
 		self:setDarkRPVar("HasGunlicense", false)
 	end
 	if TEAM.hasLicense and GAMEMODE.Config.license then
@@ -336,6 +329,7 @@ function meta:ChangeTeam(t, force)
 	end
 
 	self:SetTeam(t)
+	hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
 	DB.Log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
 	if self:InVehicle() then self:ExitVehicle() end
 	if GAMEMODE.Config.norespawn and self:Alive() then
@@ -347,6 +341,7 @@ function meta:ChangeTeam(t, force)
 		effectdata:SetOrigin( vPoint )
 		effectdata:SetScale(1)
 		util.Effect("entity_remove", effectdata)
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self)
 		GAMEMODE:PlayerSetModel(self)
 		GAMEMODE:PlayerLoadout(self)
 	else
@@ -374,8 +369,8 @@ end
  ---------------------------------------------------------*/
 function meta:AddMoney(amount)
 	if not amount then return false end
-	local total = self.DarkRPVars.money + math.floor(amount)
-	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self.DarkRPVars.money) or total
+	local total = self:getDarkRPVar("money") + math.floor(amount)
+	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
 
 	self:setDarkRPVar("money", total)
 
@@ -393,7 +388,7 @@ function meta:PayDay()
 				GAMEMODE:Notify(self, 4, 4, LANGUAGE.payday_unemployed)
 			else
 				self:AddMoney(amount)
-				GAMEMODE:Notify(self, 4, 4, string.format(LANGUAGE.payday_message, CUR .. amount))
+				GAMEMODE:Notify(self, 4, 4, string.format(LANGUAGE.payday_message, GAMEMODE.Config.currency .. amount))
 			end
 		end)
 	else
@@ -435,94 +430,6 @@ local function AddJailPos(ply)
 	return ""
 end
 DarkRP.addChatCommand("/addjailpos", AddJailPos)
-
-local arrestedPlayers = {}
-function meta:isArrested()
-	return arrestedPlayers[self:SteamID()]
-end
-
-function meta:setArrested(bool)
-	arrestedPlayers[self:SteamID()] = bool or nil
-end
-
-function meta:Arrest(time, rejoin)
-	hook.Call("PlayerArrested", GAMEMODE, self, time)
-	self:setDarkRPVar("wanted", false)
-	self.warranted = false
-	self:setSelfDarkRPVar("HasGunlicense", false)
-	self:setDarkRPVar("Arrested", true)
-	GAMEMODE:SetPlayerSpeed(self, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	self:StripWeapons()
-
-	if GAMEMODE.Config.droppocketarrest and self.Pocket then
-		for k, v in pairs(self.Pocket) do
-			if not IsValid(v) then continue end
-			self:DropPocketItem(v)
-		end
-		self.Pocket = nil
-	end
-
-	-- Always get sent to jail when Arrest() is called, even when already under arrest
-	if GAMEMODE.Config.teletojail and DB.CountJailPos() ~= 0 then
-		local jailpos = DB.RetrieveJailPos()
-		if jailpos then
-			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
-			self:SetPos(jailpos)
-		end
-	end
-
-	if not self:isArrested() or rejoin then
-		self:setArrested(true)
-		self.LastJailed = CurTime()
-
-		-- If the player has no remaining jail time,
-		-- set it back to the max for this new sentence
-		if not time or time == 0 then
-			time = GAMEMODE.Config.jailtimer or 120
-		end
-
-		self:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.youre_arrested, time))
-		for k, v in pairs(player.GetAll()) do
-			if v ~= self then
-				v:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.hes_arrested, self:Name(), time))
-			end
-		end
-
-		timer.Create(self:UniqueID() .. "jailtimer", time, 1, function() if IsValid(self) then self:Unarrest() end end)
-		umsg.Start("GotArrested", self)
-			umsg.Float(time)
-		umsg.End()
-	end
-end
-
-function meta:Unarrest()
-	hook.Call("PlayerUnarrested", GAMEMODE, self)
-
-	self:setDarkRPVar("Arrested", false)
-	if not IsValid(self) then
-		return
-	end
-
-	if self.Sleeping and GAMEMODE.KnockoutToggle then
-		GAMEMODE:KnockoutToggle(self, "force")
-	end
-
-	if self:isArrested() then
-		self:setArrested(false)
-
-		GAMEMODE:SetPlayerSpeed(self, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-		GAMEMODE:PlayerLoadout(self)
-		if GAMEMODE.Config.telefromjail and (not FAdmin or not self:FAdmin_GetGlobal("fadmin_jailed")) then
-			local _, pos = GAMEMODE:PlayerSelectSpawn(self)
-			self:SetPos(pos)
-		elseif FAdmin and self:FAdmin_GetGlobal("fadmin_jailed") then
-			self:SetPos(self.FAdminJailPos)
-		end
-
-		timer.Destroy(self:SteamID() .. "jailtimer")
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.hes_unarrested, self:Name()))
-	end
-end
 
 /*---------------------------------------------------------
  Items
@@ -568,7 +475,7 @@ function meta:DoPropertyTax()
 	if self:canAfford(tax) then
 		if tax ~= 0 then
 			self:AddMoney(-tax)
-			GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.property_tax, CUR .. tax))
+			GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.property_tax, GAMEMODE.Config.currency .. tax))
 		end
 	else
 		GAMEMODE:Notify(self, 1, 8, LANGUAGE.property_tax_cant_afford)

@@ -95,192 +95,13 @@ DarkRP.addChatCommand("/dropweapon", DropWeapon)
 DarkRP.addChatCommand("/weapondrop", DropWeapon)
 
 /*---------------------------------------------------------
- Warrants/wanted
- ---------------------------------------------------------*/
-local function UnWarrant(ply, target)
-	if not target.warranted then return end
-
-	hook.Call("PlayerUnWarranted", GAMEMODE, ply, target)
-
-	target.warranted = false
-	GAMEMODE:Notify(ply, 2, 4, string.format(LANGUAGE.warrant_expired, target:Nick()))
-end
-
-local function SetWarrant(ply, target, reason)
-	if target.warranted then return end
-	hook.Call("PlayerWarranted", GAMEMODE, ply, target, reason)
-
-	target.warranted = true
-	timer.Simple(GAMEMODE.Config.searchtime, function() UnWarrant(ply, target) end)
-	for a, b in pairs(player.GetAll()) do
-		b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.warrant_approved, target:Nick()) ..
-			"\nReason: " .. tostring(reason) ..
-			"\nOrdered by: " .. (IsValid(ply) and ply:Nick() or "Disconnected player"))
-		b:PrintMessage(HUD_PRINTCONSOLE, ply:Nick() .. " ordered a search warrant for " .. target:Nick() .. ", reason: " .. tostring(reason))
-	end
-	GAMEMODE:Notify(ply, 0, 4, LANGUAGE.warrant_approved2)
-end
-
-local function FinishWarrant(choice, mayor, initiator, target, reason)
-	if choice == 1 then
-		SetWarrant(initiator, target, reason)
-	else
-		GAMEMODE:Notify(initiator, 1, 4, string.format(LANGUAGE.warrant_denied, mayor:Nick()))
-	end
-	return ""
-end
-
-local function TimerUnwanted(ply, target)
-	if IsValid(target) and target:Alive() and target.DarkRPVars.wanted then
-		target:setDarkRPVar("wanted", false)
-		for a, b in pairs(player.GetAll()) do
-			b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_expired, target:Nick()))
-			timer.Destroy(target:Nick() .. " wantedtimer")
-		end
-	else
-		return ""
-	end
-end
-
-local function SearchWarrant(ply, args)
-	local t = ply:Team()
-	if not ply:IsCP() then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.must_be_x, "cop/mayor", "/warrant"))
-	else
-		local tableargs = string.Explode(" ", args)
-		local reason = ""
-
-		if #tableargs == 1 then
-			GAMEMODE:Notify(ply, 1, 4, LANGUAGE.vote_specify_reason)
-			return ""
-		end
-
-		if not ply:Alive() then
-			GAMEMODE:Notify(ply, 1, 4, "You must be alive in order to issue a warrant")
-			return ""
-		end
-
-		for i = 2, #tableargs, 1 do
-			reason = reason .. " " .. tableargs[i]
-		end
-		reason = string.sub(reason, 2)
-		if string.len(reason) > 25 then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/warrant", "<25 chars"))
-			return ""
-		end
-		local p = DarkRP.findPlayer(tableargs[1])
-
-		if p and p:Alive() then
-			-- If we're the Mayor, set the search warrant
-			if t == TEAM_MAYOR then
-				SetWarrant(ply, p, reason)
-			else -- If we're CP or Chief
-				-- Find the mayor
-				local m = nil
-				for k, v in pairs(player.GetAll()) do
-					if v:Team() == TEAM_MAYOR then
-						m = v
-						break
-					end
-				end
-				-- If we found the mayor
-				if m ~= nil and not m.DarkRPVars.AFK then
-					-- Request a search warrent for player "p"
-					GAMEMODE.ques:Create(string.format(LANGUAGE.warrant_request.."\nReason: "..reason, ply:Nick(), p:Nick()), p:EntIndex() .. "warrant", m, 40, FinishWarrant, ply, p, reason)
-					GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.warrant_request2, m:Nick()))
-				else
-					-- There is no mayor or the mayor is AFK, CPs can set warrants.
-					SetWarrant(ply, p, reason)
-				end
-
-			end
-		else
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
-		end
-	end
-	return ""
-end
-DarkRP.addChatCommand("/warrant", SearchWarrant)
-DarkRP.addChatCommand("/warrent", SearchWarrant) -- Most players can't spell for some reason
-
-local function PlayerWanted(ply, args)
-	if not ply:IsCP() then
-		GAMEMODE:Notify(ply, 1, 6, string.format(LANGUAGE.must_be_x, "cop/mayor", "/wanted"))
-	else
-		local tableargs = string.Explode(" ", args)
-		local reason = ""
-
-		if #tableargs == 1 then
-			GAMEMODE:Notify(ply, 1, 4, LANGUAGE.vote_specify_reason)
-			return ""
-		end
-
-		if not ply:Alive() then
-			GAMEMODE:Notify(ply, 1, 4, "You must be alive in order to make someone wanted")
-			return ""
-		end
-
-		for i = 2, #tableargs, 1 do
-			reason = reason .. " " .. tableargs[i]
-		end
-		reason = string.sub(reason, 2)
-		if string.len(reason) > 22 then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/wanted", "<23 chars"))
-			return ""
-		end
-		local p = DarkRP.findPlayer(tableargs[1])
-
-		if p and p:Alive() and not p:isArrested() and not p.DarkRPVars.wanted then
-			hook.Call("PlayerWanted", GAMEMODE, ply, p, reason)
-
-			p:setDarkRPVar("wanted", true)
-			p:setDarkRPVar("wantedReason", tostring(reason))
-			for a, b in pairs(player.GetAll()) do
-				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_by_police, p:Nick()) ..
-					"\nReason: " .. tostring(reason) ..
-					"\nOrdered by: " .. (IsValid(ply) and ply:Nick() or "Disconnected player"))
-				b:PrintMessage(HUD_PRINTCONSOLE, ply:Nick() .. " has made " .. p:Nick() .. " wanted by police for " ..tostring(reason))
-			end
-			timer.Create(p:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function() TimerUnwanted(ply, p) end)
-		else
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
-		end
-	end
-	return ""
-end
-DarkRP.addChatCommand("/wanted", PlayerWanted)
-DarkRP.addChatCommand("/wantid", PlayerWanted)
-
-local function PlayerUnWanted(ply, args)
-	if not ply:IsCP() then
-		GAMEMODE:Notify(ply, 1, 6, string.format(LANGUAGE.must_be_x, "cop/mayor", "/unwanted"))
-	else
-		local p = DarkRP.findPlayer(args)
-		if p and p:Alive() and p.DarkRPVars.wanted then
-			hook.Call("PlayerUnWanted", GAMEMODE, ply, p)
-			p:setDarkRPVar("wanted", false)
-			for a, b in pairs(player.GetAll()) do
-				b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.wanted_expired, p:Nick()) ..
-					"\nRevoked by: " .. ply:Nick())
-				b:PrintMessage(HUD_PRINTCONSOLE, string.format(LANGUAGE.wanted_expired, p:Nick()) ..
-					"\nRevoked by: " .. ply:Nick())
-			end
-			timer.Destroy(p:UniqueID() .. " wantedtimer")
-		else
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "Player: "..tostring(args)))
-		end
-	end
-	return ""
-end
-DarkRP.addChatCommand("/unwanted", PlayerUnWanted)
-DarkRP.addChatCommand("/unwantid", PlayerUnWanted) -- Can also do like /wantid but for now it's also for grammar mistakes made by people.
-
-
-/*---------------------------------------------------------
 Spawning
  ---------------------------------------------------------*/
 local function SetSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then return "" end
+	if not ply:HasPriv("rp_commands") then
+		GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "setspawn"))
+		return ""
+	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	local selection = "citizen"
@@ -304,7 +125,10 @@ end
 DarkRP.addChatCommand("/setspawn", SetSpawnPos)
 
 local function AddSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then return "" end
+	if not ply:HasPriv("rp_commands") then
+		GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "addspawn"))
+		return ""
+	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	local selection = "citizen"
@@ -328,7 +152,10 @@ end
 DarkRP.addChatCommand("/addspawn", AddSpawnPos)
 
 local function RemoveSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then return "" end
+	if not ply:HasPriv("rp_commands") then
+		GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "remove spawn"))
+		return ""
+	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	local selection = "citizen"
@@ -352,14 +179,9 @@ end
 DarkRP.addChatCommand("/removespawn", RemoveSpawnPos)
 
 function GM:ShowTeam(ply)
-	umsg.Start("KeysMenu", ply)
-		umsg.Bool(ply:GetEyeTrace().Entity:IsVehicle())
-	umsg.End()
 end
 
 function GM:ShowHelp(ply)
-	umsg.Start("ToggleHelp", ply)
-	umsg.End()
 end
 
 local function LookPersonUp(ply, cmd, args)
@@ -391,7 +213,7 @@ local function LookPersonUp(ply, cmd, args)
 		print("Kills: ".. P:Frags())
 		print("Deaths: ".. P:Deaths())
 
-		print("Money: $" .. P.DarkRPVars.money)
+		print("Money: $" .. P:getDarkRPVar("money"))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)
@@ -676,7 +498,7 @@ local function BuyShipment(ply, args)
 
 	if IsValid( crate ) then
 		ply:AddMoney(-cost)
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, args, CUR .. tostring(cost)))
+		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, args, GAMEMODE.Config.currency .. tostring(cost)))
 	end
 
 	return ""
@@ -706,7 +528,7 @@ local function BuyVehicle(ply, args)
 
 	if not ply:canAfford(found.price) then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, "vehicle")) return "" end
 	ply:AddMoney(-found.price)
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, CUR .. found.price))
+	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, GAMEMODE.Config.currency .. found.price))
 
 	local Vehicle = list.Get("Vehicles")[found.name]
 	if not Vehicle then GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "argument", "")) return "" end
@@ -768,7 +590,7 @@ local function BuyAmmo(ply, args)
 	end
 
 	if not found or (found.customCheck and not found.customCheck(ply)) then
-		GAMEMODE:Notify(ply, 1, 4, found.CustomCheckFailMsg or string.format(LANGUAGE.unavailable, "ammo"))
+		GAMEMODE:Notify(ply, 1, 4, found and found.CustomCheckFailMsg or string.format(LANGUAGE.unavailable, "ammo"))
 		return ""
 	end
 
@@ -777,7 +599,7 @@ local function BuyAmmo(ply, args)
 		return ""
 	end
 
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, CUR..tostring(found.price)))
+	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, found.name, GAMEMODE.Config.currency..tostring(found.price)))
 	ply:AddMoney(-found.price)
 
 	local trace = {}
@@ -827,7 +649,7 @@ local function BuyHealth(ply)
 	end
 	ply.StartHealth = ply.StartHealth or 100
 	ply:AddMoney(-cost)
-	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, "health", CUR .. tostring(cost)))
+	GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, "health", GAMEMODE.Config.currency .. tostring(cost)))
 	ply:SetHealth(ply.StartHealth)
 	return ""
 end
@@ -896,36 +718,39 @@ local function ChangeJob(ply, args)
 		return ""
 	end
 
-	local jl = string.lower(args)
-	local t = ply:Team()
-
-	for k,v in pairs(RPExtraTeams) do
-		if jl == v.name then
-			ply:ChangeTeam(k)
+	local canChangeJob, message, replace = hook.Call("canChangeJob", nil, ply, args)
+	if canChangeJob == false then
+		if message then
+			GAMEMODE:Notify(ply, 1, 4, message)
 		end
+		return ""
 	end
-	GAMEMODE:NotifyAll(2, 4, string.format(LANGUAGE.job_has_become, ply:Nick(), args))
-	ply:UpdateJob(args)
+
+	local job = replace or args
+	GAMEMODE:NotifyAll(2, 4, string.format(LANGUAGE.job_has_become, ply:Nick(), job))
+	ply:UpdateJob(job)
 	return ""
 end
 DarkRP.addChatCommand("/job", ChangeJob)
 
-local function FinishDemote(choice, v)
-	v.IsBeingDemoted = nil
+local function FinishDemote(vote, choice)
+	local target = vote.target
+
+	target.IsBeingDemoted = nil
 	if choice == 1 then
-		v:TeamBan()
-		if v:Alive() then
-			v:ChangeTeam(TEAM_CITIZEN, true)
-			if v:isArrested() then
-				v:Arrest()
+		target:TeamBan()
+		if target:Alive() then
+			target:ChangeTeam(TEAM_CITIZEN, true)
+			if target:isArrested() then
+				target:arrest()
 			end
 		else
-			v.demotedWhileDead = true
+			target.demotedWhileDead = true
 		end
 
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.demoted, v:Nick()))
+		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.demoted, target:Nick()))
 	else
-		GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.demoted_not, v:Nick()))
+		GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.demoted_not, target:Nick()))
 	end
 end
 
@@ -950,6 +775,13 @@ local function Demote(ply, args)
 		return ""
 	end
 
+	local canDemote, message = hook.Call("CanDemote", GAMEMODE, ply, p, reason)
+	if canDemote == false then
+		GAMEMODE:Notify(ply, 1, 4, message or string.format(LANGUAGE.unable, "demote", ""))
+
+		return ""
+	end
+
 	if p then
 		if CurTime() - ply.LastVoteCop < 80 then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.have_to_wait, math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
@@ -963,7 +795,15 @@ local function Demote(ply, args)
 			DB.Log(string.format(LANGUAGE.demote_vote_started, ply:Nick(), p:Nick()) .. " (" .. reason .. ")",
 				false, Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
-			GAMEMODE.vote:Create(p:Nick() .. ":\n"..string.format(LANGUAGE.demote_vote_text, reason), p:EntIndex() .. "votecop"..ply:EntIndex(), p, 20, FinishDemote, true)
+
+			GAMEMODE.vote:create(p:Nick() .. ":\n"..string.format(LANGUAGE.demote_vote_text, reason), "demote", p, 20, FinishDemote,
+			{
+				[p] = true,
+				[ply] = true
+			}, function(vote)
+				if not IsValid(vote.target) then return end
+				vote.target.IsBeingDemoted = nil
+			end)
 			ply:GetTable().LastVoteCop = CurTime()
 		end
 		return ""
@@ -976,7 +816,7 @@ DarkRP.addChatCommand("/demote", Demote)
 
 local function ExecSwitchJob(answer, ent, ply, target)
 	ply.RequestedJobSwitch = nil
-	if answer ~= 1 then return end
+	if not tobool(answer) then return end
 	local Pteam = ply:Team()
 	local Tteam = target:Team()
 
@@ -993,10 +833,10 @@ local function SwitchJob(ply) --Idea by Godness.
 	if not GAMEMODE.Config.allowjobswitch then return "" end
 
 	if ply.RequestedJobSwitch then return end
-	ply.RequestedJobSwitch = true
 
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
+	ply.RequestedJobSwitch = true
 	GAMEMODE.ques:Create("Switch job with "..ply:Nick().."?", "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
 	return ""
 end
@@ -1008,19 +848,12 @@ DarkRP.addChatCommand("/jobswitch", SwitchJob)
 local function DoTeamBan(ply, args, cmdargs)
 	if not args or args == "" then return "" end
 
-	local ent = args
-	local Team = args
-	if cmdargs then
-		if not cmdargs[1] then
-			ply:PrintMessage(HUD_PRINTNOTIFY, "rp_teamban [player name/ID] [team name/id] Use this to ban a player from a certain team")
-			return ""
-		end
-		ent = cmdargs[1]
-		Team = cmdargs[2]
-	else
-		local a,b = string.find(args, " ")
-		ent = string.sub(args, 1, a - 1)
-		Team = string.sub(args, a + 1)
+	args = cmdargs or string.Explode(" ", args)
+	local ent = args[1]
+	local Team = args[2]
+	if cmdargs and not cmdargs[1]  then
+		ply:PrintMessage(HUD_PRINTNOTIFY, "rp_teamban [player name/ID] [team name/id] Use this to ban a player from a certain team")
+		return
 	end
 
 	local target = DarkRP.findPlayer(ent)
@@ -1036,12 +869,8 @@ local function DoTeamBan(ply, args, cmdargs)
 
 	local found = false
 	for k,v in pairs(RPExtraTeams) do
-		if string.lower(v.name) == string.lower(Team) or  string.lower(v.command) == string.lower(Team) then
+		if string.lower(v.name) == string.lower(Team) or string.lower(v.command) == string.lower(Team) or k == tonumber(Team or -1) then
 			Team = k
-			found = true
-			break
-		end
-		if k == tonumber(Team or -1) then
 			found = true
 			break
 		end
@@ -1051,8 +880,8 @@ local function DoTeamBan(ply, args, cmdargs)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "job!"))
 		return ""
 	end
-	if not target.bannedfrom then target.bannedfrom = {} end
-	target.bannedfrom[tonumber(Team)] = 1
+
+	target:TeamBan(tonumber(Team), tonumber(args[3] or 0))
 	GAMEMODE:NotifyAll(0, 5, ply:Nick() .. " has banned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
 	return ""
 end
@@ -1223,7 +1052,7 @@ end
 DarkRP.addChatCommand("/broadcast", MayorBroadcast, 1.5)
 
 local function SetRadioChannel(ply,args)
-	if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 99 then
+	if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 100 then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/channel", "0<channel<100"))
 		return ""
 	end
@@ -1364,9 +1193,9 @@ local function GiveMoney(ply, args)
 					end
 					DB.PayPlayer(ply, trace2.Entity, amount)
 
-					GAMEMODE:Notify(trace2.Entity, 0, 4, string.format(LANGUAGE.has_given, ply:Nick(), CUR .. tostring(amount)))
-					GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_gave, trace2.Entity:Nick(), CUR .. tostring(amount)))
-					DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..CUR .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+					GAMEMODE:Notify(trace2.Entity, 0, 4, string.format(LANGUAGE.has_given, ply:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
+					GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_gave, trace2.Entity:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
+					DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..GAMEMODE.Config.currency .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
 				end
 			end
 		end)
@@ -1413,7 +1242,7 @@ local function DropMoney(ply, args)
 
 			local tr = util.TraceLine(trace)
 			DarkRPCreateMoneyBag(tr.HitPos, amount)
-			DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..CUR .. tostring(amount))
+			DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..GAMEMODE.Config.currency .. tostring(amount))
 		end
 	end)
 
@@ -1481,15 +1310,15 @@ local LotteryON = false
 local LotteryAmount = 0
 local CanLottery = CurTime()
 local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
-	if answer == 1 and not table.HasValue(LotteryPeople, target) then
+	if tobool(answer) and not table.HasValue(LotteryPeople, target) then
 		if not target:canAfford(LotteryAmount) then
 			GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.cant_afford, "lottery"))
 			return
 		end
 		table.insert(LotteryPeople, target)
 		target:AddMoney(-LotteryAmount)
-		GAMEMODE:Notify(target, 0,4, string.format(LANGUAGE.lottery_entered, CUR..tostring(LotteryAmount)))
-	elseif answer and not table.HasValue(LotteryPeople, target) then
+		GAMEMODE:Notify(target, 0,4, string.format(LANGUAGE.lottery_entered, GAMEMODE.Config.currency..tostring(LotteryAmount)))
+	elseif answer ~= nil and not table.HasValue(LotteryPeople, target) then
 		GAMEMODE:Notify(target, 1,4, string.format(LANGUAGE.lottery_not_entered, "You"))
 	end
 
@@ -1502,7 +1331,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 		end
 		local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
 		chosen:AddMoney(#LotteryPeople * LotteryAmount)
-		GAMEMODE:NotifyAll(0,10, string.format(LANGUAGE.lottery_won, chosen:Nick(), CUR .. tostring(#LotteryPeople * LotteryAmount) ))
+		GAMEMODE:NotifyAll(0,10, string.format(LANGUAGE.lottery_won, chosen:Nick(), GAMEMODE.Config.currency .. tostring(#LotteryPeople * LotteryAmount) ))
 	end
 end
 
@@ -1541,7 +1370,7 @@ local function DoLottery(ply, amount)
 	LotteryPeople = {}
 	for k,v in pairs(player.GetAll()) do
 		if v ~= ply then
-			GAMEMODE.ques:Create("There is a lottery! Participate for " ..CUR.. tostring(LotteryAmount) .. "?", "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
+			GAMEMODE.ques:Create("There is a lottery! Participate for " ..GAMEMODE.Config.currency.. tostring(LotteryAmount) .. "?", "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
 		end
 	end
 	timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
@@ -1631,8 +1460,8 @@ local function MayorSetSalary(ply, cmd, args)
 				return
 			else
 				DB.StoreSalary(target, amount)
-				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. CUR .. amount)
-				target:PrintMessage(2, plynick .. " set your Salary to: " .. CUR .. amount)
+				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
+				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
 		elseif targetteam == TEAM_CITIZEN or targetteam == TEAM_GUN or targetteam == TEAM_MEDIC or targetteam == TEAM_COOK then
 			if amount > GAMEMODE.Config.maxnormalsalary then
@@ -1640,8 +1469,8 @@ local function MayorSetSalary(ply, cmd, args)
 				return
 			else
 				DB.StoreSalary(target, amount)
-				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. CUR .. amount)
-				target:PrintMessage(2, plynick .. " set your Salary to: " .. CUR .. amount)
+				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
+				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
 		elseif targetteam == TEAM_GANG or targetteam == TEAM_MOB then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "rp_setsalary", ""))
@@ -1659,7 +1488,7 @@ concommand.Add("rp_mayor_setsalary", MayorSetSalary)
  ---------------------------------------------------------*/
 local function GrantLicense(answer, Ent, Initiator, Target)
 	Initiator.LicenseRequested = nil
-	if answer == 1 then
+	if tobool(answer) then
 		GAMEMODE:Notify(Initiator, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		GAMEMODE:Notify(Target, 0, 4, string.format(LANGUAGE.gunlicense_granted, Target:Nick(), Initiator:Nick()))
 		Initiator:setDarkRPVar("HasGunlicense", true)
@@ -1669,7 +1498,7 @@ local function GrantLicense(answer, Ent, Initiator, Target)
 end
 
 local function RequestLicense(ply)
-	if ply.DarkRPVars.HasGunlicense or ply.LicenseRequested then
+	if ply:getDarkRPVar("HasGunlicense") or ply.LicenseRequested then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/requestlicense", ""))
 		return ""
 	end
@@ -1679,7 +1508,7 @@ local function RequestLicense(ply)
 	local ischief-- then if there's a chief
 	local iscop-- and then if there's a cop to ask
 	for k,v in pairs(player.GetAll()) do
-		if v:Team() == TEAM_MAYOR and not v.DarkRPVars.AFK then
+		if v:Team() == TEAM_MAYOR and not v:getDarkRPVar("AFK") then
 			ismayor = true
 			break
 		end
@@ -1687,7 +1516,7 @@ local function RequestLicense(ply)
 
 	if not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_CHIEF and not v.DarkRPVars.AFK then
+			if v:Team() == TEAM_CHIEF and not v:getDarkRPVar("AFK") then
 				ischief = true
 				break
 			end
@@ -1736,7 +1565,7 @@ local function GiveLicense(ply)
 	local ischief-- then if there's a chief
 	local iscop-- and then if there's a cop to ask
 	for k,v in pairs(player.GetAll()) do
-		if v:Team() == TEAM_MAYOR and not v.DarkRPVars.AFK then
+		if v:Team() == TEAM_MAYOR and not v:getDarkRPVar("AFK") then
 			ismayor = true
 			break
 		end
@@ -1744,7 +1573,7 @@ local function GiveLicense(ply)
 
 	if not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_CHIEF and not v.DarkRPVars.AFK then
+			if v:Team() == TEAM_CHIEF and not v:getDarkRPVar("AFK") then
 				ischief = true
 				break
 			end
@@ -1855,14 +1684,14 @@ local function rp_RevokeLicense(ply, cmd, args)
 end
 concommand.Add("rp_revokelicense", rp_RevokeLicense)
 
-local function FinishRevokeLicense(choice, v)
+local function FinishRevokeLicense(vote, win)
 	if choice == 1 then
-		v:setDarkRPVar("HasGunlicense", false)
-		v:StripWeapons()
-		GAMEMODE:PlayerLoadout(v)
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_removed, v:Nick()))
+		vote.target:setDarkRPVar("HasGunlicense", false)
+		vote.target:StripWeapons()
+		GAMEMODE:PlayerLoadout(vote.target)
+		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_removed, vote.target:Nick()))
 	else
-		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_not_removed, v:Nick()))
+		GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_not_removed, vote.target:Nick()))
 	end
 end
 
@@ -1887,11 +1716,15 @@ local function VoteRemoveLicense(ply, args)
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.have_to_wait, math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demotelicense"))
 			return ""
 		end
-		if ply.DarkRPVars.HasGunlicense then
+		if ply:getDarkRPVar("HasGunlicense") then
 			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/demotelicense", ""))
 		else
 			GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.gunlicense_remove_vote_text, ply:Nick(), p:Nick()))
-			GAMEMODE.vote:Create(p:Nick() .. ":\n"..string.format(LANGUAGE.gunlicense_remove_vote_text2, reason), p:EntIndex() .. "votecop"..ply:EntIndex(), p, 20, FinishRevokeLicense, true)
+			GAMEMODE.vote:create(p:Nick() .. ":\n"..string.format(LANGUAGE.gunlicense_remove_vote_text2, reason), "removegunlicense", p, 20,  FinishRevokeLicense,
+			{
+				[p] = true,
+				[ply] = true
+			})
 			ply:GetTable().LastVoteCop = CurTime()
 			GAMEMODE:Notify(ply, 0, 4, LANGUAGE.vote_started)
 		end

@@ -25,16 +25,28 @@ end
 usermessage.Hook("FPP_CanTouch", CanTouch)
 
 --Show the owner!
-local CanTouchLookingAt, Why, LookingatEntity
-FPP.CanTouchEntities = {}
+
 local function RetrieveOwner(um)
-	LookingatEntity, CanTouchLookingAt, Why = um:ReadEntity(), um:ReadBool(), um:ReadString()
-	FPP.CanTouchEntities[LookingatEntity] = CanTouchLookingAt
+	entIndex, canTouch, owner = um:ReadShort(), um:ReadBool(), um:ReadString()
+
+	local i = 0
+	local function setData(ent)
+		if not IsValid(ent) and i < 20 then
+			i = i + 1
+			-- The entity is not always immediately valid
+			timer.Simple(0.1, function() setData(Entity(entIndex)) end)
+			return
+		end
+
+		ent.FPPCanTouch = canTouch
+		ent.FPPOwner = owner
+	end
+	setData(Entity(entIndex))
 end
 usermessage.Hook("FPP_Owner", RetrieveOwner)
 
 hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool) -- Prevent client from SEEING his toolgun shoot while it doesn't shoot serverside.
-	if IsValid(trace.Entity) and FPP.CanTouchEntities[trace.Entity] == false then
+	if IsValid(trace.Entity) and trace.Entity.FPPCanTouch == false then
 		return false
 	end
 
@@ -152,48 +164,37 @@ local function HUDPaint()
 
 	--Show the owner:
 	local LAEnt = LocalPlayer():GetEyeTraceNoCursor().Entity
-	if CanTouchLookingAt ~= nil and IsValid(LAEnt) and (LAEnt == LookingatEntity or (LookingatEntity == NULL and LAEnt:EntIndex() ~= 0)) then--LookingatEntity is null when you look at a prop you just spawned(haven't spawned on client yet)
+	if IsValid(LAEnt) and LAEnt.FPPCanTouch ~= nil and LAEnt.FPPOwner then
 
 		surface.SetFont("Default")
-		local w,h = surface.GetTextSize(Why)
-		local col = Color(255,0,0,255)
-		if CanTouchLookingAt then col = Color(0,255,0,255) end
+		local w,h = surface.GetTextSize(LAEnt.FPPOwner)
+		local col = LAEnt.FPPCanTouch and Color(0,255,0,255) or Color(255,0,0,255)
+
 		if comingAroundAgain < w then
 			comingAroundAgain = math.Min(comingAroundAgain + (RealFrameTime()*600), w)
 		end
 
 		draw.RoundedBox(4, comingAroundAgain - w, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-		draw.DrawText(Why, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
+		draw.DrawText(LAEnt.FPPOwner, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
 		surface.SetDrawColor(255,255,255,255)
-	elseif CanTouchLookingAt ~= nil then
-		if comingAroundAgain > 0 then
-			comingAroundAgain = math.Max(comingAroundAgain - (RealFrameTime()*600), 0)
-			surface.SetFont("Default")
-			local w,h = surface.GetTextSize(Why)
-			local col = CanTouchLookingAt and Color(0,255,0,255) or Color(255,0,0,255)
-
-			draw.RoundedBox(4, comingAroundAgain - w, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-			draw.DrawText(Why, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
-			surface.SetDrawColor(255,255,255,255)
-		else
-			comingAroundAgain = 0
-			CanTouchLookingAt, Why, LookingatEntity = nil, nil, nil
-		end
+	elseif not IsValid(LAEnt) then
+		comingAroundAgain = 0
 	end
+
 	-- Messsage when you can't touch something
-	if TouchAlpha > 0 and CantTouchOwner and CantTouchOwner ~= "" then
+	if TouchAlpha > 0 and LAEnt.FPPOwner then
 		surface.SetDrawColor(255,255,255,TouchAlpha)
 
 		surface.SetFont("Default")
-		local w,h = surface.GetTextSize(CantTouchOwner)
+		local w,h = surface.GetTextSize(LAEnt.FPPOwner)
 		local col = cantouch and Color(0,255,0,255) or Color(255,0,0,255)
 
-		draw.WordBox(4, ScrW()/2 - 0.51*w, ScrH()/2 + h, CantTouchOwner, "Default", Color(0, 0, 0, 110), col)
+		draw.WordBox(4, ScrW()/2 - 0.51*w, ScrH()/2 + h, LAEnt.FPPOwner, "Default", Color(0, 0, 0, 110), col)
 	end
 
 	if not HUDNotes then return end
 	local i = 0
-	for k, v in pairs( HUDNotes ) do
+	for k, v in pairs(HUDNotes) do
 		if v ~= 0 then
 			i = i + 1
 			DrawNotice( self, k, v, i)

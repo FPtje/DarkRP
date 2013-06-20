@@ -32,27 +32,11 @@ function GM:CanChangeRPName(ply, RPname)
 	end
 end
 
-function GM:PlayerArrested(ply, time)
+function GM:CanDemote(ply, target, reason)
 
 end
 
-function GM:PlayerUnarrested(ply)
-
-end
-
-function GM:PlayerWanted(ply, target, reason)
-
-end
-
-function GM:PlayerUnWanted(ply, target)
-
-end
-
-function GM:PlayerWarranted(ply, target, reason)
-
-end
-
-function GM:PlayerUnWarranted(ply, target)
+function GM:CanVote(ply, vote)
 
 end
 
@@ -99,6 +83,16 @@ end
 
 function GM:CanSeeLogMessage(ply, message, colour)
 	return ply:IsAdmin()
+end
+
+function GM:UpdatePlayerSpeed(ply)
+	if ply:isArrested() then
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
+	elseif ply:IsCP() then
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
+	else
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	end
 end
 
 /*---------------------------------------------------------
@@ -180,10 +174,10 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if GAMEMODE.Config.proppaying then
 		if ply:canAfford(GAMEMODE.Config.propcost) then
-			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. CUR .. GAMEMODE.Config.propcost)
+			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. GAMEMODE.Config.currency .. GAMEMODE.Config.propcost)
 			ply:AddMoney(-GAMEMODE.Config.propcost)
 		else
-			GAMEMODE:Notify(ply, 1, 4, "Need " .. CUR .. GAMEMODE.Config.propcost)
+			GAMEMODE:Notify(ply, 1, 4, "Need " .. GAMEMODE.Config.currency .. GAMEMODE.Config.propcost)
 			return false
 		end
 	end
@@ -221,16 +215,12 @@ function GM:ShowSpare1(ply)
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare1 then
 		return RPExtraTeams[ply:Team()].ShowSpare1(ply)
 	end
-	umsg.Start("ToggleClicker", ply)
-	umsg.End()
 end
 
 function GM:ShowSpare2(ply)
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare2 then
 		return RPExtraTeams[ply:Team()].ShowSpare2(ply)
 	end
-	umsg.Start("ChangeJobVGUI", ply)
-	umsg.End()
 end
 
 function GM:OnNPCKilled(victim, ent, weapon)
@@ -246,7 +236,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 		-- If we know by now who killed the NPC, pay them.
 		if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
 			ent:AddMoney(GAMEMODE.Config.npckillpay)
-			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, CUR .. GAMEMODE.Config.npckillpay))
+			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
 		end
 	end
 end
@@ -319,7 +309,7 @@ function GM:CanPlayerSuicide(ply)
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
 		return false
 	end
-	if GAMEMODE.Config.wantedsuicide and ply.DarkRPVars.wanted then
+	if GAMEMODE.Config.wantedsuicide and ply:getDarkRPVar("wanted") then
 		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
 		return false
 	end
@@ -402,7 +392,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 	if GAMEMODE.Config.dropmoneyondeath then
 		local amount = GAMEMODE.Config.deathfee
 		if not ply:canAfford(GAMEMODE.Config.deathfee) then
-			amount = ply.DarkRPVars.money
+			amount = ply:getDarkRPVar("money")
 		end
 
 		if amount > 0 then
@@ -439,7 +429,7 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 	if weapon.PlayerUse == false then return false end
 	if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
 
-	if GAMEMODE.Config.license and not ply.DarkRPVars.HasGunlicense and not ply:GetTable().RPLicenseSpawn then
+	if GAMEMODE.Config.license and not ply:getDarkRPVar("HasGunlicense") and not ply:GetTable().RPLicenseSpawn then
 		if GAMEMODE.NoLicense[string.lower(weapon:GetClass())] or not weapon:IsWeapon() then
 			return true
 		end
@@ -521,7 +511,6 @@ function GM:PlayerInitialSpawn(ply)
 			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
 		end
 	end
-	timer.Simple(10, function() ply:CompleteSentence() end)
 end
 
 function GM:PlayerSelectSpawn(ply)
@@ -532,7 +521,7 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	local POS
-	if spawn.GetPos then
+	if spawn and spawn.GetPos then
 		POS = spawn:GetPos()
 	else
 		POS = ply:GetPos()
@@ -560,6 +549,9 @@ end
 
 function GM:PlayerSpawn(ply)
 	self.BaseClass:PlayerSpawn(ply)
+
+	player_manager.SetPlayerClass(ply, "player_DarkRP")
+
 	ply:SetNoCollideWithTeammates(false)
 	ply:CrosshairEnable()
 	ply:UnSpectate()
@@ -593,7 +585,7 @@ function GM:PlayerSpawn(ply)
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
 	if ply:IsCP() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed + 10)
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
 	end
 
 	if ply:isArrested() then
@@ -638,8 +630,13 @@ local function selectDefaultWeapon(ply)
 	end
 end
 
+function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
+end
+
 function GM:PlayerLoadout(ply)
 	if ply:isArrested() then return end
+
+	player_manager.RunClass(ply, "Spawn")
 
 	ply:GetTable().RPLicenseSpawn = true
 	timer.Simple(1, function() removelicense(ply) end)

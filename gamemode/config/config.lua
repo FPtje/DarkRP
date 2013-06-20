@@ -209,6 +209,8 @@ GM.Config.quakechance					= 4000
 GM.Config.respawntime					= 1
 -- runspeed - Sets the max running speed.
 GM.Config.runspeed						= 240
+-- runspeed - Sets the max running speed for CP teams
+GM.Config.runspeedcp					= 255
 -- searchtime - Number of seconds for which a search warrant is valid.
 GM.Config.searchtime					= 30
 -- ShipmentSpawnTime - Antispam time between spawning shipments.
@@ -231,6 +233,16 @@ GM.Config.wallettaxtime					= 600
 GM.Config.wantedtime					= 120
 -- walkspeed - Sets the max walking speed.
 GM.Config.walkspeed						= 160
+
+/*---------------------------------------------------------------------------
+Other settings
+---------------------------------------------------------------------------*/
+
+-- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
+GM.Config.DarkRPSkin = "DarkRP"
+GM.Config.currency = "$"
+
+
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
 GM.Config.DisallowDrop = {
 	["weapon_keypadchecker"] = true,
@@ -256,5 +268,7 @@ GM.Config.DisabledModules = {
 	["hungermod"] = true,
 	["hud"] = false,
 	["playerscale"] = false,
-	["sleep"] = false
+	["sleep"] = false,
+	["voterestrictions"] = true,
+	["hitmenu"] = false,
 }

@@ -15,7 +15,7 @@ function KnockoutToggle(player, command, args, caller)
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
 			if (player.Sleeping and IsValid(player.SleepRagdoll)) then
-				player.OldHunger = player.DarkRPVars.Energy
+				player.OldHunger = player:getDarkRPVar("Energy")
 				player.SleepSound:Stop()
 				local ragdoll = player.SleepRagdoll
 				local health = player:Health()
@@ -51,18 +51,17 @@ function KnockoutToggle(player, command, args, caller)
 				else
 					GAMEMODE:PlayerLoadout(player)
 				end
-				player.WeaponsForSleep = {}
 
 				SendUserMessage("blackScreen", player, false)
 
 				if command == true then
-					player:Arrest()
+					player:arrest()
 				end
 				player.Sleeping = false
 				player:setSelfDarkRPVar("Energy", player.OldHunger)
 				player.OldHunger = nil
 
-				if player.DarkRPVars.Arrested then
+				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed )
 				end
 			else
@@ -73,12 +72,14 @@ function KnockoutToggle(player, command, args, caller)
 					end
 				end
 
-				player.WeaponsForSleep = {}
-				for k,v in pairs(player:GetWeapons( )) do
-					player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
-					v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
-					v:Clip1(), v:Clip2()}
-					/*{class, ammocount primary, type primary, ammo count secondary, type secondary, clip primary, clip secondary*/
+				if not player:isArrested() then
+					player.WeaponsForSleep = {}
+					for k,v in pairs(player:GetWeapons()) do
+						player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
+						v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
+						v:Clip1(), v:Clip2()}
+						/*{class, ammocount primary, type primary, ammo count secondary, type secondary, clip primary, clip secondary*/
+					end
 				end
 				local ragdoll = ents.Create("prop_ragdoll")
 				ragdoll:SetPos(player:GetPos())

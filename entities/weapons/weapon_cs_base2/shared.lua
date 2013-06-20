@@ -9,7 +9,7 @@ if CLIENT then
 	SWEP.DrawAmmo			= true
 	SWEP.DrawCrosshair		= false
 	SWEP.ViewModelFOV		= 82
-	SWEP.ViewModelFlip		= true
+	SWEP.ViewModelFlip		= false
 	SWEP.CSMuzzleFlashes	= true
 
 	-- This is the font that's used to draw the death icons
@@ -93,14 +93,18 @@ function SWEP:Deploy()
 	self.LASTOWNER = self.Owner
 
 	self:SetIronsights(self:GetIronsights())
+
+	// WORKAROUND: Some models have shit viewmodel positions until they fire
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	return true
 end
 
 function SWEP:Holster()
+	self.Ironsights = false
+
 	if CLIENT then return end
-	if self:GetIronsights() then
-		GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	end
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+
 	return true
 end
 
@@ -300,6 +304,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	local fIronTime = self.fIronTime or 0
 
+	pos = pos + ang:Forward() * -5
 	if GAMEMODE.Config.ironshoot then
 		ang:RotateAroundAxis(ang:Right(), -15)
 	end
@@ -351,16 +356,20 @@ function SWEP:SetIronsights(b)
 	if game.SinglePlayer() then -- Make ironsights work on SP
 		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b))
 	end
+	self.Ironsights = b
 	if b then
 		self:NewSetWeaponHoldType(self.HoldType)
 		self.CurHoldType = self.HoldType
-		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3) end
+		if SERVER then
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+		end
 	else
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
-		if SERVER then GAMEMODE:SetPlayerSpeed(self.Owner, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed) end
+		if SERVER then
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+		end
 	end
-	self.Ironsights = b
 end
 
 function SWEP:GetIronsights()
@@ -440,3 +449,12 @@ if CLIENT then
 		wep:SetWeaponHoldType(holdtype)
 	end)
 end
+
+hook.Add("UpdatePlayerSpeed", "DarkRP_WeaponSpeed", function(ply)
+	local wep = ply:GetActiveWeapon()
+	if not IsValid(wep) or not wep.Ironsights then return end
+
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
+
+	return true
+end)

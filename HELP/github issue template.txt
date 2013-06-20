@@ -1,0 +1,14 @@
+### Description of the problem
+
+
+
+### How I can make the problem happen again
+
+
+
+### Error log pastebin links
+("lua_errors_server.txt", "clientside_errors.txt")
+
+
+
+

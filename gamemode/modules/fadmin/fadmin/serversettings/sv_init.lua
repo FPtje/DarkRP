@@ -4,7 +4,7 @@ table.insert(Whitelist, "_FAdmin_.*")
 
 sql.Query([[CREATE TABLE IF NOT EXISTS FAdmin_ServerSettings(setting STRING NOT NULL PRIMARY KEY, value STRING NOT NULL);]])
 function FAdmin.SaveSetting(var, value)
-	sql.Query([[REPLACE INTO FAdmin_ServerSettings VALUES(]]..sql.SQLStr(var:lower())..[[, ]]..sql.SQLStr(value)..");")
+	sql.Query([[REPLACE INTO FAdmin_ServerSettings VALUES(]]..DB.SQLStr(var:lower())..[[, ]]..DB.SQLStr(value)..");")
 end
 
 hook.Add("InitPostEntity", "FAdmin_Settings", function()
@@ -38,6 +38,6 @@ end
 
 FAdmin.StartHooks["ServerSettings"] = function()
 	FAdmin.Commands.AddCommand("ServerSetting", ServerSetting)
-	
+
 	FAdmin.Access.AddPrivilege("ServerSetting", 2)
 end

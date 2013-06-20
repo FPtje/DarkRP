@@ -1,7 +1,11 @@
 module("DarkRP", package.seeall)
 
--- Variable that maintains the existing stubs
+-- Variables that maintain the existing stubs and hooks
 local stubs = {}
+local hookStubs = {}
+
+-- Contains the functions that the hooks call by default
+hooks = {}
 
 -- Delay the calling of methods until the functions are implemented
 local delayedCalls = {}
@@ -10,6 +14,10 @@ local returnsLayout, isreturns
 local parmeterLayout, isparameters
 local isreturns
 local checkStub
+
+local hookLayout
+
+local realm -- State variable to manage the realm of the stubs
 
 /*---------------------------------------------------------------------------
 Methods that check whether certain fields are valid
@@ -25,13 +33,13 @@ end
 isparameters = function(tbl)
 	if not istable(tbl) then return false end
 	for k,v in pairs(tbl) do
-		if not checkStub(v, returnsLayout) then return false end
+		if not checkStub(v, parmeterLayout) then return false end
 	end
 	return true
 end
 
 /*---------------------------------------------------------------------------
-The layout of a method stub
+The layouts of stubs
 ---------------------------------------------------------------------------*/
 local stubLayout = {
 	name = isstring,
@@ -39,6 +47,13 @@ local stubLayout = {
 	parameters = isparameters, -- the parameters of a method
 	returns = isreturns, -- the return values of a method
 	metatable = istable -- DarkRP, Player, Entity, Vector, ...
+}
+
+local hookLayout = {
+	name = isstring,
+	description = isstring,
+	parameters = isreturns, -- doesn't have the 'optional' field
+	returns = isreturns,
 }
 
 returnsLayout = {
@@ -88,9 +103,23 @@ function stub(tbl)
 		error("Invalid DarkRP method stub! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
+	tbl.realm = realm
 	stubs[tbl.name] = tbl
 
 	return function(...) return notImplemented(tbl.name, {...}) end
+end
+
+/*---------------------------------------------------------------------------
+Generate a hook stub
+---------------------------------------------------------------------------*/
+function hookStub(tbl)
+	local isStub, field = checkStub(tbl, hookLayout)
+	if not isStub then
+		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
+	end
+
+	tbl.realm = realm
+	hookStubs[tbl.name] = tbl
 end
 
 /*---------------------------------------------------------------------------
@@ -101,40 +130,64 @@ function getStubs()
 end
 
 /*---------------------------------------------------------------------------
+Retrieve the hooks
+---------------------------------------------------------------------------*/
+function getHooks()
+	return table.Copy(hookStubs)
+end
+
+/*---------------------------------------------------------------------------
 Call the cached methods
 ---------------------------------------------------------------------------*/
 function finish()
-	for name, log in pairs(delayedCalls) do
+	local calls = table.Copy(delayedCalls) -- Loop through a copy, so the notImplemented function doesn't get called again
+	for name, log in pairs(calls) do
 		if not stubs[name] then ErrorNoHalt("Calling non-existing stub \"" .. name .. "\"") continue end
 
 		for _, args in pairs(log) do
 			stubs[name].metatable[name](unpack(args))
 		end
 	end
+
+	delayedCalls = {}
 end
 
 /*---------------------------------------------------------------------------
 Load the interface files
 ---------------------------------------------------------------------------*/
 local function loadInterfaces()
-	local root = GM.FolderName.."/gamemode/modules/"
+	local root = GM.FolderName .. "/gamemode/modules"
 
-	local _, folders = file.Find(root.."*", "LUA")
+	local _, folders = file.Find(root.."/*", "LUA")
 
 	ENTITY = FindMetaTable("Entity")
 	PLAYER = FindMetaTable("Player")
 	VECTOR = FindMetaTable("Vector")
 
 	for _, folder in SortedPairs(folders, true) do
-		if GM.Config.DisabledModules[folder] then continue end
+		local interfacefile = string.format("%s/%s/%s_interface.lua", root, folder, "%s")
+		local client = string.format(interfacefile, "cl")
+		local shared = string.format(interfacefile, "sh")
+		local server = string.format(interfacefile, "sv")
 
-		for _, File in SortedPairs(file.Find(root .. folder .."/sh_interface.lua", "LUA"), true) do
-			include(root.. folder .. "/" ..File)
+		if file.Exists(shared, "LUA") then
+			if SERVER then AddCSLuaFile(shared) end
+			realm = "Shared"
+			include(shared)
 		end
 
-		local realmInterface = CLIENT and "cl" or "sv"
-		for _, File in SortedPairs(file.Find(root .. folder .."/" .. realmInterface .. "_interface.lua", "LUA"), true) do
-			include(root.. folder .. "/" ..File)
+		if SERVER and file.Exists(client, "LUA") then
+			AddCSLuaFile(client)
+		end
+
+		if SERVER and file.Exists(server, "LUA") then
+			realm = "Server"
+			include(server)
+		end
+
+		if CLIENT and file.Exists(client, "LUA") then
+			realm = "Client"
+			include(client)
 		end
 	end
 

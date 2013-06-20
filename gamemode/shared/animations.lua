@@ -183,6 +183,6 @@ local function AnimationMenu()
 			RunConsoleCommand("_DarkRP_DoAnimation", k)
 		end
 	end
-	AnimFrame:SetSkin("DarkRP")
+	AnimFrame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 concommand.Add("_DarkRP_AnimationMenu", AnimationMenu)

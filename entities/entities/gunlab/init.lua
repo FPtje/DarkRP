@@ -71,7 +71,7 @@ function ENT:Use(activator)
 
 
 	activator:AddMoney(cash * -1)
-	GAMEMODE:Notify(activator, 0, 3, "You purchased a P228 for " .. CUR .. tostring(cash) .. "!")
+	GAMEMODE:Notify(activator, 0, 3, "You purchased a P228 for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
 
 	if activator ~= owner and IsValid(owner) then
 		local gain = 0
@@ -86,7 +86,7 @@ function ENT:Use(activator)
 			owner:AddMoney(gain)
 			local word = "profit"
 			if gain < 0 then word = "loss" end
-			GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. CUR .. tostring(math.abs(gain)) .. " by selling a P228 from a Gun Lab!")
+			GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. " by selling a P228 from a Gun Lab!")
 		end
 	end
 

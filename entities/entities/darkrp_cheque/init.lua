@@ -27,7 +27,7 @@ function ENT:Use(activator, caller)
 
 	if (IsValid(activator) and IsValid(recipient)) and activator == recipient then
 		owner = (IsValid(owner) and owner:Nick()) or "Disconnected player"
-		GAMEMODE:Notify(activator, 0, 4, "You have found " .. CUR .. amount .. " in a cheque made out to you from " .. owner .. ".")
+		GAMEMODE:Notify(activator, 0, 4, "You have found " .. GAMEMODE.Config.currency .. amount .. " in a cheque made out to you from " .. owner .. ".")
 		activator:AddMoney(amount)
 		self:Remove()
 	elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then

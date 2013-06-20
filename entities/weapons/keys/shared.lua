@@ -5,7 +5,7 @@ end
 if CLIENT then
 	SWEP.PrintName = "Keys"
 	SWEP.Slot = 1
-	SWEP.SlotPos = 3
+	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
 end
@@ -70,7 +70,7 @@ function SWEP:PrimaryAttack()
 			self.Owner:EmitSound("npc/metropolice/gear".. math.floor(math.Rand(1,7)) ..".wav")
 			trace.Entity:KeysLock() -- Lock the door immediately so it won't annoy people
 
-			timer.Simple(0.9, function() if IsValid(self.Owner) then self.Owner:EmitSound(self.Sound) end end)
+			timer.Simple(0.9, function() if IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sound) end end)
 
 			local RP = RecipientFilter()
 			RP:AddAllPlayers()
@@ -162,7 +162,6 @@ function SWEP:Reload()
 	end
 	if SERVER then
 		umsg.Start("KeysMenu", self.Owner)
-			umsg.Bool(self.Owner:GetEyeTrace().Entity:IsVehicle())
 		umsg.End()
 	end
 end
