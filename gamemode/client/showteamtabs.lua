@@ -440,13 +440,22 @@ function GM:JobsTab()
 		UpdateInfo()
 
 		local function AddIcon(Model, name, description, Weapons, command, special, specialcommand)
-			local icon = vgui.Create("SpawnIcon")
+			local icon = vgui.Create("DModelPanel")
 			local IconModel = Model
 			if type(Model) == "table" then
 				IconModel = Model[math.random(#Model)]
 			end
 			icon:SetModel(IconModel)
 
+			local ent = icon:GetEntity()
+			local headPos = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
+			ent:SetEyeTarget(Vector(20, 00, 65)) -- otherwise the model will have its eyes pointing down
+			icon:SetCamPos(Vector(20, 00, 65))
+			icon:SetLookAt(headPos) -- look at the head of the model
+			
+			icon:SetAnimated(false)
+			function icon:LayoutEntity() end --disable rotation
+			
 			icon:SetSize(128, 128)
 			icon:SetToolTip()
 			icon.OnCursorEntered = function()
