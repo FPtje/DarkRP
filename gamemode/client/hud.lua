@@ -220,6 +220,9 @@ local function DrawHUD()
 	localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
 	if not IsValid(localplayer) then return end
 
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
+	if shouldDraw == false then return end
+
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
 
@@ -291,6 +294,9 @@ end
 The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------*/
 local function DrawEntityDisplay()
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
+	if shouldDraw == false then return end
+
 	local shootPos = localplayer:GetShootPos()
 	local aimVec = localplayer:GetAimVector()
 
@@ -325,6 +331,9 @@ Zombie display
 ---------------------------------------------------------------------------*/
 local function DrawZombieInfo()
 	if not localplayer:getDarkRPVar("zombieToggle") then return end
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ZombieInfo")
+	if shouldDraw == false then return end
+
 	for x=1, localplayer:getDarkRPVar("numPoints"), 1 do
 		local zPoint = localplayer.DarkRPVars["zPoints".. x]
 		if zPoint then
