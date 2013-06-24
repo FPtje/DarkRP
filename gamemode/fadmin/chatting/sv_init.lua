@@ -7,7 +7,7 @@ local function ToAdmins(ply, cmd, args)
 	RP:AddPlayer(ply)
 	for k,v in pairs(player.GetAll()) do
 		if v:IsAdmin() then
-			RP:AddPlayer(ply)
+			RP:AddPlayer(v)
 		end
 	end
 
