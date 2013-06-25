@@ -77,7 +77,7 @@ GM.Config.enablebuyhealth 				= true
 GM.Config.enablebuypistol 				= true
 -- enablemayorsetsalary - Enable Mayor salary control.
 GM.Config.enablemayorsetsalary 			= true
--- enableshipments - Turn /buyshipment on of off.
+-- enableshipments - Turn /buyshipment on or off.
 GM.Config.enableshipments 				= true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
 GM.Config.enforceplayermodel 			= true
