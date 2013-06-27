@@ -103,6 +103,8 @@ function questionCallback(answer, hitman, customer, target, price)
 		return
 	end
 
+	if hits[self] then return end
+
 	GAMEMODE:Notify(hitman, 1, 4, "Hit accepted!")
 
 	hitman:placeHit(customer, target, price)
