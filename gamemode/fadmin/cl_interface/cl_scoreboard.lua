@@ -17,6 +17,7 @@ function FAdmin.ScoreBoard.ChangeView(newView, ...)
 	FAdmin.ScoreBoard.Controls.BackButton:SetToolTip("Click me to go back!")
 	FAdmin.ScoreBoard.Controls.BackButton:SetCursor("hand")
 	FAdmin.ScoreBoard.Controls.BackButton:SetSize(100,90)
+	FAdmin.ScoreBoard.Controls.BackButton:SetZPos(999)
 
 	function FAdmin.ScoreBoard.Controls.BackButton:DoClick()
 		FAdmin.ScoreBoard.ChangeView("Main")
