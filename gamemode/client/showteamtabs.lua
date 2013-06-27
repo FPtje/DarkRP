@@ -567,6 +567,41 @@ function GM:EntitiesTab()
 	EntitiesPanel:EnableVerticalScrollbar( true )
 		function EntitiesPanel:Update()
 			self:Clear(true)
+			local AmmCat = vgui.Create("DCollapsibleCategory")
+			AmmCat:SetLabel("Ammo")
+				local AmmPanel = vgui.Create("DPanelList")
+				AmmPanel:SetSize(470, 100)
+				AmmPanel:SetAutoSize(true)
+				AmmPanel:SetSpacing(1)
+				AmmPanel:EnableHorizontal(true)
+				AmmPanel:EnableVerticalScrollbar(true)
+					local function AddAmmoIcon(Model, description, command)
+						local icon = vgui.Create("SpawnIcon")
+						icon:InvalidateLayout( true )
+						icon:SetModel(Model)
+						icon:SetSize(64, 64)
+						icon:SetToolTip(description)
+						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
+						AmmPanel:AddItem(icon)
+					end
+					
+					local ammnum = 0
+					for k,v in pairs(GAMEMODE.AmmoTypes) do
+						if not v.customCheck or v.customCheck(LocalPlayer()) then
+							AddAmmoIcon(v.model, string.format(LANGUAGE.buy_a, v.name, GAMEMODE.Config.currency .. v.price), "/buyammo " .. v.ammoType)
+							ammnum = ammnum + 1
+						end
+					end
+			
+			if ammnum ~= 0 then
+				AmmCat:SetContents(AmmPanel)
+				AmmCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+				self:AddItem(AmmCat)
+			else
+				AmmPanel:Remove()
+				AmmCat:Remove()
+			end
+			
 			local WepCat = vgui.Create("DCollapsibleCategory")
 			WepCat:SetLabel("Weapons")
 				local WepPanel = vgui.Create("DPanelList")
@@ -584,25 +619,63 @@ function GM:EntitiesTab()
 						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
 						WepPanel:AddItem(icon)
 					end
-
+					
+					local wepnum = 0
 					for k,v in pairs(CustomShipments) do
 						if not GAMEMODE:CustomObjFitsMap(v) then continue end
 						if (v.seperate and (not GAMEMODE.Config.restrictbuypistol or
 							(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
 							and (not v.customCheck or v.customCheck and v.customCheck(LocalPlayer())) then
 							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, GAMEMODE.Config.currency..(v.pricesep or "")), "/buy "..v.name)
+							wepnum = wepnum + 1
 						end
 					end
+					
+				if wepnum ~= 0 then
+					WepCat:SetContents(WepPanel)
+					WepCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+					self:AddItem(WepCat)
+				else
+					WepPanel:Remove()
+					WepCat:Remove()
+				end
 
-					for k,v in pairs(GAMEMODE.AmmoTypes) do
-						if not v.customCheck or v.customCheck(LocalPlayer()) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, v.name, GAMEMODE.Config.currency .. v.price), "/buyammo " .. v.ammoType)
+			local ShipCat = vgui.Create("DCollapsibleCategory")
+			ShipCat:SetLabel("Shipments")
+				local ShipPanel = vgui.Create("DPanelList")
+				ShipPanel:SetSize(470, 200)
+				ShipPanel:SetAutoSize(true)
+				ShipPanel:SetSpacing(1)
+				ShipPanel:EnableHorizontal(true)
+				ShipPanel:EnableVerticalScrollbar(true)
+					local function AddShipIcon(Model, description, command)
+						local icon = vgui.Create("SpawnIcon")
+						icon:InvalidateLayout( true )
+						icon:SetModel(Model)
+						icon:SetSize(64, 64)
+						icon:SetToolTip(description)
+						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
+						ShipPanel:AddItem(icon)
+					end
+					
+					local shipnum = 0
+					for k,v in pairs(CustomShipments) do
+						if not GAMEMODE:CustomObjFitsMap(v) then continue end
+						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
+							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
+							AddShipIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", GAMEMODE.Config.currency .. tostring(v.price)), "/buyshipment "..v.name)
+							shipnum = shipnum + 1
 						end
 					end
-			WepCat:SetContents(WepPanel)
-			WepCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
-			self:AddItem(WepCat)
-
+				if shipnum ~= 0 then
+					ShipCat:SetContents(ShipPanel)
+					ShipCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+					self:AddItem(ShipCat)
+				else
+					ShipPanel:Remove()
+					ShipCat:Remove()
+				end
+			
 			local EntCat = vgui.Create("DCollapsibleCategory")
 			EntCat:SetLabel("Entities")
 				local EntPanel = vgui.Create("DPanelList")
@@ -620,31 +693,31 @@ function GM:EntitiesTab()
 						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
 						EntPanel:AddItem(icon)
 					end
-
+					local entnum = 0
 					for k,v in pairs(DarkRPEntities) do
 						if not v.allowed or (type(v.allowed) == "table" and table.HasValue(v.allowed, LocalPlayer():Team()))
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
 							local cmdname = string.gsub(v.ent, " ", "_")
 
 							AddEntIcon(v.model, "Buy a " .. v.name .." " .. GAMEMODE.Config.currency .. v.price, v.cmd)
+							entnum = entnum + 1
 						end
 					end
 
 					if FoodItems and (GAMEMODE.Config.foodspawn or LocalPlayer():Team() == TEAM_COOK) and LocalPlayer():Team() == TEAM_COOK then
 						for k,v in pairs(FoodItems) do
 							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..k, "$15"), "/buyfood "..k)
+							entnum = entnum + 1
 						end
 					end
-					for k,v in pairs(CustomShipments) do
-						if not GAMEMODE:CustomObjFitsMap(v) then continue end
-						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
-							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
-							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", GAMEMODE.Config.currency .. tostring(v.price)), "/buyshipment "..v.name)
-						end
-					end
-			EntCat:SetContents(EntPanel)
-			EntCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
-			self:AddItem(EntCat)
+				if entnum ~= 0 then
+					EntCat:SetContents(EntPanel)
+					EntCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+					self:AddItem(EntCat)
+				else
+					EntPanel:Remove()
+					EntCat:Remove()
+				end
 
 
 			if #CustomVehicles <= 0 then return end
