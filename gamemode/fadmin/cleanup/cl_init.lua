@@ -13,7 +13,7 @@ FAdmin.StartHooks["CleanUp"] = function()
 	end)
 
 	usermessage.Hook("FAdmin_StopSounds", function()
-		RunConsoleCommand("stopsounds") -- bypass for ConCommand blocking it
+		RunConsoleCommand("stopsound") -- bypass for ConCommand blocking it
 	end)
 	
 	FAdmin.ScoreBoard.Server:AddServerAction("Clean up server", "FAdmin/icons/CleanUp", Color(155, 0, 0, 255), true, function(ply, button)
