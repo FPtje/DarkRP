@@ -92,8 +92,8 @@ end
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
-	self:SetWeaponHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
+	self:NewSetWeaponHoldType("melee")
+	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.Weapon:EmitSound(self.Sound)
@@ -129,14 +129,14 @@ end
 function SWEP:SecondaryAttack()
 	if CurTime() < self.NextStrike then return end
 
+	self:NewSetWeaponHoldType("melee")
+	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
+
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.Weapon:EmitSound(self.Sound)
 	self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
 
 	self.NextStrike = CurTime() + .3
-
-	self:SetWeaponHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
 
 	if CLIENT then return end
 
@@ -170,11 +170,11 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
-	self:SetWeaponHoldType("melee")
+	self:NewSetWeaponHoldType("melee")
 	timer.Destroy("rp_stunstick_threaten")
 	timer.Create("rp_stunstick_threaten", 1, 1, function()
 		if not IsValid(self) then return end
-		self:SetWeaponHoldType("normal")
+		self:NewSetWeaponHoldType("normal")
 	end)
 
 	if not SERVER then return end
