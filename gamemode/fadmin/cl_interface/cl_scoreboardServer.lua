@@ -4,49 +4,59 @@ FAdmin.ScoreBoard.Server.ActionButtons = FAdmin.ScoreBoard.Server.ActionButtons 
 local function MakeServerOptions()
 	local XPos, YPos, Width = 20, FAdmin.ScoreBoard.Y + 120 + FAdmin.ScoreBoard.Height / 5 + 20, (FAdmin.ScoreBoard.Width - 40)/3
 
-	FAdmin.ScoreBoard.Server.Controls.ServerActions = FAdmin.ScoreBoard.Server.Controls.ServerActions or vgui.Create("FAdminPlayerCatagory")
-	FAdmin.ScoreBoard.Server.Controls.ServerActions:SetLabel("  Server Actions")
-	FAdmin.ScoreBoard.Server.Controls.ServerActions.CatagoryColor = Color(155, 0, 0, 255)
-	FAdmin.ScoreBoard.Server.Controls.ServerActions:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
-	FAdmin.ScoreBoard.Server.Controls.ServerActions:SetPos(FAdmin.ScoreBoard.X + 20, YPos)
-	FAdmin.ScoreBoard.Server.Controls.ServerActions:SetVisible(true)
-	function FAdmin.ScoreBoard.Server.Controls.ServerActions:Toggle()
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat = FAdmin.ScoreBoard.Server.Controls.ServerActionsCat or vgui.Create("FAdminPlayerCatagory")
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetLabel("  Server Actions")
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat.CatagoryColor = Color(155, 0, 0, 255)
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetPos(FAdmin.ScoreBoard.X + 20, YPos)
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetVisible(true)
+	function FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:Toggle()
 	end
 
-
-	local ActionPanels = {}
-	ActionPanels.ServerActions = vgui.Create("FAdminPanelList")
-	FAdmin.ScoreBoard.Server.Controls.ServerActions:SetContents(ActionPanels.ServerActions)
-	ActionPanels.ServerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions = FAdmin.ScoreBoard.Server.Controls.PlayerActions or vgui.Create("FAdminPlayerCatagory")
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetLabel("  Player Actions")
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions.CatagoryColor = Color(0, 155, 0, 255)
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetPos(FAdmin.ScoreBoard.X + 20 + Width, YPos)
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetVisible(true)
-	function FAdmin.ScoreBoard.Server.Controls.PlayerActions:Toggle()
+	FAdmin.ScoreBoard.Server.Controls.ServerActions = FAdmin.ScoreBoard.Server.Controls.ServerActions or vgui.Create("FAdminPanelList")
+	FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.ServerActions)
+	FAdmin.ScoreBoard.Server.Controls.ServerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
+	for k,v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerActions:GetChildren()) do
+		if k == 1 then continue end
+		v:Remove()
 	end
 
-	ActionPanels.PlayerActions = vgui.Create("FAdminPanelList")
-	FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetContents(ActionPanels.PlayerActions)
-	ActionPanels.PlayerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings = FAdmin.ScoreBoard.Server.Controls.ServerSettings or vgui.Create("FAdminPlayerCatagory")
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetLabel("  Server Settings")
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings.CatagoryColor = Color(0, 0, 155, 255)
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetPos(FAdmin.ScoreBoard.X + 20 + Width*2, YPos)
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetVisible(true)
-	function FAdmin.ScoreBoard.Server.Controls.ServerSettings:Toggle()
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat = FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat or vgui.Create("FAdminPlayerCatagory")
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetLabel("  Player Actions")
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat.CatagoryColor = Color(0, 155, 0, 255)
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetPos(FAdmin.ScoreBoard.X + 20 + Width, YPos)
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetVisible(true)
+	function FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:Toggle()
 	end
 
-	ActionPanels.ServerSettings = vgui.Create("FAdminPanelList")
-	FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetContents(ActionPanels.ServerSettings)
-	ActionPanels.ServerSettings:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
+	FAdmin.ScoreBoard.Server.Controls.PlayerActions = FAdmin.ScoreBoard.Server.Controls.PlayerActions or vgui.Create("FAdminPanelList")
+	FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.PlayerActions)
+	FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
+	for k,v in pairs(FAdmin.ScoreBoard.Server.Controls.PlayerActions:GetChildren()) do
+		if k == 1 then continue end
+		v:Remove()
+	end
+
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat = FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat or vgui.Create("FAdminPlayerCatagory")
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetLabel("  Server Settings")
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat.CatagoryColor = Color(0, 0, 155, 255)
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetSize(Width-5, FAdmin.ScoreBoard.Height - 20 - YPos)
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetPos(FAdmin.ScoreBoard.X + 20 + Width*2, YPos)
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetVisible(true)
+	function FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:Toggle()
+	end
+
+	FAdmin.ScoreBoard.Server.Controls.ServerSettings = FAdmin.ScoreBoard.Server.Controls.ServerSettings or vgui.Create("FAdminPanelList")
+	FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.ServerSettings)
+	FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
+	for k,v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerSettings:GetChildren()) do
+		if k == 1 then continue end
+		v:Remove()
+	end
 
 	for k, v in ipairs(FAdmin.ScoreBoard.Server.ActionButtons) do
-		if v.Visible == true or (type(v.Visible) == "function" and v.Visible(FAdmin.ScoreBoard.Player.Player) == true) then
+		if v.Visible == true or (type(v.Visible) == "function" and v.Visible() == true) then
 			local ActionButton = vgui.Create("FAdminActionButton")
 			if type(v.Image) == "string" then
 				ActionButton:SetImage(v.Image or "icon16/exclamation")
@@ -54,7 +64,7 @@ local function MakeServerOptions()
 				ActionButton:SetImage(v.Image[1])
 				if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
 			elseif type(v.Image) == "function" then
-				local img1, img2 = v.Image(ply)
+				local img1, img2 = v.Image()
 				ActionButton:SetImage(img1)
 				if img2 then ActionButton:SetImage2(img2) end
 			else
@@ -70,7 +80,7 @@ local function MakeServerOptions()
 				return v.Action(self)
 			end
 
-			ActionPanels[v.TYPE]:Add(ActionButton)
+			FAdmin.ScoreBoard.Server.Controls[v.TYPE]:Add(ActionButton)
 			if v.OnButtonCreated then
 				v.OnButtonCreated(ActionButton)
 			end
@@ -93,6 +103,14 @@ end
 function FAdmin.ScoreBoard.Server.Show(ply)
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 
+	FAdmin.ScoreBoard.Server.InfoPanels = FAdmin.ScoreBoard.Server.InfoPanels or {}
+	for k,v in pairs(FAdmin.ScoreBoard.Server.InfoPanels) do
+		if ValidPanel(v) then
+			v:Remove()
+			FAdmin.ScoreBoard.Server.InfoPanels[k] = nil
+		end
+	end
+
 	if ValidPanel(FAdmin.ScoreBoard.Server.Controls.InfoPanel) then
 		FAdmin.ScoreBoard.Server.Controls.InfoPanel:Remove()
 	end
@@ -102,14 +120,13 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 	FAdmin.ScoreBoard.Server.Controls.InfoPanel:SetVisible(true)
 	FAdmin.ScoreBoard.Server.Controls.InfoPanel:Clear(true)
 
-	local InfoPanels = {}
 	local function AddInfoPanel()
 		local pan = vgui.Create("FAdminPanelList")
 		pan:SetSize(1, FAdmin.ScoreBoard.Server.Controls.InfoPanel:GetTall())
 		pan:Dock(LEFT)
 		FAdmin.ScoreBoard.Server.Controls.InfoPanel:Add(pan)
 
-		table.insert(InfoPanels, pan)
+		table.insert(FAdmin.ScoreBoard.Server.InfoPanels, pan)
 		return pan
 	end
 
