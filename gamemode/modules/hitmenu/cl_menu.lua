@@ -154,7 +154,7 @@ end
 
 function PANEL:Paint()
 	local w, h = self:GetSize()
-	surface.SetDrawColor(self:GetButtonColor())
+	surface.SetDrawColor(self:GetButtonColor() or 0)
 	surface.DrawRect(0, 0, w, h)
 end
 
