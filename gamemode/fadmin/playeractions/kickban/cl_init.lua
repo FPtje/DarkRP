@@ -236,7 +236,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 				RunConsoleCommand("_FAdmin", "kick", SteamID, "update", self:GetValue())
 			end
 			TextEntry:SetText("Enter reason here")
-			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", SteamID, "execute") end
+			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", SteamID, "execute", TextEntry:GetValue()) end
 			function TextEntry:OnFocusChanged(changed)
 				self:RequestFocus()
 				self:SelectAllText(true)
