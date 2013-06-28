@@ -38,8 +38,10 @@ FAdmin.StartHooks["ServerSettings"] = function()
 	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (tobool(GetConVarNumber("sbox_godmode")) and "Disable" or "Enable").." global god mode" end,
 	function() return "FAdmin/icons/god", tobool(GetConVarNumber("sbox_godmode")) and "FAdmin/icons/disable" end,
 	Color(0, 0, 155, 255), true, function(button)
-		button:SetImage2((not tobool(GetConVarNumber("sbox_godmode")) and "FAdmin/icons/disable") or "null")
-		button:SetText((not tobool(GetConVarNumber("sbox_godmode")) and "Disable" or "Enable").." global god mode")
+		local val = tobool(GetConVarNumber("sbox_godmode"))
+
+		button:SetImage2((not val and "FAdmin/icons/disable") or "null")
+		button:SetText((not val and "Disable" or "Enable").." global god mode")
 		button:GetParent():InvalidateLayout()
 
 		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_godmode", (tobool(GetConVarNumber("sbox_godmode")) and 0) or 1)
@@ -50,8 +52,8 @@ FAdmin.StartHooks["ServerSettings"] = function()
 	Color(0, 0, 155, 255), true, function(button)
 		local val = tobool(GetConVarNumber("sbox_playershurtplayers"))
 
-		button:SetImage2(val and "FAdmin/icons/disable" or "null")
-		button:SetText((val and "Disable" or "Enable").." player vs player damage")
+		button:SetImage2(not val and "FAdmin/icons/disable" or "null")
+		button:SetText((not val and "Disable" or "Enable").." player vs player damage")
 		button:GetParent():InvalidateLayout()
 
 		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_playershurtplayers", val and 0 or 1)
@@ -63,7 +65,7 @@ FAdmin.StartHooks["ServerSettings"] = function()
 		local val = tobool(GetConVarNumber("sbox_noclip"))
 
 		button:SetImage2(not val and "FAdmin/icons/disable" or "null")
-		button:SetText(not val and "Disable" or "Enable".." global noclip")
+		button:SetText((not val and "Disable" or "Enable").." global noclip")
 		button:GetParent():InvalidateLayout()
 
 		RunConsoleCommand("_Fadmin", "ServerSetting", "sbox_noclip", val and 0 or 1)
