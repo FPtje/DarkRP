@@ -46,7 +46,7 @@ function plyMeta:placeHit(customer, target, price)
 
 	DB.PayPlayer(customer, self, price)
 
-	hook.Call("onHitAccepted", DarkRP.hooks, self, target)
+	hook.Call("onHitAccepted", DarkRP.hooks, self, target, customer)
 end
 
 function plyMeta:setHitTarget(target)
@@ -143,23 +143,25 @@ end, 20)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-function DarkRP.hooks:onHitAccepted(hitman, target)
+function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 	net.Start("onHitAccepted")
 		net.WriteEntity(hitman)
 		net.WriteEntity(target)
+		net.WriteEntity(customer)
 	net.Broadcast()
 
-	GAMEMODE:Notify(hits[hitman].customer, 0, 8, "Hit Accepted!")
-	hits[hitman].customer.lastHitAccepted = CurTime()
+	GAMEMODE:Notify(customer, 0, 8, "Hit Accepted!")
+	customer.lastHitAccepted = CurTime()
 
-	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price, false,
+	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, false,
 		Color(255, 0, 255))
 end
 
-function DarkRP.hooks:onHitCompleted(hitman, target)
+function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 	net.Start("onHitCompleted")
 		net.WriteEntity(hitman)
 		net.WriteEntity(target)
+		net.WriteEntity(customer)
 	net.Broadcast()
 
 	GAMEMODE:NotifyAll(0, 6, "Hit by " .. hitman:Nick() .. " completed!")
@@ -192,7 +194,7 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 	end
 
 	if IsValid(attacker) and attacker:IsPlayer() and attacker:getHitTarget() == ply then
-		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply)
+		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply, hits[attacker].customer)
 	end
 
 	for hitman, hit in pairs(hits) do
