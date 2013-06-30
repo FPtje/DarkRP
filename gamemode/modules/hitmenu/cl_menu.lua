@@ -56,6 +56,7 @@ function PANEL:Think()
 
 	-- update the price (so the hitman can't scam)
 	self.price:SetText(string.format("Price:  $%s", self:GetHitman():getHitPrice()))
+	self.price:SizeToContents()
 end
 
 function PANEL:PerformLayout()
