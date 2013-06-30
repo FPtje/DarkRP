@@ -72,7 +72,7 @@ function GM:AddTeamCommands(CTeam, max)
 		end)
 		AddChatCommand("/"..CTeam.command, function(ply)
 			if ply:HasPriv("rp_"..CTeam.command) then
-				ply:ChangeTeam(k, true)
+				ply:ChangeTeam(k)
 				return ""
 			end
 
@@ -94,7 +94,7 @@ function GM:AddTeamCommands(CTeam, max)
 				return ""
 			end
 
-			ply:ChangeTeam(k, true)
+			ply:ChangeTeam(k)
 			return ""
 		end)
 	else
