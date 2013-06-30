@@ -14,6 +14,7 @@ Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:requestHit(customer, target, price)
 	local canRequest, msg = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
+
 	if canRequest == false then
 		GAMEMODE:Notify(customer, 1, 4, msg)
 		return false
@@ -149,6 +150,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target)
 	net.Broadcast()
 
 	GAMEMODE:Notify(hits[hitman].customer, 0, 8, "Hit Accepted!")
+	hits[hitman].customer.lastHitAccepted = CurTime()
 
 	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price, false,
 		Color(255, 0, 255))
