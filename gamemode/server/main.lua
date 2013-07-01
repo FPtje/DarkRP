@@ -205,6 +205,9 @@ local function LookPersonUp(ply, cmd, args)
 		ply:PrintMessage(2, "Job: ".. team.GetName(P:Team()))
 		ply:PrintMessage(2, "Kills: ".. P:Frags())
 		ply:PrintMessage(2, "Deaths: ".. P:Deaths())
+		if ply:IsAdmin() then
+			ply:PrintMessage(2, "Money: ".. P:getDarkRPVar("money"))
+		end
 	else
 		print("Nick: ".. P:Nick())
 		print("Steam name: "..P:SteamName())
