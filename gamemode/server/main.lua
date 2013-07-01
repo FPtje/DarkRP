@@ -218,17 +218,6 @@ local function LookPersonUp(ply, cmd, args)
 end
 concommand.Add("rp_lookup", LookPersonUp)
 
-local function GiveHint()
-	if not GAMEMODE.Config.advertisements then return end
-	local text = LANGUAGE.hints[math.random(1, #LANGUAGE.hints)]
-
-	for k,v in pairs(player.GetAll()) do
-		GAMEMODE:TalkToPerson(v, Color(150,150,150,150), text)
-	end
-end
-
-timer.Create("hints", 60, 0, GiveHint)
-
 /*---------------------------------------------------------
  Items
  ---------------------------------------------------------*/
