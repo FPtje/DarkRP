@@ -105,7 +105,7 @@ local function ccRemoveOwner(ply, cmd, args)
 		end
 
 		if trace.Entity:OwnedBy(target) then
-			trace.Entity:RemoveOwner(target)
+			trace.Entity:removeDoorOwner(target)
 		end
 	else
 		ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))

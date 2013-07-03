@@ -488,14 +488,14 @@ function meta:RemoveAllowed(ply)
 	if string.sub(self.DoorData.AllowedToOwn or "", -1) == ";" then self.DoorData.AllowedToOwn = string.sub(self.DoorData.AllowedToOwn, 1, -2) end
 end
 
-function meta:AddOwner(ply)
+function meta:addDoorOwner(ply)
 	if not IsValid(self) then return end
 	self.DoorData = self.DoorData or {}
 	self.DoorData.ExtraOwners = self.DoorData.ExtraOwners and self.DoorData.ExtraOwners .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
 	self:RemoveAllowed(ply)
 end
 
-function meta:RemoveOwner(ply)
+function meta:removeDoorOwner(ply)
 	if not IsValid(self) then return end
 	self.DoorData = self.DoorData or {}
 	if self.DoorData.ExtraOwners then self.DoorData.ExtraOwners = string.gsub(self.DoorData.ExtraOwners, tostring(ply:UserID())..".?", "") end
@@ -505,7 +505,7 @@ end
 function meta:Own(ply)
 	self.DoorData = self.DoorData or {}
 	if self:AllowedToOwn(ply) then
-		self:AddOwner(ply)
+		self:addDoorOwner(ply)
 		return
 	end
 
@@ -545,10 +545,10 @@ function meta:UnOwn(ply)
 	if self:IsMasterOwner(ply) then
 		self.DoorData.Owner = nil
 	else
-		self:RemoveOwner(ply)
+		self:removeDoorOwner(ply)
 	end
 
-	self:RemoveOwner(ply)
+	self:removeDoorOwner(ply)
 	ply.LookingAtDoor = nil
 end
 
@@ -597,7 +597,7 @@ local function RemoveDoorOwner(ply, args)
 				end
 
 				if trace.Entity:OwnedBy(target) then
-					trace.Entity:RemoveOwner(target)
+					trace.Entity:removeDoorOwner(target)
 				end
 			else
 				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.do_not_own_ent)
