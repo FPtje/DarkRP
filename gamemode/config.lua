@@ -13,8 +13,6 @@ GM.Config.AdminsCopWeapons 				= true
 GM.Config.adminsents 					= true
 -- adminvehicles - Whether or not Vehicles should be admin only.
 GM.Config.adminvehicles 				= true
--- advertisements - Enable/Disable chatprint advertisements.
-GM.Config.advertisements 				= true
 -- allow people getting their own custom jobs
 GM.Config.allowjobswitch 				= true
 -- allowrpnames - Allow Players to Set their RP names using the /rpname command.
