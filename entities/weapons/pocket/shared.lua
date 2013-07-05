@@ -63,7 +63,7 @@ function SWEP:Equip(newOwner)
 	end
 end
 
-local blacklist = {"fadmin_jail", "drug_lab", "money_printer", "meteor", "microwave", "door", "func_", "player", "beam", "worldspawn", "env_", "path_", "spawned_shipment", "darkrp_console"}
+local blacklist = {"fadmin_jail", "drug_lab", "money_printer", "meteor", "microwave", "door", "func_", "player", "beam", "worldspawn", "env_", "path_", "spawned_shipment", "darkrp_console", "prop_physics"}
 function SWEP:PrimaryAttack()
 
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if self.Owner:EyePos():Distance(trace.HitPos) > 65 then
+	if self.Owner:EyePos():Distance(trace.HitPos) > 150 then
 		return
 	end
 
