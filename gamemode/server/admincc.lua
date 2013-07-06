@@ -46,6 +46,27 @@ local function ccDoorUnOwn(ply, cmd, args)
 end
 concommand.Add("rp_unown", ccDoorUnOwn)
 
+local function unownAll(ply, cmd, args)
+	if ply:EntIndex() == 0 then
+		return
+	end
+
+	if not ply:HasPriv("rp_commands") then
+		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_unown"))
+		return
+	end
+
+	target = GAMEMODE:FindPlayer(args[1])
+
+	if not IsValid(target) then
+		ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
+		return
+	end
+	target:UnownAll()
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), nil, Color(30, 30, 30))
+end
+concommand.Add("rp_unownall", unownAll)
+
 local function ccAddOwner(ply, cmd, args)
 	if ply:EntIndex() == 0 then
 		return
