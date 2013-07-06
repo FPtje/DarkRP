@@ -13,12 +13,16 @@ FAdmin.StartHooks["Freeze"] = function()
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Freeze", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_frozen") then
-			RunConsoleCommand("_FAdmin", "freeze", ply:SteamID())
+			FAdmin.PlayerActions.addTimeMenu(function(secs)
+				RunConsoleCommand("_FAdmin", "freeze", ply:SteamID(), secs)
+				button:SetImage2("FAdmin/icons/disable")
+				button:SetText("Unfreeze")
+				button:GetParent():InvalidateLayout()
+			end)
 		else
 			RunConsoleCommand("_FAdmin", "unfreeze", ply:SteamID())
 		end
 
-		if not ply:FAdmin_GetGlobal("FAdmin_frozen") then button:SetImage2("FAdmin/icons/disable") button:SetText("Unfreeze") button:GetParent():InvalidateLayout() return end
 		button:SetImage2("null")
 		button:SetText("Freeze")
 		button:GetParent():InvalidateLayout()
