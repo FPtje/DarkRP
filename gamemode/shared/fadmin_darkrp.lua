@@ -129,7 +129,7 @@ function FAdmin.IsEmpty(vector)
 end
 
 function FAdmin.SteamToProfile(ply)
-	return "http://steamcommunity.com/profiles/" .. ply:SteamID64()
+	return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
 end
 
 hook.Add("CanTool", "EntityCanTool", function(ply, trace, mode)
