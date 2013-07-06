@@ -359,11 +359,11 @@ local function BuyPistol(ply, args)
 	local class = nil
 	local model = nil
 
-	local custom = false
+	local shipment
 	local price = 0
 	for k,v in pairs(CustomShipments) do
 		if v.seperate and string.lower(v.name) == string.lower(args) and GAMEMODE:CustomObjFitsMap(v) then
-			custom = v
+			shipment = v
 			class = v.entity
 			model = v.model
 			price = v.pricesep
@@ -404,6 +404,11 @@ local function BuyPistol(ply, args)
 	weapon.ammoadd = weapons.Get(class) and weapons.Get(class).Primary.DefaultClip
 	weapon.nodupe = true
 	weapon:Spawn()
+
+	if shipment.onBought then
+		shipment.onBought(ply, shipment, weapon)
+	end
+	hook.Call("playerBoughtPistol", nil, ply, shipment, weapon)
 
 	if IsValid( weapon ) then
 		ply:AddMoney(-price)
@@ -487,6 +492,11 @@ local function BuyShipment(ply, args)
 
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
+
+	if CustomShipments[foundKey].onBought then
+		CustomShipments[foundKey].onBought(ply, CustomShipments[foundKey], weapon)
+	end
+	hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], weapon)
 
 	if IsValid( crate ) then
 		ply:AddMoney(-cost)
