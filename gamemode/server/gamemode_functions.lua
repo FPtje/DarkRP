@@ -347,6 +347,10 @@ function GM:CanProperty(ply, property, ent)
 	return false -- Disabled until antiminge measure is found
 end
 
+function GM:PlayerShouldTaunt(ply, actid)
+	return false
+end
+
 function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
 	local weapon = ply:GetActiveWeapon()
 	local canDrop = hook.Call("CanDropWeapon", self, ply, weapon)
