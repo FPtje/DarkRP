@@ -433,6 +433,7 @@ function GM:InitPostEntity()
 			return
 		end
 	end)
+	hook.Call("TeamChanged", GAMEMODE, 1, 1)
 end
 
 function GM:TeamChanged(before, after)
