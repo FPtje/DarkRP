@@ -52,7 +52,15 @@ TEAM_POLICE = AddExtraTeam("Civil Protection", {
 	admin = 0,
 	vote = true,
 	hasLicense = true,
-	help = LANGUAGE.cophelp
+	help = {
+		"Please don't abuse your job",
+		"When you arrest someone they are auto transported to jail.",
+		"They are auto let out of jail after some time",
+		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
+		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect",
+		"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect",
+		"Type /jailpos to set the jail position"
+	}
 })
 
 TEAM_GANG = AddExtraTeam("Gangster", {
@@ -99,7 +107,11 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	help = LANGUAGE.bosshelp
+	help = {
+		"As the mob boss, you decide what you want the other Gangsters to do.",
+		"You get an Unarrest Stick which you can use to break people out of jail.",
+		"/agenda <Message> Sets the Gangsters' agenda. Use // to go to the next line."
+	}
 })
 
 TEAM_GUN = AddExtraTeam("Gun Dealer", {
@@ -158,7 +170,15 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	vote = false,
 	hasLicense = true,
 	NeedToChangeFrom = TEAM_POLICE,
-	help = LANGUAGE.cophelp
+	help = {
+		"Please don't abuse your job",
+		"When you arrest someone they are auto transported to jail.",
+		"They are auto let out of jail after some time",
+		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
+		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect",
+		"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect",
+		"Type /jailpos to set the jail position"
+	}
 })
 
 TEAM_MAYOR = AddExtraTeam("Mayor", {
@@ -180,7 +200,15 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 	admin = 0,
 	vote = true,
 	hasLicense = false,
-	help = LANGUAGE.mayorhelp
+	help = {
+		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
+		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect.",
+		"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect.",
+		"Type /lockdown to initiate a lockdown",
+		"Type /unlockdown to end a lockdown",
+		"Type /placelaws to place a screen containing the laws.",
+		"Type /addlaw and /removelaw to edit the laws."
+	}
 })
 
 TEAM_HOBO = AddExtraTeam("Hobo", {

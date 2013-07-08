@@ -1,8 +1,5 @@
 local TextColor = Color(GetConVarNumber("Healthforeground1"), GetConVarNumber("Healthforeground2"), GetConVarNumber("Healthforeground3"), GetConVarNumber("Healthforeground4"))
 local function AFKHUDPaint()
-	LocalPlayer().DarkRPVars = LocalPlayer().DarkRPVars or {}
-	LocalPlayer():getDarkRPVar("AFK") = LocalPlayer():getDarkRPVar("AFK") or false
-
 	if not LocalPlayer():getDarkRPVar("AFK") then return end
 
 	draw.SimpleText("AFK MODE", "DarkRPHUD2", ScrW()/2, (ScrH()/2) - 100, TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

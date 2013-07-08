@@ -126,6 +126,11 @@ DarkRP.hookStub{
 			name = "target",
 			description = "The target of the current hit",
 			type = "Player"
+		},
+		{
+			name = "customer",
+			description = "The customer of the current hit",
+			type = "Player"
 		}
 	},
 	returns = {
@@ -145,6 +150,11 @@ DarkRP.hookStub{
 		{
 			name = "target",
 			description = "The target of the current hit",
+			type = "Player"
+		},
+		{
+			name = "customer",
+			description = "The customer of the current hit",
 			type = "Player"
 		}
 	},

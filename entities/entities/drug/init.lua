@@ -8,7 +8,6 @@ local function UnDrugPlayer(ply)
 	local IDSteam = ply:UniqueID()
 
 	timer.Remove(IDSteam.."DruggedHealth")
-	timer.Remove(IDSteam)
 
 	SendUserMessage("DrugEffects", ply, false)
 
@@ -28,14 +27,18 @@ local function DrugPlayer(ply)
 	hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
 
 	local IDSteam = ply:UniqueID()
-	if not timer.Exists(IDSteam.."DruggedHealth") and not timer.Exists(IDSteam) then
+	if not timer.Exists(IDSteam.."DruggedHealth") then
 		ply:SetHealth(ply:Health() + 100)
+		local i = 0
 		timer.Create(IDSteam.."DruggedHealth", 60/(100 + 5), 100 + 5, function()
 			if not IsValid(ply) then return end
 			ply:SetHealth(ply:Health() - 1)
 			if ply:Health() <= 0 then ply:Kill() end
+			i = i + 1
+			if i == 105 then
+				UnDrugPlayer(ply)
+			end
 		end)
-		timer.Create(IDSteam, 60, 1, function() UnDrugPlayer(ply) end)
 	end
 
 	hook.Add("PlayerDeath", ply, UnDrugPlayer)

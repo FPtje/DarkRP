@@ -55,7 +55,6 @@ include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
-include("shared/language.lua")
 include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 
@@ -136,7 +135,7 @@ end
 
 
 function GM:InitPostEntity()
-	
+	hook.Call("TeamChanged", GAMEMODE, 1, 1)
 end
 
 function GM:TeamChanged(before, after)
@@ -151,4 +150,3 @@ local function OnChangedTeam(um)
 	hook.Call("TeamChanged", GAMEMODE, um:ReadShort(), um:ReadShort())
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
-

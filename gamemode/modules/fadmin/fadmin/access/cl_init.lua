@@ -8,7 +8,9 @@ end
 net.Receive("FADMIN_SendGroups", RetrievePRIVS)
 
 local function addPriv(um)
-	FAdmin.Access.Groups[um:ReadString()].PRIVS[um:ReadString()] = true
+	local group = um:ReadString()
+	FAdmin.Access.Groups[group] = FAdmin.Access.Groups[group] or {}
+	FAdmin.Access.Groups[group].PRIVS[um:ReadString()] = true
 end
 usermessage.Hook("FAdmin_AddPriv", addPriv)
 

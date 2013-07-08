@@ -255,6 +255,9 @@ function GM:switchTabOrder(from, to)
 end
 
 function GM:removeTab(tabNr)
+	if ValidPanel(F4Tabs[tabNr].ctrl) then
+		F4Tabs[tabNr].ctrl:Remove()
+	end
 	table.remove(F4Tabs, tabNr)
 end
 

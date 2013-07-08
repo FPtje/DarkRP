@@ -3,7 +3,7 @@ FAdmin.StartHooks["Slay"] = function()
 	FAdmin.Commands.AddCommand("Slay", nil, "<Player>", "[Normal/Silent/Explode/Rocket]")
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Slay", function(ply)
-		LocalPlayer():ConCommand("FAdmin Slay "..ply:SteamID())
+		RunConsoleCommand("_FAdmin", "slay", ply:SteamID())
 	end)
 
 	FAdmin.ScoreBoard.Player:AddActionButton("Slay", "FAdmin/icons/slay", Color(255, 130, 0, 255),

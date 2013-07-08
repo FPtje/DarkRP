@@ -220,7 +220,7 @@ function DB.Init()
 			);
 		]])
 
-		-- Table that holds all position data (jail, consoles, zombie spawns etc.)
+		-- Table that holds all position data (jail, zombie spawns etc.)
 		-- Queue these queries because other queries depend on the existence of the darkrp_position table
 		-- Race conditions could occur if the queries are executed simultaneously
 		DB.QueueQuery([[
@@ -249,21 +249,6 @@ function DB.Init()
 					ON DELETE CASCADE;
 			]])
 		end
-
-
-		-- Consoles have to be spawned in an angle
-		DB.QueueQuery([[
-			CREATE TABLE IF NOT EXISTS darkrp_console(
-				id INTEGER NOT NULL PRIMARY KEY,
-				pitch INTEGER NOT NULL,
-				yaw INTEGER NOT NULL,
-				roll INTEGER NOT NULL,
-
-				FOREIGN KEY(id) REFERENCES darkrp_position(id)
-					ON UPDATE CASCADE
-					ON DELETE CASCADE
-			);
-		]])
 
 		-- Player information
 		DB.Query([[
@@ -344,8 +329,6 @@ function DB.Init()
 							FOR EACH ROW
 								IF OLD.type = "T" THEN
 									DELETE FROM darkrp_jobspawn WHERE darkrp_jobspawn.id = OLD.id;
-								ELSEIF OLD.type = "C" THEN
-									DELETE FROM darkrp_console WHERE darkrp_console.id = OLD.id;
 								END IF
 						;
 					]])
@@ -359,16 +342,6 @@ function DB.Init()
 					WHEN OLD.type = "T"
 					BEGIN
 						DELETE FROM darkrp_jobspawn WHERE darkrp_jobspawn.id = OLD.id;
-					END;
-			]])
-
-			DB.Query([[
-				CREATE TRIGGER IF NOT EXISTS ConsolePosFKDelete
-					AFTER DELETE ON darkrp_position
-					FOR EACH ROW
-					WHEN OLD.type = "C"
-					BEGIN
-						DELETE FROM darkrp_console WHERE darkrp_console.id = OLD.id;
 					END;
 			]])
 		end
@@ -391,7 +364,6 @@ function DB.Init()
 		DB.SetUpNonOwnableDoors()
 		DB.SetUpTeamOwnableDoors()
 		DB.SetUpGroupDoors()
-		DB.LoadConsoles()
 
 		DB.Query("SELECT * FROM darkrp_cvar;", function(settings)
 			for k,v in pairs(settings or {}) do
@@ -481,17 +453,6 @@ function DB.UpdateDatabase()
 	-- Zombie spawns
 	DB.Query([[INSERT INTO darkrp_position SELECT NULL, p.map, "Z", p.x, p.y, p.z FROM darkrp_zspawns p;]])
 	DB.Query([[DROP TABLE darkrp_zspawns;]])
-
-
-	-- Console spawns
-	DB.Query([[INSERT INTO darkrp_position SELECT NULL, p.map, "C", p.x, p.y, p.z FROM darkrp_consolespawns p;]])
-	DB.Query([[
-		INSERT INTO darkrp_console
-			SELECT new.id, old.pitch, old.yaw, old.roll FROM darkrp_position new JOIN darkrp_consolespawns old ON
-				new.map = old.map AND new.x = old.x AND new.y = old.y AND new.z = old.z
-			WHERE new.type = "C";
-	]])
-	DB.Query([[DROP TABLE darkrp_consolespawns;]])
 
 
 	-- Jail positions
@@ -623,7 +584,7 @@ function DB.StoreJailPos(ply, addingPos)
 	DB.QueryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. DB.SQLStr(map) .. ";", function(already)
 		if not already or already == 0 then
 			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
-			GAMEMODE:Notify(ply, 0, 4,  LANGUAGE.created_first_jailpos)
+			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("created_first_jailpos"))
 
 			return
 		end
@@ -632,14 +593,14 @@ function DB.StoreJailPos(ply, addingPos)
 			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 			table.insert(DB.JailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
-			GAMEMODE:Notify(ply, 0, 4,  LANGUAGE.added_jailpos)
+			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("added_jailpos"))
 		else
 			DB.Query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. DB.SQLStr(map) .. ";", function()
 				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 
 				DB.JailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
-				GAMEMODE:Notify(ply, 0, 5,  LANGUAGE.reset_add_jailpos)
+				GAMEMODE:Notify(ply, 0, 5,  DarkRP.getPhrase("reset_add_jailpos"))
 			end)
 		end
 	end)
@@ -680,7 +641,7 @@ function DB.StoreTeamSpawnPos(t, pos)
 		end)
 	end)
 
-	print(string.format(LANGUAGE.created_spawnpos, team.GetName(t)))
+	print(DarkRP.getPhrase("created_spawnpos", team.GetName(t)))
 end
 
 function DB.AddTeamSpawnPos(t, pos)
@@ -784,9 +745,9 @@ function DB.ResetAllMoney(ply,cmd,args)
 		v:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
 	end
 	if ply:IsPlayer() then
-		GAMEMODE:NotifyAll(0,4, string.format(LANGUAGE.reset_money, ply:Nick()))
+		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
 	else
-		GAMEMODE:NotifyAll(0,4, string.format(LANGUAGE.reset_money, "Console"))
+		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
 	end
 end
 concommand.Add("rp_resetallmoney", DB.ResetAllMoney)
@@ -917,70 +878,6 @@ function DB.SetUpGroupDoors()
 		end
 	end)
 end
-
-/*---------------------------------------------------------------------------
-Consoles
----------------------------------------------------------------------------*/
-
-function DB.LoadConsoles()
-	local map = string.lower(game.GetMap())
-	DB.Query("SELECT * FROM darkrp_position NATURAL JOIN darkrp_console WHERE map = " .. DB.SQLStr(map) .. " AND type = 'C';", function(data)
-		if data then
-			for k, v in pairs(data) do
-				local console = ents.Create("darkrp_console")
-				console:SetPos(Vector(tonumber(v.x), tonumber(v.y), tonumber(v.z)))
-				console:SetAngles(Angle(tonumber(v.pitch), tonumber(v.yaw), tonumber(v.roll)))
-				console:Spawn()
-				console.ID = v.id
-			end
-		else -- If there are no custom positions in the database, use the presets.
-			for k,v in pairs(RP_ConsolePositions or {}) do
-				if v[1] == map then
-					local console = ents.Create("darkrp_console")
-					console:SetPos(Vector(RP_ConsolePositions[k][2], RP_ConsolePositions[k][3], RP_ConsolePositions[k][4]))
-					console:SetAngles(Angle(RP_ConsolePositions[k][5], RP_ConsolePositions[k][6], RP_ConsolePositions[k][7]))
-					console:Spawn()
-					console:Activate()
-
-					console.ID = "0"
-				end
-			end
-		end
-		RP_ConsolePositions = nil
-	end)
-end
-
-function DB.CreateConsole(ply, cmd, args)
-	if not ply:IsSuperAdmin() then return end
-
-	local tr = {}
-	tr.start = ply:EyePos()
-	tr.endpos = ply:EyePos() + 95 * ply:GetAimVector()
-	tr.filter = ply
-	local trace = util.TraceLine(tr)
-
-	local console = ents.Create("darkrp_console")
-	console:SetPos(trace.HitPos)
-	console:Spawn()
-	console:Activate()
-
-	DB.QueryValue("SELECT MAX(id) FROM darkrp_position;", function(Data)
-		console.ID = (tonumber(Data) and tostring(tonumber(Data) + 1)) or "1"
-	end)
-
-	ply:ChatPrint("Console spawned, move and freeze it to save it!")
-end
-concommand.Add("rp_CreateConsole", DB.CreateConsole)
-
-function DB.RemoveConsoles(ply, cmd, args)
-	if not ply:IsSuperAdmin() then return end
-	DB.Query("DELETE FROM darkrp_position WHERE map = " .. DB.SQLStr(string.lower(game.GetMap())) .. " AND type = 'C';")
-	for k,v in pairs(ents.FindByClass("darkrp_console")) do
-		v:Remove()
-	end
-	GAMEMODE:NotifyAll(0, 4, "All consoles have been removed")
-end
-concommand.Add("rp_removeallconsoles", DB.RemoveConsoles)
 
 /*---------------------------------------------------------
  Logging

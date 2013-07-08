@@ -67,8 +67,8 @@ local function SetAFK(ply)
 		hook.Remove("PlayerDisconnected", ply:EntIndex().."DRPNPCDisconnect")
 		hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath")
 	end
-	ply:setDarkRPVar("job", ply.DarkRPVars.AFK and "AFK" or ply.OldJob)
-	ply:getDarkRPVar("salary") = ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0
+	ply:SetDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
+	ply:SetDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
 end
 DarkRP.addChatCommand("/afk", SetAFK)
 

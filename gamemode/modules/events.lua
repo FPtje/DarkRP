@@ -34,8 +34,8 @@ end
 ZombieStart = function()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
-			v:PrintMessage(HUD_PRINTCENTER, LANGUAGE.zombie_approaching)
-			v:PrintMessage(HUD_PRINTTALK, LANGUAGE.zombie_approaching)
+			v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("zombie_approaching"))
+			v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("zombie_approaching"))
 		end
 	end
 end
@@ -43,8 +43,8 @@ end
 ZombieEnd = function()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
-			v:PrintMessage(HUD_PRINTCENTER, LANGUAGE.zombie_leaving)
-			v:PrintMessage(HUD_PRINTTALK, LANGUAGE.zombie_leaving)
+			v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("zombie_leaving"))
+			v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("zombie_leaving"))
 		end
 	end
 end
@@ -60,10 +60,10 @@ end
 local function ReMoveZombie(ply, index)
 	if ply:HasPriv("rp_commands") then
 		if not index or zombieSpawns[tonumber(index)] == nil then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.zombie_spawn_not_exist, tostring(index)))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("zombie_spawn_not_exist", tostring(index)))
 		else
 			DB.RetrieveZombies(function()
-				GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_spawn_removed)
+				GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_spawn_removed"))
 				table.remove(zombieSpawns, index)
 				DB.StoreZombies()
 				if ply:getDarkRPVar("zombieToggle") then
@@ -72,7 +72,7 @@ local function ReMoveZombie(ply, index)
 			end)
 		end
 	else
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_admin, "/removezombie"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/removezombie"))
 	end
 	return ""
 end
@@ -84,10 +84,10 @@ local function AddZombie(ply)
 			table.insert(zombieSpawns, ply:GetPos())
 			DB.StoreZombies()
 			if ply:getDarkRPVar("zombieToggle") then LoadTable(ply) end
-			GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_spawn_added)
+			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_spawn_added"))
 		end)
 	else
-		GAMEMODE:Notify(ply, 1, 6, string.format(LANGUAGE.need_admin, "/addzombie"))
+		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/addzombie"))
 	end
 	return ""
 end
@@ -104,7 +104,7 @@ local function ToggleZombie(ply)
 			ply:setSelfDarkRPVar("zombieToggle", false)
 		end
 	else
-		GAMEMODE:Notify(ply, 1, 6, LANGUAGE.string.format(LANGUAGE.need_admin, "/showzombie"))
+		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/showzombie"))
 	end
 	return ""
 end
@@ -139,11 +139,11 @@ end
 local function ZombieMax(ply, args)
 	if ply:HasPriv("rp_commands") then
 		if not tonumber(args) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.invalid_x, "argument", ""))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return ""
 		end
 		maxZombie = tonumber(args)
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.zombie_maxset, args))
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_maxset", args))
 	end
 
 	return ""
@@ -155,7 +155,7 @@ DarkRP.addChatCommand("/maxzombies", ZombieMax)
 local function StartZombie(ply)
 	if ply:HasPriv("rp_commands") then
 		timer.Start("zombieControl")
-		GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_enabled)
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_enabled"))
 	end
 	return ""
 end
@@ -167,7 +167,7 @@ local function StopZombie(ply)
 		zombieOn = false
 		timer.Stop("start2")
 		ZombieEnd()
-		GAMEMODE:Notify(ply, 0, 4, LANGUAGE.zombie_disabled)
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_disabled"))
 	end
 	return ""
 end
@@ -184,8 +184,8 @@ timer.Stop("zombieControl")
 local function StormStart()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
-			v:PrintMessage(HUD_PRINTCENTER, LANGUAGE.meteor_approaching)
-			v:PrintMessage(HUD_PRINTTALK, LANGUAGE.meteor_approaching)
+			v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("meteor_approaching"))
+			v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("meteor_approaching"))
 		end
 	end
 end
@@ -193,8 +193,8 @@ end
 local function StormEnd()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
-			v:PrintMessage(HUD_PRINTCENTER, LANGUAGE.meteor_passing)
-			v:PrintMessage(HUD_PRINTTALK, LANGUAGE.meteor_passing)
+			v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("meteor_passing"))
+			v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("meteor_passing"))
 		end
 	end
 end
@@ -236,7 +236,7 @@ end
 local function StartStorm(ply)
 	if ply:HasPriv("rp_commands") then
 		timer.Start("stormControl")
-		GAMEMODE:Notify(ply, 0, 4, LANGUAGE.meteor_enabled)
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
 	end
 	return ""
 end
@@ -248,7 +248,7 @@ local function StopStorm(ply)
 		stormOn = false
 		timer.Stop("start")
 		StormEnd()
-		GAMEMODE:Notify(ply, 0, 4, LANGUAGE.meteor_disabled)
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
 	end
 	return ""
 end
@@ -276,10 +276,10 @@ local function TremorReport(mag)
 	local mag = table.remove(lastmagnitudes, 1)
 	if mag then
 		if mag < 6.5 then
-			GAMEMODE:NotifyAll(0, 3, string.format(LANGUAGE.earthtremor_report, tostring(mag)))
+			GAMEMODE:NotifyAll(0, 3, DarkRP.getPhrase("earthtremor_report", tostring(mag)))
 			return
 		end
-		GAMEMODE:NotifyAll(0, 3, string.format(LANGUAGE.earthquake_report, tostring(mag)))
+		GAMEMODE:NotifyAll(0, 3, DarkRP.getPhrase("earthquake_report", tostring(mag)))
 	end
 end
 

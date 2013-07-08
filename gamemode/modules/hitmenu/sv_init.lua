@@ -14,12 +14,13 @@ Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:requestHit(customer, target, price)
 	local canRequest, msg = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
+
 	if canRequest == false then
 		GAMEMODE:Notify(customer, 1, 4, msg)
 		return false
 	end
 
-	GAMEMODE.ques:Create("Accept hit from " .. customer:Nick() .. "\nregarding " .. target:Nick() .. " for $" .. price .. "?",
+	GAMEMODE.ques:Create("Accept hit from " .. customer:Nick() .. "\nregarding " .. target:Nick() .. " for " .. GAMEMODE.Config.currency .. price .. "?",
 		"hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
 		self,
 		20,
@@ -45,7 +46,7 @@ function plyMeta:placeHit(customer, target, price)
 
 	DB.PayPlayer(customer, self, price)
 
-	hook.Call("onHitAccepted", DarkRP.hooks, self, target)
+	hook.Call("onHitAccepted", DarkRP.hooks, self, target, customer)
 end
 
 function plyMeta:setHitTarget(target)
@@ -103,6 +104,8 @@ function questionCallback(answer, hitman, customer, target, price)
 		return
 	end
 
+	if hits[self] then return end
+
 	GAMEMODE:Notify(hitman, 1, 4, "Hit accepted!")
 
 	hitman:placeHit(customer, target, price)
@@ -116,7 +119,7 @@ DarkRP.addChatCommand("/hitprice", function(ply, args)
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
 
-	GAMEMODE:Notify(ply, 2, 4, "Hit price set to $" .. price)
+	GAMEMODE:Notify(ply, 2, 4, "Hit price set to " .. GAMEMODE.Config.currency .. price)
 
 	return ""
 end)
@@ -140,22 +143,25 @@ end, 20)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-function DarkRP.hooks:onHitAccepted(hitman, target)
+function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 	net.Start("onHitAccepted")
 		net.WriteEntity(hitman)
 		net.WriteEntity(target)
+		net.WriteEntity(customer)
 	net.Broadcast()
 
-	GAMEMODE:Notify(hits[hitman].customer, 0, 8, "Hit Accepted!")
+	GAMEMODE:Notify(customer, 0, 8, "Hit Accepted!")
+	customer.lastHitAccepted = CurTime()
 
-	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price, false,
+	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, false,
 		Color(255, 0, 255))
 end
 
-function DarkRP.hooks:onHitCompleted(hitman, target)
+function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 	net.Start("onHitCompleted")
 		net.WriteEntity(hitman)
 		net.WriteEntity(target)
+		net.WriteEntity(customer)
 	net.Broadcast()
 
 	GAMEMODE:NotifyAll(0, 6, "Hit by " .. hitman:Nick() .. " completed!")
@@ -188,7 +194,7 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 	end
 
 	if IsValid(attacker) and attacker:IsPlayer() and attacker:getHitTarget() == ply then
-		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply)
+		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply, hits[attacker].customer)
 	end
 
 	for hitman, hit in pairs(hits) do

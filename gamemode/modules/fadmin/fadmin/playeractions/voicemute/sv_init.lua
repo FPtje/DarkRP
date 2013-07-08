@@ -7,12 +7,21 @@ local function MuteVoice(ply, cmd, args)
 		return
 	end
 
+	local time = tonumber(args[2] or 0)
+	local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
+
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Voicemute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 		if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_voicemuted") then
 			target:FAdmin_SetGlobal("FAdmin_voicemuted", true)
 
-			FAdmin.Messages.ActionMessage(ply, target, "Voice muted %s", "Your voice was muted by %s", "Muted the voice of %s")
+			FAdmin.Messages.ActionMessage(ply, target, "Voice muted %s " .. timeText, "Your voice was muted by %s " .. timeText, "Muted the voice of %s " .. timeText)
+			if time == 0 then continue end
+
+			timer.Simple(time, function()
+				if not IsValid(target) or not target:FAdmin_GetGlobal("FAdmin_voicemuted") then return end
+				target:FAdmin_SetGlobal("FAdmin_voicemuted", false)
+			end)
 		end
 	end
 end

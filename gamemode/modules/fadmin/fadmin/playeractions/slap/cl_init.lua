@@ -7,7 +7,7 @@ FAdmin.StartHooks["Slap"] = function()
 
 	-- Right click option
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Slap", function(ply)
-		LocalPlayer():ConCommand("FAdmin Slap "..ply:SteamID())
+		RunConsoleCommand("_FAdmin", "Slap", ply:SteamID())
 	end)
 
 	-- Slap option in player menu

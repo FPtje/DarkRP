@@ -31,15 +31,21 @@ FAdmin.StartHooks["Ragdoll"] = function()
 		menu:AddPanel(Title)
 
 		for k,v in pairs(FAdmin.PlayerActions.RagdollTypes) do
-			if v ~= "Unragdoll" then
-				menu:AddOption(v, function() RunConsoleCommand("_FAdmin", "Ragdoll", ply:SteamID(), k)
-					if v ~= "Kick him in the nuts" then
-						button:SetImage2("FAdmin/icons/disable")
-						button:SetText("Unragdoll")
-						button:GetParent():InvalidateLayout()
-					end
-				end)
-			end
+			if v == "Unragdoll" then continue end
+			FAdmin.PlayerActions.addTimeSubmenu(menu, v,
+				function()
+					RunConsoleCommand("_FAdmin", "Ragdoll", ply:SteamID(), k)
+					button:SetImage2("FAdmin/icons/disable")
+					button:SetText("Unragdoll")
+					button:GetParent():InvalidateLayout()
+				end,
+				function(secs)
+					RunConsoleCommand("_FAdmin", "Ragdoll", ply:SteamID(), k, secs)
+					button:SetImage2("FAdmin/icons/disable")
+					button:SetText("Unragdoll")
+					button:GetParent():InvalidateLayout()
+				end
+			)
 		end
 
 		menu:Open()

@@ -59,6 +59,7 @@ end)
 
 function FAdmin.Access.PlayerSetGroup(ply, group)
 	if not FAdmin.Access.Groups[group] then return end
+	ply = isstring(ply) and FAdmin.FindPlayer(ply) and FAdmin.FindPlayer(ply)[1] or ply
 	local SteamID = type(ply) ~= "string" and IsValid(ply) and ply:SteamID() or ply
 
 	if type(ply) ~= "string" and IsValid(ply) then

@@ -13,7 +13,7 @@ local function Kick(ply, cmd, args)
 	local stage = args[2] or ""
 	stage = string.lower(stage)
 	local stages = {"start", "cancel", "update", "execute"}
-	local Reason = args[3] or (not table.HasValue(stages, stage) and stage) or ply.FAdminKickReason
+	local Reason = (not table.HasValue(stages, stage) and table.concat(args, ' ', 2)) or table.concat(args, ' ', 3) or ply.FAdminKickReason
 
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Kick", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!")  return end
@@ -118,7 +118,9 @@ local function Ban(ply, cmd, args)
 	if CanBan == false then return end
 
 	local stage = string.lower(args[2])
-	local Reason = args[4] or ply.FAdminKickReason or ""
+	local stages = {"start", "cancel", "update", "execute"}
+	local Reason = (not table.HasValue(stages, stage) and table.concat(args, ' ', 3)) or table.concat(args, ' ', 4) or ply.FAdminKickReason
+
 	for _, target in pairs(targets) do
 		if (type(target) == "string" and not FAdmin.Access.PlayerHasPrivilege(ply, "Ban")) or
 		not FAdmin.Access.PlayerHasPrivilege(ply, "Ban", target) then

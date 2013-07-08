@@ -61,15 +61,15 @@ local function drawChatReceivers()
 
 	-- No one hears you
 	if #receivers == 0 then
-		draw.WordBox(2, x, y, string.format(LANGUAGE.hear_noone, currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
+		draw.WordBox(2, x, y, DarkRP.getPhrase("hear_noone", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
 		return
 	-- Everyone hears you
 	elseif #receivers == #player.GetAll() - 1 then
-		draw.WordBox(2, x, y, LANGUAGE.hear_everyone, "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+		draw.WordBox(2, x, y, DarkRP.getPhrase("hear_everyone"), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
 		return
 	end
 
-	draw.WordBox(2, x, y - (#receivers * 21), string.format(LANGUAGE.hear_certain_persons, currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+	draw.WordBox(2, x, y - (#receivers * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
 	for i = 1, #receivers, 1 do
 		if not IsValid(receivers[i]) then
 			receivers[i] = receivers[#receivers]

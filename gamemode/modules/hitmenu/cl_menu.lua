@@ -56,6 +56,7 @@ function PANEL:Think()
 
 	-- update the price (so the hitman can't scam)
 	self.price:SetText(string.format("Price:  $%s", self:GetHitman():getHitPrice()))
+	self.price:SizeToContents()
 end
 
 function PANEL:PerformLayout()
@@ -79,9 +80,11 @@ function PANEL:PerformLayout()
 	self.name:SetText(string.format("Name: %s", self:GetHitman():Nick()))
 	self.name:SetPos(20 + 128 + 20, 20 + self.title:GetTall())
 
-	self.price:SizeToContents(true)
+	self.price:SetFont("HUDNumber5")
+	self.price:SetColor(Color(255, 0, 0, 255))
 	self.price:SetText(string.format("Price:  $%s", self:GetHitman():getHitPrice()))
 	self.price:SetPos(20 + 128 + 20, 20 + self.title:GetTall() + 20)
+	self.price:SizeToContents(true)
 
 	self.playerList:SetPos(20, 20 + self.icon:GetTall() + 20)
 	self.playerList:SetWide(self:GetWide() - 40)
@@ -154,7 +157,7 @@ end
 
 function PANEL:Paint()
 	local w, h = self:GetSize()
-	surface.SetDrawColor(self:GetButtonColor())
+	surface.SetDrawColor(self:GetButtonColor() or 0)
 	surface.DrawRect(0, 0, w, h)
 end
 

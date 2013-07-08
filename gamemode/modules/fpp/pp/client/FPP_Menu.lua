@@ -662,8 +662,10 @@ RetrieveRestrictedTool = function(um)
 				if type(tool) ~= "table" then
 					RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
 				else
+					local i = 0
 					for a,b in pairs(tool) do
-						timer.Simple(a/10, function() -- Timer to prevent lag of executing multiple commands at the same time.
+						i = i + 1
+						timer.Simple(i/10, function() -- Timer to prevent lag of executing multiple commands at the same time.
 							RunConsoleCommand("FPP_restricttool", b, "admin", adminsCHKboxes[k].GoodValue)
 						end)
 					end

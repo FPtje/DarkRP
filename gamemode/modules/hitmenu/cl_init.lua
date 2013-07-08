@@ -24,12 +24,12 @@ end
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-function DarkRP.hooks:onHitAccepted(hitman, target)
+function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 	if not IsValid(hitman) then return end
 	hitman:drawHitInfo()
 end
 
-function DarkRP.hooks:onHitCompleted(hitman, target)
+function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 	if not IsValid(hitman) then return end
 	hitman:stopHitInfo()
 end
@@ -105,11 +105,11 @@ end
 Networking
 ---------------------------------------------------------------------------*/
 net.Receive("onHitAccepted", function(len)
-	hook.Call("onHitAccepted", DarkRP.hooks, net.ReadEntity(), net.ReadEntity())
+	hook.Call("onHitAccepted", DarkRP.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadEntity())
 end)
 
 net.Receive("onHitCompleted", function(len)
-	hook.Call("onHitCompleted", DarkRP.hooks, net.ReadEntity(), net.ReadEntity())
+	hook.Call("onHitCompleted", DarkRP.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadEntity())
 end)
 
 net.Receive("onHitFailed", function(len)

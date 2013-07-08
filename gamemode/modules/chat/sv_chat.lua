@@ -1,9 +1,6 @@
 local ChatCommands = {}
 
 function DarkRP.addChatCommand(cmd, callback, delay)
-	for k,v in pairs(ChatCommands) do
-		if cmd == v.cmd then return end
-	end
 
 	local detour = function(ply, arg, ...)
 		if ply.DarkRPUnInitialized then

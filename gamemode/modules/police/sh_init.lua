@@ -20,7 +20,7 @@ Hooks
 ---------------------------------------------------------------------------*/
 
 function DarkRP.hooks:canRequestWarrant(target, actor, reason)
-	if not reason or string.len(reason) == 0 then return false, LANGUAGE.vote_specify_reason end
+	if not reason or string.len(reason) == 0 then return false, DarkRP.getPhrase("vote_specify_reason") end
 	if not IsValid(target) then return false, "Suspect does not exist" end
 	if not IsValid(actor) then return false, "Actor does not exist" end
 	if not actor:Alive() then return false, "You must be alive in order to get a warrant" end
@@ -34,7 +34,7 @@ function DarkRP.hooks:canRequestWarrant(target, actor, reason)
 end
 
 function DarkRP.hooks:canWanted(target, actor, reason)
-	if not reason or string.len(reason) == 0 then return false, LANGUAGE.vote_specify_reason end
+	if not reason or string.len(reason) == 0 then return false, DarkRP.getPhrase("vote_specify_reason") end
 	if not IsValid(target) then return false, "Suspect does not exist" end
 	if not IsValid(actor) then return false, "Actor does not exist" end
 	if not actor:Alive() then return false, "You must be alive in order to make someone wanted" end

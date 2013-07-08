@@ -9,7 +9,7 @@ local function MayorOptns()
 		local maypanel = vgui.Create("DListLayout")
 		maypanel:SetSize(740,170)
 			local SearchWarrant = maypanel:Add("DButton")
-			SearchWarrant:SetText(LANGUAGE.searchwarrantbutton)
+			SearchWarrant:SetText(DarkRP.getPhrase("searchwarrantbutton"))
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
@@ -27,7 +27,7 @@ local function MayorOptns()
 			end
 
 			local Warrant = maypanel:Add("DButton")
-			Warrant:SetText(LANGUAGE.make_wanted)
+			Warrant:SetText(DarkRP.getPhrase("make_wanted"))
 			Warrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
@@ -44,7 +44,7 @@ local function MayorOptns()
 			end
 
 			local UnWarrant = maypanel:Add("DButton")
-			UnWarrant:SetText(LANGUAGE.make_unwanted)
+			UnWarrant:SetText(DarkRP.getPhrase("make_unwanted"))
 			UnWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
@@ -56,26 +56,26 @@ local function MayorOptns()
 			end
 
 			local Lockdown = maypanel:Add("DButton")
-			Lockdown:SetText(LANGUAGE.initiate_lockdown)
+			Lockdown:SetText(DarkRP.getPhrase("initiate_lockdown"))
 			Lockdown.DoClick = function()
 				LocalPlayer():ConCommand("darkrp /lockdown")
 			end
 
 
 			local UnLockdown = maypanel:Add("DButton")
-			UnLockdown:SetText(LANGUAGE.stop_lockdown)
+			UnLockdown:SetText(DarkRP.getPhrase("stop_lockdown"))
 			UnLockdown.DoClick = function()
 				LocalPlayer():ConCommand("darkrp /unlockdown")
 			end
 
 			local Lottery = maypanel:Add("DButton")
-			Lottery:SetText(LANGUAGE.start_lottery)
+			Lottery:SetText(DarkRP.getPhrase("start_lottery"))
 			Lottery.DoClick = function()
 				LocalPlayer():ConCommand("darkrp /lottery")
 			end
 
 			local GiveLicense = maypanel:Add("DButton")
-			GiveLicense:SetText(LANGUAGE.give_license_lookingat)
+			GiveLicense:SetText(DarkRP.getPhrase("give_license_lookingat"))
 			GiveLicense.DoClick = function()
 				LocalPlayer():ConCommand("darkrp /givelicense")
 			end
@@ -115,7 +115,7 @@ local function CPOptns()
 		local CPpanel = vgui.Create("DListLayout")
 		CPpanel:SetSize(740,170)
 			local SearchWarrant = CPpanel:Add("DButton")
-			SearchWarrant:SetText(LANGUAGE.request_warrant)
+			SearchWarrant:SetText(DarkRP.getPhrase("request_warrant"))
 			SearchWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
@@ -133,7 +133,7 @@ local function CPOptns()
 			end
 
 			local Warrant = CPpanel:Add("DButton")
-			Warrant:SetText(LANGUAGE.searchwarrantbutton)
+			Warrant:SetText(DarkRP.getPhrase("searchwarrantbutton"))
 			Warrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
@@ -152,7 +152,7 @@ local function CPOptns()
 			end
 
 			local UnWarrant = CPpanel:Add("DButton")
-			UnWarrant:SetText(LANGUAGE.unwarrantbutton)
+			UnWarrant:SetText(DarkRP.getPhrase("unwarrantbutton"))
 			UnWarrant.DoClick = function()
 				local menu = DermaMenu()
 				for _,ply in pairs(player.GetAll()) do
@@ -165,11 +165,11 @@ local function CPOptns()
 
 			if LocalPlayer():Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos or LocalPlayer():IsAdmin() then
 				local SetJailPos = CPpanel:Add("DButton")
-				SetJailPos:SetText(LANGUAGE.set_jailpos)
+				SetJailPos:SetText(DarkRP.getPhrase("set_jailpos"))
 				SetJailPos.DoClick = function() LocalPlayer():ConCommand("darkrp /jailpos") end
 
 				local AddJailPos = CPpanel:Add("DButton")
-				AddJailPos:SetText(LANGUAGE.add_jailpos)
+				AddJailPos:SetText(DarkRP.getPhrase("add_jailpos"))
 				AddJailPos.DoClick = function() LocalPlayer():ConCommand("darkrp /addjailpos") end
 			end
 
@@ -194,7 +194,7 @@ local function CPOptns()
 			local Team = LocalPlayer():Team()
 			if not ismayor and (Team == TEAM_CHIEF or (not ischief and Team == TEAM_POLICE)) then
 				local GiveLicense = CPpanel:Add("DButton")
-				GiveLicense:SetText(LANGUAGE.give_license_lookingat)
+				GiveLicense:SetText(DarkRP.getPhrase("give_license_lookingat"))
 				GiveLicense.DoClick = function()
 					LocalPlayer():ConCommand("darkrp /givelicense")
 				end
@@ -215,7 +215,7 @@ local function CitOptns()
 		Citpanel:SetSize(740,110)
 
 		local joblabel = Citpanel:Add("DLabel")
-		joblabel:SetText(LANGUAGE.set_custom_job)
+		joblabel:SetText(DarkRP.getPhrase("set_custom_job"))
 
 		local jobentry = Citpanel:Add("DTextEntry")
 		jobentry:SetAllowNonAsciiCharacters(true)
@@ -240,7 +240,7 @@ local function MobOptns()
 		Mobpanel:SetSize(740,110)
 
 		local agendalabel = Mobpanel:Add("DLabel")
-		agendalabel:SetText(LANGUAGE.set_agenda)
+		agendalabel:SetText(DarkRP.getPhrase("set_agenda"))
 
 		local agendaentry = Mobpanel:Add("DTextEntry")
 		agendaentry:SetAllowNonAsciiCharacters(true)
@@ -265,13 +265,13 @@ function GM:MoneyTab()
 				MoneyPanel:SetSize(740,60)
 
 				local GiveMoneyButton = MoneyPanel:Add("DButton")
-				GiveMoneyButton:SetText(LANGUAGE.give_money)
+				GiveMoneyButton:SetText(DarkRP.getPhrase("give_money"))
 				GiveMoneyButton.DoClick = function()
 					Derma_StringRequest("Amount of money", "How much money do you want to give?", "", function(a) LocalPlayer():ConCommand("darkrp /give " .. tostring(a)) end)
 				end
 
 				local SpawnMoneyButton = MoneyPanel:Add("DButton")
-				SpawnMoneyButton:SetText(LANGUAGE.drop_money)
+				SpawnMoneyButton:SetText(DarkRP.getPhrase("drop_money"))
 				SpawnMoneyButton.DoClick = function()
 					Derma_StringRequest("Amount of money", "How much money do you want to drop?", "", function(a) LocalPlayer():ConCommand("darkrp /dropmoney " .. tostring(a)) end)
 				end
@@ -285,35 +285,35 @@ function GM:MoneyTab()
 				local ActionsPanel = vgui.Create("DListLayout")
 				ActionsPanel:SetSize(740,210)
 					local rpnamelabel = ActionsPanel:Add("DLabel")
-					rpnamelabel:SetText(LANGUAGE.change_name)
+					rpnamelabel:SetText(DarkRP.getPhrase("change_name"))
 
 					local rpnameTextbox = ActionsPanel:Add("DTextEntry")
-					rpnameTextbox:SetAllowNonAsciiCharacters(true)
+					--/rpname does not support non-ASCII characters
 					rpnameTextbox:SetText(LocalPlayer():Nick())
 					rpnameTextbox.OnEnter = function() RunConsoleCommand("darkrp", "/rpname", tostring(rpnameTextbox:GetValue())) end
 
 					local sleep = ActionsPanel:Add("DButton")
-					sleep:SetText(LANGUAGE.go_to_sleep)
+					sleep:SetText(DarkRP.getPhrase("go_to_sleep"))
 					sleep.DoClick = function()
 						LocalPlayer():ConCommand("darkrp /sleep")
 					end
 					local Drop = ActionsPanel:Add("DButton")
-					Drop:SetText(LANGUAGE.drop_weapon)
+					Drop:SetText(DarkRP.getPhrase("drop_weapon"))
 					Drop.DoClick = function() LocalPlayer():ConCommand("darkrp /drop") end
 					if GAMEMODE.Config.enablebuyhealth then
 						local health = MoneyPanel:Add("DButton")
-						health:SetText(string.format(LANGUAGE.buy_health, tostring(GAMEMODE.Config.healthcost)))
+						health:SetText(DarkRP.getPhrase("buy_health", tostring(GAMEMODE.Config.healthcost)))
 						health.DoClick = function() LocalPlayer():ConCommand("darkrp /Buyhealth") end
 					end
 
 				if LocalPlayer():Team() ~= TEAM_MAYOR then
 					local RequestLicense = ActionsPanel:Add("DButton")
-						RequestLicense:SetText(LANGUAGE.request_gunlicense)
+						RequestLicense:SetText(DarkRP.getPhrase("request_gunlicense"))
 						RequestLicense.DoClick = function() LocalPlayer():ConCommand("darkrp /requestlicense") end
 				end
 
 				local Demote = ActionsPanel:Add("DButton")
-				Demote:SetText(LANGUAGE.demote_player_menu)
+				Demote:SetText(DarkRP.getPhrase("demote_player_menu"))
 				Demote.DoClick = function()
 					local menu = DermaMenu()
 					for _,ply in pairs(player.GetAll()) do
@@ -452,9 +452,9 @@ function GM:JobsTab()
 			icon.OnCursorEntered = function()
 				icon.PaintOverOld = icon.PaintOver
 				icon.PaintOver = icon.PaintOverHovered
-				Info[1] = LANGUAGE.job_name .. name
-				Info[2] = LANGUAGE.job_description .. description
-				Info[3] = LANGUAGE.job_weapons .. Weapons
+				Info[1] = DarkRP.getPhrase("job_name") .. name
+				Info[2] = DarkRP.getPhrase("job_description") .. description
+				Info[3] = DarkRP.getPhrase("job_weapons") .. Weapons
 				model = IconModel
 				UpdateInfo()
 			end
@@ -567,6 +567,41 @@ function GM:EntitiesTab()
 	EntitiesPanel:EnableVerticalScrollbar( true )
 		function EntitiesPanel:Update()
 			self:Clear(true)
+			local AmmCat = vgui.Create("DCollapsibleCategory")
+			AmmCat:SetLabel("Ammo")
+				local AmmPanel = vgui.Create("DPanelList")
+				AmmPanel:SetSize(470, 100)
+				AmmPanel:SetAutoSize(true)
+				AmmPanel:SetSpacing(1)
+				AmmPanel:EnableHorizontal(true)
+				AmmPanel:EnableVerticalScrollbar(true)
+					local function AddAmmoIcon(Model, description, command)
+						local icon = vgui.Create("SpawnIcon")
+						icon:InvalidateLayout( true )
+						icon:SetModel(Model)
+						icon:SetSize(64, 64)
+						icon:SetToolTip(description)
+						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
+						AmmPanel:AddItem(icon)
+					end
+
+					local ammnum = 0
+					for k,v in pairs(GAMEMODE.AmmoTypes) do
+						if not v.customCheck or v.customCheck(LocalPlayer()) then
+							AddAmmoIcon(v.model, DarkRP.getPhrase("buy_a", v.name, GAMEMODE.Config.currency .. v.price), "/buyammo " .. v.ammoType)
+							ammnum = ammnum + 1
+						end
+					end
+
+			if ammnum ~= 0 then
+				AmmCat:SetContents(AmmPanel)
+				AmmCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+				self:AddItem(AmmCat)
+			else
+				AmmPanel:Remove()
+				AmmCat:Remove()
+			end
+
 			local WepCat = vgui.Create("DCollapsibleCategory")
 			WepCat:SetLabel("Weapons")
 				local WepPanel = vgui.Create("DPanelList")
@@ -585,23 +620,61 @@ function GM:EntitiesTab()
 						WepPanel:AddItem(icon)
 					end
 
+					local wepnum = 0
 					for k,v in pairs(CustomShipments) do
 						if not GAMEMODE:CustomObjFitsMap(v) then continue end
 						if (v.seperate and (not GAMEMODE.Config.restrictbuypistol or
 							(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, LocalPlayer():Team())))))
 							and (not v.customCheck or v.customCheck and v.customCheck(LocalPlayer())) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name, GAMEMODE.Config.currency..(v.pricesep or "")), "/buy "..v.name)
+							AddIcon(v.model, DarkRP.getPhrase("buy_a", "a "..v.name, GAMEMODE.Config.currency..(v.pricesep or "")), "/buy "..v.name)
+							wepnum = wepnum + 1
 						end
 					end
 
-					for k,v in pairs(GAMEMODE.AmmoTypes) do
-						if not v.customCheck or v.customCheck(LocalPlayer()) then
-							AddIcon(v.model, string.format(LANGUAGE.buy_a, v.name, GAMEMODE.Config.currency .. v.price), "/buyammo " .. v.ammoType)
+				if wepnum ~= 0 then
+					WepCat:SetContents(WepPanel)
+					WepCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+					self:AddItem(WepCat)
+				else
+					WepPanel:Remove()
+					WepCat:Remove()
+				end
+
+			local ShipCat = vgui.Create("DCollapsibleCategory")
+			ShipCat:SetLabel("Shipments")
+				local ShipPanel = vgui.Create("DPanelList")
+				ShipPanel:SetSize(470, 200)
+				ShipPanel:SetAutoSize(true)
+				ShipPanel:SetSpacing(1)
+				ShipPanel:EnableHorizontal(true)
+				ShipPanel:EnableVerticalScrollbar(true)
+					local function AddShipIcon(Model, description, command)
+						local icon = vgui.Create("SpawnIcon")
+						icon:InvalidateLayout( true )
+						icon:SetModel(Model)
+						icon:SetSize(64, 64)
+						icon:SetToolTip(description)
+						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
+						ShipPanel:AddItem(icon)
+					end
+
+					local shipnum = 0
+					for k,v in pairs(CustomShipments) do
+						if not GAMEMODE:CustomObjFitsMap(v) then continue end
+						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
+							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
+							AddShipIcon(v.model, DarkRP.getPhrase("buy_a", "a "..v.name .." shipment", GAMEMODE.Config.currency .. tostring(v.price)), "/buyshipment "..v.name)
+							shipnum = shipnum + 1
 						end
 					end
-			WepCat:SetContents(WepPanel)
-			WepCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
-			self:AddItem(WepCat)
+				if shipnum ~= 0 then
+					ShipCat:SetContents(ShipPanel)
+					ShipCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+					self:AddItem(ShipCat)
+				else
+					ShipPanel:Remove()
+					ShipCat:Remove()
+				end
 
 			local EntCat = vgui.Create("DCollapsibleCategory")
 			EntCat:SetLabel("Entities")
@@ -620,31 +693,31 @@ function GM:EntitiesTab()
 						icon.DoClick = function() LocalPlayer():ConCommand("darkrp "..command) end
 						EntPanel:AddItem(icon)
 					end
-
+					local entnum = 0
 					for k,v in pairs(DarkRPEntities) do
 						if not v.allowed or (type(v.allowed) == "table" and table.HasValue(v.allowed, LocalPlayer():Team()))
 							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
 							local cmdname = string.gsub(v.ent, " ", "_")
 
 							AddEntIcon(v.model, "Buy a " .. v.name .." " .. GAMEMODE.Config.currency .. v.price, v.cmd)
+							entnum = entnum + 1
 						end
 					end
 
 					if FoodItems and (GAMEMODE.Config.foodspawn or LocalPlayer():Team() == TEAM_COOK) and LocalPlayer():Team() == TEAM_COOK then
 						for k,v in pairs(FoodItems) do
-							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..k, "$15"), "/buyfood "..k)
+							AddEntIcon(v.model, DarkRP.getPhrase("buy_a", "a "..k, "$15"), "/buyfood "..k)
+							entnum = entnum + 1
 						end
 					end
-					for k,v in pairs(CustomShipments) do
-						if not GAMEMODE:CustomObjFitsMap(v) then continue end
-						if not v.noship and table.HasValue(v.allowed, LocalPlayer():Team())
-							and (not v.customCheck or (v.customCheck and v.customCheck(LocalPlayer()))) then
-							AddEntIcon(v.model, string.format(LANGUAGE.buy_a, "a "..v.name .." shipment", GAMEMODE.Config.currency .. tostring(v.price)), "/buyshipment "..v.name)
-						end
-					end
-			EntCat:SetContents(EntPanel)
-			EntCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
-			self:AddItem(EntCat)
+				if entnum ~= 0 then
+					EntCat:SetContents(EntPanel)
+					EntCat:SetSkin(GAMEMODE.Config.DarkRPSkin)
+					self:AddItem(EntCat)
+				else
+					EntPanel:Remove()
+					EntCat:Remove()
+				end
 
 
 			if #CustomVehicles <= 0 then return end

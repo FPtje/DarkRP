@@ -82,6 +82,9 @@ local function Ragdoll(ply, cmd, args)
 	end
 	local RagdollType = string.lower(FAdmin.PlayerActions.RagdollTypes[tonumber(args[2])] or args[2] or cmd)
 
+	local time = tonumber(args[3] or 0)
+	local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
+
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Ragdoll", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 		if IsValid(target) then
@@ -242,22 +245,27 @@ local function Ragdoll(ply, cmd, args)
 					end
 				end end)
 
-				timer.Simple(7, function()
-				if IsValid(target) then
+				timer.Simple(5, function()
+
+					if IsValid(Kicker) then
+						Kicker:Remove()
+					end
+				end)
+
+			end
+
+			if time ~= 0 then
+				timer.Simple(time, function()
+					if IsValid(target) and IsValid(target.FAdminRagdoll) then
+						target:SetPos(target.FAdminRagdoll:GetPos())
+						target.FAdminRagdoll:Remove()
+					elseif istable(target.FAdminRagdoll) then
+						for k, v in pairs(target.FAdminRagdoll) do SafeRemoveEntity(v) end
+					end
 					target:UnSpectate()
 					target:Spawn()
 					target.FAdminRagdoll = nil
-				end
-
-				if IsValid(Ragdoll) then
-					if IsValid(target) then target:SetPos(Ragdoll:GetPos()) end
-					Ragdoll:Remove()
-				end
-
-				if IsValid(Kicker) then
-					Kicker:Remove()
-				end
-
+					target:FAdmin_SetGlobal("fadmin_ragdolled", false)
 				end)
 			end
 
@@ -269,7 +277,7 @@ local function Ragdoll(ply, cmd, args)
 	if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" then
 		FAdmin.Messages.ActionMessage(ply, targets, "Unragdolled %s", "You were unragdolled by %s", "Unragdolled %s")
 	else
-		FAdmin.Messages.ActionMessage(ply, targets, "Ragdolled %s", "You were ragdolled by %s", "Ragdolled %s")
+		FAdmin.Messages.ActionMessage(ply, targets, "Ragdolled %s ".. timeText, "You were ragdolled by %s ".. timeText, "Ragdolled %s ".. timeText)
 	end
 end
 

@@ -43,7 +43,7 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("normal")
+	self:NewSetWeaponHoldType("normal")
 end
 
 function SWEP:Deploy()
@@ -77,8 +77,8 @@ end)
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
-	self:SetWeaponHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:SetWeaponHoldType("normal") end end)
+	self:NewSetWeaponHoldType("melee")
+	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.Weapon:EmitSound(self.Sound)

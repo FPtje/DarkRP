@@ -8,12 +8,12 @@ local meta = FindMetaTable("Player")
  ---------------------------------------------------------*/
 local function RPName(ply, args)
 	if ply.LastNameChange and ply.LastNameChange > (CurTime() - 5) then
-		GAMEMODE:Notify( ply, 1, 4, string.format( LANGUAGE.have_to_wait,  math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
+		GAMEMODE:Notify( ply, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
 		return ""
 	end
 
 	if not GAMEMODE.Config.allowrpnames then
-		GAMEMODE:Notify(ply, 1, 6,  string.format(LANGUAGE.disabled, "RPname", ""))
+		GAMEMODE:Notify(ply, 1, 6,  DarkRP.getPhrase("disabled", "RPname", ""))
 		return ""
 	end
 
@@ -21,16 +21,16 @@ local function RPName(ply, args)
 	local low = string.lower(args)
 
 	if len > 30 then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "RPname", "<=30"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", "<=30"))
 		return ""
 	elseif len < 3 then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "RPname", ">2"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", ">2"))
 		return ""
 	end
 
 	local canChangeName = hook.Call("CanChangeRPName", GAMEMODE, ply, low)
 	if canChangeName == false then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "RPname", ""))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", ""))
 		return ""
 	end
 
@@ -42,7 +42,7 @@ local function RPName(ply, args)
 
 	for k in string.gmatch(args, ".") do
 		if not table.HasValue(allowed, string.lower(k)) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "RPname", k))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", k))
 			return ""
 		end
 	end
@@ -67,12 +67,12 @@ function meta:SetRPName(name, firstRun)
 				DB.StoreRPName(self, name .. " 1")
 				GAMEMODE:Notify(self, 0, 12, "Someone is already using your Steam name as their RP name so we gave you a '1' after your name.")
 			else
-				GAMEMODE:Notify(self, 1, 5, string.format(LANGUAGE.unable, "RPname", "it's been taken"))
+				GAMEMODE:Notify(self, 1, 5, DarkRP.getPhrase("unable", "RPname", "it's been taken"))
 				return ""
 			end
 		else
 			if not firstRun then -- Don't save the steam name in the database
-				GAMEMODE:NotifyAll(2, 6, string.format(LANGUAGE.rpname_changed, self:SteamName(), name))
+				GAMEMODE:NotifyAll(2, 6, DarkRP.getPhrase("rpname_changed", self:SteamName(), name))
 				DB.StoreRPName(self, name)
 			end
 		end
@@ -219,19 +219,19 @@ function meta:ChangeTeam(t, force)
 	local prevTeam = self:Team()
 
 	if self:isArrested() and not force then
-		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
+		GAMEMODE:Notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
 	self:setDarkRPVar("agenda", nil)
 
 	if t ~= TEAM_CITIZEN and not self:ChangeAllowed(t) and not force then
-		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), "banned/demoted"))
+		GAMEMODE:Notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
 		return false
 	end
 
 	if self.LastJob and 10 - (CurTime() - self.LastJob) >= 0 and not force then
-		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.have_to_wait,  math.ceil(10 - (CurTime() - self.LastJob)), "/job"))
+		GAMEMODE:Notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(10 - (CurTime() - self.LastJob)), "/job"))
 		return false
 	end
 
@@ -247,7 +247,7 @@ function meta:ChangeTeam(t, force)
 
 
 	if prevTeam == t then
-		GAMEMODE:Notify(self, 1, 4, string.format(LANGUAGE.unable, team.GetName(t), ""))
+		GAMEMODE:Notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
@@ -255,13 +255,13 @@ function meta:ChangeTeam(t, force)
 	if not TEAM then return false end
 
 	if TEAM.customCheck and not TEAM.customCheck(self) then
-		GAMEMODE:Notify(self, 1, 4, TEAM.CustomCheckFailMsg or string.format(LANGUAGE.unable, team.GetName(t), ""))
+		GAMEMODE:Notify(self, 1, 4, TEAM.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
 	if not self.DarkRPVars["Priv"..TEAM.command] and not force then
 		if type(TEAM.NeedToChangeFrom) == "number" and prevTeam ~= TEAM.NeedToChangeFrom then
-			GAMEMODE:Notify(self, 1,4, string.format(LANGUAGE.need_to_be_before, team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
+			GAMEMODE:Notify(self, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
 			return false
 		elseif type(TEAM.NeedToChangeFrom) == "table" and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
 			local teamnames = ""
@@ -273,7 +273,7 @@ function meta:ChangeTeam(t, force)
 		if max ~= 0 and -- No limit
 		(max >= 1 and team.NumPlayers(t) >= max or -- absolute maximum
 		max < 1 and (team.NumPlayers(t) + 1) / #player.GetAll() > max) then -- fractional limit (in percentages)
-			GAMEMODE:Notify(self, 1, 4,  string.format(LANGUAGE.team_limit_reached, TEAM.name))
+			GAMEMODE:Notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
 			return false
 		end
 	end
@@ -290,7 +290,8 @@ function meta:ChangeTeam(t, force)
 	end
 	self:UpdateJob(TEAM.name)
 	self:setSelfDarkRPVar("salary", TEAM.salary)
-	GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.job_has_become, self:Nick(), TEAM.name))
+	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
+
 
 	if self:getDarkRPVar("HasGunlicense") then
 		self:setDarkRPVar("HasGunlicense", false)
@@ -385,14 +386,14 @@ function meta:PayDay()
 			amount = math.floor(amount or GAMEMODE.Config.normalsalary)
 			hook.Call("PlayerGetSalary", GAMEMODE, self, amount)
 			if amount == 0 or not amount then
-				GAMEMODE:Notify(self, 4, 4, LANGUAGE.payday_unemployed)
+				GAMEMODE:Notify(self, 4, 4, DarkRP.getPhrase("payday_unemployed"))
 			else
 				self:AddMoney(amount)
-				GAMEMODE:Notify(self, 4, 4, string.format(LANGUAGE.payday_message, GAMEMODE.Config.currency .. amount))
+				GAMEMODE:Notify(self, 4, 4, DarkRP.getPhrase("payday_message", GAMEMODE.Config.currency .. amount))
 			end
 		end)
 	else
-		GAMEMODE:Notify(self, 4, 4, LANGUAGE.payday_missed)
+		GAMEMODE:Notify(self, 4, 4, DarkRP.getPhrase("payday_missed"))
 	end
 end
 
@@ -420,9 +421,9 @@ local function AddJailPos(ply)
 	if (ply:Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
 		DB.StoreJailPos(ply, true)
 	else
-		local str = LANGUAGE.admin_only
+		local str = DarkRP.getPhrase("admin_only")
 		if GAMEMODE.Config.chiefjailpos then
-			str = LANGUAGE.chief_or .. str
+			str = DarkRP.getPhrase("chief_or") .. str
 		end
 
 		GAMEMODE:Notify(ply, 1, 4, str)
@@ -475,10 +476,10 @@ function meta:DoPropertyTax()
 	if self:canAfford(tax) then
 		if tax ~= 0 then
 			self:AddMoney(-tax)
-			GAMEMODE:Notify(self, 0, 5, string.format(LANGUAGE.property_tax, GAMEMODE.Config.currency .. tax))
+			GAMEMODE:Notify(self, 0, 5, DarkRP.getPhrase("property_tax", GAMEMODE.Config.currency .. tax))
 		end
 	else
-		GAMEMODE:Notify(self, 1, 8, LANGUAGE.property_tax_cant_afford)
+		GAMEMODE:Notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
 		self:UnownAll()
 	end
 end

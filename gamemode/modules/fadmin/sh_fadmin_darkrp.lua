@@ -63,14 +63,8 @@ function FAdmin.IsEmpty(vector)
 	return a and b
 end
 
-function FAdmin.SteamToProfile(steamid) -- Thanks decodaman
-		local x, y, z = string.match( steamid, "STEAM_(%d+):(%d+):(%d+)")
-	if ( x and y and z ) then
-		local friendid = string.format("765%0.f", z * 2 + 61197960265728 + y )
-		return "http://steamcommunity.com/profiles/"..friendid
-	else
-		return "http://steamcommunity.com/profiles/"..steamid
-	end
+function FAdmin.SteamToProfile(ply) -- Thanks decodaman
+	return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
 end
 
 hook.Add("CanTool", "EntityCanTool", function(ply, trace, mode)

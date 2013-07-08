@@ -13,8 +13,6 @@ GM.Config.AdminsCopWeapons 				= true
 GM.Config.adminsents 					= true
 -- adminvehicles - Whether or not Vehicles should be admin only.
 GM.Config.adminvehicles 				= true
--- advertisements - Enable/Disable chatprint advertisements.
-GM.Config.advertisements 				= true
 -- allow people getting their own custom jobs
 GM.Config.allowjobswitch 				= true
 -- allowrpnames - Allow Players to Set their RP names using the /rpname command.
@@ -77,7 +75,7 @@ GM.Config.enablebuyhealth 				= true
 GM.Config.enablebuypistol 				= true
 -- enablemayorsetsalary - Enable Mayor salary control.
 GM.Config.enablemayorsetsalary 			= true
--- enableshipments - Turn /buyshipment on of off.
+-- enableshipments - Turn /buyshipment on or off.
 GM.Config.enableshipments 				= true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
 GM.Config.enforceplayermodel 			= true

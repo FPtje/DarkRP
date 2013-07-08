@@ -7,7 +7,7 @@ local function ccDoorOwn(ply, cmd, args)
 	end
 
 	if not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_own"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_own"))
 		return
 	end
 
@@ -30,7 +30,7 @@ local function ccDoorUnOwn(ply, cmd, args)
 	end
 
 	if not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_unown"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unown"))
 		return
 	end
 
@@ -46,13 +46,34 @@ local function ccDoorUnOwn(ply, cmd, args)
 end
 concommand.Add("rp_unown", ccDoorUnOwn)
 
+local function unownAll(ply, cmd, args)
+	if ply:EntIndex() == 0 then
+		return
+	end
+
+	if not ply:HasPriv("rp_commands") then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unown"))
+		return
+	end
+
+	target = GAMEMODE:FindPlayer(args[1])
+
+	if not IsValid(target) then
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		return
+	end
+	target:UnownAll()
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), nil, Color(30, 30, 30))
+end
+concommand.Add("rp_unownall", unownAll)
+
 local function ccAddOwner(ply, cmd, args)
 	if ply:EntIndex() == 0 then
 		return
 	end
 
 	if not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_addowner"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_addowner"))
 		return
 	end
 
@@ -69,13 +90,13 @@ local function ccAddOwner(ply, cmd, args)
 			if not trace.Entity:OwnedBy(target) and not trace.Entity:AllowedToOwn(target) then
 				trace.Entity:AddAllowed(target)
 			else
-				ply:PrintMessage(2, string.format(LANGUAGE.rp_addowner_already_owns_door))
+				ply:PrintMessage(2, string.format(DarkRP.getPhrase("rp_addowner_already_owns_door")))
 			end
 		else
 			trace.Entity:Own(target)
 		end
 	else
-		ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 	end
 	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", nil, Color(30, 30, 30))
 end
@@ -87,7 +108,7 @@ local function ccRemoveOwner(ply, cmd, args)
 	end
 
 	if not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2,  string.format(LANGUAGE.need_admin, "rp_removeowner"))
+		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_removeowner"))
 		return
 	end
 
@@ -105,10 +126,10 @@ local function ccRemoveOwner(ply, cmd, args)
 		end
 
 		if trace.Entity:OwnedBy(target) then
-			trace.Entity:RemoveOwner(target)
+			trace.Entity:removeDoorOwner(target)
 		end
 	else
-		ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 	end
 	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", nil, Color(30, 30, 30))
 end
@@ -120,7 +141,7 @@ local function ccLock(ply, cmd, args)
 	end
 
 	if not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2,  string.format(LANGUAGE.need_admin, "rp_lock"))
+		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_lock"))
 		return
 	end
 
@@ -144,7 +165,7 @@ local function ccUnLock(ply, cmd, args)
 	end
 
 	if not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2,  string.format(LANGUAGE.need_admin, "rp_unlock"))
+		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_unlock"))
 		return
 	end
 
@@ -167,7 +188,7 @@ Messages
 local function ccTell(ply, cmd, args)
 	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2,  string.format(LANGUAGE.need_admin, "rp_tell"))
+		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_tell"))
 		return
 	end
 
@@ -191,9 +212,9 @@ local function ccTell(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		end
 	end
 end
@@ -202,7 +223,7 @@ concommand.Add("rp_tell", ccTell)
 local function ccTellAll(ply, cmd, args)
 	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_tellall"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tellall"))
 		return
 	end
 
@@ -231,7 +252,7 @@ Misc
 ---------------------------------------------------------------------------*/
 local function ccRemoveLetters(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands")then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_removeletters"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_removeletters"))
 		return
 	end
 
@@ -259,15 +280,15 @@ concommand.Add("rp_removeletters", ccRemoveLetters)
 local function ccArrest(ply, cmd, args)
 	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_arrest"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_arrest"))
 		return
 	end
 
 	if DB.CountJailPos() == 0 then
 		if ply:EntIndex() == 0 then
-			print(LANGUAGE.no_jail_pos)
+			print(DarkRP.getPhrase("no_jail_pos"))
 		else
-			ply:PrintMessage(2, LANGUAGE.no_jail_pos)
+			ply:PrintMessage(2, DarkRP.getPhrase("no_jail_pos"))
 		end
 		return
 	end
@@ -288,9 +309,9 @@ local function ccArrest(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		end
 	end
 
@@ -300,7 +321,7 @@ concommand.Add("rp_arrest", ccArrest)
 local function ccUnarrest(ply, cmd, args)
 	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_unarrest"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unarrest"))
 		return
 	end
 
@@ -317,9 +338,9 @@ local function ccUnarrest(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		end
 		return
 	end
@@ -330,7 +351,7 @@ concommand.Add("rp_unarrest", ccUnarrest)
 local function ccSetMoney(ply, cmd, args)
 	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setmoney"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
 		return
 	end
 
@@ -374,7 +395,7 @@ concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply
 local function ccSetSalary(ply, cmd, args)
 	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setsalary"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setsalary"))
 		return
 	end
 
@@ -382,18 +403,18 @@ local function ccSetSalary(ply, cmd, args)
 
 	if amount < 0 then
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.invalid_x, "argument", args[2]))
+			print(DarkRP.getPhrase("invalid_x", "argument", args[2]))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "argument", args[2]))
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", args[2]))
 		end
 		return
 	end
 
 	if amount > 150 then
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.invalid_x, "argument", args[2].." (<150)"))
+			print(DarkRP.getPhrase("invalid_x", "argument", args[2].." (<150)"))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "argument", args[2].." (<150)"))
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", args[2].." (<150)"))
 		end
 		return
 	end
@@ -419,9 +440,9 @@ local function ccSetSalary(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		end
 		return
 	end
@@ -431,7 +452,7 @@ concommand.Add("rp_setsalary", ccSetSalary)
 local function ccSENTSPawn(ply, cmd, args)
 	if GAMEMODE.Config.adminsents then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnsent"))
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
 			return
 		end
 	end
@@ -443,7 +464,7 @@ concommand.Add("gm_spawnsent", ccSENTSPawn)
 local function ccVehicleSpawn(ply, cmd, args)
 	if GAMEMODE.Config.adminvehicles then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnvehicle"))
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
 			return
 		end
 	end
@@ -455,7 +476,7 @@ concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
 local function ccNPCSpawn(ply, cmd, args)
 	if GAMEMODE.Config.adminnpcs then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnnpc"))
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
 			return
 		end
 	end
@@ -467,7 +488,7 @@ concommand.Add("gm_spawnnpc", ccNPCSpawn)
 local function ccSetRPName(ply, cmd, args)
 	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, "rp_setname"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setname"))
 		return
 	end
 
@@ -475,9 +496,9 @@ local function ccSetRPName(ply, cmd, args)
 
 	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.invalid_x, "argument", args[2]))
+			print(DarkRP.getPhrase("invalid_x", "argument", args[2]))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.invalid_x, "argument", args[2]))
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", args[2]))
 		end
 	end
 
@@ -501,9 +522,9 @@ local function ccSetRPName(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		else
-			ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 		end
 	end
 end
@@ -511,7 +532,7 @@ concommand.Add("rp_setname", ccSetRPName)
 
 local function ccCancelVote(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
-		ply:PrintMessage(2, string.format(LANGUAGE.need_admin, "rp_cancelvote"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_cancelvote"))
 		return
 	end
 
