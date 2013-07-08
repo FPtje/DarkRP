@@ -17,7 +17,7 @@ function plyMeta:warrant(warranter, reason)
 
 	local warranterNick = IsValid(warranter) and warranter:Nick() or "Disconnected player"
 	local centerMessage = string.format("%s\nReason: %s\nOrdered by: %s", self:Nick(), reason, warranterNick)
-	centerMessage = string.format(LANGUAGE.warrant_approved, centerMessage)
+	centerMessage = DarkRP.getPhrase("warrant_approved", centerMessage)
 	local printMessage = string.format("%s ordered a search warrant for %s, reason: ", warranterNick, self:Nick(), reason)
 
 	for a, b in pairs(player.GetAll()) do
@@ -25,7 +25,7 @@ function plyMeta:warrant(warranter, reason)
 		b:PrintMessage(HUD_PRINTCONSOLE, printMessage)
 	end
 
-	GAMEMODE:Notify(warranter, 0, 4, LANGUAGE.warrant_approved2)
+	GAMEMODE:Notify(warranter, 0, 4, DarkRP.getPhrase("warrant_approved2"))
 end
 
 function plyMeta:unWarrant(unwarranter)
@@ -34,11 +34,11 @@ function plyMeta:unWarrant(unwarranter)
 	hook.Call("PlayerUnWarranted", GAMEMODE, unwarranter, self)
 
 	self.warranted = false
-	GAMEMODE:Notify(unwarranter, 2, 4, string.format(LANGUAGE.warrant_expired, ""))
+	GAMEMODE:Notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", ""))
 end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
-	local question = string.format(LANGUAGE.warrant_request.."\nReason: %s", actor:Nick(), suspect:Nick(), reason)
+	local question = string.format(DarkRP.getPhrase("warrant_request").."\nReason: %s", actor:Nick(), suspect:Nick(), reason)
 	GAMEMODE.ques:Create(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
@@ -49,7 +49,7 @@ function plyMeta:wanted(actor, reason)
 	self:SetDarkRPVar("wantedReason", reason)
 
 	local actorNick = IsValid(actor) and actor:Nick() or "Disconnected player"
-	local centerMessage = string.format("%s\nReason: %s\nOrdered by: %s", string.format(LANGUAGE.wanted_by_police, self:Nick()), reason, actorNick)
+	local centerMessage = string.format("%s\nReason: %s\nOrdered by: %s", DarkRP.getPhrase("wanted_by_police", self:Nick()), reason, actorNick)
 	local printMessage = string.format("%s ordered a search warrant for %s, reason: ", actorNick, self:Nick(), reason)
 
 	for _, ply in pairs(player.GetAll()) do
@@ -68,7 +68,7 @@ function plyMeta:unWanted(actor)
 	self:SetDarkRPVar("wanted", false)
 
 	local expiredMessage = IsValid(actor) and string.format("\nRevoked by: %s", actor:Nick()) or ""
-	expiredMessage = string.format(LANGUAGE.wanted_expired .. "%s", self:Nick(), expiredMessage)
+	expiredMessage = string.format(DarkRP.getPhrase("wanted_expired") .. "%s", self:Nick(), expiredMessage)
 
 	for _, ply in pairs(player.GetAll()) do
 		ply:PrintMessage(HUD_PRINTCENTER, expiredMessage)
@@ -167,7 +167,7 @@ Callback functions
 ---------------------------------------------------------------------------*/
 function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
 	if not tobool(choice) then
-		GAMEMODE:Notify(initiator, 1, 4, string.format(LANGUAGE.warrant_denied, mayor:Nick()))
+		GAMEMODE:Notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
 		return
 	end
 
@@ -188,10 +188,10 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
 
 	if ply:isArrested() then return end -- hasn't been arrested before
 
-	ply:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.youre_arrested, time))
+	ply:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("youre_arrested", time))
 	for k, v in pairs(player.GetAll()) do
 		if v == ply then continue end
-		v:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.hes_arrested, ply:Name(), time))
+		v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("hes_arrested", ply:Name(), time))
 	end
 
 	local steamID = ply:SteamID()
@@ -220,12 +220,12 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 	end
 
 	timer.Destroy(ply:SteamID() .. "jailtimer")
-	GAMEMODE:NotifyAll(0, 4, string.format(LANGUAGE.hes_unarrested, ply:Name()))
+	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
 end
 
 hook.Add("PlayerInitialSpawn", "Arrested", function(ply)
 	if not arrestedPlayers[ply:SteamID()] then return end
 	local time = GAMEMODE.Config.jailtimer
 	ply:arrest(time)
-	GAMEMODE:Notify(ply, 0, 5, string.format(LANGUAGE.jail_punishment, time))
+	GAMEMODE:Notify(ply, 0, 5, DarkRP.getPhrase("jail_punishment", time))
 end)

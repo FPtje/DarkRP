@@ -92,11 +92,11 @@ local function DrawHealth()
 end
 
 local function DrawInfo()
-	local Salary = 	LANGUAGE.salary .. GAMEMODE.Config.currency .. (localplayer:getDarkRPVar("salary") or 0)
+	local Salary = DarkRP.getPhrase("salary", GAMEMODE.Config.currency, (localplayer:getDarkRPVar("salary") or 0))
 
 	local JobWallet = {
-		LANGUAGE.job, (localplayer:getDarkRPVar("job") or ""), "\n",
-		LANGUAGE.wallet, GAMEMODE.Config.currency, (formatNumber(localplayer:getDarkRPVar("money") or 0) or 0)
+		DarkRP.getPhrase("job", localplayer:getDarkRPVar("job") or ""), "\n",
+		DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, formatNumber(localplayer:getDarkRPVar("money") or 0))
 	}
 	JobWallet = table.concat(JobWallet)
 
@@ -178,7 +178,7 @@ local function LockDown()
 	if util.tobool(GetConVarNumber("DarkRP_LockDown")) then
 		local cin = (math.sin(CurTime()) + 1) / 2
 		local chatBoxSize = math.floor(ScrH() / 4)
-		draw.DrawText(LANGUAGE.lockdown_started, "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
+		draw.DrawText(DarkRP.getPhrase("lockdown_started"), "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
 	end
 end
 
@@ -190,7 +190,7 @@ usermessage.Hook("GotArrested", function(msg)
 
 	Arrested = function()
 		if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
-		draw.DrawText(string.format(LANGUAGE.youre_arrested, math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", ScrW()/2, ScrH() - ScrH()/12, Color(255,255,255,255), 1)
+		draw.DrawText(DarkRP.getPhrase("youre_arrested", math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", ScrW()/2, ScrH() - ScrH()/12, Color(255,255,255,255), 1)
 		elseif not localplayer:getDarkRPVar("Arrested") then
 			Arrested = function() end
 		end
@@ -204,7 +204,7 @@ usermessage.Hook("AdminTell", function(msg)
 
 	AdminTell = function()
 		draw.RoundedBox(4, 10, 10, ScrW() - 20, 100, Color(0, 0, 0, 200))
-		draw.DrawText(LANGUAGE.listen_up, "GModToolName", ScrW() / 2 + 10, 10, Color(255, 255, 255, 255), 1)
+		draw.DrawText(DarkRP.getPhrase("listen_up"), "GModToolName", ScrW() / 2 + 10, 10, Color(255, 255, 255, 255), 1)
 		draw.DrawText(Message, "ChatFont", ScrW() / 2 + 10, 80, Color(200, 30, 30, 255), 1)
 	end
 
@@ -253,8 +253,8 @@ local function DrawPlayerInfo(ply)
 	if GAMEMODE.Config.showname and not ply:getDarkRPVar("wanted") then
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, Color(0, 0, 0, 255), 1)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
-		draw.DrawText(LANGUAGE.health ..ply:Health(), "DarkRPHUD2", pos.x + 1, pos.y + 21, Color(0, 0, 0, 255), 1)
-		draw.DrawText(LANGUAGE.health..ply:Health(), "DarkRPHUD2", pos.x, pos.y + 20, Color(255,255,255,200), 1)
+		draw.DrawText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x + 1, pos.y + 21, Color(0, 0, 0, 255), 1)
+		draw.DrawText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x, pos.y + 20, Color(255,255,255,200), 1)
 	end
 
 	if GAMEMODE.Config.showjob then
@@ -284,7 +284,7 @@ local function DrawWantedInfo(ply)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 	end
 
-	local wantedText = string.format("%s\nReason: %s", LANGUAGE.wanted, tostring(ply.DarkRPVars["wantedReason"]))
+	local wantedText = string.format("%s\nReason: %s", DarkRP.getPhrase("wanted"), tostring(ply.DarkRPVars["wantedReason"]))
 
 	draw.DrawText(wantedText, "DarkRPHUD2", pos.x, pos.y - 40, Color(255, 255, 255, 200), 1)
 	draw.DrawText(wantedText, "DarkRPHUD2", pos.x + 1, pos.y - 41, Color(255, 0, 0, 255), 1)

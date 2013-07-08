@@ -72,7 +72,6 @@ include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
-include("shared/language.lua")
 include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 

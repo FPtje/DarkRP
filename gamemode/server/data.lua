@@ -584,7 +584,7 @@ function DB.StoreJailPos(ply, addingPos)
 	DB.QueryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. DB.SQLStr(map) .. ";", function(already)
 		if not already or already == 0 then
 			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
-			GAMEMODE:Notify(ply, 0, 4,  LANGUAGE.created_first_jailpos)
+			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("created_first_jailpos"))
 
 			return
 		end
@@ -593,14 +593,14 @@ function DB.StoreJailPos(ply, addingPos)
 			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 			table.insert(DB.JailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
-			GAMEMODE:Notify(ply, 0, 4,  LANGUAGE.added_jailpos)
+			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("added_jailpos"))
 		else
 			DB.Query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. DB.SQLStr(map) .. ";", function()
 				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 
 				DB.JailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
-				GAMEMODE:Notify(ply, 0, 5,  LANGUAGE.reset_add_jailpos)
+				GAMEMODE:Notify(ply, 0, 5,  DarkRP.getPhrase("reset_add_jailpos"))
 			end)
 		end
 	end)
@@ -641,7 +641,7 @@ function DB.StoreTeamSpawnPos(t, pos)
 		end)
 	end)
 
-	print(string.format(LANGUAGE.created_spawnpos, team.GetName(t)))
+	print(DarkRP.getPhrase("created_spawnpos", team.GetName(t)))
 end
 
 function DB.AddTeamSpawnPos(t, pos)
@@ -745,9 +745,9 @@ function DB.ResetAllMoney(ply,cmd,args)
 		v:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
 	end
 	if ply:IsPlayer() then
-		GAMEMODE:NotifyAll(0,4, string.format(LANGUAGE.reset_money, ply:Nick()))
+		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
 	else
-		GAMEMODE:NotifyAll(0,4, string.format(LANGUAGE.reset_money, "Console"))
+		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
 	end
 end
 concommand.Add("rp_resetallmoney", DB.ResetAllMoney)

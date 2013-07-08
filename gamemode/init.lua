@@ -59,7 +59,6 @@ AddCSLuaFile("shared/player_class.lua")
 AddCSLuaFile("shared/animations.lua")
 AddCSLuaFile("shared/commands.lua")
 AddCSLuaFile("shared/entity.lua")
-AddCSLuaFile("shared/language.lua")
 AddCSLuaFile("shared/MakeThings.lua")
 AddCSLuaFile("shared/Workarounds.lua")
 
@@ -92,7 +91,6 @@ include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
 
-include("shared/language.lua")
 include("shared/MakeThings.lua")
 include("shared/Workarounds.lua")
 

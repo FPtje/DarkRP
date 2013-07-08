@@ -82,13 +82,13 @@ function GM.vote:create(question, voteType, target, time, callback, excludeVoter
 	newvote.nay = 0
 
 	if #player.GetAll() <= table.Count(excludeVoters) then
-		GAMEMODE:Notify(target, 0, 4, LANGUAGE.vote_alone)
+		GAMEMODE:Notify(target, 0, 4, DarkRP.getPhrase("vote_alone"))
 		newvote:callback(1)
 		return
 	end
 
 	if target:IsPlayer() then
-		GAMEMODE:Notify(target, 1, 4, LANGUAGE.vote_started)
+		GAMEMODE:Notify(target, 1, 4, DarkRP.getPhrase("vote_started"))
 	end
 
 	umsg.Start("DoVote", newvote:getFilter())

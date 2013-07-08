@@ -124,9 +124,9 @@ if CLIENT then
 					table.insert(names, Player(tonumber(b)):Nick())
 				end
 			end
-			ownerstr = ownerstr .. string.format(LANGUAGE.keys_other_allowed).. table.concat(names, "\n").."\n"
+			ownerstr = ownerstr .. string.format(DarkRP.getPhrase("keys_other_allowed")).. table.concat(names, "\n").."\n"
 		elseif type(self.DoorData.AllowedToOwn) == "number" and IsValid(Player(self.DoorData.AllowedToOwn)) then
-			ownerstr = ownerstr .. string.format(LANGUAGE.keys_other_allowed)..Player(self.DoorData.AllowedToOwn):Nick().."\n"
+			ownerstr = ownerstr .. string.format(DarkRP.getPhrase("keys_other_allowed"))..Player(self.DoorData.AllowedToOwn):Nick().."\n"
 		end
 
 		self.DoorData.title = self.DoorData.title or ""
@@ -137,11 +137,11 @@ if CLIENT then
 		local whiteText = true -- false for red, true for white text
 
 		if superadmin and blocked then
-			st = st .. LANGUAGE.keys_allow_ownership .. "\n"
+			st = st .. DarkRP.getPhrase("keys_allow_ownership") .. "\n"
 		end
 
 		if self.DoorData.TeamOwn then
-			st = st .. LANGUAGE.keys_owned_by .."\n"
+			st = st .. DarkRP.getPhrase("keys_owned_by") .."\n"
 
 			for k, v in pairs(self.DoorData.TeamOwn) do
 				if v then
@@ -149,28 +149,28 @@ if CLIENT then
 				end
 			end
 		elseif self.DoorData.GroupOwn then
-			st = st .. LANGUAGE.keys_owned_by .."\n"
+			st = st .. DarkRP.getPhrase("keys_owned_by") .."\n"
 			st = st .. self.DoorData.GroupOwn .. "\n"
 		end
 
 		if self:IsOwned() then
 			if superAdmin then
 				if ownerstr ~= "" then
-					st = st .. LANGUAGE.keys_owned_by .."\n" .. ownerstr
+					st = st .. DarkRP.getPhrase("keys_owned_by") .."\n" .. ownerstr
 				end
-				st = st ..LANGUAGE.keys_disallow_ownership .. "\n"
+				st = st ..DarkRP.getPhrase("keys_disallow_ownership") .. "\n"
 			elseif not blocked and ownerstr ~= "" then
-				st = st .. LANGUAGE.keys_owned_by .. "\n" .. ownerstr
+				st = st .. DarkRP.getPhrase("keys_owned_by") .. "\n" .. ownerstr
 			end
 		elseif not blocked then
 			if superAdmin then
-				st = LANGUAGE.keys_unowned .."\n".. LANGUAGE.keys_disallow_ownership
+				st = DarkRP.getPhrase("keys_unowned") .."\n".. DarkRP.getPhrase("keys_disallow_ownership")
 				if not self:IsVehicle() then
-					st = st .. "\n"..LANGUAGE.keys_cops
+					st = st .. "\n"..DarkRP.getPhrase("keys_cops")
 				end
 			elseif not self.DoorData.GroupOwn and not self.DoorData.TeamOwn then
 				whiteText = false
-				st = LANGUAGE.keys_unowned
+				st = DarkRP.getPhrase("keys_unowned")
 			end
 		end
 
@@ -376,12 +376,12 @@ local function OwnDoor(ply)
 
 		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		if ply:isArrested() then
-			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_unown_arrested)
+			GAMEMODE:Notify(ply, 1, 5, DarkRP.getPhrase("door_unown_arrested"))
 			return ""
 		end
 
 		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
-			GAMEMODE:Notify(ply, 1, 5, LANGUAGE.door_unownable)
+			GAMEMODE:Notify(ply, 1, 5, DarkRP.getPhrase("door_unownable"))
 			return ""
 		end
 
@@ -400,19 +400,19 @@ local function OwnDoor(ply)
 			ply:AddMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("HideSellDoorMessage", GAMEMODE, ply, trace.Entity );
 			if( !bSuppress ) then
-				GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.door_sold,  GAMEMODE.Config.currency..(GiveMoneyBack)))
+				GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  GAMEMODE.Config.currency..(GiveMoneyBack)))
 			end
 
 			ply.LookingAtDoor = nil
 		else
 			if trace.Entity:IsOwned() and not trace.Entity:AllowedToOwn(ply) then
-				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_already_owned)
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_already_owned"))
 				return ""
 			end
 
 			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle() && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
 			if( !ply:CanAfford( iCost ) ) then
-				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() && LANGUAGE.vehicle_cannot_afford || LANGUAGE.door_cannot_afford );
+				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() && DarkRP.getPhrase("vehicle_cannot_afford") || DarkRP.getPhrase("door_cannot_afford") );
 				return "";
 			end
 
@@ -427,18 +427,18 @@ local function OwnDoor(ply)
 			local bVehicle = trace.Entity:IsVehicle();
 
 			if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and Owner ~= ply then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, "vehicle"))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", "vehicle"))
 				return ""
 			end
 
 			if not bVehicle and (ply.OwnedNumz or 0) >= GAMEMODE.Config.maxdoors then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, "door"))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", "door"))
 				return ""
 			end
 
 			ply:AddMoney( -( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) );
 			if( !bSuppress ) then
-				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && LANGUAGE.vehicle_bought || LANGUAGE.door_bought, GAMEMODE.Config.currency..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
+				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && DarkRP.getPhrase("vehicle_bought") || DarkRP.getPhrase("door_bought"), GAMEMODE.Config.currency..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
 			end
 
 			trace.Entity:Own(ply)
@@ -455,7 +455,7 @@ local function OwnDoor(ply)
 		ply.LookingAtDoor = nil
 		return ""
 	end
-	GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.must_be_looking_at, "vehicle/door"))
+	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
 	return ""
 end
 AddChatCommand("/toggleown", OwnDoor)
@@ -564,13 +564,13 @@ local function SetDoorTitle(ply, args)
 				return ""
 			end
 		elseif trace.Entity.DoorData.NonOwnable then
-			GAMEMODE:Notify(ply, 1, 6, string.format(LANGUAGE.need_admin, "/title"))
+			GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/title"))
 		end
 
 		if trace.Entity:OwnedBy(ply) then
 			trace.Entity.DoorData.title = args
 		else
-			GAMEMODE:Notify(ply, 1, 6, string.format(LANGUAGE.door_need_to_own, "/title"))
+			GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("door_need_to_own", "/title"))
 		end
 	end
 
@@ -587,7 +587,7 @@ local function RemoveDoorOwner(ply, args)
 		target = GAMEMODE:FindPlayer(args)
 
 		if trace.Entity.DoorData.NonOwnable then
-			GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_rem_owners_unownable)
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
 		end
 
 		if target then
@@ -600,10 +600,10 @@ local function RemoveDoorOwner(ply, args)
 					trace.Entity:removeDoorOwner(target)
 				end
 			else
-				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.do_not_own_ent)
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
 			end
 		else
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 		end
 	end
 
@@ -621,7 +621,7 @@ local function AddDoorOwner(ply, args)
 		target = GAMEMODE:FindPlayer(args)
 		if target then
 			if trace.Entity.DoorData.NonOwnable then
-				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.door_add_owners_unownable)
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))
 				return ""
 			end
 
@@ -629,13 +629,13 @@ local function AddDoorOwner(ply, args)
 				if not trace.Entity:OwnedBy(target) and not trace.Entity:AllowedToOwn(target) then
 					trace.Entity:AddAllowed(target)
 				else
-					GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.rp_addowner_already_owns_door, ply:Nick()))
+					GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", ply:Nick()))
 				end
 			else
-				GAMEMODE:Notify(ply, 1, 4, LANGUAGE.do_not_own_ent)
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
 			end
 		else
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.could_not_find, "player: "..tostring(args)))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 		end
 	end
 

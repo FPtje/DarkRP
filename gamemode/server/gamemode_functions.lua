@@ -119,7 +119,7 @@ end
 function GM:PlayerSpawnSENT(ply, model)
 	if GAMEMODE.Config.adminsents then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, string.format(LANGUAGE.need_admin, "gm_spawnsent"))
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
 			return
 		end
 	end
@@ -236,7 +236,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 		-- If we know by now who killed the NPC, pay them.
 		if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
 			ent:AddMoney(GAMEMODE.Config.npckillpay)
-			GAMEMODE:Notify(ent, 0, 4, string.format(LANGUAGE.npc_killpay, GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
+			GAMEMODE:Notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
 		end
 	end
 end
@@ -302,15 +302,15 @@ end
 
 function GM:CanPlayerSuicide(ply)
 	if ply.IsSleeping then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
 	end
 	if ply:isArrested() then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
 	end
 	if GAMEMODE.Config.wantedsuicide and ply:getDarkRPVar("wanted") then
-		GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "suicide", ""))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
 	end
 
@@ -384,9 +384,9 @@ function GM:PlayerDeath(ply, weapon, killer)
 		-- If the player died in jail, make sure they can't respawn until their jail sentance is over
 		ply.NextSpawnTime = CurTime() + math.ceil(GAMEMODE.Config.jailtimer - (CurTime() - ply.LastJailed)) + 1
 		for a, b in pairs(player.GetAll()) do
-			b:PrintMessage(HUD_PRINTCENTER, string.format(LANGUAGE.died_in_jail, ply:Nick()))
+			b:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
 		end
-		GAMEMODE:Notify(ply, 4, 4, LANGUAGE.dead_in_jail)
+		GAMEMODE:Notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
 	else
 		-- Normal death, respawning.
 		ply.NextSpawnTime = CurTime() + math.Clamp(GAMEMODE.Config.respawntime, 0, 10)

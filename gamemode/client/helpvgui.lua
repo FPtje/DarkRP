@@ -14,7 +14,7 @@ function HelpPanel:Init()
 	self.title:SetText(GAMEMODE.Name)
 
 	self.scrolltext = vgui.Create("DLabel", self)
-	self.scrolltext:SetText(LANGUAGE.mouse_wheel_to_scroll)
+	self.scrolltext:SetText(DarkRP.getPhrase("mouse_wheel_to_scroll"))
 
 	self.HelpInfo = vgui.Create("Panel", self)
 

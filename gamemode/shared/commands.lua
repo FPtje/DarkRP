@@ -22,49 +22,49 @@ function GM:AddTeamCommands(CTeam, max)
 				return ""
 			end
 			if type(CTeam.NeedToChangeFrom) == "number" and ply:Team() ~= CTeam.NeedToChangeFrom then
-				GAMEMODE:Notify(ply, 1,4, string.format(LANGUAGE.need_to_be_before, team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
+				GAMEMODE:Notify(ply, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
 				return ""
 			elseif type(CTeam.NeedToChangeFrom) == "table" and not table.HasValue(CTeam.NeedToChangeFrom, ply:Team()) then
 				local teamnames = ""
 				for a,b in pairs(CTeam.NeedToChangeFrom) do teamnames = teamnames.." or "..team.GetName(b) end
-				GAMEMODE:Notify(ply, 1,4, string.format(LANGUAGE.need_to_be_before, string.sub(teamnames, 5), CTeam.name))
+				GAMEMODE:Notify(ply, 1,4, DarkRP.getPhrase("need_to_be_before", string.sub(teamnames, 5), CTeam.name))
 				return ""
 			end
 
 			if CTeam.customCheck and not CTeam.customCheck(ply) then
-				GAMEMODE:Notify(ply, 1, 4, CTeam.CustomCheckFailMsg or string.format(LANGUAGE.unable, team.GetName(t), ""))
+				GAMEMODE:Notify(ply, 1, 4, CTeam.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), ""))
 				return ""
 			end
 			if #player.GetAll() == 1 then
-				GAMEMODE:Notify(ply, 0, 4, LANGUAGE.vote_alone)
+				GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
 				ply:ChangeTeam(k)
 				return ""
 			end
 			if not ply:ChangeAllowed(k) then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.unable, "/vote"..CTeam.command, "banned/demoted"))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, "banned/demoted"))
 				return ""
 			end
 			if CurTime() - ply:GetTable().LastVoteCop < 80 then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.have_to_wait, math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), CTeam.command))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), CTeam.command))
 				return ""
 			end
 			if ply:Team() == k then
-				GAMEMODE:Notify(ply, 1, 4,  string.format(LANGUAGE.unable, CTeam.command, ""))
+				GAMEMODE:Notify(ply, 1, 4,  DarkRP.getPhrase("unable", CTeam.command, ""))
 				return ""
 			end
 			local max = CTeam.max
 			if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(k) >= max) or (max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > max)) then
-				GAMEMODE:Notify(ply, 1, 4,  string.format(LANGUAGE.team_limit_reached,CTeam.name))
+				GAMEMODE:Notify(ply, 1, 4,  DarkRP.getPhrase("team_limit_reached",CTeam.name))
 				return ""
 			end
-			GAMEMODE.vote:create(string.format(LANGUAGE.wants_to_be, ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
+			GAMEMODE.vote:create(DarkRP.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
 				local ply = vote.target
 
 				if not IsValid(ply) then return end
 				if choice >= 0 then
 					ply:ChangeTeam(k)
 				else
-					GAMEMODE:NotifyAll(1, 4, string.format(LANGUAGE.has_not_been_made_team, ply:Nick(), CTeam.name))
+					GAMEMODE:NotifyAll(1, 4, DarkRP.getPhrase("has_not_been_made_team", ply:Nick(), CTeam.name))
 				end
 			end)
 			ply:GetTable().LastVoteCop = CurTime()
@@ -80,7 +80,7 @@ function GM:AddTeamCommands(CTeam, max)
 			if a > 0 and not ply:IsAdmin()
 			or a > 1 and not ply:IsSuperAdmin()
 			then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_admin, CTeam.name))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", CTeam.name))
 				return ""
 			end
 
@@ -90,7 +90,7 @@ function GM:AddTeamCommands(CTeam, max)
 				or a == 2)
 			or CTeam.RequiresVote and CTeam.RequiresVote(ply, k)
 			then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_to_make_vote, CTeam.name))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
 				return ""
 			end
 
@@ -100,11 +100,11 @@ function GM:AddTeamCommands(CTeam, max)
 	else
 		AddChatCommand("/"..CTeam.command, function(ply)
 			if CTeam.admin == 1 and not ply:IsAdmin() then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_admin, "/"..CTeam.command))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/"..CTeam.command))
 				return ""
 			end
 			if CTeam.admin > 1 and not ply:IsSuperAdmin() then
-				GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.need_sadmin, "/"..CTeam.command))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_sadmin", "/"..CTeam.command))
 				return ""
 			end
 			ply:ChangeTeam(k)
@@ -114,21 +114,21 @@ function GM:AddTeamCommands(CTeam, max)
 
 	concommand.Add("rp_"..CTeam.command, function(ply, cmd, args)
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			ply:PrintMessage(2, string.format(LANGUAGE.need_admin, cmd))
+			ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
 			return
         end
 
 		if CTeam.admin > 1 and not ply:IsSuperAdmin() then
-			ply:PrintMessage(2, string.format(LANGUAGE.need_sadmin, cmd))
+			ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
 			return
 		end
 
 		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-				ply:PrintMessage(2, string.format(LANGUAGE.need_admin, cmd))
+				ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
 				return
 			elseif CTeam.admin > 1 and ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-				ply:PrintMessage(2, string.format(LANGUAGE.need_to_make_vote, CTeam.name))
+				ply:PrintMessage(2, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
 				return
 			end
 		end
@@ -146,9 +146,9 @@ function GM:AddTeamCommands(CTeam, max)
 			target:PrintMessage(2, nick .. " has made you a " .. CTeam.name .. "!")
         else
 			if (ply:EntIndex() == 0) then
-				print(string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+				print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 			else
-				ply:PrintMessage(2, string.format(LANGUAGE.could_not_find, "player: "..tostring(args[1])))
+				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
 			end
 			return
         end
@@ -161,7 +161,7 @@ function GM:AddEntityCommands(tblEnt)
 	local function buythis(ply, args)
 		if ply:isArrested() then return "" end
 		if type(tblEnt.allowed) == "table" and not table.HasValue(tblEnt.allowed, ply:Team()) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.incorrect_job, tblEnt.cmd))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", tblEnt.cmd))
 			return ""
 		end
 		local cmdname = string.gsub(tblEnt.ent, " ", "_")
@@ -174,12 +174,12 @@ function GM:AddEntityCommands(tblEnt)
 		local max = tonumber(tblEnt.max or 3)
 
 		if ply["max"..cmdname] and tonumber(ply["max"..cmdname]) >= tonumber(max) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.limit, tblEnt.cmd))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", tblEnt.cmd))
 			return ""
 		end
 
 		if not ply:CanAfford(tblEnt.price) then
-			GAMEMODE:Notify(ply, 1, 4, string.format(LANGUAGE.cant_afford, tblEnt.cmd))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.cmd))
 			return ""
 		end
 		ply:AddMoney(-tblEnt.price)
@@ -202,7 +202,7 @@ function GM:AddEntityCommands(tblEnt)
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
 
-		GAMEMODE:Notify(ply, 0, 4, string.format(LANGUAGE.you_bought_x, tblEnt.name, GAMEMODE.Config.currency..tblEnt.price))
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency..tblEnt.price))
 		if not ply["max"..cmdname] then
 			ply["max"..cmdname] = 0
 		end
