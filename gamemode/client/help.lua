@@ -83,8 +83,6 @@ addLabel(HELP_CATEGORY_CHATCMD, "/addowner or ao <Name> - Allow another to playe
 addLabel(HELP_CATEGORY_CHATCMD, "/removeowner <Name> - Remove an owner from your door")
 addLabel(HELP_CATEGORY_CHATCMD, "")
 addLabel(HELP_CATEGORY_CHATCMD, "/cr <Message> - Request the CP's assistance")
-addLabel(HELP_CATEGORY_CHATCMD, "/911 - Call 911 (when you're attacked by a person)")
-addLabel(HELP_CATEGORY_CHATCMD, "/report - Call 911 for an illegal entity (you have to be looking at an entity)")
 
 -- concommand help labels
 addLabel(HELP_CATEGORY_ADMINCMD, "rp_own - Own the door you're looking at.")
