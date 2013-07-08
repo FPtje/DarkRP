@@ -39,7 +39,7 @@ local function SetAFK(ply)
 		ply.AFKNpc = npc
 		npc:CPPISetOwner(ply)
 		npc.AFKPly = ply
-		if IsValid(ply:GetActiveWeapon()) then npc:Give(ply:GetActiveWeapon():GetClass()) end
+		if IsValid(ply:GetActiveWeapon()) and not (ply:GetActiveWeapon():GetClass() == "weapon_physgun") then npc:Give(ply:GetActiveWeapon():GetClass()) end
 		npc:SetHealth(ply:Health())
 		npc:SetNoDraw(false)
 		ply:SetNoDraw(true)
