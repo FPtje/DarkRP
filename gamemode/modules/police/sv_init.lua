@@ -38,7 +38,7 @@ function plyMeta:unWarrant(unwarranter)
 end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
-	local question = string.format(DarkRP.getPhrase("warrant_request").."\nReason: %s", actor:Nick(), suspect:Nick(), reason)
+	local question = DarkRP.getPhrase("warrant_request", actor:Nick(), suspect:Nick(), reason)
 	GAMEMODE.ques:Create(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
@@ -49,8 +49,8 @@ function plyMeta:wanted(actor, reason)
 	self:SetDarkRPVar("wantedReason", reason)
 
 	local actorNick = IsValid(actor) and actor:Nick() or "Disconnected player"
-	local centerMessage = string.format("%s\nReason: %s\nOrdered by: %s", DarkRP.getPhrase("wanted_by_police", self:Nick()), reason, actorNick)
-	local printMessage = string.format("%s ordered a search warrant for %s, reason: ", actorNick, self:Nick(), reason)
+	local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
+	local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Nick(), reason)
 
 	for _, ply in pairs(player.GetAll()) do
 		ply:PrintMessage(HUD_PRINTCENTER, centerMessage)
@@ -67,8 +67,8 @@ function plyMeta:unWanted(actor)
 	hook.Call("PlayerUnWanted", GAMEMODE, actor, self)
 	self:SetDarkRPVar("wanted", false)
 
-	local expiredMessage = IsValid(actor) and string.format("\nRevoked by: %s", actor:Nick()) or ""
-	expiredMessage = string.format(DarkRP.getPhrase("wanted_expired") .. "%s", self:Nick(), expiredMessage)
+	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
+		DarkRP.getPhrase("wanted_expired", self:Nick())
 
 	for _, ply in pairs(player.GetAll()) do
 		ply:PrintMessage(HUD_PRINTCENTER, expiredMessage)

@@ -25,7 +25,7 @@ local english = {
 	property_tax_cant_afford = "You couldn't pay the taxes! Your property has been taken away from you!",
 
 	-- Players
-	wanted = "Wanted by Police!",
+	wanted = "Wanted by Police!\nReason: %s",
 	youre_arrested = "You have been arrested for %d seconds!",
 	hes_arrested = "%s has been arrested for %d seconds!",
 	hes_unarrested = "%s has been released from jail!",
@@ -33,14 +33,16 @@ local english = {
 	job = "Job: %s",
 	salary = "Salary: %s%s",
 	wallet = "Wallet: %s%s",
-	warrant_request = "%s requests a search warrant for %s",
+	warrant_request = "%s requests a search warrant for %s\nReason: %s",
 	warrant_request2 = "Search warrant request sent to Mayor %s!",
 	warrant_approved = "Search warrant approved for %s!",
 	warrant_approved2 = "You are now able to search his house.",
 	warrant_denied = "Mayor %s has denied your search warrant request.",
 	warrant_expired = "The search warrant for %s has expired!",
-	wanted_by_police = "%s is wanted by the police!",
+	wanted_by_police = "%s is wanted by the police!\nReason: %s\nOrdered by: %s",
+	wanted_by_police_print = "%s ordered a search warrant for %s, reason: %s",
 	wanted_expired = "%s is no longer wanted by the Police.",
+	wanted_revoked = "%s is no longer wanted by the Police.\nRevoked by: %s",
 	rpname_changed = "%s changed their RPName to: %s",
 
 	-- Teams
@@ -69,7 +71,7 @@ local english = {
 
 	-- Keys, vehicles and doors
 	keys_allowed_to_coown = "You are allowed to co-own this\n(Press Reload with keys or press F2 to co-own)\n",
-	keys_other_allowed = "Allowed to co-own:\n",
+	keys_other_allowed = "Allowed to co-own:\n%s\n",
 	keys_allow_ownership = "(Press Reload with keys or press F2 to allow ownership)",
 	keys_disallow_ownership = "(Press Reload with keys or press F2 to disallow ownership)",
 	keys_owned_by = "Owned by: ",

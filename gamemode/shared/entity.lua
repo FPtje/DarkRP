@@ -124,9 +124,9 @@ if CLIENT then
 					table.insert(names, Player(tonumber(b)):Nick())
 				end
 			end
-			ownerstr = ownerstr .. string.format(DarkRP.getPhrase("keys_other_allowed")).. table.concat(names, "\n").."\n"
+			ownerstr = ownerstr .. DarkRP.getPhrase("keys_other_allowed", table.concat(names, "\n"))
 		elseif type(self.DoorData.AllowedToOwn) == "number" and IsValid(Player(self.DoorData.AllowedToOwn)) then
-			ownerstr = ownerstr .. string.format(DarkRP.getPhrase("keys_other_allowed"))..Player(self.DoorData.AllowedToOwn):Nick().."\n"
+			ownerstr = ownerstr .. DarkRP.getPhrase("keys_other_allowed", Player(self.DoorData.AllowedToOwn):Nick())
 		end
 
 		self.DoorData.title = self.DoorData.title or ""

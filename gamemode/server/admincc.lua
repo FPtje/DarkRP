@@ -90,7 +90,7 @@ local function ccAddOwner(ply, cmd, args)
 			if not trace.Entity:OwnedBy(target) and not trace.Entity:AllowedToOwn(target) then
 				trace.Entity:AddAllowed(target)
 			else
-				ply:PrintMessage(2, string.format(DarkRP.getPhrase("rp_addowner_already_owns_door")))
+				ply:PrintMessage(2, DarkRP.getPhrase("rp_addowner_already_owns_door", target))
 			end
 		else
 			trace.Entity:Own(target)

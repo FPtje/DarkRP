@@ -284,7 +284,7 @@ local function DrawWantedInfo(ply)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 	end
 
-	local wantedText = string.format("%s\nReason: %s", DarkRP.getPhrase("wanted"), tostring(ply.DarkRPVars["wantedReason"]))
+	local wantedText = DarkRP.getPhrase("wanted", tostring(ply:getDarkRPVar("wantedReason")))
 
 	draw.DrawText(wantedText, "DarkRPHUD2", pos.x, pos.y - 40, Color(255, 255, 255, 200), 1)
 	draw.DrawText(wantedText, "DarkRPHUD2", pos.x + 1, pos.y - 41, Color(255, 0, 0, 255), 1)
