@@ -16,6 +16,7 @@ SWEP.Contact = ""
 SWEP.Purpose = ""
 
 SWEP.ViewModel = Model("models/weapons/v_hands.mdl")
+SWEP.WorldModel	= ""
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
