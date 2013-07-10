@@ -12,7 +12,7 @@ sql.Query([[CREATE TABLE IF NOT EXISTS FADMIN_MOTD(
 	roll INTEGER NOT NULL
 	);]])
 
-local MOTD = sql.Query("SELECT * FROM FADMIN_MOTD WHERE LOWER(map) = " .. DB.SQLStr(string.lower(game.GetMap()))..";")
+local MOTD = sql.Query("SELECT * FROM FADMIN_MOTD WHERE LOWER(map) = " .. MySQLite.SQLStr(string.lower(game.GetMap()))..";")
 
 hook.Add("InitPostEntity", "PlaceMOTD", function()
 	if not MOTD or (not MOTD[1] and not MOTD["1"]) then return end
@@ -39,29 +39,29 @@ function FAdmin.MOTD.SaveMOTD(ent, ply)
 		ang.p, ang.y, ang.r
 	if MOTD then
 		sql.Query([[UPDATE FADMIN_MOTD SET ]]
-		.. "x = " .. DB.SQLStr(x)..", "
-		.. "y = " .. DB.SQLStr(y)..", "
-		.. "z = " .. DB.SQLStr(z)..", "
-		.. "pitch = " .. DB.SQLStr(pitch)..", "
-		.. "yaw = " .. DB.SQLStr(yaw)..", "
-		.. "roll = " .. DB.SQLStr(roll)
-		.. " WHERE map = " .. DB.SQLStr(map)..";")
+		.. "x = " .. MySQLite.SQLStr(x)..", "
+		.. "y = " .. MySQLite.SQLStr(y)..", "
+		.. "z = " .. MySQLite.SQLStr(z)..", "
+		.. "pitch = " .. MySQLite.SQLStr(pitch)..", "
+		.. "yaw = " .. MySQLite.SQLStr(yaw)..", "
+		.. "roll = " .. MySQLite.SQLStr(roll)
+		.. " WHERE map = " .. MySQLite.SQLStr(map)..";")
 	else
 		sql.Query([[INSERT INTO FADMIN_MOTD VALUES(]]
-		.. DB.SQLStr(map)..", "
-		.. DB.SQLStr(x)..", "
-		.. DB.SQLStr(y)..", "
-		.. DB.SQLStr(z)..", "
-		.. DB.SQLStr(pitch)..", "
-		.. DB.SQLStr(yaw)..", "
-		.. DB.SQLStr(roll)
+		.. MySQLite.SQLStr(map)..", "
+		.. MySQLite.SQLStr(x)..", "
+		.. MySQLite.SQLStr(y)..", "
+		.. MySQLite.SQLStr(z)..", "
+		.. MySQLite.SQLStr(pitch)..", "
+		.. MySQLite.SQLStr(yaw)..", "
+		.. MySQLite.SQLStr(roll)
 		.. ");")
 	end
 	FAdmin.Messages.SendMessage(ply, 4, "MOTD position saved!")
 end
 
 function FAdmin.MOTD.RemoveMOTD(ent, ply)
-	sql.Query("DELETE FROM FADMIN_MOTD WHERE map = " .. DB.SQLStr(string.lower(game.GetMap()))..";")
+	sql.Query("DELETE FROM FADMIN_MOTD WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap()))..";")
 	FAdmin.Messages.SendMessage(ply, 4, "MOTD removed!")
 end
 

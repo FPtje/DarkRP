@@ -1,219 +1,28 @@
 include("static_data.lua")
 
 /*---------------------------------------------------------------------------
-MySQL and SQLite connectivity
+Functions and variables
 ---------------------------------------------------------------------------*/
-if RP_MySQLConfig.EnableMySQL then
-	require("mysqloo")
-end
-
-DB.CONNECTED_TO_MYSQL = false
-DB.MySQLDB = nil
-
-local QueuedQueries
-function DB.Begin()
-	if not DB.CONNECTED_TO_MYSQL then
-		sql.Begin()
-	else
-		if QueuedQueries then
-			debug.Trace()
-			error("Transaction ongoing!")
-		end
-		QueuedQueries = {}
-	end
-end
-
-function DB.Commit(onFinished)
-	if not DB.CONNECTED_TO_MYSQL then
-		sql.Commit()
-		if onFinished then onFinished() end
-	else
-		if not QueuedQueries then
-			error("No queued queries! Call DB.Begin() first!")
-		end
-
-		if #QueuedQueries == 0 then
-			QueuedQueries = nil
-			return
-		end
-
-		-- Copy the table so other scripts can create their own queue
-		local queue = table.Copy(QueuedQueries)
-		QueuedQueries = nil
-
-		-- Handle queued queries in order
-		local queuePos = 0
-		local call
-
-		-- Recursion invariant: queuePos > 0 and queue[queuePos] <= #queue
-		call = function(...)
-			queuePos = queuePos + 1
-
-			if queue[queuePos].callback then
-				queue[queuePos].callback(...)
-			end
-
-			-- Base case, end of the queue
-			if queuePos + 1 > #queue then
-				if onFinished then onFinished() end -- All queries have finished
-				return
-			end
-
-			-- Recursion
-			local nextQuery = queue[queuePos + 1]
-			DB.Query(nextQuery.query, call, nextQuery.onError)
-		end
-
-		DB.Query(queue[1].query, call, queue[1].onError)
-	end
-end
-
-function DB.QueueQuery(sqlText, callback, errorCallback)
-	if DB.CONNECTED_TO_MYSQL then
-		table.insert(QueuedQueries, {query = sqlText, callback = callback, onError = errorCallback})
-	end
-	-- SQLite is instantaneous, simply running the query is equal to queueing it
-	DB.Query(sqlText, callback, errorCallback)
-end
-
-function DB.Query(sqlText, callback, errorCallback)
-	if DB.CONNECTED_TO_MYSQL then
-		local query = DB.MySQLDB:query(sqlText)
-		local data
-		query.onData = function(Q, D)
-			data = data or {}
-			data[#data + 1] = D
-		end
-
-		query.onError = function(Q, E)
-			if (DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED) then
-				table.insert(DB.cachedQueries, {sqlText, callback, false})
-				return
-			end
-
-			if errorCallback then
-				errorCallback()
-			end
-
-			DB.Log("MySQL Error: ".. E)
-			ErrorNoHalt(E .. " (" .. sqlText .. ")\n")
-		end
-
-		query.onSuccess = function()
-			if callback then callback(data, query:lastInsert()) end
-		end
-		query:start()
-		return
-	end
-
-	local lastError = sql.LastError()
-	local Result = sql.Query(sqlText)
-	if sql.LastError() and sql.LastError() ~= lastError then
-		error("SQLite error: " .. sql.LastError())
-	end
-
-	if callback then callback(Result) end
-	return Result
-end
-
-function DB.QueryValue(sqlText, callback, errorCallback)
-	if DB.CONNECTED_TO_MYSQL then
-		local query = DB.MySQLDB:query(sqlText)
-		local data
-		query.onData = function(Q, D)
-			data = D
-		end
-		query.onSuccess = function()
-			for k,v in pairs(data or {}) do
-				callback(v)
-				return
-			end
-			callback()
-		end
-		query.onError = function(Q, E)
-			if (DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED) then
-				table.insert(DB.cachedQueries, {sqlText, callback, true})
-				return
-			end
-
-			if errorCallback then
-				errorCallback()
-			end
-
-			DB.Log("MySQL Error: ".. E)
-			ErrorNoHalt(E .. " (" .. sqlText .. ")\n")
-		end
-
-		query:start()
-		return
-	end
-
-	local lastError = sql.LastError()
-	local val = sql.QueryValue(sqlText)
-	if sql.LastError() and sql.LastError() ~= lastError then
-		error("SQLite error: " .. lastError)
-	end
-
-	if callback then callback(val) end
-	return val
-end
-
-function DB.ConnectToMySQL(host, username, password, database_name, database_port)
-	if not mysqloo then DB.Log("MySQL Error: MySQL modules aren't installed properly!") Error("MySQL modules aren't installed properly!") end
-	local databaseObject = mysqloo.connect(host, username, password, database_name, database_port)
-
-	if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
-
-	databaseObject.onConnectionFailed = function(_, msg)
-		DB.Log("MySQL Error: Connection failed! "..tostring(msg))
-		Error("Connection failed! " ..tostring(msg))
-	end
-
-	databaseObject.onConnected = function()
-		DB.Log("MySQL: Connection to external database "..host.." succeeded!")
-		DB.CONNECTED_TO_MYSQL = true
-		if DB.cachedQueries then
-			for _, v in pairs(DB.cachedQueries) do
-				if v[3] then
-					DB.QueryValue(v[1], v[2])
-				else
-					DB.Query(v[1], v[2])
-				end
-			end
-		end
-		DB.cachedQueries = {}
-
-		timer.Create("darkrp_check_mysql_status", 60, 0, function()
-			if (DB.MySQLDB and DB.MySQLDB:status() == mysqloo.DATABASE_NOT_CONNECTED) then
-				DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
-			end
-		end)
-
-		hook.Call("DatabaseInitialized")
-	end
-	databaseObject:connect()
-	DB.MySQLDB = databaseObject
-end
-
-function DB.SQLStr(str)
-	if not DB.CONNECTED_TO_MYSQL then
-		return sql.SQLStr(str)
-	end
-
-	return "\"" .. DB.MySQLDB:escape(tostring(str)) .. "\""
-end
+local teamSpawns = {}
+local jailPos = {}
+local createSpawnPos,
+	setUpNonOwnableDoors,
+	setUpTeamOwnableDoors,
+	setUpGroupDoors,
+	createJailPos,
+	createZombiePos
 
 /*---------------------------------------------------------
  Database initialize
  ---------------------------------------------------------*/
-function DB.Init()
-	local map = DB.SQLStr(string.lower(game.GetMap()))
-	DB.Begin()
+function DarkRP.initDatabase()
+	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
+	MySQLite.begin()
 		-- Gotta love the difference between SQLite and MySQL
-		local AUTOINCREMENT = DB.CONNECTED_TO_MYSQL and "AUTO_INCREMENT" or "AUTOINCREMENT"
+		local AUTOINCREMENT = MySQLite.CONNECTED_TO_MYSQL and "AUTO_INCREMENT" or "AUTOINCREMENT"
 
 		-- Create the table for the convars used in DarkRP
-		DB.Query([[
+		MySQLite.query([[
 			CREATE TABLE IF NOT EXISTS darkrp_cvar(
 				var VARCHAR(25) NOT NULL PRIMARY KEY,
 				value INTEGER NOT NULL
@@ -223,7 +32,7 @@ function DB.Init()
 		-- Table that holds all position data (jail, zombie spawns etc.)
 		-- Queue these queries because other queries depend on the existence of the darkrp_position table
 		-- Race conditions could occur if the queries are executed simultaneously
-		DB.QueueQuery([[
+		MySQLite.queueQuery([[
 			CREATE TABLE IF NOT EXISTS darkrp_position(
 				id INTEGER NOT NULL PRIMARY KEY ]]..AUTOINCREMENT..[[,
 				map VARCHAR(45) NOT NULL,
@@ -235,15 +44,15 @@ function DB.Init()
 		]])
 
 		-- team spawns require extra data
-		DB.QueueQuery([[
+		MySQLite.queueQuery([[
 			CREATE TABLE IF NOT EXISTS darkrp_jobspawn(
 				id INTEGER NOT NULL PRIMARY KEY,
 				team INTEGER NOT NULL
 			);
 		]])
 
-		if DB.CONNECTED_TO_MYSQL then
-			DB.QueueQuery([[
+		if MySQLite.CONNECTED_TO_MYSQL then
+			MySQLite.queueQuery([[
 				ALTER TABLE darkrp_jobspawn ADD FOREIGN KEY(id) REFERENCES darkrp_position(id)
 					ON UPDATE CASCADE
 					ON DELETE CASCADE;
@@ -251,7 +60,7 @@ function DB.Init()
 		end
 
 		-- Player information
-		DB.Query([[
+		MySQLite.query([[
 			CREATE TABLE IF NOT EXISTS darkrp_player(
 				uid BIGINT NOT NULL PRIMARY KEY,
 				rpname VARCHAR(45),
@@ -262,7 +71,7 @@ function DB.Init()
 		]])
 
 		-- Door data
-		DB.Query([[
+		MySQLite.query([[
 			CREATE TABLE IF NOT EXISTS darkrp_door(
 				idx INTEGER NOT NULL,
 				map VARCHAR(45) NOT NULL,
@@ -274,7 +83,7 @@ function DB.Init()
 		]])
 
 		-- Some doors are owned by certain teams
-		DB.Query([[
+		MySQLite.query([[
 			CREATE TABLE IF NOT EXISTS darkrp_jobown(
 				idx INTEGER NOT NULL,
 				map VARCHAR(45) NOT NULL,
@@ -285,7 +94,7 @@ function DB.Init()
 		]])
 
 		-- Door groups
-		DB.Query([[
+		MySQLite.query([[
 			CREATE TABLE IF NOT EXISTS darkrp_doorgroups(
 				idx INTEGER NOT NULL,
 				map VARCHAR(45) NOT NULL,
@@ -300,8 +109,8 @@ function DB.Init()
 		-- For now it's deletion only, since updating of the common attribute doesn't happen.
 
 		-- MySQL trigger
-		if DB.CONNECTED_TO_MYSQL then
-			DB.Query("show triggers", function(data)
+		if MySQLite.CONNECTED_TO_MYSQL then
+			MySQLite.query("show triggers", function(data)
 				-- Check if the trigger exists first
 				if data then
 					for k,v in pairs(data) do
@@ -311,7 +120,7 @@ function DB.Init()
 					end
 				end
 
-				DB.Query("SHOW PRIVILEGES", function(data)
+				MySQLite.query("SHOW PRIVILEGES", function(data)
 					if not data then return end
 
 					local found;
@@ -323,7 +132,7 @@ function DB.Init()
 					end
 
 					if not found then return end
-					DB.Query([[
+					MySQLite.query([[
 						CREATE TRIGGER JobPositionFKDelete
 							AFTER DELETE ON darkrp_position
 							FOR EACH ROW
@@ -335,7 +144,7 @@ function DB.Init()
 				end)
 			end)
 		else -- SQLite triggers, quite a different syntax
-			DB.Query([[
+			MySQLite.query([[
 				CREATE TRIGGER IF NOT EXISTS JobPositionFKDelete
 					AFTER DELETE ON darkrp_position
 					FOR EACH ROW
@@ -345,72 +154,71 @@ function DB.Init()
 					END;
 			]])
 		end
-	DB.Commit(function() -- Initialize the data after all the tables have been created
+	MySQLite.commit(function() -- Initialize the data after all the tables have been created
 
 		-- Update older version of database to the current database
 		-- Only run when one of the older tables exist
 		local updateQuery = [[SELECT name FROM sqlite_master WHERE type="table" AND name="darkrp_cvars";]]
-		if DB.CONNECTED_TO_MYSQL then
+		if MySQLite.CONNECTED_TO_MYSQL then
 			updateQuery = [[show tables like "darkrp_cvars";]]
 		end
 
-		DB.QueryValue(updateQuery, function(data)
+		MySQLite.queryValue(updateQuery, function(data)
 			if data == "darkrp_cvars" then
 				print("UPGRADING DATABASE!")
-				DB.UpdateDatabase()
+				updateDatabase()
 			end
 		end)
 
-		DB.SetUpNonOwnableDoors()
-		DB.SetUpTeamOwnableDoors()
-		DB.SetUpGroupDoors()
+		setUpNonOwnableDoors()
+		setUpTeamOwnableDoors()
+		setUpGroupDoors()
 
-		DB.Query("SELECT * FROM darkrp_cvar;", function(settings)
+		MySQLite.query("SELECT * FROM darkrp_cvar;", function(settings)
 			for k,v in pairs(settings or {}) do
 				RunConsoleCommand(v.var, v.value)
 			end
 		end)
 
-		DB.JailPos = DB.JailPos or {}
+		jailPos = jailPos or {}
 		zombieSpawns = zombieSpawns or {}
-		DB.Query([[SELECT * FROM darkrp_position WHERE type IN('J', 'Z') AND map = ]] .. map .. [[;]], function(data)
+		MySQLite.query([[SELECT * FROM darkrp_position WHERE type IN('J', 'Z') AND map = ]] .. map .. [[;]], function(data)
 			for k,v in pairs(data or {}) do
 				if v.type == "J" then
-					table.insert(DB.JailPos, v)
+					table.insert(jailPos, v)
 				elseif v.type == "Z" then
 					table.insert(zombieSpawns, v)
 				end
 			end
 
-			if table.Count(DB.JailPos) == 0 then
-				DB.CreateJailPos()
+			if table.Count(jailPos) == 0 then
+				createJailPos()
 				return
 			end
 			if table.Count(zombieSpawns) == 0 then
-				DB.CreateZombiePos()
+				createZombiePos()
 				return
 			end
 
 			jail_positions = nil
 		end)
 
-		DB.TeamSpawns = {}
-		DB.Query("SELECT * FROM darkrp_position NATURAL JOIN darkrp_jobspawn WHERE map = "..map..";", function(data)
+		MySQLite.query("SELECT * FROM darkrp_position NATURAL JOIN darkrp_jobspawn WHERE map = "..map..";", function(data)
 			if not data or table.Count(data) == 0 then
-				DB.CreateSpawnPos()
+				createSpawnPos()
 				return
 			end
 
 			team_spawn_positions = nil
 
-			DB.TeamSpawns = data
+			teamSpawns = data
 		end)
 
-		if DB.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
+		if MySQLite.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
 									--so he walks around with the settings from the SQLite database
 			for k,v in pairs(player.GetAll()) do
-				local UniqueID = sql.SQLStr(v:UniqueID())
-				DB.Query([[SELECT * FROM darkrp_player WHERE uid = ]].. UniqueID ..[[;]], function(data)
+				local UniqueID = MySQLite.SQLStr(v:UniqueID())
+				MySQLite.query([[SELECT * FROM darkrp_player WHERE uid = ]].. UniqueID ..[[;]], function(data)
 					if not data or not data[1] then return end
 
 					local Data = data[1]
@@ -427,75 +235,75 @@ end
 Updating the older database to work with the current version
 (copy as much as possible over)
 ---------------------------------------------------------------------------*/
-function DB.UpdateDatabase()
+local function updateDatabase()
 	print("CONVERTING DATABASE")
 	-- Start transaction.
-	DB.Begin()
+	MySQLite.begin()
 
 	-- CVars
-	DB.Query([[DELETE FROM darkrp_cvar;]])
-	DB.Query([[INSERT INTO darkrp_cvar SELECT v.var, v.value FROM darkrp_cvars v;]])
-	DB.Query([[DROP TABLE darkrp_cvars;]])
+	MySQLite.query([[DELETE FROM darkrp_cvar;]])
+	MySQLite.query([[INSERT INTO darkrp_cvar SELECT v.var, v.value FROM darkrp_cvars v;]])
+	MySQLite.query([[DROP TABLE darkrp_cvars;]])
 
 	-- Positions
-	DB.Query([[DELETE FROM darkrp_position;]])
+	MySQLite.query([[DELETE FROM darkrp_position;]])
 
 	-- Team spawns
-	DB.Query([[INSERT INTO darkrp_position SELECT NULL, p.map, "T", p.x, p.y, p.z FROM darkrp_tspawns p;]])
-	DB.Query([[
+	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "T", p.x, p.y, p.z FROM darkrp_tspawns p;]])
+	MySQLite.query([[
 		INSERT INTO darkrp_jobspawn
 			SELECT new.id, old.team FROM darkrp_position new JOIN darkrp_tspawns old ON
 				new.map = old.map AND new.x = old.x AND new.y = old.y AND new.z = old.Z
 			WHERE new.type = "T";
 	]])
-	DB.Query([[DROP TABLE darkrp_tspawns;]])
+	MySQLite.query([[DROP TABLE darkrp_tspawns;]])
 
 	-- Zombie spawns
-	DB.Query([[INSERT INTO darkrp_position SELECT NULL, p.map, "Z", p.x, p.y, p.z FROM darkrp_zspawns p;]])
-	DB.Query([[DROP TABLE darkrp_zspawns;]])
+	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "Z", p.x, p.y, p.z FROM darkrp_zspawns p;]])
+	MySQLite.query([[DROP TABLE darkrp_zspawns;]])
 
 
 	-- Jail positions
-	DB.Query([[INSERT INTO darkrp_position SELECT NULL, p.map, "J", p.x, p.y, p.z FROM darkrp_jailpositions p;]])
-	DB.Query([[DROP TABLE darkrp_jailpositions;]])
+	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "J", p.x, p.y, p.z FROM darkrp_jailpositions p;]])
+	MySQLite.query([[DROP TABLE darkrp_jailpositions;]])
 
 	-- Doors
-	DB.Query([[DELETE FROM darkrp_door;]])
-	DB.Query([[INSERT INTO darkrp_door SELECT old.idx - ]] .. game.MaxPlayers() .. [[, old.map, old.title, old.locked, old.disabled FROM darkrp_doors old;]])
+	MySQLite.query([[DELETE FROM darkrp_door;]])
+	MySQLite.query([[INSERT INTO darkrp_door SELECT old.idx - ]] .. game.MaxPlayers() .. [[, old.map, old.title, old.locked, old.disabled FROM darkrp_doors old;]])
 
-	DB.Query([[DROP TABLE darkrp_doors;]])
-	DB.Query([[DROP TABLE darkrp_teamdoors;]])
-	DB.Query([[DROP TABLE darkrp_groupdoors;]])
+	MySQLite.query([[DROP TABLE darkrp_doors;]])
+	MySQLite.query([[DROP TABLE darkrp_teamdoors;]])
+	MySQLite.query([[DROP TABLE darkrp_groupdoors;]])
 
-	DB.Commit()
+	MySQLite.commit()
 
 
-	local count = DB.QueryValue("SELECT COUNT(*) FROM darkrp_wallets;") or 0
+	local count = MySQLite.queryValue("SELECT COUNT(*) FROM darkrp_wallets;") or 0
 	for i = 0, count, 1000 do -- SQLite selecting limit
-		DB.Query([[SELECT darkrp_wallets.steam, amount, salary, name FROM darkrp_wallets
+		MySQLite.query([[SELECT darkrp_wallets.steam, amount, salary, name FROM darkrp_wallets
 			LEFT OUTER JOIN darkrp_salaries ON darkrp_salaries.steam = darkrp_wallets.steam
 			LEFT OUTER JOIN darkrp_rpnames ON darkrp_rpnames.steam = darkrp_wallets.steam LIMIT 1000 OFFSET ]]..i..[[;]], function(data)
 
 			-- Separate transaction for the player data
-			DB.Begin()
+			MySQLite.begin()
 
 			for k,v in pairs(data or {}) do
 				local uniqueID = util.CRC("gm_" .. v.steam .. "_gm")
 
-				DB.Query([[INSERT INTO darkrp_player VALUES(]]
+				MySQLite.query([[INSERT INTO darkrp_player VALUES(]]
 					..uniqueID..[[,]]
-					..((v.name == "NULL" or not v.name) and "NULL" or DB.SQLStr(v.name))..[[,]]
+					..((v.name == "NULL" or not v.name) and "NULL" or MySQLite.SQLStr(v.name))..[[,]]
 					..((v.salary == "NULL" or not v.salary) and GAMEMODE.Config.normalsalary or v.salary)..[[,]]
 					..v.amount..[[);]])
 			end
 
 			if count - i < 1000 then -- the last iteration
-				DB.Query([[DROP TABLE darkrp_wallets;]])
-				DB.Query([[DROP TABLE darkrp_salaries;]])
-				DB.Query([[DROP TABLE darkrp_rpnames;]])
+				MySQLite.query([[DROP TABLE darkrp_wallets;]])
+				MySQLite.query([[DROP TABLE darkrp_salaries;]])
+				MySQLite.query([[DROP TABLE darkrp_rpnames;]])
 			end
 
-			DB.Commit()
+			MySQLite.commit()
 		end)
 	end
 end
@@ -503,40 +311,40 @@ end
 /*---------------------------------------------------------
  positions
  ---------------------------------------------------------*/
-function DB.CreateSpawnPos()
+function createSpawnPos()
 	local map = string.lower(game.GetMap())
 	if not team_spawn_positions then return end
 
 	for k, v in pairs(team_spawn_positions) do
 		if v[1] == map then
-			table.insert(DB.TeamSpawns, {id = k, map = v[1], x = v[3], y = v[4], z = v[5], team = v[2]})
+			table.insert(teamSpawns, {id = k, map = v[1], x = v[3], y = v[4], z = v[5], team = v[2]})
 		end
 	end
 	team_spawn_positions = nil -- We're done with this now.
 end
 
-function DB.CreateZombiePos()
+function createZombiePos()
 	if not zombie_spawn_positions then return end
 	local map = string.lower(game.GetMap())
 
-	DB.Begin()
+	MySQLite.begin()
 		for k, v in pairs(zombie_spawn_positions) do
 			if map == string.lower(v[1]) then
-				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", \"Z\", " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
+				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", \"Z\", " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
 			end
 		end
-	DB.Commit()
+	MySQLite.commit()
 end
 
 function DB.StoreZombies()
 	local map = string.lower(game.GetMap())
-	DB.Begin()
-	DB.Query([[DELETE FROM darkrp_position WHERE type = 'Z' AND map = ]] .. DB.SQLStr(map) .. ";", function()
+	MySQLite.begin()
+	MySQLite.query([[DELETE FROM darkrp_position WHERE type = 'Z' AND map = ]] .. MySQLite.SQLStr(map) .. ";", function()
 		for k, v in pairs(zombieSpawns) do
-			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'Z', " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
+			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'Z', " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
 		end
 	end)
-	DB.Commit()
+	MySQLite.commit()
 end
 
 local FirstZombieSpawn = true
@@ -544,7 +352,7 @@ function DB.RetrieveZombies(callback)
 	if zombieSpawns and table.Count(zombieSpawns) > 0 and not FirstZombieSpawn then callback() return zombieSpawns end
 	FirstZombieSpawn = false
 	zombieSpawns = {}
-	DB.Query([[SELECT * FROM darkrp_position WHERE type = 'Z' AND map = ]] .. DB.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
+	MySQLite.query([[SELECT * FROM darkrp_position WHERE type = 'Z' AND map = ]] .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
 		if not r then callback() return end
 		for k,v in pairs(r) do
 			zombieSpawns[k] = Vector(v.x, v.y, v.z)
@@ -562,44 +370,44 @@ function DB.RetrieveRandomZombieSpawnPos()
 	return pos
 end
 
-function DB.CreateJailPos()
+function createJailPos()
 	if not jail_positions then return end
 	local map = string.lower(game.GetMap())
 
-	DB.Begin()
-		DB.Query([[DELETE FROM darkrp_position WHERE type = "J" AND map = ]].. DB.SQLStr(map)..[[;]])
+	MySQLite.begin()
+		MySQLite.query([[DELETE FROM darkrp_position WHERE type = "J" AND map = ]].. MySQLite.SQLStr(map)..[[;]])
 		for k, v in pairs(jail_positions) do
 			if map == string.lower(v[1]) then
-				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
-				table.insert(DB.JailPos, {map = map, x = v[2], y = v[3], z = v[4]})
+				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
+				table.insert(jailPos, {map = map, x = v[2], y = v[3], z = v[4]})
 			end
 		end
-	DB.Commit()
+	MySQLite.commit()
 end
 
 local JailIndex = 1 -- Used to circulate through the jailpos table
 function DB.StoreJailPos(ply, addingPos)
 	local map = string.lower(game.GetMap())
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	DB.QueryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. DB.SQLStr(map) .. ";", function(already)
+	MySQLite.queryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function(already)
 		if not already or already == 0 then
-			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
+			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("created_first_jailpos"))
 
 			return
 		end
 
 		if addingPos then
-			DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
+			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
-			table.insert(DB.JailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
+			table.insert(jailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
 			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("added_jailpos"))
 		else
-			DB.Query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. DB.SQLStr(map) .. ";", function()
-				DB.Query("INSERT INTO darkrp_position VALUES(NULL, " .. DB.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
+			MySQLite.query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function()
+				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 
-				DB.JailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
+				jailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
 				GAMEMODE:Notify(ply, 0, 5,  DarkRP.getPhrase("reset_add_jailpos"))
 			end)
 		end
@@ -610,34 +418,34 @@ end
 
 function DB.RetrieveJailPos()
 	local map = string.lower(game.GetMap())
-	if not DB.JailPos then return Vector(0,0,0) end
+	if not jailPos then return Vector(0,0,0) end
 
 	-- Retrieve the least recently used jail position
-	local oldestPos = DB.JailPos[JailIndex]
-	JailIndex = JailIndex % #DB.JailPos + 1
+	local oldestPos = jailPos[JailIndex]
+	JailIndex = JailIndex % #jailPos + 1
 
 	return oldestPos and Vector(oldestPos.x, oldestPos.y, oldestPos.z)
 end
 
 function DB.SaveSetting(setting, value)
-	DB.Query("REPLACE INTO darkrp_cvar VALUES("..DB.SQLStr(setting)..", "..DB.SQLStr(value)..");")
+	MySQLite.query("REPLACE INTO darkrp_cvar VALUES("..MySQLite.SQLStr(setting)..", "..MySQLite.SQLStr(value)..");")
 end
 
 function DB.CountJailPos()
-	return table.Count(DB.JailPos or {})
+	return table.Count(jailPos or {})
 end
 
 function DB.StoreTeamSpawnPos(t, pos)
 	local map = string.lower(game.GetMap())
 
-	DB.Query([[DELETE FROM darkrp_position WHERE map = ]] .. DB.SQLStr(map) .. [[ AND id IN (SELECT id FROM darkrp_jobspawn WHERE team = ]] .. t .. [[)]])
+	MySQLite.query([[DELETE FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND id IN (SELECT id FROM darkrp_jobspawn WHERE team = ]] .. t .. [[)]])
 
-	DB.Query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. DB.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
+	MySQLite.query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
 		, function()
-		DB.QueryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. DB.SQLStr(map) .. [[ AND type = "T";]], function(id)
+		MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
 			if not id then return end
-			DB.Query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
-			table.insert(DB.TeamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
+			MySQLite.query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
+			table.insert(teamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
 		end)
 	end)
 
@@ -647,34 +455,34 @@ end
 function DB.AddTeamSpawnPos(t, pos)
 	local map = string.lower(game.GetMap())
 
-	DB.Query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. DB.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
+	MySQLite.query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
 		, function()
-		DB.QueryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. DB.SQLStr(map) .. [[ AND type = "T";]], function(id)
+		MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
 			if type(id) == "boolean" then return end
-			DB.Query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
-			table.insert(DB.TeamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
+			MySQLite.query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
+			table.insert(teamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
 		end)
 	end)
 end
 
 function DB.RemoveTeamSpawnPos(t, callback)
 	local map = string.lower(game.GetMap())
-	DB.Query([[SELECT darkrp_position.id FROM darkrp_position
+	MySQLite.query([[SELECT darkrp_position.id FROM darkrp_position
 		NATURAL JOIN darkrp_jobspawn
-		WHERE map = ]] .. DB.SQLStr(map) .. [[
+		WHERE map = ]] .. MySQLite.SQLStr(map) .. [[
 		AND team = ]].. t ..[[;]], function(data)
 
-		DB.Begin()
+		MySQLite.begin()
 		for k,v in pairs(data or {}) do
 			-- The trigger will make sure the values get deleted from the jobspawn as well
-			DB.Query([[DELETE FROM darkrp_position WHERE id = ]]..v.id..[[;]])
+			MySQLite.query([[DELETE FROM darkrp_position WHERE id = ]]..v.id..[[;]])
 		end
-		DB.Commit()
+		MySQLite.commit()
 	end)
 
-	for k,v in pairs(DB.TeamSpawns) do
+	for k,v in pairs(teamSpawns) do
 		if tonumber(v.team) == t then
-			DB.TeamSpawns[k] = nil
+			teamSpawns[k] = nil
 		end
 	end
 
@@ -687,8 +495,8 @@ function DB.RetrieveTeamSpawnPos(ply)
 
 	local returnal = {}
 
-	if DB.TeamSpawns then
-		for k,v in pairs(DB.TeamSpawns) do
+	if teamSpawns then
+		for k,v in pairs(teamSpawns) do
 			if v.map == map and tonumber(v.team) == t then
 				table.insert(returnal, Vector(v.x, v.y, v.z))
 			end
@@ -704,11 +512,11 @@ function DB.StoreRPName(ply, name)
 	if not name or string.len(name) < 2 then return end
 	ply:SetDarkRPVar("rpname", name)
 
-	DB.Query([[UPDATE darkrp_player SET rpname = ]] .. DB.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
+	MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
 function DB.RetrieveRPNames(ply, name, callback)
-	DB.Query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = "..DB.SQLStr(name)..";", function(r)
+	MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = "..MySQLite.SQLStr(name)..";", function(r)
 		callback(tonumber(r[1].count) > 0)
 	end)
 end
@@ -718,15 +526,15 @@ function DB.RetrievePlayerData(ply, callback, failed, attempts)
 
 	if attempts > 3 then return failed() end
 
-	DB.Query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
+	MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
 		DB.RetrievePlayerData(ply, callback, failed, attempts + 1)
 	end)
 end
 
 function DB.CreatePlayerData(ply, name, wallet, salary)
-	DB.Query([[REPLACE INTO darkrp_player VALUES(]] ..
+	MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
 			ply:UniqueID() .. [[, ]] ..
-			DB.SQLStr(name)  .. [[, ]] ..
+			MySQLite.SQLStr(name)  .. [[, ]] ..
 			salary  .. [[, ]] ..
 			wallet .. ");")
 end
@@ -735,12 +543,12 @@ function DB.StoreMoney(ply, amount)
 	if not IsValid(ply) then return end
 	if amount < 0  then return end
 
-	DB.Query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
+	MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 end
 
 function DB.ResetAllMoney(ply,cmd,args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
-	DB.Query("UPDATE darkrp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
+	MySQLite.query("UPDATE darkrp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
 	for k,v in pairs(player.GetAll()) do
 		v:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
 	end
@@ -761,7 +569,7 @@ end
 function DB.StoreSalary(ply, amount)
 	ply:SetSelfDarkRPVar("salary", math.floor(amount))
 
-	DB.Query([[UPDATE darkrp_player SET salary = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
+	MySQLite.query([[UPDATE darkrp_player SET salary = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 
 	return amount
 end
@@ -771,7 +579,7 @@ function DB.RetrieveSalary(ply, callback)
 
 	if ply:getDarkRPVar("salary") then return callback and callback(ply:getDarkRPVar("salary")) end -- First check the cache.
 
-	DB.QueryValue("SELECT salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
+	MySQLite.queryValue("SELECT salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
 		local normal = GAMEMODE.Config.normalsalary
 		if not r then
 			ply:SetSelfDarkRPVar("salary", normal)
@@ -790,10 +598,10 @@ function DB.StoreDoorOwnability(ent)
 	ent.DoorData = ent.DoorData or {}
 	local nonOwnable = ent.DoorData.NonOwnable
 
-	DB.Query([[REPLACE INTO darkrp_door VALUES(]]..
+	MySQLite.query([[REPLACE INTO darkrp_door VALUES(]]..
 		ent:DoorIndex() ..[[, ]] ..
-		DB.SQLStr(map) .. [[, ]] ..
-		(ent.DoorData.title and DB.SQLStr(ent.DoorData.title) or "NULL") .. [[, ]] ..
+		MySQLite.SQLStr(map) .. [[, ]] ..
+		(ent.DoorData.title and MySQLite.SQLStr(ent.DoorData.title) or "NULL") .. [[, ]] ..
 		"NULL" .. [[, ]] ..
 		(ent.DoorData.NonOwnable and 1 or 0) .. [[);]])
 end
@@ -801,11 +609,11 @@ end
 function DB.StoreDoorTitle(ent, text)
 	ent.DoorData = ent.DoorData or {}
 	ent.DoorData.title = text
-	DB.Query("UPDATE darkrp_door SET title = " .. DB.SQLStr(text) .. " WHERE map = " .. DB.SQLStr(string.lower(game.GetMap())) .. " AND idx = " .. ent:DoorIndex() .. ";")
+	MySQLite.query("UPDATE darkrp_door SET title = " .. MySQLite.SQLStr(text) .. " WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. " AND idx = " .. ent:DoorIndex() .. ";")
 end
 
-function DB.SetUpNonOwnableDoors()
-	DB.Query("SELECT idx, title, isLocked, isDisabled FROM darkrp_door WHERE map = " .. DB.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
+function setUpNonOwnableDoors()
+	MySQLite.query("SELECT idx, title, isLocked, isDisabled FROM darkrp_door WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
 		if not r then return end
 
 		for _, row in pairs(r) do
@@ -826,16 +634,16 @@ function DB.StoreTeamDoorOwnability(ent)
 	local map = string.lower(game.GetMap())
 	ent.DoorData = ent.DoorData or {}
 
-	DB.Query("DELETE FROM darkrp_jobown WHERE idx = " .. ent:DoorIndex() .. " AND map = " .. DB.SQLStr(map) .. ";")
+	MySQLite.query("DELETE FROM darkrp_jobown WHERE idx = " .. ent:DoorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
 	for k,v in pairs(string.Explode("\n", ent.DoorData.TeamOwn or "")) do
 		if v == "" then continue end
 
-		DB.Query("INSERT INTO darkrp_jobown VALUES("..ent:DoorIndex() .. ", "..DB.SQLStr(map) .. ", " .. v .. ");")
+		MySQLite.query("INSERT INTO darkrp_jobown VALUES("..ent:DoorIndex() .. ", "..MySQLite.SQLStr(map) .. ", " .. v .. ");")
 	end
 end
 
-function DB.SetUpTeamOwnableDoors()
-	DB.Query("SELECT idx, job FROM darkrp_jobown WHERE map = " .. DB.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
+function setUpTeamOwnableDoors()
+	MySQLite.query("SELECT idx, job FROM darkrp_jobown WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
 		if not r then return end
 
 		for _, row in pairs(r) do
@@ -850,20 +658,20 @@ function DB.SetUpTeamOwnableDoors()
 end
 
 function DB.SetDoorGroup(ent, group)
-	local map = DB.SQLStr(string.lower(game.GetMap()))
+	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
 	local index = ent:DoorIndex()
 
 	if group == "" then
-		DB.Query("DELETE FROM darkrp_doorgroups WHERE map = " .. map .. " AND idx = " .. index .. ";")
+		MySQLite.query("DELETE FROM darkrp_doorgroups WHERE map = " .. map .. " AND idx = " .. index .. ";")
 		return
 	end
 
-	DB.Query("REPLACE INTO darkrp_doorgroups VALUES(" .. index .. ", " .. map .. ", " .. DB.SQLStr(group) .. ");");
+	MySQLite.query("REPLACE INTO darkrp_doorgroups VALUES(" .. index .. ", " .. map .. ", " .. MySQLite.SQLStr(group) .. ");");
 end
 
-function DB.SetUpGroupDoors()
-	local map = DB.SQLStr(string.lower(game.GetMap()))
-	DB.Query("SELECT idx, doorgroup FROM darkrp_doorgroups WHERE map = " .. map, function(data)
+function setUpGroupDoors()
+	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
+	MySQLite.query("SELECT idx, doorgroup FROM darkrp_doorgroups WHERE map = " .. map, function(data)
 		if not data then return end
 
 		for _, row in pairs(data) do

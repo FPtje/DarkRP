@@ -11,13 +11,13 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 	FAdmin.Access.Groups[name] = FAdmin.Access.Groups[name] or {ADMIN = admin_access, PRIVS = privs or {}}
 	if not SERVER then return end
 
-	DB.QueryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = " .. DB.SQLStr(name) .. ";", function(val)
+	MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = " .. MySQLite.SQLStr(name) .. ";", function(val)
 		if tonumber(val) > 0 then return end
 
-		DB.Query("REPLACE INTO FADMIN_GROUPS VALUES(".. DB.SQLStr(name) .. ", " .. admin_access..");")
+		MySQLite.query("REPLACE INTO FADMIN_GROUPS VALUES(".. MySQLite.SQLStr(name) .. ", " .. admin_access..");")
 
 		for priv, _ in pairs(privs or {}) do
-			DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. DB.SQLStr(name) .. ", " .. DB.SQLStr(priv) .. ");")
+			MySQLite.query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(name) .. ", " .. MySQLite.SQLStr(priv) .. ");")
 		end
 	end)
 
@@ -33,7 +33,7 @@ function FAdmin.Access.RemoveGroup(ply, cmd, args)
 	if not args[1] then return end
 
 	if FAdmin.Access.Groups[args[1]] and not table.HasValue({"superadmin", "admin", "user", "noaccess"}, string.lower(args[1])) then
-		DB.Query("DELETE FROM FADMIN_GROUPS WHERE NAME = ".. DB.SQLStr(args[1])..";")
+		MySQLite.query("DELETE FROM FADMIN_GROUPS WHERE NAME = ".. MySQLite.SQLStr(args[1])..";")
 		FAdmin.Access.Groups[args[1]] = nil
 		FAdmin.Messages.SendMessage(ply, 4, "Group succesfully removed")
 

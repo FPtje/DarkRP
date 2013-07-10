@@ -78,7 +78,7 @@ end
 
 function GM:DatabaseInitialized()
 	FPP.Init()
-	DB.Init()
+	DarkRP.initDatabase()
 end
 
 function GM:CanSeeLogMessage(ply, message, colour)
@@ -879,17 +879,7 @@ end
 
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
-	if not RP_MySQLConfig or not RP_MySQLConfig.EnableMySQL then
-		hook.Call("DatabaseInitialized")
-	end
-
 	InitPostEntityCalled = true
-	timer.Simple(1, function()
-		if RP_MySQLConfig and RP_MySQLConfig.EnableMySQL then
-			DB.ConnectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
-			return
-		end
-	end)
 
 	local physData = physenv.GetPerformanceSettings()
 	physData.MaxVelocity = 2000
