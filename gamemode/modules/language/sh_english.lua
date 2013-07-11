@@ -54,14 +54,6 @@ local english = {
 	job_has_become = "%s has been made a %s!",
 
 	-- Disasters
-	zombie_approaching = "WARNING: Zombies are approaching!",
-	zombie_leaving = "Zombies are leaving.",
-	zombie_spawn_not_exist = "Zombie Spawn %s does not exist.",
-	zombie_spawn_removed = "You have removed this zombie spawn.",
-	zombie_spawn_added = "You have added a zombie spawn.",
-	zombie_maxset = "Maximum amount of zombies is now set to %s",
-	zombie_enabled = "Zombies are now enabled.",
-	zombie_disabled = "Zombies are now disabled.",
 	meteor_approaching = "WARNING: Meteor storm approaching!",
 	meteor_passing = "Meteor storm passing.",
 	meteor_enabled = "Meteor Storms are now enabled.",

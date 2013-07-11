@@ -327,29 +327,10 @@ local function DrawEntityDisplay()
 end
 
 /*---------------------------------------------------------------------------
-Zombie display
----------------------------------------------------------------------------*/
-local function DrawZombieInfo()
-	if not localplayer:getDarkRPVar("zombieToggle") then return end
-	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ZombieInfo")
-	if shouldDraw == false then return end
-
-	for x=1, localplayer:getDarkRPVar("numPoints"), 1 do
-		local zPoint = localplayer.DarkRPVars["zPoints".. x]
-		if zPoint then
-			zPoint = zPoint:ToScreen()
-			draw.DrawText("Zombie Spawn (" .. x .. ")", "DarkRPHUD2", zPoint.x, zPoint.y - 20, Color(255, 255, 255, 200), 1)
-			draw.DrawText("Zombie Spawn (" .. x .. ")", "DarkRPHUD2", zPoint.x + 1, zPoint.y - 21, Color(255, 0, 0, 255), 1)
-		end
-	end
-end
-
-/*---------------------------------------------------------------------------
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
 function GM:HUDPaint()
 	DrawHUD()
-	DrawZombieInfo()
 	DrawEntityDisplay()
 
 	self.BaseClass:HUDPaint()

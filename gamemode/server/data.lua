@@ -9,8 +9,7 @@ local createSpawnPos,
 	setUpNonOwnableDoors,
 	setUpTeamOwnableDoors,
 	setUpGroupDoors,
-	createJailPos,
-	createZombiePos
+	createJailPos
 
 /*---------------------------------------------------------
  Database initialize
@@ -181,22 +180,13 @@ function DarkRP.initDatabase()
 		end)
 
 		jailPos = jailPos or {}
-		zombieSpawns = zombieSpawns or {}
-		MySQLite.query([[SELECT * FROM darkrp_position WHERE type IN('J', 'Z') AND map = ]] .. map .. [[;]], function(data)
+		MySQLite.query([[SELECT * FROM darkrp_position WHERE type = 'J' AND map = ]] .. map .. [[;]], function(data)
 			for k,v in pairs(data or {}) do
-				if v.type == "J" then
-					table.insert(jailPos, v)
-				elseif v.type == "Z" then
-					table.insert(zombieSpawns, v)
-				end
+				table.insert(jailPos, v)
 			end
 
 			if table.Count(jailPos) == 0 then
 				createJailPos()
-				return
-			end
-			if table.Count(zombieSpawns) == 0 then
-				createZombiePos()
 				return
 			end
 
@@ -258,11 +248,6 @@ local function updateDatabase()
 	]])
 	MySQLite.query([[DROP TABLE darkrp_tspawns;]])
 
-	-- Zombie spawns
-	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "Z", p.x, p.y, p.z FROM darkrp_zspawns p;]])
-	MySQLite.query([[DROP TABLE darkrp_zspawns;]])
-
-
 	-- Jail positions
 	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "J", p.x, p.y, p.z FROM darkrp_jailpositions p;]])
 	MySQLite.query([[DROP TABLE darkrp_jailpositions;]])
@@ -321,53 +306,6 @@ function createSpawnPos()
 		end
 	end
 	team_spawn_positions = nil -- We're done with this now.
-end
-
-function createZombiePos()
-	if not zombie_spawn_positions then return end
-	local map = string.lower(game.GetMap())
-
-	MySQLite.begin()
-		for k, v in pairs(zombie_spawn_positions) do
-			if map == string.lower(v[1]) then
-				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", \"Z\", " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
-			end
-		end
-	MySQLite.commit()
-end
-
-function DB.StoreZombies()
-	local map = string.lower(game.GetMap())
-	MySQLite.begin()
-	MySQLite.query([[DELETE FROM darkrp_position WHERE type = 'Z' AND map = ]] .. MySQLite.SQLStr(map) .. ";", function()
-		for k, v in pairs(zombieSpawns) do
-			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'Z', " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
-		end
-	end)
-	MySQLite.commit()
-end
-
-local FirstZombieSpawn = true
-function DB.RetrieveZombies(callback)
-	if zombieSpawns and table.Count(zombieSpawns) > 0 and not FirstZombieSpawn then callback() return zombieSpawns end
-	FirstZombieSpawn = false
-	zombieSpawns = {}
-	MySQLite.query([[SELECT * FROM darkrp_position WHERE type = 'Z' AND map = ]] .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
-		if not r then callback() return end
-		for k,v in pairs(r) do
-			zombieSpawns[k] = Vector(v.x, v.y, v.z)
-		end
-		callback()
-	end)
-end
-
-function DB.RetrieveRandomZombieSpawnPos()
-	if #zombieSpawns < 1 then return end
-	local r = table.Random(zombieSpawns)
-
-	local pos = GAMEMODE:FindEmptyPos(r, nil, 200, 10, Vector(2, 2, 2))
-
-	return pos
 end
 
 function createJailPos()
