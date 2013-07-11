@@ -5,9 +5,9 @@ cvars.AddChangeCallback("_FAdmin_immunity", function(Cvar, Previous, New)
 end)
 
 hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
-	DB.Query("CREATE TABLE IF NOT EXISTS FADMIN_GROUPS(NAME VARCHAR(40) NOT NULL PRIMARY KEY, ADMIN_ACCESS INTEGER NOT NULL);")
-	DB.Query("CREATE TABLE IF NOT EXISTS FAdmin_PlayerGroup(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
-	DB.Query([[CREATE TABLE IF NOT EXISTS FADMIN_PRIVILEGES(
+	MySQLite.query("CREATE TABLE IF NOT EXISTS FADMIN_GROUPS(NAME VARCHAR(40) NOT NULL PRIMARY KEY, ADMIN_ACCESS INTEGER NOT NULL);")
+	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_PlayerGroup(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
+	MySQLite.query([[CREATE TABLE IF NOT EXISTS FADMIN_PRIVILEGES(
 		NAME VARCHAR(40),
 		PRIVILEGE VARCHAR(100),
 		PRIMARY KEY(NAME, PRIVILEGE),
@@ -16,7 +16,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			ON DELETE CASCADE
 	);]], function()
 
-		DB.Query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME;", function(data)
+		MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME;", function(data)
 			if not data then return end
 
 			for _, v in pairs(data) do
@@ -43,7 +43,7 @@ end)
 
 -- Check if the privileges are loaded when we're sure they're all added
 timer.Simple(3, function()
-	DB.QueryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
+	MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
 		if val ~= "0" then return end
 
 		local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
@@ -51,7 +51,7 @@ timer.Simple(3, function()
 		for priv, access in pairs(FAdmin.Access.Privileges) do
 			for i = access + 1, #hasPrivs, 1 do
 				FAdmin.Access.Groups[hasPrivs[i]].PRIVS[priv] = true
-				DB.Query("INSERT INTO FADMIN_PRIVILEGES VALUES(" .. DB.SQLStr(hasPrivs[i]) .. ", " .. DB.SQLStr(priv) .. ");")
+				MySQLite.query("INSERT INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(hasPrivs[i]) .. ", " .. MySQLite.SQLStr(priv) .. ");")
 			end
 		end
 	end)
@@ -66,7 +66,7 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 		ply:SetUserGroup(group)
 	end
 
-	DB.Query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. DB.SQLStr(SteamID)..", " .. DB.SQLStr(group)..");")
+	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(SteamID)..", " .. MySQLite.SQLStr(group)..");")
 end
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
@@ -114,7 +114,7 @@ local function AddPrivilege(ply, cmd, args)
 
 	FAdmin.Access.Groups[group].PRIVS[priv] = true
 
-	DB.Query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. DB.SQLStr(group) .. ", " .. DB.SQLStr(priv) .. ");")
+	MySQLite.query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(group) .. ", " .. MySQLite.SQLStr(priv) .. ");")
 	SendUserMessage("FAdmin_AddPriv", player.GetAll(), group, priv)
 	FAdmin.Messages.SendMessage(ply, 4, "Privilege Added!")
 end
@@ -130,7 +130,7 @@ local function RemovePrivilege(ply, cmd, args)
 
 	FAdmin.Access.Groups[group].PRIVS[priv] = nil
 
-	DB.Query("DELETE FROM FADMIN_PRIVILEGES WHERE NAME = " .. DB.SQLStr(group) .. " AND PRIVILEGE = " .. DB.SQLStr(priv) .. ";")
+	MySQLite.query("DELETE FROM FADMIN_PRIVILEGES WHERE NAME = " .. MySQLite.SQLStr(group) .. " AND PRIVILEGE = " .. MySQLite.SQLStr(priv) .. ";")
 	SendUserMessage("FAdmin_RemovePriv", player.GetAll(), group, priv)
 	FAdmin.Messages.SendMessage(ply, 4, "Privilege Removed!")
 end
@@ -189,7 +189,7 @@ end
 --hooks and stuff
 
 hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
-	DB.QueryValue("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = " .. DB.SQLStr(ply:SteamID())..";", function(Group)
+	MySQLite.queryValue("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = " .. MySQLite.SQLStr(ply:SteamID())..";", function(Group)
 		if not Group then return end
 		ply:SetUserGroup(Group)
 

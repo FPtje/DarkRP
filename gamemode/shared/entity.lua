@@ -124,9 +124,9 @@ if CLIENT then
 					table.insert(names, Player(tonumber(b)):Nick())
 				end
 			end
-			ownerstr = ownerstr .. string.format(DarkRP.getPhrase("keys_other_allowed")).. table.concat(names, "\n").."\n"
+			ownerstr = ownerstr .. DarkRP.getPhrase("keys_other_allowed", table.concat(names, "\n"))
 		elseif type(self.DoorData.AllowedToOwn) == "number" and IsValid(Player(self.DoorData.AllowedToOwn)) then
-			ownerstr = ownerstr .. string.format(DarkRP.getPhrase("keys_other_allowed"))..Player(self.DoorData.AllowedToOwn):Nick().."\n"
+			ownerstr = ownerstr .. DarkRP.getPhrase("keys_other_allowed", Player(self.DoorData.AllowedToOwn):Nick())
 		end
 
 		self.DoorData.title = self.DoorData.title or ""
@@ -410,16 +410,15 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			local iCost = hook.Call("Get"..( trace.Entity:IsVehicle() && "Vehicle" || "Door").."Cost", GAMEMODE, ply, trace.Entity );
-			if( !ply:canAfford( iCost ) ) then
-				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() && DarkRP.getPhrase("vehicle_cannot_afford") || DarkRP.getPhrase("door_cannot_afford") );
-
+			local iCost = hook.Call("Get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity );
+			if( !ply:CanAfford( iCost ) ) then
+				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford") );
 				return "";
 			end
 
-			local bAllowed, strReason, bSuppress = hook.Call("PlayerBuy"..( trace.Entity:IsVehicle() && "Vehicle" || "Door"), GAMEMODE, ply, trace.Entity );
+			local bAllowed, strReason, bSuppress = hook.Call("PlayerBuy"..( trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity );
 			if( bAllowed == false ) then
-				if( strReason && strReason != "") then
+				if( strReason and strReason != "") then
 					GAMEMODE:Notify( ply, 1, 4, strReason );
 				end
 				return "";
@@ -437,13 +436,13 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			ply:AddMoney( -( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) );
+			ply:AddMoney(-iCost)
 			if( !bSuppress ) then
-				GAMEMODE:Notify( ply, 0, 4, string.format( bVehicle && DarkRP.getPhrase("vehicle_bought") || DarkRP.getPhrase("door_bought"), GAMEMODE.Config.currency..math.floor( ( bVehicle && GAMEMODE.Config.vehiclecost || GAMEMODE.Config.doorcost ) ) ) );
+				GAMEMODE:Notify( ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", GAMEMODE.Config.currency, iCost) or DarkRP.getPhrase("door_bought", GAMEMODE.Config.currency, iCost))
 			end
 
 			trace.Entity:Own(ply)
-			hook.Call("PlayerBought"..( bVehicle && "Vehicle" || "Door"), GAMEMODE, ply, trace.Entity, iCost );
+			hook.Call("PlayerBought"..(bVehicle and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity, iCost);
 
 			if ply:GetTable().OwnedNumz == 0 then
 				timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.DoPropertyTax(ply) end)

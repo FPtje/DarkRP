@@ -35,27 +35,16 @@ end
 
 local HELP_CATEGORY_CHATCMD = 1
 local HELP_CATEGORY_CONCMD = 2
-local HELP_CATEGORY_ZOMBIE = 3
 local HELP_CATEGORY_ADMINCMD = 4
 
 addCategory(HELP_CATEGORY_CHATCMD, "Chat Commands")
 addCategory(HELP_CATEGORY_CONCMD, "Console Commands")
-addCategory(HELP_CATEGORY_ZOMBIE, "Zombie Chat Commands")
 addCategory(HELP_CATEGORY_ADMINCMD, "Admin Console Commands")
 
 addLabel(HELP_CATEGORY_CONCMD, "gm_showhelp - Toggle help menu (bind this to F1 if you haven't already)")
 addLabel(HELP_CATEGORY_CONCMD, "gm_showteam - Show door menu")
 addLabel(HELP_CATEGORY_CONCMD, "gm_showspare1 - Toggle vote clicker (bind this to F3 if you haven't already)")
 addLabel(HELP_CATEGORY_CONCMD, "gm_showspare2 - Job menu(bind this to F4 if you haven't already)")
-
-addLabel(HELP_CATEGORY_ZOMBIE, "/addzombie (creates a zombie spawn)")
-addLabel(HELP_CATEGORY_ZOMBIE, "/zombiemax (maximum amount of zombies that can be alive)")
-addLabel(HELP_CATEGORY_ZOMBIE, "/removezombie index (removes a zombie spawn, index is the number inside ()")
-addLabel(HELP_CATEGORY_ZOMBIE, "/showzombie (shows where the zombie spawns are)")
-addLabel(HELP_CATEGORY_ZOMBIE, "/enablezombie (enables zombiemode)")
-addLabel(HELP_CATEGORY_ZOMBIE, "/disablezombie (disables zombiemode)")
-addLabel(HELP_CATEGORY_ZOMBIE, "/enablestorm (enables meteor storms)")
-
 
 addLabel(HELP_CATEGORY_CHATCMD, "/help - Bring up this menu")
 addLabel(HELP_CATEGORY_CHATCMD, "/job <Job Name> - Set a custom job")

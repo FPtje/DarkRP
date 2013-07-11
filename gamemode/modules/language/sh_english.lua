@@ -25,7 +25,7 @@ local english = {
 	property_tax_cant_afford = "You couldn't pay the taxes! Your property has been taken away from you!",
 
 	-- Players
-	wanted = "Wanted by Police!",
+	wanted = "Wanted by Police!\nReason: %s",
 	youre_arrested = "You have been arrested for %d seconds!",
 	hes_arrested = "%s has been arrested for %d seconds!",
 	hes_unarrested = "%s has been released from jail!",
@@ -33,14 +33,16 @@ local english = {
 	job = "Job: %s",
 	salary = "Salary: %s%s",
 	wallet = "Wallet: %s%s",
-	warrant_request = "%s requests a search warrant for %s",
+	warrant_request = "%s requests a search warrant for %s\nReason: %s",
 	warrant_request2 = "Search warrant request sent to Mayor %s!",
 	warrant_approved = "Search warrant approved for %s!",
 	warrant_approved2 = "You are now able to search his house.",
 	warrant_denied = "Mayor %s has denied your search warrant request.",
 	warrant_expired = "The search warrant for %s has expired!",
-	wanted_by_police = "%s is wanted by the police!",
+	wanted_by_police = "%s is wanted by the police!\nReason: %s\nOrdered by: %s",
+	wanted_by_police_print = "%s ordered a search warrant for %s, reason: %s",
 	wanted_expired = "%s is no longer wanted by the Police.",
+	wanted_revoked = "%s is no longer wanted by the Police.\nRevoked by: %s",
 	rpname_changed = "%s changed their RPName to: %s",
 
 	-- Teams
@@ -52,14 +54,6 @@ local english = {
 	job_has_become = "%s has been made a %s!",
 
 	-- Disasters
-	zombie_approaching = "WARNING: Zombies are approaching!",
-	zombie_leaving = "Zombies are leaving.",
-	zombie_spawn_not_exist = "Zombie Spawn %s does not exist.",
-	zombie_spawn_removed = "You have removed this zombie spawn.",
-	zombie_spawn_added = "You have added a zombie spawn.",
-	zombie_maxset = "Maximum amount of zombies is now set to %s",
-	zombie_enabled = "Zombies are now enabled.",
-	zombie_disabled = "Zombies are now disabled.",
 	meteor_approaching = "WARNING: Meteor storm approaching!",
 	meteor_passing = "Meteor storm passing.",
 	meteor_enabled = "Meteor Storms are now enabled.",
@@ -69,7 +63,7 @@ local english = {
 
 	-- Keys, vehicles and doors
 	keys_allowed_to_coown = "You are allowed to co-own this\n(Press Reload with keys or press F2 to co-own)\n",
-	keys_other_allowed = "Allowed to co-own:\n",
+	keys_other_allowed = "Allowed to co-own:\n%s\n",
 	keys_allow_ownership = "(Press Reload with keys or press F2 to allow ownership)",
 	keys_disallow_ownership = "(Press Reload with keys or press F2 to disallow ownership)",
 	keys_owned_by = "Owned by: ",
@@ -84,8 +78,8 @@ local english = {
 	door_cannot_afford = "You can not afford this door!",
 	door_hobo_unable = "You can not buy a door if you are a hobo!",
 	vehicle_cannot_afford = "You can not afford this vehicle!",
-	door_bought = "You've bought this door for %s",
-	vehicle_bought = "You've bought this vehicle for %s",
+	door_bought = "You've bought this door for %s%s",
+	vehicle_bought = "You've bought this vehicle for %s%s",
 	door_need_to_own = "You need to own this door in order to be able to %s",
 	door_rem_owners_unownable = "You can not remove owners if a door is non-ownable!",
 	door_add_owners_unownable = "You can not add owners if a door is non-ownable!",

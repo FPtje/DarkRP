@@ -75,6 +75,8 @@ include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
 
+include("server/database.lua")
+MySQLite.initialize()
 include("server/data.lua")
 include("server/gamemode_functions.lua")
 include("server/main.lua")

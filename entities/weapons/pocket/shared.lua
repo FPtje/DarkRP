@@ -21,6 +21,7 @@ SWEP.IconLetter = ""
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
 SWEP.AnimPrefix	 = "rpg"
+SWEP.WorldModel	= ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true

@@ -284,7 +284,7 @@ local function DrawWantedInfo(ply)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
 	end
 
-	local wantedText = string.format("%s\nReason: %s", DarkRP.getPhrase("wanted"), tostring(ply.DarkRPVars["wantedReason"]))
+	local wantedText = DarkRP.getPhrase("wanted", tostring(ply:getDarkRPVar("wantedReason")))
 
 	draw.DrawText(wantedText, "DarkRPHUD2", pos.x, pos.y - 40, Color(255, 255, 255, 200), 1)
 	draw.DrawText(wantedText, "DarkRPHUD2", pos.x + 1, pos.y - 41, Color(255, 0, 0, 255), 1)
@@ -323,24 +323,6 @@ local function DrawEntityDisplay()
 
 	if IsValid(tr.Entity) and tr.Entity:IsOwnable() and tr.Entity:GetPos():Distance(localplayer:GetPos()) < 200 then
 		tr.Entity:DrawOwnableInfo()
-	end
-end
-
-/*---------------------------------------------------------------------------
-Zombie display
----------------------------------------------------------------------------*/
-local function DrawZombieInfo()
-	if not localplayer:getDarkRPVar("zombieToggle") then return end
-	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ZombieInfo")
-	if shouldDraw == false then return end
-
-	for x=1, localplayer:getDarkRPVar("numPoints"), 1 do
-		local zPoint = localplayer.DarkRPVars["zPoints".. x]
-		if zPoint then
-			zPoint = zPoint:ToScreen()
-			draw.DrawText("Zombie Spawn (" .. x .. ")", "DarkRPHUD2", zPoint.x, zPoint.y - 20, Color(255, 255, 255, 200), 1)
-			draw.DrawText("Zombie Spawn (" .. x .. ")", "DarkRPHUD2", zPoint.x + 1, zPoint.y - 21, Color(255, 0, 0, 255), 1)
-		end
 	end
 end
 
@@ -391,7 +373,6 @@ Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
 function GM:HUDPaint()
 	DrawHUD()
-	DrawZombieInfo()
 	DrawEntityDisplay()
 
 	self.BaseClass:HUDPaint()
