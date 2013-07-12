@@ -206,7 +206,7 @@ local function loadData()
 		jail_positions = nil
 	end)
 end
-hook.Add("DatabaseInitialized", "ZombieData", loadData)
+hook.Add("DarkRPDBInitialized", "ZombieData", loadData)
 
 function DarkRP.StoreZombies()
 	local map = string.lower(game.GetMap())

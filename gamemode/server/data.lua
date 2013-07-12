@@ -218,6 +218,8 @@ function DarkRP.initDatabase()
 				end)
 			end
 		end
+
+		hook.Call("DarkRPDBInitialized")
 	end)
 end
 
