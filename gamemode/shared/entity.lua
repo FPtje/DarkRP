@@ -202,34 +202,13 @@ end
 function meta:KeysLock()
 	self:Fire("lock", "", 0)
 
-	-- VUMod compatibility
-	-- Locks passenger seats when the vehicle is locked.
-	if self:IsVehicle() and self.VehicleTable and self.VehicleTable.Passengers then
-		for k,v in pairs(self.VehicleTable.Passengers) do
-			v.Ent:Fire("lock", "", 0)
-		end
-	end
-
-	-- Locks the vehicle if you're unlocking a passenger seat:
-	if IsValid(self:GetParent()) and self:GetParent():IsVehicle() then
-		self:GetParent():KeysLock()
-	end
+	hook.Call("onKeysLocked", nil, self)
 end
 
 function meta:KeysUnLock()
 	self:Fire("unlock", "", 0)
 
-	-- VUMod
-	if self:IsVehicle() and self.VehicleTable and self.VehicleTable.Passengers then
-		for k,v in pairs(self.VehicleTable.Passengers) do
-			v.Ent:Fire("unlock", "", 0)
-		end
-	end
-
-	-- Unlocks the vehicle if you're unlocking a passenger seat:
-	if IsValid(self:GetParent()) and self:GetParent():IsVehicle() then
-		self:GetParent():KeysUnLock()
-	end
+	hook.Call("onKeysUnlocked", nil, self)
 end
 
 local time = false

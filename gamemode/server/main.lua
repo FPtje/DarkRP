@@ -567,7 +567,11 @@ local function BuyVehicle(ply, args)
 		table.Merge(ent, Vehicle.Members)
 	end
 	ent:Own(ply)
-	gamemode.Call("PlayerSpawnedVehicle", ply, ent) -- VUMod compatability
+	hook.Call("PlayerSpawnedVehicle", GAMEMODE, ply, ent) -- VUMod compatability
+	hook.Call("playerBoughtVehicle", nil, ply, found, ent)
+	if found.onBought then
+		found.onBought(ply, found, ent)
+	end
 
 	return ""
 end
