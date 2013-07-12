@@ -11,6 +11,7 @@ local table = table
 local timer = timer
 local tostring = tostring
 local print = print
+local GAMEMODE = GM
 local mysqlOO
 
 local RP_MySQLConfig = RP_MySQLConfig
@@ -27,7 +28,10 @@ function initialize()
 			connectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
 		end)
 	else
-		timer.Simple(0, function() hook.Call("DatabaseInitialized") end)
+		timer.Simple(0, function()
+			GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
+			hook.Call("DatabaseInitialized", GAMEMODE)
+		end)
 	end
 end
 
