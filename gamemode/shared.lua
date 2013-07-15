@@ -169,6 +169,7 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	admin = 0,
 	vote = false,
 	hasLicense = true,
+	chief = true,
 	NeedToChangeFrom = TEAM_POLICE,
 	help = {
 		"Please don't abuse your job",

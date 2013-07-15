@@ -1521,7 +1521,7 @@ local function RequestLicense(ply)
 
 	if not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_CHIEF and not v:getDarkRPVar("AFK") then
+			if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].chief and not v:getDarkRPVar("AFK") then
 				ischief = true
 				break
 			end
@@ -1550,7 +1550,7 @@ local function RequestLicense(ply)
 	if ismayor and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].mayor) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "mayor"))
 		return ""
-	elseif ischief and LookingAt:Team() ~= TEAM_CHIEF then
+	elseif ischief and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].chief) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
 		return ""
 	elseif iscop and LookingAt:Team() ~= TEAM_POLICE then
@@ -1578,7 +1578,7 @@ local function GiveLicense(ply)
 
 	if not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_CHIEF and not v:getDarkRPVar("AFK") then
+			if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].chief and not v:getDarkRPVar("AFK") then
 				ischief = true
 				break
 			end
@@ -1597,7 +1597,7 @@ local function GiveLicense(ply)
 	if ismayor and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
-	elseif ischief and ply:Team() ~= TEAM_CHIEF then
+	elseif ischief and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].chief) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
 	elseif iscop and ply:Team() ~= TEAM_POLICE then

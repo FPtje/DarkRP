@@ -401,7 +401,7 @@ end
  ---------------------------------------------------------*/
 local function JailPos(ply)
 	-- Admin or Chief can set the Jail Position
-	if (ply:Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
+	if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
 		DB.StoreJailPos(ply)
 	else
 		local str = "Admin only!"
@@ -417,7 +417,7 @@ AddChatCommand("/jailpos", JailPos)
 
 local function AddJailPos(ply)
 	-- Admin or Chief can add Jail Positions
-	if (ply:Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
+	if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
 		DB.StoreJailPos(ply, true)
 	else
 		local str = DarkRP.getPhrase("admin_only")
