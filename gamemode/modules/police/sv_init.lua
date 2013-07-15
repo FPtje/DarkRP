@@ -132,11 +132,19 @@ local function warrantCommand(ply, args)
 		return ""
 	end
 
-	local mayors = team.GetPlayers(TEAM_MAYOR or -1)
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then -- No need to search through all the teams if the player is a mayor
+		local mayors = {}
 
-	if #mayors > 0 and ply:Team() ~= TEAM_MAYOR then -- Request a warrant if there's a mayor
-		table.Random(mayors):requestWarrant(target, ply, reason)
-		return ""
+		for k,v in pairs(RPExtraTeams) do
+			if v.mayor then
+				table.Add(mayors, team.GetPlayers(v))
+			end
+		end
+
+		if #mayors > 0 then -- Request a warrant if there's a mayor
+			table.Random(mayors):requestWarrant(target, ply, reason)
+			return ""
+		end
 	end
 
 	target:warrant(ply, reason)

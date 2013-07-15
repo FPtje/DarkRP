@@ -285,7 +285,8 @@ function meta:ChangeTeam(t, force)
 		end
 	end
 
-	if prevTeam == TEAM_MAYOR and tobool(GetConVarNumber("DarkRP_LockDown")) then
+	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
+	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then
 		GAMEMODE:UnLockdown(self)
 	end
 	self:UpdateJob(TEAM.name)
@@ -319,7 +320,7 @@ function meta:ChangeTeam(t, force)
 		end
 	end
 
-	if prevTeam == TEAM_MAYOR then
+	if isMayor then
 		for _, ent in pairs(self.lawboards or {}) do
 			if IsValid(ent) then
 				ent:Remove()

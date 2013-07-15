@@ -794,7 +794,8 @@ function GM:PlayerDisconnected(ply)
 		end
 	end
 
-	if ply:Team() == TEAM_MAYOR then
+	local isMayor = RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor
+	if isMayor then
 		for _, ent in pairs(ply.lawboards or {}) do
 			if IsValid(ent) then
 				removeDelayed(ent, ply)
@@ -804,7 +805,7 @@ function GM:PlayerDisconnected(ply)
 
 	GAMEMODE.vote.DestroyVotesWithEnt(ply)
 
-	if ply:Team() == TEAM_MAYOR and tobool(GetConVarNumber("DarkRP_LockDown")) then -- Stop the lockdown
+	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then -- Stop the lockdown
 		GAMEMODE:UnLockdown(ply)
 	end
 

@@ -200,6 +200,7 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 	admin = 0,
 	vote = true,
 	hasLicense = false,
+	mayor = true,
 	help = {
 		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
 		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect.",
