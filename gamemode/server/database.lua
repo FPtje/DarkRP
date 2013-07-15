@@ -202,7 +202,7 @@ function connectToMySQL(host, username, password, database_name, database_port)
 		if cachedQueries then
 			for _, v in pairs(cachedQueries) do
 				if v[3] then
-					QueryValue(v[1], v[2])
+					queryValue(v[1], v[2])
 				else
 					query(v[1], v[2])
 				end
