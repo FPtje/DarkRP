@@ -1086,22 +1086,6 @@ local function SayThroughRadio(ply,args)
 end
 AddChatCommand("/radio", SayThroughRadio, 1.5)
 
-local function CombineRequest(ply, args)
-	if args == "" then return "" end
-	local t = ply:Team()
-
-	local DoSay = function(text)
-		if text == "" then return end
-		for k, v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_POLICE or v:Team() == TEAM_CHIEF or v == ply then
-				GAMEMODE:TalkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
-			end
-		end
-	end
-	return args, DoSay
-end
-AddChatCommand("/cr", CombineRequest, 1.5)
-
 local function GroupMsg(ply, args)
 	if args == "" then return "" end
 

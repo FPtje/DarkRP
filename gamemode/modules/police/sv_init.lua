@@ -105,6 +105,22 @@ end
 /*---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------*/
+local function CombineRequest(ply, args)
+	if args == "" then return "" end
+	local t = ply:Team()
+
+	local DoSay = function(text)
+		if text == "" then return end
+		for k, v in pairs(player.GetAll()) do
+			if v:IsCP() or v == ply then
+				GAMEMODE:TalkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
+			end
+		end
+	end
+	return args, DoSay
+end
+AddChatCommand("/cr", CombineRequest, 1.5)
+
 local function warrantCommand(ply, args)
 	local expl = string.Explode(" ", args or "")
 	local target = GAMEMODE:FindPlayer(expl[1])
