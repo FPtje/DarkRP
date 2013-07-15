@@ -1459,7 +1459,7 @@ local function MayorSetSalary(ply, cmd, args)
 		if RPExtraTeams[targetteam] and RPExtraTeams[targetteam].mayor then
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "rp_setsalary", ""))
 			return
-		elseif targetteam == TEAM_POLICE or targetteam == TEAM_CHIEF then
+		elseif target:IsCP() then
 			if amount > GAMEMODE.Config.maxcopsalary then
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "salary", "< " .. GAMEMODE.Config.maxcopsalary))
 				return
@@ -1530,7 +1530,7 @@ local function RequestLicense(ply)
 
 	if not ischief and not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_POLICE then
+			if v:IsCP() then
 				iscop = true
 				break
 			end
@@ -1553,7 +1553,7 @@ local function RequestLicense(ply)
 	elseif ischief and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].chief) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
 		return ""
-	elseif iscop and LookingAt:Team() ~= TEAM_POLICE then
+	elseif iscop and not LookingAt:IsCP() then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "cop"))
 		return ""
 	end
@@ -1587,7 +1587,7 @@ local function GiveLicense(ply)
 
 	if not ischief and not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_POLICE then
+			if v:IsCP() then
 				iscop = true
 				break
 			end
@@ -1600,7 +1600,7 @@ local function GiveLicense(ply)
 	elseif ischief and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].chief) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
-	elseif iscop and ply:Team() ~= TEAM_POLICE then
+	elseif iscop and not ply:IsCP() then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
 	end
