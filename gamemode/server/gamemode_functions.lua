@@ -683,7 +683,7 @@ function GM:PlayerSpawn(ply)
 
 	if ply.demotedWhileDead then
 		ply.demotedWhileDead = nil
-		ply:ChangeTeam(TEAM_CITIZEN)
+		ply:ChangeTeam(GAMEMODE.DefaultTeam)
 	end
 
 	ply:GetTable().StartHealth = ply:Health()

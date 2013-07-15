@@ -104,7 +104,6 @@ local function SetSpawnPos(ply, args)
 	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	local selection = "citizen"
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -131,7 +130,6 @@ local function AddSpawnPos(ply, args)
 	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	local selection = "citizen"
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -157,8 +155,6 @@ local function RemoveSpawnPos(ply, args)
 		return ""
 	end
 
-	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	local selection = "citizen"
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -746,7 +742,7 @@ local function FinishDemote(vote, choice)
 	if choice == 1 then
 		target:TeamBan()
 		if target:Alive() then
-			target:ChangeTeam(TEAM_CITIZEN, true)
+			target:ChangeTeam(GAMEMODE.DefaultTeam, true)
 			if target:isArrested() then
 				target:arrest()
 			end

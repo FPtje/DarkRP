@@ -5,8 +5,8 @@
 local function AFKDemote(ply)
 	local rpname = ply:getDarkRPVar("rpname")
 
-	if ply:Team() ~= TEAM_CITIZEN then
-		ply:ChangeTeam(TEAM_CITIZEN, true)
+	if ply:Team() ~= GAMEMODE.DefaultTeam then
+		ply:ChangeTeam(GAMEMODE.DefaultTeam, true)
 		ply:SetSelfDarkRPVar("AFKDemoted", true)
 		GAMEMODE:NotifyAll(0, 5, rpname .. " has been demoted for being AFK for too long.")
 	end
@@ -80,7 +80,7 @@ hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply:getDarkRPVar("AFKDemoted") then
-		ply:SetDarkRPVar("job", "Citizen")
+		ply:SetDarkRPVar("job", team.GetName(GAMEMODE.DefaultTeam))
 		timer.Simple(3, function() ply:SetSelfDarkRPVar("AFKDemoted", false) end)
 	end
 end
