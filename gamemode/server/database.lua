@@ -180,7 +180,7 @@ function queryValue(sqlText, callback, errorCallback)
 	local lastError = sql.LastError()
 	local val = sql.QueryValue(sqlText)
 	if sql.LastError() and sql.LastError() ~= lastError then
-		error("SQLite error: " .. lastError)
+		error("SQLite error: " .. sql.LastError())
 	end
 
 	if callback then callback(val) end
