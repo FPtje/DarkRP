@@ -474,7 +474,7 @@ local function BuyShipment(ply, args)
 		return ""
 	end
 
-	local crate = ents.Create("spawned_shipment")
+	local crate = ents.Create(found.shipmentClass or "spawned_shipment")
 	crate.SID = ply.SID
 	crate:Setowning_ent(ply)
 	crate:SetContents(foundKey, found.amount)
