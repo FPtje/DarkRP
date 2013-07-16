@@ -57,3 +57,33 @@ function DarkRP.hooks:canUnwant(target, actor)
 
 	return true
 end
+
+/*---------------------------------------------------------------------------
+Chat commands
+---------------------------------------------------------------------------*/
+DarkRP.declareChatCommand{
+	command = "cr",
+	description = "Cry for help, the police will come!",
+	delay = 1.5
+}
+
+DarkRP.declareChatCommand{
+	command = "warrant",
+	description = "Get a search warrant for a certain player. With this warrant you can search their house",
+	delay = 1.5,
+	condition = fn.FAnd{plyMeta.Alive, plyMeta.IsCP, fn.Compose{fn.Not, plyMeta.isArrested}}
+}
+
+DarkRP.declareChatCommand{
+	command = "wanted",
+	description = "Make a player wanted. This is needed to get them arrested.",
+	delay = 1.5,
+	condition = fn.FAnd{plyMeta.Alive, plyMeta.IsCP, fn.Compose{fn.Not, plyMeta.isArrested}}
+}
+
+DarkRP.declareChatCommand{
+	command = "wanted",
+	description = "Remove a player's wanted status.",
+	delay = 1.5,
+	condition = fn.FAnd{plyMeta.Alive, plyMeta.IsCP, fn.Compose{fn.Not, plyMeta.isArrested}}
+}
