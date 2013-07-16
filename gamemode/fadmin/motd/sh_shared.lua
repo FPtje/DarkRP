@@ -15,6 +15,7 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 			Window:SetDrawOnTop(true)
 
 			local InnerPanel = vgui.Create("DPanel", Window)
+			InnerPanel:SetPaintBackground(false) -- clear background
 
 			local Text = vgui.Create("DLabel", InnerPanel)
 			Text:SetText("Set the MOTD page. Click default to reset the MOTD to the text file in data/FAdmin/MOTD.txt.")
@@ -31,6 +32,7 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 			end
 
 			local ButtonPanel = vgui.Create("DPanel", Window )
+			ButtonPanel:SetPaintBackground(false) -- clear background
 			ButtonPanel:SetTall( 30 )
 
 			local Button = vgui.Create("DButton", ButtonPanel )
