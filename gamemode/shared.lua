@@ -230,7 +230,8 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	candemote = false
+	candemote = false,
+	hobo = true
 })
 
 //ADD CUSTOM TEAMS UNDER THIS LINE:
