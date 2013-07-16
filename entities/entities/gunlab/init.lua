@@ -40,7 +40,7 @@ function ENT:SalePrice(activator)
 	local discounted = math.ceil(185 * 0.88)
 
 	if activator == owner and IsValid(owner) then
-		if activator:Team() == TEAM_GUN then
+		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, activator:Team()) then
 			return discounted
 		else
 			return 185
@@ -75,7 +75,7 @@ function ENT:Use(activator)
 
 	if activator ~= owner and IsValid(owner) then
 		local gain = 0
-		if owner:Team() == TEAM_GUN then
+		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, owner:Team()) then
 			gain = math.floor(self:Getprice() - discounted)
 		else
 			gain = math.floor(self:Getprice() - 185)

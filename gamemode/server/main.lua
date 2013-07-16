@@ -104,7 +104,6 @@ local function SetSpawnPos(ply, args)
 	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	local selection = "citizen"
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -131,7 +130,6 @@ local function AddSpawnPos(ply, args)
 	end
 
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	local selection = "citizen"
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -157,8 +155,6 @@ local function RemoveSpawnPos(ply, args)
 		return ""
 	end
 
-	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	local selection = "citizen"
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -648,7 +644,15 @@ local function BuyHealth(ply)
 
 		return ""
 	end
-	if ply:Team() ~= TEAM_MEDIC and team.NumPlayers(TEAM_MEDIC) > 0 then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].medic then
+		local foundMedics = false
+		for k,v in pairs(RPExtraTeams) do
+			if v.medic and team.NumPlayers(k) > 0 then
+				foundMedics = true
+				break
+			end
+		end
+		if not foundMedics then return "" end
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyhealth", ""))
 		return ""
 	end
@@ -742,7 +746,7 @@ local function FinishDemote(vote, choice)
 	if choice == 1 then
 		target:TeamBan()
 		if target:Alive() then
-			target:ChangeTeam(TEAM_CITIZEN, true)
+			target:ChangeTeam(GAMEMODE.DefaultTeam, true)
 			if target:isArrested() then
 				target:arrest()
 			end
@@ -1041,7 +1045,7 @@ DarkRP.addChatCommand("/advert", PlayerAdvertise, 1.5)
 
 local function MayorBroadcast(ply, args)
 	if args == "" then return "" end
-	if ply:Team() ~= TEAM_MAYOR then GAMEMODE:Notify(ply, 1, 4, "You have to be mayor") return "" end
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then GAMEMODE:Notify(ply, 1, 4, "You have to be mayor") return "" end
 	local DoSay = function(text)
 		if text == "" then return end
 		for k,v in pairs(player.GetAll()) do
@@ -1081,22 +1085,6 @@ local function SayThroughRadio(ply,args)
 	return args, DoSay
 end
 DarkRP.addChatCommand("/radio", SayThroughRadio, 1.5)
-
-local function CombineRequest(ply, args)
-	if args == "" then return "" end
-	local t = ply:Team()
-
-	local DoSay = function(text)
-		if text == "" then return end
-		for k, v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_POLICE or v:Team() == TEAM_CHIEF or v == ply then
-				GAMEMODE:TalkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
-			end
-		end
-	end
-	return args, DoSay
-end
-DarkRP.addChatCommand("/cr", CombineRequest, 1.5)
 
 local function GroupMsg(ply, args)
 	if args == "" then return "" end
@@ -1308,6 +1296,7 @@ end
 DarkRP.addChatCommand("/cheque", CreateCheque, 0.3)
 DarkRP.addChatCommand("/check", CreateCheque, 0.3) -- for those of you who can't spell
 
+
 /*---------------------------------------------------------
  Mayor stuff
  ---------------------------------------------------------*/
@@ -1343,7 +1332,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 end
 
 local function DoLottery(ply, amount)
-	if ply:Team() ~= TEAM_MAYOR then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/lottery"))
 		return ""
 	end
@@ -1395,7 +1384,7 @@ local function WaitLock()
 end
 
 function GM:Lockdown(ply)
-	if not lstat and ply:Team() == TEAM_MAYOR then
+	if not lstat and RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor then
 		for k,v in pairs(player.GetAll()) do
 			v:ConCommand("play npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav\n")
 		end
@@ -1410,7 +1399,7 @@ concommand.Add("rp_lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
 DarkRP.addChatCommand("/lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
 
 function GM:UnLockdown(ply)
-	if lstat and not wait_lockdown and ply:Team() == TEAM_MAYOR then
+	if lstat and not wait_lockdown and RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor then
 		GAMEMODE:PrintMessageAll(HUD_PRINTTALK , DarkRP.getPhrase("lockdown_ended"))
 		GAMEMODE:NotifyAll(1, 3, DarkRP.getPhrase("lockdown_ended"))
 		wait_lockdown = true
@@ -1434,7 +1423,7 @@ local function MayorSetSalary(ply, cmd, args)
 		return
 	end
 
-	if ply:Team() ~= TEAM_MAYOR then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
 		ply:PrintMessage(2, DarkRP.getPhrase("incorrect_job", "rp_setsalary"))
 		return
 	end
@@ -1458,10 +1447,10 @@ local function MayorSetSalary(ply, cmd, args)
 		local targetteam = target:Team()
 		local targetnick = target:Nick()
 
-		if targetteam == TEAM_MAYOR then
+		if RPExtraTeams[targetteam] and RPExtraTeams[targetteam].mayor then
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "rp_setsalary", ""))
 			return
-		elseif targetteam == TEAM_POLICE or targetteam == TEAM_CHIEF then
+		elseif target:IsCP() then
 			if amount > GAMEMODE.Config.maxcopsalary then
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "salary", "< " .. GAMEMODE.Config.maxcopsalary))
 				return
@@ -1470,7 +1459,7 @@ local function MayorSetSalary(ply, cmd, args)
 				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
-		elseif targetteam == TEAM_CITIZEN or targetteam == TEAM_GUN or targetteam == TEAM_MEDIC or targetteam == TEAM_COOK then
+		elseif RPExtraTeams[targetteam] and RPExtraTeams[targetteam].mayorCanSetSalary then
 			if amount > GAMEMODE.Config.maxnormalsalary then
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "salary", "< " .. GAMEMODE.Config.maxnormalsalary))
 				return
@@ -1479,7 +1468,7 @@ local function MayorSetSalary(ply, cmd, args)
 				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
-		elseif targetteam == TEAM_GANG or targetteam == TEAM_MOB then
+		else
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "rp_setsalary", ""))
 			return
 		end
@@ -1515,7 +1504,7 @@ local function RequestLicense(ply)
 	local ischief-- then if there's a chief
 	local iscop-- and then if there's a cop to ask
 	for k,v in pairs(player.GetAll()) do
-		if v:Team() == TEAM_MAYOR and not v:getDarkRPVar("AFK") then
+		if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].mayor and not v:getDarkRPVar("AFK") then
 			ismayor = true
 			break
 		end
@@ -1523,7 +1512,7 @@ local function RequestLicense(ply)
 
 	if not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_CHIEF and not v:getDarkRPVar("AFK") then
+			if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].chief and not v:getDarkRPVar("AFK") then
 				ischief = true
 				break
 			end
@@ -1532,7 +1521,7 @@ local function RequestLicense(ply)
 
 	if not ischief and not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_POLICE then
+			if v:IsCP() then
 				iscop = true
 				break
 			end
@@ -1549,13 +1538,13 @@ local function RequestLicense(ply)
 		return ""
 	end
 
-	if ismayor and LookingAt:Team() ~= TEAM_MAYOR then
+	if ismayor and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].mayor) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "mayor"))
 		return ""
-	elseif ischief and LookingAt:Team() ~= TEAM_CHIEF then
+	elseif ischief and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].chief) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
 		return ""
-	elseif iscop and LookingAt:Team() ~= TEAM_POLICE then
+	elseif iscop and not LookingAt:IsCP() then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "cop"))
 		return ""
 	end
@@ -1572,7 +1561,7 @@ local function GiveLicense(ply)
 	local ischief-- then if there's a chief
 	local iscop-- and then if there's a cop to ask
 	for k,v in pairs(player.GetAll()) do
-		if v:Team() == TEAM_MAYOR and not v:getDarkRPVar("AFK") then
+		if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].mayor and not v:getDarkRPVar("AFK") then
 			ismayor = true
 			break
 		end
@@ -1580,7 +1569,7 @@ local function GiveLicense(ply)
 
 	if not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_CHIEF and not v:getDarkRPVar("AFK") then
+			if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].chief and not v:getDarkRPVar("AFK") then
 				ischief = true
 				break
 			end
@@ -1589,20 +1578,20 @@ local function GiveLicense(ply)
 
 	if not ischief and not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:Team() == TEAM_POLICE then
+			if v:IsCP() then
 				iscop = true
 				break
 			end
 		end
 	end
 
-	if ismayor and ply:Team() ~= TEAM_MAYOR then
+	if ismayor and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
-	elseif ischief and ply:Team() ~= TEAM_CHIEF then
+	elseif ischief and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].chief) then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
-	elseif iscop and ply:Team() ~= TEAM_POLICE then
+	elseif iscop and not ply:IsCP() then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
 	end

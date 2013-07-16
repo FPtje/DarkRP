@@ -105,6 +105,22 @@ end
 /*---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------*/
+local function CombineRequest(ply, args)
+	if args == "" then return "" end
+	local t = ply:Team()
+
+	local DoSay = function(text)
+		if text == "" then return end
+		for k, v in pairs(player.GetAll()) do
+			if v:IsCP() or v == ply then
+				GAMEMODE:TalkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
+			end
+		end
+	end
+	return args, DoSay
+end
+DarkRP.addChatCommand("/cr", CombineRequest, 1.5)
+
 local function warrantCommand(ply, args)
 	local expl = string.Explode(" ", args or "")
 	local target = GAMEMODE:FindPlayer(expl[1])
@@ -116,11 +132,19 @@ local function warrantCommand(ply, args)
 		return ""
 	end
 
-	local mayors = team.GetPlayers(TEAM_MAYOR or -1)
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then -- No need to search through all the teams if the player is a mayor
+		local mayors = {}
 
-	if #mayors > 0 and ply:Team() ~= TEAM_MAYOR then -- Request a warrant if there's a mayor
-		table.Random(mayors):requestWarrant(target, ply, reason)
-		return ""
+		for k,v in pairs(RPExtraTeams) do
+			if v.mayor then
+				table.Add(mayors, team.GetPlayers(k))
+			end
+		end
+
+		if #mayors > 0 then -- Request a warrant if there's a mayor
+			table.Random(mayors):requestWarrant(target, ply, reason)
+			return ""
+		end
 	end
 
 	target:warrant(ply, reason)

@@ -2,7 +2,7 @@ local function MakeZombieSoundsAsHobo(ply)
 	if not ply.nospamtime then
 		ply.nospamtime = CurTime() - 2
 	end
-	if not TEAM_HOBO or ply:Team() ~= TEAM_HOBO or CurTime() < (ply.nospamtime + 1.3) or (IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() ~= "weapon_bugbait") then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].hobo or CurTime() < (ply.nospamtime + 1.3) or (IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() ~= "weapon_bugbait") then
 		return
 	end
 	ply.nospamtime = CurTime()

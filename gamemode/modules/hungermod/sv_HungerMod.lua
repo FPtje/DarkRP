@@ -52,7 +52,7 @@ local function BuyFood(ply, args)
 
 	local tr = util.TraceLine(trace)
 
-	if ply:Team() ~= TEAM_COOK then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].cook then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyfood", "cooks"))
 		return ""
 	end

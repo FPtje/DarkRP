@@ -199,6 +199,7 @@ function GM:AddEntityCommands(tblEnt)
 		item:SetPos(tr.HitPos)
 		item.SID = ply.SID
 		item.onlyremover = true
+		item.allowed = tblEnt.allowed
 		item:Spawn()
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end

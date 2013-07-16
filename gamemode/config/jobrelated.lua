@@ -29,7 +29,8 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	candemote = false
+	candemote = false,
+	mayorCanSetSalary = true
 })
 
 TEAM_POLICE = AddExtraTeam("Civil Protection", {
@@ -89,7 +90,8 @@ TEAM_GANG = AddExtraTeam("Gangster", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	mayorCanSetSalary = false
 })
 
 TEAM_MOB = AddExtraTeam("Mob boss", {
@@ -107,6 +109,7 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
+	mayorCanSetSalary = false,
 	help = {
 		"As the mob boss, you decide what you want the other Gangsters to do.",
 		"You get an Unarrest Stick which you can use to break people out of jail.",
@@ -129,7 +132,8 @@ TEAM_GUN = AddExtraTeam("Gun Dealer", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	mayorCanSetSalary = true
 })
 
 TEAM_MEDIC = AddExtraTeam("Medic", {
@@ -147,7 +151,9 @@ TEAM_MEDIC = AddExtraTeam("Medic", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	medic = true,
+	mayorCanSetSalary = true
 })
 
 TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
@@ -169,6 +175,7 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	admin = 0,
 	vote = false,
 	hasLicense = true,
+	chief = true,
 	NeedToChangeFrom = TEAM_POLICE,
 	help = {
 		"Please don't abuse your job",
@@ -200,6 +207,7 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 	admin = 0,
 	vote = true,
 	hasLicense = false,
+	mayor = true,
 	help = {
 		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
 		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect.",
@@ -227,7 +235,9 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	candemote = false
+	candemote = false,
+	hobo = true,
+	mayorCanSetSalary = false
 })
 
 //ADD CUSTOM TEAMS UNDER THIS LINE:
@@ -284,6 +294,11 @@ This one is for people who know how to script Lua.
 */
 GM:AddGroupChat(function(ply) return ply:IsCP() end)
 GM:AddGroupChat(TEAM_MOB, TEAM_GANG)
+
+/*---------------------------------------------------------------------------
+Define which team joining players spawn into and what team you change to if demoted
+---------------------------------------------------------------------------*/
+GM.DefaultTeam = TEAM_CITIZEN
 
 /*---------------------------------------------------------------------------
 Define which teams belong to civil protection

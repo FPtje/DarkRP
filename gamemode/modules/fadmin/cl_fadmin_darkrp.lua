@@ -34,7 +34,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		end,
 		function(ply) return "FAdmin/icons/jail", ply:getDarkRPVar("wanted") and "FAdmin/icons/disable" end,
 		Color(0, 0, 200, 255),
-		function(ply) local t = LocalPlayer():Team() return t == TEAM_POLICE or t == TEAM_MAYOR or t == TEAM_CHIEF end,
+		function(ply) return LocalPlayer():IsCP() end,
 		function(ply, button)
 			if not ply:getDarkRPVar("wanted")  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)

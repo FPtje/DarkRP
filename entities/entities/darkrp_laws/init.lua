@@ -27,7 +27,7 @@ function ENT:Initialize()
 end
 
 local function AddLaw(ply, args)
-	if ply:Team() ~= TEAM_MAYOR then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
 		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to set laws!")
 		return ""
 	end
@@ -53,7 +53,7 @@ end
 DarkRP.addChatCommand("/addlaw", AddLaw)
 
 local function RemoveLaw(ply, args)
-	if ply:Team() ~= TEAM_MAYOR then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
 		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to remove laws!")
 		return ""
 	end
@@ -85,7 +85,7 @@ DarkRP.addChatCommand("/removelaw", RemoveLaw)
 
 local numlaws = 0
 local function PlaceLaws(ply, args)
-	if ply:Team() ~= TEAM_MAYOR then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
 		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to place a list of laws.")
 		return ""
 	end
