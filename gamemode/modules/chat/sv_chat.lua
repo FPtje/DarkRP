@@ -32,10 +32,7 @@ local function RP_PlayerChat(ply, text)
 	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
 		PrintTable(tblCmd)
 		print(text, tblCmd.condition)
-		if tblCmd.condition and not tblCmd.condition(ply, text) then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
-			return "", ""
-		end
+
 		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
 		if callback == "" then
 			return "", "", DoSayFunc;
