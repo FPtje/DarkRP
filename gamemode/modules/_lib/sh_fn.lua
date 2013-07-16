@@ -156,6 +156,13 @@ Filter = function(f, xs)
 	return res
 end
 
+ForEach = function(f, xs)
+	for k,v in pairs(xs) do
+		local val = f(k, v)
+		if val ~= nil then return val end
+	end
+end
+
 Head = function(xs)
 	return table.GetFirstValue(xs)
 end
