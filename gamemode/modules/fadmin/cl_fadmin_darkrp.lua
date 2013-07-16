@@ -24,7 +24,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply) return LocalPlayer():IsCP() end,
 		function(ply, button)
 			Derma_StringRequest("Warrant reason", "Enter the reason for the warrant", "", function(Reason)
-				RunConsoleCommand("darkrp", "/warrant", ply:SteamID(), Reason)
+				RunConsoleCommand("darkrp", "warrant", ply:SteamID(), Reason)
 			end)
 		end)
 
@@ -38,10 +38,10 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply, button)
 			if not ply:getDarkRPVar("wanted")  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)
-					RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), Reason)
+					RunConsoleCommand("darkrp", "wanted", ply:SteamID(), Reason)
 				end)
 			else
-				RunConsoleCommand("darkrp", "/unwanted", ply:UserID())
+				RunConsoleCommand("darkrp", "unwanted", ply:UserID())
 			end
 		end)
 

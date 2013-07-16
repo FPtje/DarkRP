@@ -30,9 +30,6 @@ local function RP_PlayerChat(ply, text)
 	}(text)
 
 	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
-		PrintTable(tblCmd)
-		print(text, tblCmd.condition)
-
 		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
 		if callback == "" then
 			return "", "", DoSayFunc;
@@ -125,10 +122,9 @@ hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 local function ConCommand(ply, _, args)
 	if not args[1] then return end
 
-	local chatcommands = DarkRP.getChatCommands()
 	local cmd = string.lower(args[1])
 	local arg = table.concat(args, ' ', 2)
-	local tbl = chatcommands[cmd]
+	local tbl = DarkRP.getChatCommand(cmd)
 	local time = CurTime()
 
 	if not tbl then return end

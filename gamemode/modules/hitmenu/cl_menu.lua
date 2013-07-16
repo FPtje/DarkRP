@@ -34,7 +34,7 @@ function PANEL:Init()
 	self.btnRequest:SetText("Request")
 	self.btnRequest.DoClick = function()
 		if IsValid(self:GetTarget()) then
-			RunConsoleCommand("darkrp", "/requesthit", self:GetTarget():SteamID(), self:GetHitman():UserID())
+			RunConsoleCommand("darkrp", "requesthit", self:GetTarget():SteamID(), self:GetHitman():UserID())
 			self:Remove()
 		end
 	end

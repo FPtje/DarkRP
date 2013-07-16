@@ -41,6 +41,6 @@ properties.Add("createShipment",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("darkrp", "/makeshipment", ent:EntIndex())
+						RunConsoleCommand("darkrp", "makeshipment", ent:EntIndex())
 					end
 })

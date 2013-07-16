@@ -143,6 +143,6 @@ properties.Add("splitShipment",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("darkrp", "/splitshipment", ent:EntIndex())
+						RunConsoleCommand("darkrp", "splitshipment", ent:EntIndex())
 					end
 })
