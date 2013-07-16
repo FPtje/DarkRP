@@ -225,7 +225,7 @@ function meta:ChangeTeam(t, force)
 
 	self:SetDarkRPVar("agenda", nil)
 
-	if t ~= TEAM_CITIZEN and not self:ChangeAllowed(t) and not force then
+	if t ~= GAMEMODE.DefaultTeam and not self:ChangeAllowed(t) and not force then
 		GAMEMODE:Notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
 		return false
 	end
@@ -285,7 +285,8 @@ function meta:ChangeTeam(t, force)
 		end
 	end
 
-	if prevTeam == TEAM_MAYOR and tobool(GetConVarNumber("DarkRP_LockDown")) then
+	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
+	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then
 		GAMEMODE:UnLockdown(self)
 	end
 	self:UpdateJob(TEAM.name)
@@ -302,24 +303,26 @@ function meta:ChangeTeam(t, force)
 
 	if GAMEMODE.Config.removeclassitems then
 		for k, v in pairs(ents.FindByClass("microwave")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
 			if v.SID == self.SID then v:Remove() end
 		end
 		for k, v in pairs(ents.FindByClass("gunlab")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
 			if v.SID == self.SID then v:Remove() end
 		end
 
-		if t ~= TEAM_MOB and t ~= TEAM_GANG then
-			for k, v in pairs(ents.FindByClass("drug_lab")) do
-				if v.SID == self.SID then v:Remove() end
-			end
+		for k, v in pairs(ents.FindByClass("drug_lab")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
+			if v.SID == self.SID then v:Remove() end
 		end
 
 		for k,v in pairs(ents.FindByClass("spawned_shipment")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
 			if v.SID == self.SID then v:Remove() end
 		end
 	end
 
-	if prevTeam == TEAM_MAYOR then
+	if isMayor then
 		for _, ent in pairs(self.lawboards or {}) do
 			if IsValid(ent) then
 				ent:Remove()
@@ -400,7 +403,7 @@ end
  ---------------------------------------------------------*/
 local function JailPos(ply)
 	-- Admin or Chief can set the Jail Position
-	if (ply:Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
+	if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
 		DB.StoreJailPos(ply)
 	else
 		local str = "Admin only!"
@@ -416,7 +419,7 @@ AddChatCommand("/jailpos", JailPos)
 
 local function AddJailPos(ply)
 	-- Admin or Chief can add Jail Positions
-	if (ply:Team() == TEAM_CHIEF and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
+	if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
 		DB.StoreJailPos(ply, true)
 	else
 		local str = DarkRP.getPhrase("admin_only")
