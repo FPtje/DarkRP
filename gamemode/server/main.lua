@@ -474,7 +474,7 @@ local function BuyShipment(ply, args)
 		return ""
 	end
 
-	local crate = ents.Create("spawned_shipment")
+	local crate = ents.Create(found.shipmentClass or "spawned_shipment")
 	crate.SID = ply.SID
 	crate:Setowning_ent(ply)
 	crate:SetContents(foundKey, found.amount)
@@ -568,7 +568,11 @@ local function BuyVehicle(ply, args)
 		table.Merge(ent, Vehicle.Members)
 	end
 	ent:Own(ply)
-	gamemode.Call("PlayerSpawnedVehicle", ply, ent) -- VUMod compatability
+	hook.Call("PlayerSpawnedVehicle", GAMEMODE, ply, ent) -- VUMod compatability
+	hook.Call("playerBoughtVehicle", nil, ply, found, ent)
+	if found.onBought then
+		found.onBought(ply, found, ent)
+	end
 
 	return ""
 end
@@ -679,13 +683,6 @@ local function CreateAgenda(ply, args)
 	return ""
 end
 DarkRP.addChatCommand("/agenda", CreateAgenda, 0.1)
-
-local function GetHelp(ply, args)
-	umsg.Start("ToggleHelp", ply)
-	umsg.End()
-	return ""
-end
-DarkRP.addChatCommand("/help", GetHelp)
 
 local function ChangeJob(ply, args)
 	if args == "" then return "" end

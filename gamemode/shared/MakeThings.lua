@@ -86,15 +86,17 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 end
 
 function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
+	local vehicle = istable(Name_of_vehicle) and Name_of_vehicle or
+		{name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
+
 	local found = false
 	for k,v in pairs(list.Get("Vehicles")) do
-		if string.lower(k) == string.lower(Name_of_vehicle) then found = true break end
+		if string.lower(k) == string.lower(vehicle.name) then found = true break end
 	end
 
-	local vehicle = {name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
 	local corrupt = checkValid(vehicle, validVehicle)
-	if corrupt then ErrorNoHalt("Corrupt vehicle \"" .. (Name_of_vehicle or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
-	if not found then ErrorNoHalt("Vehicle invalid: " .. Name_of_vehicle .. ". Unknown v\nehicle name.") end
+	if corrupt then ErrorNoHalt("Corrupt vehicle \"" .. (vehicle.name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
+	if not found then ErrorNoHalt("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.") end
 
 	table.insert(CustomVehicles, vehicle)
 end
