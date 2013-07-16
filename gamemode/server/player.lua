@@ -303,19 +303,21 @@ function meta:ChangeTeam(t, force)
 
 	if GAMEMODE.Config.removeclassitems then
 		for k, v in pairs(ents.FindByClass("microwave")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
 			if v.SID == self.SID then v:Remove() end
 		end
 		for k, v in pairs(ents.FindByClass("gunlab")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
 			if v.SID == self.SID then v:Remove() end
 		end
 
-		if t ~= TEAM_MOB and t ~= TEAM_GANG then
-			for k, v in pairs(ents.FindByClass("drug_lab")) do
-				if v.SID == self.SID then v:Remove() end
-			end
+		for k, v in pairs(ents.FindByClass("drug_lab")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
+			if v.SID == self.SID then v:Remove() end
 		end
 
 		for k,v in pairs(ents.FindByClass("spawned_shipment")) do
+			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
 			if v.SID == self.SID then v:Remove() end
 		end
 	end
