@@ -1476,7 +1476,7 @@ local function MayorSetSalary(ply, cmd, args)
 				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
-		elseif targetteam == TEAM_CITIZEN or targetteam == TEAM_GUN or targetteam == TEAM_MEDIC or targetteam == TEAM_COOK then
+		elseif RPExtraTeams[targetteam] and RPExtraTeams[targetteam].mayorCanSetSalary then
 			if amount > GAMEMODE.Config.maxnormalsalary then
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "salary", "< " .. GAMEMODE.Config.maxnormalsalary))
 				return
@@ -1485,7 +1485,7 @@ local function MayorSetSalary(ply, cmd, args)
 				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
-		elseif targetteam == TEAM_GANG or targetteam == TEAM_MOB then
+		else
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "rp_setsalary", ""))
 			return
 		end

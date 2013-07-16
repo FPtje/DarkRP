@@ -26,7 +26,8 @@ TEAM_COOK = AddExtraTeam("Cook", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	cook = true
+	cook = true,
+	mayorCanSetSalary = true
 })
 
 AddEntity("Microwave", {
