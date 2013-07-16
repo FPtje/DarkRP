@@ -1438,6 +1438,11 @@ local function MayorSetSalary(ply, cmd, args)
 		return
 	end
 
+	if not args[2] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return
+	end
+
 	local amount = math.floor(tonumber(args[2]))
 
 	if not amount or amount < 0 then
