@@ -95,9 +95,11 @@ local function ToggleZombie(ply)
 			DarkRP.RetrieveZombies(function()
 				ply:SetSelfDarkRPVar("zombieToggle", true)
 				LoadTable(ply)
+				GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 			end)
 		else
 			ply:setSelfDarkRPVar("zombieToggle", false)
+			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 		end
 	else
 		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/showzombie"))
@@ -152,6 +154,8 @@ local function StartZombie(ply)
 	if ply:HasPriv("rp_commands") then
 		timer.Start("zombieControl")
 		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_enabled"))
+	else
+		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/enablezombie"))
 	end
 	return ""
 end
@@ -164,6 +168,8 @@ local function StopZombie(ply)
 		timer.Stop("start2")
 		ZombieEnd()
 		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_disabled"))
+	else
+		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/disablezombie"))
 	end
 	return ""
 end

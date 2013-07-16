@@ -15,7 +15,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 	-- DarkRP information:
 	FAdmin.ScoreBoard.Player:AddInformation("Steam name", function(ply) return ply:SteamName() end, true)
 	FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() and ply.DarkRPVars and ply:getDarkRPVar("money") then return GAMEMODE.Config.currency..formatNumber(ply:getDarkRPVar("money")) end end)
-	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply.DarkRPVars and ply:getDarkRPVar("wanted") then return tostring(ply.DarkRPVars["wantedReason"] or "N/A") end end)
+	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply.DarkRPVars and ply:getDarkRPVar("wanted") then return tostring(ply:getDarkRPVar("wantedReason") or "N/A") end end)
 	FAdmin.ScoreBoard.Player:AddInformation("Community link", function(ply) return FAdmin.SteamToProfile(ply) end)
 	FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply) return ply:GetNWString("usergroup") end)
 
@@ -24,7 +24,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply) return LocalPlayer():IsCP() end,
 		function(ply, button)
 			Derma_StringRequest("Warrant reason", "Enter the reason for the warrant", "", function(Reason)
-				LocalPlayer():ConCommand("darkrp /warrant \"".. ply:SteamID().."\" ".. Reason)
+				RunConsoleCommand("darkrp", "/warrant", ply:SteamID(), Reason)
 			end)
 		end)
 
@@ -38,10 +38,10 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply, button)
 			if not ply:getDarkRPVar("wanted")  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)
-					LocalPlayer():ConCommand("darkrp /wanted \"".. ply:SteamID().."\" ".. Reason)
+					RunConsoleCommand("darkrp", "/wanted", ply:SteamID(), Reason)
 				end)
 			else
-				LocalPlayer():ConCommand("darkrp /unwanted \"".. ply:UserID() .. "\"")
+				RunConsoleCommand("darkrp", "/unwanted", ply:UserID())
 			end
 		end)
 

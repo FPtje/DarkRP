@@ -138,7 +138,7 @@ end
 concommand.Add("-FAdmin_menu", FAdmin.ScoreBoard.HideScoreBoard)
 
 hook.Add("ScoreboardHide", "FAdmin_scoreboard", function()
-	if tobool(GetConVarNumber("FAdmin_IsScoreboard")) and FAdmin.GlobalSetting.FAdmin and FAdmin.ScoreBoard.CurrentView ~= "Help" then -- Don't show scoreboard when FAdmin is not installed on server
+	if tobool(GetConVarNumber("FAdmin_IsScoreboard")) and FAdmin.GlobalSetting.FAdmin then -- Don't show scoreboard when FAdmin is not installed on server
 		return FAdmin.ScoreBoard.HideScoreBoard()
 	end
 end)

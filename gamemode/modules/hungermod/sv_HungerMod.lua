@@ -43,7 +43,10 @@ AddFoodItem("bottle3", "models/props_junk/garbage_glassbottle003a.mdl", 10)
 AddFoodItem("orange", "models/props/cs_italy/orange.mdl", 20)
 
 local function BuyFood(ply, args)
-	if args == "" then return "" end
+	if args == "" then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return ""
+	end
 
 	local trace = {}
 	trace.start = ply:EyePos()
@@ -79,6 +82,7 @@ local function BuyFood(ply, args)
 			return ""
 		end
 	end
+	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 	return ""
 end
 DarkRP.defineChatCommand("buyfood", BuyFood)

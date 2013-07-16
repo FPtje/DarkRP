@@ -7,7 +7,10 @@ local function createShipment(ply, args)
 
 	ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_weapon" then return end
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_weapon" then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return
+	end
 
 	local shipID
 	for k,v in pairs(CustomShipments) do
@@ -17,7 +20,10 @@ local function createShipment(ply, args)
 		end
 	end
 
-	if not shipID then return end
+	if not shipID then 
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/makeshipment", ""))
+		return
+	end
 
 	local crate = ents.Create("spawned_shipment")
 	crate.SID = ply.SID
@@ -46,7 +52,10 @@ local function splitShipment(ply, args)
 
 	ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" or ent:Getcount() < 2 then return end
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" or ent:Getcount() < 2 then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return
+	end
 
 	local count = math.floor(ent:Getcount() / 2)
 	ent:Setcount(ent:Getcount() - count)

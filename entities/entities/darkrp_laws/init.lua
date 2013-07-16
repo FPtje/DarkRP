@@ -48,6 +48,8 @@ local function AddLaw(ply, args)
 		umsg.String(args)
 	umsg.End()
 
+	GAMEMODE:Notify(ply, 0, 2, "Law added.")
+
 	return ""
 end
 DarkRP.defineChatCommand("addlaw", AddLaw)
@@ -78,6 +80,8 @@ local function RemoveLaw(ply, args)
 	umsg.Start("DRP_RemoveLaw")
 		umsg.Char(tonumber(args))
 	umsg.End()
+
+	GAMEMODE:Notify(ply, 0, 2, "Law removed.")
 
 	return ""
 end
