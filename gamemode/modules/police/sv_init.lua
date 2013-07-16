@@ -106,11 +106,17 @@ end
 Chat commands
 ---------------------------------------------------------------------------*/
 local function CombineRequest(ply, args)
-	if args == "" then return "" end
+	if args == "" then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return ""
+	end
 	local t = ply:Team()
 
 	local DoSay = function(text)
-		if text == "" then return end
+		if text == "" then
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			return
+		end
 		for k, v in pairs(player.GetAll()) do
 			if v:IsCP() or v == ply then
 				GAMEMODE:TalkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
@@ -142,7 +148,9 @@ local function warrantCommand(ply, args)
 		end
 
 		if #mayors > 0 then -- Request a warrant if there's a mayor
-			table.Random(mayors):requestWarrant(target, ply, reason)
+			local mayor = table.Random(mayors)
+			mayor:requestWarrant(target, ply, reason)
+			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Nick()))
 			return ""
 		end
 	end

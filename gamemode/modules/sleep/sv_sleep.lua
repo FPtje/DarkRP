@@ -62,7 +62,7 @@ function KnockoutToggle(player, command, args, caller)
 				player.OldHunger = nil
 
 				if player:isArrested() then
-					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed )
+					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 				end
 			else
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
@@ -112,6 +112,8 @@ function KnockoutToggle(player, command, args, caller)
 				player.SleepSound:PlayEx(0.10, 100)
 				player.Sleeping = true
 			end
+		else
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
 		end
 		return ""
 	else

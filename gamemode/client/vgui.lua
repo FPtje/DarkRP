@@ -413,7 +413,7 @@ local function KeysMenu(um)
 		end
 		DoorTitle.DoClick = function()
 			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text)
-				LocalPlayer():ConCommand("darkrp /title ".. text)
+				RunConsoleCommand("darkrp", "/title", text)
 				if ValidPanel(Frame) then
 					Frame:Close()
 				end
@@ -566,7 +566,7 @@ local function KeysMenu(um)
 		DoorTitle:SetSize(180, 100)
 		DoorTitle:SetText("Set "..Entiteh.." title")
 		DoorTitle.DoClick = function()
-			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text) LocalPlayer():ConCommand("darkrp /title ".. text) Frame:Close() end, function() end, "OK!", "CANCEL!")
+			Derma_StringRequest("Set door title", "Set the title of the "..Entiteh.." you're looking at", "", function(text) RunConsoleCommand("darkrp", "/title", text) Frame:Close() end, function() end, "OK!", "CANCEL!")
 		end
 	elseif (FAdmin and FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_doorManipulation") or LocalPlayer():IsAdmin()) and not trace.Entity:OwnedBy(LocalPlayer()) and trace.Entity:IsOwned() and not trace.Entity:AllowedToOwn(LocalPlayer()) then
 		Frame:SetSize(200, 250)

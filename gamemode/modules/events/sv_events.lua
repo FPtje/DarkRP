@@ -64,6 +64,8 @@ local function StartStorm(ply)
 	if ply:HasPriv("rp_commands") then
 		timer.Start("stormControl")
 		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
+	else
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/enablestorm"))
 	end
 	return ""
 end
@@ -76,6 +78,8 @@ local function StopStorm(ply)
 		timer.Stop("start")
 		StormEnd()
 		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
+	else
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/disablestorm"))
 	end
 	return ""
 end
