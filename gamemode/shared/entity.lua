@@ -552,26 +552,27 @@ end
 local function SetDoorTitle(ply, args)
 	local trace = ply:GetEyeTrace()
 
-	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
-		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		if ply:IsSuperAdmin() then
-			if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
-				DB.StoreDoorTitle(trace.Entity, args)
-				ply.LookingAtDoor = nil
-				return ""
-			end
-		elseif trace.Entity.DoorData.NonOwnable then
-			GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/title"))
-		end
-
-		if trace.Entity:OwnedBy(ply) then
-			trace.Entity.DoorData.title = args
-		else
-			GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("door_need_to_own", "/title"))
-		end
-	else
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		return ""
 	end
+
+	trace.Entity.DoorData = trace.Entity.DoorData or {}
+	if ply:IsSuperAdmin() then
+		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
+			DB.StoreDoorTitle(trace.Entity, args)
+			ply.LookingAtDoor = nil
+			return ""
+		end
+	elseif trace.Entity.DoorData.NonOwnable then
+		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/title"))
+	end
+
+	if not trace.Entity:OwnedBy(ply) then
+		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("door_need_to_own", "/title"))
+		return ""
+	end
+	trace.Entity.DoorData.title = args
 
 	ply.LookingAtDoor = nil
 	return ""
@@ -581,32 +582,35 @@ DarkRP.defineChatCommand("title", SetDoorTitle)
 local function RemoveDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
-	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
-		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		target = DarkRP.findPlayer(args)
-
-		if trace.Entity.DoorData.NonOwnable then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
-			return ""
-		end
-
-		if target then
-			if trace.Entity:OwnedBy(ply) then
-				if trace.Entity:AllowedToOwn(target) then
-					trace.Entity:RemoveAllowed(target)
-				end
-
-				if trace.Entity:OwnedBy(target) then
-					trace.Entity:removeDoorOwner(target)
-				end
-			else
-				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
-			end
-		else
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
-		end
-	else
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		return ""
+	end
+
+	trace.Entity.DoorData = trace.Entity.DoorData or {}
+	target = DarkRP.findPlayer(args)
+
+	if trace.Entity.DoorData.NonOwnable then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
+		return ""
+	end
+
+	if not target then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		return ""
+	end
+
+	if not trace.Entity:OwnedBy(ply) then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
+		return ""
+	end
+
+	if trace.Entity:AllowedToOwn(target) then
+		trace.Entity:RemoveAllowed(target)
+	end
+
+	if trace.Entity:OwnedBy(target) then
+		trace.Entity:removeDoorOwner(target)
 	end
 
 	ply.LookingAtDoor = nil
@@ -618,33 +622,38 @@ DarkRP.defineChatCommand("ro", RemoveDoorOwner)
 local function AddDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
-	if IsValid(trace.Entity) and trace.Entity:IsOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 110 then
-		trace.Entity.DoorData = trace.Entity.DoorData or {}
-		target = DarkRP.findPlayer(args)
-
-		if trace.Entity.DoorData.NonOwnable then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))
-			return ""
-		end
-
-		if target then
-			if trace.Entity:OwnedBy(ply) then
-				if not trace.Entity:OwnedBy(target) and not trace.Entity:AllowedToOwn(target) then
-					trace.Entity:AddAllowed(target)
-				else
-					GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", ply:Nick()))
-				end
-			else
-				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
-			end
-		else
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
-		end
-	else
+	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		return ""
 	end
 
+	trace.Entity.DoorData = trace.Entity.DoorData or {}
+	target = DarkRP.findPlayer(args)
+
+	if trace.Entity.DoorData.NonOwnable then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))
+		return ""
+	end
+
+	if not target then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		return ""
+	end
+
+	if not trace.Entity:OwnedBy(ply) then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
+		return ""
+	end
+
+	if trace.Entity:OwnedBy(target) or trace.Entity:AllowedToOwn(target) then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", ply:Nick()))
+		return ""
+	end
+
+	trace.Entity:AddAllowed(target)
+
 	ply.LookingAtDoor = nil
+
 	return ""
 end
 DarkRP.defineChatCommand("addowner", AddDoorOwner)
