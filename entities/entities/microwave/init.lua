@@ -39,7 +39,7 @@ function ENT:SalePrice(activator)
 
 	if activator == owner then
 		-- If they are still a cook, sell them the food at the discounted rate
-		if activator:Team() == TEAM_COOK then
+		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, activator:Team()) then
 			return discounted
 		else -- Otherwise, sell it to them at full price
 			return math.floor(GAMEMODE.Config.microwavefoodcost)
@@ -76,7 +76,7 @@ function ENT:Use(activator,caller)
 
 		if activator ~= owner then
 			local gain = 0
-			if owner:Team() == TEAM_COOK then
+			if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, owner:Team()) then
 				gain = math.floor(self:Getprice() - discounted)
 			else
 				gain = math.floor(self:Getprice() - GAMEMODE.Config.microwavefoodcost)
