@@ -42,6 +42,8 @@ end
 
 GM.Config = {} -- config table
 
+include("fn.lua")
+
 include("config/config.lua")
 include("sh_interfaceloader.lua")
 include("client/help.lua")

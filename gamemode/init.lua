@@ -19,6 +19,8 @@ DeriveGamemode("sandbox")
 util.AddNetworkString("DarkRP_keypadData")
 
 AddCSLuaFile("sh_interfaceloader.lua")
+AddCSLuaFile("fn.lua")
+include("fn.lua")
 
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
