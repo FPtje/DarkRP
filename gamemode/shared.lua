@@ -147,7 +147,8 @@ TEAM_MEDIC = AddExtraTeam("Medic", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	medic = true
 })
 
 TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {

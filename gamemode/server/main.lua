@@ -641,7 +641,15 @@ local function BuyHealth(ply)
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "/buyhealth"))
 		return ""
 	end
-	if ply:Team() ~= TEAM_MEDIC and team.NumPlayers(TEAM_MEDIC) > 0 then
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].medic then
+		local foundMedics = false
+		for k,v in pairs(RPExtraTeams) do
+			if v.medic and team.NumPlayers(k) > 0 then
+				foundMedics = true
+				break
+			end
+		end
+		if not foundMedics then return "" end
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyhealth", ""))
 		return ""
 	end

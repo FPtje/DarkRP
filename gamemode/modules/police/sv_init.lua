@@ -137,7 +137,7 @@ local function warrantCommand(ply, args)
 
 		for k,v in pairs(RPExtraTeams) do
 			if v.mayor then
-				table.Add(mayors, team.GetPlayers(v))
+				table.Add(mayors, team.GetPlayers(k))
 			end
 		end
 
