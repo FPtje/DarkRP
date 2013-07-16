@@ -112,7 +112,7 @@ Even = Compose{Curry(Eq, 2)(0), Curry(Flip(Mod), 2)(2)}
 Odd = Compose{Not, Even}
 
 /*---------------------------------------------------------------------------
-Functional logical operators
+Functional logical operators and conditions
 ---------------------------------------------------------------------------*/
 FAnd = function(fns)
 	return function(x)
@@ -133,6 +133,16 @@ FOr = function(fns)
 end
 
 Not = function(x) return not x end
+
+If = function(f, Then, Else)
+	return function(x)
+		if f(x) then
+			return Then
+		else
+			return Else
+		end
+	end
+end
 
 /*---------------------------------------------------------------------------
 List operations
@@ -179,6 +189,10 @@ end
 Init = function(xs)
 	xs[#xs] = nil
 	return xs
+end
+
+GetValue = function(xs, i)
+	return xs[i]
 end
 
 Null = function(xs)
