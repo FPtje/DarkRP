@@ -681,13 +681,6 @@ local function CreateAgenda(ply, args)
 end
 AddChatCommand("/agenda", CreateAgenda, 0.1)
 
-local function GetHelp(ply, args)
-	umsg.Start("ToggleHelp", ply)
-	umsg.End()
-	return ""
-end
-AddChatCommand("/help", GetHelp)
-
 local function ChangeJob(ply, args)
 	if args == "" then return "" end
 

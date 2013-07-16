@@ -46,7 +46,6 @@ addLabel(HELP_CATEGORY_CONCMD, "gm_showteam - Show door menu")
 addLabel(HELP_CATEGORY_CONCMD, "gm_showspare1 - Toggle vote clicker (bind this to F3 if you haven't already)")
 addLabel(HELP_CATEGORY_CONCMD, "gm_showspare2 - Job menu(bind this to F4 if you haven't already)")
 
-addLabel(HELP_CATEGORY_CHATCMD, "/help - Bring up this menu")
 addLabel(HELP_CATEGORY_CHATCMD, "/job <Job Name> - Set a custom job")
 addLabel(HELP_CATEGORY_CHATCMD, "/w <Message> - Whisper a message")
 addLabel(HELP_CATEGORY_CHATCMD, "/y <Message> - Yell a message")
