@@ -119,9 +119,9 @@ function KnockoutToggle(player, command, args, caller)
 		return ""
 	end
 end
-DarkRP.addChatCommand("/sleep", KnockoutToggle)
-DarkRP.addChatCommand("/wake", KnockoutToggle)
-DarkRP.addChatCommand("/wakeup", KnockoutToggle)
+DarkRP.defineChatCommand("sleep", KnockoutToggle)
+DarkRP.defineChatCommand("wake", KnockoutToggle)
+DarkRP.defineChatCommand("wakeup", KnockoutToggle)
 
 local function DamageSleepers(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()

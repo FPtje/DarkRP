@@ -70,7 +70,7 @@ local function SetAFK(ply)
 	ply:SetDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
 	ply:SetDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
 end
-DarkRP.addChatCommand("/afk", SetAFK)
+DarkRP.defineChatCommand("afk", SetAFK)
 
 local function StartAFKOnPlayer(ply)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime

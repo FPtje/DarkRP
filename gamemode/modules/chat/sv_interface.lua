@@ -1,5 +1,5 @@
-DarkRP.addChatCommand = DarkRP.stub{
-	name = "addChatCommand",
+DarkRP.defineChatCommand = DarkRP.stub{
+	name = "defineChatCommand",
 	description = "Create a chat command that calls the function",
 	parameters = {
 		{
@@ -13,12 +13,6 @@ DarkRP.addChatCommand = DarkRP.stub{
 			description = "The function that is called when the chat command is executed",
 			type = "function",
 			optional = false
-		},
-		{
-			name = "delay",
-			description = "The spam delay of the chat command",
-			type = "number",
-			optional = true
 		}
 	},
 	returns = {},

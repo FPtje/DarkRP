@@ -1,7 +1,4 @@
-local ChatCommands = {}
-
-function DarkRP.addChatCommand(cmd, callback, delay)
-
+function DarkRP.defineChatCommand(cmd, callback)
 	local detour = function(ply, arg, ...)
 		if ply.DarkRPUnInitialized then
 			GAMEMODE:Notify(ply, 1, 4, "Your data has not been loaded yet. Please wait.")
@@ -11,36 +8,45 @@ function DarkRP.addChatCommand(cmd, callback, delay)
 		return callback(ply, arg, ...)
 	end
 
-	ChatCommands[string.lower(cmd)] = {
-		cmd = cmd,
-		callback = detour,
-		delay = delay
-	}
+	local chatcommands = DarkRP.getChatCommands()
+
+	chatcommands[cmd] = chatcommands[cmd] or {}
+	chatcommands[cmd].callback = callback
+	chatcommands[cmd].command = chatcommands[cmd].command or cmd
 end
 
-function removeChatCommand(cmd)
-	ChatCommands[string.lower(cmd)] = nil
-end
-
-function getChatCommand(cmd)
-	return ChatCommands[string.lower(cmd)]
-end
 
 local function RP_PlayerChat(ply, text)
 	DB.Log(ply:Nick().." ("..ply:SteamID().."): "..text )
+	local chatcommands = DarkRP.getChatCommands()
 	local callback = ""
 	local DoSayFunc
-	local tblCmd = ChatCommands[string.lower( string.Explode(" ", text )[1] )];
-	if tblCmd then
-		callback, DoSayFunc = tblCmd.callback( ply, string.sub( text, string.len( tblCmd.cmd ) + 2, string.len( text ) ) );
-		if( callback == "") then
+	local tblCmd = fn.Compose{ -- Extract the chat command
+		DarkRP.getChatCommand,
+		string.lower,
+		fn.Curry(fn.Flip(string.sub), 2)(2), -- extract prefix
+		fn.Curry(fn.Flip(fn.GetValue), 2)(1), -- Get the first word
+		fn.Curry(string.Explode, 2)(' ') -- split by spaces
+	}(text)
+
+	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
+		PrintTable(tblCmd)
+		print(text, tblCmd.condition)
+		if tblCmd.condition and not tblCmd.condition(ply, text) then
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
+			return "", ""
+		end
+		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
+		if callback == "" then
 			return "", "", DoSayFunc;
 		end
-		text = string.sub(text, string.len(tblCmd.cmd) + 2, string.len(text))
+		text = string.sub(text, string.len(tblCmd.command) + 2, string.len(text))
 	end
-	if( callback != "") then
-		callback = ( callback || "").." "
+
+	if callback ~= "" then
+		callback = callback or "" .. " "
 	end
+
 	return text, callback, DoSayFunc;
 end
 
@@ -112,15 +118,20 @@ local function ReplaceChatHooks()
 
 		return true
 	end)
+
+	-- give warnings for undeclared chat commands
+	local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
+	fn.ForEach(warning, DarkRP.getIncompleteChatCommands())
 end
 hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
 local function ConCommand(ply, _, args)
-	if not args[1] then for k,v in pairs(ChatCommands) do print(k) end return end
+	if not args[1] then return end
 
+	local chatcommands = DarkRP.getChatCommands()
 	local cmd = string.lower(args[1])
 	local arg = table.concat(args, ' ', 2)
-	local tbl = ChatCommands[cmd]
+	local tbl = chatcommands[cmd]
 	local time = CurTime()
 
 	if not tbl then return end

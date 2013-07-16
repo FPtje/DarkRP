@@ -72,7 +72,7 @@ local function ReMoveZombie(ply, index)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/removezombie", ReMoveZombie)
+DarkRP.defineChatCommand("removezombie", ReMoveZombie)
 
 local function AddZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -87,7 +87,7 @@ local function AddZombie(ply)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/addzombie", AddZombie)
+DarkRP.defineChatCommand("addzombie", AddZombie)
 
 local function ToggleZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -104,7 +104,7 @@ local function ToggleZombie(ply)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/showzombie", ToggleZombie)
+DarkRP.defineChatCommand("showzombie", ToggleZombie)
 
 local function GetAliveZombie()
 	local zombieCount = 0
@@ -144,9 +144,9 @@ local function ZombieMax(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/zombiemax", ZombieMax)
-DarkRP.addChatCommand("/maxzombie", ZombieMax)
-DarkRP.addChatCommand("/maxzombies", ZombieMax)
+DarkRP.defineChatCommand("zombiemax", ZombieMax)
+DarkRP.defineChatCommand("maxzombie", ZombieMax)
+DarkRP.defineChatCommand("maxzombies", ZombieMax)
 
 local function StartZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -155,7 +155,7 @@ local function StartZombie(ply)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/enablezombie", StartZombie)
+DarkRP.defineChatCommand("enablezombie", StartZombie)
 
 local function StopZombie(ply)
 	if ply:HasPriv("rp_commands") then
@@ -167,7 +167,7 @@ local function StopZombie(ply)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/disablezombie", StopZombie)
+DarkRP.defineChatCommand("disablezombie", StopZombie)
 
 timer.Create("start2", 1, 0, SpawnZombie)
 timer.Create("zombieControl", 1, 0, ControlZombie)

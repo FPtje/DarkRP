@@ -239,6 +239,7 @@ Other settings
 -- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
 GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
+GM.Config.chatCommandPrefix = "/"
 
 
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped

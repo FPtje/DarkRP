@@ -67,7 +67,7 @@ local function StartStorm(ply)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/enablestorm", StartStorm)
+DarkRP.defineChatCommand("enablestorm", StartStorm)
 
 local function StopStorm(ply)
 	if ply:HasPriv("rp_commands") then
@@ -79,7 +79,7 @@ local function StopStorm(ply)
 	end
 	return ""
 end
-DarkRP.addChatCommand("/disablestorm", StopStorm)
+DarkRP.defineChatCommand("disablestorm", StopStorm)
 
 timer.Create("start", 1, 0, StartShower)
 timer.Create("stormControl", 1, 0, ControlStorm)

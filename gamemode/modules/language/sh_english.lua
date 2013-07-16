@@ -4,6 +4,7 @@ local english = {
 	-- Admin things
 	need_admin = "You need admin privileges in order to be able to %s",
 	need_sadmin = "You need super admin privileges in order to be able to %s",
+	no_privilege = "You don't have the right privileges to perform this action",
 	no_jail_pos = "No jail position",
 	invalid_x = "Invalid %s! %s",
 

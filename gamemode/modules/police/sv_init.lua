@@ -119,7 +119,7 @@ local function CombineRequest(ply, args)
 	end
 	return args, DoSay
 end
-DarkRP.addChatCommand("/cr", CombineRequest, 1.5)
+DarkRP.defineChatCommand("cr", CombineRequest, 1.5)
 
 local function warrantCommand(ply, args)
 	local expl = string.Explode(" ", args or "")
@@ -151,7 +151,7 @@ local function warrantCommand(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/warrant", warrantCommand)
+DarkRP.defineChatCommand("warrant", warrantCommand)
 
 local function wantedCommand(ply, args)
 	local expl = string.Explode(" ", args or "")
@@ -168,7 +168,7 @@ local function wantedCommand(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/wanted", wantedCommand)
+DarkRP.defineChatCommand("wanted", wantedCommand)
 
 local function unwantedCommand(ply, args)
 	local target = GAMEMODE:FindPlayer(args)
@@ -183,7 +183,7 @@ local function unwantedCommand(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/unwanted", unwantedCommand)
+DarkRP.defineChatCommand("unwanted", unwantedCommand)
 
 
 /*---------------------------------------------------------------------------

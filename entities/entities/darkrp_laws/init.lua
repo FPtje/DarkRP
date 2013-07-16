@@ -50,7 +50,7 @@ local function AddLaw(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/addlaw", AddLaw)
+DarkRP.defineChatCommand("addlaw", AddLaw)
 
 local function RemoveLaw(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
@@ -81,7 +81,7 @@ local function RemoveLaw(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/removelaw", RemoveLaw)
+DarkRP.defineChatCommand("removelaw", RemoveLaw)
 
 local numlaws = 0
 local function PlaceLaws(ply, args)
@@ -124,7 +124,7 @@ local function PlaceLaws(ply, args)
 
 	return ""
 end
-DarkRP.addChatCommand("/placelaws", PlaceLaws)
+DarkRP.defineChatCommand("placelaws", PlaceLaws)
 
 function ENT:OnRemove()
 	numlaws = numlaws - 1

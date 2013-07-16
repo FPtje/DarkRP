@@ -52,11 +52,11 @@ end
 function plyMeta:setHitTarget(target)
 	if not hits[self] then error("This person has no active hit!") end
 
-	self:SetDarkRPVar("hitTarget", target)
+	self:setDarkRPVar("hitTarget", target)
 end
 
 function plyMeta:setHitPrice(price)
-	self:SetDarkRPVar("hitPrice", math.Max(GAMEMODE.Config.minHitPrice or 200, price))
+	self:setDarkRPVar("hitPrice", math.Max(GAMEMODE.Config.minHitPrice or 200, price))
 end
 
 function plyMeta:setHitCustomer(customer)
@@ -114,7 +114,7 @@ end
 /*---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------*/
-DarkRP.addChatCommand("/hitprice", function(ply, args)
+DarkRP.defineChatCommand("hitprice", function(ply, args)
 	local price = tonumber(args) or 0
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
@@ -124,7 +124,7 @@ DarkRP.addChatCommand("/hitprice", function(ply, args)
 	return ""
 end)
 
-DarkRP.addChatCommand("/requesthit", function(ply, args)
+DarkRP.defineChatCommand("requesthit", function(ply, args)
 	args = string.Explode(' ', args)
 	local target = GAMEMODE:FindPlayer(args[1])
 	local traceEnt = ply:GetEyeTrace().Entity
@@ -138,7 +138,7 @@ DarkRP.addChatCommand("/requesthit", function(ply, args)
 	hitman:requestHit(ply, target, hitman:getHitPrice())
 
 	return ""
-end, 20)
+end)
 
 /*---------------------------------------------------------------------------
 Hooks
@@ -171,7 +171,7 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 	DB.Log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
 		false, Color(255, 0, 255))
 
-	target:SetDarkRPVar("lastHitTime", CurTime())
+	target:setDarkRPVar("lastHitTime", CurTime())
 
 	hitman:finishHit()
 end

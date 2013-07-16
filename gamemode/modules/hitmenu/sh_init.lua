@@ -38,3 +38,19 @@ function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 
 	return true
 end
+
+/*---------------------------------------------------------------------------
+Chat commands
+---------------------------------------------------------------------------*/
+DarkRP.declareChatCommand{
+	command = "hitprice",
+	description = "Set the price of your hits",
+	condition = plyMeta.isHitman,
+	delay = 10
+}
+
+DarkRP.declareChatCommand{
+	command = "requesthit",
+	description = "Request a hit from the player you're looking at",
+	delay = 5
+}
