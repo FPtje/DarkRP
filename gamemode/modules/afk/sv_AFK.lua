@@ -8,7 +8,7 @@ local function AFKDemote(ply)
 	if ply:Team() ~= GAMEMODE.DefaultTeam then
 		ply:ChangeTeam(GAMEMODE.DefaultTeam, true)
 		ply:setSelfDarkRPVar("AFKDemoted", true)
-		GAMEMODE:NotifyAll(0, 5, rpname .. " has been demoted for being AFK for too long.")
+		GAMEMODE:NotifyAll(0, 5, DarkRP.getPhrase("hes_afk_demoted", rpname))
 	end
 	ply:setDarkRPVar("job", "AFK")
 end
@@ -22,7 +22,7 @@ local function SetAFK(ply)
 	if ply:getDarkRPVar("AFK") then
 		DarkRP.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
 		ply.OldJob = ply:getDarkRPVar("job")
-		GAMEMODE:NotifyAll(0, 5, rpname .. " is now AFK.")
+		GAMEMODE:NotifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
 
 		-- NPC code partially by _Undefined
 		local npc = ents.Create("npc_citizen")
@@ -55,8 +55,8 @@ local function SetAFK(ply)
 			hook.Remove("PlayerDisconnected", ply:EntIndex().."DRPNPCDisconnect")
 		end)
 	else
-		GAMEMODE:NotifyAll(1, 5, rpname .. " is no longer AFK.")
-		GAMEMODE:Notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
+		GAMEMODE:NotifyAll(1, 5, DarkRP.getPhrase("player_no_longer_afk", rpname))
+		GAMEMODE:Notify(ply, 0, 5, DarkRP.getPhrase("salary_restored")
 		if IsValid(ply.AFKNpc) then
 			ply:SetEyeAngles(ply.AFKNpc:EyeAngles())
 			ply:SetPos(ply.AFKNpc:GetPos() + ply.AFKNpc:GetAimVector() * 10)

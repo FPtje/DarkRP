@@ -7,7 +7,7 @@ function ENT:Draw()
 
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
-	local text = "Amount: " .. self.dt.amount
+	local text = DarkRP.getPhrase("amount") .. self.dt.amount
 
 	surface.SetFont("HUDNumber5")
 	local TextWidth = surface.GetTextSize(text)

@@ -161,7 +161,7 @@ local function AnimationMenu()
 	local Height = table.Count(Anims) * 60
 	AnimFrame:SetSize(130, Height)
 	AnimFrame:SetPos(ScrW()/2 + ScrW() * 0.1, ScrH()/2 - (Height/2))
-	AnimFrame:SetTitle("Custom animation!")
+	AnimFrame:SetTitle(DarkRP.getPhrase("custom_animation"))
 	AnimFrame:SetVisible(true)
 	AnimFrame:MakePopup()
 

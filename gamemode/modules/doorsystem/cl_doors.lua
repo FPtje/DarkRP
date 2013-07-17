@@ -81,7 +81,7 @@ function meta:DrawOwnableInfo()
 		for k,v in pairs(player.GetAll()) do
 			if v:GetVehicle() == self then
 				whiteText = true
-				st = st .. "\n" .. "Driver: " .. v:Nick()
+				st = st .. "\n" .. DarkRP.getPhrase("driver", v:Nick())
 			end
 		end
 	end

@@ -81,8 +81,8 @@ function ENT:Use(activator,caller)
 			return false
 		end
 		DarkRP.payPlayer(activator, Owner, self:Getprice())
-		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. GAMEMODE.Config.currency .. self:Getprice() .. " for using drugs.")
-		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. GAMEMODE.Config.currency .. self:Getprice() .. " for selling drugs.")
+		GAMEMODE:Notify(activator, 0, 4, DarkRP.getPhrase("you_bought_x", string.lower(DarkRP.getPhrase("drugs")), GAMEMODE.Config.currency, self:Getprice()))
+		GAMEMODE:Notify(Owner, 0, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. self:Getprice()), string.lower(DarkRP.getPhrase("drugs")))
 	end
 	DrugPlayer(caller)
 	self.CanUse = false

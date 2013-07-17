@@ -148,7 +148,7 @@ local function ccLock(ply, cmd, args)
 		return
 	end
 
-	ply:PrintMessage(2, "Locked.")
+	ply:PrintMessage(2, DarkRP.getPhrase("locked"))
 
 	trace.Entity:KeysLock()
 	MySQLite.query("REPLACE INTO darkrp_door VALUES("..MySQLite.SQLStr(trace.Entity:EntIndex())..", "..MySQLite.SQLStr(string.lower(game.GetMap()))..", "..MySQLite.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
@@ -172,7 +172,7 @@ local function ccUnLock(ply, cmd, args)
 		return
 	end
 
-	ply:PrintMessage(2, "Unlocked.")
+	ply:PrintMessage(2, DarkRP.getPhrase("unlocked"))
 	trace.Entity:KeysUnLock()
 	MySQLite.query("REPLACE INTO darkrp_door VALUES("..MySQLite.SQLStr(trace.Entity:EntIndex())..", "..MySQLite.SQLStr(string.lower(game.GetMap()))..", "..MySQLite.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", Color(30, 30, 30))
