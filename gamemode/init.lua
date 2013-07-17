@@ -45,7 +45,6 @@ include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
 
-include("server/admincc.lua")
 include("server/data.lua")
 include("server/gamemode_functions.lua")
 include("server/main.lua")
