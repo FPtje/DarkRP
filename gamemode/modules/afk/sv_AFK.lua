@@ -20,7 +20,7 @@ local function SetAFK(ply)
 	SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
 
 	if ply:getDarkRPVar("AFK") then
-		DB.RetrieveSalary(ply, function(amount) ply.OldSalary = amount end)
+		DarkRP.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
 		ply.OldJob = ply:getDarkRPVar("job")
 		GAMEMODE:NotifyAll(0, 5, rpname .. " is now AFK.")
 

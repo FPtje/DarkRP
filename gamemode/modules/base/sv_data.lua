@@ -369,7 +369,7 @@ end
 /*---------------------------------------------------------
  Doors
  ---------------------------------------------------------*/
-function DB.StoreDoorOwnability(ent)
+function DarkRP.storeDoorData(ent)
 	local map = string.lower(game.GetMap())
 	ent.DoorData = ent.DoorData or {}
 	local nonOwnable = ent.DoorData.NonOwnable
@@ -382,7 +382,7 @@ function DB.StoreDoorOwnability(ent)
 		(ent.DoorData.NonOwnable and 1 or 0) .. [[);]])
 end
 
-function DB.StoreDoorTitle(ent, text)
+function DarkRP.storeDoorTitle(ent, text)
 	ent.DoorData = ent.DoorData or {}
 	ent.DoorData.title = text
 	MySQLite.query("UPDATE darkrp_door SET title = " .. MySQLite.SQLStr(text) .. " WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. " AND idx = " .. ent:DoorIndex() .. ";")
@@ -406,7 +406,7 @@ function setUpNonOwnableDoors()
 	end)
 end
 
-function DB.StoreTeamDoorOwnability(ent)
+function DarkRP.storeTeamDoorOwnability(ent)
 	local map = string.lower(game.GetMap())
 	ent.DoorData = ent.DoorData or {}
 
@@ -433,7 +433,7 @@ function setUpTeamOwnableDoors()
 	end)
 end
 
-function DB.SetDoorGroup(ent, group)
+function DarkRP.setDoorGroup(ent, group)
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
 	local index = ent:DoorIndex()
 

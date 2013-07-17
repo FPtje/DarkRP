@@ -21,7 +21,6 @@ AddCSLuaFile("shared/entity.lua")
 AddCSLuaFile("shared/MakeThings.lua")
 AddCSLuaFile("shared/Workarounds.lua")
 
-DB = DB or {}
 GM.Config = GM.Config or {}
 GM.NoLicense = GM.NoLicense or {}
 

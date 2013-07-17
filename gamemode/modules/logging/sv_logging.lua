@@ -15,18 +15,19 @@ local function AdminLog(message, colour)
 	umsg.End()
 end
 
+local DarkRPFile
 function DarkRP.log(text, colour)
 	if colour then
 		AdminLog(text, colour)
 	end
 	if (not GAMEMODE.Config.logging or not text) and not force then return end
-	if not DB.File then -- The log file of this session, if it's not there then make it!
+	if not DarkRPFile then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("DarkRP_logs", "DATA") then
 			file.CreateDir("DarkRP_logs")
 		end
-		DB.File = "DarkRP_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
-		file.Write(DB.File, os.date().. "\t".. text)
+		DarkRPFile = "DarkRP_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
+		file.Write(DarkRPFile, os.date().. "\t".. text)
 		return
 	end
-	file.Append(DB.File, "\n"..os.date().. "\t"..(text or ""))
+	file.Append(DarkRPFile, "\n"..os.date().. "\t"..(text or ""))
 end

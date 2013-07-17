@@ -238,7 +238,7 @@ local function SetDoorOwnable(ply)
 	ent.DoorData = ent.DoorData or {}
 	ent.DoorData.NonOwnable = not ent.DoorData.NonOwnable
 	-- Save it for future map loads
-	DB.StoreDoorOwnability(ent)
+	DarkRP.storeDoorData(ent)
 	ply.LookingAtDoor = nil -- Send the new data to the client who is looking at the door :D
 	return ""
 end
@@ -282,8 +282,8 @@ local function SetDoorGroupOwnable(ply, arg)
 	end
 
 	-- Save it for future map loads
-	DB.SetDoorGroup(ent, arg)
-	DB.StoreTeamDoorOwnability(ent)
+	DarkRP.setDoorGroup(ent, arg)
+	DarkRP.storeTeamDoorOwnability(ent)
 
 	ply.LookingAtDoor = nil
 
@@ -349,7 +349,7 @@ local function SetDoorTeamOwnable(ply, arg)
 		ent.DoorData.TeamOwn = nil
 	end
 	GAMEMODE:Notify(ply, 0, 8, "Door group set successfully")
-	DB.StoreTeamDoorOwnability(ent)
+	DarkRP.storeTeamDoorOwnability(ent)
 
 	ent:UnOwn()
 	ply.LookingAtDoor = nil
@@ -560,7 +560,7 @@ local function SetDoorTitle(ply, args)
 	trace.Entity.DoorData = trace.Entity.DoorData or {}
 	if ply:IsSuperAdmin() then
 		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
-			DB.StoreDoorTitle(trace.Entity, args)
+			DarkRP.storeDoorTitle(trace.Entity, args)
 			ply.LookingAtDoor = nil
 			return ""
 		end
