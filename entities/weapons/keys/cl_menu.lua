@@ -286,5 +286,5 @@ local function KeysMenu(um)
 
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-GAMEMODE.ShowTeam = KeysMenu
+timer.Simple(0, function() GAMEMODE.ShowTeam = KeysMenu end)
 usermessage.Hook("KeysMenu", KeysMenu)

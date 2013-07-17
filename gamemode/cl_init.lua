@@ -28,8 +28,6 @@ include("config/config.lua")
 include("libraries/fn.lua")
 include("libraries/interfaceloader.lua")
 
-include("shared/entity.lua")
-
 LoadModules()
 
 include("config/jobrelated.lua")

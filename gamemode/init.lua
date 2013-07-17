@@ -15,8 +15,6 @@ AddCSLuaFile("config/ammotypes.lua")
 
 AddCSLuaFile("cl_init.lua")
 
-AddCSLuaFile("shared/entity.lua")
-
 GM.Config = GM.Config or {}
 GM.NoLicense = GM.NoLicense or {}
 
@@ -28,8 +26,6 @@ include("config/licenseweapons.lua")
 
 include("libraries/fn.lua")
 include("libraries/database.lua")
-
-include("shared/entity.lua")
 
 include("server/gamemode_functions.lua")
 include("server/main.lua")
