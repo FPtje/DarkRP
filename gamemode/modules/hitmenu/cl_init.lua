@@ -54,7 +54,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
 
 	if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
 		x, y = chat.GetChatBoxPos()
-		local text = "Hit: " .. localplayer:getHitTarget():Nick()
+		local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Nick())
 		draw.DrawText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
 		draw.DrawText(text, "HUDNumber5", x, y, textCol2, 0)
 	end
@@ -72,7 +72,7 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
 	local canRequest, message = hook.Call("canRequestHit", DarkRP.hooks, hitman, ply, nil, hitman:getHitPrice())
 
 	if not canRequest then
-		GAMEMODE:AddNotify("Cannot request hit! " .. (message or ""), 1, 4)
+		GAMEMODE:AddNotify(DarkRP.getPhrase("cannot_request_hit", (message or "")), 1, 4)
 		surface.PlaySound("buttons/lightswitch2.wav")
 		return
 	end

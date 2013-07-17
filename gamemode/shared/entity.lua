@@ -178,7 +178,7 @@ if CLIENT then
 			for k,v in pairs(player.GetAll()) do
 				if v:GetVehicle() == self then
 					whiteText = true
-					st = st .. "\n" .. "Driver: " .. v:Nick()
+					st = st .. "\n" .. DarkRP.getPhrase("driver", v:Nick())
 				end
 			end
 		end
@@ -221,7 +221,7 @@ local function SetDoorOwnable(ply)
 	timer.Simple(0.1, function() time = false end)
 
 	if not ply:HasPriv("rp_doorManipulation") then
-		GAMEMODE:Notify(ply, 1, 4, "You need the rp_doorManipulation privilege")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
 		return ""
 	end
 
@@ -256,7 +256,7 @@ local function SetDoorGroupOwnable(ply, arg)
 	local trace = ply:GetEyeTrace()
 
 	if not ply:HasPriv("rp_doorManipulation") then
-		GAMEMODE:Notify(ply, 1, 4, "You need the rp_doorManipulation privilege")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
 		return ""
 	end
 
@@ -267,7 +267,7 @@ local function SetDoorGroupOwnable(ply, arg)
 		return
 	end
 
-	if not RPExtraTeamDoors[arg] and arg ~= "" then GAMEMODE:Notify(ply, 1, 10, "Door group does not exist!") return "" end
+	if not RPExtraTeamDoors[arg] and arg ~= "" then GAMEMODE:Notify(ply, 1, 10, DarkRP.getPhrase("door_group_doesnt_exist")) return "" end
 
 	ent:UnOwn()
 
@@ -287,7 +287,7 @@ local function SetDoorGroupOwnable(ply, arg)
 
 	ply.LookingAtDoor = nil
 
-	GAMEMODE:Notify(ply, 0, 8, "Door group set successfully")
+	GAMEMODE:Notify(ply, 0, 8, DarkRP.getPhrase("door_group_set"))
 	return ""
 end
 DarkRP.defineChatCommand("togglegroupownable", SetDoorGroupOwnable)
@@ -304,7 +304,7 @@ local function SetDoorTeamOwnable(ply, arg)
 
 	local ent = trace.Entity
 	if not ply:HasPriv("rp_doorManipulation") then
-		GAMEMODE:Notify(ply, 1, 4, "You need the rp_doorManipulation privilege")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("no_prvilege"))
 		return ""
 	end
 
@@ -314,7 +314,7 @@ local function SetDoorTeamOwnable(ply, arg)
 	end
 
 	arg = tonumber(arg)
-	if not RPExtraTeams[arg] and arg ~= nil then GAMEMODE:Notify(ply, 1, 10, "Job does not exist!") return "" end
+	if not RPExtraTeams[arg] and arg ~= nil then GAMEMODE:Notify(ply, 1, 10, DarkRP.getPhrase("job_doesnt_exist")) return "" end
 	if IsValid(ent:GetDoorOwner()) then
 		ent:UnOwn(ent:GetDoorOwner())
 	end
@@ -348,7 +348,7 @@ local function SetDoorTeamOwnable(ply, arg)
 	else
 		ent.DoorData.TeamOwn = nil
 	end
-	GAMEMODE:Notify(ply, 0, 8, "Door group set successfully")
+	GAMEMODE:Notify(ply, 0, 8, DarkRP.getPhrase("door_group_set"))
 	DarkRP.storeTeamDoorOwnability(ent)
 
 	ent:UnOwn()
@@ -407,7 +407,7 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			local iCost = hook.Call("Get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity );
+			local iCost = hook.Call(DarkRP.getPhrase("get_x_cost", (trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle") or DarkRP.getPhrase("door"))), GAMEMODE, ply, trace.Entity );
 			if( !ply:CanAfford( iCost ) ) then
 				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford") );
 				return "";
@@ -424,12 +424,12 @@ local function OwnDoor(ply)
 			local bVehicle = trace.Entity:IsVehicle();
 
 			if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and Owner ~= ply then
-				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", "vehicle"))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", DarkRP.getPhrase("vehicle")))
 				return ""
 			end
 
 			if not bVehicle and (ply.OwnedNumz or 0) >= GAMEMODE.Config.maxdoors then
-				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", "door"))
+				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", DarkRP.getPhrase("door")))
 				return ""
 			end
 
@@ -452,7 +452,7 @@ local function OwnDoor(ply)
 		ply.LookingAtDoor = nil
 		return ""
 	end
-	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 	return ""
 end
 DarkRP.defineChatCommand("toggleown", OwnDoor)
@@ -469,7 +469,7 @@ local function UnOwnAll(ply, cmd, args)
 		end
 	end
 	ply:GetTable().OwnedNumz = 0
-	GAMEMODE:Notify(ply, 2, 4, string.format("You have sold "..amount.." doors for " .. GAMEMODE.Config.currency .. amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)) .. "!"))
+	GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors_for_y", amount, GAMEMODE.Config.currency, amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5))))
 	return ""
 end
 DarkRP.defineChatCommand("unownalldoors", UnOwnAll)

@@ -175,7 +175,7 @@ function SWEP:DrawHUD()
 		local BarWidth = status * (width - 16) + 8
 		draw.RoundedBox(8, x+8, y+8, BarWidth, height - 16, Color(255-(status*255), 0+(status*255), 0, 255))
 
-		draw.SimpleText("Picking lock"..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
+		draw.SimpleText(DarkRP.getPhrase("picking_lock")..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
 	end
 end
 

@@ -208,14 +208,14 @@ local function LookPersonUp(ply, cmd, args)
 			ply:PrintMessage(2, "Money: ".. P:getDarkRPVar("money"))
 		end
 	else
-		print("Nick: ".. P:Nick())
-		print("Steam name: "..P:SteamName())
+		print(DarkRP.getPhrase("name", P:Nick()))
+		print("Steam ".. DarkRP.getPhrase("name", P:SteamName()))
 		print("Steam ID: "..P:SteamID())
-		print("Job: ".. team.GetName(P:Team()))
-		print("Kills: ".. P:Frags())
-		print("Deaths: ".. P:Deaths())
+		print(DarkRP.getPhrase("job", team.GetName(P:Team())))
+		print(DarkRP.getPhrase("kills", P:Frags()))
+		print(DarkRP.getPhrase("deaths", P:Death()))
 
-		print("Money: " .. GAMEMODE.Config.currency .. P:getDarkRPVar("money"))
+		print(DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)
@@ -244,7 +244,7 @@ local function MakeLetter(ply, args, type)
 	-- Instruct the player's letter window to open
 
 	local ftext = string.gsub(args, "//", "\n")
-	ftext = string.gsub(ftext, "\\n", "\n") .. "\n\nYours,\n"..ply:Nick()
+	ftext = string.gsub(ftext, "\\n", "\n") .. "\n\n" .. DarkRP.getPhrase("signed") .. "\n"..ply:Nick()
 	local length = string.len(ftext)
 
 	local numParts = math.floor(length / 39) + 1
@@ -392,7 +392,7 @@ local function BuyPistol(ply, args)
 			end
 
 			if v.customCheck and not v.customCheck(ply) then
-				GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
+				GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
 				return ""
 			end
 
@@ -429,7 +429,7 @@ local function BuyPistol(ply, args)
 
 	if IsValid( weapon ) then
 		ply:AddMoney(-price)
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, tostring(price)))
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, price))
 	else
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buy", args))
 	end
@@ -445,7 +445,7 @@ local function BuyShipment(ply, args)
 	end
 
 	if ply.LastShipmentSpawn and ply.LastShipmentSpawn > (CurTime() - GAMEMODE.Config.ShipmentSpamTime) then
-		GAMEMODE:Notify(ply, 1, 4, "Please wait before spawning another shipment.")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("shipment_antispam_wait"))
 		return ""
 	end
 	ply.LastShipmentSpawn = CurTime()
@@ -476,7 +476,7 @@ local function BuyShipment(ply, args)
 			end
 
 			if v.customCheck and not v.customCheck(ply) then
-				GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
+				GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
 				return ""
 			end
 
@@ -525,7 +525,7 @@ local function BuyShipment(ply, args)
 
 	if IsValid( crate ) then
 		ply:AddMoney(-cost)
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency .. tostring(cost)))
+		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, cost))
 	else
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", arg))
 	end
@@ -554,7 +554,7 @@ local function BuyVehicle(ply, args)
 	if found.allowed and not table.HasValue(found.allowed, ply:Team()) then GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/buyvehicle")) return "" end
 
 	if found.customCheck and not found.customCheck(ply) then
-		GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or "You're not allowed to purchase this item")
+		GAMEMODE:Notify(ply, 1, 4, v.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
 		return ""
 	end
 
@@ -567,7 +567,7 @@ local function BuyVehicle(ply, args)
 	if not ply:canAfford(found.price) then GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "vehicle")) return "" end
 
 	ply:AddMoney(-found.price)
-	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency .. found.price))
+	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, found.price))
 
 	local Vehicle = list.Get("Vehicles")[found.name]
 	if not Vehicle then GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "")) return "" end
@@ -652,7 +652,7 @@ local function BuyAmmo(ply, args)
 		return ""
 	end
 
-	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency..tostring(found.price)))
+	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, found.price))
 	ply:AddMoney(-found.price)
 
 	local trace = {}
@@ -712,7 +712,7 @@ local function BuyHealth(ply)
 	end
 	ply.StartHealth = ply.StartHealth or 100
 	ply:AddMoney(-cost)
-	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", "health", GAMEMODE.Config.currency .. tostring(cost)))
+	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", "health", GAMEMODE.Config.currency, cost))
 	ply:SetHealth(ply.StartHealth)
 	return ""
 end
@@ -828,7 +828,7 @@ local function Demote(ply, args)
 	end
 	local p = DarkRP.findPlayer(tableargs[1])
 	if p == ply then
-		GAMEMODE:Notify(ply, 1, 4, "Can't demote yourself.")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_demote_self"))
 		return ""
 	end
 
@@ -846,7 +846,7 @@ local function Demote(ply, args)
 		if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
 		else
-			GAMEMODE:TalkToPerson(p, team.GetColor(ply:Team()), "(DEMOTE) "..ply:Nick(),Color(255,0,0,255), "I want to demote you. Reason: "..reason, p)
+			GAMEMODE:TalkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " ..ply:Nick(),Color(255,0,0,255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
 			GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
 			DarkRP.log(DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()) .. " (" .. reason .. ")",
 				false, Color(255, 128, 255, 255))
@@ -893,7 +893,7 @@ local function SwitchJob(ply) --Idea by Godness.
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
 	ply.RequestedJobSwitch = true
-	GAMEMODE.ques:Create("Switch job with "..ply:Nick().."?", "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+	GAMEMODE.ques:Create(DarkRP.getPhrase("team_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
 	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("created_x", "You", "job switch request."))
 	return ""
 end
@@ -911,8 +911,8 @@ local function DoTeamBan(ply, args, cmdargs)
 	args = cmdargs or string.Explode(" ", args)
 	local ent = args[1]
 	local Team = args[2]
-	if cmdargs and not cmdargs[1]  then
-		ply:PrintMessage(HUD_PRINTNOTIFY, "rp_teamban [player name/ID] [team name/id] Use this to ban a player from a certain team")
+	if cmdargs and not cmdargs[1] then
+		ply:PrintMessage(HUD_PRINTNOTIFY, DarkRP.getPhrase("rp_teamban_hint"))
 		return
 	end
 
@@ -942,7 +942,7 @@ local function DoTeamBan(ply, args, cmdargs)
 	end
 
 	target:TeamBan(tonumber(Team), tonumber(args[3] or 0))
-	GAMEMODE:NotifyAll(0, 5, ply:Nick() .. " has banned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
+	GAMEMODE:NotifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", ply:Nick(), target:Nick(), team.GetName(tonumber(Team))))
 	return ""
 end
 DarkRP.defineChatCommand("teamban", DoTeamBan)
@@ -958,7 +958,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	local Team = args
 	if cmdargs then
 		if not cmdargs[1] then
-			ply:PrintMessage(HUD_PRINTNOTIFY, "rp_teamunban [player name/ID] [team name/id] Use this to unban a player from a certain team")
+			ply:PrintMessage(HUD_PRINTNOTIFY, DarkRP.getPhrase("rp_teamunban_hint"))
 			return ""
 		end
 		ent = cmdargs[1]
@@ -994,7 +994,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	end
 	if not target.bannedfrom then target.bannedfrom = {} end
 	target.bannedfrom[tonumber(Team)] = nil
-	GAMEMODE:NotifyAll(1, 5, ply:Nick() .. " has unbanned " ..target:Nick() .. " from being a " .. team.GetName(tonumber(Team)))
+	GAMEMODE:NotifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", ply:Nick(), target:Nick(), team.GetName(tonumber(Team))))
 	return ""
 end
 DarkRP.defineChatCommand("teamunban", DoTeamUnBan)
@@ -1081,7 +1081,7 @@ DarkRP.defineChatCommand("me", Me, 1.5)
 
 local function OOC(ply, args)
 	if not GAMEMODE.Config.ooc then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("disabled", "OOC", ""))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("disabled", DarkRP.getPhrase("ooc"), ""))
 		return ""
 	end
 
@@ -1097,7 +1097,7 @@ local function OOC(ply, args)
 			col = col2
 		end
 		for k,v in pairs(player.GetAll()) do
-			GAMEMODE:TalkToPerson(v, col, "(OOC) "..ply:Name(), col2, text, ply)
+			GAMEMODE:TalkToPerson(v, col, DarkRP.getPhrase("ooc").." "..ply:Name(), col2, text, ply)
 		end
 	end
 	return args, DoSay
@@ -1138,7 +1138,7 @@ local function MayorBroadcast(ply, args)
 		end
 		for k,v in pairs(player.GetAll()) do
 			local col = team.GetColor(ply:Team())
-			GAMEMODE:TalkToPerson(v, col, "[Broadcast!] " ..ply:Nick(), Color(170, 0, 0,255), text, ply)
+			GAMEMODE:TalkToPerson(v, col, DarkRP.getPhrase("broadcast") .. " " ..ply:Nick(), Color(170, 0, 0,255), text, ply)
 		end
 	end
 	return args, DoSay
@@ -1150,7 +1150,7 @@ local function SetRadioChannel(ply,args)
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "0<channel<100"))
 		return ""
 	end
-	GAMEMODE:Notify(ply, 2, 4, "Channel set to "..args.."!")
+	GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("channel_set_to_x", args))
 	ply.RadioChannel = tonumber(args)
 	return ""
 end
@@ -1169,7 +1169,7 @@ local function SayThroughRadio(ply,args)
 		end
 		for k,v in pairs(player.GetAll()) do
 			if v.RadioChannel == ply.RadioChannel then
-				GAMEMODE:TalkToPerson(v, Color(180,180,180,255), "Radio ".. tostring(ply.RadioChannel), Color(180,180,180,255), text, ply)
+				GAMEMODE:TalkToPerson(v, Color(180,180,180,255), DarkRP.getPhrase("radio_x", ply.RadioChannel), Color(180,180,180,255), text, ply)
 			end
 		end
 	end
@@ -1220,11 +1220,11 @@ local CreditsWait = true
 local function GetDarkRPAuthors(ply, args)
 	local target = DarkRP.findPlayer(args); -- Only send to one player. Prevents spamming
 	if not IsValid(target) then
-		GAMEMODE:Notify(ply, 1, 4, "Player does not exist")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("plaer_doesnt_exist"))
 		return ""
 	end
 
-	if not CreditsWait then GAMEMODE:Notify(ply, 1, 4, "Wait with that") return "" end
+	if not CreditsWait then GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that")) return "" end
 	CreditsWait = false
 	timer.Simple(60, function() CreditsWait = true end)--so people don't spam it
 
@@ -1474,13 +1474,11 @@ local function DoLottery(ply, amount)
 
 	LotteryAmount = math.Clamp(math.floor(amount), GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)
 
-	GAMEMODE:NotifyAll(0, 4, "A lottery has started!")
-
 	LotteryON = true
 	LotteryPeople = {}
 	for k,v in pairs(player.GetAll()) do
 		if v ~= ply then
-			GAMEMODE.ques:Create("There is a lottery! Participate for " ..GAMEMODE.Config.currency.. tostring(LotteryAmount) .. "?", "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
+			GAMEMODE.ques:Create(DarkRP.getPhrase("lottery_started", GAMEMODE.Config.currency, LotteryAmount), "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
 		end
 	end
 	timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
@@ -1587,8 +1585,8 @@ local function MayorSetSalary(ply, cmd, args)
 				return
 			else
 				DarkRP.storeSalary(target, amount)
-				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
-				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
+				ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_salary_to_y", targetnick, GAMEMODE.Config.currency, amount))
+				target:PrintMessage(2, DarkRP.getPhrase("x_set_your_salary_to_y", plynick, GAMEMODE.Config.currency, amount))
 			end
 		elseif RPExtraTeams[targetteam] and RPExtraTeams[targetteam].mayorCanSetSalary then
 			if amount > GAMEMODE.Config.maxnormalsalary then
@@ -1596,8 +1594,8 @@ local function MayorSetSalary(ply, cmd, args)
 				return
 			else
 				DarkRP.storeSalary(target, amount)
-				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
-				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
+				ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_salary_to_y", targetnick, GAMEMODE.Config.currency, amount))
+				target:PrintMessage(2, DarkRP.getPhrase("x_set_your_salary_to_y", plynick, GAMEMODE.Config.currency, amount))
 			end
 		else
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "rp_setsalary", ""))

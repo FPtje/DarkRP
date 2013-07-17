@@ -90,7 +90,7 @@ function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
 	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:IsCP() and not GAMEMODE.Config.cpcanarrestcp then
-		GAMEMODE:Notify(self.Owner, 1, 5, "You can not arrest other CPs!")
+		GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("cant_arrest_other_cp"))
 		return
 	end
 
@@ -112,19 +112,19 @@ function SWEP:PrimaryAttack()
 	end
 
 	if GAMEMODE.Config.needwantedforarrest and not trace.Entity:IsNPC() and not trace.Entity:getDarkRPVar("wanted") then
-		GAMEMODE:Notify(self.Owner, 1, 5, "The player must be wanted in order to be able to arrest them.")
+		GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("must_be_wanted_for_arrest"))
 		return
 	end
 
 	if FAdmin and trace.Entity:IsPlayer() and trace.Entity:FAdmin_GetGlobal("fadmin_jailed") then
-		GAMEMODE:Notify(self.Owner, 1, 5, "You cannot arrest a player who has been jailed by an admin.")
+		GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("cant_arrest_fadmin_jailed"))
 		return
 	end
 
 	local jpc = DarkRP.jailPosCount()
 
 	if not jpc or jpc == 0 then
-		GAMEMODE:Notify(self.Owner, 1, 4, "You cannot arrest people since there are no jail positions set!")
+		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("cant_arrest_no_jail_pos"))
 	else
 		-- Send NPCs to Jail
 		if trace.Entity:IsNPC() then
@@ -132,13 +132,13 @@ function SWEP:PrimaryAttack()
 		else
 			if not trace.Entity.Babygod then
 				trace.Entity:arrest(nil, self.Owner)
-				GAMEMODE:Notify(trace.Entity, 0, 20, "You've been arrested by " .. self.Owner:Nick())
+				GAMEMODE:Notify(trace.Entity, 0, 20, DarkRP.getPhrase("youre_arrested_by", self.Owner:Nick()))
 
 				if self.Owner.SteamName then
 					DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..trace.Entity:Nick(), Color(0, 255, 255))
 				end
 			else
-				GAMEMODE:Notify(self.Owner, 1, 4, "You can't arrest players who are spawning.")
+				GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("cant_arrest_spawning_players"))
 			end
 		end
 	end
