@@ -67,8 +67,8 @@ local function SetAFK(ply)
 		hook.Remove("PlayerDisconnected", ply:EntIndex().."DRPNPCDisconnect")
 		hook.Remove("PlayerDeath", ply:EntIndex().."DRPNPCDeath")
 	end
-	ply:SetDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
-	ply:SetDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
+	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
+	ply:setDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
 end
 DarkRP.defineChatCommand("afk", SetAFK)
 
@@ -80,7 +80,7 @@ hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply:getDarkRPVar("AFKDemoted") then
-		ply:SetDarkRPVar("job", team.GetName(GAMEMODE.DefaultTeam))
+		ply:setDarkRPVar("job", team.GetName(GAMEMODE.DefaultTeam))
 		timer.Simple(3, function() ply:setSelfDarkRPVar("AFKDemoted", false) end)
 	end
 end
