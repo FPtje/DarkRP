@@ -28,17 +28,12 @@ include("config/config.lua")
 include("libraries/fn.lua")
 include("libraries/interfaceloader.lua")
 
-include("shared/player_class.lua")
-include("shared/animations.lua")
-include("shared/commands.lua")
 include("shared/entity.lua")
-include("shared/MakeThings.lua")
-include("shared/Workarounds.lua")
+
+LoadModules()
 
 include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
-
-LoadModules()
 
 DarkRP.finish()
