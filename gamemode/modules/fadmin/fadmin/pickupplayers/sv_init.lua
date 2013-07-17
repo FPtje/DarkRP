@@ -27,7 +27,7 @@ local function ChangeAdmin(ply, cmd, args)
 	if Value ~= 1 and Value ~= 0 then return end
 	RunConsoleCommand("AdminsCanPickUpPlayers", Value)
 
-	DB.SaveSetting("AdminsCanPickUpPlayers", Value)
+	FAdmin.SaveSetting("AdminsCanPickUpPlayers", Value)
 
 	local OnOff = (tobool(Value) and "on") or "off"
 	FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Nick().." turned Admin>Player pickup "..OnOff, "Admin>Player pickup has been turned "..OnOff, "Turned Admin>Player pickup "..OnOff)
@@ -41,7 +41,7 @@ local function ChangeUser(ply, cmd, args)
 	if Value ~= 1 and Value ~= 0 then return end
 	RunConsoleCommand("PlayersCanPickUpPlayers", Value)
 
-	DB.SaveSetting("PlayersCanPickUpPlayers", Value)
+	FAdmin.SaveSetting("PlayersCanPickUpPlayers", Value)
 
 	local OnOff = (tobool(Value) and "on") or "off"
 	FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Nick().." turned Player>Player pickup "..OnOff, "Player>Player pickup has been turned "..OnOff, "Turned Player>Player pickup "..OnOff)

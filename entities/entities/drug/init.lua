@@ -80,7 +80,7 @@ function ENT:Use(activator,caller)
 		if not activator:canAfford(self:Getprice()) then
 			return false
 		end
-		DB.PayPlayer(activator, Owner, self:Getprice())
+		DarkRP.payPlayer(activator, Owner, self:Getprice())
 		GAMEMODE:Notify(activator, 0, 4, "You have paid " .. GAMEMODE.Config.currency .. self:Getprice() .. " for using drugs.")
 		GAMEMODE:Notify(Owner, 0, 4, "You have received " .. GAMEMODE.Config.currency .. self:Getprice() .. " for selling drugs.")
 	end

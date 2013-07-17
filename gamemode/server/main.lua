@@ -1287,7 +1287,7 @@ local function GiveMoney(ply, args)
 
 						return ""
 					end
-					DB.PayPlayer(ply, trace2.Entity, amount)
+					DarkRP.payPlayer(ply, trace2.Entity, amount)
 
 					GAMEMODE:Notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
 					GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), GAMEMODE.Config.currency .. tostring(amount)))

@@ -1,15 +1,11 @@
-include("static_data.lua")
-
 /*---------------------------------------------------------------------------
 Functions and variables
 ---------------------------------------------------------------------------*/
 local teamSpawns = {}
 local jailPos = {}
-local createSpawnPos,
-	setUpNonOwnableDoors,
+local setUpNonOwnableDoors,
 	setUpTeamOwnableDoors,
-	setUpGroupDoors,
-	createJailPos
+	setUpGroupDoors
 
 /*---------------------------------------------------------
  Database initialize
@@ -19,14 +15,6 @@ function DarkRP.initDatabase()
 	MySQLite.begin()
 		-- Gotta love the difference between SQLite and MySQL
 		local AUTOINCREMENT = MySQLite.CONNECTED_TO_MYSQL and "AUTO_INCREMENT" or "AUTOINCREMENT"
-
-		-- Create the table for the convars used in DarkRP
-		MySQLite.query([[
-			CREATE TABLE IF NOT EXISTS darkrp_cvar(
-				var VARCHAR(25) NOT NULL PRIMARY KEY,
-				value INTEGER NOT NULL
-			);
-		]])
 
 		-- Table that holds all position data (jail, zombie spawns etc.)
 		-- Queue these queries because other queries depend on the existence of the darkrp_position table
@@ -159,35 +147,15 @@ function DarkRP.initDatabase()
 		setUpTeamOwnableDoors()
 		setUpGroupDoors()
 
-		MySQLite.query("SELECT * FROM darkrp_cvar;", function(settings)
-			for k,v in pairs(settings or {}) do
-				RunConsoleCommand(v.var, v.value)
-			end
-		end)
-
 		jailPos = jailPos or {}
 		MySQLite.query([[SELECT * FROM darkrp_position WHERE type = 'J' AND map = ]] .. map .. [[;]], function(data)
 			for k,v in pairs(data or {}) do
 				table.insert(jailPos, v)
 			end
-
-			if table.Count(jailPos) == 0 then
-				createJailPos()
-				return
-			end
-
-			jail_positions = nil
 		end)
 
 		MySQLite.query("SELECT * FROM darkrp_position NATURAL JOIN darkrp_jobspawn WHERE map = "..map..";", function(data)
-			if not data or table.Count(data) == 0 then
-				createSpawnPos()
-				return
-			end
-
-			team_spawn_positions = nil
-
-			teamSpawns = data
+			teamSpawns = data or {}
 		end)
 
 		if MySQLite.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
@@ -212,33 +180,6 @@ end
 /*---------------------------------------------------------
  positions
  ---------------------------------------------------------*/
-function createSpawnPos()
-	local map = string.lower(game.GetMap())
-	if not team_spawn_positions then return end
-
-	for k, v in pairs(team_spawn_positions) do
-		if v[1] == map then
-			table.insert(teamSpawns, {id = k, map = v[1], x = v[3], y = v[4], z = v[5], team = v[2]})
-		end
-	end
-	team_spawn_positions = nil -- We're done with this now.
-end
-
-function createJailPos()
-	if not jail_positions then return end
-	local map = string.lower(game.GetMap())
-
-	MySQLite.begin()
-		MySQLite.query([[DELETE FROM darkrp_position WHERE type = "J" AND map = ]].. MySQLite.SQLStr(map)..[[;]])
-		for k, v in pairs(jail_positions) do
-			if map == string.lower(v[1]) then
-				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
-				table.insert(jailPos, {map = map, x = v[2], y = v[3], z = v[4]})
-			end
-		end
-	MySQLite.commit()
-end
-
 local JailIndex = 1 -- Used to circulate through the jailpos table
 function DB.StoreJailPos(ply, addingPos)
 	local map = string.lower(game.GetMap())
@@ -279,10 +220,6 @@ function DB.RetrieveJailPos()
 	JailIndex = JailIndex % #jailPos + 1
 
 	return oldestPos and Vector(oldestPos.x, oldestPos.y, oldestPos.z)
-end
-
-function DB.SaveSetting(setting, value)
-	MySQLite.query("REPLACE INTO darkrp_cvar VALUES("..MySQLite.SQLStr(setting)..", "..MySQLite.SQLStr(value)..");")
 end
 
 function DB.CountJailPos()
@@ -414,12 +351,6 @@ function DB.ResetAllMoney(ply,cmd,args)
 end
 concommand.Add("rp_resetallmoney", DB.ResetAllMoney)
 
-function DB.PayPlayer(ply1, ply2, amount)
-	if not IsValid(ply1) or not IsValid(ply2) then return end
-	ply1:AddMoney(-amount)
-	ply2:AddMoney(amount)
-end
-
 function DB.StoreSalary(ply, amount)
 	ply:setSelfDarkRPVar("salary", math.floor(amount))
 
@@ -544,7 +475,6 @@ end
 /*---------------------------------------------------------
  Logging
  ---------------------------------------------------------*/
-
 local function AdminLog(message, colour)
 	local RF = RecipientFilter()
 	for k,v in pairs(player.GetAll()) do

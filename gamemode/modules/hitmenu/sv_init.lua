@@ -44,7 +44,7 @@ function plyMeta:placeHit(customer, target, price)
 	self:setHitCustomer(customer)
 	self:setHitTarget(target)
 
-	DB.PayPlayer(customer, self, price)
+	DarkRP.payPlayer(customer, self, price)
 
 	hook.Call("onHitAccepted", DarkRP.hooks, self, target, customer)
 end

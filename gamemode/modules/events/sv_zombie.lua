@@ -183,18 +183,6 @@ timer.Stop("zombieControl")
 /*---------------------------------------------------------------------------
 Loading and saving data
 ---------------------------------------------------------------------------*/
-local function createZombiePos()
-	if not zombie_spawn_positions then return end
-	local map = string.lower(game.GetMap())
-
-	MySQLite.begin()
-		for k, v in pairs(zombie_spawn_positions) do
-			if map == string.lower(v[1]) then
-				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", \"Z\", " .. v[2] .. ", " .. v[3] .. ", " .. v[4] .. ");")
-			end
-		end
-	MySQLite.commit()
-end
 
 local function loadData()
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
@@ -203,13 +191,6 @@ local function loadData()
 		for k,v in pairs(data or {}) do
 			table.insert(zombieSpawns, v)
 		end
-
-		if table.Count(zombieSpawns) == 0 then
-			createZombiePos()
-			return
-		end
-
-		jail_positions = nil
 	end)
 end
 hook.Add("DarkRPDBInitialized", "ZombieData", loadData)
