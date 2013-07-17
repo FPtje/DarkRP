@@ -129,3 +129,20 @@ function GM.vote.DestroyLast()
 
 	Votes[lastVote.id] = nil
 end
+
+local function CancelVote(ply, cmd, args)
+	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_cancelvote"))
+		return
+	end
+
+	GAMEMODE.vote.DestroyLast()
+	if ply:EntIndex() == 0 then
+		nick = "Console"
+	else
+		nick = ply:Nick()
+	end
+
+	GAMEMODE:NotifyAll(0, 4, nick .. " canceled the last vote")
+end
+concommand.Add("rp_cancelvote", CancelVote)

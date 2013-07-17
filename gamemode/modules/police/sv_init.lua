@@ -193,6 +193,79 @@ local function unwantedCommand(ply, args)
 end
 DarkRP.defineChatCommand("unwanted", unwantedCommand)
 
+/*---------------------------------------------------------------------------
+Admin commands
+---------------------------------------------------------------------------*/
+local function ccArrest(ply, cmd, args)
+	if not args[1] then return end
+	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_arrest"))
+		return
+	end
+
+	if DB.CountJailPos() == 0 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("no_jail_pos"))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("no_jail_pos"))
+		end
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+	if target then
+		local length = tonumber(args[2])
+		if length then
+			target:arrest(length, ply)
+		else
+			target:arrest(nil, ply)
+		end
+
+		if ply:EntIndex() == 0 then
+			DB.Log("Console force-arrested "..target:SteamName(), nil, Color(0, 255, 255))
+		else
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") force-arrested "..target:SteamName(), nil, Color(0, 255, 255))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		end
+	end
+
+end
+concommand.Add("rp_arrest", ccArrest)
+
+local function ccUnarrest(ply, cmd, args)
+	if not args[1] then return end
+	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unarrest"))
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if target then
+		target:unArrest(ply)
+		if not target:Alive() then target:Spawn() end
+
+		if ply:EntIndex() == 0 then
+			DB.Log("Console force-unarrested "..target:SteamName(), nil, Color(0, 255, 255))
+		else
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unarrested "..target:SteamName(), nil, Color(0, 255, 255))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		end
+		return
+	end
+
+end
+concommand.Add("rp_unarrest", ccUnarrest)
 
 /*---------------------------------------------------------------------------
 Callback functions

@@ -58,3 +58,30 @@ concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
 
 	letter:SignLetter(ply)
 end)
+
+local function removeLetters(ply, cmd, args)
+	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands")then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_removeletters"))
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if target then
+		for k, v in pairs(ents.FindByClass("letter")) do
+			if v.SID == target.SID then v:Remove() end
+		end
+	else
+		-- Remove ALL letters
+		for k, v in pairs(ents.FindByClass("letter")) do
+			v:Remove()
+		end
+	end
+
+	if ply:EntIndex() == 0 then
+		DB.Log("Console force-removed all letters", nil, Color(30, 30, 30))
+	else
+		DB.Log(ply:Nick().." ("..ply:SteamID()..") force-removed all letters", nil, Color(30, 30, 30))
+	end
+end
+concommand.Add("rp_removeletters", removeLetters)

@@ -188,6 +188,42 @@ function GM:PlayerSpawnedRagdoll(ply, model, ent)
 	ent.SID = ply.SID
 end
 
+local function ccSENTSPawn(ply, cmd, args)
+	if GAMEMODE.Config.adminsents then
+		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
+			return
+		end
+	end
+	Spawn_SENT(ply, args[1])
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..args[1], nil, Color(255, 255, 0))
+end
+concommand.Add("gm_spawnsent", ccSENTSPawn)
+
+local function ccVehicleSpawn(ply, cmd, args)
+	if GAMEMODE.Config.adminvehicles then
+		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
+			return
+		end
+	end
+	Spawn_Vehicle(ply, args[1])
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..args[1], nil, Color(255, 255, 0))
+end
+concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
+
+local function ccNPCSpawn(ply, cmd, args)
+	if GAMEMODE.Config.adminnpcs then
+		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
+			return
+		end
+	end
+	Spawn_NPC(ply, args[1])
+	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..args[1], nil, Color(255, 255, 0))
+end
+concommand.Add("gm_spawnnpc", ccNPCSpawn)
+
 function GM:EntityRemoved(ent)
 	self.BaseClass:EntityRemoved(ent)
 	if ent:IsVehicle() then

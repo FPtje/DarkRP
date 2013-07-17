@@ -82,6 +82,155 @@ end
 concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 
 /*---------------------------------------------------------------------------
+Admin DarkRPVar commands
+---------------------------------------------------------------------------*/
+local function ccSetMoney(ply, cmd, args)
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
+		return
+	end
+
+	local amount = math.floor(tonumber(args[2]))
+
+	if args[3] then
+		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if target then
+		local nick = ""
+		DB.StoreMoney(target, amount)
+		target:setDarkRPVar("money", amount)
+
+		if ply:EntIndex() == 0 then
+			print("Set " .. target:Nick() .. "'s money to: " .. GAMEMODE.Config.currency .. amount)
+			nick = "Console"
+		else
+			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s money to: " .. GAMEMODE.Config.currency .. amount)
+			nick = ply:Nick()
+		end
+		target:PrintMessage(2, nick .. " set your money to: " .. GAMEMODE.Config.currency .. amount)
+		if ply:EntIndex() == 0 then
+			DB.Log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+		else
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print("Could not find player: " .. args[1])
+		else
+			ply:PrintMessage(2, "Could not find player: " .. args[1])
+		end
+		return
+	end
+end
+concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
+
+local function ccSetSalary(ply, cmd, args)
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setsalary"))
+		return
+	end
+
+	local amount = math.floor(tonumber(args[2]))
+
+	if amount < 0 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", "argument", args[2]))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", args[2]))
+		end
+		return
+	end
+
+	if amount > 150 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", "argument", args[2].." (<150)"))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", args[2].." (<150)"))
+		end
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if target then
+		local nick = ""
+		DB.StoreSalary(target, amount)
+		target:setSelfDarkRPVar("salary", amount)
+		if ply:EntIndex() == 0 then
+			print("Set " .. target:Nick() .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
+			nick = "Console"
+		else
+			ply:PrintMessage(2, "Set " .. target:Nick() .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
+			nick = ply:Nick()
+		end
+		target:PrintMessage(2, nick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
+		if ply:EntIndex() == 0 then
+			DB.Log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+		else
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		end
+		return
+	end
+end
+concommand.Add("rp_setsalary", ccSetSalary)
+
+local function SetRPName(ply, cmd, args)
+	if not args[1] then return end
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setname"))
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", "argument", args[2]))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", args[2]))
+		end
+	end
+
+	if target then
+		local oldname = target:Nick()
+		local nick = ""
+		DB.StoreRPName(target, args[2])
+		target:setDarkRPVar("rpname", args[2])
+		if ply:EntIndex() == 0 then
+			print("Set " .. oldname .. "'s name to: " .. args[2])
+			nick = "Console"
+		else
+			ply:PrintMessage(2, "Set " .. oldname .. "'s name to: " .. args[2])
+			nick = ply:Nick()
+		end
+		target:PrintMessage(2, nick .. " set your name to: " .. args[2])
+		if ply:EntIndex() == 0 then
+			DB.Log("Console set "..target:SteamName().."'s name to " .. args[2], nil, Color(30, 30, 30))
+		else
+			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s name to " .. args[2], nil, Color(30, 30, 30))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		end
+	end
+end
+concommand.Add("rp_setname", SetRPName)
+
+/*---------------------------------------------------------------------------
 Nickname override to show RP name
 ---------------------------------------------------------------------------*/
 meta.SteamName = meta.SteamName or meta.Name

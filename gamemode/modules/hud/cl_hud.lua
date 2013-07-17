@@ -200,6 +200,7 @@ end)
 local AdminTell = function() end
 
 usermessage.Hook("AdminTell", function(msg)
+	timer.Destroy("DarkRP_AdminTell")
 	local Message = msg:ReadString()
 
 	AdminTell = function()
@@ -208,7 +209,7 @@ usermessage.Hook("AdminTell", function(msg)
 		draw.DrawText(Message, "ChatFont", ScrW() / 2 + 10, 80, Color(200, 30, 30, 255), 1)
 	end
 
-	timer.Simple(10, function()
+	timer.Create("DarkRP_AdminTell", 10, 1, function()
 		AdminTell = function() end
 	end)
 end)
