@@ -11,7 +11,7 @@ local function ccDoVote(ply, cmd, args)
 	local canVote, message = hook.Call("CanVote", GAMEMODE, ply, vote)
 
 	if vote.voters[ply] or vote.exclude[ply] or canVote == false then
-		GAMEMODE:Notify(ply, 1, 4, message or "You cannot vote!")
+		GAMEMODE:Notify(ply, 1, 4, message or DarkRP.getPhrase("you_cannot_vote"))
 		return
 	end
 	vote.voters[ply] = true
@@ -143,6 +143,6 @@ local function CancelVote(ply, cmd, args)
 		nick = ply:Nick()
 	end
 
-	GAMEMODE:NotifyAll(0, 4, nick .. " canceled the last vote")
+	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", nick))
 end
 concommand.Add("rp_cancelvote", CancelVote)

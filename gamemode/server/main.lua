@@ -881,8 +881,8 @@ local function ExecSwitchJob(answer, ent, ply, target)
 		ply:ChangeTeam(Pteam, true) -- revert job change
 		return
 	end
-	GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("team_switch"))
-	GAMEMODE:Notify(target, 2, 4, DarkRP.getPhrase("team_switch"))
+	GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("job_switch"))
+	GAMEMODE:Notify(target, 2, 4, DarkRP.getPhrase("job_switch"))
 end
 
 local function SwitchJob(ply) --Idea by Godness.
@@ -893,8 +893,8 @@ local function SwitchJob(ply) --Idea by Godness.
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
 	ply.RequestedJobSwitch = true
-	GAMEMODE.ques:Create(DarkRP.getPhrase("team_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
-	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("created_x", "You", "job switch request."))
+	GAMEMODE.ques:Create(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+	GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("job_switch_reqested"))
 	return ""
 end
 DarkRP.defineChatCommand("switchjob", SwitchJob)

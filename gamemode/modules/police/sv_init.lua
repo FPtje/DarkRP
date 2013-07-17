@@ -227,9 +227,9 @@ local function ccArrest(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end
 
@@ -256,9 +256,9 @@ local function ccUnarrest(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 		return
 	end

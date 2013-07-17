@@ -243,8 +243,9 @@ local english = {
 	updated_spawnpos = "%s's spawn position updated.",
 	do_not_own_ent = "You do not own this entity!",
 	cannot_drop_weapon = "Can't drop this weapon!",
-	team_switch = "Jobs switched successfully!",
-	team_switch_question = "Switch jobs with %s?",
+	job_switch = "Jobs switched successfully!",
+	job_switch_question = "Switch jobs with %s?",
+	job_switch_requested = "Job switch requested.",
 
 	cooks_only = "Cooks only.",
 
@@ -257,6 +258,8 @@ local english = {
 	door_or_vehicle = "door/vehicle",
 	driver = "Driver: %s",
 	name = "Name: %s",
+	locked = "Locked.",
+	unlocked = "Unlocked.",
 	player_doesnt_exist = "Player does not exist.",
 	job_doesnt_exist = "Job does not exist!"
 	must_be_alive_to_do_x = "You must be alive in order to %s.",
@@ -290,6 +293,8 @@ local english = {
 	vote_specify_reason = "You need to specify a reason!",
 	vote_started = "The vote is created",
 	vote_alone = "You have won the vote since you are alone in the server.",
+	you_cannot_vote = "You cannot vote!",
+	x_cancelled_vote = "%s cancelled the last vote.",
 	jail_punishment = "Punishment for disconnecting! Jailed for: %d seconds.",
 	admin_only = "Admin only!", -- When doing /addjailpos
 	chief_or = "Chief or",-- When doing /addjailpos
@@ -317,6 +322,10 @@ local english = {
 
 	you_set_x_salary_to_y = "You set %s's salary to %d%s.",
 	x_set_your_salary_to_y = "%s set your salary to %d%s.",
+	you_set_x_money_to_y = "You set %s's money to %d%s.",
+	x_set_your_money_to_y = "%s set your money to %d%s.",
+	you_set_x_name_to_y = "You set %s's name to %s",
+	x_set_your_name_to_y = "%s set your name to %s",
 
 	someone_stole_steam_name = "Someone is already using your Steam name as their RP name so we gave you a '1' after your name.", -- Uh oh
 	already_taken = "Already taken.",

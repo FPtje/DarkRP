@@ -228,7 +228,7 @@ local function SetDoorOwnable(ply)
 	local trace = ply:GetEyeTrace()
 	local ent = trace.Entity
 	if not IsValid(ent) or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -263,7 +263,7 @@ local function SetDoorGroupOwnable(ply, arg)
 	local ent = trace.Entity
 
 	if not IsValid(ent) or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -309,7 +309,7 @@ local function SetDoorTeamOwnable(ply, arg)
 	end
 
 	if not IsValid(ent) or (not ent:IsDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 115 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
@@ -553,7 +553,7 @@ local function SetDoorTitle(ply, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
@@ -583,7 +583,7 @@ local function RemoveDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
@@ -596,7 +596,7 @@ local function RemoveDoorOwner(ply, args)
 	end
 
 	if not target then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 
@@ -623,7 +623,7 @@ local function AddDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "vehicle/door"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
@@ -636,7 +636,7 @@ local function AddDoorOwner(ply, args)
 	end
 
 	if not target then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 
