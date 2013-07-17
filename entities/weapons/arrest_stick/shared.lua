@@ -128,7 +128,7 @@ function SWEP:PrimaryAttack()
 	else
 		-- Send NPCs to Jail
 		if trace.Entity:IsNPC() then
-			trace.Entity:SetPos(DB.RetrieveJailPos())
+			trace.Entity:SetPos(DarkRP.retrieveJailPos())
 		else
 			if not trace.Entity.Babygod then
 				trace.Entity:arrest(nil, self.Owner)

@@ -45,8 +45,8 @@ end
 function plyMeta:wanted(actor, reason)
 	hook.Call("PlayerWanted", DarkRP.hooks, actor, self, reason)
 
-	self:SetDarkRPVar("wanted", true)
-	self:SetDarkRPVar("wantedReason", reason)
+	self:setDarkRPVar("wanted", true)
+	self:setDarkRPVar("wantedReason", reason)
 
 	local actorNick = IsValid(actor) and actor:Nick() or "Disconnected player"
 	local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
@@ -65,7 +65,7 @@ end
 
 function plyMeta:unWanted(actor)
 	hook.Call("PlayerUnWanted", GAMEMODE, actor, self)
-	self:SetDarkRPVar("wanted", false)
+	self:setDarkRPVar("wanted", false)
 
 	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
 		DarkRP.getPhrase("wanted_expired", self:Nick())
@@ -81,12 +81,12 @@ function plyMeta:arrest(time, arrester)
 	time = GAMEMODE.Config.jailtimer or 120
 
 	hook.Call("playerArrested", DarkRP.hooks, self, time, arrester)
-	self:SetDarkRPVar("Arrested", true)
+	self:setDarkRPVar("Arrested", true)
 	arrestedPlayers[self:SteamID()] = true
 
 	-- Always get sent to jail when Arrest() is called, even when already under arrest
 	if GAMEMODE.Config.teletojail and DB.CountJailPos() ~= 0 then
-		local jailpos = DB.RetrieveJailPos()
+		local jailpos = DarkRP.retrieveJailPos()
 		if jailpos then
 			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
 			self:SetPos(jailpos)
@@ -97,7 +97,7 @@ end
 function plyMeta:unArrest(unarrester)
 	if not self:isArrested() then return end
 
-	self:SetDarkRPVar("Arrested", false)
+	self:setDarkRPVar("Arrested", false)
 	arrestedPlayers[self:SteamID()] = nil
 	hook.Call("playerUnArrested", DarkRP.hooks, self)
 end
@@ -285,7 +285,7 @@ Hooks
 function DarkRP.hooks:playerArrested(ply, time, arrester)
 	if ply:isWanted() then ply:unWanted(arrester) end
 	ply:unWarrant(arrester)
-	ply:SetSelfDarkRPVar("HasGunlicense", false)
+	ply:setSelfDarkRPVar("HasGunlicense", false)
 
 	-- UpdatePlayerSpeed won't work here as the "Arrested" DarkRPVar is set AFTER this hook
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)

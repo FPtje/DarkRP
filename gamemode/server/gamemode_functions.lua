@@ -578,7 +578,7 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	if ply:isArrested() then
-		POS = DB.RetrieveJailPos() or ply:GetTable().DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
+		POS = DarkRP.retrieveJailPos() or ply:GetTable().DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
 	end
 
 	-- Make sure the player doesn't get stuck in something

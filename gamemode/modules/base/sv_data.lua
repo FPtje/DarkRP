@@ -181,7 +181,7 @@ end
  positions
  ---------------------------------------------------------*/
 local JailIndex = 1 -- Used to circulate through the jailpos table
-function DB.StoreJailPos(ply, addingPos)
+function DarkRP.storeJailPos(ply, addingPos)
 	local map = string.lower(game.GetMap())
 	local pos = string.Explode(" ", tostring(ply:GetPos()))
 	MySQLite.queryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function(already)
@@ -211,7 +211,7 @@ function DB.StoreJailPos(ply, addingPos)
 	JailIndex = 1
 end
 
-function DB.RetrieveJailPos()
+function DarkRP.retrieveJailPos()
 	local map = string.lower(game.GetMap())
 	if not jailPos then return Vector(0,0,0) end
 
