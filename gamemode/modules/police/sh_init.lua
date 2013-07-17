@@ -37,7 +37,7 @@ function DarkRP.hooks:canWanted(target, actor, reason)
 	if not reason or string.len(reason) == 0 then return false, DarkRP.getPhrase("vote_specify_reason") end
 	if not IsValid(target) then return false, DarkRP.getPhrase("suspect_doesnt_exist") end
 	if not IsValid(actor) then return false, DarkRP.getPhrase("actor_doesnt_exist") end
-	if not if not actor:Alive() then return false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("make_someone_wanted")) end
+	if not actor:Alive() then return false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("make_someone_wanted")) end
 	if not actor:IsCP() then return false, DarkRP.getPhrase("incorrect_job", DarkRP.getPhrase("make_someone_wanted")) end
 	if target:isWanted() then return false, DarkRP.getPhrase("already_wanted") end
 	if not target:Alive() then return false, DarkRP.getPhrase("suspect_must_be_alive_to_do_x", DarkRP.getPhrase("make_someone_wanted")) end

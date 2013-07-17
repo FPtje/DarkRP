@@ -146,9 +146,9 @@ function GM:AddTeamCommands(CTeam, max)
 			target:PrintMessage(2, DarkRP.getPhrase("x_made_you_a_y", nick, CTeam.name))
         else
 			if (ply:EntIndex() == 0) then
-				print(DarkRP.getPhrase("could_not_find", ..tostring(args[1])))
+				print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 			else
-				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", ..tostring(args[1])))
+				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 			end
 			return
         end

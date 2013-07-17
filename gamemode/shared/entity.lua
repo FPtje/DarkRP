@@ -407,7 +407,7 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			local iCost = hook.Call(DarkRP.getPhrase("get_x_cost", (trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle") or DarkRP.getPhrase("door"))), GAMEMODE, ply, trace.Entity );
+			local iCost = hook.Call("Get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity);
 			if( !ply:CanAfford( iCost ) ) then
 				GAMEMODE:Notify( ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford") );
 				return "";

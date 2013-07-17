@@ -38,13 +38,13 @@ local english = {
 
 	found_cash = "You have found %s%d!",
 
-	owner_poor = "The %s owner is too poor to subsidize this sale!"
+	owner_poor = "The %s owner is too poor to subsidize this sale!",
 
 	-- Police
 	wanted = "Wanted by Police!\nReason: %s",
 	youre_arrested = "You have been arrested for %d seconds!",
 	youre_arrested_by = "You have been arrested by %s.",
-	youre_unarrested_by = "You were unarrested by %s."
+	youre_unarrested_by = "You were unarrested by %s.",
 	hes_arrested = "%s has been arrested for %d seconds!",
 	hes_unarrested = "%s has been released from jail!",
 	warrant_ordered = "%s ordered a search warrant for %s. Reason: %s",
@@ -137,8 +137,8 @@ local english = {
 	edit_door_group = "Edit Door Group",
 	door_groups = "Door Groups",
 	door_group_doesnt_exist = "Door group does not exist!",
-	door_group_set = "Door group set successfully."
-	sold_x_doors_for_y "You have sold %d doors for %s%d!",
+	door_group_set = "Door group set successfully.",
+	sold_x_doors_for_y = "You have sold %d doors for %s%d!",
 
 	-- Entities
 	drugs = "Drugs",
@@ -189,7 +189,7 @@ local english = {
 
 	persons_weapons = "%s's weapons:",
 	has_no_weapons = "%s has no weapons",
-	returned_persons_weapons = "Returned %s's confiscated weapons."
+	returned_persons_weapons = "Returned %s's confiscated weapons.",
 	no_weapons_confiscated = "%s had no weapons confiscated!",
 	no_illegal_weapons = "%s had no illegal weapons",
 	confiscated_these_weapons = "Confiscated these weapons:",
@@ -205,7 +205,7 @@ local english = {
 	whisper = "whisper",
 	yell = "yell",
 	advert = "[Advert]",
-	broadcast = "[Broadcast!]".
+	broadcast = "[Broadcast!]",
 	radio = "radio",
 	request = "(REQUEST!)",
 	group = "(group)",
@@ -234,7 +234,7 @@ local english = {
 	created_x = "%s created a %s",
 	cleaned_up = "Your %s were cleaned up.",
 	you_bought_x = "You have bought %s for %s%d.",
-	you_received_x = "You have received %s for %s."
+	you_received_x = "You have received %s for %s.",
 
 	created_first_jailpos = "You have created the first jail position!",
 	added_jailpos = "You have added one extra jail position!",
@@ -261,7 +261,7 @@ local english = {
 	locked = "Locked.",
 	unlocked = "Unlocked.",
 	player_doesnt_exist = "Player does not exist.",
-	job_doesnt_exist = "Job does not exist!"
+	job_doesnt_exist = "Job does not exist!",
 	must_be_alive_to_do_x = "You must be alive in order to %s.",
 	banned_or_demoted = "banned/demoted",
 	wait_with_that = "Wait with that.",
@@ -381,7 +381,7 @@ local english = {
 	customer_left_server = "The customer has left the server!",
 	target_left_server = "The target has left the server!",
 	hit_price_set_to_x = "Hit price set to %s%d.",
-	hit_complete = "Hit by %s complete!"
+	hit_complete = "Hit by %s complete!",
 	hitman_died = "The hitman died!",
 	target_died = "The target has died!",
 	hitman_arrested = "The hitman was arrested!",
@@ -409,7 +409,6 @@ local english = {
 	set_x_title = "Set %s title",
 	set_x_title_long = "Set the title of the %s you are looking at.",
 	jobs = "Jobs",
-	get_x_cost = "Get %s cost",
 	buy_x = "Buy %s",
 
 	-- F4menu
@@ -449,7 +448,7 @@ local english = {
 
 	-- Second tab
 	job_name = "Name: ",
-	job_description = "Description: " ,
+	job_description = "Description: ",
 	job_weapons = "Weapons: ",
 
 	-- Entities tab

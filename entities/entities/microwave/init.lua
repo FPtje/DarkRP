@@ -86,7 +86,7 @@ function ENT:Use(activator,caller)
 			else
 				owner:AddMoney(gain)
 				local word = DarkRP.getPhrase("profit")
-				if gain < 0 then word = DarkRP.getPhrase("loss") e
+				if gain < 0 then word = DarkRP.getPhrase("loss") end
 				GAMEMODE:Notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. word, DarkRP.getPhrase("food")))
 			end
 		end
