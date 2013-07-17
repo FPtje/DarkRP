@@ -222,11 +222,11 @@ function DarkRP.retrieveJailPos()
 	return oldestPos and Vector(oldestPos.x, oldestPos.y, oldestPos.z)
 end
 
-function DB.CountJailPos()
+function DarkRP.jailPosCount()
 	return table.Count(jailPos or {})
 end
 
-function DB.StoreTeamSpawnPos(t, pos)
+function DarkRP.storeTeamSpawnPos(t, pos)
 	local map = string.lower(game.GetMap())
 
 	MySQLite.query([[DELETE FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND id IN (SELECT id FROM darkrp_jobspawn WHERE team = ]] .. t .. [[)]])
@@ -243,7 +243,7 @@ function DB.StoreTeamSpawnPos(t, pos)
 	print(DarkRP.getPhrase("created_spawnpos", team.GetName(t)))
 end
 
-function DB.AddTeamSpawnPos(t, pos)
+function DarkRP.addTeamSpawnPos(t, pos)
 	local map = string.lower(game.GetMap())
 
 	MySQLite.query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
@@ -256,7 +256,7 @@ function DB.AddTeamSpawnPos(t, pos)
 	end)
 end
 
-function DB.RemoveTeamSpawnPos(t, callback)
+function DarkRP.removeTeamSpawnPos(t, callback)
 	local map = string.lower(game.GetMap())
 	MySQLite.query([[SELECT darkrp_position.id FROM darkrp_position
 		NATURAL JOIN darkrp_jobspawn
@@ -280,20 +280,11 @@ function DB.RemoveTeamSpawnPos(t, callback)
 	if callback then callback() end
 end
 
-function DB.RetrieveTeamSpawnPos(ply)
-	local map = string.lower(game.GetMap())
-	local t = ply:Team()
+function DarkRP.retrieveTeamSpawnPos(t)
+	local isTeam = fn.Compose{fn.Curry(fn.Eq, 2)(t), tonumber, fn.Curry(fn.GetValue, 2)("team")}
+	local getPos = function(tbl) return Vector(tonumber(tbl.x), tonumber(tbl.y), tonumber(tbl.z)) end
 
-	local returnal = {}
-
-	if teamSpawns then
-		for k,v in pairs(teamSpawns) do
-			if v.map == map and tonumber(v.team) == t then
-				table.insert(returnal, Vector(v.x, v.y, v.z))
-			end
-		end
-		return (table.Count(returnal) > 0 and returnal) or nil
-	end
+	return table.ClearKeys(fn.Map(getPos, fn.Filter(isTeam, teamSpawns)))
 end
 
 /*---------------------------------------------------------

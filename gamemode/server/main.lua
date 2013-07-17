@@ -117,7 +117,7 @@ local function SetSpawnPos(ply, args)
 	end
 
 	if t then
-		DB.StoreTeamSpawnPos(t, pos)
+		DarkRP.storeTeamSpawnPos(t, pos)
 	else
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "team: "..tostring(args)))
 	end
@@ -143,7 +143,7 @@ local function AddSpawnPos(ply, args)
 	end
 
 	if t then
-		DB.AddTeamSpawnPos(t, pos)
+		DarkRP.addTeamSpawnPos(t, pos)
 	else
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "team: "..tostring(args)))
 	end
@@ -168,7 +168,7 @@ local function RemoveSpawnPos(ply, args)
 	end
 
 	if t then
-		DB.RemoveTeamSpawnPos(t)
+		DarkRP.removeTeamSpawnPos(t)
 	else
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "team: "..tostring(args)))
 	end

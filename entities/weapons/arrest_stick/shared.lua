@@ -121,7 +121,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	local jpc = DB.CountJailPos()
+	local jpc = DarkRP.jailPosCount()
 
 	if not jpc or jpc == 0 then
 		GAMEMODE:Notify(self.Owner, 1, 4, "You cannot arrest people since there are no jail positions set!")

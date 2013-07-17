@@ -191,7 +191,7 @@ Init = function(xs)
 	return xs
 end
 
-GetValue = function(xs, i)
+GetValue = function(i, xs)
 	return xs[i]
 end
 

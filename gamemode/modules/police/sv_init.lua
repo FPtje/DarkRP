@@ -85,7 +85,7 @@ function plyMeta:arrest(time, arrester)
 	arrestedPlayers[self:SteamID()] = true
 
 	-- Always get sent to jail when Arrest() is called, even when already under arrest
-	if GAMEMODE.Config.teletojail and DB.CountJailPos() ~= 0 then
+	if GAMEMODE.Config.teletojail and DarkRP.jailPosCount() ~= 0 then
 		local jailpos = DarkRP.retrieveJailPos()
 		if jailpos then
 			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
@@ -203,7 +203,7 @@ local function ccArrest(ply, cmd, args)
 		return
 	end
 
-	if DB.CountJailPos() == 0 then
+	if DarkRP.jailPosCount() == 0 then
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("no_jail_pos"))
 		else

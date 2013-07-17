@@ -25,7 +25,7 @@ local function RP_PlayerChat(ply, text)
 		DarkRP.getChatCommand,
 		string.lower,
 		fn.Curry(fn.Flip(string.sub), 2)(2), -- extract prefix
-		fn.Curry(fn.Flip(fn.GetValue), 2)(1), -- Get the first word
+		fn.Curry(fn.GetValue, 2)(1), -- Get the first word
 		fn.Curry(string.Explode, 2)(' ') -- split by spaces
 	}(text)
 
