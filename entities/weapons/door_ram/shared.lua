@@ -13,7 +13,7 @@ end
 -- Variables that are used on both client and server
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "Rickster"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles."
 SWEP.Contact = ""
 SWEP.Purpose = ""

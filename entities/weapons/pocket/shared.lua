@@ -12,7 +12,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "FPtje and everyone who gave FPtje the idea"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to pick up, right click to drop, reload for menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""

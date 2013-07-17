@@ -3,7 +3,7 @@ if (SERVER) then
 end
 
 SWEP.PrintName = "Medic Kit"
-SWEP.Author = "Jake Johnson"
+SWEP.Author = "DarkRP Developers"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 SWEP.Description = "Heals the wounded."

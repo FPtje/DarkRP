@@ -29,7 +29,7 @@ end
 
 SWEP.Base = "weapon_base"
 
-SWEP.Author = "Rickster"
+SWEP.Author = "DarkRP Developers"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = ""

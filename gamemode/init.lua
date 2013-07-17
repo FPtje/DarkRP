@@ -17,10 +17,6 @@ AddCSLuaFile("config/ammotypes.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("config/config.lua")
 
-AddCSLuaFile("client/DRPDermaSkin.lua")
-AddCSLuaFile("client/showteamtabs.lua")
-AddCSLuaFile("client/vgui.lua")
-
 AddCSLuaFile("shared/player_class.lua")
 AddCSLuaFile("shared/animations.lua")
 AddCSLuaFile("shared/commands.lua")

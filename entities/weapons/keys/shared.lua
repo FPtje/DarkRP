@@ -1,5 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
+	AddCSLuaFile("cl_menu.lua")
 end
 
 if CLIENT then
@@ -8,9 +9,11 @@ if CLIENT then
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
+
+	include("cl_menu.lua")
 end
 
-SWEP.Author = "Rick Darkaliono, philxyz"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to lock. Right click to unlock"
 SWEP.Contact = ""
 SWEP.Purpose = ""

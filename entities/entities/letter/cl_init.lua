@@ -75,4 +75,3 @@ local function ShowLetter(msg)
 	end)
 end
 usermessage.Hook("ShowLetter", ShowLetter)
-

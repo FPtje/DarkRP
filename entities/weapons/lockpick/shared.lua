@@ -12,7 +12,7 @@ end
 
 -- Variables that are used on both client and server
 
-SWEP.Author = "Rickster"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to pick a lock"
 SWEP.Contact = ""
 SWEP.Purpose = ""

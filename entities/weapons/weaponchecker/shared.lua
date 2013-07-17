@@ -10,7 +10,7 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 end
 
-SWEP.Author = "FPtje"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to Check weapons, right click to confiscate guns, reload to give back the guns"
 SWEP.Contact = ""
 SWEP.Purpose = ""

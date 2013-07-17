@@ -29,10 +29,6 @@ include("fn.lua")
 include("config/config.lua")
 include("sh_interfaceloader.lua")
 
-include("client/DRPDermaSkin.lua")
-include("client/showteamtabs.lua")
-include("client/vgui.lua")
-
 include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")

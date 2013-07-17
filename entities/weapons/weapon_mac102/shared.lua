@@ -4,7 +4,7 @@ end
 
 if (CLIENT) then
 	SWEP.PrintName = "Mac10"
-	SWEP.Author = "Rickster"
+	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "l"

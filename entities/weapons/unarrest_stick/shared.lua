@@ -12,7 +12,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "Rick Darkaliono, philxyz"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left or right click to unarrest"
 SWEP.Contact = ""
 SWEP.Purpose = ""

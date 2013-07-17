@@ -12,7 +12,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "Rick Darkaliono, philxyz"
+SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to discipline, right click to kill"
 SWEP.Contact = ""
 SWEP.Purpose = ""

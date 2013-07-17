@@ -1,5 +1,5 @@
 if (CLIENT) then
-	SWEP.Author = "CSE - Night Eagle"
+	SWEP.Author = "DarkRP Developers"
 	SWEP.Contact = ""
 	SWEP.Purpose = ""
 	SWEP.Instructions = ""
