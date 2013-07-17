@@ -20,7 +20,7 @@ function plyMeta:requestHit(customer, target, price)
 		return false
 	end
 
-	GAMEMODE.ques:Create("Accept hit from " .. customer:Nick() .. "\nregarding " .. target:Nick() .. " for " .. GAMEMODE.Config.currency .. price .. "?",
+	GAMEMODE.ques:Create(DarkRP.getPhrase("accept_hit_question", customer:Nick(), target:Nick(), GAMEMODE.Config.currency, price),
 		"hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
 		self,
 		20,
@@ -30,7 +30,7 @@ function plyMeta:requestHit(customer, target, price)
 		price
 	)
 
-	GAMEMODE:Notify(customer, 1, 4, "Hit requested!")
+	GAMEMODE:Notify(customer, 1, 4, DarkRP.getPhrase("hit_requested"))
 
 	return true
 end
@@ -75,7 +75,7 @@ function plyMeta:abortHit(message)
 	msg = msg or ""
 
 	hook.Call("onHitFailed", DarkRP.hooks, self, self:getHitTarget(), message)
-	GAMEMODE:NotifyAll(0, 4, "Hit aborted! " .. message)
+	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("hit_aborted", message))
 
 	self:finishHit()
 end
@@ -90,23 +90,23 @@ function questionCallback(answer, hitman, customer, target, price)
 	if not IsValid(customer) then return end
 
 	if not IsValid(customer) then
-		GAMEMODE:Notify(hitman, 1, 4, "The customer has left the server!")
+		GAMEMODE:Notify(hitman, 1, 4, DarkRP.getPhrase("customer_left_server"))
 		return
 	end
 
 	if not IsValid(target) then
-		GAMEMODE:Notify(hitman, 1, 4, "The target has left the server!")
+		GAMEMODE:Notify(hitman, 1, 4, DarkRP.getPhrase("target_left_server"))
 		return
 	end
 
 	if not tobool(answer) then
-		GAMEMODE:Notify(customer, 1, 4, "The hitman declined the hit!")
+		GAMEMODE:Notify(customer, 1, 4, DarkRP.getPhrase("hit_declined"))
 		return
 	end
 
 	if hits[self] then return end
 
-	GAMEMODE:Notify(hitman, 1, 4, "Hit accepted!")
+	GAMEMODE:Notify(hitman, 1, 4, DarkRP.getPhrase("hit_accepted"))
 
 	hitman:placeHit(customer, target, price)
 end
@@ -119,7 +119,7 @@ DarkRP.defineChatCommand("hitprice", function(ply, args)
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
 
-	GAMEMODE:Notify(ply, 2, 4, "Hit price set to " .. GAMEMODE.Config.currency .. price)
+	GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("hit_price_set_to_x", GAMEMODE.Config.currency, price))
 
 	return ""
 end)
@@ -131,7 +131,7 @@ DarkRP.defineChatCommand("requesthit", function(ply, args)
 	local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1))
 
 	if not IsValid(hitman) or not IsValid(target) or not hitman:IsPlayer() then
-		GAMEMODE:Notify(ply, 1, 4, "Invalid arguments!")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 
@@ -150,7 +150,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 		net.WriteEntity(customer)
 	net.Broadcast()
 
-	GAMEMODE:Notify(customer, 0, 8, "Hit Accepted!")
+	GAMEMODE:Notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
 	customer.lastHitAccepted = CurTime()
 
 	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, false,
@@ -164,7 +164,7 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 		net.WriteEntity(customer)
 	net.Broadcast()
 
-	GAMEMODE:NotifyAll(0, 6, "Hit by " .. hitman:Nick() .. " completed!")
+	GAMEMODE:NotifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Nick()))
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
@@ -190,7 +190,7 @@ end
 
 hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacker)
 	if hits[ply] then -- player was hitman
-		ply:abortHit("The hitman died!")
+		ply:abortHit(DarkRP.getPhrase("hitman_died"))
 	end
 
 	if IsValid(attacker) and attacker:IsPlayer() and attacker:getHitTarget() == ply then
@@ -199,23 +199,23 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 
 	for hitman, hit in pairs(hits) do
 		if hitman:getHitTarget() == ply then
-			hitman:abortHit("The target has died!")
+			hitman:abortHit(DarkRP.getPhrase("target_died"))
 		end
 	end
 end)
 
 hook.Add("PlayerDisconnected", "Hitman system", function(ply)
 	if hits[ply] then
-		ply:abortHit("Hitman disconnected!")
+		ply:abortHit(DarkRP.getPhrase("hitman_left_server"))
 	end
 
 	for hitman, hit in pairs(hits) do
 		if hitman:getHitTarget() == ply then
-			hitman:abortHit("Target disconnected!")
+			hitman:abortHit(DarkRP.getPhrase("target_left_server"))
 		end
 
 		if hit.customer == ply then
-			hitman:abortHit("Customer disconnected!")
+			hitman:abortHit(DarkRP.getPhrase("customer_left_server"))
 		end
 	end
 end)
@@ -233,14 +233,14 @@ hook.Add("playerArrested", "Hitman system", function(ply)
 	end
 
 	umsg.Start("AdminTell", filter)
-		umsg.String(ply:Nick() .. " had an active hit ordered by " .. hits[ply].customer:Nick())
+		umsg.String(DarkRP.getPhrase("x_had_hit_ordered_by_y", ply:Nick(), hits[ply].customer:Nick()))
 	umsg.End()
 
-	ply:abortHit("The hitman was arrested!")
+	ply:abortHit(DarkRP.getPhrase("hitman_arrested"))
 end)
 
 hook.Add("OnPlayerChangedTeam", "Hitman system", function(ply, prev, new)
 	if hits[ply] then
-		ply:abortHit("Player changed team!")
+		ply:abortHit(DarkRP.getPhrase("hitman_changed_team"))
 	end
 end)

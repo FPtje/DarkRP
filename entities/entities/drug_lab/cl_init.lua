@@ -7,11 +7,13 @@ function ENT:Draw()
 	local Ang = self:GetAngles()
 
 	local owner = self:Getowning_ent()
-	owner = (IsValid(owner) and owner:Nick()) or "Unknown"
+	owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("unknown")
 
 	surface.SetFont("HUDNumber5")
-	local TextWidth = surface.GetTextSize("Druglab!")
-	local TextWidth2 = surface.GetTextSize("Price: "..GAMEMODE.Config.currency..self:Getprice())
+	local text = DarkRP.getPhrase("drug_lab")
+	local text2 = DarkRP.getPhrase("price", GAMEMODE.Config.currency, self:Getprice())
+	local TextWidth = surface.GetTextSize(text)
+	local TextWidth2 = surface.GetTextSize(text2)
 
 	Ang:RotateAroundAxis(Ang:Forward(), 90)
 	local TextAng = Ang
@@ -19,7 +21,7 @@ function ENT:Draw()
 	TextAng:RotateAroundAxis(TextAng:Right(), CurTime() * -180)
 
 	cam.Start3D2D(Pos + Ang:Right() * -39, TextAng, 0.2)
-		draw.WordBox(2, -TextWidth*0.5 + 5, -30, "Druglab!", "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
-		draw.WordBox(2, -TextWidth2*0.5 + 5, 18, "Price: "..GAMEMODE.Config.currency..self:Getprice(), "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+		draw.WordBox(2, -TextWidth*0.5 + 5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+		draw.WordBox(2, -TextWidth2*0.5 + 5, 18, text2, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 	cam.End3D2D()
 end

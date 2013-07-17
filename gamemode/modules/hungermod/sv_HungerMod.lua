@@ -53,7 +53,7 @@ local function BuyFood(ply, args)
 	local tr = util.TraceLine(trace)
 
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].cook then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyfood", "cooks"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyfood", DarkRP.getPhrase("cooks_only")))
 		return ""
 	end
 
@@ -66,7 +66,7 @@ local function BuyFood(ply, args)
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
 				return ""
 			end
-			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", k, tostring(cost)))
+			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", k, GAMEMODE.Config.currency, cost))
 			local SpawnedFood = ents.Create("spawned_food")
 			SpawnedFood:Setowning_ent(ply)
 			SpawnedFood.ShareGravgun = true

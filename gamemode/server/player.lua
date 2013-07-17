@@ -65,9 +65,9 @@ function meta:SetRPName(name, firstRun)
 				-- If we just connected and another player happens to be using our steam name as their RP name
 				-- Put a 1 after our steam name
 				DB.StoreRPName(self, name .. " 1")
-				GAMEMODE:Notify(self, 0, 12, "Someone is already using your Steam name as their RP name so we gave you a '1' after your name.")
+				GAMEMODE:Notify(self, 0, 12, DarkRP.getPhrase("someone_stole_steam_name"))
 			else
-				GAMEMODE:Notify(self, 1, 5, DarkRP.getPhrase("unable", "RPname", "it's been taken"))
+				GAMEMODE:Notify(self, 1, 5, DarkRP.getPhrase("unable", "RPname", DarkRP.getPhrase("already_taken")))
 				return ""
 			end
 		else
@@ -153,7 +153,7 @@ function meta:InitiateTax()
 			  tax = math.Min(maxtax, mintax + (maxtax - mintax) * tax)
 
 		self:AddMoney(-tax * money)
-		GAMEMODE:Notify(self, 3, 7, "Tax day! "..math.Round(tax * 100, 3) .. "% of your income was taken!")
+		GAMEMODE:Notify(self, 3, 7, DarkRP.getPhrase("taxday", math.Round(tax * 100, 3)))
 
 	end)
 end
@@ -240,7 +240,7 @@ function meta:ChangeTeam(t, force)
 		self.IsBeingDemoted = false
 		self:ChangeTeam(1, true)
 		GAMEMODE.vote.DestroyVotesWithEnt(self)
-		GAMEMODE:Notify(self, 1, 4, "You tried to escape demotion. You failed, and have been demoted.")
+		GAMEMODE:Notify(self, 1, 4, DarkRP.getPhrase("tried_to_avoid_demotion"))
 
 		return false
 	end
@@ -408,9 +408,9 @@ local function JailPos(ply)
 	if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or ply:HasPriv("rp_commands") then
 		DB.StoreJailPos(ply)
 	else
-		local str = "Admin only!"
+		local str = DarkRP.getPhrase("admin_only")
 		if GAMEMODE.Config.chiefjailpos then
-			str = "Chief or " .. str
+			str = DarkRP.getPhrase("chief_or") .. str
 		end
 
 		GAMEMODE:Notify(ply, 1, 4, str)

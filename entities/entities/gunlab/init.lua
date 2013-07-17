@@ -59,12 +59,12 @@ function ENT:Use(activator)
 	if self.Once then return end
 
 	if not activator:canAfford(self:SalePrice(activator)) then
-		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase this gun.")
+		GAMEMODE:Notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("gun")))
 		return ""
 	end
 	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
 	if diff < 0 and not owner:canAfford(math.abs(diff)) then
-		GAMEMODE:Notify(activator, 2, 3, "Gun Lab owner is too poor to subsidize this sale!")
+		GAMEMODE:Notify(activator, 2, 3, DarkRP.getPhrase("owner_poor", DarkRP.getPhrase("gun_lab")))
 		return ""
 	end
 	self.sparking = true
@@ -81,12 +81,12 @@ function ENT:Use(activator)
 			gain = math.floor(self:Getprice() - 185)
 		end
 		if gain == 0 then
-			GAMEMODE:Notify(owner, 3, 3, "You sold a P228 but made no profit!")
+			GAMEMODE:Notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0" .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 		else
 			owner:AddMoney(gain)
-			local word = "profit"
-			if gain < 0 then word = "loss" end
-			GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. " by selling a P228 from a Gun Lab!")
+			local word = DarkRP.getPhrase("profit")
+			if gain < 0 then word = DarkRP.getPhrase("loss") end
+			GAMEMODE:Notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. word, "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 		end
 	end
 

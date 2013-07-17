@@ -139,19 +139,19 @@ function SWEP:PrimaryAttack( partofburst )
 
 			self.FireMode = "burst"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to burst-fire mode.")
+			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
 
 		elseif self.FireMode == "burst" then
 
 			self.FireMode = "auto"
 			self.Primary.Automatic = true
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to fully automatic fire mode.")
+			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
 
 		elseif self.FireMode == "auto" then
 
 			self.FireMode = "semi"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "Switched to semi-automatic fire mode.")
+			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
 
 		end
 

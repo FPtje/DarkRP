@@ -81,9 +81,9 @@ function SWEP:PrimaryAttack()
 	end
 	self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
 	timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
-	self.Owner:ChatPrint(trace.Entity:Nick() .."'s weapons:")
+	self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 	if result == "" then
-		self.Owner:ChatPrint(trace.Entity:Nick() .. " has no weapons")
+		self.Owner:ChatPrint(DarkRP.getPhrase("has_no_weapons", trace.Entity:Nick()))
 	else
 		local endresult = string.sub(result, 3)
 		if string.len(endresult) >= 126 then
@@ -137,7 +137,7 @@ function SWEP:Reload()
 	end
 
 	if not trace.Entity:GetTable().ConfiscatedWeapons then
-		GAMEMODE:Notify(self.Owner, 1, 4, trace.Entity:Nick() .. " had no weapons confisquated!")
+		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("no_weapons_confiscated", trace.Entity:Nick()))
 		return
 	else
 		for k,v in pairs(trace.Entity.ConfiscatedWeapons) do
@@ -150,7 +150,7 @@ function SWEP:Reload()
 			wep:SetClip2(v[7])
 
 		end
-		GAMEMODE:Notify(self.Owner, 2, 4, "Returned "..trace.Entity:Nick() .. "'s confisquated weapons!")
+		GAMEMODE:Notify(self.Owner, 2, 4, DarkRP.getPhrase("returned_persons_weapons", trace.Entity:Nick()))
 		trace.Entity:GetTable().ConfiscatedWeapons = nil
 	end
 end
@@ -202,13 +202,13 @@ function SWEP:Succeed()
 	end
 
 	if result == "" then
-		self.Owner:ChatPrint(trace.Entity:Nick() .. " has no illegal weapons")
+		self.Owner:ChatPrint(DarkRP.getPhrase("had_no_illegal_weapons", trace.Entity:Nick()))
 		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
 		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
 	else
 		local endresult = string.sub(result, 3)
 		self.Owner:EmitSound("ambient/energy/zap1.wav", 50, 100)
-		self.Owner:ChatPrint("Confisquated these weapons:")
+		self.Owner:ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))
 		if string.len(endresult) >= 126 then
 			local amount = math.ceil(string.len(endresult) / 126)
 			for i = 1, amount, 1 do
@@ -256,6 +256,6 @@ function SWEP:DrawHUD()
 		local BarWidth = status * (width - 16) + 8
 		draw.RoundedBox(8, x+8, y+8, BarWidth, height - 16, Color(0, 0+(status*255), 255-(status*255), 255))
 
-		draw.SimpleText("Checking weapons"..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
+		draw.SimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
 	end
 end

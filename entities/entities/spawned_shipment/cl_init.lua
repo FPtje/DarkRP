@@ -108,21 +108,23 @@ function ENT:drawInfo()
 	contents = contents.name
 
 	surface.SetFont("HUDNumber5")
-	local TextWidth = surface.GetTextSize("Contents:")
+	local text = DarkRP.getPhrase("contents")
+	local TextWidth = surface.GetTextSize(text)
 	local TextWidth2 = surface.GetTextSize(contents)
 
 	cam.Start3D2D(Pos + Ang:Up() * 25, Ang, 0.2)
-		draw.WordBox(2, -TextWidth*0.5 + 5, -30, "Contents:", "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+		draw.WordBox(2, -TextWidth*0.5 + 5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 		draw.WordBox(2, -TextWidth2*0.5 + 5, 18, contents, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 	cam.End3D2D()
 
 	Ang:RotateAroundAxis(Ang:Forward(), 90)
 
-	TextWidth = surface.GetTextSize("Amount left:")
+	text = DarkRP.getPhrase("amount")
+	TextWidth = surface.GetTextSize(text)
 	TextWidth2 = surface.GetTextSize(self:Getcount())
 
 	cam.Start3D2D(Pos + Ang:Up() * 17, Ang, 0.14)
-		draw.WordBox(2, -TextWidth*0.5 + 5, -150, "Amount left:", "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+		draw.WordBox(2, -TextWidth*0.5 + 5, -150, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 		draw.WordBox(2, -TextWidth2*0.5 + 0, -102, self:Getcount(), "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
 	cam.End3D2D()
 end

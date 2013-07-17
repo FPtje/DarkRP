@@ -1,8 +1,8 @@
 function DarkRP.defineChatCommand(cmd, callback)
 	local detour = function(ply, arg, ...)
 		if ply.DarkRPUnInitialized then
-			GAMEMODE:Notify(ply, 1, 4, "Your data has not been loaded yet. Please wait.")
-			GAMEMODE:Notify(ply, 1, 4, "If this persists, try rejoining or contacting an admin.")
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_two"))
 			return ""
 		end
 		return callback(ply, arg, ...)

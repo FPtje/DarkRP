@@ -131,7 +131,7 @@ local function canSpawnWeapon(ply, class)
 	(GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
 		return true
 	end
-	GAMEMODE:Notify(ply, 1, 4, "You can't spawn weapons")
+	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
 
 	return false
 end
@@ -174,10 +174,10 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if GAMEMODE.Config.proppaying then
 		if ply:canAfford(GAMEMODE.Config.propcost) then
-			GAMEMODE:Notify(ply, 0, 4, "Deducted " .. GAMEMODE.Config.currency .. GAMEMODE.Config.propcost)
+			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("deducted", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
 			ply:AddMoney(-GAMEMODE.Config.propcost)
 		else
-			GAMEMODE:Notify(ply, 1, 4, "Need " .. GAMEMODE.Config.currency .. GAMEMODE.Config.propcost)
+			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
 			return false
 		end
 	end
@@ -321,7 +321,7 @@ function GM:CanPlayerSuicide(ply)
 end
 
 function GM:CanDrive(ply, ent)
-	GAMEMODE:Notify(ply, 1, 4, "Drive disabled for now.")
+	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("drive_disabled"))
 	return false -- Disabled until people can't minge with it anymore
 end
 
@@ -343,7 +343,7 @@ function GM:CanProperty(ply, property, ent)
 	if property == "persist" and ply:IsSuperAdmin() then
 		return true
 	end
-	GAMEMODE:Notify(ply, 1, 4, "Property disabled for now.")
+	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("property_disabled"))
 	return false -- Disabled until antiminge measure is found
 end
 

@@ -28,17 +28,17 @@ end
 
 local function AddLaw(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to set laws!")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "addlaw"))
 		return ""
 	end
 
 	if string.len(args) < 3 then
-		GAMEMODE:Notify(ply, 1, 4, "Law too short.")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
 		return ""
 	end
 
 	if #Laws >= 12 then
-		GAMEMODE:Notify(ply, 1, 4, "The laws are full.")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("laws_full"))
 		return ""
 	end
 
@@ -54,22 +54,17 @@ DarkRP.defineChatCommand("addlaw", AddLaw)
 
 local function RemoveLaw(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to remove laws!")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "removelaw"))
 		return ""
 	end
 
-	if not tonumber(args) then
-		GAMEMODE:Notify(ply, 1, 4, "Invalid arguments.")
-		return ""
-	end
-
-	if not Laws[ tonumber(args) ] then
-		GAMEMODE:Notify(ply, 1, 4, "Invalid law.")
+	if not tonumber(args) or not Laws[tonumber(arg)] then
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments")))
 		return ""
 	end
 
 	if FixedLaws[ tonumber(args) ] then
-		GAMEMODE:Notify(ply, 1, 4, "You are not allowed to change the default laws.")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
 		return ""
 	end
 
@@ -86,12 +81,12 @@ DarkRP.defineChatCommand("removelaw", RemoveLaw)
 local numlaws = 0
 local function PlaceLaws(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		GAMEMODE:Notify(ply, 1, 4, "You must be the mayor to place a list of laws.")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
 		return ""
 	end
 
 	if numlaws >= GAMEMODE.Config.maxlawboards then
-		GAMEMODE:Notify(ply, 1, 4, "You have reached the max number of laws you can place!")
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
 		return ""
 	end
 
