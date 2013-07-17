@@ -1,6 +1,8 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_init.lua")
+
+	util.AddNetworkString("DarkRP_keypadData")
 end
 
 SWEP.Base = "weapon_base"

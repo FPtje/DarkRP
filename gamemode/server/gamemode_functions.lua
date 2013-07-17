@@ -767,6 +767,10 @@ function GM:InitPostEntity()
 	game.ConsoleCommand("physgun_DampingFactor 0.9\n")
 	game.ConsoleCommand("sv_sticktoground 0\n")
 	game.ConsoleCommand("sv_airaccelerate 100\n")
+	-- sv_alltalk must be 0
+	-- Note, everyone will STILL hear everyone UNLESS rp_voiceradius is 1!!!
+	-- This will fix the rp_voiceradius not working
+	game.ConsoleCommand("sv_alltalk 0\n")
 
 	for k, v in pairs(ents.GetAll()) do
 		local class = v:GetClass()

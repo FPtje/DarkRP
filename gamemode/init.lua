@@ -4,8 +4,6 @@ GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome 
 
 DeriveGamemode("sandbox")
 
-util.AddNetworkString("DarkRP_keypadData")
-
 AddCSLuaFile("libraries/interfaceloader.lua")
 AddCSLuaFile("libraries/fn.lua")
 
@@ -26,11 +24,6 @@ AddCSLuaFile("shared/Workarounds.lua")
 DB = DB or {}
 GM.Config = GM.Config or {}
 GM.NoLicense = GM.NoLicense or {}
-
--- sv_alltalk must be 0
--- Note, everyone will STILL hear everyone UNLESS rp_voiceradius is 1!!!
--- This will fix the rp_voiceradius not working
-game.ConsoleCommand("sv_alltalk 0\n")
 
 include("libraries/interfaceloader.lua")
 
