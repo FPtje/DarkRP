@@ -25,7 +25,7 @@ function ENT:Draw()
 		surface.DrawRect(0, 0, 558, 290)
 
 		draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
-		draw.DrawText("LAWS OF THE LAND", "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+		draw.DrawText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
 		draw.DrawText(drawLaws, "TargetID", 5, 35, Color(255, 255, 255, 255))
 

@@ -15,10 +15,9 @@ function plyMeta:warrant(warranter, reason)
 		self:unWarrant(warranter)
 	end)
 
-	local warranterNick = IsValid(warranter) and warranter:Nick() or "Disconnected player"
-	local centerMessage = string.format("%s\nReason: %s\nOrdered by: %s", self:Nick(), reason, warranterNick)
-	centerMessage = DarkRP.getPhrase("warrant_approved", centerMessage)
-	local printMessage = string.format("%s ordered a search warrant for %s, reason: ", warranterNick, self:Nick(), reason)
+	local warranterNick = IsValid(warranter) and warranter:Nick() or DarkRP.getPhrase("disconnected_player")
+	local centerMessage = DarkRP.getPhrase("warrant_approved", self:Nick(), reason, warranterNick)
+	local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Nick(), reason)
 
 	for a, b in pairs(player.GetAll()) do
 		b:PrintMessage(HUD_PRINTCENTER, centerMessage)
@@ -34,7 +33,7 @@ function plyMeta:unWarrant(unwarranter)
 	hook.Call("PlayerUnWarranted", GAMEMODE, unwarranter, self)
 
 	self.warranted = false
-	GAMEMODE:Notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", ""))
+	GAMEMODE:Notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
 end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
@@ -48,7 +47,7 @@ function plyMeta:wanted(actor, reason)
 	self:setDarkRPVar("wanted", true)
 	self:setDarkRPVar("wantedReason", reason)
 
-	local actorNick = IsValid(actor) and actor:Nick() or "Disconnected player"
+	local actorNick = IsValid(actor) and actor:Nick() or DarkRP.getPhrase("disconnected_player")
 	local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
 	local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Nick(), reason)
 
@@ -228,9 +227,9 @@ local function ccArrest(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end
 
@@ -257,9 +256,9 @@ local function ccUnarrest(ply, cmd, args)
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 		return
 	end

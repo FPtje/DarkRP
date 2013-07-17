@@ -54,16 +54,16 @@ function ENT:Use(activator,caller)
 	local owner = self:Getowning_ent()
 	self.user = activator
 	if not activator:canAfford(self:SalePrice(activator)) then
-		GAMEMODE:Notify(activator, 1, 3, "You do not have enough money to purchase food!")
+		GAMEMODE:Notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("food")))
 		return ""
 	end
 	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
 	if diff < 0 and not owner:canAfford(math.abs(diff)) then
-		GAMEMODE:Notify(activator, 2, 3, "Microwave owner is too poor to subsidize this sale!")
+		GAMEMODE:Notify(activator, 2, 3, DarkRP.getPhrase("owner_poor", DarkRP.getPhrase("microwave")))
 		return ""
 	end
 	if activator.maxFoods and activator.maxFoods >= GAMEMODE.Config.maxfoods then
-		GAMEMODE:Notify(activator, 1, 3, "You have reached the food limit.")
+		GAMEMODE:Notify(activator, 1, 3, DarkRP.getPhrase("limit", DarkRP.getPhrase("food")))
 	elseif not self.Once then
 		self.Once = true
 		self.sparking = true
@@ -72,7 +72,7 @@ function ENT:Use(activator,caller)
 		local cash = self:SalePrice(activator)
 
 		activator:AddMoney(cash * -1)
-		GAMEMODE:Notify(activator, 0, 3, "You have purchased food for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
+		GAMEMODE:Notify(activator, 0, 3, DarkRP.getPhrase("you_bought_x", DarkRP.getPhrase("food"), GAMEMODE.Config.currency, cash))
 
 		if activator ~= owner then
 			local gain = 0
@@ -82,12 +82,12 @@ function ENT:Use(activator,caller)
 				gain = math.floor(self:Getprice() - GAMEMODE.Config.microwavefoodcost)
 			end
 			if gain == 0 then
-				GAMEMODE:Notify(owner, 2, 3, "You sold some food but made no profit!")
+				GAMEMODE:Notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0" .. DarkRP.getPhrase("profit"), DarkRP.getPhrase("food")))
 			else
 				owner:AddMoney(gain)
-				local word = "profit"
-				if gain < 0 then word = "loss" end
-				GAMEMODE:Notify(owner, 0, 3, "You made a " .. word .. " of " .. GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. " by selling food!")
+				local word = DarkRP.getPhrase("profit")
+				if gain < 0 then word = DarkRP.getPhrase("loss") end
+				GAMEMODE:Notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. word, DarkRP.getPhrase("food")))
 			end
 		end
 		timer.Create(self:EntIndex() .. "food", 1, 1, function() self:createFood() end)

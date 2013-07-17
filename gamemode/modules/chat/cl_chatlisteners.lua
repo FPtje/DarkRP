@@ -11,7 +11,7 @@ local receivers
 local currentChatText = {}
 local receiverConfigs = {
 	[""] = { -- The default config decides who can hear you when you speak normally
-		text = "talk",
+		text = DarkRP.getPhrase("talk"),
 		hearFunc = function(ply)
 			if GAMEMODE.Config.alltalk then return nil end
 
@@ -139,13 +139,13 @@ hook.Add("ChatTextChanged", "DarkRP_FindChatRecipients", findConfig)
 /*---------------------------------------------------------------------------
 Default chat receievers. If you want to add your own ones, don't add them to this file. Add them to a clientside module file instead.
 ---------------------------------------------------------------------------*/
-DarkRP.addChatReceiver("/ooc", "speak in OOC", function(ply) return true end)
-DarkRP.addChatReceiver("//", "speak in OOC", function(ply) return true end)
-DarkRP.addChatReceiver("/a", "speak in OOC", function(ply) return true end)
-DarkRP.addChatReceiver("/w", "whisper", function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 90 end)
-DarkRP.addChatReceiver("/y", "yell", function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 550 end)
-DarkRP.addChatReceiver("/me", "perform your action", function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 250 end)
-DarkRP.addChatReceiver("/g", "talk to your group", function(ply)
+DarkRP.addChatReceiver("/ooc", DarkRP.getPhrase("speak_in_ooc"), function(ply) return true end)
+DarkRP.addChatReceiver("//", DarkRP.getPhrase("speak_in_ooc"), function(ply) return true end)
+DarkRP.addChatReceiver("/a", DarkRP.getPhrase("speak_in_ooc"), function(ply) return true end)
+DarkRP.addChatReceiver("/w", DarkRP.getPhrase("whisper"), function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 90 end)
+DarkRP.addChatReceiver("/y", DarkRP.getPhrase("yell"), function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 550 end)
+DarkRP.addChatReceiver("/me", DarkRP.getPhrase("perform_your_action"), function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 250 end)
+DarkRP.addChatReceiver("/g", DarkRP.getPhrase("talk_to_your_group"), function(ply)
 	for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
 		if func(LocalPlayer()) and func(ply) then
 			return true
@@ -167,7 +167,7 @@ end)
 /*---------------------------------------------------------------------------
 Voice chat receivers
 ---------------------------------------------------------------------------*/
-DarkRP.addChatReceiver("speak", "speak", function(ply)
+DarkRP.addChatReceiver("speak", DarkRP.getPhrase("speak"), function(ply)
 	if not LocalPlayer().DRPIsTalking then return nil end
 	if LocalPlayer():GetPos():Distance(ply:GetPos()) > 550 then return false end
 

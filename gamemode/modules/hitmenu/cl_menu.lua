@@ -23,7 +23,7 @@ function PANEL:Init()
 	self.icon:SetTooltip()
 
 	self.title = vgui.Create("DLabel", self)
-	self.title:SetText("Hitman")
+	self.title:SetText(DarkRP.getPhrase("hitman"))
 
 	self.name = vgui.Create("DLabel", self)
 	self.price = vgui.Create("DLabel", self)
@@ -31,7 +31,7 @@ function PANEL:Init()
 	self.playerList = vgui.Create("DScrollPanel", self)
 
 	self.btnRequest = vgui.Create("HitmanMenuButton", self)
-	self.btnRequest:SetText("Request")
+	self.btnRequest:SetText(DarkRP.getPhrase("hitmenu_request"))
 	self.btnRequest.DoClick = function()
 		if IsValid(self:GetTarget()) then
 			RunConsoleCommand("darkrp", "requesthit", self:GetTarget():SteamID(), self:GetHitman():UserID())
@@ -40,7 +40,7 @@ function PANEL:Init()
 	end
 
 	self.btnCancel = vgui.Create("HitmanMenuButton", self)
-	self.btnCancel:SetText("Cancel")
+	self.btnCancel:SetText(DarkRP.getPhrase("cancel"))
 	self.btnCancel.DoClick = function() self:Remove() end
 
 	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
@@ -55,7 +55,7 @@ function PANEL:Think()
 	end
 
 	-- update the price (so the hitman can't scam)
-	self.price:SetText(string.format("Price:  $%s", self:GetHitman():getHitPrice()))
+	self.price:SetText(DarkRP.getPhrase("price", GAMEMODE.Config.currency, self:GetHitman():getHitPrice()))
 	self.price:SizeToContents()
 end
 
@@ -77,12 +77,12 @@ function PANEL:PerformLayout()
 	self.title:SizeToContents(true)
 
 	self.name:SizeToContents(true)
-	self.name:SetText(string.format("Name: %s", self:GetHitman():Nick()))
+	self.name:SetText(DarkRP.getPhrase("name", self:GetHitman():Nick()))
 	self.name:SetPos(20 + 128 + 20, 20 + self.title:GetTall())
 
 	self.price:SetFont("HUDNumber5")
 	self.price:SetColor(Color(255, 0, 0, 255))
-	self.price:SetText(string.format("Price:  $%s", self:GetHitman():getHitPrice()))
+	self.price:SetText(DarkRP.getPhrase("price", GAMEMODE.Config.currency, self:GetHitman():getHitPrice()))
 	self.price:SetPos(20 + 128 + 20, 20 + self.title:GetTall() + 20)
 	self.price:SizeToContents(true)
 

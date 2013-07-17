@@ -26,14 +26,14 @@ function ENT:Use(activator, caller)
 	local amount = self:Getamount() or 0
 
 	if (IsValid(activator) and IsValid(recipient)) and activator == recipient then
-		owner = (IsValid(owner) and owner:Nick()) or "Disconnected player"
-		GAMEMODE:Notify(activator, 0, 4, "You have found " .. GAMEMODE.Config.currency .. amount .. " in a cheque made out to you from " .. owner .. ".")
+		owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("disconnected_player")
+		GAMEMODE:Notify(activator, 0, 4, DarkRP.getPhrase("found_cheque", GAMEMODE.Config.currency, amount, owner))
 		activator:AddMoney(amount)
 		self:Remove()
 	elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then
-		GAMEMODE:Notify(activator, 0, 4, "This cheque is made out to " .. recipient:Name() .. ".")
+		GAMEMODE:Notify(activator, 0, 4, DarkRP.getPhrase("cheque_details", recipient:Name()))
 	elseif IsValid(owner) and owner == activator then
-		GAMEMODE:Notify(activator, 0, 4, "You have torn up the cheque.")
+		GAMEMODE:Notify(activator, 0, 4, DarkRP.getPhrase("cheque_torn"))
 		owner:AddMoney(self:Getamount()) -- return the money on the cheque to the owner.
 		self:Remove()
 	elseif not IsValid(recipient) then self:Remove()

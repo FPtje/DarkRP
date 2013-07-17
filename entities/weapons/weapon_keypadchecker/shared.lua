@@ -35,19 +35,19 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 		local Owner = keypad:CPPIGetOwner()
 
 		if v.key == keyPass and v.ply == Owner then
-			table.insert(targets, {type = "Entering the right password", name = v.name, ent = v.ent, original = keypad})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_entering_right_pass"), name = v.name, ent = v.ent, original = keypad})
 		end
 		if v.key == keyDenied and v.ply == Owner then
-			table.insert(targets, {type = "Entering a wrong password", name = v.name, ent = v.ent, original = keypad})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_entering_wrong_pass"), name = v.name, ent = v.ent, original = keypad})
 		end
 	end
 
 	for k,v in pairs(numpad.OnUpItems or {}) do
 		if v.key == keyPass and v.ply == Owner then
-			table.insert(targets, {type = "after having entered the right password", name = v.name, delay = math.Round(delayPass, 2), ent = v.ent, original = keypad})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_after_right_pass"), name = v.name, delay = math.Round(delayPass, 2), ent = v.ent, original = keypad})
 		end
 		if v.key == keyDenied and v.ply == Owner then
-			table.insert(targets, {type = "after having entered wrong password", name = v.name, delay = math.Round(delayDenied, 2), ent = v.ent, original = keypad})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_after_wrong_pass"), name = v.name, delay = math.Round(delayDenied, 2), ent = v.ent, original = keypad})
 		end
 	end
 
@@ -103,10 +103,10 @@ local function getEntityKeypad(ent)
 		local entOwner = ent:CPPIGetOwner()
 
 		if vOwner == entOwner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup1")) then
-			table.insert(targets, {type = "Right password entered", ent = v, original = ent})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_right_pass_entered"), ent = v, original = ent})
 		end
 		if vOwner == entOwner and  table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup2")) then
-			table.insert(targets, {type = "Wrong password entered", ent = v, original = ent})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_wrong_pass_entered"), ent = v, original = ent})
 		end
 	end
 
@@ -115,10 +115,10 @@ local function getEntityKeypad(ent)
 		local entOwner = ent:CPPIGetOwner()
 
 		if vOwner == entOwner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then
-			table.insert(targets, {type = "Right password entered", ent = v, original = ent})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_right_pass_entered"), ent = v, original = ent})
 		end
 		if vOwner == entOwner and  table.HasValue(doorKeys, tonumber(v.KeypadData.KeyDenied) or 0) then
-			table.insert(targets, {type = "Wrong password entered", ent = v, original = ent})
+			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_wrong_pass_entered"), ent = v, original = ent})
 		end
 	end
 
@@ -135,13 +135,13 @@ function SWEP:PrimaryAttack()
 
 	if class == "sent_keypad" then
 		data = get_sent_keypad_Info(ent)
-		GAMEMODE:Notify(self.Owner, 1, 4, "This keypad controls "..#data / 2 .. " entities")
+		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
 	elseif class == "keypad" then
 		data = get_keypad_Info(ent)
-		GAMEMODE:Notify(self.Owner, 1, 4, "This keypad controls "..#data / 2 .. " entities")
+		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
 	else
 		data = getEntityKeypad(ent)
-		GAMEMODE:Notify(self.Owner, 1, 4, "This entity is controlled by "..#data .. " keypads")
+		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controlled_by_x_keypads", #data))
 	end
 
 	net.Start("DarkRP_keypadData")
