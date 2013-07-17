@@ -24,10 +24,9 @@ end
 
 GM.Config = {} -- config table
 
-include("fn.lua")
-
 include("config/config.lua")
-include("sh_interfaceloader.lua")
+include("libraries/fn.lua")
+include("libraries/interfaceloader.lua")
 
 include("shared/player_class.lua")
 include("shared/animations.lua")

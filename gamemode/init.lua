@@ -6,16 +6,15 @@ DeriveGamemode("sandbox")
 
 util.AddNetworkString("DarkRP_keypadData")
 
-AddCSLuaFile("sh_interfaceloader.lua")
-AddCSLuaFile("fn.lua")
-include("fn.lua")
+AddCSLuaFile("libraries/interfaceloader.lua")
+AddCSLuaFile("libraries/fn.lua")
 
+AddCSLuaFile("config/config.lua")
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
 
 AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("config/config.lua")
 
 AddCSLuaFile("shared/player_class.lua")
 AddCSLuaFile("shared/animations.lua")
@@ -33,35 +32,32 @@ GM.NoLicense = GM.NoLicense or {}
 -- This will fix the rp_voiceradius not working
 game.ConsoleCommand("sv_alltalk 0\n")
 
+include("libraries/interfaceloader.lua")
+
+include("shared/MakeThings.lua")
+include("shared/Workarounds.lua")
+
 include("config/_MySQL.lua")
 include("config/config.lua")
 include("config/licenseweapons.lua")
+include("config/jobrelated.lua")
+include("config/addentities.lua")
+include("config/ammotypes.lua")
 
-include("sh_interfaceloader.lua")
-
-include("server/admincc.lua")
+include("libraries/fn.lua")
+include("libraries/database.lua")
 
 include("shared/player_class.lua")
 include("shared/animations.lua")
 include("shared/commands.lua")
 include("shared/entity.lua")
 
-include("shared/MakeThings.lua")
-include("shared/Workarounds.lua")
-
-include("config/jobrelated.lua")
-include("config/addentities.lua")
-include("config/ammotypes.lua")
-
-include("server/database.lua")
-MySQLite.initialize()
+include("server/admincc.lua")
 include("server/data.lua")
 include("server/gamemode_functions.lua")
 include("server/main.lua")
 include("server/player.lua")
-include("server/questions.lua")
 include("server/util.lua")
-include("server/votes.lua")
 
 /*---------------------------------------------------------------------------
 Loading modules
@@ -96,5 +92,7 @@ for _, folder in SortedPairs(folders, true) do
 		end
 	end
 end
+
+MySQLite.initialize()
 
 DarkRP.finish()
