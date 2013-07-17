@@ -1586,7 +1586,7 @@ local function MayorSetSalary(ply, cmd, args)
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "salary", "< " .. GAMEMODE.Config.maxcopsalary))
 				return
 			else
-				DB.StoreSalary(target, amount)
+				DarkRP.storeSalary(target, amount)
 				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end
@@ -1595,7 +1595,7 @@ local function MayorSetSalary(ply, cmd, args)
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "salary", "< " .. GAMEMODE.Config.maxnormalsalary))
 				return
 			else
-				DB.StoreSalary(target, amount)
+				DarkRP.storeSalary(target, amount)
 				ply:PrintMessage(2, "Set " .. targetnick .. "'s Salary to: " .. GAMEMODE.Config.currency .. amount)
 				target:PrintMessage(2, plynick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 			end

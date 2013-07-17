@@ -57,14 +57,14 @@ DarkRP.defineChatCommand("nick", RPName)
 function meta:SetRPName(name, firstRun)
 	-- Make sure nobody on this server already has this RP name
 	local lowername = string.lower(tostring(name))
-	DB.RetrieveRPNames(self, name, function(taken)
+	DarkRP.retrieveRPNames(self, name, function(taken)
 		if string.len(lowername) < 2 and not firstrun then return end
 		-- If we found that this name exists for another player
 		if taken then
 			if firstRun then
 				-- If we just connected and another player happens to be using our steam name as their RP name
 				-- Put a 1 after our steam name
-				DB.StoreRPName(self, name .. " 1")
+				DarkRP.storeRPName(self, name .. " 1")
 				GAMEMODE:Notify(self, 0, 12, "Someone is already using your Steam name as their RP name so we gave you a '1' after your name.")
 			else
 				GAMEMODE:Notify(self, 1, 5, DarkRP.getPhrase("unable", "RPname", "it's been taken"))
@@ -73,7 +73,7 @@ function meta:SetRPName(name, firstRun)
 		else
 			if not firstRun then -- Don't save the steam name in the database
 				GAMEMODE:NotifyAll(2, 6, DarkRP.getPhrase("rpname_changed", self:SteamName(), name))
-				DB.StoreRPName(self, name)
+				DarkRP.storeRPName(self, name)
 			end
 		end
 	end)
@@ -81,7 +81,7 @@ end
 
 function meta:RestorePlayerData()
 	if not IsValid(self) then return end
-	DB.RetrievePlayerData(self, function(data)
+	DarkRP.retrievePlayerData(self, function(data)
 		if not IsValid(self) then return end
 
 		self.DarkRPUnInitialized = nil
@@ -98,7 +98,7 @@ function meta:RestorePlayerData()
 		self:setDarkRPVar("rpname", info.rpname)
 
 		if not data then
-			DB.CreatePlayerData(self, info.rpname, info.wallet, info.salary)
+			DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary)
 		end
 	end, function() -- Retrieving data failed, go on without it
 		self.DarkRPUnInitialized = nil
@@ -379,7 +379,7 @@ function meta:AddMoney(amount)
 	self:setDarkRPVar("money", total)
 
 	if self.DarkRPUnInitialized then return end
-	DB.StoreMoney(self, total)
+	DarkRP.storeMoney(self, total)
 end
 
 function DarkRP.payPlayer(ply1, ply2, amount)
@@ -391,7 +391,7 @@ end
 function meta:PayDay()
 	if not IsValid(self) then return end
 	if not self:isArrested() then
-		DB.RetrieveSalary(self, function(amount)
+		DarkRP.retrieveSalary(self, function(amount)
 			amount = math.floor(amount or GAMEMODE.Config.normalsalary)
 			hook.Call("PlayerGetSalary", GAMEMODE, self, amount)
 			if amount == 0 or not amount then

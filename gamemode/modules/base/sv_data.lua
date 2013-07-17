@@ -290,30 +290,30 @@ end
 /*---------------------------------------------------------
 Players
  ---------------------------------------------------------*/
-function DB.StoreRPName(ply, name)
+function DarkRP.storeRPName(ply, name)
 	if not name or string.len(name) < 2 then return end
 	ply:setDarkRPVar("rpname", name)
 
 	MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
-function DB.RetrieveRPNames(ply, name, callback)
+function DarkRP.retrieveRPNames(ply, name, callback)
 	MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = "..MySQLite.SQLStr(name)..";", function(r)
 		callback(tonumber(r[1].count) > 0)
 	end)
 end
 
-function DB.RetrievePlayerData(ply, callback, failed, attempts)
+function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
 	attempts = attempts or 0
 
 	if attempts > 3 then return failed() end
 
 	MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
-		DB.RetrievePlayerData(ply, callback, failed, attempts + 1)
+		DarkRP.retrievePlayerData(ply, callback, failed, attempts + 1)
 	end)
 end
 
-function DB.CreatePlayerData(ply, name, wallet, salary)
+function DarkRP.createPlayerData(ply, name, wallet, salary)
 	MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
 			ply:UniqueID() .. [[, ]] ..
 			MySQLite.SQLStr(name)  .. [[, ]] ..
@@ -321,14 +321,14 @@ function DB.CreatePlayerData(ply, name, wallet, salary)
 			wallet .. ");")
 end
 
-function DB.StoreMoney(ply, amount)
+function DarkRP.storeMoney(ply, amount)
 	if not IsValid(ply) then return end
 	if amount < 0  then return end
 
 	MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 end
 
-function DB.ResetAllMoney(ply,cmd,args)
+local function resetAllMoney(ply,cmd,args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
 	MySQLite.query("UPDATE darkrp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
 	for k,v in pairs(player.GetAll()) do
@@ -340,9 +340,9 @@ function DB.ResetAllMoney(ply,cmd,args)
 		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
 	end
 end
-concommand.Add("rp_resetallmoney", DB.ResetAllMoney)
+concommand.Add("rp_resetallmoney", resetAllMoney)
 
-function DB.StoreSalary(ply, amount)
+function DarkRP.storeSalary(ply, amount)
 	ply:setSelfDarkRPVar("salary", math.floor(amount))
 
 	MySQLite.query([[UPDATE darkrp_player SET salary = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
@@ -350,7 +350,7 @@ function DB.StoreSalary(ply, amount)
 	return amount
 end
 
-function DB.RetrieveSalary(ply, callback)
+function DarkRP.retrieveSalary(ply, callback)
 	if not IsValid(ply) then return 0 end
 
 	if ply:getDarkRPVar("salary") then return callback and callback(ply:getDarkRPVar("salary")) end -- First check the cache.
