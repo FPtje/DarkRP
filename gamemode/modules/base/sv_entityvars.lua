@@ -113,9 +113,9 @@ local function ccSetMoney(ply, cmd, args)
 		end
 		target:PrintMessage(2, nick .. " set your money to: " .. GAMEMODE.Config.currency .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+			DarkRP.log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -170,9 +170,9 @@ local function ccSetSalary(ply, cmd, args)
 		end
 		target:PrintMessage(2, nick .. " set your Salary to: " .. GAMEMODE.Config.currency .. amount)
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+			DarkRP.log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, nil, Color(30, 30, 30))
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -216,9 +216,9 @@ local function SetRPName(ply, cmd, args)
 		end
 		target:PrintMessage(2, nick .. " set your name to: " .. args[2])
 		if ply:EntIndex() == 0 then
-			DB.Log("Console set "..target:SteamName().."'s name to " .. args[2], nil, Color(30, 30, 30))
+			DarkRP.log("Console set "..target:SteamName().."'s name to " .. args[2], Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s name to " .. args[2], nil, Color(30, 30, 30))
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s name to " .. args[2], Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

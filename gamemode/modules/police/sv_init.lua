@@ -222,9 +222,9 @@ local function ccArrest(ply, cmd, args)
 		end
 
 		if ply:EntIndex() == 0 then
-			DB.Log("Console force-arrested "..target:SteamName(), nil, Color(0, 255, 255))
+			DarkRP.log("Console force-arrested "..target:SteamName(), Color(0, 255, 255))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") force-arrested "..target:SteamName(), nil, Color(0, 255, 255))
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-arrested "..target:SteamName(), Color(0, 255, 255))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -251,9 +251,9 @@ local function ccUnarrest(ply, cmd, args)
 		if not target:Alive() then target:Spawn() end
 
 		if ply:EntIndex() == 0 then
-			DB.Log("Console force-unarrested "..target:SteamName(), nil, Color(0, 255, 255))
+			DarkRP.log("Console force-unarrested "..target:SteamName(), Color(0, 255, 255))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unarrested "..target:SteamName(), nil, Color(0, 255, 255))
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unarrested "..target:SteamName(), Color(0, 255, 255))
 		end
 	else
 		if ply:EntIndex() == 0 then

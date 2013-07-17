@@ -79,9 +79,9 @@ local function removeLetters(ply, cmd, args)
 	end
 
 	if ply:EntIndex() == 0 then
-		DB.Log("Console force-removed all letters", nil, Color(30, 30, 30))
+		DarkRP.log("Console force-removed all letters", Color(30, 30, 30))
 	else
-		DB.Log(ply:Nick().." ("..ply:SteamID()..") force-removed all letters", nil, Color(30, 30, 30))
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed all letters", Color(30, 30, 30))
 	end
 end
 concommand.Add("rp_removeletters", removeLetters)

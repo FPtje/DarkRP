@@ -196,7 +196,7 @@ local function ccSENTSPawn(ply, cmd, args)
 		end
 	end
 	Spawn_SENT(ply, args[1])
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..args[1], nil, Color(255, 255, 0))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..args[1], Color(255, 255, 0))
 end
 concommand.Add("gm_spawnsent", ccSENTSPawn)
 
@@ -208,7 +208,7 @@ local function ccVehicleSpawn(ply, cmd, args)
 		end
 	end
 	Spawn_Vehicle(ply, args[1])
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..args[1], nil, Color(255, 255, 0))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..args[1], Color(255, 255, 0))
 end
 concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
 
@@ -220,7 +220,7 @@ local function ccNPCSpawn(ply, cmd, args)
 		end
 	end
 	Spawn_NPC(ply, args[1])
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..args[1], nil, Color(255, 255, 0))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..args[1], Color(255, 255, 0))
 end
 concommand.Add("gm_spawnnpc", ccNPCSpawn)
 
@@ -461,7 +461,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		WeaponName = "suicide trick"
 	end
 
-	DB.Log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, nil, Color(255, 190, 0))
+	DarkRP.log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, Color(255, 190, 0))
 end
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
@@ -533,7 +533,7 @@ end
 
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") has joined the game", nil, Color(0, 130, 255))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
 	ply.bannedfrom = {}
 	ply.DarkRPVars = ply.DarkRPVars or {}
 	ply:NewData()
@@ -658,7 +658,7 @@ function GM:PlayerSpawn(ply)
 	end
 
 	ply:AllowFlashlight(true)
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") spawned")
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned")
 end
 
 local function selectDefaultWeapon(ply)
@@ -774,7 +774,7 @@ function GM:PlayerDisconnected(ply)
 	end
 
 	ply:UnownAll()
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") disconnected", nil, Color(0, 130, 255))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") disconnected", Color(0, 130, 255))
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
 		RPExtraTeams[ply:Team()].PlayerDisconnected(ply)

@@ -17,7 +17,7 @@ local function ccDoorOwn(ply, cmd, args)
 	trace.Entity:Fire("unlock", "", 0)
 	trace.Entity:UnOwn()
 	trace.Entity:Own(ply)
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-owned a door with rp_own", nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-owned a door with rp_own", Color(30, 30, 30))
 end
 concommand.Add("rp_own", ccDoorOwn)
 
@@ -39,7 +39,7 @@ local function ccDoorUnOwn(ply, cmd, args)
 
 	trace.Entity:Fire("unlock", "", 0)
 	trace.Entity:UnOwn()
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unowned a door with rp_unown", nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned a door with rp_unown", Color(30, 30, 30))
 end
 concommand.Add("rp_unown", ccDoorUnOwn)
 
@@ -60,7 +60,7 @@ local function unownAll(ply, cmd, args)
 		return
 	end
 	target:UnownAll()
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
 end
 concommand.Add("rp_unownall", unownAll)
 
@@ -95,7 +95,7 @@ local function ccAddOwner(ply, cmd, args)
 	else
 		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 	end
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 end
 concommand.Add("rp_addowner", ccAddOwner)
 
@@ -128,7 +128,7 @@ local function ccRemoveOwner(ply, cmd, args)
 	else
 		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 	end
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 end
 concommand.Add("rp_removeowner", ccRemoveOwner)
 
@@ -152,7 +152,7 @@ local function ccLock(ply, cmd, args)
 
 	trace.Entity:KeysLock()
 	MySQLite.query("REPLACE INTO darkrp_door VALUES("..MySQLite.SQLStr(trace.Entity:EntIndex())..", "..MySQLite.SQLStr(string.lower(game.GetMap()))..", "..MySQLite.SQLStr(trace.Entity.DoorData.title or "")..", 1, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-locked a door with rp_lock (locked door is saved)", nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-locked a door with rp_lock (locked door is saved)", Color(30, 30, 30))
 end
 concommand.Add("rp_lock", ccLock)
 
@@ -175,6 +175,6 @@ local function ccUnLock(ply, cmd, args)
 	ply:PrintMessage(2, "Unlocked.")
 	trace.Entity:KeysUnLock()
 	MySQLite.query("REPLACE INTO darkrp_door VALUES("..MySQLite.SQLStr(trace.Entity:EntIndex())..", "..MySQLite.SQLStr(string.lower(game.GetMap()))..", "..MySQLite.SQLStr(trace.Entity.DoorData.title or "")..", 0, "..(trace.Entity.DoorData.NonOwnable and 1 or 0)..");")
-	DB.Log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", nil, Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", Color(30, 30, 30))
 end
 concommand.Add("rp_unlock", ccUnLock)

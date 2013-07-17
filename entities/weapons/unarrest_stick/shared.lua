@@ -98,7 +98,7 @@ function SWEP:PrimaryAttack()
 	GAMEMODE:Notify(trace.Entity, 0, 4, "You were unarrested by " .. self.Owner:Nick())
 
 	if self.Owner.SteamName then
-		DB.Log(self.Owner:Nick().." ("..self.Owner:SteamID()..") unarrested "..trace.Entity:Nick(), nil, Color(0, 255, 255))
+		DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") unarrested "..trace.Entity:Nick(), Color(0, 255, 255))
 	end
 end
 

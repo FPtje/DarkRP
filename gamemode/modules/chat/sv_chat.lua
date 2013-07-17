@@ -17,7 +17,7 @@ end
 
 
 local function RP_PlayerChat(ply, text)
-	DB.Log(ply:Nick().." ("..ply:SteamID().."): "..text )
+	DarkRP.log(ply:Nick().." ("..ply:SteamID().."): "..text )
 	local chatcommands = DarkRP.getChatCommands()
 	local callback = ""
 	local DoSayFunc

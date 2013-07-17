@@ -135,7 +135,7 @@ function SWEP:PrimaryAttack()
 				GAMEMODE:Notify(trace.Entity, 0, 20, "You've been arrested by " .. self.Owner:Nick())
 
 				if self.Owner.SteamName then
-					DB.Log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..trace.Entity:Nick(), nil, Color(0, 255, 255))
+					DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..trace.Entity:Nick(), Color(0, 255, 255))
 				end
 			else
 				GAMEMODE:Notify(self.Owner, 1, 4, "You can't arrest players who are spawning.")

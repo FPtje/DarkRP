@@ -848,7 +848,7 @@ local function Demote(ply, args)
 		else
 			GAMEMODE:TalkToPerson(p, team.GetColor(ply:Team()), "(DEMOTE) "..ply:Nick(),Color(255,0,0,255), "I want to demote you. Reason: "..reason, p)
 			GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
-			DB.Log(DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()) .. " (" .. reason .. ")",
+			DarkRP.log(DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()) .. " (" .. reason .. ")",
 				false, Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
 
@@ -1291,7 +1291,7 @@ local function GiveMoney(ply, args)
 
 					GAMEMODE:Notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
 					GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
-					DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..GAMEMODE.Config.currency .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+					DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..GAMEMODE.Config.currency .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
 				end
 			else
 				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/give", ""))
@@ -1345,7 +1345,7 @@ local function DropMoney(ply, args)
 
 			local tr = util.TraceLine(trace)
 			DarkRPCreateMoneyBag(tr.HitPos, amount)
-			DB.Log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..GAMEMODE.Config.currency .. tostring(amount))
+			DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..GAMEMODE.Config.currency .. tostring(amount))
 		else
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/dropmoney", ""))
 		end
@@ -1762,7 +1762,7 @@ local function rp_GiveLicense(ply, cmd, args)
 
 		GAMEMODE:Notify(target, 1, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
 		GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-		DB.Log(nick.." ("..steamID..") force-gave "..target:Nick().." a gun license", nil, Color(30, 30, 30))
+		DarkRP.log(nick.." ("..steamID..") force-gave "..target:Nick().." a gun license", Color(30, 30, 30))
 	else
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
@@ -1795,7 +1795,7 @@ local function rp_RevokeLicense(ply, cmd, args)
 
 		GAMEMODE:Notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
-		DB.Log(nick.." ("..steamID..") force-removed "..target:Nick().."'s gun license", nil, Color(30, 30, 30))
+		DarkRP.log(nick.." ("..steamID..") force-removed "..target:Nick().."'s gun license", Color(30, 30, 30))
 	else
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))

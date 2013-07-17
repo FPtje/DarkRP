@@ -153,8 +153,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 	GAMEMODE:Notify(customer, 0, 8, "Hit Accepted!")
 	customer.lastHitAccepted = CurTime()
 
-	DB.Log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, false,
-		Color(255, 0, 255))
+	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, false, Color(255, 0, 255))
 end
 
 function DarkRP.hooks:onHitCompleted(hitman, target, customer)
@@ -168,7 +167,7 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-	DB.Log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
+	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
 		false, Color(255, 0, 255))
 
 	target:setDarkRPVar("lastHitTime", CurTime())
@@ -185,7 +184,7 @@ function DarkRP.hooks:onHitFailed(hitman, target, reason)
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-	DB.Log("Hit on " .. targetname .. " failed. Reason: " .. reason, false, Color(255, 0, 255))
+	DarkRP.log("Hit on " .. targetname .. " failed. Reason: " .. reason, false, Color(255, 0, 255))
 end
 
 hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacker)

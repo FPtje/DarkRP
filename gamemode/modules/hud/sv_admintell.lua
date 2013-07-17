@@ -22,9 +22,9 @@ local function ccTell(ply, cmd, args)
 		umsg.End()
 
 		if ply:EntIndex() == 0 then
-			DB.Log("Console did rp_tell \""..msg .. "\" on "..target:SteamName(), nil, Color(30, 30, 30))
+			DarkRP.log("Console did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
 		else
-			DB.Log(ply:Nick().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName(), nil, Color(30, 30, 30))
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -55,9 +55,9 @@ local function ccTellAll(ply, cmd, args)
 	umsg.End()
 
 	if ply:EntIndex() == 0 then
-		DB.Log("Console did rp_tellall \""..msg .. "\"", nil, Color(30, 30, 30))
+		DarkRP.log("Console did rp_tellall \""..msg .. "\"", Color(30, 30, 30))
 	else
-		DB.Log(ply:Nick().." ("..ply:SteamID()..") did rp_tellall \""..msg .. "\"", nil, Color(30, 30, 30))
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") did rp_tellall \""..msg .. "\"", Color(30, 30, 30))
 	end
 
 end

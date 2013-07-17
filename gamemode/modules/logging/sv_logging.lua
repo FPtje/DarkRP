@@ -15,7 +15,7 @@ local function AdminLog(message, colour)
 	umsg.End()
 end
 
-function DB.Log(text, force, colour)
+function DarkRP.log(text, colour)
 	if colour then
 		AdminLog(text, colour)
 	end
