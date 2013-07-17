@@ -155,20 +155,6 @@ function DarkRP.initDatabase()
 		end
 	MySQLite.commit(function() -- Initialize the data after all the tables have been created
 
-		-- Update older version of database to the current database
-		-- Only run when one of the older tables exist
-		local updateQuery = [[SELECT name FROM sqlite_master WHERE type="table" AND name="darkrp_cvars";]]
-		if MySQLite.CONNECTED_TO_MYSQL then
-			updateQuery = [[show tables like "darkrp_cvars";]]
-		end
-
-		MySQLite.queryValue(updateQuery, function(data)
-			if data == "darkrp_cvars" then
-				print("UPGRADING DATABASE!")
-				updateDatabase()
-			end
-		end)
-
 		setUpNonOwnableDoors()
 		setUpTeamOwnableDoors()
 		setUpGroupDoors()
@@ -221,78 +207,6 @@ function DarkRP.initDatabase()
 
 		hook.Call("DarkRPDBInitialized")
 	end)
-end
-
-/*---------------------------------------------------------------------------
-Updating the older database to work with the current version
-(copy as much as possible over)
----------------------------------------------------------------------------*/
-local function updateDatabase()
-	print("CONVERTING DATABASE")
-	-- Start transaction.
-	MySQLite.begin()
-
-	-- CVars
-	MySQLite.query([[DELETE FROM darkrp_cvar;]])
-	MySQLite.query([[INSERT INTO darkrp_cvar SELECT v.var, v.value FROM darkrp_cvars v;]])
-	MySQLite.query([[DROP TABLE darkrp_cvars;]])
-
-	-- Positions
-	MySQLite.query([[DELETE FROM darkrp_position;]])
-
-	-- Team spawns
-	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "T", p.x, p.y, p.z FROM darkrp_tspawns p;]])
-	MySQLite.query([[
-		INSERT INTO darkrp_jobspawn
-			SELECT new.id, old.team FROM darkrp_position new JOIN darkrp_tspawns old ON
-				new.map = old.map AND new.x = old.x AND new.y = old.y AND new.z = old.Z
-			WHERE new.type = "T";
-	]])
-	MySQLite.query([[DROP TABLE darkrp_tspawns;]])
-
-	-- Jail positions
-	MySQLite.query([[INSERT INTO darkrp_position SELECT NULL, p.map, "J", p.x, p.y, p.z FROM darkrp_jailpositions p;]])
-	MySQLite.query([[DROP TABLE darkrp_jailpositions;]])
-
-	-- Doors
-	MySQLite.query([[DELETE FROM darkrp_door;]])
-	MySQLite.query([[INSERT INTO darkrp_door SELECT old.idx - ]] .. game.MaxPlayers() .. [[, old.map, old.title, old.locked, old.disabled FROM darkrp_doors old;]])
-
-	MySQLite.query([[DROP TABLE darkrp_doors;]])
-	MySQLite.query([[DROP TABLE darkrp_teamdoors;]])
-	MySQLite.query([[DROP TABLE darkrp_groupdoors;]])
-
-	MySQLite.commit()
-
-
-	local count = MySQLite.queryValue("SELECT COUNT(*) FROM darkrp_wallets;") or 0
-	for i = 0, count, 1000 do -- SQLite selecting limit
-		MySQLite.query([[SELECT darkrp_wallets.steam, amount, salary, name FROM darkrp_wallets
-			LEFT OUTER JOIN darkrp_salaries ON darkrp_salaries.steam = darkrp_wallets.steam
-			LEFT OUTER JOIN darkrp_rpnames ON darkrp_rpnames.steam = darkrp_wallets.steam LIMIT 1000 OFFSET ]]..i..[[;]], function(data)
-
-			-- Separate transaction for the player data
-			MySQLite.begin()
-
-			for k,v in pairs(data or {}) do
-				local uniqueID = util.CRC("gm_" .. v.steam .. "_gm")
-
-				MySQLite.query([[INSERT INTO darkrp_player VALUES(]]
-					..uniqueID..[[,]]
-					..((v.name == "NULL" or not v.name) and "NULL" or MySQLite.SQLStr(v.name))..[[,]]
-					..((v.salary == "NULL" or not v.salary) and GAMEMODE.Config.normalsalary or v.salary)..[[,]]
-					..v.amount..[[);]])
-			end
-
-			if count - i < 1000 then -- the last iteration
-				MySQLite.query([[DROP TABLE darkrp_wallets;]])
-				MySQLite.query([[DROP TABLE darkrp_salaries;]])
-				MySQLite.query([[DROP TABLE darkrp_rpnames;]])
-			end
-
-			MySQLite.commit()
-		end)
-	end
 end
 
 /*---------------------------------------------------------
