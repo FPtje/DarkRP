@@ -98,6 +98,18 @@ hook.Add("InitPostEntity", "CheckDarkRPVars", function()
 end)
 
 /*---------------------------------------------------------------------------
+RP name overrid
+---------------------------------------------------------------------------*/
+pmeta.SteamName = pmeta.SteamName or pmeta.Name
+function pmeta:Name()
+	return GAMEMODE.Config.allowrpnames and self:getDarkRPVar("rpname")
+		or self:SteamName()
+end
+
+pmeta.GetName = pmeta.Name
+pmeta.Nick = pmeta.Name
+
+/*---------------------------------------------------------------------------
 Door data
 ---------------------------------------------------------------------------*/
 

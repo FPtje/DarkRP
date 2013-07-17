@@ -1,16 +1,3 @@
-local HELP_CATEGORY_ZOMBIE = 3
-
-GM:AddHelpCategory(HELP_CATEGORY_ZOMBIE, "Zombie Chat Commands")
-
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/addzombie (creates a zombie spawn)")
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/zombiemax (maximum amount of zombies that can be alive)")
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/removezombie index (removes a zombie spawn, index is the number inside ()")
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/showzombie (shows where the zombie spawns are)")
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/enablezombie (enables zombiemode)")
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/disablezombie (disables zombiemode)")
-GM:AddHelpLabel(HELP_CATEGORY_ZOMBIE, "/enablestorm (enables meteor storms)")
-
-
 /*---------------------------------------------------------------------------
 Zombie display
 ---------------------------------------------------------------------------*/

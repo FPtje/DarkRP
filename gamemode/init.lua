@@ -2,18 +2,6 @@ GM.Version = "2.5.0"
 GM.Name = "DarkRP"
 GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
 
--- RP Name Overrides
-
-local meta = FindMetaTable("Player")
-meta.SteamName = meta.SteamName or meta.Name
-function meta:Name()
-	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
-		or self:SteamName()
-end
-meta.Nick = meta.Name
-meta.GetName = meta.Name
--- End
-
 DeriveGamemode("sandbox")
 
 util.AddNetworkString("DarkRP_keypadData")
@@ -30,8 +18,6 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("config/config.lua")
 
 AddCSLuaFile("client/DRPDermaSkin.lua")
-AddCSLuaFile("client/help.lua")
-AddCSLuaFile("client/helpvgui.lua")
 AddCSLuaFile("client/showteamtabs.lua")
 AddCSLuaFile("client/vgui.lua")
 
@@ -41,12 +27,6 @@ AddCSLuaFile("shared/commands.lua")
 AddCSLuaFile("shared/entity.lua")
 AddCSLuaFile("shared/MakeThings.lua")
 AddCSLuaFile("shared/Workarounds.lua")
-
--- Earthquake Mod addon
-resource.AddFile("sound/earthquake.mp3")
-util.PrecacheSound("earthquake.mp3")
-
-resource.AddFile("materials/darkrp/DarkRPSkin.png")
 
 DB = DB or {}
 GM.Config = GM.Config or {}

@@ -81,6 +81,16 @@ local function SendDarkRPVars(ply)
 end
 concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 
+/*---------------------------------------------------------------------------
+Nickname override to show RP name
+---------------------------------------------------------------------------*/
+meta.SteamName = meta.SteamName or meta.Name
+function meta:Name()
+	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
+		or self:SteamName()
+end
+meta.Nick = meta.Name
+meta.GetName = meta.Name
 
 /*---------------------------------------------------------------------------
 Doors
