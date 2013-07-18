@@ -5,6 +5,7 @@ Utility functions
 -----------------------------------------------------------------------------]]
 
 local vector = FindMetaTable("Vector")
+local meta = FindMetaTable("Player")
 
 /*---------------------------------------------------------------------------
 Decides whether the vector could be seen by the player if they were to look at it
@@ -65,4 +66,11 @@ if SERVER then
 	concommand.Add("rp_getvehicles_sv", GetAvailableVehicles)
 else
 	concommand.Add("rp_getvehicles", GetAvailableVehicles)
+end
+
+function meta:hasDarkRPPrivilege(priv)
+	if FAdmin then
+		return FAdmin.Access.PlayerHasPrivilege(self, priv)
+	end
+	return self:IsAdmin()
 end
