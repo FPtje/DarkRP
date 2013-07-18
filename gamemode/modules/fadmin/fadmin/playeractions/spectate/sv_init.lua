@@ -71,7 +71,7 @@ OnPlayerSay = function(spectator, sender, message, isTeam)
 	if spectator.FAdminSpectatePos and sender:GetShootPos():Distance(spectator.FAdminSpectatePos) <= 400 and
 		sender:GetShootPos():Distance(spectator:GetShootPos()) > 250 then-- Make sure you don't get it twice
 
-		GAMEMODE:TalkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
+		DarkRP.talkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
 		return
 	end
 
@@ -79,7 +79,7 @@ OnPlayerSay = function(spectator, sender, message, isTeam)
 	if IsValid(spectator.FAdminSpectatingEnt) and
 		sender:GetShootPos():Distance(spectator.FAdminSpectatingEnt:GetShootPos()) <= 300 and
 		sender:GetShootPos():Distance(spectator:GetShootPos()) > 250 then
-		GAMEMODE:TalkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
+		DarkRP.talkToPerson(spectator, team.GetColor(sender:Team()), sender:Nick(), Color(255, 255, 255, 255), message, sender)
 	end
 end
 

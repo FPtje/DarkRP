@@ -44,7 +44,7 @@ AddFoodItem("orange", "models/props/cs_italy/orange.mdl", 20)
 
 local function BuyFood(ply, args)
 	if args == "" then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
 
@@ -56,7 +56,7 @@ local function BuyFood(ply, args)
 	local tr = util.TraceLine(trace)
 
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].cook then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyfood", DarkRP.getPhrase("cooks_only")))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyfood", DarkRP.getPhrase("cooks_only")))
 		return ""
 	end
 
@@ -66,10 +66,10 @@ local function BuyFood(ply, args)
 			if ply:canAfford(cost) then
 				ply:AddMoney(-cost)
 			else
-				GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
 				return ""
 			end
-			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", k, GAMEMODE.Config.currency, cost))
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", k, GAMEMODE.Config.currency, cost))
 			local SpawnedFood = ents.Create("spawned_food")
 			SpawnedFood:Setowning_ent(ply)
 			SpawnedFood.ShareGravgun = true
@@ -82,7 +82,7 @@ local function BuyFood(ply, args)
 			return ""
 		end
 	end
-	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 	return ""
 end
 DarkRP.defineChatCommand("buyfood", BuyFood)

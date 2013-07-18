@@ -1,4 +1,4 @@
-function GM:Notify(ply, msgtype, len, msg)
+function DarkRP.notify(ply, msgtype, len, msg)
 	if not IsValid(ply) then return end
 	umsg.Start("_Notify", ply)
 		umsg.String(msg)
@@ -7,7 +7,7 @@ function GM:Notify(ply, msgtype, len, msg)
 	umsg.End()
 end
 
-function GM:NotifyAll(msgtype, len, msg)
+function DarkRP.notifyAll(msgtype, len, msg)
 	umsg.Start("_Notify")
 		umsg.String(msg)
 		umsg.Short(msgtype)
@@ -15,13 +15,13 @@ function GM:NotifyAll(msgtype, len, msg)
 	umsg.End()
 end
 
-function GM:PrintMessageAll(msgtype, msg)
+function DarkRP.printMessageAll(msgtype, msg)
 	for k, v in pairs(player.GetAll()) do
 		v:PrintMessage(msgtype, msg)
 	end
 end
 
-function GM:TalkToRange(ply, PlayerName, Message, size)
+function DarkRP.talkToRange(ply, PlayerName, Message, size)
 	local ents = ents.FindInSphere(ply:EyePos(), size)
 	local col = team.GetColor(ply:Team())
 	local filter = RecipientFilter()
@@ -47,7 +47,7 @@ function GM:TalkToRange(ply, PlayerName, Message, size)
 	umsg.End()
 end
 
-function GM:TalkToPerson(receiver, col1, text1, col2, text2, sender)
+function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
 	umsg.Start("DarkRP_Chat", receiver)
 		umsg.Short(col1.r)
 		umsg.Short(col1.g)
@@ -65,7 +65,7 @@ function GM:TalkToPerson(receiver, col1, text1, col2, text2, sender)
 	umsg.End()
 end
 
-function GM:IsEmpty(vector, ignore)
+function DarkRP.isEmpty(vector, ignore)
 	ignore = ignore or {}
 
 	local point = util.PointContents(vector)
@@ -99,8 +99,8 @@ area - the position relative to pos that should also be free
 Performance: O(N^2) (The Lua part, that is, I don't know about the C++ counterpart)
 Don't call this function too often or with big inputs.
 ---------------------------------------------------------------------------*/
-function GM:FindEmptyPos(pos, ignore, distance, step, area)
-	if GAMEMODE:IsEmpty(pos, ignore) and GAMEMODE:IsEmpty(pos + area, ignore) then
+function DarkRP.findEmptyPos(pos, ignore, distance, step, area)
+	if DarkRP.isEmpty(pos, ignore) and DarkRP.isEmpty(pos + area, ignore) then
 		return pos
 	end
 
@@ -109,17 +109,17 @@ function GM:FindEmptyPos(pos, ignore, distance, step, area)
 			local k = j * i
 
 			-- Look North/South
-			if GAMEMODE:IsEmpty(pos + Vector(k, 0, 0), ignore) and GAMEMODE:IsEmpty(pos + Vector(k, 0, 0) + area, ignore) then
+			if DarkRP.isEmpty(pos + Vector(k, 0, 0), ignore) and DarkRP.isEmpty(pos + Vector(k, 0, 0) + area, ignore) then
 				return pos + Vector(k, 0, 0)
 			end
 
 			-- Look East/West
-			if GAMEMODE:IsEmpty(pos + Vector(0, k, 0), ignore) and GAMEMODE:IsEmpty(pos + Vector(0, k, 0) + area, ignore) then
+			if DarkRP.isEmpty(pos + Vector(0, k, 0), ignore) and DarkRP.isEmpty(pos + Vector(0, k, 0) + area, ignore) then
 				return pos + Vector(0, k, 0)
 			end
 
 			-- Look Up/Down
-			if GAMEMODE:IsEmpty(pos + Vector(0, 0, k), ignore) and GAMEMODE:IsEmpty(pos + Vector(0, 0, k) + area, ignore) then
+			if DarkRP.isEmpty(pos + Vector(0, 0, k), ignore) and DarkRP.isEmpty(pos + Vector(0, 0, k) + area, ignore) then
 				return pos + Vector(0, 0, k)
 			end
 		end

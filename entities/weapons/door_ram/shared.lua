@@ -135,7 +135,7 @@ function SWEP:PrimaryAttack()
 			trace.Entity:Fire("open", "", .6)
 			trace.Entity:Fire("setanimation", "open", .6)
 		else
-			GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))
+			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))
 			return
 		end
 	elseif (trace.Entity:IsVehicle()) then
@@ -146,7 +146,7 @@ function SWEP:PrimaryAttack()
 		trace.Entity:Fire("lock", "", 0)
 	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
-			GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))
+			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))
 			return
 		end
 
@@ -156,7 +156,7 @@ function SWEP:PrimaryAttack()
 		end
 	elseif a and b and not trace.Entity:GetPhysicsObject():IsMoveable() and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
-			GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required_unfreeze"))
+			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required_unfreeze"))
 			return
 		end
 
@@ -164,7 +164,7 @@ function SWEP:PrimaryAttack()
 	end
 	if d and b and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
-			GAMEMODE:Notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required_unweld"))
+			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required_unweld"))
 			return
 		end
 

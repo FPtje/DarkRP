@@ -46,23 +46,6 @@ function FAdmin.FindPlayer(info)
 	return (#PlayersFound > 0 and PlayersFound) or nil
 end
 
-function FAdmin.IsEmpty(vector)
-	local point = util.PointContents(vector)
-	local a = point ~= CONTENTS_SOLID
-	and point ~= CONTENTS_MOVEABLE
-	and point ~= CONTENTS_LADDER
-	and point ~= CONTENTS_PLAYERCLIP
-	and point ~= CONTENTS_MONSTERCLIP
-	local b = true
-
-	for k,v in pairs(ents.FindInSphere(vector, 35)) do
-		if v:IsNPC() or v:IsPlayer() or v:GetClass() == "prop_physics" then
-			b = false
-		end
-	end
-	return a and b
-end
-
 function FAdmin.SteamToProfile(ply) -- Thanks decodaman
 	return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
 end

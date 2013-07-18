@@ -72,7 +72,7 @@ function meta:SetRPName(name, firstRun)
 			end
 		else
 			if not firstRun then -- Don't save the steam name in the database
-				GAMEMODE:NotifyAll(2, 6, DarkRP.getPhrase("rpname_changed", self:SteamName(), name))
+				DarkRP.notifyAll(2, 6, DarkRP.getPhrase("rpname_changed", self:SteamName(), name))
 				DarkRP.storeRPName(self, name)
 			end
 		end
@@ -291,7 +291,7 @@ function meta:ChangeTeam(t, force)
 	end
 	self:UpdateJob(TEAM.name)
 	self:setSelfDarkRPVar("salary", TEAM.salary)
-	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
+	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
 
 
 	if self:getDarkRPVar("HasGunlicense") then

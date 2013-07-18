@@ -66,9 +66,9 @@ end
 local function StartStorm(ply)
 	if ply:HasPriv("rp_commands") then
 		timer.Start("stormControl")
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
 	else
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/enablestorm"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/enablestorm"))
 	end
 	return ""
 end
@@ -80,9 +80,9 @@ local function StopStorm(ply)
 		stormOn = false
 		timer.Stop("start")
 		StormEnd()
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
 	else
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/disablestorm"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/disablestorm"))
 	end
 	return ""
 end
@@ -110,10 +110,10 @@ local function TremorReport(mag)
 	local mag = table.remove(lastmagnitudes, 1)
 	if mag then
 		if mag < 6.5 then
-			GAMEMODE:NotifyAll(0, 3, DarkRP.getPhrase("earthtremor_report", tostring(mag)))
+			DarkRP.notifyAll(0, 3, DarkRP.getPhrase("earthtremor_report", tostring(mag)))
 			return
 		end
-		GAMEMODE:NotifyAll(0, 3, DarkRP.getPhrase("earthquake_report", tostring(mag)))
+		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("earthquake_report", tostring(mag)))
 	end
 end
 

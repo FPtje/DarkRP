@@ -30,7 +30,6 @@ include("libraries/database.lua")
 include("server/gamemode_functions.lua")
 include("server/main.lua")
 include("server/player.lua")
-include("server/util.lua")
 
 /*---------------------------------------------------------------------------
 Loading modules

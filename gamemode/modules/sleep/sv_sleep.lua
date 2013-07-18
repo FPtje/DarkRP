@@ -67,7 +67,7 @@ function KnockoutToggle(player, command, args, caller)
 			else
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
 					if v:GetClass() == "func_door" then
-						GAMEMODE:Notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
+						DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
 						return ""
 					end
 				end
@@ -113,11 +113,11 @@ function KnockoutToggle(player, command, args, caller)
 				player.Sleeping = true
 			end
 		else
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
 		end
 		return ""
 	else
-		GAMEMODE:Notify(player, 1, 4, DarkRP.getPhrase("disabled", "/sleep", ""))
+		DarkRP.notify(player, 1, 4, DarkRP.getPhrase("disabled", "/sleep", ""))
 		return ""
 	end
 end

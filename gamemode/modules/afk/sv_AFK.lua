@@ -8,7 +8,7 @@ local function AFKDemote(ply)
 	if ply:Team() ~= GAMEMODE.DefaultTeam then
 		ply:ChangeTeam(GAMEMODE.DefaultTeam, true)
 		ply:setSelfDarkRPVar("AFKDemoted", true)
-		GAMEMODE:NotifyAll(0, 5, DarkRP.getPhrase("hes_afk_demoted", rpname))
+		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("hes_afk_demoted", rpname))
 	end
 	ply:setDarkRPVar("job", "AFK")
 end
@@ -22,12 +22,12 @@ local function SetAFK(ply)
 	if ply:getDarkRPVar("AFK") then
 		DarkRP.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
 		ply.OldJob = ply:getDarkRPVar("job")
-		GAMEMODE:NotifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
+		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
 
 		ply:KillSilent()
 	else
-		GAMEMODE:NotifyAll(1, 5, rpname .. " is no longer AFK.")
-		GAMEMODE:Notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
+		DarkRP.notifyAll(1, 5, rpname .. " is no longer AFK.")
+		DarkRP.notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
 		ply:Spawn()
 	end
 	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)

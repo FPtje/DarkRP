@@ -135,13 +135,13 @@ function SWEP:PrimaryAttack()
 
 	if class == "sent_keypad" then
 		data = get_sent_keypad_Info(ent)
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
 	elseif class == "keypad" then
 		data = get_keypad_Info(ent)
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
 	else
 		data = getEntityKeypad(ent)
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controlled_by_x_keypads", #data))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controlled_by_x_keypads", #data))
 	end
 
 	net.Start("DarkRP_keypadData")

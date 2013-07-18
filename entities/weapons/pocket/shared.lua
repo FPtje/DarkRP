@@ -89,23 +89,23 @@ function SWEP:PrimaryAttack()
 
 	self.Owner:GetTable().Pocket = self.Owner:GetTable().Pocket or {}
 	if not trace.Entity:CPPICanPickup(self.Owner) or trace.Entity.IsPocketed or trace.Entity.jailWall then
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("cannot_pocket_x", ""))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("cannot_pocket_x", ""))
 		return
 	end
 	for k,v in pairs(blacklist) do
 		if string.find(string.lower(trace.Entity:GetClass()), v) then
-			GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("cannot_pocket_x", " " .. v))
+			DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("cannot_pocket_x", " " .. v))
 			return
 		end
 	end
 
 	if mass > 100 then
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("object_too_heavy"))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("object_too_heavy"))
 		return
 	end
 
 	if #self.Owner:GetTable().Pocket >= self.MaxPocketItems then
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_full"))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_full"))
 		return
 	end
 
@@ -133,7 +133,7 @@ function SWEP:SecondaryAttack()
 	if CLIENT then return end
 
 	if not self.Owner:GetTable().Pocket or #self.Owner:GetTable().Pocket <= 0 then
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
 		return
 	end
 
@@ -142,7 +142,7 @@ function SWEP:SecondaryAttack()
 
 	local ent = self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket]
 	self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket] = nil
-	if not IsValid(ent) then GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items")) return end
+	if not IsValid(ent) then DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items")) return end
 
 	self.Owner:DropPocketItem(ent)
 end
@@ -154,7 +154,7 @@ function SWEP:Reload()
 	timer.Simple(0.5, function() self.Weapon.OnceReload = false end)
 
 	if not self.Owner:GetTable().Pocket or #self.Owner:GetTable().Pocket <= 0 then
-		GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
 		return
 	end
 
@@ -163,7 +163,7 @@ function SWEP:Reload()
 			self.Owner:GetTable().Pocket[k] = nil
 			self.Owner:GetTable().Pocket = table.ClearKeys(self.Owner:GetTable().Pocket)
 			if #self.Owner:GetTable().Pocket <= 0 then -- Recheck after the entities have been validated.
-				GAMEMODE:Notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
+				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
 				return
 			end
 		end

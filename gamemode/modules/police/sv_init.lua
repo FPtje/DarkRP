@@ -24,7 +24,7 @@ function plyMeta:warrant(warranter, reason)
 		b:PrintMessage(HUD_PRINTCONSOLE, printMessage)
 	end
 
-	GAMEMODE:Notify(warranter, 0, 4, DarkRP.getPhrase("warrant_approved2"))
+	DarkRP.notify(warranter, 0, 4, DarkRP.getPhrase("warrant_approved2"))
 end
 
 function plyMeta:unWarrant(unwarranter)
@@ -33,7 +33,7 @@ function plyMeta:unWarrant(unwarranter)
 	hook.Call("PlayerUnWarranted", GAMEMODE, unwarranter, self)
 
 	self.warranted = false
-	GAMEMODE:Notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
+	DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
 end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
@@ -87,7 +87,7 @@ function plyMeta:arrest(time, arrester)
 	if GAMEMODE.Config.teletojail and DarkRP.jailPosCount() ~= 0 then
 		local jailpos = DarkRP.retrieveJailPos()
 		if jailpos then
-			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
+			jailpos = DarkRP.findEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
 			self:SetPos(jailpos)
 		end
 	end
@@ -106,19 +106,19 @@ Chat commands
 ---------------------------------------------------------------------------*/
 local function CombineRequest(ply, args)
 	if args == "" then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
 	local t = ply:Team()
 
 	local DoSay = function(text)
 		if text == "" then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return
 		end
 		for k, v in pairs(player.GetAll()) do
 			if v:IsCP() or v == ply then
-				GAMEMODE:TalkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
+				DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
 			end
 		end
 	end
@@ -133,7 +133,7 @@ local function warrantCommand(ply, args)
 
 	local canRequest, message = hook.Call("canRequestWarrant", DarkRP.hooks, target, ply, reason)
 	if not canRequest then
-		GAMEMODE:Notify(ply, 1, 4, message)
+		DarkRP.notify(ply, 1, 4, message)
 		return ""
 	end
 
@@ -149,7 +149,7 @@ local function warrantCommand(ply, args)
 		if #mayors > 0 then -- Request a warrant if there's a mayor
 			local mayor = table.Random(mayors)
 			mayor:requestWarrant(target, ply, reason)
-			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Nick()))
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Nick()))
 			return ""
 		end
 	end
@@ -167,7 +167,7 @@ local function wantedCommand(ply, args)
 
 	local canWanted, message = hook.Call("canWanted", DarkRP.hooks, target, ply, reason)
 	if not canWanted then
-		GAMEMODE:Notify(ply, 1, 4, message)
+		DarkRP.notify(ply, 1, 4, message)
 		return ""
 	end
 
@@ -182,7 +182,7 @@ local function unwantedCommand(ply, args)
 
 	local canUnwant, message = hook.Call("canUnwant", DarkRP.hooks, target, ply)
 	if not canUnwant then
-		GAMEMODE:Notify(ply, 1, 4, message)
+		DarkRP.notify(ply, 1, 4, message)
 		return ""
 	end
 
@@ -271,7 +271,7 @@ Callback functions
 ---------------------------------------------------------------------------*/
 function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
 	if not tobool(choice) then
-		GAMEMODE:Notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
+		DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
 		return
 	end
 
@@ -324,12 +324,12 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 	end
 
 	timer.Destroy(ply:SteamID() .. "jailtimer")
-	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
+	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
 end
 
 hook.Add("PlayerInitialSpawn", "Arrested", function(ply)
 	if not arrestedPlayers[ply:SteamID()] then return end
 	local time = GAMEMODE.Config.jailtimer
 	ply:arrest(time)
-	GAMEMODE:Notify(ply, 0, 5, DarkRP.getPhrase("jail_punishment", time))
+	DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("jail_punishment", time))
 end)

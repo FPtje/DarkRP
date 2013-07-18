@@ -119,7 +119,7 @@ function SWEP:PrimaryAttack()
 		if FPP and FPP.PlayerCanTouchEnt(self.Owner, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
 			if trace.Entity.SeizeReward and not trace.Entity.burningup and self.Owner:IsCP() and self.Owner != trace.Entity:Getowning_ent() then
 				self.Owner:AddMoney( trace.Entity.SeizeReward )
-				GAMEMODE:Notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. trace.Entity.SeizeReward, DarkRP.getPhrase("bonus_destroying_entity")))
+				DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. trace.Entity.SeizeReward, DarkRP.getPhrase("bonus_destroying_entity")))
 			end
 			trace.Entity:TakeDamage(1000, self.Owner, self) -- for illegal entities
 		end
@@ -161,7 +161,7 @@ function SWEP:SecondaryAttack()
 			if FPP and FPP.PlayerCanTouchEnt(ply, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
 				if trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
 					self.Owner:AddMoney( trace.Entity.SeizeReward )
-					GAMEMODE:Notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. trace.Entity.SeizeReward, DarkRP.getPhrase("bonus_destroying_entity")))
+					DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. trace.Entity.SeizeReward, DarkRP.getPhrase("bonus_destroying_entity")))
 				end
 				trace.Entity:TakeDamage(990, self.Owner, self)
 			end

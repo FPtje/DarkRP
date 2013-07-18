@@ -11,7 +11,7 @@ local function ccDoVote(ply, cmd, args)
 	local canVote, message = hook.Call("CanVote", GAMEMODE, ply, vote)
 
 	if vote.voters[ply] or vote.exclude[ply] or canVote == false then
-		GAMEMODE:Notify(ply, 1, 4, message or DarkRP.getPhrase("you_cannot_vote"))
+		DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("you_cannot_vote"))
 		return
 	end
 	vote.voters[ply] = true
@@ -82,13 +82,13 @@ function GM.vote:create(question, voteType, target, time, callback, excludeVoter
 	newvote.nay = 0
 
 	if #player.GetAll() <= table.Count(excludeVoters) then
-		GAMEMODE:Notify(target, 0, 4, DarkRP.getPhrase("vote_alone"))
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("vote_alone"))
 		newvote:callback(1)
 		return
 	end
 
 	if target:IsPlayer() then
-		GAMEMODE:Notify(target, 1, 4, DarkRP.getPhrase("vote_started"))
+		DarkRP.notify(target, 1, 4, DarkRP.getPhrase("vote_started"))
 	end
 
 	umsg.Start("DoVote", newvote:getFilter())
@@ -143,6 +143,6 @@ local function CancelVote(ply, cmd, args)
 		nick = ply:Nick()
 	end
 
-	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", nick))
+	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", nick))
 end
 concommand.Add("rp_cancelvote", CancelVote)

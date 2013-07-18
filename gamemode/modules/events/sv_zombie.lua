@@ -56,10 +56,10 @@ end
 local function ReMoveZombie(ply, index)
 	if ply:HasPriv("rp_commands") then
 		if not index or zombieSpawns[tonumber(index)] == nil then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("zombie_spawn_not_exist", tostring(index)))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("zombie_spawn_not_exist", tostring(index)))
 		else
 			DarkRP.RetrieveZombies(function()
-				GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_spawn_removed"))
+				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_spawn_removed"))
 				table.remove(zombieSpawns, index)
 				DarkRP.StoreZombies()
 				if ply:getDarkRPVar("zombieToggle") then
@@ -68,7 +68,7 @@ local function ReMoveZombie(ply, index)
 			end)
 		end
 	else
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/removezombie"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/removezombie"))
 	end
 	return ""
 end
@@ -80,10 +80,10 @@ local function AddZombie(ply)
 			table.insert(zombieSpawns, ply:GetPos())
 			DarkRP.StoreZombies()
 			if ply:getDarkRPVar("zombieToggle") then LoadTable(ply) end
-			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_spawn_added"))
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_spawn_added"))
 		end)
 	else
-		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/addzombie"))
+		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/addzombie"))
 	end
 	return ""
 end
@@ -95,14 +95,14 @@ local function ToggleZombie(ply)
 			DarkRP.RetrieveZombies(function()
 				ply:SetSelfDarkRPVar("zombieToggle", true)
 				LoadTable(ply)
-				GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
+				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 			end)
 		else
 			ply:setSelfDarkRPVar("zombieToggle", false)
-			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 		end
 	else
-		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/showzombie"))
+		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/showzombie"))
 	end
 	return ""
 end
@@ -137,11 +137,11 @@ end
 local function ZombieMax(ply, args)
 	if ply:HasPriv("rp_commands") then
 		if not tonumber(args) then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return ""
 		end
 		maxZombie = tonumber(args)
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_maxset", args))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_maxset", args))
 	end
 
 	return ""
@@ -153,9 +153,9 @@ DarkRP.defineChatCommand("maxzombies", ZombieMax)
 local function StartZombie(ply)
 	if ply:HasPriv("rp_commands") then
 		timer.Start("zombieControl")
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_enabled"))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_enabled"))
 	else
-		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/enablezombie"))
+		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/enablezombie"))
 	end
 	return ""
 end
@@ -167,9 +167,9 @@ local function StopZombie(ply)
 		zombieOn = false
 		timer.Stop("start2")
 		ZombieEnd()
-		GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("zombie_disabled"))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_disabled"))
 	else
-		GAMEMODE:Notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/disablezombie"))
+		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/disablezombie"))
 	end
 	return ""
 end
@@ -224,7 +224,7 @@ function DarkRP.RetrieveRandomZombieSpawnPos()
 	if #zombieSpawns < 1 then return end
 	local r = table.Random(zombieSpawns)
 
-	local pos = GAMEMODE:FindEmptyPos(r, nil, 200, 10, Vector(2, 2, 2))
+	local pos = DarkRP.findEmptyPos(r, nil, 200, 10, Vector(2, 2, 2))
 
 	return pos
 end

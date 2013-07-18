@@ -28,17 +28,17 @@ end
 
 local function AddLaw(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "addlaw"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "addlaw"))
 		return ""
 	end
 
 	if string.len(args) < 3 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
 		return ""
 	end
 
 	if #Laws >= 12 then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("laws_full"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("laws_full"))
 		return ""
 	end
 
@@ -48,7 +48,7 @@ local function AddLaw(ply, args)
 		umsg.String(args)
 	umsg.End()
 
-	GAMEMODE:Notify(ply, 0, 2, "Law added.")
+	DarkRP.notify(ply, 0, 2, "Law added.")
 
 	return ""
 end
@@ -56,17 +56,17 @@ DarkRP.defineChatCommand("addlaw", AddLaw)
 
 local function RemoveLaw(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "removelaw"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "removelaw"))
 		return ""
 	end
 
 	if not tonumber(args) or not Laws[tonumber(arg)] then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments")))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments")))
 		return ""
 	end
 
 	if FixedLaws[ tonumber(args) ] then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
 		return ""
 	end
 
@@ -76,7 +76,7 @@ local function RemoveLaw(ply, args)
 		umsg.Char(tonumber(args))
 	umsg.End()
 
-	GAMEMODE:Notify(ply, 0, 2, "Law removed.")
+	DarkRP.notify(ply, 0, 2, "Law removed.")
 
 	return ""
 end
@@ -85,12 +85,12 @@ DarkRP.defineChatCommand("removelaw", RemoveLaw)
 local numlaws = 0
 local function PlaceLaws(ply, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
 		return ""
 	end
 
 	if numlaws >= GAMEMODE.Config.maxlawboards then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
 		return ""
 	end
 

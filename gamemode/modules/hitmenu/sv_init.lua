@@ -16,7 +16,7 @@ function plyMeta:requestHit(customer, target, price)
 	local canRequest, msg = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
 
 	if canRequest == false then
-		GAMEMODE:Notify(customer, 1, 4, msg)
+		DarkRP.notify(customer, 1, 4, msg)
 		return false
 	end
 
@@ -30,7 +30,7 @@ function plyMeta:requestHit(customer, target, price)
 		price
 	)
 
-	GAMEMODE:Notify(customer, 1, 4, DarkRP.getPhrase("hit_requested"))
+	DarkRP.notify(customer, 1, 4, DarkRP.getPhrase("hit_requested"))
 
 	return true
 end
@@ -75,7 +75,7 @@ function plyMeta:abortHit(message)
 	msg = msg or ""
 
 	hook.Call("onHitFailed", DarkRP.hooks, self, self:getHitTarget(), message)
-	GAMEMODE:NotifyAll(0, 4, DarkRP.getPhrase("hit_aborted", message))
+	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hit_aborted", message))
 
 	self:finishHit()
 end
@@ -90,23 +90,23 @@ function questionCallback(answer, hitman, customer, target, price)
 	if not IsValid(customer) then return end
 
 	if not IsValid(customer) then
-		GAMEMODE:Notify(hitman, 1, 4, DarkRP.getPhrase("customer_left_server"))
+		DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("customer_left_server"))
 		return
 	end
 
 	if not IsValid(target) then
-		GAMEMODE:Notify(hitman, 1, 4, DarkRP.getPhrase("target_left_server"))
+		DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("target_left_server"))
 		return
 	end
 
 	if not tobool(answer) then
-		GAMEMODE:Notify(customer, 1, 4, DarkRP.getPhrase("hit_declined"))
+		DarkRP.notify(customer, 1, 4, DarkRP.getPhrase("hit_declined"))
 		return
 	end
 
 	if hits[self] then return end
 
-	GAMEMODE:Notify(hitman, 1, 4, DarkRP.getPhrase("hit_accepted"))
+	DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("hit_accepted"))
 
 	hitman:placeHit(customer, target, price)
 end
@@ -119,7 +119,7 @@ DarkRP.defineChatCommand("hitprice", function(ply, args)
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
 
-	GAMEMODE:Notify(ply, 2, 4, DarkRP.getPhrase("hit_price_set_to_x", GAMEMODE.Config.currency, price))
+	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("hit_price_set_to_x", GAMEMODE.Config.currency, price))
 
 	return ""
 end)
@@ -131,7 +131,7 @@ DarkRP.defineChatCommand("requesthit", function(ply, args)
 	local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1) or -1)
 
 	if not IsValid(hitman) or not IsValid(target) or not hitman:IsPlayer() then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 
@@ -150,7 +150,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 		net.WriteEntity(customer)
 	net.Broadcast()
 
-	GAMEMODE:Notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
+	DarkRP.notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
 	customer.lastHitAccepted = CurTime()
 
 	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, false, Color(255, 0, 255))
@@ -163,7 +163,7 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 		net.WriteEntity(customer)
 	net.Broadcast()
 
-	GAMEMODE:NotifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Nick()))
+	DarkRP.notifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Nick()))
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 

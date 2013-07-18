@@ -119,7 +119,7 @@ end
 function GM:PlayerSpawnSENT(ply, model)
 	if GAMEMODE.Config.adminsents then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
+			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
 			return
 		end
 	end
@@ -131,7 +131,7 @@ local function canSpawnWeapon(ply, class)
 	(GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
 		return true
 	end
-	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
 
 	return false
 end
@@ -174,10 +174,10 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if GAMEMODE.Config.proppaying then
 		if ply:canAfford(GAMEMODE.Config.propcost) then
-			GAMEMODE:Notify(ply, 0, 4, DarkRP.getPhrase("deducted", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("deducted", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
 			ply:AddMoney(-GAMEMODE.Config.propcost)
 		else
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("need", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
 			return false
 		end
 	end
@@ -191,7 +191,7 @@ end
 local function ccSENTSPawn(ply, cmd, args)
 	if GAMEMODE.Config.adminsents then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
+			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
 			return
 		end
 	end
@@ -203,7 +203,7 @@ concommand.Add("gm_spawnsent", ccSENTSPawn)
 local function ccVehicleSpawn(ply, cmd, args)
 	if GAMEMODE.Config.adminvehicles then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
+			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
 			return
 		end
 	end
@@ -215,7 +215,7 @@ concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
 local function ccNPCSpawn(ply, cmd, args)
 	if GAMEMODE.Config.adminnpcs then
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			GAMEMODE:Notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
+			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
 			return
 		end
 	end
@@ -272,7 +272,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 		-- If we know by now who killed the NPC, pay them.
 		if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
 			ent:AddMoney(GAMEMODE.Config.npckillpay)
-			GAMEMODE:Notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
+			DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
 		end
 	end
 end
@@ -338,15 +338,15 @@ end
 
 function GM:CanPlayerSuicide(ply)
 	if ply.IsSleeping then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
 	end
 	if ply:isArrested() then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
 	end
 	if GAMEMODE.Config.wantedsuicide and ply:getDarkRPVar("wanted") then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
 	end
 
@@ -357,7 +357,7 @@ function GM:CanPlayerSuicide(ply)
 end
 
 function GM:CanDrive(ply, ent)
-	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("drive_disabled"))
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("drive_disabled"))
 	return false -- Disabled until people can't minge with it anymore
 end
 
@@ -379,7 +379,7 @@ function GM:CanProperty(ply, property, ent)
 	if property == "persist" and ply:IsSuperAdmin() then
 		return true
 	end
-	GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("property_disabled"))
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("property_disabled"))
 	return false -- Disabled until antiminge measure is found
 end
 
@@ -422,7 +422,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		for a, b in pairs(player.GetAll()) do
 			b:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
 		end
-		GAMEMODE:Notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
+		DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
 	else
 		-- Normal death, respawning.
 		ply.NextSpawnTime = CurTime() + math.Clamp(GAMEMODE.Config.respawntime, 0, 10)
@@ -582,7 +582,7 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	-- Make sure the player doesn't get stuck in something
-	POS = GAMEMODE:FindEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
+	POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
 
 	return spawn, POS
 end

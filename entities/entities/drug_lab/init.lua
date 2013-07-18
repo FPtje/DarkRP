@@ -43,17 +43,17 @@ function ENT:Use(activator,caller)
 	self.CanUse = false
 	self.drug_user = activator
 	if activator.maxDrugs and activator.maxDrugs >= GAMEMODE.Config.maxdrugs then
-		GAMEMODE:Notify(activator, 1, 3, DarkRP.getPhrase("limit", string.lower(DarkRP.getPhrase("drugs"))))
+		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("limit", string.lower(DarkRP.getPhrase("drugs"))))
 		timer.Simple(0.5, function() self.CanUse = true end)
 	else
 		local productioncost = math.random(math.Round(self:Getprice() / 8), math.Round(self:Getprice() / 4))
 		if not activator:CanAfford(productioncost) then
-			GAMEMODE:Notify(activator, 1, 4, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("drugs"))))
+			DarkRP.notify(activator, 1, 4, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("drugs"))))
 			timer.Simple(0.5, function() self.CanUse = true end)
 			return false
 		end
 		activator:AddMoney(-productioncost)
-		GAMEMODE:Notify(activator, 0, 4, DarkRP.getPhrase("you_bought_x", string.lower(DarkRP.getPhrase("drugs")), GAMEMODE.Config.currency, productioncost))
+		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("you_bought_x", string.lower(DarkRP.getPhrase("drugs")), GAMEMODE.Config.currency, productioncost))
 		self.sparking = true
 		timer.Create(self:EntIndex() .. "drug", 1, 1, function() self:createDrug() end)
 	end

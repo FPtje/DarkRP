@@ -88,7 +88,7 @@ function SWEP:PrimaryAttack()
 		self.Weapon:SetNextPrimaryFire(CurTime() + 0.3)
 	else
 		if trace.Entity:IsVehicle() and SERVER then
-			GAMEMODE:Notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+			DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 		elseif not trace.Entity:IsVehicle() then
 			if SERVER then self.Owner:EmitSound("physics/wood/wood_crate_impact_hard2.wav", 100, math.random(90, 110))
 				umsg.Start("anim_keys", RP)
@@ -138,7 +138,7 @@ function SWEP:SecondaryAttack()
 		self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
 	else
 		if trace.Entity:IsVehicle() and SERVER then
-			GAMEMODE:Notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+			DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 		elseif not trace.Entity:IsVehicle() then
 			if SERVER then self.Owner:EmitSound("physics/wood/wood_crate_impact_hard3.wav", 100, math.random(90, 110))
 				umsg.Start("anim_keys", RP)
@@ -158,7 +158,7 @@ function SWEP:Reload()
 	local trace = self.Owner:GetEyeTrace()
 	if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:IsDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
 		if not self.OnceReload then
-			if SERVER then GAMEMODE:Notify(self.Owner, 1, 3, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle"))) end
+			if SERVER then DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle"))) end
 			self.OnceReload = true
 			timer.Simple(3, function() self.OnceReload = false end)
 		end

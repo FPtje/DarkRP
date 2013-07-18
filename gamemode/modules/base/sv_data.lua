@@ -187,7 +187,7 @@ function DarkRP.storeJailPos(ply, addingPos)
 	MySQLite.queryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function(already)
 		if not already or already == 0 then
 			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
-			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("created_first_jailpos"))
+			DarkRP.notify(ply, 0, 4,  DarkRP.getPhrase("created_first_jailpos"))
 
 			return
 		end
@@ -196,14 +196,14 @@ function DarkRP.storeJailPos(ply, addingPos)
 			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 			table.insert(jailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
-			GAMEMODE:Notify(ply, 0, 4,  DarkRP.getPhrase("added_jailpos"))
+			DarkRP.notify(ply, 0, 4,  DarkRP.getPhrase("added_jailpos"))
 		else
 			MySQLite.query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function()
 				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
 
 
 				jailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
-				GAMEMODE:Notify(ply, 0, 5,  DarkRP.getPhrase("reset_add_jailpos"))
+				DarkRP.notify(ply, 0, 5,  DarkRP.getPhrase("reset_add_jailpos"))
 			end)
 		end
 	end)
@@ -335,9 +335,9 @@ local function resetAllMoney(ply,cmd,args)
 		v:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
 	end
 	if ply:IsPlayer() then
-		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
+		DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
 	else
-		GAMEMODE:NotifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
+		DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
 	end
 end
 concommand.Add("rp_resetallmoney", resetAllMoney)

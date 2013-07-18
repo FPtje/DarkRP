@@ -1,8 +1,8 @@
 function DarkRP.defineChatCommand(cmd, callback)
 	local detour = function(ply, arg, ...)
 		if ply.DarkRPUnInitialized then
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
-			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_two"))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_two"))
 			return ""
 		end
 		return callback(ply, arg, ...)
@@ -56,10 +56,10 @@ local function RP_ActualDoSay(ply, text, callback)
 
 	if GAMEMODE.Config.alltalk then
 		for k,v in pairs(player.GetAll()) do
-			GAMEMODE:TalkToPerson(v, col, callback..ply:Name(), col2, text, ply)
+			DarkRP.talkToPerson(v, col, callback..ply:Name(), col2, text, ply)
 		end
 	else
-		GAMEMODE:TalkToRange(ply, callback..ply:Name(), text, 250)
+		DarkRP.talkToRange(ply, callback..ply:Name(), text, 250)
 	end
 	return ""
 end
