@@ -563,7 +563,7 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	local CustomSpawnPos = DarkRP.retrieveTeamSpawnPos(ply:Team())
-	if GAMEMODE.Config.customspawns and not ply:isArrested() and CustomSpawnPos then
+	if GAMEMODE.Config.customspawns and not ply:isArrested() and CustomSpawnPos and next(CustomSpawnPos) ~= nil then
 		POS = CustomSpawnPos[math.random(1, #CustomSpawnPos)]
 	end
 
