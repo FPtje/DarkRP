@@ -323,8 +323,8 @@ local english = {
 
 	you_set_x_salary_to_y = "You set %s's salary to %d%s.",
 	x_set_your_salary_to_y = "%s set your salary to %d%s.",
-	you_set_x_money_to_y = "You set %s's money to %d%s.",
-	x_set_your_money_to_y = "%s set your money to %d%s.",
+	you_set_x_money_to_y = "You set %s's money to %s%s.",
+	x_set_your_money_to_y = "%s set your money to %s%s.",
 	you_set_x_name_to_y = "You set %s's name to %s",
 	x_set_your_name_to_y = "%s set your name to %s",
 

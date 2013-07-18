@@ -127,3 +127,40 @@ function DarkRP.findEmptyPos(pos, ignore, distance, step, area)
 
 	return pos
 end
+
+local function LookPersonUp(ply, cmd, args)
+	if not args[1] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return
+	end
+	local P = DarkRP.findPlayer(args[1])
+	if not IsValid(P) then
+		if ply:EntIndex() ~= 0 then
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		else
+			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+		end
+		return
+	end
+	if ply:EntIndex() ~= 0 then
+		ply:PrintMessage(2, "Nick: ".. P:Nick())
+		ply:PrintMessage(2, "Steam name: "..P:SteamName())
+		ply:PrintMessage(2, "Steam ID: "..P:SteamID())
+		ply:PrintMessage(2, "Job: ".. team.GetName(P:Team()))
+		ply:PrintMessage(2, "Kills: ".. P:Frags())
+		ply:PrintMessage(2, "Deaths: ".. P:Deaths())
+		if ply:IsAdmin() then
+			ply:PrintMessage(2, "Money: ".. P:getDarkRPVar("money"))
+		end
+	else
+		print(DarkRP.getPhrase("name", P:Nick()))
+		print("Steam ".. DarkRP.getPhrase("name", P:SteamName()))
+		print("Steam ID: "..P:SteamID())
+		print(DarkRP.getPhrase("job", team.GetName(P:Team())))
+		print(DarkRP.getPhrase("kills", P:Frags()))
+		print(DarkRP.getPhrase("deaths", P:Death()))
+
+		print(DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
+	end
+end
+concommand.Add("rp_lookup", LookPersonUp)
