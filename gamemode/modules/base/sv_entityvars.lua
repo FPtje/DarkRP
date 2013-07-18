@@ -85,7 +85,7 @@ concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 Admin DarkRPVar commands
 ---------------------------------------------------------------------------*/
 local function ccSetMoney(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"))) return end
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
 		return
@@ -129,7 +129,7 @@ end
 concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
 
 local function ccSetSalary(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"))) return end
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setsalary"))
 		return
