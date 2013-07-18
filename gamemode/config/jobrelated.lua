@@ -29,8 +29,7 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	candemote = false,
-	mayorCanSetSalary = true
+	candemote = false
 })
 
 TEAM_POLICE = AddExtraTeam("Civil Protection", {
@@ -90,8 +89,7 @@ TEAM_GANG = AddExtraTeam("Gangster", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false,
-	mayorCanSetSalary = false
+	hasLicense = false
 })
 
 TEAM_MOB = AddExtraTeam("Mob boss", {
@@ -109,7 +107,6 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	mayorCanSetSalary = false,
 	help = {
 		"As the mob boss, you decide what you want the other Gangsters to do.",
 		"You get an Unarrest Stick which you can use to break people out of jail.",
@@ -132,8 +129,7 @@ TEAM_GUN = AddExtraTeam("Gun Dealer", {
 	salary = 45,
 	admin = 0,
 	vote = false,
-	hasLicense = false,
-	mayorCanSetSalary = true
+	hasLicense = false
 })
 
 TEAM_MEDIC = AddExtraTeam("Medic", {
@@ -152,8 +148,7 @@ TEAM_MEDIC = AddExtraTeam("Medic", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	medic = true,
-	mayorCanSetSalary = true
+	medic = true
 })
 
 TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
@@ -236,8 +231,7 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 	vote = false,
 	hasLicense = false,
 	candemote = false,
-	hobo = true,
-	mayorCanSetSalary = false
+	hobo = true
 })
 
 //ADD CUSTOM TEAMS UNDER THIS LINE:
