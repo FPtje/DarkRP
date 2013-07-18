@@ -27,7 +27,6 @@ include("config/licenseweapons.lua")
 include("libraries/fn.lua")
 include("libraries/database.lua")
 
-include("server/main.lua")
 include("server/player.lua")
 
 /*---------------------------------------------------------------------------
