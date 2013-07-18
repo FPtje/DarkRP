@@ -321,7 +321,7 @@ local function SetPrice(ply, args)
 	end
 
 	local a = tonumber(args)
-	if not a then 
+	if not a then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
@@ -1391,7 +1391,7 @@ local function CreateCheque(ply, args)
 			Cheque:Setowning_ent(ply)
 			Cheque:Setrecipient(recipient)
 
-			Cheque:Setamount(amount)
+			Cheque:Setamount(math.Min(amount, 2147483647))
 			Cheque:Spawn()
 		else
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/cheque", ""))
