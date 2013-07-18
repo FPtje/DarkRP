@@ -19,7 +19,7 @@ local function MakeLetter(ply, args, type)
 	-- Instruct the player's letter window to open
 
 	local ftext = string.gsub(args, "//", "\n")
-	ftext = string.gsub(ftext, "\\n", "\n") .. "\n\n" .. DarkRP.getPhrase("signed") .. "\n"..ply:Nick()
+	ftext = string.gsub(ftext, "\\n", "\n") .. "\n\n" .. DarkRP.getPhrase("signed_yours") .. "\n"..ply:Nick()
 	local length = string.len(ftext)
 
 	local numParts = math.floor(length / 39) + 1

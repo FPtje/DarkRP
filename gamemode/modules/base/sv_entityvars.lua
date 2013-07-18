@@ -85,7 +85,7 @@ concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 Admin DarkRPVar commands
 ---------------------------------------------------------------------------*/
 local function setRPName(ply, cmd, args)
-	if not args[1] then return end
+	if not args[2] then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setname"))
 		return

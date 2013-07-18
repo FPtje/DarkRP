@@ -268,7 +268,7 @@ local function SetDoorTeamOwnable(ply, arg)
 
 	local ent = trace.Entity
 	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_prvilege"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
 		return ""
 	end
 

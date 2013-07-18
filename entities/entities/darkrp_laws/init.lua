@@ -60,13 +60,18 @@ local function RemoveLaw(ply, args)
 		return ""
 	end
 
-	if not tonumber(args) or not Laws[tonumber(arg)] then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments")))
+	if not tonumber(args) then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 
 	if FixedLaws[ tonumber(args) ] then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
+		return ""
+	end
+
+	if not Laws[tonumber(arg)] then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 

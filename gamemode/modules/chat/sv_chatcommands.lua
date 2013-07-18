@@ -94,7 +94,7 @@ local function OOC(ply, args)
 			col = col2
 		end
 		for k,v in pairs(player.GetAll()) do
-			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("ooc").." "..ply:Name(), col2, text, ply)
+			DarkRP.talkToPerson(v, col, "("..DarkRP.getPhrase("ooc")..") "..ply:Name(), col2, text, ply)
 		end
 	end
 	return args, DoSay
