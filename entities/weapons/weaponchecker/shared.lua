@@ -202,7 +202,7 @@ function SWEP:Succeed()
 	end
 
 	if result == "" then
-		self.Owner:ChatPrint(DarkRP.getPhrase("had_no_illegal_weapons", trace.Entity:Nick()))
+		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
 		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
 		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
 	else
