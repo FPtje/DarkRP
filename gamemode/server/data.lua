@@ -58,6 +58,12 @@ function DarkRP.initDatabase()
 			]])
 		end
 
+		MySQLite.query([[
+			CREATE TABLE IF NOT EXISTS playerinformation(
+				uid BIGINT NOT NULL,
+				steamID VARCHAR(50) NOT NULL PRIMARY KEY
+			)
+		]])
 		-- Player information
 		MySQLite.query([[
 			CREATE TABLE IF NOT EXISTS darkrp_player(
@@ -472,6 +478,7 @@ function DB.RetrievePlayerData(ply, callback, failed, attempts)
 end
 
 function DB.CreatePlayerData(ply, name, wallet, salary)
+	MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(ply:UniqueID()), MySQLite.SQLStr(ply:SteamID())))
 	MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
 			ply:UniqueID() .. [[, ]] ..
 			MySQLite.SQLStr(name)  .. [[, ]] ..
