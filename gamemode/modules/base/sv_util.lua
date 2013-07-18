@@ -143,24 +143,24 @@ local function LookPersonUp(ply, cmd, args)
 		return
 	end
 	if ply:EntIndex() ~= 0 then
-		ply:PrintMessage(2, "Nick: ".. P:Nick())
-		ply:PrintMessage(2, "Steam name: "..P:SteamName())
+		ply:PrintMessage(2, DarkRP.getPhrase("name", P:Nick()))
+		ply:PrintMessage(2, "Steam ".. DarkRP.getPhrase("name", P:SteamName()))
 		ply:PrintMessage(2, "Steam ID: "..P:SteamID())
-		ply:PrintMessage(2, "Job: ".. team.GetName(P:Team()))
-		ply:PrintMessage(2, "Kills: ".. P:Frags())
-		ply:PrintMessage(2, "Deaths: ".. P:Deaths())
+		ply:PrintMessage(2, DarkRP.getPhrase("job", team.GetName(P:Team())))
+		ply:PrintMessage(2, DarkRP.getPhrase("kills", P:Frags()))
+		ply:PrintMessage(2, DarkRP.getPhrase("deaths", P:Deaths()))
 		if ply:IsAdmin() then
-			ply:PrintMessage(2, "Money: ".. P:getDarkRPVar("money"))
+			ply:PrintMessage(2, DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
 		end
 	else
-		print(DarkRP.getPhrase("name", P:Nick()))
-		print("Steam ".. DarkRP.getPhrase("name", P:SteamName()))
+		print("Nick: ".. P:Nick())
+		print("Steam name: "..P:SteamName())
 		print("Steam ID: "..P:SteamID())
-		print(DarkRP.getPhrase("job", team.GetName(P:Team())))
-		print(DarkRP.getPhrase("kills", P:Frags()))
-		print(DarkRP.getPhrase("deaths", P:Death()))
+		print("Job: ".. team.GetName(P:Team()))
+		print("Kills: ".. P:Frags())
+		print("Deaths: ".. P:Deaths())
 
-		print(DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
+		print("Money: ".. P:getDarkRPVar("money"))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)

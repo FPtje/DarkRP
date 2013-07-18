@@ -82,7 +82,7 @@ function ENT:Use(activator,caller)
 				gain = math.floor(self:Getprice() - GAMEMODE.Config.microwavefoodcost)
 			end
 			if gain == 0 then
-				DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0" .. DarkRP.getPhrase("profit"), DarkRP.getPhrase("food")))
+				DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0 " .. DarkRP.getPhrase("profit"), DarkRP.getPhrase("food")))
 			else
 				owner:AddMoney(gain)
 				local word = DarkRP.getPhrase("profit")

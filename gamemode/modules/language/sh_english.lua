@@ -54,9 +54,9 @@ local english = {
 	warrant_approved2 = "You are now able to search his house.",
 	warrant_denied = "Mayor %s has denied your search warrant request.",
 	warrant_expired = "The search warrant for %s has expired!",
-	warrant_requied = "You need a warrant in order to be able to open this door.",
-	warrant_requied_unfreeze = "You need a warrant in order to be able to unfreeze this prop.",
-	warrant_requied_unweld = "You need a warrant in order to be able to unweld this prop.",
+	warrant_required = "You need a warrant in order to be able to open this door.",
+	warrant_required_unfreeze = "You need a warrant in order to be able to unfreeze this prop.",
+	warrant_required_unweld = "You need a warrant in order to be able to unweld this prop.",
 	wanted_by_police = "%s is wanted by the police!\nReason: %s\nOrdered by: %s",
 	wanted_by_police_print = "%s ordered a search warrant for %s, reason: %s",
 	wanted_expired = "%s is no longer wanted by the Police.",
@@ -150,7 +150,7 @@ local english = {
 	money_printer = "Money Printer",
 
 	sign_this_letter = "Sign this letter",
-	signed = "Yours, ",
+	signed_yours = "Yours,",
 
 	money_printer_exploded = "Your money printer has exploded!",
 	money_printer_overheating = "Your money printer is overheating!",
@@ -169,7 +169,7 @@ local english = {
 	bonus_destroying_entity = "bonus for destroying this illegal entiy.",
 
 	switched_burst = "Switched to burst-fire mode.",
-	switched_full_auto = "Switched to fully automatic fire mode.",
+	switched_fully_auto = "Switched to fully automatic fire mode.",
 	switched_semi_auto = "Switched to semi-automatic fire mode.",
 
 	keypad_checker_shoot_keypad = "Shoot a keypad to see what it controls.",
@@ -188,10 +188,10 @@ local english = {
 	seconds = "seconds",
 
 	persons_weapons = "%s's weapons:",
-	has_no_weapons = "%s has no weapons",
+	has_no_weapons = "%s has no weapons.",
 	returned_persons_weapons = "Returned %s's confiscated weapons.",
 	no_weapons_confiscated = "%s had no weapons confiscated!",
-	no_illegal_weapons = "%s had no illegal weapons",
+	no_illegal_weapons = "%s had no illegal weapons.",
 	confiscated_these_weapons = "Confiscated these weapons:",
 	checking_weapons = "Checking weapons",
 
@@ -210,7 +210,7 @@ local english = {
 	request = "(REQUEST!)",
 	group = "(group)",
 	demote = "(DEMOTE)",
-	ooc = "(OOC)",
+	ooc = "OOC",
 	radio_x = "Radio %d",
 
 	talk = "talk",
@@ -263,7 +263,7 @@ local english = {
 	player_doesnt_exist = "Player does not exist.",
 	job_doesnt_exist = "Job does not exist!",
 	must_be_alive_to_do_x = "You must be alive in order to %s.",
-	banned_or_demoted = "banned/demoted",
+	banned_or_demoted = "Banned/demoted",
 	wait_with_that = "Wait with that.",
 	could_not_find = "Could not find %s",
 	f3tovote = "Hit F3 to vote",
@@ -297,7 +297,7 @@ local english = {
 	x_cancelled_vote = "%s cancelled the last vote.",
 	jail_punishment = "Punishment for disconnecting! Jailed for: %d seconds.",
 	admin_only = "Admin only!", -- When doing /addjailpos
-	chief_or = "Chief or",-- When doing /addjailpos
+	chief_or = "Chief or ",-- When doing /addjailpos
 
 	dead_in_jail = "You now are dead until your jail time is up!",
 	died_in_jail = "%s has died in jail!",
@@ -369,7 +369,7 @@ local english = {
 	distance_too_big = "Distance too big.",
 	hitman_no_suicide = "The hitman won't kill himself.",
 	hitman_no_self_order = "A hitman cannot order a hit for himself.",
-	hitman_already_has_hit = "The hitman already has a hit ongoing",
+	hitman_already_has_hit = "The hitman already has a hit ongoing.",
 	price_too_low = "Price too low!",
 	hit_target_recently_killed_by_hit = "The target was recently killed by a hit,",
 	customer_recently_bought_hit = "The customer has recently requested a hit.",

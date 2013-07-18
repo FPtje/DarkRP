@@ -81,7 +81,7 @@ function ENT:Use(activator)
 			gain = math.floor(self:Getprice() - 185)
 		end
 		if gain == 0 then
-			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0" .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
+			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0 " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 		else
 			owner:AddMoney(gain)
 			local word = DarkRP.getPhrase("profit")
