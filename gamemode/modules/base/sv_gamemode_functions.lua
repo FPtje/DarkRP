@@ -261,19 +261,19 @@ end
 
 function GM:OnNPCKilled(victim, ent, weapon)
 	-- If something killed the npc
-	if ent then
-		if ent:IsVehicle() and ent:GetDriver():IsPlayer() then ent = ent:GetDriver() end
+	if not ent then return end
 
-		-- If it wasn't a player directly, find out who owns the prop that did the killing
-		if not ent:IsPlayer() then
-			ent = Player(tonumber(ent.SID) or 0)
-		end
+	if ent:IsVehicle() and ent:GetDriver():IsPlayer() then ent = ent:GetDriver() end
 
-		-- If we know by now who killed the NPC, pay them.
-		if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
-			ent:AddMoney(GAMEMODE.Config.npckillpay)
-			DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
-		end
+	-- If it wasn't a player directly, find out who owns the prop that did the killing
+	if not ent:IsPlayer() then
+		ent = Player(tonumber(ent.SID) or 0)
+	end
+
+	-- If we know by now who killed the NPC, pay them.
+	if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
+		ent:AddMoney(GAMEMODE.Config.npckillpay)
+		DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
 	end
 end
 
@@ -482,11 +482,6 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 	return true
 end
 
-local function removelicense(ply)
-	if not IsValid(ply) then return end
-	ply:GetTable().RPLicenseSpawn = false
-end
-
 local function SetPlayerModel(ply, cmd, args)
 	if not args[1] then return end
 	ply.rpChosenModel = args[1]
@@ -673,6 +668,11 @@ end
 function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
 end
 
+local function removelicense(ply)
+	if not IsValid(ply) then return end
+	ply:GetTable().RPLicenseSpawn = false
+end
+
 function GM:PlayerLoadout(ply)
 	if ply:isArrested() then return end
 
@@ -719,6 +719,9 @@ function GM:PlayerLoadout(ply)
 	selectDefaultWeapon(ply)
 end
 
+/*---------------------------------------------------------------------------
+Remove with a delay if the player doesn't rejoin before the timer has run out
+---------------------------------------------------------------------------*/
 local function removeDelayed(ent, ply)
 	local removedelay = GAMEMODE.Config.entremovedelay
 
@@ -830,7 +833,7 @@ end
 
 local function ClearDecals()
 	if GAMEMODE.Config.decalcleaner then
-		for _, p in pairs( player.GetAll() ) do
+		for _, p in pairs(player.GetAll()) do
 			p:ConCommand("r_cleardecals")
 		end
 	end

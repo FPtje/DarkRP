@@ -1,7 +1,7 @@
 CreateConVar("DarkRP_LockDown", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}) -- Don't save this one!
 /*---------------------------------------------------------
  Flammable
- ---------------------------------------------------------*/
+---------------------------------------------------------*/
 local FlammableProps = {drug = true,
 drug_lab = true,
 food = true,
@@ -64,8 +64,7 @@ timer.Create("FlammableProps", 0.1, 0, FlammablePropThink)
 
 /*---------------------------------------------------------
  Shipments
- ---------------------------------------------------------*/
-
+---------------------------------------------------------*/
 local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) then
