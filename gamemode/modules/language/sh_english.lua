@@ -302,7 +302,8 @@ local english = {
 	dead_in_jail = "You now are dead until your jail time is up!",
 	died_in_jail = "%s has died in jail!",
 
-	credits_for = "CREDITS FOR %s",
+	credits_for = "CREDITS FOR %s\n",
+	credits_see_console = "DarkRP credits printed to console.",
 
 	rp_getvehicles = "Available vehicles for custom vehicles:",
 

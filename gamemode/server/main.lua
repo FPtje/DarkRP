@@ -1221,7 +1221,7 @@ local CreditsWait = true
 local function GetDarkRPAuthors(ply, args)
 	local target = DarkRP.findPlayer(args); -- Only send to one player. Prevents spamming
 	if not IsValid(target) then
-		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("plaer_doesnt_exist"))
+		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("player_doesnt_exist"))
 		return ""
 	end
 
