@@ -2,15 +2,15 @@ resource.AddFile("sound/earthquake.mp3")
 util.PrecacheSound("earthquake.mp3")
 
 /*---------------------------------------------------------
- Variables
- ---------------------------------------------------------*/
+Variables
+---------------------------------------------------------*/
 local timeLeft = 10
 local stormOn = false
 
 
 /*---------------------------------------------------------
- Meteor storm
- ---------------------------------------------------------*/
+Meteor storm
+---------------------------------------------------------*/
 local function StormStart()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
@@ -95,8 +95,8 @@ timer.Stop("start")
 timer.Stop("stormControl")
 
 /*---------------------------------------------------------
- Earthquake
- ---------------------------------------------------------*/
+Earthquake
+---------------------------------------------------------*/
 local lastmagnitudes = {} -- The magnitudes of the last tremors
 
 local tremor = ents.Create("env_physexplosion")
@@ -146,3 +146,66 @@ local function EarthQuakeTest()
 	end
 end
 timer.Create("EarthquakeTest", 1, 0, EarthQuakeTest)
+
+/*---------------------------------------------------------
+ Flammable
+---------------------------------------------------------*/
+local FlammableProps = {drug = true,
+drug_lab = true,
+food = true,
+gunlab = true,
+letter = true,
+microwave = true,
+money_printer = true,
+spawned_shipment = true,
+spawned_weapon = true,
+spawned_money = true}
+
+local function IsFlammable(ent)
+	return FlammableProps[ent:GetClass()] ~= nil
+end
+
+-- FireSpread from SeriousRP
+local function FireSpread(e)
+	if not e:IsOnFire() then return end
+
+	if e:IsMoneyBag() then
+		e:Remove()
+	end
+
+	local rand = math.random(0, 300)
+
+	if rand > 1 then return end
+	local en = ents.FindInSphere(e:GetPos(), math.random(20, 90))
+
+	for k, v in pairs(en) do
+		if not IsFlammable(v) then continue end
+
+		if not v.burned then
+			v:Ignite(math.random(5,180), 0)
+			v.burned = true
+		else
+			local color = v:GetColor()
+			if (color.r - 51) >= 0 then color.r = color.r - 51 end
+			if (color.g - 51) >= 0 then color.g = color.g - 51 end
+			if (color.b - 51) >= 0 then color.b = color.b - 51 end
+			v:SetColor(color)
+			if (color.r + color.g + color.b) < 103 and math.random(1, 100) < 35 then
+				v:Fire("enablemotion","",0)
+				constraint.RemoveAll(v)
+			end
+		end
+		break -- Don't ignite all entities in sphere at once, just one at a time
+	end
+end
+
+local function FlammablePropThink()
+	for k, v in pairs(FlammableProps) do
+		local ens = ents.FindByClass(k)
+
+		for a, b in pairs(ens) do
+			FireSpread(b)
+		end
+	end
+end
+timer.Create("FlammableProps", 0.1, 0, FlammablePropThink)

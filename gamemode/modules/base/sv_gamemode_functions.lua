@@ -259,6 +259,12 @@ function GM:ShowSpare2(ply)
 	end
 end
 
+function GM:ShowTeam(ply)
+end
+
+function GM:ShowHelp(ply)
+end
+
 function GM:OnNPCKilled(victim, ent, weapon)
 	-- If something killed the npc
 	if not ent then return end

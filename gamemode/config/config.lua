@@ -73,8 +73,6 @@ GM.Config.earthquakes 					= false
 GM.Config.enablebuyhealth 				= true
 -- enablebuypistol - Turn /buy on of off.
 GM.Config.enablebuypistol 				= true
--- enablemayorsetsalary - Enable Mayor salary control.
-GM.Config.enablemayorsetsalary 			= true
 -- enableshipments - Turn /buyshipment on or off.
 GM.Config.enableshipments 				= true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
@@ -161,8 +159,6 @@ GM.Config.entremovedelay				= 0
 GM.Config.healthcost					= 60
 -- jailtimer - Sets the jailtimer. (in seconds)
 GM.Config.jailtimer						= 120
--- maxcopsalary - Sets the max salary that the Mayor can give to a CP.
-GM.Config.maxcopsalary					= 100
 -- maxdoors - Sets the max amount of doors one can own.
 GM.Config.maxdoors						= 20
 -- maxdrugs - Sets max drugs.
@@ -175,10 +171,6 @@ GM.Config.maxlawboards					= 2
 GM.Config.maxletters					= 10
 -- maxlotterycost - Maximum payment the mayor can set to join a lottery.
 GM.Config.maxlotterycost				= 250
--- maxmayorsetsalary - Sets the Max Salary that a Mayor can set for another player.
-GM.Config.maxmayorsetsalary				= 120
--- maxnormalsalary - Sets the max normal salary.
-GM.Config.maxnormalsalary				= 90
 -- maxvehicles - Sets how many vehicles one can buy.
 GM.Config.maxvehicles					= 5
 -- microwavefoodcost - Sets the sale price of Microwave Food.

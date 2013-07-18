@@ -2,6 +2,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
+include("commands.lua")
 
 function ENT:Initialize()
 	self:SetModel("models/props_c17/paper01.mdl")
