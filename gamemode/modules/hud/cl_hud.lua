@@ -173,6 +173,7 @@ local function DrawVoiceChat()
 	end
 end
 
+CreateConVar("DarkRP_LockDown", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
 local function LockDown()
 	local chbxX, chboxY = chat.GetChatBoxPos()
 	if util.tobool(GetConVarNumber("DarkRP_LockDown")) then
