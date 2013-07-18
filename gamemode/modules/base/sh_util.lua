@@ -56,7 +56,7 @@ local function GetAvailableVehicles(ply)
 	if SERVER and IsValid(ply) and not ply:IsAdmin() then return end
 	local print = SERVER and ServerLog or Msg
 
-	print("Available vehicles for custom vehicles:" .. "\n")
+	print(DarkRP.getPhrase("rp_getvehicles") .. "\n")
 	for k,v in pairs(list.Get("Vehicles")) do
 		print("\""..k.."\"" .. "\n")
 	end

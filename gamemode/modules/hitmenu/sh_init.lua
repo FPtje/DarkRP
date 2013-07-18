@@ -26,15 +26,15 @@ function DarkRP.addHitmanTeam(job)
 end
 
 function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
-	if not hitman:isHitman() then return false, "This player is not a hitman!" end
-	if customer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return false, "Distance too big" end
-	if hitman == target then return false, "The hitman won't kill himself" end
-	if hitman == customer then return false, "The hitman cannot order a hit for himself" end
-	if not customer:CanAfford(price) then return false, "Cannot afford!" end
-	if price < GAMEMODE.Config.minHitPrice then return false, "Price too low!" end
-	if hitman:hasHit() then return false, "Hitman already has a hit ongoing" end
-	if IsValid(target) and ((target:getDarkRPVar("lastHitTime") or 0) > CurTime() - GAMEMODE.Config.hitTargetCooldown) then return false, "The target was recently killed" end
-	if IsValid(customer) and ((customer.lastHitAccepted or 0) > CurTime() - GAMEMODE.Config.hitCustomerCooldown) then return false, "The customer has recently requested a hit" end
+	if not hitman:isHitman() then return false, DarkRP.getPhrase("player_not_hitman") end
+	if customer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return false, DarkRP.getPhrase("distance_too_big") end
+	if hitman == target then return false, DarkRP.getPhrase("hitman_no_suicide") end
+	if hitman == customer then return false, DarkRP.getPhrase("hitman_no_self_order") end
+	if not customer:CanAfford(price) then return false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit")) end
+	if price < GAMEMODE.Config.minHitPrice then return false, DarkRP.getPhrase("price_too_low") end
+	if hitman:hasHit() then return false, DarkRP.getPhrase("hitman_already_has_hit") end
+	if IsValid(target) and ((target:getDarkRPVar("lastHitTime") or 0) > CurTime() - GAMEMODE.Config.hitTargetCooldown) then return false, DarkRP.getPhrase("hit_target_recently_killed_by_hit") end
+	if IsValid(customer) and ((customer.lastHitAccepted or 0) > CurTime() - GAMEMODE.Config.hitCustomerCooldown) then return false, DarkRP.getPhrase("customer_recently_bought_hit") end
 
 	return true
 end

@@ -63,6 +63,6 @@ Eusion (STEAM_0:0:20450406)
 Drakehawke (STEAM_0:0:22342869)]]
 
 local function credits(um)
-	chat.AddText(Color(255,0,0,255), "CREDITS FOR DARKRP", Color(0,0,255,255), creds)
+	chat.AddText(Color(255,0,0,255), DarkRP.getPhrase("credits_for", "DARKRP"), Color(0,0,255,255), creds)
 end
 usermessage.Hook("DarkRP_Credits", credits)

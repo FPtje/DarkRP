@@ -20,14 +20,14 @@ local GangsterJobs = {
 }
 
 local function decide(ply, target)
-	if ply:Team() == TEAM_HOBO then return false, "Hobo's have no voting rights" end
+	if ply:Team() == TEAM_HOBO then return false, DarkRP.getPhrase("hobos_no_rights") end
 
 	if GangsterJobs[ply:Team()] and GovernmentJobs[target:Team()] then
-		return false, "Gangsters can't vote for government things!"
+		return false, DarkRP.getPhrase("gangsters_cant_vote_for_government")
 	end
 
 	if GovernmentJobs[ply:Team()] and GangsterJobs[target:Team()] then
-		return false, "Government officials can't vote for gangster things!"
+		return false, DarkRP.getPhrase("government_cant_vote_for_gangsters")
 	end
 end
 hook.Add("CanDemote", "VoteRegulations", decide)

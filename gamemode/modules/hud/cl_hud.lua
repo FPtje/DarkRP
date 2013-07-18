@@ -104,7 +104,7 @@ local function DrawInfo()
 
 	if IsValid(wep) and GAMEMODE.Config.weaponhud then
         local name = wep:GetPrintName();
-		draw.DrawText("Weapon: "..name, "UiBold", RelativeX + 5, RelativeY - HUDHeight - 18, Color(255, 255, 255, 255), 0)
+		draw.DrawText(DarkRP.getPhrase("weapon", name), "UiBold", RelativeX + 5, RelativeY - HUDHeight - 18, Color(255, 255, 255, 255), 0)
 	end
 
 	draw.DrawText(Salary, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
