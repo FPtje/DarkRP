@@ -61,7 +61,7 @@ concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
 end)
 
 local function removeLetters(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands")then
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands")then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_removeletters"))
 		return
 	end

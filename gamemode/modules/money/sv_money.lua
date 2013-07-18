@@ -1,3 +1,45 @@
+/*---------------------------------------------------------------------------
+functions
+---------------------------------------------------------------------------*/
+local meta = FindMetaTable("Player")
+function meta:AddMoney(amount)
+	if not amount then return false end
+	local total = self:getDarkRPVar("money") + math.floor(amount)
+	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
+
+	self:setDarkRPVar("money", total)
+
+	if self.DarkRPUnInitialized then return end
+	DarkRP.storeMoney(self, total)
+end
+
+function DarkRP.payPlayer(ply1, ply2, amount)
+	if not IsValid(ply1) or not IsValid(ply2) then return end
+	ply1:AddMoney(-amount)
+	ply2:AddMoney(amount)
+end
+
+function meta:PayDay()
+	if not IsValid(self) then return end
+	if not self:isArrested() then
+		DarkRP.retrieveSalary(self, function(amount)
+			amount = math.floor(amount or GAMEMODE.Config.normalsalary)
+			hook.Call("PlayerGetSalary", GAMEMODE, self, amount)
+			if amount == 0 or not amount then
+				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_unemployed"))
+			else
+				self:AddMoney(amount)
+				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_message", GAMEMODE.Config.currency .. amount))
+			end
+		end)
+	else
+		DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_missed"))
+	end
+end
+
+/*---------------------------------------------------------------------------
+Commands
+---------------------------------------------------------------------------*/
 local function GiveMoney(ply, args)
 	if args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
@@ -163,3 +205,105 @@ local function CreateCheque(ply, args)
 end
 DarkRP.defineChatCommand("cheque", CreateCheque, 0.3)
 DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
+
+local function ccSetMoney(ply, cmd, args)
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
+		return
+	end
+
+	local amount = math.floor(tonumber(args[2]))
+
+	if args[3] then
+		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if target then
+		local nick = ""
+		DarkRP.storeMoney(target, amount)
+		target:setDarkRPVar("money", amount)
+
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("you_set_x_money_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			nick = "Console"
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_money_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			nick = ply:Nick()
+		end
+		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_money_to_y", nick, GAMEMODE.Config.currency, amount))
+		if ply:EntIndex() == 0 then
+			DarkRP.log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+		else
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", args[1]))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", args[1]))
+		end
+		return
+	end
+end
+concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
+
+local function ccSetSalary(ply, cmd, args)
+	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setsalary"))
+		return
+	end
+
+	local amount = math.floor(tonumber(args[2]))
+
+	if amount < 0 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2]))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2]))
+		end
+		return
+	end
+
+	if amount > 150 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2].." (<150)"))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2].." (<150)"))
+		end
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if target then
+		local nick = ""
+		DarkRP.storeSalary(target, amount)
+		target:setSelfDarkRPVar("salary", amount)
+
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("you_set_x_salary_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			nick = "Console"
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_salary_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			nick = ply:Nick()
+		end
+		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_salary_to_y", nick, GAMEMODE.Config.currency, amount))
+		if ply:EntIndex() == 0 then
+			DarkRP.log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+		else
+			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		end
+		return
+	end
+end
+concommand.Add("rp_setsalary", ccSetSalary)

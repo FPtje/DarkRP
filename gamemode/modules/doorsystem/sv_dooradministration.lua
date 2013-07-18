@@ -3,7 +3,7 @@ local function ccDoorOwn(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_own"))
 		return
 	end
@@ -26,7 +26,7 @@ local function ccDoorUnOwn(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unown"))
 		return
 	end
@@ -48,7 +48,7 @@ local function unownAll(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unown"))
 		return
 	end
@@ -59,7 +59,7 @@ local function unownAll(ply, cmd, args)
 		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
 		return
 	end
-	target:UnownAll()
+	target:unownAll()
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
 end
 concommand.Add("rp_unownall", unownAll)
@@ -69,7 +69,7 @@ local function ccAddOwner(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_addowner"))
 		return
 	end
@@ -104,7 +104,7 @@ local function ccRemoveOwner(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_removeowner"))
 		return
 	end
@@ -137,7 +137,7 @@ local function ccLock(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_lock"))
 		return
 	end
@@ -161,7 +161,7 @@ local function ccUnLock(ply, cmd, args)
 		return
 	end
 
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_unlock"))
 		return
 	end

@@ -54,7 +54,7 @@ local function LoadTable(ply)
 end
 
 local function ReMoveZombie(ply, index)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		if not index or zombieSpawns[tonumber(index)] == nil then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("zombie_spawn_not_exist", tostring(index)))
 		else
@@ -75,7 +75,7 @@ end
 DarkRP.defineChatCommand("removezombie", ReMoveZombie)
 
 local function AddZombie(ply)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		DarkRP.RetrieveZombies(function()
 			table.insert(zombieSpawns, ply:GetPos())
 			DarkRP.StoreZombies()
@@ -90,7 +90,7 @@ end
 DarkRP.defineChatCommand("addzombie", AddZombie)
 
 local function ToggleZombie(ply)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		if not ply:getDarkRPVar("zombieToggle") then
 			DarkRP.RetrieveZombies(function()
 				ply:SetSelfDarkRPVar("zombieToggle", true)
@@ -135,7 +135,7 @@ local function SpawnZombie()
 end
 
 local function ZombieMax(ply, args)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		if not tonumber(args) then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return ""
@@ -151,7 +151,7 @@ DarkRP.defineChatCommand("maxzombie", ZombieMax)
 DarkRP.defineChatCommand("maxzombies", ZombieMax)
 
 local function StartZombie(ply)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		timer.Start("zombieControl")
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_enabled"))
 	else
@@ -162,7 +162,7 @@ end
 DarkRP.defineChatCommand("enablezombie", StartZombie)
 
 local function StopZombie(ply)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		timer.Stop("zombieControl")
 		zombieOn = false
 		timer.Stop("start2")

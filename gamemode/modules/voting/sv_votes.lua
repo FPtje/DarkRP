@@ -131,7 +131,7 @@ function GM.vote.DestroyLast()
 end
 
 local function CancelVote(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:HasPriv("rp_commands") then
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_cancelvote"))
 		return
 	end

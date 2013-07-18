@@ -398,7 +398,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
 	local canDrop = hook.Call("CanDropWeapon", self, ply, weapon)
 
 	if GAMEMODE.Config.dropweapondeath and IsValid(weapon) and canDrop then
-		ply:DropDRPWeapon(weapon)
+		ply:dropDRPWeapon(weapon)
 	end
 	self.BaseClass:DoPlayerDeath(ply, attacker, dmginfo, ...)
 end
@@ -532,12 +532,45 @@ function GM:PlayerSetModel(ply)
 	end
 end
 
+local function initPlayer(ply)
+	timer.Simple(5, function()
+		if not IsValid(ply) then return end
+
+		if tobool(GetConVarNumber("DarkRP_Lockdown")) then
+			RunConsoleCommand("DarkRP_Lockdown", 1) -- so new players who join know there's a lockdown
+		end
+	end)
+
+	ply:initiateTax()
+
+	ply:UpdateJob(team.GetName(1))
+
+	ply:GetTable().Ownedz = { }
+	ply:GetTable().OwnedNumz = 0
+
+	ply:GetTable().LastLetterMade = CurTime() - 61
+	ply:GetTable().LastVoteCop = CurTime() - 61
+
+	ply:SetTeam(GAMEMODE.DefaultTeam)
+
+	-- Whether or not a player is being prevented from joining
+	-- a specific team for a certain length of time
+	for i = 1, #RPExtraTeams do
+		if GAMEMODE.Config.restrictallteams then
+			ply.bannedfrom[i] = 1
+		else
+			ply.bannedfrom[i] = 0
+		end
+	end
+end
+
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
 	ply.bannedfrom = {}
 	ply.DarkRPVars = ply.DarkRPVars or {}
-	ply:NewData()
+	ply:restorePlayerData()
+	initPlayer(ply)
 	ply.SID = ply:UserID()
 
 	for k,v in pairs(ents.GetAll()) do
@@ -644,7 +677,7 @@ function GM:PlayerSpawn(ply)
 
 	if ply.demotedWhileDead then
 		ply.demotedWhileDead = nil
-		ply:ChangeTeam(GAMEMODE.DefaultTeam)
+		ply:changeTeam(GAMEMODE.DefaultTeam)
 	end
 
 	ply:GetTable().StartHealth = ply:Health()
@@ -714,7 +747,7 @@ function GM:PlayerLoadout(ply)
 		ply:Give("weapon_keypadchecker")
 	end
 
-	if ply:HasPriv("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
+	if ply:hasDarkRPPrivilege("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
 		ply:Give("door_ram")
 		ply:Give("arrest_stick")
 		ply:Give("unarrest_stick")
@@ -782,7 +815,7 @@ function GM:PlayerDisconnected(ply)
 		ply.SleepRagdoll:Remove()
 	end
 
-	ply:UnownAll()
+	ply:unownAll()
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") disconnected", Color(0, 130, 255))
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then

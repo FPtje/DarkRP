@@ -53,7 +53,7 @@ local function addTeamCommands(CTeam, max)
 			end
 			if #player.GetAll() == 1 then
 				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
-				ply:ChangeTeam(k)
+				ply:changeTeam(k)
 				return ""
 			end
 			if not ply:ChangeAllowed(k) then
@@ -78,7 +78,7 @@ local function addTeamCommands(CTeam, max)
 
 				if not IsValid(ply) then return end
 				if choice >= 0 then
-					ply:ChangeTeam(k)
+					ply:changeTeam(k)
 				else
 					DarkRP.notifyAll(1, 4, DarkRP.getPhrase("has_not_been_made_team", ply:Nick(), CTeam.name))
 				end
@@ -87,8 +87,8 @@ local function addTeamCommands(CTeam, max)
 			return ""
 		end)
 		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
-			if ply:HasPriv("rp_"..CTeam.command) then
-				ply:ChangeTeam(k)
+			if ply:hasDarkRPPrivilege("rp_"..CTeam.command) then
+				ply:changeTeam(k)
 				return ""
 			end
 
@@ -110,7 +110,7 @@ local function addTeamCommands(CTeam, max)
 				return ""
 			end
 
-			ply:ChangeTeam(k)
+			ply:changeTeam(k)
 			return ""
 		end)
 	else
@@ -123,7 +123,7 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_sadmin", "/"..CTeam.command))
 				return ""
 			end
-			ply:ChangeTeam(k)
+			ply:changeTeam(k)
 			return ""
 		end)
 	end
@@ -153,7 +153,7 @@ local function addTeamCommands(CTeam, max)
 		local target = DarkRP.findPlayer(args[1])
 
         if (target) then
-			target:ChangeTeam(k, true)
+			target:changeTeam(k, true)
 			if (ply:EntIndex() ~= 0) then
 				nick = ply:Nick()
 			else

@@ -6,7 +6,7 @@ local function AFKDemote(ply)
 	local rpname = ply:getDarkRPVar("rpname")
 
 	if ply:Team() ~= GAMEMODE.DefaultTeam then
-		ply:ChangeTeam(GAMEMODE.DefaultTeam, true)
+		ply:changeTeam(GAMEMODE.DefaultTeam, true)
 		ply:setSelfDarkRPVar("AFKDemoted", true)
 		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("hes_afk_demoted", rpname))
 	end

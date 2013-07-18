@@ -251,6 +251,44 @@ function DarkRP.retrieveSalary(ply, callback)
 	end)
 end
 
+/*---------------------------------------------------------------------------
+Players
+---------------------------------------------------------------------------*/
+local meta = FindMetaTable("Player")
+function meta:restorePlayerData()
+	if not IsValid(self) then return end
+	self.DarkRPUnInitialized = true
+
+	DarkRP.retrievePlayerData(self, function(data)
+		if not IsValid(self) then return end
+
+		self.DarkRPUnInitialized = nil
+
+		local info = data and data[1] or {}
+		if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
+
+		info.wallet = info.wallet or GAMEMODE.Config.startingmoney
+		info.salary = info.salary or GAMEMODE.Config.normalsalary
+
+		self:setDarkRPVar("money", tonumber(info.wallet))
+		self:setDarkRPVar("salary", tonumber(info.salary))
+
+		self:setDarkRPVar("rpname", info.rpname)
+
+		if not data then
+			DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary)
+		end
+	end, function() -- Retrieving data failed, go on without it
+		self.DarkRPUnInitialized = nil
+
+		self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
+		self:setDarkRPVar("salary", GAMEMODE.Config.normalsalary)
+		self:setDarkRPVar(string.gsub(self:SteamName(), "\\\"", "\""))
+
+		error("Failed to retrieve player information from MySQL server")
+	end)
+end
+
 /*---------------------------------------------------------
  Doors
  ---------------------------------------------------------*/

@@ -1,5 +1,5 @@
 local function SetSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "setspawn"))
 		return ""
 	end
@@ -25,7 +25,7 @@ end
 DarkRP.defineChatCommand("setspawn", SetSpawnPos)
 
 local function AddSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "addspawn"))
 		return ""
 	end
@@ -51,7 +51,7 @@ end
 DarkRP.defineChatCommand("addspawn", AddSpawnPos)
 
 local function RemoveSpawnPos(ply, args)
-	if not ply:HasPriv("rp_commands") then
+	if not ply:hasDarkRPPrivilege("rp_commands") then
 		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "remove spawn"))
 		return ""
 	end

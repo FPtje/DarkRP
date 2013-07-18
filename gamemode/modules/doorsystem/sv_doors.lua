@@ -1,5 +1,9 @@
 local meta = FindMetaTable("Entity")
+local pmeta = FindMetaTable("Player")
 
+/*---------------------------------------------------------------------------
+Functions
+---------------------------------------------------------------------------*/
 function meta:KeysLock()
 	self:Fire("lock", "", 0)
 
@@ -12,6 +16,165 @@ function meta:KeysUnLock()
 	hook.Call("onKeysUnlocked", nil, self)
 end
 
+function meta:AddAllowed(ply)
+	self.DoorData = self.DoorData or {}
+	self.DoorData.AllowedToOwn = self.DoorData.AllowedToOwn and self.DoorData.AllowedToOwn .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
+end
+
+function meta:RemoveAllowed(ply)
+	self.DoorData = self.DoorData or {}
+	if self.DoorData.AllowedToOwn then self.DoorData.AllowedToOwn = string.gsub(self.DoorData.AllowedToOwn, tostring(ply:UserID())..".?", "") end
+	if string.sub(self.DoorData.AllowedToOwn or "", -1) == ";" then self.DoorData.AllowedToOwn = string.sub(self.DoorData.AllowedToOwn, 1, -2) end
+end
+
+function meta:addDoorOwner(ply)
+	if not IsValid(self) then return end
+	self.DoorData = self.DoorData or {}
+	self.DoorData.ExtraOwners = self.DoorData.ExtraOwners and self.DoorData.ExtraOwners .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
+	self:RemoveAllowed(ply)
+end
+
+function meta:removeDoorOwner(ply)
+	if not IsValid(self) then return end
+	self.DoorData = self.DoorData or {}
+	if self.DoorData.ExtraOwners then self.DoorData.ExtraOwners = string.gsub(self.DoorData.ExtraOwners, tostring(ply:UserID())..".?", "") end
+	if string.sub(self.DoorData.ExtraOwners or "", -1) == ";" then self.DoorData.ExtraOwners = string.sub(self.DoorData.ExtraOwners, 1, -2) end
+end
+
+function meta:Own(ply)
+	self.DoorData = self.DoorData or {}
+	if self:AllowedToOwn(ply) then
+		self:addDoorOwner(ply)
+		return
+	end
+
+	local Owner = self:CPPIGetOwner()
+
+ 	-- Increase vehicle count
+	if self:IsVehicle() then
+		if IsValid(ply) then
+			ply.Vehicles = ply.Vehicles or 0
+			ply.Vehicles = ply.Vehicles + 1
+		end
+
+		-- Decrease vehicle count of the original owner
+		if IsValid(Owner) and Owner ~= ply then
+			Owner.Vehicles = Owner.Vehicles or 1
+			Owner.Vehicles = Owner.Vehicles - 1
+		end
+	end
+
+	if self:IsVehicle() then
+		self:CPPISetOwner(ply)
+	end
+
+	if not self:IsOwned() and not self:OwnedBy(ply) then
+		self.DoorData.Owner = ply
+	end
+end
+
+function meta:UnOwn(ply)
+	self.DoorData = self.DoorData or {}
+	if not ply then
+		ply = self:GetDoorOwner()
+
+		if not IsValid(ply) then return end
+	end
+
+	if self:IsMasterOwner(ply) then
+		self.DoorData.Owner = nil
+	else
+		self:removeDoorOwner(ply)
+	end
+
+	self:removeDoorOwner(ply)
+	ply.LookingAtDoor = nil
+end
+
+function pmeta:unownAll()
+	for k, v in pairs(ents.GetAll()) do
+		if v:IsOwnable() and v:OwnedBy(self) == true then
+			v:Fire("unlock", "", 0.6)
+		end
+	end
+
+	if self:GetTable().Ownedz then
+		for k, v in pairs(self:GetTable().Ownedz) do
+			v:UnOwn(self)
+			self:GetTable().Ownedz[v:EntIndex()] = nil
+		end
+	end
+
+	for k, v in pairs(player.GetAll()) do
+		if v:GetTable().Ownedz then
+			for n, m in pairs(v:GetTable().Ownedz) do
+				if IsValid(m) and m:AllowedToOwn(self) then
+					m:RemoveAllowed(self)
+				end
+			end
+		end
+	end
+
+	self:GetTable().OwnedNumz = 0
+end
+
+function pmeta:doPropertyTax()
+	if not GAMEMODE.Config.propertytax then return end
+	if self:IsCP() and GAMEMODE.Config.cit_propertytax then return end
+
+	local numowned = self.OwnedNumz
+
+	if not numowned or numowned <= 0 then return end
+
+	local price = 10
+	local tax = price * numowned + math.random(-5, 5)
+
+	if self:canAfford(tax) then
+		if tax ~= 0 then
+			self:AddMoney(-tax)
+			DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", GAMEMODE.Config.currency .. tax))
+		end
+	else
+		DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
+		self:unownAll()
+	end
+end
+
+function meta:initiateTax()
+	local taxtime = GAMEMODE.Config.wallettaxtime
+	local uniqueid = self:UniqueID() -- so we can destroy the timer if the player leaves
+	timer.Create("rp_tax_"..uniqueid, taxtime or 600, 0, function()
+		if not IsValid(self) then
+			timer.Destroy("rp_tax_"..uniqueid)
+			return
+		end
+
+		if not GAMEMODE.Config.wallettax then
+			return -- Don't remove the hook in case it's turned on afterwards.
+		end
+
+		local money = self:getDarkRPVar("money")
+		local mintax = GAMEMODE.Config.wallettaxmin / 100
+		local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
+		local startMoney = GAMEMODE.Config.startingmoney
+
+		if money < (startMoney * 2) then
+			return -- Don't tax players if they have less than twice the starting amount
+		end
+
+		-- Variate the taxes between twice the starting money ($1000 by default) and 200 - 2 times the starting money (100.000 by default)
+		local tax = (money - (startMoney * 2)) / (startMoney * 198)
+			  tax = math.Min(maxtax, mintax + (maxtax - mintax) * tax)
+
+		self:AddMoney(-tax * money)
+		DarkRP.notify(self, 3, 7, DarkRP.getPhrase("taxday", math.Round(tax * 100, 3)))
+
+	end)
+end
+
+/*---------------------------------------------------------------------------
+Commands
+---------------------------------------------------------------------------*/
 local time = false
 local function SetDoorOwnable(ply)
 	if time then
@@ -21,7 +184,7 @@ local function SetDoorOwnable(ply)
 	time = true
 	timer.Simple(0.1, function() time = false end)
 
-	if not ply:HasPriv("rp_doorManipulation") then
+	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
 		return ""
 	end
@@ -56,7 +219,7 @@ local function SetDoorGroupOwnable(ply, arg)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ply:HasPriv("rp_doorManipulation") then
+	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
 		return ""
 	end
@@ -104,7 +267,7 @@ local function SetDoorTeamOwnable(ply, arg)
 	local trace = ply:GetEyeTrace()
 
 	local ent = trace.Entity
-	if not ply:HasPriv("rp_doorManipulation") then
+	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_prvilege"))
 		return ""
 	end
@@ -243,7 +406,7 @@ local function OwnDoor(ply)
 			hook.Call("PlayerBought"..(bVehicle and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity, iCost);
 
 			if ply:GetTable().OwnedNumz == 0 then
-				timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.DoPropertyTax(ply) end)
+				timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
 			end
 
 			ply:GetTable().OwnedNumz = ply:GetTable().OwnedNumz + 1
@@ -275,80 +438,7 @@ local function UnOwnAll(ply, cmd, args)
 end
 DarkRP.defineChatCommand("unownalldoors", UnOwnAll)
 
-function meta:AddAllowed(ply)
-	self.DoorData = self.DoorData or {}
-	self.DoorData.AllowedToOwn = self.DoorData.AllowedToOwn and self.DoorData.AllowedToOwn .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
-end
 
-function meta:RemoveAllowed(ply)
-	self.DoorData = self.DoorData or {}
-	if self.DoorData.AllowedToOwn then self.DoorData.AllowedToOwn = string.gsub(self.DoorData.AllowedToOwn, tostring(ply:UserID())..".?", "") end
-	if string.sub(self.DoorData.AllowedToOwn or "", -1) == ";" then self.DoorData.AllowedToOwn = string.sub(self.DoorData.AllowedToOwn, 1, -2) end
-end
-
-function meta:addDoorOwner(ply)
-	if not IsValid(self) then return end
-	self.DoorData = self.DoorData or {}
-	self.DoorData.ExtraOwners = self.DoorData.ExtraOwners and self.DoorData.ExtraOwners .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
-	self:RemoveAllowed(ply)
-end
-
-function meta:removeDoorOwner(ply)
-	if not IsValid(self) then return end
-	self.DoorData = self.DoorData or {}
-	if self.DoorData.ExtraOwners then self.DoorData.ExtraOwners = string.gsub(self.DoorData.ExtraOwners, tostring(ply:UserID())..".?", "") end
-	if string.sub(self.DoorData.ExtraOwners or "", -1) == ";" then self.DoorData.ExtraOwners = string.sub(self.DoorData.ExtraOwners, 1, -2) end
-end
-
-function meta:Own(ply)
-	self.DoorData = self.DoorData or {}
-	if self:AllowedToOwn(ply) then
-		self:addDoorOwner(ply)
-		return
-	end
-
-	local Owner = self:CPPIGetOwner()
-
- 	-- Increase vehicle count
-	if self:IsVehicle() then
-		if IsValid(ply) then
-			ply.Vehicles = ply.Vehicles or 0
-			ply.Vehicles = ply.Vehicles + 1
-		end
-
-		-- Decrease vehicle count of the original owner
-		if IsValid(Owner) and Owner ~= ply then
-			Owner.Vehicles = Owner.Vehicles or 1
-			Owner.Vehicles = Owner.Vehicles - 1
-		end
-	end
-
-	if self:IsVehicle() then
-		self:CPPISetOwner(ply)
-	end
-
-	if not self:IsOwned() and not self:OwnedBy(ply) then
-		self.DoorData.Owner = ply
-	end
-end
-
-function meta:UnOwn(ply)
-	self.DoorData = self.DoorData or {}
-	if not ply then
-		ply = self:GetDoorOwner()
-
-		if not IsValid(ply) then return end
-	end
-
-	if self:IsMasterOwner(ply) then
-		self.DoorData.Owner = nil
-	else
-		self:removeDoorOwner(ply)
-	end
-
-	self:removeDoorOwner(ply)
-	ply.LookingAtDoor = nil
-end
 
 local function SetDoorTitle(ply, args)
 	local trace = ply:GetEyeTrace()
@@ -459,3 +549,4 @@ local function AddDoorOwner(ply, args)
 end
 DarkRP.defineChatCommand("addowner", AddDoorOwner)
 DarkRP.defineChatCommand("ao", AddDoorOwner)
+

@@ -84,109 +84,7 @@ concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 /*---------------------------------------------------------------------------
 Admin DarkRPVar commands
 ---------------------------------------------------------------------------*/
-local function ccSetMoney(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
-		return
-	end
-
-	local amount = math.floor(tonumber(args[2]))
-
-	if args[3] then
-		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
-	end
-
-	local target = DarkRP.findPlayer(args[1])
-
-	if target then
-		local nick = ""
-		DarkRP.storeMoney(target, amount)
-		target:setDarkRPVar("money", amount)
-
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("you_set_x_money_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
-			nick = "Console"
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_money_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
-			nick = ply:Nick()
-		end
-		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_money_to_y", nick, GAMEMODE.Config.currency, amount))
-		if ply:EntIndex() == 0 then
-			DarkRP.log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
-		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
-		end
-	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", args[1]))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", args[1]))
-		end
-		return
-	end
-end
-concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
-
-local function ccSetSalary(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setsalary"))
-		return
-	end
-
-	local amount = math.floor(tonumber(args[2]))
-
-	if amount < 0 then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2]))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2]))
-		end
-		return
-	end
-
-	if amount > 150 then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2].." (<150)"))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2].." (<150)"))
-		end
-		return
-	end
-
-	local target = DarkRP.findPlayer(args[1])
-
-	if target then
-		local nick = ""
-		DarkRP.storeSalary(target, amount)
-		target:setSelfDarkRPVar("salary", amount)
-
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("you_set_x_salary_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
-			nick = "Console"
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_salary_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
-			nick = ply:Nick()
-		end
-		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_salary_to_y", nick, GAMEMODE.Config.currency, amount))
-		if ply:EntIndex() == 0 then
-			DarkRP.log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
-		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
-		end
-	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		end
-		return
-	end
-end
-concommand.Add("rp_setsalary", ccSetSalary)
-
-local function SetRPName(ply, cmd, args)
+local function setRPName(ply, cmd, args)
 	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setname"))
@@ -230,7 +128,55 @@ local function SetRPName(ply, cmd, args)
 		end
 	end
 end
-concommand.Add("rp_setname", SetRPName)
+concommand.Add("rp_setname", setRPName)
+
+local function RPName(ply, args)
+	if ply.LastNameChange and ply.LastNameChange > (CurTime() - 5) then
+		DarkRP.notify( ply, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
+		return ""
+	end
+
+	if not GAMEMODE.Config.allowrpnames then
+		DarkRP.notify(ply, 1, 6,  DarkRP.getPhrase("disabled", "RPname", ""))
+		return ""
+	end
+
+	local len = string.len(args)
+	local low = string.lower(args)
+
+	if len > 30 then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", "<=30"))
+		return ""
+	elseif len < 3 then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", ">2"))
+		return ""
+	end
+
+	local canChangeName = hook.Call("CanChangeRPName", GAMEMODE, ply, low)
+	if canChangeName == false then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", ""))
+		return ""
+	end
+
+	local allowed = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+	'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
+	'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+	'z', 'x', 'c', 'v', 'b', 'n', 'm', ' ',
+	'(', ')', '[', ']', '!', '@', '#', '$', '%', '^', '&', '*', '-', '_', '=', '+', '|', '\\'}
+
+	for k in string.gmatch(args, ".") do
+		if not table.HasValue(allowed, string.lower(k)) then
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", k))
+			return ""
+		end
+	end
+	ply:setRPName(args)
+	ply.LastNameChange = CurTime()
+	return ""
+end
+DarkRP.defineChatCommand("rpname", RPName)
+DarkRP.defineChatCommand("name", RPName)
+DarkRP.defineChatCommand("nick", RPName)
 
 /*---------------------------------------------------------------------------
 Nickname override to show RP name
@@ -242,6 +188,34 @@ function meta:Name()
 end
 meta.Nick = meta.Name
 meta.GetName = meta.Name
+
+/*---------------------------------------------------------------------------
+Setting the RP name
+---------------------------------------------------------------------------*/
+function meta:setRPName(name, firstRun)
+	-- Make sure nobody on this server already has this RP name
+	local lowername = string.lower(tostring(name))
+	DarkRP.retrieveRPNames(self, name, function(taken)
+		if string.len(lowername) < 2 and not firstrun then return end
+		-- If we found that this name exists for another player
+		if taken then
+			if firstRun then
+				-- If we just connected and another player happens to be using our steam name as their RP name
+				-- Put a 1 after our steam name
+				DarkRP.storeRPName(self, name .. " 1")
+				DarkRP.notify(self, 0, 12, DarkRP.getPhrase("someone_stole_steam_name"))
+			else
+				DarkRP.notify(self, 1, 5, DarkRP.getPhrase("unable", "RPname", DarkRP.getPhrase("already_taken")))
+				return ""
+			end
+		else
+			if not firstRun then -- Don't save the steam name in the database
+				DarkRP.notifyAll(2, 6, DarkRP.getPhrase("rpname_changed", self:SteamName(), name))
+				DarkRP.storeRPName(self, name)
+			end
+		end
+	end)
+end
 
 /*---------------------------------------------------------------------------
 Doors

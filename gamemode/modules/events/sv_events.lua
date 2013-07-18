@@ -64,7 +64,7 @@ local function StartShower()
 end
 
 local function StartStorm(ply)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		timer.Start("stormControl")
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
 	else
@@ -75,7 +75,7 @@ end
 DarkRP.defineChatCommand("enablestorm", StartStorm)
 
 local function StopStorm(ply)
-	if ply:HasPriv("rp_commands") then
+	if ply:hasDarkRPPrivilege("rp_commands") then
 		timer.Stop("stormControl")
 		stormOn = false
 		timer.Stop("start")
