@@ -132,7 +132,7 @@ local function addTeamCommands(CTeam, max)
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 			ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
 			return
-        end
+		end
 
 		if CTeam.admin > 1 and not ply:IsSuperAdmin() then
 			ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
@@ -152,7 +152,7 @@ local function addTeamCommands(CTeam, max)
 		if not args[1] then return end
 		local target = DarkRP.findPlayer(args[1])
 
-        if (target) then
+		if (target) then
 			target:changeTeam(k, true)
 			if (ply:EntIndex() ~= 0) then
 				nick = ply:Nick()
@@ -160,14 +160,14 @@ local function addTeamCommands(CTeam, max)
 				nick = "Console"
 			end
 			target:PrintMessage(2, DarkRP.getPhrase("x_made_you_a_y", nick, CTeam.name))
-        else
+		else
 			if (ply:EntIndex() == 0) then
 				print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 			else
 				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 			end
 			return
-        end
+		end
 	end)
 end
 
