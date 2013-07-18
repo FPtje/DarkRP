@@ -153,7 +153,7 @@ local function CreateCheque(ply, args)
 			Cheque:Setowning_ent(ply)
 			Cheque:Setrecipient(recipient)
 
-			Cheque:Setamount(amount)
+			Cheque:Setamount(math.Min(amount, 2147483647))
 			Cheque:Spawn()
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/cheque", ""))

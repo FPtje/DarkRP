@@ -29,7 +29,7 @@ end
 function DarkRPCreateMoneyBag(pos, amount)
 	local moneybag = ents.Create("spawned_money")
 	moneybag:SetPos(pos)
-	moneybag:Setamount(amount)
+	moneybag:Setamount(math.Min(amount, 2147483647))
 	moneybag:Spawn()
 	moneybag:Activate()
 	return moneybag
