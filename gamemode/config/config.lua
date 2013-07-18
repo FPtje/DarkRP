@@ -261,7 +261,7 @@ GM.Config.DefaultWeapons = {
 -- The list of modules that are disabled. Set to true to disable, false to enable.
 -- Modules that are not in this list are enabled by default.
 GM.Config.DisabledModules = {
-	["afk"] = true,
+	["afk"] = false,
 	["chatsounds"] = false,
 	["events"] = false,
 	["hungermod"] = true,

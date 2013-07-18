@@ -128,7 +128,7 @@ DarkRP.defineChatCommand("requesthit", function(ply, args)
 	args = string.Explode(' ', args)
 	local target = GAMEMODE:FindPlayer(args[1])
 	local traceEnt = ply:GetEyeTrace().Entity
-	local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1))
+	local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1) or -1)
 
 	if not IsValid(hitman) or not IsValid(target) or not hitman:IsPlayer() then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
