@@ -250,6 +250,13 @@ GM.Config.DefaultWeapons = {
 	"weapon_physgun"
 }
 
+-- These are the default laws, they're unchangeable in-game.
+GM.Config.DefaultLaws = {
+	"Do not attack other citizens except in self-defence.",
+	"Do not steal or break in to peoples homes.",
+	"Money printers/drugs are illegal."
+}
+
 -- The list of modules that are disabled. Set to true to disable, false to enable.
 -- Modules that are not in this list are enabled by default.
 GM.Config.DisabledModules = {
