@@ -58,6 +58,7 @@ end
 
 -- Definition from http://lua-users.org/wiki/CurriedLua
 Curry = function(func, num_args)
+	if not num_args then error("Missing argument #2: num_args") end
 	if not func then error("Function does not exist!", 2) end
 	-- helper
 	local function curry_h(argtrace, n)

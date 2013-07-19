@@ -82,8 +82,66 @@ DarkRP.declareChatCommand{
 }
 
 DarkRP.declareChatCommand{
-	command = "wanted",
+	command = "unwanted",
 	description = "Remove a player's wanted status.",
 	delay = 1.5,
 	condition = fn.FAnd{plyMeta.Alive, plyMeta.IsCP, fn.Compose{fn.Not, plyMeta.isArrested}}
+}
+
+DarkRP.declareChatCommand{
+	command = "agenda",
+	description = "Set the agenda.",
+	delay = 1.5,
+	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
+}
+
+local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
+local isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
+local isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), getJobTable}
+DarkRP.declareChatCommand{
+	command = "lottery",
+	description = "Start a lottery",
+	delay = 1.5,
+	condition = isMayor
+}
+
+DarkRP.declareChatCommand{
+	command = "lockdown",
+	description = "Start a lockdown. Everyone will have to stay inside",
+	delay = 1.5,
+	condition = isMayor
+}
+
+DarkRP.declareChatCommand{
+	command = "unlockdown",
+	description = "Stop a lockdown",
+	delay = 1.5,
+	condition = isMayor
+}
+
+DarkRP.declareChatCommand{
+	command = "requestlicense",
+	description = "Request a gun license.",
+	delay = 1.5
+}
+
+local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isMayor), player.GetAll}
+local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isChief), player.GetAll}
+DarkRP.declareChatCommand{
+	command = "givelicense",
+	description = "Give someone a gun license",
+	delay = 1.5,
+	condition = fn.Compose{
+		fn.FOr{
+			isMayor, -- Mayors can hand out licenses
+			fn.FAnd{isChief, noMayorExists}, -- Chiefs can if there is no mayor
+			fn.FAnd{plyMeta.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
+		}
+	}
+}
+
+DarkRP.declareChatCommand{
+	command = "demotelicense",
+	description = "Start a vote to get someone's license revoked.",
+	delay = 1.5
 }

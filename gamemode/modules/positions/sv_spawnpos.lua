@@ -62,6 +62,7 @@ local function RemoveSpawnPos(ply, args)
 		if args == v.command then
 			t = k
 			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("updated_spawnpos", v.name))
+			break
 		end
 	end
 
