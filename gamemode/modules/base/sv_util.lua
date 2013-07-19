@@ -1,5 +1,3 @@
-local meta = FindMetaTable("Player")
-
 function DarkRP.notify(ply, msgtype, len, msg)
 	if not IsValid(ply) then return end
 	umsg.Start("_Notify", ply)
@@ -166,11 +164,3 @@ local function LookPersonUp(ply, cmd, args)
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)
-
-function meta:hasDarkRPPrivilege(priv)
-	if FAdmin then
-		return FAdmin.Access.PlayerHasPrivilege(self, priv)
-	end
-	return self:IsAdmin()
-end
-
