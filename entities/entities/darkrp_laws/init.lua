@@ -3,14 +3,13 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
--- These are the default laws, they're unchangeable in-game.
-local Laws = {
-	"Do not attack other citizens except in self-defence.",
-	"Do not steal or break in to peoples homes.",
-	"Money printers/drugs are illegal."
-}
+local Laws = {}
+local FixedLaws = {}
 
-local FixedLaws = table.Copy(Laws)
+timer.Simple(0, function()
+	Laws = table.Copy(GAMEMODE.Config.DefaultLaws)
+	FixedLaws = table.Copy(Laws)
+end)
 
 function ENT:Initialize()
 	self:SetModel("models/props/cs_assault/Billboard.mdl")
@@ -60,25 +59,20 @@ local function RemoveLaw(ply, args)
 		return ""
 	end
 
-	if not tonumber(args) then
+	if not tonumber(args) or not Laws[tonumber(args)] then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 
-	if FixedLaws[ tonumber(args) ] then
+	if FixedLaws[tonumber(args)] then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
-		return ""
-	end
-
-	if not Laws[tonumber(arg)] then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 
 	table.remove(Laws, tonumber(args))
 
 	umsg.Start("DRP_RemoveLaw")
-		umsg.Char(tonumber(args))
+		umsg.Short(tonumber(args))
 	umsg.End()
 
 	DarkRP.notify(ply, 0, 2, "Law removed.")
