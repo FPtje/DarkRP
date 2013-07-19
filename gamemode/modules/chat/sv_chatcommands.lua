@@ -22,7 +22,7 @@ local function PM(ply, args)
 		DarkRP.talkToPerson(target, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
 		DarkRP.talkToPerson(ply, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(name)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(name)))
 	end
 
 	return ""

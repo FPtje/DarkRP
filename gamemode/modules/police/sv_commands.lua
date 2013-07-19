@@ -270,9 +270,9 @@ local function rp_GiveLicense(ply, cmd, args)
 		DarkRP.log(nick.." ("..steamID..") force-gave "..target:Nick().." a gun license", Color(30, 30, 30))
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 		return
 	end
@@ -303,9 +303,9 @@ local function rp_RevokeLicense(ply, cmd, args)
 		DarkRP.log(nick.." ("..steamID..") force-removed "..target:Nick().."'s gun license", Color(30, 30, 30))
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 		return
 	end
@@ -358,7 +358,7 @@ local function VoteRemoveLicense(ply, args)
 		end
 		return ""
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 end

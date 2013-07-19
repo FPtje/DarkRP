@@ -1,12 +1,12 @@
 local Anims = {}
-Anims[ACT_GMOD_GESTURE_BOW] = "Bow"
-Anims[ACT_GMOD_TAUNT_MUSCLE] = "Dance"
-Anims[ACT_GMOD_GESTURE_BECON] = "Follow me!"
-Anims[ACT_GMOD_TAUNT_LAUGH] = "Laugh"
-Anims[ACT_GMOD_TAUNT_PERSISTENCE] = "Lion Pose"
-Anims[ACT_GMOD_GESTURE_DISAGREE] = "Non-verbal no"
-Anims[ACT_GMOD_GESTURE_AGREE] = "Thumbs up"
-Anims[ACT_GMOD_GESTURE_WAVE] = "Wave"
+Anims[ACT_GMOD_GESTURE_BOW] = DarkRP.getPhrase("bow")
+Anims[ACT_GMOD_TAUNT_MUSCLE] = DarkRP.getPhrase("dance")
+Anims[ACT_GMOD_GESTURE_BECON] = DarkRP.getPhrase("follow_me")
+Anims[ACT_GMOD_TAUNT_LAUGH] = DarkRP.getPhrase("laugh")
+Anims[ACT_GMOD_TAUNT_PERSISTENCE] = DarkRP.getPhrase("lion_pose")
+Anims[ACT_GMOD_GESTURE_DISAGREE] = DarkRP.getPhrase("nonverbal_no")
+Anims[ACT_GMOD_GESTURE_AGREE] = DarkRP.getPhrase("thumbs_up")
+Anims[ACT_GMOD_GESTURE_WAVE] = DarkRP.getPhrase("wave")
 
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!

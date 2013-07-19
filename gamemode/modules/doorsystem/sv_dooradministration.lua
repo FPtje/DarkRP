@@ -56,7 +56,7 @@ local function unownAll(ply, cmd, args)
 	target = GAMEMODE:FindPlayer(args[1])
 
 	if not IsValid(target) then
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
 		return
 	end
 	target:unownAll()
@@ -93,7 +93,7 @@ local function ccAddOwner(ply, cmd, args)
 			trace.Entity:Own(target)
 		end
 	else
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 end
@@ -126,7 +126,7 @@ local function ccRemoveOwner(ply, cmd, args)
 			trace.Entity:removeDoorOwner(target)
 		end
 	else
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 end

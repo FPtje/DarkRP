@@ -17,7 +17,7 @@ local function SetSpawnPos(ply, args)
 	if t then
 		DarkRP.storeTeamSpawnPos(t, pos)
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "team: "..tostring(args)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 
 	return ""
@@ -43,7 +43,7 @@ local function AddSpawnPos(ply, args)
 	if t then
 		DarkRP.addTeamSpawnPos(t, pos)
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "team: "..tostring(args)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 
 	return ""
@@ -69,7 +69,7 @@ local function RemoveSpawnPos(ply, args)
 	if t then
 		DarkRP.removeTeamSpawnPos(t)
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "team: "..tostring(args)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 
 	return ""
