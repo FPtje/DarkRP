@@ -136,9 +136,9 @@ local function LookPersonUp(ply, cmd, args)
 	local P = DarkRP.findPlayer(args[1])
 	if not IsValid(P) then
 		if ply:EntIndex() ~= 0 then
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		else
-			print(DarkRP.getPhrase("could_not_find", "player: "..tostring(args[1])))
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 		return
 	end

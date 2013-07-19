@@ -307,7 +307,7 @@ local function Demote(ply, args)
 		end
 		return ""
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player: "..tostring(args)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 end
@@ -361,7 +361,7 @@ local function DoTeamBan(ply, args, cmdargs)
 
 	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player!"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
 		return ""
 	end
 
@@ -380,7 +380,7 @@ local function DoTeamBan(ply, args, cmdargs)
 	end
 
 	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "job!"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
 		return ""
 	end
 
@@ -414,7 +414,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 
 	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "player!"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
 		return ""
 	end
 
@@ -432,7 +432,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	end
 
 	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", "job!"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
 		return ""
 	end
 	if not target.bannedfrom then target.bannedfrom = {} end
