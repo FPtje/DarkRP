@@ -45,7 +45,7 @@ local function RemoveLaw(um)
 	local i = um:ReadChar()
 
 	while i < #Laws do
-		Laws[i] = i .. string.sub(Laws[i], 2)
+		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%."))))
 		i = i + 1
 	end
 	Laws[i] = nil
