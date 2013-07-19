@@ -102,6 +102,7 @@ Mod = function(a, b) return a % b end
 Neg = function(a) return -a end
 
 Eq = function(a, b) return a == b end
+Neq = function(a, b) return a ~= b end
 Gt = function(a, b) return a > b end
 Lt = function(a, b) return a < b end
 Gte = function(a, b) return a >= b end
