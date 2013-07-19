@@ -15,6 +15,17 @@ function plyMeta:getWantedReason()
 	return self:getDarkRPVar("wantedReason")
 end
 
+function plyMeta:IsCP()
+	if not IsValid(self) then return false end
+	local Team = self:Team()
+	return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team]
+end
+
+local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
+plyMeta.isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
+plyMeta.isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), getJobTable}
+
+
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
@@ -96,27 +107,25 @@ DarkRP.declareChatCommand{
 }
 
 local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
-local isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
-local isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), getJobTable}
 DarkRP.declareChatCommand{
 	command = "lottery",
 	description = "Start a lottery",
 	delay = 1.5,
-	condition = isMayor
+	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{
 	command = "lockdown",
 	description = "Start a lockdown. Everyone will have to stay inside",
 	delay = 1.5,
-	condition = isMayor
+	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{
 	command = "unlockdown",
 	description = "Stop a lockdown",
 	delay = 1.5,
-	condition = isMayor
+	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{
@@ -125,14 +134,14 @@ DarkRP.declareChatCommand{
 	delay = 1.5
 }
 
-local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isMayor), player.GetAll}
-local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isChief), player.GetAll}
+local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isMayor), player.GetAll}
+local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isChief), player.GetAll}
 DarkRP.declareChatCommand{
 	command = "givelicense",
 	description = "Give someone a gun license",
 	delay = 1.5,
 	condition = fn.FOr{
-		isMayor, -- Mayors can hand out licenses
+		plyMeta.isMayor, -- Mayors can hand out licenses
 		fn.FAnd{isChief, noMayorExists}, -- Chiefs can if there is no mayor
 		fn.FAnd{plyMeta.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
 	}

@@ -78,18 +78,6 @@ function meta:AllowedToOwn(ply)
 	return false
 end
 
-local playerMeta = FindMetaTable("Player")
-function playerMeta:IsCP()
-	if not IsValid(self) then return false end
-	local Team = self:Team()
-	return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team]
-end
-
-function playerMeta:CanAfford(amount)
-	if not amount or self.DarkRPUnInitialized then return false end
-	return math.floor(amount) >= 0 and (self:getDarkRPVar("money") or 0) - math.floor(amount) >= 0
-end
-
 /*---------------------------------------------------------------------------
 Commands
 ---------------------------------------------------------------------------*/

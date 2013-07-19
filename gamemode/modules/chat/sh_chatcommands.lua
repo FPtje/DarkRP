@@ -95,13 +95,11 @@ DarkRP.declareChatCommand{
 	delay = 1.5
 }
 
-local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
-local isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
 DarkRP.declareChatCommand{
 	command = "broadcast",
 	description = "Broadcast something as a mayor.",
 	delay = 1.5,
-	condition = isMayor
+	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{

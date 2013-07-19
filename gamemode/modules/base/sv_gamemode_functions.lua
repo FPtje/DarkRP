@@ -796,8 +796,7 @@ function GM:PlayerDisconnected(ply)
 		end
 	end
 
-	local isMayor = RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor
-	if isMayor then
+	if ply:isMayor() then
 		for _, ent in pairs(ply.lawboards or {}) do
 			if IsValid(ent) then
 				removeDelayed(ent, ply)

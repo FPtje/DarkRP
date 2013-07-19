@@ -218,16 +218,12 @@ end
 DarkRP.defineChatCommand("requestlicense", RequestLicense)
 
 local function GiveLicense(ply)
-	local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), ply.Team}
-	local isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
-	local isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), getJobTable}
-
-	local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isMayor), player.GetAll}
-	local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isChief), player.GetAll}
+	local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(ply.isMayor), player.GetAll}
+	local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(ply.isChief), player.GetAll}
 
 	local canGiveLicense = fn.FOr{
-		isMayor, -- Mayors can hand out licenses
-		fn.FAnd{isChief, noMayorExists}, -- Chiefs can if there is no mayor
+		ply.isMayor, -- Mayors can hand out licenses
+		fn.FAnd{ply.isChief, noMayorExists}, -- Chiefs can if there is no mayor
 		fn.FAnd{ply.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
 	}
 
