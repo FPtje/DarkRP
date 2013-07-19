@@ -32,6 +32,11 @@ local function AddLaw(ply, args)
 		return ""
 	end
 
+	if not args or args == "" then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		return ""
+	end
+
 	if string.len(args) < 3 then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
 		return ""
