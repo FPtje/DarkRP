@@ -7,6 +7,7 @@ ENT.Author = "Drakehawke"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
+local plyMeta = FindMetaTable("Player")
 DarkRP.declareChatCommand{
 	command = "addlaw",
 	description = "Add a law to the laws board.",
