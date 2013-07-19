@@ -131,12 +131,10 @@ DarkRP.declareChatCommand{
 	command = "givelicense",
 	description = "Give someone a gun license",
 	delay = 1.5,
-	condition = fn.Compose{
-		fn.FOr{
-			isMayor, -- Mayors can hand out licenses
-			fn.FAnd{isChief, noMayorExists}, -- Chiefs can if there is no mayor
-			fn.FAnd{plyMeta.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
-		}
+	condition = fn.FOr{
+		isMayor, -- Mayors can hand out licenses
+		fn.FAnd{isChief, noMayorExists}, -- Chiefs can if there is no mayor
+		fn.FAnd{plyMeta.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
 	}
 }
 

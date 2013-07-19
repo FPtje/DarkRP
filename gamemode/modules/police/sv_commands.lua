@@ -218,41 +218,20 @@ end
 DarkRP.defineChatCommand("requestlicense", RequestLicense)
 
 local function GiveLicense(ply)
-	local ismayor--first look if there's a mayor
-	local ischief-- then if there's a chief
-	local iscop-- and then if there's a cop to ask
-	for k,v in pairs(player.GetAll()) do
-		if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].mayor and not v:getDarkRPVar("AFK") then
-			ismayor = true
-			break
-		end
-	end
+	local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), ply.Team}
+	local isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
+	local isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), getJobTable}
 
-	if not ismayor then
-		for k,v in pairs(player.GetAll()) do
-			if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].chief and not v:getDarkRPVar("AFK") then
-				ischief = true
-				break
-			end
-		end
-	end
+	local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isMayor), player.GetAll}
+	local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(isChief), player.GetAll}
 
-	if not ischief and not ismayor then
-		for k,v in pairs(player.GetAll()) do
-			if v:IsCP() then
-				iscop = true
-				break
-			end
-		end
-	end
+	local canGiveLicense = fn.FOr{
+		isMayor, -- Mayors can hand out licenses
+		fn.FAnd{isChief, noMayorExists}, -- Chiefs can if there is no mayor
+		fn.FAnd{ply.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
+	}
 
-	if ismayor and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
-		return ""
-	elseif ischief and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].chief) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
-		return ""
-	elseif iscop and not ply:IsCP() then
+	if not canGiveLicense(ply) then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
 		return ""
 	end
