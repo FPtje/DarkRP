@@ -451,6 +451,8 @@ local english = {
 	give_license_lookingat = "Give <lookingat> a gun license",
 
 	laws_of_the_land = "LAWS OF THE LAND",
+	law_added = "Law added.",
+	law_removed = "Law removed.",
 	law_too_short = "Law too short.",
 	laws_full = "The laws are full.",
 	default_law_change_denied = "You are not allowed to change the default laws.",

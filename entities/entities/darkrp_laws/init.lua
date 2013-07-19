@@ -53,7 +53,7 @@ local function AddLaw(ply, args)
 		umsg.String(args)
 	umsg.End()
 
-	DarkRP.notify(ply, 0, 2, "Law added.")
+	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_added"))
 
 	return ""
 end
@@ -86,7 +86,7 @@ local function RemoveLaw(ply, args)
 		umsg.Char(tonumber(args))
 	umsg.End()
 
-	DarkRP.notify(ply, 0, 2, "Law removed.")
+	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_removed"))
 
 	return ""
 end
