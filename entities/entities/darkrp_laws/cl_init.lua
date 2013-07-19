@@ -1,14 +1,7 @@
-
 include("shared.lua")
 
--- These are the default laws, they're unchangeable in-game.
-local Laws = {
-	"1. Do not attack other citizens except in self-defence.",
-	"2. Do not steal or break in to peoples homes.",
-	"3. Money printers/drugs are illegal."
-}
-
-local drawLaws = table.concat(Laws, "\n")
+local Laws = {}
+local drawLaws = ""
 
 function ENT:Draw()
 	self:DrawModel()
@@ -32,17 +25,21 @@ function ENT:Draw()
 	cam.End3D2D()
 end
 
-local function AddLaw(um)
-	local law = um:ReadString()
-	law = GAMEMODE:TextWrap(law, "TargetID", 522)
+local function AddLaw(inLaw)
+	local law = GAMEMODE:TextWrap(inLaw, "TargetID", 522)
 
 	Laws[#Laws + 1] = (#Laws + 1).. ". " .. law
 	drawLaws = table.concat(Laws, "\n")
 end
-usermessage.Hook("DRP_AddLaw", AddLaw)
+
+local function AddLawUM(um)
+	AddLaw(um:ReadString())
+end
+usermessage.Hook("DRP_AddLaw", AddLawUM)
 
 local function RemoveLaw(um)
-	local i = um:ReadChar()
+	local i = um:ReadShort()
+
 
 	while i < #Laws do
 		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%."))))
@@ -53,3 +50,7 @@ local function RemoveLaw(um)
 	drawLaws = table.concat(Laws, "\n")
 end
 usermessage.Hook("DRP_RemoveLaw", RemoveLaw)
+
+timer.Simple(0, function()
+	fn.Foldl(function(val,v) AddLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
+end)
