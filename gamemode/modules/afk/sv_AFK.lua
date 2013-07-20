@@ -25,10 +25,12 @@ local function SetAFK(ply)
 		GAMEMODE:NotifyAll(0, 5, rpname .. " is now AFK.")
 
 		ply:KillSilent()
+		ply:Lock()
 	else
 		GAMEMODE:NotifyAll(1, 5, rpname .. " is no longer AFK.")
 		GAMEMODE:Notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
 		ply:Spawn()
+		ply:UnLock()
 	end
 	ply:SetDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
 	ply:SetDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
