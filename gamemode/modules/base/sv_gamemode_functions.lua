@@ -291,7 +291,7 @@ local function IsInRoom(listener, talker) -- IsInRoom function to see if the pla
 	local tracedata = {}
 	tracedata.start = talker:GetShootPos()
 	tracedata.endpos = listener:GetShootPos()
-	local trace = util.TraceLine( tracedata )
+	local trace = util.TraceLine(tracedata)
 
 	return not trace.HitWorld
 end
@@ -299,20 +299,29 @@ end
 local threed = GM.Config.voice3D
 local vrad = GM.Config.voiceradius
 local dynv = GM.Config.dynamicvoice
-function GM:PlayerCanHearPlayersVoice(listener, talker, other)
-	if vrad and listener:GetShootPos():Distance(talker:GetShootPos()) < 550 then
-		if dynv then
-			if IsInRoom(listener, talker) then
-				return true, threed
-			else
-				return false, threed
-			end
-		end
-		return true, threed
-	elseif vrad then
-		return false, threed
+-- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
+-- causing a lagfest when there are many players
+local function calcPlyCanHearPlayerVoice(listener)
+	listener.DrpCanHear = listener.DrpCanHear or {}
+	for _, talker in pairs(player.GetAll()) do
+		listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
+			(listener:GetShootPos():Distance(talker:GetShootPos()) < 550 and -- voiceradius is on and the two are within hearing distance
+				(not dynv or IsInRoom(listener, talker))) -- Dynamic voice is on and players are in the same room
 	end
-	return true, threed
+end
+hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
+	timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
+end)
+hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
+	for k,v in pairs(player.GetAll()) do
+		v.DrpCanHear[ply] = nil
+	end
+	timer.Destroy(ply:UserID() .. "DarkRPCanHearPlayersVoice")
+end)
+
+function GM:PlayerCanHearPlayersVoice(listener, talker)
+	local canHear = listener.DrpCanHear and listener.DrpCanHear[talker]
+	return canHear, threed
 end
 
 function GM:CanTool(ply, trace, mode)
