@@ -20,3 +20,17 @@ DarkRP.declareChatCommand{
 	delay = 1.5,
 	condition = fn.Curry(fn.Flip(meta.hasDarkRPPrivilege), 2)("rp_commands")
 }
+
+DarkRP.declareChatCommand{
+	command = "jailpos",
+	description = "Reset jail positions and create a new one at your position.",
+	delay = 1.5,
+	condition = fn.Curry(fn.Flip(meta.hasDarkRPPrivilege), 2)("rp_commands")
+}
+
+DarkRP.declareChatCommand{
+	command = "addjailpos",
+	description = "Add a jail position where you're standing.",
+	delay = 1.5,
+	condition = fn.Curry(fn.Flip(meta.hasDarkRPPrivilege), 2)("rp_commands")
+}

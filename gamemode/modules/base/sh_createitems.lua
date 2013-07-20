@@ -1,3 +1,4 @@
+local plyMeta = FindMetaTable("Player")
 -- automatically block players from doing certain things with their DarkRP entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
@@ -86,6 +87,13 @@ local function addTeamCommands(CTeam, max)
 			ply:GetTable().LastVoteCop = CurTime()
 			return ""
 		end)
+
+		DarkRP.declareChatCommand{
+			command = "vote"..CTeam.command,
+			description = "Vote to become " .. CTeam.name,
+			delay = 1.5
+		}
+
 		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
 			if ply:hasDarkRPPrivilege("rp_"..CTeam.command) then
 				ply:changeTeam(k)
@@ -113,6 +121,13 @@ local function addTeamCommands(CTeam, max)
 			ply:changeTeam(k)
 			return ""
 		end)
+
+		DarkRP.declareChatCommand{
+			command = CTeam.command,
+			description = "Vote to become " .. CTeam.name,
+			delay = 1.5,
+			condition = fn.Curry(fn.Flip(plyMeta.hadDarkRPPrivilege), 2)("rp_"..CTeam.command)
+		}
 	else
 		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
 			if CTeam.admin == 1 and not ply:IsAdmin() then
@@ -126,6 +141,12 @@ local function addTeamCommands(CTeam, max)
 			ply:changeTeam(k)
 			return ""
 		end)
+
+		DarkRP.declareChatCommand{
+			command = CTeam.command,
+			description = "Vote to become " .. CTeam.name,
+			delay = 1.5
+		}
 	end
 
 	concommand.Add("rp_"..CTeam.command, function(ply, cmd, args)
@@ -228,6 +249,12 @@ local function addEntityCommands(tblEnt)
 		return ""
 	end
 	DarkRP.defineChatCommand(tblEnt.cmd, buythis)
+
+	DarkRP.declareChatCommand{
+		command = tblEnt.cmd,
+		description = "Purchase a " .. tblEnt.name,
+		delay = 5
+	}
 end
 
 RPExtraTeams = {}
