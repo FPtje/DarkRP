@@ -58,6 +58,7 @@ end
 
 -- Definition from http://lua-users.org/wiki/CurriedLua
 Curry = function(func, num_args)
+	if not num_args then error("Missing argument #2: num_args") end
 	if not func then error("Function does not exist!", 2) end
 	-- helper
 	local function curry_h(argtrace, n)
@@ -101,6 +102,7 @@ Mod = function(a, b) return a % b end
 Neg = function(a) return -a end
 
 Eq = function(a, b) return a == b end
+Neq = function(a, b) return a ~= b end
 Gt = function(a, b) return a > b end
 Lt = function(a, b) return a < b end
 Gte = function(a, b) return a >= b end
@@ -112,7 +114,7 @@ Even = Compose{Curry(Eq, 2)(0), Curry(Flip(Mod), 2)(2)}
 Odd = Compose{Not, Even}
 
 /*---------------------------------------------------------------------------
-Functional logical operators
+Functional logical operators and conditions
 ---------------------------------------------------------------------------*/
 FAnd = function(fns)
 	return function(x)
@@ -133,6 +135,16 @@ FOr = function(fns)
 end
 
 Not = function(x) return not x end
+
+If = function(f, Then, Else)
+	return function(x)
+		if f(x) then
+			return Then
+		else
+			return Else
+		end
+	end
+end
 
 /*---------------------------------------------------------------------------
 List operations
@@ -156,6 +168,13 @@ Filter = function(f, xs)
 	return res
 end
 
+ForEach = function(f, xs)
+	for k,v in pairs(xs) do
+		local val = f(k, v)
+		if val ~= nil then return val end
+	end
+end
+
 Head = function(xs)
 	return table.GetFirstValue(xs)
 end
@@ -172,6 +191,10 @@ end
 Init = function(xs)
 	xs[#xs] = nil
 	return xs
+end
+
+GetValue = function(i, xs)
+	return xs[i]
 end
 
 Null = function(xs)
