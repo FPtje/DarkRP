@@ -100,8 +100,15 @@ end
 
 FAdmin.StartHooks["AccessFunctions"] = function()
 	FAdmin.Access.AddPrivilege("SetAccess", 3) -- AddPrivilege is shared, run on both client and server
+	FAdmin.Access.AddPrivilege("SeeAdmins", 1)
 	FAdmin.Commands.AddCommand("RemoveGroup", FAdmin.Access.RemoveGroup)
 
 	local printPlyGroup = function(ply) print(ply:Nick(), "\t|\t", ply:GetNWString("usergroup")) end
-	FAdmin.Commands.AddCommand("Admins", fn.Compose{fn.Curry(fn.Map, 2)(printPlyGroup), player.GetAll})
+	FAdmin.Commands.AddCommand("Admins", function(ply)
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return end
+		for k,v in pairs(player.GetAll()) do
+			ply:PrintMessage(HUD_PRINTCONSOLE, v:Nick() .. "\t|\t" .. v:GetNWString("usergroup"))
+		end
+	end
+	)
 end

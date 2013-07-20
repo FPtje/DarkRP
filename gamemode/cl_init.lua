@@ -516,7 +516,11 @@ FAdmin.StartHooks["DarkRP"] = function()
 	FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() and ply.DarkRPVars and ply:getDarkRPVar("money") then return GAMEMODE.Config.currency..formatNumber(ply:getDarkRPVar("money")) end end)
 	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply.DarkRPVars and ply:getDarkRPVar("wanted") then return tostring(ply:getDarkRPVar("wantedReason") or "N/A") end end)
 	FAdmin.ScoreBoard.Player:AddInformation("Community link", function(ply) return FAdmin.SteamToProfile(ply) end)
-	FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply) return ply:GetNWString("usergroup") end)
+	FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply)
+		if FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SeeAdmins") then
+			return ply:GetNWString("usergroup")
+		end
+	end)
 
 	-- Warrant
 	FAdmin.ScoreBoard.Player:AddActionButton("Warrant", "FAdmin/icons/Message",	Color(0, 0, 200, 255),
