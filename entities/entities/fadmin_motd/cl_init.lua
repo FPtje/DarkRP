@@ -26,7 +26,9 @@ function ENT:Initialize()
 	self.HTML = self.HTMLControl or vgui.Create("HTML")
 	self.HTML:SetPaintedManually(true)
 	self.HTML:SetPos(-512, -256)
-	self.HTML:SetSize(ScrW() / 2, ScrH() / 2)
+	self.HTMLWidth = 1448
+	self.HTMLHeight = 724
+	self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
 	self:LoadPage()
 
 	self.HTML:SetVisible(true)
@@ -40,7 +42,6 @@ function ENT:Think()
 	end
 	self:NextThink(CurTime() + 0.1)
 end
-
 
 local gripTexture = surface.GetTextureID("sprites/grip")
 local ArrowTexture = surface.GetTextureID("gui/arrow")
@@ -106,7 +107,7 @@ function ENT:Draw()
 		else
 			surface.SetMaterial(self.HTMLMat)
 			surface.SetDrawColor(255, 255, 255, 255)
-			surface.DrawTexturedRect(-512, -256, 1520, 780)
+			surface.DrawTexturedRect(-512, -256, self.HTMLWidth, self.HTMLHeight)
 		end
 
 	cam.End3D2D()
@@ -136,7 +137,9 @@ function ENT:Draw()
 
 			function self.HTMLCloseButton.DoClick() -- Revert to drawing on the prop
 				self.HTML:SetPos(-512, -256)
-				self.HTML:SetSize(1024, 512)
+				self.HTMLWidth = 1088
+				self.HTMLHeight = 536
+				self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
 				self.HTML:SetPaintedManually(true)
 				self.HTML:SetKeyBoardInputEnabled(false)
 				self.HTML:SetVisible(false)
