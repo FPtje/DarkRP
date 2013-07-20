@@ -78,7 +78,7 @@ function plyMeta:unWanted(actor)
 end
 
 function plyMeta:arrest(time, arrester)
-	time = GAMEMODE.Config.jailtimer or 120
+	time = time or GAMEMODE.Config.jailtimer or 120
 
 	hook.Call("playerArrested", DarkRP.hooks, self, time, arrester)
 	self:SetDarkRPVar("Arrested", true)
