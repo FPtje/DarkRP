@@ -21,6 +21,29 @@ end
 -----------------------------------------------------------
 -- Job commands --
 -----------------------------------------------------------
+local function declareTeamCommands(CTeam)
+	if CTeam.vote or CTeam.RequiresVote then
+		DarkRP.declareChatCommand{
+			command = "vote"..CTeam.command,
+			description = "Vote to become " .. CTeam.name,
+			delay = 1.5
+		}
+
+		DarkRP.declareChatCommand{
+			command = CTeam.command,
+			description = "Vote to become " .. CTeam.name,
+			delay = 1.5,
+			condition = fn.Curry(fn.Flip(plyMeta.hadDarkRPPrivilege), 2)("rp_"..CTeam.command)
+		}
+	else
+		DarkRP.declareChatCommand{
+			command = CTeam.command,
+			description = "Vote to become " .. CTeam.name,
+			delay = 1.5
+		}
+	end
+end
+
 local function addTeamCommands(CTeam, max)
 	if CLIENT then return end
 
@@ -88,12 +111,6 @@ local function addTeamCommands(CTeam, max)
 			return ""
 		end)
 
-		DarkRP.declareChatCommand{
-			command = "vote"..CTeam.command,
-			description = "Vote to become " .. CTeam.name,
-			delay = 1.5
-		}
-
 		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
 			if ply:hasDarkRPPrivilege("rp_"..CTeam.command) then
 				ply:changeTeam(k)
@@ -121,13 +138,6 @@ local function addTeamCommands(CTeam, max)
 			ply:changeTeam(k)
 			return ""
 		end)
-
-		DarkRP.declareChatCommand{
-			command = CTeam.command,
-			description = "Vote to become " .. CTeam.name,
-			delay = 1.5,
-			condition = fn.Curry(fn.Flip(plyMeta.hadDarkRPPrivilege), 2)("rp_"..CTeam.command)
-		}
 	else
 		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
 			if CTeam.admin == 1 and not ply:IsAdmin() then
@@ -141,12 +151,6 @@ local function addTeamCommands(CTeam, max)
 			ply:changeTeam(k)
 			return ""
 		end)
-
-		DarkRP.declareChatCommand{
-			command = CTeam.command,
-			description = "Vote to become " .. CTeam.name,
-			delay = 1.5
-		}
 	end
 
 	concommand.Add("rp_"..CTeam.command, function(ply, cmd, args)
@@ -193,6 +197,11 @@ local function addTeamCommands(CTeam, max)
 end
 
 local function addEntityCommands(tblEnt)
+	DarkRP.declareChatCommand{
+		command = tblEnt.cmd,
+		description = "Purchase a " .. tblEnt.name,
+		delay = 5
+	}
 	if CLIENT then return end
 
 	local function buythis(ply, args)
@@ -249,12 +258,6 @@ local function addEntityCommands(tblEnt)
 		return ""
 	end
 	DarkRP.defineChatCommand(tblEnt.cmd, buythis)
-
-	DarkRP.declareChatCommand{
-		command = tblEnt.cmd,
-		description = "Purchase a " .. tblEnt.name,
-		delay = 5
-	}
 end
 
 RPExtraTeams = {}
@@ -275,7 +278,10 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
 	local Team = #RPExtraTeams
 
-	timer.Simple(0, function() addTeamCommands(CustomTeam, CustomTeam.max) end)
+	timer.Simple(0, function()
+		declareTeamCommands(CustomTeam)
+		addTeamCommands(CustomTeam, CustomTeam.max)
+	end)
 
 	// Precache model here. Not right before the job change is done
 	if type(CustomTeam.model) == "table" then

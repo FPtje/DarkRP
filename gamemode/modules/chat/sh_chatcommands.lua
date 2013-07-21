@@ -41,6 +41,13 @@ function DarkRP.getChatCommands()
 	return chatCommands
 end
 
+function DarkRP.getSortedChatCommands()
+	local tbl = fn.Compose{table.ClearKeys, table.Copy, DarkRP.getChatCommands}()
+	table.SortByMember(tbl, "command", true)
+
+	return tbl
+end
+
 -- chat commands that have been defined, but not declared
 DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(chatCommands)
 

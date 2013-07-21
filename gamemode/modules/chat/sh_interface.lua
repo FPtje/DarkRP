@@ -44,7 +44,7 @@ DarkRP.getChatCommand = DarkRP.stub{
 	returns = {
 		{
 			name = "chatTable",
-			description = "A table containing the information of the chat command",
+			description = "A table containing the information of the chat command.",
 			type = "table"
 		}
 	},
@@ -60,7 +60,23 @@ DarkRP.getChatCommands = DarkRP.stub{
 	returns = {
 		{
 			name = "commands",
-			description = "A table containing every command",
+			description = "A table containing every command. Table indices are the command strings.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
+DarkRP.getSortedChatCommands = DarkRP.stub{
+	name = "getSortedChatCommands",
+	description = "Get every chat command, sorted by their name.",
+	parameters = {
+
+	},
+	returns = {
+		{
+			name = "commands",
+			description = "A table containing every command.",
 			type = "table"
 		}
 	},
