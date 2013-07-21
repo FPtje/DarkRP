@@ -48,7 +48,7 @@ SWEP.Secondary.Ammo = "none"
 
 -- Start of Firemode configuration
 
-SWEP.IronSightsPos = Vector(-8.05, -5, 0.5)
-SWEP.IronSightsAng = Vector(3, -4, -4)
+SWEP.IronSightsPos = Vector(-8.09, -4.5, 0.56)
+SWEP.IronSightsAng = Vector(2.75, -3.97, -3.8)
 
 SWEP.MultiMode = true
