@@ -173,7 +173,7 @@ end
 /*
 	FAdmin global settings
 */
-FAdmin.GlobalSetting = {}
+FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
 
 
 FindMetaTable("Player").FAdmin_GetGlobal = function(self, setting)
