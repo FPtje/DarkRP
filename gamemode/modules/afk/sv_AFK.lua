@@ -25,10 +25,12 @@ local function SetAFK(ply)
 		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
 
 		ply:KillSilent()
+		ply:Lock()
 	else
 		DarkRP.notifyAll(1, 5, rpname .. " is no longer AFK.")
 		DarkRP.notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
 		ply:Spawn()
+		ply:UnLock()
 	end
 	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply.OldJob)
 	ply:setDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)

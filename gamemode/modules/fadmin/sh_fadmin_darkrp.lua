@@ -1,7 +1,7 @@
 FAdmin = FAdmin or {}
 
-FAdmin.PlayerActions = {}
-FAdmin.StartHooks = {}
+FAdmin.PlayerActions = FAdmin.PlayerActions or {}
+FAdmin.StartHooks = FAdmin.StartHooks or {}
 
 /*
 
@@ -71,7 +71,7 @@ end)
 /*
 	FAdmin global settings
 */
-FAdmin.GlobalSetting = {}
+FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
 
 
 FindMetaTable("Player").FAdmin_GetGlobal = function(self, setting)
