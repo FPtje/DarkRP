@@ -45,7 +45,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
 	local x, y
 	local ply = localplayer:GetEyeTrace().Entity
 
-	if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and localplayer:GetPos():Distance(ply:GetPos()) < GAMEMODE.Config.minHitDistance then
+	if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and not ply:hasHit() and localplayer:GetPos():Distance(ply:GetPos()) < GAMEMODE.Config.minHitDistance then
 		x, y = ScrW() / 2, ScrH() / 2 + 30
 
 		draw.DrawText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)

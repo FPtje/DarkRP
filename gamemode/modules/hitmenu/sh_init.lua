@@ -33,8 +33,8 @@ function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 	if not customer:CanAfford(price) then return false, "Cannot afford!" end
 	if price < GAMEMODE.Config.minHitPrice then return false, "Price too low!" end
 	if hitman:hasHit() then return false, "Hitman already has a hit ongoing" end
-	if IsValid(target) and ((target:getDarkRPVar("lastHitTime") or 0) > CurTime() - GAMEMODE.Config.hitTargetCooldown) then return false, "The target was recently killed" end
-	if IsValid(customer) and ((customer.lastHitAccepted or 0) > CurTime() - GAMEMODE.Config.hitCustomerCooldown) then return false, "The customer has recently requested a hit" end
+	if IsValid(target) and ((target:getDarkRPVar("lastHitTime") or -GAMEMODE.Config.hitTargetCooldown) > CurTime() - GAMEMODE.Config.hitTargetCooldown) then return false, "The target was recently killed" end
+	if IsValid(customer) and ((customer.lastHitAccepted or -GAMEMODE.Config.hitCustomerCooldown) > CurTime() - GAMEMODE.Config.hitCustomerCooldown) then return false, "The customer has recently requested a hit" end
 
 	return true
 end
