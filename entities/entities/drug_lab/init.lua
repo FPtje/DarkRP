@@ -47,7 +47,7 @@ function ENT:Use(activator,caller)
 		timer.Simple(0.5, function() self.CanUse = true end)
 	else
 		local productioncost = math.random(math.Round(self:Getprice() / 8), math.Round(self:Getprice() / 4))
-		if not activator:CanAfford(productioncost) then
+		if not activator:canAfford(productioncost) then
 			DarkRP.notify(activator, 1, 4, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("drugs"))))
 			timer.Simple(0.5, function() self.CanUse = true end)
 			return false

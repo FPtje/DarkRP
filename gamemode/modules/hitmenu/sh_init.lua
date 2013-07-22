@@ -30,7 +30,7 @@ function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 	if customer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return false, DarkRP.getPhrase("distance_too_big") end
 	if hitman == target then return false, DarkRP.getPhrase("hitman_no_suicide") end
 	if hitman == customer then return false, DarkRP.getPhrase("hitman_no_self_order") end
-	if not customer:CanAfford(price) then return false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit")) end
+	if not customer:canAfford(price) then return false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit")) end
 	if price < GAMEMODE.Config.minHitPrice then return false, DarkRP.getPhrase("price_too_low") end
 	if hitman:hasHit() then return false, DarkRP.getPhrase("hitman_already_has_hit") end
 	if IsValid(target) and ((target:getDarkRPVar("lastHitTime") or 0) > CurTime() - GAMEMODE.Config.hitTargetCooldown) then return false, DarkRP.getPhrase("hit_target_recently_killed_by_hit") end
