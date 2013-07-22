@@ -1,7 +1,14 @@
+surface.CreateFont("F1MenuTitle", {
+		size = 50,
+		weight = 500,
+		antialias = true,
+		shadow = false,
+		font = "coolvetica"})
+
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetFont("GModToolSubtitle")
+	self:SetFont("F1MenuTitle")
 end
 
-derma.DefineControl("F1MenuLabel", "DarkRP F1 menu title label", PANEL, "DLabel")
+derma.DefineControl("F1MenuTitleLabel", "DarkRP F1 menu title label", PANEL, "DLabel")

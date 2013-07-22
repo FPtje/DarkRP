@@ -1,6 +1,7 @@
 local chatCommands
 
-function searchChatCommand(str)
+local function searchChatCommand(str)
+	if not str or str == "" then return chatCommands end
 	-- Fuzzy search regex string
 	str = ".*" .. str:gsub("[a-zA-Z0-9]", function(a) return a:lower() .. ".*" end)
 	local condition = fn.Compose{fn.Curry(fn.Flip(string.match), 2)(str), fn.Curry(fn.GetValue, 2)("command")}
@@ -9,7 +10,11 @@ end
 
 local F1Menu
 function DarkRP.openF1Menu()
+	chatCommands = chatCommands or DarkRP.getSortedChatCommands()
+
 	F1Menu = F1Menu or vgui.Create("F1MenuPanel")
+	F1Menu:setSearchAlgorithm(searchChatCommand)
+	F1Menu:refresh()
 	F1Menu:slideIn()
 end
 
@@ -24,4 +29,3 @@ function GM:ShowHelp()
 		DarkRP.closeF1Menu()
 	end
 end
-print(GM.ShowHelp)

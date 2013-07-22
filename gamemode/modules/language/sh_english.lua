@@ -9,7 +9,7 @@ local english = {
 	invalid_x = "Invalid %s! %s",
 
 	-- F1 menu
-	mouse_wheel_to_scroll = "Use mousewheel to scroll",
+	f1ChatCommandTitle = "Chat commands",
 
 	-- Money things:
 	price = "Price: %s%d",
