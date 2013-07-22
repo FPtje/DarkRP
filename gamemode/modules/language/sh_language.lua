@@ -9,6 +9,7 @@ function DarkRP.addLanguage(name, tbl)
 	for k,v in pairs(old) do
 		rp_languages[name][k] = v
 	end
+	LANGUAGE = rp_languages[name] -- backwards compatibility
 end
 
 function DarkRP.addPhrase(lang, name, phrase)
