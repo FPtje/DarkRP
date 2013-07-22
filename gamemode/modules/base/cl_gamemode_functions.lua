@@ -1,7 +1,3 @@
-function GM:ShowHelp()
-	-- TODO: Make the F1 menu show
-end
-
 local GUIToggled = false
 local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 function GM:ShowSpare1()

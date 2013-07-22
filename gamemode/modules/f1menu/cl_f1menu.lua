@@ -6,3 +6,22 @@ function searchChatCommand(str)
 	local condition = fn.Compose{fn.Curry(fn.Flip(string.match), 2)(str), fn.Curry(fn.GetValue, 2)("command")}
 	return fn.Compose{table.ClearKeys, fn.Curry(fn.Filter, 2)(condition)}(chatCommands)
 end
+
+local F1Menu
+function DarkRP.openF1Menu()
+	F1Menu = F1Menu or vgui.Create("F1MenuPanel")
+	F1Menu:slideIn()
+end
+
+function DarkRP.closeF1Menu()
+	F1Menu:slideOut()
+end
+
+function GM:ShowHelp()
+	if not F1Menu or not F1Menu.toggled then
+		DarkRP.openF1Menu()
+	else
+		DarkRP.closeF1Menu()
+	end
+end
+print(GM.ShowHelp)
