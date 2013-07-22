@@ -56,3 +56,18 @@ function plyMeta:isInRoom()
 
 	return not trace.HitWorld
 end
+
+/*---------------------------------------------------------------------------
+Key name to key int mapping
+---------------------------------------------------------------------------*/
+local keyNames
+function input.KeyNameToNumber(str)
+	if not keyNames then
+		keyNames = {}
+		for i = 1, 107, 1 do
+			keyNames[input.GetKeyName(i)] = i
+		end
+	end
+
+	return keyNames[str]
+end

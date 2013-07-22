@@ -68,6 +68,9 @@ else
 	concommand.Add("rp_getvehicles", GetAvailableVehicles)
 end
 
+/*---------------------------------------------------------------------------
+Whether a player has a DarkRP privilege
+---------------------------------------------------------------------------*/
 function meta:hasDarkRPPrivilege(priv)
 	if FAdmin then
 		return FAdmin.Access.PlayerHasPrivilege(self, priv)
