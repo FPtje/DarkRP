@@ -82,5 +82,4 @@ local function credits(um)
 	MsgC(Color(255,0,0,255), DarkRP.getPhrase("credits_for", GAMEMODE.Name))
 	MsgC(Color(255,255,255,255), creds)
 end
-a = credits
 usermessage.Hook("DarkRP_Credits", credits)
