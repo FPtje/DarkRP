@@ -96,7 +96,7 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	color = Color(25, 25, 25, 255),
 	model = "models/player/gman_high.mdl",
 	description = [[The Mobboss is the boss of the criminals in the city.
-		With his power he coordinates the gangsters and forms an efficent crime
+		With his power he coordinates the gangsters and forms an efficient crime
 		organization.
 		He has the ability to break into houses by using a lockpick.
 		The Mobboss also can unarrest you.]],
@@ -138,7 +138,7 @@ TEAM_MEDIC = AddExtraTeam("Medic", {
 	description = [[With your medical knowledge,
 		you heal players to proper
 		health.
-		Without a medic, people can not be healed.
+		Without a medic, people cannot be healed.
 		Left click with the Medical Kit to heal other players.
 		Right click with the Medical Kit to heal yourself.]],
 	weapons = {"med_kit"},
@@ -155,8 +155,8 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	color = Color(20, 20, 255, 255),
 	model = "models/player/combine_soldier_prisonguard.mdl",
 	description = [[The Chief is the leader of the Civil Protection unit.
-		Coordinate the police forces to bring law to the city
-		Hit them with arrest baton to put them in jail
+		Coordinate the police force to enforce law in the city.
+		Hit them with arrest baton to put them in jail.
 		Bash them with a stunstick and they might learn better than to
 		disobey the law.
 		The Battering Ram can break down the door of a criminal with a
