@@ -1,11 +1,16 @@
 local PANEL = {}
 
 function PANEL:Init()
-	//self:SetBGColor(Color(0, 0, 0, 0))
+	self:SetBackgroundColor(Color(0, 0, 0, 0))
 end
 
 function PANEL:fillLabels(tbl)
-
+	self:Clear()
+	for i, cmd in ipairs(tbl) do
+		local lbl = vgui.Create("F1ChatCommandLabel", self)
+		lbl:setChatCommand(cmd)
+		lbl:Dock(TOP)
+	end
 end
 
 

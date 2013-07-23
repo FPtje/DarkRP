@@ -113,7 +113,7 @@ AddEntity("Drug lab", {
 	model = "models/props_lab/crematorcase.mdl",
 	price = 400,
 	max = 3,
-	cmd = "/buydruglab",
+	cmd = "buydruglab",
 	allowed = {TEAM_GANG, TEAM_MOB}
 })
 
@@ -122,7 +122,7 @@ AddEntity("Money printer", {
 	model = "models/props_c17/consolebox01a.mdl",
 	price = 1000,
 	max = 2,
-	cmd = "/buymoneyprinter"
+	cmd = "buymoneyprinter"
 })
 
 AddEntity("Gun lab", {
@@ -130,7 +130,7 @@ AddEntity("Gun lab", {
 	model = "models/props_c17/TrapPropeller_Engine.mdl",
 	price = 500,
 	max = 1,
-	cmd = "/buygunlab",
+	cmd = "buygunlab",
 	allowed = TEAM_GUN
 })
 

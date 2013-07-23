@@ -33,7 +33,7 @@ local function declareTeamCommands(CTeam)
 			command = CTeam.command,
 			description = "Vote to become " .. CTeam.name,
 			delay = 1.5,
-			condition = fn.Curry(fn.Flip(plyMeta.hadDarkRPPrivilege), 2)("rp_"..CTeam.command)
+			condition = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_"..CTeam.command)
 		}
 	else
 		DarkRP.declareChatCommand{

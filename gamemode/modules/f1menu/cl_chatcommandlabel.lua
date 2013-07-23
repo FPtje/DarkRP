@@ -6,16 +6,20 @@ local red = Color(140, 0, 0)
 function PANEL:Init()
 	self:SetFont("DarkRPHUD2")
 	self:SetColor(green)
+	self:DockMargin(0, 5, 0, 0)
 end
 
 function PANEL:setChatCommand(command)
 	self.chatCommand = command
-	self:SetText(command.command)
+	local text = string.format("%s%s - %s", GAMEMODE.Config.chatCommandPrefix, command.command, command.description)
+	self:SetAutoStretchVertical(true)
+	self:SetWrap(true)
+	self:SetText(text)
 	self:refresh()
 end
 
 function PANEL:refresh()
-	local color = self.command.condition and not self.command.condition(LocalPlayer()) and red or green
+	local color = self.chatCommand.condition and not self.chatCommand.condition(LocalPlayer()) and red or green
 	self:SetColor(color)
 end
 

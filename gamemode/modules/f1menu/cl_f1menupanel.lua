@@ -4,7 +4,7 @@ AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
 function PANEL:Init()
 	self:SetFocusTopLevel(true)
 	self:SetSize(ScrW() * 0.9, ScrH() * 0.9)
-	self:SetBackgroundColor(Color(255, 0, 0, 200))
+	self:SetBackgroundColor(Color(0, 0, 0, 200))
 
 	self:SetPos(-self:GetWide(), ScrH() * 0.05)
 
@@ -16,6 +16,7 @@ function PANEL:Init()
 	self.lblChatCommands:SetText(DarkRP.getPhrase("f1ChatCommandTitle"))
 
 	self.txtChatCommandSearch = vgui.Create("F1SearchBox", self)
+	self.txtChatCommandSearch.OnChange = fn.Curry(self.refresh, 2)(self)
 
 	self.pnlChatCommands = vgui.Create("F1ChatCommandPanel", self)
 end
@@ -26,7 +27,8 @@ function PANEL:PerformLayout()
 
 	self.txtChatCommandSearch:SetPos(20, 80)
 
-	self.pnlChatCommands:StretchToParent(20, 120, 10, 20)
+	self.pnlChatCommands:StretchToParent(20, 120, nil, 20)
+	self.pnlChatCommands:SetWide(self:GetWide() / 2 - 20)
 end
 
 function PANEL:OnMousePressed()
@@ -50,7 +52,8 @@ function PANEL:slideOut()
 end
 
 function PANEL:refresh()
-
+	local commands = self.searchAlg(self.txtChatCommandSearch:GetText())
+	self.pnlChatCommands:fillLabels(commands)
 end
 
 function PANEL:setSlideInTime(time)
@@ -74,7 +77,9 @@ function PANEL:AnimationThink()
 end
 
 function PANEL:Paint()
-	surface.SetDrawColor(self:GetBackgroundColor())
+	local x, y = self:GetPos()
+	local w, h = self:GetSize()
+	draw.RoundedBox(4, 0, 0, w, h, self:GetBackgroundColor())
 end
 
 derma.DefineControl("F1MenuPanel", "", PANEL, "EditablePanel")

@@ -1,10 +1,14 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetWide(100)
+	self:SetWide(300)
 	self:SetKeyBoardInputEnabled(true)
 	self.BaseClass.Init(self)
 	self.F1Down = true
+	self:SetFont("DarkRPHUD2")
+	self:SetTextColor(Color(255,255,255,255))
+	self:SetCursorColor(Color(255,255,255,255))
+	self:SetDrawBackground(false)
 end
 
 function PANEL:OnLoseFocus()

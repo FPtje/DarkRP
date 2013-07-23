@@ -20,8 +20,9 @@ Parameter manipulation
 ---------------------------------------------------------------------------*/
 Id = function(...) return ... end
 
-Flip = function(f) return
-	function(b, a, ...)
+Flip = function(f)
+	if not f then error("not a function") end
+	return function(b, a, ...)
 		return f(a, b, ...)
 	end
 end
