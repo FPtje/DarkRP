@@ -145,5 +145,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	self:PrimaryAttack()
+	if CLIENT then return end
+	if self.Owner:HasWeapon("unarrest_stick") then
+		self.Owner:SelectWeapon("unarrest_stick")
+	end
 end

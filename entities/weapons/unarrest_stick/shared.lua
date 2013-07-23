@@ -103,5 +103,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	self:PrimaryAttack()
+	if CLIENT then return end
+	if self.Owner:HasWeapon("arrest_stick") then
+		self.Owner:SelectWeapon("arrest_stick")
+	end
 end
