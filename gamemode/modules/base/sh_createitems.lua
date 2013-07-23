@@ -25,20 +25,20 @@ local function declareTeamCommands(CTeam)
 	if CTeam.vote or CTeam.RequiresVote then
 		DarkRP.declareChatCommand{
 			command = "vote"..CTeam.command,
-			description = "Vote to become " .. CTeam.name,
+			description = "Vote to become " .. CTeam.name .. ".",
 			delay = 1.5
 		}
 
 		DarkRP.declareChatCommand{
 			command = CTeam.command,
-			description = "Vote to become " .. CTeam.name,
+			description = "Become " .. CTeam.name .. " and skip the vote.",
 			delay = 1.5,
 			condition = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_"..CTeam.command)
 		}
 	else
 		DarkRP.declareChatCommand{
 			command = CTeam.command,
-			description = "Vote to become " .. CTeam.name,
+			description = "Vote to become " .. CTeam.name .. ".",
 			delay = 1.5
 		}
 	end

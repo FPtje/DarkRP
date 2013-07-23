@@ -19,6 +19,9 @@ function PANEL:Init()
 
 	self.pnlChatCommands = vgui.Create("F1ChatCommandPanel", self)
 	self.pnlChatCommands.DoClick = fprint
+
+	self.lblWiki = vgui.Create("F1MenuTitleLabel", self)
+	self.lblWiki:SetText(DarkRP.getPhrase("f1WikiTitle"))
 end
 
 function PANEL:PerformLayout()
@@ -28,7 +31,10 @@ function PANEL:PerformLayout()
 	self.txtChatCommandSearch:SetPos(20, 80)
 
 	self.pnlChatCommands:StretchToParent(20, 120, nil, 20)
-	self.pnlChatCommands:SetWide(self:GetWide() / 2 - 20)
+	self.pnlChatCommands:SetWide(self:GetWide() * 0.4 - 20)
+
+	self.lblWiki:SetPos(self:GetWide() * 0.4 + 20, 20)
+	self.lblWiki:SizeToContents()
 end
 
 function PANEL:OnMousePressed()

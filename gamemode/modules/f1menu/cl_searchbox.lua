@@ -9,6 +9,13 @@ function PANEL:Init()
 	self:SetTextColor(Color(255,255,255,255))
 	self:SetCursorColor(Color(255,255,255,255))
 	self:SetDrawBackground(false)
+
+	self.lblSearch = vgui.Create("DLabel", self)
+	self.lblSearch:SetFont("DarkRPHUD2")
+	self.lblSearch:SetColor(Color(200, 200, 200, 200))
+	self.lblSearch:SetText(DarkRP.getPhrase("f1Search"))
+	self.lblSearch:SizeToContents()
+	self.lblSearch:SetPos(5)
 end
 
 function PANEL:OnLoseFocus()
@@ -24,6 +31,15 @@ function PANEL:Think()
 	elseif not self.F1Down and input.IsKeyDown(F1Bind) then
 		self.F1Down = true
 		self:GetParent():slideOut()
+	end
+end
+
+function PANEL:OnTextChanged()
+	self.BaseClass.OnTextChanged(self)
+	if self:GetText() == "" then
+		self.lblSearch:SetVisible(true)
+	else
+		self.lblSearch:SetVisible(false)
 	end
 end
 
