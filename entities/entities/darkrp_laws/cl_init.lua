@@ -1,7 +1,6 @@
 include("shared.lua")
 
 local Laws = {}
-local drawLaws = ""
 
 function ENT:Draw()
 	self:DrawModel()
@@ -18,9 +17,13 @@ function ENT:Draw()
 		surface.DrawRect(0, 0, 558, 290)
 
 		draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
-		draw.DrawText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
-		draw.DrawText(drawLaws, "TargetID", 5, 35, Color(255, 255, 255, 255))
+		draw.SimpleText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+
+		local col = Color(255, 255, 255, 255)
+		for k,v in ipairs(Laws) do
+			draw.SimpleText(v, "TargetID", 5, 35 + (k-1)*21, col)
+		end
 
 	cam.End3D2D()
 end
@@ -29,7 +32,6 @@ local function AddLaw(inLaw)
 	local law = GAMEMODE:TextWrap(inLaw, "TargetID", 522)
 
 	Laws[#Laws + 1] = (#Laws + 1).. ". " .. law
-	drawLaws = table.concat(Laws, "\n")
 end
 
 local function AddLawUM(um)
@@ -42,12 +44,10 @@ local function RemoveLaw(um)
 
 
 	while i < #Laws do
-		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%."))))
+		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%d%."))))
 		i = i + 1
 	end
 	Laws[i] = nil
-
-	drawLaws = table.concat(Laws, "\n")
 end
 usermessage.Hook("DRP_RemoveLaw", RemoveLaw)
 
