@@ -178,6 +178,7 @@ if CLIENT then
 	local function Reload()
 		if not ValidPanel(frame) or not frame:IsVisible() then return end
 		local items = LocalPlayer():GetTable().Pocket
+		if not items or next(items) == nil then frame:Close() return end
 		frame:SetSize(#items * 64, 90)
 		frame:Center()
 		for k,v in pairs(items) do
@@ -218,7 +219,7 @@ if CLIENT then
 			end
 		end
 	end
-	
+
 	local function StorePocketItem(um)
 		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
 
