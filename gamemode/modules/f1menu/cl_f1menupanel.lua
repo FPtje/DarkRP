@@ -4,10 +4,9 @@ AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
 function PANEL:Init()
 	self:SetFocusTopLevel(true)
 	self:SetSize(ScrW() * 0.9, ScrH() * 0.9)
-	self:SetBackgroundColor(Color(0, 0, 0, 200))
+	self:SetBackgroundColor(Color(0, 0, 0, 220))
 
 	self:SetPos(-self:GetWide(), ScrH() * 0.05)
-
 
 	self.slideInTime = self.slideInTime or 0.3
 	self.toggled = false
@@ -19,6 +18,7 @@ function PANEL:Init()
 	self.txtChatCommandSearch.OnChange = fn.Curry(self.refresh, 2)(self)
 
 	self.pnlChatCommands = vgui.Create("F1ChatCommandPanel", self)
+	self.pnlChatCommands.DoClick = fprint
 end
 
 function PANEL:PerformLayout()
@@ -46,6 +46,7 @@ function PANEL:slideIn()
 end
 
 function PANEL:slideOut()
+	self.txtChatCommandSearch.F1Down = true
 	self.animationStart = RealTime()
 	self.slideRight = false
 	self.toggled = false

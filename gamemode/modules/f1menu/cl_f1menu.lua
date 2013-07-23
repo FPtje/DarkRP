@@ -13,6 +13,7 @@ function DarkRP.openF1Menu()
 	chatCommands = chatCommands or DarkRP.getSortedChatCommands()
 
 	F1Menu = F1Menu or vgui.Create("F1MenuPanel")
+	F1Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	F1Menu:setSearchAlgorithm(searchChatCommand)
 	F1Menu:refresh()
 	F1Menu:slideIn()
