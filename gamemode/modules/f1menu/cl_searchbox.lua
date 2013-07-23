@@ -8,7 +8,6 @@ function PANEL:Init()
 	self:SetFont("DarkRPHUD2")
 	self:SetTextColor(Color(255,255,255,255))
 	self:SetCursorColor(Color(255,255,255,255))
-	self:SetDrawBackground(false)
 
 	self.lblSearch = vgui.Create("DLabel", self)
 	self.lblSearch:SetFont("DarkRPHUD2")
