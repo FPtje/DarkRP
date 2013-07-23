@@ -149,9 +149,9 @@ end
 
 SWEP.OnceReload = false
 function SWEP:Reload()
-	if CLIENT or self.Weapon.OnceReload then return end
+	if CLIENT or self.Weapon.OnceReload or not IsValid(self.Weapon) then return end
 	self.Weapon.OnceReload = true
-	timer.Simple(0.5, function() self.Weapon.OnceReload = false end)
+	timer.Simple(0.5, function() if IsValid(self) and IsValid(self.Weapon) then self.Weapon.OnceReload = false end end)
 
 	if not self.Owner:GetTable().Pocket or #self.Owner:GetTable().Pocket <= 0 then
 		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
@@ -174,6 +174,52 @@ function SWEP:Reload()
 end
 
 if CLIENT then
+	local frame
+	local function Reload()
+		if not ValidPanel(frame) or not frame:IsVisible() then return end
+		local items = LocalPlayer():GetTable().Pocket
+		if not items or next(items) == nil then frame:Close() return end
+		frame:SetSize(#items * 64, 90)
+		frame:Center()
+		for k,v in pairs(items) do
+			if not IsValid(v) then
+				items[k] = nil
+				for a,b in pairs(LocalPlayer().Pocket) do
+					if b == v or not IsValid(b) then
+						LocalPlayer():GetTable().Pocket[a] = nil
+					end
+				end
+				items = table.ClearKeys(items)
+				frame:Close()
+				PocketMenu()
+				break
+			end
+			local icon = vgui.Create("SpawnIcon", frame)
+			icon:SetPos((k-1) * 64, 25)
+			icon:SetModel(v:GetModel())
+			icon:SetSize(64, 64)
+			icon:SetToolTip()
+			icon.DoClick = function()
+				icon:SetToolTip()
+				RunConsoleCommand("_RPSpawnPocketItem", v:EntIndex())
+				items[k] = nil
+				for a,b in pairs(LocalPlayer().Pocket) do
+					if b == v then
+						LocalPlayer():GetTable().Pocket[a] = nil
+					end
+				end
+				if #items == 0 then
+					frame:Close()
+					return
+				end
+				items = table.ClearKeys(items)
+				Reload()
+				LocalPlayer():GetActiveWeapon():SetWeaponHoldType("pistol")
+				timer.Simple(0.2, function() if LocalPlayer():GetActiveWeapon():IsValid() then LocalPlayer():GetActiveWeapon():SetWeaponHoldType("normal") end end)
+			end
+		end
+	end
+
 	local function StorePocketItem(um)
 		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
 
@@ -181,6 +227,8 @@ if CLIENT then
 		if IsValid(ent) and not table.HasValue(LocalPlayer():GetTable().Pocket, ent) then
 			table.insert(LocalPlayer():GetTable().Pocket, ent)
 		end
+
+		Reload()
 	end
 	usermessage.Hook("Pocket_AddItem", StorePocketItem)
 
@@ -191,10 +239,11 @@ if CLIENT then
 		for k,v in pairs(LocalPlayer():GetTable().Pocket) do
 			if v == ent then LocalPlayer():GetTable().Pocket[k] = nil end
 		end
+
+		Reload()
 	end
 	usermessage.Hook("Pocket_RemoveItem", RemovePocketItem)
 
-	local frame
 	local function PocketMenu()
 		if frame and frame:IsValid() and frame:IsVisible() then return end
 		if LocalPlayer():GetActiveWeapon():GetClass() ~= "pocket" then return end
@@ -203,59 +252,18 @@ if CLIENT then
 		if #LocalPlayer():GetTable().Pocket <= 0 then return end
 		LocalPlayer():GetTable().Pocket = table.ClearKeys(LocalPlayer():GetTable().Pocket)
 		frame = vgui.Create("DFrame")
+
 		frame:SetTitle(DarkRP.getPhrase("drop_item"))
-		frame:SetVisible( true )
+		frame:SetVisible(true)
 		frame:MakePopup()
 
-		local items = LocalPlayer():GetTable().Pocket
-		local function Reload()
-			frame:SetSize( #items * 64, 90 )
-			frame:Center()
-			for k,v in pairs(items) do
-				if not IsValid(v) then
-					items[k] = nil
-					for a,b in pairs(LocalPlayer().Pocket) do
-						if b == v or not IsValid(b) then
-							LocalPlayer():GetTable().Pocket[a] = nil
-						end
-					end
-					items = table.ClearKeys(items)
-					frame:Close()
-					PocketMenu()
-					break
-				end
-				local icon = vgui.Create("SpawnIcon", frame)
-				icon:SetPos((k-1) * 64, 25)
-				icon:SetModel(v:GetModel())
-				icon:SetSize(64, 64)
-				icon:SetToolTip()
-				icon.DoClick = function()
-					icon:SetToolTip()
-					RunConsoleCommand("_RPSpawnPocketItem", v:EntIndex())
-					items[k] = nil
-					for a,b in pairs(LocalPlayer().Pocket) do
-						if b == v then
-							LocalPlayer():GetTable().Pocket[a] = nil
-						end
-					end
-					if #items == 0 then
-						frame:Close()
-						return
-					end
-					items = table.ClearKeys(items)
-					Reload()
-					LocalPlayer():GetActiveWeapon():SetWeaponHoldType("pistol")
-					timer.Simple(0.2, function() if LocalPlayer():GetActiveWeapon():IsValid() then LocalPlayer():GetActiveWeapon():SetWeaponHoldType("normal") end end)
-				end
-			end
-		end
 		Reload()
 		frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	end
 	usermessage.Hook("StartPocketMenu", PocketMenu)
 elseif SERVER then
 	local function Spawn(ply, cmd, args)
-		if ply:GetActiveWeapon():GetClass() ~= "pocket" then
+		if not IsValid(ply:GetActiveWeapon()) or ply:GetActiveWeapon():GetClass() ~= "pocket" then
 			return
 		end
 		if ply:GetTable().Pocket and IsValid(Entity(tonumber(args[1]))) then
