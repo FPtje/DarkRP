@@ -261,6 +261,7 @@ local function addEntityCommands(tblEnt)
 end
 
 RPExtraTeams = {}
+plyMeta.getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
 	local tableSyntaxUsed = colorOrTable.r == nil -- the color is not a color table.
 
@@ -390,6 +391,7 @@ AddEntity = DarkRP.createEntity
 
 DarkRPAgendas = {}
 
+plyMeta.getAgenda = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
 function DarkRP.createAgenda(Title, Manager, Listeners)
 	if not Manager then
 		hook.Add("PlayerSpawn", "AgendaError", function(ply)

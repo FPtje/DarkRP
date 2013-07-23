@@ -21,9 +21,8 @@ function plyMeta:IsCP()
 	return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team]
 end
 
-local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
-plyMeta.isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), getJobTable}
-plyMeta.isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), getJobTable}
+plyMeta.isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), plyMeta.getJobTable}
+plyMeta.isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), plyMeta.getJobTable}
 
 
 /*---------------------------------------------------------------------------
@@ -103,7 +102,7 @@ DarkRP.declareChatCommand{
 	command = "agenda",
 	description = "Set the agenda.",
 	delay = 1.5,
-	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
+	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), getAgenda}
 }
 
 local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}

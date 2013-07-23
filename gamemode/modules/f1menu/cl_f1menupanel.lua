@@ -33,6 +33,7 @@ end
 
 function PANEL:OnMousePressed()
 	self:SetKeyboardInputEnabled(true)
+	self.txtChatCommandSearch:RequestFocus()
 end
 
 function PANEL:slideIn()

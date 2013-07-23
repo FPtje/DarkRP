@@ -87,7 +87,10 @@ end
 /*---------------------------------------------------------------------------
 When a stub is called, the calling of the method is delayed
 ---------------------------------------------------------------------------*/
-local function notImplemented(name, args)
+local function notImplemented(name, args, thisFunc)
+	if stubs[name] and stubs[name].metatable[name] ~= thisFunc then -- when calling the not implemented function after the function was implemented
+		return stubs[name].metatable[name](unpack(args))
+	end
 	delayedCalls[name] = delayedCalls[name] or {}
 	table.insert(delayedCalls[name], args)
 
@@ -106,7 +109,11 @@ function stub(tbl)
 	tbl.realm = realm
 	stubs[tbl.name] = tbl
 
-	return function(...) return notImplemented(tbl.name, {...}) end
+	local function retNotImpl(...)
+		return notImplemented(tbl.name, {...}, retNotImpl)
+	end
+
+	return retNotImpl
 end
 
 /*---------------------------------------------------------------------------

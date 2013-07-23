@@ -1,7 +1,8 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetBackgroundColor(Color(0, 0, 0, 0))
+	//self:SetBackgroundColor(Color(0, 0, 0, 0))
+	self:SetVerticalScrollbarEnabled(true)
 end
 
 function PANEL:fillLabels(tbl)
@@ -12,6 +13,5 @@ function PANEL:fillLabels(tbl)
 		lbl:Dock(TOP)
 	end
 end
-
 
 derma.DefineControl("F1ChatCommandPanel", "", PANEL, "DPanel")

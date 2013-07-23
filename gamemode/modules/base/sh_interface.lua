@@ -19,21 +19,51 @@ DarkRP.findPlayer = DarkRP.stub{
 	metatable = DarkRP
 }
 
-DarkRP.PLAYER.canAfford = DarkRP.stub{
-	name = "canAfford",
-	description = "Whether the player can afford the given amount of money",
+DarkRP.PLAYER.getJobTable = DarkRP.stub{
+	name = "getJobTable",
+	description = "Get the job table of a player.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "job",
+			description = "Table with the job information.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.getAgenda = DarkRP.stub{
+	name = "getAgenda",
+	description = "Get the agenda a player manages.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "agenda",
+			description = "The agenda.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.hasDarkRPPrivilege = DarkRP.stub{
+	name = "hasDarkRPPrivilege",
+	description = "Whether the player has a certain privilege",
 	parameters = {
 		{
-			name = "amount",
-			description = "The amount of money",
-			type = "number",
+			name = "priv",
+			description = "The name of the privilege.",
+			type = "string",
 			optional = false
 		}
 	},
 	returns = {
 		{
 			name = "answer",
-			description = "Whether the player can afford it",
+			description = "Whether the player has the privilege",
 			type = "boolean"
 		}
 	},
