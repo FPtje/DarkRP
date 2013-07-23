@@ -1,5 +1,5 @@
-FAdmin.ScoreBoard.Server.Information = FAdmin.ScoreBoard.Server.Information or {}
-FAdmin.ScoreBoard.Server.ActionButtons = FAdmin.ScoreBoard.Server.ActionButtons or {}
+FAdmin.ScoreBoard.Server.Information = {} -- Compatibility for autoreload
+FAdmin.ScoreBoard.Server.ActionButtons = {} -- Refresh server buttons when reloading gamemode
 
 local function MakeServerOptions()
 	local XPos, YPos, Width = 20, FAdmin.ScoreBoard.Y + 120 + FAdmin.ScoreBoard.Height / 5 + 20, (FAdmin.ScoreBoard.Width - 40)/3
