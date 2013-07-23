@@ -232,6 +232,7 @@ Other settings
 GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
+GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
 
 
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped

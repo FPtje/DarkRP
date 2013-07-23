@@ -22,6 +22,13 @@ function PANEL:Init()
 
 	self.lblWiki = vgui.Create("F1MenuTitleLabel", self)
 	self.lblWiki:SetText(DarkRP.getPhrase("f1WikiTitle"))
+
+	self.htmlWikiControls = vgui.Create("DHTMLControls", self)
+	self.htmlWikiControls.HomeURL = GAMEMODE.Config.F1MenuHelpPage
+
+	self.htmlWiki = vgui.Create("HTML", self)
+	self.htmlWiki:OpenURL(GAMEMODE.Config.F1MenuHelpPage)
+	self.htmlWikiControls:SetHTML(self.htmlWiki)
 end
 
 function PANEL:PerformLayout()
@@ -32,6 +39,9 @@ function PANEL:PerformLayout()
 
 	self.pnlChatCommands:StretchToParent(20, 120, nil, 20)
 	self.pnlChatCommands:SetWide(self:GetWide() * 0.4 - 20)
+
+	self.htmlWikiControls:StretchToParent(self:GetWide() * 0.4 + 20, 80, 20, nil)
+	self.htmlWiki:StretchToParent(self:GetWide() * 0.4 + 20, 120, 20, 20)
 
 	self.lblWiki:SetPos(self:GetWide() * 0.4 + 20, 20)
 	self.lblWiki:SizeToContents()
