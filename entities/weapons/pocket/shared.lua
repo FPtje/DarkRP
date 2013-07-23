@@ -174,31 +174,11 @@ function SWEP:Reload()
 end
 
 if CLIENT then
-	local function StorePocketItem(um)
-		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
-
-		local ent = Entity(um:ReadShort())
-		if IsValid(ent) and not table.HasValue(LocalPlayer():GetTable().Pocket, ent) then
-			table.insert(LocalPlayer():GetTable().Pocket, ent)
-		end
-	end
-	usermessage.Hook("Pocket_AddItem", StorePocketItem)
-
-	local function RemovePocketItem(um)
-		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
-
-		local ent = Entity(um:ReadShort())
-		for k,v in pairs(LocalPlayer():GetTable().Pocket) do
-			if v == ent then LocalPlayer():GetTable().Pocket[k] = nil end
-		end
-	end
-	usermessage.Hook("Pocket_RemoveItem", RemovePocketItem)
-
 	local frame
 	local function Reload()
-		if not ValidPanel(frame) then return end
+		if not ValidPanel(frame) or not frame:IsVisible() then return end
 		local items = LocalPlayer():GetTable().Pocket
-		frame:SetSize( #items * 64, 90 )
+		frame:SetSize(#items * 64, 90)
 		frame:Center()
 		for k,v in pairs(items) do
 			if not IsValid(v) then
@@ -238,6 +218,31 @@ if CLIENT then
 			end
 		end
 	end
+	
+	local function StorePocketItem(um)
+		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
+
+		local ent = Entity(um:ReadShort())
+		if IsValid(ent) and not table.HasValue(LocalPlayer():GetTable().Pocket, ent) then
+			table.insert(LocalPlayer():GetTable().Pocket, ent)
+		end
+
+		Reload()
+	end
+	usermessage.Hook("Pocket_AddItem", StorePocketItem)
+
+	local function RemovePocketItem(um)
+		LocalPlayer():GetTable().Pocket = LocalPlayer():GetTable().Pocket or {}
+
+		local ent = Entity(um:ReadShort())
+		for k,v in pairs(LocalPlayer():GetTable().Pocket) do
+			if v == ent then LocalPlayer():GetTable().Pocket[k] = nil end
+		end
+
+		Reload()
+	end
+	usermessage.Hook("Pocket_RemoveItem", RemovePocketItem)
+
 	local function PocketMenu()
 		if frame and frame:IsValid() and frame:IsVisible() then return end
 		if LocalPlayer():GetActiveWeapon():GetClass() ~= "pocket" then return end
