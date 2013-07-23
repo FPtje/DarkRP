@@ -8,8 +8,6 @@ local Laws = {
 	"3. Money printers/drugs are illegal."
 }
 
-local drawLaws = table.concat(Laws, "\n")
-
 function ENT:Draw()
 	self:DrawModel()
 
@@ -25,9 +23,12 @@ function ENT:Draw()
 		surface.DrawRect(0, 0, 558, 290)
 
 		draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
-		draw.DrawText("LAWS OF THE LAND", "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+		draw.SimpleText("LAWS OF THE LAND", "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
-		draw.DrawText(drawLaws, "TargetID", 5, 35, Color(255, 255, 255, 255))
+		local col = Color(255, 255, 255, 255)
+		for k,v in ipairs(Laws) do
+			draw.SimpleText(v, "TargetID", 5, 35 + (k-1)*21, col)
+		end
 
 	cam.End3D2D()
 end
@@ -37,7 +38,6 @@ local function AddLaw(um)
 	law = GAMEMODE:TextWrap(law, "TargetID", 522)
 
 	Laws[#Laws + 1] = (#Laws + 1).. ". " .. law
-	drawLaws = table.concat(Laws, "\n")
 end
 usermessage.Hook("DRP_AddLaw", AddLaw)
 
@@ -45,11 +45,9 @@ local function RemoveLaw(um)
 	local i = um:ReadChar()
 
 	while i < #Laws do
-		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%."))))
+		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%d%."))))
 		i = i + 1
 	end
 	Laws[i] = nil
-
-	drawLaws = table.concat(Laws, "\n")
 end
 usermessage.Hook("DRP_RemoveLaw", RemoveLaw)
