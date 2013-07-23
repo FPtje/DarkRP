@@ -16,9 +16,10 @@ function PANEL:Init()
 
 	self.txtChatCommandSearch = vgui.Create("F1SearchBox", self)
 	self.txtChatCommandSearch.OnChange = fn.Curry(self.refresh, 2)(self)
+	self.txtChatCommandSearch.OnMousePressed = fn.Curry(self.OnMousePressed, 2)(self)
 
 	self.pnlChatCommands = vgui.Create("F1ChatCommandPanel", self)
-	self.pnlChatCommands.DoClick = fprint
+	self.pnlChatCommands.OnMousePressed = fn.Curry(self.OnMousePressed, 2)(self)
 
 	self.lblWiki = vgui.Create("F1MenuTitleLabel", self)
 	self.lblWiki:SetText(DarkRP.getPhrase("f1WikiTitle"))

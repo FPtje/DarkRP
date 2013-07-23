@@ -1,7 +1,7 @@
 local PANEL = {}
 
 local green = Color(0, 150, 0)
-local red = Color(140, 0, 0)
+local red = Color(160, 20, 20)
 
 function PANEL:Init()
 	self:SetFont("DarkRPHUD2")
