@@ -1,5 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
+	util.AddNetworkString("StunStickColour")
 end
 
 if CLIENT then
@@ -46,27 +47,42 @@ function SWEP:Deploy()
 	if CLIENT or not IsValid(self:GetOwner()) then return end
 	self:SetColor(Color(0,0,255,255))
 	self:SetMaterial("models/shiny")
-	SendUserMessage("StunStickColour", self:GetOwner(), 0,0,255, "models/shiny")
+	net.Start("StunStickColour")
+		net.WriteUInt(0,8)
+		net.WriteUInt(0,8)
+		net.WriteUInt(255,8)
+		net.WriteString("models/shiny")
+	net.Send(self:GetOwner())
 	return true
 end
 
 function SWEP:Holster()
 	if CLIENT or not IsValid(self:GetOwner()) then return end
-	SendUserMessage("StunStickColour", self:GetOwner(), 255, 255, 255, "")
+	net.Start("StunStickColour")
+		net.WriteUInt(255,8)
+		net.WriteUInt(255,8)
+		net.WriteUInt(255,8)
+		net.WriteString("")
+	net.Send(self:GetOwner())
 	return true
 end
 
 function SWEP:OnRemove()
 	if SERVER and IsValid(self:GetOwner()) then
-		SendUserMessage("StunStickColour", self:GetOwner(), 255, 255, 255, "")
+		net.Start("StunStickColour")
+			net.WriteUInt(255,8)
+			net.WriteUInt(255,8)
+			net.WriteUInt(255,8)
+			net.WriteString("")
+		net.Send(self:GetOwner())
 	end
 end
 
-usermessage.Hook("StunStickColour", function(um)
+net.Receive("StunStickColour", function()
 	local viewmodel = LocalPlayer():GetViewModel()
-	local r,g,b,a = um:ReadLong(), um:ReadLong(), um:ReadLong(), 255
+	local r,g,b,a = net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), 255
 	viewmodel:SetColor(Color(r,g,b,a))
-	viewmodel:SetMaterial(um:ReadString())
+	viewmodel:SetMaterial(net.ReadString())
 end)
 
 function SWEP:Initialize()
