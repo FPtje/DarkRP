@@ -19,8 +19,10 @@ SWEP.Purpose = ""
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
-SWEP.ViewModel = Model("models/weapons/v_crowbar.mdl")
+SWEP.ViewModel = Model("models/weapons/c_crowbar.mdl")
 SWEP.WorldModel = Model("models/weapons/w_crowbar.mdl")
+
+SWEP.UseHands = true
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true

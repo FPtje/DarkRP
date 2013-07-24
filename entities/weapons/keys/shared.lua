@@ -1,6 +1,7 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_menu.lua")
+	util.AddNetworkString("Keys_ViewModelMaterial")
 end
 
 if CLIENT then
@@ -25,6 +26,8 @@ SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
 SWEP.AnimPrefix	 = "rpg"
 
+SWEP.UseHands = true
+
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Sound = "doors/door_latch3.wav"
@@ -43,10 +46,31 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if SERVER then
-		self.Owner:DrawWorldModel(false)
-	end
+	if CLIENT or not IsValid(self.Owner) then return end
+	self.Owner:DrawWorldModel(false)
+	net.Start("Keys_ViewModelMaterial")
+		net.WriteString("debug/hsv") -- Make view model invisible but keep the new hands.
+	net.Send(self.Owner)
 end
+
+function SWEP:Holster(wep)
+	if CLIENT or not IsValid(self.Owner) then return true end
+	net.Start("Keys_ViewModelMaterial")
+		net.WriteString("") -- Reset
+	net.Send(self.Owner)
+	return true
+end
+
+function SWEP:Remove()
+	if CLIENT or not IsValid(self.Owner) then return end
+	net.Start("Keys_ViewModelMaterial")
+		net.WriteString("") -- Reset
+	net.Send(self.Owner)
+end
+
+net.Receive("Keys_ViewModelMaterial", function()
+	LocalPlayer():GetViewModel():SetMaterial(net.ReadString())
+end)
 
 function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
