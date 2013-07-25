@@ -131,7 +131,7 @@ function SWEP:Succeed()
 			timer.Simple(5, function() if trace.Entity.fadeActive then trace.Entity:fadeDeactivate() end end)
 		end
 	elseif IsValid(trace.Entity) and trace.Entity.Fire then
-		trace.Entity:Fire("unlock", "", .5)
+		trace.Entity:KeysUnLock()
 		trace.Entity:Fire("open", "", .6)
 		trace.Entity:Fire("setanimation","open",.6)
 	end

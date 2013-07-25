@@ -131,7 +131,7 @@ function SWEP:PrimaryAttack()
 		end
 		-- Do we have a warrant for this player?
 		if allowed then
-			trace.Entity:Fire("unlock", "", .5)
+			trace.Entity:KeysUnLock()
 			trace.Entity:Fire("open", "", .6)
 			trace.Entity:Fire("setanimation", "open", .6)
 		else
@@ -143,7 +143,7 @@ function SWEP:PrimaryAttack()
 		if driver and driver.ExitVehicle then
 			driver:ExitVehicle()
 		end
-		trace.Entity:Fire("lock", "", 0)
+		trace.Entity:KeysLock()
 	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
 			GAMEMODE:Notify(self.Owner, 1, 5,"You need a warrant in order to be able to open the fading door.")
