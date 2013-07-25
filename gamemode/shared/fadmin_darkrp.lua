@@ -150,26 +150,6 @@ hook.Add("OnPhysgunFreeze", "EntityPhysgunFreeze", function(weapon, physobj, ent
 	end
 end)
 
-local IP = ""
-if SERVER then
-	-- Temporarily commented out because HTTP is broken
-	/*http.Get("http://automation.whatismyip.com/n09230945.asp", "", function(content, size)
-		local ip = string.match(content, "([0-9.]+)")
-		if not ip then return end
-		IP = ip..":"..GetConVarString("hostport")
-	end)
-	timer.Simple(5, function()
-		if IP == "" then -- if the other site is down?
-			http.Get("http://checkip.dyndns.org/", "", function(content1, size1) -- check a different site
-				local ip1 = string.match(content1, "([0-9.]+)")
-				if not ip1 then return end -- nope.
-				IP = ip1..":"..GetConVarString("hostport")
-			end)
-			return
-		end
-	end)*/
-end
-
 /*
 	FAdmin global settings
 */
@@ -235,7 +215,6 @@ if SERVER then
 
 	timer.Create("FAdmin_ServerInformation", 1, 0, function()
 		FAdmin.SetGlobalSetting("FAdmin_ServerFPS", math.floor(1/FrameTime()))
-		if IP ~= "" then FAdmin.SetGlobalSetting("FAdmin_ServerIP", IP) end
 	end)
 elseif CLIENT then
 	local GetTypes = {Angle = "ReadAngle",

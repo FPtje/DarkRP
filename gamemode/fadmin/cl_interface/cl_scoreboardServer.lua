@@ -202,42 +202,9 @@ function FAdmin.ScoreBoard.Server:AddInformation(name, func, ForceNewPanel) -- F
 	table.insert(FAdmin.ScoreBoard.Server.Information, {name = name, func = func, NewPanel = ForceNewPanel})
 end
 
-
-/*
-Server IP (Thanks chrisaster)
-*/
-
-local hex2dec = {
-	["a"] = 10,
-	["b"] = 11,
-	["c"] = 12,
-	["d"] = 13,
-	["e"] = 14,
-	["f"] = 15,
-}
-
 FAdmin.ScoreBoard.Server:AddInformation("Hostname", GetHostName)
 FAdmin.ScoreBoard.Server:AddInformation("Gamemode", function() return GAMEMODE.Name end)
 FAdmin.ScoreBoard.Server:AddInformation("Author", function() return GAMEMODE.Author end)
-FAdmin.ScoreBoard.Server:AddInformation("Server IP", function()
-	if FAdmin.GlobalSetting.FAdmin_ServerIP and FAdmin.GlobalSetting.FAdmin_ServerIP ~= "" then return FAdmin.GlobalSetting.FAdmin_ServerIP end
-	/*local dec = tonumber(string.format("%u", GetConVarString("hostip")))
-	local split = string.ToTable(string.format("%x", dec))
-	local ip = ""
-
-	for i=1, #split, 2 do
-		local a = split[i]
-		local b = split[i+1]
-
-		ip = ip..((hex2dec[a] || tonumber(a))*16)+(hex2dec[b] || tonumber(b))
-
-		if (i < (#split-2)) then
-			ip = ip.."."
-		end
-	end
-
-	return ip*/
-end)
 FAdmin.ScoreBoard.Server:AddInformation("Server FPS", function() return FAdmin.GlobalSetting.FAdmin_ServerFPS end)
 FAdmin.ScoreBoard.Server:AddInformation("Map", game.GetMap)
 FAdmin.ScoreBoard.Server:AddInformation("Players", function() return #player.GetAll().."/"..GetConVarString("maxplayers") end)
