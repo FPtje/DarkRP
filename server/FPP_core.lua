@@ -67,7 +67,7 @@ if cleanup then
 			end
 		end
 
-		if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and (not ent.IsVehicle() or not ent:IsVehicle()) then
+		if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and (not ent.IsVehicle or not ent:IsVehicle()) then
 			FPP.AntiSpam.CreateEntity(ply, ent, Type == "duplicates")
 		end
 
@@ -816,7 +816,7 @@ function ENTITY:FireBullets(bullet, ...)
 end
 
 hook.Add("EntityRemoved","jeepWorkaround",function(ent)
-    if IsValid(ent) and ent:IsVehicle() and IsValid(ent:GetPassenger(1)) then
+    if IsValid(ent) and ent:IsVehicle() and ent.GetPassenger and IsValid(ent:GetPassenger(1)) then
         ent:GetPassenger(1):ExitVehicle()
     end
 end)
