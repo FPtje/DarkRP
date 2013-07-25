@@ -49,11 +49,11 @@ local function FPP_SetSetting(ply, cmd, args)
 	FPP.Settings[args[1]][args[2]] = tonumber(args[3])
 	RunConsoleCommand("_"..args[1].."_"..args[2], tonumber(args[3]))
 
-	DB.QueryValue("SELECT var FROM ".. args[1] .. " WHERE var = "..sql.SQLStr(args[2])..";", function(data)
+	MySQLite.queryValue("SELECT var FROM ".. args[1] .. " WHERE var = "..sql.SQLStr(args[2])..";", function(data)
 		if not data then
-			DB.Query("INSERT INTO ".. args[1] .. " VALUES(" .. sql.SQLStr(args[2]) .. ", " .. args[3] .. ");")
+			MySQLite.query("INSERT INTO ".. args[1] .. " VALUES(" .. sql.SQLStr(args[2]) .. ", " .. args[3] .. ");")
 		elseif tonumber(data) ~= args[3] then
-			DB.Query("UPDATE ".. args[1] .. " SET setting = " .. args[3] .. " WHERE var = " .. sql.SQLStr(args[2]) .. ";")
+			MySQLite.query("UPDATE ".. args[1] .. " SET setting = " .. args[3] .. " WHERE var = " .. sql.SQLStr(args[2]) .. ";")
 		end
 
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " set ".. string.lower(string.gsub(args[1], "FPP_", "")) .. " "..args[2].." to " .. tostring(args[3]), util.tobool(tonumber(args[3])))
@@ -68,7 +68,7 @@ local function AddBlocked(ply, cmd, args)
 	if FPP.Blocked[args[1]][args[2]] then return end
 	FPP.Blocked[args[1]][args[2]] = true
 
-	DB.Query("SELECT * FROM FPP_BLOCKED1;", function(data)
+	MySQLite.query("SELECT * FROM FPP_BLOCKED1;", function(data)
 		if type(data) == "table" then
 			local found = false
 			local highest = 0
@@ -81,11 +81,11 @@ local function AddBlocked(ply, cmd, args)
 				end
 			end
 			if not found then
-				DB.Query("INSERT INTO FPP_BLOCKED1 VALUES("..highest + 1 ..", " .. sql.SQLStr(args[1]) .. ", " .. sql.SQLStr(args[2]) .. ");")
+				MySQLite.query("INSERT INTO FPP_BLOCKED1 VALUES("..highest + 1 ..", " .. sql.SQLStr(args[1]) .. ", " .. sql.SQLStr(args[2]) .. ");")
 			end
 		else
 			--insert
-			DB.Query("INSERT INTO FPP_BLOCKED1 VALUES(1, " .. sql.SQLStr(args[1]) .. ", " .. sql.SQLStr(args[2]) .. ");")
+			MySQLite.query("INSERT INTO FPP_BLOCKED1 VALUES(1, " .. sql.SQLStr(args[1]) .. ", " .. sql.SQLStr(args[2]) .. ");")
 		end
 
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. args[2] .. " to the "..args[1] .. " black/whitelist", true)
@@ -103,7 +103,7 @@ local function AddBlockedModel(ply, cmd, args)
 	if FPP.BlockedModels[model] then FPP.Notify(ply, "This model is already in the black/whitelist", false) return end
 
 	FPP.BlockedModels[model] = true
-	DB.Query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(model)..");")
+	MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(model)..");")
 
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. model .. " to the blocked models black/whitelist", true)
 end
@@ -115,7 +115,7 @@ local function RemoveBlocked(ply, cmd, args)
 
 	FPP.Blocked[args[1]][args[2]] = nil
 
-	DB.Query("DELETE FROM FPP_BLOCKED1 WHERE var = "..sql.SQLStr(args[1]) .. " AND setting = "..sql.SQLStr(args[2])..";")
+	MySQLite.query("DELETE FROM FPP_BLOCKED1 WHERE var = "..sql.SQLStr(args[1]) .. " AND setting = "..sql.SQLStr(args[2])..";")
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. args[2] .. " from the "..args[1] .. " black/whitelist", false)
 end
 concommand.Add("FPP_RemoveBlocked", RemoveBlocked)
@@ -130,7 +130,7 @@ local function RemoveBlockedModel(ply, cmd, args)
 
 	FPP.BlockedModels[model] = nil
 
-	DB.Query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = "..sql.SQLStr(model)..";")
+	MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = "..sql.SQLStr(model)..";")
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. model .. " from the blocked models black/whitelist", false)
 end
 concommand.Add("FPP_RemoveBlockedModel", RemoveBlockedModel)
@@ -181,7 +181,7 @@ concommand.Add("FPP_ShareProp", ShareProp)
 
 local function RetrieveSettings()
 	for k,v in pairs(FPP.Settings) do
-		DB.Query("SELECT setting, var FROM "..k..";", function(data)
+		MySQLite.query("SELECT setting, var FROM "..k..";", function(data)
 
 			if data then
 				local i = 0
@@ -196,7 +196,7 @@ local function RetrieveSettings()
 end
 
 local function RetrieveBlocked()
-	DB.Query("SELECT * FROM FPP_BLOCKED1;", function(data)
+	MySQLite.query("SELECT * FROM FPP_BLOCKED1;", function(data)
 		if type(data) == "table" then
 			for k,v in pairs(data) do
 				if not FPP.Blocked[v.var] then
@@ -207,7 +207,7 @@ local function RetrieveBlocked()
 				FPP.Blocked[v.var][string.lower(v.setting)] = true
 			end
 		else
-			data = DB.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")
+			data = MySQLite.query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")
 
 			FPP.Blocked.Physgun1 = {
 				["func_breakable_surf"] = true,
@@ -239,14 +239,14 @@ local function RetrieveBlocked()
 			FPP.Blocked.EntityDamage1 = {}
 
 			local count = 0
-			DB.Begin()
+			MySQLite.begin()
 			for k,v in pairs(FPP.Blocked) do
 				for a,b in pairs(v) do
 					count = count + 1
-					DB.Query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(a) .. ");")
+					MySQLite.query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(a) .. ");")
 				end
 			end
-			DB.Commit()
+			MySQLite.commit()
 		end
 	end)
 end
@@ -273,13 +273,13 @@ local function RetrieveBlockedModels()
 	-- Sometimes when the database retrieval is corrupt,
 	-- only parts of the table will be retrieved
 	-- This is a workaround
-	if not DB.MySQLDB then
-		local count = DB.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") or 0
+	if not MySQLite.databaseObject then
+		local count = MySQLite.queryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") or 0
 
 		-- Select with offsets of a thousand.
 		-- That's about the maximum it can receive properly at once
 		for i=0, count, 1000 do
-			DB.Query("SELECT * FROM FPP_BLOCKEDMODELS1 LIMIT 1000 OFFSET "..i..";", function(data)
+			MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1 LIMIT 1000 OFFSET "..i..";", function(data)
 				for k,v in pairs(data or {}) do
 					FPP.BlockedModels[v.model] = true
 				end
@@ -290,7 +290,7 @@ local function RetrieveBlockedModels()
 	end
 
 	-- Retrieve the data normally from MySQL
-	DB.Query("SELECT * FROM FPP_BLOCKEDMODELS1;", function(data)
+	MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1;", function(data)
 		for k,v in pairs(data or {}) do
 			if not v.model then continue end
 			FPP.BlockedModels[v.model] = true
@@ -299,7 +299,7 @@ local function RetrieveBlockedModels()
 end
 
 local function RetrieveRestrictedTools()
-	DB.Query("SELECT * FROM FPP_TOOLADMINONLY;", function(data)
+	MySQLite.query("SELECT * FROM FPP_TOOLADMINONLY;", function(data)
 		if type(data) == "table" then
 			for k,v in pairs(data) do
 				FPP.RestrictedTools[v.toolname] = {}
@@ -308,7 +308,7 @@ local function RetrieveRestrictedTools()
 		end
 	end)
 
-	DB.Query("SELECT * FROM FPP_TOOLRESTRICTPERSON1;", function(perplayerData)
+	MySQLite.query("SELECT * FROM FPP_TOOLRESTRICTPERSON1;", function(perplayerData)
 		if type(perplayerData) ~= "table" then return end
 		for k,v in pairs(perplayerData) do
 			FPP.RestrictedToolsPlayers[v.toolname] = FPP.RestrictedToolsPlayers[v.toolname] or {}
@@ -319,7 +319,7 @@ local function RetrieveRestrictedTools()
 		end
 	end)
 
-	DB.Query("SELECT * FROM FPP_TOOLTEAMRESTRICT;", function(data)
+	MySQLite.query("SELECT * FROM FPP_TOOLTEAMRESTRICT;", function(data)
 		if not data then return end
 
 		for k,v in pairs(data) do
@@ -332,9 +332,9 @@ local function RetrieveRestrictedTools()
 end
 
 local function RetrieveGroups()
-	DB.Query("SELECT * FROM FPP_GROUPS3;", function(data)
+	MySQLite.query("SELECT * FROM FPP_GROUPS3;", function(data)
 		if type(data) ~= "table" then
-			DB.Query("REPLACE INTO FPP_GROUPS3 VALUES('default', 1);")
+			MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES('default', 1);")
 			FPP.Groups['default'] = {}
 			FPP.Groups['default'].tools = {}
 			FPP.Groups['default'].allowdefault = true
@@ -347,7 +347,7 @@ local function RetrieveGroups()
 			FPP.Groups[v.groupname].allowdefault = util.tobool(v.allowdefault)
 		end
 
-		DB.Query("SELECT * FROM FPP_GROUPTOOL;", function(data)
+		MySQLite.query("SELECT * FROM FPP_GROUPTOOL;", function(data)
 			if not data then return end
 
 			for k,v in pairs(data) do
@@ -358,7 +358,7 @@ local function RetrieveGroups()
 			end
 		end)
 
-		DB.Query("SELECT * FROM FPP_GROUPMEMBERS1;", function(members)
+		MySQLite.query("SELECT * FROM FPP_GROUPMEMBERS1;", function(members)
 			if type(members) ~= "table" then return end
 			for _,v in pairs(members) do
 				FPP.GroupMembers[v.steamid] = v.groupname
@@ -398,7 +398,7 @@ local function AddGroup(ply, cmd, args)
 	FPP.Groups[name].allowdefault = util.tobool(allowdefault)
 	FPP.Groups[name].tools = {}
 
-	DB.Query("REPLACE INTO FPP_GROUPS3 VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(allowdefault)..");")
+	MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(allowdefault)..");")
 	FPP.Notify(ply, "Group added succesfully", true)
 end
 concommand.Add("FPP_AddGroup", AddGroup)
@@ -427,8 +427,8 @@ local function RemoveGroup(ply, cmd, args)
 	end
 
 	FPP.Groups[name] = nil
-	DB.Query("DELETE FROM FPP_GROUPS3 WHERE groupname = "..sql.SQLStr(name)..";")
-	DB.Query("DELETE FROM FPP_GROUPTOOL WHERE groupname = "..sql.SQLStr(name)..";")
+	MySQLite.query("DELETE FROM FPP_GROUPS3 WHERE groupname = "..sql.SQLStr(name)..";")
+	MySQLite.query("DELETE FROM FPP_GROUPTOOL WHERE groupname = "..sql.SQLStr(name)..";")
 
 	for k,v in pairs(FPP.GroupMembers) do
 		if v == name then
@@ -452,7 +452,7 @@ local function GroupChangeAllowDefault(ply, cmd, args)
 	end
 
 	FPP.Groups[name].allowdefault = util.tobool(newval)
-	DB.Query("UPDATE FPP_GROUPS3 SET allowdefault = "..sql.SQLStr(newval).." WHERE groupname = "..sql.SQLStr(name)..";")
+	MySQLite.query("UPDATE FPP_GROUPS3 SET allowdefault = "..sql.SQLStr(newval).." WHERE groupname = "..sql.SQLStr(name)..";")
 	FPP.Notify(ply, "Group status changed succesfully", true)
 end
 concommand.Add("FPP_ChangeGroupStatus", GroupChangeAllowDefault)
@@ -478,7 +478,7 @@ local function GroupAddTool(ply, cmd, args)
 
 	table.insert(FPP.Groups[name].tools, tool)
 
-	DB.Query("REPLACE INTO FPP_GROUPTOOL VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(tool)..");")
+	MySQLite.query("REPLACE INTO FPP_GROUPTOOL VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(tool)..");")
 	FPP.Notify(ply, "Tool added succesfully", true)
 end
 concommand.Add("FPP_AddGroupTool", GroupAddTool)
@@ -506,7 +506,7 @@ local function GroupRemoveTool(ply, cmd, args)
 		end
 	end
 
-	DB.Query("DELETE FROM FPP_GROUPTOOL WHERE groupname = "..sql.SQLStr(name).." AND tool = "..sql.SQLStr(tool)..";")
+	MySQLite.query("DELETE FROM FPP_GROUPTOOL WHERE groupname = "..sql.SQLStr(name).." AND tool = "..sql.SQLStr(tool)..";")
 
 	FPP.Notify(ply, "Tool removed succesfully", true)
 end
@@ -527,11 +527,11 @@ local function PlayerSetGroup(ply, cmd, args)
 	end
 
 	if group ~= "default" then
-		DB.Query("REPLACE INTO FPP_GROUPMEMBERS1 VALUES(".. sql.SQLStr(name)..", " .. sql.SQLStr(group) ..");")
+		MySQLite.query("REPLACE INTO FPP_GROUPMEMBERS1 VALUES(".. sql.SQLStr(name)..", " .. sql.SQLStr(group) ..");")
 		FPP.GroupMembers[name] = group
 	else
 		FPP.GroupMembers[name] = nil
-		DB.Query("DELETE FROM FPP_GROUPMEMBERS1 WHERE steamid = "..sql.SQLStr(name)..";")
+		MySQLite.query("DELETE FROM FPP_GROUPMEMBERS1 WHERE steamid = "..sql.SQLStr(name)..";")
 	end
 
 	FPP.Notify(ply, "Player group succesfully set", true)
@@ -667,7 +667,7 @@ local function SetToolRestrict(ply, cmd, args)
 		FPP.RestrictedTools[toolname].admin = args[3] --weapons.Get("gmod_tool").Tool
 
 		--Save to database!
-		DB.Query("REPLACE INTO FPP_TOOLADMINONLY VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(args[3])..");")
+		MySQLite.query("REPLACE INTO FPP_TOOLADMINONLY VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(args[3])..");")
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " changed the admin status of " .. toolname , true)
 	elseif RestrictWho == "team" then
 		FPP.RestrictedTools[toolname]["team"] = FPP.RestrictedTools[toolname]["team"] or {}
@@ -684,10 +684,10 @@ local function SetToolRestrict(ply, cmd, args)
 
 		if tobool(teamtoggle) then -- if the team restrict is enabled
 			FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " restricted " .. toolname .. " to certain teams", true)
-			DB.Query("REPLACE INTO FPP_TOOLTEAMRESTRICT VALUES("..sql.SQLStr(toolname) ..", "..tonumber(args[3])..");")
+			MySQLite.query("REPLACE INTO FPP_TOOLTEAMRESTRICT VALUES("..sql.SQLStr(toolname) ..", "..tonumber(args[3])..");")
 		else -- otherwise if the restriction for the team is being removed
 			FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed teamrestrictions from " .. toolname, true)
-			DB.Query("DELETE FROM FPP_TOOLTEAMRESTRICT WHERE toolname = "..sql.SQLStr(toolname).. " AND team = ".. tonumber(args[3]))
+			MySQLite.query("DELETE FROM FPP_TOOLTEAMRESTRICT WHERE toolname = "..sql.SQLStr(toolname).. " AND team = ".. tonumber(args[3]))
 		end
 	end
 end
@@ -708,10 +708,10 @@ local function RestrictToolPerson(ply, cmd, args)
 	if access == 0 or access == 1 then -- Disallow, even if other people can use it
 		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = access == 1
 
-		DB.Query("REPLACE INTO FPP_TOOLRESTRICTPERSON1 VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(target:SteamID())..", ".. access ..");")
+		MySQLite.query("REPLACE INTO FPP_TOOLRESTRICTPERSON1 VALUES("..sql.SQLStr(toolname)..", "..sql.SQLStr(target:SteamID())..", ".. access ..");")
 	elseif access == 2 then -- reset tool status(make him like everyone else)
 		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = nil
-		DB.Query("DELETE FROM FPP_TOOLRESTRICTPERSON1 WHERE toolname = "..sql.SQLStr(toolname).." AND steamid = "..sql.SQLStr(target:SteamID())..";")
+		MySQLite.query("DELETE FROM FPP_TOOLRESTRICTPERSON1 WHERE toolname = "..sql.SQLStr(toolname).." AND steamid = "..sql.SQLStr(target:SteamID())..";")
 	end
 end
 concommand.Add("FPP_restricttoolplayer", RestrictToolPerson)
@@ -720,26 +720,26 @@ concommand.Add("FPP_restricttoolplayer", RestrictToolPerson)
 Load all FPP settings
 ---------------------------------------------------------------------------*/
 function FPP.Init()
-	DB.Begin()
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var VARCHAR(40) NOT NULL, setting VARCHAR(100) NOT NULL, PRIMARY KEY(id));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_PHYSGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GRAVGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_PLAYERUSE1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_ENTITYDAMAGE1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GLOBALSETTINGS1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKMODELSETTINGS1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+	MySQLite.begin()
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var VARCHAR(40) NOT NULL, setting VARCHAR(100) NOT NULL, PRIMARY KEY(id));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_PHYSGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GRAVGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_PLAYERUSE1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_ENTITYDAMAGE1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GLOBALSETTINGS1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKMODELSETTINGS1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
 
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_ANTISPAM1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLADMINONLY(toolname VARCHAR(40) NOT NULL, adminonly INTEGER NOT NULL, PRIMARY KEY(toolname));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLTEAMRESTRICT(toolname VARCHAR(40) NOT NULL, team INTEGER NOT NULL, PRIMARY KEY(toolname, team));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_ANTISPAM1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLADMINONLY(toolname VARCHAR(40) NOT NULL, adminonly INTEGER NOT NULL, PRIMARY KEY(toolname));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLTEAMRESTRICT(toolname VARCHAR(40) NOT NULL, team INTEGER NOT NULL, PRIMARY KEY(toolname, team));")
 
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLRESTRICTPERSON1(toolname VARCHAR(40) NOT NULL, steamid VARCHAR(40) NOT NULL, allow INTEGER NOT NULL, PRIMARY KEY(steamid, toolname));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPS3(groupname VARCHAR(40) NOT NULL, allowdefault INTEGER NOT NULL, PRIMARY KEY(groupname));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPTOOL(groupname VARCHAR(40) NOT NULL, tool VARCHAR(45) NOT NULL, PRIMARY KEY(groupname, tool));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
-		DB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
-	DB.Commit(function()
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLRESTRICTPERSON1(toolname VARCHAR(40) NOT NULL, steamid VARCHAR(40) NOT NULL, allow INTEGER NOT NULL, PRIMARY KEY(steamid, toolname));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPS3(groupname VARCHAR(40) NOT NULL, allowdefault INTEGER NOT NULL, PRIMARY KEY(groupname));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPTOOL(groupname VARCHAR(40) NOT NULL, tool VARCHAR(45) NOT NULL, PRIMARY KEY(groupname, tool));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
+		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
+	MySQLite.commit(function()
 		RetrieveBlocked()
 		RetrieveBlockedModels()
 		RetrieveRestrictedTools()
