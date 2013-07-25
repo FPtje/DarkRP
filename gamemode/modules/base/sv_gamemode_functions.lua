@@ -77,7 +77,6 @@ function GM:CanDropWeapon(ply, weapon)
 end
 
 function GM:DatabaseInitialized()
-	FPP.Init()
 	DarkRP.initDatabase()
 end
 

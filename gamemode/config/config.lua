@@ -262,6 +262,7 @@ GM.Config.DefaultLaws = {
 -- Modules that are not in this list are enabled by default.
 GM.Config.DisabledModules = {
 	["afk"] = true,
+	["fpp"] = false,
 	["chatsounds"] = false,
 	["events"] = false,
 	["hungermod"] = true,
