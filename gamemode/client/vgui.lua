@@ -337,7 +337,7 @@ local function KeysMenu(um)
 
 	function Frame:Think()
 		local ent = LocalPlayer():GetEyeTrace().Entity
-		if not IsValid(ent) or (not ent:IsDoor() and not string.find(ent:GetClass(), "vehicle")) or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
+		if not IsValid(ent) or (not ent:IsDoor() and not ent:IsVehicle()) or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
 			self:Close()
 		end
 		if (!self.Dragging) then return end
