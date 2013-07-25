@@ -86,11 +86,7 @@ function plyMeta:arrest(time, arrester)
 
 	-- Always get sent to jail when Arrest() is called, even when already under arrest
 	if GAMEMODE.Config.teletojail and DB.CountJailPos() ~= 0 then
-		local jailpos = DB.RetrieveJailPos()
-		if jailpos then
-			jailpos = GAMEMODE:FindEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
-			self:SetPos(jailpos)
-		end
+		self:Spawn()
 	end
 end
 
