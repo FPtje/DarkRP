@@ -69,7 +69,10 @@ function SWEP:Remove()
 end
 
 net.Receive("Keys_ViewModelMaterial", function()
-	LocalPlayer():GetViewModel():SetMaterial(net.ReadString())
+	if not IsValid(LocalPlayer()) then return end
+	local viewmodel = LocalPlayer():GetViewModel()
+	if not IsValid(viewmodel) then return end
+	viewmodel:SetMaterial(net.ReadString())
 end)
 
 function SWEP:PrimaryAttack()
