@@ -173,7 +173,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		function Text:OnMousePressed(mcode)
 			self:SetToolTip(v.name.." copied to clipboard!")
 			ChangeTooltip(self)
-			SetClipboardText(v.func())
+			SetClipboardText(v.func() or "")
 			self:SetToolTip("Click to copy "..v.name.." to clipboard")
 		end
 
