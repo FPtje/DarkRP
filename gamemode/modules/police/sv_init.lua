@@ -85,11 +85,7 @@ function plyMeta:arrest(time, arrester)
 
 	-- Always get sent to jail when Arrest() is called, even when already under arrest
 	if GAMEMODE.Config.teletojail and DarkRP.jailPosCount() ~= 0 then
-		local jailpos = DarkRP.retrieveJailPos()
-		if jailpos then
-			jailpos = DarkRP.findEmptyPos(jailpos, {ply}, 300, 30, Vector(16, 16, 64))
-			self:SetPos(jailpos)
-		end
+		self:Spawn()
 	end
 end
 
