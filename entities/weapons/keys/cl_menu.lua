@@ -60,7 +60,8 @@ local function KeysMenu(um)
 	if KeyFrameVisible then return end
 
 	local ent = LocalPlayer():GetEyeTrace().Entity
-	if not IsValid(ent) or not ent:IsOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 or not ent.DoorData then return end -- Don't open the menu if the entity is not ownable, the entity is too far away or the door settings are not loaded yet
+	-- Don't open the menu if the entity is not ownable, the entity is too far away or the door settings are not loaded yet
+	if not IsValid(ent) or not ent:IsOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 or not ent.DoorData then return end
 
 	KeyFrameVisible = true
 	local Frame = vgui.Create("DFrame")
