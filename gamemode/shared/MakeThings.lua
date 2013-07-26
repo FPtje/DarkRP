@@ -90,7 +90,7 @@ function AddCustomVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, c
 		{name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
 
 	local found = false
-	for k,v in pairs(list.Get("Vehicles")) do
+	for k,v in pairs(DarkRP.getAvailableVehicles()) do
 		if string.lower(k) == string.lower(vehicle.name) then found = true break end
 	end
 

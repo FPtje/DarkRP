@@ -9,6 +9,20 @@ function entity:EmitSound(sound, ...)
 	if string.find(sound, "??", 0, true) then return end
 	return EmitSound(self, sound, ...)
 end
+
+
+function DarkRP.getAvailableVehicles()
+	local vehicles = list.Get("Vehicles")
+	for k, v in pairs(list.Get("SCarsList") or {}) do
+		vehicles[v.PrintName] = {
+			Name = v.PrintName,
+			Class = v.ClassName,
+			Model = v.CarModel
+		}
+	end
+
+	return vehicles
+end
 /*net.WriteVars =
 {
 	[TYPE_NUMBER] = function ( t, v )	net.WriteByte( t )	net.WriteLong( v )			end,

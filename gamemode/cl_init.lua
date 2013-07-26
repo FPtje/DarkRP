@@ -275,7 +275,7 @@ usermessage.Hook("DarkRP_Chat", AddToChat)
 
 local function GetAvailableVehicles()
 	print("Available vehicles for custom vehicles:")
-	for k,v in pairs(list.Get("Vehicles")) do
+	for k,v in pairs(DarkRP.getAvailableVehicles()) do
 		print("\""..k.."\"")
 	end
 end
