@@ -743,8 +743,9 @@ function GM:EntitiesTab()
 				local founds = 0
 				for k,v in pairs(CustomVehicles) do
 					if (not v.allowed or table.HasValue(v.allowed, LocalPlayer():Team())) and (not v.customCheck or v.customCheck(LocalPlayer())) then
-						local Skin = (list.Get("Vehicles")[v.name] and list.Get("Vehicles")[v.name].KeyValues and list.Get("Vehicles")[v.name].KeyValues.Skin) or "0"
+						local Skin = (DarkRP.getAvailableVehicles()[v.name] and DarkRP.getAvailableVehicles()[v.name].KeyValues and DarkRP.getAvailableVehicles()[v.name].KeyValues.Skin) or "0"
 						AddVehicleIcon(v.model or "models/buggy.mdl", Skin, "Buy a "..v.name.." for "..GAMEMODE.Config.currency..v.price, "buyvehicle "..v.name)
+
 						founds = founds + 1
 					end
 				end

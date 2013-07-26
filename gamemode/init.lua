@@ -63,7 +63,6 @@ end
 
 MySQLite.initialize()
 
-
 include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")

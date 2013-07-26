@@ -217,11 +217,11 @@ local function BuyVehicle(ply, args)
 
 	if not ply:canAfford(found.price) then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "vehicle")) return "" end
 
+	local Vehicle = DarkRP.getAvailableVehicles()[found.name]
+	if not Vehicle then GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "")) return "" end
+
 	ply:AddMoney(-found.price)
 	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, found.price))
-
-	local Vehicle = list.Get("Vehicles")[found.name]
-	if not Vehicle then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "")) return "" end
 
 	local trace = {}
 	trace.start = ply:EyePos()
@@ -249,7 +249,6 @@ local function BuyVehicle(ply, args)
 	ent:SetPos(tr.HitPos)
 	ent.VehicleName = found.name
 	ent.VehicleTable = Vehicle
-	ent:CPPISetOwner(ply)
 	ent:Spawn()
 	ent:Activate()
 	ent.SID = ply.SID
@@ -257,6 +256,7 @@ local function BuyVehicle(ply, args)
 	if Vehicle.Members then
 		table.Merge(ent, Vehicle.Members)
 	end
+	ent:CPPISetOwner(ply)
 	ent:Own(ply)
 	hook.Call("PlayerSpawnedVehicle", GAMEMODE, ply, ent) -- VUMod compatability
 	hook.Call("playerBoughtVehicle", nil, ply, found, ent)
