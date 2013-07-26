@@ -359,6 +359,7 @@ local function KeysMenu(um)
 		self:Remove()
 	end
 
+	if not IsValid(trace.Entity) then Frame:Close() return end
 	if trace.Entity:OwnedBy(LocalPlayer()) then
 		if not trace.Entity.DoorData then return end -- Don't open the menu when the door settings are not loaded yet
 		local Owndoor = vgui.Create("DButton", Frame)
