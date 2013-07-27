@@ -11,10 +11,6 @@ AddCSLuaFile("autorun/client/fpp_buddies.lua")
 AddCSLuaFile("autorun/sh_cppi.lua")
 AddCSLuaFile("autorun/sh_settings.lua")
 
-if not BlockedModelsExist then
-	include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models
-end
-
 FPP.Blocked = FPP.Blocked or {}
 	FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
 	FPP.Blocked.Spawning1 = FPP.Blocked.Spawning1 or {}
@@ -750,7 +746,11 @@ function FPP.Init()
 		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPS3(groupname VARCHAR(40) NOT NULL, allowdefault INTEGER NOT NULL, PRIMARY KEY(groupname));")
 		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPTOOL(groupname VARCHAR(40) NOT NULL, tool VARCHAR(45) NOT NULL, PRIMARY KEY(groupname, tool));")
 		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
-		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
+		local count = FPPDB.QueryValue("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='FPP_BLOCKEDMODELS1' LIMIT 1") or 0
+		if(count==0) then
+			FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
+			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
+		end
 	FPPDB.Commit(function()
 
 		RetrieveBlocked()
