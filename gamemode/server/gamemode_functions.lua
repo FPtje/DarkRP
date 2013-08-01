@@ -270,7 +270,7 @@ hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
 	timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
 end)
 hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
-	if not v.DrpCanHear then return end
+	if not ply.DrpCanHear then return end
 	for k,v in pairs(player.GetAll()) do
 		v.DrpCanHear[ply] = nil
 	end
