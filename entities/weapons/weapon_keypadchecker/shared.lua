@@ -13,6 +13,7 @@ SWEP.SlotPos = 1
 SWEP.DrawAmmo = false
 SWEP.ViewModelFlip = false
 SWEP.Primary.ClipSize = 0
+SWEP.Primary.Ammo = ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
@@ -20,6 +21,9 @@ SWEP.AdminSpawnable = true
 SWEP.HoldType = "normal"
 SWEP.WorldModel = "models/weapons/w_toolgun.mdl"
 SWEP.IconLetter = ""
+
+SWEP.ViewModel = "models/weapons/c_pistol.mdl"
+SWEP.UseHands = true
 
 if not SERVER then return end
 
