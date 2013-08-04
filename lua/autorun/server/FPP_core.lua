@@ -720,7 +720,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 
 			if setspawning then
 				FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-				EntTables[k] = nil
+				EntTable[k] = nil
 			end
 		end
 	end
