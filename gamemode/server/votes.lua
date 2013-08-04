@@ -62,7 +62,7 @@ function Vote:getFilter()
 	return filter
 end
 
-function GM.vote:create(question, voteType, target, time, callback, excludeVoters, fail)
+function GM.vote:create(question, voteType, target, time, callback, excludeVoters, fail, extraInfo)
 	excludeVoters = excludeVoters or {[target] = true}
 
 	local newvote = {}
@@ -77,6 +77,7 @@ function GM.vote:create(question, voteType, target, time, callback, excludeVoter
 	newvote.fail = fail or function() end
 	newvote.exclude = excludeVoters
 	newvote.voters = {}
+	newvote.info = extraInfo
 
 	newvote.yea = 0
 	newvote.nay = 0

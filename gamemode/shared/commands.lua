@@ -66,7 +66,7 @@ function GM:AddTeamCommands(CTeam, max)
 				else
 					GAMEMODE:NotifyAll(1, 4, DarkRP.getPhrase("has_not_been_made_team", ply:Nick(), CTeam.name))
 				end
-			end)
+			end, nil, nil, {targetTeam = k})
 			ply:GetTable().LastVoteCop = CurTime()
 			return ""
 		end)
