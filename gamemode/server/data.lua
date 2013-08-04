@@ -468,6 +468,7 @@ function DB.RetrieveRPNames(ply, name, callback)
 end
 
 function DB.RetrievePlayerData(ply, callback, failed, attempts)
+	MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(ply:UniqueID()), MySQLite.SQLStr(ply:SteamID())))
 	attempts = attempts or 0
 
 	if attempts > 3 then return failed() end
@@ -478,7 +479,6 @@ function DB.RetrievePlayerData(ply, callback, failed, attempts)
 end
 
 function DB.CreatePlayerData(ply, name, wallet, salary)
-	MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(ply:UniqueID()), MySQLite.SQLStr(ply:SteamID())))
 	MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
 			ply:UniqueID() .. [[, ]] ..
 			MySQLite.SQLStr(name)  .. [[, ]] ..
