@@ -203,6 +203,7 @@ function meta:KeysLock()
 	self:Fire("lock", "", 0)
 
 	if isfunction(self.Lock) then self:Lock(true) end -- SCars
+	if IsValid(self.EntOwner) and self.EntOwner ~= self then return self.EntOwner:KeysLock() end -- SCars
 
 	hook.Call("onKeysLocked", nil, self)
 end
@@ -211,6 +212,7 @@ function meta:KeysUnLock()
 	self:Fire("unlock", "", 0)
 
 	if isfunction(self.UnLock) then self:UnLock(true) end -- SCars
+	if IsValid(self.EntOwner) and self.EntOwner ~= self then return self.EntOwner:KeysLock() end -- SCars
 
 	hook.Call("onKeysUnlocked", nil, self)
 end
