@@ -259,6 +259,7 @@ local dynv = GM.Config.dynamicvoice
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
+	if not IsValid(listener) then return end
 	listener.DrpCanHear = listener.DrpCanHear or {}
 	for _, talker in pairs(player.GetAll()) do
 		listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
