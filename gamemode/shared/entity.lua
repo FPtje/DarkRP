@@ -466,11 +466,12 @@ AddChatCommand("/toggleown", OwnDoor)
 local function UnOwnAll(ply, cmd, args)
 	local amount = 0
 	for k,v in pairs(ents.GetAll()) do
-		if v:OwnedBy(ply) then
+		if v:OwnedBy(ply) and not IsValid(v.EntOwner) --[[SCars]]then
 			amount = amount + 1
 			v:Fire("unlock", "", 0)
 			v:UnOwn(ply)
-			ply:AddMoney(math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))
+			local cost = (v:IsVehicle() and GAMEMODE.Config.vehiclecost or GAMEMODE.Config.doorcost) * 2/3 + 0.5
+			ply:AddMoney(math.floor(cost))
 			ply:GetTable().Ownedz[v:EntIndex()] = nil
 		end
 	end
