@@ -23,7 +23,6 @@ SWEP.AdminSpawnable = true
 SWEP.HoldType = "normal"
 SWEP.ViewModel = Model("models/weapons/c_pistol.mdl")
 SWEP.WorldModel = "models/weapons/w_toolgun.mdl"
-SWEP.UseHands = true
 SWEP.IconLetter = ""
 
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
