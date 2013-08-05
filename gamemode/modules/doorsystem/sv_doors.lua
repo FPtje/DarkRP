@@ -7,6 +7,7 @@ Functions
 function meta:KeysLock()
 	self:Fire("lock", "", 0)
 	if isfunction(self.Lock) then self:Lock(true) end -- SCars
+	if IsValid(self.EntOwner) and self.EntOwner ~= self then return self.EntOwner:KeysLock() end -- SCars
 
 	hook.Call("onKeysLocked", nil, self)
 end
@@ -14,6 +15,7 @@ end
 function meta:KeysUnLock()
 	self:Fire("unlock", "", 0)
 	if isfunction(self.UnLock) then self:UnLock(true) end -- SCars
+	if IsValid(self.EntOwner) and self.EntOwner ~= self then return self.EntOwner:KeysUnLock() end -- SCars
 
 	hook.Call("onKeysUnlocked", nil, self)
 end
@@ -154,11 +156,11 @@ function meta:initiateTax()
 		if not GAMEMODE.Config.wallettax then
 			return -- Don't remove the hook in case it's turned on afterwards.
 		end
-
 		local money = self:getDarkRPVar("money")
 		local mintax = GAMEMODE.Config.wallettaxmin / 100
 		local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
 		local startMoney = GAMEMODE.Config.startingmoney
+
 
 		if money < (startMoney * 2) then
 			return -- Don't tax players if they have less than twice the starting amount
@@ -426,11 +428,12 @@ DarkRP.defineChatCommand("toggleown", OwnDoor)
 local function UnOwnAll(ply, cmd, args)
 	local amount = 0
 	for k,v in pairs(ents.GetAll()) do
-		if v:OwnedBy(ply) then
+		if v:OwnedBy(ply) and not IsValid(v.EntOwner) --[[SCars]]then
 			amount = amount + 1
 			v:Fire("unlock", "", 0)
 			v:UnOwn(ply)
-			ply:AddMoney(math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))
+			local cost = (v:IsVehicle() and GAMEMODE.Config.vehiclecost or GAMEMODE.Config.doorcost) * 2/3 + 0.5
+			ply:AddMoney(math.floor(cost))
 			ply:GetTable().Ownedz[v:EntIndex()] = nil
 		end
 	end

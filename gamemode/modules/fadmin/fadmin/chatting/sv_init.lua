@@ -4,7 +4,7 @@ local function ToAdmins(ply, cmd, args)
 	local text = table.concat(args, " ")
 	local RP = RecipientFilter()
 
-	RP:AddPlayer(ply)
+	if ply ~= game.GetWorld() then RP:AddPlayer(ply) end
 	for k,v in pairs(player.GetAll()) do
 		if v:IsAdmin() then
 			RP:AddPlayer(v)

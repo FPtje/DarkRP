@@ -191,6 +191,7 @@ function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
 	attempts = attempts or 0
 
 	if attempts > 3 then return failed() end
+	MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(ply:UniqueID()), MySQLite.SQLStr(ply:SteamID())))
 
 	MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
 		DarkRP.retrievePlayerData(ply, callback, failed, attempts + 1)
@@ -198,7 +199,6 @@ function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
 end
 
 function DarkRP.createPlayerData(ply, name, wallet, salary)
-	MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(ply:UniqueID()), MySQLite.SQLStr(ply:SteamID())))
 	MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
 			ply:UniqueID() .. [[, ]] ..
 			MySQLite.SQLStr(name)  .. [[, ]] ..

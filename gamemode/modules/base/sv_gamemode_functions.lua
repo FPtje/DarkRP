@@ -1,4 +1,3 @@
-
 /*---------------------------------------------------------------------------
 DarkRP hooks
 ---------------------------------------------------------------------------*/
@@ -301,6 +300,7 @@ local dynv = GM.Config.dynamicvoice
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
+	if not IsValid(listener) then return end
 	listener.DrpCanHear = listener.DrpCanHear or {}
 	for _, talker in pairs(player.GetAll()) do
 		listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
@@ -312,6 +312,7 @@ hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
 	timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
 end)
 hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
+	if not ply.DrpCanHear then return end
 	for k,v in pairs(player.GetAll()) do
 		v.DrpCanHear[ply] = nil
 	end
