@@ -1,3 +1,5 @@
+local plyMeta = FindMetaTable("Player")
+
 --Immunity
 cvars.AddChangeCallback("_FAdmin_immunity", function(Cvar, Previous, New)
 	FAdmin.SetGlobalSetting("Immunity", (tonumber(New) == 1 and true) or false)
@@ -68,6 +70,14 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 
 	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(SteamID)..", " .. MySQLite.SQLStr(group)..");")
 end
+
+local oldSetUsergroup = plyMeta.SetUserGroup
+function plyMeta:SetUserGroup(group, ...)
+	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(self:SteamID())..", " .. MySQLite.SQLStr(group)..");")
+
+	return oldSetUsergroup(self, group, ...)
+end
+
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
