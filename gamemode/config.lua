@@ -243,9 +243,20 @@ GM.Config.currency = "$"
 
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
 GM.Config.DisallowDrop = {
-	["weapon_keypadchecker"] = true,
+	["arrest_stick"] = true,
+	["door_ram"] = true,
+	["gmod_camera"] = true,
+	["gmod_tool"] = true,
 	["keys"] = true,
-	["pocket"] = true
+	["lockpick"] = true,
+	["med_kit"] = true,
+	["pocket"] = true,
+	["stunstick"] = true,
+	["unarrest_stick"] = true,
+	["weapon_keypadchecker"] = true,
+	["weapon_physcannon"] = true,
+	["weapon_physgun"] = true,
+	["weaponchecker"] = true
 }
 
 GM.Config.DefaultWeapons = {
