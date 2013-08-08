@@ -11,6 +11,7 @@ local ipairs = ipairs
 local error = error
 local math = math
 local select = select
+local _G = _G
 
 
 module("fn")
@@ -91,6 +92,8 @@ Until = function(cmp, fn, val)
 	end
 	return Until(cmp, fn, fn(val))
 end
+
+GetGlobalVar = function(key) return _G[key] end
 
 /*---------------------------------------------------------------------------
 Mathematical operators and functions
