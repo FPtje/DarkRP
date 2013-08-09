@@ -42,6 +42,12 @@ function DarkRP.removeF4MenuTab(name)
 	f4Frame:removeTab(name)
 end
 
+function DarkRP.switchTabOrder(tab1, tab2)
+	if not f4Frame then error("DarkRP.addF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.") end
+
+	f4Frame:switchTabOrder(tab1, tab2)
+end
+
 
 /*---------------------------------------------------------------------------
 Hooks

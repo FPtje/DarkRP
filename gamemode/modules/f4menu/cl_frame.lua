@@ -38,8 +38,6 @@ PANEL = {}
 
 local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 function PANEL:Init()
-	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
-
 	self.F4Down = true
 
 	self:StretchToParent(100, 100, 100, 100)
@@ -124,12 +122,20 @@ end
 function PANEL:removeTab(name)
 	for k, v in pairs(self.Items) do
 		if v.Tab:GetText() ~= name then return end
-		return self:CloseTab(v, true)
+		return self:CloseTab(v.Tab, true)
 	end
 end
 
+function PANEL:switchTabOrder(tab1, tab2)
+	self.Items[tab1], self.Items[tab2] = self.Items[tab2], self.Items[tab1]
+	self.tabScroller.Panels[tab1], self.tabScroller.Panels[tab2] = self.tabScroller.Panels[tab2], self.tabScroller.Panels[tab1]
+	self.tabScroller:InvalidateLayout(true)
+end
+
+
 function PANEL:generateTabs()
 	hook.Call("F4MenuTabs")
+	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 
 derma.DefineControl("F4MenuFrame", "", PANEL, "DPropertySheet")

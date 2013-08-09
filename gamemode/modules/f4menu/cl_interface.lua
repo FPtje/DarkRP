@@ -71,7 +71,6 @@ DarkRP.removeF4MenuTab = DarkRP.stub{
 	metatable = DarkRP
 }
 
--- DarkRP.switchTabOrder(firstTabNr, secondTabNr)
 DarkRP.switchTabOrder = DarkRP.stub{
 	name = "switchTabOrder",
 	description = "Switch the order of two tabs.",
