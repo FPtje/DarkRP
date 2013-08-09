@@ -14,6 +14,10 @@ function meta:DrawOwnableInfo()
 		return
 	end
 
+	-- Look, if you want to change the way door ownership is drawn, don't edit this file, use the hook instead!
+	local doorDrawing = hook.Call("HUDDrawDoorData", nil, self)
+	if doorDrawing == true then return end
+
 	for k,v in pairs(player.GetAll()) do
 		if self:OwnedBy(v) then
 			ownerstr = ownerstr .. v:Nick() .. "\n"
