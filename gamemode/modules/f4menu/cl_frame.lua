@@ -1,4 +1,40 @@
+/*---------------------------------------------------------------------------
+F4 tab
+---------------------------------------------------------------------------*/
 local PANEL = {}
+
+function PANEL:Init()
+	self.BaseClass.Init(self)
+	self:SetFont("DarkRPHUD2")
+end
+
+function PANEL:ApplySchemeSettings()
+	local ExtraInset = 10
+
+	if self.Image then
+		ExtraInset = ExtraInset + self.Image:GetWide()
+	end
+
+	local Active = self:GetPropertySheet():GetActiveTab() == self
+
+	self:SetTextInset(ExtraInset, 4)
+	local w, h = self:GetContentSize()
+	h = Active and 38 or 30
+
+	self:SetSize(w + 30, h)
+
+	DLabel.ApplySchemeSettings(self)
+end
+
+derma.DefineControl("F4MenuTab", "", PANEL, "DTab")
+
+
+
+/*---------------------------------------------------------------------------
+F4 tab sheet
+---------------------------------------------------------------------------*/
+
+PANEL = {}
 
 local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 function PANEL:Init()
@@ -11,6 +47,8 @@ function PANEL:Init()
 	self:SetVisible(true)
 	self:MakePopup()
 	self:SetupCloseButton(fn.Curry(self.Hide, 2)(self))
+
+	self:AddSheet("Knob", vgui.Create("DPanel"), nil)
 end
 
 function PANEL:SetupCloseButton(func)
@@ -21,6 +59,37 @@ function PANEL:SetupCloseButton(func)
 	self.CloseButton:Dock(RIGHT)
 	self.CloseButton:DockMargin(0, 0, 0, 8)
 	self.CloseButton:SetSize(32, 32)
+end
+
+function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
+	if not IsValid(panel) then return end
+
+	local sheet = {}
+
+	sheet.Name = label
+
+	sheet.Tab = vgui.Create("F4MenuTab", self)
+	sheet.Tab:SetTooltip(Tooltip)
+	sheet.Tab:Setup(label, self, panel, material)
+
+	sheet.Panel = panel
+	sheet.Panel.NoStretchX = NoStretchX
+	sheet.Panel.NoStretchY = NoStretchY
+	sheet.Panel:SetPos(self:GetPadding(), sheet.Tab:GetTall() + 8 + self:GetPadding())
+	sheet.Panel:SetVisible(false)
+
+	panel:SetParent(self)
+
+	table.insert(self.Items, sheet)
+
+	if not self:GetActiveTab() then
+		self:SetActiveTab(sheet.Tab)
+		sheet.Panel:SetVisible(true)
+	end
+
+	self.tabScroller:AddPanel(sheet.Tab)
+
+	return sheet
 end
 
 function PANEL:Think()
