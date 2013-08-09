@@ -262,6 +262,7 @@ end
 
 RPExtraTeams = {}
 plyMeta.getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
+local jobCount = 0
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
 	local tableSyntaxUsed = colorOrTable.r == nil -- the color is not a color table.
 
@@ -271,10 +272,11 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 			NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
 		}
 	CustomTeam.name = Name
-	CustomTeam.team = #team.GetAllTeams() + 1
 
 	local corrupt = checkValid(CustomTeam, requiredTeamItems)
 	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end
+	jobCount = jobCount + 1
+	CustomTeam.team = jobCount
 
 	table.insert(RPExtraTeams, CustomTeam)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
