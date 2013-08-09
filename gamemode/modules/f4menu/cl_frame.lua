@@ -100,7 +100,14 @@ function PANEL:Think()
 	end
 end
 
+function PANEL:Refresh()
+	for k,v in pairs(self.Items) do
+		if v.Panel.Refresh then v.Panel:Refresh() end
+	end
+end
+
 function PANEL:Show()
+	self:Refresh()
 	self.F4Down = true
 	self:SetVisible(true)
 	gui.SetMousePos(mouseX, mouseY)

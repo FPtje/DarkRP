@@ -13,6 +13,12 @@ function PANEL:Init()
 
 end
 
+function PANEL:Refresh()
+	for k,v in pairs(self.Items) do
+		if v.Refresh then v:Refresh() end
+	end
+end
+
 /*-- The white stuff is for testing purposes.
 function PANEL:Paint(w, h)
 	draw.RoundedBox(0, 0, 0, w, h, Color(255,255,255,255))
@@ -42,6 +48,10 @@ function PANEL:PerformLayout()
 end
 
 PANEL.Paint = fn.Id
+
+function PANEL:Refresh()
+	self.pnlLeft:Refresh()
+end
 
 function PANEL:fillData()
 	for i, job in ipairs(RPExtraTeams) do

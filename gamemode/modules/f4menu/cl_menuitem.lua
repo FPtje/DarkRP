@@ -50,6 +50,10 @@ function PANEL:setDarkRPItem(item)
 
 end
 
+function PANEL:Refresh()
+
+end
+
 derma.DefineControl("F4MenuItemButton", "", PANEL, "DButton")
 
 /*---------------------------------------------------------------------------
@@ -65,10 +69,16 @@ local function getMaxOfTeam(job)
 end
 
 function PANEL:setDarkRPItem(job)
+	self.DarkRPItem = job
+
 	self:SetBorderColor(job.color)
 	self:SetModel(istable(job.model) and job.model[1] or job.model)
 	self:SetText(job.name)
 	self:SetTextRight(string.format("%s/%s", team.NumPlayers(job.team), getMaxOfTeam(job)))
+end
+
+function PANEL:Refresh()
+	self:SetTextRight(string.format("%s/%s", team.NumPlayers(self.DarkRPItem.team), getMaxOfTeam(self.DarkRPItem)))
 end
 
 function PANEL:DoClick()
