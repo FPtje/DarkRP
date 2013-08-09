@@ -53,4 +53,5 @@ end
 Hooks
 ---------------------------------------------------------------------------*/
 hook.Add("F4MenuTabs", "DefaultTabs", function()
+	DarkRP.addF4MenuTab(DarkRP.getPhrase("jobs"), vgui.Create("F4MenuJobs"))
 end)
