@@ -47,8 +47,6 @@ function PANEL:Init()
 	self:SetVisible(true)
 	self:MakePopup()
 	self:SetupCloseButton(fn.Curry(self.Hide, 2)(self))
-
-	self:AddSheet("Knob", vgui.Create("DPanel"), nil)
 end
 
 function PANEL:SetupCloseButton(func)
