@@ -117,4 +117,19 @@ function PANEL:Close()
 	self:Hide()
 end
 
+function PANEL:createTab(name, panel)
+	return self:AddSheet(name, panel)
+end
+
+function PANEL:removeTab(name)
+	for k, v in pairs(self.Items) do
+		if v.Tab:GetText() ~= name then return end
+		return self:CloseTab(v, true)
+	end
+end
+
+function PANEL:generateTabs()
+	hook.Call("F4MenuTabs")
+end
+
 derma.DefineControl("F4MenuFrame", "", PANEL, "DPropertySheet")
