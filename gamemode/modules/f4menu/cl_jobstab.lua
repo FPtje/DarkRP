@@ -26,6 +26,39 @@ end*/
 
 derma.DefineControl("F4EmptyPanel", "", PANEL, "DPanelList")
 
+/*---------------------------------------------------------------------------
+Right panel for the jobs
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+function PANEL:Init()
+	self.BaseClass.Init(self)
+	self:SetPadding(10)
+end
+
+local black = Color(0, 0, 0, 170)
+function PANEL:Paint(w, h)
+	draw.RoundedBox(0, 0, 0, w, h, black)
+end
+
+function PANEL:updateInfo(job)
+	self:Clear()
+
+	local lblTitle = vgui.Create("DLabel")
+	lblTitle:SetFont("HUDNumber5")
+	lblTitle:SetText(job.name)
+	lblTitle:SizeToContents()
+	self:AddItem(lblTitle)
+
+	local lblDescription = vgui.Create("DLabel")
+	lblDescription:SetWide(self:GetWide())
+	lblDescription:SetAutoStretchVertical(true)
+	lblDescription:SetText(job.description)
+	self:AddItem(lblDescription)
+end
+
+derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")
+
 
 /*---------------------------------------------------------------------------
 Jobs panel
@@ -36,10 +69,11 @@ function PANEL:Init()
 	self.pnlLeft = vgui.Create("F4EmptyPanel", self)
 	self.pnlLeft:Dock(LEFT)
 
-	self.pnlRight = vgui.Create("F4EmptyPanel", self)
+	self.pnlRight = vgui.Create("F4JobsPanelRight", self)
 	self.pnlRight:Dock(RIGHT)
 
 	self:fillData()
+	self.pnlRight:updateInfo(RPExtraTeams[1])
 end
 
 function PANEL:PerformLayout()
@@ -57,6 +91,7 @@ function PANEL:fillData()
 	for i, job in ipairs(RPExtraTeams) do
 		local item = vgui.Create("F4MenuJobButton")
 		item:setDarkRPItem(job)
+		item.DoClick = fn.Compose{fn.Curry(self.pnlRight.updateInfo, 2)(self.pnlRight), fn.Curry(fn.GetValue, 3)("DarkRPItem")(item)}
 		self.pnlLeft:AddItem(item)
 	end
 end

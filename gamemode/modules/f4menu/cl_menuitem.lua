@@ -29,7 +29,7 @@ end
 local black, gray = Color(0, 0, 0, 255), Color(140, 140, 140, 255)
 function PANEL:Paint(w, h)
 	draw.RoundedBox(8, 0, 0, w, h, self:GetBorderColor() or black)
-	draw.RoundedBox(4, 3, 3, w - 6, h - 6, black)
+	draw.RoundedBox(4, 6, 6, w - 12, h - 12, black)
 
 	surface.SetDrawColor(gray)
 	surface.DrawRect(5, 5, 50, 50)
