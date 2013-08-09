@@ -151,7 +151,7 @@ local function Agenda()
 
 		local text = table.concat(AgendaText, "\n")
 		text = text:gsub("//", "\n"):gsub("\\n", "\n")
-		text = GAMEMODE:TextWrap(text, "DarkRPHUD1", 440)
+		text = DarkRP.textWrap(text, "DarkRPHUD1", 440)
 		draw.DrawText(text, "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
 	end
 end

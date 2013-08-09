@@ -29,7 +29,7 @@ function ENT:Draw()
 end
 
 local function AddLaw(inLaw)
-	local law = GAMEMODE:TextWrap(inLaw, "TargetID", 522)
+	local law = DarkRP.textWrap(inLaw, "TargetID", 522)
 
 	Laws[#Laws + 1] = (#Laws + 1).. ". " .. law
 end

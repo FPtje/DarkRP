@@ -181,7 +181,7 @@ function DarkRP.storeRPName(ply, name)
 	MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
-function DarkRP.retrieveRPNames(ply, name, callback)
+function DarkRP.retrieveRPNames(name, callback)
 	MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = "..MySQLite.SQLStr(name)..";", function(r)
 		callback(tonumber(r[1].count) > 0)
 	end)

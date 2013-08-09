@@ -21,7 +21,7 @@ usermessage.Hook("blackScreen", blackScreen)
 /*---------------------------------------------------------------------------
 Wrap strings to not become wider than the given amount of pixels
 ---------------------------------------------------------------------------*/
-function GM:TextWrap(text, font, pxWidth)
+function DarkRP.textWrap(text, font, pxWidth)
 	local total = 0
 
 	surface.SetFont(font)

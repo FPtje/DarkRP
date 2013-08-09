@@ -1,10 +1,10 @@
 DarkRP.findPlayer = DarkRP.stub{
 	name = "findPlayer",
-	description = "Find a player based on vague information",
+	description = "Find a player based on vague information.",
 	parameters = {
 		{
 			name = "info",
-			description = "The information of the player (UserID, SteamID, name)",
+			description = "The information of the player (UserID, SteamID, name).",
 			type = "string",
 			optional = false
 		}
@@ -12,7 +12,7 @@ DarkRP.findPlayer = DarkRP.stub{
 	returns = {
 		{
 			name = "found",
-			description = "The player that matches the description",
+			description = "The player that matches the description.",
 			type = "Player"
 		}
 	},
@@ -29,6 +29,21 @@ DarkRP.PLAYER.getJobTable = DarkRP.stub{
 			name = "job",
 			description = "Table with the job information.",
 			type = "table"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
+	name = "getDarkRPVar",
+	description = "Get the value of a DarkRPVar, which is shared between server and client.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "var",
+			description = "The name of the variable.",
+			type = "string"
 		}
 	},
 	metatable = DarkRP.PLAYER
@@ -275,4 +290,32 @@ DarkRP.createAmmoType = DarkRP.stub{
 	},
 	metatable = DarkRP
 }
-//GM.AddAmmoType = DarkRP.createAmmoType
+
+DarkRP.hookStub{
+	name = "DarkRPVarChanged",
+	description = "Called when a DarkRPVar was changed.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player for whom the DarkRPVar changed.",
+			type = "Player"
+		},
+		{
+			name = "varname",
+			description = "The name of the variable that has changed.",
+			type = "string"
+		},
+		{
+			name = "oldValue",
+			description = "The old value of the DarkRPVar.",
+			type = "any"
+		},
+		{
+			name = "price",
+			description = "The new value of the DarkRPVar.",
+			type = "any"
+		}
+	},
+	returns = {
+	}
+}

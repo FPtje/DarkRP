@@ -195,7 +195,7 @@ Setting the RP name
 function meta:setRPName(name, firstRun)
 	-- Make sure nobody on this server already has this RP name
 	local lowername = string.lower(tostring(name))
-	DarkRP.retrieveRPNames(self, name, function(taken)
+	DarkRP.retrieveRPNames(name, function(taken)
 		if string.len(lowername) < 2 and not firstrun then return end
 		-- If we found that this name exists for another player
 		if taken then
