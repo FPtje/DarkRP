@@ -4,14 +4,23 @@ local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 function PANEL:Init()
 	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
 
-	self:SetTitle("")
-
 	self.F4Down = true
 
 	self:StretchToParent(100, 100, 100, 100)
 	self:Center()
 	self:SetVisible(true)
 	self:MakePopup()
+	self:SetupCloseButton(fn.Curry(self.Hide, 2)(self))
+end
+
+function PANEL:SetupCloseButton(func)
+	self.CloseButton = self.tabScroller:Add("DButton")
+	self.CloseButton:SetText("")
+	self.CloseButton.DoClick = func
+	self.CloseButton.Paint = function(panel, w, h) derma.SkinHook("Paint", "WindowCloseButton", panel, w, h) end
+	self.CloseButton:Dock(RIGHT)
+	self.CloseButton:DockMargin(0, 0, 0, 8)
+	self.CloseButton:SetSize(32, 32)
 end
 
 function PANEL:Think()
@@ -41,4 +50,4 @@ function PANEL:Close()
 	self:Hide()
 end
 
-derma.DefineControl("F4MenuFrame", "", PANEL, "DFrame")
+derma.DefineControl("F4MenuFrame", "", PANEL, "DPropertySheet")
