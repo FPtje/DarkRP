@@ -51,7 +51,7 @@ function PANEL:updateInfo(job)
 	self:AddItem(lblTitle)
 
 	local lblDescription = vgui.Create("DLabel")
-	lblDescription:SetWide(self:GetWide())
+	lblDescription:SetWide(self:GetWide() - 20)
 	lblDescription:SetAutoStretchVertical(true)
 	lblDescription:SetText(job.description)
 	self:AddItem(lblDescription)

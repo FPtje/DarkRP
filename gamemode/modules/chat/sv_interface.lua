@@ -18,3 +18,4 @@ DarkRP.defineChatCommand = DarkRP.stub{
 	returns = {},
 	metatable = DarkRP
 }
+-- PostPlayerSay

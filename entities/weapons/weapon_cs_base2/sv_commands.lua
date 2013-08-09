@@ -66,3 +66,19 @@ end
 DarkRP.defineChatCommand("drop", DropWeapon)
 DarkRP.defineChatCommand("dropweapon", DropWeapon)
 DarkRP.defineChatCommand("weapondrop", DropWeapon)
+
+DarkRP.stub{
+	name = "dropDRPWeapon",
+	description = "Drop the weapon with animations.",
+	parameters = {
+		{
+			name = "weapon",
+			description = "The weapon to drop",
+			type = "Entity",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = meta
+}

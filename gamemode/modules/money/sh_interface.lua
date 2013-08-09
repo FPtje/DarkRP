@@ -18,3 +18,19 @@ DarkRP.PLAYER.canAfford = DarkRP.stub{
 	},
 	metatable = DarkRP.PLAYER
 }
+
+DarkRP.ENTITY.isMoneyBag = DarkRP.stub{
+	name = "isMoneyBag",
+	description = "Whether this entity is a money bag",
+	parameters = {
+
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "Whether this entity is a money bag.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}

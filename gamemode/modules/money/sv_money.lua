@@ -37,6 +37,15 @@ function meta:PayDay()
 	end
 end
 
+function DarkRP.createMoneyBag(pos, amount)
+	local moneybag = ents.Create("spawned_money")
+	moneybag:SetPos(pos)
+	moneybag:Setamount(math.Min(amount, 2147483647))
+	moneybag:Spawn()
+	moneybag:Activate()
+	return moneybag
+end
+
 /*---------------------------------------------------------------------------
 Commands
 ---------------------------------------------------------------------------*/
@@ -140,7 +149,7 @@ local function DropMoney(ply, args)
 			trace.filter = ply
 
 			local tr = util.TraceLine(trace)
-			DarkRPCreateMoneyBag(tr.HitPos, amount)
+			DarkRP.createMoneyBag(tr.HitPos, amount)
 			DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..GAMEMODE.Config.currency .. tostring(amount))
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/dropmoney", ""))

@@ -169,7 +169,7 @@ end
 local function FireSpread(e)
 	if not e:IsOnFire() then return end
 
-	if e:IsMoneyBag() then
+	if e:isMoneyBag() then
 		e:Remove()
 	end
 

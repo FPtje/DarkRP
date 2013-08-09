@@ -26,15 +26,6 @@ function ENT:Use(activator,caller)
 	self:Remove()
 end
 
-function DarkRPCreateMoneyBag(pos, amount)
-	local moneybag = ents.Create("spawned_money")
-	moneybag:SetPos(pos)
-	moneybag:Setamount(math.Min(amount, 2147483647))
-	moneybag:Spawn()
-	moneybag:Activate()
-	return moneybag
-end
-
 function ENT:Touch(ent)
 	if ent:GetClass() ~= "spawned_money" or self.hasMerged or ent.hasMerged then return end
 

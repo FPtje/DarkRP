@@ -94,7 +94,7 @@ function ENT:CreateMoneybag()
 		amount = 250
 	end
 
-	DarkRPCreateMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
+	DarkRP.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
 	self.sparking = false
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
 end

@@ -452,7 +452,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 
 		if amount > 0 then
 			ply:AddMoney(-amount)
-			DarkRPCreateMoneyBag(ply:GetPos(), amount)
+			DarkRP.createMoneyBag(ply:GetPos(), amount)
 		end
 	end
 

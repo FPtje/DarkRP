@@ -58,7 +58,7 @@ function SWEP:Equip(newOwner)
 
 	local i = self.Owner.Pocket and #self.Owner.Pocket or 0
 	while i > self.MaxPocketItems do
-		self.Owner:DropPocketItem(self.Owner.Pocket[i])
+		self.Owner:dropPocketItem(self.Owner.Pocket[i])
 		self.Owner.Pocket[i] = nil
 		i = i - 1
 	end
@@ -144,7 +144,7 @@ function SWEP:SecondaryAttack()
 	self.Owner:GetTable().Pocket[#self.Owner:GetTable().Pocket] = nil
 	if not IsValid(ent) then DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items")) return end
 
-	self.Owner:DropPocketItem(ent)
+	self.Owner:dropPocketItem(ent)
 end
 
 SWEP.OnceReload = false
@@ -280,13 +280,13 @@ elseif SERVER then
 			ply:GetActiveWeapon():SetWeaponHoldType("pistol")
 			timer.Simple(0.2, function() if ply:GetActiveWeapon():IsValid() then ply:GetActiveWeapon():SetWeaponHoldType("normal") end end)
 
-			ply:DropPocketItem(ent)
+			ply:dropPocketItem(ent)
 		end
 	end
 	concommand.Add("_RPSpawnPocketItem", Spawn)
 
 	local meta = FindMetaTable("Player")
-	function meta:DropPocketItem(ent)
+	function meta:dropPocketItem(ent)
 		local trace = {}
 		trace.start = self:EyePos()
 		trace.endpos = trace.start + self:GetAimVector() * 85
@@ -312,7 +312,23 @@ elseif SERVER then
 		ent.IsPocketed = nil
 	end
 
-	hook.Add("PlayerDeath", "DropPocketItems", function(ply)
+	DarkRP.stub{
+		name = "dropPocketItem",
+		description = "Make the player drop an item from the pocket",
+		parameters = {
+			{
+				name = "ent",
+				description = "The entity to drop",
+				type = "Entity",
+				optional = false
+			}
+		},
+		returns = {
+		},
+		metatable = meta
+	}
+
+	hook.Add("PlayerDeath", "dropPocketItems", function(ply)
 		local pocket = ply.Pocket
 		if not GAMEMODE.Config.droppocketdeath or not pocket then return end
 
@@ -320,7 +336,7 @@ elseif SERVER then
 
 		for k, v in pairs(pocket) do
 			if IsValid(v) then
-				ply:DropPocketItem(v)
+				ply:dropPocketItem(v)
 			end
 		end
 	end)
