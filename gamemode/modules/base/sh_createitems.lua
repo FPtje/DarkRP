@@ -271,6 +271,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 			NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
 		}
 	CustomTeam.name = Name
+	CustomTeam.team = #team.GetAllTeams() + 1
 
 	local corrupt = checkValid(CustomTeam, requiredTeamItems)
 	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end
