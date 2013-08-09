@@ -126,7 +126,7 @@ end)
 
 DarkRP.defineChatCommand("requesthit", function(ply, args)
 	args = string.Explode(' ', args)
-	local target = GAMEMODE:FindPlayer(args[1])
+	local target = DarkRP.findPlayer(args[1])
 	local traceEnt = ply:GetEyeTrace().Entity
 	local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1) or -1)
 

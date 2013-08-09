@@ -124,7 +124,7 @@ DarkRP.defineChatCommand("cr", CombineRequest, 1.5)
 
 local function warrantCommand(ply, args)
 	local expl = string.Explode(" ", args or "")
-	local target = GAMEMODE:FindPlayer(expl[1])
+	local target = DarkRP.findPlayer(expl[1])
 	local reason = table.concat(expl, " ", 2)
 
 	local canRequest, message = hook.Call("canRequestWarrant", DarkRP.hooks, target, ply, reason)
@@ -158,7 +158,7 @@ DarkRP.defineChatCommand("warrant", warrantCommand)
 
 local function wantedCommand(ply, args)
 	local expl = string.Explode(" ", args or "")
-	local target = GAMEMODE:FindPlayer(expl[1])
+	local target = DarkRP.findPlayer(expl[1])
 	local reason = table.concat(expl, " ", 2)
 
 	local canWanted, message = hook.Call("canWanted", DarkRP.hooks, target, ply, reason)
@@ -174,7 +174,7 @@ end
 DarkRP.defineChatCommand("wanted", wantedCommand)
 
 local function unwantedCommand(ply, args)
-	local target = GAMEMODE:FindPlayer(args)
+	local target = DarkRP.findPlayer(args)
 
 	local canUnwant, message = hook.Call("canUnwant", DarkRP.hooks, target, ply)
 	if not canUnwant then

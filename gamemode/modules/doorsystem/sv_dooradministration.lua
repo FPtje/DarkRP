@@ -53,7 +53,7 @@ local function unownAll(ply, cmd, args)
 		return
 	end
 
-	target = GAMEMODE:FindPlayer(args[1])
+	target = DarkRP.findPlayer(args[1])
 
 	if not IsValid(target) then
 		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
