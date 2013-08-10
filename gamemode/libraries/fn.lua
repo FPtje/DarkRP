@@ -93,6 +93,8 @@ Until = function(cmp, fn, val)
 	return Until(cmp, fn, fn(val))
 end
 
+Seq = function(f, x) f(x) return x end
+
 GetGlobalVar = function(key) return _G[key] end
 
 /*---------------------------------------------------------------------------
