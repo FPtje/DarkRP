@@ -14,11 +14,11 @@ function PANEL:Init()
 	self:SetFont("DarkRPHUD2")
 	self:SetTextColor(Color(255, 255, 255, 255))
 	self:SetTall(60)
-	self:DockPadding(5, 5, 10, 5)
+	self:DockPadding(0, 0, 10, 5)
 
 	self.model = self.model or vgui.Create("ModelImage", self)
-	self.model:SetSize(50, 50)
-	self.model:Dock(LEFT)
+	self.model:SetSize(60, 60)
+	self.model:SetPos(0, 0)
 
 	self.txtRight = self.txtRight or vgui.Create("DLabel", self)
 	self.txtRight:SetFont("DarkRPHUD2")
@@ -28,11 +28,11 @@ end
 
 local black, gray = Color(0, 0, 0, 255), Color(140, 140, 140, 255)
 function PANEL:Paint(w, h)
-	draw.RoundedBox(8, 0, 0, w, h, self:GetBorderColor() or black)
-	draw.RoundedBox(4, 6, 6, w - 12, h - 12, black)
+	draw.RoundedBox(4, 0, 0, w, h, black) -- background
 
-	surface.SetDrawColor(gray)
-	surface.DrawRect(5, 5, 50, 50)
+	draw.RoundedBoxEx(4, h, h - 10, w - 60, 10, self:GetBorderColor() or black, false, false, false, true) -- the colored bar
+
+	draw.RoundedBoxEx(4, 0, 0, h, h, gray, true, false, false, false) -- gray box for the model
 end
 
 function PANEL:SetModel(mdl, skin)
