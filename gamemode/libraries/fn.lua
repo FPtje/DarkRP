@@ -122,17 +122,20 @@ Functional logical operators and conditions
 ---------------------------------------------------------------------------*/
 FAnd = function(fns)
 	return function(x)
+		local val
 		for _, f in pairs(fns) do
-			if not f(x) then return false end
+			val = f(x)
+			if not val then return false end
 		end
-		return true
+		return val
 	end
 end
 
 FOr = function(fns)
 	return function(x)
 		for _, f in pairs(fns) do
-			if f(x) then return true end
+			local val = f(x)
+			if val then return val end
 		end
 		return false
 	end
