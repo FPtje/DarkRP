@@ -15,12 +15,10 @@ SWEP.Instructions = "Left click to lock. Right click to unlock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
-SWEP.ViewModel = Model("models/weapons/v_hands.mdl")
-SWEP.WorldModel	= ""
+SWEP.UseHands = true
 
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.AnimPrefix	 = "rpg"
+SWEP.ViewModel = "models/weapons/c_arms_citizen.mdl"
+SWEP.WorldModel	= ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
@@ -39,7 +37,28 @@ function SWEP:Initialize()
 	self:SetWeaponHoldType("normal")
 end
 
+-- [[ Taken from weapon_fists ]] --
+function SWEP:PreDrawViewModel( vm, wep, ply )
+	vm:SetMaterial( "engine/occlusionproxy" ) -- Hide that view model with hacky material
+end
+
+function SWEP:OnRemove()
+	if ( IsValid( self.Owner ) ) then
+		local vm = self.Owner:GetViewModel()
+		if ( IsValid( vm ) ) then vm:SetMaterial( "" ) end
+	end
+	timer.Stop( "fists_idle" .. self:EntIndex() )
+end
+
+function SWEP:Holster( wep )
+	self:OnRemove()
+	return true
+end
+-- [[ Thanks robotboy655 & MaxOfS2D! ]]--
+
 function SWEP:Deploy()
+	local vm = self.Owner:GetViewModel()
+	vm:ResetSequence( vm:LookupSequence( "seq_admire" ) )
 	if SERVER then
 		self.Owner:DrawWorldModel(false)
 	end
