@@ -83,6 +83,14 @@ Curry = function(func, num_args)
    end
 end
 
+-- Thanks Lexic!
+Partial = function(func, ...)
+	local args = {...}
+	return function(...)
+		return func(unpack(table.Add( args, {...})))
+	end
+end
+
 Apply = function(f, ...) return f(...) end
 
 Const = function(a, b) return a end
