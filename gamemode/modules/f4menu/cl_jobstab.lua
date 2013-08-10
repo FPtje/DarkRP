@@ -34,6 +34,30 @@ PANEL = {}
 function PANEL:Init()
 	self.BaseClass.Init(self)
 	self:SetPadding(10)
+
+	self.lblTitle = vgui.Create("DLabel")
+	self.lblTitle:SetFont("HUDNumber5")
+	self:AddItem(self.lblTitle)
+
+	self.lblDescription = vgui.Create("DLabel")
+	self.lblDescription:SetWide(self:GetWide() - 20)
+	self.lblDescription:SetAutoStretchVertical(true)
+	self:AddItem(self.lblDescription)
+
+	self.filler = VGUIRect(0, 0, 0, 20)
+	self.filler:SetColor(Color(0, 0, 0, 0))
+	self:AddItem(self.filler)
+
+	self.lblWeapons = vgui.Create("DLabel")
+	self.lblWeapons:SetFont("HUDNumber5")
+	self.lblWeapons:SetText("Weapons")
+	self.lblWeapons:SizeToContents()
+	self.lblWeapons:SetTall(50)
+	self:AddItem(self.lblWeapons)
+
+	self.lblSweps = vgui.Create("DLabel")
+	self.lblSweps:SetAutoStretchVertical(true)
+	self:AddItem(self.lblSweps)
 end
 
 local black = Color(0, 0, 0, 170)
@@ -41,20 +65,24 @@ function PANEL:Paint(w, h)
 	draw.RoundedBox(0, 0, 0, w, h, black)
 end
 
+-- functions for getting the weapon names from the job table
+local getWepName = fn.FOr{fn.FAnd{weapons.Get, fn.Compose{fn.Curry(fn.GetValue, 2)("PrintName"), weapons.Get}}, fn.Id}
+local getWeaponNames = fn.Curry(fn.Map, 2)(getWepName)
+local weaponString = fn.Compose{fn.Curry(fn.Flip(table.concat), 2)("\n"), fn.Curry(fn.Seq, 2)(table.sort), getWeaponNames, table.Copy}
 function PANEL:updateInfo(job)
-	self:Clear()
+	self.lblTitle:SetText(job.name)
+	self.lblTitle:SizeToContents()
 
-	local lblTitle = vgui.Create("DLabel")
-	lblTitle:SetFont("HUDNumber5")
-	lblTitle:SetText(job.name)
-	lblTitle:SizeToContents()
-	self:AddItem(lblTitle)
+	self.lblDescription:SetText(job.description)
+	self.lblDescription:SizeToContents()
 
-	local lblDescription = vgui.Create("DLabel")
-	lblDescription:SetWide(self:GetWide() - 20)
-	lblDescription:SetAutoStretchVertical(true)
-	lblDescription:SetText(job.description)
-	self:AddItem(lblDescription)
+	local weps = weaponString(job.weapons)
+	weps = weps ~= "" and weps or DarkRP.getPhrase("no_extra_weapons")
+
+	self.lblSweps:SetText(weps)
+
+	self:InvalidateLayout()
+	timer.Simple(0, fn.Curry(self.InvalidateLayout, 2)(self))
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")

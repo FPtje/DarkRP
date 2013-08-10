@@ -423,6 +423,7 @@ local english = {
 	buy_x = "Buy %s",
 
 	-- F4menu
+	no_extra_weapons = "This job has no extra weapons.",
 	-- Tab 1
 	give_money = "Give money to the player you're looking at",
 	drop_money = "Drop money",
