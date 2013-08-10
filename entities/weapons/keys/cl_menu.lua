@@ -61,7 +61,7 @@ local function KeysMenu(um)
 
 	local ent = LocalPlayer():GetEyeTrace().Entity
 	-- Don't open the menu if the entity is not ownable, the entity is too far away or the door settings are not loaded yet
-	if not IsValid(ent) or not ent:IsOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 or not ent.DoorData then return end
+	if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 or not ent.DoorData then return end
 
 	KeyFrameVisible = true
 	local Frame = vgui.Create("DFrame")
@@ -71,7 +71,7 @@ local function KeysMenu(um)
 
 	function Frame:Think()
 		local ent = LocalPlayer():GetEyeTrace().Entity
-		if not IsValid(ent) or not ent:IsOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
+		if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
 			self:Close()
 		end
 		if not self.Dragging then return end
@@ -91,7 +91,7 @@ local function KeysMenu(um)
 		self:Remove()
 	end
 
-	if ent:OwnedBy(LocalPlayer()) then
+	if ent:isKeysOwnedBy(LocalPlayer()) then
 		local Owndoor = AddButtonToFrame(Frame)
 		Owndoor:SetText(DarkRP.getPhrase("sell_x", entType))
 		Owndoor.DoClick = function() RunConsoleCommand("darkrp", "toggleown") Frame:Close() end
@@ -102,7 +102,7 @@ local function KeysMenu(um)
 			local menu = DermaMenu()
 			menu.found = false
 			for k,v in pairs(player.GetAll()) do
-				if not ent:OwnedBy(v) and not ent:AllowedToOwn(v) then
+				if not ent:isKeysOwnedBy(v) and not ent:isKeysAllowedToOwn(v) then
 					menu.found = true
 					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "ao", v:SteamID()) end)
 				end
@@ -118,7 +118,7 @@ local function KeysMenu(um)
 		RemoveOwner.DoClick = function()
 			local menu = DermaMenu()
 			for k,v in pairs(player.GetAll()) do
-				if (ent:OwnedBy(v) and not ent:IsMasterOwner(v)) or ent:AllowedToOwn(v) then
+				if (ent:isKeysOwnedBy(v) and not ent:isMasterOwner(v)) or ent:isKeysAllowedToOwn(v) then
 					menu.found = true
 					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "ro", v:SteamID()) end)
 				end
@@ -128,7 +128,7 @@ local function KeysMenu(um)
 			end
 			menu:Open()
 		end
-		if not ent:IsMasterOwner(LocalPlayer()) then
+		if not ent:isMasterOwner(LocalPlayer()) then
 			RemoveOwner:SetDisabled(true)
 		end
 
@@ -143,7 +143,7 @@ local function KeysMenu(um)
 			end,
 			function() end, DarkRP.getPhrase("ok"), DarkRP.getPhrase("cancel"))
 		end
-	elseif not ent:OwnedBy(LocalPlayer()) and not ent:IsOwned() and not ent.DoorData.NonOwnable and not ent.DoorData.GroupOwn and not ent.DoorData.TeamOwn then
+	elseif not ent:isKeysOwnedBy(LocalPlayer()) and not ent:isKeysOwned() and not ent.DoorData.NonOwnable and not ent.DoorData.GroupOwn and not ent.DoorData.TeamOwn then
 		if LocalPlayer():hasDarkRPPrivilege("rp_doorManipulation") then
 			local Owndoor = AddButtonToFrame(Frame)
 			Owndoor:SetText(DarkRP.getPhrase("buy_x", entType))
@@ -156,7 +156,7 @@ local function KeysMenu(um)
 			KeyFrameVisible = true
 			timer.Simple(0.3, function() KeyFrameVisible = false end)
 		end
-	elseif not ent:OwnedBy(LocalPlayer()) and ent:AllowedToOwn(LocalPlayer()) then
+	elseif not ent:isKeysOwnedBy(LocalPlayer()) and ent:isKeysAllowedToOwn(LocalPlayer()) then
 		if LocalPlayer():hasDarkRPPrivilege("rp_doorManipulation") then
 			local Owndoor = AddButtonToFrame(Frame)
 			Owndoor:SetText(DarkRP.getPhrase("coown_x", entType))

@@ -1,6 +1,6 @@
 local meta = FindMetaTable("Entity")
 local lastDataRequested = 0
-function meta:DrawOwnableInfo()
+function meta:drawOwnableInfo()
 	if LocalPlayer():InVehicle() then return end
 
 	local pos = {x = ScrW()/2, y = ScrH() / 2}
@@ -19,7 +19,7 @@ function meta:DrawOwnableInfo()
 	if doorDrawing == true then return end
 
 	for k,v in pairs(player.GetAll()) do
-		if self:OwnedBy(v) then
+		if self:isKeysOwnedBy(v) then
 			ownerstr = ownerstr .. v:Nick() .. "\n"
 		end
 	end
@@ -60,7 +60,7 @@ function meta:DrawOwnableInfo()
 		st = st .. self.DoorData.GroupOwn .. "\n"
 	end
 
-	if self:IsOwned() then
+	if self:isKeysOwned() then
 		if superAdmin then
 			if ownerstr ~= "" then
 				st = st .. DarkRP.getPhrase("keys_owned_by") .."\n" .. ownerstr

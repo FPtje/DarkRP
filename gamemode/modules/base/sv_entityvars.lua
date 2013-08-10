@@ -227,7 +227,7 @@ Send door data to players
 local function PlayerDoorCheck()
 	for k, ply in pairs(player.GetAll()) do
 		local trace = ply:GetEyeTrace()
-		if IsValid(trace.Entity) and (trace.Entity:IsDoor() or trace.Entity:IsVehicle()) and ply.LookingAtDoor ~= trace.Entity and trace.HitPos:Distance(ply:GetShootPos()) < 410 then
+		if IsValid(trace.Entity) and (trace.Entity:isDoor() or trace.Entity:IsVehicle()) and ply.LookingAtDoor ~= trace.Entity and trace.HitPos:Distance(ply:GetShootPos()) < 410 then
 			ply.LookingAtDoor = trace.Entity -- Variable that prevents streaming to clients every frame
 
 			trace.Entity.DoorData = trace.Entity.DoorData or {}

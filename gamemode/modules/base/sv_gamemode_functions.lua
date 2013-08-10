@@ -5,7 +5,7 @@ function GM:Initialize()
 	self.BaseClass:Initialize()
 end
 
-function GM:PlayerBuyDoor( objPl, objEnt )
+function GM:playerBuyDoor( objPl, objEnt )
 	return true;
 end
 
@@ -13,11 +13,11 @@ function GM:PlayerSellDoor( objPl, objEnt )
 	return false;
 end
 
-function GM:GetDoorCost( objPl, objEnt )
+function GM:getDoorCost( objPl, objEnt )
 	return GAMEMODE.Config.doorcost ~= 0 and  GAMEMODE.Config.doorcost or 30;
 end
 
-function GM:GetVehicleCost( objPl, objEnt )
+function GM:getVehicleCost( objPl, objEnt )
 	return GAMEMODE.Config.vehiclecost ~= 0 and  GAMEMODE.Config.vehiclecost or 40;
 end
 
@@ -51,11 +51,11 @@ function GM:DarkRPVarChanged(ply, var, oldvar, newvalue)
 
 end
 
-function GM:PlayerBoughtVehicle(ply, ent, cost)
+function GM:playerBoughtVehicle(ply, ent, cost)
 
 end
 
-function GM:PlayerBoughtDoor(ply, ent, cost)
+function GM:playerBoughtDoor(ply, ent, cost)
 
 end
 
@@ -823,7 +823,7 @@ function GM:PlayerDisconnected(ply)
 		ply.SleepRagdoll:Remove()
 	end
 
-	ply:unownAll()
+	ply:keysUnOwnAll()
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") disconnected", Color(0, 130, 255))
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
@@ -860,7 +860,7 @@ function GM:InitPostEntity()
 
 	for k, v in pairs(ents.GetAll()) do
 		local class = v:GetClass()
-		if GAMEMODE.Config.unlockdoorsonstart and v:IsDoor() then
+		if GAMEMODE.Config.unlockdoorsonstart and v:isDoor() then
 			v:Fire("unlock", "", 0)
 		end
     end
@@ -872,8 +872,8 @@ timer.Simple(0.1, function()
 end)
 
 function GM:PlayerLeaveVehicle(ply, vehicle)
-	if GAMEMODE.Config.autovehiclelock and vehicle:OwnedBy(ply) then
-		vehicle:KeysLock()
+	if GAMEMODE.Config.autovehiclelock and vehicle:isKeysOwnedBy(ply) then
+		vehicle:keysLock()
 	end
 	self.BaseClass:PlayerLeaveVehicle(ply, vehicle)
 end

@@ -666,7 +666,7 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
-	name = "playerBoughtVehicle",
+	name = "playerBoughtCustomVehicle",
 	description = "Called when a player bought a vehicle.",
 	parameters = {
 		{

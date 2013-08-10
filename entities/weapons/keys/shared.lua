@@ -78,7 +78,7 @@ end)
 function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
-	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or (trace.Entity.DoorData and trace.Entity.DoorData.NonOwnable) or (trace.Entity:IsDoor() and self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 65) or (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.Entity:NearestPoint(self.Owner:EyePos())) > 100) then
+	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or (trace.Entity.DoorData and trace.Entity.DoorData.NonOwnable) or (trace.Entity:isDoor() and self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 65) or (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.Entity:NearestPoint(self.Owner:EyePos())) > 100) then
 		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
 		return
 	end
@@ -96,10 +96,10 @@ function SWEP:PrimaryAttack()
 		end
 		DoorData.TeamOwn = decoded
 	end
-	if trace.Entity:OwnedBy(self.Owner) or (DoorData.GroupOwn and table.HasValue(RPExtraTeamDoors[DoorData.GroupOwn] or {}, Team)) or (DoorData.TeamOwn and DoorData.TeamOwn[Team]) then
+	if trace.Entity:isKeysOwnedBy(self.Owner) or (DoorData.GroupOwn and table.HasValue(RPExtraTeamDoors[DoorData.GroupOwn] or {}, Team)) or (DoorData.TeamOwn and DoorData.TeamOwn[Team]) then
 		if SERVER then
 			self.Owner:EmitSound("npc/metropolice/gear".. math.floor(math.Rand(1,7)) ..".wav")
-			trace.Entity:KeysLock() -- Lock the door immediately so it won't annoy people
+			trace.Entity:keysLock() -- Lock the door immediately so it won't annoy people
 
 			timer.Simple(0.9, function() if IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sound) end end)
 
@@ -133,7 +133,7 @@ end
 function SWEP:SecondaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
-	if not IsValid(trace.Entity) or not trace.Entity:IsOwnable() or (trace.Entity.DoorData and trace.Entity.DoorData.NonOwnable) or (trace.Entity:IsDoor() and self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 65) or (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.Entity:NearestPoint(self.Owner:EyePos())) > 100) then
+	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or (trace.Entity.DoorData and trace.Entity.DoorData.NonOwnable) or (trace.Entity:isDoor() and self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 65) or (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.Entity:NearestPoint(self.Owner:EyePos())) > 100) then
 		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
 		return
 	end
@@ -149,10 +149,10 @@ function SWEP:SecondaryAttack()
 		end
 		DoorData.TeamOwn = decoded
 	end
-	if trace.Entity:OwnedBy(self.Owner) or (DoorData.GroupOwn and table.HasValue(RPExtraTeamDoors[DoorData.GroupOwn] or {}, Team)) or (DoorData.TeamOwn and DoorData.TeamOwn[Team]) then
+	if trace.Entity:isKeysOwnedBy(self.Owner) or (DoorData.GroupOwn and table.HasValue(RPExtraTeamDoors[DoorData.GroupOwn] or {}, Team)) or (DoorData.TeamOwn and DoorData.TeamOwn[Team]) then
 		if SERVER then
 			self.Owner:EmitSound("npc/metropolice/gear".. math.floor(math.Rand(1,7)) ..".wav")
-			trace.Entity:KeysUnLock() -- Unlock the door immediately so it won't annoy people
+			trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
 
 			timer.Simple(0.9, function() if IsValid(self.Owner) then self.Owner:EmitSound(self.Sound) end end)
 
@@ -183,7 +183,7 @@ end
 SWEP.OnceReload = false
 function SWEP:Reload()
 	local trace = self.Owner:GetEyeTrace()
-	if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:IsDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
+	if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
 		if not self.OnceReload then
 			if SERVER then DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle"))) end
 			self.OnceReload = true

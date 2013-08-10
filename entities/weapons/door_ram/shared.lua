@@ -82,11 +82,11 @@ function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
 	self.Weapon:SetNextPrimaryFire(CurTime() + 2.5)
-	if (not IsValid(trace.Entity) or (not trace.Entity:IsDoor() and not trace.Entity:IsVehicle() and trace.Entity:GetClass() ~= "prop_physics")) then
+	if (not IsValid(trace.Entity) or (not trace.Entity:isDoor() and not trace.Entity:IsVehicle() and trace.Entity:GetClass() ~= "prop_physics")) then
 		return
 	end
 
-	if trace.Entity:IsDoor() and (self.Owner:EyePos():Distance(trace.HitPos) > 45 or
+	if trace.Entity:isDoor() and (self.Owner:EyePos():Distance(trace.HitPos) > 45 or
 		(not GAMEMODE.Config.canforcedooropen and trace.Entity.DoorData.NonOwnable)) then
 		return
 	end
@@ -104,15 +104,15 @@ function SWEP:PrimaryAttack()
 	if Owner then
 		c = Owner.warranted or Owner:isWanted() or Owner:isArrested()
 	end
-	if (trace.Entity:IsDoor()) then
+	if (trace.Entity:isDoor()) then
 		local allowed = false
 		local team = self.Owner:Team()
 		-- if we need a warrant to get in
-		if GAMEMODE.Config.doorwarrants and trace.Entity:IsOwned() and not trace.Entity:OwnedBy(self.Owner) then
+		if GAMEMODE.Config.doorwarrants and trace.Entity:isKeysOwned() and not trace.Entity:isKeysOwnedBy(self.Owner) then
 			-- if anyone who owns this door has a warrant for their arrest
 			-- allow the police to smash the door in
 			for k, v in pairs(player.GetAll()) do
-				if trace.Entity:OwnedBy(v) and (v.warranted == true or v:isWanted() or v:isArrested()) then
+				if trace.Entity:isKeysOwnedBy(v) and (v.warranted == true or v:isWanted() or v:isArrested()) then
 					allowed = true
 					break
 				end
@@ -133,7 +133,7 @@ function SWEP:PrimaryAttack()
 		end
 		-- Do we have a warrant for this player?
 		if allowed then
-			trace.Entity:KeysUnLock()
+			trace.Entity:keysUnLock()
 			trace.Entity:Fire("open", "", .6)
 			trace.Entity:Fire("setanimation", "open", .6)
 		else
@@ -145,7 +145,7 @@ function SWEP:PrimaryAttack()
 		if driver and driver.ExitVehicle then
 			driver:ExitVehicle()
 		end
-		trace.Entity:KeysLock()
+		trace.Entity:keysLock()
 	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
 		if not c then
 			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))

@@ -24,3 +24,18 @@ DarkRP.addChatReceiver = DarkRP.stub{
 	returns = {},
 	metatable = DarkRP
 }
+
+DarkRP.removeChatReceiver = DarkRP.stub{
+	name = "removeChatReceiver",
+	description = "Remove a chat command receiver",
+	parameters = {
+		{
+			name = "prefix",
+			description = "The chat command itself (\"/pm\", \"/ooc\", \"/me\" are some examples)",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {},
+	metatable = DarkRP
+}

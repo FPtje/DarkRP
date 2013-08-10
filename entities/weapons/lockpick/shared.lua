@@ -77,7 +77,7 @@ function SWEP:PrimaryAttack()
 	local e = trace.Entity
 	if SERVER and e.isFadingDoor then SendUserMessage("IsFadingDoor", self.Owner, e) end -- The fading door tool only sets isFadingDoor serverside, for the lockpick to work we need this to be set clientside too.
 	if not IsValid(e) or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
-		(not e:IsDoor() and not e:IsVehicle() and not string.find(string.lower(e:GetClass()), "vehicle") and not e.isFadingDoor) then
+		(not e:isDoor() and not e:IsVehicle() and not string.find(string.lower(e:GetClass()), "vehicle") and not e.isFadingDoor) then
 		return
 	end
 
@@ -133,7 +133,7 @@ function SWEP:Succeed()
 			timer.Simple(5, function() if trace.Entity.fadeActive then trace.Entity:fadeDeactivate() end end)
 		end
 	elseif IsValid(trace.Entity) and trace.Entity.Fire then
-		trace.Entity:KeysUnLock()
+		trace.Entity:keysUnLock()
 		trace.Entity:Fire("open", "", .6)
 		trace.Entity:Fire("setanimation","open",.6)
 	end
@@ -154,7 +154,7 @@ function SWEP:Think()
 		if not IsValid(trace.Entity) then
 			self:Fail()
 		end
-		if trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or (not trace.Entity:IsDoor() and not trace.Entity:IsVehicle() and not string.find(string.lower(trace.Entity:GetClass()), "vehicle") and not trace.Entity.isFadingDoor) then
+		if trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or (not trace.Entity:isDoor() and not trace.Entity:IsVehicle() and not string.find(string.lower(trace.Entity:GetClass()), "vehicle") and not trace.Entity.isFadingDoor) then
 			self:Fail()
 		end
 		if self.EndPick <= CurTime() then

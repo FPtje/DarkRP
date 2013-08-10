@@ -18,4 +18,33 @@ DarkRP.defineChatCommand = DarkRP.stub{
 	returns = {},
 	metatable = DarkRP
 }
--- PostPlayerSay
+
+DarkRP.hookStub{
+	name = "PostPlayerSay",
+	description = "Called after a player has said something.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who spoke.",
+			type = "Player"
+		},
+		{
+			name = "text",
+			description = "The thing they said.",
+			type = "string"
+		},
+		{
+			name = "teamonly",
+			description = "Whether they said it to their team only.",
+			type = "boolean"
+		},
+		{
+			name = "dead",
+			description = "Whether they are dead.",
+			type = "boolean"
+		}
+	},
+	returns = {
+
+	}
+}

@@ -1,10 +1,10 @@
 local function onBought(ply, ent)
 	for k,v in pairs(ent.Seats or {}) do
-		v:Own(ply)
+		v:keysOwn(ply)
 	end
 end
-hook.Add("PlayerBuyVehicle", "PassengerModCompatibility", onBought)
-hook.Add("playerBoughtVehicle", "PassengerModCompatibility", function(ply, _, ent) onBought(ply, ent) end)
+hook.Add("playerBoughtVehicle", "PassengerModCompatibility", onBought)
+hook.Add("playerBoughtCustomVehicle", "PassengerModCompatibility", function(ply, _, ent) onBought(ply, ent) end)
 
 
 local function onLocked(ent)
@@ -23,7 +23,7 @@ local function onLocked(ent)
 
 	-- Locks the vehicle if you're unlocking a passenger seat:
 	if IsValid(ent:GetParent()) and ent:GetParent():IsVehicle() then
-		ent:GetParent():KeysLock()
+		ent:GetParent():keysLock()
 	end
 end
 hook.Add("onKeysLocked", "PassengerModCompatibility", onLocked)
@@ -44,7 +44,7 @@ local function onUnlocked(ent)
 
 	-- Unlocks the vehicle if you're unlocking a passenger seat:
 	if IsValid(ent:GetParent()) and ent:GetParent():IsVehicle() then
-		ent:GetParent():KeysUnLock()
+		ent:GetParent():keysUnLock()
 	end
 end
 hook.Add("onKeysUnlocked", "PassengerModCompatibility", onUnlocked)

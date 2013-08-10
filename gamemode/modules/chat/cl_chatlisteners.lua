@@ -46,7 +46,7 @@ Remove a chat command.
 
 prefix: the command, like in addChatReceiver
 ---------------------------------------------------------------------------*/
-function GM:removeChatReceiver(prefix)
+function DarkRP.removeChatReceiver(prefix)
 	receiverConfigs[prefix] = nil
 end
 
