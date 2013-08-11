@@ -36,11 +36,12 @@ function PANEL:Init()
 	self:SetPadding(10)
 
 	self.lblTitle = vgui.Create("DLabel")
-	self.lblTitle:SetFont("HUDNumber5")
+	self.lblTitle:SetFont("F4MenuFont2")
 	self:AddItem(self.lblTitle)
 
 	self.lblDescription = vgui.Create("DLabel")
 	self.lblDescription:SetWide(self:GetWide() - 20)
+	self.lblDescription:SetFont("Ubuntu Light")
 	self.lblDescription:SetAutoStretchVertical(true)
 	self:AddItem(self.lblDescription)
 
@@ -49,7 +50,7 @@ function PANEL:Init()
 	self:AddItem(self.filler)
 
 	self.lblWeapons = vgui.Create("DLabel")
-	self.lblWeapons:SetFont("HUDNumber5")
+	self.lblWeapons:SetFont("F4MenuFont2")
 	self.lblWeapons:SetText("Weapons")
 	self.lblWeapons:SizeToContents()
 	self.lblWeapons:SetTall(50)
@@ -57,6 +58,7 @@ function PANEL:Init()
 
 	self.lblSweps = vgui.Create("DLabel")
 	self.lblSweps:SetAutoStretchVertical(true)
+	self.lblSweps:SetFont("Ubuntu Light")
 	self:AddItem(self.lblSweps)
 end
 

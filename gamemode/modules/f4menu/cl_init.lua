@@ -55,3 +55,20 @@ Hooks
 hook.Add("F4MenuTabs", "DefaultTabs", function()
 	DarkRP.addF4MenuTab(DarkRP.getPhrase("jobs"), vgui.Create("F4MenuJobs"))
 end)
+
+/*---------------------------------------------------------------------------
+Fonts
+---------------------------------------------------------------------------*/
+surface.CreateFont("F4MenuFont1", {
+		size = 23,
+		weight = 400,
+		antialias = true,
+		shadow = false,
+		font = "Ubuntu Light"})
+
+surface.CreateFont("F4MenuFont2", {
+		size = 30,
+		weight = 800,
+		antialias = true,
+		shadow = false,
+		font = "Ubuntu Light"})
