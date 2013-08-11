@@ -125,6 +125,12 @@ AddChatCommand("/sleep", KnockoutToggle)
 AddChatCommand("/wake", KnockoutToggle)
 AddChatCommand("/wakeup", KnockoutToggle)
 
+hook.Add("OnPlayerChangedTeam", "SleepMod", function(ply)
+	if ply.Sleeping then
+		KnockoutToggle(ply, "force")
+	end
+end)
+
 local function DamageSleepers(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()
 	local attacker = dmginfo:GetAttacker()
