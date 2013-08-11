@@ -1,4 +1,4 @@
-Downloading a zip file from github and unpacking it is the worst way to install DarkRP.
+Downloading a zip file from GitHub and unpacking it is the worst way to install DarkRP.
 The biggest problem with it is that you cannot reasonably update.
 
 There is a way to keep your DarkRP up to date, even if you modified it!
