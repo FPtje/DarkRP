@@ -125,6 +125,12 @@ DarkRP.defineChatCommand("sleep", KnockoutToggle)
 DarkRP.defineChatCommand("wake", KnockoutToggle)
 DarkRP.defineChatCommand("wakeup", KnockoutToggle)
 
+hook.Add("OnPlayerChangedTeam", "SleepMod", function(ply)
+	if ply.Sleeping then
+		KnockoutToggle(ply, "force")
+	end
+end)
+
 local function DamageSleepers(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()
 	local attacker = dmginfo:GetAttacker()

@@ -73,8 +73,6 @@ GM.Config.earthquakes 					= false
 GM.Config.enablebuyhealth 				= true
 -- enablebuypistol - Turn /buy on of off.
 GM.Config.enablebuypistol 				= true
--- enableshipments - Turn /buyshipment on or off.
-GM.Config.enableshipments 				= true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
 GM.Config.enforceplayermodel 			= true
 -- globalshow - Whether or not to display player info above players' heads in-game.
