@@ -105,7 +105,7 @@ function meta:RestorePlayerData()
 
 		self:SetDarkRPVar("money", GAMEMODE.Config.startingmoney)
 		self:SetDarkRPVar("salary", GAMEMODE.Config.normalsalary)
-		self:SetDarkRPVar(string.gsub(self:SteamName(), "\\\"", "\""))
+		self:SetDarkRPVar("name", string.gsub(self:SteamName(), "\\\"", "\""))
 
 		error("Failed to retrieve player information from MySQL server")
 	end)
