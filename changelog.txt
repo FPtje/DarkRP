@@ -1,5 +1,7 @@
 This list is missing content. For a full list see:
-http://code.google.com/p/darkrp/source/list
+https://github.com/FPtje/DarkRP/commits/master (October 2012 and later)
+and
+http://code.google.com/p/darkrp/source/list (early-October 2012 and earlier)
 for the latest changes
 
 DarkRP 2.4.3

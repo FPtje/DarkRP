@@ -1,11 +1,5 @@
 Avoid editing DarkRP core files AT ALL COST!
-DarkRP files are not meant for you to be edited, except for these files:
-- shared.lua
-- addentities.lua
-- _MySQL.lua
-- ammotypes.lua
-- config.lua
-- licenseweapons.lua
+DarkRP files are not meant for you to be edited, except for files in the config folder.
 
 Anything in DarkRP should be changeable without having to change core DarkRP files.
 If this isn't possible, it should be MADE possible.
