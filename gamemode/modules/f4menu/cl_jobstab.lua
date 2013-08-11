@@ -1,7 +1,37 @@
 /*---------------------------------------------------------------------------
-Left panel for the jobs
+Vote/become job button
 ---------------------------------------------------------------------------*/
 local PANEL = {}
+
+function PANEL:Init()
+	self.BaseClass.Init(self)
+	self:SetFont("F4MenuFont2")
+	self:SetTall(50)
+	self:SetTextColor(Color(255, 255, 255, 255))
+end
+
+function PANEL:setJob(job, closeFunc)
+	if job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
+		self:SetText(DarkRP.getPhrase("create_vote_for_job"))
+		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "darkrp", "vote" .. job.command)}
+	else
+		self:SetText(DarkRP.getPhrase("become_job"))
+		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "darkrp", job.command)}
+	end
+end
+
+local red, dark = Color(140, 0, 0, 180), Color(0, 0, 0, 200)
+function PANEL:Paint(w, h)
+	draw.RoundedBox(4, 0, 0, w, h, dark)
+	draw.RoundedBox(4, 5, 5, w - 10, h - 10, red)
+end
+
+derma.DefineControl("F4MenuJobBecomeButton", "", PANEL, "DButton")
+
+/*---------------------------------------------------------------------------
+Left panel for the jobs
+---------------------------------------------------------------------------*/
+PANEL = {}
 
 function PANEL:Init()
 	self:SetBackgroundColor(Color(0, 0, 0, 0))
@@ -10,7 +40,6 @@ function PANEL:Init()
 	self.VBar.Paint = fn.Id
 	self.VBar.btnUp.Paint = fn.Id
 	self.VBar.btnDown.Paint = fn.Id
-
 end
 
 function PANEL:Refresh()
@@ -60,6 +89,9 @@ function PANEL:Init()
 	self.lblSweps:SetAutoStretchVertical(true)
 	self.lblSweps:SetFont("Ubuntu Light")
 	self:AddItem(self.lblSweps)
+
+	self.btnGetJob = vgui.Create("F4MenuJobBecomeButton", self)
+	self.btnGetJob:Dock(BOTTOM)
 end
 
 local black = Color(0, 0, 0, 170)
@@ -83,8 +115,9 @@ function PANEL:updateInfo(job)
 
 	self.lblSweps:SetText(weps)
 
+	self.btnGetJob:setJob(job, fn.Partial(self:GetParent():GetParent().Hide, self:GetParent():GetParent()))
+
 	self:InvalidateLayout()
-	timer.Simple(0, fn.Curry(self.InvalidateLayout, 2)(self))
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")

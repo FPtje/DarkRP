@@ -424,6 +424,9 @@ local english = {
 
 	-- F4menu
 	no_extra_weapons = "This job has no extra weapons.",
+	become_job = "Become",
+	create_vote_for_job = "Create vote",
+
 	-- Tab 1
 	give_money = "Give money to the player you're looking at",
 	drop_money = "Drop money",
