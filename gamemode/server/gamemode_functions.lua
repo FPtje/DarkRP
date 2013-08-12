@@ -882,11 +882,12 @@ end
 timer.Create("RP_DoorCheck", 0.1, 0, PlayerDoorCheck)
 
 function GM:GetFallDamage( ply, flFallSpeed )
-	if GetConVarNumber("mp_falldamage") == 1 then
-		return flFallSpeed / 15
+	if GetConVarNumber("mp_falldamage") == 1 or GAMEMODE.Config.realisticfalldamage then
+		if GAMEMODE.Config.falldamagedamper then return flFallSpeed / GAMEMODE.Config.falldamagedamper else return flFallSpeed / 15 end
+	else
+		if GAMEMODE.Config.falldamageamount then return GAMEMODE.Config.falldamageamount else return 10 end
 	end
-	return 10
-end
+end	
 
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
