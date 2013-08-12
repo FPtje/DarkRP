@@ -50,7 +50,7 @@ end
 
 -- For overriding
 function PANEL:setDarkRPItem(item)
-
+	self.DarkRPItem = item
 end
 
 function PANEL:Refresh()
@@ -87,7 +87,7 @@ local function canGetJob(job)
 end
 
 function PANEL:setDarkRPItem(job)
-	self.DarkRPItem = job
+	self.BaseClass.setDarkRPItem(self, job)
 
 	self:SetBorderColor(job.color)
 	self:SetModel(istable(job.model) and job.model[1] or job.model)
@@ -121,3 +121,30 @@ function PANEL:Refresh()
 end
 
 derma.DefineControl("F4MenuJobButton", "", PANEL, "F4MenuItemButton")
+
+/*---------------------------------------------------------------------------
+custom entity button
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+function PANEL:setDarkRPItem(item)
+	self.BaseClass.setDarkRPItem(self, item)
+	self:SetBorderColor(Color(140, 0, 0, 180))
+	self:SetModel(item.model)
+	self:SetText(item.name)
+	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.price))
+end
+
+derma.DefineControl("F4MenuEntityButton", "", PANEL, "F4MenuItemButton")
+
+/*---------------------------------------------------------------------------
+Button for purchasing pistols
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+function PANEL:setDarkRPItem(item)
+	self.BaseClass.setDarkRPItem(self, item)
+	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.pricesep))
+end
+
+derma.DefineControl("F4MenuPistolButton", "", PANEL, "F4MenuEntityButton")
