@@ -70,4 +70,37 @@ function PANEL:PerformLayout()
 	end
 	self.BaseClass.PerformLayout(self)
 end
+
 derma.DefineControl("F4MenuShipments", "", PANEL, "F4MenuEntitiesBase")
+
+/*---------------------------------------------------------------------------
+Gun buying panel
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+local function canBuyGun(ship)
+	local ply = LocalPlayer()
+
+	if GAMEMODE.Config.restrictbuypistol and not table.HasValue(ship.allowed, ply:Team()) then return false end
+	if ship.customCheck and not ship.customCheck(ply) then return false end
+	if not ply:canAfford(ship.pricesep) then return false end
+
+	return true
+end
+
+function PANEL:generateButtons()
+	local shipments = fn.Filter(fn.Curry(fn.GetValue, 2)("seperate"), CustomShipments)
+
+	for k,v in pairs(shipments) do
+		local pnl = vgui.Create("F4MenuPistolButton", self)
+		pnl:setDarkRPItem(v)
+
+		if not canBuyGun(v) then
+			pnl:SetDisabled(true)
+		end
+
+		self:AddItem(pnl)
+	end
+end
+
+derma.DefineControl("F4MenuGuns", "", PANEL, "F4MenuEntitiesBase")

@@ -108,6 +108,7 @@ function PANEL:DoDoubleClick()
 	else
 		RunConsoleCommand("darkrp", job.command)
 	end
+	timer.Simple(1, fn.Partial(self:GetParent():GetParent().Refresh, self:GetParent():GetParent()))
 end
 
 function PANEL:Refresh()
@@ -133,18 +134,25 @@ function PANEL:setDarkRPItem(item)
 	self:SetModel(item.model)
 	self:SetText(item.name)
 	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.price))
+
+	self.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyshipment", self.DarkRPItem.name)
 end
 
 derma.DefineControl("F4MenuEntityButton", "", PANEL, "F4MenuItemButton")
 
 /*---------------------------------------------------------------------------
-Button for purchasing pistols
+Button for purchasing guns
 ---------------------------------------------------------------------------*/
 PANEL = {}
 
 function PANEL:setDarkRPItem(item)
 	self.BaseClass.setDarkRPItem(self, item)
+	self:SetBorderColor(Color(140, 0, 0, 180))
+	self:SetModel(item.model)
+	self:SetText(item.name)
 	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.pricesep))
+
+	self.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buy", self.DarkRPItem.name)
 end
 
-derma.DefineControl("F4MenuPistolButton", "", PANEL, "F4MenuEntityButton")
+derma.DefineControl("F4MenuPistolButton", "", PANEL, "F4MenuItemButton")

@@ -55,6 +55,12 @@ Hooks
 hook.Add("F4MenuTabs", "DefaultTabs", function()
 	DarkRP.addF4MenuTab(DarkRP.getPhrase("jobs"), vgui.Create("F4MenuJobs"))
 	DarkRP.addF4MenuTab(DarkRP.getPhrase("shipments"), vgui.Create("F4MenuShipments"))
+
+	local guns = fn.Filter(fn.Curry(fn.GetValue, 2)("seperate"), CustomShipments)
+	PrintTable(guns)
+	if #guns > 0 then
+		DarkRP.addF4MenuTab(DarkRP.getPhrase("F4guns"), vgui.Create("F4MenuGuns"))
+	end
 end)
 
 /*---------------------------------------------------------------------------

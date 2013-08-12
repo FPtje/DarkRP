@@ -427,6 +427,7 @@ local english = {
 	become_job = "Become job",
 	create_vote_for_job = "Create vote",
 	shipments = "Shipments",
+	F4guns = "Guns",
 
 	-- Tab 1
 	give_money = "Give money to the player you're looking at",
