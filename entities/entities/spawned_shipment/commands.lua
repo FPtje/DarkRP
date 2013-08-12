@@ -20,12 +20,12 @@ local function createShipment(ply, args)
 		end
 	end
 
-	if not shipID then 
+	if not shipID then
 		GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/makeshipment", ""))
 		return
 	end
 
-	local crate = ents.Create("spawned_shipment")
+	local crate = ents.Create(CustomShipments[shipID].shipmentClass or "spawned_shipment")
 	crate.SID = ply.SID
 	crate:SetPos(ent:GetPos())
 	crate.nodupe = true
