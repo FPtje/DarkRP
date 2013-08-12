@@ -11,6 +11,7 @@ local ipairs = ipairs
 local error = error
 local math = math
 local select = select
+local _G = _G
 
 
 module("fn")
@@ -20,8 +21,9 @@ Parameter manipulation
 ---------------------------------------------------------------------------*/
 Id = function(...) return ... end
 
-Flip = function(f) return
-	function(b, a, ...)
+Flip = function(f)
+	if not f then error("not a function") end
+	return function(b, a, ...)
 		return f(a, b, ...)
 	end
 end
@@ -81,6 +83,14 @@ Curry = function(func, num_args)
    end
 end
 
+-- Thanks Lexic!
+Partial = function(func, ...)
+	local args = {...}
+	return function(...)
+		return func(unpack(table.Add( args, {...})))
+	end
+end
+
 Apply = function(f, ...) return f(...) end
 
 Const = function(a, b) return a end
@@ -90,6 +100,10 @@ Until = function(cmp, fn, val)
 	end
 	return Until(cmp, fn, fn(val))
 end
+
+Seq = function(f, x) f(x) return x end
+
+GetGlobalVar = function(key) return _G[key] end
 
 /*---------------------------------------------------------------------------
 Mathematical operators and functions
@@ -118,17 +132,20 @@ Functional logical operators and conditions
 ---------------------------------------------------------------------------*/
 FAnd = function(fns)
 	return function(x)
+		local val
 		for _, f in pairs(fns) do
-			if not f(x) then return false end
+			val = f(x)
+			if not val then return false end
 		end
-		return true
+		return val
 	end
 end
 
 FOr = function(fns)
 	return function(x)
 		for _, f in pairs(fns) do
-			if f(x) then return true end
+			local val = f(x)
+			if val then return val end
 		end
 		return false
 	end
