@@ -136,7 +136,13 @@ function PANEL:Init()
 	self.pnlRight:Dock(RIGHT)
 
 	self:fillData()
-	self.pnlRight:updateInfo(RPExtraTeams[1])
+
+	local job = RPExtraTeams[1]
+	for k, v in pairs(self.pnlLeft:GetItems()) do
+		job = v.DarkRPItem
+		if not v:GetDisabled() then break end
+	end
+	self.pnlRight:updateInfo(job)
 end
 
 function PANEL:PerformLayout()
