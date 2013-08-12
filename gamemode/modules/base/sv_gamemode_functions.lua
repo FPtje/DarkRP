@@ -832,12 +832,12 @@ function GM:PlayerDisconnected(ply)
 end
 
 function GM:GetFallDamage( ply, flFallSpeed )
-	if GetConVarNumber("mp_falldamage") == 1 then
-		return flFallSpeed / 15
+	if GetConVarNumber("mp_falldamage") == 1 or GAMEMODE.Config.realisticfalldamage then
+		if GAMEMODE.Config.falldamagedamper then return flFallSpeed / GAMEMODE.Config.falldamagedamper else return flFallSpeed / 15 end
+	else
+		if GAMEMODE.Config.falldamageamount then return GAMEMODE.Config.falldamageamount else return 10 end
 	end
-	return 10
-end
-
+end	
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
 	InitPostEntityCalled = true
