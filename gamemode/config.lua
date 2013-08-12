@@ -135,6 +135,8 @@ GM.Config.wallettax 					= false
 GM.Config.wantedsuicide 				= false
 -- showcrosshairs - Enable/disable crosshair visibility
 GM.Config.showcrosshairs				= true
+-- realisticfalldamage - Enable/Disable dynamic fall damage. Setting mp_falldamage to 1 will over-ride this.
+GM.Config.realisticfalldamage			= true
 
 /*
 Value settings
@@ -229,6 +231,10 @@ GM.Config.wallettaxtime					= 600
 GM.Config.wantedtime					= 120
 -- walkspeed - Sets the max walking speed.
 GM.Config.walkspeed						= 160
+-- falldamagedamper - The damper on realistic fall damage. Default is 15. Decrease this for more damage.
+GM.Config.falldamagedamper				= 15
+-- falldamageamount - The base damage taken from falling for static fall damage. Default is 10
+GM.Config.falldamageamount				= 10
 
 /*---------------------------------------------------------------------------
 Other settings
