@@ -4,7 +4,11 @@ FAdmin.StartHooks["Jail"] = function()
 	FAdmin.Commands.AddCommand("UnJail", nil, "<Player>")
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Jail", function(ply)
-		RunConsoleCommand("_FAdmin", "jail", ply:SteamID())
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+			RunConsoleCommand("_FAdmin", "jail", ply:Nick())
+		else
+			RunConsoleCommand("_FAdmin", "jail", ply:SteamID())
+		end
 	end)
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
@@ -18,7 +22,9 @@ FAdmin.StartHooks["Jail"] = function()
 	Color(255, 130, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Jail", ply) end,
 	function(ply, button)
-		if ply:FAdmin_GetGlobal("fadmin_jailed") then RunConsoleCommand("_FAdmin", "unjail", ply:SteamID()) button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
+		if ply:FAdmin_GetGlobal("fadmin_jailed") then 
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then RunConsoleCommand("_FAdmin", "unjail", ply:Nick()) else RunConsoleCommand("_FAdmin", "unjail", ply:SteamID()) end button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
+		-- I assume there is a good reason why this was all in one line. Figured I keep it that way.
 
 		local menu = DermaMenu()
 		local Title = vgui.Create("DLabel")
@@ -33,12 +39,20 @@ FAdmin.StartHooks["Jail"] = function()
 			if v == "Unjail" then continue end
 			FAdmin.PlayerActions.addTimeSubmenu(menu, v .. " jail",
 				function()
-					RunConsoleCommand("_FAdmin", "Jail", ply:SteamID(), k)
+					if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+						RunConsoleCommand("_FAdmin", "Jail", ply:Nick(), k)
+					else
+						RunConsoleCommand("_FAdmin", "Jail", ply:SteamID(), k)
+					end
 					button:SetText("Unjail") button:GetParent():InvalidateLayout()
 					button:SetImage2("FAdmin/icons/disable")
 				end,
 				function(secs)
-					RunConsoleCommand("_FAdmin", "Jail", ply:SteamID(), k, secs)
+					if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+						RunConsoleCommand("_FAdmin", "Jail", ply:Nick(), k, secs)
+					else
+						RunConsoleCommand("_FAdmin", "Jail", ply:SteamID(), k, secs)
+					end
 					button:SetText("Unjail")
 					button:GetParent():InvalidateLayout()
 					button:SetImage2("FAdmin/icons/disable")

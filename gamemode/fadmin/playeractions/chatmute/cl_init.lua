@@ -14,13 +14,21 @@ FAdmin.StartHooks["Chatmute"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Chatmute", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_chatmuted") then
 			FAdmin.PlayerActions.addTimeMenu(function(secs)
-				RunConsoleCommand("_FAdmin", "chatmute", ply:SteamID(), secs)
+				if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+					RunConsoleCommand("_FAdmin", "chatmute", ply:Nick(), secs)
+				else
+					RunConsoleCommand("_FAdmin", "chatmute", ply:SteamID(), secs)
+				end
 				button:SetImage2("null")
 				button:SetText("Unmute chat")
 				button:GetParent():InvalidateLayout()
 			end)
 		else
-			RunConsoleCommand("_FAdmin", "UnChatmute", ply:SteamID())
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "UnChatmute", ply:Nick())
+			else
+				RunConsoleCommand("_FAdmin", "UnChatmute", ply:SteamID())
+			end
 		end
 
 		button:SetImage2("FAdmin/icons/disable")

@@ -13,9 +13,17 @@ FAdmin.StartHooks["zz_Cloak"] = function()
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Cloak", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_cloaked") then
-			RunConsoleCommand("_FAdmin", "Cloak", ply:SteamID())
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "Cloak", ply:Nick())
+			else
+				RunConsoleCommand("_FAdmin", "Cloak", ply:SteamID())
+			end
 		else
-			RunConsoleCommand("_FAdmin", "Uncloak", ply:SteamID())
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "Uncloak", ply:Nick())
+			else
+				RunConsoleCommand("_FAdmin", "Uncloak", ply:SteamID())
+			end
 		end
 
 		if not ply:FAdmin_GetGlobal("FAdmin_cloaked") then button:SetImage2("FAdmin/icons/disable") button:SetText("Uncloak") button:GetParent():InvalidateLayout() return end

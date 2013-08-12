@@ -12,8 +12,11 @@ local function GiveWeaponGui(ply)
 	function WeaponMenu:DoGiveWeapon(SpawnName, IsAmmo)
 		if not ply:IsValid() then return end
 		local giveWhat = (IsAmmo and "ammo") or "weapon"
-
-		RunConsoleCommand("FAdmin", "give"..giveWhat, ply:SteamID(), SpawnName)
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+			RunConsoleCommand("FAdmin", "give"..giveWhat, ply:Nick(), SpawnName)
+		else
+			RunConsoleCommand("FAdmin", "give"..giveWhat, ply:SteamID(), SpawnName)
+		end
 	end
 
 	WeaponMenu:BuildList()

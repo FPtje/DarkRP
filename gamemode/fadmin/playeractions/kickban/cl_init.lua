@@ -204,7 +204,11 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 	FAdmin.Commands.AddCommand("unban", "<SteamID>")
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Quick Kick", function(ply, Panel)
-		RunConsoleCommand("_FAdmin", "kick", ply:SteamID(), "Quick kick")
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+			RunConsoleCommand("_FAdmin", "kick", ply:Nick(), "Quick kick")
+		else
+			RunConsoleCommand("_FAdmin", "kick", ply:SteamID(), "Quick kick")
+		end
 		if ValidPanel(Panel) then Panel:Remove() end
 	end)
 
@@ -214,8 +218,12 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		if not IsValid(ply) then return end
 		local SteamID = ply:SteamID()
 		local NICK = ply:Nick()
-
-		RunConsoleCommand("FAdmin", "kick", SteamID, "start")
+		-- bots...
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+			RunConsoleCommand("FAdmin", "kick", NICK, "start")
+		else
+			RunConsoleCommand("FAdmin", "kick", SteamID, "start")
+		end
 		local Window = vgui.Create("DFrame")
 		Window:SetTitle("Reason for kicking")
 		Window:SetDraggable( false )
@@ -233,10 +241,14 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 
 		local TextEntry = vgui.Create("DTextEntry", InnerPanel )
 			function TextEntry:OnTextChanged()
-				RunConsoleCommand("_FAdmin", "kick", SteamID, "update", self:GetValue())
+				if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+					RunConsoleCommand("_FAdmin", "kick", NICK, "update", self:GetValue())
+				else
+					RunConsoleCommand("_FAdmin", "kick", SteamID, "update", self:GetValue())
+				end
 			end
 			TextEntry:SetText("Enter reason here")
-			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", SteamID, "execute", TextEntry:GetValue()) end
+			TextEntry.OnEnter = function() Window:Close() if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then RunConsoleCommand("_FAdmin", "kick", NICK, "execute", TextEntry:GetValue()) else RunConsoleCommand("_FAdmin", "kick", SteamID, "execute", TextEntry:GetValue()) end end
 			function TextEntry:OnFocusChanged(changed)
 				self:RequestFocus()
 				self:SelectAllText(true)
@@ -253,7 +265,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			Button:SetTall( 20 )
 			Button:SetWide( Button:GetWide() + 20 )
 			Button:SetPos( 5, 5 )
-			Button.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "kick", SteamID, "execute", TextEntry:GetValue()) end
+			Button.DoClick = function() Window:Close() if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then RunConsoleCommand("_FAdmin", "kick", NICK, "execute", TextEntry:GetValue()) else RunConsoleCommand("_FAdmin", "kick", SteamID, "execute", TextEntry:GetValue()) end end
 
 		local ButtonCancel = vgui.Create("DButton", ButtonPanel )
 			ButtonCancel:SetText("Cancel")
@@ -261,7 +273,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 			ButtonCancel:SetTall( 20 )
 			ButtonCancel:SetWide( Button:GetWide() + 20 )
 			ButtonCancel:SetPos( 5, 5 )
-			ButtonCancel.DoClick = function() Window:Close() RunConsoleCommand("FAdmin", "kick", SteamID, "cancel") end
+			ButtonCancel.DoClick = function() Window:Close() if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then RunConsoleCommand("FAdmin", "kick", NICK, "cancel") else RunConsoleCommand("FAdmin", "kick", SteamID, "cancel") end end
 			ButtonCancel:MoveRightOf( Button, 5 )
 
 		ButtonPanel:SetWide( Button:GetWide() + 5 + ButtonCancel:GetWide() + 10 )
@@ -289,6 +301,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 	end)
 
 	-- Ban button
+	-- Not adding bot support here. I smell trouble if support is added.
 	FAdmin.ScoreBoard.Player:AddActionButton("Ban", "FAdmin/icons/Ban", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ban", ply) end, function(ply)
 		local SteamID = ply:SteamID()
 		local NICK = ply:Nick()

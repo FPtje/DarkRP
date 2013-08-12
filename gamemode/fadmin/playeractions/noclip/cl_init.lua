@@ -19,9 +19,17 @@ FAdmin.StartHooks["zz_Noclip"] = function()
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetNoclip") end, function(ply, button)
 		if EnableDisableNoclip(ply) then
-			RunConsoleCommand("_FAdmin", "SetNoclip", ply:SteamID(), 0)
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "SetNoclip", ply:Nick(), 0)
+			else
+				RunConsoleCommand("_FAdmin", "SetNoclip", ply:SteamID(), 0)
+			end
 		else
-			RunConsoleCommand("_FAdmin", "SetNoclip", ply:SteamID(), 1)
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "SetNoclip", ply:Nick(), 1)
+			else
+				RunConsoleCommand("_FAdmin", "SetNoclip", ply:SteamID(), 1)
+			end
 		end
 
 		if EnableDisableNoclip(ply) then

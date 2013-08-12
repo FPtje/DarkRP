@@ -60,7 +60,11 @@ local function MessageGui(ply)
 	OK:AlignBottom(20)
 	function OK:DoClick()
 		frame:Close()
-		RunConsoleCommand("_FAdmin", "Message", ply:SteamID(), MsgType, TextBox:GetValue())
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- Why am I even doing bot support for messages?
+			RunConsoleCommand("_FAdmin", "Message", ply:Nick(), MsgType, TextBox:GetValue())
+		else
+			RunConsoleCommand("_FAdmin", "Message", ply:SteamID(), MsgType, TextBox:GetValue())
+		end
 	end
 end
 
