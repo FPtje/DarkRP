@@ -50,6 +50,15 @@ function SWEP:Deploy()
 	self.Owner:DrawWorldModel(false)
 end
 
+function SWEP:Holster()
+	if not SERVER then return true end
+	
+	self.Owner:DrawViewModel(true)
+	self.Owner:DrawWorldModel(true)
+
+	return true
+end
+
 function SWEP:Equip(newOwner)
 	if not SERVER then return end
 
