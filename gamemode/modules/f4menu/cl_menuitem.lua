@@ -134,8 +134,6 @@ function PANEL:setDarkRPItem(item)
 	self:SetModel(item.model)
 	self:SetText(item.name)
 	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.price))
-
-	self.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyshipment", self.DarkRPItem.name)
 end
 
 derma.DefineControl("F4MenuEntityButton", "", PANEL, "F4MenuItemButton")

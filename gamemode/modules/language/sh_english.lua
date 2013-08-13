@@ -400,7 +400,7 @@ local english = {
 	x_had_hit_ordered_by_y = "%s had an active hit ordered by %s",
 
 	-- Vote Restrictions
-	hobos_no_rights = "Hobos have no voting rights!", -- :'(
+	hobos_no_rights = "Hobos have no voting rights!",
 	gangsters_cant_vote_for_government = "Gangsters cannot vote for government things!",
 	government_cant_vote_for_gangsters = "Government officials cannot vote for gangster things!",
 
@@ -428,6 +428,7 @@ local english = {
 	create_vote_for_job = "Create vote",
 	shipments = "Shipments",
 	F4guns = "Guns",
+	F4entities = "WHAT DO I NAME THIS?",
 
 	-- Tab 1
 	give_money = "Give money to the player you're looking at",

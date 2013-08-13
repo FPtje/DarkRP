@@ -29,6 +29,42 @@ end
 
 derma.DefineControl("F4MenuEntitiesBase", "", PANEL, "DPanelList")
 
+/*---------------------------------------------------------------------------
+Entities panel
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+function PANEL:generateButtons()
+	for k,v in pairs(DarkRPEntities) do
+		local pnl = vgui.Create("F4MenuEntityButton", self)
+		pnl:setDarkRPItem(v)
+		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", v.cmd)
+		self:AddItem(pnl)
+	end
+end
+
+local function canBuyEntity(item)
+	local ply = LocalPlayer()
+
+	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false end
+	if item.customCheck and not item.customCheck(ply) then return false end
+	if not ply:canAfford(item.price) then return false end
+
+	return true
+end
+
+function PANEL:PerformLayout()
+	for k,v in pairs(self.Items) do
+		if not canBuyEntity(v.DarkRPItem) then
+			v:SetDisabled(true)
+		else
+			v:SetDisabled(false)
+		end
+	end
+	self.BaseClass.PerformLayout(self)
+end
+
+derma.DefineControl("F4MenuEntities", "", PANEL, "F4MenuEntitiesBase")
 
 /*---------------------------------------------------------------------------
 Shipments panel
@@ -52,10 +88,7 @@ function PANEL:generateButtons()
 		local pnl = vgui.Create("F4MenuEntityButton", self)
 		pnl:setDarkRPItem(v)
 
-		if not canBuyShipment(v) then
-			pnl:SetDisabled(true)
-		end
-
+		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyshipment", v.name)
 		self:AddItem(pnl)
 	end
 end
@@ -95,12 +128,20 @@ function PANEL:generateButtons()
 		local pnl = vgui.Create("F4MenuPistolButton", self)
 		pnl:setDarkRPItem(v)
 
-		if not canBuyGun(v) then
-			pnl:SetDisabled(true)
-		end
-
 		self:AddItem(pnl)
 	end
 end
+
+function PANEL:PerformLayout()
+	for k,v in pairs(self.Items) do
+		if not canBuyGun(v.DarkRPItem) then
+			v:SetDisabled(true)
+		else
+			v:SetDisabled(false)
+		end
+	end
+	self.BaseClass.PerformLayout(self)
+end
+
 
 derma.DefineControl("F4MenuGuns", "", PANEL, "F4MenuEntitiesBase")
