@@ -427,7 +427,7 @@ local english = {
 	become_job = "Become job",
 	create_vote_for_job = "Create vote",
 	shipments = "Shipments",
-	F4guns = "Guns",
+	F4guns = "Weapons",
 	F4entities = "Miscellaneous",
 	F4vehicles = "Vehicles",
 
