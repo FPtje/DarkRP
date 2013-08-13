@@ -20,7 +20,7 @@ function PANEL:Rebuild()
 			height = height + math.Max(item:GetTall(), self.Items[i - 1]:GetTall()) + 2
 		end
 	end
-	self:GetCanvas():SetTall(height)
+	self:GetCanvas():SetTall(height + self.Items[#self.Items]:GetTall())
 end
 
 function PANEL:generateButtons()
@@ -145,3 +145,40 @@ end
 
 
 derma.DefineControl("F4MenuGuns", "", PANEL, "F4MenuEntitiesBase")
+
+/*---------------------------------------------------------------------------
+Vehicles panel
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+function PANEL:generateButtons()
+	for k,v in pairs(CustomVehicles) do
+		local pnl = vgui.Create("F4MenuEntityButton", self)
+		pnl:setDarkRPItem(v)
+		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyvehicle", v.name)
+		self:AddItem(pnl)
+	end
+end
+
+local function canBuyVehicle(item)
+	local ply = LocalPlayer()
+
+	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false end
+	if item.customCheck and not item.customCheck(ply) then return false end
+	if not ply:canAfford(item.price) then return false end
+
+	return true
+end
+
+function PANEL:PerformLayout()
+	for k,v in pairs(self.Items) do
+		if not canBuyVehicle(v.DarkRPItem) then
+			v:SetDisabled(true)
+		else
+			v:SetDisabled(false)
+		end
+	end
+	self.BaseClass.PerformLayout(self)
+end
+
+derma.DefineControl("F4MenuVehicles", "", PANEL, "F4MenuEntitiesBase")

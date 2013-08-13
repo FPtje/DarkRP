@@ -62,6 +62,9 @@ hook.Add("F4MenuTabs", "DefaultTabs", function()
 		DarkRP.addF4MenuTab(DarkRP.getPhrase("F4guns"), vgui.Create("F4MenuGuns"))
 	end
 
+	if #CustomVehicles > 0 then
+		DarkRP.addF4MenuTab(DarkRP.getPhrase("F4vehicles"), vgui.Create("F4MenuVehicles"))
+	end
 end)
 
 /*---------------------------------------------------------------------------

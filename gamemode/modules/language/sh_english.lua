@@ -428,7 +428,8 @@ local english = {
 	create_vote_for_job = "Create vote",
 	shipments = "Shipments",
 	F4guns = "Guns",
-	F4entities = "WHAT DO I NAME THIS?",
+	F4entities = "Miscellaneous",
+	F4vehicles = "Vehicles",
 
 	-- Tab 1
 	give_money = "Give money to the player you're looking at",
