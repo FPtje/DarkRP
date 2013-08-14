@@ -25,7 +25,7 @@ local function createShipment(ply, args)
 		return
 	end
 
-	local crate = ents.Create("spawned_shipment")
+	local crate = ents.Create(CustomShipments[shipID].shipmentClass or "spawned_shipment")
 	crate.SID = ply.SID
 	crate:SetPos(ent:GetPos())
 	crate.nodupe = true

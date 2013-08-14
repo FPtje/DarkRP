@@ -71,13 +71,14 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(SteamID)..", " .. MySQLite.SQLStr(group)..");")
 end
 
+hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn") -- Remove Garry's usergroup setter.
+
 local oldSetUsergroup = plyMeta.SetUserGroup
 function plyMeta:SetUserGroup(group, ...)
 	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(self:SteamID())..", " .. MySQLite.SQLStr(group)..");")
 
 	return oldSetUsergroup(self, group, ...)
 end
-
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
