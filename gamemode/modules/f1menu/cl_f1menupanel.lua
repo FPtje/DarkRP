@@ -55,7 +55,6 @@ end
 
 function PANEL:slideIn()
 	self:SetVisible(true)
-	self.animationStart = RealTime()
 	self.slideRight = true
 	self.toggled = true
 	self:MakePopup()
@@ -64,7 +63,7 @@ end
 
 function PANEL:slideOut()
 	self.txtChatCommandSearch.F1Down = true
-	self.animationStart = RealTime()
+	self.progress = 1
 	self.slideRight = false
 	self.toggled = false
 	self:SetVisible(false)
@@ -84,15 +83,11 @@ function PANEL:setSearchAlgorithm(func)
 end
 
 function PANEL:AnimationThink()
-	local realtime = RealTime()
-	if (self.animationStart or 0) < (realtime - self.slideInTime) then return end
-
-	local progress = (realtime - self.animationStart) / self.slideInTime * math.pi / 2
-	progress = math.sin(progress)
-	progress = self.slideRight and 1 - progress or progress
+	self.progress = self.progress or 1
+	self.progress = self.slideRight and math.max(0, self.progress - FrameTime()/self.slideInTime) or math.min(1, self.progress + FrameTime())
 
 	local x, y = self:GetPos()
-	self:SetPos(-self:GetWide() * progress, y)
+	self:SetPos(-self:GetWide() * self.progress, y)
 end
 
 function PANEL:Paint()
