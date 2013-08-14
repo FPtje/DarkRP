@@ -5,7 +5,7 @@ local meta = FindMetaTable("Player")
 function meta:addMoney(amount)
 	if not amount then return false end
 	local total = self:getDarkRPVar("money") + math.floor(amount)
-	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
+	total = hook.Call("playerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
 
 	self:setDarkRPVar("money", total)
 
@@ -24,7 +24,7 @@ function meta:payDay()
 	if not self:isArrested() then
 		DarkRP.retrieveSalary(self, function(amount)
 			amount = math.floor(amount or GAMEMODE.Config.normalsalary)
-			hook.Call("PlayerGetSalary", GAMEMODE, self, amount)
+			hook.Call("playerGetSalary", GAMEMODE, self, amount)
 			if amount == 0 or not amount then
 				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_unemployed"))
 			else

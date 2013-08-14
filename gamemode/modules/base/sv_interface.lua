@@ -688,3 +688,196 @@ DarkRP.hookStub{
 	returns = {
 	}
 }
+
+DarkRP.hookStub{
+	name = "canChangeJob",
+	description = "Whether a player can change their job.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player whom is to change their job.",
+			type = "Player"
+		},
+		{
+			name = "job",
+			description = "The job name.",
+			type = "string"
+		}
+	},
+	returns = {
+		{
+			name = "canChangeJob",
+			description = "Whether the player can change their job.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message to show when the player cannot take the job. Only useful when canChangeJob is false.",
+			type = "string"
+		},
+		{
+			name = "replace",
+			description = "A replacement for the job name. Only useful when canChangeJob is true.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canDemote",
+	description = "Whether a player can demote another player.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who wants to demote.",
+			type = "Player"
+		},
+		{
+			name = "target",
+			description = "The player whom is to be demoted.",
+			type = "Player"
+		},
+		{
+			name = "reason",
+			description = "The reason provided for the demote.",
+			type = "string"
+		}
+	},
+	returns = {
+		{
+			name = "canDemote",
+			description = "Whether the player can change demote the target.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message to show when the player cannot demote the other player. Only useful when canDemote is false.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canDropWeapon",
+	description = "Whether a player can drop a certain weapon.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who wants to demote.",
+			type = "Player"
+		},
+		{
+			name = "weapon",
+			description = "The weapon the player wants to drop.",
+			type = "Weapon"
+		}
+	},
+	returns = {
+		{
+			name = "canDrop",
+			description = "Whether the player can drop the weapon.",
+			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canSeeLogMessage",
+	description = "Whether a player can see a DarkRP log message in the console.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "message",
+			description = "The log message.",
+			type = "string"
+		},
+		{
+			name = "color",
+			description = "The color of the message.",
+			type = "Color"
+		}
+	},
+	returns = {
+		{
+			name = "canHear",
+			description = "Whether the player can see the log message.",
+			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canVote",
+	description = "Whether a player can cast a vote.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "vote",
+			description = "Table containing all information about the vote.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canVote",
+			description = "Whether the player can vote.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message to show when the player cannot vote. Only useful when canVote is false.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerGetSalary",
+	description = "When a player receives salary.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who is receiving salary.",
+			type = "Player"
+		},
+		{
+			name = "amount",
+			description = "The amount of money given to the player.",
+			type = "number"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "PlayerWalletChanged",
+	description = "When a player receives money.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who is getting money.",
+			type = "Player"
+		},
+		{
+			name = "amount",
+			description = "The amount of money given to the player.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "total",
+			description = "Override the total amount of money (optional).",
+			type = "number"
+		}
+	}
+}

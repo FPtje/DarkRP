@@ -46,19 +46,19 @@ DarkRP.PLAYER.requestWarrant = DarkRP.stub{
 	parameters = {
 		{
 			name = "suspect",
-			description = "The player who is suspected",
+			description = "The player who is suspected.",
 			type = "Player",
 			optional = false
 		},
 		{
 			name = "actor",
-			description = "The player who wants the warrant",
+			description = "The player who wants the warrant.",
 			type = "Player",
 			optional = false
 		},
 		{
 			name = "reason",
-			description = "The reason for the warrant",
+			description = "The reason for the warrant.",
 			type = "string",
 			optional = false
 		}
@@ -70,17 +70,17 @@ DarkRP.PLAYER.requestWarrant = DarkRP.stub{
 
 DarkRP.PLAYER.warrant = DarkRP.stub{
 	name = "warrant",
-	description = "Get a search warrant for this person",
+	description = "Get a search warrant for this person.",
 	parameters = {
 		{
 			name = "warranter",
-			description = "The player who set the warrant",
+			description = "The player who set the warrant.",
 			type = "Player",
 			optional = false
 		},
 		{
 			name = "reason",
-			description = "The reason for the warrant",
+			description = "The reason for the warrant.",
 			type = "string",
 			optional = false
 		}
@@ -92,11 +92,11 @@ DarkRP.PLAYER.warrant = DarkRP.stub{
 
 DarkRP.PLAYER.unWarrant = DarkRP.stub{
 	name = "unWarrant",
-	description = "Remove the search warrant for this person",
+	description = "Remove the search warrant for this person.",
 	parameters = {
 		{
 			name = "unwarranter",
-			description = "The player who removed the warrant",
+			description = "The player who removed the warrant.",
 			type = "Player",
 			optional = true
 		}
@@ -108,17 +108,17 @@ DarkRP.PLAYER.unWarrant = DarkRP.stub{
 
 DarkRP.PLAYER.wanted = DarkRP.stub{
 	name = "wanted",
-	description = "Make this person wanted by the police",
+	description = "Make this person wanted by the police.",
 	parameters = {
 		{
 			name = "actor",
-			description = "The player who made the other person wanted",
+			description = "The player who made the other person wanted.",
 			type = "Player",
 			optional = false
 		},
 		{
 			name = "reason",
-			description = "The reason for the wanted status",
+			description = "The reason for the wanted status.",
 			type = "string",
 			optional = false
 		}
@@ -130,11 +130,11 @@ DarkRP.PLAYER.wanted = DarkRP.stub{
 
 DarkRP.PLAYER.unWanted = DarkRP.stub{
 	name = "unWanted",
-	description = "Clear the wanted status for this person",
+	description = "Clear the wanted status for this person.",
 	parameters = {
 		{
 			name = "actor",
-			description = "The player who cleared the wanted status",
+			description = "The player who cleared the wanted status.",
 			type = "Player",
 			optional = true
 		}
@@ -146,17 +146,17 @@ DarkRP.PLAYER.unWanted = DarkRP.stub{
 
 DarkRP.PLAYER.arrest = DarkRP.stub{
 	name = "arrest",
-	description = "Arrest a player",
+	description = "Arrest a player.",
 	parameters = {
 		{
 			name = "time",
-			description = "For how long the player is arrested",
+			description = "For how long the player is arrested.",
 			type = "number",
 			optional = true
 		},
 		{
 			name = "Arrester",
-			description = "The player who arrested the target",
+			description = "The player who arrested the target.",
 			type = "Player",
 			optional = true
 		}
@@ -168,11 +168,11 @@ DarkRP.PLAYER.arrest = DarkRP.stub{
 
 DarkRP.PLAYER.unArrest = DarkRP.stub{
 	name = "unArrest",
-	description = "Unarrest a player",
+	description = "Unarrest a player.",
 	parameters = {
 		{
 			name = "Unarrester",
-			description = "The player who unarrested the target",
+			description = "The player who unarrested the target.",
 			type = "Player",
 			optional = true
 		}
@@ -184,21 +184,21 @@ DarkRP.PLAYER.unArrest = DarkRP.stub{
 
 DarkRP.hookStub{
 	name = "playerArrested",
-	description = "When a player is arrested",
+	description = "When a player is arrested.",
 	parameters = {
 		{
 			name = "criminal",
-			description = "The arrested criminal",
+			description = "The arrested criminal.",
 			type = "Player"
 		},
 		{
 			name = "time",
-			description = "The jail time",
+			description = "The jail time.",
 			type = "number"
 		},
 		{
 			name = "actor",
-			description = "The person who arrested the criminal",
+			description = "The person who arrested the criminal.",
 			type = "Player"
 		}
 	},
@@ -208,16 +208,102 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "playerUnArrested",
-	description = "When a player is unarrested",
+	description = "When a player is unarrested.",
 	parameters = {
 		{
 			name = "criminal",
-			description = "The arrested criminal",
+			description = "The arrested criminal.",
 			type = "Player"
 		},
 		{
 			name = "actor",
-			description = "The person who arrested the criminal",
+			description = "The person who arrested the criminal.",
+			type = "Player"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerWarranted",
+	description = "When a player is warranted.",
+	parameters = {
+		{
+			name = "criminal",
+			description = "The potential criminal.",
+			type = "Player"
+		},
+		{
+			name = "actor",
+			description = "The person who wanted the potential criminal.",
+			type = "Player"
+		},
+		{
+			name = "reason",
+			description = "The reason for wanting this person.",
+			type = "string"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerUnWarranted",
+	description = "When a player is unwarranted.",
+	parameters = {
+		{
+			name = "excriminal",
+			description = "The potential criminal.",
+			type = "Player"
+		},
+		{
+			name = "actor",
+			description = "The person who unwarranted the potential criminal",
+			type = "Player"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerWanted",
+	description = "When a player is wanted.",
+	parameters = {
+		{
+			name = "criminal",
+			description = "The criminal.",
+			type = "Player"
+		},
+		{
+			name = "actor",
+			description = "The person who wanted the criminal.",
+			type = "Player"
+		},
+		{
+			name = "reason",
+			description = "The reason for wanting this person.",
+			type = "string"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerUnWanted",
+	description = "When a player is unwanted.",
+	parameters = {
+		{
+			name = "excriminal",
+			description = "The ex criminal.",
+			type = "Player"
+		},
+		{
+			name = "actor",
+			description = "The person who unwanted the ex criminal.",
 			type = "Player"
 		}
 	},

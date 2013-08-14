@@ -275,7 +275,7 @@ local function Demote(ply, args)
 		return ""
 	end
 
-	local canDemote, message = hook.Call("CanDemote", GAMEMODE, ply, p, reason)
+	local canDemote, message = hook.Call("canDemote", GAMEMODE, ply, p, reason)
 	if canDemote == false then
 		DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "demote", ""))
 		return ""

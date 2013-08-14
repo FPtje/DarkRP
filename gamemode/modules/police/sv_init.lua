@@ -7,7 +7,7 @@ Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:warrant(warranter, reason)
 	if self.warranted then return end
-	hook.Call("PlayerWarranted", GAMEMODE, warranter, self, reason)
+	hook.Call("playerWarranted", GAMEMODE, self, warranter, reason)
 
 	self.warranted = true
 	timer.Simple(GAMEMODE.Config.searchtime, function()
@@ -30,7 +30,7 @@ end
 function plyMeta:unWarrant(unwarranter)
 	if not self.warranted then return end
 
-	hook.Call("PlayerUnWarranted", GAMEMODE, unwarranter, self)
+	hook.Call("playerUnWarranted", GAMEMODE, self, unwarranter)
 
 	self.warranted = false
 	DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
@@ -42,7 +42,7 @@ function plyMeta:requestWarrant(suspect, actor, reason)
 end
 
 function plyMeta:wanted(actor, reason)
-	hook.Call("PlayerWanted", DarkRP.hooks, actor, self, reason)
+	hook.Call("playerWanted", DarkRP.hooks, self, actor, reason)
 
 	self:setDarkRPVar("wanted", true)
 	self:setDarkRPVar("wantedReason", reason)
@@ -63,7 +63,7 @@ function plyMeta:wanted(actor, reason)
 end
 
 function plyMeta:unWanted(actor)
-	hook.Call("PlayerUnWanted", GAMEMODE, actor, self)
+	hook.Call("playerUnWanted", GAMEMODE, self, actor)
 	self:setDarkRPVar("wanted", false)
 
 	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or

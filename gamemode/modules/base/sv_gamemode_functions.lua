@@ -31,19 +31,19 @@ function GM:CanChangeRPName(ply, RPname)
 	end
 end
 
-function GM:CanDemote(ply, target, reason)
+function GM:canDemote(ply, target, reason)
 
 end
 
-function GM:CanVote(ply, vote)
+function GM:canVote(ply, vote)
 
 end
 
-function GM:PlayerWalletChanged(ply, amount)
+function GM:playerWalletChanged(ply, amount)
 
 end
 
-function GM:PlayerGetSalary(ply, amount)
+function GM:playerGetSalary(ply, amount)
 
 end
 
@@ -59,7 +59,7 @@ function GM:playerBoughtDoor(ply, ent, cost)
 
 end
 
-function GM:CanDropWeapon(ply, weapon)
+function GM:canDropWeapon(ply, weapon)
 	if not IsValid(weapon) then return false end
 	local class = string.lower(weapon:GetClass())
 	if self.Config.DisallowDrop[class] then return false end
@@ -79,7 +79,7 @@ function GM:DatabaseInitialized()
 	DarkRP.initDatabase()
 end
 
-function GM:CanSeeLogMessage(ply, message, colour)
+function GM:canSeeLogMessage(ply, message, colour)
 	return ply:IsAdmin()
 end
 
@@ -404,7 +404,7 @@ end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
 	local weapon = ply:GetActiveWeapon()
-	local canDrop = hook.Call("CanDropWeapon", self, ply, weapon)
+	local canDrop = hook.Call("canDropWeapon", self, ply, weapon)
 
 	if GAMEMODE.Config.dropweapondeath and IsValid(weapon) and canDrop then
 		ply:dropDRPWeapon(weapon)

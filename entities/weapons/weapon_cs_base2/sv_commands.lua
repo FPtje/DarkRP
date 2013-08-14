@@ -42,7 +42,7 @@ local function DropWeapon(ply)
 		return ""
 	end
 
-	local canDrop = hook.Call("CanDropWeapon", GAMEMODE, ply, ent)
+	local canDrop = hook.Call("canDropWeapon", GAMEMODE, ply, ent)
 	if not canDrop then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
 		return ""

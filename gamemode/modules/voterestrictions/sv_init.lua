@@ -38,4 +38,4 @@ local function canVote(ply, vote)
 
 	return decide(ply, vote.target)
 end
-hook.Add("CanVote", "VoteRegulations", canVote)
+hook.Add("canVote", "VoteRegulations", canVote)
