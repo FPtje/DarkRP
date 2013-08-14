@@ -1,4 +1,3 @@
-
 -- DO NOT remove the english language!
 local english = {
 	-- Admin things
@@ -15,7 +14,7 @@ local english = {
 
 	-- Money things:
 	price = "Price: %s%d",
-	reset_money = "%s has reset all player's money!",
+	reset_money = "%s has reset all players' money!",
 	has_given = "%s has given you %s",
 	you_gave = "You gave %s %s",
 	npc_killpay = "%s for killing an NPC!",
@@ -74,7 +73,7 @@ local english = {
 	get_a_warrant = "get a warrant",
 	make_someone_wanted = "make someone wanted",
 	remove_wanted_status = "remove wanted status",
-	already_a_warrant = "There already is a search warrent for this suspect.",
+	already_a_warrant = "There already is a search warrant for this suspect.",
 	already_wanted = "The suspect is already wanted.",
 	not_wanted = "The suspect is not wanted.",
 	need_to_be_cp = "You have to be a member of the police force.",
