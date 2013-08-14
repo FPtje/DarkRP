@@ -53,9 +53,9 @@ DarkRP.payPlayer = DarkRP.stub{
 	metatable = DarkRP
 }
 
-DarkRP.addHitmanTeam = DarkRP.stub{
-	name = "addHitmanTeam",
-	description = "Make this team a hitman.",
+DarkRP.createMoneyBag = DarkRP.stub{
+	name = "createMoneyBag",
+	description = "Create a money bag.",
 	parameters = {
 		{
 			name = "pos",
