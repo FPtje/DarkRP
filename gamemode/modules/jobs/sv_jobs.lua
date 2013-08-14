@@ -26,7 +26,7 @@ function meta:changeTeam(t, force)
 		self:teamBan()
 		self.IsBeingDemoted = false
 		self:changeTeam(1, true)
-		GAMEMODE.vote.DestroyVotesWithEnt(self)
+		DarkRP.destroyVotesWithEnt(self)
 		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("tried_to_avoid_demotion"))
 
 		return false
@@ -295,7 +295,7 @@ local function Demote(ply, args)
 				false, Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
 
-			GAMEMODE.vote:create(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
+			DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
 			{
 				[p] = true,
 				[ply] = true
@@ -336,7 +336,7 @@ local function SwitchJob(ply) --Idea by Godness.
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
 	ply.RequestedJobSwitch = true
-	GAMEMODE.ques:Create(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+	DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
 	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_reqested"))
 	return ""
 end

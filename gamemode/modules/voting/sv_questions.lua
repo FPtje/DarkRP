@@ -1,6 +1,5 @@
-local Question = { }
-local Questions = { }
-GM.ques = {}
+local Question = {}
+local Questions = {}
 
 local function ccDoQuestion(ply, cmd, args)
 	if not Questions[args[1]] then return end
@@ -10,15 +9,22 @@ local function ccDoQuestion(ply, cmd, args)
 end
 concommand.Add("ans", ccDoQuestion)
 
+local function handleQuestionEnd(id)
+	if not Questions[id] then return end
+	local q = Questions[id]
+	q.Callback(q.yn, q.Ent, q.Initiator, q.Target, unpack(q.Args))
+	Questions[id] = nil
+end
+
 function Question:HandleNewQuestion(ply, response)
 	if response == 1 or response == 0 then
 		self.yn = tobool(response)
 	end
 
-	GAMEMODE.ques.HandleQuestionEnd(self.ID)
+	handleQuestionEnd(self.ID)
 end
 
-function GM.ques:Create(question, quesid, ent, delay, callback, fromPly, toPly, ...)
+function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, toPly, ...)
 	local newques = { }
 	for k, v in pairs(Question) do newques[k] = v end
 
@@ -39,10 +45,10 @@ function GM.ques:Create(question, quesid, ent, delay, callback, fromPly, toPly, 
 		umsg.Float(delay)
 	umsg.End()
 
-	timer.Create(quesid .. "timer", delay, 1, function() GAMEMODE.ques.HandleQuestionEnd(quesid) end)
+	timer.Create(quesid .. "timer", delay, 1, function() handleQuestionEnd(quesid) end)
 end
 
-function GM.ques:Destroy(id)
+function DarkRP.destroyQuestion(id)
 	umsg.Start("KillQuestionVGUI", Questions[id].Ent)
 		umsg.String(Questions[id].ID)
 	umsg.End()
@@ -50,17 +56,10 @@ function GM.ques:Destroy(id)
 	Questions[id] = nil
 end
 
-function GM.ques:DestroyQuestionsWithEnt(ent)
+function DarkRP.destroyQuestionsWithEnt(ent)
 	for k, v in pairs(Questions) do
 		if v.Ent == ent then
-			self:Destroy(v.ID)
+			DarkRP.destroyQuestion(v.ID)
 		end
 	end
-end
-
-function GM.ques.HandleQuestionEnd(id)
-	if not Questions[id] then return end
-	local q = Questions[id]
-	q.Callback(q.yn, q.Ent, q.Initiator, q.Target, unpack(q.Args))
-	Questions[id] = nil
 end

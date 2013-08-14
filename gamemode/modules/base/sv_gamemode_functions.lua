@@ -813,7 +813,7 @@ function GM:PlayerDisconnected(ply)
 		end
 	end
 
-	GAMEMODE.vote.DestroyVotesWithEnt(ply)
+	DarkRP.destroyVotesWithEnt(ply)
 
 	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then -- Stop the lockdown
 		DarkRP.unLockdown(ply)

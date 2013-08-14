@@ -38,7 +38,7 @@ end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
 	local question = DarkRP.getPhrase("warrant_request", actor:Nick(), suspect:Nick(), reason)
-	GAMEMODE.ques:Create(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
+	DarkRP.createQuestion(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
 function plyMeta:wanted(actor, reason)

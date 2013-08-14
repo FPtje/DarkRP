@@ -1,6 +1,5 @@
 local Vote = {}
 local Votes = {}
-GM.vote = {}
 
 local function ccDoVote(ply, cmd, args)
 	local vote = Votes[tonumber(args[1] or 0)]
@@ -62,7 +61,7 @@ function Vote:getFilter()
 	return filter
 end
 
-function GM.vote:create(question, voteType, target, time, callback, excludeVoters, fail, extraInfo)
+function DarkRP.createVote(question, voteType, target, time, callback, excludeVoters, fail, extraInfo)
 	excludeVoters = excludeVoters or {[target] = true}
 
 	local newvote = {}
@@ -99,9 +98,11 @@ function GM.vote:create(question, voteType, target, time, callback, excludeVoter
 	umsg.End()
 
 	timer.Create(newvote.id .. "DarkRPVote", time, 1, function() newvote:handleEnd() end)
+
+	return newvote
 end
 
-function GM.vote.DestroyVotesWithEnt(ent)
+function DarkRP.destroyVotesWithEnt(ent)
 	for k, v in pairs(Votes) do
 		if v.target ~= ent then continue end
 
@@ -116,7 +117,7 @@ function GM.vote.DestroyVotesWithEnt(ent)
 	end
 end
 
-function GM.vote.DestroyLast()
+function DarkRP.destroyLastVote()
 	local lastVote = Votes[#Votes]
 
 	if not lastVote then return end
@@ -137,7 +138,7 @@ local function CancelVote(ply, cmd, args)
 		return
 	end
 
-	GAMEMODE.vote.DestroyLast()
+	DarkRP.destroyLastVote()
 	if ply:EntIndex() == 0 then
 		nick = "Console"
 	else
