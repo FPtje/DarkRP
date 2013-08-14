@@ -552,7 +552,7 @@ local function initPlayer(ply)
 
 	ply:initiateTax()
 
-	ply:UpdateJob(team.GetName(1))
+	ply:updateJob(team.GetName(1))
 
 	ply:GetTable().Ownedz = { }
 	ply:GetTable().OwnedNumz = 0
@@ -837,7 +837,7 @@ function GM:GetFallDamage( ply, flFallSpeed )
 	else
 		if GAMEMODE.Config.falldamageamount then return GAMEMODE.Config.falldamageamount else return 10 end
 	end
-end	
+end
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
 	InitPostEntityCalled = true

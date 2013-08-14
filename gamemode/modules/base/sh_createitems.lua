@@ -80,7 +80,7 @@ local function addTeamCommands(CTeam, max)
 				ply:changeTeam(k)
 				return ""
 			end
-			if not ply:ChangeAllowed(k) then
+			if not ply:changeAllowed(k) then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, DarkRP.getPhrase("banned_or_demoted")))
 				return ""
 			end
