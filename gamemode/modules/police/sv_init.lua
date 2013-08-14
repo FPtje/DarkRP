@@ -113,7 +113,7 @@ local function CombineRequest(ply, args)
 			return
 		end
 		for k, v in pairs(player.GetAll()) do
-			if v:IsCP() or v == ply then
+			if v:isCP() or v == ply then
 				DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
 			end
 		end

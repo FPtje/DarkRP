@@ -286,7 +286,7 @@ GAMEMODE:AddGroupChat(a function with ply as argument that returns whether a ran
 This one is for people who know how to script Lua.
 
 */
-GM:AddGroupChat(function(ply) return ply:IsCP() end)
+GM:AddGroupChat(function(ply) return ply:isCP() end)
 GM:AddGroupChat(TEAM_MOB, TEAM_GANG)
 
 /*---------------------------------------------------------------------------

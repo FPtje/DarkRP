@@ -124,7 +124,7 @@ end
 
 function pmeta:doPropertyTax()
 	if not GAMEMODE.Config.propertytax then return end
-	if self:IsCP() and GAMEMODE.Config.cit_propertytax then return end
+	if self:isCP() and GAMEMODE.Config.cit_propertytax then return end
 
 	local numowned = self.OwnedNumz
 

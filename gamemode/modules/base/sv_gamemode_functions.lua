@@ -86,7 +86,7 @@ end
 function GM:UpdatePlayerSpeed(ply)
 	if ply:isArrested() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	elseif ply:IsCP() then
+	elseif ply:isCP() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
 	else
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
@@ -667,7 +667,7 @@ function GM:PlayerSpawn(ply)
 	ply.IsSleeping = false
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	if ply:IsCP() then
+	if ply:isCP() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
 	end
 

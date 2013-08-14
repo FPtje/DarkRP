@@ -43,8 +43,8 @@ DarkRP.PLAYER.isArrested = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
-DarkRP.PLAYER.IsCP = DarkRP.stub{
-	name = "IsCP",
+DarkRP.PLAYER.isCP = DarkRP.stub{
+	name = "isCP",
 	description = "Whether this player is part of the police force (mayor, cp, chief).",
 	parameters = {
 	},

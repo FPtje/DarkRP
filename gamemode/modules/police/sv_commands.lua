@@ -182,7 +182,7 @@ local function RequestLicense(ply)
 
 	if not ischief and not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:IsCP() then
+			if v:isCP() then
 				iscop = true
 				break
 			end
@@ -205,7 +205,7 @@ local function RequestLicense(ply)
 	elseif ischief and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].chief) then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
 		return ""
-	elseif iscop and not LookingAt:IsCP() then
+	elseif iscop and not LookingAt:isCP() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "cop"))
 		return ""
 	end
@@ -224,7 +224,7 @@ local function GiveLicense(ply)
 	local canGiveLicense = fn.FOr{
 		ply.isMayor, -- Mayors can hand out licenses
 		fn.FAnd{ply.isChief, noMayorExists}, -- Chiefs can if there is no mayor
-		fn.FAnd{ply.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
+		fn.FAnd{ply.isCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
 	}
 
 	if not canGiveLicense(ply) then
