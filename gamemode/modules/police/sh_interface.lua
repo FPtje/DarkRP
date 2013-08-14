@@ -43,6 +43,52 @@ DarkRP.PLAYER.isArrested = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.IsCP = DarkRP.stub{
+	name = "IsCP",
+	description = "Whether this player is part of the police force (mayor, cp, chief).",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "Whether this player is part of the police force.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.isMayor = DarkRP.stub{
+	name = "isMayor",
+	description = "Whether this player is a mayor.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "Whether this player is a mayor.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.isChief = DarkRP.stub{
+	name = "isChief",
+	description = "Whether this player is a Chief.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "Whether this player is a Chief.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+
 DarkRP.hookStub{
 	name = "canRequestWarrant",
 	description = "Whether someone can request a search warrant.",

@@ -229,7 +229,7 @@ local function addEntityCommands(tblEnt)
 
 			return ""
 		end
-		ply:AddMoney(-tblEnt.price)
+		ply:addMoney(-tblEnt.price)
 
 		local trace = {}
 		trace.start = ply:EyePos()

@@ -52,7 +52,7 @@ function ENT:Use(activator,caller)
 			timer.Simple(0.5, function() self.CanUse = true end)
 			return false
 		end
-		activator:AddMoney(-productioncost)
+		activator:addMoney(-productioncost)
 		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("you_bought_x", string.lower(DarkRP.getPhrase("drugs")), GAMEMODE.Config.currency, productioncost))
 		self.sparking = true
 		timer.Create(self:EntIndex() .. "drug", 1, 1, function() self:createDrug() end)

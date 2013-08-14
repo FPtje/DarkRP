@@ -1,3 +1,45 @@
+DarkRP.lockdown = DarkRP.stub{
+	name = "lockdown",
+	description = "Start a lockdown.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who initiated the lockdown.",
+			type = "Player",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "str",
+			description = "Empty string (since it's a called in a chat command)",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
+DarkRP.unLockdown = DarkRP.stub{
+	name = "unLockdown",
+	description = "Stop the lockdown.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who stopped the lockdown.",
+			type = "Player",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "str",
+			description = "Empty string (since it's a called in a chat command)",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.PLAYER.requestWarrant = DarkRP.stub{
 	name = "requestWarrant",
 	description = "File a request for a search warrant.",

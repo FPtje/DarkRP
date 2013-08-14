@@ -31,7 +31,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 			return
 		end
 		table.insert(LotteryPeople, target)
-		target:AddMoney(-LotteryAmount)
+		target:addMoney(-LotteryAmount)
 		DarkRP.notify(target, 0,4, DarkRP.getPhrase("lottery_entered", GAMEMODE.Config.currency..tostring(LotteryAmount)))
 	elseif answer ~= nil and not table.HasValue(LotteryPeople, target) then
 		DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", "You"))
@@ -45,7 +45,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 			return
 		end
 		local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
-		chosen:AddMoney(#LotteryPeople * LotteryAmount)
+		chosen:addMoney(#LotteryPeople * LotteryAmount)
 		DarkRP.notifyAll(0,10, DarkRP.getPhrase("lottery_won", chosen:Nick(), GAMEMODE.Config.currency .. tostring(#LotteryPeople * LotteryAmount) ))
 	end
 end
@@ -100,7 +100,7 @@ local function WaitLock()
 	timer.Destroy("spamlock")
 end
 
-function GM:Lockdown(ply)
+function DarkRP.lockdown(ply)
 	if lstat then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", ""))
 		return ""
@@ -118,10 +118,10 @@ function GM:Lockdown(ply)
 	end
 	return ""
 end
-concommand.Add("rp_lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
-DarkRP.defineChatCommand("lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
+concommand.Add("rp_lockdown", function(ply) DarkRP.lockdown(ply) end)
+DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
 
-function GM:UnLockdown(ply)
+function DarkRP.unLockdown(ply)
 	if not lstat or wait_lockdown then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", ""))
 		return ""
@@ -137,8 +137,8 @@ function GM:UnLockdown(ply)
 	end
 	return ""
 end
-concommand.Add("rp_unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
-DarkRP.defineChatCommand("unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
+concommand.Add("rp_unlockdown", function(ply) DarkRP.unLockdown(ply) end)
+DarkRP.defineChatCommand("unlockdown", function(ply) DarkRP.unLockdown(ply) end)
 
 /*---------------------------------------------------------
  License

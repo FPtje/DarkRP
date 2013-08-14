@@ -306,7 +306,7 @@ end
 
 function DarkRP.hooks:playerUnArrested(ply, actor)
 	if ply.Sleeping and GAMEMODE.KnockoutToggle then
-		GAMEMODE:KnockoutToggle(ply, "force")
+		DarkRP.toggleSleep(ply, "force")
 	end
 
 	-- "Arrested" DarkRPVar is set to false BEFORE this hook however, so it is safe here.

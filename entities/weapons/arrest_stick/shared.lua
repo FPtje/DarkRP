@@ -113,7 +113,7 @@ function SWEP:PrimaryAttack()
 	if trace.Entity:GetClass() == "prop_ragdoll" then
 		for k,v in pairs(player.GetAll()) do
 			if trace.Entity.OwnerINT and trace.Entity.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
-				GAMEMODE:KnockoutToggle(v, true)
+				DarkRP.toggleSleep(v, true)
 				return
 			end
 		end

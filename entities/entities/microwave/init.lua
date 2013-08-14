@@ -71,7 +71,7 @@ function ENT:Use(activator,caller)
 		local discounted = math.ceil(GAMEMODE.Config.microwavefoodcost * 0.82)
 		local cash = self:SalePrice(activator)
 
-		activator:AddMoney(cash * -1)
+		activator:addMoney(cash * -1)
 		DarkRP.notify(activator, 0, 3, DarkRP.getPhrase("you_bought_x", DarkRP.getPhrase("food"), GAMEMODE.Config.currency, cash))
 
 		if activator ~= owner then
@@ -84,7 +84,7 @@ function ENT:Use(activator,caller)
 			if gain == 0 then
 				DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0 " .. DarkRP.getPhrase("profit"), DarkRP.getPhrase("food")))
 			else
-				owner:AddMoney(gain)
+				owner:addMoney(gain)
 				local word = DarkRP.getPhrase("profit")
 				if gain < 0 then word = DarkRP.getPhrase("loss") end
 				DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. word, DarkRP.getPhrase("food")))

@@ -74,7 +74,7 @@ function meta:changeTeam(t, force)
 
 	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
 	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then
-		GAMEMODE:UnLockdown(self)
+		DarkRP.unLockdown(self)
 	end
 	self:updateJob(TEAM.name)
 	self:setSelfDarkRPVar("salary", TEAM.salary)
@@ -151,7 +151,7 @@ function meta:updateJob(job)
 
 	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
 		if not IsValid(self) then return end
-		self:PayDay()
+		self:payDay()
 	end)
 end
 

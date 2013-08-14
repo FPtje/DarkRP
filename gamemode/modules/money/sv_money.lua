@@ -2,7 +2,7 @@
 functions
 ---------------------------------------------------------------------------*/
 local meta = FindMetaTable("Player")
-function meta:AddMoney(amount)
+function meta:addMoney(amount)
 	if not amount then return false end
 	local total = self:getDarkRPVar("money") + math.floor(amount)
 	total = hook.Call("PlayerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
@@ -15,11 +15,11 @@ end
 
 function DarkRP.payPlayer(ply1, ply2, amount)
 	if not IsValid(ply1) or not IsValid(ply2) then return end
-	ply1:AddMoney(-amount)
-	ply2:AddMoney(amount)
+	ply1:addMoney(-amount)
+	ply2:addMoney(amount)
 end
 
-function meta:PayDay()
+function meta:payDay()
 	if not IsValid(self) then return end
 	if not self:isArrested() then
 		DarkRP.retrieveSalary(self, function(amount)
@@ -28,7 +28,7 @@ function meta:PayDay()
 			if amount == 0 or not amount then
 				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_unemployed"))
 			else
-				self:AddMoney(amount)
+				self:addMoney(amount)
 				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_message", GAMEMODE.Config.currency .. amount))
 			end
 		end)
@@ -132,7 +132,7 @@ local function DropMoney(ply, args)
 		return ""
 	end
 
-	ply:AddMoney(-amount)
+	ply:addMoney(-amount)
 	local RP = RecipientFilter()
 	RP:AddAllPlayers()
 
@@ -183,7 +183,7 @@ local function CreateCheque(ply, args)
 	end
 
 	if IsValid(ply) and IsValid(recipient) then
-		ply:AddMoney(-amount)
+		ply:addMoney(-amount)
 	end
 
 	umsg.Start("anim_dropitem", RecipientFilter():AddAllPlayers())
