@@ -298,9 +298,10 @@ end
 AddExtraTeam = DarkRP.createJob
 
 RPExtraTeamDoors = {}
-function AddDoorGroup(name, ...)
+function DarkRP.createEntityGroup(name, ...)
 	RPExtraTeamDoors[name] = {...}
 end
+AddDoorGroup = DarkRP.createEntityGroup
 
 CustomVehicles = {}
 CustomShipments = {}
