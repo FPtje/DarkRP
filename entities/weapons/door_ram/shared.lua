@@ -59,6 +59,7 @@ Desc: called when the weapon is deployed
 ---------------------------------------------------------------------------*/
 function SWEP:Deploy()
 	self.Ready = false
+	return true
 end
 
 function SWEP:Holster()

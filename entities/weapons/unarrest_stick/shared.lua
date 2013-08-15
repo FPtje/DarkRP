@@ -51,6 +51,7 @@ function SWEP:Deploy()
 		self:SetColor(Color(0,255,0,255))
 		self:SetMaterial("models/shiny")
 	end
+	return true
 end
 
 function SWEP:PreDrawViewModel()
