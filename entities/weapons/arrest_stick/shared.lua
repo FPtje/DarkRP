@@ -60,7 +60,7 @@ function SWEP:PreDrawViewModel()
 end
 
 function SWEP:Holster()
-	if SEVER then
+	if SERVER then
 		self:SetColor(Color(255,255,255,255))
 		self:SetMaterial("")
 	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
@@ -71,7 +71,7 @@ function SWEP:Holster()
 end
 
 function SWEP:OnRemove()
-	if SEVER then
+	if SERVER then
 		self:SetColor(Color(255,255,255,255))
 		self:SetMaterial("")
 	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
