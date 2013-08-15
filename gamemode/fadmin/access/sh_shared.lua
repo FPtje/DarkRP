@@ -84,6 +84,11 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 
 	local Usergroup = ply:GetNWString("usergroup")
 
+	local canTarget = hook.Call("FAdmin_CanTarget", nil, ply, priv, target)
+	if canTarget ~= nil then
+		return canTarget
+	end
+
 	if FAdmin.GlobalSetting.Immunity and type(target) ~= "string" and IsValid(target) and target ~= ply and FAdmin.Access.Groups[Usergroup] and
 	FAdmin.Access.Groups[target:GetNWString("usergroup")] and FAdmin.Access.Groups[target:GetNWString("usergroup")].ADMIN >= FAdmin.Access.Groups[Usergroup].ADMIN then
 		return false
