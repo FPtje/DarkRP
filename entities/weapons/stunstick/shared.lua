@@ -1,6 +1,5 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
-	util.AddNetworkString("StunStickColour")
 end
 
 if CLIENT then
@@ -43,48 +42,6 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
-function SWEP:Deploy()
-	if CLIENT or not IsValid(self:GetOwner()) then return end
-	self:SetColor(Color(0,0,255,255))
-	self:SetMaterial("models/shiny")
-	net.Start("StunStickColour")
-		net.WriteUInt(0,8)
-		net.WriteUInt(0,8)
-		net.WriteUInt(255,8)
-		net.WriteString("models/shiny")
-	net.Send(self:GetOwner())
-	return true
-end
-
-function SWEP:Holster()
-	if CLIENT or not IsValid(self:GetOwner()) then return end
-	net.Start("StunStickColour")
-		net.WriteUInt(255,8)
-		net.WriteUInt(255,8)
-		net.WriteUInt(255,8)
-		net.WriteString("")
-	net.Send(self:GetOwner())
-	return true
-end
-
-function SWEP:OnRemove()
-	if SERVER and IsValid(self:GetOwner()) then
-		net.Start("StunStickColour")
-			net.WriteUInt(255,8)
-			net.WriteUInt(255,8)
-			net.WriteUInt(255,8)
-			net.WriteString("")
-		net.Send(self:GetOwner())
-	end
-end
-
-net.Receive("StunStickColour", function()
-	local viewmodel = LocalPlayer():GetViewModel()
-	local r,g,b,a = net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), 255
-	viewmodel:SetColor(Color(r,g,b,a))
-	viewmodel:SetMaterial(net.ReadString())
-end)
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType("normal")
 
@@ -97,6 +54,40 @@ function SWEP:Initialize()
 		Sound("weapons/stunstick/stunstick_fleshhit1.wav"),
 		Sound("weapons/stunstick/stunstick_fleshhit2.wav")
 	}
+end
+
+function SWEP:Deploy()
+	if SERVER then
+		self:SetColor(Color(0,0,255,255))
+		self:SetMaterial("models/shiny")
+	end
+end
+
+function SWEP:PreDrawViewModel()
+	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
+	self.Owner:GetViewModel():SetColor(Color(0,0,255,255))
+	self.Owner:GetViewModel():SetMaterial("models/shiny")
+end
+
+function SWEP:Holster()
+	if SEVER then
+		self:SetColor(Color(255,255,255,255))
+		self:SetMaterial("")
+	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
+		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
+		self.Owner:GetViewModel():SetMaterial("")
+	end
+	return true
+end
+
+function SWEP:OnRemove()
+	if SEVER then
+		self:SetColor(Color(255,255,255,255))
+		self:SetMaterial("")
+	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
+		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
+		self.Owner:GetViewModel():SetMaterial("")
+	end
 end
 
 function SWEP:DoFlash(ply)

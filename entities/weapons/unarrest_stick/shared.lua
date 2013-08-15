@@ -1,6 +1,5 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
-	util.AddNetworkString("UnarrestBatonColour")
 end
 
 if CLIENT then
@@ -48,47 +47,38 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if CLIENT or not IsValid(self:GetOwner()) then return end
-	self:SetColor(Color(0,255,0,255))
-	self:SetMaterial("models/shiny")
-	net.Start("UnarrestBatonColour")
-		net.WriteUInt(0,8)
-		net.WriteUInt(255,8)
-		net.WriteUInt(0,8)
-		net.WriteString("models/shiny")
-	net.Send(self:GetOwner())
-	return true
+	if SERVER then
+		self:SetColor(Color(0,255,0,255))
+		self:SetMaterial("models/shiny")
+	end
+end
+
+function SWEP:PreDrawViewModel()
+	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
+	self.Owner:GetViewModel():SetColor(Color(0,255,0,255))
+	self.Owner:GetViewModel():SetMaterial("models/shiny")
 end
 
 function SWEP:Holster()
-	if CLIENT or not IsValid(self:GetOwner()) then return end
-	net.Start("UnarrestBatonColour")
-		net.WriteUInt(255,8)
-		net.WriteUInt(255,8)
-		net.WriteUInt(255,8)
-		net.WriteString("")
-	net.Send(self:GetOwner())
+	if SEVER then
+		self:SetColor(Color(255,255,255,255))
+		self:SetMaterial("")
+	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
+		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
+		self.Owner:GetViewModel():SetMaterial("")
+	end
 	return true
 end
 
 function SWEP:OnRemove()
-	if SERVER and IsValid(self:GetOwner()) then
-		net.Start("UnarrestBatonColour")
-			net.WriteUInt(255,8)
-			net.WriteUInt(255,8)
-			net.WriteUInt(255,8)
-			net.WriteString("")
-		net.Send(self:GetOwner())
+	if SEVER then
+		self:SetColor(Color(255,255,255,255))
+		self:SetMaterial("")
+	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
+		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
+		self.Owner:GetViewModel():SetMaterial("")
 	end
 end
-
-net.Receive("UnarrestBatonColour", function()
-	local viewmodel = LocalPlayer():GetViewModel()
-	if not IsValid(viewmodel) then return end
-	local r,g,b,a = net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), 255
-	viewmodel:SetColor(Color(r,g,b,a))
-	viewmodel:SetMaterial(net.ReadString())
-end)
 
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
