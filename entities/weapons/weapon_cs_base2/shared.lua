@@ -114,14 +114,14 @@ function SWEP:Holster()
 			local vm = self.Owner:GetViewModel()
 			self:ResetBones(vm)
 		end
-		return
+	else
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	end
-	hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 
 	return true
 end
 
-function SWEP:Remove()
+function SWEP:OnRemove()
 	if CLIENT and IsValid(self.Owner) then
 		local vm = self.Owner:GetViewModel()
 		self:ResetBones(vm)
