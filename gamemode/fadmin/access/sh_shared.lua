@@ -7,7 +7,7 @@ FAdmin.Access.ADMIN[0] = "noaccess"
 FAdmin.Access.Groups = FAdmin.Access.Groups or {}
 FAdmin.Access.Privileges = FAdmin.Access.Privileges or {}
 
-function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 = superadmin*/, privs)
+function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 = superadmin*/, privs, immunity)
 	FAdmin.Access.Groups[name] = FAdmin.Access.Groups[name] or {ADMIN = admin_access, PRIVS = privs or {}}
 	if not SERVER then return end
 
@@ -20,6 +20,10 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 			MySQLite.query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(name) .. ", " .. MySQLite.SQLStr(priv) .. ");")
 		end
 	end)
+
+	if immunity then
+		MySQLite.query("REPLACE INTO FAdmin_Immunity VALUES(" .. MySQLite.SQLStr(name) .. ", " .. tonumber(immunity) .. ");")
+	end
 
 	if FAdmin.Access.SendGroups and privs then
 		for k,v in pairs(player.GetAll()) do
@@ -89,8 +93,11 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 		return canTarget
 	end
 
-	if FAdmin.GlobalSetting.Immunity and type(target) ~= "string" and IsValid(target) and target ~= ply and FAdmin.Access.Groups[Usergroup] and
-	FAdmin.Access.Groups[target:GetNWString("usergroup")] and FAdmin.Access.Groups[target:GetNWString("usergroup")].ADMIN >= FAdmin.Access.Groups[Usergroup].ADMIN then
+	if FAdmin.GlobalSetting.Immunity and
+		not isstring(target) and IsValid(target) and target ~= ply and
+		FAdmin.Access.Groups[Usergroup] and	FAdmin.Access.Groups[target:GetNWString("usergroup")] and
+		FAdmin.Access.Groups[Usergroup].immunity and FAdmin.Access.Groups[target:GetNWString("usergroup")].immunity and
+		FAdmin.Access.Groups[target:GetNWString("usergroup")].immunity >= FAdmin.Access.Groups[Usergroup].immunity then
 		return false
 	end
 
