@@ -68,7 +68,7 @@ SWEP.MultiMode = false
 function SWEP:Initialize()
 	if CLIENT and IsValid(self.Owner) then
 		local vm = self.Owner:GetViewModel()
-		self:ResetBones(vm)
+		self:ResetDarkRPBones(vm)
 	end
 
 	self:SetWeaponHoldType("normal")
@@ -110,7 +110,7 @@ function SWEP:Holster()
 	if CLIENT then
 		if IsValid(self.Owner) then
 			local vm = self.Owner:GetViewModel()
-			self:ResetBones(vm)
+			self:ResetDarkRPBones(vm)
 		end
 		return
 	end
@@ -122,7 +122,7 @@ end
 function SWEP:Remove()
 	if CLIENT and IsValid(self.Owner) then
 		local vm = self.Owner:GetViewModel()
-		self:ResetBones(vm)
+		self:ResetDarkRPBones(vm)
 	end
 end
 
@@ -462,14 +462,14 @@ if CLIENT then
 		if not IsValid(self.Owner) then return end
 		local vm = self.Owner:GetViewModel()
 		
-		if self.ViewModelBoneManipulations then
-			self:UpdateBones(vm, self.ViewModelBoneManipulations)
+		if self.DarkRPViewModelBoneManipulations then
+			self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
 		else
-			self:ResetBones(vm)
+			self:ResetDarkRPBones(vm)
 		end
 	end
 
-	function SWEP:UpdateBones(vm, manipulations)
+	function SWEP:UpdateDarkRPBones(vm, manipulations)
 		if not IsValid(vm) or not vm:GetBoneCount() then return end
 
 		-- Fill in missing bone names. Things fuck up when we workaround the scale bug and bones are missing.
@@ -514,7 +514,7 @@ if CLIENT then
 		end 
 	end
 	
-	function SWEP:ResetBones(vm)	
+	function SWEP:ResetDarkRPBones(vm)	
 		if not IsValid(vm) or not vm:GetBoneCount() then return end
 		for i = 0, vm:GetBoneCount() - 1 do
 			vm:ManipulateBoneScale(i, Vector(1, 1, 1))
