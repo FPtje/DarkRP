@@ -144,9 +144,13 @@ function SWEP:SecondaryAttack()
 	self:NewSetWeaponHoldType("melee")
 	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
 
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
-	self.Weapon:EmitSound(self.Sound)
-	self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+	-- Workaround: ACT_VM_HITCENTER sometimes fails to work.
+	self.Weapon:SendWeaponAnim(ACT_VM_IDLE)
+	timer.Simple(0, function()
+		self.Owner:SetAnimation(PLAYER_ATTACK1)
+		self.Weapon:EmitSound(self.Sound)
+		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+	end)
 
 	self.NextStrike = CurTime() + .3
 
