@@ -106,9 +106,13 @@ function SWEP:PrimaryAttack()
 	-- Workaround: ACT_VM_HITCENTER sometimes fails to work.
 	self.Weapon:SendWeaponAnim(ACT_VM_IDLE)
 	timer.Simple(0, function()
-		self.Owner:SetAnimation(PLAYER_ATTACK1)
-		self.Weapon:EmitSound(self.Sound)
-		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+		if IsValid(self.Owner) then
+			self.Owner:SetAnimation(PLAYER_ATTACK1)
+		end
+		if IsValid(self.Weapon) then
+			self.Weapon:EmitSound(self.Sound)
+			self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+		end
 	end)
 
 	self.NextStrike = CurTime() + .3
