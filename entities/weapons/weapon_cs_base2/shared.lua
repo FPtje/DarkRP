@@ -143,6 +143,8 @@ function SWEP:Reload()
 		self.Reloading = false
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
+		// WORKAROUND: Some models have shit viewmodel positions until they fire
+		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	end)
 end
 
