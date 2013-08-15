@@ -109,11 +109,10 @@ end
 function SWEP:Holster()
 	self.Ironsights = false
 
+	if not IsValid(self.Owner) then return true end
 	if CLIENT then
-		if IsValid(self.Owner) then
-			local vm = self.Owner:GetViewModel()
-			self:ResetDarkRPBones(vm)
-		end
+		local vm = self.Owner:GetViewModel()
+		self:ResetDarkRPBones(vm)
 	else
 		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	end
@@ -122,9 +121,13 @@ function SWEP:Holster()
 end
 
 function SWEP:OnRemove()
+	self.Ironsights = false
+
 	if CLIENT and IsValid(self.Owner) then
 		local vm = self.Owner:GetViewModel()
 		self:ResetDarkRPBones(vm)
+	elseif SERVER and IsValid(self.LASTOWNER) then
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.LASTOWNER)
 	end
 end
 
@@ -382,13 +385,13 @@ function SWEP:SetIronsights(b)
 	if b then
 		self:NewSetWeaponHoldType(self.HoldType)
 		self.CurHoldType = self.HoldType
-		if SERVER then
+		if SERVER and IsValid(self.Owner) then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
 	else
 		self:NewSetWeaponHoldType("normal")
 		self.CurHoldType = "normal"
-		if SERVER then
+		if SERVER and IsValid(self.Owner) then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
 	end
