@@ -50,6 +50,9 @@ function SWEP:Deploy()
 	if SERVER then
 		self:SetColor(Color(0,255,0,255))
 		self:SetMaterial("models/shiny")
+		local vm = self.Owner:GetViewModel()
+		if not IsValid(vm) then return end
+		vm:ResetSequence(vm:LookupSequence("idle01"))
 	end
 	return true
 end
@@ -64,6 +67,7 @@ function SWEP:Holster()
 	if SERVER then
 		self:SetColor(Color(255,255,255,255))
 		self:SetMaterial("")
+		timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
 	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
 		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
 		self.Owner:GetViewModel():SetMaterial("")
@@ -75,6 +79,7 @@ function SWEP:OnRemove()
 	if SERVER then
 		self:SetColor(Color(255,255,255,255))
 		self:SetMaterial("")
+		timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
 	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
 		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
 		self.Owner:GetViewModel():SetMaterial("")
@@ -87,21 +92,36 @@ function SWEP:PrimaryAttack()
 	self:NewSetWeaponHoldType("melee")
 	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
 
-	-- Workaround: ACT_VM_HITCENTER sometimes fails to work.
-	self.Weapon:SendWeaponAnim(ACT_VM_IDLE)
-	timer.Simple(0, function()
-		if IsValid(self.Owner) then
-			self.Owner:SetAnimation(PLAYER_ATTACK1)
-		end
-		if IsValid(self.Weapon) then
-			self.Weapon:EmitSound(self.Sound)
-			self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-		end
-	end)
-
-	self.NextStrike = CurTime() + .4
+	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later
 
 	if CLIENT then return end
+
+	timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
+	local vm = self.Owner:GetViewModel()
+	if IsValid(vm) then
+		vm:ResetSequence(vm:LookupSequence("idle01"))
+		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(self.Owner) or not IsValid(self.Owner:GetActiveWeapon()) or self.Owner:GetActiveWeapon() ~= self then return end
+			self.Owner:SetAnimation(PLAYER_ATTACK1)
+
+			if IsValid(self.Weapon) then
+				self.Weapon:EmitSound(self.Sound)
+			end
+
+			local vm = self.Owner:GetViewModel()
+			if not IsValid(vm) then return end
+			vm:ResetSequence(vm:LookupSequence("attackch"))
+			vm:SetPlaybackRate(1 + 1/3)
+			local duration = vm:SequenceDuration() / vm:GetPlaybackRate()
+			timer.Create(self:GetClass() .. "_idle" .. self:EntIndex(), duration, 1, function()
+				if not IsValid(self) or not IsValid(self.Owner) then return end
+				local vm = self.Owner:GetViewModel()
+				if not IsValid(vm) then return end
+				vm:ResetSequence(vm:LookupSequence("idle01"))
+			end)
+			self.NextStrike = CurTime() + duration
+		end)
+	end
 
 	local trace = self.Owner:GetEyeTrace()
 
