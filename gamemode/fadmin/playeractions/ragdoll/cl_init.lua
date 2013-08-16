@@ -15,7 +15,7 @@ FAdmin.StartHooks["Ragdoll"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ragdoll", ply) end,
 	function(ply, button)
 		if ply:FAdmin_GetGlobal("fadmin_ragdolled") then
-			RunConsoleCommand("_FAdmin", "unragdoll", ply:SteamID())
+			RunConsoleCommand("_FAdmin", "unragdoll", ply:UserID())
 			button:SetImage2("null")
 			button:SetText("Ragdoll")
 			button:GetParent():InvalidateLayout()
@@ -34,13 +34,13 @@ FAdmin.StartHooks["Ragdoll"] = function()
 			if v == "Unragdoll" then continue end
 			FAdmin.PlayerActions.addTimeSubmenu(menu, v,
 				function()
-					RunConsoleCommand("_FAdmin", "Ragdoll", ply:SteamID(), k)
+					RunConsoleCommand("_FAdmin", "Ragdoll", ply:UserID(), k)
 					button:SetImage2("FAdmin/icons/disable")
 					button:SetText("Unragdoll")
 					button:GetParent():InvalidateLayout()
 				end,
 				function(secs)
-					RunConsoleCommand("_FAdmin", "Ragdoll", ply:SteamID(), k, secs)
+					RunConsoleCommand("_FAdmin", "Ragdoll", ply:UserID(), k, secs)
 					button:SetImage2("FAdmin/icons/disable")
 					button:SetText("Unragdoll")
 					button:GetParent():InvalidateLayout()
