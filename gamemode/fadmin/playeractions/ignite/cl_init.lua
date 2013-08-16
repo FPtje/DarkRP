@@ -9,12 +9,12 @@ FAdmin.StartHooks["Ignite"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ignite", ply) end,
 	function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_ignited") then
-			RunConsoleCommand("_FAdmin", "ignite", ply:SteamID())
+			RunConsoleCommand("_FAdmin", "ignite", ply:UserID())
 			button:SetImage2("FAdmin/icons/disable")
 			button:SetText("Extinguish")
 			button:GetParent():InvalidateLayout()
 		else
-			RunConsoleCommand("_FAdmin", "unignite", ply:SteamID())
+			RunConsoleCommand("_FAdmin", "unignite", ply:UserID())
 			button:SetImage2("null")
 			button:SetText("Ignite")
 			button:GetParent():InvalidateLayout()

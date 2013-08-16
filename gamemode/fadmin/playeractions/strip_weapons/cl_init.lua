@@ -5,6 +5,6 @@ FAdmin.StartHooks["StripWeapons"] = function()
 
 	FAdmin.ScoreBoard.Player:AddActionButton("Strip weapons", {"FAdmin/icons/weapon", "FAdmin/icons/disable"}, Color(255, 130, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "StripWeapons", ply) end, function(ply, button)
-		RunConsoleCommand("_FAdmin", "StripWeapons", ply:SteamID())
+		RunConsoleCommand("_FAdmin", "StripWeapons", ply:UserID())
 	end)
 end
