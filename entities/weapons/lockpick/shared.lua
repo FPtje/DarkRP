@@ -174,7 +174,7 @@ function SWEP:DrawHUD()
 		local time = self.EndPick - self.StartPick
 		local curtime = CurTime() - self.StartPick
 		local status = curtime/time
-		local BarWidth = status * (width - 16) + 8
+		local BarWidth = status * (width - 16)
 		draw.RoundedBox(8, x+8, y+8, BarWidth, height - 16, Color(255-(status*255), 0+(status*255), 0, 255))
 
 		draw.SimpleText(DarkRP.getPhrase("picking_lock")..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
