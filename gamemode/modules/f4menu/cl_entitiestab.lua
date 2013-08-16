@@ -147,6 +147,33 @@ end
 derma.DefineControl("F4MenuGuns", "", PANEL, "F4MenuEntitiesBase")
 
 /*---------------------------------------------------------------------------
+Ammo panel
+---------------------------------------------------------------------------*/
+PANEL = {}
+
+function PANEL:generateButtons()
+	for k,v in pairs(GAMEMODE.AmmoTypes) do
+		local pnl = vgui.Create("F4MenuEntityButton", self)
+		pnl:setDarkRPItem(v)
+		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyammo", v.ammoType)
+		self:AddItem(pnl)
+	end
+end
+
+function PANEL:PerformLayout()
+	for k,v in pairs(self.Items) do
+		if v.customCheck and not customCheck(v.DarkRPItem) then
+			v:SetDisabled(true)
+		else
+			v:SetDisabled(false)
+		end
+	end
+	self.BaseClass.PerformLayout(self)
+end
+
+derma.DefineControl("F4MenuAmmo", "", PANEL, "F4MenuEntitiesBase")
+
+/*---------------------------------------------------------------------------
 Vehicles panel
 ---------------------------------------------------------------------------*/
 PANEL = {}

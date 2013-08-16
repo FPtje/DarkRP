@@ -428,6 +428,7 @@ local english = {
 	shipments = "Shipments",
 	F4guns = "Weapons",
 	F4entities = "Miscellaneous",
+	F4ammo = "Ammo",
 	F4vehicles = "Vehicles",
 
 	-- Tab 1
