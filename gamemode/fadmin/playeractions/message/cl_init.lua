@@ -69,7 +69,7 @@ FAdmin.StartHooks["zzSendMessage"] = function()
 	FAdmin.Commands.AddCommand("Message", nil, "<Player>", "[type]", "<text>")
 
 	FAdmin.ScoreBoard.Player:AddActionButton("Send message", "FAdmin/icons/Message", Color(0, 200, 0, 255),
-		function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Message") end, function(ply, button)
+		function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Message") and not ply:IsBot() end, function(ply, button)
 			MessageGui(ply)
 		end
 	)

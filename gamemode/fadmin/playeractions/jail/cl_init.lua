@@ -4,7 +4,7 @@ FAdmin.StartHooks["Jail"] = function()
 	FAdmin.Commands.AddCommand("UnJail", nil, "<Player>")
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Jail", function(ply)
-		RunConsoleCommand("_FAdmin", "jail", ply:SteamID())
+		RunConsoleCommand("_FAdmin", "jail", ply:UserID())
 	end)
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
@@ -18,7 +18,7 @@ FAdmin.StartHooks["Jail"] = function()
 	Color(255, 130, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Jail", ply) end,
 	function(ply, button)
-		if ply:FAdmin_GetGlobal("fadmin_jailed") then RunConsoleCommand("_FAdmin", "unjail", ply:SteamID()) button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
+		if ply:FAdmin_GetGlobal("fadmin_jailed") then RunConsoleCommand("_FAdmin", "unjail", ply:UserID()) button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
 
 		local menu = DermaMenu()
 		local Title = vgui.Create("DLabel")
@@ -33,12 +33,12 @@ FAdmin.StartHooks["Jail"] = function()
 			if v == "Unjail" then continue end
 			FAdmin.PlayerActions.addTimeSubmenu(menu, v .. " jail",
 				function()
-					RunConsoleCommand("_FAdmin", "Jail", ply:SteamID(), k)
+					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k)
 					button:SetText("Unjail") button:GetParent():InvalidateLayout()
 					button:SetImage2("FAdmin/icons/disable")
 				end,
 				function(secs)
-					RunConsoleCommand("_FAdmin", "Jail", ply:SteamID(), k, secs)
+					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k, secs)
 					button:SetText("Unjail")
 					button:GetParent():InvalidateLayout()
 					button:SetImage2("FAdmin/icons/disable")
