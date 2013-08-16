@@ -76,7 +76,7 @@ Utilities!
 function FAdmin.FindPlayer(info)
 	if not info then return nil end
 	local pls = player.GetAll()
-	local PlayersFound = {}
+	local found = {}
 
 	if string.lower(info) == "*" or string.lower(info) == "<all>" then return pls end
 
@@ -85,30 +85,40 @@ function FAdmin.FindPlayer(info)
 		if A ~= "" then table.insert(InfoPlayers, A) end
 	end
 
-	for k, v in pairs(pls) do
-		for _, PlayerInfo in pairs(InfoPlayers) do
-			-- Find by UserID (status in console)
-			if tonumber(PlayerInfo) == v:UserID() and not table.HasValue(PlayersFound, v) then
-				table.insert(PlayersFound, v)
+	for _, PlayerInfo in pairs(InfoPlayers) do
+		-- Playerinfo is always to be treated as UserID when it's a number
+		-- otherwise people with numbers in their names could get confused with UserID's of other players
+		if tonumber(PlayerInfo) then
+			if IsValid(Player(PlayerInfo)) and not found[Player(PlayerInfo)] then
+				found[Player(PlayerInfo)] = true
 			end
+			continue
+		end
 
+		for k, v in pairs(pls) do
 			-- Find by Steam ID
-			if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not table.HasValue(PlayersFound, v)  then
-				table.insert(PlayersFound, v)
+			if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not found[v]  then
+				found[v] = true
 			end
 
 			-- Find by Partial Nick
-			if string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not table.HasValue(PlayersFound, v)  then
-				table.insert(PlayersFound, v)
+			if string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
+				found[v] = true
 			end
 
-			if v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not table.HasValue(PlayersFound, v)  then -- DarkRP
-				table.insert(PlayersFound, v)
+			if v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
+				found[v] = true
 			end
 		end
 	end
 
-	return (#PlayersFound > 0 and PlayersFound) or nil
+	local players = {}
+	local empty = true
+	for k, v in pairs(found or {}) do
+		empty = false
+		table.insert(players, k)
+	end
+	return empty and nil or players
 end
 
 function FAdmin.IsEmpty(vector)
