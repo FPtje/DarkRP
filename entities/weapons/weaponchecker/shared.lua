@@ -253,7 +253,7 @@ function SWEP:DrawHUD()
 		local time = self.EndCheck - self.StartCheck
 		local curtime = CurTime() - self.StartCheck
 		local status = curtime/time
-		local BarWidth = status * (width - 16) + 8
+		local BarWidth = status * (width - 16)
 		draw.RoundedBox(8, x+8, y+8, BarWidth, height - 16, Color(0, 0+(status*255), 255-(status*255), 255))
 
 		draw.SimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
