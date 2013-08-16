@@ -168,7 +168,7 @@ function SWEP:DrawHUD()
 		self.Dots = self.Dots or ""
 		local w = ScrW()
 		local h = ScrH()
-		local x,y,width,height = w/2-w/10, h/ 2, w/5, h/15
+		local x,y,width,height = w/2-w/10, h/2-60, w/5, h/15
 		draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
 		local time = self.EndPick - self.StartPick
