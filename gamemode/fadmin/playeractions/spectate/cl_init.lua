@@ -16,12 +16,20 @@ FAdmin.StartHooks["zzSpectate"] = function()
 
 	-- Right click option
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Spectate", function(ply)
-		RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+			RunConsoleCommand("_FAdmin", "Spectate", ply:Nick())
+		else
+			RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
+		end
 	end)
 
 	-- Slap option in player menu
 	FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "FAdmin/icons/spectate", Color(0, 200, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Spectate") and ply ~= LocalPlayer() end, function(ply)
-		RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
+		if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+			RunConsoleCommand("_FAdmin", "Spectate", ply:Nick())
+		else
+			RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
+		end
 	end)
 end
 
@@ -118,8 +126,11 @@ local function spectateLookingAt()
 	end
 
 	if not IsValid(foundPly) then return end
-
-	RunConsoleCommand("FAdmin", "Spectate", foundPly:SteamID())
+	if foundPly:SteamID() == "NULL" or foundPly:SteamID() == "BOT" or foundPly:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+		RunConsoleCommand("FAdmin", "Spectate", foundPly:Nick())
+	else
+		RunConsoleCommand("FAdmin", "Spectate", foundPly:SteamID())
+	end
 end
 
 /*---------------------------------------------------------------------------

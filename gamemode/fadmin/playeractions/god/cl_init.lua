@@ -13,9 +13,17 @@ FAdmin.StartHooks["God"] = function()
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "God") end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_godded") then
-			RunConsoleCommand("_FAdmin", "god", ply:SteamID())
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "god", ply:Nick())
+			else
+				RunConsoleCommand("_FAdmin", "god", ply:SteamID())
+			end
 		else
-			RunConsoleCommand("_FAdmin", "ungod", ply:SteamID())
+			if ply:SteamID() == "NULL" or ply:SteamID() == "BOT" or ply:SteamID() == "" then -- I'm almost certain its "" but idk... best to cover all bases.
+				RunConsoleCommand("_FAdmin", "ungod", ply:Nick())
+			else
+				RunConsoleCommand("_FAdmin", "ungod", ply:SteamID())
+			end
 		end
 
 		if not ply:FAdmin_GetGlobal("FAdmin_godded") then button:SetImage2("FAdmin/icons/disable") button:SetText("Ungod") button:GetParent():InvalidateLayout() return end
