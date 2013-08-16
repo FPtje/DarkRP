@@ -13,7 +13,7 @@ local function GiveWeaponGui(ply)
 		if not ply:IsValid() then return end
 		local giveWhat = (IsAmmo and "ammo") or "weapon"
 
-		RunConsoleCommand("FAdmin", "give"..giveWhat, ply:SteamID(), SpawnName)
+		RunConsoleCommand("FAdmin", "give"..giveWhat, ply:UserID(), SpawnName)
 	end
 
 	WeaponMenu:BuildList()

@@ -13,9 +13,9 @@ FAdmin.StartHooks["God"] = function()
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "God") end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_godded") then
-			RunConsoleCommand("_FAdmin", "god", ply:SteamID())
+			RunConsoleCommand("_FAdmin", "god", ply:UserID())
 		else
-			RunConsoleCommand("_FAdmin", "ungod", ply:SteamID())
+			RunConsoleCommand("_FAdmin", "ungod", ply:UserID())
 		end
 
 		if not ply:FAdmin_GetGlobal("FAdmin_godded") then button:SetImage2("FAdmin/icons/disable") button:SetText("Ungod") button:GetParent():InvalidateLayout() return end

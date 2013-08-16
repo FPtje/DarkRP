@@ -13,7 +13,7 @@ FAdmin.StartHooks["Health"] = function()
 			local window = Derma_StringRequest("Select health", "What do you want the health of the person to be?", "",
 				function(text)
 					local health = tonumber(text or 100) or 100
-					RunConsoleCommand("_fadmin", "SetHealth", ply:SteamID(), health)
+					RunConsoleCommand("_fadmin", "SetHealth", ply:UserID(), health)
 				end
 			)
 
