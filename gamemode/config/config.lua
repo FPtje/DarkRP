@@ -287,3 +287,18 @@ GM.Config.DisabledModules = {
 	["voterestrictions"] = true,
 	["hitmenu"] = false,
 }
+
+GM.Config.PocketBlacklist = {
+	["fadmin_jail"] = true,
+	["meteor"] = true,
+	["door"] = true,
+	["func_"] = true,
+	["player"] = true,
+	["beam"] = true,
+	["worldspawn"] = true,
+	["env_"] = true,
+	["path_"] = true,
+	["prop_physics"] = true,
+	["money_printer"] = true,
+	["gunlab"] = true,
+}

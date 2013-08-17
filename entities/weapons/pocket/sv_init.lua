@@ -202,24 +202,12 @@ end)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-local blacklist = {
-	["fadmin_jail"] = true,
-	["meteor"] = true,
-	["door"] = true,
-	["func_"] = true,
-	["player"] = true,
-	["beam"] = true,
-	["worldspawn"] = true,
-	["env_"] = true,
-	["path_"] = true
-}
-
 local function canPocket(ply, item)
 	if not IsValid(item) then return false end
 
 	if not item:CPPICanPickup(ply) then return false, DarkRP.getPhrase("cannot_pocket_x") end
 	if item.jailWall then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if blacklist[item:GetClass()] then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if GAMEMODE.Config.PocketBlacklist[item:GetClass()] then return false, DarkRP.getPhrase("cannot_pocket_x") end
 
 	local trace = ply:GetEyeTrace()
 	if ply:EyePos():Distance(trace.HitPos) > 150 then return false end
