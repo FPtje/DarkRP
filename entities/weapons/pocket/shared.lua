@@ -6,13 +6,13 @@ end
 
 if CLIENT then
 	include("cl_menu.lua")
-
-	SWEP.PrintName = "Pocket"
-	SWEP.Slot = 1
-	SWEP.SlotPos = 1
-	SWEP.DrawAmmo = false
-	SWEP.DrawCrosshair = true
 end
+
+SWEP.PrintName = "Pocket"
+SWEP.Slot = 1
+SWEP.SlotPos = 1
+SWEP.DrawAmmo = false
+SWEP.DrawCrosshair = true
 
 SWEP.Base = "weapon_cs_base2"
 
@@ -39,10 +39,6 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
-if CLIENT then
-	SWEP.FrameVisible = false
-end
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType("normal")
 end
@@ -54,21 +50,52 @@ function SWEP:Deploy()
 	self.Owner:DrawWorldModel(false)
 end
 
-function SWEP:Equip(newOwner)
-	-- enforce max
-end
-
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
 
-	-- pick up item
+	if not SERVER then return end
+
+	local ent = self.Owner:GetEyeTrace().Entity
+	local canPickup, message = hook.Call("canPocket", nil, self.Owner, ent)
+
+	if not canPickup then
+		if message then DarkRP.notify(self.Owner, 1, 4, message) end
+		return
+	end
+
+	self.Owner:addPocketItem(ent)
 end
 
 function SWEP:SecondaryAttack()
-	-- drop last item
+	if not SERVER then return end
+
+	local item = #self.Owner:getPocketItems()
+	if item <= 0 then
+		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
+		return
+	end
+
+	self.Owner:dropPocketItem(item)
 end
 
-SWEP.OnceReload = false
 function SWEP:Reload()
-	-- open menu
+	if not CLIENT then return end
+
+	DarkRP.openPocketMenu()
 end
+
+local meta = FindMetaTable("Player")
+DarkRP.stub{
+	name = "getPocketItems",
+	description = "Get a player's pocket items.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "items",
+			description = "A table containing crucial information about the items in the pocket.",
+			type = "table"
+		}
+	},
+	metatable = meta
+}

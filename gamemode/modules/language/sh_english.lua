@@ -161,7 +161,7 @@ local english = {
 
 	picking_lock = "Picking lock",
 
-	cannot_pocket_x = "You cannot put this%s in your pocket!",
+	cannot_pocket_x = "You cannot put this in your pocket!",
 	object_too_heavy = "This object is too heavy.",
 	pocket_full = "Your pocket is full!",
 	pocket_no_items = "Your pocket contains no items.",
