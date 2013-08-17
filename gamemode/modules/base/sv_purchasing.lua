@@ -313,16 +313,12 @@ local function BuyAmmo(ply, args)
 
 	local tr = util.TraceLine(trace)
 
-	local ammo = ents.Create("spawned_weapon")
+	local ammo = ents.Create("spawned_ammo")
 	ammo:SetModel(found.model)
 	ammo.ShareGravgun = true
 	ammo:SetPos(tr.HitPos)
 	ammo.nodupe = true
-	function ammo:PlayerUse(user, ...)
-		user:GiveAmmo(found.amountGiven, found.ammoType)
-		self:Remove()
-		return true
-	end
+	ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
 	ammo:Spawn()
 
 	return ""
