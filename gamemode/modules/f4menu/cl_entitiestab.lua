@@ -84,7 +84,7 @@ local function canBuyShipment(ship)
 end
 
 function PANEL:generateButtons()
-	local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("seperate")}, CustomShipments)
+	local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
 
 	for k,v in pairs(shipments) do
 		local pnl = vgui.Create("F4MenuEntityButton", self)
