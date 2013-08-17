@@ -9,6 +9,8 @@ function PANEL:Init()
 end
 
 function PANEL:Rebuild()
+	if #self.Items == 0 then return end
+
 	local height = 0
 	for i, item in pairs(self.Items) do
 		item:SetWide(self:GetWide() / 2 - 10)
