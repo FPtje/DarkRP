@@ -54,6 +54,7 @@ if CLIENT then
 		local wep = net.ReadEntity()
 		local time = net.ReadUInt(5)
 
+		wep.IsLockPicking = true
 		wep.StartPick = CurTime()
 		wep.LockPickTime = time
 		wep.EndPick = CurTime() + time
@@ -87,9 +88,8 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	self.IsLockPicking = true
-
 	if SERVER then
+		self.IsLockPicking = true
 		self.StartPick = CurTime()
 		self.LockPickTime = math.Rand(10, 30)
 		net.Start("lockpick_time")
@@ -175,10 +175,10 @@ function SWEP:DrawHUD()
 
 		local time = self.EndPick - self.StartPick
 		local curtime = CurTime() - self.StartPick
-		local status = curtime/time
+		local status = math.Clamp(curtime/time, 0, 1)
 		local BarWidth = status * (width - 16)
-		local cornerRadius = math.min(math.floor(BarWidth) - (math.floor(BarWidth) % 2), 8)
-		draw.RoundedBox(cornerRadius, x+8, y+8+((8-cornerRadius)/2), BarWidth, height-16-(8-cornerRadius), Color(255-(status*255), 0+(status*255), 0, 255))
+		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
+		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
 
 		draw.SimpleText(DarkRP.getPhrase("picking_lock")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 	end
