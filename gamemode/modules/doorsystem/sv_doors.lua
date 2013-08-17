@@ -501,6 +501,10 @@ local function RemoveDoorOwner(ply, args)
 		return ""
 	end
 
+
+	local canDo = hook.Call("onAllowedToOwnRemoved", nil, ply, trace.Entity, target)
+	if canDo == false then return "" end
+
 	if trace.Entity:isKeysAllowedToOwn(target) then
 		trace.Entity:removeKeysAllowedToOwn(target)
 	end
@@ -545,6 +549,9 @@ local function AddDoorOwner(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", ply:Nick()))
 		return ""
 	end
+
+	local canDo = hook.Call("onAllowedToOwnAdded", nil, ply, trace.Entity, target)
+	if canDo == false then return "" end
 
 	trace.Entity:addKeysAllowedToOwn(target)
 

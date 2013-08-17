@@ -308,6 +308,64 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "onAllowedToOwnAdded",
+	description = "When a player adds a co-owner to a door.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who adds the co-owner.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The door.",
+			type = "Entity"
+		},
+		{
+			name = "target",
+			description = "The target who will be allowed to own the door.",
+			type = "Player"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to add this player as co-owner.",
+			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "onAllowedToOwnRemoved",
+	description = "When a player removes a co-owner to a door.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who removes the co-owner.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The door.",
+			type = "Entity"
+		},
+		{
+			name = "target",
+			description = "The target who will not be allowed to own the door anymore.",
+			type = "Player"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to remove this player as co-owner.",
+			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
 	name = "playerBuyVehicle",
 	description = "When a player purchases a vehicle.",
 	parameters = {
