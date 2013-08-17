@@ -133,6 +133,12 @@ local function deserialize(ply, item)
 	return ent
 end
 
+local function dropAllPocketItems(ply)
+	for k,v in pairs(ply.darkRPPocket or {}) do
+		ply:dropPocketItem(k)
+	end
+end
+
 util.AddNetworkString("DarkRP_Pocket")
 local function sendPocketItems(ply)
 	net.Start("DarkRP_Pocket")
@@ -230,7 +236,10 @@ hook.Add("canPocket", "defaultRestrictions", canPocket)
 -- Drop pocket items on death
 hook.Add("PlayerDeath", "DropPocketItems", function(ply)
 	if not GAMEMODE.Config.droppocketdeath or not ply.darkRPPocket then return end
-	for k,v in pairs(ply.darkRPPocket) do
-		ply:dropPocketItem(k)
-	end
+	dropAllPocketItems(ply)
+end)
+
+hook.Add("playerArrested", "DropPocketItems", function(ply)
+	if not GAMEMODE.Config.droppocketarrest then return end
+	dropAllPocketItems(ply)
 end)

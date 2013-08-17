@@ -11,6 +11,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self.locked = true
+	timer.Simple(0, function() self.locked = true end) -- when spawning through pocket it might be unlocked
 	timer.Simple(GAMEMODE.Config.shipmentspawntime, function() if IsValid(self) then self.locked = false end end)
 	self.damage = 100
 	self.ShareGravgun = true
