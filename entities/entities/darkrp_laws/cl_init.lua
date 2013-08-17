@@ -44,7 +44,6 @@ usermessage.Hook("DRP_AddLaw", AddLawUM)
 local function RemoveLaw(um)
 	local i = um:ReadShort()
 
-
 	while i < #Laws do
 		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%d%."))))
 		i = i + 1

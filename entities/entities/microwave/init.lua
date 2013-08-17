@@ -42,7 +42,7 @@ function ENT:SalePrice(activator)
 		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, activator:Team()) then
 			return discounted
 		else -- Otherwise, sell it to them at full price
-			return math.floor(GAMEMODE.Config.microwavefoodcost)
+			return math.ceil(GAMEMODE.Config.microwavefoodcost)
 		end
 	else
 		return self:Getprice()

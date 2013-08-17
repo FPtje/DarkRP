@@ -37,23 +37,24 @@ end
 
 function ENT:SalePrice(activator)
 	local owner = self:Getowning_ent()
-	local discounted = math.ceil(185 * 0.88)
 
-	if activator == owner and IsValid(owner) then
+	if IsValid(owner) and activator == owner then
 		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, activator:Team()) then
-			return discounted
+			-- Hey, hey, hey! Get 20% off production costs of the award winning gun lab if you own the gun lab and are a gun dealer!
+			return math.ceil(self:Getprice() * 0.80) -- 20% off
 		else
-			return 185
+			-- But we're not stopping there! If you are the owner of the Gun Lab 9000 but not a gun dealer, you still get a massive 10% off!
+			return math.ceil(self:Getprice() * 0.90) -- 10% off
 		end
 	else
-		return self:Getprice()
+		-- If you don't own the gun lab, tough shit. No discount for you. Thank you, come again.
+		return self:Getprice() -- 0% off
 	end
 end
 
 ENT.Once = false
 function ENT:Use(activator)
 	local owner = self:Getowning_ent()
-	local discounted = math.ceil(185 * 0.88)
 	local cash = self:SalePrice(activator)
 
 	if self.Once then return end
@@ -73,12 +74,12 @@ function ENT:Use(activator)
 	activator:AddMoney(cash * -1)
 	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
 
-	if activator ~= owner and IsValid(owner) then
+	if IsValid(owner) and activator ~= owner then
 		local gain = 0
 		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, owner:Team()) then
-			gain = math.floor(self:Getprice() - discounted)
+			gain = math.floor(self:Getprice() - math.ceil(self:Getprice() * 0.80))
 		else
-			gain = math.floor(self:Getprice() - 185)
+			gain = math.floor(self:Getprice() - math.ceil(self:Getprice() * 0.90))
 		end
 		if gain == 0 then
 			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0 " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
