@@ -9,7 +9,7 @@ function GM:playerBuyDoor( objPl, objEnt )
 	return true;
 end
 
-function GM:PlayerSellDoor( objPl, objEnt )
+function GM:playerSellDoor( objPl, objEnt )
 	return false;
 end
 
