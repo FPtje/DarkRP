@@ -21,8 +21,10 @@ function ENT:Draw()
 		draw.SimpleText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
 		local col = Color(255, 255, 255, 255)
-		for k,v in ipairs(Laws) do
-			draw.SimpleText(v, "TargetID", 5, 35 + (k-1)*21, col)
+		local lastHeight = 0
+		for _,v in ipairs(Laws) do
+			draw.DrawText(v, "TargetID", 5, 35 + lastHeight, col)
+			lastHeight = lastHeight + ((fn.ReverseArgs(string.gsub(v, "\n", "")))+1)*21
 		end
 
 	cam.End3D2D()
