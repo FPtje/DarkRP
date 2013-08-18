@@ -5,10 +5,7 @@ local KickText = ""
 usermessage.Hook("FAdmin_kick_start", function()
 	hook.Add("HUDPaint", "FAdmin_kick", function()
 		draw.RoundedBox(0,0,0, ScrW(), ScrH(), Color(0,0,0,255))
-		draw.DrawText([[You are getting kicked
-		Reason: ]]..KickText..[[
-
-		Leaving voluntarily is also an option.]], "HUDNumber5", ScrW()/2, ScrH()/2, Color(255,0,0,255), TEXT_ALIGN_CENTER)
+		draw.DrawText("You are getting kicked\nReason: "..KickText.."\nLeaving voluntarily is also an option.", "HUDNumber5", ScrW()/2, ScrH()/2, Color(255,0,0,255), TEXT_ALIGN_CENTER)
 	end)
 end)
 
@@ -27,10 +24,7 @@ local BanTimeText = "permanent"
 usermessage.Hook("FAdmin_ban_start", function()
 	hook.Add("HUDPaint", "FAdmin_ban", function()
 		draw.RoundedBox(0,0,0, ScrW(), ScrH(), Color(0,0,0,255))
-		draw.DrawText([[You are getting banned
-		Reason: ]]..BanText.."\nTime: ".." "..BanTimeText..[[
-
-		Leaving voluntarily or rejoining will not prevent banning.]], "HUDNumber5", ScrW()/2, ScrH()/2, Color(0,0,255,255), TEXT_ALIGN_CENTER)
+		draw.DrawText("You are getting banned\nReason: "..BanText.."\nTime: ".." "..BanTimeText.."\nLeaving voluntarily or rejoining will not prevent banning.", "HUDNumber5", ScrW()/2, ScrH()/2, Color(0,0,255,255), TEXT_ALIGN_CENTER)
 	end)
 end)
 
