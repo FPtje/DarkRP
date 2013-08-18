@@ -85,6 +85,44 @@ DarkRP.PLAYER.hasDarkRPPrivilege = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.getEyeSightHitEntity = DarkRP.stub{
+	name = "getEyeSightHitEntity",
+	description = "Get the entity that is closest to a player's line of sight and its distance.",
+	parameters = {
+		{
+			name = "searchDistance",
+			description = "How far to look. You usually don't want this function to return an entity millions of units away. The default is 100 units.",
+			type = "number",
+			optional = true
+		},
+		{
+			name = "hitDistance",
+			description = "The maximum distance between the player's line of sight and the object. The default is 15.",
+			type = "number",
+			optional = true
+		},
+		{
+			name = "filter",
+			description = "The filter for which entities to look for. By default it only looks for players.",
+			type = "function",
+			optional = true
+		}
+	},
+	returns = {
+		{
+			name = "closestEnt",
+			description = "The entity that is closest to the player's line of sight. Returns nil when not found.",
+			type = "Entity"
+		},
+		{
+			name = "distance",
+			description = "The (minimum) distance between the player's line of sight and the object.",
+			type = "number"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.VECTOR.isInSight = DarkRP.stub{
 	name = "isInSight",
 	description = "Decides whether the vector could be seen by the player if they were to look at it.",
