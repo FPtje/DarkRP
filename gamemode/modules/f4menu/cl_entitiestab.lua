@@ -32,6 +32,13 @@ function PANEL:generateButtons()
 	// override this
 end
 
+function PANEL:Refresh()
+	for k,v in pairs(self.Items) do
+		if v.Refresh then v:Refresh() end
+	end
+	self:InvalidateLayout()
+end
+
 derma.DefineControl("F4MenuEntitiesBase", "", PANEL, "DPanelList")
 
 /*---------------------------------------------------------------------------
