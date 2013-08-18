@@ -60,15 +60,17 @@ local function showBanWindow(SteamID, NICK, time, reason)
 	Window:SetBackgroundBlur( true )
 	Window:SetDrawOnTop( true )
 
-	local InnerPanel = vgui.Create("DPanel", Window )
+	local InnerPanel = vgui.Create("DPanel", Window)
+	InnerPanel:SetPaintBackground(false)
 
-	local Text = vgui.Create("DLabel", InnerPanel )
+	local Text = vgui.Create("DLabel", InnerPanel)
 		Text:SetText("Ban " .. NICK .. "")
 		Text:SizeToContents()
 		Text:SetContentAlignment( 5 )
 
 
 	local TimePanel = vgui.Create("DPanel", Window)
+	TimePanel:SetPaintBackground(false)
 
 	local TextEntry = vgui.Create("DTextEntry", TimePanel)
 		function TextEntry:OnTextChanged()
@@ -132,10 +134,11 @@ local function showBanWindow(SteamID, NICK, time, reason)
 	function Weeks:OnValueChanged(val) if val == W then return end W = val update() end
 	function Years:OnValueChanged(val) if val == Y then return end Y = val update() end
 
-	local ButtonPanel = vgui.Create("DPanel", Window )
-	ButtonPanel:SetTall( 25 )
+	local ButtonPanel = vgui.Create("DPanel", Window)
+	ButtonPanel:SetTall(25)
+	ButtonPanel:SetPaintBackground(false)
 
-	local Button = vgui.Create("DButton", ButtonPanel )
+	local Button = vgui.Create("DButton", ButtonPanel)
 		Button:SetText("OK")
 		Button:SizeToContents()
 		Button:SetTall( 20 )
@@ -217,9 +220,10 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		Window:SetBackgroundBlur( true )
 		Window:SetDrawOnTop( true )
 
-		local InnerPanel = vgui.Create("DPanel", Window )
+		local InnerPanel = vgui.Create("DPanel", Window)
+		InnerPanel:SetPaintBackground(false)
 
-		local Text = vgui.Create("DLabel", InnerPanel )
+		local Text = vgui.Create("DLabel", InnerPanel)
 			Text:SetText( NICK.. " knows he is getting kicked\nTake all your time entering the reason, he can't do anything anymore")
 			Text:SizeToContents()
 			Text:SetContentAlignment( 5 )
@@ -238,10 +242,11 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 
 
 
-		local ButtonPanel = vgui.Create("DPanel", Window )
-		ButtonPanel:SetTall( 30 )
+		local ButtonPanel = vgui.Create("DPanel", Window)
+		ButtonPanel:SetTall(30)
+		ButtonPanel:SetPaintBackground(false)
 
-		local Button = vgui.Create("DButton", ButtonPanel )
+		local Button = vgui.Create("DButton", ButtonPanel)
 			Button:SetText("OK")
 			Button:SizeToContents()
 			Button:SetTall( 20 )
