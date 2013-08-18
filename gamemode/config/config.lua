@@ -135,6 +135,8 @@ GM.Config.wantedsuicide 				= false
 GM.Config.showcrosshairs				= true
 -- realisticfalldamage - Enable/Disable dynamic fall damage. Setting mp_falldamage to 1 will over-ride this.
 GM.Config.realisticfalldamage			= true
+-- printeroverheat - Can the default money printer overheat on its own?
+GM.Config.printeroverheat				= true
 
 /*
 Value settings
@@ -227,6 +229,8 @@ GM.Config.walkspeed						= 160
 GM.Config.falldamagedamper				= 15
 -- falldamageamount - The base damage taken from falling for static fall damage. Default is 10
 GM.Config.falldamageamount				= 10
+-- printeroverheatchance - The likelyhood of a printer overheating. The higher this number, the less likely. Minimum 3. Default 22
+GM.Config.printeroverheatchance			= 22
 
 /*---------------------------------------------------------------------------
 Other settings
