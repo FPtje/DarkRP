@@ -13,7 +13,7 @@ hooks = {}
 local delayedCalls = {}
 
 local returnsLayout, isreturns
-local parmeterLayout, isparameters
+local parameterLayout, isparameters
 local isreturns
 local checkStub
 
@@ -35,7 +35,7 @@ end
 isparameters = function(tbl)
 	if not istable(tbl) then return false end
 	for k,v in pairs(tbl) do
-		if not checkStub(v, parmeterLayout) then return false end
+		if not checkStub(v, parameterLayout) then return false end
 	end
 	return true
 end
@@ -64,7 +64,7 @@ returnsLayout = {
 	type = isstring
 }
 
-parmeterLayout = {
+parameterLayout = {
 	name = isstring,
 	description = isstring,
 	type = isstring,
