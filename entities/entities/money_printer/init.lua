@@ -89,7 +89,7 @@ function ENT:CreateMoneybag()
 
 	if GAMEMODE.Config.printeroverheat then 
 		local overheatchance
-		if GAMEMODE.Config.pritneroverheatchance <= 3 then
+		if GAMEMODE.Config.printeroverheatchance <= 3 then
 			overheatchance = 22
 		else
 			overheatchance = GAMEMODE.Config.printeroverheatchance or 22
