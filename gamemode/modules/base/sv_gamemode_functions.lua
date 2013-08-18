@@ -9,10 +9,6 @@ function GM:playerBuyDoor( objPl, objEnt )
 	return true;
 end
 
-function GM:PlayerSellDoor( objPl, objEnt )
-	return false;
-end
-
 function GM:getDoorCost( objPl, objEnt )
 	return GAMEMODE.Config.doorcost ~= 0 and  GAMEMODE.Config.doorcost or 30;
 end
