@@ -72,7 +72,7 @@ function meta:changeTeam(t, force)
 		end
 	end
 
-	local hookValue = hook.Call("playerCanChangeTeam", nil, ply, t, force)
+	local hookValue = hook.Call("playerCanChangeTeam", nil, self, t, force)
 	if hookValue == false then return false end
 
 	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
