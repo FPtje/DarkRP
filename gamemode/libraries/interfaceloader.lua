@@ -1,5 +1,7 @@
 module("DarkRP", package.seeall)
 
+MetaName = "DarkRP"
+
 -- Variables that maintain the existing stubs and hooks
 local stubs = {}
 local hookStubs = {}
