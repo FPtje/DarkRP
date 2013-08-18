@@ -22,7 +22,7 @@ SWEP.WorldModel = "models/weapons/w_snip_g3sg1.mdl"
 
 SWEP.Weight = 3
 
-SWEP.HoldType = "smg"
+SWEP.HoldType = "ar2"
 
 SWEP.Primary.Sound = Sound("Weapon_M4A1.Silenced")
 SWEP.Primary.Damage = 100
