@@ -15,7 +15,7 @@ end
 
 local function SetAFK(ply)
 	local rpname = ply:getDarkRPVar("rpname")
-	ply:setSelfDarkRPVar("AFK", not ply.DarkRPVars.AFK)
+	ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
 	SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
 
@@ -62,3 +62,12 @@ local function KillAFKTimer()
 	end
 end
 hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
+
+local function BlockAFKTeamChange(ply, t)
+	if ply:getDarkRPVar("AFK") then
+		local TEAM = RPExtraTeams[t]
+		if TEAM then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. TEAM.command, DarkRP.getPhrase("afk_mode"))) end
+		return false
+	end
+end
+hook.Add("playerCanChangeTeam", "AFKCanChangeTeam", BlockAFKTeamChange)
