@@ -690,40 +690,6 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
-	name = "canChangeJob",
-	description = "Whether a player can change their job.",
-	parameters = {
-		{
-			name = "ply",
-			description = "The player whom is to change their job.",
-			type = "Player"
-		},
-		{
-			name = "job",
-			description = "The job name.",
-			type = "string"
-		}
-	},
-	returns = {
-		{
-			name = "canChangeJob",
-			description = "Whether the player can change their job.",
-			type = "boolean"
-		},
-		{
-			name = "message",
-			description = "The message to show when the player cannot take the job. Only useful when canChangeJob is false.",
-			type = "string"
-		},
-		{
-			name = "replace",
-			description = "A replacement for the job name. Only useful when canChangeJob is true.",
-			type = "string"
-		}
-	}
-}
-
-DarkRP.hookStub{
 	name = "canDemote",
 	description = "Whether a player can demote another player.",
 	parameters = {

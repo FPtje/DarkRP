@@ -100,3 +100,66 @@ DarkRP.PLAYER.changeAllowed = DarkRP.stub{
 	},
 	metatable = DarkRP.PLAYER
 }
+
+DarkRP.hookStub{
+	name = "canChangeJob",
+	description = "Whether a player can change their job.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player whom is to change their job.",
+			type = "Player"
+		},
+		{
+			name = "job",
+			description = "The job name.",
+			type = "string"
+		}
+	},
+	returns = {
+		{
+			name = "canChangeJob",
+			description = "Whether the player can change their job name (doesn't change their team).",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message to show when the player cannot take the job. Only useful when canChangeJob is false.",
+			type = "string"
+		},
+		{
+			name = "replace",
+			description = "A replacement for the job name. Only useful when canChangeJob is true.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerCanChangeTeam",
+	description = "Whether a player can change their team.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player whom is to change their team.",
+			type = "Player"
+		},
+		{
+			name = "team",
+			description = "The team number.",
+			type = "number"
+		},
+		{
+			name = "force",
+			description = "Whether this team change is important.",
+			type = "boolean"
+		}
+	},
+	returns = {
+		{
+			name = "canChange",
+			description = "Whether the player can change their team.",
+			type = "boolean"
+		}
+	}
+}
