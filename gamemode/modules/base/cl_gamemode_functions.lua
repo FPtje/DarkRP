@@ -49,13 +49,13 @@ end
 
 
 function GM:InitPostEntity()
-	hook.Call("TeamChanged", GAMEMODE, 1, 1)
+	hook.Call("teamChanged", GAMEMODE, 1, 1)
 end
 
-function GM:TeamChanged(before, after)
+function GM:teamChanged(before, after)
 end
 
 local function OnChangedTeam(um)
-	hook.Call("TeamChanged", GAMEMODE, um:ReadShort(), um:ReadShort())
+	hook.Call("teamChanged", GAMEMODE, um:ReadShort(), um:ReadShort())
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)

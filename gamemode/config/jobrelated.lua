@@ -37,13 +37,13 @@ TEAM_POLICE = AddExtraTeam("Civil Protection", {
 	model = {"models/player/police.mdl", "models/player/police_fem.mdl"},
 	description = [[The protector of every citizen that lives in the city .
 		You have the power to arrest criminals and protect innocents.
-		Hit them with your arrest baton to put them in jail
-		Bash them with a stunstick and they might learn better than to disobey
+		Hit a player with your arrest baton to put them in jail
+		Bash a player with a stunstick and they may learn to obey
 		the law.
-		The Battering Ram can break down the door of a criminal with a warrant
+		The Battering Ram can break down the door of a criminal, with a warrant
 		for his/her arrest.
 		The Battering Ram can also unfreeze frozen props(if enabled).
-		Type /wanted <name> to alert the public to this criminal
+		Type /wanted <name> to alert the public to the presence of a criminal.
 		OR go to tab and warrant someone by clicking the warrant button]],
 	weapons = {"arrest_stick", "unarrest_stick", "weapon_glock2", "stunstick", "door_ram", "weaponchecker"},
 	command = "cp",
@@ -82,7 +82,7 @@ TEAM_GANG = AddExtraTeam("Gangster", {
 		"models/player/Group03/Male_09.mdl"},
 	description = [[The lowest person of crime.
 		A gangster generally works for the Mobboss who runs the crime family.
-		The Mobboss sets your agenda and you follow it or you might be punished.]],
+		The Mob boss sets your agenda and you follow it or you might be punished.]],
 	weapons = {},
 	command = "gangster",
 	max = 3,
@@ -95,11 +95,11 @@ TEAM_GANG = AddExtraTeam("Gangster", {
 TEAM_MOB = AddExtraTeam("Mob boss", {
 	color = Color(25, 25, 25, 255),
 	model = "models/player/gman_high.mdl",
-	description = [[The Mobboss is the boss of the criminals in the city.
+	description = [[The Mob boss is the boss of the criminals in the city.
 		With his power he coordinates the gangsters and forms an efficient crime
 		organization.
 		He has the ability to break into houses by using a lockpick.
-		The Mobboss also can unarrest you.]],
+		The Mob boss posesses the ability to unarrest you.]],
 	weapons = {"lockpick", "unarrest_stick"},
 	command = "mobboss",
 	max = 1,
@@ -108,7 +108,7 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	vote = false,
 	hasLicense = false,
 	help = {
-		"As the mob boss, you decide what you want the other Gangsters to do.",
+		"As the Mob boss, you decide what you want the other Gangsters to do.",
 		"You get an Unarrest Stick which you can use to break people out of jail.",
 		"/agenda <Message> Sets the Gangsters' agenda. Use // to go to the next line."
 	}
@@ -117,9 +117,9 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 TEAM_GUN = AddExtraTeam("Gun Dealer", {
 	color = Color(255, 140, 0, 255),
 	model = "models/player/monk.mdl",
-	description = [[A gun dealer is the only person who can sell guns to other
+	description = [[A Gun Dealer is the only person who can sell guns to other
 		people.
-		However, make sure you aren't caught selling guns that are illegal to
+		However, make sure you aren't caught selling illegal firearms to
 		the public.
 		/Buyshipment <name> to Buy a  weapon shipment
 		/Buygunlab to Buy a gunlab that spawns P228 pistols]],
@@ -136,8 +136,7 @@ TEAM_MEDIC = AddExtraTeam("Medic", {
 	color = Color(47, 79, 79, 255),
 	model = "models/player/kleiner.mdl",
 	description = [[With your medical knowledge,
-		you heal players to proper
-		health.
+		you work to restore players to full health.
 		Without a medic, people cannot be healed.
 		Left click with the Medical Kit to heal other players.
 		Right click with the Medical Kit to heal yourself.]],
@@ -156,12 +155,12 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	model = "models/player/combine_soldier_prisonguard.mdl",
 	description = [[The Chief is the leader of the Civil Protection unit.
 		Coordinate the police force to enforce law in the city.
-		Hit them with arrest baton to put them in jail.
-		Bash them with a stunstick and they might learn better than to
-		disobey the law.
-		The Battering Ram can break down the door of a criminal with a
+		Hit a player with arrest baton to put them in jail.
+		Bash a player with a stunstick and they may learn to
+		obey the law.
+		The Battering Ram can break down the door of a criminal, with a
 		warrant for his/her arrest.
-		Type /wanted <name> to alert the public to this criminal
+		Type /wanted <name> to alert the public to the presence of a criminal.
 		Type /jailpos to set the Jail Position]],
 	weapons = {"arrest_stick", "unarrest_stick", "weapon_deagle2", "stunstick", "door_ram", "weaponchecker"},
 	command = "chief",
@@ -186,8 +185,7 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 TEAM_MAYOR = AddExtraTeam("Mayor", {
 	color = Color(150, 20, 20, 255),
 	model = "models/player/breen.mdl",
-	description = [[The Mayor of the city creates laws to serve the greater good
-	of the people.
+	description = [[The Mayor of the city creates laws to govern the city.
 	If you are the mayor you may create and accept warrants.
 	Type /wanted <name>  to warrant a player
 	Type /jailpos to set the Jail Position
@@ -217,7 +215,7 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 TEAM_HOBO = AddExtraTeam("Hobo", {
 	color = Color(80, 45, 0, 255),
 	model = "models/player/corpse1.mdl",
-	description = [[The lowest member of society. All people see you laugh.
+	description = [[The lowest member of society. Everybody laughs at you.
 		You have no home.
 		Beg for your food and money
 		Sing for everyone who passes to get money
@@ -286,7 +284,7 @@ GAMEMODE:AddGroupChat(a function with ply as argument that returns whether a ran
 This one is for people who know how to script Lua.
 
 */
-GM:AddGroupChat(function(ply) return ply:IsCP() end)
+GM:AddGroupChat(function(ply) return ply:isCP() end)
 GM:AddGroupChat(TEAM_MOB, TEAM_GANG)
 
 /*---------------------------------------------------------------------------

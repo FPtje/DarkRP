@@ -80,7 +80,7 @@ local function addTeamCommands(CTeam, max)
 				ply:changeTeam(k)
 				return ""
 			end
-			if not ply:ChangeAllowed(k) then
+			if not ply:changeAllowed(k) then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, DarkRP.getPhrase("banned_or_demoted")))
 				return ""
 			end
@@ -97,7 +97,7 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1, 4,  DarkRP.getPhrase("team_limit_reached", CTeam.name))
 				return ""
 			end
-			GAMEMODE.vote:create(DarkRP.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
+			DarkRP.createVote(DarkRP.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
 				local ply = vote.target
 
 				if not IsValid(ply) then return end
@@ -229,7 +229,7 @@ local function addEntityCommands(tblEnt)
 
 			return ""
 		end
-		ply:AddMoney(-tblEnt.price)
+		ply:addMoney(-tblEnt.price)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -298,9 +298,10 @@ end
 AddExtraTeam = DarkRP.createJob
 
 RPExtraTeamDoors = {}
-function AddDoorGroup(name, ...)
+function DarkRP.createEntityGroup(name, ...)
 	RPExtraTeamDoors[name] = {...}
 end
+AddDoorGroup = DarkRP.createEntityGroup
 
 CustomVehicles = {}
 CustomShipments = {}

@@ -31,7 +31,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 			return
 		end
 		table.insert(LotteryPeople, target)
-		target:AddMoney(-LotteryAmount)
+		target:addMoney(-LotteryAmount)
 		DarkRP.notify(target, 0,4, DarkRP.getPhrase("lottery_entered", GAMEMODE.Config.currency..tostring(LotteryAmount)))
 	elseif answer ~= nil and not table.HasValue(LotteryPeople, target) then
 		DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", "You"))
@@ -45,7 +45,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 			return
 		end
 		local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
-		chosen:AddMoney(#LotteryPeople * LotteryAmount)
+		chosen:addMoney(#LotteryPeople * LotteryAmount)
 		DarkRP.notifyAll(0,10, DarkRP.getPhrase("lottery_won", chosen:Nick(), GAMEMODE.Config.currency .. tostring(#LotteryPeople * LotteryAmount) ))
 	end
 end
@@ -83,7 +83,7 @@ local function DoLottery(ply, amount)
 	LotteryPeople = {}
 	for k,v in pairs(player.GetAll()) do
 		if v ~= ply then
-			GAMEMODE.ques:Create(DarkRP.getPhrase("lottery_started", GAMEMODE.Config.currency, LotteryAmount), "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
+			DarkRP.createQuestion(DarkRP.getPhrase("lottery_started", GAMEMODE.Config.currency, LotteryAmount), "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
 		end
 	end
 	timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
@@ -100,7 +100,7 @@ local function WaitLock()
 	timer.Destroy("spamlock")
 end
 
-function GM:Lockdown(ply)
+function DarkRP.lockdown(ply)
 	if lstat then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", ""))
 		return ""
@@ -118,10 +118,10 @@ function GM:Lockdown(ply)
 	end
 	return ""
 end
-concommand.Add("rp_lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
-DarkRP.defineChatCommand("lockdown", function(ply) GAMEMODE:Lockdown(ply) end)
+concommand.Add("rp_lockdown", function(ply) DarkRP.lockdown(ply) end)
+DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
 
-function GM:UnLockdown(ply)
+function DarkRP.unLockdown(ply)
 	if not lstat or wait_lockdown then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", ""))
 		return ""
@@ -137,8 +137,8 @@ function GM:UnLockdown(ply)
 	end
 	return ""
 end
-concommand.Add("rp_unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
-DarkRP.defineChatCommand("unlockdown", function(ply) GAMEMODE:UnLockdown(ply) end)
+concommand.Add("rp_unlockdown", function(ply) DarkRP.unLockdown(ply) end)
+DarkRP.defineChatCommand("unlockdown", function(ply) DarkRP.unLockdown(ply) end)
 
 /*---------------------------------------------------------
  License
@@ -182,7 +182,7 @@ local function RequestLicense(ply)
 
 	if not ischief and not ismayor then
 		for k,v in pairs(player.GetAll()) do
-			if v:IsCP() then
+			if v:isCP() then
 				iscop = true
 				break
 			end
@@ -205,14 +205,14 @@ local function RequestLicense(ply)
 	elseif ischief and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].chief) then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
 		return ""
-	elseif iscop and not LookingAt:IsCP() then
+	elseif iscop and not LookingAt:isCP() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "cop"))
 		return ""
 	end
 
 	ply.LicenseRequested = true
 	DarkRP.notify(ply, 3, 4, DarkRP.getPhrase("gunlicense_requested", ply:Nick(), LookingAt:Nick()))
-	GAMEMODE.ques:Create(DarkRP.getPhrase("gunlicense_question_text", ply:Nick()), "Gunlicense"..ply:EntIndex(), LookingAt, 20, GrantLicense, ply, LookingAt)
+	DarkRP.createQuestion(DarkRP.getPhrase("gunlicense_question_text", ply:Nick()), "Gunlicense"..ply:EntIndex(), LookingAt, 20, GrantLicense, ply, LookingAt)
 	return ""
 end
 DarkRP.defineChatCommand("requestlicense", RequestLicense)
@@ -224,7 +224,7 @@ local function GiveLicense(ply)
 	local canGiveLicense = fn.FOr{
 		ply.isMayor, -- Mayors can hand out licenses
 		fn.FAnd{ply.isChief, noMayorExists}, -- Chiefs can if there is no mayor
-		fn.FAnd{ply.IsCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
+		fn.FAnd{ply.isCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
 	}
 
 	if not canGiveLicense(ply) then
@@ -348,7 +348,7 @@ local function VoteRemoveLicense(ply, args)
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demotelicense", ""))
 		else
 			DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_remove_vote_text", ply:Nick(), p:Nick()))
-			GAMEMODE.vote:create(p:Nick() .. ":\n"..DarkRP.getPhrase("gunlicense_remove_vote_text2", reason), "removegunlicense", p, 20,  FinishRevokeLicense,
+			DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("gunlicense_remove_vote_text2", reason), "removegunlicense", p, 20,  FinishRevokeLicense,
 			{
 				[p] = true,
 				[ply] = true

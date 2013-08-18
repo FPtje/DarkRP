@@ -21,7 +21,7 @@ end
 function ENT:Use(activator,caller)
 	local amount = self:Getamount()
 
-	activator:AddMoney(amount or 0)
+	activator:addMoney(amount or 0)
 	DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_cash", GAMEMODE.Config.currency, (self:Getamount() or 0)))
 	self:Remove()
 end

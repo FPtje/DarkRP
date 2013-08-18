@@ -68,8 +68,8 @@ Current developer:
 	Falco A.K.A. FPtje Atheos (STEAM_0:0:8944068)
 
 People who have contributed (ordered by commits, with at least two commits)
-	Drakehawke (STEAM_0:0:22342869) (64 commits on old SVN)
 	Bo98
+	Drakehawke (STEAM_0:0:22342869) (64 commits on old SVN)
 	Eusion (STEAM_0:0:20450406) (3 commits on old SVN)
 	KoZ
 	MattWalton12

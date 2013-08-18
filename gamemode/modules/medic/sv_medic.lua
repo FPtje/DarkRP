@@ -31,7 +31,7 @@ local function BuyHealth(ply)
 		return ""
 	end
 	ply.StartHealth = ply.StartHealth or 100
-	ply:AddMoney(-cost)
+	ply:addMoney(-cost)
 	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", "health", GAMEMODE.Config.currency, cost))
 	ply:SetHealth(ply.StartHealth)
 	return ""

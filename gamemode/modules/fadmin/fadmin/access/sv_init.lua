@@ -9,6 +9,7 @@ end)
 hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FADMIN_GROUPS(NAME VARCHAR(40) NOT NULL PRIMARY KEY, ADMIN_ACCESS INTEGER NOT NULL);")
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_PlayerGroup(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
+	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_Immunity(groupname VARCHAR(40) NOT NULL, immunity INTEGER NOT NULL, PRIMARY KEY(groupname));")
 	MySQLite.query([[CREATE TABLE IF NOT EXISTS FADMIN_PRIVILEGES(
 		NAME VARCHAR(40),
 		PRIVILEGE VARCHAR(100),
@@ -18,7 +19,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			ON DELETE CASCADE
 	);]], function()
 
-		MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME;", function(data)
+		MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE, i.immunity FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME LEFT OUTER JOIN FAdmin_Immunity i ON g.NAME = i.groupname;", function(data)
 			if not data then return end
 
 			for _, v in pairs(data) do
@@ -28,6 +29,10 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 				if v.PRIVILEGE and v.PRIVILEGE ~= "NULL" then
 					FAdmin.Access.Groups[v.NAME].PRIVS[v.PRIVILEGE] = true
 				end
+
+				if v.immunity and v.immunity ~= "NULL" then
+					FAdmin.Access.Groups[v.NAME].immunity = tonumber(v.immunity)
+				end
 			end
 
 			-- Send groups to early joiners and listen server hosts
@@ -36,10 +41,10 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			end
 		end)
 
-		FAdmin.Access.AddGroup("superadmin", 2)
-		FAdmin.Access.AddGroup("admin", 1)
-		FAdmin.Access.AddGroup("user", 0)
-		FAdmin.Access.AddGroup("noaccess", 0)
+		FAdmin.Access.AddGroup("superadmin", 2, nil, 100)
+		FAdmin.Access.AddGroup("admin", 1, nil, 50)
+		FAdmin.Access.AddGroup("user", 0, nil, 10)
+		FAdmin.Access.AddGroup("noaccess", 0, nil, 0)
 	end)
 end)
 
@@ -71,13 +76,14 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(SteamID)..", " .. MySQLite.SQLStr(group)..");")
 end
 
+hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn") -- Remove Garry's usergroup setter.
+
 local oldSetUsergroup = plyMeta.SetUserGroup
 function plyMeta:SetUserGroup(group, ...)
 	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(self:SteamID())..", " .. MySQLite.SQLStr(group)..");")
 
 	return oldSetUsergroup(self, group, ...)
 end
-
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
@@ -210,13 +216,26 @@ hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
 	FAdmin.Access.SendGroups(ply)
 end)
 
-local function SetImmunity(ply, cmd, args)
+local function toggleImmunity(ply, cmd, args)
 	-- SetAccess privilege because they can handle immunity settings
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
 	if not args[1] then FAdmin.Messages.SendMessage(ply, 5, "Invalid argument!") return end
 	RunConsoleCommand("_FAdmin_immunity", args[1])
 	FAdmin.Messages.SendMessage(ply, 4, "turned " .. ((tonumber(args[1]) == 1 and "on") or "off") .. " admin immunity!")
+end
+
+
+local function setImmunity(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	local group, immunity = args[1], tonumber(args[2])
+
+	if not FAdmin.Access.Groups[group] or not immunity then return end
+
+	FAdmin.Access.Groups[group].immunity = immunity
+	MySQLite.query("REPLACE INTO FAdmin_Immunity VALUES(" .. MySQLite.SQLStr(group) .. ", " .. tonumber(immunity) .. ");")
+
+	FAdmin.Access.SendGroups(ply)
 end
 
 FAdmin.StartHooks["Access"] = function() --Run all functions that depend on other plugins
@@ -228,7 +247,8 @@ FAdmin.StartHooks["Access"] = function() --Run all functions that depend on othe
 	FAdmin.Commands.AddCommand("AddPrivilege", AddPrivilege)
 	FAdmin.Commands.AddCommand("RemovePrivilege", RemovePrivilege)
 
-	FAdmin.Commands.AddCommand("immunity", SetImmunity)
+	FAdmin.Commands.AddCommand("immunity", toggleImmunity)
+	FAdmin.Commands.AddCommand("SetImmunity", setImmunity)
 
 	FAdmin.SetGlobalSetting("Immunity", (GetConVarNumber("_FAdmin_immunity") == 1 and true) or false)
 end

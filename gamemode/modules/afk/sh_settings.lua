@@ -1,1 +1,0 @@
-GM.Config.afkdemotetime = 600

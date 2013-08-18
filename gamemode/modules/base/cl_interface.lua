@@ -35,3 +35,23 @@ DarkRP.textWrap = DarkRP.stub{
 	},
 	metatable = DarkRP
 }
+
+DarkRP.hookStub{
+	name = "teamChanged",
+	description = "When your team is changed.",
+	parameters = {
+		{
+			name = "before",
+			description = "The team before the change.",
+			type = "number"
+		},
+		{
+			name = "after",
+			description = "The team after the change.",
+			type = "number"
+		}
+	},
+	returns = {
+
+	}
+}

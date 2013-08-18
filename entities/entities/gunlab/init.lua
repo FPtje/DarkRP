@@ -71,7 +71,7 @@ function ENT:Use(activator)
 	self.sparking = true
 
 
-	activator:AddMoney(cash * -1)
+	activator:addMoney(cash * -1)
 	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
 
 	if IsValid(owner) and activator ~= owner then
@@ -84,7 +84,7 @@ function ENT:Use(activator)
 		if gain == 0 then
 			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0 " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 		else
-			owner:AddMoney(gain)
+			owner:addMoney(gain)
 			local word = DarkRP.getPhrase("profit")
 			if gain < 0 then word = DarkRP.getPhrase("loss") end
 			DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. word, "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))

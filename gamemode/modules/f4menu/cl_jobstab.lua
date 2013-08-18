@@ -46,12 +46,8 @@ function PANEL:Refresh()
 	for k,v in pairs(self.Items) do
 		if v.Refresh then v:Refresh() end
 	end
+	self:InvalidateLayout()
 end
-
-/*-- The white stuff is for testing purposes.
-function PANEL:Paint(w, h)
-	draw.RoundedBox(0, 0, 0, w, h, Color(255,255,255,255))
-end*/
 
 derma.DefineControl("F4EmptyPanel", "", PANEL, "DPanelList")
 
@@ -162,6 +158,7 @@ function PANEL:fillData()
 		item:setDarkRPItem(job)
 		item.DoClick = fn.Compose{fn.Curry(self.pnlRight.updateInfo, 2)(self.pnlRight), fn.Curry(fn.GetValue, 3)("DarkRPItem")(item)}
 		self.pnlLeft:AddItem(item)
+		item:Refresh()
 	end
 end
 

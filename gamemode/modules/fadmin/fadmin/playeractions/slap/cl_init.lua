@@ -7,7 +7,7 @@ FAdmin.StartHooks["Slap"] = function()
 
 	-- Right click option
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Slap", function(ply)
-		RunConsoleCommand("_FAdmin", "Slap", ply:SteamID())
+		RunConsoleCommand("_FAdmin", "Slap", ply:UserID())
 	end)
 
 	-- Slap option in player menu
@@ -22,7 +22,7 @@ FAdmin.StartHooks["Slap"] = function()
 		menu:AddPanel(Title)
 
 		for k,v in ipairs(Damages) do
-			local SubMenu = menu:AddSubMenu(v, function() RunConsoleCommand("_FAdmin", "slap", ply:SteamID(), v) end)
+			local SubMenu = menu:AddSubMenu(v, function() RunConsoleCommand("_FAdmin", "slap", ply:UserID(), v) end)
 
 			local SubMenuTitle = vgui.Create("DLabel")
 			SubMenuTitle:SetText("  "..v .. " damage\n")
@@ -33,7 +33,7 @@ FAdmin.StartHooks["Slap"] = function()
 			SubMenu:AddPanel(SubMenuTitle)
 
 			for reps, Name in SortedPairs(Repetitions) do
-				SubMenu:AddOption(Name, function() RunConsoleCommand("_FAdmin", "slap", ply:SteamID(), v, reps) end)
+				SubMenu:AddOption(Name, function() RunConsoleCommand("_FAdmin", "slap", ply:UserID(), v, reps) end)
 			end
 		end
 		menu:Open()

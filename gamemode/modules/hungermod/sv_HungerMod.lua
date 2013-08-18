@@ -64,7 +64,7 @@ local function BuyFood(ply, args)
 		if string.lower(args) == k then
 			local cost = GAMEMODE.Config.foodcost
 			if ply:canAfford(cost) then
-				ply:AddMoney(-cost)
+				ply:addMoney(-cost)
 			else
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
 				return ""

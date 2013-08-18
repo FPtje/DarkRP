@@ -13,7 +13,9 @@ function ENT:Initialize()
 	phys:Wake()
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 
-	self:Setamount(1)
+	if self:Getamount() == 0 then
+		self:Setamount(1)
+	end
 end
 
 function ENT:DecreaseAmount()

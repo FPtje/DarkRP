@@ -135,6 +135,8 @@ GM.Config.wantedsuicide 				= false
 GM.Config.showcrosshairs				= true
 -- realisticfalldamage - Enable/Disable dynamic fall damage. Setting mp_falldamage to 1 will over-ride this.
 GM.Config.realisticfalldamage			= true
+-- printeroverheat - Can the default money printer overheat on its own?
+GM.Config.printeroverheat				= true
 
 /*
 Value settings
@@ -227,6 +229,8 @@ GM.Config.walkspeed						= 160
 GM.Config.falldamagedamper				= 15
 -- falldamageamount - The base damage taken from falling for static fall damage. Default is 10
 GM.Config.falldamageamount				= 10
+-- printeroverheatchance - The likelyhood of a printer overheating. The higher this number, the less likely. Minimum 3. Default 22
+GM.Config.printeroverheatchance			= 22
 
 /*---------------------------------------------------------------------------
 Other settings
@@ -287,3 +291,57 @@ GM.Config.DisabledModules = {
 	["voterestrictions"] = true,
 	["hitmenu"] = false,
 }
+
+GM.Config.PocketBlacklist = {
+	["fadmin_jail"] = true,
+	["meteor"] = true,
+	["door"] = true,
+	["func_"] = true,
+	["player"] = true,
+	["beam"] = true,
+	["worldspawn"] = true,
+	["env_"] = true,
+	["path_"] = true,
+	["prop_physics"] = true,
+	["money_printer"] = true,
+	["gunlab"] = true,
+}
+
+/*---------------------------------------------------------------------------
+F4 menu
+---------------------------------------------------------------------------*/
+-- hide the items that you can't buy (instead of graying them out)
+GM.Config.hideNonBuyable = false
+
+/*---------------------------------------------------------------------------
+AFK module
+---------------------------------------------------------------------------*/
+GM.Config.afkdemotetime = 600
+
+/*---------------------------------------------------------------------------
+Hitmenu module
+---------------------------------------------------------------------------*/
+-- The minimum price for a hit
+GM.Config.minHitPrice = 200
+-- The minimum distance between a hitman and his customer when they make the deal
+GM.Config.minHitDistance = 150
+-- The text that tells the player he can press use on the hitman to request a hit
+GM.Config.hudText = "I am a hitman.\nPress E on me to request a hit!"
+-- The text above a hitman when he's got a hit
+GM.Config.hitmanText = "Hit\naccepted!"
+-- The cooldown time for a hit target (so they aren't spam killed)
+GM.Config.hitTargetCooldown = 120
+-- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted)
+GM.Config.hitCustomerCooldown = 240
+
+/*---------------------------------------------------------------------------
+Hungermod module
+---------------------------------------------------------------------------*/
+-- foodspawn - Whether players(non-cooks) can spawn food props or not
+GM.Config.foodspawn = true
+-- foodcost <Amount> - Set food cost
+GM.Config.foodcost = 15
+-- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)
+GM.Config.hungerspeed = 2
+-- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
+GM.Config.starverate = 3

@@ -49,7 +49,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 		for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
 			menu:AddOption(k, function()
 				if not IsValid(ply) then return end
-				RunConsoleCommand("_FAdmin", "setaccess", ply:SteamID(), k)
+				RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), k)
 			end)
 		end
 
@@ -134,7 +134,7 @@ ContinueNewGroup = function(ply, name, admin_access, func)
 	OKButton:StretchToParent(5, 30 + TickBoxPanel:GetTall(), Window:GetWide()/2 + 2, 5)
 	function OKButton:DoClick()
 		if ply then
-			RunConsoleCommand("_FAdmin", "setaccess", ply:SteamID(), name, admin_access, unpack(privs))
+			RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access, unpack(privs))
 		else
 			RunConsoleCommand("_FAdmin", "AddGroup", name, admin_access, unpack(privs))
 		end
@@ -154,7 +154,7 @@ ContinueNewGroup = function(ply, name, admin_access, func)
 end
 
 EditGroups = function()
-	local frame, SelectedGroup, AddGroup, RemGroup, Privileges, SelectedPrivs, AddPriv, RemPriv
+	local frame, SelectedGroup, AddGroup, RemGroup, Privileges, SelectedPrivs, AddPriv, RemPriv, lblImmunity, nmbrImmunity
 
 	frame = vgui.Create("DFrame")
 	frame:SetTitle("Create, edit and remove groups")
@@ -167,7 +167,7 @@ EditGroups = function()
 	SelectedGroup:SetPos(5, 30)
 	SelectedGroup:SetWidth(145)
 
-	for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
+	for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "immunity", true) do
 		SelectedGroup:AddChoice(k)
 	end
 
@@ -219,8 +219,8 @@ EditGroups = function()
 	Privileges:AddColumn("Available privileges")
 
 	SelectedPrivs = vgui.Create("DListView", frame)
-	SelectedPrivs:SetPos(340, 25)
-	SelectedPrivs:SetSize(295, 450)
+	SelectedPrivs:SetPos(340, 55)
+	SelectedPrivs:SetSize(295, 420)
 	SelectedPrivs:AddColumn("Selected Privileges")
 
 	function SelectedGroup:OnSelect(index, value, data)
@@ -241,12 +241,23 @@ EditGroups = function()
 				Privileges:AddLine(priv)
 			end
 		end
+
+		if nmbrImmunity then
+			nmbrImmunity:SetText(FAdmin.Access.Groups[value].immunity or "")
+			if table.HasValue({"superadmin", "admin", "user", "noaccess"}, string.lower(value)) then
+				nmbrImmunity:SetDisabled(true)
+				nmbrImmunity:SetEditable(false)
+			else
+				nmbrImmunity:SetDisabled(false)
+				nmbrImmunity:SetEditable(true)
+			end
+		end
 	end
 	SelectedGroup:SetValue("user")
 	SelectedGroup:OnSelect(1, "user", data)
 
 	AddPriv = vgui.Create("DButton", frame)
-	AddPriv:SetPos(310, 45)
+	AddPriv:SetPos(310, 55)
 	AddPriv:SetSize(25, 25)
 	AddPriv:SetText(">")
 	AddPriv.DoClick = function()
@@ -259,7 +270,7 @@ EditGroups = function()
 	end
 
 	RemPriv = vgui.Create("DButton", frame)
-	RemPriv:SetPos(310, 75)
+	RemPriv:SetPos(310, 85)
 	RemPriv:SetSize(25, 25)
 	RemPriv:SetText("<")
 	RemPriv.DoClick = function()
@@ -273,4 +284,18 @@ EditGroups = function()
 			SelectedPrivs:RemoveLine(v.m_iID)
 		end
 	end
+
+	lblImmunity = vgui.Create("DLabel", frame)
+	lblImmunity:SetPos(340, 30)
+	lblImmunity:SetText("Immunity number (higher is more immune)")
+	lblImmunity:SizeToContents()
+
+	nmbrImmunity = vgui.Create("DTextEntry", frame)
+	nmbrImmunity:SetPos(545, 28)
+	nmbrImmunity:SetWide(90)
+	nmbrImmunity:SetNumeric(true)
+	nmbrImmunity:SetText(FAdmin.Access.Groups.user.immunity)
+	nmbrImmunity:SetDisabled(true)
+	nmbrImmunity:SetEditable(false)
+	nmbrImmunity.OnEnter = function(self) RunConsoleCommand("FAdmin", "SetImmunity", SelectedGroup:GetValue(), self:GetValue()) end
 end

@@ -20,7 +20,7 @@ function plyMeta:requestHit(customer, target, price)
 		return false
 	end
 
-	GAMEMODE.ques:Create(DarkRP.getPhrase("accept_hit_question", customer:Nick(), target:Nick(), GAMEMODE.Config.currency, price),
+	DarkRP.createQuestion(DarkRP.getPhrase("accept_hit_question", customer:Nick(), target:Nick(), GAMEMODE.Config.currency, price),
 		"hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
 		self,
 		20,

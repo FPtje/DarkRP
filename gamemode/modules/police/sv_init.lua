@@ -7,7 +7,7 @@ Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:warrant(warranter, reason)
 	if self.warranted then return end
-	hook.Call("PlayerWarranted", GAMEMODE, warranter, self, reason)
+	hook.Call("playerWarranted", GAMEMODE, self, warranter, reason)
 
 	self.warranted = true
 	timer.Simple(GAMEMODE.Config.searchtime, function()
@@ -30,7 +30,7 @@ end
 function plyMeta:unWarrant(unwarranter)
 	if not self.warranted then return end
 
-	hook.Call("PlayerUnWarranted", GAMEMODE, unwarranter, self)
+	hook.Call("playerUnWarranted", GAMEMODE, self, unwarranter)
 
 	self.warranted = false
 	DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
@@ -38,11 +38,11 @@ end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
 	local question = DarkRP.getPhrase("warrant_request", actor:Nick(), suspect:Nick(), reason)
-	GAMEMODE.ques:Create(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
+	DarkRP.createQuestion(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
 function plyMeta:wanted(actor, reason)
-	hook.Call("PlayerWanted", DarkRP.hooks, actor, self, reason)
+	hook.Call("playerWanted", DarkRP.hooks, self, actor, reason)
 
 	self:setDarkRPVar("wanted", true)
 	self:setDarkRPVar("wantedReason", reason)
@@ -63,7 +63,7 @@ function plyMeta:wanted(actor, reason)
 end
 
 function plyMeta:unWanted(actor)
-	hook.Call("PlayerUnWanted", GAMEMODE, actor, self)
+	hook.Call("playerUnWanted", GAMEMODE, self, actor)
 	self:setDarkRPVar("wanted", false)
 
 	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
@@ -113,7 +113,7 @@ local function CombineRequest(ply, args)
 			return
 		end
 		for k, v in pairs(player.GetAll()) do
-			if v:IsCP() or v == ply then
+			if v:isCP() or v == ply then
 				DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") ..ply:Nick(), Color(255,0,0,255), text, ply)
 			end
 		end
@@ -306,7 +306,7 @@ end
 
 function DarkRP.hooks:playerUnArrested(ply, actor)
 	if ply.Sleeping and GAMEMODE.KnockoutToggle then
-		GAMEMODE:KnockoutToggle(ply, "force")
+		DarkRP.toggleSleep(ply, "force")
 	end
 
 	-- "Arrested" DarkRPVar is set to false BEFORE this hook however, so it is safe here.

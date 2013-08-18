@@ -57,6 +57,13 @@ function PANEL:Refresh()
 
 end
 
+function PANEL:SetDisabled(b)
+	self.m_bDisabled = b
+	if GAMEMODE.Config.hideNonBuyable then
+		self:SetVisible(not b)
+	end
+end
+
 derma.DefineControl("F4MenuItemButton", "", PANEL, "DButton")
 
 /*---------------------------------------------------------------------------

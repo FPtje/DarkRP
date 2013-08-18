@@ -123,17 +123,18 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
-	local trace = self.Owner:GetEyeTrace()
+	local ent = self.Owner:getEyeSightHitEntity()
+	if not ent then return end
 
-	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 115) or not trace.Entity:getDarkRPVar("Arrested") then
+	if not IsValid(ent) or not ent:IsPlayer() or (self.Owner:EyePos():Distance(ent:GetPos()) > 115) or not ent:getDarkRPVar("Arrested") then
 		return
 	end
 
-	trace.Entity:unArrest(self.Owner)
-	DarkRP.notify(trace.Entity, 0, 4, DarkRP.getPhrase("youre_unarrested_by", self.Owner:Nick()))
+	ent:unArrest(self.Owner)
+	DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("youre_unarrested_by", self.Owner:Nick()))
 
 	if self.Owner.SteamName then
-		DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") unarrested "..trace.Entity:Nick(), Color(0, 255, 255))
+		DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") unarrested "..ent:Nick(), Color(0, 255, 255))
 	end
 end
 

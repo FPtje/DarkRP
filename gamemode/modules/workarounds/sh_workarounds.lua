@@ -23,20 +23,6 @@ function DarkRP.getAvailableVehicles()
 
 	return vehicles
 end
-/*net.WriteVars =
-{
-	[TYPE_NUMBER] = function ( t, v )	net.WriteByte( t )	net.WriteLong( v )			end,
-	[TYPE_ENTITY] = function ( t, v )	net.WriteByte( t )	net.WriteEntity( v )		end,
-	[TYPE_VECTOR] = function ( t, v )	net.WriteByte( t )	net.WriteVector( v )		end,
-	[TYPE_STRING] = function ( t, v )	net.WriteByte( t )	net.WriteString( v )		end,
-}
-net.ReadVars =
-{
-	[TYPE_NUMBER] = function ()	return net.ReadLong() end,
-	[TYPE_ENTITY] = function ()	return net.ReadEntity() end,
-	[TYPE_VECTOR] = function ()	return net.ReadVector() end,
-	[TYPE_STRING] = function ()	return net.ReadString() end,
-}*/
 
 -- Clientside part
 if CLIENT then

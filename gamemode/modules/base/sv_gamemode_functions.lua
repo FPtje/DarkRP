@@ -9,10 +9,6 @@ function GM:playerBuyDoor( objPl, objEnt )
 	return true;
 end
 
-function GM:PlayerSellDoor( objPl, objEnt )
-	return false;
-end
-
 function GM:getDoorCost( objPl, objEnt )
 	return GAMEMODE.Config.doorcost ~= 0 and  GAMEMODE.Config.doorcost or 30;
 end
@@ -31,19 +27,19 @@ function GM:CanChangeRPName(ply, RPname)
 	end
 end
 
-function GM:CanDemote(ply, target, reason)
+function GM:canDemote(ply, target, reason)
 
 end
 
-function GM:CanVote(ply, vote)
+function GM:canVote(ply, vote)
 
 end
 
-function GM:PlayerWalletChanged(ply, amount)
+function GM:playerWalletChanged(ply, amount)
 
 end
 
-function GM:PlayerGetSalary(ply, amount)
+function GM:playerGetSalary(ply, amount)
 
 end
 
@@ -59,7 +55,7 @@ function GM:playerBoughtDoor(ply, ent, cost)
 
 end
 
-function GM:CanDropWeapon(ply, weapon)
+function GM:canDropWeapon(ply, weapon)
 	if not IsValid(weapon) then return false end
 	local class = string.lower(weapon:GetClass())
 	if self.Config.DisallowDrop[class] then return false end
@@ -79,14 +75,14 @@ function GM:DatabaseInitialized()
 	DarkRP.initDatabase()
 end
 
-function GM:CanSeeLogMessage(ply, message, colour)
+function GM:canSeeLogMessage(ply, message, colour)
 	return ply:IsAdmin()
 end
 
 function GM:UpdatePlayerSpeed(ply)
 	if ply:isArrested() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	elseif ply:IsCP() then
+	elseif ply:isCP() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
 	else
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
@@ -173,7 +169,7 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 	if GAMEMODE.Config.proppaying then
 		if ply:canAfford(GAMEMODE.Config.propcost) then
 			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("deducted", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
-			ply:AddMoney(-GAMEMODE.Config.propcost)
+			ply:addMoney(-GAMEMODE.Config.propcost)
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need", GAMEMODE.Config.currency, GAMEMODE.Config.propcost))
 			return false
@@ -276,7 +272,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 
 	-- If we know by now who killed the NPC, pay them.
 	if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
-		ent:AddMoney(GAMEMODE.Config.npckillpay)
+		ent:addMoney(GAMEMODE.Config.npckillpay)
 		DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", GAMEMODE.Config.currency .. GAMEMODE.Config.npckillpay))
 	end
 end
@@ -404,7 +400,7 @@ end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
 	local weapon = ply:GetActiveWeapon()
-	local canDrop = hook.Call("CanDropWeapon", self, ply, weapon)
+	local canDrop = hook.Call("canDropWeapon", self, ply, weapon)
 
 	if GAMEMODE.Config.dropweapondeath and IsValid(weapon) and canDrop then
 		ply:dropDRPWeapon(weapon)
@@ -451,7 +447,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		end
 
 		if amount > 0 then
-			ply:AddMoney(-amount)
+			ply:addMoney(-amount)
 			DarkRP.createMoneyBag(ply:GetPos(), amount)
 		end
 	end
@@ -552,7 +548,7 @@ local function initPlayer(ply)
 
 	ply:initiateTax()
 
-	ply:UpdateJob(team.GetName(1))
+	ply:updateJob(team.GetName(1))
 
 	ply:GetTable().Ownedz = { }
 	ply:GetTable().OwnedNumz = 0
@@ -667,7 +663,7 @@ function GM:PlayerSpawn(ply)
 	ply.IsSleeping = false
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	if ply:IsCP() then
+	if ply:isCP() then
 		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
 	end
 
@@ -813,10 +809,10 @@ function GM:PlayerDisconnected(ply)
 		end
 	end
 
-	GAMEMODE.vote.DestroyVotesWithEnt(ply)
+	DarkRP.destroyVotesWithEnt(ply)
 
 	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then -- Stop the lockdown
-		GAMEMODE:UnLockdown(ply)
+		DarkRP.unLockdown(ply)
 	end
 
 	if IsValid(ply.SleepRagdoll) then
@@ -837,7 +833,7 @@ function GM:GetFallDamage( ply, flFallSpeed )
 	else
 		if GAMEMODE.Config.falldamageamount then return GAMEMODE.Config.falldamageamount else return 10 end
 	end
-end	
+end
 local InitPostEntityCalled = false
 function GM:InitPostEntity()
 	InitPostEntityCalled = true

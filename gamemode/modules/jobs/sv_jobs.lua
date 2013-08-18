@@ -12,7 +12,7 @@ function meta:changeTeam(t, force)
 
 	self:setDarkRPVar("agenda", nil)
 
-	if t ~= GAMEMODE.DefaultTeam and not self:ChangeAllowed(t) and not force then
+	if t ~= GAMEMODE.DefaultTeam and not self:changeAllowed(t) and not force then
 		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
 		return false
 	end
@@ -23,10 +23,10 @@ function meta:changeTeam(t, force)
 	end
 
 	if self.IsBeingDemoted then
-		self:TeamBan()
+		self:teamBan()
 		self.IsBeingDemoted = false
 		self:changeTeam(1, true)
-		GAMEMODE.vote.DestroyVotesWithEnt(self)
+		DarkRP.destroyVotesWithEnt(self)
 		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("tried_to_avoid_demotion"))
 
 		return false
@@ -72,11 +72,14 @@ function meta:changeTeam(t, force)
 		end
 	end
 
+	local hookValue = hook.Call("playerCanChangeTeam", nil, self, t, force)
+	if hookValue == false then return false end
+
 	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
 	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then
-		GAMEMODE:UnLockdown(self)
+		DarkRP.unLockdown(self)
 	end
-	self:UpdateJob(TEAM.name)
+	self:updateJob(TEAM.name)
 	self:setSelfDarkRPVar("salary", TEAM.salary)
 	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
 
@@ -146,22 +149,22 @@ function meta:changeTeam(t, force)
 	return true
 end
 
-function meta:UpdateJob(job)
+function meta:updateJob(job)
 	self:setDarkRPVar("job", job)
 
 	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
 		if not IsValid(self) then return end
-		self:PayDay()
+		self:payDay()
 	end)
 end
 
-function meta:TeamUnBan(Team)
+function meta:teamUnBan(Team)
 	if not IsValid(self) then return end
 	if not self.bannedfrom then self.bannedfrom = {} end
 	self.bannedfrom[Team] = 0
 end
 
-function meta:TeamBan(t, time)
+function meta:teamBan(t, time)
 	if not self.bannedfrom then self.bannedfrom = {} end
 	t = t or self:Team()
 	self.bannedfrom[t] = 1
@@ -169,11 +172,11 @@ function meta:TeamBan(t, time)
 	if time == 0 then return end
 	timer.Simple(time or GAMEMODE.Config.demotetime, function()
 		if not IsValid(self) then return end
-		self:TeamUnBan(t)
+		self:teamUnBan(t)
 	end)
 end
 
-function meta:ChangeAllowed(t)
+function meta:changeAllowed(t)
 	if not self.bannedfrom then return true end
 	if self.bannedfrom[t] == 1 then return false else return true end
 end
@@ -228,7 +231,7 @@ local function ChangeJob(ply, args)
 
 	local job = replace or args
 	DarkRP.notifyAll(2, 4, DarkRP.getPhrase("job_has_become", ply:Nick(), job))
-	ply:UpdateJob(job)
+	ply:updateJob(job)
 	return ""
 end
 DarkRP.defineChatCommand("job", ChangeJob)
@@ -238,7 +241,7 @@ local function FinishDemote(vote, choice)
 
 	target.IsBeingDemoted = nil
 	if choice == 1 then
-		target:TeamBan()
+		target:teamBan()
 		if target:Alive() then
 			target:changeTeam(GAMEMODE.DefaultTeam, true)
 			if target:isArrested() then
@@ -275,7 +278,7 @@ local function Demote(ply, args)
 		return ""
 	end
 
-	local canDemote, message = hook.Call("CanDemote", GAMEMODE, ply, p, reason)
+	local canDemote, message = hook.Call("canDemote", GAMEMODE, ply, p, reason)
 	if canDemote == false then
 		DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "demote", ""))
 		return ""
@@ -295,7 +298,7 @@ local function Demote(ply, args)
 				false, Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
 
-			GAMEMODE.vote:create(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
+			DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
 			{
 				[p] = true,
 				[ply] = true
@@ -336,7 +339,7 @@ local function SwitchJob(ply) --Idea by Godness.
 	local eyetrace = ply:GetEyeTrace()
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
 	ply.RequestedJobSwitch = true
-	GAMEMODE.ques:Create(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+	DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
 	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_reqested"))
 	return ""
 end
@@ -384,7 +387,7 @@ local function DoTeamBan(ply, args, cmdargs)
 		return ""
 	end
 
-	target:TeamBan(tonumber(Team), tonumber(args[3] or 0))
+	target:teamBan(tonumber(Team), tonumber(args[3] or 0))
 	DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", ply:Nick(), target:Nick(), team.GetName(tonumber(Team))))
 	return ""
 end

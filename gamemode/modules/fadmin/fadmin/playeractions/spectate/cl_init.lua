@@ -16,12 +16,12 @@ FAdmin.StartHooks["zzSpectate"] = function()
 
 	-- Right click option
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Spectate", function(ply)
-		RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
+		RunConsoleCommand("_FAdmin", "Spectate", ply:UserID())
 	end)
 
-	-- Slap option in player menu
+	-- Spectate option in player menu
 	FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "FAdmin/icons/spectate", Color(0, 200, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Spectate") and ply ~= LocalPlayer() end, function(ply)
-		RunConsoleCommand("_FAdmin", "Spectate", ply:SteamID())
+		RunConsoleCommand("_FAdmin", "Spectate", ply:UserID())
 	end)
 end
 

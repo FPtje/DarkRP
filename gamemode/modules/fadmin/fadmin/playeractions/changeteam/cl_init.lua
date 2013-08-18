@@ -13,7 +13,7 @@ FAdmin.StartHooks["zzSetTeam"] = function()
 
 		menu:AddPanel(Title)
 		for k,v in SortedPairsByMemberValue(team.GetAllTeams(), "Name") do
-			menu:AddOption(v.Name, function() RunConsoleCommand("_FAdmin", "setteam", ply:SteamID(), k) end)
+			menu:AddOption(v.Name, function() RunConsoleCommand("_FAdmin", "setteam", ply:UserID(), k) end)
 		end
 		menu:Open()
 	end)

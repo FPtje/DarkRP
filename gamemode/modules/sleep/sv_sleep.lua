@@ -1,4 +1,5 @@
-KnockoutTime = 5
+-- very old sleep module
+local KnockoutTime = 5
 
 local function ResetKnockouts(player)
 	player.SleepRagdoll = nil
@@ -7,7 +8,7 @@ end
 hook.Add("PlayerSpawn", "Knockout", ResetKnockouts)
 
 
-function KnockoutToggle(player, command, args, caller)
+function DarkRP.toggleSleep(player, command)
 	if not player.SleepSound then
 		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
 	end
@@ -121,13 +122,13 @@ function KnockoutToggle(player, command, args, caller)
 		return ""
 	end
 end
-DarkRP.defineChatCommand("sleep", KnockoutToggle)
-DarkRP.defineChatCommand("wake", KnockoutToggle)
-DarkRP.defineChatCommand("wakeup", KnockoutToggle)
+DarkRP.defineChatCommand("sleep", DarkRP.toggleSleep)
+DarkRP.defineChatCommand("wake", DarkRP.toggleSleep)
+DarkRP.defineChatCommand("wakeup", DarkRP.toggleSleep)
 
 hook.Add("OnPlayerChangedTeam", "SleepMod", function(ply)
 	if ply.Sleeping then
-		KnockoutToggle(ply, "force")
+		DarkRP.toggleSleep(ply, "force")
 	end
 end)
 
