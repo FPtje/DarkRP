@@ -17,6 +17,7 @@ SWEP.Primary.Ammo = ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 
 SWEP.HoldType = "normal"
 SWEP.WorldModel = "models/weapons/w_toolgun.mdl"

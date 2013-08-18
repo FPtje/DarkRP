@@ -16,6 +16,7 @@ SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_m3super90.mdl"
