@@ -21,6 +21,12 @@ FAdmin.StartHooks["Jail"] = function()
 		if ply:FAdmin_GetGlobal("fadmin_jailed") then RunConsoleCommand("_FAdmin", "unjail", ply:UserID()) button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
 
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Jail Type:\n")
 		Title:SetFont("UiBold")

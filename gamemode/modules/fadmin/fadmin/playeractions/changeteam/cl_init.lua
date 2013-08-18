@@ -5,6 +5,12 @@ FAdmin.StartHooks["zzSetTeam"] = function()
 	FAdmin.ScoreBoard.Player:AddActionButton("Set team", "FAdmin/icons/changeteam", Color(0, 200, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetTeam", ply) end, function(ply, button)
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Teams:\n")
 		Title:SetFont("UiBold")

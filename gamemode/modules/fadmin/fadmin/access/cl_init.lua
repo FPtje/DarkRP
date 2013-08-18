@@ -38,6 +38,12 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 	FAdmin.ScoreBoard.Player:AddActionButton("Set access", "FAdmin/icons/access", Color(255, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetAccess") or LocalPlayer():IsSuperAdmin() end, function(ply)
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Set access:\n")
 		Title:SetFont("UiBold")
