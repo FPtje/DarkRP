@@ -28,8 +28,8 @@ local function SetAFK(ply)
 		ply:Lock()
 	else
 		ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
-		DarkRP.notifyAll(1, 5, rpname .. " is no longer AFK.")
-		DarkRP.notify(ply, 0, 5, "Welcome back, your salary has now been restored.")
+		DarkRP.notifyAll(1, 5, DarkRP.getPhrase("player_no_longer_afk", rpname))
+		DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("salary_restored", rpname))
 		ply:Spawn()
 		ply:UnLock()
 	end
