@@ -32,6 +32,7 @@ function ENT:Initialize()
 	self:LoadPage()
 
 	self.HTML:SetVisible(false)
+	self.HTML:SetKeyBoardInputEnabled(false)
 	timer.Simple(0, function() -- Fix HTML material
 		self.HTML:SetPaintedManually(true)
 	end)
