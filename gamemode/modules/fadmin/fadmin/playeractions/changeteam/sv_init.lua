@@ -9,7 +9,7 @@ local function SetTeam(ply, cmd, args)
 		if k == tonumber(args[2]) or string.lower(v.Name) == string.lower(args[2] or "") then
 			for _, target in pairs(targets) do
 				if not FAdmin.Access.PlayerHasPrivilege(ply, "SetTeam", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-				local SetTeam = target.ChangeTeam or target.SetTeam -- DarkRP compatibility
+				local SetTeam = target.changeTeam or target.SetTeam -- DarkRP compatibility
 				if IsValid(target) then
 					SetTeam(target, k, true)
 					end
