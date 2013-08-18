@@ -13,6 +13,7 @@ SWEP.Instructions = "Left Click to heal player infront of user."
 
 SWEP.Spawnable = false       -- Change to false to make Admin only.
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 
 SWEP.ViewModel = "models/weapons/c_medkit.mdl"
 SWEP.WorldModel = "models/weapons/w_medkit.mdl"

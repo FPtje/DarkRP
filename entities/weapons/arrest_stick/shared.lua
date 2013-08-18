@@ -24,6 +24,7 @@ SWEP.AnimPrefix = "stunstick"
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 
 SWEP.NextStrike = 0
 

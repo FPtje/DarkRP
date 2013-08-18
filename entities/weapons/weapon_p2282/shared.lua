@@ -16,6 +16,7 @@ SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.HoldType = "pistol"
 
