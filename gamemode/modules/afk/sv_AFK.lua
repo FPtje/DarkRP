@@ -61,3 +61,10 @@ local function KillAFKTimer()
 	end
 end
 hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
+
+local function BlockAFKTeamChange(ply, t)
+	if ply:getDarkRPVar("AFK") then
+		return false
+	end
+end
+hook.Add("playerCanChangeTeam", "AFKCanChangeTeam", BlockAFKTeamChange)
