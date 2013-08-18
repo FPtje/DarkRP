@@ -87,7 +87,15 @@ function ENT:CreateMoneybag()
 
 	local MoneyPos = self:GetPos()
 
-	if math.random(1, 22) == 3 then self:BurstIntoFlames() end
+	if GAMEMODE.Config.printeroverheat then 
+		local overheatchance
+		if GAMEMODE.Config.printeroverheatchance <= 3 then
+			overheatchance = 22
+		else
+			overheatchance = GAMEMODE.Config.printeroverheatchance or 22
+		end
+		if math.random(1, overheatchance) == 3 then self:BurstIntoFlames() end
+	end
 
 	local amount = GAMEMODE.Config.mprintamount
 	if amount == 0 then
