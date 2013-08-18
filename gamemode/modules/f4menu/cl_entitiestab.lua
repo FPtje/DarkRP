@@ -12,14 +12,17 @@ function PANEL:Rebuild()
 	if #self.Items == 0 then return end
 
 	local height = 0
+	local k = 0
 	for i, item in pairs(self.Items) do
+		if not item:IsVisible() then continue end
+		k = k + 1
 		item:SetWide(self:GetWide() / 2 - 10)
-		local goRight = i % 2 == 0
+		local goRight = k % 2 == 0
 		local x = goRight and self:GetWide() / 2 or 0
 		item:SetPos(x, height)
 
 		if goRight then
-			height = height + math.Max(item:GetTall(), self.Items[i - 1]:GetTall()) + 2
+			height = height + math.Max(item:GetTall(), self.Items[k - 1]:GetTall()) + 2
 		end
 	end
 	self:GetCanvas():SetTall(height + self.Items[#self.Items]:GetTall())
