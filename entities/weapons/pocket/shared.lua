@@ -97,5 +97,6 @@ DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = meta
+	metatable = meta,
+	realm = "Shared"
 }
