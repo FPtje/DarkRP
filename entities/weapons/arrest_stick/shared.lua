@@ -103,36 +103,37 @@ function SWEP:PrimaryAttack()
 
 	if CLIENT then return end
 
-	local trace = self.Owner:GetEyeTrace()
+	local ent = self.Owner:getEyeSightHitEntity()
+	if not ent then return end
 
-	if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:isCP() and not GAMEMODE.Config.cpcanarrestcp then
+	if IsValid(ent) and ent:IsPlayer() and ent:isCP() and not GAMEMODE.Config.cpcanarrestcp then
 		DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("cant_arrest_other_cp"))
 		return
 	end
 
-	if trace.Entity:GetClass() == "prop_ragdoll" then
+	if ent:GetClass() == "prop_ragdoll" then
 		for k,v in pairs(player.GetAll()) do
-			if trace.Entity.OwnerINT and trace.Entity.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
+			if ent.OwnerINT and ent.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
 				DarkRP.toggleSleep(v, true)
 				return
 			end
 		end
 	end
 
-	if not IsValid(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 115) or (not trace.Entity:IsPlayer() and not trace.Entity:IsNPC()) then
+	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 115) or (not ent:IsPlayer() and not ent:IsNPC()) then
 		return
 	end
 
-	if not GAMEMODE.Config.npcarrest and trace.Entity:IsNPC() then
+	if not GAMEMODE.Config.npcarrest and ent:IsNPC() then
 		return
 	end
 
-	if GAMEMODE.Config.needwantedforarrest and not trace.Entity:IsNPC() and not trace.Entity:getDarkRPVar("wanted") then
+	if GAMEMODE.Config.needwantedforarrest and not ent:IsNPC() and not ent:getDarkRPVar("wanted") then
 		DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("must_be_wanted_for_arrest"))
 		return
 	end
 
-	if FAdmin and trace.Entity:IsPlayer() and trace.Entity:FAdmin_GetGlobal("fadmin_jailed") then
+	if FAdmin and ent:IsPlayer() and ent:FAdmin_GetGlobal("fadmin_jailed") then
 		DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("cant_arrest_fadmin_jailed"))
 		return
 	end
@@ -143,15 +144,15 @@ function SWEP:PrimaryAttack()
 		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("cant_arrest_no_jail_pos"))
 	else
 		-- Send NPCs to Jail
-		if trace.Entity:IsNPC() then
-			trace.Entity:SetPos(DarkRP.retrieveJailPos())
+		if ent:IsNPC() then
+			ent:SetPos(DarkRP.retrieveJailPos())
 		else
-			if not trace.Entity.Babygod then
-				trace.Entity:arrest(nil, self.Owner)
-				DarkRP.notify(trace.Entity, 0, 20, DarkRP.getPhrase("youre_arrested_by", self.Owner:Nick()))
+			if not ent.Babygod then
+				ent:arrest(nil, self.Owner)
+				DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self.Owner:Nick()))
 
 				if self.Owner.SteamName then
-					DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..trace.Entity:Nick(), Color(0, 255, 255))
+					DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..ent:Nick(), Color(0, 255, 255))
 				end
 			else
 				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("cant_arrest_spawning_players"))

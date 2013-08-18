@@ -53,7 +53,7 @@ end
 function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	searchDistance = searchDistance or 100
 	hitDistance = hitDistance or 15
-	filter = filter or function(p) return p:IsPlayer() end
+	filter = filter or function(p) return p:IsPlayer() and p ~= self end
 
 	local shootPos = self:GetShootPos()
 	local entities = ents.FindInSphere(shootPos, searchDistance)
