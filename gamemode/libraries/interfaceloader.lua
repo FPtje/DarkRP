@@ -108,7 +108,7 @@ function stub(tbl)
 		error("Invalid DarkRP method stub! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
-	tbl.realm = realm
+	tbl.realm = tbl.realm or realm
 	stubs[tbl.name] = tbl
 
 	local function retNotImpl(...)
@@ -127,7 +127,7 @@ function hookStub(tbl)
 		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
-	tbl.realm = realm
+	tbl.realm = tbl.realm or realm
 	hookStubs[tbl.name] = tbl
 end
 
