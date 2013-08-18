@@ -24,14 +24,17 @@ function ENT:Initialize()
 	self.Disabled = true
 	self.LastDrawn = CurTime()
 	self.HTML = self.HTMLControl or vgui.Create("HTML")
-	self.HTML:SetPaintedManually(true)
+	self.HTML:SetPaintedManually(false)
 	self.HTML:SetPos(-512, -256)
 	self.HTMLWidth = 1448
 	self.HTMLHeight = 724
 	self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
 	self:LoadPage()
 
-	self.HTML:SetVisible(true)
+	self.HTML:SetVisible(false)
+	timer.Simple(0, function() -- Fix HTML material
+		self.HTML:SetPaintedManually(true)
+	end)
 end
 
 function ENT:Think()
@@ -58,6 +61,7 @@ function ENT:Draw()
 	self.LastDrawn = CurTime()
 	local IsAdmin = LocalPlayer():IsAdmin()
 	local HasPhysgun = (IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "weapon_physgun")
+	local isUsing = (HasPhysgun and LocalPlayer():KeyDown(IN_ATTACK)) or LocalPlayer():KeyDown(IN_USE)
 
 	surface.SetFont("TargetID")
 	local TextPosX = surface.GetTextSize("Physgun/use the button to see the MOTD!")*(-0.5)
@@ -85,7 +89,7 @@ function ENT:Draw()
 				surface.SetTexture(gripTexture)
 				surface.DrawTexturedRect(-10, 240, 16, 16)
 			end
-			if (HasPhysgun and LocalPlayer():KeyDown(IN_ATTACK)) or LocalPlayer():KeyDown(IN_USE) then
+			if isUsing then
 
 				posX, posY = math.Clamp(posX, -506, 506), math.Clamp(posY, -250, 250)
 				surface.SetTexture(ArrowTexture)
@@ -116,8 +120,7 @@ function ENT:Draw()
 
 	--Drawing the actual HTML panel:
 
-	if ((HasPhysgun and LocalPlayer():KeyDown(IN_ATTACK)) or LocalPlayer():KeyDown(IN_USE))
-		and posX > -500 and posX < 500 and posY < 250 and posY > -250 then
+	if isUsing and posX > -500 and posX < 500 and posY < 250 and posY > -250 then
 		if not self.Disabled and self.HTML and self.HTML:IsValid() and self.CanClickAgain and CurTime() > self.CanClickAgain then
 			self.CanClickAgain = CurTime() + 1
 			self.HTML:SetPaintedManually(false)
