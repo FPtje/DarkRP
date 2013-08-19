@@ -24,7 +24,7 @@ hook.Add("Initialize", "HungerMod_Init", function()
 		model = "models/props/cs_office/microwave.mdl",
 		price = 400,
 		max = 1,
-		cmd = "/buymicrowave",
+		cmd = "buymicrowave",
 		allowed = TEAM_COOK
 	})
 end)
