@@ -372,7 +372,7 @@ DarkRP.hookStub{
 			type = "any"
 		},
 		{
-			name = "price",
+			name = "newvalue",
 			description = "The new value of the DarkRPVar.",
 			type = "any"
 		}
