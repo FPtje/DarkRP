@@ -87,7 +87,7 @@ DarkRP.createPlayerData = DarkRP.stub{
 		{
 			name = "name",
 			description = "The name of the player.",
-			type = "name",
+			type = "string",
 			optional = false
 		},
 		{
