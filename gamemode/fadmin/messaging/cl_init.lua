@@ -35,7 +35,7 @@ local function DrawNotice( self, k, v, i )
 
 	local H = ScrH() / 1024
 	local x = v.x - 75 * H
-	local y = v.y - 20 * H
+	local y = v.y - 27
 
 	surface.SetFont("GModNotify")
 	local w, h = surface.GetTextSize( v.text )
