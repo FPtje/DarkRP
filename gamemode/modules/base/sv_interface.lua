@@ -520,7 +520,7 @@ DarkRP.PLAYER.setDarkRPVar = DarkRP.stub{
 		{
 			name = "target",
 			description = "the clients to whom this variable is sent.",
-			type = "RecipientFilter",
+			type = "CRecipientFilter",
 			optional = true
 		}
 	},
