@@ -5,7 +5,7 @@ end
 if (CLIENT) then
 	SWEP.PrintName = "Pump Shotgun"
 	SWEP.Author = "DarkRP Developers"
-	SWEP.Slot = 2
+	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "k"
 
