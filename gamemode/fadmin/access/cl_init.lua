@@ -167,6 +167,9 @@ EditGroups = function()
 	SelectedGroup:SetPos(5, 30)
 	SelectedGroup:SetWidth(145)
 
+	for k,v in pairs(FAdmin.Access.Groups) do
+		v.immunity = v.immunity or 0
+	end
 	for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "immunity", true) do
 		SelectedGroup:AddChoice(k)
 	end
