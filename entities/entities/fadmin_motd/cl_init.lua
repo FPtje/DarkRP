@@ -33,7 +33,7 @@ function ENT:Initialize()
 
 	self.HTML:SetVisible(false)
 	self.HTML:SetKeyBoardInputEnabled(false)
-	timer.Simple(0, function() -- Fix HTML material
+	timer.Simple(0, function() -- Fix areas of the FAdmin scoreboard coming unclickable
 		self.HTML:SetPaintedManually(true)
 	end)
 end
@@ -104,11 +104,17 @@ function ENT:Draw()
 				end
 			end
 		elseif not self.HTMLMat then
+			self.HTML:SetVisible(true)
+			self.HTML:SetKeyBoardInputEnabled(true)
 			self.HTML:SetPaintedManually(false)
+			self.HTML:UpdateHTMLTexture()
 
 			timer.Simple(0, function() -- Fix HTML material
 				self.HTML:SetPaintedManually(true)
+				self.HTML:SetVisible(false)
+				self.HTML:SetKeyBoardInputEnabled(false)
 			end)
+
 		else
 			surface.SetMaterial(self.HTMLMat)
 			surface.SetDrawColor(255, 255, 255, 255)
