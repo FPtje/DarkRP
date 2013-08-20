@@ -22,7 +22,7 @@ DarkRP.addLanguage = DarkRP.stub{
 
 DarkRP.addPhrase = DarkRP.stub{
 	name = "addPhrase",
-	description = "Add a phrase to the existing translation",
+	description = "Add a phrase to the existing translation.",
 	parameters = {
 		{
 			name = "Language name",
@@ -50,7 +50,7 @@ DarkRP.addPhrase = DarkRP.stub{
 
 DarkRP.getPhrase = DarkRP.stub{
 	name = "getPhrase",
-	description = "Get a phrase from the selected language",
+	description = "Get a phrase from the selected language.",
 	parameters = {
 		{
 			name = "key",
@@ -60,7 +60,7 @@ DarkRP.getPhrase = DarkRP.stub{
 		},
 		{
 			name = "Phrase parameters",
-			description = "Some phrases need extra information, like in \"PLAYERNAME just won the lottery!\". Not filling in the phrase parameters will cause errors",
+			description = "Some phrases need extra information, like in \"PLAYERNAME just won the lottery!\". Not filling in the phrase parameters will cause errors.",
 			type = "vararg",
 			optional = false
 		}
@@ -69,6 +69,27 @@ DarkRP.getPhrase = DarkRP.stub{
 		{
 			name = "phrase",
 			description = "The formatted phrase.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
+DarkRP.getMissingPhrases = DarkRP.stub{
+	name = "getMissingPhrases",
+	description = "Get all the phrases a language is missing.",
+	parameters = {
+		{
+			name = "languageCode",
+			description = "The language code of the language. For English this is \"en\".",
+			type = "string",
+			optional = true
+		}
+	},
+	returns = {
+		{
+			name = "missingPhrases",
+			description = "All the missing phrases formatted in such way that you can copy and paste it in your language file.",
 			type = "string"
 		}
 	},

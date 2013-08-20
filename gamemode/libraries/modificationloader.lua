@@ -51,12 +51,12 @@ Modules
 ---------------------------------------------------------------------------*/
 local function loadModules()
 	local fol = "darkrp_modules/"
-	if not file.IsDir("darkrp_modules/", "LUA") then return end
+	if not file.IsDir(fol, "LUA") then return end
 
 	local files, folders = file.Find(fol .. "*", "LUA")
 
 	for _, folder in SortedPairs(folders, true) do
-		if folder == "." or folder == ".." then continue end
+		if folder == "." or folder == ".." or GAMEMODE.Config.DisabledCustomModules[folder] then continue end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 			if SERVER then AddCSLuaFile(fol..folder .. "/" ..File) end
@@ -77,6 +77,16 @@ local function loadModules()
 			if SERVER then AddCSLuaFile(fol.. folder .. "/" ..File)
 			else include(fol.. folder .. "/" ..File)  end
 		end
+	end
+end
+
+local function loadLanguages()
+	local fol = "darkrp_language/"
+
+	local files, folders = file.Find(fol .. "*", "LUA")
+	for _, File in pairs(files) do
+		if SERVER then AddCSLuaFile(fol .. File) end
+		include(fol .. File)
 	end
 end
 
@@ -101,6 +111,7 @@ end
 
 
 local function load()
+	loadLanguages()
 	loadModules()
 	loadCustomDarkRPItems()
 end
