@@ -20,3 +20,18 @@ Make sure you prefix it with the [MODIFICATION] tag, though.
 More information about migrating can be found here:
 http://wiki.darkrp.com/index.php/MigratingTo2.5.0
 (note, this page doesn't exist yet, but will be created ASAP. Please stand by)
+
+
+= REASONS FOR UPGRADING TO DARKRP 2.5.0. =
+
+- New and recoded F1 menu with chat command searching
+- New and recoded F4 menu in which you can add your own tabs and which doesn't lag when you open it
+- Piss easy to translate DarkRP with the addon. Just copy a file and start translating.
+- Update DarkRP without problems. No more merge conflicts because you're not touching the DarkRP files.
+- Shitloads faster
+- ALL of the available functions and hooks are documented on the wiki.
+- Super recode. Everything is tidied up.
+
+= SO HERE IS A WARNING =
+If you modified DarkRP and try to update after October 4th you will fuck yourself over harder than a hedgehog performing autofellatio backwards.
+And I won't be responsible.
