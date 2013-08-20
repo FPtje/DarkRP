@@ -23,6 +23,7 @@ local function LoadModules()
 end
 
 GM.Config = {} -- config table
+GM.NoLicense = GM.NoLicense or {}
 
 include("config/config.lua")
 include("libraries/fn.lua")
