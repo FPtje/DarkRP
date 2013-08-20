@@ -42,6 +42,7 @@ function ENT:Think()
 	if not self.HTML or self.Disabled or self.HTMLCloseButton then
 		self.HTMLMat = nil
 	else
+		self.HTML:UpdateHTMLTexture()
 		self.HTMLMat = self.HTML:GetHTMLMaterial()
 	end
 	self:NextThink(CurTime() + 0.1)
@@ -71,9 +72,9 @@ function ENT:Draw()
 	ang:RotateAroundAxis(ang:Right(), -90)
 	ang:RotateAroundAxis(ang:Up(), 90)
 
-
 	local posX, posY = WorldToScreen(LocalPlayer():GetEyeTrace().HitPos, self:GetPos() + ang:Up()*3, 0.25, ang)
 	render.SuppressEngineLighting(true)
+
 	cam.Start3D2D(self:GetPos() + ang:Up()*3, ang, 0.25)
 
 		if self.Disabled then
@@ -147,8 +148,6 @@ function ENT:Draw()
 
 			function self.HTMLCloseButton.DoClick() -- Revert to drawing on the prop
 				self.HTML:SetPos(-512, -256)
-				self.HTMLWidth = 1088
-				self.HTMLHeight = 536
 				self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
 				self.HTML:SetPaintedManually(true)
 				self.HTML:SetKeyBoardInputEnabled(false)
