@@ -57,9 +57,11 @@ function PANEL:Refresh()
 
 end
 
-function PANEL:SetDisabled(b)
+-- SetDisabled. Disables the button and hides it when the config options are set right
+-- rules: always hide if hideNonBuyable, only hide items that have nothing to do with your situation (like items for another job) with hideTeamUnbuyable
+function PANEL:SetDisabled(b, isImportant)
 	self.m_bDisabled = b
-	if GAMEMODE.Config.hideNonBuyable then
+	if GAMEMODE.Config.hideNonBuyable or (isImportant and GAMEMODE.Config.hideTeamUnbuyable) then
 		self:SetVisible(not b)
 	end
 end
@@ -81,13 +83,13 @@ end
 local function canGetJob(job)
 	local ply = LocalPlayer()
 
-	if isnumber(job.NeedToChangeFrom) and ply:Team() ~= job.NeedToChangeFrom then return false end
-	if istable(job.NeedToChangeFrom) and not table.HasValue(job.NeedToChangeFrom, ply:Team()) then return false end
-	if job.customCheck and not job.customCheck(ply) then  return false end
-	if ply:Team() == job.team then return false end
-	if job.max ~= 0 and ((job.max % 1 == 0 and team.NumPlayers(job.team) >= job.max) or (job.max % 1 ~= 0 and (team.NumPlayers(job.team) + 1) / #player.GetAll() > job.max)) then return false end
-	if job.admin == 1 and not ply:IsAdmin() then return false end
-	if job.admin > 1 and not ply:IsSuperAdmin() then return false end
+	if isnumber(job.NeedToChangeFrom) and ply:Team() ~= job.NeedToChangeFrom then return false, true end
+	if istable(job.NeedToChangeFrom) and not table.HasValue(job.NeedToChangeFrom, ply:Team()) then return false, true end
+	if job.customCheck and not job.customCheck(ply) then return false, true end
+	if ply:Team() == job.team then return false, true end
+	if job.max ~= 0 and ((job.max % 1 == 0 and team.NumPlayers(job.team) >= job.max) or (job.max % 1 ~= 0 and (team.NumPlayers(job.team) + 1) / #player.GetAll() > job.max)) then return false, false end
+	if job.admin == 1 and not ply:IsAdmin() then return false, true end
+	if job.admin > 1 and not ply:IsSuperAdmin() then return false, true end
 
 
 	return true
@@ -101,9 +103,8 @@ function PANEL:setDarkRPItem(job)
 	self:SetText(job.name)
 	self:SetTextRight(string.format("%s/%s", team.NumPlayers(job.team), getMaxOfTeam(job)))
 
-	if not canGetJob(job) then
-		self:SetDisabled(true)
-	end
+	local canGet, important = canGetJob(job)
+	self:SetDisabled(not canGet, important)
 end
 
 function PANEL:DoDoubleClick()
@@ -121,11 +122,8 @@ end
 function PANEL:Refresh()
 	self:SetTextRight(string.format("%s/%s", team.NumPlayers(self.DarkRPItem.team), getMaxOfTeam(self.DarkRPItem)))
 
-	if canGetJob(self.DarkRPItem) then
-		self:SetDisabled(false)
-	else
-		self:SetDisabled(true)
-	end
+	local canGet, important = canGetJob(self.DarkRPItem)
+	self:SetDisabled(not canGet, important)
 end
 
 derma.DefineControl("F4MenuJobButton", "", PANEL, "F4MenuItemButton")

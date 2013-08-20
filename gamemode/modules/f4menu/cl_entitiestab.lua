@@ -51,20 +51,18 @@ end
 local function canBuyEntity(item)
 	local ply = LocalPlayer()
 
-	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false end
-	if item.customCheck and not item.customCheck(ply) then return false end
-	if not ply:canAfford(item.price) then return false end
+	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
+	if item.customCheck and not item.customCheck(ply) then return false, true end
+	if not ply:canAfford(item.price) then return false, false end
 
 	return true
 end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		if not canBuyEntity(v.DarkRPItem) then
-			v:SetDisabled(true)
-		else
-			v:SetDisabled(false)
-		end
+		local canBuy, important = canBuyEntity(v.DarkRPItem)
+
+		v:SetDisabled(not canBuy, important)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -79,9 +77,9 @@ PANEL = {}
 local function canBuyShipment(ship)
 	local ply = LocalPlayer()
 
-	if not table.HasValue(ship.allowed, ply:Team()) then return false end
-	if ship.customCheck and not ship.customCheck(ply) then return false end
-	if not ply:canAfford(ship.price) then return false end
+	if not table.HasValue(ship.allowed, ply:Team()) then return false, true end
+	if ship.customCheck and not ship.customCheck(ply) then return false, true end
+	if not ply:canAfford(ship.price) then return false, false end
 
 	return true
 end
@@ -100,11 +98,9 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		if not canBuyShipment(v.DarkRPItem) then
-			v:SetDisabled(true)
-		else
-			v:SetDisabled(false)
-		end
+		local canBuy, important = canBuyShipment(v.DarkRPItem)
+
+		v:SetDisabled(not canBuy, important)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -119,9 +115,9 @@ PANEL = {}
 local function canBuyGun(ship)
 	local ply = LocalPlayer()
 
-	if GAMEMODE.Config.restrictbuypistol and not table.HasValue(ship.allowed, ply:Team()) then return false end
-	if ship.customCheck and not ship.customCheck(ply) then return false end
-	if not ply:canAfford(ship.pricesep) then return false end
+	if GAMEMODE.Config.restrictbuypistol and not table.HasValue(ship.allowed, ply:Team()) then return false, true end
+	if ship.customCheck and not ship.customCheck(ply) then return false, true end
+	if not ply:canAfford(ship.pricesep) then return false, false end
 
 	return true
 end
@@ -139,11 +135,9 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		if not canBuyGun(v.DarkRPItem) then
-			v:SetDisabled(true)
-		else
-			v:SetDisabled(false)
-		end
+		local canBuy, important = canBuyGun(v.DarkRPItem)
+
+		v:SetDisabled(not canBuy, important)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -167,11 +161,7 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		if v.customCheck and not customCheck(v.DarkRPItem) then
-			v:SetDisabled(true)
-		else
-			v:SetDisabled(false)
-		end
+		v:SetDisabled(v.customCheck and not v.customCheck(v.DarkRPItem) or false, true)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -195,20 +185,18 @@ end
 local function canBuyVehicle(item)
 	local ply = LocalPlayer()
 
-	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false end
-	if item.customCheck and not item.customCheck(ply) then return false end
-	if not ply:canAfford(item.price) then return false end
+	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
+	if item.customCheck and not item.customCheck(ply) then return false, true end
+	if not ply:canAfford(item.price) then return false, false end
 
 	return true
 end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		if not canBuyVehicle(v.DarkRPItem) then
-			v:SetDisabled(true)
-		else
-			v:SetDisabled(false)
-		end
+		local canBuy, important = canBuyVehicle(v.DarkRPItem)
+
+		v:SetDisabled(not canBuy, important)
 	end
 	self.BaseClass.PerformLayout(self)
 end

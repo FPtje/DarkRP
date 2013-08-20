@@ -310,8 +310,14 @@ GM.Config.PocketBlacklist = {
 /*---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------*/
--- hide the items that you can't buy (instead of graying them out)
+-- hide the items that you can't buy and the jobs you can't get (instead of graying them out)
+-- this option hides items when you don't have enough money, when the maximum is reached for a job or any other reason
 GM.Config.hideNonBuyable = false
+
+-- Hide only the items that you have the wrong job for (or for which the customCheck says no)
+-- When you set this option to true and hideNonBuyable to false, you WILL see e.g. items that are too expensive for you to buy
+-- but you won't see gundealer shipments when you have the citizen job
+GM.Config.hideTeamUnbuyable = true
 
 /*---------------------------------------------------------------------------
 AFK module
