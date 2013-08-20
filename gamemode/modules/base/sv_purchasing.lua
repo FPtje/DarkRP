@@ -168,6 +168,9 @@ local function BuyShipment(ply, args)
 
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
+	if found.weight then
+		phys:SetMass(found.weight)
+	end
 
 	if CustomShipments[foundKey].onBought then
 		CustomShipments[foundKey].onBought(ply, CustomShipments[foundKey], weapon)
