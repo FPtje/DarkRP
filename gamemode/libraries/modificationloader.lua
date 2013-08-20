@@ -2,7 +2,7 @@
 Disabled defaults
 ---------------------------------------------------------------------------*/
 DarkRP.disabledDefaults = {}
-DarkRP.disabledDefaults["modules"] = { --
+DarkRP.disabledDefaults["modules"] = {
 	["afk"]              = true,
 	["chatsounds"]       = false,
 	["events"]           = false,
@@ -15,15 +15,15 @@ DarkRP.disabledDefaults["modules"] = { --
 	["voterestrictions"] = true,
 }
 
-DarkRP.disabledDefaults["agendas"]    = {} --
-DarkRP.disabledDefaults["ammo"]       = {} --
-DarkRP.disabledDefaults["doorgroups"] = {} --
-DarkRP.disabledDefaults["entities"]   = {} --
+DarkRP.disabledDefaults["agendas"]    = {}
+DarkRP.disabledDefaults["ammo"]       = {}
+DarkRP.disabledDefaults["doorgroups"] = {}
+DarkRP.disabledDefaults["entities"]   = {}
 DarkRP.disabledDefaults["groupchat"]  = {}
-DarkRP.disabledDefaults["hitmen"]     = {} --
-DarkRP.disabledDefaults["jobs"]       = {} --
-DarkRP.disabledDefaults["shipments"]  = {} --
-DarkRP.disabledDefaults["vehicles"]   = {} --
+DarkRP.disabledDefaults["hitmen"]     = {}
+DarkRP.disabledDefaults["jobs"]       = {}
+DarkRP.disabledDefaults["shipments"]  = {}
+DarkRP.disabledDefaults["vehicles"]   = {}
 
 if file.Exists("darkrp_config/disabled_defaults.lua", "LUA") then
 	if SERVER then AddCSLuaFile("darkrp_config/disabled_defaults.lua") end
