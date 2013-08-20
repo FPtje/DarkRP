@@ -31,6 +31,14 @@ if file.Exists("darkrp_config/disabled_defaults.lua", "LUA") then
 end
 
 /*---------------------------------------------------------------------------
+Config
+---------------------------------------------------------------------------*/
+if file.Exists("darkrp_config/settings.lua", "LUA") then
+	if SERVER then AddCSLuaFile("darkrp_config/settings.lua") end
+	include("darkrp_config/settings.lua")
+end
+
+/*---------------------------------------------------------------------------
 Modules
 ---------------------------------------------------------------------------*/
 local function loadModules()
@@ -64,9 +72,29 @@ local function loadModules()
 	end
 end
 
+local customFiles = {
+	"darkrp_customthings/jobs.lua",
+	"darkrp_customthings/shipments.lua",
+	"darkrp_customthings/entities.lua",
+	"darkrp_customthings/vehicles.lua",
+	"darkrp_customthings/ammo.lua",
+	"darkrp_customthings/groupchats.lua",
+	"darkrp_customthings/agendas.lua", -- has to be run after jobs.lua
+	"darkrp_customthings/doorgroups.lua", -- has to be run after jobs.lua
+}
+local function loadCustomDarkRPItems()
+	for _, File in pairs(customFiles) do
+		if not file.Exists(File, "LUA") then continue end
+
+		if SERVER then AddCSLuaFile(File) end
+		include(File)
+	end
+end
+
 
 local function load()
 	loadModules()
+	loadCustomDarkRPItems()
 end
 hook.Add("Initialize", "loadDarkRPModules", load)
 hook.Add("OnReloaded", "loadDarkRPModules", load)
