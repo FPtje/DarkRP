@@ -232,15 +232,6 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 	hobo = true
 })
 
-//ADD CUSTOM TEAMS UNDER THIS LINE:
-
-
-
-
-
-
-
-
 
 /*
 --------------------------------------------------------
