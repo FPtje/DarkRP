@@ -61,8 +61,10 @@ end
 -- rules: always hide if hideNonBuyable, only hide items that have nothing to do with your situation (like items for another job) with hideTeamUnbuyable
 function PANEL:SetDisabled(b, isImportant)
 	self.m_bDisabled = b
-	if GAMEMODE.Config.hideNonBuyable or (isImportant and GAMEMODE.Config.hideTeamUnbuyable) then
-		self:SetVisible(not b)
+	if GAMEMODE.Config.hideNonBuyable or (isImportant and GAMEMODE.Config.hideTeamUnbuyable) and b then
+		self:SetVisible(false)
+	else
+		self:SetVisible(true)
 	end
 end
 
@@ -116,6 +118,7 @@ function PANEL:DoDoubleClick()
 	else
 		RunConsoleCommand("darkrp", job.command)
 	end
+
 	timer.Simple(1, fn.Partial(self:GetParent():GetParent().Refresh, self:GetParent():GetParent()))
 end
 
