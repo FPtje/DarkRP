@@ -33,9 +33,17 @@ end
 /*---------------------------------------------------------------------------
 Config
 ---------------------------------------------------------------------------*/
-if file.Exists("darkrp_config/settings.lua", "LUA") then
-	if SERVER then AddCSLuaFile("darkrp_config/settings.lua") end
-	include("darkrp_config/settings.lua")
+local configFiles = {
+	"darkrp_config/settings.lua",
+	"darkrp_config/mysql.lua",
+	"darkrp_config/licenseweapons.lua",
+}
+
+for _, File in pairs(configFiles) do
+	if not file.Exists(File, "LUA") then continue end
+
+	if SERVER then AddCSLuaFile(File) end
+	include(File)
 end
 
 /*---------------------------------------------------------------------------
