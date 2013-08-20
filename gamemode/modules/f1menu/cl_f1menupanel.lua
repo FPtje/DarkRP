@@ -24,10 +24,10 @@ function PANEL:Init()
 	self.lblWiki = vgui.Create("F1MenuTitleLabel", self)
 	self.lblWiki:SetText(DarkRP.getPhrase("f1WikiTitle"))
 
-	self.htmlWikiControls = vgui.Create("DHTMLControls", self)
+	self.htmlWikiControls = vgui.Create("F1HTMLControls", self)
 	self.htmlWikiControls.HomeURL = GAMEMODE.Config.F1MenuHelpPage
 
-	self.htmlWiki = vgui.Create("HTML", self)
+	self.htmlWiki = vgui.Create("F1HTML", self)
 	self.htmlWiki:OpenURL(GAMEMODE.Config.F1MenuHelpPage)
 	self.htmlWikiControls:SetHTML(self.htmlWiki)
 end
@@ -93,7 +93,7 @@ end
 function PANEL:Paint()
 	local x, y = self:GetPos()
 	local w, h = self:GetSize()
-	draw.RoundedBox(4, 0, 0, w, h, self:GetBackgroundColor())
+	draw.RoundedBoxEx(4, 0, 0, w, h, self:GetBackgroundColor(), false, true, false, true)
 end
 
 derma.DefineControl("F1MenuPanel", "", PANEL, "EditablePanel")
