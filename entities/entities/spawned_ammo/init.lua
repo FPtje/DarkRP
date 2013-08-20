@@ -5,7 +5,6 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator, caller)
-	print("Called")
 	activator:GiveAmmo(self.amountGiven, self.ammoType)
 	self:Remove()
 end

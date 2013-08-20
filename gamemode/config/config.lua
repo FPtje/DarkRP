@@ -277,21 +277,6 @@ GM.Config.DefaultLaws = {
 	"Money printers/drugs are illegal."
 }
 
--- The list of modules that are disabled. Set to true to disable, false to enable.
--- Modules that are not in this list are enabled by default.
-GM.Config.DisabledModules = {
-	["afk"] = true,
-	["fpp"] = false,
-	["chatsounds"] = false,
-	["events"] = false,
-	["hungermod"] = true,
-	["hud"] = false,
-	["playerscale"] = false,
-	["sleep"] = false,
-	["voterestrictions"] = true,
-	["hitmenu"] = false,
-}
-
 GM.Config.PocketBlacklist = {
 	["fadmin_jail"] = true,
 	["meteor"] = true,
