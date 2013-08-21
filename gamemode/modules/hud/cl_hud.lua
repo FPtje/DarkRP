@@ -127,6 +127,8 @@ local function GunLicense()
 end
 
 local function Agenda()
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
+	if shouldDraw == false then return end
 	local DrawAgenda, AgendaManager = DarkRPAgendas[localplayer:Team()], localplayer:Team()
 	if not DrawAgenda then
 		for k,v in pairs(DarkRPAgendas) do
@@ -228,12 +230,14 @@ local function DrawHUD()
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
 
-	--Background
-	draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
-
-	DrawHealth()
-	DrawInfo()
-	GunLicense()
+	shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
+	if shouldDraw ~= false then
+		--Background
+		draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
+		DrawHealth()
+		DrawInfo()
+		GunLicense()
+	end
 	Agenda()
 	DrawVoiceChat()
 	LockDown()
