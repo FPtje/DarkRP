@@ -44,6 +44,15 @@ if SERVER then
 	function ENTITY:CPPISetOwner(ply)
 		self.FPPOwner = ply
 		self.FPPOwnerID = ply:SteamID()
+		if constraint.HasConstraints( self ) then
+			local ConstrainedEntities = constraint.GetAllConstrainedEntities( self )
+			for _,ent in pairs(ConstrainedEntities) do
+				if IsValid(ent) then
+					ent.FPPOwner = ply
+					ent.FPPOwnerID = ply:SteamID()
+				end
+			end
+		end		
 		return true
 	end
 
