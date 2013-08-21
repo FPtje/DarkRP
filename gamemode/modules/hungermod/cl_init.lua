@@ -34,10 +34,15 @@ function HM.HUDPaint()
 	local x = 5
 	local y = ScrH() - 9
 
-	draw.RoundedBox(4, x - 1, y - 1, GetConVarNumber("HudW") - 8, 9, Color(0, 0, 0, 255))
+	local cornerRadius = 4
+	if energy > 0 then
+		cornerRadius = math.Min(4, (GetConVarNumber("HudW")-9)*(math.Clamp(energy, 0, 100)/100)/3*2 - (GetConVarNumber("HudW")-9)*(math.Clamp(energy, 0, 100)/100)/3*2%2)
+	end
+
+	draw.RoundedBox(cornerRadius, x - 1, y - 1, GetConVarNumber("HudW") - 8, 9, Color(0, 0, 0, 255))
 
 	if energy > 0 then
-		draw.RoundedBox(4, x, y, (GetConVarNumber("HudW") - 9) * (math.Clamp(energy, 0, 100) / 100), 7, Color(30, 30, 120, 255))
+		draw.RoundedBox(cornerRadius, x, y, (GetConVarNumber("HudW") - 9) * (math.Clamp(energy, 0, 100) / 100), 7, Color(30, 30, 120, 255))
 		draw.DrawText(math.ceil(energy) .. "%", "DefaultSmall", GetConVarNumber("HudW") / 2, y - 2, Color(255, 255, 255, 255), 1)
 	else
 		draw.DrawText(DarkRP.getPhrase("starving"), "ChatFont", GetConVarNumber("HudW") / 2, y - 4, Color(200, 0, 0, 255), 1)
