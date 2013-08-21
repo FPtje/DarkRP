@@ -738,7 +738,7 @@ function FPP.Init()
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPS3(groupname VARCHAR(40) NOT NULL, allowdefault INTEGER NOT NULL, PRIMARY KEY(groupname));")
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPTOOL(groupname VARCHAR(40) NOT NULL, tool VARCHAR(45) NOT NULL, PRIMARY KEY(groupname, tool));")
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
-		local count = MySQLite.QueryValue("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='FPP_BLOCKEDMODELS1' LIMIT 1") or 0
+		local count = MySQLite.queryValue("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='FPP_BLOCKEDMODELS1' LIMIT 1") or 0
 		if(count==0) then
 			MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
 			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
