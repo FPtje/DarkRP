@@ -80,24 +80,30 @@ if cleanup then
 end
 
 FPP.ApplyForceCenter = FPP.ApplyForceCenter or debug.getregistry().PhysObj.ApplyForceCenter
-debug.getregistry().PhysObj.ApplyForceCenter = function(self, force, ...)
+
+debug.getregistry().PhysObj.ApplyForceCenter = function(self, force)
 	local i = 0
-	while true and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) do
+	local ent = self:GetEntity()
+	if ent.FPPE2Nocollided then FPP.ApplyForceCenter(self, force) end
+
+	while tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) do
 		i = i + 1
 		local DebugLevel = debug.getinfo(i, "Sln")
 		if not DebugLevel then break end
-		if DebugLevel and string.find(DebugLevel.short_src, "gmod_wire_expression2") and IsValid(self:GetEntity()) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) then
-			self:GetEntity():SetCollisionGroup(COLLISION_GROUP_WEAPON)
+		if DebugLevel and string.find(DebugLevel.short_src, "gmod_wire_expression2") and IsValid(ent) and tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) then
+			ent:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+			ent.FPPE2Nocollided = true
 			local ConstrainedEnts = constraint.GetAllConstrainedEntities(self:GetEntity())
 
 			if ConstrainedEnts then -- All its constrained entities as well!
 				for k,v in pairs(ConstrainedEnts) do
+					v.FPPE2Nocollided = true
 					v:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 				end
 			end
 		end
 	end
-	return FPP.ApplyForceCenter(self, force, ...)
+	return FPP.ApplyForceCenter(self, force)
 end
 
 local PLAYER = FindMetaTable("Player")
@@ -720,7 +726,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 
 			if setspawning then
 				FPP.CanTouch(ply, "FPP_TOOLGUN1", "Duplicating blocked entity", false)
-				EntTables[k] = nil
+				EntTable[k] = nil
 			end
 		end
 	end
