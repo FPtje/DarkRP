@@ -5,6 +5,7 @@ Pooled networking strings
 ---------------------------------------------------------------------------*/
 util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_DoorData")
+util.AddNetworkString("DarkRP_PlayerVar")
 
 /*---------------------------------------------------------------------------
 Player vars
@@ -13,32 +14,21 @@ Player vars
 /*---------------------------------------------------------------------------
 Set a player's DarkRPVar
 ---------------------------------------------------------------------------*/
-local function formatDarkRPValue(value)
-	if value == nil then return "nil" end
-
-	if isentity(value) and not IsValid(value) then return "NULL" end
-	if isentity(value) and value:IsPlayer() then return string.format("Entity [%s][Player]", value:EntIndex()) end
-
-	return tostring(value)
-end
 
 function meta:setDarkRPVar(var, value, target)
 	if not IsValid(self) then return end
-	target = target or RecipientFilter():AddAllPlayers()
+	target = target or player.GetAll()
 
 	hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, value)
 
 	self.DarkRPVars = self.DarkRPVars or {}
 	self.DarkRPVars[var] = value
 
-	value = formatDarkRPValue(value)
-
-	umsg.Start("DarkRP_PlayerVar", target)
-		-- The index because the player handle might not exist clientside yet
-		umsg.Short(self:EntIndex())
-		umsg.String(var)
-		umsg.String(value)
-	umsg.End()
+	net.Start("DarkRP_PlayerVar")
+		net.WriteFloat(self:EntIndex())
+		net.WriteString(var)
+		net.WriteType(value)
+	net.Send(target)
 end
 
 /*---------------------------------------------------------------------------

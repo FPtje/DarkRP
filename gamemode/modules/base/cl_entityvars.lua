@@ -16,37 +16,13 @@ local function RetrievePlayerVar(entIndex, var, value, tries)
 	-- Usermessages _can_ arrive before the player is valid.
 	-- In this case, chances are huge that this player will become valid.
 	if not IsValid(ply) then
-		if tries >= 5 then return end
+		if (tries or 0) >= 5 then return end
 
-		timer.Simple(0.5, function() RetrievePlayerVar(entIndex, var, value, tries + 1) end)
+		timer.Simple(0.5, function() RetrievePlayerVar(entIndex, var, value, (tries or 0) + 1) end)
 		return
 	end
 
 	ply.DarkRPVars = ply.DarkRPVars or {}
-
-	local stringvalue = value
-	value = tonumber(value) or value
-
-	if string.match(stringvalue, "Entity .([0-9]*)") then
-		value = Entity(string.match(stringvalue, "Entity .([0-9]*)"))
-	end
-
-	if string.match(stringvalue, "^Player .([0-9]+).") then
-		value = player.GetAll()[tonumber(string.match(stringvalue, "^Player .([0-9]+)."))]
-	end
-
-	if stringvalue == "NULL" then
-		value = NULL
-	end
-
-	if string.match(stringvalue, [[(-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+)]]) then
-		local x,y,z = string.match(value, [[(-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+) (-?[0-9]+.[0-9]+)]])
-		value = Vector(x,y,z)
-	end
-
-	if stringvalue == "true" or stringvalue == "false" then value = tobool(value) end
-
-	if stringvalue == "nil" then value = nil end
 
 	hook.Call("DarkRPVarChanged", nil, ply, var, ply.DarkRPVars[var], value)
 	ply.DarkRPVars[var] = value
@@ -56,12 +32,15 @@ end
 Retrieve a player var.
 Read the usermessage and attempt to set the DarkRP var
 ---------------------------------------------------------------------------*/
-local function doRetrieve(um)
-	local entIndex = um:ReadShort()
-	local var, value = um:ReadString(), um:ReadString()
-	RetrievePlayerVar(entIndex, var, value, 0)
+local function doRetrieve()
+	local entIndex = net.ReadFloat()
+	local var = net.ReadString()
+	local valueType = net.ReadUInt(8)
+	local value = net.ReadType(valueType)
+
+	RetrievePlayerVar(entIndex, var, value)
 end
-usermessage.Hook("DarkRP_PlayerVar", doRetrieve)
+net.Receive("DarkRP_PlayerVar", doRetrieve)
 
 /*---------------------------------------------------------------------------
 Initialize the DarkRPVars at the start of the game
