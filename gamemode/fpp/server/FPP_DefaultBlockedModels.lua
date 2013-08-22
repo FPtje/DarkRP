@@ -53,6 +53,6 @@ local defaultblocked = {
 
 -- Add to SQLite database
 for k,v in pairs(defaultblocked) do
-	FPPDB.Query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(v)..");")
+	MySQLite.Query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..MySQLite.SQLStr(v)..");")
 end
 
