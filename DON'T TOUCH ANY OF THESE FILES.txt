@@ -28,3 +28,8 @@ Wanting to edit DarkRP files doesn't make you batshit insane unless you think th
 		AND YOU CAN STILL UPDATE DARKRP
 ================================== IMPORTANT ==================================
 Of course you can modify DarkRP, I'd be daft if I forbade you. Just don't do it by editing DarkRP files.
+
+Get the DarkRP modification addon.
+https://github.com/FPtje/DarkRPModification
+
+You will be surprised about how much you do with it.
