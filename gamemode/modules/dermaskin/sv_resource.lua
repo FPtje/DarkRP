@@ -1,1 +1,1 @@
-resource.AddFile("materials/DarkRP/darkrpderma.png")
+resource.AddFile("materials/darkrp/darkrpderma.png")
