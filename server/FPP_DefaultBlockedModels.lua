@@ -52,9 +52,7 @@ local defaultblocked = {
 }
 
 -- Add to SQLite database
-sql.Begin()
 for k,v in pairs(defaultblocked) do
-	sql.Query("INSERT INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(v)..");")
+	FPPDB.Query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(v)..");")
 end
-sql.Commit()
 
