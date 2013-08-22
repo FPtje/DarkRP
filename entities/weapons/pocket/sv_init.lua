@@ -80,6 +80,49 @@ DarkRP.hookStub{
 	}
 }
 
+DarkRP.hookStub{
+	name = "onPocketItemAdded",
+	description = "Called when an entity is added to the pocket.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The pocket holder.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The entity.",
+			type = "Entity"
+		},
+		{
+			name = "serialized",
+			description = "The serialized version of the pocketed entity.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onPocketItemRemoved",
+	description = "Called when an item is removed from the pocket.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The pocket holder.",
+			type = "Player"
+		},
+		{
+			name = "item",
+			description = "The index of the pocket item.",
+			type = "number"
+		}
+	},
+	returns = {
+	}
+}
+
 /*---------------------------------------------------------------------------
 Functions
 ---------------------------------------------------------------------------*/
@@ -154,6 +197,8 @@ function meta:addPocketItem(ent)
 
 	local serialized = serialize(ent)
 
+	hook.Call("onPocketItemAdded", nil, self, ent, serialized)
+
 	ent:Remove()
 
 	self.darkRPPocket = self.darkRPPocket or {}
@@ -165,6 +210,8 @@ end
 
 function meta:removePocketItem(item)
 	if not self.darkRPPocket or not self.darkRPPocket[item] then error("Player does not contain " .. item .. " in their pocket.", 2) end
+
+	hook.Call("onPocketItemRemoved", nil, self, item)
 
 	self.darkRPPocket[item] = nil
 	sendPocketItems(self)
