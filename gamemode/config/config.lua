@@ -243,6 +243,12 @@ GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
 
 
+GM.Config.DefaultPlayerGroups = {
+	["STEAM_0:0:00000000"] = "superadmin",
+	["STEAM_0:0:11111111"] = "admin",
+}
+
+
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
 GM.Config.DisallowDrop = {
 	["arrest_stick"] = true,

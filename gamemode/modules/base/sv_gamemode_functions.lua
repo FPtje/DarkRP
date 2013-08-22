@@ -578,6 +578,14 @@ function GM:PlayerInitialSpawn(ply)
 	initPlayer(ply)
 	ply.SID = ply:UserID()
 
+	timer.Simple(1, function()
+		if not IsValid(ply) then return end
+		local group = GAMEMODE.Config.DefaultPlayerGroups[ply:SteamID()]
+		if group then
+			ply:SetUserGroup(group)
+		end
+	end)
+
 	for k,v in pairs(ents.GetAll()) do
 		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.dt then
 			v.SID = ply.SID
