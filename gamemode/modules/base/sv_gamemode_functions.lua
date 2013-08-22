@@ -228,16 +228,14 @@ function GM:EntityRemoved(ent)
 		end
 	end
 
-	for k,v in pairs(DarkRPEntities or {}) do
-		if ent:IsValid() and ent:GetClass() == v.ent and ent.dt and IsValid(ent.dt.owning_ent) and not ent.IsRemoved then
-			local ply = ent.dt.owning_ent
-			local cmdname = string.gsub(v.ent, " ", "_")
-			if not ply["max"..cmdname] then
-				ply["max"..cmdname] = 1
-			end
-			ply["max"..cmdname] = ply["max"..cmdname] - 1
-			ent.IsRemoved = true
+	if ent:IsValid() and ent.DarkRPItem and IsValid(ent:Getowning_ent()) and not ent.IsRemoved then
+		local ply = ent:Getowning_ent()
+		local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
+		if not ply["max"..cmdname] then
+			ply["max"..cmdname] = 1
 		end
+		ply["max"..cmdname] = ply["max"..cmdname] - 1
+		ent.IsRemoved = true
 	end
 end
 

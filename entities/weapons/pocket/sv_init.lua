@@ -255,6 +255,19 @@ end)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
+
+local function onAdded(ply, ent, serialized)
+	if not ent:IsValid() or not ent.DarkRPItem or not IsValid(ent:Getowning_ent()) then return end
+
+	local ply = ent:Getowning_ent()
+	local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
+	if not ply["max"..cmdname] then
+		ply["max"..cmdname] = 0
+	end
+	ply["max"..cmdname] = ply["max"..cmdname] + 1
+end
+hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
+
 local function canPocket(ply, item)
 	if not IsValid(item) then return false end
 

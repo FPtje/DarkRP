@@ -246,6 +246,7 @@ local function addEntityCommands(tblEnt)
 		item.SID = ply.SID
 		item.onlyremover = true
 		item.allowed = tblEnt.allowed
+		item.DarkRPItem = tblEnt
 		item:Spawn()
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
