@@ -284,6 +284,10 @@ local function RetrieveBlockedModels()
 	if not FPPDB.MySQLDB then
 		local count = FPPDB.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") or 0
 
+		if count == 0 then
+			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
+		end
+
 		-- Select with offsets of a thousand.
 		-- That's about the maximum it can receive properly at once
 		for i=0, count, 1000 do
@@ -299,6 +303,10 @@ local function RetrieveBlockedModels()
 
 	-- Retrieve the data normally from MySQL
 	FPPDB.Query("SELECT * FROM FPP_BLOCKEDMODELS1;", function(data)
+		if not data or #data == 0 then
+			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
+		end
+
 		for k,v in pairs(data or {}) do
 			if not v.model then continue end
 			FPP.BlockedModels[v.model] = true
@@ -746,11 +754,9 @@ function FPP.Init()
 		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPS3(groupname VARCHAR(40) NOT NULL, allowdefault INTEGER NOT NULL, PRIMARY KEY(groupname));")
 		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPTOOL(groupname VARCHAR(40) NOT NULL, tool VARCHAR(45) NOT NULL, PRIMARY KEY(groupname, tool));")
 		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
-		local count = FPPDB.QueryValue("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='FPP_BLOCKEDMODELS1' LIMIT 1") or 0
-		if(count==0) then
-			FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
-			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
-		end
+
+		FPPDB.QueueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
+
 	FPPDB.Commit(function()
 
 		RetrieveBlocked()
