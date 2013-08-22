@@ -109,14 +109,12 @@ local english = {
 
 	-- Keys, vehicles and doors
 	keys_allowed_to_coown = "You are allowed to co-own this\n(Press Reload with keys or press F2 to co-own)\n",
-	keys_other_allowed = "Allowed to co-own:\n%s\n",
+	keys_other_allowed = "Allowed to co-own:",
 	keys_allow_ownership = "(Press Reload with keys or press F2 to allow ownership)",
 	keys_disallow_ownership = "(Press Reload with keys or press F2 to disallow ownership)",
-	keys_owned_by = "Owned by: ",
-	keys_cops_and_mayor = "All cops and the mayor",
+	keys_owned_by = "Owned by:",
 	keys_unowned = "Unowned\n(Press Reload with keys or press F2 to own)",
 	keys_everyone = "(Press Reload with keys or press F2 to enable for everyone)",
-	keys_cops = "(Press Reload with keys or press F2 to set to cops and mayor only)",
 	door_unown_arrested = "You can not own or unown things while arrested!",
 	door_unownable = "This door cannot be owned or unowned!",
 	door_sold = "You have sold this for %s",

@@ -73,11 +73,13 @@ hook.Add("InitPostEntity", "CheckDarkRPVars", function()
 			RunConsoleCommand("_sendDarkRPvars")
 			return
 		end
+
+		timer.Destroy("DarkRPCheckifitcamethrough")
 	end)
 end)
 
 /*---------------------------------------------------------------------------
-RP name overrid
+RP name override
 ---------------------------------------------------------------------------*/
 pmeta.SteamName = pmeta.SteamName or pmeta.Name
 function pmeta:Name()
@@ -87,72 +89,3 @@ end
 
 pmeta.GetName = pmeta.Name
 pmeta.Nick = pmeta.Name
-
-/*---------------------------------------------------------------------------
-Door data
----------------------------------------------------------------------------*/
-
-/*---------------------------------------------------------------------------
-Retrieve all the data for one door
----------------------------------------------------------------------------*/
-local function RetrieveDoorData(len)
-	local door = net.ReadEntity()
-	local doorData = net.ReadTable()
-	if not door or not door.IsValid or not IsValid(door) or not doorData then return end
-
-	if doorData.TeamOwn then
-		local tdata = {}
-		for k, v in pairs(string.Explode("\n", doorData.TeamOwn or "")) do
-			if v and v != "" then
-				tdata[tonumber(v)] = true
-			end
-		end
-		doorData.TeamOwn = tdata
-	else
-		doorData.TeamOwn = nil
-	end
-
-	door.DoorData = doorData
-end
-net.Receive("DarkRP_DoorData", RetrieveDoorData)
-
-/*---------------------------------------------------------------------------
-Update changed variables
----------------------------------------------------------------------------*/
-local function UpdateDoorData(um)
-	local door = um:ReadEntity()
-	if not IsValid(door) then return end
-
-	local var, value = um:ReadString(), um:ReadString()
-	value = tonumber(value) or value
-
-	if string.match(tostring(value), "Entity .([0-9]*)") then
-		value = Entity(string.match(value, "Entity .([0-9]*)"))
-	end
-
-	if string.match(tostring(value), "Player .([0-9]*)") then
-		value = Entity(string.match(value, "Player .([0-9]*)"))
-	end
-
-	if value == "true" or value == "false" then value = tobool(value) end
-
-	if value == "nil" then value = nil end
-
-	if var == "TeamOwn" then
-		local decoded = {}
-		for k, v in pairs(string.Explode("\n", value or "")) do
-			if v and v != "" then
-				decoded[tonumber(v)] = true
-			end
-		end
-		if table.Count(decoded) == 0 then
-			value = nil
-		else
-			value = decoded
-		end
-	end
-
-	door.DoorData = door.DoorData or {}
-	door.DoorData[var] = value
-end
-usermessage.Hook("DRP_UpdateDoorData", UpdateDoorData)

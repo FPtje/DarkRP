@@ -88,7 +88,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	if trace.Entity:isDoor() and (self.Owner:EyePos():Distance(trace.HitPos) > 45 or
-		(not GAMEMODE.Config.canforcedooropen and trace.Entity.DoorData.NonOwnable)) then
+		(not GAMEMODE.Config.canforcedooropen and trace.Entity:getKeysNonOwnable())) then
 		return
 	end
 
@@ -123,10 +123,11 @@ function SWEP:PrimaryAttack()
 			allowed = true
 		end
 
-		if GAMEMODE.Config.doorwarrants and trace.Entity.DoorData.GroupOwn and RPExtraTeamDoors[trace.Entity.DoorData.GroupOwn] then -- Be able to open the door if anyone is warranted
+		-- Be able to open the door if anyone is warranted
+		if GAMEMODE.Config.doorwarrants and trace.Entity:getKeysDoorGroup() and RPExtraTeamDoors[trace.Entity:getKeysDoorGroup()] then
 			allowed = false
 			for k,v in pairs(player.GetAll()) do
-				if table.HasValue(RPExtraTeamDoors[trace.Entity.DoorData.GroupOwn], v:Team()) and (v.warranted or v:isWanted() or v:isArrested()) then
+				if table.HasValue(RPExtraTeamDoors[trace.Entity:getKeysDoorGroup()], v:Team()) and (v.warranted or v:isWanted() or v:isArrested()) then
 					allowed = true
 					break
 				end

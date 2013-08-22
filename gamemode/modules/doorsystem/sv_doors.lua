@@ -20,33 +20,7 @@ function meta:keysUnLock()
 	hook.Call("onKeysUnlocked", nil, self)
 end
 
-function meta:addKeysAllowedToOwn(ply)
-	self.DoorData = self.DoorData or {}
-	self.DoorData.AllowedToOwn = self.DoorData.AllowedToOwn and self.DoorData.AllowedToOwn .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
-end
-
-function meta:removeKeysAllowedToOwn(ply)
-	self.DoorData = self.DoorData or {}
-	if self.DoorData.AllowedToOwn then self.DoorData.AllowedToOwn = string.gsub(self.DoorData.AllowedToOwn, tostring(ply:UserID())..".?", "") end
-	if string.sub(self.DoorData.AllowedToOwn or "", -1) == ";" then self.DoorData.AllowedToOwn = string.sub(self.DoorData.AllowedToOwn, 1, -2) end
-end
-
-function meta:addKeysDoorOwner(ply)
-	if not IsValid(self) then return end
-	self.DoorData = self.DoorData or {}
-	self.DoorData.ExtraOwners = self.DoorData.ExtraOwners and self.DoorData.ExtraOwners .. ";" .. tostring(ply:UserID()) or tostring(ply:UserID())
-	self:removeKeysAllowedToOwn(ply)
-end
-
-function meta:removeKeysDoorOwner(ply)
-	if not IsValid(self) then return end
-	self.DoorData = self.DoorData or {}
-	if self.DoorData.ExtraOwners then self.DoorData.ExtraOwners = string.gsub(self.DoorData.ExtraOwners, tostring(ply:UserID())..".?", "") end
-	if string.sub(self.DoorData.ExtraOwners or "", -1) == ";" then self.DoorData.ExtraOwners = string.sub(self.DoorData.ExtraOwners, 1, -2) end
-end
-
 function meta:keysOwn(ply)
-	self.DoorData = self.DoorData or {}
 	if self:isKeysAllowedToOwn(ply) then
 		self:addKeysDoorOwner(ply)
 		return
@@ -73,12 +47,13 @@ function meta:keysOwn(ply)
 	end
 
 	if not self:isKeysOwned() and not self:isKeysOwnedBy(ply) then
-		self.DoorData.Owner = ply
+		local doorData = self:getDoorData()
+		doorData.owner = ply
+		DarkRP.updateDoorData(self, "owner")
 	end
 end
 
 function meta:keysUnOwn(ply)
-	self.DoorData = self.DoorData or {}
 	if not ply then
 		ply = self:getDoorOwner()
 
@@ -86,13 +61,12 @@ function meta:keysUnOwn(ply)
 	end
 
 	if self:isMasterOwner(ply) then
-		self.DoorData.Owner = nil
+		local doorData = self:getDoorData()
+		doorData.owner = nil
+		DarkRP.updateDoorData(self, "owner")
 	else
 		self:removeKeysDoorOwner(ply)
 	end
-
-	self:removeKeysDoorOwner(ply)
-	ply.LookingAtDoor = nil
 end
 
 function pmeta:keysUnOwnAll()
@@ -200,14 +174,18 @@ local function SetDoorOwnable(ply)
 		return
 	end
 
-	if IsValid( ent:getDoorOwner() ) then
+	if IsValid(ent:getDoorOwner()) then
 		ent:keysUnOwn(ent:getDoorOwner())
 	end
-	ent.DoorData = ent.DoorData or {}
-	ent.DoorData.NonOwnable = not ent.DoorData.NonOwnable
+	ent:setKeysNonOwnable(not ent:getKeysNonOwnable())
+	ent:removeAllKeysExtraOwners()
+	ent:removeAllKeysAllowedToOwn()
+	ent:removeAllKeysDoorTeams()
+	ent:setDoorGroup(nil)
+	ent:setKeysTitle(nil)
+
 	-- Save it for future map loads
 	DarkRP.storeDoorData(ent)
-	ply.LookingAtDoor = nil -- Send the new data to the client who is looking at the door :D
 	return ""
 end
 DarkRP.defineChatCommand("toggleownable", SetDoorOwnable)
@@ -240,20 +218,14 @@ local function SetDoorGroupOwnable(ply, arg)
 	ent:keysUnOwn()
 
 
-	ent.DoorData = ent.DoorData or {}
-	ent.DoorData.TeamOwn = nil
-	ent.DoorData.GroupOwn = arg
-
-	if arg == "" then
-		ent.DoorData.GroupOwn = nil
-		ent.DoorData.TeamOwn = nil
-	end
+	ent:removeAllKeysDoorTeams()
+	local group = arg ~= "" and arg or nil
+	ent:setDoorGroup(group)
 
 	-- Save it for future map loads
-	DarkRP.setDoorGroup(ent, arg)
+	DarkRP.storeDoorGroup(ent, group)
 	DarkRP.storeTeamDoorOwnability(ent)
 
-	ply.LookingAtDoor = nil
 
 	DarkRP.notify(ply, 0, 8, DarkRP.getPhrase("door_group_set"))
 	return ""
@@ -287,40 +259,20 @@ local function SetDoorTeamOwnable(ply, arg)
 		ent:keysUnOwn(ent:getDoorOwner())
 	end
 
-	ent.DoorData = ent.DoorData or {}
-	ent.DoorData.GroupOwn = nil
-	local decoded = {}
-	if ent.DoorData.TeamOwn then
-		for k, v in pairs(string.Explode("\n", ent.DoorData.TeamOwn)) do
-			if v and v != "" then
-				decoded[tonumber(v)] = true
-			end
-		end
-	end
-	if arg then
-		decoded[arg] = not decoded[arg]
-		if decoded[arg] == false then
-			decoded[arg] = nil
-		end
-		if table.Count(decoded) == 0 then
-			ent.DoorData.TeamOwn = nil
-		else
-			local encoded = ""
-			for k, v in pairs(decoded) do
-				if v then
-					encoded = encoded .. k .. "\n"
-				end
-			end
-			ent.DoorData.TeamOwn = encoded -- So we can send it to the client, and store it easily
-		end
+	ent:setDoorGroup(nil)
+	DarkRP.storeDoorGroup(ent, nil)
+
+	local doorTeams = ent:getKeysDoorTeams()
+	if not doorTeams or not doorTeams[arg] then
+		ent:addKeysDoorTeam(arg)
 	else
-		ent.DoorData.TeamOwn = nil
+		ent:removeKeysDoorTeam(arg)
 	end
+
 	DarkRP.notify(ply, 0, 8, DarkRP.getPhrase("door_group_set"))
 	DarkRP.storeTeamDoorOwnability(ent)
 
 	ent:keysUnOwn()
-	ply.LookingAtDoor = nil
 	return ""
 end
 DarkRP.defineChatCommand("toggleteamownable", SetDoorTeamOwnable)
@@ -328,7 +280,7 @@ DarkRP.defineChatCommand("toggleteamownable", SetDoorTeamOwnable)
 local time2 = false
 local function OwnDoor(ply)
 	if time2 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", "0.1", "/toggleteamownable"))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", "0.1", "/toggleown"))
 		return ""
 	end
 	time2 = true
@@ -339,25 +291,25 @@ local function OwnDoor(ply)
 	if IsValid(trace.Entity) and trace.Entity:isKeysOwnable() and ply:GetPos():Distance(trace.Entity:GetPos()) < 200 then
 		local Owner = trace.Entity:CPPIGetOwner()
 
-		trace.Entity.DoorData = trace.Entity.DoorData or {}
 		if ply:isArrested() then
 			DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unown_arrested"))
 			return ""
 		end
 
-		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
+		if trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or not fn.Null(trace.Entity:getKeysDoorTeams() or {}) then
 			DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unownable"))
 			return ""
 		end
 
 		if trace.Entity:isKeysOwnedBy(ply) then
 			if trace.Entity:isMasterOwner(ply) then
-				trace.Entity.DoorData.AllowedToOwn = nil
-				trace.Entity.DoorData.ExtraOwners = nil
+				trace.Entity:removeAllKeysExtraOwners()
+				trace.Entity:removeAllKeysAllowedToOwn()
 				trace.Entity:Fire("unlock", "", 0)
 			end
 
 			trace.Entity:keysUnOwn(ply)
+			trace.Entity:setKeysTitle(nil)
 			ply:GetTable().Ownedz[trace.Entity:EntIndex()] = nil
 			ply:GetTable().OwnedNumz = math.abs(ply:GetTable().OwnedNumz - 1)
 			local GiveMoneyBack = math.floor((((trace.Entity:IsVehicle() and GAMEMODE.Config.vehiclecost) or GAMEMODE.Config.doorcost) * 0.666) + 0.5)
@@ -368,7 +320,6 @@ local function OwnDoor(ply)
 				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  GAMEMODE.Config.currency..(GiveMoneyBack)))
 			end
 
-			ply.LookingAtDoor = nil
 		else
 			if trace.Entity:isKeysOwned() and not trace.Entity:isKeysAllowedToOwn(ply) then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_already_owned"))
@@ -417,7 +368,7 @@ local function OwnDoor(ply)
 
 			ply:GetTable().Ownedz[trace.Entity:EntIndex()] = trace.Entity
 		end
-		ply.LookingAtDoor = nil
+
 		return ""
 	end
 	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
@@ -444,7 +395,6 @@ end
 DarkRP.defineChatCommand("unownalldoors", UnOwnAll)
 
 
-
 local function SetDoorTitle(ply, args)
 	local trace = ply:GetEyeTrace()
 
@@ -453,14 +403,13 @@ local function SetDoorTitle(ply, args)
 		return ""
 	end
 
-	trace.Entity.DoorData = trace.Entity.DoorData or {}
 	if ply:IsSuperAdmin() then
-		if trace.Entity.DoorData.NonOwnable or trace.Entity.DoorData.GroupOwn or trace.Entity.DoorData.TeamOwn then
-			DarkRP.storeDoorTitle(trace.Entity, args)
-			ply.LookingAtDoor = nil
+		if trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or not fn.Null(trace.Entity:getKeysDoorTeams() or {}) then
+			trace.Entity:setKeysTitle(args)
+			DarkRP.storeDoorData(trace.Entity)
 			return ""
 		end
-	elseif trace.Entity.DoorData.NonOwnable then
+	elseif trace.Entity:getKeysNonOwnable() then
 		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/title"))
 	end
 
@@ -468,9 +417,8 @@ local function SetDoorTitle(ply, args)
 		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("door_need_to_own", "/title"))
 		return ""
 	end
-	trace.Entity.DoorData.title = args
+	trace.Entity:setKeysTitle(args)
 
-	ply.LookingAtDoor = nil
 	return ""
 end
 DarkRP.defineChatCommand("title", SetDoorTitle)
@@ -482,11 +430,9 @@ local function RemoveDoorOwner(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return ""
 	end
-
-	trace.Entity.DoorData = trace.Entity.DoorData or {}
 	target = DarkRP.findPlayer(args)
 
-	if trace.Entity.DoorData.NonOwnable then
+	if trace.Entity:getKeysNonOwnable() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
 		return ""
 	end
@@ -513,7 +459,6 @@ local function RemoveDoorOwner(ply, args)
 		trace.Entity:removeKeysDoorOwner(target)
 	end
 
-	ply.LookingAtDoor = nil
 	return ""
 end
 DarkRP.defineChatCommand("removeowner", RemoveDoorOwner)
@@ -527,10 +472,9 @@ local function AddDoorOwner(ply, args)
 		return ""
 	end
 
-	trace.Entity.DoorData = trace.Entity.DoorData or {}
 	target = DarkRP.findPlayer(args)
 
-	if trace.Entity.DoorData.NonOwnable then
+	if trace.Entity:getKeysNonOwnable() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))
 		return ""
 	end
@@ -555,7 +499,6 @@ local function AddDoorOwner(ply, args)
 
 	trace.Entity:addKeysAllowedToOwn(target)
 
-	ply.LookingAtDoor = nil
 
 	return ""
 end

@@ -1,100 +1,119 @@
 local meta = FindMetaTable("Entity")
-local lastDataRequested = 0
+local black = Color(0, 0, 0, 255)
+local white = Color(255, 255, 255, 200)
+local red = Color(128, 30, 30, 255)
 function meta:drawOwnableInfo()
 	if LocalPlayer():InVehicle() then return end
-
-	local pos = {x = ScrW()/2, y = ScrH() / 2}
-
-	local ownerstr = ""
-
-	if self.DoorData == nil and lastDataRequested < (CurTime() - 0.7) then
-		RunConsoleCommand("_RefreshDoorData", self:EntIndex())
-		lastDataRequested = CurTime()
-
-		return
-	end
 
 	-- Look, if you want to change the way door ownership is drawn, don't edit this file, use the hook instead!
 	local doorDrawing = hook.Call("HUDDrawDoorData", nil, self)
 	if doorDrawing == true then return end
 
-	for k,v in pairs(player.GetAll()) do
-		if self:isKeysOwnedBy(v) then
-			ownerstr = ownerstr .. v:Nick() .. "\n"
-		end
-	end
-
-	if type(self.DoorData.AllowedToOwn) == "string" and self.DoorData.AllowedToOwn ~= "" and self.DoorData.AllowedToOwn ~= ";" then
-		local names = {}
-		for a,b in pairs(string.Explode(";", self.DoorData.AllowedToOwn)) do
-			if b ~= "" and IsValid(Player(tonumber(b))) then
-				table.insert(names, Player(tonumber(b)):Nick())
-			end
-		end
-		ownerstr = ownerstr .. DarkRP.getPhrase("keys_other_allowed", table.concat(names, "\n"))
-	elseif type(self.DoorData.AllowedToOwn) == "number" and IsValid(Player(self.DoorData.AllowedToOwn)) then
-		ownerstr = ownerstr .. DarkRP.getPhrase("keys_other_allowed", Player(self.DoorData.AllowedToOwn):Nick())
-	end
-
-	self.DoorData.title = self.DoorData.title or ""
-
-	local blocked = self.DoorData.NonOwnable
-	local st = self.DoorData.title .. "\n"
+	local blocked = self:getKeysNonOwnable()
 	local superadmin = LocalPlayer():IsSuperAdmin()
-	local whiteText = true -- false for red, true for white text
+	local doorTeams = self:getKeysDoorTeams()
+	local doorGroup = self:getKeysDoorGroup()
+	local owned = self:isKeysOwned() or doorGroup or doorTeams
 
-	if superadmin and blocked then
-		st = st .. DarkRP.getPhrase("keys_allow_ownership") .. "\n"
-	end
+	local doorInfo = {}
 
-	if self.DoorData.TeamOwn then
-		st = st .. DarkRP.getPhrase("keys_owned_by") .."\n"
+	local title = self:getKeysTitle()
+	if title then table.insert(doorInfo, title) end
 
-		for k, v in pairs(self.DoorData.TeamOwn) do
-			if v then
-				st = st .. RPExtraTeams[k].name .. "\n"
-			end
-		end
-	elseif self.DoorData.GroupOwn then
-		st = st .. DarkRP.getPhrase("keys_owned_by") .."\n"
-		st = st .. self.DoorData.GroupOwn .. "\n"
+	if owned then
+		table.insert(doorInfo, DarkRP.getPhrase("keys_owned_by"))
 	end
 
 	if self:isKeysOwned() then
-		if superAdmin then
-			if ownerstr ~= "" then
-				st = st .. DarkRP.getPhrase("keys_owned_by") .."\n" .. ownerstr
-			end
-			st = st ..DarkRP.getPhrase("keys_disallow_ownership") .. "\n"
-		elseif not blocked and ownerstr ~= "" then
-			st = st .. DarkRP.getPhrase("keys_owned_by") .. "\n" .. ownerstr
+		table.insert(doorInfo, self:getDoorOwner():Nick())
+		for k,v in pairs(self:getKeysCoOwners() or {}) do
+			table.insert(doorInfo, Entity(k):Nick())
 		end
-	elseif not blocked then
-		if superAdmin then
-			st = DarkRP.getPhrase("keys_unowned") .."\n".. DarkRP.getPhrase("keys_disallow_ownership")
-			if not self:IsVehicle() then
-				st = st .. "\n"..DarkRP.getPhrase("keys_cops")
+
+		local allowedCoOwn = self:getKeysAllowedToOwn()
+		if allowedCoOwn and not fn.Null(allowedCoOwn) then
+			table.insert(doorInfo, DarkRP.getPhrase("keys_other_allowed"))
+
+			for k,v in pairs(allowedCoOwn) do
+				table.insert(doorInfo, Entity(k):Nick())
 			end
-		elseif not self.DoorData.GroupOwn and not self.DoorData.TeamOwn then
-			whiteText = false
-			st = DarkRP.getPhrase("keys_unowned")
+		end
+	elseif doorGroup then
+		table.insert(doorInfo, doorGroup)
+	elseif doorTeams then
+		for k, v in pairs(doorTeams) do
+			if not v then continue end
+
+			table.insert(doorInfo, RPExtraTeams[k].name)
+		end
+	elseif blocked and superadmin then
+		table.insert(doorInfo, DarkRP.getPhrase("keys_allow_ownership"))
+	elseif not blocked then
+		table.insert(doorInfo, DarkRP.getPhrase("keys_unowned"))
+		if superadmin then
+			table.insert(doorInfo, DarkRP.getPhrase("keys_disallow_ownership"))
 		end
 	end
 
 	if self:IsVehicle() then
 		for k,v in pairs(player.GetAll()) do
-			if v:GetVehicle() == self then
-				whiteText = true
-				st = st .. "\n" .. DarkRP.getPhrase("driver", v:Nick())
-			end
+			if v:GetVehicle() ~= self then continue end
+
+			table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
 		end
 	end
 
-	if whiteText then
-		draw.DrawText(st, "TargetID", pos.x + 1, pos.y + 1, Color(0, 0, 0, 200), 1)
-		draw.DrawText(st, "TargetID", pos.x, pos.y, Color(255, 255, 255, 200), 1)
-	else
-		draw.DrawText(st, "TargetID", pos.x , pos.y+1 , Color(0, 0, 0, 255), 1)
-		draw.DrawText(st, "TargetID", pos.x, pos.y, Color(128, 30, 30, 255), 1)
-	end
+	local x, y = ScrW()/2, ScrH() / 2
+	draw.DrawText(table.concat(doorInfo, "\n"), "TargetID", x , y + 1 , black, 1)
+	draw.DrawText(table.concat(doorInfo, "\n"), "TargetID", x, y, (blocked or owned) and white or red, 1)
 end
+
+
+/*---------------------------------------------------------------------------
+Door data
+---------------------------------------------------------------------------*/
+local doorData = {}
+
+/*---------------------------------------------------------------------------
+Interface functions
+---------------------------------------------------------------------------*/
+function meta:getDoorData()
+	local i = self:EntIndex()
+	self.DoorData = doorData[i] or {} -- Backwards compatibility
+
+	return doorData[i] or {}
+end
+
+/*---------------------------------------------------------------------------
+Networking
+---------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------
+Retrieve all the data for all doors
+---------------------------------------------------------------------------*/
+local function retrieveAllDoorData(len)
+	local data = net.ReadTable()
+	doorData = data
+end
+net.Receive("DarkRP_AllDoorData", retrieveAllDoorData)
+
+/*---------------------------------------------------------------------------
+Update changed variables
+---------------------------------------------------------------------------*/
+local function updateDoorData()
+	local door = net.ReadFloat()
+
+	doorData[door] = doorData[door] or {}
+
+	local var = net.ReadString()
+	local valueType = net.ReadUInt(8)
+	local value = net.ReadType(valueType)
+
+	doorData[door][var] = value
+end
+net.Receive("DarkRP_UpdateDoorData", updateDoorData)
+
+/*---------------------------------------------------------------------------
+Hooks
+---------------------------------------------------------------------------*/
+hook.Add("InitPostEntity", "getDoorData", fn.Curry(RunConsoleCommand, 2)("_sendAllDoorData"))

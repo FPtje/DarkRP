@@ -205,28 +205,6 @@ DarkRP.storeDoorData = DarkRP.stub{
 	metatable = DarkRP
 }
 
-DarkRP.storeDoorTitle = DarkRP.stub{
-	name = "storeDoorTitle",
-	description = "Store the title of a door in the database.",
-	parameters = {
-		{
-			name = "ent",
-			description = "The door.",
-			type = "Entity",
-			optional = false
-		},
-		{
-			name = "title",
-			description = "The title of the door.",
-			type = "string",
-			optional = false
-		}
-	},
-	returns = {
-	},
-	metatable = DarkRP
-}
-
 DarkRP.storeTeamDoorOwnability = DarkRP.stub{
 	name = "storeTeamDoorOwnability",
 	description = "Store the ownability information of a door in the database.",
@@ -243,8 +221,8 @@ DarkRP.storeTeamDoorOwnability = DarkRP.stub{
 	metatable = DarkRP
 }
 
-DarkRP.setDoorGroup = DarkRP.stub{
-	name = "setDoorGroup",
+DarkRP.storeDoorGroup = DarkRP.stub{
+	name = "storeDoorGroup",
 	description = "Store the group of a door in the database.",
 	parameters = {
 		{

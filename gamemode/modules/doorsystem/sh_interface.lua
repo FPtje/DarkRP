@@ -19,6 +19,21 @@ DarkRP.doorToEntIndex = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.ENTITY.getDoorData = DarkRP.stub{
+	name = "getDoorData",
+	description = "Internal function to get the door/vehicle data.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "doordata",
+			description = "All the DarkRP information on a door or vehicle.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
 DarkRP.ENTITY.isKeysOwnable = DarkRP.stub{
 	name = "isKeysOwnable",
 	description = "Whether this door can be bought.",
@@ -152,6 +167,96 @@ DarkRP.ENTITY.isKeysAllowedToOwn = DarkRP.stub{
 			name = "answer",
 			description = "Whether this door is (co-)ownable by the player.",
 			type = "boolean"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.getKeysNonOwnable = DarkRP.stub{
+	name = "getKeysNonOwnable",
+	description = "Whether ownability of this door/vehicle is disabled.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "title",
+			description = "The ownability status.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.getKeysTitle = DarkRP.stub{
+	name = "getKeysTitle",
+	description = "Get the title of this door or vehicle.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "title",
+			description = "The title of the door or vehicle.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.getKeysDoorGroup = DarkRP.stub{
+	name = "getKeysDoorGroup",
+	description = "The door group of a door if it exists.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "group",
+			description = "The door group.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.getKeysDoorTeams = DarkRP.stub{
+	name = "getKeysDoorTeams",
+	description = "The teams that are allowed to open this door.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "teams",
+			description = "The door teams.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.getKeysAllowedToOwn = DarkRP.stub{
+	name = "getKeysAllowedToOwn",
+	description = "The list of people of which the master door owner has added as allowed to own.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "players",
+			description = "The list of people allowed to own.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.getKeysCoOwners = DarkRP.stub{
+	name = "getKeysDoorOwners",
+	description = "The list of people who co-own the door.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "players",
+			description = "The list of people allowed to own.",
+			type = "table"
 		}
 	},
 	metatable = DarkRP.ENTITY

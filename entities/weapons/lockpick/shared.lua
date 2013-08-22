@@ -82,7 +82,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if not GAMEMODE.Config.canforcedooropen and e.DoorData.NonOwnable then
+	if not GAMEMODE.Config.canforcedooropen and e:getKeysNonOwnable() then
 		return
 	end
 
