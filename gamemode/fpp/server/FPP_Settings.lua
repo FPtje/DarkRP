@@ -748,7 +748,7 @@ function FPP.Init()
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
 
-	MySQLite.Commit(function()
+	MySQLite.commit(function()
 		RetrieveBlocked()
 		RetrieveBlockedModels()
 		RetrieveRestrictedTools()
