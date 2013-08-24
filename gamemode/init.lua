@@ -29,6 +29,7 @@ AddCSLuaFile("fpp/client/FPP_HUD.lua")
 AddCSLuaFile("fpp/client/FPP_Buddies.lua")
 AddCSLuaFile("shared/fadmin_darkrp.lua")
 
+include("fpp/sv_defaultblockedmodels.lua")
 include("fpp/sh_settings.lua")
 include("fpp/sh_CPPI.lua")
 include("fpp/server/FPP_Settings.lua")
