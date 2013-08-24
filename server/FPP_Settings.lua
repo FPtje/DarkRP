@@ -277,7 +277,7 @@ local function RetrieveBlockedModels()
 		local count = MySQLite.queryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") or 0
 
 		if count == 0 then
-			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
+			FPP.generateDefaultBlocked() -- Load the default blocked models on first run
 		end
 
 		-- Select with offsets of a thousand.
@@ -296,7 +296,7 @@ local function RetrieveBlockedModels()
 	-- Retrieve the data normally from MySQL
 	MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1;", function(data)
 		if not data or #data == 0 then
-			include("FPP_DefaultBlockedModels.lua") -- Load the default blocked models on first run
+			FPP.generateDefaultBlocked()
 		end
 
 		for k,v in pairs(data or {}) do
