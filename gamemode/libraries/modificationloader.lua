@@ -51,7 +51,6 @@ Modules
 ---------------------------------------------------------------------------*/
 local function loadModules()
 	local fol = "darkrp_modules/"
-	if not file.IsDir(fol, "LUA") then return end
 
 	local files, folders = file.Find(fol .. "*", "LUA")
 
