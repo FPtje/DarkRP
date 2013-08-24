@@ -423,6 +423,7 @@ GM.DarkRPGroupChats = {}
 local groupChatNumber = 0
 function DarkRP.createGroupChat(funcOrTeam, ...)
 	local gm = GM or GAMEMODE
+	gm.DarkRPGroupChats = gm.DarkRPGroupChats or {}
 	if DarkRP.DARKRP_LOADING then
 		groupChatNumber = groupChatNumber + 1
 		if DarkRP.disabledDefaults["groupchat"][groupChatNumber] then return end
