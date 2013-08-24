@@ -422,16 +422,17 @@ AddAgenda = DarkRP.createAgenda
 GM.DarkRPGroupChats = {}
 local groupChatNumber = 0
 function DarkRP.createGroupChat(funcOrTeam, ...)
+	local gm = GM or GAMEMODE
 	if DarkRP.DARKRP_LOADING then
 		groupChatNumber = groupChatNumber + 1
 		if DarkRP.disabledDefaults["groupchat"][groupChatNumber] then return end
 	end
 	-- People can enter either functions or a list of teams as parameter(s)
 	if type(funcOrTeam) == "function" then
-		table.insert(GM.DarkRPGroupChats, funcOrTeam)
+		table.insert(gm.DarkRPGroupChats, funcOrTeam)
 	else
 		local teams = {funcOrTeam, ...}
-		table.insert(GM.DarkRPGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
+		table.insert(gm.DarkRPGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
 	end
 end
 GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
@@ -439,6 +440,7 @@ GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
 GM.AmmoTypes = {}
 
 function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, customCheck)
+	local gm = GM or GAMEMODE
 	local ammo = istable(name) and name or {
 		ammoType = ammoType,
 		name = name,
@@ -449,6 +451,6 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 	}
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
-	table.insert(GM.AmmoTypes, ammo)
+	table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
