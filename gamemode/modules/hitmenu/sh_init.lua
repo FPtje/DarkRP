@@ -51,5 +51,6 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "requesthit",
 	description = "Request a hit from the player you're looking at",
-	delay = 5
+	delay = 5,
+	condition = fn.Compose{fn.Not, fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isHitman), player.GetAll}
 }
