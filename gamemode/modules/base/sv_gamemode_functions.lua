@@ -228,7 +228,7 @@ function GM:EntityRemoved(ent)
 		end
 	end
 
-	if ent:IsValid() and ent.DarkRPItem and IsValid(ent:Getowning_ent()) and not ent.IsRemoved then
+	if ent:IsValid() and ent.DarkRPItem and ent.Getowning_ent and IsValid(ent:Getowning_ent()) and not ent.IsRemoved then
 		local ply = ent:Getowning_ent()
 		local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
 		if not ply["max"..cmdname] then
