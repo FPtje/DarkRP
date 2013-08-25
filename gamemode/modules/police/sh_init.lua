@@ -127,14 +127,24 @@ DarkRP.declareChatCommand{
 	condition = plyMeta.isMayor
 }
 
+local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isMayor), player.GetAll}
+local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isChief), player.GetAll}
+
 DarkRP.declareChatCommand{
 	command = "requestlicense",
 	description = "Request a gun license.",
-	delay = 1.5
+	delay = 1.5,
+	condition = fn.FAnd {
+		fn.FOr {
+			fn.Curry(fn.Not, 2)(noMayorExists),
+			fn.Curry(fn.Not, 2)(noChiefExists),
+			fn.Compose{fn.Not, fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isCP), player.GetAll}
+		},
+		fn.Compose{fn.Not, fn.Curry(fn.Flip(plyMeta.getDarkRPVar), 2)("HasGunlicense")},
+		fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("LicenseRequested")}
+	}
 }
 
-local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isMayor), player.GetAll}
-local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isChief), player.GetAll}
 DarkRP.declareChatCommand{
 	command = "givelicense",
 	description = "Give someone a gun license",
