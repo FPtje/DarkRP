@@ -270,10 +270,12 @@ hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
 
 local function canPocket(ply, item)
 	if not IsValid(item) then return false end
+	local class = item:GetClass()
 
 	if not item:CPPICanPickup(ply) then return false, DarkRP.getPhrase("cannot_pocket_x") end
 	if item.jailWall then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if GAMEMODE.Config.PocketBlacklist[item:GetClass()] then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if GAMEMODE.Config.PocketBlacklist[class] then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if string.find(class, "func_") then return false, DarkRP.getPhrase("cannot_pocket_x") end
 
 	local trace = ply:GetEyeTrace()
 	if ply:EyePos():Distance(trace.HitPos) > 150 then return false end
