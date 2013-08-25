@@ -61,6 +61,15 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1,4, DarkRP.getPhrase("job_doesnt_require_vote_currently"))
 				return ""
 			end
+
+			if CTeam.admin == 1 and not ply:IsAdmin() then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/".."vote"..CTeam.command))
+				return ""
+			elseif CTeam.admin > 1 and not ply:IsSuperAdmin() then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_sadmin", "/".."vote"..CTeam.command))
+				return ""
+			end
+
 			if type(CTeam.NeedToChangeFrom) == "number" and ply:Team() ~= CTeam.NeedToChangeFrom then
 				DarkRP.notify(ply, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
 				return ""
