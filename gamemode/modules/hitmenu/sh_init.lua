@@ -45,7 +45,6 @@ Chat commands
 DarkRP.declareChatCommand{
 	command = "hitprice",
 	description = "Set the price of your hits",
-	condition = plyMeta.isHitman,
 	delay = 10
 }
 
