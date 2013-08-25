@@ -448,15 +448,11 @@ local function OnChangedTeam(um)
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
 
-function GM:TextWrap(text, font, pxWidth)
+-- Split a word if a word is too big
+local function charWrap(text, pxWidth)
 	local total = 0
 
-	surface.SetFont(font)
 	text = text:gsub(".", function(char)
-		if char == "\n" then
-			total = 0
-		end
-
 		total = total + surface.GetTextSize(char)
 
 		-- Wrap around when the max width is reached
@@ -467,6 +463,44 @@ function GM:TextWrap(text, font, pxWidth)
 
 		return char
 	end)
+
+	return text, total
+end
+
+function GM:TextWrap(text, font, pxWidth)
+	local total = 0
+
+	surface.SetFont(font)
+
+	local spaceSize = surface.GetTextSize(' ')
+	text = text:gsub("(%s?%w+)", function(word)
+			local char = string.sub(word, 1, 1)
+			if char == "\n" then
+				total = 0
+			end
+
+			local wordlen = surface.GetTextSize(word)
+			total = total + wordlen
+
+
+			-- Wrap around when the max width is reached
+			if wordlen >= pxWidth then -- Split the word if the word is too big
+				local splitWord, splitPoint = charWrap(word, pxWidth)
+				total = splitPoint
+				return splitWord
+			elseif total < pxWidth then
+				return word
+			end
+
+			-- Split before the word
+			if char == ' ' then
+				total = wordlen - spaceSize
+				return '\n' .. string.sub(word, 2)
+			end
+
+			total = wordlen
+			return "\n" .. word
+		end)
 
 	return text
 end
