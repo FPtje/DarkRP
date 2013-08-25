@@ -73,7 +73,7 @@ Chat commands
 ---------------------------------------------------------------------------*/
 DarkRP.declareChatCommand{
 	command = "cr",
-	description = "Cry for help, the police will come!",
+	description = "Cry for help, the police will come (hopefully)!",
 	delay = 1.5
 }
 
@@ -102,7 +102,7 @@ DarkRP.declareChatCommand{
 	command = "agenda",
 	description = "Set the agenda.",
 	delay = 1.5,
-	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), getAgenda}
+	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), plyMeta.getAgenda}
 }
 
 local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
