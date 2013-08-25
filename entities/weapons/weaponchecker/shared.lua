@@ -32,7 +32,17 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
-local NoStripWeapons = {"weapon_physgun", "weapon_physcannon", "keys", "gmod_camera", "gmod_tool", "weaponchecker", "med_kit", "pocket"}
+local NoStripWeapons = {
+	["weapon_physgun"] = true,
+	["weapon_physcannon"] = true,
+	["keys"] = true,
+	["gmod_camera"] = true,
+	["gmod_tool"] = true,
+	["weaponchecker"] = true,
+	["med_kit"] = true,
+	["pocket"] = true
+}
+
 function SWEP:Initialize()
 	self:SetWeaponHoldType("normal")
 end
@@ -173,7 +183,8 @@ function SWEP:Succeed()
 	local trace = self.Owner:GetEyeTrace()
 	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() then return end
 	for k,v in pairs(trace.Entity:GetWeapons()) do
-		if not table.HasValue(NoStripWeapons, string.lower(v:GetClass())) then
+		local class = v:GetClass()
+		if not NoStripWeapons[class] and not table.HasValue(GAMEMODE.Config.DefaultWeapons, class) then
 			trace.Entity:StripWeapon(v:GetClass())
 			result = result..", "..v:GetClass()
 			table.insert(stripped, {v:GetClass(), trace.Entity:GetAmmoCount(v:GetPrimaryAmmoType()),
