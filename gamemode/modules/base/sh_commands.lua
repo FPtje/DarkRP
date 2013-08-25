@@ -19,7 +19,11 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "buy",
 	description = "Buy a pistol",
-	delay = 1.5
+	delay = 1.5,
+	condition = fn.FAnd {
+		fn.Compose{fn.Curry(fn.GetValue, 2)("enablebuypistol"), fn.Curry(fn.GetValue, 2)("Config"), gmod.GetGamemode},
+		fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noguns"), fn.Curry(fn.GetValue, 2)("Config"), gmod.GetGamemode}
+	}
 }
 
 DarkRP.declareChatCommand{
@@ -37,7 +41,8 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "buyammo",
 	description = "Purchase ammo",
-	delay = 1.5
+	delay = 1.5,
+	condition = fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noguns"), fn.Curry(fn.GetValue, 2)("Config"), gmod.GetGamemode}
 }
 
 DarkRP.declareChatCommand{
