@@ -11,7 +11,7 @@ function DarkRP.defineChatCommand(cmd, callback)
 	local chatcommands = DarkRP.getChatCommands()
 
 	chatcommands[cmd] = chatcommands[cmd] or {}
-	chatcommands[cmd].callback = callback
+	chatcommands[cmd].callback = detour
 	chatcommands[cmd].command = chatcommands[cmd].command or cmd
 end
 
