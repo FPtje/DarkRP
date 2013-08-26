@@ -7,5 +7,5 @@ DarkRP.declareChatCommand{
 	command = "buyhealth",
 	description = "Buy health (only possible if there's no medic!)",
 	delay = 1.5,
-	condition = fn.FOr{isMedic, noMedicExists}
+	condition = fn.FAnd{fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("enablebuyhealth"), fn.Curry(fn.GetValue, 2)("Config"), gmod.GetGamemode}, fn.FOr{isMedic, noMedicExists}}
 }
