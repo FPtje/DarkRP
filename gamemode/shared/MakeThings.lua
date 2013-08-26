@@ -71,6 +71,7 @@ function AddCustomShipment(name, model, entity, price, Amount_of_guns_in_one_shi
 		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = AllowedClasses,
 		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
 
+	customShipment.seperate = customShipment.separate or customShipment.seperate
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
 
