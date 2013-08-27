@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------
 Settings for the job and entities
 ---------------------------------------------------------------------------*/
-hook.Add("Initialize", "HungerMod_Init", function()
+timer.Simple(0, function()
 	TEAM_COOK = AddExtraTeam("Cook", {
 		color = Color(238, 99, 99, 255),
 		model = "models/player/mossman.mdl",
