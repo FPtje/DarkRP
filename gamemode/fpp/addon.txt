@@ -1,0 +1,11 @@
+"AddonInfo"
+{
+	"name"				"Falco's prop protection"
+	"version"			"1"
+	"up_date"			"00/00/00"
+	"author_name"			"FPtje"
+	"author_email"			""
+	"author_url"			""
+	"info"				"A very good prop protection."
+	"override"			"0"
+}

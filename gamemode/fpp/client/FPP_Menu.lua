@@ -53,6 +53,7 @@ function FPP.AdminMenu(Panel)
 	local function addchk(label, command, plist)
 		local box = plist:Add("DCheckBoxLabel")
 		box:SetText(label)
+		box:SetDark(true)
 		box:SetValue(tobool(GetConVarNumber("_"..command[1].."_"..command[2])))
 		box.Button.Toggle = function()
 			if not superadmin then return end--Hehe now you can't click it anymore non-admin!
@@ -71,6 +72,7 @@ function FPP.AdminMenu(Panel)
 	local function addblock(pan, Type)
 		local label = pan:Add("DLabel")
 		label:SetText("\n"..Type.." black/whitelist entities:")
+		label:SetTextColor(Color(0, 0, 0, 255))
 		label:SizeToContents()
 
 		local lview = pan:Add("DListView")
@@ -129,6 +131,7 @@ function FPP.AdminMenu(Panel)
 		decimals = decimals or 1
 		sldr:SetDecimals(decimals)
 		sldr:SetText(text)
+		sldr:SetDark(true)
 		sldr:SetValue(GetConVarNumber("_"..command[1].."_"..command[2]))
 		function sldr.Slider:OnMouseReleased()
 			self:SetDragging( false )
@@ -160,6 +163,7 @@ function FPP.AdminMenu(Panel)
 
 	local other = general:Add(Label("\nDelete player's entities:"))
 	other:SizeToContents()
+	other:SetTextColor(Color(0, 0, 0, 255))
 
 	local areplayers = false
 	for k,v in pairs(player.GetAll()) do
@@ -240,6 +244,8 @@ function FPP.AdminMenu(Panel)
 	addblock(playeruse, "PlayerUse1")
 
 	local damagecat, damage = MakeOption("Entity damage options")
+	local antiDMGLabel = Label("Prevents players from damaging other players' props")
+	antiDMGLabel:SetTextColor(Color(0, 0, 0, 255))
 	damage:Add(Label("Prevents players from damaging other players' props"))
 
 	addchk("Damage protection enabled", {"FPP_ENTITYDAMAGE1", "toggle"}, damage)
@@ -257,6 +263,7 @@ function FPP.AdminMenu(Panel)
 	local blockedmodelscat, blockedmodels = MakeOption("Blocked models options")
 	local BlockedModelsLabel = blockedmodels:Add("DLabel")
 	BlockedModelsLabel:SetText("\nTo add a model in the blocked models list:\nOpen the spawn menu, right click a prop and\nadd it to the blocked list")
+	BlockedModelsLabel:SetTextColor(Color(0, 0, 0, 255))
 	BlockedModelsLabel:SizeToContents()
 
 	addchk("Blocked models enabled", {"FPP_BLOCKMODELSETTINGS1", "toggle"}, blockedmodels)
@@ -379,7 +386,9 @@ function FPP.AdminMenu(Panel)
 		end)
 	end
 
-	local EditToolListLabel = ToolRestrict:Add(Label("\nMultiple tool editor.\nAdd tools in this list by clicking on them,\nthen click \"Edit multiple tools\"\nto edit multiple tools at once!"))
+	local multiToolEditLabel = Label("\nMultiple tool editor.\nAdd tools in this list by clicking on them,\nthen click \"Edit multiple tools\"\nto edit multiple tools at once!")
+	multiToolEditLabel:SetTextColor(Color(0, 0, 0, 255))
+	local EditToolListLabel = ToolRestrict:Add(multiToolEditLabel)
 	EditToolListLabel:SizeToContents()
 
 	if #FPP.multirestricttoollist.Columns ~= 1 then
@@ -420,9 +429,12 @@ function FPP.AdminMenu(Panel)
 
 	local GroupRestrictCat, GroupRestrict = MakeOption("Group tool restriction")
 
-	local PressLoadFirst = GroupRestrict:Add(Label("Press \"Load groups and members\" first!"))
+	local pressLoadFirstLabel = Label("Press \"Load groups and members\" first!")
+	pressLoadFirstLabel:SetTextColor(Color(0, 0, 0, 255))
+	local PressLoadFirst = GroupRestrict:Add(pressLoadFirstLabel)
 	local  membersLabel = Label("Group Members: NOTE: People who have the\nusergroup that matches with this group\nare automatically in this group!")
 	membersLabel:SizeToContents()
+	membersLabel:SetTextColor(Color(0, 0, 0, 255))
 	GroupRestrict:Add(membersLabel)
 
 	local LoadGroups = GroupRestrict:Add("DButton")
@@ -445,6 +457,7 @@ function FPP.AdminMenu(Panel)
 
 	ChkAllowDefault = GroupRestrict:Add("DCheckBoxLabel")
 	ChkAllowDefault:SetText("Allow all tools by default")
+	ChkAllowDefault:SetDark(true)
 	ChkAllowDefault:SetTooltip([[Ticked: All tools are allowed, EXCEPT for the tools in the tool list
 	Unticked: NO tools will be allowed, EXCEPT for the tools in the tool list]])
 	if GroupList:GetSelectedLine() and FPP.Groups[GroupList:GetSelectedLine().Columns[1]:GetValue()] then
@@ -492,7 +505,9 @@ function FPP.AdminMenu(Panel)
 		EditGroupTools(GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
 	end
 
-	GroupRestrict:Add(Label("Group Members:"))
+	local groupMemLabel = Label("Group Members:")
+	groupMemLabel:SetTextColor(Color(0, 0, 0, 255))
+	GroupRestrict:Add(groupMemLabel)
 	local GroupMembers = GroupRestrict:Add("DListView")
 	GroupMembers:AddColumn("SteamID")
 	GroupMembers:AddColumn("Name")
@@ -569,7 +584,10 @@ function FPP.AdminMenu(Panel)
 	end
 	net.Receive("FPP_GroupMembers", RetrieveGroupMembers)
 
-	AdminPanel.contents:Add(Label("\nFalco's Prop Protection\nMade by Falco A.K.A. FPtje")):SizeToContents()
+	local lbl = Label("\nFalco's Prop Protection\nMade by Falco A.K.A. FPtje")
+	lbl:SizeToContents()
+	lbl:SetTextColor(Color(0, 0, 0, 255))
+	AdminPanel.contents:Add(lbl)
 	AdminPanel:SetContents(AdminPanel.contents)
 	AdminPanel:Dock(FILL)
 end
@@ -743,6 +761,7 @@ RetrieveRestrictedTool = function(um)
 	for k,v in pairs(team.GetAllTeams()) do
 		local chkbx = vgui.Create("DCheckBoxLabel")
 		chkbx:SetText(v.Name)
+		chkbx:SetDark(true)
 		chkbx.Team = k
 		if table.HasValue(Teams, tostring(k)) then
 			chkbx.Button:SetValue(true)
@@ -978,6 +997,7 @@ function FPP.SetBuddyMenu(SteamID, Name, data)
 	local function AddChk(name, Type, value)
 		local box = vgui.Create("DCheckBoxLabel", frame)
 		box:SetText(name .." buddy")
+		box:SetDark(true)
 
 		box:SetPos(10, count * 20)
 		count = count + 1

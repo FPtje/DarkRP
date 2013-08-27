@@ -675,15 +675,14 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 
 	local ent = ENT or trace.Entity
 
-	if IsEntity(ent) and type(ent.CanTool) == "function" then
+	if IsEntity(ent) and type(ent.CanTool) == "function" and ent:GetClass() ~= "gmod_cameraprop" then
 		local val = ent:CanTool(ply, trace, tool, ENT)
 		if val ~= nil then return val end
-	elseif IsEntity(ent) and ent.CanTool ~= nil then
+	elseif IsEntity(ent) and ent.CanTool ~= nil and ent:GetClass() ~= "gmod_cameraprop" then
 		return ent.CanTool
 	end
 
 	if tobool(FPP.Settings.FPP_TOOLGUN1.toggle) and IsValid(ent) then
-
 		local cantouch, why = FPP.PlayerCanTouchEnt(ply, ent, "Toolgun1", "FPP_TOOLGUN1")
 		if why then
 			FPP.CanTouch(ply, "FPP_TOOLGUN1", why, cantouch)
