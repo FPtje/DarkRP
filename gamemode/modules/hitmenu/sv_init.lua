@@ -104,7 +104,7 @@ function questionCallback(answer, hitman, customer, target, price)
 		return
 	end
 
-	if hits[self] then return end
+	if hits[hitman] then return end
 
 	DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("hit_accepted"))
 

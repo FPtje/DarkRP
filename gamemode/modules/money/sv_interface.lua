@@ -36,7 +36,7 @@ DarkRP.payPlayer = DarkRP.stub{
 			optional = false
 		},
 		{
-			name = "sender",
+			name = "receiver",
 			description = "The player who receives the money.",
 			type = "Player",
 			optional = false

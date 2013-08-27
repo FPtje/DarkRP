@@ -35,22 +35,6 @@ DarkRP.ENTITY.addKeysAllowedToOwn = DarkRP.stub{
 	metatable = DarkRP.ENTITY
 }
 
-DarkRP.ENTITY.removeKeysAllowedToOwn = DarkRP.stub{
-	name = "removeKeysAllowedToOwn",
-	description = "Remove the player from the list of players who are allowed to co-own the door or vehicle.",
-	parameters = {
-		{
-			name = "ply",
-			description = "The player to remove.",
-			type = "Player",
-			optional = false
-		}
-	},
-	returns = {
-	},
-	metatable = DarkRP.ENTITY
-}
-
 DarkRP.ENTITY.addKeysDoorOwner = DarkRP.stub{
 	name = "addKeysDoorOwner",
 	description = "Make this player a co-owner of the door.",
@@ -115,6 +99,131 @@ DarkRP.ENTITY.keysUnOwn = DarkRP.stub{
 	metatable = DarkRP.ENTITY
 }
 
+DarkRP.ENTITY.setKeysNonOwnable = DarkRP.stub{
+	name = "setKeysNonOwnable",
+	description = "Set whether this door or vehicle is ownable or not.",
+	parameters = {
+		{
+			name = "ownable",
+			description = "Whether the door or vehicle is blocked from ownership.",
+			type = "boolean",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.setKeysTitle = DarkRP.stub{
+	name = "setKeysTitle",
+	description = "Set the title of a door or vehicle.",
+	parameters = {
+		{
+			name = "title",
+			description = "The title of the door.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.setDoorGroup = DarkRP.stub{
+	name = "setDoorGroup",
+	description = "Set the door group of a door.",
+	parameters = {
+		{
+			name = "group",
+			description = "The door group.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.addKeysDoorTeam = DarkRP.stub{
+	name = "addKeysDoorTeam",
+	description = "Allow a team to lock/unlock a door..",
+	parameters = {
+		{
+			name = "team",
+			description = "The team to add to team owners.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.removeKeysDoorTeam = DarkRP.stub{
+	name = "removeKeysDoorTeam",
+	description = "Disallow a team from locking/unlocking a door.",
+	parameters = {
+		{
+			name = "team",
+			description = "The team to remove from team owners.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.removeAllKeysDoorTeams = DarkRP.stub{
+	name = "removeAllKeysDoorTeams",
+	description = "Disallow all teams from locking/unlocking a door.",
+	parameters = {
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.removeAllKeysExtraOwners = DarkRP.stub{
+	name = "removeAllKeysExtraOwners",
+	description = "Remove all co-owners from a door.",
+	parameters = {
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.removeAllKeysAllowedToOwn = DarkRP.stub{
+	name = "removeAllKeysAllowedToOwn",
+	description = "Disallow all people from owning the door.",
+	parameters = {
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
+
+DarkRP.ENTITY.removeKeysAllowedToOwn = DarkRP.stub{
+	name = "removeKeysAllowedToOwn",
+	description = "Remove a player from being allowed to co-own a door.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player to be removed.",
+			type = "Player",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP.ENTITY
+}
 
 DarkRP.PLAYER.keysUnOwnAll = DarkRP.stub{
 	name = "keysUnOwnAll",

@@ -80,6 +80,49 @@ DarkRP.hookStub{
 	}
 }
 
+DarkRP.hookStub{
+	name = "onPocketItemAdded",
+	description = "Called when an entity is added to the pocket.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The pocket holder.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The entity.",
+			type = "Entity"
+		},
+		{
+			name = "serialized",
+			description = "The serialized version of the pocketed entity.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onPocketItemRemoved",
+	description = "Called when an item is removed from the pocket.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The pocket holder.",
+			type = "Player"
+		},
+		{
+			name = "item",
+			description = "The index of the pocket item.",
+			type = "number"
+		}
+	},
+	returns = {
+	}
+}
+
 /*---------------------------------------------------------------------------
 Functions
 ---------------------------------------------------------------------------*/
@@ -154,6 +197,8 @@ function meta:addPocketItem(ent)
 
 	local serialized = serialize(ent)
 
+	hook.Call("onPocketItemAdded", nil, self, ent, serialized)
+
 	ent:Remove()
 
 	self.darkRPPocket = self.darkRPPocket or {}
@@ -165,6 +210,8 @@ end
 
 function meta:removePocketItem(item)
 	if not self.darkRPPocket or not self.darkRPPocket[item] then error("Player does not contain " .. item .. " in their pocket.", 2) end
+
+	hook.Call("onPocketItemRemoved", nil, self, item)
 
 	self.darkRPPocket[item] = nil
 	sendPocketItems(self)
@@ -208,12 +255,27 @@ end)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
+
+local function onAdded(ply, ent, serialized)
+	if not ent:IsValid() or not ent.DarkRPItem or not ent.Getowning_ent or not IsValid(ent:Getowning_ent()) then return end
+
+	local ply = ent:Getowning_ent()
+	local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
+	if not ply["max"..cmdname] then
+		ply["max"..cmdname] = 0
+	end
+	ply["max"..cmdname] = ply["max"..cmdname] + 1
+end
+hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
+
 local function canPocket(ply, item)
 	if not IsValid(item) then return false end
+	local class = item:GetClass()
 
 	if not item:CPPICanPickup(ply) then return false, DarkRP.getPhrase("cannot_pocket_x") end
 	if item.jailWall then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if GAMEMODE.Config.PocketBlacklist[item:GetClass()] then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if GAMEMODE.Config.PocketBlacklist[class] then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if string.find(class, "func_") then return false, DarkRP.getPhrase("cannot_pocket_x") end
 
 	local trace = ply:GetEyeTrace()
 	if ply:EyePos():Distance(trace.HitPos) > 150 then return false end

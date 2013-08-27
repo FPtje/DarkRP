@@ -38,12 +38,18 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
 	name = "getDarkRPVar",
 	description = "Get the value of a DarkRPVar, which is shared between server and client.",
 	parameters = {
-	},
-	returns = {
 		{
 			name = "var",
 			description = "The name of the variable.",
-			type = "string"
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "value",
+			description = "The value of the DarkRP var.",
+			type = "any"
 		}
 	},
 	metatable = DarkRP.PLAYER
@@ -372,7 +378,7 @@ DarkRP.hookStub{
 			type = "any"
 		},
 		{
-			name = "price",
+			name = "newvalue",
 			description = "The new value of the DarkRPVar.",
 			type = "any"
 		}

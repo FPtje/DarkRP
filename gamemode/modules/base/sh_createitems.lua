@@ -364,6 +364,7 @@ local function addEntityCommands(tblEnt)
 		item.SID = ply.SID
 		item.onlyremover = true
 		item.allowed = tblEnt.allowed
+		item.DarkRPItem = tblEnt
 		item:Spawn()
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
@@ -391,6 +392,9 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 		}
 	CustomTeam.name = Name
 
+	-- Disabled job
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
+
 	local corrupt = checkValid(CustomTeam, requiredTeamItems)
 	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end
 	jobCount = jobCount + 1
@@ -417,6 +421,7 @@ AddExtraTeam = DarkRP.createJob
 
 RPExtraTeamDoors = {}
 function DarkRP.createEntityGroup(name, ...)
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["doorgroups"][name] then return end
 	RPExtraTeamDoors[name] = {...}
 end
 AddDoorGroup = DarkRP.createEntityGroup
@@ -441,8 +446,11 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = AllowedClasses,
 		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
 
+	customShipment.seperate = customShipment.separate or customShipment.seperate
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
+
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
 	local corrupt = checkValid(customShipment, validShipment)
 	if corrupt then ErrorNoHalt("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
@@ -459,6 +467,8 @@ AddCustomShipment = DarkRP.createShipment
 function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
 	local vehicle = istable(Name_of_vehicle) and Name_of_vehicle or
 		{name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
+
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["vehicles"][vehicle.name] then return end
 
 	local found = false
 	for k,v in pairs(DarkRP.getAvailableVehicles()) do
@@ -495,6 +505,8 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 		cmd = command, allowed = classes, customCheck = CustomCheck}
 	tblEnt.name = name
 
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["entities"][tblEnt.name] then return end
+
 	if type(tblEnt.allowed) == "number" then
 		tblEnt.allowed = {tblEnt.allowed}
 	end
@@ -515,6 +527,8 @@ DarkRPAgendas = {}
 
 plyMeta.getAgenda = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
 function DarkRP.createAgenda(Title, Manager, Listeners)
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
+
 	if not Manager then
 		hook.Add("PlayerSpawn", "AgendaError", function(ply)
 		if ply:IsAdmin() then ply:ChatPrint("WARNING: Agenda made incorrectly, there is no manager! failed to load!") end end)
@@ -525,13 +539,20 @@ end
 AddAgenda = DarkRP.createAgenda
 
 GM.DarkRPGroupChats = {}
+local groupChatNumber = 0
 function DarkRP.createGroupChat(funcOrTeam, ...)
+	local gm = GM or GAMEMODE
+	gm.DarkRPGroupChats = gm.DarkRPGroupChats or {}
+	if DarkRP.DARKRP_LOADING then
+		groupChatNumber = groupChatNumber + 1
+		if DarkRP.disabledDefaults["groupchat"][groupChatNumber] then return end
+	end
 	-- People can enter either functions or a list of teams as parameter(s)
 	if type(funcOrTeam) == "function" then
-		table.insert(GM.DarkRPGroupChats, funcOrTeam)
+		table.insert(gm.DarkRPGroupChats, funcOrTeam)
 	else
 		local teams = {funcOrTeam, ...}
-		table.insert(GM.DarkRPGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
+		table.insert(gm.DarkRPGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
 	end
 end
 GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
@@ -539,13 +560,17 @@ GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
 GM.AmmoTypes = {}
 
 function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, customCheck)
-	table.insert(GM.AmmoTypes, istable(name) and name or {
+	local gm = GM or GAMEMODE
+	local ammo = istable(name) and name or {
 		ammoType = ammoType,
 		name = name,
 		model = model,
 		price = price,
 		amountGiven = amountGiven,
 		customCheck = customCheck
-	})
+	}
+
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
+	table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end

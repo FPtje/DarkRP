@@ -1,5 +1,7 @@
 module("DarkRP", package.seeall)
 
+MetaName = "DarkRP"
+
 -- Variables that maintain the existing stubs and hooks
 local stubs = {}
 local hookStubs = {}
@@ -11,7 +13,7 @@ hooks = {}
 local delayedCalls = {}
 
 local returnsLayout, isreturns
-local parmeterLayout, isparameters
+local parameterLayout, isparameters
 local isreturns
 local checkStub
 
@@ -33,7 +35,7 @@ end
 isparameters = function(tbl)
 	if not istable(tbl) then return false end
 	for k,v in pairs(tbl) do
-		if not checkStub(v, parmeterLayout) then return false end
+		if not checkStub(v, parameterLayout) then return false end
 	end
 	return true
 end
@@ -62,7 +64,7 @@ returnsLayout = {
 	type = isstring
 }
 
-parmeterLayout = {
+parameterLayout = {
 	name = isstring,
 	description = isstring,
 	type = isstring,
@@ -106,7 +108,7 @@ function stub(tbl)
 		error("Invalid DarkRP method stub! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
-	tbl.realm = realm
+	tbl.realm = tbl.realm or realm
 	stubs[tbl.name] = tbl
 
 	local function retNotImpl(...)
@@ -125,7 +127,7 @@ function hookStub(tbl)
 		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
-	tbl.realm = realm
+	tbl.realm = tbl.realm or realm
 	hookStubs[tbl.name] = tbl
 end
 

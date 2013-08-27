@@ -10,10 +10,10 @@ end
 
 local function AdminMenuAdditions(Frame, ent, entType)
 	local DisableOwnage = AddButtonToFrame(Frame)
-	DisableOwnage:SetText(DarkRP.getPhrase(ent.DoorData.NonOwnable and "allow_ownership" or "disallow_ownership"))
+	DisableOwnage:SetText(DarkRP.getPhrase(ent:getKeysNonOwnable() and "allow_ownership" or "disallow_ownership"))
 	DisableOwnage.DoClick = function() Frame:Close() RunConsoleCommand("darkrp", "toggleownable") end
 
-	if ent.DoorData.NonOwnable and entType then
+	if ent:getKeysNonOwnable() and entType then
 		local DoorTitle = AddButtonToFrame(Frame)
 		DoorTitle:SetText(DarkRP.getPhrase("set_x_title", entType))
 		DoorTitle.DoClick = function()
@@ -40,10 +40,9 @@ local function AdminMenuAdditions(Frame, ent, entType)
 				groups:AddOption(k, function() RunConsoleCommand("darkrp", "togglegroupownable", k) Frame:Close() end)
 			end
 
-			if not ent.DoorData then return end
-
+			local doorTeams = ent:getKeysDoorTeams()
 			for k,v in pairs(RPExtraTeams) do
-				if not ent.DoorData.TeamOwn or not ent.DoorData.TeamOwn[k] then
+				if not doorTeams or not doorTeams[k] then
 					add:AddOption(v.name, function() RunConsoleCommand("darkrp", "toggleteamownable", k) if Frame.Close then Frame:Close() end end)
 				else
 					remove:AddOption(v.name, function() RunConsoleCommand("darkrp", "toggleteamownable", k) Frame:Close() end)
@@ -61,7 +60,7 @@ local function KeysMenu(um)
 
 	local ent = LocalPlayer():GetEyeTrace().Entity
 	-- Don't open the menu if the entity is not ownable, the entity is too far away or the door settings are not loaded yet
-	if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 or not ent.DoorData then return end
+	if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then return end
 
 	KeyFrameVisible = true
 	local Frame = vgui.Create("DFrame")
@@ -143,7 +142,7 @@ local function KeysMenu(um)
 			end,
 			function() end, DarkRP.getPhrase("ok"), DarkRP.getPhrase("cancel"))
 		end
-	elseif not ent:isKeysOwnedBy(LocalPlayer()) and not ent:isKeysOwned() and not ent.DoorData.NonOwnable and not ent.DoorData.GroupOwn and not ent.DoorData.TeamOwn then
+	elseif not ent:isKeysOwnedBy(LocalPlayer()) and not ent:isKeysOwned() and not ent:getKeysNonOwnable() and not ent:getKeysDoorGroup() and not ent:getKeysDoorTeams() then
 		if LocalPlayer():hasDarkRPPrivilege("rp_doorManipulation") then
 			local Owndoor = AddButtonToFrame(Frame)
 			Owndoor:SetText(DarkRP.getPhrase("buy_x", entType))

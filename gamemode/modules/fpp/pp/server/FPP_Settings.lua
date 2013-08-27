@@ -276,6 +276,10 @@ local function RetrieveBlockedModels()
 	if not MySQLite.databaseObject then
 		local count = MySQLite.queryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") or 0
 
+		if count == 0 then
+			FPP.generateDefaultBlocked() -- Load the default blocked models on first run
+		end
+
 		-- Select with offsets of a thousand.
 		-- That's about the maximum it can receive properly at once
 		for i=0, count, 1000 do
@@ -291,6 +295,10 @@ local function RetrieveBlockedModels()
 
 	-- Retrieve the data normally from MySQL
 	MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1;", function(data)
+		if not data or #data == 0 then
+			FPP.generateDefaultBlocked()
+		end
+
 		for k,v in pairs(data or {}) do
 			if not v.model then continue end
 			FPP.BlockedModels[v.model] = true
@@ -739,6 +747,7 @@ function FPP.Init()
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPTOOL(groupname VARCHAR(40) NOT NULL, tool VARCHAR(45) NOT NULL, PRIMARY KEY(groupname, tool));")
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
+
 	MySQLite.commit(function()
 		RetrieveBlocked()
 		RetrieveBlockedModels()

@@ -19,6 +19,7 @@ SWEP.Primary.Ammo = ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 
 SWEP.HoldType = "normal"
 SWEP.ViewModel = Model("models/weapons/c_pistol.mdl")

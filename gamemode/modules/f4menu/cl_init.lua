@@ -6,8 +6,10 @@ Interface functions
 function DarkRP.openF4Menu()
 	if f4Frame then
 		f4Frame:Show()
+		f4Frame:InvalidateLayout()
 	else
-		DarkRP.toggleF4Menu()
+		f4Frame = vgui.Create("F4MenuFrame")
+		f4Frame:generateTabs()
 	end
 end
 
@@ -18,13 +20,10 @@ function DarkRP.closeF4Menu()
 end
 
 function DarkRP.toggleF4Menu()
-	if not ValidPanel(f4Frame) then
-		f4Frame = vgui.Create("F4MenuFrame")
-		f4Frame:generateTabs()
-	elseif not f4Frame:IsVisible() then
-		f4Frame:Show()
+	if not ValidPanel(f4Frame) or not f4Frame:IsVisible() then
+		DarkRP.openF4Menu()
 	else
-		f4Frame:Hide()
+		DarkRP.closeF4Menu()
 	end
 end
 
@@ -73,6 +72,12 @@ hook.Add("F4MenuTabs", "DefaultTabs", function()
 	if #CustomVehicles > 0 then
 		DarkRP.addF4MenuTab(DarkRP.getPhrase("F4vehicles"), vgui.Create("F4MenuVehicles"))
 	end
+end)
+
+hook.Add("DarkRPVarChanged", "RefreshF4Menu", function(ply, varname)
+	if ply ~= LocalPlayer() or varname ~= "money" or not ValidPanel(f4Frame) or not f4Frame:IsVisible() then return end
+
+	f4Frame:InvalidateLayout()
 end)
 
 /*---------------------------------------------------------------------------

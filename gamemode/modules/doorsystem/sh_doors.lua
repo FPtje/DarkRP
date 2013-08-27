@@ -34,49 +34,78 @@ function DarkRP.doorToEntIndex(num)
 end
 
 function meta:isKeysOwned()
-	self.DoorData = self.DoorData or {}
-
-	if IsValid(self.DoorData.Owner) then return true end
+	if IsValid(self:getDoorOwner()) then return true end
 
 	return false
 end
 
 function meta:getDoorOwner()
-	if not IsValid(self) then return end
-	self.DoorData = self.DoorData or {}
-	return self.DoorData.Owner
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.owner
 end
 
 function meta:isMasterOwner(ply)
-	if ply == self:getDoorOwner() then
-		return true
-	end
-
-	return false
+	return ply == self:getDoorOwner()
 end
 
 function meta:isKeysOwnedBy(ply)
-	if ply == self:getDoorOwner() then return true end
-	self.DoorData = self.DoorData or {}
+	if self:isMasterOwner(ply) then return true end
 
-	if self.DoorData.ExtraOwners then
-		local People = string.Explode(";", self.DoorData.ExtraOwners)
-		for k,v in pairs(People) do
-			if tonumber(v) == ply:UserID() then return true end
-		end
-	end
-
-	return false
+	local coOwners = self:getKeysCoOwners()
+	return coOwners and coOwners[ply:EntIndex()] or false
 end
 
 function meta:isKeysAllowedToOwn(ply)
-	self.DoorData = self.DoorData or {}
-	if not self.DoorData then return false end
-	if self.DoorData.AllowedToOwn and string.find(self.DoorData.AllowedToOwn, ply:UserID()) then
-		return true
-	end
-	return false
+	local doorData = self:getDoorData()
+	if not doorData then return false end
+
+	return doorData.allowedToOwn and doorData.allowedToOwn[ply:EntIndex()] or false
 end
+
+function meta:getKeysNonOwnable()
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.nonOwnable
+end
+
+function meta:getKeysTitle()
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.title
+end
+
+function meta:getKeysDoorGroup()
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.groupOwn
+end
+
+function meta:getKeysDoorTeams()
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.teamOwn
+end
+
+function meta:getKeysAllowedToOwn()
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.allowedToOwn
+end
+
+function meta:getKeysCoOwners()
+	local doorData = self:getDoorData()
+	if not doorData then return nil end
+
+	return doorData.extraOwners
+end
+
 
 /*---------------------------------------------------------------------------
 Commands
@@ -106,7 +135,7 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "toggleown",
 	description = "Own or unown the door you're looking at.",
-	delay = 1.5
+	delay = 0.5
 }
 
 DarkRP.declareChatCommand{
@@ -124,23 +153,23 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "removeowner",
 	description = "Remove an owner from the door you're looking at.",
-	delay = 1.5
+	delay = 0.5
 }
 
 DarkRP.declareChatCommand{
 	command = "ro",
 	description = "Remove an owner from the door you're looking at.",
-	delay = 1.5
+	delay = 0.5
 }
 
 DarkRP.declareChatCommand{
 	command = "addowner",
 	description = "Invite someone to co-own the door you're looking at.",
-	delay = 1.5
+	delay = 0.5
 }
 
 DarkRP.declareChatCommand{
 	command = "ao",
 	description = "Invite someone to co-own the door you're looking at.",
-	delay = 1.5
+	delay = 0.5
 }

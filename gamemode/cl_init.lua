@@ -9,7 +9,7 @@ local function LoadModules()
 	local _, folders = file.Find(root.."*", "LUA")
 
 	for _, folder in SortedPairs(folders, true) do
-		if GM.Config.DisabledModules[folder] then continue end
+		if DarkRP.disabledDefaults["modules"][folder] then continue end
 
 		for _, File in SortedPairs(file.Find(root .. folder .."/sh_*.lua", "LUA"), true) do
 			if File == "sh_interface.lua" then continue end
@@ -23,16 +23,19 @@ local function LoadModules()
 end
 
 GM.Config = {} -- config table
+GM.NoLicense = GM.NoLicense or {}
 
 include("config/config.lua")
 include("libraries/fn.lua")
 include("libraries/interfaceloader.lua")
 
+include("libraries/modificationloader.lua")
 LoadModules()
 
+DarkRP.DARKRP_LOADING = true
 include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
-
+DarkRP.DARKRP_LOADING = nil
 
 DarkRP.finish()

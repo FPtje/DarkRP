@@ -243,6 +243,12 @@ GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
 
 
+GM.Config.DefaultPlayerGroups = {
+	["STEAM_0:0:00000000"] = "superadmin",
+	["STEAM_0:0:11111111"] = "admin",
+}
+
+
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
 GM.Config.DisallowDrop = {
 	["arrest_stick"] = true,
@@ -277,21 +283,6 @@ GM.Config.DefaultLaws = {
 	"Money printers/drugs are illegal."
 }
 
--- The list of modules that are disabled. Set to true to disable, false to enable.
--- Modules that are not in this list are enabled by default.
-GM.Config.DisabledModules = {
-	["afk"] = true,
-	["fpp"] = false,
-	["chatsounds"] = false,
-	["events"] = false,
-	["hungermod"] = true,
-	["hud"] = false,
-	["playerscale"] = false,
-	["sleep"] = false,
-	["voterestrictions"] = true,
-	["hitmenu"] = false,
-}
-
 GM.Config.PocketBlacklist = {
 	["fadmin_jail"] = true,
 	["meteor"] = true,
@@ -310,8 +301,14 @@ GM.Config.PocketBlacklist = {
 /*---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------*/
--- hide the items that you can't buy (instead of graying them out)
+-- hide the items that you can't buy and the jobs you can't get (instead of graying them out)
+-- this option hides items when you don't have enough money, when the maximum is reached for a job or any other reason
 GM.Config.hideNonBuyable = false
+
+-- Hide only the items that you have the wrong job for (or for which the customCheck says no)
+-- When you set this option to true and hideNonBuyable to false, you WILL see e.g. items that are too expensive for you to buy
+-- but you won't see gundealer shipments when you have the citizen job
+GM.Config.hideTeamUnbuyable = true
 
 /*---------------------------------------------------------------------------
 AFK module

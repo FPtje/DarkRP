@@ -232,14 +232,16 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 	hobo = true
 })
 
-//ADD CUSTOM TEAMS UNDER THIS LINE:
-
-
-
-
-
-
-
+-- Compatibility for when default teams are disabled
+TEAM_CITIZEN = TEAM_CITIZEN  or -1
+TEAM_POLICE  = TEAM_POLICE   or -1
+TEAM_GANG    = TEAM_GANG     or -1
+TEAM_MOB     = TEAM_MOB      or -1
+TEAM_GUN     = TEAM_GUN      or -1
+TEAM_MEDIC   = TEAM_MEDIC    or -1
+TEAM_CHIEF   = TEAM_CHIEF    or -1
+TEAM_MAYOR   = TEAM_MAYOR    or -1
+TEAM_HOBO    = TEAM_HOBO     or -1
 
 
 /*
@@ -247,8 +249,6 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 HOW TO MAKE A DOOR GROUP
 --------------------------------------------------------
 AddDoorGroup("NAME OF THE GROUP HERE, you see this when looking at a door", Team1, Team2, team3, team4, etc.)
-
-WARNING: THE DOOR GROUPS HAVE TO BE UNDER THE TEAMS IN SHARED.LUA. IF THEY ARE NOT, IT MIGHT MUCK UP!
 
 
 The default door groups, can also be used as examples:
@@ -262,8 +262,6 @@ AddDoorGroup("Gundealer only", TEAM_GUN)
 HOW TO MAKE AN AGENDA
 --------------------------------------------------------
 AddAgenda(Title of the agenda, Manager (who edits it), Listeners (the ones who just see and follow the agenda))
-
-WARNING: THE AGENDAS HAVE TO BE UNDER THE TEAMS IN SHARED.LUA. IF THEY ARE NOT, IT MIGHT MUCK UP!
 
 The default agenda's, can also be used as examples:
 */

@@ -29,6 +29,7 @@ SWEP.WorldModel	= ""
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
@@ -106,5 +107,6 @@ DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = meta
+	metatable = meta,
+	realm = "Shared"
 }

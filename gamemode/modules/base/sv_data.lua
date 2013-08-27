@@ -294,21 +294,15 @@ end
  ---------------------------------------------------------*/
 function DarkRP.storeDoorData(ent)
 	local map = string.lower(game.GetMap())
-	ent.DoorData = ent.DoorData or {}
-	local nonOwnable = ent.DoorData.NonOwnable
+	local nonOwnable = ent:getKeysNonOwnable()
+	local title = ent:getKeysTitle()
 
 	MySQLite.query([[REPLACE INTO darkrp_door VALUES(]]..
 		ent:doorIndex() ..[[, ]] ..
 		MySQLite.SQLStr(map) .. [[, ]] ..
-		(ent.DoorData.title and MySQLite.SQLStr(ent.DoorData.title) or "NULL") .. [[, ]] ..
+		(title and MySQLite.SQLStr(title) or "NULL") .. [[, ]] ..
 		"NULL" .. [[, ]] ..
-		(ent.DoorData.NonOwnable and 1 or 0) .. [[);]])
-end
-
-function DarkRP.storeDoorTitle(ent, text)
-	ent.DoorData = ent.DoorData or {}
-	ent.DoorData.title = text
-	MySQLite.query("UPDATE darkrp_door SET title = " .. MySQLite.SQLStr(text) .. " WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. " AND idx = " .. ent:doorIndex() .. ";")
+		(nonOwnable and 1 or 0) .. [[);]])
 end
 
 function setUpNonOwnableDoors()
@@ -318,12 +312,11 @@ function setUpNonOwnableDoors()
 		for _, row in pairs(r) do
 			local e = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
 			if IsValid(e) then
-				e.DoorData = e.DoorData or {}
-				e.DoorData.NonOwnable = tobool(row.isDisabled)
+				e:setKeysNonOwnable(tobool(row.isDisabled))
 				if r.isLocked ~= nil then
 					e:Fire((tobool(row.locked) and "" or "un").."lock", "", 0)
 				end
-				e.DoorData.title = row.title ~= "NULL" and row.title or nil
+				e:setKeysTitle(row.title ~= "NULL" and row.title or nil)
 			end
 		end
 	end)
@@ -331,13 +324,10 @@ end
 
 function DarkRP.storeTeamDoorOwnability(ent)
 	local map = string.lower(game.GetMap())
-	ent.DoorData = ent.DoorData or {}
 
 	MySQLite.query("DELETE FROM darkrp_jobown WHERE idx = " .. ent:doorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
-	for k,v in pairs(string.Explode("\n", ent.DoorData.TeamOwn or "")) do
-		if v == "" then continue end
-
-		MySQLite.query("INSERT INTO darkrp_jobown VALUES("..ent:doorIndex() .. ", "..MySQLite.SQLStr(map) .. ", " .. v .. ");")
+	for k,v in pairs(ent:getKeysDoorTeams() or {}) do
+		MySQLite.query("INSERT INTO darkrp_jobown VALUES(" .. ent:doorIndex() .. ", " .. MySQLite.SQLStr(map) .. ", " .. k .. ");")
 	end
 end
 
@@ -347,20 +337,18 @@ function setUpTeamOwnableDoors()
 
 		for _, row in pairs(r) do
 			local e = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
-			if IsValid(e) then
-				e.DoorData = e.DoorData or {}
-				e.DoorData.TeamOwn = e.DoorData.TeamOwn or ""
-				e.DoorData.TeamOwn = (e.DoorData.TeamOwn == "" and row.job) or (e.DoorData.TeamOwn .. "\n" .. row.job)
-			end
+			if not IsValid(e) then continue end
+
+			e:addKeysDoorTeam(tonumber(row.job))
 		end
 	end)
 end
 
-function DarkRP.setDoorGroup(ent, group)
+function DarkRP.storeDoorGroup(ent, group)
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
 	local index = ent:doorIndex()
 
-	if group == "" then
+	if group == "" or not group then
 		MySQLite.query("DELETE FROM darkrp_doorgroups WHERE map = " .. map .. " AND idx = " .. index .. ";")
 		return
 	end
@@ -380,8 +368,7 @@ function setUpGroupDoors()
 				continue
 			end
 
-			ent.DoorData = ent.DoorData or {}
-			ent.DoorData.GroupOwn = row.doorgroup
+			ent:setDoorGroup(row.doorgroup)
 		end
 	end)
 end

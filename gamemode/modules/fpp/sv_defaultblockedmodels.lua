@@ -51,10 +51,9 @@ local defaultblocked = {
 "models/props_combine/prison01.mdl"
 }
 
--- Add to SQLite database
-sql.Begin()
-for k,v in pairs(defaultblocked) do
-	sql.Query("INSERT INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(v)..");")
+-- Add to database
+function FPP.generateDefaultBlocked()
+	for k,v in pairs(defaultblocked) do
+		MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..MySQLite.SQLStr(v)..");")
+	end
 end
-sql.Commit()
-

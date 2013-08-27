@@ -47,6 +47,10 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	end
 end
 
+function GM:PlayerNoClip(ply)
+	-- Default action for noclip is to disallow it
+	return false
+end
 
 function GM:InitPostEntity()
 	hook.Call("teamChanged", GAMEMODE, GAMEMODE.DefaultTeam, GAMEMODE.DefaultTeam)

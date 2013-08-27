@@ -27,6 +27,7 @@ SWEP.UseHands = true
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 
 SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
 
@@ -84,7 +85,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if not GAMEMODE.Config.canforcedooropen and e.DoorData.NonOwnable then
+	if not GAMEMODE.Config.canforcedooropen and e:getKeysNonOwnable() then
 		return
 	end
 
