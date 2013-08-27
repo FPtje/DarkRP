@@ -53,10 +53,15 @@ local function unownAll(ply, cmd, args)
 		return
 	end
 
+	if not args or not args[1] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		return
+	end
+
 	target = DarkRP.findPlayer(args[1])
 
 	if not IsValid(target) then
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		return
 	end
 	target:keysUnOwnAll()
@@ -71,6 +76,11 @@ local function ccAddOwner(ply, cmd, args)
 
 	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_addowner"))
+		return
+	end
+
+	if not args or not args[1] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
@@ -93,7 +103,7 @@ local function ccAddOwner(ply, cmd, args)
 			trace.Entity:keysOwn(target)
 		end
 	else
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 end
@@ -106,6 +116,11 @@ local function ccRemoveOwner(ply, cmd, args)
 
 	if not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_removeowner"))
+		return
+	end
+
+	if not args or not args[1] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
@@ -126,7 +141,7 @@ local function ccRemoveOwner(ply, cmd, args)
 			trace.Entity:removeKeysDoorOwner(target)
 		end
 	else
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 end
