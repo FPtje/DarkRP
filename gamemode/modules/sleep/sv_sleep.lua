@@ -48,6 +48,7 @@ function KnockoutToggle(player, command, args, caller)
 						player:SelectWeapon( cl_defaultweapon )
 					end
 					player:GetTable().BeforeSleepTeam = nil
+					player.WeaponsForSleep = nil
 				else
 					GAMEMODE:PlayerLoadout(player)
 				end
@@ -146,15 +147,7 @@ local function DamageSleepers(ent, dmginfo)
 				end
 				v:SetHealth(v:Health() - amount)
 				if v:Health() <= 0 and v:Alive() then
-					v:Spawn()
-					v:UnSpectate()
-					v:SetPos(ent:GetPos())
-					v:SetHealth(1)
-					v:TakeDamage(1, inflictor, attacker)
-					if v.SleepSound then
-						v.SleepSound:Stop()
-					end
-					ent:Remove()
+					KnockoutToggle(v, "force")
 				end
 			end
 		end
