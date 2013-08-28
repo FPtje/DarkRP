@@ -178,17 +178,8 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1, 4, CTeam.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), ""))
 				return ""
 			end
-			if #player.GetAll() == 1 then
-				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
-				ply:changeTeam(k)
-				return ""
-			end
 			if not ply:changeAllowed(k) then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, DarkRP.getPhrase("banned_or_demoted")))
-				return ""
-			end
-			if CurTime() - ply:GetTable().LastVoteCop < 80 then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), CTeam.command))
 				return ""
 			end
 			if ply:Team() == k then
@@ -197,7 +188,20 @@ local function addTeamCommands(CTeam, max)
 			end
 			local max = CTeam.max
 			if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(k) >= max) or (max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > max)) then
-				DarkRP.notify(ply, 1, 4,  DarkRP.getPhrase("team_limit_reached", CTeam.name))
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("team_limit_reached", CTeam.name))
+				return ""
+			end
+			if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
+				return ""
+			end
+			if #player.GetAll() == 1 then
+				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
+				ply:changeTeam(k)
+				return ""
+			end
+			if CurTime() - ply:GetTable().LastVoteCop < 80 then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
 				return ""
 			end
 			DarkRP.createVote(DarkRP.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
