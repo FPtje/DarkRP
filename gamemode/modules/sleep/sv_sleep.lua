@@ -148,6 +148,7 @@ local function DamageSleepers(ent, dmginfo)
 				v:SetHealth(v:Health() - amount)
 				if v:Health() <= 0 and v:Alive() then
 					KnockoutToggle(v, "force")
+					v:SetHealth(GAMEMODE.Config.startinghealth)
 				end
 			end
 		end
