@@ -311,7 +311,7 @@ function setUpNonOwnableDoors()
 
 		for _, row in pairs(r) do
 			local e = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
-			if IsValid(e) then
+			if IsValid(e) and e:isKeysOwnable() then
 				e:setKeysNonOwnable(tobool(row.isDisabled))
 				if r.isLocked ~= nil then
 					e:Fire((tobool(row.locked) and "" or "un").."lock", "", 0)
@@ -364,7 +364,7 @@ function setUpGroupDoors()
 		for _, row in pairs(data) do
 			local ent = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
 
-			if not IsValid(ent) then
+			if not IsValid(ent) or not ent:isKeysOwnable() then
 				continue
 			end
 
