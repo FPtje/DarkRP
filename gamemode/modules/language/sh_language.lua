@@ -7,6 +7,7 @@ function DarkRP.addLanguage(name, tbl)
 
 	-- Merge the language with the translations added by DarkRP.addPhrase
 	for k,v in pairs(old) do
+		if rp_languages[name][k] then continue end
 		rp_languages[name][k] = v
 	end
 	LANGUAGE = rp_languages[name] -- backwards compatibility
