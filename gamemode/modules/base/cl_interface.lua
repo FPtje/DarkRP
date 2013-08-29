@@ -36,6 +36,49 @@ DarkRP.textWrap = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.setPreferredJobModel = DarkRP.stub{
+	name = "setPreferredJobModel",
+	description = "Set the model preferred by the player (if the job allows multiple models).",
+	parameters = {
+		{
+			name = "teamNr",
+			description = "The team number of the job.",
+			type = "number",
+			optional = false
+		},
+		{
+			name = "model",
+			description = "The preferred model for the job.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.getPreferredJobModel = DarkRP.stub{
+	name = "getPreferredJobModel",
+	description = "Get the model preferred by the player (if the job allows multiple models).",
+	parameters = {
+		{
+			name = "teamNr",
+			description = "The team number of the job.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "model",
+			description = "The preferred model for the job.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.hookStub{
 	name = "teamChanged",
 	description = "When your team is changed.",
