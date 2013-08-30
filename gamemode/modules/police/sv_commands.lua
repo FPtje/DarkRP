@@ -102,7 +102,7 @@ end
 
 function DarkRP.lockdown(ply)
 	if lstat then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
 		return ""
 	end
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor then
@@ -123,7 +123,7 @@ DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
 
 function DarkRP.unLockdown(ply)
 	if not lstat or wait_lockdown then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
 		return ""
 	end
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor then
