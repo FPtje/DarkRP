@@ -192,9 +192,17 @@ DarkRP.defineChatCommand("unwanted", unwantedCommand)
 Admin commands
 ---------------------------------------------------------------------------*/
 local function ccArrest(ply, cmd, args)
-	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_arrest"))
+		return
+	end
+
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
 		return
 	end
 
@@ -228,14 +236,21 @@ local function ccArrest(ply, cmd, args)
 			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end
-
 end
 concommand.Add("rp_arrest", ccArrest)
 
 local function ccUnarrest(ply, cmd, args)
-	if not args[1] then return end
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unarrest"))
+		return
+	end
+
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
 		return
 	end
 
@@ -256,9 +271,7 @@ local function ccUnarrest(ply, cmd, args)
 		else
 			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
-		return
 	end
-
 end
 concommand.Add("rp_unarrest", ccUnarrest)
 

@@ -294,6 +294,7 @@ local english = {
 	vote_alone = "You have won the vote since you are alone in the server.",
 	you_cannot_vote = "You cannot vote!",
 	x_cancelled_vote = "%s cancelled the last vote.",
+	cant_cancel_vote = "Could not cancel the last vote as there was no last vote to cancel!",
 	jail_punishment = "Punishment for disconnecting! Jailed for: %d seconds.",
 	admin_only = "Admin only!", -- When doing /addjailpos
 	chief_or = "Chief or ",-- When doing /addjailpos
@@ -333,6 +334,8 @@ local english = {
 	job_doesnt_require_vote_currently = "This job does not require a vote at the moment!",
 
 	x_made_you_a_y = "%s has made you a %s!",
+
+	cmd_cant_be_run_server_console = "This command cannot be run from the server console.",
 
 	-- The lottery
 	lottery_started = "There is a lottery! Participate for %s%d?",

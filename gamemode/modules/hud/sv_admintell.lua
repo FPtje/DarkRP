@@ -2,9 +2,17 @@
 Messages
 ---------------------------------------------------------------------------*/
 local function ccTell(ply, cmd, args)
-	if not args[1] then return end
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
+		return
+	end
+
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2,  DarkRP.getPhrase("need_admin", "rp_tell"))
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tell"))
 		return
 	end
 
@@ -37,12 +45,19 @@ end
 concommand.Add("rp_tell", ccTell)
 
 local function ccTellAll(ply, cmd, args)
-	if not args[1] then return end
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
+		return
+	end
+
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tellall"))
 		return
 	end
-
 
 	local msg = ""
 
