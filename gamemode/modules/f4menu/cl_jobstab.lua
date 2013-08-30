@@ -88,6 +88,8 @@ function PANEL:Init()
 
 	self.btnGetJob = vgui.Create("F4MenuJobBecomeButton", self)
 	self.btnGetJob:Dock(BOTTOM)
+
+	self.job = {}
 end
 
 local black = Color(0, 0, 0, 170)
@@ -101,6 +103,8 @@ local getWeaponNames = fn.Curry(fn.Map, 2)(getWepName)
 local weaponString = fn.Compose{fn.Curry(fn.Flip(table.concat), 2)("\n"), fn.Curry(fn.Seq, 2)(table.sort), getWeaponNames, table.Copy}
 function PANEL:updateInfo(job)
 	self.lblTitle:SetText(job.name)
+	self.job = job
+
 	self.lblTitle:SizeToContents()
 
 	self.lblDescription:SetText(job.description)
@@ -155,6 +159,17 @@ end
 
 function PANEL:Refresh()
 	self.pnlLeft:Refresh()
+
+	if not self.pnlLeft.Items then self.pnlRight:updateInfo({}) return end
+	local curTeam = self.pnlLeft.Items[self.pnlRight.job.team]
+	if not curTeam or curTeam:GetDisabled() then
+		for k,v in ipairs(self.pnlLeft.Items) do
+			if v:GetDisabled() then continue end
+			self.pnlRight:updateInfo(v.DarkRPItem)
+			return
+		end
+		self.pnlRight:updateInfo({})
+	end
 end
 
 function PANEL:fillData()
