@@ -281,6 +281,15 @@ local function rp_GiveLicense(ply, cmd, args)
 		return
 	end
 
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
+		return
+	end
+
 	local target = DarkRP.findPlayer(args[1])
 
 	if target then
@@ -316,6 +325,15 @@ concommand.Add("rp_givelicense", rp_GiveLicense)
 local function rp_RevokeLicense(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_revokelicense"))
+		return
+	end
+
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
 		return
 	end
 
