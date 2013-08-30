@@ -100,40 +100,69 @@ local function WaitLock()
 	timer.Destroy("spamlock")
 end
 
-function DarkRP.lockdown(ply)
+function DarkRP.lockdown(ply, args, cmdargs)
 	if lstat then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
-		return ""
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
+			return
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
+			return ""
+		end
 	end
-	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor then
+	if ply:EntIndex() == 0 or (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor) then
 		for k,v in pairs(player.GetAll()) do
 			v:ConCommand("play npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav\n")
 		end
 		lstat = true
-		DarkRP.printMessageAll(HUD_PRINTTALK , DarkRP.getPhrase("lockdown_started"))
+		DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
 		RunConsoleCommand("DarkRP_LockDown", 1)
 		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
+		end
 	end
 	return ""
 end
 concommand.Add("rp_lockdown", function(ply) DarkRP.lockdown(ply) end)
 DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
 
-function DarkRP.unLockdown(ply)
+function DarkRP.unLockdown(ply, args, cmdargs)
 	if not lstat or wait_lockdown then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
-		return ""
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("unable", "/ulockdown", DarkRP.getPhrase("lockdown_ended")))
+			return
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
+			return ""
+		end
 	end
-	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor then
-		DarkRP.printMessageAll(HUD_PRINTTALK , DarkRP.getPhrase("lockdown_ended"))
-		DarkRP.notifyAll(1, 3, DarkRP.getPhrase("lockdown_ended"))
+
+	if ply:EntIndex() == 0 or (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor) then
+		DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
+		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
 		wait_lockdown = true
 		RunConsoleCommand("DarkRP_LockDown", 0)
-		timer.Create("spamlock", 20, 1, function() WaitLock("") end)
+		timer.Create("spamlock", 20, 1, function() WaitLock() end)
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
+		end
 	end
 	return ""
 end
@@ -265,8 +294,14 @@ local function rp_GiveLicense(ply, cmd, args)
 			steamID = "Console"
 		end
 
-		DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-		DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+		if ply ~= target then
+			if ply:EntIndex() == 0 then
+				print(DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+			else
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+			end
+		end
 		DarkRP.log(nick.." ("..steamID..") force-gave "..target:Nick().." a gun license", Color(30, 30, 30))
 	else
 		if ply:EntIndex() == 0 then
@@ -274,7 +309,6 @@ local function rp_GiveLicense(ply, cmd, args)
 		else
 			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
-		return
 	end
 end
 concommand.Add("rp_givelicense", rp_GiveLicense)
@@ -299,7 +333,13 @@ local function rp_RevokeLicense(ply, cmd, args)
 		end
 
 		DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
+		if ply ~= target then
+			if ply:EntIndex() == 0 then
+				print(DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
+			else
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+			end
+		end
 		DarkRP.log(nick.." ("..steamID..") force-removed "..target:Nick().."'s gun license", Color(30, 30, 30))
 	else
 		if ply:EntIndex() == 0 then
@@ -307,7 +347,6 @@ local function rp_RevokeLicense(ply, cmd, args)
 		else
 			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
-		return
 	end
 end
 concommand.Add("rp_revokelicense", rp_RevokeLicense)

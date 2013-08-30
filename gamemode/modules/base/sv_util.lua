@@ -130,7 +130,11 @@ end
 
 local function LookPersonUp(ply, cmd, args)
 	if not args[1] then
-		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", "argument", ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
+		end
 		return
 	end
 	local P = DarkRP.findPlayer(args[1])

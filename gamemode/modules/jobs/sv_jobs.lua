@@ -349,28 +349,46 @@ DarkRP.defineChatCommand("jobswitch", SwitchJob)
 
 
 local function DoTeamBan(ply, args, cmdargs)
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
+		if cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "/teamban"))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamban"))
+			return ""
+		end
+	end
+	
 	if not args or args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
 		return ""
 	end
 
-	args = cmdargs or string.Explode(" ", args)
-	local ent = args[1]
-	local Team = args[2]
-	if cmdargs and not cmdargs[1] then
-		ply:PrintMessage(HUD_PRINTNOTIFY, DarkRP.getPhrase("rp_teamban_hint"))
+	if cmdargs and not cmdargs[2] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("rp_teamban_hint"))
+		else
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("rp_teamban_hint"))
+		end
 		return
 	end
 
+	args = cmdargs or string.Explode(" ", args)
+	local ent = args[1]
+	local Team = args[2]
+
 	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
-		return ""
-	end
-
-	if (not FAdmin or not FAdmin.Access.PlayerHasPrivilege(ply, "rp_commands", target)) and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamban"))
-		return ""
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", ent or ""))
+			return
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", ent or ""))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
+			return ""
+		end
 	end
 
 	local found = false
@@ -383,29 +401,54 @@ local function DoTeamBan(ply, args, cmdargs)
 	end
 
 	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
-		return ""
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", Team or ""))
+			return
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", Team or ""))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
+			return ""
+		end
 	end
 
 	target:teamBan(tonumber(Team), tonumber(args[3] or 0))
-	DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", ply:Nick(), target:Nick(), team.GetName(tonumber(Team))))
+
+	local nick
+	if ply:EntIndex() == 0 then
+		nick = "Console"
+	else
+		nick = ply:Nick()
+	end
+	DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
+	
 	return ""
 end
 DarkRP.defineChatCommand("teamban", DoTeamBan)
 concommand.Add("rp_teamban", DoTeamBan)
 
 local function DoTeamUnBan(ply, args, cmdargs)
-	if not ply:IsAdmin() then
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamunban"))
+		return ""
+	end
+
+	if not args or args == "" then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
 		return ""
 	end
 
 	local ent = args
 	local Team = args
 	if cmdargs then
-		if not cmdargs[1] then
-			ply:PrintMessage(HUD_PRINTNOTIFY, DarkRP.getPhrase("rp_teamunban_hint"))
-			return ""
+		if not cmdargs[2] then
+			if ply:EntIndex() == 0 then
+				print(DarkRP.getPhrase("rp_teamunban_hint"))
+			else
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("rp_teamunban_hint"))
+			end
+			return
 		end
 		ent = cmdargs[1]
 		Team = cmdargs[2]
@@ -417,8 +460,16 @@ local function DoTeamUnBan(ply, args, cmdargs)
 
 	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
-		return ""
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", ent or ""))
+			return
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", ent or ""))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
+			return ""
+		end
 	end
 
 	local found = false
@@ -435,12 +486,28 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	end
 
 	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
-		return ""
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", Team or ""))
+			return
+		elseif cmdargs then
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", Team or ""))
+			return
+		else
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
+			return ""
+		end
 	end
 	if not target.bannedfrom then target.bannedfrom = {} end
 	target.bannedfrom[tonumber(Team)] = nil
-	DarkRP.notifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", ply:Nick(), target:Nick(), team.GetName(tonumber(Team))))
+
+	local nick
+	if ply:EntIndex() == 0 then
+		nick = "Console"
+	else
+		nick = ply:Nick()
+	end
+	DarkRP.notifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
+	
 	return ""
 end
 DarkRP.defineChatCommand("teamunban", DoTeamUnBan)

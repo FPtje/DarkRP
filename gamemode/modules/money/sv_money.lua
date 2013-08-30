@@ -216,7 +216,14 @@ DarkRP.defineChatCommand("cheque", CreateCheque, 0.3)
 DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
 
 local function ccSetMoney(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
+	if not tonumber(args[2]) then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
+		return
+	end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
 		return
@@ -260,7 +267,14 @@ end
 concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
 
 local function ccSetSalary(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
+	if not tonumber(args[2]) then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
+		return
+	end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setsalary"))
 		return

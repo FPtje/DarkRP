@@ -1,4 +1,5 @@
 local function MakeZombieSoundsAsHobo(ply)
+	if ply:EntIndex() == 0 then return end
 	if not ply.nospamtime then
 		ply.nospamtime = CurTime() - 2
 	end

@@ -48,24 +48,37 @@ local function unownAll(ply, cmd, args)
 		return
 	end
 
-	if not ply:hasDarkRPPrivilege("rp_commands") then
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unown"))
 		return
 	end
 
 	if not args or not args[1] then
-		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
 		return
 	end
 
 	target = DarkRP.findPlayer(args[1])
 
 	if not IsValid(target) then
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		end
 		return
 	end
 	target:keysUnOwnAll()
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
+
+	if ply:EntIndex() == 0 then
+		DarkRP.log("Console force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
+	else
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
+	end
 end
 concommand.Add("rp_unownall", unownAll)
 

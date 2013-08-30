@@ -2,6 +2,8 @@ local Vote = {}
 local Votes = {}
 
 local function ccDoVote(ply, cmd, args)
+	if ply:EntIndex() == 0 then return end
+	
 	local vote = Votes[tonumber(args[1] or 0)]
 
 	if not vote then return end

@@ -266,14 +266,14 @@ local function addTeamCommands(CTeam, max)
 			return
 		end
 
-		if CTeam.admin > 1 and not ply:IsSuperAdmin() then
+		if CTeam.admin > 1 and not ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
 			ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
 			return
 		end
 
 		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-				ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
+				ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
 				return
 			elseif CTeam.admin > 1 and ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
 				ply:PrintMessage(2, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
@@ -286,6 +286,7 @@ local function addTeamCommands(CTeam, max)
 
 		if (target) then
 			target:changeTeam(k, true)
+			local nick
 			if (ply:EntIndex() ~= 0) then
 				nick = ply:Nick()
 			else
@@ -298,7 +299,6 @@ local function addTeamCommands(CTeam, max)
 			else
 				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 			end
-			return
 		end
 	end)
 end
