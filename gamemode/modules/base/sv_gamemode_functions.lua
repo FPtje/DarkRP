@@ -491,25 +491,19 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 	return true
 end
 
-local function SetPlayerModel(ply, cmd, args)
-	if not args[1] then return end
-	ply.rpChosenModel = args[1]
-end
-concommand.Add("_rp_ChosenModel", SetPlayerModel)
-
 function GM:PlayerSetModel(ply)
-	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSetModel then
-		return RPExtraTeams[ply:Team()].PlayerSetModel(ply)
+	local teamNr = ply:Team()
+	if RPExtraTeams[teamNr] and RPExtraTeams[teamNr].PlayerSetModel then
+		return RPExtraTeams[teamNr].PlayerSetModel(ply)
 	end
 
 	local EndModel = ""
 	if GAMEMODE.Config.enforceplayermodel then
-		local TEAM = RPExtraTeams[ply:Team()]
+		local TEAM = RPExtraTeams[teamNr]
 		if not TEAM then return end
 
-		if type(TEAM.model) == "table" then
-			local ChosenModel = ply.rpChosenModel or ply:GetInfo("rp_playermodel")
-			ChosenModel = string.lower(ChosenModel)
+		if istable(TEAM.model) then
+			local ChosenModel = string.lower(ply:getPreferredModel(teamNr) or "")
 
 			local found
 			for _,Models in pairs(TEAM.model) do
@@ -530,8 +524,8 @@ function GM:PlayerSetModel(ply)
 		ply:SetModel(EndModel)
 	else
 		local cl_playermodel = ply:GetInfo("cl_playermodel")
-        local modelname = player_manager.TranslatePlayerModel( cl_playermodel )
-        ply:SetModel( modelname )
+        local modelname = player_manager.TranslatePlayerModel(cl_playermodel)
+        ply:SetModel(ply:getPreferredModel(teamNr) or modelname)
 	end
 end
 

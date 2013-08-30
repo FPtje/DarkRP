@@ -548,6 +548,27 @@ DarkRP.PLAYER.setRPName = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
+	name = "getPreferredModel",
+	description = "Get the preferred model of a player for a job.",
+	parameters = {
+		{
+			name = "TeamNr",
+			description = "The job number.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "model",
+			description = "The preferred model for the job.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.hookStub{
 	name = "UpdatePlayerSpeed",
 	description = "Change a player's walking and running speed.",

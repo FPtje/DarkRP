@@ -340,7 +340,7 @@ local function SwitchJob(ply) --Idea by Godness.
 	if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
 	ply.RequestedJobSwitch = true
 	DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_reqested"))
+	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_requested"))
 	return ""
 end
 DarkRP.defineChatCommand("switchjob", SwitchJob)

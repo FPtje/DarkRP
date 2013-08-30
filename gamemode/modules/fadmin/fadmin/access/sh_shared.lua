@@ -12,7 +12,7 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 	if not SERVER then return end
 
 	MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = " .. MySQLite.SQLStr(name) .. ";", function(val)
-		if tonumber(val) > 0 then return end
+		if tonumber(val or 0) > 0 then return end
 
 		MySQLite.query("REPLACE INTO FADMIN_GROUPS VALUES(".. MySQLite.SQLStr(name) .. ", " .. admin_access..");")
 
