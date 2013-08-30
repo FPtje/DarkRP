@@ -173,6 +173,11 @@ DarkRP.destroyLastVote = DarkRP.stub{
 	parameters = {
 	},
 	returns = {
+		{
+			name = "destroyed",
+			description = "Whether there was a last vote to destroy or not.",
+			type = "boolean"
+		}
 	},
 	metatable = DarkRP
 }
