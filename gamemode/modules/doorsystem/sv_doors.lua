@@ -51,6 +51,14 @@ function meta:keysOwn(ply)
 		doorData.owner = ply
 		DarkRP.updateDoorData(self, "owner")
 	end
+
+	if ply:GetTable().OwnedNumz == 0 then
+		timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
+	end
+
+	ply:GetTable().OwnedNumz = ply:GetTable().OwnedNumz + 1
+
+	ply:GetTable().Ownedz[self:EntIndex()] = self
 end
 
 function meta:keysUnOwn(ply)
@@ -67,6 +75,9 @@ function meta:keysUnOwn(ply)
 	else
 		self:removeKeysDoorOwner(ply)
 	end
+
+	ply:GetTable().Ownedz[self:EntIndex()] = nil
+	ply:GetTable().OwnedNumz = math.Clamp(ply:GetTable().OwnedNumz - 1, 0, math.huge)
 end
 
 function pmeta:keysUnOwnAll()
@@ -310,8 +321,6 @@ local function OwnDoor(ply)
 
 			trace.Entity:keysUnOwn(ply)
 			trace.Entity:setKeysTitle(nil)
-			ply:GetTable().Ownedz[trace.Entity:EntIndex()] = nil
-			ply:GetTable().OwnedNumz = math.abs(ply:GetTable().OwnedNumz - 1)
 			local GiveMoneyBack = math.floor((((trace.Entity:IsVehicle() and GAMEMODE.Config.vehiclecost) or GAMEMODE.Config.doorcost) * 0.666) + 0.5)
 			hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveMoneyBack)
 			ply:addMoney(GiveMoneyBack)
@@ -359,14 +368,6 @@ local function OwnDoor(ply)
 
 			trace.Entity:keysOwn(ply)
 			hook.Call("playerBought"..(bVehicle and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity, iCost);
-
-			if ply:GetTable().OwnedNumz == 0 then
-				timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
-			end
-
-			ply:GetTable().OwnedNumz = ply:GetTable().OwnedNumz + 1
-
-			ply:GetTable().Ownedz[trace.Entity:EntIndex()] = trace.Entity
 		end
 
 		return ""
