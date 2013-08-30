@@ -132,13 +132,6 @@ function PANEL:Init()
 	self.pnlRight:Dock(RIGHT)
 
 	self:fillData()
-
-	local job = RPExtraTeams[1]
-	for k, v in pairs(self.pnlLeft:GetItems()) do
-		job = v.DarkRPItem
-		if not v:GetDisabled() then break end
-	end
-	self.pnlRight:updateInfo(job)
 end
 
 function PANEL:PerformLayout()
@@ -147,6 +140,18 @@ function PANEL:PerformLayout()
 end
 
 PANEL.Paint = fn.Id
+
+-- If the following code is moved to Init, the gamemode will blow up.
+function PANEL:SetParent(parent)
+	self.BaseClass.SetParent(self, parent)
+	local job
+	for k, v in ipairs(self.pnlLeft:GetItems()) do
+		if v:GetDisabled() then continue end
+		job = v.DarkRPItem
+		break
+	end
+	self.pnlRight:updateInfo(job or {})
+end
 
 function PANEL:Refresh()
 	self.pnlLeft:Refresh()
