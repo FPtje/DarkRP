@@ -54,14 +54,14 @@ function ENT:onPlayerDisconnected(ply)
 end
 
 concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
-	if not args[1] then return end
+	if not args[1] or ply:EntIndex() == 0 then return end
 	local letter = ents.GetByIndex(tonumber(args[1]))
 
 	letter:SignLetter(ply)
 end)
 
 local function removeLetters(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands")then
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_removeletters"))
 		return
 	end
