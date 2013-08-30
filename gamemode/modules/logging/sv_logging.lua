@@ -20,7 +20,7 @@ function DarkRP.log(text, colour)
 	if colour then
 		AdminLog(text, colour)
 	end
-	if (not GAMEMODE.Config.logging or not text) and not force then return end
+	if not GAMEMODE.Config.logging or not text then return end
 	if not DarkRPFile then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("DarkRP_logs", "DATA") then
 			file.CreateDir("DarkRP_logs")

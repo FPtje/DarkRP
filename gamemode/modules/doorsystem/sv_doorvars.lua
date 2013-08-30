@@ -115,6 +115,7 @@ end
 Networking
 ---------------------------------------------------------------------------*/
 local function sendDoorData(ply)
+	if ply:EntIndex() == 0 then return end
 	if ply.doorDataSent and ply.doorDataSent > (CurTime() - 1) then return end -- prevent spammers
 
 	local res = {}

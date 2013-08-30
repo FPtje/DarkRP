@@ -22,6 +22,12 @@ FAdmin.StartHooks["Ragdoll"] = function()
 		return end
 
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Ragdoll Type:\n")
 		Title:SetFont("UiBold")

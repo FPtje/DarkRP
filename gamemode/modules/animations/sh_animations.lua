@@ -81,6 +81,7 @@ end)
 
 if SERVER then
 	local function CustomAnim(ply, cmd, args)
+		if ply:EntIndex() == 0 then return end
 		local Gesture = tonumber(args[1] or 0)
 		if not Anims[Gesture] then return end
 
@@ -148,7 +149,7 @@ usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
 
 local AnimFrame
 local function AnimationMenu()
-	if AnimFrame then return end
+	if AnimFrame or ply:EntIndex() == 0 then return end
 
 	local Panel = vgui.Create("Panel")
 	Panel:SetPos(0,0)

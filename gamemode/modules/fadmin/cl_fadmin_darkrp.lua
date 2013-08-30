@@ -1,13 +1,13 @@
 local function formatNumber(n)
 	if not n then return "" end
 	if n >= 1e14 then return tostring(n) end
-    n = tostring(n)
-    local sep = sep or ","
-    local dp = string.find(n, "%.") or #n+1
+	n = tostring(n)
+	local sep = sep or ","
+	local dp = string.find(n, "%.") or #n+1
 	for i=dp-4, 1, -3 do
 		n = n:sub(1, i) .. sep .. n:sub(i+1)
-    end
-    return n
+	end
+	return n
 end
 
 if not FAdmin or not FAdmin.StartHooks then return end
@@ -52,14 +52,20 @@ FAdmin.StartHooks["DarkRP"] = function()
 	--Teamban
 	local function teamban(ply, button)
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Jobs:\n")
 		Title:SetFont("UiBold")
 		Title:SizeToContents()
 		Title:SetTextColor(color_black)
-		local command = "rp_teamban"
-
 		menu:AddPanel(Title)
+
+		local command = "rp_teamban"
 		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
 			local submenu = menu:AddSubMenu(v.name)
 			submenu:AddOption("2 minutes", function() RunConsoleCommand(command, ply:UserID(), k, 120) end)
@@ -74,14 +80,20 @@ FAdmin.StartHooks["DarkRP"] = function()
 
 	local function teamunban(ply, button)
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Jobs:\n")
 		Title:SetFont("UiBold")
 		Title:SizeToContents()
 		Title:SetTextColor(color_black)
-		local command = "rp_teamunban"
-
 		menu:AddPanel(Title)
+
+		local command = "rp_teamunban"
 		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
 			menu:AddOption(v.name, function() RunConsoleCommand(command, ply:UserID(), k) end)
 		end

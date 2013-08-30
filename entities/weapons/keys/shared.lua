@@ -1,7 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_menu.lua")
-	util.AddNetworkString("Keys_ViewModelMaterial")
 end
 
 if CLIENT then
@@ -47,34 +46,26 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if CLIENT or not IsValid(self.Owner) then return end
-	self.Owner:DrawWorldModel(false)
-	net.Start("Keys_ViewModelMaterial")
-		net.WriteString("debug/hsv") -- Make view model invisible but keep the new hands.
-	net.Send(self.Owner)
-end
-
-function SWEP:Holster(wep)
 	if CLIENT or not IsValid(self.Owner) then return true end
-	net.Start("Keys_ViewModelMaterial")
-		net.WriteString("") -- Reset
-	net.Send(self.Owner)
+	self.Owner:DrawWorldModel(false)
 	return true
 end
 
-function SWEP:Remove()
-	if CLIENT or not IsValid(self.Owner) then return end
-	net.Start("Keys_ViewModelMaterial")
-		net.WriteString("") -- Reset
-	net.Send(self.Owner)
+function SWEP:PreDrawViewModel()
+	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
+	self.Owner:GetViewModel():SetMaterial("debug/hsv")
 end
 
-net.Receive("Keys_ViewModelMaterial", function()
-	if not IsValid(LocalPlayer()) then return end
-	local viewmodel = LocalPlayer():GetViewModel()
-	if not IsValid(viewmodel) then return end
-	viewmodel:SetMaterial(net.ReadString())
-end)
+function SWEP:Holster()
+	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return true end
+	self.Owner:GetViewModel():SetMaterial("")
+	return true
+end
+
+function SWEP:OnRemove()
+	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
+	self.Owner:GetViewModel():SetMaterial("")
+end
 
 function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()

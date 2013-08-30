@@ -53,7 +53,7 @@ function GM:PlayerNoClip(ply)
 end
 
 function GM:InitPostEntity()
-	hook.Call("teamChanged", GAMEMODE, 1, 1)
+	hook.Call("teamChanged", GAMEMODE, GAMEMODE.DefaultTeam, GAMEMODE.DefaultTeam)
 end
 
 function GM:teamChanged(before, after)

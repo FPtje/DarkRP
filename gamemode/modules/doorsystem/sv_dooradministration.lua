@@ -1,5 +1,6 @@
 local function ccDoorOwn(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
@@ -11,6 +12,7 @@ local function ccDoorOwn(ply, cmd, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+		ply:PrintMessage(2, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -23,6 +25,7 @@ concommand.Add("rp_own", ccDoorOwn)
 
 local function ccDoorUnOwn(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print("This command cannot be run from the server console.")
 		return
 	end
 
@@ -34,6 +37,7 @@ local function ccDoorUnOwn(ply, cmd, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+		ply:PrintMessage(2, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -45,27 +49,47 @@ concommand.Add("rp_unown", ccDoorUnOwn)
 
 local function unownAll(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
-	if not ply:hasDarkRPPrivilege("rp_commands") then
+	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_unown"))
+		return
+	end
+
+	if not args or not args[1] then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		end
 		return
 	end
 
 	target = DarkRP.findPlayer(args[1])
 
 	if not IsValid(target) then
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		end
 		return
 	end
 	target:keysUnOwnAll()
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
+
+	if ply:EntIndex() == 0 then
+		DarkRP.log("Console force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
+	else
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
+	end
 end
 concommand.Add("rp_unownall", unownAll)
 
 local function ccAddOwner(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
@@ -74,9 +98,15 @@ local function ccAddOwner(ply, cmd, args)
 		return
 	end
 
+	if not args or not args[1] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		return
+	end
+
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+		ply:PrintMessage(2, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -92,15 +122,16 @@ local function ccAddOwner(ply, cmd, args)
 		else
 			trace.Entity:keysOwn(target)
 		end
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 	else
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 end
 concommand.Add("rp_addowner", ccAddOwner)
 
 local function ccRemoveOwner(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
@@ -109,9 +140,15 @@ local function ccRemoveOwner(ply, cmd, args)
 		return
 	end
 
+	if not args or not args[1] then
+		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		return
+	end
+
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+		ply:PrintMessage(2, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -125,15 +162,16 @@ local function ccRemoveOwner(ply, cmd, args)
 		if trace.Entity:isKeysOwnedBy(target) then
 			trace.Entity:removeKeysDoorOwner(target)
 		end
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 	else
-		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args)))
+		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 end
 concommand.Add("rp_removeowner", ccRemoveOwner)
 
 local function ccLock(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
@@ -145,6 +183,7 @@ local function ccLock(ply, cmd, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+		ply:PrintMessage(2, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -158,6 +197,7 @@ concommand.Add("rp_lock", ccLock)
 
 local function ccUnLock(ply, cmd, args)
 	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
@@ -169,6 +209,7 @@ local function ccUnLock(ply, cmd, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+		ply:PrintMessage(2, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return
 	end
 

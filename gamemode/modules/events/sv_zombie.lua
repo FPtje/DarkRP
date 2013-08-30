@@ -93,7 +93,7 @@ local function ToggleZombie(ply)
 	if ply:hasDarkRPPrivilege("rp_commands") then
 		if not ply:getDarkRPVar("zombieToggle") then
 			DarkRP.retrieveZombies(function()
-				ply:SetSelfDarkRPVar("zombieToggle", true)
+				ply:setSelfDarkRPVar("zombieToggle", true)
 				LoadTable(ply)
 				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 			end)

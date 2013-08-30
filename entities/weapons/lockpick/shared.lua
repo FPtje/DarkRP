@@ -1,5 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
+	util.AddNetworkString("lockpick_time")
 end
 
 if CLIENT then
@@ -50,10 +51,12 @@ function SWEP:Initialize()
 end
 
 if CLIENT then
-	usermessage.Hook("lockpick_time", function(um)
-		local wep = um:ReadEntity()
-		local time = um:ReadLong()
+	net.Receive("lockpick_time", function()
+		local wep = net.ReadEntity()
+		local time = net.ReadUInt(5)
 
+		wep.IsLockPicking = true
+		wep.StartPick = CurTime()
 		wep.LockPickTime = time
 		wep.EndPick = CurTime() + time
 	end)
@@ -86,17 +89,16 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	self.IsLockPicking = true
-	self.StartPick = CurTime()
 	if SERVER then
+		self.IsLockPicking = true
+		self.StartPick = CurTime()
 		self.LockPickTime = math.Rand(10, 30)
-		umsg.Start("lockpick_time", self.Owner)
-			umsg.Entity(self)
-			umsg.Long(self.LockPickTime)
-		umsg.End()
+		net.Start("lockpick_time")
+			net.WriteEntity(self)
+			net.WriteUInt(self.LockPickTime, 5) -- 2^5 = 32 max
+		net.Send(self.Owner)
+		self.EndPick = CurTime() + self.LockPickTime
 	end
-
-	self.EndPick = CurTime() + self.LockPickTime
 
 	self:SetWeaponHoldType("pistol")
 
@@ -150,7 +152,7 @@ function SWEP:Fail()
 end
 
 function SWEP:Think()
-	if self.IsLockPicking then
+	if self.IsLockPicking and self.EndPick then
 		local trace = self.Owner:GetEyeTrace()
 		if not IsValid(trace.Entity) then
 			self:Fail()
@@ -165,20 +167,21 @@ function SWEP:Think()
 end
 
 function SWEP:DrawHUD()
-	if self.IsLockPicking then
+	if self.IsLockPicking and self.EndPick then
 		self.Dots = self.Dots or ""
 		local w = ScrW()
 		local h = ScrH()
-		local x,y,width,height = w/2-w/10, h/ 2, w/5, h/15
+		local x,y,width,height = w/2-w/10, h/2-60, w/5, h/15
 		draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
 		local time = self.EndPick - self.StartPick
 		local curtime = CurTime() - self.StartPick
-		local status = curtime/time
-		local BarWidth = status * (width - 16) + 8
-		draw.RoundedBox(8, x+8, y+8, BarWidth, height - 16, Color(255-(status*255), 0+(status*255), 0, 255))
+		local status = math.Clamp(curtime/time, 0, 1)
+		local BarWidth = status * (width - 16)
+		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
+		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
 
-		draw.SimpleText(DarkRP.getPhrase("picking_lock")..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
+		draw.SimpleText(DarkRP.getPhrase("picking_lock")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 	end
 end
 

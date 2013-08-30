@@ -2,6 +2,8 @@ local Vote = {}
 local Votes = {}
 
 local function ccDoVote(ply, cmd, args)
+	if ply:EntIndex() == 0 then return end
+	
 	local vote = Votes[tonumber(args[1] or 0)]
 
 	if not vote then return end
@@ -120,7 +122,7 @@ end
 function DarkRP.destroyLastVote()
 	local lastVote = Votes[#Votes]
 
-	if not lastVote then return end
+	if not lastVote then return false end
 
 	timer.Destroy(lastVote.id .. "DarkRPVote")
 	umsg.Start("KillVoteVGUI", lastVote:getFilter())
@@ -130,6 +132,8 @@ function DarkRP.destroyLastVote()
 	lastVote:fail()
 
 	Votes[lastVote.id] = nil
+
+	return true
 end
 
 local function CancelVote(ply, cmd, args)
@@ -138,13 +142,19 @@ local function CancelVote(ply, cmd, args)
 		return
 	end
 
-	DarkRP.destroyLastVote()
-	if ply:EntIndex() == 0 then
-		nick = "Console"
-	else
-		nick = ply:Nick()
-	end
+	local result = DarkRP.destroyLastVote()
 
-	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", nick))
+	if result then
+		DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", ply:EntIndex() ~= 0 and ply:Nick() or "Console"))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("x_cancelled_vote", "Console"))
+		end
+	else
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("cant_cancel_vote"))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("cant_cancel_vote"))
+		end
+	end
 end
 concommand.Add("rp_cancelvote", CancelVote)

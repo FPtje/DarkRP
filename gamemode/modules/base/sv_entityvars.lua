@@ -51,6 +51,7 @@ end
 Send the DarkRPVars to a client
 ---------------------------------------------------------------------------*/
 local function SendDarkRPVars(ply)
+	if ply:EntIndex() == 0 then return end
 	if ply.DarkRPVarsSent and ply.DarkRPVarsSent > (CurTime() - 1) then return end -- prevent spammers
 	ply.DarkRPVarsSent = CurTime()
 
@@ -73,21 +74,21 @@ concommand.Add("_sendDarkRPvars", SendDarkRPVars)
 Admin DarkRPVar commands
 ---------------------------------------------------------------------------*/
 local function setRPName(ply, cmd, args)
-	if not args[2] then ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "")) return end
+	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
+		else
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
+		end
+		return
+	end
+
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setname"))
 		return
 	end
 
 	local target = DarkRP.findPlayer(args[1])
-
-	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2]))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), args[2]))
-		end
-	end
 
 	if target then
 		local oldname = target:Nick()

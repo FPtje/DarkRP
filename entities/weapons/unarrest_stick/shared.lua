@@ -1,6 +1,5 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
-	util.AddNetworkString("UnarrestBatonColour")
 end
 
 if CLIENT then
@@ -49,47 +48,44 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if CLIENT or not IsValid(self:GetOwner()) then return end
-	self:SetColor(Color(0,255,0,255))
-	self:SetMaterial("models/shiny")
-	net.Start("UnarrestBatonColour")
-		net.WriteUInt(0,8)
-		net.WriteUInt(255,8)
-		net.WriteUInt(0,8)
-		net.WriteString("models/shiny")
-	net.Send(self:GetOwner())
+	if SERVER then
+		self:SetColor(Color(0,255,0,255))
+		self:SetMaterial("models/shiny")
+		local vm = self.Owner:GetViewModel()
+		if not IsValid(vm) then return end
+		vm:ResetSequence(vm:LookupSequence("idle01"))
+	end
 	return true
 end
 
+function SWEP:PreDrawViewModel()
+	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
+	self.Owner:GetViewModel():SetColor(Color(0,255,0,255))
+	self.Owner:GetViewModel():SetMaterial("models/shiny")
+end
+
 function SWEP:Holster()
-	if CLIENT or not IsValid(self:GetOwner()) then return end
-	net.Start("UnarrestBatonColour")
-		net.WriteUInt(255,8)
-		net.WriteUInt(255,8)
-		net.WriteUInt(255,8)
-		net.WriteString("")
-	net.Send(self:GetOwner())
+	if SERVER then
+		self:SetColor(Color(255,255,255,255))
+		self:SetMaterial("")
+		timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
+	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
+		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
+		self.Owner:GetViewModel():SetMaterial("")
+	end
 	return true
 end
 
 function SWEP:OnRemove()
-	if SERVER and IsValid(self:GetOwner()) then
-		net.Start("UnarrestBatonColour")
-			net.WriteUInt(255,8)
-			net.WriteUInt(255,8)
-			net.WriteUInt(255,8)
-			net.WriteString("")
-		net.Send(self:GetOwner())
+	if SERVER then
+		self:SetColor(Color(255,255,255,255))
+		self:SetMaterial("")
+		timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
+	elseif CLIENT and IsValid(self.Owner) and IsValid(self.Owner:GetViewModel()) then
+		self.Owner:GetViewModel():SetColor(Color(255,255,255,255))
+		self.Owner:GetViewModel():SetMaterial("")
 	end
 end
-
-net.Receive("UnarrestBatonColour", function()
-	local viewmodel = LocalPlayer():GetViewModel()
-	if not IsValid(viewmodel) then return end
-	local r,g,b,a = net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), 255
-	viewmodel:SetColor(Color(r,g,b,a))
-	viewmodel:SetMaterial(net.ReadString())
-end)
 
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
@@ -97,13 +93,36 @@ function SWEP:PrimaryAttack()
 	self:NewSetWeaponHoldType("melee")
 	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
 
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
-	self.Weapon:EmitSound(self.Sound)
-	self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-
-	self.NextStrike = CurTime() + .4
+	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later
 
 	if CLIENT then return end
+
+	timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
+	local vm = self.Owner:GetViewModel()
+	if IsValid(vm) then
+		vm:ResetSequence(vm:LookupSequence("idle01"))
+		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(self.Owner) or not IsValid(self.Owner:GetActiveWeapon()) or self.Owner:GetActiveWeapon() ~= self then return end
+			self.Owner:SetAnimation(PLAYER_ATTACK1)
+
+			if IsValid(self.Weapon) then
+				self.Weapon:EmitSound(self.Sound)
+			end
+
+			local vm = self.Owner:GetViewModel()
+			if not IsValid(vm) then return end
+			vm:ResetSequence(vm:LookupSequence("attackch"))
+			vm:SetPlaybackRate(1 + 1/3)
+			local duration = vm:SequenceDuration() / vm:GetPlaybackRate()
+			timer.Create(self:GetClass() .. "_idle" .. self:EntIndex(), duration, 1, function()
+				if not IsValid(self) or not IsValid(self.Owner) then return end
+				local vm = self.Owner:GetViewModel()
+				if not IsValid(vm) then return end
+				vm:ResetSequence(vm:LookupSequence("idle01"))
+			end)
+			self.NextStrike = CurTime() + duration
+		end)
+	end
 
 	local ent = self.Owner:getEyeSightHitEntity()
 	if not ent then return end

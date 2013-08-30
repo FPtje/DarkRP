@@ -22,24 +22,118 @@ end
 -- Job commands --
 -----------------------------------------------------------
 local function declareTeamCommands(CTeam)
+	local k = 0
+	for num,v in pairs(RPExtraTeams) do
+		if v.command == CTeam.command then
+			k = num
+		end
+	end
+
 	if CTeam.vote or CTeam.RequiresVote then
 		DarkRP.declareChatCommand{
 			command = "vote"..CTeam.command,
 			description = "Vote to become " .. CTeam.name .. ".",
-			delay = 1.5
+			delay = 1.5,
+			condition = fn.FAnd
+			{
+				fn.If(
+					fn.Curry(isfunction, 2)(CTeam.RequiresVote),
+					fn.Curry(fn.Flip(fn.FOr{fn.Curry(fn.Const, 2)(CTeam.RequiresVote), fn.Curry(fn.Const, 2)(-1)}()), 2)(k),
+					fn.Curry(fn.Const, 2)(true)
+				)(),
+				fn.If(
+					fn.Curry(isnumber, 2)(CTeam.NeedToChangeFrom),
+					fn.Compose{fn.Curry(fn.Eq, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+					fn.If(
+						fn.Curry(istable, 2)(CTeam.NeedToChangeFrom),
+						fn.Compose{fn.Curry(table.HasValue, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+						fn.Curry(fn.Const, 2)(true)
+					)()
+				)(),
+				fn.If(
+					fn.Curry(isfunction, 2)(CTeam.customCheck),
+					CTeam.customCheck,
+					fn.Curry(fn.Const, 2)(true)
+				)(),
+				fn.Compose{fn.Curry(fn.Neq, 2)(k), plyMeta.Team},
+				fn.FOr {
+					fn.Curry(fn.Lte, 3)(CTeam.admin)(0),
+					fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(1), plyMeta.IsAdmin},
+					fn.FAnd{fn.Curry(fn.Gte, 3)(CTeam.admin)(2), plyMeta.IsSuperAdmin}
+				}
+			}
 		}
 
 		DarkRP.declareChatCommand{
 			command = CTeam.command,
 			description = "Become " .. CTeam.name .. " and skip the vote.",
 			delay = 1.5,
-			condition = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_"..CTeam.command)
+			condition = fn.FAnd {
+				fn.FOr {
+					fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_"..CTeam.command),
+					fn.FAnd {
+						fn.FOr {
+							fn.Curry(fn.Lte, 3)(CTeam.admin)(0),
+							fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(1), plyMeta.IsAdmin},
+							fn.FAnd{fn.Curry(fn.Gte, 3)(CTeam.admin)(2), plyMeta.IsSuperAdmin}
+						},
+						fn.If(
+							fn.Curry(isfunction, 2)(CTeam.RequiresVote),
+							fn.Curry(fn.Flip(fn.FOr{fn.Curry(fn.Const, 2)(CTeam.RequiresVote), fn.Curry(fn.Const, 2)(-1)}()), 2)(k),
+							fn.FOr {
+								fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(0), plyMeta.IsAdmin},
+								fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(1), plyMeta.IsSuperAdmin}
+							}
+						)()
+					}
+				},
+				fn.Compose{fn.Not, plyMeta.isArrested},
+				fn.If(
+					fn.Curry(isnumber, 2)(CTeam.NeedToChangeFrom),
+					fn.Compose{fn.Curry(fn.Eq, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+					fn.If(
+						fn.Curry(istable, 2)(CTeam.NeedToChangeFrom),
+						fn.Compose{fn.Curry(table.HasValue, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+						fn.Curry(fn.Const, 2)(true)
+					)()
+				)(),
+				fn.If(
+					fn.Curry(isfunction, 2)(CTeam.customCheck),
+					CTeam.customCheck,
+					fn.Curry(fn.Const, 2)(true)
+				)(),
+				fn.Compose{fn.Curry(fn.Neq, 2)(k), plyMeta.Team}
+			}
 		}
 	else
 		DarkRP.declareChatCommand{
 			command = CTeam.command,
-			description = "Vote to become " .. CTeam.name .. ".",
-			delay = 1.5
+			description = "Become " .. CTeam.name .. ".",
+			delay = 1.5,
+			condition = fn.FAnd
+			{
+				fn.Compose{fn.Not, plyMeta.isArrested},
+				fn.If(
+					fn.Curry(isnumber, 2)(CTeam.NeedToChangeFrom),
+					fn.Compose{fn.Curry(fn.Eq, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+					fn.If(
+						fn.Curry(istable, 2)(CTeam.NeedToChangeFrom),
+						fn.Compose{fn.Curry(table.HasValue, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+						fn.Curry(fn.Const, 2)(true)
+					)()
+				)(),
+				fn.If(
+					fn.Curry(isfunction, 2)(CTeam.customCheck),
+					CTeam.customCheck,
+					fn.Curry(fn.Const, 2)(true)
+				)(),
+				fn.Compose{fn.Curry(fn.Neq, 2)(k), plyMeta.Team},
+				fn.FOr {
+					fn.Curry(fn.Lte, 3)(CTeam.admin)(0),
+					fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(1), plyMeta.IsAdmin},
+					fn.FAnd{fn.Curry(fn.Gte, 3)(CTeam.admin)(2), plyMeta.IsSuperAdmin}
+				}
+			}
 		}
 	end
 end
@@ -61,6 +155,15 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1,4, DarkRP.getPhrase("job_doesnt_require_vote_currently"))
 				return ""
 			end
+
+			if CTeam.admin == 1 and not ply:IsAdmin() then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/".."vote"..CTeam.command))
+				return ""
+			elseif CTeam.admin > 1 and not ply:IsSuperAdmin() then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_sadmin", "/".."vote"..CTeam.command))
+				return ""
+			end
+
 			if type(CTeam.NeedToChangeFrom) == "number" and ply:Team() ~= CTeam.NeedToChangeFrom then
 				DarkRP.notify(ply, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
 				return ""
@@ -75,17 +178,8 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1, 4, CTeam.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), ""))
 				return ""
 			end
-			if #player.GetAll() == 1 then
-				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
-				ply:changeTeam(k)
-				return ""
-			end
 			if not ply:changeAllowed(k) then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, DarkRP.getPhrase("banned_or_demoted")))
-				return ""
-			end
-			if CurTime() - ply:GetTable().LastVoteCop < 80 then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), CTeam.command))
 				return ""
 			end
 			if ply:Team() == k then
@@ -94,7 +188,20 @@ local function addTeamCommands(CTeam, max)
 			end
 			local max = CTeam.max
 			if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(k) >= max) or (max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > max)) then
-				DarkRP.notify(ply, 1, 4,  DarkRP.getPhrase("team_limit_reached", CTeam.name))
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("team_limit_reached", CTeam.name))
+				return ""
+			end
+			if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
+				return ""
+			end
+			if #player.GetAll() == 1 then
+				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
+				ply:changeTeam(k)
+				return ""
+			end
+			if CurTime() - ply:GetTable().LastVoteCop < 80 then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
 				return ""
 			end
 			DarkRP.createVote(DarkRP.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
@@ -159,14 +266,14 @@ local function addTeamCommands(CTeam, max)
 			return
 		end
 
-		if CTeam.admin > 1 and not ply:IsSuperAdmin() then
+		if CTeam.admin > 1 and not ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
 			ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
 			return
 		end
 
 		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-				ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
+				ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
 				return
 			elseif CTeam.admin > 1 and ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
 				ply:PrintMessage(2, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
@@ -174,11 +281,20 @@ local function addTeamCommands(CTeam, max)
 			end
 		end
 
-		if not args[1] then return end
+		if not args or not args[1] then
+			if ply:EntIndex() == 0 then
+				print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+			else
+				ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+			end
+			return
+		end
+
 		local target = DarkRP.findPlayer(args[1])
 
 		if (target) then
 			target:changeTeam(k, true)
+			local nick
 			if (ply:EntIndex() ~= 0) then
 				nick = ply:Nick()
 			else
@@ -191,7 +307,6 @@ local function addTeamCommands(CTeam, max)
 			else
 				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 			end
-			return
 		end
 	end)
 end
@@ -200,7 +315,22 @@ local function addEntityCommands(tblEnt)
 	DarkRP.declareChatCommand{
 		command = tblEnt.cmd,
 		description = "Purchase a " .. tblEnt.name,
-		delay = 5
+		delay = 5,
+		condition = fn.FAnd
+		{
+			fn.Compose{fn.Not, plyMeta.isArrested},
+			fn.If(
+				fn.Curry(istable, 2)(tblEnt.allowed),
+				fn.Compose{fn.Curry(table.HasValue, 2)(tblEnt.allowed), plyMeta.Team},
+				fn.Curry(fn.Const, 2)(true)
+			)(),
+			fn.If(
+				fn.Curry(isfunction, 2)(tblEnt.customCheck),
+				tblEnt.customCheck,
+				fn.Curry(fn.Const, 2)(true)
+			)(),
+			fn.Curry(fn.Flip(plyMeta.canAfford), 2)(tblEnt.price)
+		}
 	}
 	if CLIENT then return end
 

@@ -26,6 +26,8 @@ end
 
 local function ToggleChatIndicator( ply )
 
+	if ply:EntIndex() == 0 then return end
+
 	if not IsValid( ply.ChatIndicator ) then
 
 		ply.ChatIndicator = ents.Create("chatindicator")

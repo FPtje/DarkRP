@@ -118,10 +118,9 @@ function SWEP:SecondaryAttack()
 		return
 	end
 
-	self.IsWeaponChecking = true
-	self.StartCheck = CurTime()
-
 	if SERVER then
+		self.IsWeaponChecking = true
+		self.StartCheck = CurTime()
 		self.WeaponCheckTime = math.Rand(5, 10)
 		umsg.Start("weaponcheck_time", self.Owner)
 			umsg.Entity(self)
@@ -240,7 +239,7 @@ function SWEP:Fail()
 end
 
 function SWEP:Think()
-	if self.IsWeaponChecking then
+	if self.IsWeaponChecking and self.EndCheck then
 		local trace = self.Owner:GetEyeTrace()
 		if not IsValid(trace.Entity) then
 			self:Fail()
@@ -255,19 +254,20 @@ function SWEP:Think()
 end
 
 function SWEP:DrawHUD()
-	if self.IsWeaponChecking then
+	if self.IsWeaponChecking and self.EndCheck then
 		self.Dots = self.Dots or ""
 		local w = ScrW()
 		local h = ScrH()
-		local x,y,width,height = w/2-w/10, h/ 2, w/5, h/15
+		local x,y,width,height = w/2-w/10, h/2, w/5, h/15
 		draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
 		local time = self.EndCheck - self.StartCheck
 		local curtime = CurTime() - self.StartCheck
-		local status = curtime/time
-		local BarWidth = status * (width - 16) + 8
-		draw.RoundedBox(8, x+8, y+8, BarWidth, height - 16, Color(0, 0+(status*255), 255-(status*255), 255))
+		local status = math.Clamp(curtime/time, 0, 1)
+		local BarWidth = status * (width - 16)
+		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
+		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(0, 0+(status*255), 255-(status*255), 255))
 
-		draw.SimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, h/2 + height/2, Color(255,255,255,255), 1, 1)
+		draw.SimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 	end
 end
