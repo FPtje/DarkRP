@@ -122,10 +122,10 @@ local function ccAddOwner(ply, cmd, args)
 		else
 			trace.Entity:keysOwn(target)
 		end
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 	else
 		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-added a door owner with rp_addowner", Color(30, 30, 30))
 end
 concommand.Add("rp_addowner", ccAddOwner)
 
@@ -162,10 +162,10 @@ local function ccRemoveOwner(ply, cmd, args)
 		if trace.Entity:isKeysOwnedBy(target) then
 			trace.Entity:removeKeysDoorOwner(target)
 		end
+		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 	else
 		ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed a door owner with rp_removeowner", Color(30, 30, 30))
 end
 concommand.Add("rp_removeowner", ccRemoveOwner)
 
