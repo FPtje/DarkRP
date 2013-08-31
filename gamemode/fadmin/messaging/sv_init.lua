@@ -58,5 +58,8 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
 
 	local action = plyNick.." (".. plySteamID .. ") ".. string.format(LogMSG, Targets:gsub("yourself", "themselves"))
 	FAdmin.Log("FAdmin Action: " .. action)
-	FAdmin.Messages.ConsoleNotify(player.GetAll(), action)
+
+	local haspriv = fn.Partial(fn.Flip(FAdmin.Access.PlayerHasPrivilege), "SeeAdmins")
+	local plys = fn.Filter(haspriv, player.GetAll())
+	FAdmin.Messages.ConsoleNotify(plys, action)
 end
