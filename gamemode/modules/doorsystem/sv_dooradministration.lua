@@ -25,7 +25,7 @@ concommand.Add("rp_own", ccDoorOwn)
 
 local function ccDoorUnOwn(ply, cmd, args)
 	if ply:EntIndex() == 0 then
-		print("This command cannot be run from the server console.")
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
 		return
 	end
 
