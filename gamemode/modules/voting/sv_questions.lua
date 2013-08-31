@@ -5,7 +5,7 @@ local function ccDoQuestion(ply, cmd, args)
 	if not Questions[args[1]] then return end
 	if not tonumber(args[2]) then return end
 
-	Questions[args[1]]:HandleNewQuestion(ply, tonumber(args[2]))
+	Questions[args[1]]:handleNewQuestion(tonumber(args[2]))
 end
 concommand.Add("ans", ccDoQuestion)
 
@@ -16,7 +16,7 @@ local function handleQuestionEnd(id)
 	Questions[id] = nil
 end
 
-function Question:HandleNewQuestion(ply, response)
+function Question:handleNewQuestion(response)
 	if response == 1 or response == 0 then
 		self.yn = tobool(response)
 	end

@@ -9,8 +9,8 @@ FAdmin.StartHooks["Voicemute"] = function()
 	FAdmin.Commands.AddCommand("UnVoicemute", nil, "<Player>")
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
-			if ply:FAdmin_GetGlobal("FAdmin_voicemuted") then return "Unmute globally" end
-			return "Mute globally"
+			if ply:FAdmin_GetGlobal("FAdmin_voicemuted") then return "Unmute voice globally" end
+			return "Mute voice globally"
 		end,
 
 	function(ply)
@@ -25,7 +25,7 @@ FAdmin.StartHooks["Voicemute"] = function()
 			FAdmin.PlayerActions.addTimeMenu(function(secs)
 				RunConsoleCommand("_FAdmin", "Voicemute", ply:UserID(), secs)
 				button:SetImage2("null")
-				button:SetText("Unmute voice")
+				button:SetText("Unmute voice globally")
 				button:GetParent():InvalidateLayout()
 			end)
 		else
@@ -33,12 +33,12 @@ FAdmin.StartHooks["Voicemute"] = function()
 		end
 
 		button:SetImage2("FAdmin/icons/disable")
-		button:SetText("Mute voice")
+		button:SetText("Mute voice globally")
 		button:GetParent():InvalidateLayout()
 	end)
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
-		return ply.FAdminMuted and "Unmute" or "Mute"
+		return ply.FAdminMuted and "Unmute voice" or "Mute voice"
 	end,
 	function(ply)
 		if ply.FAdminMuted then return "FAdmin/icons/voicemute" end
@@ -52,10 +52,10 @@ FAdmin.StartHooks["Voicemute"] = function()
 		ply:SetMuted(not ply.FAdminMuted)
 		ply.FAdminMuted = not ply.FAdminMuted
 
-		if ply.FAdminMuted then button:SetImage2("null") button:SetText("Unmute") button:GetParent():InvalidateLayout() return end
+		if ply.FAdminMuted then button:SetImage2("null") button:SetText("Unmute voice") button:GetParent():InvalidateLayout() return end
 
 		button:SetImage2("FAdmin/icons/disable")
-		button:SetText("Mute")
+		button:SetText("Mute voice")
 		button:GetParent():InvalidateLayout()
 	end)
 

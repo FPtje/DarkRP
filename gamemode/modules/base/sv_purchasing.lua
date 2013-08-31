@@ -221,7 +221,7 @@ local function BuyVehicle(ply, args)
 	if not ply:canAfford(found.price) then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "vehicle")) return "" end
 
 	local Vehicle = DarkRP.getAvailableVehicles()[found.name]
-	if not Vehicle then GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "")) return "" end
+	if not Vehicle then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "")) return "" end
 
 	ply:addMoney(-found.price)
 	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, found.price))

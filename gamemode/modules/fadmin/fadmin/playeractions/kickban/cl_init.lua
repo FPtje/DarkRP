@@ -5,10 +5,7 @@ local KickText = ""
 usermessage.Hook("FAdmin_kick_start", function()
 	hook.Add("HUDPaint", "FAdmin_kick", function()
 		draw.RoundedBox(0,0,0, ScrW(), ScrH(), Color(0,0,0,255))
-		draw.DrawText([[You are getting kicked
-		Reason: ]]..KickText..[[
-
-		Leaving voluntarily is also an option.]], "HUDNumber5", ScrW()/2, ScrH()/2, Color(255,0,0,255), TEXT_ALIGN_CENTER)
+		draw.DrawText("You are getting kicked\nReason: "..KickText.."\nLeaving voluntarily is also an option.", "HUDNumber5", ScrW()/2, ScrH()/2, Color(255,0,0,255), TEXT_ALIGN_CENTER)
 	end)
 end)
 
@@ -27,10 +24,7 @@ local BanTimeText = "permanent"
 usermessage.Hook("FAdmin_ban_start", function()
 	hook.Add("HUDPaint", "FAdmin_ban", function()
 		draw.RoundedBox(0,0,0, ScrW(), ScrH(), Color(0,0,0,255))
-		draw.DrawText([[You are getting banned
-		Reason: ]]..BanText.."\nTime: ".." "..BanTimeText..[[
-
-		Leaving voluntarily or rejoining will not prevent banning.]], "HUDNumber5", ScrW()/2, ScrH()/2, Color(0,0,255,255), TEXT_ALIGN_CENTER)
+		draw.DrawText("You are getting banned\nReason: "..BanText.."\nTime: ".." "..BanTimeText.."\nLeaving voluntarily or rejoining will not prevent banning.", "HUDNumber5", ScrW()/2, ScrH()/2, Color(0,0,255,255), TEXT_ALIGN_CENTER)
 	end)
 end)
 
@@ -66,15 +60,17 @@ local function showBanWindow(SteamID, NICK, time, reason)
 	Window:SetBackgroundBlur( true )
 	Window:SetDrawOnTop( true )
 
-	local InnerPanel = vgui.Create("DPanel", Window )
+	local InnerPanel = vgui.Create("DPanel", Window)
+	InnerPanel:SetPaintBackground(false)
 
-	local Text = vgui.Create("DLabel", InnerPanel )
+	local Text = vgui.Create("DLabel", InnerPanel)
 		Text:SetText("Ban " .. NICK .. "")
 		Text:SizeToContents()
 		Text:SetContentAlignment( 5 )
 
 
 	local TimePanel = vgui.Create("DPanel", Window)
+	TimePanel:SetPaintBackground(false)
 
 	local TextEntry = vgui.Create("DTextEntry", TimePanel)
 		function TextEntry:OnTextChanged()
@@ -138,10 +134,11 @@ local function showBanWindow(SteamID, NICK, time, reason)
 	function Weeks:OnValueChanged(val) if val == W then return end W = val update() end
 	function Years:OnValueChanged(val) if val == Y then return end Y = val update() end
 
-	local ButtonPanel = vgui.Create("DPanel", Window )
-	ButtonPanel:SetTall( 25 )
+	local ButtonPanel = vgui.Create("DPanel", Window)
+	ButtonPanel:SetTall(25)
+	ButtonPanel:SetPaintBackground(false)
 
-	local Button = vgui.Create("DButton", ButtonPanel )
+	local Button = vgui.Create("DButton", ButtonPanel)
 		Button:SetText("OK")
 		Button:SizeToContents()
 		Button:SetTall( 20 )
@@ -223,9 +220,10 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		Window:SetBackgroundBlur( true )
 		Window:SetDrawOnTop( true )
 
-		local InnerPanel = vgui.Create("DPanel", Window )
+		local InnerPanel = vgui.Create("DPanel", Window)
+		InnerPanel:SetPaintBackground(false)
 
-		local Text = vgui.Create("DLabel", InnerPanel )
+		local Text = vgui.Create("DLabel", InnerPanel)
 			Text:SetText( NICK.. " knows he is getting kicked\nTake all your time entering the reason, he can't do anything anymore")
 			Text:SizeToContents()
 			Text:SetContentAlignment( 5 )
@@ -244,10 +242,11 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 
 
 
-		local ButtonPanel = vgui.Create("DPanel", Window )
-		ButtonPanel:SetTall( 30 )
+		local ButtonPanel = vgui.Create("DPanel", Window)
+		ButtonPanel:SetTall(30)
+		ButtonPanel:SetPaintBackground(false)
 
-		local Button = vgui.Create("DButton", ButtonPanel )
+		local Button = vgui.Create("DButton", ButtonPanel)
 			Button:SetText("OK")
 			Button:SizeToContents()
 			Button:SetTall( 20 )

@@ -60,6 +60,7 @@ Desc: called when the weapon is deployed
 ---------------------------------------------------------------------------*/
 function SWEP:Deploy()
 	self.Ready = false
+	return true
 end
 
 function SWEP:Holster()
@@ -181,6 +182,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
+	if not IsFirstTimePredicted() then return end
 	self.LastIron = CurTime()
 	self.Ready = not self.Ready
 	self.Ironsights = not self.Ironsights
@@ -202,6 +204,7 @@ end
 
 function SWEP:GetViewModelPosition(pos, ang)
 	local Mul = 1
+
 	if self.LastIron > CurTime() - 0.25 then
 		Mul = math.Clamp((CurTime() - self.LastIron) / 0.25, 0, 1)
 	end

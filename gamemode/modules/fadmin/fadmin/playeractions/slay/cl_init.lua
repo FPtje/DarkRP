@@ -10,12 +10,17 @@ FAdmin.StartHooks["Slay"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Slay", ply) end,
 	function(ply)
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Kill Type:\n")
 		Title:SetFont("UiBold")
 		Title:SizeToContents()
 		Title:SetTextColor(color_black)
-
 		menu:AddPanel(Title)
 
 		for k,v in pairs(FAdmin.PlayerActions.SlayTypes) do

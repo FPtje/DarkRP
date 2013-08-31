@@ -11,10 +11,14 @@ function PANEL:Init()
 end
 
 function PANEL:setJob(job, closeFunc)
-	if job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
+	if not job.team then 
+		self:SetVisible(false)
+	elseif job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
+		self:SetVisible(true)
 		self:SetText(DarkRP.getPhrase("create_vote_for_job"))
 		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "darkrp", "vote" .. job.command)}
 	else
+		self:SetVisible(true)
 		self:SetText(DarkRP.getPhrase("become_job"))
 		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "darkrp", job.command)}
 	end
@@ -216,6 +220,7 @@ PANEL = {}
 
 function PANEL:Init()
 	self.BaseClass.Init(self)
+
 	self:SetPadding(10)
 	self:DockPadding(5, 5, 5, 5)
 
@@ -250,6 +255,8 @@ function PANEL:Init()
 
 	self.pnlChooseMdl = vgui.Create("F4MenuChooseJobModel", self)
 	self.pnlChooseMdl:Dock(BOTTOM)
+
+	self.job = {}
 end
 
 local black = Color(0, 0, 0, 170)
@@ -262,14 +269,22 @@ local getWepName = fn.FOr{fn.FAnd{weapons.Get, fn.Compose{fn.Curry(fn.GetValue, 
 local getWeaponNames = fn.Curry(fn.Map, 2)(getWepName)
 local weaponString = fn.Compose{fn.Curry(fn.Flip(table.concat), 2)("\n"), fn.Curry(fn.Seq, 2)(table.sort), getWeaponNames, table.Copy}
 function PANEL:updateInfo(job)
-	self.lblTitle:SetText(job.name)
+	self.job = job
+
+	self.lblTitle:SetText(job.name or (job.team and "" or "No jobs available"))
 	self.lblTitle:SizeToContents()
 
-	self.lblDescription:SetText(job.description)
+	self.lblDescription:SetText(job.description or "")
 	self.lblDescription:SizeToContents()
 
-	local weps = weaponString(job.weapons)
-	weps = weps ~= "" and weps or DarkRP.getPhrase("no_extra_weapons")
+	local weps
+	if not job.weapons then
+		self.lblWeapons:SetText("")
+		weps = ""
+	else
+		weps = weaponString(job.weapons)
+		weps = weps ~= "" and weps or DarkRP.getPhrase("no_extra_weapons")
+	end
 
 	self.lblSweps:SetText(weps)
 
@@ -301,13 +316,6 @@ function PANEL:Init()
 	self.pnlRight:Dock(RIGHT)
 
 	self:fillData()
-
-	local job = RPExtraTeams[1]
-	for k, v in pairs(self.pnlLeft:GetItems()) do
-		job = v.DarkRPItem
-		if not v:GetDisabled() then break end
-	end
-	self.pnlRight:updateInfo(job)
 end
 
 function PANEL:PerformLayout()
@@ -318,8 +326,31 @@ end
 
 PANEL.Paint = fn.Id
 
+-- If the following code is moved to Init, the gamemode will blow up.
+function PANEL:SetParent(parent)
+	self.BaseClass.SetParent(self, parent)
+	local job
+	for k, v in ipairs(self.pnlLeft:GetItems()) do
+		if v:GetDisabled() then continue end
+		job = v.DarkRPItem
+		break
+	end
+	self.pnlRight:updateInfo(job or {})
+end
+
 function PANEL:Refresh()
 	self.pnlLeft:Refresh()
+
+	if not self.pnlLeft.Items then self.pnlRight:updateInfo({}) return end
+	local curTeam = self.pnlLeft.Items[self.pnlRight.job.team]
+	if not curTeam or curTeam:GetDisabled() then
+		for k,v in ipairs(self.pnlLeft.Items) do
+			if v:GetDisabled() then continue end
+			self.pnlRight:updateInfo(v.DarkRPItem)
+			return
+		end
+		self.pnlRight:updateInfo({})
+	end
 end
 
 function PANEL:fillData()

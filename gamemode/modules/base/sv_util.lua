@@ -130,7 +130,11 @@ end
 
 local function LookPersonUp(ply, cmd, args)
 	if not args[1] then
-		ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("invalid_x", "argument", ""))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
+		end
 		return
 	end
 	local P = DarkRP.findPlayer(args[1])
@@ -153,14 +157,13 @@ local function LookPersonUp(ply, cmd, args)
 			ply:PrintMessage(2, DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
 		end
 	else
-		print("Nick: ".. P:Nick())
-		print("Steam name: "..P:SteamName())
+		print(DarkRP.getPhrase("name", P:Nick()))
+		print("Steam ".. DarkRP.getPhrase("name", P:SteamName()))
 		print("Steam ID: "..P:SteamID())
-		print("Job: ".. team.GetName(P:Team()))
-		print("Kills: ".. P:Frags())
-		print("Deaths: ".. P:Deaths())
-
-		print("Money: ".. P:getDarkRPVar("money"))
+		print(DarkRP.getPhrase("job", team.GetName(P:Team())))
+		print(DarkRP.getPhrase("kills", P:Frags()))
+		print(DarkRP.getPhrase("deaths", P:Deaths()))
+		print(DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)

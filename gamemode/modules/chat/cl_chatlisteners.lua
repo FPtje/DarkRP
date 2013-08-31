@@ -23,7 +23,7 @@ local receiverConfigs = {
 local currentConfig = receiverConfigs[""] -- Default config is normal talk
 
 /*---------------------------------------------------------------------------
-AddChatReceiver
+addChatReceiver
 Add a chat command with specific receivers
 
 prefix: the chat command itself ("/pm", "/ooc", "/me" are some examples)

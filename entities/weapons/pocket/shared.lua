@@ -51,6 +51,15 @@ function SWEP:Deploy()
 	self.Owner:DrawWorldModel(false)
 end
 
+function SWEP:Holster()
+	if not SERVER then return true end
+	
+	self.Owner:DrawViewModel(true)
+	self.Owner:DrawWorldModel(true)
+
+	return true
+end
+
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
 

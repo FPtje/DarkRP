@@ -3,8 +3,12 @@ FAdmin.StartHooks["Jail"] = function()
 	FAdmin.Commands.AddCommand("Jail", nil, "<Player>", "[Small/Normal/Big]", "[Time]")
 	FAdmin.Commands.AddCommand("UnJail", nil, "<Player>")
 
-	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Jail", function(ply)
-		RunConsoleCommand("_FAdmin", "jail", ply:UserID())
+	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Jail/Unjail", function(ply)
+		if ply:FAdmin_GetGlobal("fadmin_jailed") then
+			RunConsoleCommand("_FAdmin", "unjail", ply:UserID())
+		else
+			RunConsoleCommand("_FAdmin", "jail", ply:UserID())
+		end
 	end)
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
@@ -21,6 +25,12 @@ FAdmin.StartHooks["Jail"] = function()
 		if ply:FAdmin_GetGlobal("fadmin_jailed") then RunConsoleCommand("_FAdmin", "unjail", ply:UserID()) button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
 
 		local menu = DermaMenu()
+
+		local Padding = vgui.Create("DPanel")
+		Padding:SetPaintBackgroundEnabled(false)
+		Padding:SetSize(1,5)
+		menu:AddPanel(Padding)
+
 		local Title = vgui.Create("DLabel")
 		Title:SetText("  Jail Type:\n")
 		Title:SetFont("UiBold")
