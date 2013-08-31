@@ -38,7 +38,6 @@ function DarkRP.hooks:canRequestWarrant(target, actor, reason)
 	if not actor:isCP() then return false, DarkRP.getPhrase("incorrect_job", DarkRP.getPhrase("get_a_warrant")) end
 	if not target:Alive() then return false, DarkRP.getPhrase("suspect_must_be_alive_to_do_x", DarkRP.getPhrase("get_a_warrant")) end
 	if target:isArrested() then return false, DarkRP.getPhrase("suspect_already_arrested") end
-	if string.len(reason) > 22 then return false, DarkRP.getPhrase("unable", DarkRP.getPhrase("get_a_warrant"), "<23") end
 
 	return true
 end
@@ -52,7 +51,6 @@ function DarkRP.hooks:canWanted(target, actor, reason)
 	if target:isWanted() then return false, DarkRP.getPhrase("already_wanted") end
 	if not target:Alive() then return false, DarkRP.getPhrase("suspect_must_be_alive_to_do_x", DarkRP.getPhrase("make_someone_wanted")) end
 	if target:isArrested() then return false, DarkRP.getPhrase("suspect_already_arrested") end
-	if string.len(reason) > 22 then return false, DarkRP.getPhrase("unable", DarkRP.getPhrase("make_someone_wanted"), "<23") end
 
 	return true
 end
