@@ -229,13 +229,13 @@ local function ccSetMoney(ply, cmd, args)
 		return
 	end
 
+	local target = DarkRP.findPlayer(args[1])
+
 	local amount = math.floor(tonumber(args[2]))
 
 	if args[3] then
-		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
+		amount = args[3] == "-" and math.Max(0, target:getDarkRPVar("money") - amount) or target:getDarkRPVar("money") + amount
 	end
-
-	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		local nick = ""
@@ -261,7 +261,6 @@ local function ccSetMoney(ply, cmd, args)
 		else
 			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", args[1]))
 		end
-		return
 	end
 end
 concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
