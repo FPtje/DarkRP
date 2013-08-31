@@ -8,6 +8,17 @@ function PANEL:Init()
 	self:SetFont("DarkRPHUD2")
 end
 
+local gray = Color(110, 110, 110, 255)
+function PANEL:Paint(w, h)
+	local drawFunc = self:GetSkin().tex.TabT_Inactive
+
+	if self:GetDisabled() then
+		drawFunc(0, 0, w, h, gray)
+		return
+	end
+	self.BaseClass.Paint(self, w, h)
+end
+
 function PANEL:ApplySchemeSettings()
 	local ExtraInset = 10
 
