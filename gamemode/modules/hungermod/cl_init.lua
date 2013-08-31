@@ -29,6 +29,9 @@ surface.CreateFont("HungerPlus", {
 	font = "ChatFont"})
 
 function HM.HUDPaint()
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Hungermod")
+	if shouldDraw == false then return end
+
 	local energy = LocalPlayer():getDarkRPVar("Energy") or 0
 
 	local x = 5
