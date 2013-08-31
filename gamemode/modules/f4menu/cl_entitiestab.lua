@@ -32,6 +32,14 @@ function PANEL:generateButtons()
 	// override this
 end
 
+function PANEL:isItemHidden(cantBuy, important)
+	return cantBuy and (GAMEMODE.Config.hideNonBuyable or (important and GAMEMODE.Config.hideTeamUnbuyable))
+end
+
+function PANEL:shouldHide()
+	// override this
+end
+
 function PANEL:Refresh()
 	for k,v in pairs(self.Items) do
 		if v.Refresh then v:Refresh() end
@@ -62,6 +70,15 @@ local function canBuyEntity(item)
 	if item.customCheck and not item.customCheck(ply) then return false, true end
 	if not ply:canAfford(item.price) then return false, false end
 
+	return true
+end
+
+function PANEL:shouldHide()
+	for k,v in pairs(DarkRPEntities) do
+		local canBuy, important = canBuyEntity(v)
+		important = important or true
+		if not self:isItemHidden(not canBuy, important) then return false end
+	end
 	return true
 end
 
@@ -103,6 +120,17 @@ function PANEL:generateButtons()
 	end
 end
 
+function PANEL:shouldHide()
+	local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
+
+	for k,v in pairs(shipments) do
+		local canBuy, important = canBuyShipment(v)
+		if not self:isItemHidden(not canBuy, important) then return false end
+	end
+
+	return true
+end
+
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
 		local canBuy, important = canBuyShipment(v.DarkRPItem)
@@ -140,6 +168,19 @@ function PANEL:generateButtons()
 	end
 end
 
+function PANEL:shouldHide()
+	local shipments = fn.Filter(fn.Curry(fn.GetValue, 2)("seperate"), CustomShipments)
+
+	for k,v in pairs(shipments) do
+		local canBuy, important = canBuyGun(v)
+
+		if not self:isItemHidden(not canBuy, important) then return false end
+	end
+
+	return true
+end
+
+
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
 		local canBuy, important = canBuyGun(v.DarkRPItem)
@@ -166,9 +207,19 @@ function PANEL:generateButtons()
 	end
 end
 
+function PANEL:shouldHide()
+	for k,v in pairs(GAMEMODE.AmmoTypes) do
+		local canBuy, important = not v.customCheck or v.customCheck(LocalPlayer()), true
+
+		if not self:isItemHidden(not canBuy, important) then return false end
+	end
+
+	return true
+end
+
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		v:SetDisabled(v.customCheck and not v.customCheck(v.DarkRPItem) or false, true)
+		v:SetDisabled(v.DarkRPItem.customCheck and not v.DarkRPItem.customCheck(LocalPlayer()) or false, true)
 	end
 	self.BaseClass.PerformLayout(self)
 end

@@ -69,10 +69,12 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 	sheet.Tab:Setup(label, self, panel, material)
 
 	sheet.Panel = panel
+	sheet.Panel.tab = sheet.Tab
 	sheet.Panel.NoStretchX = NoStretchX
 	sheet.Panel.NoStretchY = NoStretchY
 	sheet.Panel:SetPos(self:GetPadding(), sheet.Tab:GetTall() + 8 + self:GetPadding())
 	sheet.Panel:SetVisible(false)
+	if sheet.Panel.shouldHide and sheet.Panel:shouldHide() then sheet.Tab:SetDisabled(true) end
 
 	panel:SetParent(self)
 
@@ -102,6 +104,8 @@ end
 
 function PANEL:Refresh()
 	for k,v in pairs(self.Items) do
+		if v.Panel.shouldHide and v.Panel:shouldHide() then v.Tab:SetDisabled(true)
+		else v.Tab:SetDisabled(false) end
 		if v.Panel.Refresh then v.Panel:Refresh() end
 	end
 end
