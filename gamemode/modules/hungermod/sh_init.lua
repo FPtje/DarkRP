@@ -2,6 +2,8 @@
 Settings for the job and entities
 ---------------------------------------------------------------------------*/
 timer.Simple(0, function()
+	DarkRP.DARKRP_LOADING = true
+
 	TEAM_COOK = AddExtraTeam("Cook", {
 		color = Color(238, 99, 99, 255),
 		model = "models/player/mossman.mdl",
@@ -27,4 +29,6 @@ timer.Simple(0, function()
 		cmd = "buymicrowave",
 		allowed = TEAM_COOK
 	})
+
+	DarkRP.DARKRP_LOADING = nil
 end)
