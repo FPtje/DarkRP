@@ -355,15 +355,15 @@ local function ccSetMoney(ply, cmd, args)
 		return
 	end
 
-	local amount = math.floor(tonumber(args[2]))
-
-	if args[3] then
-		amount = args[3] == "-" and math.Max(0, ply:getDarkRPVar("money") - amount) or ply:getDarkRPVar("money") + amount
-	end
-
 	local target = GAMEMODE:FindPlayer(args[1])
 
 	if target then
+		local amount = math.floor(tonumber(args[2]))
+
+		if args[3] then
+			amount = args[3] == "-" and math.Max(0, target:getDarkRPVar("money") - amount) or target:getDarkRPVar("money") + amount
+		end
+
 		local nick = ""
 		DB.StoreMoney(target, amount)
 		target:SetDarkRPVar("money", amount)
@@ -387,7 +387,6 @@ local function ccSetMoney(ply, cmd, args)
 		else
 			ply:PrintMessage(2, "Could not find player: " .. args[1])
 		end
-		return
 	end
 end
 concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
