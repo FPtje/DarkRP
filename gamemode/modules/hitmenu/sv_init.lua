@@ -115,6 +115,7 @@ end
 Chat commands
 ---------------------------------------------------------------------------*/
 DarkRP.defineChatCommand("hitprice", function(ply, args)
+	if not ply:isHitman() then return "" end
 	local price = tonumber(args) or 0
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
