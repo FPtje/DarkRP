@@ -63,6 +63,7 @@ function PANEL:HTMLForward()
 end
 
 function PANEL:Refresh()
+	if not self.URL then return end -- refreshed before the URL is set
 	self:OpenURL(self.URL, true)
 end
 
