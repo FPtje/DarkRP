@@ -149,6 +149,7 @@ usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
 
 local AnimFrame
 local function AnimationMenu()
+	if not IsValid(ply) then return end
 	if AnimFrame or ply:EntIndex() == 0 then return end
 
 	local Panel = vgui.Create("Panel")
