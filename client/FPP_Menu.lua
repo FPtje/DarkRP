@@ -246,7 +246,7 @@ function FPP.AdminMenu(Panel)
 	local damagecat, damage = MakeOption("Entity damage options")
 	local antiDMGLabel = Label("Prevents players from damaging other players' props")
 	antiDMGLabel:SetTextColor(Color(0, 0, 0, 255))
-	damage:Add(Label("Prevents players from damaging other players' props"))
+	damage:Add(antiDMGLabel)
 
 	addchk("Damage protection enabled", {"FPP_ENTITYDAMAGE1", "toggle"}, damage)
 	addchk("Prop damage protection", {"FPP_ENTITYDAMAGE1", "protectpropdamage"}, damage)
