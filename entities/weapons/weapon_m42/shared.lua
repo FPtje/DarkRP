@@ -5,7 +5,7 @@ if (CLIENT) then
 	SWEP.Instructions = ""
 	SWEP.PrintName = "M4"
 	SWEP.Instructions = "Hold use and right-click to change firemodes or left-click to attach silencer."
-	SWEP.Slot = 3
+	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "w"
 

@@ -5,7 +5,7 @@ if (CLIENT) then
 	SWEP.Instructions = ""
 	SWEP.PrintName = "Glock"
 	SWEP.Instructions = "Shoot with it"
-	SWEP.Slot = 2
+	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "c"
 
