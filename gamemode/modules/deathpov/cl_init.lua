@@ -1,5 +1,6 @@
 hook.Add("CalcView", "rp_deathPOV", function(ply, origin, angles, fov)
-	if not GAMEMODE.Config.deathpov or ply:Alive() then return end
+	-- Entity:Alive() is being slow as hell, we might actually see ourselves from third person for frame or two
+	if not GAMEMODE.Config.deathpov or ply:Health() > 0 then return end
 
 	local Ragdoll = ply:GetRagdollEntity()
 	if not IsValid(Ragdoll) then return end
@@ -31,6 +32,7 @@ hook.Add("CalcView", "rp_deathPOV", function(ply, origin, angles, fov)
 	return {
 		origin = head.Pos,
 		angles = head.Ang,
-		fov = fov
+		fov = fov,
+		znear = 1,
 	}
 end)
