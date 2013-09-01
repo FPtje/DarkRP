@@ -1,25 +1,37 @@
-local function doDeathPOV(ply, origin, angles, fov)
-	local Ragdoll = ply:GetRagdollEntity()
-	if not IsValid(Ragdoll) then return end
+hook.Add("CalcView", "rp_deathPOV", function(ply, origin, angles, fov)
+	if GAMEMODE.Config.deathpov and not ply:Alive() then
+		local Ragdoll = ply:GetRagdollEntity()
+		if not IsValid(Ragdoll) then return end
 
-	local head = Ragdoll:LookupAttachment("eyes")
-	head = Ragdoll:GetAttachment(head)
-	if not head or not head.Pos then return end
+		if not Ragdoll.BonesRattled then
+			Ragdoll.BonesRattled = true
+			print(Ragdoll)
 
-	local view = {}
-	view.origin = head.Pos
-	view.angles = head.Ang
-	view.fov = fov
-	return view
-end
+			Ragdoll:InvalidateBoneCache()
+			Ragdoll:SetupBones()
 
-local function deathPOV(um)
-	local toggle = um:ReadBool()
+			local matrix
 
-	if toggle then
-		hook.Add("CalcView", "rp_deathPOV", doDeathPOV)
-	else
-		hook.Remove("CalcView", "rp_deathPOV")
+			for bone = 0, (Ragdoll:GetBoneCount() or 1) do
+				if Ragdoll:GetBoneName(bone):lower():find("head") then
+					matrix = Ragdoll:GetBoneMatrix(bone)
+					return
+				end
+			end
+
+			if IsValid(matrix) then
+				matrix:SetScale(Vector(0, 0, 0))
+			end
+		end
+
+		local head = Ragdoll:LookupAttachment("eyes")
+		head = Ragdoll:GetAttachment(head)
+		if not head or not head.Pos then return end
+
+		return {
+			origin = head.Pos,
+			angles = head.Ang,
+			fov = fov
+		}
 	end
-end
-usermessage.Hook("DeathPOV", deathPOV)
+end)
