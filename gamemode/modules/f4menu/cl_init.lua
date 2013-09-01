@@ -29,6 +29,10 @@ end
 
 GM.ShowSpare2 = DarkRP.toggleF4Menu
 
+function DarkRP.getF4MenuPanel()
+	return f4Frame
+end
+
 function DarkRP.addF4MenuTab(name, panel)
 	if not f4Frame then error("DarkRP.addF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.") end
 

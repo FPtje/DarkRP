@@ -28,6 +28,22 @@ DarkRP.toggleF4Menu = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.getF4MenuPanel = DarkRP.stub{
+	name = "getF4MenuPanel",
+	description = "Get the F4 menu panel.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "panel",
+			description = "The F4 menu panel. It will be invalid until the F4 menu has been opened.",
+			type = "Panel",
+			optional = false
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.addF4MenuTab = DarkRP.stub{
 	name = "addF4MenuTab",
 	description = "Add a tab to the F4 menu.",
