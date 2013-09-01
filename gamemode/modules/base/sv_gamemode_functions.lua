@@ -540,7 +540,7 @@ local function initPlayer(ply)
 
 	ply:initiateTax()
 
-	ply:updateJob(team.GetName(1))
+	ply:updateJob(team.GetName(GAMEMODE.DefaultTeam))
 
 	ply:GetTable().Ownedz = { }
 	ply:GetTable().OwnedNumz = 0
