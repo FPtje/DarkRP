@@ -1,8 +1,7 @@
 if (SERVER) then
 	AddCSLuaFile("shared.lua")
-	resource.AddFile("vgui/entities/med_kit.vmt")
 end
-SWEP.Icon = "vgui/entities/med_kit"
+
 SWEP.PrintName = "Medic Kit"
 SWEP.Author = "DarkRP Developers"
 SWEP.Slot = 4

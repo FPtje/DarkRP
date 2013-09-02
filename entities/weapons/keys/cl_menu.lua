@@ -54,8 +54,16 @@ local function AdminMenuAdditions(Frame, ent, entType)
 	end
 end
 
+DarkRP.stub{
+	name = "openKeysMenu",
+	description = "Open the keys/F2 menu.",
+	parameters = {},
+	returns = {},
+	metatable = DarkRP
+}
+
 local KeyFrameVisible = false
-local function KeysMenu(um)
+function DarkRP.openKeysMenu(um)
 	if KeyFrameVisible then return end
 
 	local ent = LocalPlayer():GetEyeTrace().Entity
@@ -177,5 +185,4 @@ local function KeysMenu(um)
 	Frame:Center()
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-timer.Simple(0, function() GAMEMODE.ShowTeam = KeysMenu end)
-usermessage.Hook("KeysMenu", KeysMenu)
+usermessage.Hook("KeysMenu", DarkRP.openKeysMenu)

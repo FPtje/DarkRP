@@ -1,6 +1,5 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
-	resource.AddFile("vgui/entities/ls_sniper.vmt")
 end
 
 if CLIENT then
@@ -14,7 +13,7 @@ if CLIENT then
 end
 
 SWEP.Base = "ls_snip_base"
-SWEP.Icon = "vgui/entities/ls_sniper"
+
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"

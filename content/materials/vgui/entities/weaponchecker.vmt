@@ -1,7 +1,0 @@
-"UnlitGeneric"
-{
- "$basetexture" "VGUI/entities/weaponchecker"
- "$vertexcolor" 1
- "$vertexalpha" 1
- "$translucent" 1
-}

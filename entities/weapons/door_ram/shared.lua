@@ -1,6 +1,5 @@
 if (SERVER) then
 	AddCSLuaFile("shared.lua")
-	resource.AddFile("vgui/entities/door_ram.vmt")
 end
 
 if (CLIENT) then
@@ -13,7 +12,7 @@ end
 
 -- Variables that are used on both client and server
 SWEP.Base = "weapon_cs_base2"
-SWEP.Icon = "vgui/entities/door_ram"
+
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles."
 SWEP.Contact = ""

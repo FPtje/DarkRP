@@ -1,7 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_menu.lua")
-	resource.AddFile("vgui/entities/keys.vmt")
 end
 
 if CLIENT then
@@ -13,7 +12,7 @@ if CLIENT then
 
 	include("cl_menu.lua")
 end
-SWEP.Icon = "vgui/entities/keys" -- Credit to wiremod for this model.
+
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to lock. Right click to unlock"
 SWEP.Contact = ""

@@ -1,6 +1,5 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
-	resource.AddFile("vgui/entities/weaponchecker.vmt")
 end
 
 if CLIENT then
@@ -15,7 +14,7 @@ SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to Check weapons, right click to confiscate guns, reload to give back the guns"
 SWEP.Contact = ""
 SWEP.Purpose = ""
-SWEP.Icon = "vgui/entities/weapon_checker"
+
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
 SWEP.AnimPrefix	 = "rpg"

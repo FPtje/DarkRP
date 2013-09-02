@@ -3,11 +3,10 @@ if SERVER then
 	AddCSLuaFile("cl_init.lua")
 
 	util.AddNetworkString("DarkRP_keypadData")
-	resource.AddFile("vgui/entities/weapon_keypadchecker.vmt")
 end
 
 SWEP.Base = "weapon_base"
-SWEP.Icon = "vgui/entities/weapon_keypadchecker"
+
 SWEP.PrintName = "Admin keypad checker"
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click on a keypad or fading door to check it, right click to clear"
