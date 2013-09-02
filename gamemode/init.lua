@@ -1,7 +1,7 @@
 GM.Version = "2.5.0"
 GM.Name = "DarkRP"
 GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
-
+resource.AddFile("vgui/achievements/ep1_beat_game_onebullet.png") -- Needed somewhere to put this. Seemed appropriate.
 
 DeriveGamemode("sandbox")
 
