@@ -1,6 +1,7 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
 	util.AddNetworkString("lockpick_time")
+	resource.AddFile("vgui/entities/lockpick.vmt")
 end
 
 if CLIENT then
@@ -12,7 +13,7 @@ if CLIENT then
 end
 
 -- Variables that are used on both client and server
-
+SWEP.Icon = "vgui/entities/lockpick"
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to pick a lock"
 SWEP.Contact = ""

@@ -2,12 +2,13 @@ if SERVER then
 	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_menu.lua")
 	include("sv_init.lua")
+	resource.AddFile("vgui/entities/pocket.vmt")
 end
 
 if CLIENT then
 	include("cl_menu.lua")
 end
-
+SWEP.Icon = "vgui/entities/pocket"
 SWEP.PrintName = "Pocket"
 SWEP.Slot = 1
 SWEP.SlotPos = 1

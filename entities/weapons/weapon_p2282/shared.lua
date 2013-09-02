@@ -1,5 +1,6 @@
 if (SERVER) then
 	AddCSLuaFile("shared.lua")
+	resource.AddFile("vgui/entities/weapon_p2282.vmt")
 end
 
 if (CLIENT) then
@@ -13,7 +14,7 @@ if (CLIENT) then
 end
 
 SWEP.Base = "weapon_cs_base2"
-
+SWEP.Icon = "vgui/entities/weapon_p2282"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"

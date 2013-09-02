@@ -14,6 +14,7 @@ end
 
 if (SERVER) then
 	AddCSLuaFile("shared.lua")
+	resource.AddFile("vgui/entities/weapon_glock2.vmt")
 end
 
 SWEP.Base = "weapon_cs_base2"
@@ -21,7 +22,7 @@ SWEP.Base = "weapon_cs_base2"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
-
+SWEP.Icon = "vgui/entities/weapon_glock2"
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_glock18.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_glock18.mdl"
 SWEP.HoldType = "pistol"
