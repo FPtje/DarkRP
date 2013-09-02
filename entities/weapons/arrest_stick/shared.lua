@@ -124,7 +124,7 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
-	local ent = self.Owner:getEyeSightHitEntity()
+	local ent = self.Owner:getEyeSightHitEntity(nil, nil, function(p) return p ~= self.Owner and p:IsPlayer() and p:Alive() end)
 
 	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 115) or (not ent:IsPlayer() and not ent:IsNPC()) then
 		return
