@@ -36,7 +36,7 @@ end
 
 function PANEL:CreateAdminIcon()
 	self.imgAdmin = vgui.Create("DImage", self)
-	self.imgAdmin:SetImage("gui/silkicons/shield")
+	self.imgAdmin:SetImage("icon16/shield.png")
 	self.imgAdmin:SetTooltip("#Admin Only")
 end
 
@@ -95,7 +95,7 @@ function PANEL2:BuildList()
 
 		for k, v in SortedPairs(FAdmin.AmmoTypes) do
 			local Icon = vgui.CreateFromTable(WeaponIcon, self)
-			Icon:Setup(k, k, "vgui/achievements/ep1_beat_game_onebullet", false, self, true)
+			Icon:Setup(k, k, "spawnicons/items/boxmrounds60x60.png", false, self, true) -- If that icon isnt on the client, it will be as soon as he tries to buy ammo.
 			AmmoPan:AddItem(Icon)
 		end
 	end
