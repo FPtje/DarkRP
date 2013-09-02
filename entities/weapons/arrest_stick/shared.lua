@@ -1,5 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
+	resource.AddFile("vgui/entities/arrest_stick.vmt")
 end
 
 if CLIENT then
@@ -11,7 +12,7 @@ if CLIENT then
 end
 
 SWEP.Base = "weapon_cs_base2"
-
+SWEP.Icon = "vgui/entities/arrest_stick"
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left or right click to arrest"
 SWEP.Contact = ""
