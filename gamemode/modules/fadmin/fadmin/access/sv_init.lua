@@ -222,8 +222,7 @@ local function toggleImmunity(ply, cmd, args)
 
 	if not args[1] then FAdmin.Messages.SendMessage(ply, 5, "Invalid argument!") return end
 	RunConsoleCommand("_FAdmin_immunity", args[1])
-	local OnOff = (tonumber(args[1]) == 1 and "on") or "off"
-	FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Nick() .. " turned " .. OnOff .. " admin immunity!", "Admin immunity has been turned "..OnOff, "Turned admin immunity "..OnOff)
+	FAdmin.Messages.SendMessage(ply, 4, "turned " .. ((tonumber(args[1]) == 1 and "on") or "off") .. " admin immunity!")
 end
 
 
