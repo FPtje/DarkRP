@@ -19,8 +19,8 @@ local function PM(ply, args)
 
 	if target then
 		local col = team.GetColor(ply:Team())
-		DarkRP.talkToPerson(target, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
-		DarkRP.talkToPerson(ply, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
+		DarkRP.talkToPerson(target, col, "(PM)", Color(255,255,255,255), msg, ply)
+		DarkRP.talkToPerson(ply, col, "(PM)", Color(255,255,255,255), msg, ply)
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(name)))
 	end
@@ -35,7 +35,7 @@ local function Whisper(ply, args)
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return ""
 		end
-		DarkRP.talkToRange(ply, "(".. DarkRP.getPhrase("whisper") .. ") " .. ply:Nick(), text, 90)
+		DarkRP.talkToRange(ply, "(".. DarkRP.getPhrase("whisper") .. ")", text, 90)
 	end
 	return args, DoSay
 end
@@ -47,7 +47,7 @@ local function Yell(ply, args)
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return ""
 		end
-		DarkRP.talkToRange(ply, "(".. DarkRP.getPhrase("yell") .. ") " .. ply:Nick(), text, 550)
+		DarkRP.talkToRange(ply, "(".. DarkRP.getPhrase("yell") .. ")", text, 550)
 	end
 	return args, DoSay
 end
@@ -66,10 +66,10 @@ local function Me(ply, args)
 		end
 		if GAMEMODE.Config.alltalk then
 			for _, target in pairs(player.GetAll()) do
-				DarkRP.talkToPerson(target, team.GetColor(ply:Team()), ply:Nick() .. " " .. text)
+				DarkRP.talkToPerson(target, team.GetColor(ply:Team()), text, nil, nil, ply)
 			end
 		else
-			DarkRP.talkToRange(ply, ply:Nick() .. " " .. text, "", 250)
+			DarkRP.talkToRange(ply, ply:Nick() .. text, "", 250)
 		end
 	end
 	return args, DoSay
@@ -94,7 +94,7 @@ local function OOC(ply, args)
 			col = col2
 		end
 		for k,v in pairs(player.GetAll()) do
-			DarkRP.talkToPerson(v, col, "("..DarkRP.getPhrase("ooc")..") "..ply:Name(), col2, text, ply)
+			DarkRP.talkToPerson(v, col, "("..DarkRP.getPhrase("ooc")..") ", col2, text, ply)
 		end
 	end
 	return args, DoSay
@@ -115,7 +115,7 @@ local function PlayerAdvertise(ply, args)
 		end
 		for k,v in pairs(player.GetAll()) do
 			local col = team.GetColor(ply:Team())
-			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("advert") .." "..ply:Nick(), Color(255,255,0,255), text, ply)
+			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("advert") .. " ", Color(255,255,0,255), text, ply)
 		end
 	end
 	return args, DoSay
@@ -135,7 +135,7 @@ local function MayorBroadcast(ply, args)
 		end
 		for k,v in pairs(player.GetAll()) do
 			local col = team.GetColor(ply:Team())
-			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("broadcast") .. " " ..ply:Nick(), Color(170, 0, 0,255), text, ply)
+			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("broadcast") .. " ", Color(170, 0, 0,255), text, ply)
 		end
 	end
 	return args, DoSay
@@ -197,7 +197,7 @@ local function GroupMsg(ply, args)
 			for _, target in pairs(player.GetAll()) do
 				if func(target) and not hasReceived[target] then
 					hasReceived[target] = true
-					DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
+					DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group"), Color(255,255,255,255), text, ply)
 				end
 			end
 		end
