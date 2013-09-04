@@ -14,11 +14,12 @@ local function AddToChat(msg)
 	local ply = msg:ReadEntity()
 	ply = IsValid(ply) and ply or LocalPlayer()
 
+	--[[
 	if prefixText == "" or not prefixText then
 		prefixText = ply:Nick()
 		prefixText = prefixText ~= "" and prefixText or ply:SteamName()
 	end
-
+]]
 	local col2 = Color(msg:ReadShort(), msg:ReadShort(), msg:ReadShort())
 
 	local text = msg:ReadString()
@@ -29,7 +30,7 @@ local function AddToChat(msg)
 		end
 
 		if shouldShow ~= true then
-			chat.AddText(col1, prefixText, col2, ": "..text)
+			chat.AddText(col1, prefixText, ply, col2, ": "..text)
 		end
 	else
 		shouldShow = hook.Call("ChatText", nil, "0", prefixText, prefixText, "none")
