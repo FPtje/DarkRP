@@ -233,7 +233,7 @@ local function CheckChat( ply, text )
 			if res1 and ( not text[ res1 - 1 ] or text[ res1 - 1 ] == "" or text[ res1 - 1 ] == " ") and ( not text[ res2 + 1 ] or text[ res2 + 1 ] == "" or text[ res2 + 1 ] == " ") then
 
 				ply:EmitSound( table.Random( v ), 80, 100 )
-				ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay
+				ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
 				break
 			end
 
