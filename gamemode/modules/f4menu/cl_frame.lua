@@ -160,4 +160,5 @@ function PANEL:generateTabs()
 	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 
-derma.DefineControl("F4MenuFrame", "", PANEL, "DPropertySheet")
+derma.DefineControl("F4EditablePropertySheet", "", vgui.GetControlTable("DPropertySheet"), "EditablePanel")
+derma.DefineControl("F4MenuFrame", "", PANEL, "F4EditablePropertySheet")
