@@ -147,6 +147,8 @@ GM.Config.adminweapons					= 1
 GM.Config.arrestspeed					= 120
 -- babygodtime - How long the babygod lasts
 GM.Config.babygodtime					= 5
+-- chatsoundsdelay - How long to wait before letting a player emit a sound from their chat again. Leave this on at least a few seconds to prevent spamming.
+GM.Config.chatsoundsdelay				= 7
 -- deathfee - the amount of money someone drops when dead.
 GM.Config.deathfee						= 30
 -- decaltimer - Sets the time to clear clientside decals. (seconds)
