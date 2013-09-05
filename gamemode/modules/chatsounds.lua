@@ -223,7 +223,7 @@ sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
 
 local function CheckChat( ply, text )
 
-	if not GAMEMODE.Config.chatsounds then return end
+	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
 	local prefix = string.sub( text, 0, 1 )
 	if prefix ~= "/" and prefix ~= "!" and prefix ~= "@" then -- should cover most chat commands for various mods/addons
 
@@ -233,6 +233,7 @@ local function CheckChat( ply, text )
 			if res1 and ( not text[ res1 - 1 ] or text[ res1 - 1 ] == "" or text[ res1 - 1 ] == " ") and ( not text[ res2 + 1 ] or text[ res2 + 1 ] == "" or text[ res2 + 1 ] == " ") then
 
 				ply:EmitSound( table.Random( v ), 80, 100 )
+				ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
 				break
 			end
 
