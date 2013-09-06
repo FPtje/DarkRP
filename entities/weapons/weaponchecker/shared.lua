@@ -1,5 +1,6 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
+	util.AddNetworkString("WeaponCheck_EmitSound")
 end
 
 if CLIENT then
@@ -65,6 +66,13 @@ if CLIENT then
 			wep.Dots = dots[len]
 		end)
 	end)
+else
+	net.Receive("WeaponCheck_EmitSound", function()
+		local owner = net.ReadEntity()
+		if not IsValid(owner) then return end
+		owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+		timer.Simple(0.4, function() owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+	end)
 end
 
 function SWEP:Deploy()
@@ -75,8 +83,8 @@ function SWEP:Deploy()
 end
 
 function SWEP:PrimaryAttack()
-	if CLIENT or self.IsWeaponChecking then return end
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
+	if SERVER or not IsFirstTimePredicted() or self.IsWeaponChecking then return end
 
 	local trace = self.Owner:GetEyeTrace()
 
@@ -87,11 +95,14 @@ function SWEP:PrimaryAttack()
 	local result = ""
 	for k,v in pairs(trace.Entity:GetWeapons()) do
 		if v:IsValid() then
-			result = result..", ".. v:GetClass()
+			result = result..", ".. (v:GetPrintName() or v:GetClass())
 		end
 	end
-	self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-	timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+
+	net.Start("WeaponCheck_EmitSound")
+		net.WriteEntity(self.Owner)
+	net.SendToServer()
+	
 	self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 	if result == "" then
 		self.Owner:ChatPrint(DarkRP.getPhrase("has_no_weapons", trace.Entity:Nick()))
