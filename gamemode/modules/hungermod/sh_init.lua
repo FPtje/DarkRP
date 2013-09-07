@@ -1,5 +1,5 @@
 FoodItems = {}
-local function AddFoodItem(name, mdl, energy, price)
+function AddFoodItem(name, mdl, energy, price)
 	local foodItem = istable(mdl) and mdl or {model = mdl, energy = energy, price = price}
 	foodItem.name = name
 	table.insert(FoodItems, foodItem)
