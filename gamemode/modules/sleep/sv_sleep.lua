@@ -115,7 +115,7 @@ function DarkRP.toggleSleep(player, command)
 				player.Sleeping = true
 			end
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
+			DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
 		end
 		return ""
 	else
