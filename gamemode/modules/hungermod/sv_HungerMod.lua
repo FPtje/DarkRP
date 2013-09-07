@@ -47,7 +47,7 @@ local function BuyFood(ply, args)
 			if ply:canAfford(cost) then
 				ply:addMoney(-cost)
 			else
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("food"))))
 				return ""
 			end
 			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", v.name, GAMEMODE.Config.currency, cost))
