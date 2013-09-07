@@ -41,8 +41,8 @@ local function BuyFood(ply, args)
 		return ""
 	end
 
-	for k,v in pairs(FoodItems) do
-		if string.lower(args) == k then
+	for _,v in pairs(FoodItems) do
+		if string.lower(args) == v.name then
 			local cost = GAMEMODE.Config.foodcost
 			if ply:canAfford(cost) then
 				ply:addMoney(-cost)
@@ -50,7 +50,7 @@ local function BuyFood(ply, args)
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
 				return ""
 			end
-			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", k, GAMEMODE.Config.currency, cost))
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", v.name, GAMEMODE.Config.currency, cost))
 			local SpawnedFood = ents.Create("spawned_food")
 			SpawnedFood:Setowning_ent(ply)
 			SpawnedFood.ShareGravgun = true
