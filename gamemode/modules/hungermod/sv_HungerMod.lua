@@ -8,19 +8,19 @@ local function HMThink()
 
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > 1) then
-			v:HungerUpdate()
+			v:hungerUpdate()
 		end
 	end
 end
 hook.Add("Think", "HMThink", HMThink)
 
 local function HMPlayerInitialSpawn(ply)
-	ply:NewHungerData()
+	ply:newHungerData()
 end
 hook.Add("PlayerInitialSpawn", "HMPlayerInitialSpawn", HMPlayerInitialSpawn)
 
 for k, v in pairs(player.GetAll()) do
-	v:NewHungerData()
+	v:newHungerData()
 end
 
 local function BuyFood(ply, args)
