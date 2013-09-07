@@ -6,6 +6,8 @@ function DarkRP.createFood(name, mdl, energy, price)
 	local foodItem = istable(mdl) and mdl or {model = mdl, energy = energy, price = price}
 	foodItem.name = name
 
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["food"][name] then return end
+
 	for k,v in pairs(validFood) do
 		local isFunction = isfunction(v)
 
@@ -18,6 +20,7 @@ function DarkRP.createFood(name, mdl, energy, price)
 end
 AddFoodItem = DarkRP.createFood
 
+DarkRP.DARKRP_LOADING = true
 AddFoodItem("Banana", {
 	model = "models/props/cs_italy/bananna.mdl",
 	energy = 10,
@@ -73,6 +76,7 @@ AddFoodItem("Orange", {
 	energy = 20,
 	price = 20
 })
+DarkRP.DARKRP_LOADING = nil
 
 /*---------------------------------------------------------------------------
 Settings for the job and entities

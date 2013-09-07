@@ -19,6 +19,7 @@ DarkRP.disabledDefaults["agendas"]    = {}
 DarkRP.disabledDefaults["ammo"]       = {}
 DarkRP.disabledDefaults["doorgroups"] = {}
 DarkRP.disabledDefaults["entities"]   = {}
+DarkRP.disabledDefaults["food"]       = {}
 DarkRP.disabledDefaults["groupchat"]  = {}
 DarkRP.disabledDefaults["hitmen"]     = {}
 DarkRP.disabledDefaults["jobs"]       = {}
