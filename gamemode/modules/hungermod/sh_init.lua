@@ -1,9 +1,10 @@
 FoodItems = {}
-function AddFoodItem(name, mdl, energy, price)
+function DarkRP.createFood(name, mdl, energy, price)
 	local foodItem = istable(mdl) and mdl or {model = mdl, energy = energy, price = price}
 	foodItem.name = name
 	table.insert(FoodItems, foodItem)
 end
+AddFoodItem = DarkRP.createFood
 
 AddFoodItem("banana", {
 	model = "models/props/cs_italy/bananna.mdl",
