@@ -16,6 +16,7 @@ function DarkRP.toggleSleep(player, command)
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
 			if (player.Sleeping and IsValid(player.SleepRagdoll)) then
+				local frozen = player:IsFrozen()
 				player.OldHunger = player:getDarkRPVar("Energy")
 				player.SleepSound:Stop()
 				local ragdoll = player.SleepRagdoll
@@ -33,6 +34,7 @@ function DarkRP.toggleSleep(player, command)
 				player:UnSpectate()
 				player:StripWeapons()
 				ragdoll:Remove()
+				ragdoll.OwnerINT = 0
 				if player.WeaponsForSleep and player:GetTable().BeforeSleepTeam == player:Team() then
 					for k,v in pairs(player.WeaponsForSleep) do
 						local wep = player:Give(v[1])
@@ -54,6 +56,11 @@ function DarkRP.toggleSleep(player, command)
 					GAMEMODE:PlayerLoadout(player)
 				end
 
+				if frozen then
+					player:UnLock()
+					player:Lock()
+				end
+
 				SendUserMessage("blackScreen", player, false)
 
 				if command == true then
@@ -66,7 +73,7 @@ function DarkRP.toggleSleep(player, command)
 				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 				end
-			else
+			elseif not player:IsFrozen() then
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
 					if v:GetClass() == "func_door" then
 						DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
@@ -113,13 +120,15 @@ function DarkRP.toggleSleep(player, command)
 				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
 				player.SleepSound:PlayEx(0.10, 100)
 				player.Sleeping = true
+			else
+				DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", DarkRP.getPhrase("frozen")))
 			end
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
+			DarkRP.notify(player, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil((player.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep"))
 		end
 		return ""
 	else
-		DarkRP.notify(player, 1, 4, DarkRP.getPhrase("disabled", "/sleep", ""))
+		DarkRP.notify(player, 1, 4, DarkRP.getPhrase("must_be_alive_to_do_x", "/sleep"))
 		return ""
 	end
 end
@@ -148,7 +157,7 @@ local function DamageSleepers(ent, dmginfo)
 				end
 				v:SetHealth(v:Health() - amount)
 				if v:Health() <= 0 and v:Alive() then
-					KnockoutToggle(v, "force")
+					DarkRP.toggleSleep(v, "force")
 					v:SetHealth(GAMEMODE.Config.startinghealth)
 				end
 			end

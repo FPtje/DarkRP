@@ -298,6 +298,7 @@ local english = {
 	jail_punishment = "Punishment for disconnecting! Jailed for: %d seconds.",
 	admin_only = "Admin only!", -- When doing /addjailpos
 	chief_or = "Chief or ",-- When doing /addjailpos
+	frozen = "Frozen.",
 
 	dead_in_jail = "You now are dead until your jail time is up!",
 	died_in_jail = "%s has died in jail!",
