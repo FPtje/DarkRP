@@ -16,6 +16,7 @@ function DarkRP.toggleSleep(player, command)
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
 			if (player.Sleeping and IsValid(player.SleepRagdoll)) then
+				local frozen = player:IsFrozen()
 				player.OldHunger = player:getDarkRPVar("Energy")
 				player.SleepSound:Stop()
 				local ragdoll = player.SleepRagdoll
@@ -55,6 +56,11 @@ function DarkRP.toggleSleep(player, command)
 					GAMEMODE:PlayerLoadout(player)
 				end
 
+				if frozen then
+					player:UnLock()
+					player:Lock()
+				end
+
 				SendUserMessage("blackScreen", player, false)
 
 				if command == true then
@@ -67,7 +73,7 @@ function DarkRP.toggleSleep(player, command)
 				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 				end
-			else
+			elseif not player:IsFrozen() then
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
 					if v:GetClass() == "func_door" then
 						DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
@@ -114,6 +120,8 @@ function DarkRP.toggleSleep(player, command)
 				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
 				player.SleepSound:PlayEx(0.10, 100)
 				player.Sleeping = true
+			else
+				DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", DarkRP.getPhrase("frozen")))
 			end
 		else
 			DarkRP.notify(player, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil((player.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep"))
