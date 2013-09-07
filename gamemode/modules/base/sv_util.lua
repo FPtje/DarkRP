@@ -21,48 +21,53 @@ function DarkRP.printMessageAll(msgtype, msg)
 	end
 end
 
+util.AddNetworkString("DarkRP_Chat")
+
 function DarkRP.talkToRange(ply, PlayerName, Message, size)
 	local ents = ents.FindInSphere(ply:EyePos(), size)
 	local col = team.GetColor(ply:Team())
-	local filter = RecipientFilter()
-	filter:RemoveAllPlayers()
+
+	local filter = {}
+
 	for k, v in pairs(ents) do
 		if v:IsPlayer() then
-			filter:AddPlayer(v)
+			table.insert(filter, v)
 		end
 	end
-
+	
 	if PlayerName == ply:Nick() then PlayerName = "" end -- If it's just normal chat, why not cut down on networking and get the name on the client
-
-	umsg.Start("DarkRP_Chat", filter)
-		umsg.Short(col.r)
-		umsg.Short(col.g)
-		umsg.Short(col.b)
-		umsg.String(PlayerName)
-		umsg.Entity(ply)
-		umsg.Short(255)
-		umsg.Short(255)
-		umsg.Short(255)
-		umsg.String(Message)
-	umsg.End()
+	
+	net.Start("DarkRP_Chat")
+		net.WriteUInt(col.r, 8)
+		net.WriteUInt(col.g, 8)
+		net.WriteUInt(col.b, 8)
+		net.WriteString(PlayerName)
+		net.WriteEntity(ply)
+		net.WriteUInt(255, 8)
+		net.WriteUInt(255, 8)
+		net.WriteUInt(255, 8)
+		net.WriteString(Message)
+	net.Send(filter)
 end
 
 function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
-	umsg.Start("DarkRP_Chat", receiver)
-		umsg.Short(col1.r)
-		umsg.Short(col1.g)
-		umsg.Short(col1.b)
-		umsg.String(text1)
+	net.Start("DarkRP_Chat")
+		net.WriteUInt(col1.r, 8)
+		net.WriteUInt(col1.g, 8)
+		net.WriteUInt(col1.b, 8)
+		net.WriteString(text1)
+		
 		if sender then
-			umsg.Entity(sender)
+			net.WriteEntity(sender)
 		end
+		
 		if col2 and text2 then
-			umsg.Short(col2.r)
-			umsg.Short(col2.g)
-			umsg.Short(col2.b)
-			umsg.String(text2)
+			net.WriteUInt(col2.r, 8)
+			net.WriteUInt(col2.g, 8)
+			net.WriteUInt(col2.b, 8)
+			net.WriteString(text2)
 		end
-	umsg.End()
+	net.Send(receiver)
 end
 
 function DarkRP.isEmpty(vector, ignore)
