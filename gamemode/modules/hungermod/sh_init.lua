@@ -1,19 +1,65 @@
 FoodItems = {}
 local function AddFoodItem(name, mdl, energy, price)
-	table.insert(FoodItems, {name = name, model = mdl, energy = energy, price = price})
+	local foodItem = istable(mdl) and mdl or {model = mdl, energy = energy, price = price}
+	foodItem.name = name
+	table.insert(FoodItems, foodItem)
 end
 
-AddFoodItem("banana", "models/props/cs_italy/bananna.mdl", 10, 10)
-AddFoodItem("bananabunch", "models/props/cs_italy/bananna_bunch.mdl", 20, 20)
-AddFoodItem("melon", "models/props_junk/watermelon01.mdl", 20, 20)
-AddFoodItem("glassbottle", "models/props_junk/GlassBottle01a.mdl", 20, 20)
-AddFoodItem("popcan", "models/props_junk/PopCan01a.mdl", 5, 5)
-AddFoodItem("plasticbottle", "models/props_junk/garbage_plasticbottle003a.mdl", 15, 15)
-AddFoodItem("milk", "models/props_junk/garbage_milkcarton002a.mdl", 20, 20)
-AddFoodItem("bottle1", "models/props_junk/garbage_glassbottle001a.mdl", 10, 10)
-AddFoodItem("bottle2", "models/props_junk/garbage_glassbottle002a.mdl", 10, 10)
-AddFoodItem("bottle3", "models/props_junk/garbage_glassbottle003a.mdl", 10, 10)
-AddFoodItem("orange", "models/props/cs_italy/orange.mdl", 20, 20)
+AddFoodItem("banana", {
+	model = "models/props/cs_italy/bananna.mdl",
+	energy = 10,
+	price = 10
+})
+AddFoodItem("bananabunch", {
+	model = "models/props/cs_italy/bananna_bunch.mdl",
+	energy = 20,
+	price = 20
+})
+AddFoodItem("melon", {
+	model = "models/props_junk/watermelon01.mdl",
+	energy = 20,
+	price = 20
+})
+AddFoodItem("glassbottle", {
+	model = "models/props_junk/GlassBottle01a.mdl",
+	energy = 20,
+	price = 20
+})
+AddFoodItem("popcan", {
+	model = "models/props_junk/PopCan01a.mdl",
+	energy = 5,
+	price = 5
+})
+AddFoodItem("plasticbottle", {
+	model = "models/props_junk/garbage_plasticbottle003a.mdl",
+	energy = 15,
+	price = 15
+})
+AddFoodItem("milk", {
+	model = "models/props_junk/garbage_milkcarton002a.mdl",
+	energy = 20, 
+	price = 20
+})
+AddFoodItem("bottle1", {
+	model = "models/props_junk/garbage_glassbottle001a.mdl",
+	energy = 10, 
+	price = 10
+})
+AddFoodItem("bottle2", { 
+	model = "models/props_junk/garbage_glassbottle002a.mdl",
+	energy = 10,
+	price = 10
+})
+AddFoodItem("bottle3", {
+	model = "models/props_junk/garbage_glassbottle003a.mdl",
+	energy = 10,
+	price = 10
+})
+AddFoodItem("orange", {
+	model = "models/props/cs_italy/orange.mdl",
+	energy = 20,
+	price = 20
+})
 
 /*---------------------------------------------------------------------------
 Settings for the job and entities
