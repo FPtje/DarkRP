@@ -128,7 +128,7 @@ function DarkRP.toggleSleep(player, command)
 		end
 		return ""
 	else
-		DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
+		DarkRP.notify(player, 1, 4, DarkRP.getPhrase("must_be_alive_to_do_x", "/sleep"))
 		return ""
 	end
 end
