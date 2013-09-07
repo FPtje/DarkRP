@@ -75,7 +75,7 @@ function SWEP:Deploy()
 end
 
 function SWEP:PrimaryAttack()
-	if CLIENT or self.IsWeaponChecking then return end
+	if not IsFirstTimePredicted() or self.IsWeaponChecking then return end
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
 
 	local trace = self.Owner:GetEyeTrace()
@@ -84,14 +84,19 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
+	if SERVER then
+		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+		return
+	end
+
 	local result = ""
 	for k,v in pairs(trace.Entity:GetWeapons()) do
 		if v:IsValid() then
-			result = result..", ".. v:GetClass()
+			result = result..", ".. (v:GetPrintName() and language.GetPhrase(v:GetPrintName()) or v:GetClass())
 		end
 	end
-	self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-	timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+	
 	self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 	if result == "" then
 		self.Owner:ChatPrint(DarkRP.getPhrase("has_no_weapons", trace.Entity:Nick()))
