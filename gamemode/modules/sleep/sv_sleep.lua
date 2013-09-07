@@ -115,7 +115,7 @@ function DarkRP.toggleSleep(player, command)
 				player.Sleeping = true
 			end
 		else
-			DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
+			DarkRP.notify(player, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil((player.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep"))
 		end
 		return ""
 	else
