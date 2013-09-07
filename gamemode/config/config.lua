@@ -300,6 +300,18 @@ GM.Config.PocketBlacklist = {
 	["gunlab"] = true,
 }
 
+-- These weapons are classed as 'legal' in the weapon checker and are not stripped when confiscating weapons.
+GM.Config.noStripWeapons = {
+	["weapon_physgun"] = true,
+	["weapon_physcannon"] = true,
+	["keys"] = true,
+	["gmod_camera"] = true,
+	["gmod_tool"] = true,
+	["weaponchecker"] = true,
+	["med_kit"] = true,
+	["pocket"] = true,
+}
+
 /*---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------*/
