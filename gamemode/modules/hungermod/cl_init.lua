@@ -1,7 +1,7 @@
 local HM = {}
 
-FoodAteAlpha = -1
-FoodAteY = 0
+local FoodAteAlpha = -1
+local FoodAteY = 0
 
 surface.CreateFont("HungerPlus", {
 	size = 70,
