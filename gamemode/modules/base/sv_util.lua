@@ -26,7 +26,6 @@ util.AddNetworkString("DarkRP_Chat")
 function DarkRP.talkToRange(ply, PlayerName, Message, size)
 	local ents = ents.FindInSphere(ply:EyePos(), size)
 	local col = team.GetColor(ply:Team())
-
 	local filter = {}
 
 	for k, v in pairs(ents) do
@@ -34,9 +33,9 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
 			table.insert(filter, v)
 		end
 	end
-	
+
 	if PlayerName == ply:Nick() then PlayerName = "" end -- If it's just normal chat, why not cut down on networking and get the name on the client
-	
+
 	net.Start("DarkRP_Chat")
 		net.WriteUInt(col.r, 8)
 		net.WriteUInt(col.g, 8)
@@ -56,11 +55,11 @@ function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
 		net.WriteUInt(col1.g, 8)
 		net.WriteUInt(col1.b, 8)
 		net.WriteString(text1)
-		
+
 		if sender then
 			net.WriteEntity(sender)
 		end
-		
+
 		if col2 and text2 then
 			net.WriteUInt(col2.r, 8)
 			net.WriteUInt(col2.g, 8)

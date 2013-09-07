@@ -34,7 +34,7 @@ local function RP_PlayerChat(ply, text)
 		if callback == "" then
 			return "", "", DoSayFunc;
 		end
-		text = string.sub(text, string.len(tblCmd.command) + 2, string.len(text))
+		text = string.sub(text, string.len(tblCmd.command) + 3, string.len(text))
 	end
 
 	if callback ~= "" then
