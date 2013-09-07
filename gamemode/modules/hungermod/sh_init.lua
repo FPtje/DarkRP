@@ -1,6 +1,6 @@
 FoodItems = {}
 local function AddFoodItem(name, mdl, amount)
-	FoodItems[name] = { model = mdl, amount = amount }
+	table.insert(FoodItems, {name = name, model = mdl, amount = amount})
 end
 
 AddFoodItem("banana", "models/props/cs_italy/bananna.mdl", 10)
