@@ -18,57 +18,57 @@ function DarkRP.createFood(name, mdl, energy, price)
 end
 AddFoodItem = DarkRP.createFood
 
-AddFoodItem("banana", {
+AddFoodItem("Banana", {
 	model = "models/props/cs_italy/bananna.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("bananabunch", {
+AddFoodItem("Bunch of bananas", {
 	model = "models/props/cs_italy/bananna_bunch.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("melon", {
+AddFoodItem("Melon", {
 	model = "models/props_junk/watermelon01.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("glassbottle", {
+AddFoodItem("Glass bottle", {
 	model = "models/props_junk/GlassBottle01a.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("popcan", {
+AddFoodItem("Pop can", {
 	model = "models/props_junk/PopCan01a.mdl",
 	energy = 5,
 	price = 5
 })
-AddFoodItem("plasticbottle", {
+AddFoodItem("Plastic bottle", {
 	model = "models/props_junk/garbage_plasticbottle003a.mdl",
 	energy = 15,
 	price = 15
 })
-AddFoodItem("milk", {
+AddFoodItem("Milk", {
 	model = "models/props_junk/garbage_milkcarton002a.mdl",
 	energy = 20, 
 	price = 20
 })
-AddFoodItem("bottle1", {
+AddFoodItem("Bottle 1", {
 	model = "models/props_junk/garbage_glassbottle001a.mdl",
 	energy = 10, 
 	price = 10
 })
-AddFoodItem("bottle2", { 
+AddFoodItem("Bottle 2", { 
 	model = "models/props_junk/garbage_glassbottle002a.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("bottle3", {
+AddFoodItem("Bottle 3", {
 	model = "models/props_junk/garbage_glassbottle003a.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("orange", {
+AddFoodItem("Orange", {
 	model = "models/props/cs_italy/orange.mdl",
 	energy = 20,
 	price = 20
