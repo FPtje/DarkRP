@@ -1,11 +1,9 @@
-local HM = {}
-
-function HM.PlayerSpawn(ply)
+local function HMPlayerSpawn(ply)
 	ply:setSelfDarkRPVar("Energy", 100)
 end
-hook.Add("PlayerSpawn", "HM.PlayerSpawn", HM.PlayerSpawn)
+hook.Add("PlayerSpawn", "HMPlayerSpawn", HMPlayerSpawn)
 
-function HM.Think()
+local function HMThink()
 	if not GAMEMODE.Config.hungerspeed then return end
 
 	for k, v in pairs(player.GetAll()) do
@@ -14,12 +12,12 @@ function HM.Think()
 		end
 	end
 end
-hook.Add("Think", "HM.Think", HM.Think)
+hook.Add("Think", "HMThink", HMThink)
 
-function HM.PlayerInitialSpawn(ply)
+local function HMPlayerInitialSpawn(ply)
 	ply:NewHungerData()
 end
-hook.Add("PlayerInitialSpawn", "HM.PlayerInitialSpawn", HM.PlayerInitialSpawn)
+hook.Add("PlayerInitialSpawn", "HMPlayerInitialSpawn", HMPlayerInitialSpawn)
 
 for k, v in pairs(player.GetAll()) do
 	v:NewHungerData()
