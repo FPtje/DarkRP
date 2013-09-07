@@ -1,5 +1,5 @@
 local plyMeta = FindMetaTable("Player")
-local chatCommands = {}
+DarkRP.chatCommands = DarkRP.chatCommands or {}
 
 local validChatCommand = {
 	command = isstring,
@@ -23,22 +23,22 @@ function DarkRP.declareChatCommand(tbl)
 		error("Incorrect chat command! " .. element .. " is invalid!", 2)
 	end
 
-	chatCommands[tbl.command] = chatCommands[tbl.command] or tbl
+	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
 	for k, v in pairs(tbl) do
-		chatCommands[tbl.command][k] = v
+		DarkRP.chatCommands[tbl.command][k] = v
 	end
 end
 
 function DarkRP.removeChatCommand(command)
-	chatCommands[string.lower(command)] = nil
+	DarkRP.chatCommands[string.lower(command)] = nil
 end
 
 function DarkRP.getChatCommand(command)
-	return chatCommands[string.lower(command)]
+	return DarkRP.chatCommands[string.lower(command)]
 end
 
 function DarkRP.getChatCommands()
-	return chatCommands
+	return DarkRP.chatCommands
 end
 
 function DarkRP.getSortedChatCommands()
@@ -49,7 +49,7 @@ function DarkRP.getSortedChatCommands()
 end
 
 -- chat commands that have been defined, but not declared
-DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(chatCommands)
+DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(DarkRP.chatCommands)
 
 /*---------------------------------------------------------------------------
 Chat commands
