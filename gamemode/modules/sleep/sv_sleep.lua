@@ -33,6 +33,7 @@ function DarkRP.toggleSleep(player, command)
 				player:UnSpectate()
 				player:StripWeapons()
 				ragdoll:Remove()
+				ragdoll.OwnerINT = 0
 				if player.WeaponsForSleep and player:GetTable().BeforeSleepTeam == player:Team() then
 					for k,v in pairs(player.WeaponsForSleep) do
 						local wep = player:Give(v[1])
