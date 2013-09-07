@@ -7,11 +7,11 @@ end
 /*---------------------------------------------------------------------------
 Add a message to chat
 ---------------------------------------------------------------------------*/
-local function AddToChat(msg)
-	local col1 = Color(msg:ReadShort(), msg:ReadShort(), msg:ReadShort())
+local function AddToChat(bits)
+	local col1 = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
 
-	local prefixText = msg:ReadString()
-	local ply = msg:ReadEntity()
+	local prefixText = net.ReadString()
+	local ply = net.ReadEntity()
 	ply = IsValid(ply) and ply or LocalPlayer()
 
 	if prefixText == "" or not prefixText then
@@ -19,9 +19,9 @@ local function AddToChat(msg)
 		prefixText = prefixText ~= "" and prefixText or ply:SteamName()
 	end
 
-	local col2 = Color(msg:ReadShort(), msg:ReadShort(), msg:ReadShort())
+	local col2 = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
 
-	local text = msg:ReadString()
+	local text = net.ReadString()
 	local shouldShow
 	if text and text ~= "" then
 		if IsValid(ply) then
@@ -39,7 +39,7 @@ local function AddToChat(msg)
 	end
 	chat.PlaySound()
 end
-usermessage.Hook("DarkRP_Chat", AddToChat)
+net.Receive("DarkRP_Chat", AddToChat)
 
 /*---------------------------------------------------------------------------
 Credits
