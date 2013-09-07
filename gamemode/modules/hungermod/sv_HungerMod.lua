@@ -58,7 +58,7 @@ local function BuyFood(ply, args)
 			SpawnedFood.onlyremover = true
 			SpawnedFood.SID = ply.SID
 			SpawnedFood:SetModel(v.model)
-			SpawnedFood.FoodEnergy = v.amount
+			SpawnedFood.FoodEnergy = v.energy
 			SpawnedFood:Spawn()
 			return ""
 		end
