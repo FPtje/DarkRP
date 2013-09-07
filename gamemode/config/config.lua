@@ -336,8 +336,6 @@ GM.Config.hitCustomerCooldown = 240
 /*---------------------------------------------------------------------------
 Hungermod module
 ---------------------------------------------------------------------------*/
--- foodspawn - Whether players(non-cooks) can spawn food props or not
-GM.Config.foodspawn = true
 -- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)
 GM.Config.hungerspeed = 2
 -- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
