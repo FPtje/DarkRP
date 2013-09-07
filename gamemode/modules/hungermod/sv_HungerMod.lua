@@ -43,7 +43,7 @@ local function BuyFood(ply, args)
 
 	for _,v in pairs(FoodItems) do
 		if string.lower(args) == v.name then
-			local cost = GAMEMODE.Config.foodcost
+			local cost = v.price
 			if ply:canAfford(cost) then
 				ply:addMoney(-cost)
 			else
