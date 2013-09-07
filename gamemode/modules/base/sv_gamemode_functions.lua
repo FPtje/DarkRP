@@ -370,18 +370,8 @@ function GM:CanDrive(ply, ent)
 	return false -- Disabled until people can't minge with it anymore
 end
 
-local allowedProperty = {
-	remover = true,
-	ignite = false,
-	extinguish = true,
-	keepupright = true,
-	gravity = true,
-	collision = true,
-	skin = true,
-	bodygroups = true
-}
 function GM:CanProperty(ply, property, ent)
-	if allowedProperty[property] and ent:CPPICanTool(ply, "remover") then
+	if self.Config.allowedProperties[property] and ent:CPPICanTool(ply, "remover") then
 		return true
 	end
 
