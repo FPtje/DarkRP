@@ -2,6 +2,7 @@ local meta = FindMetaTable("Entity")
 local black = Color(0, 0, 0, 255)
 local white = Color(255, 255, 255, 200)
 local red = Color(128, 30, 30, 255)
+
 function meta:drawOwnableInfo()
 	if LocalPlayer():InVehicle() then return end
 
@@ -27,7 +28,9 @@ function meta:drawOwnableInfo()
 	if self:isKeysOwned() then
 		table.insert(doorInfo, self:getDoorOwner():Nick())
 		for k,v in pairs(self:getKeysCoOwners() or {}) do
-			table.insert(doorInfo, Entity(k):Nick())
+			local ent = Entity(k)
+			if not IsValid(ent) or not ent:IsPlayer() then continue end
+			table.insert(doorInfo, ent:Nick())
 		end
 
 		local allowedCoOwn = self:getKeysAllowedToOwn()
@@ -35,7 +38,9 @@ function meta:drawOwnableInfo()
 			table.insert(doorInfo, DarkRP.getPhrase("keys_other_allowed"))
 
 			for k,v in pairs(allowedCoOwn) do
-				table.insert(doorInfo, Entity(k):Nick())
+				local ent = Entity(k)
+				if not IsValid(ent) or not ent:IsPlayer() then continue end
+				table.insert(doorInfo, ent:Nick())
 			end
 		end
 	elseif doorGroup then
