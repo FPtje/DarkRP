@@ -42,7 +42,7 @@ local function BuyFood(ply, args)
 	end
 
 	for _,v in pairs(FoodItems) do
-		if string.lower(args) == v.name then
+		if string.lower(args) == string.lower(v.name) then
 			local cost = v.price
 			if ply:canAfford(cost) then
 				ply:addMoney(-cost)
