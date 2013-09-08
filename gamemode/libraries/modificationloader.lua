@@ -95,6 +95,7 @@ local customFiles = {
 	"darkrp_customthings/shipments.lua",
 	"darkrp_customthings/entities.lua",
 	"darkrp_customthings/vehicles.lua",
+	"darkrp_customthings/food.lua",
 	"darkrp_customthings/ammo.lua",
 	"darkrp_customthings/groupchats.lua",
 	"darkrp_customthings/agendas.lua", -- has to be run after jobs.lua
