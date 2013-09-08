@@ -8,7 +8,7 @@ surface.CreateFont("HungerPlus", {
 	shadow = false,
 	font = "ChatFont"})
 
-local function HMHUDPaint()
+local function HMHUD()
 	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Hungermod")
 	if shouldDraw == false then return end
 
@@ -44,7 +44,7 @@ local function HMHUDPaint()
 		FoodAteY = FoodAteY - 150 * FrameTime()
 	end
 end
-hook.Add("HUDPaint", "HMHUDPaint", HMHUDPaint)
+hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after DarkRP HUD is drawn in HUDPaint
 
 local function AteFoodIcon(msg)
 	FoodAteAlpha = 1
