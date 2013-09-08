@@ -98,6 +98,8 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 
 	self.tabScroller:AddPanel(sheet.Tab)
 
+	if panel.Refresh then panel:Refresh() end
+
 	return sheet
 end
 

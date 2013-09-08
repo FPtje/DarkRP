@@ -47,7 +47,7 @@ function DarkRP.textWrap(text, font, pxWidth)
 	local spaceSize = surface.GetTextSize(' ')
 	text = text:gsub("(%s?%w+)", function(word)
 			local char = string.sub(word, 1, 1)
-			if char == "\n" then
+			if char == "\n" or char == "\t" then
 				total = 0
 			end
 

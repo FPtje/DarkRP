@@ -11,7 +11,7 @@ function PANEL:Init()
 end
 
 function PANEL:setJob(job, closeFunc)
-	if not job.team then 
+	if not job.team then
 		self:SetVisible(false)
 	elseif job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
 		self:SetVisible(true)
@@ -274,9 +274,6 @@ function PANEL:updateInfo(job)
 	self.lblTitle:SetText(job.name or (job.team and "" or "No jobs available"))
 	self.lblTitle:SizeToContents()
 
-	self.lblDescription:SetText(job.description or "")
-	self.lblDescription:SizeToContents()
-
 	local weps
 	if not job.weapons then
 		self.lblWeapons:SetText("")
@@ -298,6 +295,12 @@ function PANEL:updateInfo(job)
 	end
 
 	self:InvalidateLayout()
+end
+
+function PANEL:PerformLayout()
+	self.BaseClass.PerformLayout(self)
+
+	self.lblDescription:SetText(DarkRP.textWrap(self.job.description or "", "Ubuntu Light", self:GetWide() - 20))
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")
@@ -326,9 +329,14 @@ end
 
 PANEL.Paint = fn.Id
 
--- If the following code is moved to Init, the gamemode will blow up.
-function PANEL:SetParent(parent)
-	self.BaseClass.SetParent(self, parent)
+function PANEL:Refresh()
+	self.pnlLeft:Refresh()
+
+	if not self.pnlLeft.Items then self.pnlRight:updateInfo({}) return end
+
+	-- don't refresh if still valid
+	if self.pnlRight.job and self.pnlLeft.Items[self.pnlRight.job.team] and not self.pnlLeft.Items[self.pnlRight.job.team]:GetDisabled() then return end
+
 	local job
 	for k, v in ipairs(self.pnlLeft:GetItems()) do
 		if v:GetDisabled() then continue end
@@ -336,21 +344,6 @@ function PANEL:SetParent(parent)
 		break
 	end
 	self.pnlRight:updateInfo(job or {})
-end
-
-function PANEL:Refresh()
-	self.pnlLeft:Refresh()
-
-	if not self.pnlLeft.Items then self.pnlRight:updateInfo({}) return end
-	local curTeam = self.pnlLeft.Items[self.pnlRight.job.team]
-	if not curTeam or curTeam:GetDisabled() then
-		for k,v in ipairs(self.pnlLeft.Items) do
-			if v:GetDisabled() then continue end
-			self.pnlRight:updateInfo(v.DarkRPItem)
-			return
-		end
-		self.pnlRight:updateInfo({})
-	end
 end
 
 function PANEL:fillData()

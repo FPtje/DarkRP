@@ -19,9 +19,7 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 		"models/player/Group01/Male_08.mdl",
 		"models/player/Group01/Male_09.mdl"
 	},
-	description = [[The Citizen is the most basic level of society you can hold
-		besides being a hobo.
-		You have no specific role in city life.]],
+	description = [[The Citizen is the most basic level of society you can hold besides being a hobo. You have no specific role in city life.]],
 	weapons = {},
 	command = "citizen",
 	max = 0,
@@ -35,16 +33,13 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 TEAM_POLICE = AddExtraTeam("Civil Protection", {
 	color = Color(25, 25, 170, 255),
 	model = {"models/player/police.mdl", "models/player/police_fem.mdl"},
-	description = [[The protector of every citizen that lives in the city .
+	description = [[The protector of every citizen that lives in the city.
 		You have the power to arrest criminals and protect innocents.
-		Hit a player with your arrest baton to put them in jail
-		Bash a player with a stunstick and they may learn to obey
-		the law.
-		The Battering Ram can break down the door of a criminal, with a warrant
-		for his/her arrest.
-		The Battering Ram can also unfreeze frozen props(if enabled).
-		Type /wanted <name> to alert the public to the presence of a criminal.
-		OR go to tab and warrant someone by clicking the warrant button]],
+		Hit a player with your arrest baton to put them in jail.
+		Bash a player with a stunstick and they may learn to obey the law.
+		The Battering Ram can break down the door of a criminal, with a warrant for their arrest.
+		The Battering Ram can also unfreeze frozen props (if enabled).
+		Type /wanted <name> to alert the public to the presence of a criminal.]],
 	weapons = {"arrest_stick", "unarrest_stick", "weapon_glock2", "stunstick", "door_ram", "weaponchecker"},
 	command = "cp",
 	max = 4,
@@ -96,8 +91,7 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	color = Color(25, 25, 25, 255),
 	model = "models/player/gman_high.mdl",
 	description = [[The Mob boss is the boss of the criminals in the city.
-		With his power he coordinates the gangsters and forms an efficient crime
-		organization.
+		With his power he coordinates the gangsters and forms an efficient crime organization.
 		He has the ability to break into houses by using a lockpick.
 		The Mob boss posesses the ability to unarrest you.]],
 	weapons = {"lockpick", "unarrest_stick"},
@@ -117,12 +111,8 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 TEAM_GUN = AddExtraTeam("Gun Dealer", {
 	color = Color(255, 140, 0, 255),
 	model = "models/player/monk.mdl",
-	description = [[A Gun Dealer is the only person who can sell guns to other
-		people.
-		However, make sure you aren't caught selling illegal firearms to
-		the public.
-		/Buyshipment <name> to Buy a  weapon shipment
-		/Buygunlab to Buy a gunlab that spawns P228 pistols]],
+	description = [[A Gun Dealer is the only person who can sell guns to other people.
+		Make sure you aren't caught selling illegal firearms to the public! You might get arrested!]],
 	weapons = {},
 	command = "gundealer",
 	max = 2,
@@ -135,8 +125,7 @@ TEAM_GUN = AddExtraTeam("Gun Dealer", {
 TEAM_MEDIC = AddExtraTeam("Medic", {
 	color = Color(47, 79, 79, 255),
 	model = "models/player/kleiner.mdl",
-	description = [[With your medical knowledge,
-		you work to restore players to full health.
+	description = [[With your medical knowledge you work to restore players to full health.
 		Without a medic, people cannot be healed.
 		Left click with the Medical Kit to heal other players.
 		Right click with the Medical Kit to heal yourself.]],
@@ -156,10 +145,8 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	description = [[The Chief is the leader of the Civil Protection unit.
 		Coordinate the police force to enforce law in the city.
 		Hit a player with arrest baton to put them in jail.
-		Bash a player with a stunstick and they may learn to
-		obey the law.
-		The Battering Ram can break down the door of a criminal, with a
-		warrant for his/her arrest.
+		Bash a player with a stunstick and they may learn to obey the law.
+		The Battering Ram can break down the door of a criminal, with a warrant for his/her arrest.
 		Type /wanted <name> to alert the public to the presence of a criminal.
 		Type /jailpos to set the Jail Position]],
 	weapons = {"arrest_stick", "unarrest_stick", "weapon_deagle2", "stunstick", "door_ram", "weaponchecker"},
@@ -187,11 +174,11 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 	model = "models/player/breen.mdl",
 	description = [[The Mayor of the city creates laws to govern the city.
 	If you are the mayor you may create and accept warrants.
-	Type /wanted <name>  to warrant a player
-	Type /jailpos to set the Jail Position
+	Type /wanted <name>  to warrant a player.
+	Type /jailpos to set the Jail Position.
 	Type /lockdown initiate a lockdown of the city.
 	Everyone must be inside during a lockdown.
-	The cops patrol the area
+	The cops patrol the area.
 	/unlockdown to end a lockdown]],
 	weapons = {},
 	command = "mayor",
@@ -219,8 +206,7 @@ TEAM_HOBO = AddExtraTeam("Hobo", {
 		You have no home.
 		Beg for your food and money
 		Sing for everyone who passes to get money
-		Make your own wooden home somewhere in a corner or
-		outside someone else's door]],
+		Make your own wooden home somewhere in a corner or outside someone else's door]],
 	weapons = {"weapon_bugbait"},
 	command = "hobo",
 	max = 5,
