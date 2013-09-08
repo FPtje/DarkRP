@@ -87,10 +87,9 @@ timer.Simple(0, function()
 	TEAM_COOK = AddExtraTeam("Cook", {
 		color = Color(238, 99, 99, 255),
 		model = "models/player/mossman.mdl",
-		description = [[As a cook, it is your responsibility to feed the other members
-			of your city.
+		description = [[As a cook, it is your responsibility to feed the other members of your city.
 			You can spawn a microwave and sell the food you make:
-			/Buymicrowave]],
+			/buymicrowave]],
 		weapons = {},
 		command = "cook",
 		max = 2,
