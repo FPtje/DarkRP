@@ -1,25 +1,23 @@
--- copied from serverside
-FoodItems = { }
-local function AddFoodItem(name, mdl, amount)
-	FoodItems[name] = { model = mdl, amount = amount }
-end
+local cvars = cvars
+local draw = draw
+local hook = hook
+local math = math
+local table = table
+local timer = timer
+local Color = Color
+local ColorAlpha = ColorAlpha
+local CreateClientConVar = CreateClientConVar
+local GetConVar = GetConVar
+local GetConVarNumber = GetConVarNumber
+local ipairs = ipairs
+local pairs = pairs
+local unpack = unpack
 
-AddFoodItem("banana", "models/props/cs_italy/bananna.mdl", GM.Config.foodcost or 10)
-AddFoodItem("bananabunch", "models/props/cs_italy/bananna_bunch.mdl", GM.Config.foodcost or 20)
-AddFoodItem("melon", "models/props_junk/watermelon01.mdl", GM.Config.foodcost or 20)
-AddFoodItem("glassbottle", "models/props_junk/GlassBottle01a.mdl", GM.Config.foodcost or 20)
-AddFoodItem("popcan", "models/props_junk/PopCan01a.mdl", GM.Config.foodcost or 5)
-AddFoodItem("plasticbottle", "models/props_junk/garbage_plasticbottle003a.mdl", GM.Config.foodcost or 15)
-AddFoodItem("milk", "models/props_junk/garbage_milkcarton002a.mdl", GM.Config.foodcost or 20)
-AddFoodItem("bottle1", "models/props_junk/garbage_glassbottle001a.mdl", GM.Config.foodcost or 10)
-AddFoodItem("bottle2", "models/props_junk/garbage_glassbottle002a.mdl", GM.Config.foodcost or 10)
-AddFoodItem("bottle3", "models/props_junk/garbage_glassbottle003a.mdl", GM.Config.foodcost or 10)
-AddFoodItem("orange", "models/props/cs_italy/orange.mdl", GM.Config.foodcost or 20)
+local ConVars = {}
+local HUDWidth
 
-local HM = { }
-
-FoodAteAlpha = -1
-FoodAteY = 0
+local FoodAteAlpha = -1
+local FoodAteY = 0
 
 surface.CreateFont("HungerPlus", {
 	size = 70,
@@ -28,27 +26,58 @@ surface.CreateFont("HungerPlus", {
 	shadow = false,
 	font = "ChatFont"})
 
-function HM.HUDPaint()
+local function ReloadConVars()
+	ConVars = {
+		HungerBackground = {0, 0, 0, 255},
+		HungerForeground = {30, 30, 120, 255},
+		HungerPercentageText = {255, 255, 255, 255},
+		StarvingText = {200, 0, 0, 255},
+		FoodEatenBackground = {0, 0, 0}, -- No alpha
+		FoodEatenForeground = {20, 100, 20} -- No alpha
+	}
+	for name, Colour in pairs(ConVars) do
+		ConVars[name] = {}
+		for num, rgb in ipairs(Colour) do
+			local ConVarName = name..num
+			local CVar = GetConVar(ConVarName) or CreateClientConVar(ConVarName, rgb, true, false)
+			table.insert(ConVars[name], CVar:GetInt())
+
+			if not cvars.GetConVarCallbacks(ConVarName, false) then
+				cvars.AddChangeCallback(ConVarName, function() timer.Simple(0, ReloadConVars) end)
+			end
+		end
+		ConVars[name] = Color(unpack(ConVars[name]))
+	end
+
+	if not HUDWidth then
+		cvars.AddChangeCallback("HudW", function() timer.Simple(0, ReloadConVars) end)
+	end
+
+	HUDWidth = GetConVarNumber("HudW")
+end
+timer.Simple(0, ReloadConVars)
+
+local function HMHUD()
 	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Hungermod")
 	if shouldDraw == false then return end
 
-	local energy = LocalPlayer():getDarkRPVar("Energy") or 0
+	local energy = math.ceil(LocalPlayer():getDarkRPVar("Energy") or 0)
 
 	local x = 5
 	local y = ScrH() - 9
 
 	local cornerRadius = 4
 	if energy > 0 then
-		cornerRadius = math.Min(4, (GetConVarNumber("HudW")-9)*(math.Clamp(energy, 0, 100)/100)/3*2 - (GetConVarNumber("HudW")-9)*(math.Clamp(energy, 0, 100)/100)/3*2%2)
+		cornerRadius = math.Min(4, (HUDWidth-9)*(energy/100)/3*2 - (HUDWidth-9)*(energy/100)/3*2%2)
 	end
 
-	draw.RoundedBox(cornerRadius, x - 1, y - 1, GetConVarNumber("HudW") - 8, 9, Color(0, 0, 0, 255))
+	draw.RoundedBox(cornerRadius, x - 1, y - 1, HUDWidth - 8, 9, ConVars.HungerBackground)
 
 	if energy > 0 then
-		draw.RoundedBox(cornerRadius, x, y, (GetConVarNumber("HudW") - 9) * (math.Clamp(energy, 0, 100) / 100), 7, Color(30, 30, 120, 255))
-		draw.DrawText(math.ceil(energy) .. "%", "DefaultSmall", GetConVarNumber("HudW") / 2, y - 2, Color(255, 255, 255, 255), 1)
+		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / 100), 7, ConVars.HungerForeground)
+		draw.SimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1)
 	else
-		draw.DrawText(DarkRP.getPhrase("starving"), "ChatFont", GetConVarNumber("HudW") / 2, y - 4, Color(200, 0, 0, 255), 1)
+		draw.SimpleText(DarkRP.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
 	end
 
 	if FoodAteAlpha > -1 then
@@ -57,14 +86,14 @@ function HM.HUDPaint()
 			mul = -.5
 		end
 
-		draw.DrawText("++", "HungerPlus", 208, FoodAteY + 1, Color(0, 0, 0, FoodAteAlpha), 0)
-		draw.DrawText("++", "HungerPlus", 207, FoodAteY, Color(20, 100, 20, FoodAteAlpha), 0)
+		draw.SimpleText("++", "HungerPlus", 208, FoodAteY + 1, ColorAlpha(ConVars.FoodEatenBackground, FoodAteAlpha), 0)
+		draw.SimpleText("++", "HungerPlus", 207, FoodAteY, ColorAlpha(ConVars.FoodEatenForeground, FoodAteAlpha), 0)
 
-		FoodAteAlpha = math.Clamp(FoodAteAlpha + 1000 * FrameTime() * mul, -1, 255)
+		FoodAteAlpha = math.Clamp(FoodAteAlpha + 4 * FrameTime() * mul, -1, 1) --ColorAlpha works with 0-1 alpha
 		FoodAteY = FoodAteY - 150 * FrameTime()
 	end
 end
-hook.Add("HUDPaint", "HM.HUDPaint", HM.HUDPaint)
+hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after DarkRP HUD is drawn in HUDPaint
 
 local function AteFoodIcon(msg)
 	FoodAteAlpha = 1
