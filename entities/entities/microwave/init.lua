@@ -123,7 +123,5 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-	timer.Destroy(self:EntIndex())
-	local ply = self:Getowning_ent()
-	if not IsValid(ply) then return end
+	timer.Destroy(self:EntIndex().."food")
 end

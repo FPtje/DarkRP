@@ -1,5 +1,5 @@
-DarkRP.PLAYER.NewHungerData = DarkRP.stub{
-	name = "NewHungerData",
+DarkRP.PLAYER.newHungerData = DarkRP.stub{
+	name = "newHungerData",
 	description = "Create the initial hunger data (called on PlayerInitialSpawn).",
 	parameters = {
 	},
@@ -8,8 +8,8 @@ DarkRP.PLAYER.NewHungerData = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
-DarkRP.PLAYER.HungerUpdate = DarkRP.stub{
-	name = "HungerUpdate",
+DarkRP.PLAYER.hungerUpdate = DarkRP.stub{
+	name = "hungerUpdate",
 	description = "Makes the player slightly more hungry. Called in a timer by default.",
 	parameters = {
 	},
