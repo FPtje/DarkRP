@@ -36,7 +36,7 @@ end
 
 function PANEL:CreateAdminIcon()
 	self.imgAdmin = vgui.Create("DImage", self)
-	self.imgAdmin:SetImage("gui/silkicons/shield")
+	self.imgAdmin:SetImage("icon16/shield.png") -- SilkIcons are now merged into GMOD as materials/icon16
 	self.imgAdmin:SetTooltip("#Admin Only")
 end
 
@@ -95,7 +95,7 @@ function PANEL2:BuildList()
 
 		for k, v in SortedPairs(FAdmin.AmmoTypes) do
 			local Icon = vgui.CreateFromTable(WeaponIcon, self)
-			Icon:Setup(k, k, "vgui/achievements/ep1_beat_game_onebullet", false, self, true)
+			Icon:Setup(k, k, "spawnicons/models/items/boxmrounds60x60.png", false, self, true) -- Gets created clientside by GMOD when someone is after that model, or trying to buy ammo.
 			AmmoPan:AddItem(Icon)
 		end
 	end
