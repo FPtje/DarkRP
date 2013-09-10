@@ -70,6 +70,7 @@ Current developer:
 People who have contributed (ordered by commits, with at least two commits)
 	Bo98
 	Drakehawke (STEAM_0:0:22342869) (64 commits on old SVN)
+	FiG-Scorn
 	Eusion (STEAM_0:0:20450406) (3 commits on old SVN)
 	KoZ
 	MattWalton12
