@@ -104,7 +104,7 @@ local customFiles = {
 local function loadCustomDarkRPItems()
 	for _, File in pairs(customFiles) do
 		if not file.Exists(File, "LUA") then continue end
-		if File == "darkrp_customthings/food.lua" and DarkRP.disabledDefaults["modules"]["hungermod"] then return end
+		if File == "darkrp_customthings/food.lua" and DarkRP.disabledDefaults["modules"]["hungermod"] then continue end
 
 		if SERVER then AddCSLuaFile(File) end
 		include(File)
