@@ -90,15 +90,8 @@ local function loadLanguages()
 	end
 end
 
-function DarkRP.loadCustomJobs()
-	local File = "darkrp_customthings/jobs.lua"
-	if not file.Exists(File, "LUA") then return end
-
-	if SERVER then AddCSLuaFile(File) end
-	include(File)
-end
-
 local customFiles = {
+	["darkrp_customthings/jobs.lua"] = true,
 	["darkrp_customthings/shipments.lua"] = true,
 	["darkrp_customthings/entities.lua"] = true,
 	["darkrp_customthings/vehicles.lua"] = true,

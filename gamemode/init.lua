@@ -65,11 +65,6 @@ MySQLite.initialize()
 
 DarkRP.DARKRP_LOADING = true
 include("config/jobrelated.lua")
-
-	-- Load custom jobs before the rest so default jobs can be overridden
-	DarkRP.DARKRP_LOADING = nil
-	DarkRP.loadCustomJobs()
-	DarkRP.DARKRP_LOADING = true
 include("config/addentities.lua")
 include("config/ammotypes.lua")
 DarkRP.DARKRP_LOADING = nil
