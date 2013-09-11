@@ -91,19 +91,19 @@ local function loadLanguages()
 end
 
 local customFiles = {
-	["darkrp_customthings/jobs.lua"] = true,
-	["darkrp_customthings/shipments.lua"] = true,
-	["darkrp_customthings/entities.lua"] = true,
-	["darkrp_customthings/vehicles.lua"] = true,
-	["darkrp_customthings/food.lua"] = not DarkRP.disabledDefaults["modules"]["hungermod"],
-	["darkrp_customthings/ammo.lua"] = true,
-	["darkrp_customthings/groupchats.lua"] = true,
-	["darkrp_customthings/agendas.lua"] = true, -- has to be run after jobs.lua
-	["darkrp_customthings/doorgroups.lua"] = true, -- has to be run after jobs.lua
+	"darkrp_customthings/jobs.lua",
+	"darkrp_customthings/shipments.lua",
+	"darkrp_customthings/entities.lua",
+	"darkrp_customthings/vehicles.lua",
+	"darkrp_customthings/food.lua",
+	"darkrp_customthings/ammo.lua",
+	"darkrp_customthings/groupchats.lua",
+	"darkrp_customthings/agendas.lua", -- has to be run after jobs.lua
+	"darkrp_customthings/doorgroups.lua", -- has to be run after jobs.lua
 }
 local function loadCustomDarkRPItems()
-	for File, enabled in pairs(customFiles) do
-		if not enabled or not file.Exists(File, "LUA") then continue end
+	for _, File in pairs(customFiles) do
+		if not file.Exists(File, "LUA") then continue end
 
 		if SERVER then AddCSLuaFile(File) end
 		include(File)
