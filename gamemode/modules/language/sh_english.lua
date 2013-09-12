@@ -145,7 +145,7 @@ local english = {
 	gun_lab = "Gun Lab",
 	gun = "gun",
 	microwave = "Microwave",
-	food = "food",
+	food = "Food",
 	money_printer = "Money Printer",
 
 	sign_this_letter = "Sign this letter",
