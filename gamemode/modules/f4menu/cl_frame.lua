@@ -125,6 +125,9 @@ end
 
 function PANEL:Show()
 	self:Refresh()
+	if #self.Items > 0 and self:GetActiveTab() and self:GetActiveTab():GetDisabled() then
+		self:SetActiveTab(self.Items[1].Tab) --Jobs
+	end
 	self.F4Down = true
 	self:SetVisible(true)
 	gui.SetMousePos(mouseX, mouseY)
