@@ -197,6 +197,15 @@ Ammo panel
 ---------------------------------------------------------------------------*/
 PANEL = {}
 
+local function canBuyAmmo(item)
+	local ply = LocalPlayer()
+
+	if item.customCheck and not item.customCheck(ply) then return false, true end
+	if not ply:canAfford(item.price) then return false, false end
+
+	return true
+end
+
 function PANEL:generateButtons()
 	for k,v in pairs(GAMEMODE.AmmoTypes) do
 		local pnl = vgui.Create("F4MenuEntityButton", self)
@@ -208,17 +217,16 @@ end
 
 function PANEL:shouldHide()
 	for k,v in pairs(GAMEMODE.AmmoTypes) do
-		local canBuy, important = not v.customCheck or v.customCheck(LocalPlayer()), true
-
+		local canBuy, important = canBuyAmmo(v)
 		if not self:isItemHidden(not canBuy, important) then return false end
 	end
-
 	return true
 end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		v:SetDisabled(v.DarkRPItem.customCheck and not v.DarkRPItem.customCheck(LocalPlayer()) or false, true)
+		local canBuy, important = canBuyAmmo(v.DarkRPItem)
+		v:SetDisabled(not canBuy, important)
 	end
 	self.BaseClass.PerformLayout(self)
 end
