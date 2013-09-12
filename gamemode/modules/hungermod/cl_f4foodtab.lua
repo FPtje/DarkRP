@@ -21,7 +21,6 @@ end
 function PANEL:shouldHide()
 	for k,v in pairs(FoodItems) do
 		local canBuy, important = canBuyFood(v)
-		important = important or true
 		if not self:isItemHidden(not canBuy, important) then return false end
 	end
 	return true
