@@ -76,7 +76,6 @@ end
 function PANEL:shouldHide()
 	for k,v in pairs(DarkRPEntities) do
 		local canBuy, important = canBuyEntity(v)
-		important = important or true
 		if not self:isItemHidden(not canBuy, important) then return false end
 	end
 	return true
