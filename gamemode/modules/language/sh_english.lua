@@ -29,7 +29,7 @@ local english = {
 
 	property_tax = "Property tax! %s",
 	property_tax_cant_afford = "You couldn't pay the taxes! Your property has been taken away from you!",
-	taxday = "Tax Day! %d%% of your income was taken!",
+	taxday = "Tax Day! %s%% of your income was taken!",
 
 	found_cheque = "You have found %s%s in a cheque made out to you from %s.",
 	cheque_details = "This cheque is made out to %s.",
