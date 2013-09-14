@@ -52,10 +52,10 @@ local creds =
 LightRP was created by Rick darkalonio. LightRP was sandbox with some added RP elements.
 LightRP was released at the end of January 2007
 
-DarkRP was created as a spoof of LightRP by Rickster, somewhere in the summer of 2007.
+DarkRP was created as a spoof of LightRP by Rickster, somewhere during the summer of 2007.
 Note: There was a DarkRP in 2006, but that was an entirely different gamemode.
 
-Rickster went to serve his country and went to Afghanistan. During that time, the following people made updates for DarkRP:
+Rickster went to serve his country and went to Afghanistan. During that time, the following people updated DarkRP:
 Picwizdan
 Sibre
 [GNC] Matt
