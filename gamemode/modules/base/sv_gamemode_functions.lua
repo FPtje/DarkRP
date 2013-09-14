@@ -58,6 +58,12 @@ end
 function GM:canDropWeapon(ply, weapon)
 	if not IsValid(weapon) then return false end
 	local class = string.lower(weapon:GetClass())
+	local team = ply:Team()
+	
+	if not GAMEMODE.Config.dropspawnedweapons then
+	if RPExtraTeams[team] and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
+	end
+
 	if self.Config.DisallowDrop[class] then return false end
 
 	if not GAMEMODE.Config.restrictdrop then return true end
