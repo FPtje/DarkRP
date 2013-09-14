@@ -39,6 +39,10 @@ function FPP.UnGhost(ply, ent)
 	end
 end
 
+local blacklist = {
+	["gmod_wire_indicator"] = true,
+	["phys_constraint"] = true
+}
 function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
 	if not tobool(FPP.Settings.FPP_ANTISPAM1.toggle) then return end
 	local phys = ent:GetPhysicsObject()
@@ -47,7 +51,7 @@ function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
 	local class = ent:GetClass()
 	-- I power by ten because the volume of a prop can vary between 65 and like a few billion
 	if phys:GetVolume() and phys:GetVolume() > math.pow(10, FPP.Settings.FPP_ANTISPAM1.bigpropsize) and not string.find(class, "constraint") and not string.find(class, "hinge")
-	and not string.find(class, "magnet") and not string.find(class, "collision") then
+	and not string.find(class, "magnet") and not string.find(class, "collision") and not blacklist[class] then
 		if not IsDuplicate then
 			ply.FPPAntispamBigProp = (ply.FPPAntispamBigProp or 0) + 1
 			timer.Simple(10*FPP.Settings.FPP_ANTISPAM1.bigpropwait, function()
@@ -72,7 +76,7 @@ function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
 		return
 	end
 
-	if not IsDuplicate then
+	if not IsDuplicate and not blacklist[class] then
 		ply.FPPAntiSpamCount = (ply.FPPAntiSpamCount or 0) + 1
 		local time = math.Max(1, FPP.Settings.FPP_ANTISPAM1.smallpropdowngradecount)
 		timer.Simple(ply.FPPAntiSpamCount / time, function()
