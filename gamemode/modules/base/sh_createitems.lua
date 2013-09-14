@@ -93,7 +93,7 @@ local function declareTeamCommands(CTeam)
 					fn.Compose{fn.Curry(fn.Eq, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
 					fn.If(
 						fn.Curry(istable, 2)(CTeam.NeedToChangeFrom),
-						fn.Compose{fn.Curry(table.HasValue, 2)(CTeam.NeedsToChangeFrom), plyMeta.Team},
+						fn.Compose{fn.Curry(table.HasValue, 2)(CTeam.NeedToChangeFrom), plyMeta.Team},
 						fn.Curry(fn.Const, 2)(true)
 					)()
 				)(),
