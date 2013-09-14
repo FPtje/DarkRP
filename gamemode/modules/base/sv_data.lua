@@ -293,6 +293,7 @@ end
  Doors
  ---------------------------------------------------------*/
 function DarkRP.storeDoorData(ent)
+	if not ent:CreatedByMap() then return end
 	local map = string.lower(game.GetMap())
 	local nonOwnable = ent:getKeysNonOwnable()
 	local title = ent:getKeysTitle()
@@ -323,6 +324,7 @@ function setUpNonOwnableDoors()
 end
 
 function DarkRP.storeTeamDoorOwnability(ent)
+	if not ent:CreatedByMap() then return end
 	local map = string.lower(game.GetMap())
 
 	MySQLite.query("DELETE FROM darkrp_jobown WHERE idx = " .. ent:doorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
@@ -345,6 +347,7 @@ function setUpTeamOwnableDoors()
 end
 
 function DarkRP.storeDoorGroup(ent, group)
+	if not ent:CreatedByMap() then return end
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
 	local index = ent:doorIndex()
 
