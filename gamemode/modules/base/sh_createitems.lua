@@ -381,6 +381,8 @@ local function addEntityCommands(tblEnt)
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
 
+		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item)
+
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency, tblEnt.price))
 		if not ply["max"..cmdname] then
 			ply["max"..cmdname] = 0

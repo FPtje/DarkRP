@@ -689,6 +689,30 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "playerBoughtCustomEntity",
+	description = "Called when a player bought an entity (like a money printer or a gun lab).",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "entityTable",
+			description = "The table of the custom entity.",
+			type = "table"
+		},
+		{
+			name = "ent",
+			description = "The spawned vehicle.",
+			type = "Entity"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
 	name = "canDemote",
 	description = "Whether a player can demote another player.",
 	parameters = {
