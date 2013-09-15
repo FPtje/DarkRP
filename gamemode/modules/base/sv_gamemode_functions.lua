@@ -59,7 +59,7 @@ function GM:canDropWeapon(ply, weapon)
 	if not IsValid(weapon) then return false end
 	local class = string.lower(weapon:GetClass())
 	local team = ply:Team()
-	
+
 	if not GAMEMODE.Config.dropspawnedweapons then
 	if RPExtraTeams[team] and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
 	end
@@ -841,7 +841,9 @@ function GM:InitPostEntity()
 	physenv.SetPerformanceSettings(physData)
 
 	-- Scriptenforcer enabled by default? Fuck you, not gonna happen.
-	game.ConsoleCommand("sv_allowcslua 1\n")
+	if not GAMEMODE.Config.disallowClientsideScripts then
+		game.ConsoleCommand("sv_allowcslua 1\n")
+	end
 	game.ConsoleCommand("physgun_DampingFactor 0.9\n")
 	game.ConsoleCommand("sv_sticktoground 0\n")
 	game.ConsoleCommand("sv_airaccelerate 100\n")
