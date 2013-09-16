@@ -256,7 +256,8 @@ local function Ragdoll(ply, cmd, args)
 
 			if time ~= 0 then
 				timer.Simple(time, function()
-					if IsValid(target) and IsValid(target.FAdminRagdoll) then
+					if not IsValid(target) then return end
+					if IsValid(target.FAdminRagdoll) then
 						target:SetPos(target.FAdminRagdoll:GetPos())
 						target.FAdminRagdoll:Remove()
 					elseif istable(target.FAdminRagdoll) then
