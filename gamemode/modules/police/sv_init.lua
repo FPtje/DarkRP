@@ -327,9 +327,9 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 	GAMEMODE:PlayerLoadout(ply)
 	if GAMEMODE.Config.telefromjail and (not FAdmin or not ply:FAdmin_GetGlobal("fadmin_jailed")) then
 		local _, pos = GAMEMODE:PlayerSelectSpawn(ply)
-		ply:SetPos(pos)
+		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos) end end) -- workaround for SetPos in weapon event bug
 	elseif FAdmin and ply:FAdmin_GetGlobal("fadmin_jailed") then
-		ply:SetPos(ply.FAdminJailPos)
+		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(ply.FAdminJailPos) end end)
 	end
 
 	timer.Destroy(ply:SteamID() .. "jailtimer")
