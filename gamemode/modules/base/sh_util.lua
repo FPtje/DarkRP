@@ -77,6 +77,14 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 		local distance = nearestPoint:Distance(projected)
 
 		if distance < smallestDistance then
+			local trace = {
+				start = self:GetShootPos(),
+				endpos = nearestPoint,
+				filter = {self, ent}
+			}
+			local traceLine = util.TraceLine(trace)
+			if traceLine.Hit then continue end
+
 			smallestDistance = distance
 			foundEnt = ent
 		end
