@@ -844,6 +844,16 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
+		{
+			name = "suppress",
+			description = "Suppress the salary message.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "Override the default message (suppress must be false).",
+			type = "string"
+		}
 	}
 }
 

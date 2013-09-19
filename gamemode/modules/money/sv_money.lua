@@ -24,12 +24,13 @@ function meta:payDay()
 	if not self:isArrested() then
 		DarkRP.retrieveSalary(self, function(amount)
 			amount = math.floor(amount or GAMEMODE.Config.normalsalary)
-			hook.Call("playerGetSalary", GAMEMODE, self, amount)
+			local suppress, message = hook.Call("playerGetSalary", GAMEMODE, self, amount)
+
 			if amount == 0 or not amount then
-				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_unemployed"))
+				if not suppress then DarkRP.notify(self, 4, 4, message or DarkRP.getPhrase("payday_unemployed")) end
 			else
 				self:addMoney(amount)
-				DarkRP.notify(self, 4, 4, DarkRP.getPhrase("payday_message", GAMEMODE.Config.currency .. amount))
+				if not suppress then DarkRP.notify(self, 4, 4, message or DarkRP.getPhrase("payday_message", GAMEMODE.Config.currency .. amount)) end
 			end
 		end)
 	else
