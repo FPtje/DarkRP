@@ -1,6 +1,5 @@
-
 -- German translation by DaCoolboy(STEAM_0:0:15924852) - Contact for critism etc.  
-local english = {
+local german = {
 	-- Admin things
 	need_admin = "Du brauchst Admin-Privilegien fuer: %s",
 	need_sadmin = "Du brauchst SuperAdmin-Privilegien fuer: %s",
@@ -101,7 +100,7 @@ local english = {
 	disabled = "%s ist deaktiviert! %s",
 	limit = "Du hast das Limit fuer %s erreicht!",
 	have_to_wait = "Du musst %d Sekunden warten bevor du dies wieder benutzen kannst: %s!",
-	must_be_looking_at = "Du musst dafür  ein %s ansehen!",
+	must_be_looking_at = "Du musst dafuer ein %s ansehen!",
 	incorrect_job = "Du hast nicht den richtigen Beruf um diesen zu tun: %s",
 	unavailable = "Dieser %s ist nicht verfuegbar",
 	unable = "Du kannst dies nicht tun: %s. %s",
@@ -176,7 +175,7 @@ local english = {
 
 	searchwarrantbutton = "Eine Fahndung fuer einen Spieler einleiten",
 	unwarrantbutton = "Eine Fahndung fuer einen Spieler einstellen",
-	noone_available = "Niemand verfügbar",
+	noone_available = "Niemand verfuegbar",
 	request_warrant = "Eine Durchsuchungsbeschluss beantragen",
 	make_wanted = "Eine Fahndung einleiten",
 	make_unwanted = "Eine Fahndung einstellen",
