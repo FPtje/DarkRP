@@ -401,7 +401,7 @@ SecondaryAttack
 function SWEP:SecondaryAttack()
 	if not self.IronSightsPos then return end
 
-	if (self.NextSecondaryAttack > CurTime()) then return end
+	if self.NextSecondaryAttack > CurTime() or self.reloading then return end
 
 	local bIronsights = not self.Ironsights
 
@@ -461,7 +461,7 @@ if CLIENT then
 	function SWEP:ViewModelDrawn()
 		if not IsValid(self.Owner) then return end
 		local vm = self.Owner:GetViewModel()
-		
+
 		if self.DarkRPViewModelBoneManipulations then
 			self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
 		else
@@ -476,21 +476,21 @@ if CLIENT then
 		local bones = {}
 		for i = 0, vm:GetBoneCount() - 1 do
 			local bonename = vm:GetBoneName(i)
-			if manipulations[bonename] then 
+			if manipulations[bonename] then
 				bones[bonename] = manipulations[bonename]
 			else
-				bones[bonename] = { 
+				bones[bonename] = {
 					scale = Vector(1,1,1),
 					pos = Vector(0,0,0),
 					angle = Angle(0,0,0)
 				}
 			end
 		end
-			
+
 		for k, v in pairs(bones) do
 			local bone = vm:LookupBone(k)
 			if not bone then continue end
-				
+
 			-- Bone scaling seems to be buggy. Workaround.
 			local scale = Vector(v.scale.x, v.scale.y, v.scale.z)
 			local ms = Vector(1,1,1)
@@ -501,7 +501,7 @@ if CLIENT then
 				cur = vm:GetBoneParent(cur)
 			end
 			scale = scale * ms
-				
+
 			if vm:GetManipulateBoneScale(bone) ~= scale then
 				vm:ManipulateBoneScale(bone, scale)
 			end
@@ -511,10 +511,10 @@ if CLIENT then
 			if vm:GetManipulateBoneAngles(bone) ~= v.angle then
 				vm:ManipulateBoneAngles(bone, v.angle)
 			end
-		end 
+		end
 	end
-	
-	function SWEP:ResetDarkRPBones(vm)	
+
+	function SWEP:ResetDarkRPBones(vm)
 		if not IsValid(vm) or not vm:GetBoneCount() then return end
 		for i = 0, vm:GetBoneCount() - 1 do
 			vm:ManipulateBoneScale(i, Vector(1, 1, 1))
