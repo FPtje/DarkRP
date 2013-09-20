@@ -2,14 +2,16 @@
 -- If a player uses /afk, they go into AFK mode, they will not be autodemoted and their salary is set to $0 (you can still be killed/vote demoted though!).
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
-local function AFKDemote(ply)
-	local rpname = ply:getDarkRPVar("rpname")
+function AFKDemote(ply)
+	local shouldDemote, demoteTeam, suppressMsg, msg = hook.Call("playerAFKDemoted", nil, ply)
+	demoteTeam = demoteTeam or GAMEMODE.DefaultTeam
 
-	if ply:Team() ~= GAMEMODE.DefaultTeam then
-		ply:changeTeam(GAMEMODE.DefaultTeam, true)
-		ply:setSelfDarkRPVar("AFKDemoted", true)
-		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("hes_afk_demoted", rpname))
+	if ply:Team() ~= demoteTeam and shouldDemote ~= false then
+		local rpname = ply:getDarkRPVar("rpname")
+		ply:changeTeam(demoteTeam, true)
+		if not suppressMsg then DarkRP.notifyAll(0, 5, msg or DarkRP.getPhrase("hes_afk_demoted", rpname)) end
 	end
+	ply:setSelfDarkRPVar("AFKDemoted", true)
 	ply:setDarkRPVar("job", "AFK")
 end
 
@@ -46,7 +48,7 @@ hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply:getDarkRPVar("AFKDemoted") then
-		ply:setDarkRPVar("job", team.GetName(GAMEMODE.DefaultTeam))
+		ply:setDarkRPVar("job", team.GetName(ply:Team()))
 		timer.Simple(3, function() ply:setSelfDarkRPVar("AFKDemoted", false) end)
 	end
 end
