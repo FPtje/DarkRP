@@ -73,8 +73,6 @@ GM.Config.dropspawnedweapons			= true
 GM.Config.dynamicvoice 					= true
 -- earthquakes - Enable/disable earthquakes.
 GM.Config.earthquakes 					= false
--- enablebuyhealth - Enable/disable buyhealth
-GM.Config.enablebuyhealth 				= true
 -- enablebuypistol - Turn /buy on of off.
 GM.Config.enablebuypistol 				= true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
