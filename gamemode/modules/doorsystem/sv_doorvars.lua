@@ -135,7 +135,7 @@ function DarkRP.updateDoorData(door, member)
 	if not IsValid(door) or not door.DoorData then error("Calling updateDoorData on a door that has no data!") end
 
 	net.Start("DarkRP_UpdateDoorData")
-		net.WriteFloat(door:EntIndex())
+		net.WriteUInt(door:EntIndex(), 32)
 		net.WriteString(member)
 		net.WriteType(door.DoorData[member])
 	net.Send(player.GetAll())

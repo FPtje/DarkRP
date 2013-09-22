@@ -77,16 +77,16 @@ end
 /*---------------------------------------------------------------------------
 Door data
 ---------------------------------------------------------------------------*/
-local doorData = {}
+DarkRP.doorData = DarkRP.doorData or {}
 
 /*---------------------------------------------------------------------------
 Interface functions
 ---------------------------------------------------------------------------*/
 function meta:getDoorData()
 	local i = self:EntIndex()
-	self.DoorData = doorData[i] or {} -- Backwards compatibility
+	self.DoorData = DarkRP.doorData[i] or {} -- Backwards compatibility
 
-	return doorData[i] or {}
+	return DarkRP.doorData[i] or {}
 end
 
 /*---------------------------------------------------------------------------
@@ -98,7 +98,7 @@ Retrieve all the data for all doors
 ---------------------------------------------------------------------------*/
 local function retrieveAllDoorData(len)
 	local data = net.ReadTable()
-	doorData = data
+	DarkRP.doorData = data
 end
 net.Receive("DarkRP_AllDoorData", retrieveAllDoorData)
 
@@ -106,15 +106,15 @@ net.Receive("DarkRP_AllDoorData", retrieveAllDoorData)
 Update changed variables
 ---------------------------------------------------------------------------*/
 local function updateDoorData()
-	local door = net.ReadFloat()
+	local door = net.ReadUInt(32)
 
-	doorData[door] = doorData[door] or {}
+	DarkRP.doorData[door] = DarkRP.doorData[door] or {}
 
 	local var = net.ReadString()
 	local valueType = net.ReadUInt(8)
 	local value = net.ReadType(valueType)
 
-	doorData[door][var] = value
+	DarkRP.doorData[door][var] = value
 end
 net.Receive("DarkRP_UpdateDoorData", updateDoorData)
 
