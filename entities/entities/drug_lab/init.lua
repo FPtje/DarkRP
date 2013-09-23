@@ -16,7 +16,6 @@ function ENT:Initialize()
 	self.damage = 100
 	local ply = self:Getowning_ent()
 	self.SID = ply.SID
-	self.SID = ply.SID
 	self:Setprice(math.Clamp((GAMEMODE.Config.pricemin ~= 0 and GAMEMODE.Config.pricemin) or 100, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 100))
 	self.CanUse = true
 	self.ShareGravgun = true

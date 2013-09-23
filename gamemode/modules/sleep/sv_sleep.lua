@@ -7,11 +7,17 @@ local function ResetKnockouts(player)
 end
 hook.Add("PlayerSpawn", "Knockout", ResetKnockouts)
 
+local function stopSleep(ply)
+	if ply.Sleeping then
+		DarkRP.toggleSleep(ply, "force")
+	end
+end
 
 function DarkRP.toggleSleep(player, command)
 	if not player.SleepSound then
 		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
 	end
+	local timerName = player:EntIndex() .. "SleepExploit"
 
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
@@ -73,7 +79,9 @@ function DarkRP.toggleSleep(player, command)
 				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 				end
+				timer.Destroy(timerName)
 			elseif not player:IsFrozen() then
+				if IsValid(player:GetObserverTarget()) then return "" end
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
 					if v:GetClass() == "func_door" then
 						DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
@@ -120,6 +128,18 @@ function DarkRP.toggleSleep(player, command)
 				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
 				player.SleepSound:PlayEx(0.10, 100)
 				player.Sleeping = true
+
+				timer.Create(timerName, 0.3, 0, function()
+					if not IsValid(player) then timer.Destroy(timerName) return end
+
+					if player:GetObserverTarget() ~= ragdoll then
+						if IsValid(ragdoll) then
+							ragdoll:Remove()
+						end
+						stopSleep(player)
+						player.SleepSound:Stop()
+					end
+				end)
 			else
 				DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", DarkRP.getPhrase("frozen")))
 			end
@@ -136,11 +156,8 @@ DarkRP.defineChatCommand("sleep", DarkRP.toggleSleep)
 DarkRP.defineChatCommand("wake", DarkRP.toggleSleep)
 DarkRP.defineChatCommand("wakeup", DarkRP.toggleSleep)
 
-hook.Add("OnPlayerChangedTeam", "SleepMod", function(ply)
-	if ply.Sleeping then
-		DarkRP.toggleSleep(ply, "force")
-	end
-end)
+hook.Add("OnPlayerChangedTeam", "SleepMod", stopSleep)
+
 
 local function DamageSleepers(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()

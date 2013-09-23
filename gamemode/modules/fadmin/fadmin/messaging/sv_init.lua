@@ -44,7 +44,6 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
 
 				if v ~= ply then FAdmin.Messages.SendMessage(v, 2, string.format(MessageToTarget, plyNick)) end
 				Targets = Targets..Name..suffix
-				break
 			end
 		else
 			FAdmin.Messages.SendMessage(target, 2, string.format(MessageToTarget, plyNick))
