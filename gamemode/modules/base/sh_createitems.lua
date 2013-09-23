@@ -2,7 +2,6 @@ local plyMeta = FindMetaTable("Player")
 -- automatically block players from doing certain things with their DarkRP entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
-
 local checkModel = function(model) return model ~= nil and (CLIENT or util.IsValidModel(model)) end
 local requiredTeamItems = {"color", "model", "description", "weapons", "command", "max", "salary", "admin", "vote"}
 local validShipment = {model = checkModel, "entity", "price", "amount", "seperate", "allowed"}
