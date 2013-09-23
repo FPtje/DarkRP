@@ -2,7 +2,6 @@ local plyMeta = FindMetaTable("Player")
 -- automatically block players from doing certain things with their DarkRP entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
-
 local checkModel = function(model) return model ~= nil and (CLIENT or util.IsValidModel(model)) end
 local requiredTeamItems = {"color", "model", "description", "weapons", "command", "max", "salary", "admin", "vote"}
 local validShipment = {model = checkModel, "entity", "price", "amount", "seperate", "allowed"}
@@ -575,6 +574,7 @@ GM.AmmoTypes = {}
 
 function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, customCheck)
 	local gm = GM or GAMEMODE
+	gm.AmmoTypes = gm.AmmoTypes or {}
 	local ammo = istable(name) and name or {
 		ammoType = ammoType,
 		name = name,
@@ -583,8 +583,9 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 		amountGiven = amountGiven,
 		customCheck = customCheck
 	}
+	if istable(name) then ammo.name = ammoType end
 
-	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end	
 	table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
