@@ -571,7 +571,7 @@ function DarkRP.createGroupChat(funcOrTeam, ...)
 end
 GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
 
-GM.AmmoTypes = {}
+GM.AmmoTypes = GM.AmmoTypes or {}
 
 function DarkRP.createAmmoType(name, ammoType, model, price, amountGiven, customCheck)
 	local gm = GM or GAMEMODE
