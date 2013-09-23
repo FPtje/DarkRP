@@ -6,11 +6,17 @@ local function ResetKnockouts(player)
 end
 hook.Add("PlayerSpawn", "Knockout", ResetKnockouts)
 
+local function stopSleep(ply)
+	if ply.Sleeping then
+		KnockoutToggle(ply, "force")
+	end
+end
 
 function KnockoutToggle(player, command, args, caller)
 	if not player.SleepSound then
 		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
 	end
+	local timerName = player:EntIndex() .. "SleepExploit"
 
 	if player:Alive() then
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
@@ -65,7 +71,10 @@ function KnockoutToggle(player, command, args, caller)
 				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 				end
+
+				timer.Destroy(timerName)
 			else
+				if IsValid(player:GetObserverTarget()) then return "" end
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
 					if v:GetClass() == "func_door" then
 						GAMEMODE:Notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
@@ -112,6 +121,18 @@ function KnockoutToggle(player, command, args, caller)
 				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
 				player.SleepSound:PlayEx(0.10, 100)
 				player.Sleeping = true
+
+				timer.Create(timerName, 0.3, 0, function()
+					if not IsValid(player) then timer.Destroy(timerName) return end
+
+					if player:GetObserverTarget() ~= ragdoll then
+						if IsValid(ragdoll) then
+							ragdoll:Remove()
+						end
+						stopSleep(player)
+						player.SleepSound:Stop()
+					end
+				end)
 			end
 		else
 			GAMEMODE:Notify(ply, 1, 4, DarkRP.getPhrase("unable", "/sleep", ""))
@@ -126,11 +147,8 @@ AddChatCommand("/sleep", KnockoutToggle)
 AddChatCommand("/wake", KnockoutToggle)
 AddChatCommand("/wakeup", KnockoutToggle)
 
-hook.Add("OnPlayerChangedTeam", "SleepMod", function(ply)
-	if ply.Sleeping then
-		KnockoutToggle(ply, "force")
-	end
-end)
+hook.Add("OnPlayerChangedTeam", "SleepMod", stopSleep)
+
 
 local function DamageSleepers(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()
