@@ -570,20 +570,22 @@ function DarkRP.createGroupChat(funcOrTeam, ...)
 end
 GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
 
-GM.AmmoTypes = GM.AmmoTypes or {}
+GM.AmmoTypes = {}
 
-function DarkRP.createAmmoType(name, ammoType, model, price, amountGiven, customCheck)
+function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, customCheck)
 	local gm = GM or GAMEMODE
-	local ammo = istable(ammoType) and ammoType or {
+	gm.AmmoTypes = gm.AmmoTypes or {}
+	local ammo = istable(name) and name or {
 		ammoType = ammoType,
+		name = name,
 		model = model,
 		price = price,
 		amountGiven = amountGiven,
 		customCheck = customCheck
 	}
-	ammo.name = name
+	if istable(name) then ammo.name = ammoType end
 
-	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end	
 	table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
