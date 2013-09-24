@@ -34,6 +34,10 @@ function DarkRP.findPlayer(info)
 		if tonumber(info) == v:UserID() then
 			return v
 		end
+		
+		if tonumber(info) == v:UniqueID() then
+			return v
+		end
 
 		if info == v:SteamID() then
 			return v
