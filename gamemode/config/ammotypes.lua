@@ -10,7 +10,7 @@ DarkRP.createAmmoType("ammoType", {
     model = "Model",
     price = 1234,
     amountGiven = 5678,
-    customCheck = function(ply) return ply:IsAdmin()
+    customCheck = function(ply) return ply:IsAdmin() end
 })
 
 ammoType: The name of the ammo that Garry's mod recognizes
