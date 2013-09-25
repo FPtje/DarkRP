@@ -1,9 +1,17 @@
 /*---------------------------------------------------------------------------
-Custom ammo types
+/*---------------------------------------------------------------------------
+Ammo types
+---------------------------------------------------------------------------
+Ammo boxes that can be purchased in the F4 menu.
 
 Add your custom ammo types in this file. Here's the syntax:
-
-GM:AddAmmoType(ammoType, name, model, price, amountGiven, customCheck)
+DarkRP.createAmmoType("ammoType", {
+    name = "Ammo name",
+    model = "Model",
+    price = 1234,
+    amountGiven = 5678,
+    customCheck = function(ply) return ply:IsAdmin()
+})
 
 ammoType: The name of the ammo that Garry's mod recognizes
 	If you open your SWEP's shared.lua, you can find the ammo name next to
@@ -28,10 +36,25 @@ Examples are below!
 ---------------------------------------------------------------------------*/
 
 -- Pistol ammo type. Used by p228, desert eagle and all other pistols
-GM:AddAmmoType("pistol", "Pistol ammo", "models/Items/BoxSRounds.mdl", 30, 24)
+DarkRP.createAmmoType("pistol", {
+	name = "Pistol ammo",
+	model = "models/Items/BoxSRounds.mdl",
+	price = 30,
+	amountGiven = 24
+})
 
 -- Buckshot ammo, used by the shotguns
-GM:AddAmmoType("buckshot", "Shotgun ammo", "models/Items/BoxBuckshot.mdl", 50, 8)
+DarkRP.createAmmoType("buckshot", {
+	name = "Shotgun ammo",
+	model = "models/Items/BoxBuckshot.mdl",
+	price = 50,
+	amountGiven = 8
+})
 
 -- Rifle ammo, usually used by assault rifles
-GM:AddAmmoType("smg1", "Rifle ammo", "models/Items/BoxMRounds.mdl", 80, 30)
+DarkRP.createAmmoType("smg1", {
+	name = "Rifle ammo",
+	model = "models/Items/BoxMRounds.mdl",
+	price = 80,
+	amountGiven = 30
+})
