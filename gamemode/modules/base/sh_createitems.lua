@@ -575,8 +575,8 @@ GM.AmmoTypes = {}
 
 function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, customCheck)
 	local gm = GM or GAMEMODE
+	gm.AmmoTypes = gm.AmmoTypes or {}
 	local ammo = istable(name) and name or {
-		ammoType = ammoType,
 		name = name,
 		model = model,
 		price = price,
