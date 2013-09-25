@@ -583,6 +583,7 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 		amountGiven = amountGiven,
 		customCheck = customCheck
 	}
+	ammo.ammoType = ammoType
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
 	table.insert(gm.AmmoTypes, ammo)
