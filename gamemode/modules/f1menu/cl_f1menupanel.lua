@@ -22,7 +22,7 @@ function PANEL:Init()
 	self.pnlChatCommands.OnMousePressed = fn.Curry(self.OnMousePressed, 2)(self)
 
 	self.lblWiki = vgui.Create("F1MenuTitleLabel", self)
-	self.lblWiki:SetText(DarkRP.getPhrase("f1WikiTitle"))
+	self.lblWiki:SetText(GAMEMODE.Config.F1MenuHelpPageTitle)
 
 	self.htmlWikiControls = vgui.Create("F1HTMLControls", self)
 	self.htmlWikiControls.HomeURL = GAMEMODE.Config.F1MenuHelpPage
