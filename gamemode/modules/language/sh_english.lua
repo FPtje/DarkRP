@@ -9,7 +9,6 @@ local english = {
 
 	-- F1 menu
 	f1ChatCommandTitle = "Chat commands",
-	f1WikiTitle = "Wiki page",
 	f1Search = "Search...",
 
 	-- Money things:
