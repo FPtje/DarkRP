@@ -349,7 +349,14 @@ end
 concommand.Add("rp_unarrest", ccUnarrest)
 
 local function ccSetMoney(ply, cmd, args)
-	if not tonumber(args[2]) then ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments") return end
+	if not tonumber(args[2]) then
+		if ply:EntIndex() == 0 then
+			print("Invalid arguments")
+		else 
+			ply:PrintMessage(HUD_PRINTCONSOLE, "Invalid arguments")
+		end
+		return
+	end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
 		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
 		return
