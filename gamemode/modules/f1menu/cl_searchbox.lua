@@ -24,6 +24,8 @@ end
 local F1Bind
 function PANEL:Think()
 	F1Bind = F1Bind or input.KeyNameToNumber(input.LookupBinding("gm_showhelp"))
+	if not F1Bind then return end
+	
 	if self.F1Down and not input.IsKeyDown(F1Bind) then
 		self.F1Down = false
 		return
@@ -32,6 +34,12 @@ function PANEL:Think()
 		self:GetParent():slideOut()
 	end
 end
+
+hook.Add("PlayerBindPress", "DarkRPF1Bind", function(ply, bind, pressed)
+	if string.find(bind, "gm_showhelp", 1, true) then
+		F1Bind = input.KeyNameToNumber(input.LookupBinding(bind))
+	end
+end)
 
 function PANEL:OnTextChanged()
 	self.BaseClass.OnTextChanged(self)
