@@ -101,7 +101,7 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 
 	if panel.Refresh then panel:Refresh() end
 
-	return index, sheet
+	return sheet, index
 end
 
 function PANEL:Think()
@@ -151,7 +151,8 @@ function PANEL:Close()
 end
 
 function PANEL:createTab(name, panel)
-	return self:AddSheet(name, panel)
+	local sheet, index = self:AddSheet(name, panel)
+	return index, sheet
 end
 
 function PANEL:removeTab(name)
