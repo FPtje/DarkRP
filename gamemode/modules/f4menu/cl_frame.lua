@@ -105,6 +105,7 @@ end
 
 function PANEL:Think()
 	F4Bind = F4Bind or input.KeyNameToNumber(input.LookupBinding("gm_showspare2"))
+	if not F4Bind then return end
 
 	if self.F4Down and not input.IsKeyDown(F4Bind) then
 		self.F4Down = false
@@ -114,6 +115,12 @@ function PANEL:Think()
 		self:Hide()
 	end
 end
+
+hook.Add("PlayerBindPress", "DarkRPF4Bind", function(ply, bind, pressed)
+	if string.find(bind, "gm_showspare2", 1, true) then
+		F4Bind = input.KeyNameToNumber(input.LookupBinding(bind))
+	end
+end)
 
 function PANEL:Refresh()
 	for k,v in pairs(self.Items) do
