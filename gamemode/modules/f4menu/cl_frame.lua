@@ -90,6 +90,7 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 	panel:SetParent(self)
 
 	table.insert(self.Items, sheet)
+	local index = #self.Items
 
 	if not self:GetActiveTab() then
 		self:SetActiveTab(sheet.Tab)
@@ -100,11 +101,12 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 
 	if panel.Refresh then panel:Refresh() end
 
-	return sheet
+	return sheet, index
 end
 
 function PANEL:Think()
 	F4Bind = F4Bind or input.KeyNameToNumber(input.LookupBinding("gm_showspare2"))
+	if not F4Bind then return end
 
 	if self.F4Down and not input.IsKeyDown(F4Bind) then
 		self.F4Down = false
@@ -114,6 +116,12 @@ function PANEL:Think()
 		self:Hide()
 	end
 end
+
+hook.Add("PlayerBindPress", "DarkRPF4Bind", function(ply, bind, pressed)
+	if string.find(bind, "gm_showspare2", 1, true) then
+		F4Bind = input.KeyNameToNumber(input.LookupBinding(bind))
+	end
+end)
 
 function PANEL:Refresh()
 	for k,v in pairs(self.Items) do
@@ -143,7 +151,8 @@ function PANEL:Close()
 end
 
 function PANEL:createTab(name, panel)
-	return self:AddSheet(name, panel)
+	local sheet, index = self:AddSheet(name, panel)
+	return index, sheet
 end
 
 function PANEL:removeTab(name)
