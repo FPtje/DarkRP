@@ -90,6 +90,7 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 	panel:SetParent(self)
 
 	table.insert(self.Items, sheet)
+	local index = #self.Items
 
 	if not self:GetActiveTab() then
 		self:SetActiveTab(sheet.Tab)
@@ -100,7 +101,7 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 
 	if panel.Refresh then panel:Refresh() end
 
-	return sheet
+	return index, sheet
 end
 
 function PANEL:Think()
