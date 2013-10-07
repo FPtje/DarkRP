@@ -248,7 +248,7 @@ DarkRP.ENTITY.getKeysAllowedToOwn = DarkRP.stub{
 }
 
 DarkRP.ENTITY.getKeysCoOwners = DarkRP.stub{
-	name = "getKeysDoorOwners",
+	name = "getKeysCoOwners",
 	description = "The list of people who co-own the door.",
 	parameters = {
 	},
