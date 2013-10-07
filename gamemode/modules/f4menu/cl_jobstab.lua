@@ -239,7 +239,7 @@ function PANEL:Init()
 
 	self.filler = VGUIRect(0, 0, 0, 20)
 	self.filler:SetColor(Color(0, 0, 0, 0))
-	self:AddItem(self.filler)
+	self.innerPanel:AddItem(self.filler)
 
 	self.lblWeapons = vgui.Create("DLabel")
 	self.lblWeapons:SetFont("F4MenuFont2")
@@ -305,6 +305,7 @@ function PANEL:PerformLayout()
 
 	self.innerPanel:SetPos(3, 3)
 	self.innerPanel:SetSize(self:GetWide() - 6, self:GetTall() - self.pnlChooseMdl:GetTall() - self.btnGetJob:GetTall() - 13)
+	self.innerPanel:InvalidateLayout()
 	self.lblDescription:SetText(DarkRP.textWrap(self.job.description or "", "Ubuntu Light", self:GetWide() - 43))
 end
 
