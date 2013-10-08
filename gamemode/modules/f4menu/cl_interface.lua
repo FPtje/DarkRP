@@ -63,6 +63,11 @@ DarkRP.addF4MenuTab = DarkRP.stub{
 	},
 	returns = {
 		{
+			name = "index",
+			description = "The index of the tab in the menu. This is the number you use for the tab in DarkRP.switchTabOrder.",
+			type = "number"
+		},
+		{
 			name = "sheet",
 			description = "The tab sheet.",
 			type = "Panel"

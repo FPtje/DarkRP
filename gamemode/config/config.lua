@@ -161,8 +161,6 @@ GM.Config.demotetime					= 120
 GM.Config.doorcost						= 30
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
 GM.Config.entremovedelay				= 0
--- healthcost - Sets the cost of health.
-GM.Config.healthcost					= 60
 -- jailtimer - Sets the jailtimer. (in seconds)
 GM.Config.jailtimer						= 120
 -- maxdoors - Sets the max amount of doors one can own.

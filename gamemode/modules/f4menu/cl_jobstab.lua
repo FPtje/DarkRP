@@ -224,31 +224,34 @@ function PANEL:Init()
 	self:SetPadding(10)
 	self:DockPadding(5, 5, 5, 5)
 
+	self.innerPanel = vgui.Create("F4EmptyPanel", self)
+	self.innerPanel:SetPos(0, 0)
+
 	self.lblTitle = vgui.Create("DLabel")
 	self.lblTitle:SetFont("F4MenuFont2")
-	self:AddItem(self.lblTitle)
+	self.innerPanel:AddItem(self.lblTitle)
 
 	self.lblDescription = vgui.Create("DLabel")
 	self.lblDescription:SetWide(self:GetWide() - 20)
 	self.lblDescription:SetFont("Ubuntu Light")
 	self.lblDescription:SetAutoStretchVertical(true)
-	self:AddItem(self.lblDescription)
+	self.innerPanel:AddItem(self.lblDescription)
 
 	self.filler = VGUIRect(0, 0, 0, 20)
 	self.filler:SetColor(Color(0, 0, 0, 0))
-	self:AddItem(self.filler)
+	self.innerPanel:AddItem(self.filler)
 
 	self.lblWeapons = vgui.Create("DLabel")
 	self.lblWeapons:SetFont("F4MenuFont2")
 	self.lblWeapons:SetText("Weapons")
 	self.lblWeapons:SizeToContents()
 	self.lblWeapons:SetTall(50)
-	self:AddItem(self.lblWeapons)
+	self.innerPanel:AddItem(self.lblWeapons)
 
 	self.lblSweps = vgui.Create("DLabel")
 	self.lblSweps:SetAutoStretchVertical(true)
 	self.lblSweps:SetFont("Ubuntu Light")
-	self:AddItem(self.lblSweps)
+	self.innerPanel:AddItem(self.lblSweps)
 
 	self.btnGetJob = vgui.Create("F4MenuJobBecomeButton", self)
 	self.btnGetJob:Dock(BOTTOM)
@@ -300,7 +303,10 @@ end
 function PANEL:PerformLayout()
 	self.BaseClass.PerformLayout(self)
 
-	self.lblDescription:SetText(DarkRP.textWrap(self.job.description or "", "Ubuntu Light", self:GetWide() - 20))
+	self.innerPanel:SetPos(3, 3)
+	self.innerPanel:SetSize(self:GetWide() - 6, self:GetTall() - self.pnlChooseMdl:GetTall() - self.btnGetJob:GetTall() - 13)
+	self.innerPanel:InvalidateLayout()
+	self.lblDescription:SetText(DarkRP.textWrap(self.job.description or "", "Ubuntu Light", self:GetWide() - 43))
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")
