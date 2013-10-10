@@ -23,6 +23,7 @@ function DarkRP.declareChatCommand(tbl)
 		error("Incorrect chat command! " .. element .. " is invalid!", 2)
 	end
 
+	tbl.command = string.lower(tbl.command)
 	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
 	for k, v in pairs(tbl) do
 		DarkRP.chatCommands[tbl.command][k] = v

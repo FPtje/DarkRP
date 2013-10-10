@@ -1,4 +1,5 @@
 function DarkRP.defineChatCommand(cmd, callback)
+	cmd = string.lower(cmd)
 	local detour = function(ply, arg, ...)
 		if ply.DarkRPUnInitialized then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
