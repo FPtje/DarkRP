@@ -181,6 +181,8 @@ GM.Config.maxvehicles					= 5
 GM.Config.microwavefoodcost				= 30
 -- minlotterycost - Minimum payment the mayor can set to join a lottery.
 GM.Config.minlotterycost				= 30
+-- Money packets will get removed if they don't get picked up after a while. Set to 0 to disable
+GM.Config.moneyRemoveTime				= 600
 -- mprintamount - Value of the money printed by the money printer.
 GM.Config.mprintamount					= 250
 -- normalsalary - Sets the starting salary for newly joined players.

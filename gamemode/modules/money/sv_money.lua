@@ -44,6 +44,9 @@ function DarkRP.createMoneyBag(pos, amount)
 	moneybag:Setamount(math.Min(amount, 2147483647))
 	moneybag:Spawn()
 	moneybag:Activate()
+	if GAMEMODE.Config.moneyRemoveTime and  GAMEMODE.Config.moneyRemoveTime ~= 0 then
+		timer.Create("RemoveEnt"..moneybag:EntIndex(), GAMEMODE.Config.moneyRemoveTime, 1, fn.Partial(SafeRemoveEntity, moneybag))
+	end
 	return moneybag
 end
 
