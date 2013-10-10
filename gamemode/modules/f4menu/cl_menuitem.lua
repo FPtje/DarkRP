@@ -143,7 +143,7 @@ function PANEL:setDarkRPItem(item)
 	self.BaseClass.setDarkRPItem(self, item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
-	self:SetText(item.name)
+	self:SetText(item.label or item.name)
 	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.price))
 end
 
