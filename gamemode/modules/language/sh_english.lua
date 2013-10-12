@@ -218,7 +218,7 @@ local english = {
 	perform_your_action = "perform your action",
 	talk_to_your_group = "talk to your group",
 
-	channel_set_to_x = "Channgel set to %s!",
+	channel_set_to_x = "Channel set to %s!",
 
 	-- Notifies
 	disabled = "%s is disabled! %s",
