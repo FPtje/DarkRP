@@ -272,6 +272,7 @@ GM.Config.DisallowDrop = {
 	["weaponchecker"] = true
 }
 
+-- The list of weapons people spawn with
 GM.Config.DefaultWeapons = {
 	"keys",
 	"weapon_physcannon",
@@ -279,6 +280,12 @@ GM.Config.DefaultWeapons = {
 	"gmod_tool",
 	"pocket",
 	"weapon_physgun"
+}
+
+-- The list of weapons admins spawn with, in addition to the normal weapons
+--
+GM.Config.AdminWeapons = {
+	"weapon_keypadchecker"
 }
 
 -- These are the default laws, they're unchangeable in-game.

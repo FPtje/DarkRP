@@ -740,12 +740,10 @@ function GM:PlayerLoadout(ply)
 		ply:Give(v)
 	end
 
-	if (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin()  then
-		ply:Give("gmod_tool")
-	end
-
 	if (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin() then
-		ply:Give("weapon_keypadchecker")
+		for k,v in pairs(GAMEMODE.Config.AdminWeapons) do
+			ply:Give(v)
+		end
 	end
 
 	if ply:hasDarkRPPrivilege("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
