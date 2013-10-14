@@ -99,10 +99,11 @@ PANEL = {}
 
 local function canBuyShipment(ship)
 	local ply = LocalPlayer()
+	local cost = ship.getPrice and ship.getPrice(ply, ship.price) or ship.price
 
 	if not table.HasValue(ship.allowed, ply:Team()) then return false, true end
 	if ship.customCheck and not ship.customCheck(ply) then return false, true end
-	if not ply:canAfford(ship.price) then return false, false end
+	if not ply:canAfford(cost) then return false, false end
 
 	return true
 end
@@ -148,10 +149,11 @@ PANEL = {}
 
 local function canBuyGun(ship)
 	local ply = LocalPlayer()
+	local cost = ship.getPrice and ship.getPrice(ply, ship.pricesep) or ship.pricesep
 
 	if GAMEMODE.Config.restrictbuypistol and not table.HasValue(ship.allowed, ply:Team()) then return false, true end
 	if ship.customCheck and not ship.customCheck(ply) then return false, true end
-	if not ply:canAfford(ship.pricesep) then return false, false end
+	if not ply:canAfford(cost) then return false, false end
 
 	return true
 end
@@ -249,6 +251,7 @@ end
 
 local function canBuyVehicle(item)
 	local ply = LocalPlayer()
+	local cost = item.getPrice and item.getPrice(ply, item.price) or item.price
 
 	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
 	if item.customCheck and not item.customCheck(ply) then return false, true end

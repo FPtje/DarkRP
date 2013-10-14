@@ -34,7 +34,7 @@ local function BuyPistol(ply, args)
 			shipment = v
 			class = v.entity
 			model = v.model
-			price = v.pricesep
+			price = v.getPrice and v.getPrice(ply, v.pricesep) or v.pricesep
 			local canbuy = false
 
 			if not GAMEMODE.Config.restrictbuypistol or
@@ -143,7 +143,7 @@ local function BuyShipment(ply, args)
 		return ""
 	end
 
-	local cost = found.price
+	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
 
 	if not ply:canAfford(cost) then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "shipment"))
@@ -218,13 +218,14 @@ local function BuyVehicle(ply, args)
 		return ""
 	end
 
-	if not ply:canAfford(found.price) then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "vehicle")) return "" end
+	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
+	if not ply:canAfford(cost) then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "vehicle")) return "" end
 
 	local Vehicle = DarkRP.getAvailableVehicles()[found.name]
 	if not Vehicle then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "")) return "" end
 
-	ply:addMoney(-found.price)
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, found.price))
+	ply:addMoney(-cost)
+	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
 
 	local trace = {}
 	trace.start = ply:EyePos()
@@ -300,14 +301,15 @@ local function BuyAmmo(ply, args)
 		return ""
 	end
 
-	if not ply:canAfford(found.price) then
+	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
+	if not ply:canAfford(cost) then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "ammo"))
 
 		return ""
 	end
 
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, found.price))
-	ply:addMoney(-found.price)
+	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
+	ply:addMoney(-cost)
 
 	local trace = {}
 	trace.start = ply:EyePos()

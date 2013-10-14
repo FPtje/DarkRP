@@ -140,11 +140,13 @@ custom entity button
 PANEL = {}
 
 function PANEL:setDarkRPItem(item)
+	local cost = item.getPrice and item.getPrice(LocalPlayer(), item.price) or item.price
+
 	self.BaseClass.setDarkRPItem(self, item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
 	self:SetText(item.label or item.name)
-	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.price))
+	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, cost))
 end
 
 derma.DefineControl("F4MenuEntityButton", "", PANEL, "F4MenuItemButton")
@@ -155,11 +157,13 @@ Button for purchasing guns
 PANEL = {}
 
 function PANEL:setDarkRPItem(item)
+	local cost = item.getPrice and item.getPrice(LocalPlayer(), item.pricesep) or item.pricesep
+
 	self.BaseClass.setDarkRPItem(self, item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
 	self:SetText(item.name)
-	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, item.pricesep))
+	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, cost))
 
 	self.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buy", self.DarkRPItem.name)
 end
