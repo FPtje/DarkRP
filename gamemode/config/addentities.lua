@@ -1,4 +1,4 @@
-AddCustomShipment("Desert eagle", {
+DarkRP.createShipment("Desert eagle", {
 	model = "models/weapons/w_pist_deagle.mdl",
 	entity = "weapon_deagle2",
 	price = 215,
@@ -9,7 +9,7 @@ AddCustomShipment("Desert eagle", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("Fiveseven", {
+DarkRP.createShipment("Fiveseven", {
 	model = "models/weapons/w_pist_fiveseven.mdl",
 	entity = "weapon_fiveseven2",
 	price = 0,
@@ -20,7 +20,7 @@ AddCustomShipment("Fiveseven", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("Glock", {
+DarkRP.createShipment("Glock", {
 	model = "models/weapons/w_pist_glock18.mdl",
 	entity = "weapon_glock2",
 	price = 0,
@@ -31,7 +31,7 @@ AddCustomShipment("Glock", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("P228", {
+DarkRP.createShipment("P228", {
 	model = "models/weapons/w_pist_p228.mdl",
 	entity = "weapon_p2282",
 	price = 0,
@@ -42,7 +42,7 @@ AddCustomShipment("P228", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("AK47", {
+DarkRP.createShipment("AK47", {
 	model = "models/weapons/w_rif_ak47.mdl",
 	entity = "weapon_ak472",
 	price = 2450,
@@ -53,7 +53,7 @@ AddCustomShipment("AK47", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("MP5", {
+DarkRP.createShipment("MP5", {
 	model = "models/weapons/w_smg_mp5.mdl",
 	entity = "weapon_mp52",
 	price = 2200,
@@ -64,7 +64,7 @@ AddCustomShipment("MP5", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("M4", {
+DarkRP.createShipment("M4", {
 	model = "models/weapons/w_rif_m4a1.mdl",
 	entity = "weapon_m42",
 	price = 2450,
@@ -75,7 +75,7 @@ AddCustomShipment("M4", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("Mac 10", {
+DarkRP.createShipment("Mac 10", {
 	model = "models/weapons/w_smg_mac10.mdl",
 	entity = "weapon_mac102",
 	price = 2150,
@@ -86,7 +86,7 @@ AddCustomShipment("Mac 10", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("Pump shotgun", {
+DarkRP.createShipment("Pump shotgun", {
 	model = "models/weapons/w_shot_m3super90.mdl",
 	entity = "weapon_pumpshotgun2",
 	price = 1750,
@@ -97,7 +97,7 @@ AddCustomShipment("Pump shotgun", {
 	allowed = {TEAM_GUN}
 })
 
-AddCustomShipment("Sniper rifle", {
+DarkRP.createShipment("Sniper rifle", {
 	model = "models/weapons/w_snip_g3sg1.mdl",
 	entity = "ls_sniper",
 	price = 3750,
@@ -108,7 +108,7 @@ AddCustomShipment("Sniper rifle", {
 	allowed = {TEAM_GUN}
 })
 
-AddEntity("Drug lab", {
+DarkRP.createEntity("Drug lab", {
 	ent = "drug_lab",
 	model = "models/props_lab/crematorcase.mdl",
 	price = 400,
@@ -117,7 +117,7 @@ AddEntity("Drug lab", {
 	allowed = {TEAM_GANG, TEAM_MOB}
 })
 
-AddEntity("Money printer", {
+DarkRP.createEntity("Money printer", {
 	ent = "money_printer",
 	model = "models/props_c17/consolebox01a.mdl",
 	price = 1000,
@@ -125,7 +125,7 @@ AddEntity("Money printer", {
 	cmd = "buymoneyprinter"
 })
 
-AddEntity("Gun lab", {
+DarkRP.createEntity("Gun lab", {
 	ent = "gunlab",
 	model = "models/props_c17/TrapPropeller_Engine.mdl",
 	price = 500,

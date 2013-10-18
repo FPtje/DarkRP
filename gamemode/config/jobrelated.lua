@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 Default teams. If you make a team above the citizen team, people will spawn with that team!
 --------------------------------------------------------*/
-TEAM_CITIZEN = AddExtraTeam("Citizen", {
+TEAM_CITIZEN = DarkRP.createJob("Citizen", {
 	color = Color(20, 150, 20, 255),
 	model = {
 		"models/player/Group01/Female_01.mdl",
@@ -30,7 +30,7 @@ TEAM_CITIZEN = AddExtraTeam("Citizen", {
 	candemote = false
 })
 
-TEAM_POLICE = AddExtraTeam("Civil Protection", {
+TEAM_POLICE = DarkRP.createJob("Civil Protection", {
 	color = Color(25, 25, 170, 255),
 	model = {"models/player/police.mdl", "models/player/police_fem.mdl"},
 	description = [[The protector of every citizen that lives in the city.
@@ -58,7 +58,7 @@ TEAM_POLICE = AddExtraTeam("Civil Protection", {
 	}
 })
 
-TEAM_GANG = AddExtraTeam("Gangster", {
+TEAM_GANG = DarkRP.createJob("Gangster", {
 	color = Color(75, 75, 75, 255),
 	model = {
 		"models/player/Group03/Female_01.mdl",
@@ -87,7 +87,7 @@ TEAM_GANG = AddExtraTeam("Gangster", {
 	hasLicense = false
 })
 
-TEAM_MOB = AddExtraTeam("Mob boss", {
+TEAM_MOB = DarkRP.createJob("Mob boss", {
 	color = Color(25, 25, 25, 255),
 	model = "models/player/gman_high.mdl",
 	description = [[The Mob boss is the boss of the criminals in the city.
@@ -108,7 +108,7 @@ TEAM_MOB = AddExtraTeam("Mob boss", {
 	}
 })
 
-TEAM_GUN = AddExtraTeam("Gun Dealer", {
+TEAM_GUN = DarkRP.createJob("Gun Dealer", {
 	color = Color(255, 140, 0, 255),
 	model = "models/player/monk.mdl",
 	description = [[A Gun Dealer is the only person who can sell guns to other people.
@@ -122,7 +122,7 @@ TEAM_GUN = AddExtraTeam("Gun Dealer", {
 	hasLicense = false
 })
 
-TEAM_MEDIC = AddExtraTeam("Medic", {
+TEAM_MEDIC = DarkRP.createJob("Medic", {
 	color = Color(47, 79, 79, 255),
 	model = "models/player/kleiner.mdl",
 	description = [[With your medical knowledge you work to restore players to full health.
@@ -139,7 +139,7 @@ TEAM_MEDIC = AddExtraTeam("Medic", {
 	medic = true
 })
 
-TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
+TEAM_CHIEF = DarkRP.createJob("Civil Protection Chief", {
 	color = Color(20, 20, 255, 255),
 	model = "models/player/combine_soldier_prisonguard.mdl",
 	description = [[The Chief is the leader of the Civil Protection unit.
@@ -169,7 +169,7 @@ TEAM_CHIEF = AddExtraTeam("Civil Protection Chief", {
 	}
 })
 
-TEAM_MAYOR = AddExtraTeam("Mayor", {
+TEAM_MAYOR = DarkRP.createJob("Mayor", {
 	color = Color(150, 20, 20, 255),
 	model = "models/player/breen.mdl",
 	description = [[The Mayor of the city creates laws to govern the city.
@@ -199,7 +199,7 @@ TEAM_MAYOR = AddExtraTeam("Mayor", {
 	}
 })
 
-TEAM_HOBO = AddExtraTeam("Hobo", {
+TEAM_HOBO = DarkRP.createJob("Hobo", {
 	color = Color(80, 45, 0, 255),
 	model = "models/player/corpse1.mdl",
 	description = [[The lowest member of society. Everybody laughs at you.
