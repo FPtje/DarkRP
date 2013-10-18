@@ -54,6 +54,8 @@ function ENT:Use(activator, caller)
 	if not CanPickup then return end
 	weapon:Remove()
 
+	hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
+
 	activator:Give(class)
 	weapon = activator:GetWeapon(class)
 

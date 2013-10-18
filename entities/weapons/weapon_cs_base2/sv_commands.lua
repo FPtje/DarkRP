@@ -28,6 +28,8 @@ function meta:dropDRPWeapon(weapon)
 	ent.clip2 = weapon:Clip2()
 	ent.ammoadd = ammo
 
+	hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
+
 	self:RemoveAmmo(ammo, weapon:GetPrimaryAmmoType())
 
 	ent:Spawn()
@@ -81,4 +83,54 @@ DarkRP.stub{
 	returns = {
 	},
 	metatable = meta
+}
+
+DarkRP.hookStub{
+	name = "onDarkRPWeaponDropped",
+	description = "When a player drops a weapon. Use this hook (in combination with PlayerPickupDarkRPWeapon) to store extra information about a weapon. This hook cannot prevent weapon dropping. If you want to prevent weapon dropping, use canDropWeapon instead.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who dropped the weapon.",
+			type = "Player"
+		},
+		{
+			name = "spawned_weapon",
+			description = "The spawned_weapon created from the weapon that is dropped.",
+			type = "Entity"
+		},
+		{
+			name = "original_weapon",
+			description = "The original weapon from which the spawned_weapon is made.",
+			type = "Player"
+		}
+	},
+	returns = {
+
+	}
+}
+
+DarkRP.hookStub{
+	name = "PlayerPickupDarkRPWeapon",
+	description = "When a player picks up a spawned_weapon.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who dropped the weapon.",
+			type = "Player"
+		},
+		{
+			name = "spawned_weapon",
+			description = "The spawned_weapon created from the weapon that is dropped.",
+			type = "Entity"
+		},
+		{
+			name = "real_weapon",
+			description = "The actual weapon that will be used by the player.",
+			type = "Player"
+		}
+	},
+	returns = {
+
+	}
 }
