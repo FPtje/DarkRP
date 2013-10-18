@@ -1,6 +1,8 @@
 include("shared.lua")
 
 function ENT:Draw()
+	local ret = hook.Call("onDrawSpawnedWeapon", nil, self)
+	if ret ~= nil then return end
 	self:DrawModel()
 
 	if self.dt.amount == 1 then return end
@@ -44,3 +46,25 @@ properties.Add("createShipment",
 						RunConsoleCommand("darkrp", "makeshipment", ent:EntIndex())
 					end
 })
+
+/*---------------------------------------------------------------------------
+Interface
+---------------------------------------------------------------------------*/
+DarkRP.hookStub{
+	name = "onDrawSpawnedWeapon",
+	description = "Draw spawned weapons.",
+	parameters = {
+		{
+			name = "weapon",
+			description = "The weapon to perform drawing operations on.",
+			type = "Player"
+		}
+	},
+	returns = {
+		{
+			name = "value",
+			description = "Return a value to completely override drawing",
+			type = "any"
+		}
+	}
+}
