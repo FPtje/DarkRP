@@ -124,6 +124,12 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
+	local trace = util.QuickTrace(self.Owner:EyePos(), self.Owner:GetAimVector() * 90, {self.Owner})
+	if IsValid(trace.Entity) and trace.Entity.onArrestStickUsed then
+		trace.Entity:onArrestStickUsed(self.Owner)
+		return
+	end
+
 	local ent = self.Owner:getEyeSightHitEntity(nil, nil, function(p) return p ~= self.Owner and p:IsPlayer() and p:Alive() end)
 
 	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) or (not ent:IsPlayer() and not ent:IsNPC()) then
