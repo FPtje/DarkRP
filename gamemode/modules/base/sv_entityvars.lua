@@ -207,3 +207,29 @@ function meta:setRPName(name, firstRun)
 end
 
 
+/*---------------------------------------------------------------------------
+Maximum entity values
+---------------------------------------------------------------------------*/
+local maxEntities = {}
+function meta:addCustomEntity(entTable)
+	maxEntities[self] = maxEntities[self] or {}
+	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
+	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] + 1
+end
+
+function meta:removeCustomEntity(entTable)
+	maxEntities[self] = maxEntities[self] or {}
+	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
+	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] - 1
+end
+
+function meta:customEntityLimitReached(entTable)
+	maxEntities[self] = maxEntities[self] or {}
+	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
+
+	return maxEntities[self][entTable.cmd] >= entTable.max
+end
+
+hook.Add("PlayerDisconnected", "removeLimits", function(ply)
+	maxEntities[ply] = nil
+end)

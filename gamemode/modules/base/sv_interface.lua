@@ -548,6 +548,57 @@ DarkRP.PLAYER.setRPName = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.addCustomEntity = DarkRP.stub{
+	name = "addCustomEntity",
+	description = "Add a custom entity to the player's limit.",
+	parameters = {
+		{
+			name = "tblEnt",
+			description = "The entity table (from the DarkRPEntities table.)",
+			type = "table",
+			optional = false
+		}
+	},
+	returns = {},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.removeCustomEntity = DarkRP.stub{
+	name = "removeCustomEntity",
+	description = "Remove a custom entity to the player's limit.",
+	parameters = {
+		{
+			name = "tblEnt",
+			description = "The entity table (from the DarkRPEntities table.)",
+			type = "table",
+			optional = false
+		}
+	},
+	returns = {},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.customEntityLimitReached = DarkRP.stub{
+	name = "customEntityLimitReached",
+	description = "Set a shared variable.",
+	parameters = {
+		{
+			name = "tblEnt",
+			description = "The entity table (from the DarkRPEntities table.)",
+			type = "table",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "limitReached",
+			description = "Whether the limit has been reached.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
 	name = "getPreferredModel",
 	description = "Get the preferred model of a player for a job.",

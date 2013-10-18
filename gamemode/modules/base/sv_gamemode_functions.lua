@@ -234,15 +234,8 @@ function GM:EntityRemoved(ent)
 		end
 	end
 
-	if ent:IsValid() and ent.DarkRPItem and ent.Getowning_ent and IsValid(ent:Getowning_ent()) and not ent.IsRemoved then
-		local ply = ent:Getowning_ent()
-		local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
-		if not ply["max"..cmdname] then
-			ply["max"..cmdname] = 1
-		end
-		ply["max"..cmdname] = ply["max"..cmdname] - 1
-		ent.IsRemoved = true
-	end
+	local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID)
+	if ent.DarkRPItem and IsValid(owner) then owner:removeCustomEntity(ent.DarkRPItem) end
 end
 
 function GM:ShowSpare1(ply)
@@ -575,14 +568,15 @@ function GM:PlayerInitialSpawn(ply)
 	end)
 
 	for k,v in pairs(ents.GetAll()) do
-		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.dt then
+		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
 			v.SID = ply.SID
 			if v.Setowning_ent then
 				v:Setowning_ent(ply)
 			end
 			v.deleteSteamID = nil
 			timer.Destroy("Remove"..v:EntIndex())
-			ply["max"..v:GetClass()] = (ply["max"..v:GetClass()] or 0) + 1
+			ply:addCustomEntity(v.DarkRPItem)
+
 			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
 		end
 	end

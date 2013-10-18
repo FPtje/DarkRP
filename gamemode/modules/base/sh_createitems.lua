@@ -349,7 +349,7 @@ local function addEntityCommands(tblEnt)
 
 		local max = tonumber(tblEnt.max or 3)
 
-		if ply["max"..cmdname] and tonumber(ply["max"..cmdname]) >= tonumber(max) then
+		if ply:customEntityLimitReached(tblEnt) then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", tblEnt.cmd))
 			return ""
 		end
@@ -384,10 +384,8 @@ local function addEntityCommands(tblEnt)
 		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item)
 
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency, tblEnt.price))
-		if not ply["max"..cmdname] then
-			ply["max"..cmdname] = 0
-		end
-		ply["max"..cmdname] = ply["max"..cmdname] + 1
+
+		ply:addCustomEntity(tblEnt)
 		return ""
 	end
 	DarkRP.defineChatCommand(tblEnt.cmd, buythis)

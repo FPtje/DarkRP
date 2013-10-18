@@ -133,5 +133,3 @@ AddEntity("Gun lab", {
 	cmd = "buygunlab",
 	allowed = TEAM_GUN
 })
-
--- ADD CUSTOM SHIPMENTS HERE(next line):

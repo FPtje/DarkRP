@@ -261,10 +261,8 @@ local function onAdded(ply, ent, serialized)
 
 	local ply = ent:Getowning_ent()
 	local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
-	if not ply["max"..cmdname] then
-		ply["max"..cmdname] = 0
-	end
-	ply["max"..cmdname] = ply["max"..cmdname] + 1
+
+	ply:addCustomEntity(ent.DarkRPItem)
 end
 hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
 
