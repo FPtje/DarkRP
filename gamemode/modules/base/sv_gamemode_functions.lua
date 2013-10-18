@@ -234,7 +234,7 @@ function GM:EntityRemoved(ent)
 		end
 	end
 
-	local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID)
+	local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID or 0)
 	if ent.DarkRPItem and IsValid(owner) then owner:removeCustomEntity(ent.DarkRPItem) end
 end
 
