@@ -7,7 +7,7 @@ Interface functions
 ---------------------------------------------------------------------------*/
 local eMeta = FindMetaTable("Entity")
 function eMeta:getDoorData()
-	if not self:isKeysOwnable() then return nil end
+	if not self:isKeysOwnable() then return {} end
 
 	self.DoorData = self.DoorData or {}
 	return self.DoorData

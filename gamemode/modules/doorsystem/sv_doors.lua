@@ -88,15 +88,16 @@ function pmeta:keysUnOwnAll()
 	end
 
 	if self:GetTable().Ownedz then
-		for k, v in pairs(self:GetTable().Ownedz) do
+		for k, v in pairs(self.Ownedz) do
+			if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
 			v:keysUnOwn(self)
-			self:GetTable().Ownedz[v:EntIndex()] = nil
+			self.Ownedz[v:EntIndex()] = nil
 		end
 	end
 
 	for k, v in pairs(player.GetAll()) do
-		if v:GetTable().Ownedz then
-			for n, m in pairs(v:GetTable().Ownedz) do
+		if v.Ownedz then
+			for n, m in pairs(v.Ownedz) do
 				if IsValid(m) and m:isKeysAllowedToOwn(self) then
 					m:removeKeysAllowedToOwn(self)
 				end
@@ -104,7 +105,7 @@ function pmeta:keysUnOwnAll()
 		end
 	end
 
-	self:GetTable().OwnedNumz = 0
+	self.OwnedNumz = 0
 end
 
 function pmeta:doPropertyTax()

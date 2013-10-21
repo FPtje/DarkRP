@@ -83,10 +83,11 @@ DarkRP.doorData = DarkRP.doorData or {}
 Interface functions
 ---------------------------------------------------------------------------*/
 function meta:getDoorData()
-	local i = self:EntIndex()
-	self.DoorData = DarkRP.doorData[i] or {} -- Backwards compatibility
+	local doorData = DarkRP.doorData[self:EntIndex()] or {}
 
-	return DarkRP.doorData[i] or {}
+	self.DoorData = doorData -- Backwards compatibility
+
+	return doorData
 end
 
 /*---------------------------------------------------------------------------
