@@ -315,7 +315,7 @@ local function addEntityCommands(tblEnt)
 	DarkRP.declareChatCommand{
 		command = tblEnt.cmd,
 		description = "Purchase a " .. tblEnt.name,
-		delay = 5,
+		delay = 2,
 		condition = fn.FAnd
 		{
 			fn.Compose{fn.Not, plyMeta.isArrested},
