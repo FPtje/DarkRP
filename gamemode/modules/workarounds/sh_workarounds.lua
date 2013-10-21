@@ -37,6 +37,18 @@ if CLIENT then
 end
 
 /*---------------------------------------------------------------------------
+SetPos crash
+---------------------------------------------------------------------------*/
+local oldSetPos = entity.SetPos
+function entity:SetPos(vec)
+	vec.x = math.Clamp(vec.x, -99999997952, 99999997952)
+	vec.y = math.Clamp(vec.y, -99999997952, 99999997952)
+	vec.z = math.Clamp(vec.z, -99999997952, 99999997952)
+
+	return oldSetPos(self, vec)
+end
+
+/*---------------------------------------------------------------------------
 Generic InitPostEntity workarounds
 ---------------------------------------------------------------------------*/
 hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
