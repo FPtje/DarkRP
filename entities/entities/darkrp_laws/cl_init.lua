@@ -37,7 +37,7 @@ local function AddLaw(inLaw)
 end
 
 local function AddLawUM(um)
-	AddLaw(um:ReadString())
+	timer.Simple(0, fn.Curry(AddLaw, 2)(um:ReadString()))
 end
 usermessage.Hook("DRP_AddLaw", AddLawUM)
 
