@@ -568,7 +568,7 @@ function GM:PlayerInitialSpawn(ply)
 	end)
 
 	for k,v in pairs(ents.GetAll()) do
-		if IsValid(v) and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
+		if IsValid(v) and v:GetTable() and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
 			v.SID = ply.SID
 			if v.Setowning_ent then
 				v:Setowning_ent(ply)
