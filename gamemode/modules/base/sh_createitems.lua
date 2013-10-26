@@ -5,14 +5,26 @@ local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
 local checkModel = function(model) return model ~= nil and (CLIENT or util.IsValidModel(model)) end
 local requiredTeamItems = {"color", "model", "description", "weapons", "command", "max", "salary", "admin", "vote"}
-local validShipment = {model = checkModel, "entity", "price", "amount", "seperate", "allowed"}
-local validVehicle = {"name", model = checkModel, "price"}
-local validEntity = {"ent", model = checkModel, "price", "max", "cmd", "name"}
+local validShipment = {
+	model = checkModel, "entity",
+	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
+	"amount",
+	"seperate",
+	"allowed"
+}
+local validVehicle = {"name", model = checkModel, price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end}
+local validEntity = {
+	"ent",
+	model = checkModel,
+	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
+	max = function(v, tbl) return v ~= nil or isfunction(tbl.getMax) end, "cmd", "name"
+}
+
 local function checkValid(tbl, requiredItems)
 	for k,v in pairs(requiredItems) do
 		local isFunction = type(v) == "function"
 
-		if (isFunction and not v(tbl[k])) or (not isFunction and tbl[v] == nil) then
+		if (isFunction and not v(tbl[k], tbl)) or (not isFunction and tbl[v] == nil) then
 			return isFunction and k or v
 		end
 	end

@@ -227,7 +227,7 @@ function meta:customEntityLimitReached(entTable)
 	maxEntities[self] = maxEntities[self] or {}
 	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
 
-	return maxEntities[self][entTable.cmd] >= entTable.max
+	return maxEntities[self][entTable.cmd] >= (entTable.getMax and entTable.getMax(self) or entTable.max)
 end
 
 hook.Add("PlayerDisconnected", "removeLimits", function(ply)
