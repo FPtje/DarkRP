@@ -300,13 +300,13 @@ end
 The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------*/
 local function DrawEntityDisplay()
-	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
+	local shouldDraw, players = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
 	if shouldDraw == false then return end
 
 	local shootPos = localplayer:GetShootPos()
 	local aimVec = localplayer:GetAimVector()
 
-	for k, ply in pairs(player.GetAll()) do
+	for k, ply in pairs(players or player.GetAll()) do
 		if not ply:Alive() then continue end
 		local hisPos = ply:GetShootPos()
 		if ply:getDarkRPVar("wanted") then DrawWantedInfo(ply) end
