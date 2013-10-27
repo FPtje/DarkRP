@@ -37,15 +37,30 @@ local function AdminMenuAdditions(Frame, ent, entType)
 
 			menu:AddOption(DarkRP.getPhrase("none"), function() RunConsoleCommand("darkrp", "togglegroupownable") Frame:Close() end)
 			for k,v in pairs(RPExtraTeamDoors) do
-				groups:AddOption(k, function() RunConsoleCommand("darkrp", "togglegroupownable", k) Frame:Close() end)
+				groups:AddOption(k, function() 
+					RunConsoleCommand("darkrp", "togglegroupownable", k)
+					if ValidPanel(Frame) then
+						Frame:Close()
+					end
+				end)
 			end
 
 			local doorTeams = ent:getKeysDoorTeams()
 			for k,v in pairs(RPExtraTeams) do
 				if not doorTeams or not doorTeams[k] then
-					add:AddOption(v.name, function() RunConsoleCommand("darkrp", "toggleteamownable", k) if Frame.Close then Frame:Close() end end)
+					add:AddOption(v.name, function() 
+						RunConsoleCommand("darkrp", "toggleteamownable", k) 
+						if ValidPanel(Frame) then
+							Frame:Close() 
+						end
+					end)
 				else
-					remove:AddOption(v.name, function() RunConsoleCommand("darkrp", "toggleteamownable", k) Frame:Close() end)
+					remove:AddOption(v.name, function() 
+						RunConsoleCommand("darkrp", "toggleteamownable", k) 
+						if ValidPanel(Frame) then
+							Frame:Close() 
+						end
+					end)
 				end
 			end
 
