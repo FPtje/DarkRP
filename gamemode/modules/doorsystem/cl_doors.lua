@@ -120,6 +120,15 @@ end
 net.Receive("DarkRP_UpdateDoorData", updateDoorData)
 
 /*---------------------------------------------------------------------------
+Remove doordata of removed entity
+---------------------------------------------------------------------------*/
+local function removeDoorData()
+	local door = net.ReadUInt(32)
+	DarkRP.doorData[door] = nil
+end
+net.Receive("DarkRP_RemoveDoorData", removeDoorData)
+
+/*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
 hook.Add("InitPostEntity", "getDoorData", fn.Curry(RunConsoleCommand, 2)("_sendAllDoorData"))

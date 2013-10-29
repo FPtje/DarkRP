@@ -1,5 +1,6 @@
 util.AddNetworkString("DarkRP_PlayerVar")
 util.AddNetworkString("DarkRP_UpdateDoorData")
+util.AddNetworkString("DarkRP_RemoveDoorData")
 util.AddNetworkString("DarkRP_AllDoorData")
 
 /*---------------------------------------------------------------------------
@@ -109,6 +110,12 @@ function eMeta:removeAllKeysExtraOwners()
 	doorData.extraOwners = nil
 
 	DarkRP.updateDoorData(self, "extraOwners")
+end
+
+function eMeta:removeDoorData()
+	net.Start("DarkRP_RemoveDoorData")
+		net.WriteUInt(self:EntIndex(), 32)
+	net.Send(player.GetAll())
 end
 
 /*---------------------------------------------------------------------------
