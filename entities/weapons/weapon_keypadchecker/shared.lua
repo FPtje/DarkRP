@@ -36,10 +36,9 @@ if not SERVER then return end
 */
 local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 	local targets = {}
+	local Owner = keypad:CPPIGetOwner()
 
 	for k,v in pairs(numpad.OnDownItems or {}) do
-		local Owner = keypad:CPPIGetOwner()
-
 		if v.key == keyPass and v.ply == Owner then
 			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_entering_right_pass"), name = v.name, ent = v.ent, original = keypad})
 		end
@@ -91,6 +90,7 @@ Get the keypads that trigger this entity
 local function getEntityKeypad(ent)
 	local targets = {}
 	local doorKeys = {} -- The numpad keys that activate this entity
+	local entOwner = ent:CPPIGetOwner()
 
 	for k,v in pairs(numpad.OnDownItems or {}) do
 		if v.ent == ent then
@@ -106,7 +106,6 @@ local function getEntityKeypad(ent)
 
 	for k,v in pairs(ents.FindByClass("sent_keypad")) do
 		local vOwner = v:CPPIGetOwner()
-		local entOwner = ent:CPPIGetOwner()
 
 		if vOwner == entOwner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup1")) then
 			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_right_pass_entered"), ent = v, original = ent})
@@ -118,7 +117,6 @@ local function getEntityKeypad(ent)
 
 	for k,v in pairs(ents.FindByClass("keypad")) do
 		local vOwner = v:CPPIGetOwner()
-		local entOwner = ent:CPPIGetOwner()
 
 		if vOwner == entOwner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then
 			table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_right_pass_entered"), ent = v, original = ent})
@@ -136,7 +134,7 @@ Send the info to the client
 ---------------------------------------------------------------------------*/
 function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
-	local ent, class = trace.Entity, trace.Entity:GetClass()
+	local ent, class = trace.Entity, string.lower(trace.Entity:GetClass() or "")
 	local data
 
 	if class == "sent_keypad" then
