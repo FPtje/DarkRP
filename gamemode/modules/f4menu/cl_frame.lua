@@ -105,6 +105,8 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 end
 
 function PANEL:Think()
+	self.CloseButton:SetVisible(not self.tabScroller.btnRight:IsVisible())
+
 	F4Bind = F4Bind or input.KeyNameToNumber(input.LookupBinding("gm_showspare2"))
 	if not F4Bind then return end
 
