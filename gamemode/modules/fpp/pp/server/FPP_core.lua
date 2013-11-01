@@ -10,6 +10,10 @@ local function isBlocked(model)
 		not tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.toggle)
 		or not FPP.BlockedModels or not model then return end
 
+	if string.find(model, "../", 1, true) then
+		return true, "The model path goes up in the folder tree."
+	end
+
 	model = string.lower(model or "")
 	model = string.Replace(model, "\\", "/")
 	model = string.gsub(model, "[\\/]+", "/")
