@@ -10,7 +10,7 @@ function GM:playerBuyDoor( objPl, objEnt )
 end
 
 function GM:getDoorCost( objPl, objEnt )
-	return GAMEMODE.Config.doorcost ~= 0 and  GAMEMODE.Config.doorcost or 30;
+	return GAMEMODE.Config.doorcost ~= 0 and GAMEMODE.Config.doorcost or 30;
 end
 
 function GM:getVehicleCost( objPl, objEnt )

@@ -154,7 +154,7 @@ function SWEP:PrimaryAttack()
 	else
 		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 		if FPP and FPP.PlayerCanTouchEnt(self.Owner, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
-			if trace.Entity.SeizeReward and not trace.Entity.burningup and self.Owner:isCP() and self.Owner != trace.Entity:Getowning_ent() then
+			if trace.Entity.SeizeReward and not trace.Entity.burningup and self.Owner:isCP() and trace.Entity.Getowning_ent and self.Owner != trace.Entity:Getowning_ent() then
 				self.Owner:addMoney( trace.Entity.SeizeReward )
 				DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. trace.Entity.SeizeReward, DarkRP.getPhrase("bonus_destroying_entity")))
 			end
@@ -219,7 +219,7 @@ function SWEP:SecondaryAttack()
 		else
 			self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 			if FPP and FPP.PlayerCanTouchEnt(ply, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
-				if trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
+				if trace.Entity.Getowning_ent and trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
 					self.Owner:addMoney( trace.Entity.SeizeReward )
 					DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. trace.Entity.SeizeReward, DarkRP.getPhrase("bonus_destroying_entity")))
 				end
