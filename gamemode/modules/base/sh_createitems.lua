@@ -168,6 +168,11 @@ local function addTeamCommands(CTeam, max)
 				return ""
 			end
 
+			if CTeam.canStartVote and not CTeam.canStartVote(ply) then
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, CTeam.canStartVoteReason or ""))
+				return ""
+			end
+
 			if CTeam.admin == 1 and not ply:IsAdmin() then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/".."vote"..CTeam.command))
 				return ""
@@ -230,7 +235,7 @@ local function addTeamCommands(CTeam, max)
 			return ""
 		end)
 
-		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
+		DarkRP.defineChatCommand(CTeam.command, function(ply)
 			if ply:hasDarkRPPrivilege("rp_"..CTeam.command) then
 				ply:changeTeam(k)
 				return ""
@@ -258,7 +263,7 @@ local function addTeamCommands(CTeam, max)
 			return ""
 		end)
 	else
-		DarkRP.defineChatCommand(""..CTeam.command, function(ply)
+		DarkRP.defineChatCommand(CTeam.command, function(ply)
 			if CTeam.admin == 1 and not ply:IsAdmin() then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/"..CTeam.command))
 				return ""
