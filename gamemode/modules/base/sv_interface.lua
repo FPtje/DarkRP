@@ -904,6 +904,11 @@ DarkRP.hookStub{
 			name = "message",
 			description = "Override the default message (suppress must be false).",
 			type = "string"
+		},
+		{
+			name = "amount",
+			description = "Override the salary.",
+			type = "number"
 		}
 	}
 }
