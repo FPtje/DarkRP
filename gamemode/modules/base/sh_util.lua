@@ -105,7 +105,7 @@ local function GetAvailableVehicles(ply)
 	local print = SERVER and ServerLog or Msg
 
 	print(DarkRP.getPhrase("rp_getvehicles") .. "\n")
-	for k,v in pairs(list.Get("Vehicles")) do
+	for k,v in pairs(DarkRP.getAvailableVehicles()) do
 		print("\""..k.."\"" .. "\n")
 	end
 end
