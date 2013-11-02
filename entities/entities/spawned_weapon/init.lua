@@ -9,7 +9,7 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then phys:Wake() return end
+	if phys:IsValid() then phys:Wake() end
 	
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 
