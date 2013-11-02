@@ -9,8 +9,8 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
-
-	phys:Wake()
+	if phys:IsValid() then phys:Wake() end
+	
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 
 	if self:Getamount() == 0 then
