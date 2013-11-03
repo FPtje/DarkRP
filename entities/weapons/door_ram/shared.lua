@@ -100,7 +100,7 @@ function SWEP:PrimaryAttack()
 	local a = GAMEMODE.Config.copscanunfreeze
 	local d = GAMEMODE.Config.copscanunweld
 	local b = trace.Entity:GetClass() == "prop_physics"
-	local c = true
+	local c = false
 
 	local Owner = trace.Entity:CPPIGetOwner()
 	if Owner then
