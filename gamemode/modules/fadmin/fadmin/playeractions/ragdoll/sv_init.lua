@@ -301,6 +301,18 @@ hook.Add("CanPlayerSuicide", "FAdmin_ragdoll", function(ply)
 	end
 end)
 
+hook.Add("PlayerDeath", "FAdmin_ragdoll", function(ply)
+	if (type(ply.FAdminRagdoll) == "table" or IsValid(ply.FAdminRagdoll)) and IsValid(ply:GetRagdollEntity()) then
+		ply:GetRagdollEntity():Remove()
+	end
+end)
+
+hook.Add("PlayerDeathThink", "FAdmin_ragdoll", function(ply)
+	if type(ply.FAdminRagdoll) == "table" or IsValid(ply.FAdminRagdoll) then
+		return false
+	end
+end)
+
 hook.Add("PlayerDisconnected", "FAdmin_ragdoll", function(ply)
 	if not ply.FAdminRagdoll then return end
 
