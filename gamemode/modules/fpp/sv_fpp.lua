@@ -1,7 +1,7 @@
 local BlockedModelsExist = sql.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") ~= false
 if not BlockedModelsExist then
 	sql.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
-	include("pp/FPP_DefaultBlockedModels.lua") -- Load the default blocked models
+	include("sv_defaultblockedmodels.lua") -- Load the default blocked models
 end
 
 AddCSLuaFile("pp/sh_CPPI.lua")
