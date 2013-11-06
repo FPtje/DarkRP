@@ -116,52 +116,6 @@ function GM:PlayerSpawnProp(ply, model)
 	return self.BaseClass:PlayerSpawnProp(ply, model)
 end
 
-function GM:PlayerSpawnSENT(ply, model)
-	if GAMEMODE.Config.adminsents then
-		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
-			return
-		end
-	end
-	return self.BaseClass:PlayerSpawnSENT(ply, model) and not ply:isArrested()
-end
-
-local function canSpawnWeapon(ply, class)
-	if (GAMEMODE.Config.adminweapons == 0 and ply:IsAdmin()) or
-	(GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
-		return true
-	end
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
-
-	return false
-end
-
-function GM:PlayerSpawnSWEP(ply, class, model)
-	return canSpawnWeapon(ply, class) and self.BaseClass:PlayerSpawnSWEP(ply, class, model) and not ply:isArrested()
-end
-
-function GM:PlayerGiveSWEP(ply, class, model)
-	return canSpawnWeapon(ply, class) and self.BaseClass:PlayerGiveSWEP(ply, class, model) and not ply:isArrested()
-end
-
-function GM:PlayerSpawnEffect(ply, model)
-	return self.BaseClass:PlayerSpawnEffect(ply, model) and not ply:isArrested()
-end
-
-function GM:PlayerSpawnVehicle(ply, model)
-	return self.BaseClass:PlayerSpawnVehicle(ply, model) and not ply:isArrested()
-end
-
-function GM:PlayerSpawnNPC(ply, model)
-	if GAMEMODE.Config.adminnpcs and not ply:IsAdmin() then return false end
-
-	return self.BaseClass:PlayerSpawnNPC(ply, model) and not ply:isArrested()
-end
-
-function GM:PlayerSpawnRagdoll(ply, model)
-	return self.BaseClass:PlayerSpawnRagdoll(ply, model) and not ply:isArrested()
-end
-
 function GM:PlayerSpawnedProp(ply, model, ent)
 	self.BaseClass:PlayerSpawnedProp(ply, model, ent)
 	ent.SID = ply.SID
@@ -183,46 +137,75 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 	end
 end
 
+function GM:PlayerSpawnSENT(ply, class)
+	if GAMEMODE.Config.adminsents and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
+		return false
+	end
+	return self.BaseClass:PlayerSpawnSENT(ply, class) and not ply:isArrested()
+end
+
+function GM:PlayerSpawnedSENT(ply, ent)
+	self.BaseClass:PlayerSpawnedSENT(ply, ent)
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..ent:GetClass(), Color(255, 255, 0))
+end
+
+local function canSpawnWeapon(ply)
+	if (GAMEMODE.Config.adminweapons == 0 and ply:IsAdmin()) or
+	(GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
+		return true
+	end
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
+
+	return false
+end
+
+function GM:PlayerSpawnSWEP(ply, class, info)
+	return canSpawnWeapon(ply) and self.BaseClass:PlayerSpawnSWEP(ply, class, info) and not ply:isArrested()
+end
+
+function GM:PlayerGiveSWEP(ply, class, info)
+	return canSpawnWeapon(ply) and self.BaseClass:PlayerGiveSWEP(ply, class, info) and not ply:isArrested()
+end
+
+function GM:PlayerSpawnEffect(ply, model)
+	return self.BaseClass:PlayerSpawnEffect(ply, model) and not ply:isArrested()
+end
+
+function GM:PlayerSpawnVehicle(ply, model, class, info)
+	if GAMEMODE.Config.adminvehicles and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
+		return false
+	end
+	return self.BaseClass:PlayerSpawnVehicle(ply, model, class, info) and not ply:isArrested()
+end
+
+function GM:PlayerSpawnedVehicle(ply, ent)
+	self.BaseClass:PlayerSpawnedVehicle(ply, ent)
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..ent:GetClass(), Color(255, 255, 0))
+end
+
+function GM:PlayerSpawnNPC(ply, type, weapon)
+	if GAMEMODE.Config.adminnpcs and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
+		return false
+	end
+	return self.BaseClass:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested()
+end
+
+function GM:PlayerSpawnedNPC(ply, ent)
+	self.BaseClass:PlayerSpawnedNPC(ply, ent)
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..ent:GetClass(), Color(255, 255, 0))
+end
+
+function GM:PlayerSpawnRagdoll(ply, model)
+	return self.BaseClass:PlayerSpawnRagdoll(ply, model) and not ply:isArrested()
+end
+
 function GM:PlayerSpawnedRagdoll(ply, model, ent)
 	self.BaseClass:PlayerSpawnedRagdoll(ply, model, ent)
 	ent.SID = ply.SID
 end
-
-local function ccSENTSPawn(ply, cmd, args)
-	if GAMEMODE.Config.adminsents then
-		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
-			return
-		end
-	end
-	Spawn_SENT(ply, args[1])
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..args[1], Color(255, 255, 0))
-end
-concommand.Add("gm_spawnsent", ccSENTSPawn)
-
-local function ccVehicleSpawn(ply, cmd, args)
-	if GAMEMODE.Config.adminvehicles then
-		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
-			return
-		end
-	end
-	Spawn_Vehicle(ply, args[1])
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..args[1], Color(255, 255, 0))
-end
-concommand.Add("gm_spawnvehicle", ccVehicleSpawn)
-
-local function ccNPCSpawn(ply, cmd, args)
-	if GAMEMODE.Config.adminnpcs then
-		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
-			return
-		end
-	end
-	Spawn_NPC(ply, args[1])
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..args[1], Color(255, 255, 0))
-end
-concommand.Add("gm_spawnnpc", ccNPCSpawn)
 
 function GM:EntityRemoved(ent)
 	self.BaseClass:EntityRemoved(ent)
