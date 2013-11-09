@@ -43,7 +43,7 @@ function SWEP:PrimaryAttack()
 
 	for k,v in pairs(player.GetAll()) do
 		local maxhealth = v.StartHealth or 100
-		if v == self.Owner or v:GetShootPos():Distance(self.Owner:GetShootPos()) > 85 or v:Health() >= maxhealth then continue end
+		if v == self.Owner or v:GetShootPos():Distance(self.Owner:GetShootPos()) > 85 or v:Health() >= maxhealth or !v:Alive() then continue end
 
 		local direction = v:GetShootPos() - self.Owner:GetShootPos()
 		direction:Normalize()
