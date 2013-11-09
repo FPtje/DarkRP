@@ -7,7 +7,6 @@ function PANEL:Init()
 	self.BaseClass.Init(self)
 	self:SetFont("F4MenuFont2")
 	self:SetTall(50)
-	self:SetTextColor(Color(255, 255, 255, 255))
 end
 
 function PANEL:setJob(job, closeFunc)

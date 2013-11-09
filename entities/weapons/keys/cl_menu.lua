@@ -4,7 +4,6 @@ local function AddButtonToFrame(Frame)
 	local button = vgui.Create("DButton", Frame)
 	button:SetPos(10, Frame:GetTall() - 110)
 	button:SetSize(180, 100)
-	button:SetTextColor(Color(255, 255, 255, 255))
 	return button
 end
 
@@ -37,7 +36,7 @@ local function AdminMenuAdditions(Frame, ent, entType)
 
 			menu:AddOption(DarkRP.getPhrase("none"), function() RunConsoleCommand("darkrp", "togglegroupownable") Frame:Close() end)
 			for k,v in pairs(RPExtraTeamDoors) do
-				groups:AddOption(k, function() 
+				groups:AddOption(k, function()
 					RunConsoleCommand("darkrp", "togglegroupownable", k)
 					if ValidPanel(Frame) then
 						Frame:Close()
@@ -48,17 +47,17 @@ local function AdminMenuAdditions(Frame, ent, entType)
 			local doorTeams = ent:getKeysDoorTeams()
 			for k,v in pairs(RPExtraTeams) do
 				if not doorTeams or not doorTeams[k] then
-					add:AddOption(v.name, function() 
-						RunConsoleCommand("darkrp", "toggleteamownable", k) 
+					add:AddOption(v.name, function()
+						RunConsoleCommand("darkrp", "toggleteamownable", k)
 						if ValidPanel(Frame) then
-							Frame:Close() 
+							Frame:Close()
 						end
 					end)
 				else
-					remove:AddOption(v.name, function() 
-						RunConsoleCommand("darkrp", "toggleteamownable", k) 
+					remove:AddOption(v.name, function()
+						RunConsoleCommand("darkrp", "toggleteamownable", k)
 						if ValidPanel(Frame) then
-							Frame:Close() 
+							Frame:Close()
 						end
 					end)
 				end
