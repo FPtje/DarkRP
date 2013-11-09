@@ -18,14 +18,14 @@ function PANEL:Init()
 end
 
 function PANEL:OnLoseFocus()
-	self:GetParent():SetKeyboardInputEnabled(false)
+
 end
 
 local F1Bind
 function PANEL:Think()
 	F1Bind = F1Bind or input.KeyNameToNumber(input.LookupBinding("gm_showhelp"))
 	if not F1Bind then return end
-	
+
 	if self.F1Down and not input.IsKeyDown(F1Bind) then
 		self.F1Down = false
 		return
