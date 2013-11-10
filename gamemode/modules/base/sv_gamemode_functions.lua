@@ -659,7 +659,6 @@ function GM:PlayerSpawn(ply)
 		ply:changeTeam(GAMEMODE.DefaultTeam)
 	end
 
-	ply:GetTable().StartHealth = ply:Health()
 	gamemode.Call("PlayerSetModel", ply)
 	gamemode.Call("PlayerLoadout", ply)
 

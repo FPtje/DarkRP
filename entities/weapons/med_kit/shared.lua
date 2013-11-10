@@ -37,12 +37,14 @@ SWEP.Secondary.Ammo = "none"
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
+	if not SERVER then return end
+
 	local found
 	local lastDot = -1 -- the opposite of what you're looking at
 	local aimVec = self.Owner:GetAimVector()
 
 	for k,v in pairs(player.GetAll()) do
-		local maxhealth = v.StartHealth or 100
+		local maxhealth = v:GetMaxHealth() or 100
 		if v == self.Owner or v:GetShootPos():Distance(self.Owner:GetShootPos()) > 85 or v:Health() >= maxhealth or not v:Alive() then continue end
 
 		local direction = v:GetShootPos() - self.Owner:GetShootPos()
@@ -64,8 +66,10 @@ end
 
 function SWEP:SecondaryAttack()
 	self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-	local maxhealth = self.Owner.StartHealth or 100
-	if self.Owner:Health() < maxhealth and SERVER then
+	if not SERVER then return end
+
+	local maxhealth = self.Owner:GetMaxHealth() or 100
+	if self.Owner:Health() < maxhealth then
 		self.Owner:SetHealth(self.Owner:Health() + 1)
 		self.Owner:EmitSound("hl1/fvox/boop.wav", 150, self.Owner:Health())
 	end
