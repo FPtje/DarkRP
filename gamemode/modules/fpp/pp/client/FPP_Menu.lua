@@ -1013,7 +1013,6 @@ function FPP.SetBuddyMenu(SteamID, Name, data)
 			tonum[true] = 1
 
 			FPP.SaveBuddy(SteamID, Name, Type, tonum[box.Button:GetChecked()])
-			FPP.BuddiesMenu(BuddiesPanel) -- Restart the entire menu
 		end
 		box:SizeToContents()
 	end
