@@ -3,7 +3,10 @@ local PANEL = {}
 local function canBuyFood(food)
 	local ply = LocalPlayer()
 
-	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].cook then return false, true end
+	if (food.requiresCook == nil or food.requiresCook == true) and
+	(not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].cook) then return false, true end
+	if food.customCheck and not food.customCheck(LocalPlayer()) then return false, false end
+
 	if not ply:canAfford(food.price) then return false, false end
 
 	return true

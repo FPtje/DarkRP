@@ -20,6 +20,15 @@ function DarkRP.createFood(name, mdl, energy, price)
 end
 AddFoodItem = DarkRP.createFood
 
+--[[
+Valid members:
+	model = string, -- the model of the food item
+	energy = int, -- how much energy it restores
+	price = int, -- the price of the food
+	requiresCook = boolean, -- whether only cooks can buy this food
+	customCheck = function(ply) return boolean end, -- customCheck on purchase function
+	customCheckMessage = string -- message to people who cannot buy it because of the customCheck
+]]
 DarkRP.DARKRP_LOADING = true
 AddFoodItem("Banana", {
 	model = "models/props/cs_italy/bananna.mdl",
@@ -53,15 +62,15 @@ AddFoodItem("Plastic bottle", {
 })
 AddFoodItem("Milk", {
 	model = "models/props_junk/garbage_milkcarton002a.mdl",
-	energy = 20, 
+	energy = 20,
 	price = 20
 })
 AddFoodItem("Bottle 1", {
 	model = "models/props_junk/garbage_glassbottle001a.mdl",
-	energy = 10, 
+	energy = 10,
 	price = 10
 })
-AddFoodItem("Bottle 2", { 
+AddFoodItem("Bottle 2", {
 	model = "models/props_junk/garbage_glassbottle002a.mdl",
 	energy = 10,
 	price = 10
