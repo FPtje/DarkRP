@@ -172,6 +172,7 @@ end
 
 
 function PANEL:generateTabs()
+	DarkRP.hooks.F4MenuTabs()
 	hook.Call("F4MenuTabs")
 	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end

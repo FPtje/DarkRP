@@ -55,7 +55,7 @@ end
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-hook.Add("F4MenuTabs", "DefaultTabs", function()
+function DarkRP.hooks.F4MenuTabs()
 	DarkRP.addF4MenuTab(DarkRP.getPhrase("jobs"), vgui.Create("F4MenuJobs"))
 	DarkRP.addF4MenuTab(DarkRP.getPhrase("F4entities"), vgui.Create("F4MenuEntities"))
 
@@ -76,7 +76,7 @@ hook.Add("F4MenuTabs", "DefaultTabs", function()
 	if #CustomVehicles > 0 then
 		DarkRP.addF4MenuTab(DarkRP.getPhrase("F4vehicles"), vgui.Create("F4MenuVehicles"))
 	end
-end)
+end
 
 hook.Add("DarkRPVarChanged", "RefreshF4Menu", function(ply, varname)
 	if ply ~= LocalPlayer() or varname ~= "money" or not ValidPanel(f4Frame) or not f4Frame:IsVisible() then return end
