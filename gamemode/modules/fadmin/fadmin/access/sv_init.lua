@@ -45,22 +45,19 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 		FAdmin.Access.AddGroup("admin", 1, nil, 50)
 		FAdmin.Access.AddGroup("user", 0, nil, 10)
 		FAdmin.Access.AddGroup("noaccess", 0, nil, 0)
-	end)
-end)
 
--- Check if the privileges are loaded when we're sure they're all added
-timer.Simple(3, function()
-	MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
-		if val ~= "0" then return end
+		MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
+			if val ~= "0" then return end
 
-		local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
+			local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
-		for priv, access in pairs(FAdmin.Access.Privileges) do
-			for i = access + 1, #hasPrivs, 1 do
-				FAdmin.Access.Groups[hasPrivs[i]].PRIVS[priv] = true
-				MySQLite.query("INSERT INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(hasPrivs[i]) .. ", " .. MySQLite.SQLStr(priv) .. ");")
+			for priv, access in pairs(FAdmin.Access.Privileges) do
+				for i = access + 1, #hasPrivs, 1 do
+					FAdmin.Access.Groups[hasPrivs[i]].PRIVS[priv] = true
+					MySQLite.query("INSERT INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(hasPrivs[i]) .. ", " .. MySQLite.SQLStr(priv) .. ");")
+				end
 			end
-		end
+		end)
 	end)
 end)
 
