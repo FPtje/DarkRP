@@ -289,7 +289,7 @@ function PANEL:updateInfo(job)
 
 	self.btnGetJob:setJob(job, fn.Partial(self:GetParent():GetParent().Hide, self:GetParent():GetParent()))
 
-	if istable(job.model) then
+	if istable(job.model) and not isfunction(job.PlayerSetModel) then
 		self.pnlChooseMdl:updateInfo(job)
 		self.pnlChooseMdl:SetVisible(true)
 	else

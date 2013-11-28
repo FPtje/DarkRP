@@ -103,8 +103,12 @@ end
 function PANEL:setDarkRPItem(job)
 	self.BaseClass.setDarkRPItem(self, job)
 
+	local model = 	isfunction(job.PlayerSetModel) and job.PlayerSetModel(LocalPlayer()) or
+					istable(job.model) and job.model[1] or
+					job.model
+
 	self:SetBorderColor(job.color)
-	self:SetModel(istable(job.model) and job.model[1] or job.model)
+	self:SetModel(model)
 	self:SetText(job.name)
 	self:SetTextRight(string.format("%s/%s", team.NumPlayers(job.team), getMaxOfTeam(job)))
 
