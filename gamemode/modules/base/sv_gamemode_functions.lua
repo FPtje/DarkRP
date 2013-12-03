@@ -467,7 +467,8 @@ end
 function GM:PlayerSetModel(ply)
 	local teamNr = ply:Team()
 	if RPExtraTeams[teamNr] and RPExtraTeams[teamNr].PlayerSetModel then
-		return RPExtraTeams[teamNr].PlayerSetModel(ply)
+		ply:SetModel(RPExtraTeams[teamNr].PlayerSetModel(ply))
+		return
 	end
 
 	local EndModel = ""
