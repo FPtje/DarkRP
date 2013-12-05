@@ -234,7 +234,7 @@ FAdmin.StartHooks["KickBan"] = function()
 	FAdmin.Access.AddPrivilege("UnBan", 2)
 end
 
-hook.Add("InitPostEntity", "FAdmin_Retrievebans", function()
+hook.Add("DarkRPDBInitialized", "FAdmin_Retrievebans", function()
 	timer.Simple(2, function()
 		local RetrieveBans = hook.Call("FAdmin_RetrieveBans", nil)
 
