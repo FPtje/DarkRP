@@ -231,7 +231,8 @@ local function DrawHUD()
 	RelativeX, RelativeY = 0, Scrh
 
 	shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
-	if shouldDraw ~= false then
+	shouldDraw = shouldDraw ~= false and (GAMEMODE.BaseClass.HUDShouldDraw(GAMEMODE, "DarkRP_LocalPlayerHUD") ~= false)
+	if shouldDraw then
 		--Background
 		draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
 		DrawHealth()
