@@ -311,7 +311,7 @@ function setUpNonOwnableDoors()
 		if not r then return end
 
 		for _, row in pairs(r) do
-			local e = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
+			local e = DarkRP.doorIndexToEnt(tonumber(row.idx))
 			if IsValid(e) and e:isKeysOwnable() then
 				e:setKeysNonOwnable(tobool(row.isDisabled))
 				if r.isLocked ~= nil then
@@ -338,7 +338,7 @@ function setUpTeamOwnableDoors()
 		if not r then return end
 
 		for _, row in pairs(r) do
-			local e = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
+			local e = DarkRP.doorIndexToEnt(tonumber(row.idx))
 			if not IsValid(e) then continue end
 
 			e:addKeysDoorTeam(tonumber(row.job))
@@ -365,7 +365,7 @@ function setUpGroupDoors()
 		if not data then return end
 
 		for _, row in pairs(data) do
-			local ent = ents.GetByIndex(DarkRP.doorToEntIndex(tonumber(row.idx)))
+			local ent = DarkRP.doorIndexToEnt(tonumber(row.idx))
 
 			if not IsValid(ent) or not ent:isKeysOwnable() then
 				continue

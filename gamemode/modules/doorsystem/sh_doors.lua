@@ -26,11 +26,17 @@ function meta:isDoor()
 end
 
 function meta:doorIndex()
-	return self:EntIndex() - game.MaxPlayers()
+	return self:CreatedByMap() and self:MapCreationID() or nil
 end
 
 function DarkRP.doorToEntIndex(num)
-	return num + game.MaxPlayers()
+	local ent = ents.GetMapCreatedEntity(num)
+
+	return IsValid(ent) and ent:EntIndex() or nil
+end
+
+function DarkRP.doorIndexToEnt(num)
+	return ents.GetMapCreatedEntity(num) or NULL
 end
 
 function meta:isKeysOwned()
