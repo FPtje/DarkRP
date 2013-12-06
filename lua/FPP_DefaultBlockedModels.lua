@@ -48,7 +48,8 @@ local defaultblocked = {
 "models/props_phx/misc/potato_launcher_explosive.mdl",
 "models/props_combine/combine_citadel001.mdl",
 "models/props_phx/oildrum001_explosive.mdl",
-"models/props_combine/prison01.mdl"
+"models/props_combine/prison01.mdl",
+"models/props_buildings/collapsedbuilding01a.mdl"
 }
 
 -- Add to SQLite database
