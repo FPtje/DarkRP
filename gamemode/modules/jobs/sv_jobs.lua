@@ -251,6 +251,7 @@ local function FinishDemote(vote, choice)
 			target.demotedWhileDead = true
 		end
 
+		hook.Call("onPlayerDemoted", nil, vote.info.source, target, vote.info.reason)
 		DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demoted", target:Nick()))
 	else
 		DarkRP.notifyAll(1, 4, DarkRP.getPhrase("demoted_not", target:Nick()))
@@ -305,7 +306,7 @@ local function Demote(ply, args)
 			}, function(vote)
 				if not IsValid(vote.target) then return end
 				vote.target.IsBeingDemoted = nil
-			end)
+			end, {source = ply, reason = reason})
 			ply:GetTable().LastVoteCop = CurTime()
 		end
 		return ""
@@ -358,7 +359,7 @@ local function DoTeamBan(ply, args, cmdargs)
 			return ""
 		end
 	end
-	
+
 	if not args or args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
 		return ""
@@ -422,7 +423,7 @@ local function DoTeamBan(ply, args, cmdargs)
 		nick = ply:Nick()
 	end
 	DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
-	
+
 	return ""
 end
 DarkRP.defineChatCommand("teamban", DoTeamBan)
@@ -507,7 +508,7 @@ local function DoTeamUnBan(ply, args, cmdargs)
 		nick = ply:Nick()
 	end
 	DarkRP.notifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
-	
+
 	return ""
 end
 DarkRP.defineChatCommand("teamunban", DoTeamUnBan)

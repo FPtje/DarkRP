@@ -176,6 +176,7 @@ Players
  ---------------------------------------------------------*/
 function DarkRP.storeRPName(ply, name)
 	if not name or string.len(name) < 2 then return end
+	hook.Call("onPlayerChangedName", nil, ply, ply:getDarkRPVar("rpname"), name)
 	ply:setDarkRPVar("rpname", name)
 
 	MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")

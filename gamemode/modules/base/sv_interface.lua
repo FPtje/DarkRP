@@ -668,6 +668,30 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "onPlayerChangedName",
+	description = "Called when a player's DarkRP name has been changed.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "oldName",
+			description = "The old name.",
+			type = "string"
+		},
+		{
+			name = "newName",
+			description = "The new name.",
+			type = "string"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
 	name = "playerBoughtPistol",
 	description = "Called when a player bought a pistol.",
 	parameters = {
@@ -794,6 +818,30 @@ DarkRP.hookStub{
 			description = "The message to show when the player cannot demote the other player. Only useful when canDemote is false.",
 			type = "string"
 		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "onPlayerDemoted",
+	description = "Called when a player is demoted.",
+	parameters = {
+		{
+			name = "source",
+			description = "The player who demoted the target.",
+			type = "Player"
+		},
+		{
+			name = "target",
+			description = "The player who has been demoted.",
+			type = "Player"
+		},
+		{
+			name = "reason",
+			description = "The reason provided for the demote.",
+			type = "string"
+		}
+	},
+	returns = {
 	}
 }
 
