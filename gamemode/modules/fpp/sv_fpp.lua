@@ -1,9 +1,3 @@
-local BlockedModelsExist = sql.QueryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;") ~= false
-if not BlockedModelsExist then
-	sql.Query("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
-	include("sv_defaultblockedmodels.lua") -- Load the default blocked models
-end
-
 AddCSLuaFile("pp/sh_CPPI.lua")
 AddCSLuaFile("pp/sh_settings.lua")
 AddCSLuaFile("pp/client/FPP_Menu.lua")
@@ -17,6 +11,14 @@ include("pp/server/FPP_Core.lua")
 include("pp/server/FPP_Antispam.lua")
 
 hook.Add("DatabaseInitialized", "FPPInit", function()
+	MySQLite.query("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);", function()
+		MySQLite.queryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;", function(modelCount)
+			if modelCount and tonumber(modelCount) > 0 then return end
+
+			include("darkrp/gamemode/modules/fpp/pp/sv_defaultblockedmodels.lua")
+		end)
+	end)
+
 	FPP.Init()
 end)
 
