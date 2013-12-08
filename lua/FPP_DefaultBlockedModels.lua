@@ -50,6 +50,7 @@ local defaultblocked = {
 "models/props_wasteland/cargo_container01.mdl",
 "models/props_wasteland/cargo_container01b.mdl",
 "models/props_wasteland/cargo_container01c.mdl",
+"models/props_wasteland/depot.mdl",
 }
 
 -- Add to SQLite database
