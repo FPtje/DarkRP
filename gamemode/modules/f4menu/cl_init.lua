@@ -88,7 +88,7 @@ end)
 Fonts
 ---------------------------------------------------------------------------*/
 surface.CreateFont("Ubuntu Light", { -- font is not found otherwise
-		size = 18,
+		size = 19,
 		weight = 300,
 		antialias = true,
 		shadow = false,
