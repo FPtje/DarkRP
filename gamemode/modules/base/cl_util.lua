@@ -45,13 +45,14 @@ function DarkRP.textWrap(text, font, pxWidth)
 	surface.SetFont(font)
 
 	local spaceSize = surface.GetTextSize(' ')
-	text = text:gsub("(%s?%w+)", function(word)
+	text = text:gsub("(%s?[%S]+)", function(word)
 			local char = string.sub(word, 1, 1)
 			if char == "\n" or char == "\t" then
 				total = 0
 			end
 
 			local wordlen = surface.GetTextSize(word)
+			print(word, wordlen)
 			total = total + wordlen
 
 
