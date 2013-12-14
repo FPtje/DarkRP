@@ -198,6 +198,7 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 	end
 
 	for hitman, hit in pairs(hits) do
+		if not hitman or not IsValid(hitman) then hits[hitman] = nil continue end
 		if hitman:getHitTarget() == ply then
 			hitman:abortHit(DarkRP.getPhrase("target_died"))
 		end
