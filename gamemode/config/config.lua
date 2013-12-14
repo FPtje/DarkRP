@@ -139,6 +139,8 @@ GM.Config.showcrosshairs				= true
 GM.Config.realisticfalldamage			= true
 -- printeroverheat - Can the default money printer overheat on its own?
 GM.Config.printeroverheat				= true
+-- sleep - Enable/disable being able to sleep
+GM.Config.sleep						= true
 
 /*
 Value settings
