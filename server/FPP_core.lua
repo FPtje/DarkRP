@@ -825,6 +825,11 @@ function ENTITY:FireBullets(bullet, ...)
 end
 
 hook.Add("EntityRemoved","jeepWorkaround",function(ent)
+	-- Crash workaround, calling IsValid on "Vehicle [DELETED]" will crash the game (gm_mobenix)
+	if string.find(tostring(ent), "DELETED") then
+		return
+	end
+
     if IsValid(ent) and ent:IsVehicle() and ent.GetPassenger and IsValid(ent:GetPassenger(1)) then
         ent:GetPassenger(1):ExitVehicle()
     end
