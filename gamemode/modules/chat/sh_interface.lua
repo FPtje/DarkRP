@@ -30,9 +30,31 @@ DarkRP.removeChatCommand = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.chatCommandAlias = DarkRP.stub{
+	name = "chatCommandAlias",
+	description = "Create an alias for a chat command",
+	parameters = {
+		{
+			name = "command",
+			description = "An already existing chat command.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "alias",
+			description = "One or more aliases for the chat command.",
+			type = "vararg",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
 DarkRP.getChatCommand = DarkRP.stub{
 	name = "getChatCommand",
-	description = "Get the information on a chat command",
+	description = "Get the information on a chat command.",
 	parameters = {
 		{
 			name = "command",
@@ -53,7 +75,7 @@ DarkRP.getChatCommand = DarkRP.stub{
 
 DarkRP.getChatCommands = DarkRP.stub{
 	name = "getChatCommands",
-	description = "Get every chat command",
+	description = "Get every chat command.",
 	parameters = {
 
 	},

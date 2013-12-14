@@ -34,6 +34,16 @@ function DarkRP.removeChatCommand(command)
 	DarkRP.chatCommands[string.lower(command)] = nil
 end
 
+function DarkRP.chatCommandAlias(command, ...)
+	local name
+	for k, v in pairs{...} do
+		name = string.lower(v)
+
+		DarkRP.chatCommands[name] = table.Copy(DarkRP.chatCommands[command])
+		DarkRP.chatCommands[name].command = name
+	end
+end
+
 function DarkRP.getChatCommand(command)
 	return DarkRP.chatCommands[string.lower(command)]
 end
