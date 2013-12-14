@@ -14,6 +14,7 @@ local function stopSleep(ply)
 end
 
 function DarkRP.toggleSleep(player, command)
+	if not GAMEMODE.Config.sleep then return end
 	if not player.SleepSound then
 		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
 	end
