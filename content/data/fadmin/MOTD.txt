@@ -1,0 +1,22 @@
+<html>
+<title>MOTD!</title>
+<body bgcolor="888888"> 
+<center><h1>Example MOTD/Instructions on how to set a proper MOTD</h1></center>
+<h2>Of course you have to be superadmin or owner.<br>
+You have two choices:</h2>
+<h3>Choice #1 (text file)</h3>
+<ol>
+<li>Simply edit addons/FAdmin/data/MOTD.txt <b>on the server</b><br></li>
+<li>Put your HTML source code in there. Clients will automatically download and use it.<br></li>
+<li><u>Currently this very page is in the MOTD.txt file, simply delete content of MOTD.txt and replace it with your HTML code.</u><br></li>
+<li>Make sure FAdmin MOTDPage is set to data/FADmin/MOTD.txt. Do this by entering this command in console: FAdmin MOTDpage garrysmod/gamemodes/Darkrp/content/data/FAdmin/motd.txt<br></li>
+</ol>
+
+<h3>Choice #2 (Website)</h3>
+<ol>
+<li>Copy the website to the clipboard<br></li>
+<li>Enter the command: FAdmin MOTDPage "your website here"<br><br></li>
+<i>Example:</i><br>
+FAdmin MOTDPage "www.facepunch.com"
+</body>
+</html>

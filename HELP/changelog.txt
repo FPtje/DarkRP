@@ -1,0 +1,1014 @@
+This list is missing content. For a full list see:
+https://github.com/FPtje/DarkRP/commits/master (October 2012 and later)
+and
+http://code.google.com/p/darkrp/source/list (early-October 2012 and earlier)
+for the latest changes
+
+DarkRP 2.4.3
+[ADD] Laws system! Use /placelaws to spawn a screen displaying the laws, /addlaw and /removelaw to edit them. rp_maxlawboards to set the limit.
+[ADD] AFK NPC
+[ADD] Signing of letters
+[ADD] Proplympics! Prop surf games :D
+[CHANGE] People need to be alive in order to be able to wanted/warrant
+[CHANGE] Updated Notifies to work better with the newer ones
+[CHANGE] Lots of function/network optimisation
+[CHANGE] Remade HUD
+...
+
+
+DarkRP 2.4.2
+[CHANGE Drakehawke] Fixed the default GMod admin cleanup from unowning/resetting doors.
+[ADD Drakehawke] Dynamic mic chat - if enabled (rp_voiceradius_dynamic), only players in the same room as you can hear your mic (rp_voiceradius must be 1).
+[ADD Drakehawke] AFK module
+[ADD] Extra animations! (use key swep!)
+[ADD] Group ownable doors
+[ADD] rp_startingmoney
+[ADD] rp_copscanunweld
+[ADD] rp_droppocketondeath toggle dropping items in pocket
+[ADD] rp_allowvehicleowning Allow vehicles to be owned
+[ADD] Support for multiple models. It still works the old way, don't worry
+[ADD] Reason for warrant and wanted
+[ADD] Rp_vote, vote with a keybind! bind a key to rp_vote 1 and rp_vote 0 to vote yes or no without clicking!
+[ADD] Lockdown stops when mayor changes job or leaves server
+[ADD] rp_DeathPOV: Enable/disable whether people see their death in first person view
+[ADD] rp_respawninjail - Enable/disable whether people can respawn in jail when they die (default on)
+[ADD] /911 and /report: Call 911 when you're being attacked and call /report when you see an illegal entity!
+[ADD] rp_enablebuyhealth
+[ADD] rp_npcarrest
+[ADD] /broadcast for mayors
+[ADD] Custom agenda's
+[ADD] Police agenda
+[ADD] Animations for several things!
+[ADD] Possibility to give unownable door a title in the keys menu
+[ADD] maximum to /price. Set maximum with rp_pricecap
+[ADD] /unownalldoors, sell all your doors at once!
+[ADD] rp_droppocketonarrest, drop pocket items on arrest.
+[ADD] Showing whether someone has a gunlicense above their heads
+[ADD] MySQL support!
+[ADD] Support for 3D voice chat!
+[ADD] rp_adminvehicles and rp_adminnpc, restrict vehicles and NPC's!
+[ADD] rp_pricemin, set minimum price of entities.
+[ADD] New fading door tool compatability (DOESN'T WORK WITH OLD DOOR TOOL (Conna's tool))
+[ADD] FAdmin admin mod
+[ADD] Threaten with stunstick (reload)
+[ADD] E2 antiminge! (one of the best updates ever!)
+[FIX] // not working in letters
+[FIX] Disabling RP names not working clientside
+[FIX] Weapon checker resetting ammo
+[FIX] Gunlicense buttons in F4
+[FIX] Shipment issues
+[FIX] Pocket glitch
+[FIX] drop pickup get ammo glitch
+[FIX] Sitting incorrectly in vehicles
+[FIX] Switchjob not working when player can't change job for some reason
+[FIX] Modules not working when folder name was changed
+[FIX] Jail positions not saving
+[FIX] Compatability with extra seats in VUMod
+[FIX] animations to work with latest update
+[FIX] Staying on fire when respawning after money printer explosion
+[FIX] Pressing E on a gun you can't pick up making it pick up on walk over it (hard to explain lol)
+[FIX] Saving original steam names in the database
+[FIX] Door issue: random other people co-owning it when one co-owner is added.
+[FIX] Meteor emitter spam
+[FIX] Escaping demote
+[FIX] Lag when switching team
+[CHANGE] Microphone GUI layout. It's way more RP'ish now!
+[CHANGE] Credits, added Eusion
+[CHANGE] The way Entities like money and money printers show their information. Thanks MavBear!
+[CHANGE] Made a lot of functions local, this will give you better overall performance both on server and client
+[CHANGE] Stunstick damage to prevent abuse. Left click: no damage, right click: 10 damage
+[CHANGE] F1 help text
+[CHANGE] Made it so you have to press E on dropped weapons to pick them up
+[CHANGE] It doesn't remove vehicles anymore when you change job.
+[CHANGE] Made lockpicking time random
+[CHANGE] Weapon checker to take a while to confiscate weapons
+[CHANGE] Made warrant possible on arrest
+[CHANGE] Made it so group doors need to have at least one warranted owner for it to be opened with battering ram
+[REMOVE] ALL NWVars in doors, players and custom entities (shipments, druglabs etc.) DarkRP now has LESS NWVars than sandbox!
+[REMOVE] VoteCopOn. It's bullshit
+[REMOVE] All global integers. Result: Less server crashes, less buffer overflow in net message, faster spawning time
+[REMOVE] SendLua's to open keys and F4 menu. I don't even know why I had them there in the first place
+[REMOVE] FindPlayerBySID, SID is the player's UserID, Player(SID) does exactly the same thing.
+[REMOVE] Unused functions such as rp_paydaytime and FoodHeal
+[REMOVE] Bannedprops/allowed props, it has been replaced by FPP.
+[REMOVE] CustomTeams and Customshipments.txt, no one used them
+[REMOVE] Traditional privilege system. It has been replaced by FAdmin.
+
+DarkRP 2.4.1
+
+[ADD] rp_ironshoot, set if people have to see through the ironsights to shoot
+[ADD] Falco's Prop protection (FPP), reporting for duty to replace Simple Prop Protection!
+[ADD] Anti tool model crash(FPP feature)
+[ADD] An easy way to make normal entities
+[ADD] CPPI for FPP
+[ADD] rp_dropmoneyondeath and rp_deathfee, drop money when you die. Off by default
+[ADD] Demote option in F4
+[ADD] People now walk slow while in ironsight mode of weapon
+[ADD] DarkRP skin for the VGUI's
+[ADD] Language system, it's really easy to add languages to your DarkRP now! Thanks WoRmS for the danish translation, Donkie for Swedish!
+[ADD] Signature to the letters/mails
+[ADD] rp_startinghealth: Set the default health
+[ADD] /addspawn and /removespawn: You can now add multiple team spawns and you can remove all the teamspawns from one team.
+[ADD] Visible message when a lockdown is going on
+[ADD] /me command
+[ADD] rp_dropweaponondeath - Enable/disable whether people drop their current weapon when they die.
+[FIX] Unable to remove door tool doors
+[FIX] People with the admin privilege can now see the admin menu
+[FIX] Hunger resetting after sleep
+[FIX] Max microwaves
+[FIX] rp_enforcemodels 0 not working correctly
+[FIX] Unneccessary Database access on PlayerInitialSpawn(should save lag)
+[FIX] Name exploit.
+[FIX] People staying RP admin after having normal admin removed
+[FIX] Errors when removing poopeemod
+[FIX] Crash sometimes when changing team.
+[FIX] Able to sprint after Arrest>sleep>wake up
+[FIX] Tool restriction mods not working(Thanks Gorgorp!)
+[FIX] Name exploit, names can now only contain letters and numbers.
+[FIX] earthquake mod, it's been broken for a long time apparently
+[FIX] Chat not appearing in HLSW
+[FIX] Arrested timer resetting when other player was arrested
+[FIX] Ooc and advert bug where you could say nothing in OOC or advert.
+[FIX] Timers for database stuff
+[FIX] CPOwnable doors ownable by normal players
+[FIX] Unownable doors having an owner
+[FIX] ASS antispam and prop protection
+[FIX] Lottery saying noone entered even though someone has won
+[FIX] Hints about jailtime and money printer saying 0 every time.
+[FIX] ULX fuckups: Error and pocket jail
+[FIX] Scoreboard kick and ban not working
+[FIX] Gunlab exploit to get free guns
+[FIX] Sleep and get unarrested bug
+[FIX] Being able to set name to world prop
+[FIX] Vehicle exploit where you can go through walls with pods
+[FIX] Weapon ironsight bugs
+[FIX] Sleep and get free ammo
+[CHANGE] Default shipments are now in addshipments.lua
+[CHANGE] Moved complicated code in shared.lua and addshipments.lua to MakeThings.lua
+[CHANGE] Changed filename of addshipments.lua to addentities.lua
+[CHANGE] People now can't use wanted as an ESP, you will only see someone is wanted if he is in your sight. This way it won't be abused to find players.
+[CHANGE] People now drop everything in pocket when they die.
+[CHANGE] Medic gun world model to package, so it doesn't look like he's about to blow you up
+[CHANGE] Moneybags now have their own seperate entity
+[REMOVE] Simple Prop protection. You have served us well, goodbye.
+[REMOVE] RunConsoleCommand override
+
+DarkRP 2.3.7
+Updated by: FPtje Falco
+
+[ADD] /demote <reason> People need to specify a reason to demote
+[ADD] rp_needwantedforarrest to prevent cops from random arresting
+[ADD] /channel and /radio command: Set your radio to a channel and talk through the radio so everyone with the same channel hears you.
+[ADD] Hobo's can make zombie sounds by right clicking with the bugbait :P -- idea thanks to GoDNeSS
+[ADD] Eating food makes the TF2 nom sound(bad luck if you don't have TF2)
+[ADD] Poo and pee mod :D enable with rp_poopeemod 1
+[ADD] Anti slobbot server crash
+[ADD] Weapon checker for the cops, chief and admin
+[ADD] New, more subtle and easier to find easter egg.
+[ADD] /wake and /wakeup command :)
+[ADD] Gun license, people need a license to be able to pick up guns(toggle with rp_license 1/0)
+[ADD] rp_allow<custom team> 1/0
+[ADD] Message when trying to spawn a banned prop
+[ADD] Pocket swep, store things temporarilly! (rp_pocket to turn on/off)
+[ADD] Sleeping players can get hurt
+[ADD] rp_voiceradius: Only hear people's voice in your vicinity!(same distance as yell, 550 units)
+[ADD] rp_resetallmoney: Reset EVERY SINGLE stored money on the server(not only of the people who are in the server)(Superadmin only)
+[ADD] Players can now see how long before they get unarrested.
+[ADD] Phone! You can call people for 1$ per 20 seconds!
+[ADD] DarkRP map pattern(in create server/start singleplayer) THANKS \/\/()?|\/|Š
+[ADD] rp_lookup command, look players up(nick, steam name, steam ID)
+[ADD] Custom vehicle support!
+[ADD] Logging system toggle on/off by doing rp_logging 1/0(superadmin only command)
+[ADD] /job antispam, you can now only change job every 60 seconds
+[ADD] Effects with money and health on the HUD
+[ADD] rp_tellall, put a message in everyone's screen(admin only)
+[ADD] Effect when trying to touch an entity you can't touch.
+[ADD] Compatability with mods that use PlayerSay(Like the ASS grammar plugin!)
+[ADD] Option to unown entities(for clients)
+[ADD] Compatability with doormod
+[ADD] /switchjob, switch jobs with someone else! Idea by GodNess
+[FIX] Version number in the help screen
+[FIX] Battering ram not working on warranted people
+[FIX] Zombie spawns not saving, jailpositions not saving AND custom spawns not saving!
+[FIX] People being able to spawn inside each other
+[FIX] rp_max<custom team> erroring sometimes and breaking the whole fucking gamemode
+[FIX] rp_grant breaking when the console enters it
+[FIX] Atefood icon showing for everyone
+[FIX] Prop protection toggle not working
+[FIX] Normalsalary being stored twice.
+[FIX] /teamban not working
+[FIX] RP_max<customteam>s unable to be set to 0
+[FIX] Unable to drop custom shipment weapons
+[FIX] Zombie move code(Thanks Enjia2000)
+[FIX] Enhanced "players don't spawn in each other" code
+[FIX] Zombies spawning in each other using the "players don't spawn in each other" code (a bit thanks to Enjia2000)
+[FIX] Settings and globals not loading
+[FIX] prop protection assigning all world props to the owner of the server(in case of a listen server)
+[FIX] Medkit now heals to someone's max health(determined on spawn)
+[FIX] Exploit: Be cop, go to sleep, change to citizen, keep arrest baton and other weapons.
+[FIX] Exploit where you could duplicate food
+[FIX] Zombiemod does not only spawn zombies anymore(FIX because it was there but not enabled... Idk why)
+[FIX] Exploit where you could spawn banned props
+[FIX] If rp_allowrpnames = 0 then people won't have rp names anymore.
+[FIX] Health is not restored when you come back from sleep
+[FIX] HUGE Speed fix!(something with help labels sending from server to client every time)
+[FIX] F4 admin menu having to load a few seconds
+[FIX] F4 admin menu being unstable
+[FIX] F1 menu not showing part of the help.
+[FIX] Player warrants resetting after they were already reset.
+[FIX] rp_enablemayorsetsalary not working
+[FIX] Can't change job when you're dead
+[FIX] Shotgun shooting super precise when in ironsight mode
+[FIX] Arrest/unarrest baton seeming to hit superfast clientside
+[FIX] cl_defaultweapon, you can now spawn and select the weapon you want by doing cl_defaultweapon <weapon name>
+[FIX] Ironsights, they were fucked up
+[FIX] mp_falldamage not working
+[FIX] Chat bug after gamemode_reload(developer's thing)
+[FIX] Health showing below 0
+[FIX] SPP exploit where clients could retrieve steamID's with Lua.(Should only be possible with status in console)
+[FIX] Bug in SPP menu that made the settings reset themselves(The settings now use the DarkRP settings system)
+[FIX] Weapon predictions
+[FIX] Meteor erroring etc.
+[FIX] Message about someone being unwanted when he already wasn't wanted anymore.
+[FIX] Spawning on non-custom spawn pos when custom spawn pos was enabled and guy was unarrested
+[FIX] Question screen buttons having wrong position
+[CHANGE] /buypistol to /buy because of the custom items
+[CHANGE] rp_max<customteam> to rp_max<customteam>s
+[CHANGE] Made admins.lua a bit more idiot proof
+[CHANGE] Cooks can now buy food too when hungermod is off
+[CHANGE] Letters get removed after 10 minutes, long enoug and prevents them for lying there for like hours.
+[CHANGE] Custom shipments without a team entered will make it so that every team can spawn the shipment
+[CHANGE] Moved changelog part in init.lua to the changelog.txt file
+[CHANGE] The way of saving settings and globals, it now doesn't use text files but SQL
+[CHANGE] Admins can touch world props to players can touch world props so players can pick up world items.
+[CHANGE] Chiefs can now change to cops by doing /cp
+[CHANGE] When there's only one option in the keys menu, it will do that option instantly without opening the menu
+[CHANGE] Made all yell,whisper,pm ETC. in colour!!!
+[CHANGE] Helplabel structure(now MUCH faster!)
+[CHANGE] The chat to use the new system
+[CHANGE] Removed /zombiehelp and put it in the F1 menu.
+[CHANGE] the way how gravgun punting is done
+[CHANGE] You can't shoot unless you see through the sight post (ANTI DM!)
+[CHANGE] Weapon animations, they are now standard holstered, unless you see through the sight post
+[CHANGE] the way chat colours work, it now works completely different!
+[CHANGE] The way lockpick works.
+[CHANGE] All standard teams are now made the same way as custom teams
+[REMOVE] The easter egg :(
+[REMOVE] the player possessor
+[REMOVE] refesh_int concommand, it's been replaced by rp_resetallsettings
+[REMOVE] Restriction of /dropweapon. You can now drop any weapon.
+[REMOVE] CSE base and other unused swep bases
+[REMOVE] The second stunstick swep(There were 2 the same :S)
+[REMOVE] Chat prefix, broken and noone ever used it.
+[REMOVE] cl_deathnotice.lua, it was a complete file just for ONE thing!
+[REMOVE] rp_currencysymbol, Didn't work and noone used it
+[REMOVE] The standard look-at-a-player Name and health thing, it's replaced by the RP one
+[REMOVE] /rm, Exploit-sensitive and never used
+[REMOVE] Apply settings button in SPP menu, it now applies instantly.
+[REMOVE] Melon entity, it wasn't doing anything :S
+[REMOVE] Several networked variables that were used only serverside
+[REMOVE] The weight of shipments, noone ever cared.
+
+DarkRP 2.3.5:
+Updated by: FPtje Falco
+
+[ADD] Cops can arrest sleeping people
+[ADD] Admins can disable the No-respawning when changing job with rp_norespawn
+[ADD] Admins can allow/disallow hobo's by doing rp_allowhobos <1/0>
+[ADD] Every door and vehicle controls are put in the reload function of the keys SWEP
+[ADD] Re-added the earthquake sound
+[ADD] DarkRP now automaticly saves the DarkRP settings(not the costs) in a text file every minute and will get restored when the server starts(like after a crash)
+[ADD] Cops chief and mayor only option in the Key menu for superadmins
+[ADD] A very easy way to add classes! see shared.lua!
+[ADD] rp_hungerspeed command: it's the speed of hunger divided by 10( standard = 7)
+[ADD] Admins can choose to make a vote or not to make a vote to become cop/mayor
+[ADD] The ability to make custom shipments
+[ADD] Console command to remove class specified entities when someone changes class.(Like microwaves get removed when a cook changes to like the hobo): rp_removeclassitems
+[ADD] HUD adaptation menu.
+[ADD] Timer to the vote screen(You see how much time you have left to vote)
+[ADD] DarkRP now saves the costs of guns and other global ints
+[ADD] Ability to knock on doors you don't own(left/right mouse with the keys weapon)
+[ADD] Some citizen models(Now not every citizen has the same model)
+[ADD] Teamban and teamunban (chat = /teamban, console = rp_teamban): Ban/unban a player from a certain team. Use: /teamban <player> <team> or rp_teamban <player> <team>
+[ADD] Lottery: The mayor can start a lottery and players can enter the lottery with $50. At the end one of the players wins all the money. Toggle with rp_lottery 1/0
+[ADD] /advert command: Say /advert <advertisement>  to advert!
+[ADD] Rp_BabyGod: Players are immortal when they've just spawned.
+[ADD] Rp_<job> for every job, not only cp, mayor and cpchief
+[ADD] Color codes when rp_alltalk = 0: People can see who can hear them whisper/talk normally/yell and who cannot hear them.
+[ADD] Expanded /buyfood, Now you can do more than /buyfood melon. It's also in the F4 menu!
+[CHANGE] All door controls are now done though reload with the Keys weapon.
+[CHANGE] Descriptions in the change job VGUI(thanks james hutchins)
+[CHANGE] The way prop protection works for admins
+[CHANGE] Moved the job change to F2 and I added a lot of commands/entities to it
+[CHANGE] The way Simple prop protection protects against slider bug: you can make the slider but you won't be able to do anything with the prop you made the slider on.
+[CHANGE] Lockpick being able to hit other things than doors
+[CHANGE] HasPriv() speed by using a cache: THANKS PHILXYZ
+[CHANGE] SpreadFire code: THANKS PHILXYZ
+[CHANGE] The way movement is done
+[CHANGE] The druglab completely! I hope you like it!
+[CHANGE] Put the warrant back.
+[CHANGE] Scoreboard now sorts the players on their class
+[CHANGE] Replaced bad rating with "friendly" rating
+[CHANGE] You can see what you rated someone, and the rated guy can see who rated him.
+[CHANGE] Only super admins can set peoples money(Due to complaints of admins setting random people's money)
+[CHANGE] Pressing F4 when the F4 menu is already open, closes it.
+[CHANGE] Lock pick appearance(I also fixed the error with ActIndex("Crowbar") isn't set)
+[CHANGE] Merged Simple RP Prop protection with DarkRP
+[CHANGE] Put the contents folder in DarkRP with the earthquake sound
+[CHANGE] Settings now save when a convar is changed instead of every minute.
+[FIX] When use protection is on, doors couldn't be opened by some people, now they can.
+[FIX] Rare error with dropweapon
+[FIX] Exploit with shipments: Exploding them with more than one explosive would make them spawn more guns than usual.
+[FIX] Exploit with wire nailer
+[FIX] Exploit that you can duplicate weapons(I made sure that you can't use toolgun on weapons AND I made sure you can't spawn saved weapons works on both normal dup and adv. dup)
+[FIX] Bug that even if hungermod was off, food would still cost money.
+[FIX] Gravgun punt punting far
+[FIX] Not being able to use druglabs/money printers/whatever
+[FIX] Vote screens being able to be there forever
+[FIX] The save system not saving everything
+[FIX] When looking at an item/door, the text won't be shaky anymore!
+[FIX] Attempt to fix playerinitialspawn lag
+[FIX] Attempt to fix walk speed lag
+[FIX] /dropmoney text exploit
+[FIX] The vote system was fucked, I completely renewed it(I now use Derma) and HOPEFULLY every shit problem you guys had with it is fixed!
+[FIX] Prices etc. resetting to 0
+[FIX] HUGE FUCKING MAJOR EXPLOIT where you enter a console command after doing /votecop or /votemayor and just become a cop without anyone voting yes.
+[FIX] The ability of people to somehow get <nothing> as RP name(Always happened with bots too)
+[FIX] People being able to get less than 0 money. DarkRP just doesn't work with depts
+[FIX] rp_grant and rp_revoke not working properly, Philxyz fucked the caching system up(Phil look at my code to fix it for your release :D)
+[FIX] Demote: the demoter can't vote anymore now.
+[FIX] Unable to select keys when you got a different weapon(like the 357)
+[REMOVE] Data/DarkRP/WHAT_YOU_CAN_DO_IN_THIS_FOLDER.txt and its contents, it had absolutely no purpose. If you have that file, the update won't remove it but it won't remake it either.
+[REMOVE] rp_mute <player> <on/off> It didn't work AND you've got admin mods to mute people!
+
+
+DarkRP 2.3.1
+Updated by: FPtje Falco
+
+[ADD] Awesome change job screen, Press F4 while not looking at a door
+[ADD] Player possessor swep for the admins
+[ADD] Sleep sound
+[ADD] New team! Hobo
+[ADD] Cops can warrant through TAB scoreboard :D
+[ADD] The battering ram can unfreeze props of warranted players!
+[FIX] People being able to duplicate DarkRP entities/Remove other people's entities through a slider/winch/muscle/etc.
+[FIX] Having to respawn when you change your job, Now you can change your job without respawning
+[FIX] When you go to sleep and back you now get all your weapons back
+[FIX] Medic's can't "heal" when someone's health is or is bigger than 100
+[FIX] When you're arrested and join more than 120 seconds later you won't get re-arrested. but if you rejoin in less than those 120 seconds you will get rearrested
+[FIX] People being able to disable motionblur/dof/the black screen by doing pp_colormod 0/pp_dof 0/pp_motionblur 0
+[FIX] When you do a vote when alone then it doesn't vote, it just accepts
+[FIX] You can't vote when you made the vote yourself
+[FIX] The moneyhack with the gunlabs and microwaves :D
+[Change] Medic gun can now heal self
+[Change] The way the medic kit heals, it doesn't do it instantly anymore
+[Change] The chief has a different model now
+[Change] If an admin/whatever does votemayor he skips the voting
+
+DarkRP 2.2.20
+Updated by: Chrome Bolt(Unib5)
+
+-- Self Ideas/Fixes
+
+[Fix] /r was showing on the help list
+[Fix] Clarified some of the help screens - added their alternate commands.
+[Added] Added some more banned props, including the money printer model.
+[Added] Added rp_respawntime, default to 4.
+[Added] Players are now wanted by the Police set amount of time - controlled with rp_wantedtime.
+[Added] rp_deathblack - Players vision is black when dead.
+[Added] Added myself to credits list :-)
+[Change] Cash no longer displays a message when it is burned up.
+
+DarkRP 2.2.19
+Nov 08, 2008
+Updated by: philxyz
+
+-- Old
+[Fix] /addowner and /removeowner were blocked
+[Fix] Phantom "Owned By:" labels on doors
+
+
+DarkRP 2.2.18
+Nov 06, 2008
+Updated by: philxyz
+
+-- New
+[Changed] Add rp_maxletters command to replace the fixed limit of 4
+[Changed] Add rp_customjobs command (default 1) to enable toggling of /job command
+
+-- Old
+[Fix] Missing return "" in /job lower bound string check
+[Fix] You could set your RP name to Shared or World (dangerous - conflicts with prop protection)
+[Fix] Prop protection not updating for a user's props when changing RP name
+[Fix] Per-player letter limits were broken
+[Fix] Increase the maximum amount of allowed text in a letter
+[Fix] Remove some old debugging messages
+
+
+DarkRP 2.2.17
+Oct 31, 2008
+Updated by: philxyz
+
+-- New
+[Changed] Non-ownable doors can now have a title (/title from a super admin when door is disabled)
+[Changed] Add a minimum number of characters (3) to the /job command
+[Changed] When your RP name is the same as your Steam name (the name set in Steam, not your steam username) don't print both names in the chat box
+
+-- Old
+[Fix] Client-side Lua spam when looking at a non-ownable door (thanks Scooby)
+[Fix] The use of player commands on a door which has been disabled
+[Fix] The ability to own or unown a door while arrested
+[Fix] Baton animation (a bit better now)
+[Fix] Fix a lot of Notify messages that had inconsistent use of upper and lower case letters mid-sentence
+[Fix] Simplify and clean up the code for all batons
+[Fix] Make the rp name chat text slightly shorter in length
+[Fix] "OOC" was an allowable RP name
+[Fix] Chief and CPs not spawning with guns regardless of rp_noguns setting
+[Fix] Change some spaces back to tabs
+[Removed] Remove the final references to budgets from data.lua and main.lua
+[Removed] Remove the obsolete player.NotifyArrest function (we already do it)
+
+
+DarkRP 2.2.16
+Oct 26, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] Display custom jobs in the scoreboard
+[Changed by philxyz] Add support for multiple jail positions per map
+[Changed by philxyz] Add all jail positions for the most popular rp maps at time of release to static_data.lua for auto-loading on map load
+[Changed by philxyz] Jail time on punishment is now the full jail time from the previous session to avoid buggy corner cases
+[Changed by philxyz] Add /rpname command to allow a player to choose a custom RP name per server
+[Changed by philxyz] Add a rp_allowrpnames command to control the above
+[Changed by philxyz] Add "find by rp name" support (built-in behind all find commands)
+[Changed by philxyz] Super admins can now make a door non-ownable by pressing F2 on it. The setting remains during a server restart until F2 is pressed on that door again or the database is cleared
+[Changed by philxyz] Add rp_noguns command to allow admins to disable gundealers and spawning with pistols. NOTE: Not designed to prevent map-based gun factories
+[Changed by philxyz] Add rp_chiefjailpos (default: 1) to determine whether or not the Chief can use /jailpos and /addjailpos
+[Changed by philxyz] Change rp_earthquake_chance_is_1_in to rp_quakechance_1_in
+
+-- Old
+[Fix by philxyz] Jail punishment timer
+[Fix by philxyz] Mayor salary setting commands no longer permit negative salaries
+[Fix by philxyz] Impossible to set the moneyprinter cost
+[Fix by philxyz] Another player_row.lua runtime error caused by viewing the scoreboard while another player is disconnecting
+[Fix by philxyz] Ability to see who killed who during rp_showdeaths 0 by sneaking a look in the console
+[Fix by philxyz] rp_dm_autokick always enabled regardless of setting
+[Fix by philxyz] Shared items no longer responding to the "Use" key after a player has been killed while holding that item with the gravity gun
+[Fix by philxyz] Negative salary setting was allowed
+[Fix by philxyz] Useless brackets all over the place
+[Fix by philxyz] Privilege cleanup
+[Fix by philxyz] Money Printer hint index
+[Fix by philxyz] hints.lua in general - it was a mess
+[Fix by philxyz] Players walking too quickly for it to be realistic
+[Fix by philxyz] Make most calls to the Notify() function last at least 4 seconds
+[Fix by philxyz] Limit the number of mayors to 1 and remove the maxmayors setting (this is because only 1 mayor can answer warrant requests, etc)
+[Fix by philxyz] Gangsters not seeing the agenda unless the Mob Boss sets it while they are a Gangster
+[Fix by philxyz] Custom player spawn positions (table loading design fault)
+[Fix by philxyz] /job command should intercept job names that are similar to or exactly the names in the main F2 job menu and change the player's team
+[Fix by philxyz] Lots of little SQL problems
+[Removed by philxyz] Pointless file in Hunger Mod
+[Removed by philxyz] economy.lua (only had one function left)
+[Removed by philxyz] The ability to set budgets - broken and unused
+[Removed by philxyz] The ability to set bails - broken and unused (and should be RP'd anyway)
+[Removed by philxyz] Combine radio command (/r) - Just use /g (group chat)
+
+
+DarkRP 2.2.15
+Oct 15, 2008
+Updated by: philxyz
+
+--New
+[Changed by philxyz] Objectify some messy procedural code (reduce the size of /buypistol, /buyshipment, /buyammo and spawned_shipment sent)
+[Changed by philxyz] Ensure that prices are always shown in the Notify() message after buying something (add it for drug labs, shipments and ammo)
+[Changed by philxyz] Widen the scoreboard. I'm sure nobody plays in 640x480 any more...
+
+--Old
+[Fix by philxyz] Always resetting a player's wallet to 500 on initial spawn (thanks to Sc00by22 and supe7nova for informing me of that)
+[Fix by philxyz] Flickering text when inside a vehicle (credit goes to David Blaine on facepunch for the idea!)
+[Fix by philxyz] Getting stuck in a vehicle when changing your job (found by Chrome Bolt) and being demoted (found by David Blaine)
+[Fix by philxyz] Update the rest of the places where Sibre's name should appear
+[Fix by philxyz] Lua errors in player_row.lua if a player disconnects while the player list is being viewed
+
+
+DarkRP 2.2.14
+Oct 13, 2008
+Updated by: philxyz
+
+--News: There were still some bugs, thanks to Unib5 and Sc00by22 for informing me.
+
+--New
+[Changed by philxyz] Clean up the salary code, it was messy and broken
+[Changed by philxyz] Change one or two sentences to improve readability
+
+--Old
+[Fix by philxyz] No pay received until you changed job for the first time
+[Fix by philxyz] Clean up unemployment and bum / hobo mode
+[Fix by philxyz] Delete a stray hidden file created by my file browser that shipped with darkrp accidently
+[Fix by philxyz] Remove Money Printers on player disconnect to cut inflation
+
+
+DarkRP 2.2.13
+Oct 9, 2008
+Updated by: philxyz
+
+--News: OK, I lied. THIS is my last release :-)
+
+--New
+[Changed by philxyz] Include a money printer based on the RRPX version
+[Changed by philxyz] Include spreadable fire from SeriousRP (for the money printer)
+[Changed by philxyz] Can now demote a dead or jailed player (comes into force on next player spawn)
+
+--Old
+[Fix by philxyz] Players getting hold of admin toolgun on spawn
+[Fix by philxyz] Players escaping demotion by suiciding at the right moment
+[Fix by philxyz] Non-Gun Dealers buying shipments when there are no other Gun Dealers
+[Fix by philxyz] That annoying, seizure-inducing white flash
+[Fix by philxyz] Change credits to reflect the person who truly fixed the /job exploit (Sibre) rather than Zorblet who actually re-hacked Sibre's version of DarkRP 2008 to introduce his own exploit (as removed in v2.22E, see changelog below).
+
+
+DarkRP 2.2.12
+Aug 3, 2008
+Updated by: philxyz
+
+--News: Ricky has returned and will be continuing development, this is my last release for now. Something new is coming from both of us independently... watch this space!
+
+--New
+[Changed by philxyz] No more escaping jail by changing job
+[Changed by philxyz] Player loadout should occur on inital spawn
+[Changed by philxyz] Blocked some more props by default
+[Changed by philxyz] Switch to UNIX newlines for lua files (\n instead of \r\n)
+
+--Old
+[Fix by philxyz] Lua errors when killed by a prop and rp_showdeaths = 0
+[Fix by philxyz] Some more awful, awful spelling
+[Fix by philxyz] Non-admin wire to Shipment Crates
+[Fix by philxyz] /setspawn was broken
+[Fix by philxyz] Console message repetition
+[Fix by philxyz] Nobody should have physguns at spawn unless admin enables it (a
+s it always used to be)
+[Removed] Loading of rp_* commands from data/DarkRP/servercfg.txt - it never worked, even once I'd fixed it. Stick to your custom scripts for now
+[Removed] Wire Use input on shipment crates. They were admin only and it would have taken too much time to fix compared with the number of people that use the feature
+
+
+DarkRP 2.2.11
+Aug 1, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] Prevent No-Collide tool on vehicles (rp_enforcevehiclenocollide 0 to disable)
+[Changed by philxyz] Revert to allowing /buypistol for all players (rp_restrictbuypistol 1 to make /buypistol gundealer only if there are any)
+[Changed by philxyz] Gun Dealers and Cooks now receive discounts for buying stock (12% pistol discount for gundealers, 18% food discount for cooks)
+[Changed by philxyz] Gun Labs and Microwaves now display the price for the customer
+[Changed by philxyz] Gun Labs and Microwaves have a new profit/loss based buy system
+[Changed by philxyz] Add arrest notifications
+
+-- Old
+[Fix by philxyz] Prevent changing material of restricted items. (As of this release, a bug in Garrys Mod means that this fix will not yet work)
+[Fix by philxyz] Lua errors in cl_deathnotice.lua
+[Fix by philxyz] Some more spelling and grammar fixes
+[Fix by philxyz] Remove Zorblet from contributor list, all he did was include a backdoor (which was fixed ages ago)
+[Fix by philxyz] RP Admins can no longer kick or ban other RP admins or server admins
+[Fix by philxyz] Add /unlockdown to Mayor help menu
+
+
+DarkRP 2.2.10
+July 20, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] Move DarkRP to SQLite by default
+[Changed by philxyz] Upgrade the bundled "Simple RP Prop Protection" to version 1.4
+[Changed by philxyz] Add /removeletters command to remove your own letters
+[Changed by philxyz] Add rp_removeletters [Name] command to enable admin removal of all or a specific player's letters
+[Changed by philxyz] Add /rm command to allow a player to delete their own letters, gunlabs and druglabs (aim first)
+[Changed by philxyz] Rework the prices to ensure rifles are more expensive than pistols
+[Changed by philxyz] You can now set your own currency symbol in shared.lua
+[Changed by philxyz] Add Wire "Use" input to gun shipment crates
+[Changed by philxyz] Re-code the jailpos system to work with the new SQL backend cleanly
+[Changed by philxyz] Add a default jailpos for RP_Downtown_V2 (set on map load)
+[Changed by philxyz] Add rp_npckillpay command (amount of money paid out when killing an NPC)
+[Changed by philxyz] Add the ability to register NPC prop kills to the player who created the prop
+[Changed by philxyz] Completely rewrite the team change code in response to the 0 salary bug, preventing future similar problems
+[Changed by philxyz] Block by default the large blue dumpster that mingebags use to trap other players
+[Changed by philxyz] Add Earthquake magnitude reports (Notify) backported from my new gamemode (in development)
+[Changed by philxyz] Add a group chat command (/g) that allows (police - chief - mayor) and (mobboss - gang) to talk together privately
+[Changed by philxyz] If there are gundealers, you must buy pistols from them (/buypistol is disabled)
+[Changed by philxyz] Remove rp_add temporary admin maker command (see below)
+[Changed by philxyz] Recode the admin system so that you no longer have to restart DarkRP to add privileges for players (rp_grant and rp_revoke)
+[Changed by philxyz] Merge rplol.lua and rprofl.lua into main.lua and merge commands.lua into admincc.lua
+[Changed by philxyz] Make all "&&", "||" and "!" into "and", "or" and "not" (pure lua)
+[Changed by philxyz] Arresting an NPC will now send it to the jailpos. Fun when it's a zombie and there are already prisoners in there!
+[Changed by philxyz] Prevent the use of toolgun on drug labs. Suggested by Chuteuk
+[Changed by philxyz] Prevent duplication of items that should never be duplicated
+[Changed by philxyz] Only Admin or SuperAdmin can alter rp_chatprefix, rp_setmoney, rp_paydaytime or rp_setsalary (not DarkRP Admin)
+[Changed by philxyz] Make it possible for ANY player to buy a drug lab. Corruption does not discriminate :P
+
+-- Old
+[Fix by philxyz] Right click kill mode of stunstick
+[Fix by philxyz] Properly remove gun labs, letters and microwaves belonging to a player when they disconnect
+[Fix by philxyz] Prevent all manner of items from being spawned by a player under arrest
+[Fix by philxyz] Prevent /mayor and /cp during a vote (prevents players exceeding the team quota)
+[Fix by philxyz] Make the glock slightly less accurate
+[Fix by philxyz] Make the sniper less accurate at close range
+[Fix by philxyz] Demoted players no longer receive 0 salary
+[Fix by philxyz] Remove Chief from Citizen property tax rate
+[Fix by philxyz] Allow custom chief spawn positions
+[Fix by philxyz] Mayor is now able to do /votecop
+[Fix by philxyz] Chief was not receiving /r chat text
+[Fix by philxyz] Fix a boolean logic error in the combine request (/cr) code
+[Fix by philxyz] A whole bunch of tiny money related bugs
+[Fix by philxyz] Make the gunlab interaction the same as the microwave interaction
+[Fix by philxyz] Medics can still use /buyhealth themselves
+[Fix by philxyz] All players now pay for props if rp_proppaying is enabled, not just the admins
+[Fix by philxyz] Vehicle npc kills register as a kill by the driver
+[Fix by philxyz] Some awful zombie related grammar issues
+[Fix by philxyz] Player lookup by user ID (status in console)
+[Removed] rp_rcon command. DarkRP admins are NOT meant to be super admins
+
+
+DarkRP 2.2.9
+July 3, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] Add /warrant command for search warrants
+[Changed by philxyz] Add rp_searchtime (default 30) for search warrant expiry
+[Changed by philxyz] Add /wanted and /unwanted commands for CPs or the Mayor to highlight a wanted criminal (replaces playerwarrant)
+[Changed by philxyz] Add /ao and /ro as aliases for /addowner and /removeowner respectively
+[Changed by philxyz] Add more commands to the F2 menu
+
+-- Old
+[Removed] /playerwarrant - It became a bizarre cross between arrest warrant (unnecessary) and search warrant
+
+
+DarkRP 2.2.8
+June 30, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] Log Notify() output to server and client consoles (useful for /give proof of purchase)
+
+-- Old
+[Fix by philxyz] Players could never re-take a job after demotion
+[Fix by philxyz] Remove duplicate function definitions from util.lua
+
+
+DarkRP 2.2.7
+May 08, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] A more successful attempt at fixing Simple Prop Protection compatibility - thanks to Spacetech for both his original work and his co-operation
+[Changed by philxyz] Implement rp_maxdrugs and rp_maxfoods
+[Changed by philxyz] Show the price when buying a melon
+[Changed by philxyz] Remove letters on player disconnect
+
+-- Old
+[Fix by philxyz] When unowning doors, don't show cents in the sale value
+[Fix by philxyz] Fix an old typo that meant rp_gunlabcost was not working
+[Fix by philxyz] Fix rp_microwavefoodcost
+
+
+DarkRP 2.2.6
+May 05, 2008
+Updated by: philxyz
+
+-- New
+[Changed by philxyz] Added /dropweapon, /weapondrop as aliases for /drop
+[Changed by philxyz] /moneydrop is now /dropmoney (with an alias /moneydrop so as not to confuse people)
+[Changed by philxyz] Allow help menu closing using /x in chat - it's much quicker
+
+-- Old
+[Fix by philxyz] Remove the ability to screw up your money
+[Fix by philxyz] CPs can smash open their own or unowned doors (important for rp_tb_city45 nexus)
+[Fix by philxyz] Money should be owned by "World" according to Simple Prop Protection
+
+
+DarkRP 2.2.5
+May 04, 2008
+Updated by: philxyz with contributions from [GNC] Matt
+
+-- New
+[Changed by philxyz] Player has died in jail is now printed in the middle of the screen
+[Changed by philxyz] Replace IsValid() with calls to G.ValidEntity()
+[Changed by philxyz] Use the Unix find and sed commands to clean out the syntax even more (spacing, semicolons, if spacing etc)
+
+-- Old
+[Changed by philxyz] Remove all traces of old bug reporting tools
+[Fix by philxyz] Actually fix the druglab removal on player disconnect process
+[Fix by philxyz] Remove spawned microwaves and gun labs on player disconnect
+[Fix by philxyz] Fix the rest of the help screens not disappearing on job change
+[Fix by [GNC] Matt] Simplify chat.lua
+[Fix by [GNC] Matt] Fix a money related typo
+
+
+DarkRP 2.2.4
+May 03, 2008
+Updated by: philxyz with contributions from [GNC] Matt
+
+-- New
+[Changed by philxyz] Arrested players are now on suicide watch! (no kill in console)
+[Changed by philxyz] Arrested players when killed, will not respawn until their time in jail is served
+[Changed by philxyz] CPs can only smash in doors with a warrant set on one of the door's owners (rp_doorwarrants 1 default)
+[Changed by philxyz] If there is a Mayor, he must approve /playerwarrant requests by CPs
+[Changed by philxyz] When someone gets demoted, they can not rejoin that job until the timer is up (rp_demotetime 120) 2 mins by default
+[Changed by philxyz] FindPlayer() is now case insensitive (suggestion by [GNC] Matt, something I missed)
+[Changed by philxyz] Lockpick now has a random chance of success and can open vehicles
+[Changed by philxyz] If a gangster or the mob boss steals a battering ram, they can use it as they wish
+[Changed by philxyz] Shipments now come in crates
+[Changed by [GNC] Matt] Police battering ram can now be used to force people out of vehicles
+
+--Old
+[Fix by philxyz] Fix a bunch of Lua errors
+[Fix by philxyz] Fix the baton view model errors
+[Fix by philxyz] Fixed the last wrongly labelled "Max Gundealers Reached" Notify()
+[Fix by philxyz] Backport /give and /moneydrop from my new unreleased gamemode. Only whole amounts are allowed and minimum give amount is 2 dollars
+[Fix by philxyz] Disable mayor help on mayor death
+[Fix by [GNC] Matt] Police Chief spawn position fix
+[Fix by [GNC] Matt] Hit and run now registers as a kill by the driver
+[Fix by [GNC] Matt] Keys work on vehicles at a greater distance
+
+
+DarkRP 2.2.3
+April 27, 2008
+Updated by: philxyz
+
+--New
+[Changed] Backported from my new upcoming gamemode:
+                - util.lua, enabling player lookups by name for in-game commands such as "/playerwarrant"
+                - chat.lua, allowing chat commands that start with the same character sequence as another command without causing a conflict
+                - F1 menu scroll direction fixed
+                - auto-enable pricing on server start (zero prices bug)
+                - /queryvar command to allow clients to query server CfgVar values
+                - anti-deathmatch feature rp_dm_autokick, rp_dm_maxkills and rp_dm_gracetime
+
+[Changed] Code cleanup: Remove useless semicolons and replace my indentation spaces with single tabs throughout
+[Changed] Merge the sv_earthquake commands into the rp_ namespace
+[Changed] Chief can now set the jailpos as well as admin
+[Changed] Simplify the version number
+
+--Old
+[Fix] Simple Prop protection was preventing people from picking up items from other players
+[Fix] Only Gangs can spawn druglabs (the "DarkRP 2.1" way)
+
+
+DarkRP 2.22 E
+February 4, 2008
+Updated by: philxyz
+
+--Old
+[Remove] What appears to be a very dirty cheat embedded into the game mode by some crafty person
+
+
+DarkRP 2.21 E
+February 3, 2008
+Updated by: philxyz
+
+--New
+[Changed] Clean the code throughout the entire addon
+[Changed] Reorder the CfgVars to make it easier to see which are bool and which are configurable
+[Changed] Merge the old Checklist.txt into this changelog.txt file and delete Checklist.txt
+[Add] Earthquake! sv_earthquakes / sv_earthquake_chance_is_1_in
+
+--Old
+[Fix] Some grammar in hints.lua and other files so it reads much better
+[Fix] Medics can now only heal other players, not just any entity
+[Fix] Max Cooks Reached and Max Police Chiefs Reached labels were incorrectly set to Max Gundealers Reached
+[Fix] Zombie Movement
+[Removed] Zero byte modules/Hungermod/entity.lua
+
+
+DarkRP 2.2
+January 26, 2008
+Updated by: Zorblet
+
+--New
+[Fix] Critical exploit which allowed command execution on all connected clients
+
+--Old
+[Add] rp_doorcost <amount> - The Cost to buy a door.
+[Add] rp_zombiescore <amount> - The money awarded for a NPC Kill.
+[Add] Player's now spawn with Cameras
+[Add] Grenades to BuyShipment
+[Add] Flashbangs to Buyshipment
+[Add] /sleep for 10 seconds then /sleep again to unsleep
+[Add] CfgVar "physgun"
+[Add] CfgVar "adminjailpos"
+[Add] rp_rtalk - To set Normal Talk Radius
+[Add] rp_ryell - To Set Yell Radius
+[Add] rp_rwhisper - To set Whisper Radius
+[Add] A "Law" Group to be used when Cfgvar "adminjailpos" = 0 making Cp's and Ow's(mayor) able to set Jailpos, 1 making admin only
+[Add] Hints telling the correct jailtime, not always 120 seconds.
+
+[Changed] Ow to Mayor - Makes more sense
+[Changed] Dist between Cop and criminal needed for arrest/unarrest from 94 to 110 (should make arresting easier now)
+
+[Removed] Para - Created ridiculous amount of warefare.
+[Removed] TMP - To make room in F2 for Flashbangs.
+[Removed] Melee Damage of Lockpick (Created Crowbar Deathmatch)
+[Removed] All Players spawn with NO WEAPONS, only job based ones (CPs get a Glock/USP) reason: Freeguns=bad economy and Deathmatchers as soon as people become Gangsters.
+
+[Fix] Maxdruglabs not working, There was no limit.
+[Fix] /drop money not working, new command /moneydrop
+[Fix] Many Typos and spelling errors in help menus and functions
+[Fix] /agenda showing in chat, aswell as all the others that also do
+[Fix] Drugs turn to food when Hungermod enabled
+[Fix] Buying ammo not subtracting money for sale.
+[Fix] "Bill HAMPTONhas a Warrant for their Arrest!" typo, added space.
+[Fix] Hint Typos
+[Fix] Description/Help in admins.lua
+[Fix] Unneeded "Tip #1: " prefixes (they took up space in chat and looked horrible.)
+[QuickFix] For no damage zombies: Made Only Fastzombies when zombies are on...(this will be completely fixed soon)
+
+
+DarkRP 2.0
+June 30, 2007
+Updated by: Pcwizdan
+
+[Add] rp_doorcost <amount> - The Cost to buy a door.
+[Add] rp_zombiescore <amount> - The money awarded for a NPC Kill.
+1[Add] Player's now spawn with Cameras
+1[Add] Grenades to BuyShipment
+1[Add] Flashbangs to Buyshipment
+1[Add] /sleep for 10 seconds then /sleep again to unsleep
+[Add] flash/gren so only 2 spawns...
+[Add] CfgVar "physgun"
+[Add] CfgVar "adminjailpos"
+[Add] rp_talkradius - To set Normal Talk Radius
+[Add] rp_yellradius - To Set Yell Radius
+[Add] rp_whispradius - To set Whisper Radius
+[Add] A "Law" Group to be used when Cfgvar "adminjailpos" = 0 making Cp's and Ow's(mayor) able to set Jailpos, 1 making admin only
+1[Add] Hints telling the correct jailtime, not always 120 seconds.
+
+1[Changed] Ow to Mayor - Makes more sense
+1[Changed] Dist between Cop and criminal needed for arrest/unarrest from 94 to 115 (should make arresting easier now)
+
+1[Removed] Para - Created ridiculous amount of warfare.
+1[Removed] TMP - To make room in F2 for Flashbangs.
+1[Removed] Melee Damage of Lockpick (Created Crowbar Deathmatch)
+1[Removed] All Players spawn with NO WEAPONS, only job based ones (CPs get a Glock/USP) reason: Freeguns=bad economy and Deathmatchers as soon as people become Gangsters.
+
+1[Fix] Maxdruglabs not working, There was no limit.
+1[Fix] /drop money not working, new command /moneydrop
+1[Fix] Many Typos and spelling errors in help menus and functions
+1[Fix] /agenda showing in chat, aswell as all the others that also do
+1[Fix] Drugs turn to food when Hungermod enabled
+1[Fix] Buying ammo not subtracting money for sale.
+1[Fix] "Bill HAMPTONhas a Warrant for their Arrest!" typo, added space.
+1[Fix] Hint Typos
+1[Fix] Description/Help in admins.lua
+1[Fix] Unneeded "Tip #1: " prefixes (they took up space in chat and looked horrible.)
+1[QuickFix] For no damage zombies: Made Only Fastzombies when zombies are on...(this will be completely fixed soon)
+
+
+LightRP 1.3
+February 1, 2007
+
+[Add] Help labels are created more efficiently, and allow for newer help commands added by modules
+[Add] Amount console variables are created more efficiently with AddValueCommand
+[Add] rp_tell <Name/Partial-Name> <Message> - Send an admin message to a player
+[Add] "Hunger Mod" module
+[Add] /write - Write letters.
+[Add] Multiple owners for doors
+[Add] OW votes
+[Add] More toggleables for CP-voting/OW-voting
+[Add] rp_enforcemodels  <1 or 0> - Set if player model enforcement should be enabled (players can use zombie models, combine models, etc..)
+[Add] rp_lock, rp_unlock - Lock/unlock doors you're facing
+[Add] rp_own, rp_unown - Own/unown doors
+[Add] rp_addowner <Name>, rp_removeowner <Name> - Add/remove co-owners
+[Add] rp_adminsents <1 or 0> - Should SENTs be spawnable by only admins
+[Add] /pm chat command
+[Add] data/LightRP/servercfg.txt, allowing you to do rp admin commands on server start up without modifying the script.  YOU HAVE TO CREATE THIS FILE MANUALLY.
+[Add] Admin commands to toggle prop paying/change prop spawning price
+[Add] /help chat command
+[Fix] Console can now do rp admin commands
+[Fix] Help menu reorganized
+[Fix] Changing chat prefix would glitch up the help menu
+[Fix] You can lock/unlock owned vehicles
+[Fix] You can vote anytime you're in gui "clicker" mode.
+[Fix] /give and /drop money can't do negative money
+
+
+LightRP 1.2
+January 30, 2007
+
+[Fix] Players couldnt spawn wheels/thrusters/lamps/etc...
+[Add] rp_adminsweps, toggles whether all sweps should be admin only.
+[Add] rp_chatprefix, change the chat prefix for commands, like /votecop to !votecop
+
+LightRP 1.1
+January 29, 2007
+
+[Add] rp_toolgun - Toggle toolguns
+[Add] Allowed props, rp_allowedprops (bannedprops.lua)
+[Add] rp_propspawning
+[Add] Module scripts (should be self explanatory to developers)
+[Fix] Toggle concommands are scripted more efficiently
+
+-------------
+-- LightRP
+-- Rick Darkaliono aka DarkCybo1
+-- Jan 22, 2007
+-- Done Jan 26, 2007
+-- This script isn't a representation of my skillz
+-------------
+-- DarkRP v1.07
+-- By: Rickster
+-- Done June 15, 2007
+-------------
+-- v2.0 and up
+-- By: Pcwizdan / Silent Inferno
+-- All credit goes to Rickster, v2.0 just a Fix/Cleanup Mod
+-------------
+-- DarkRP 2008 v2.21 E
+-- by philxyz
+-- code cleanup
+-- earthquake
+-------------
+-- DarkRP 2008 v2.22 E
+-- by philxyz
+-------------
+-- DarkRP 2.2.3
+-- by philxyz
+-- fix the name, it was getting stupid.
+-- add a /queryvar command so clients can see what a given server var is are set to
+-- chat.lua now checks whole command, not just first letters
+-- fix simple prop protection compatibility
+-- fix scroll direction in F1 menu
+-- fix prices being 0 on initial load
+-- chief can now set the jailpos as well as admin
+-- anti-deathmatch feature rp_dm_autokick, rp_dm_maxkills and rp_dm_gracetime
+-- move sv_earthquakes and sv_earthquake_chance_is_1_in to the rp_ namespace
+-- allow searching by player name and steam ID for /playerwarrant etc
+-- more code clean up (spaces for tabs, remove semicolons)
+-- only gangs can spawn druglabs. Like in DarkRP 2.1
+-------------
+-- DarkRP 2.2.4
+-- by philxyz and [GNC] Matt
+-- philxyz: Arrested players are now on suicide watch! (no kill in console)
+-- philxyz: Arrested players when killed, will not respawn until their time in jail is served
+-- philxyz: CPs can only smash in doors with a warrant set on one of the door's owners (rp_doorwarrants 1 default)
+-- philxyz: If a gangster or the mobboss steals a battering ram, they can use it as they wish
+-- philxyz: If there is a Mayor, he must approve /playerwarrant requests by CPs
+-- philxyz: When someone gets demoted, they can not rejoin that job until the timer is up (rp_demotetime 120) 2 mins by default
+-- philxyz: Fix a bunch of Lua errors
+-- philxyz: Fix the baton view model errors
+-- philxyz: Fixed the last wrongly labelled "Max Gundealers Reached" Notify()
+-- philxyz & [GNC] Matt: FindPlayer() is now case insensitive
+-- philxyz: Backport /give and /moneydrop from my new unreleased gamemode. Fractional amounts are now not allowed and minimum give amount is 2 dollars
+-- philxyz: Lockpick has random chance of success and can open vehicles
+-- philxyz: Shipments now come in crates
+-- philxyz: Disable mayor help on mayor death
+-- [GNC] Matt: Police Chief spawn position fix
+-- [GNC] Matt: Hit and run now registers as a kill by the driver
+-- [GNC] Matt: Battering ram can force people out of vehicles
+-- [GNC] Matt: Keys work on vehicles at a greater distance
+-------------
+-- DarkRP 2.2.5
+-- by philxyz and [GNC] Matt
+-- [GNC] Matt: Simplify chat.lua
+-- [GNC] Matt: Fix a money related typo
+-- philxyz: Player has died in jail is now printed in the middle of the screen
+-- philxyz: Replace IsValid() with calls to G.ValidEntity()
+-- philxyz: Use the Unix find and sed commands to clean out the syntax even more (spacing, semicolons, if spacing etc)
+-- philxyz: Remove all traces of old bug reporting tools
+-- philxyz: Actually fix the druglab removal on player disconnect process
+-- philxyz: Remove spawned microwaves and gun labs on player disconnect
+-- philxyz: Fix the rest of the help screens not disappearing on job change
+-------------
+-- DarkRP 2.2.6
+-- by philxyz
+-- philxyz: Remove the ability to screw up your money
+-- philxyz: CPs can smash open their own or unowned doors (important for rp_tb_city45 nexus)
+-- philxyz: allow help menu closing using /x in chat - it's much quicker
+-- philxyz: Added /dropweapon, /weapondrop as aliases for /drop
+-- philxyz: /moneydrop is now /dropmoney (with an alias /moneydrop so as not to confuse people)
+-- philxyz: Money should be owned by "World" according to Simple Prop Protection
+-------------
+-- DarkRP 2.2.7
+-- philxyz: Implement rp_maxdrugs and rp_maxfoods
+-- philxyz: A more successful attempt at fixing Simple Prop Protection compatibility - thanks to Spacetech for both his original work and his co-operation
+-- philxyz: When unowning doors, don't show cents in the sale value
+-- philxyz: Implement rp_maxdrugs and rp_maxfoods
+-- philxyz: Show the price when buying a melon
+-- philxyz: Remove letters on player disconnect
+-- philxyz: When unowning doors, don't show cents in the sale value
+-- philxyz: Fix an old typo that meant rp_gunlabcost was not working
+-- philxyz: Fix rp_microwavefoodcost
+------------
+-- DarkRP 2.2.8
+-- philxyz: Fix "Players could never re-take a job after demotion"
+-- philxyz: Remove duplicate function definitions from util.lua
+-- philxyz: Log Notify() output to server and client consoles (useful for /give proof of purchase)
+------------
+-- DarkRP 2.2.9
+-- philxyz: Remove /playerwarrant - it became a bizarre cross between arrest warrant (unnecessary) and search warrant
+-- philxyz: Add /warrant command for search warrants
+-- philxyz: Add rp_searchtime (default 30) for search warrant expiry
+-- philxyz: Add /wanted and /unwanted commands for CPs or the Mayor to highlight a wanted criminal (replaces playerwarrant)
+-- philxyz: Add /ao and /ro as aliases for /addowner and /removeowner respectively.
+-- philxyz: Add more commands to the F2 menu
+------------
+-- DarkRP 2.2.10
+-- philxyz: For these and future changes, please refer to changelog.txt
+
