@@ -103,7 +103,7 @@ DarkRP.PLAYER.changeAllowed = DarkRP.stub{
 
 DarkRP.hookStub{
 	name = "canChangeJob",
-	description = "Whether a player can change their job.",
+	description = "Whether a player can change their job. NOTE: This is only for the /job comand! The hook for changing to a pre-existing job is playerCanChangeTeam.",
 	parameters = {
 		{
 			name = "ply",
@@ -112,7 +112,7 @@ DarkRP.hookStub{
 		},
 		{
 			name = "job",
-			description = "The job name.",
+			description = "The job name (what the player entered in the /job command).",
 			type = "string"
 		}
 	},
