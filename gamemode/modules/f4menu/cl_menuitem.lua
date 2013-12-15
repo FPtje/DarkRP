@@ -36,7 +36,9 @@ function PANEL:Paint(w, h)
 
 	draw.RoundedBox(4, x, y, w, h, disabled and darkgray or black) -- background
 
-	draw.RoundedBoxEx(4, h, h - 10 + y, w - h + x, 10, not disabled and (self:GetBorderColor() or black) or darkgray, false, false, false, true) -- the colored bar
+	draw.RoundedBoxEx(4, h, h - 10 + y, w - h + x, 10,
+		self.DarkRPItem and self.DarkRPItem.buttonColor or not disabled and (self:GetBorderColor() or black) or darkgray,
+		false, false, false, true) -- the colored bar
 
 	draw.RoundedBoxEx(4, x, y, h, h, disabled and darkgray or gray, true, false, false, false) -- gray box for the model
 end
