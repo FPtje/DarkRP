@@ -111,7 +111,7 @@ function PANEL:setDarkRPItem(job)
 
 	self:SetBorderColor(job.color)
 	self:SetModel(model)
-	self:SetText(job.name)
+	self:SetText(job.label or job.name)
 	self:SetTextRight(string.format("%s/%s", team.NumPlayers(job.team), getMaxOfTeam(job)))
 
 	local canGet, important = canGetJob(job)
@@ -168,7 +168,7 @@ function PANEL:setDarkRPItem(item)
 	self.BaseClass.setDarkRPItem(self, item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
-	self:SetText(item.name)
+	self:SetText(item.label or item.name)
 	self:SetTextRight(string.format("%s%s", GAMEMODE.Config.currency, cost))
 
 	self.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buy", self.DarkRPItem.name)
