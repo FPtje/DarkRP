@@ -522,3 +522,37 @@ DarkRP.hookStub{
 		}
 	}
 }
+
+DarkRP.hookStub{
+	name = "canBuyCustomEntity",
+	description = "Whether a player can a certain custom entity.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "entTable",
+			description = "The table, as defined by the user.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canBuy",
+			description = "Whether it can be bought.",
+			type = "boolean"
+		},
+		{
+			name = "suppressMessage",
+			description = "Suppress the notification message when it cannot be bought.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		}
+	}
+}

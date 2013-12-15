@@ -70,6 +70,12 @@ local function canBuyEntity(item)
 	if item.customCheck and not item.customCheck(ply) then return false, true end
 	if not ply:canAfford(item.price) then return false, false end
 
+	local canbuy, suppress, message = hook.Call("canBuyCustomEntity", nil, ply, item)
+
+	if canbuy == false then
+		return false, suppress
+	end
+
 	return true
 end
 
@@ -107,7 +113,7 @@ local function canBuyShipment(ship)
 
 	local canbuy, suppress, message = hook.Call("canBuyShipment", nil, ply, ship)
 
-	if not canbuy == false then
+	if canbuy == false then
 		return false, suppress
 	end
 
@@ -163,7 +169,7 @@ local function canBuyGun(ship)
 
 	local canbuy, suppress, message = hook.Call("canBuyPistol", nil, ply, ship)
 
-	if not canbuy == false then
+	if canbuy == false then
 		return false, suppress
 	end
 
@@ -219,7 +225,7 @@ local function canBuyAmmo(item)
 
 	local canbuy, suppress, message = hook.Call("canBuyAmmo", nil, ply, item)
 
-	if not canbuy == false then
+	if canbuy == false then
 		return false, suppress
 	end
 
@@ -277,7 +283,7 @@ local function canBuyVehicle(item)
 
 	local canbuy, suppress, message = hook.Call("canBuyVehicle", nil, ply, item)
 
-	if not canbuy == false then
+	if canbuy == false then
 		return false, suppress
 	end
 

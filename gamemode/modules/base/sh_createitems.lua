@@ -357,7 +357,6 @@ local function addEntityCommands(tblEnt)
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", tblEnt.cmd))
 			return ""
 		end
-		local cmdname = string.gsub(tblEnt.ent, " ", "_")
 
 		if tblEnt.customCheck and not tblEnt.customCheck(ply) then
 			DarkRP.notify(ply, 1, 4, tblEnt.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
@@ -376,6 +375,15 @@ local function addEntityCommands(tblEnt)
 
 			return ""
 		end
+
+		local canbuy, suppress, message = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
+
+		if canbuy == false then
+			if not suppress and message then DarkRP.notify(ply, 1, 4, message) end
+			return ""
+		end
+
+
 		ply:addMoney(-tblEnt.price)
 
 		local trace = {}
