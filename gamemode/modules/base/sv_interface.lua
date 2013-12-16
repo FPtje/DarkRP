@@ -693,7 +693,41 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "canBuyPistol",
-	description = "Whether a player can buy a a pistol.",
+	description = "Whether a player can buy a pistol.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "shipmentTable",
+			description = "The table, as defined in the shipments file.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canBuy",
+			description = "Whether it can be bought.",
+			type = "boolean"
+		},
+		{
+			name = "suppressMessage",
+			description = "Suppress the notification message when it cannot be bought.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canBuyShipment",
+	description = "Whether a player can buy a shipment.",
 	parameters = {
 		{
 			name = "ply",

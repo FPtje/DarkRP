@@ -99,53 +99,60 @@ local function BuyPistol(ply, args)
 end
 DarkRP.defineChatCommand("buy", BuyPistol, 0.2)
 
+function DarkRP.hooks:canBuyShipment(ply, shipment)
+	if not GAMEMODE:CustomObjFitsMap(shipment) then
+		return false, false, "Custom object does not fit map"
+	end
+
+	if ply.LastShipmentSpawn and ply.LastShipmentSpawn > (CurTime() - GAMEMODE.Config.ShipmentSpamTime) then
+		return false, false, DarkRP.getPhrase("shipment_antispam_wait")
+	end
+
+	if ply:isArrested() then
+		return false, false, DarkRP.getPhrase("unable", "/buyshipment", "")
+	end
+
+	if shipment.customCheck and not shipment.customCheck(ply) then
+		return false, false, shipment.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase")
+	end
+
+	local canbecome = false
+	for a,b in pairs(shipment.allowed) do
+		if ply:Team() == b then
+			canbecome = true
+			break
+		end
+	end
+
+	if not canbecome then
+		return false, false, DarkRP.getPhrase("incorrect_job", "/buyshipment")
+	end
+
+	local cost = shipment.getPrice and shipment.getPrice(ply, shipment.price) or shipment.price
+
+	if not ply:canAfford(cost) then
+		return false, false, DarkRP.getPhrase("cant_afford", "shipment")
+	end
+
+	return true
+end
+
 local function BuyShipment(ply, args)
 	if args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
 
-	if ply.LastShipmentSpawn and ply.LastShipmentSpawn > (CurTime() - GAMEMODE.Config.ShipmentSpamTime) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("shipment_antispam_wait"))
-		return ""
-	end
-	ply.LastShipmentSpawn = CurTime()
-
-	local trace = {}
-	trace.start = ply:EyePos()
-	trace.endpos = trace.start + ply:GetAimVector() * 85
-	trace.filter = ply
-
-	local tr = util.TraceLine(trace)
-
-	if ply:isArrested() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", ""))
-		return ""
-	end
-
 	local found = false
 	local foundKey
 	for k,v in pairs(CustomShipments) do
-		if string.lower(args) == string.lower(v.name) and not v.noship and GAMEMODE:CustomObjFitsMap(v) then
-			found = v
-			foundKey = k
-			local canbecome = false
-			for a,b in pairs(v.allowed) do
-				if ply:Team() == b then
-					canbecome = true
-				end
-			end
-
-			if v.customCheck and not v.customCheck(ply) then
-				DarkRP.notify(ply, 1, 4, v.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
-				return ""
-			end
-
-			if not canbecome then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/buyshipment"))
-				return ""
-			end
+		if string.lower(args) ~= string.lower(v.name) or v.noship or not GAMEMODE:CustomObjFitsMap(v) then
+			continue
 		end
+
+		found = v
+		foundKey = k
+		break
 	end
 
 	if not found then
@@ -153,12 +160,22 @@ local function BuyShipment(ply, args)
 		return ""
 	end
 
-	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
+	local canbuy, suppress, message = hook.Call("canBuyShipment", DarkRP.hooks, ply, found)
 
-	if not ply:canAfford(cost) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "shipment"))
+	if not canbuy then
+		message = message or DarkRP.getPhrase("incorrect_job", "/buy")
+		if not suppress then DarkRP.notify(ply, 1, 4, message) end
 		return ""
 	end
+
+	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
+
+	local trace = {}
+	trace.start = ply:EyePos()
+	trace.endpos = trace.start + ply:GetAimVector() * 85
+	trace.filter = ply
+
+	local tr = util.TraceLine(trace)
 
 	local crate = ents.Create(found.shipmentClass or "spawned_shipment")
 	crate.SID = ply.SID
@@ -187,12 +204,14 @@ local function BuyShipment(ply, args)
 	end
 	hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], weapon)
 
-	if IsValid( crate ) then
+	if IsValid(crate) then
 		ply:addMoney(-cost)
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, cost))
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", arg))
 	end
+
+	ply.LastShipmentSpawn = CurTime()
 
 	return ""
 end
