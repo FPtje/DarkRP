@@ -1,10 +1,34 @@
+function DarkRP.hooks:canBuyPistol(ply, shipment)
+	local price = shipment.getPrice and shipment.getPrice(ply, shipment.pricesep) or shipment.pricesep or 0
+
+	if not GAMEMODE:CustomObjFitsMap(shipment) then
+		return false, false, "Custom object does not fit map"
+	end
+
+	print(ply, "playerBoughtPistol")
+	if ply:isArrested() then
+		return false, false, DarkRP.getPhrase("unable", "/buy", "")
+	end
+
+	if shipment.customCheck and not shipment.customCheck(ply) then
+		return false, false, shipment.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase")
+	end
+
+	if not ply:canAfford(price) then
+		return false, false, DarkRP.getPhrase("cant_afford", "/buy")
+	end
+
+	if not GAMEMODE.Config.restrictbuypistol or
+	(GAMEMODE.Config.restrictbuypistol and (not shipment.allowed[1] or table.HasValue(shipment.allowed, ply:Team()))) then
+		return true
+	end
+
+	return false
+end
+
 local function BuyPistol(ply, args)
 	if args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
-		return ""
-	end
-	if ply:isArrested() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buy", ""))
 		return ""
 	end
 
@@ -12,10 +36,36 @@ local function BuyPistol(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/buy", ""))
 		return ""
 	end
+
 	if GAMEMODE.Config.noguns then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/buy", ""))
 		return ""
 	end
+
+	local shipment
+	for k, v in pairs(CustomShipments) do
+		if not v.seperate or string.lower(v.name) ~= string.lower(args) then
+			continue
+		end
+
+		shipment = v
+		break
+	end
+
+	if not shipment then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "weapon"))
+		return ""
+	end
+
+	local canbuy, suppress, message = hook.Call("canBuyPistol", DarkRP.hooks, ply, shipment)
+
+	if not canbuy then
+		message = message or DarkRP.getPhrase("incorrect_job", "/buy")
+		if not suppress then DarkRP.notify(ply, 1, 4, message) end
+		return ""
+	end
+
+	local price = shipment.getPrice and shipment.getPrice(ply, shipment.pricesep) or shipment.pricesep or 0
 
 	local trace = {}
 	trace.start = ply:EyePos()
@@ -24,52 +74,12 @@ local function BuyPistol(ply, args)
 
 	local tr = util.TraceLine(trace)
 
-	local class = nil
-	local model = nil
-
-	local shipment
-	local price = 0
-	for k,v in pairs(CustomShipments) do
-		if v.seperate and string.lower(v.name) == string.lower(args) and GAMEMODE:CustomObjFitsMap(v) then
-			shipment = v
-			class = v.entity
-			model = v.model
-			price = v.getPrice and v.getPrice(ply, v.pricesep) or v.pricesep
-			local canbuy = false
-
-			if not GAMEMODE.Config.restrictbuypistol or
-			(GAMEMODE.Config.restrictbuypistol and (not v.allowed[1] or table.HasValue(v.allowed, ply:Team()))) then
-				canbuy = true
-			end
-
-			if v.customCheck and not v.customCheck(ply) then
-				DarkRP.notify(ply, 1, 4, v.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
-				return ""
-			end
-
-			if not canbuy then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/buy"))
-				return ""
-			end
-		end
-	end
-
-	if not class then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "weapon"))
-		return ""
-	end
-
-	if not ply:canAfford(price) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", "/buy"))
-		return ""
-	end
-
 	local weapon = ents.Create("spawned_weapon")
-	weapon:SetModel(model)
-	weapon.weaponclass = class
+	weapon:SetModel(shipment.model)
+	weapon.weaponclass = shipment.entity
 	weapon.ShareGravgun = true
 	weapon:SetPos(tr.HitPos)
-	weapon.ammoadd = weapons.Get(class) and weapons.Get(class).Primary.DefaultClip
+	weapon.ammoadd = weapons.Get(shipment.entity) and weapons.Get(shipment.entity).Primary.DefaultClip
 	weapon.nodupe = true
 	weapon:Spawn()
 
@@ -78,7 +88,7 @@ local function BuyPistol(ply, args)
 	end
 	hook.Call("playerBoughtPistol", nil, ply, shipment, weapon)
 
-	if IsValid( weapon ) then
+	if IsValid(weapon) then
 		ply:addMoney(-price)
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, price))
 	else
