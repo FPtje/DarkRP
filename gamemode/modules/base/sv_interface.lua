@@ -760,6 +760,74 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "canBuyVehicle",
+	description = "Whether a player can buy a vehicle.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "vehicleTable",
+			description = "The table, as defined in the vehicles file.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canBuy",
+			description = "Whether it can be bought.",
+			type = "boolean"
+		},
+		{
+			name = "suppressMessage",
+			description = "Suppress the notification message when it cannot be bought.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canBuyAmmo",
+	description = "Whether a player can buy ammo.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "ammoTable",
+			description = "The table, as defined in the a ammo file.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canBuy",
+			description = "Whether it can be bought.",
+			type = "boolean"
+		},
+		{
+			name = "suppressMessage",
+			description = "Suppress the notification message when it cannot be bought.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
 	name = "playerBoughtPistol",
 	description = "Called when a player bought a pistol.",
 	parameters = {
