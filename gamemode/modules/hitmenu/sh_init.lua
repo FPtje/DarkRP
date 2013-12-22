@@ -6,7 +6,7 @@ function plyMeta:isHitman()
 end
 
 function plyMeta:hasHit()
-	return IsValid(self:getHitTarget())
+	return self:getDarkRPVar("hasHit") or false
 end
 
 function plyMeta:getHitTarget()

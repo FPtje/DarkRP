@@ -52,7 +52,8 @@ end
 function plyMeta:setHitTarget(target)
 	if not hits[self] then error("This person has no active hit!") end
 
-	self:setDarkRPVar("hitTarget", target)
+	self:setSelfDarkRPVar("hitTarget", target)
+	self:setDarkRPVar("hasHit", target and true or nil)
 end
 
 function plyMeta:setHitPrice(price)
