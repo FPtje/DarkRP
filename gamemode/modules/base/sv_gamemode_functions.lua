@@ -681,6 +681,13 @@ local function selectDefaultWeapon(ply)
 end
 
 function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
+	local agenda = ply:getAgendaTable()
+
+	if agenda and oldTeam == agenda.Manager and team.NumPlayers(oldTeam) == 0 then
+		agenda.text = nil
+	end
+
+	ply:setSelfDarkRPVar("agenda", agenda and agenda.text or nil)
 end
 
 local function removelicense(ply)
@@ -790,6 +797,13 @@ function GM:PlayerDisconnected(ply)
 
 	ply:keysUnOwnAll()
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") disconnected", Color(0, 130, 255))
+
+	local agenda = ply:getAgendaTable()
+
+	-- Clear agenda
+	if agenda and ply:Team() == agenda.Manager and #team.NumPlayers(ply:Team()) == 0 then
+		agenda.text = nil
+	end
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
 		RPExtraTeams[ply:Team()].PlayerDisconnected(ply)

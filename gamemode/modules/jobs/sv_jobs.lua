@@ -10,8 +10,6 @@ function meta:changeTeam(t, force)
 		return false
 	end
 
-	self:setDarkRPVar("agenda", nil)
-
 	if t ~= GAMEMODE.DefaultTeam and not self:changeAllowed(t) and not force then
 		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
 		return false

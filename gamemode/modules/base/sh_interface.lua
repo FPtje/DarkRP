@@ -57,7 +57,22 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
 
 DarkRP.PLAYER.getAgenda = DarkRP.stub{
 	name = "getAgenda",
-	description = "Get the agenda a player manages.",
+	description = "(Deprecated, use getAgendaTable) Get the agenda a player manages.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "agenda",
+			description = "The agenda.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.getAgendaTable = DarkRP.stub{
+	name = "getAgendaTable",
+	description = "Get the agenda a player can see. Note: when a player is not the manager of an agenda, it returns the agenda of the manager.",
 	parameters = {
 	},
 	returns = {

@@ -562,9 +562,17 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 end
 AddEntity = DarkRP.createEntity
 
+-- here for backwards compatibility
 DarkRPAgendas = {}
 
+local agendas = {}
 plyMeta.getAgenda = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
+
+function plyMeta:getAgendaTable()
+	local set = agendas[self:Team()]
+	return set and disjoint.FindSet(set).value or nil
+end
+
 function DarkRP.createAgenda(Title, Manager, Listeners)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 
@@ -573,7 +581,13 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 		if ply:IsAdmin() then ply:ChatPrint("WARNING: Agenda made incorrectly, there is no manager! failed to load!") end end)
 		return
 	end
-	DarkRPAgendas[Manager] = {Title = Title, Listeners = Listeners}
+
+	DarkRPAgendas[Manager] = {Manager = Manager, Title = Title, Listeners = Listeners} -- backwards compat
+
+	agendas[Manager] = disjoint.MakeSet(DarkRPAgendas[Manager])
+	for k,v in pairs(Listeners) do
+		agendas[v] = disjoint.MakeSet(v, agendas[Manager]) -- have the manager as parent
+	end
 end
 AddAgenda = DarkRP.createAgenda
 

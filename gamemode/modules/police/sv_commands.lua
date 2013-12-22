@@ -1,16 +1,21 @@
 local function CreateAgenda(ply, args)
-	if DarkRPAgendas[ply:Team()] then
-		ply:setDarkRPVar("agenda", args)
+	local agenda = ply:getAgendaTable()
+	local plyTeam = ply:Team()
 
-		DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("agenda_updated"))
-		for k,v in pairs(DarkRPAgendas[ply:Team()].Listeners) do
-			for a,b in pairs(team.GetPlayers(v)) do
-				DarkRP.notify(b, 2, 4, DarkRP.getPhrase("agenda_updated"))
-			end
-		end
-	else
+	if not agenda or agenda.Manager ~= plyTeam then
 		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
+		return ""
 	end
+
+	agenda.text = args
+
+	for k,v in pairs(player.GetAll()) do
+		if v:getAgendaTable() ~= agenda then continue end
+
+		v:setSelfDarkRPVar("agenda", agenda.text)
+		DarkRP.notify(v, 2, 4, DarkRP.getPhrase("agenda_updated"))
+	end
+
 	return ""
 end
 DarkRP.defineChatCommand("agenda", CreateAgenda, 0.1)

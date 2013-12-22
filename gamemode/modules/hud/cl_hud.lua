@@ -129,33 +129,22 @@ end
 local function Agenda()
 	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
 	if shouldDraw == false then return end
-	local DrawAgenda, AgendaManager = DarkRPAgendas[localplayer:Team()], localplayer:Team()
-	if not DrawAgenda then
-		for k,v in pairs(DarkRPAgendas) do
-			if table.HasValue(v.Listeners or {}, localplayer:Team()) then
-				DrawAgenda, AgendaManager = DarkRPAgendas[k], k
-				break
-			end
-		end
-	end
-	if DrawAgenda then
-		draw.RoundedBox(10, 10, 10, 460, 110, Color(0, 0, 0, 155))
-		draw.RoundedBox(10, 12, 12, 456, 106, Color(51, 58, 51,100))
-		draw.RoundedBox(10, 12, 12, 456, 20, Color(0, 0, 70, 100))
+	local ply = LocalPlayer()
 
-		draw.DrawText(DrawAgenda.Title, "DarkRPHUD1", 30, 12, Color(255,0,0,255),0)
+	local agenda = ply:getAgendaTable()
+	if not agenda then return end
 
-		local AgendaText = {}
-		for k,v in pairs(team.GetPlayers(AgendaManager)) do
-			if not v.DarkRPVars then continue end
-			table.insert(AgendaText, v:getDarkRPVar("agenda"))
-		end
+	draw.RoundedBox(10, 10, 10, 460, 110, Color(0, 0, 0, 155))
+	draw.RoundedBox(10, 12, 12, 456, 106, Color(51, 58, 51,100))
+	draw.RoundedBox(10, 12, 12, 456, 20, Color(0, 0, 70, 100))
 
-		local text = table.concat(AgendaText, "\n")
-		text = text:gsub("//", "\n"):gsub("\\n", "\n")
-		text = DarkRP.textWrap(text, "DarkRPHUD1", 440)
-		draw.DrawText(text, "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
-	end
+	draw.DrawText(agenda.Title, "DarkRPHUD1", 30, 12, Color(255,0,0,255),0)
+
+	local text = ply:getDarkRPVar("agenda") or ""
+
+	text = text:gsub("//", "\n"):gsub("\\n", "\n")
+	text = DarkRP.textWrap(text, "DarkRPHUD1", 440)
+	draw.DrawText(text, "DarkRPHUD1", 30, 35, Color(255,255,255,255),0)
 end
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
