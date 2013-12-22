@@ -56,12 +56,8 @@ if CLIENT then
 	end)
 end
 
-function SWEP:Deploy()
-	if SERVER then
-		self.Owner:DrawViewModel(false)
-		self.Owner:DrawWorldModel(false)
-	end
-end
+function SWEP:DrawWorldModel() end
+function SWEP:PreDrawViewModel( vm ) vm:SetNoDraw( true ) end
 
 function SWEP:PrimaryAttack()
 	if not IsFirstTimePredicted() or self.IsWeaponChecking then return end
