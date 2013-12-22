@@ -7,8 +7,10 @@ by FPtje Atheos
 Running time per operation (Union/FindSet): O(a(n)) where a is the inverse of the Ackermann function.
 ---------------------------------------------------------------------------*/
 
+local pairs = pairs
 local setmetatable = setmetatable
 local string = string
+local table = table
 local tostring = tostring
 
 module("disjoint")
@@ -28,6 +30,8 @@ function MakeSet(x, parent)
 end
 
 local function Link(x, y)
+	if x == y then return x end
+
 	-- Union by rank
 	if x.rank > y.rank then
 		y.parent = x
