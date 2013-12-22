@@ -160,14 +160,18 @@ end
 
 function meta:teamUnBan(Team)
 	if not IsValid(self) then return end
-	if not self.bannedfrom then self.bannedfrom = {} end
-	self.bannedfrom[Team] = 0
+	self.bannedfrom = self.bannedfrom or {}
+
+	local group = DarkRP.getDemoteGroup(Team)
+	self.bannedfrom[group] = nil
 end
 
 function meta:teamBan(t, time)
 	if not self.bannedfrom then self.bannedfrom = {} end
 	t = t or self:Team()
-	self.bannedfrom[t] = 1
+
+	local group = DarkRP.getDemoteGroup(t)
+	self.bannedfrom[group] = true
 
 	if time == 0 then return end
 	timer.Simple(time or GAMEMODE.Config.demotetime, function()
@@ -177,8 +181,9 @@ function meta:teamBan(t, time)
 end
 
 function meta:changeAllowed(t)
+	local group = DarkRP.getDemoteGroup(t)
 	if not self.bannedfrom then return true end
-	if self.bannedfrom[t] == 1 then return false else return true end
+	if self.bannedfrom[group] then return false else return true end
 end
 
 /*---------------------------------------------------------------------------

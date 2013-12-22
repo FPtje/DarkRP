@@ -28,6 +28,7 @@ GM.NoLicense = GM.NoLicense or {}
 include("config/config.lua")
 include("libraries/fn.lua")
 include("libraries/interfaceloader.lua")
+include("libraries/disjointset.lua")
 
 include("libraries/modificationloader.lua")
 LoadModules()

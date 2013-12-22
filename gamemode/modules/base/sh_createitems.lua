@@ -614,3 +614,27 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 	table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
+
+local demoteGroups = {}
+function DarkRP.createDemoteGroup(name, tbl)
+	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["demotegroups"][name] then return end
+	if not tbl or not tbl[1] then error("No members in the demote group!") end
+
+	local set = demoteGroups[tbl[1]] or disjoint.MakeSet(tbl[1])
+	for i = 2, #tbl do
+		set = set + (demoteGroups[tbl[i]] or disjoint.MakeSet(tbl[i]))
+	end
+
+	for _, teamNr in pairs(tbl) do
+		if demoteGroups[teamNr] then
+			-- Unify the sets if there was already one there
+			demoteGroups[teamNr] = demoteGroups[teamNr] + set
+		else
+			demoteGroups[teamNr] = set
+		end
+	end
+end
+
+function DarkRP.getDemoteGroup(teamNr)
+	return demoteGroups[teamNr] and disjoint.FindSet(demoteGroups[teamNr]) or disjoint.MakeSet(teamNr)
+end

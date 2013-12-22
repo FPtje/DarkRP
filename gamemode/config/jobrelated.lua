@@ -291,3 +291,8 @@ Enable hitman goodies on this team
 ---------------------------------------------------------------------------*/
 DarkRP.addHitmanTeam(TEAM_MOB)
 
+/*---------------------------------------------------------------------------
+Default demote groups
+---------------------------------------------------------------------------*/
+DarkRP.createDemoteGroup("Cops", {TEAM_POLICE, TEAM_CHIEF})
+DarkRP.createDemoteGroup("Gangsters", {TEAM_GANG, TEAM_MOB})

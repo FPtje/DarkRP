@@ -7,6 +7,7 @@ DeriveGamemode("sandbox")
 
 AddCSLuaFile("libraries/interfaceloader.lua")
 AddCSLuaFile("libraries/modificationloader.lua")
+AddCSLuaFile("libraries/disjointset.lua")
 AddCSLuaFile("libraries/fn.lua")
 
 AddCSLuaFile("config/config.lua")
@@ -28,6 +29,7 @@ include("config/licenseweapons.lua")
 include("libraries/modificationloader.lua")
 include("libraries/fn.lua")
 include("libraries/database.lua")
+include("libraries/disjointset.lua")
 
 /*---------------------------------------------------------------------------
 Loading modules

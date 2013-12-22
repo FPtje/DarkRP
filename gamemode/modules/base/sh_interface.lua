@@ -358,6 +358,49 @@ DarkRP.createAmmoType = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.createDemoteGroup = DarkRP.stub{
+	name = "createDemoteGroup",
+	description = "Create a demote group. When you get banned (demoted) from one of the jobs in this group, you will be banned from every job in this group.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the demote group.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "tbl",
+			description = "Table consisting of a list of job.",
+			type = "table",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.getDemoteGroup = DarkRP.stub{
+	name = "getDemoteGroup",
+	description = "Get the demote group of a team. Every team in the same group will return the same object.",
+	parameters = {
+		{
+			name = "teamNr",
+			description = "Table consisting of a list of job.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "set",
+			description = "The demote group identifier.",
+			type = "Disjoint-Set"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.hookStub{
 	name = "DarkRPVarChanged",
 	description = "Called when a DarkRPVar was changed.",
