@@ -101,6 +101,7 @@ local customFiles = {
 	"darkrp_customthings/groupchats.lua",
 	"darkrp_customthings/agendas.lua", -- has to be run after jobs.lua
 	"darkrp_customthings/doorgroups.lua", -- has to be run after jobs.lua
+	"darkrp_customthings/demotegroups.lua", -- has to be run after jobs.lua
 }
 local function loadCustomDarkRPItems()
 	for _, File in pairs(customFiles) do
