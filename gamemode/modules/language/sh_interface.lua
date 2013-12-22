@@ -95,3 +95,46 @@ DarkRP.getMissingPhrases = DarkRP.stub{
 	},
 	metatable = DarkRP
 }
+
+DarkRP.addChatCommandsLanguage = DarkRP.stub{
+	name = "addChatCommandsLanguage",
+	description = "Add a translation table for chat command descriptions. See darkrpmod/lua/darkrp_language/chatcommands.lua for an example.",
+	parameters = {
+		{
+			name = "languageCode",
+			description = "The language code of the language. For English this is \"en\".",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "translations",
+			description = "Key-value table with chat command strings as keys and their translation as value.",
+			type = "table",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.getChatCommandDescription = DarkRP.stub{
+	name = "getChatCommandDescription",
+	description = "Get the translated description of a chat command.",
+	parameters = {
+		{
+			name = "command",
+			description = "The chat command string.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "description",
+			description = "The translated chat command description.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}

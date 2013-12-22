@@ -49,3 +49,58 @@ local function getMissingPhrases(ply, cmd, args)
 	print(DarkRP.getMissingPhrases(args[1]))
 end
 if CLIENT then concommand.Add("darkrp_getphrases", getMissingPhrases) end
+
+/*---------------------------------------------------------------------------
+Chat command translating
+---------------------------------------------------------------------------*/
+local chatCmdDescriptions = {}
+function DarkRP.addChatCommandsLanguage(lang, tbl)
+	chatCmdDescriptions[lang] = chatCmdDescriptions[lang] or {}
+
+	table.Merge(chatCmdDescriptions[lang], tbl)
+end
+
+function DarkRP.getChatCommandDescription(name)
+	local cmd = DarkRP.getChatCommand(name)
+	return chatCmdDescriptions[selectedLanguage] and chatCmdDescriptions[selectedLanguage][name] or
+		cmd and cmd.description or
+		nil
+end
+
+local function getMissingCmdTranslations()
+	local cmds = DarkRP.getSortedChatCommands()
+
+	-- No commands have been translated
+	if not chatCmdDescriptions[selectedLanguage] then return cmds end
+
+	-- Remove translated commands and maintain keys
+	local count = #cmds
+	for i = 1, count do
+		if chatCmdDescriptions[selectedLanguage][cmds[i].command] then
+			cmds[i] = nil
+		end
+	end
+	table.ClearKeys(cmds)
+
+	return cmds
+end
+
+local function printMissingChatTranslations()
+	local cmds = getMissingCmdTranslations()
+	local text = {}
+
+	local maxCmdLength = 0
+	for k,v in pairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
+
+	for k,v in pairs(cmds) do
+		text[k] = string.format('["%s"]%s=\t"%s",', v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description)
+	end
+
+	MsgC(Color(0, 255, 0), string.format("%s untranslated chat command descriptions!\n", #cmds))
+
+	text = table.concat(text, "\n\t")
+	SetClipboardText(text)
+
+	MsgC(Color(0, 255, 0), "text copied to clipboard!\n")
+end
+if CLIENT then concommand.Add("darkrp_translateChatCommands", printMissingChatTranslations) end

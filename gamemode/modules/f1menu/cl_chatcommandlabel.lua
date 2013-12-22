@@ -11,7 +11,7 @@ end
 
 function PANEL:setChatCommand(command)
 	self.chatCommand = command
-	local text = string.format("%s%s - %s", GAMEMODE.Config.chatCommandPrefix, command.command, command.description)
+	local text = string.format("%s%s - %s", GAMEMODE.Config.chatCommandPrefix, command.command, DarkRP.getChatCommandDescription(command.command))
 	self:SetAutoStretchVertical(true)
 	self:SetWrap(true)
 	self:SetText(text)
