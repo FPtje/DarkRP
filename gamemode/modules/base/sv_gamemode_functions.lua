@@ -528,9 +528,7 @@ local function initPlayer(ply)
 	-- a specific team for a certain length of time
 	for i = 1, #RPExtraTeams do
 		if GAMEMODE.Config.restrictallteams then
-			ply.bannedfrom[i] = 1
-		else
-			ply.bannedfrom[i] = 0
+			ply:teamBan(i, 0)
 		end
 	end
 end
@@ -538,7 +536,6 @@ end
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
-	ply.bannedfrom = {}
 	ply.DarkRPVars = ply.DarkRPVars or {}
 	ply:restorePlayerData()
 	initPlayer(ply)

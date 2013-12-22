@@ -498,8 +498,8 @@ local function DoTeamUnBan(ply, args, cmdargs)
 			return ""
 		end
 	end
-	if not target.bannedfrom then target.bannedfrom = {} end
-	target.bannedfrom[tonumber(Team)] = nil
+
+	target:teamUnBan(tonumber(Team))
 
 	local nick
 	if ply:EntIndex() == 0 then
