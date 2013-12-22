@@ -44,12 +44,19 @@ function SWEP:Initialize()
 	self:SetWeaponHoldType("normal")
 end
 
+function SWEP:Deploy()
+	return true
+end
+
 function SWEP:DrawWorldModel() end
-function SWEP:PreDrawViewModel( vm ) vm:SetNoDraw( true ) end
+
+function SWEP:PreDrawViewModel(vm)
+	return true
+end
 
 function SWEP:Holster()
 	if not SERVER then return true end
-	
+
 	self.Owner:DrawViewModel(true)
 	self.Owner:DrawWorldModel(true)
 

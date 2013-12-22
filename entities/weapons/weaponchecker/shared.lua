@@ -56,8 +56,15 @@ if CLIENT then
 	end)
 end
 
+function SWEP:Deploy()
+	return true
+end
+
 function SWEP:DrawWorldModel() end
-function SWEP:PreDrawViewModel( vm ) vm:SetNoDraw( true ) end
+
+function SWEP:PreDrawViewModel(vm)
+	return true
+end
 
 function SWEP:PrimaryAttack()
 	if not IsFirstTimePredicted() or self.IsWeaponChecking then return end
@@ -81,7 +88,7 @@ function SWEP:PrimaryAttack()
 			result = result..", ".. (v:GetPrintName() and language.GetPhrase(v:GetPrintName()) or v:GetClass())
 		end
 	end
-	
+
 	self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 	if result == "" then
 		self.Owner:ChatPrint(DarkRP.getPhrase("has_no_weapons", trace.Entity:Nick()))
