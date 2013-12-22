@@ -636,5 +636,6 @@ function DarkRP.createDemoteGroup(name, tbl)
 end
 
 function DarkRP.getDemoteGroup(teamNr)
-	return demoteGroups[teamNr] and disjoint.FindSet(demoteGroups[teamNr]) or disjoint.MakeSet(teamNr)
+	demoteGroups[teamNr] = demoteGroups[teamNr] or disjoint.MakeSet(teamNr)
+	return disjoint.FindSet(demoteGroups[teamNr])
 end
