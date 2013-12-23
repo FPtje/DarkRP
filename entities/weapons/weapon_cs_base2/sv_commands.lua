@@ -1,6 +1,6 @@
 local meta = FindMetaTable("Player")
 function meta:dropDRPWeapon(weapon)
-	if GAMEMODE.Config.RestrictDrop then
+	if GAMEMODE.Config.restrictdrop then
 		local found = false
 		for k,v in pairs(CustomShipments) do
 			if v.entity == weapon:GetClass() then
