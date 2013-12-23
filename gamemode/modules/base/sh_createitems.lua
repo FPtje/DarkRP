@@ -494,9 +494,9 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	local corrupt = checkValid(customShipment, validShipment)
 	if corrupt then ErrorNoHalt("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
 
-	if SERVER and FPP then
-		FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
-	end
+	-- if SERVER and FPP then
+	-- 	FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
+	-- end
 
 	table.insert(CustomShipments, customShipment)
 	util.PrecacheModel(customShipment.model)
@@ -553,9 +553,9 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 	local corrupt = checkValid(tblEnt, validEntity)
 	if corrupt then ErrorNoHalt("Corrupt Entity \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
 
-	if SERVER and FPP then
-		FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
-	end
+	-- if SERVER and FPP then
+	-- 	FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
+	-- end
 
 	table.insert(DarkRPEntities, tblEnt)
 	timer.Simple(0, function() addEntityCommands(tblEnt) end)
