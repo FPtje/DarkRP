@@ -17,6 +17,8 @@ local function UnDrugPlayer(ply)
 	hook.Remove("PlayerDeath", ply)
 end
 
+hook.Add("PlayerDeath", "UndrugPlayers", function(ply) if ply.isDrugged then UnDrugPlayer(ply) end end)
+
 local function DrugPlayer(ply)
 	if not IsValid(ply) then return end
 
@@ -40,8 +42,6 @@ local function DrugPlayer(ply)
 			end
 		end)
 	end
-
-	hook.Add("PlayerDeath", ply, UnDrugPlayer)
 end
 
 function ENT:Initialize()
