@@ -801,8 +801,12 @@ function GM:PlayerDisconnected(ply)
 	local agenda = ply:getAgendaTable()
 
 	-- Clear agenda
-	if agenda and ply:Team() == agenda.Manager and #team.NumPlayers(ply:Team()) == 0 then
+	if agenda and ply:Team() == agenda.Manager and team.NumPlayers(ply:Team()) <= 1 then
 		agenda.text = nil
+		for k,v in pairs(player.GetAll()) do
+			if v:getAgendaTable() ~= agenda then continue end
+			v:setSelfDarkRPVar("agenda", agenda.text)
+		end
 	end
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
