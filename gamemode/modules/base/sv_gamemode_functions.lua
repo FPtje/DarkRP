@@ -281,7 +281,7 @@ local function calcPlyCanHearPlayerVoice(listener)
 	listener.DrpCanHear = listener.DrpCanHear or {}
 	for _, talker in pairs(player.GetAll()) do
 		listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
-			(listener:GetShootPos():Distance(talker:GetShootPos()) < 550 and -- voiceradius is on and the two are within hearing distance
+			(listener:GetShootPos():DistToSqr(talker:GetShootPos()) < 302500 and -- voiceradius is on and the two are within hearing distance
 				(not dynv or IsInRoom(listener, talker))) -- Dynamic voice is on and players are in the same room
 	end
 end
