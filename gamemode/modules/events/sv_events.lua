@@ -150,62 +150,72 @@ timer.Create("EarthquakeTest", 1, 0, EarthQuakeTest)
 /*---------------------------------------------------------
  Flammable
 ---------------------------------------------------------*/
-local FlammableProps = {drug = true,
-drug_lab = true,
-food = true,
-gunlab = true,
-letter = true,
-microwave = true,
-money_printer = true,
-spawned_shipment = true,
-spawned_weapon = true,
-spawned_money = true}
+local flammablePropsKV = { -- Class names as index
+	drug = true,
+	drug_lab = true,
+	food = true,
+	gunlab = true,
+	letter = true,
+	microwave = true,
+	money_printer = true,
+	spawned_shipment = true,
+	spawned_weapon = true,
+	spawned_money = true
+}
+
+local flammableProps = {} -- Numbers as index
+for k,v in pairs(flammablePropsKV) do table.insert(flammableProps, k) end
+
 
 local function IsFlammable(ent)
-	return FlammableProps[ent:GetClass()] ~= nil
+	return flammablePropsKV[ent:GetClass()] ~= nil
 end
 
 -- FireSpread from SeriousRP
-local function FireSpread(e)
-	if not e:IsOnFire() then return end
+local function FireSpread(ent, chanceDiv)
+	if not ent:IsOnFire() then return end
 
-	if e:isMoneyBag() then
-		e:Remove()
+	if ent:isMoneyBag() then
+		ent:Remove()
 	end
 
-	local rand = math.random(0, 300)
+	local rand = math.random(0, 300 / chanceDiv)
 
 	if rand > 1 then return end
-	local en = ents.FindInSphere(e:GetPos(), math.random(20, 90))
+	local en = ents.FindInSphere(ent:GetPos(), math.random(20, 90))
 
 	for k, v in pairs(en) do
-		if not IsFlammable(v) then continue end
+		if not IsFlammable(v) or v == ent then continue end
 
 		if not v.burned then
 			v:Ignite(math.random(5,180), 0)
 			v.burned = true
-		else
-			local color = v:GetColor()
-			if (color.r - 51) >= 0 then color.r = color.r - 51 end
-			if (color.g - 51) >= 0 then color.g = color.g - 51 end
-			if (color.b - 51) >= 0 then color.b = color.b - 51 end
-			v:SetColor(color)
-			if (color.r + color.g + color.b) < 103 and math.random(1, 100) < 35 then
-				v:Fire("enablemotion","",0)
-				constraint.RemoveAll(v)
-			end
+			break -- Don't ignite all entities in sphere at once, just one at a time
 		end
-		break -- Don't ignite all entities in sphere at once, just one at a time
+
+		local color = v:GetColor()
+		if (color.r - 51) >= 0 then color.r = color.r - 51 end
+		if (color.g - 51) >= 0 then color.g = color.g - 51 end
+		if (color.b - 51) >= 0 then color.b = color.b - 51 end
+		v:SetColor(color)
+		if (color.r + color.g + color.b) < 103 and math.random(1, 100) < 35 then
+			v:Fire("enablemotion","",0)
+			constraint.RemoveAll(v)
+		end
 	end
 end
 
 local function FlammablePropThink()
-	for k, v in pairs(FlammableProps) do
-		local ens = ents.FindByClass(k)
+	local class = flammableProps[math.random(#flammableProps)]
+	local entities = ents.FindByClass(class)
+	local ent = entities[math.random(#entities)]
 
-		for a, b in pairs(ens) do
-			FireSpread(b)
-		end
-	end
+	if class ~= "letter" then return end
+
+	if not ent then return end
+
+	 -- The amount of classes and the amount of entities in a class
+	 -- affect the chance of fire spreading. This should be minimized.
+	FireSpread(ent, #entities * #flammableProps)
 end
 timer.Create("FlammableProps", 0.1, 0, FlammablePropThink)
