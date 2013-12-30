@@ -297,14 +297,14 @@ local function DrawEntityDisplay()
 	local aimVec = localplayer:GetAimVector()
 
 	for k, ply in pairs(players or player.GetAll()) do
-		if not ply:Alive() then continue end
+		if not ply:Alive() or ply == localplayer then continue end
 		local hisPos = ply:GetShootPos()
 		if ply:getDarkRPVar("wanted") then DrawWantedInfo(ply) end
 
-		if GAMEMODE.Config.globalshow and ply ~= localplayer then
+		if GAMEMODE.Config.globalshow then
 			DrawPlayerInfo(ply)
 		-- Draw when you're (almost) looking at him
-		elseif not GAMEMODE.Config.globalshow and hisPos:Distance(shootPos) < 400 then
+		elseif not GAMEMODE.Config.globalshow and hisPos:DistToSqr(shootPos) < 160000 then
 			local pos = hisPos - shootPos
 			local unitPos = pos:GetNormalized()
 			if unitPos:Dot(aimVec) > 0.95 then
