@@ -42,8 +42,8 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	self.BaseClass:PlayerBindPress(ply, bind, pressed)
 
 	local bnd = string.match(string.lower(bind), "gm_[a-z]+[12]?")
-	if bnd and FKeyBinds[bnd] and GAMEMODE[FKeyBinds[bnd]] then
-		GAMEMODE[FKeyBinds[bnd]](GAMEMODE)
+	if bnd and FKeyBinds[bnd] then
+		hook.Call(FKeyBinds[bnd], GAMEMODE)
 	end
 end
 
