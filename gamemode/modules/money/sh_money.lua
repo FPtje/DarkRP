@@ -7,5 +7,5 @@ function pMeta:canAfford(amount)
 end
 
 function entMeta:isMoneyBag()
-	return self:GetClass() == "spawned_money"
+	return self:GetClass() == "spawned_money" or self:GetClass() == GAMEMODE.Config.MoneyClass
 end

@@ -40,7 +40,7 @@ function meta:payDay()
 end
 
 function DarkRP.createMoneyBag(pos, amount)
-	local moneybag = ents.Create("spawned_money")
+	local moneybag = ents.Create(GAMEMODE.Config.MoneyClass)
 	moneybag:SetPos(pos)
 	moneybag:Setamount(math.Min(amount, 2147483647))
 	moneybag:Spawn()
