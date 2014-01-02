@@ -281,7 +281,7 @@ local function calcPlyCanHearPlayerVoice(listener)
 	listener.DrpCanHear = listener.DrpCanHear or {}
 	for _, talker in pairs(player.GetAll()) do
 		listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
-			(listener:GetShootPos():Distance(talker:GetShootPos()) < 550 and -- voiceradius is on and the two are within hearing distance
+			(listener:GetShootPos():DistToSqr(talker:GetShootPos()) < 302500 and -- voiceradius is on and the two are within hearing distance
 				(not dynv or IsInRoom(listener, talker))) -- Dynamic voice is on and players are in the same room
 	end
 end
@@ -801,8 +801,12 @@ function GM:PlayerDisconnected(ply)
 	local agenda = ply:getAgendaTable()
 
 	-- Clear agenda
-	if agenda and ply:Team() == agenda.Manager and #team.NumPlayers(ply:Team()) == 0 then
+	if agenda and ply:Team() == agenda.Manager and team.NumPlayers(ply:Team()) <= 1 then
 		agenda.text = nil
+		for k,v in pairs(player.GetAll()) do
+			if v:getAgendaTable() ~= agenda then continue end
+			v:setSelfDarkRPVar("agenda", agenda.text)
+		end
 	end
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then

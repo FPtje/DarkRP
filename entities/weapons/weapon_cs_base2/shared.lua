@@ -101,8 +101,6 @@ function SWEP:Deploy()
 
 	self:SetIronsights(self:GetIronsights())
 
-	// WORKAROUND: Some models have shit viewmodel positions until they fire
-	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	return true
 end
 
@@ -264,6 +262,9 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 		eyeang.pitch = eyeang.pitch - recoil
 		self.Owner:SetEyeAngles( eyeang )
 	end
+
+	-- Part of workaround, different viewmodel position if shots have been fired
+	self.hasShot = true
 end
 
 /*---------------------------------------------------------
@@ -305,6 +306,8 @@ end
 
 local IRONSIGHT_TIME = 0.25
 
+function SWEP:CalcView() end
+
 /*---------------------------------------------------------
 Name: GetViewModelPosition
 Desc: Allows you to re-position the view model
@@ -312,6 +315,14 @@ Desc: Allows you to re-position the view model
 function SWEP:GetViewModelPosition(pos, ang)
 	if (not self.IronSightsPos) then return pos, ang end
 
+	if not self.hasShot then
+		if self.IronSightsPosAfterShootingAdjustment then pos = pos + self.IronSightsPosAfterShootingAdjustment end
+		if self.IronSightsAngAfterShootingAdjustment then
+			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x)
+			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y)
+			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z)
+		end
+	end
 	local bIron = self.Ironsights
 
 	if (bIron != self.bLastIron) then

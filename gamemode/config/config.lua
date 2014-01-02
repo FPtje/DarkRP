@@ -240,6 +240,10 @@ GM.Config.printeroverheatchance			= 22
 Other settings
 ---------------------------------------------------------------------------*/
 
+-- The classname of money packets. Use this to create your own money entity!
+-- Note: the money packet must support the "Setamount" method (or the amount DTVar)
+GM.Config.MoneyClass = "spawned_money"
+
 -- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
 GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
