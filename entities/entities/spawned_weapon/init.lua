@@ -25,6 +25,7 @@ function ENT:DecreaseAmount()
 
 	if self.dt.amount == 0 then
 		self:Remove()
+		self.Removed = true -- because it is not removed immediately
 	end
 end
 
