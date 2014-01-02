@@ -139,6 +139,10 @@ GM.Config.showcrosshairs				= true
 GM.Config.realisticfalldamage			= true
 -- printeroverheat - Can the default money printer overheat on its own?
 GM.Config.printeroverheat				= true
+-- weaponCheckerHideDefault - Hide default weapons when checking weapons
+GM.Config.weaponCheckerHideDefault		= true
+-- weaponCheckerHideNoLicense - Hide weapons that do not require a license
+GM.Config.weaponCheckerHideNoLicense	= false
 
 /*
 Value settings

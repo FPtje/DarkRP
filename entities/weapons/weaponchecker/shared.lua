@@ -82,25 +82,33 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	local result = ""
+	local result = {}
 	for k,v in pairs(trace.Entity:GetWeapons()) do
-		if v:IsValid() then
-			result = result..", ".. (v:GetPrintName() and language.GetPhrase(v:GetPrintName()) or v:GetClass())
+		if not v:IsValid() then continue end
+		local class = v:GetClass()
+
+		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
+			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
+			continue
 		end
+
+		if GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class] then continue end
+
+		table.insert(result, v:GetPrintName() and language.GetPhrase(v:GetPrintName()) or v:GetClass())
 	end
+	result = table.concat(result, ", ")
 
 	self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 	if result == "" then
 		self.Owner:ChatPrint(DarkRP.getPhrase("has_no_weapons", trace.Entity:Nick()))
 	else
-		local endresult = string.sub(result, 3)
-		if string.len(endresult) >= 126 then
-			local amount = math.ceil(string.len(endresult) / 126)
+		if string.len(result) >= 126 then
+			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
-				self.Owner:ChatPrint(string.sub(endresult, (i-1) * 126, i * 126 - 1))
+				self.Owner:ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
 			end
 		else
-			self.Owner:ChatPrint(string.sub(result, 3))
+			self.Owner:ChatPrint(result)
 		end
 	end
 end
@@ -180,13 +188,19 @@ function SWEP:Succeed()
 	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() then return end
 	for k,v in pairs(trace.Entity:GetWeapons()) do
 		local class = v:GetClass()
-		if not GAMEMODE.Config.noStripWeapons[class] and not table.HasValue(GAMEMODE.Config.DefaultWeapons, class) then
-			trace.Entity:StripWeapon(v:GetClass())
-			result = result..", "..v:GetClass()
-			table.insert(stripped, {v:GetClass(), trace.Entity:GetAmmoCount(v:GetPrimaryAmmoType()),
-			v:GetPrimaryAmmoType(), trace.Entity:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
-			v:Clip1(), v:Clip2()})
+
+		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
+			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
+			continue
 		end
+
+		if GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class] then continue end
+
+		trace.Entity:StripWeapon(class)
+		result = result..", "..class
+		table.insert(stripped, {class, trace.Entity:GetAmmoCount(v:GetPrimaryAmmoType()),
+		v:GetPrimaryAmmoType(), trace.Entity:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
+		v:Clip1(), v:Clip2()})
 	end
 
 	if not trace.Entity:GetTable().ConfiscatedWeapons then
@@ -200,12 +214,10 @@ function SWEP:Succeed()
 					break
 				end
 			end
+
 			if not found then
 				table.insert(trace.Entity:GetTable().ConfiscatedWeapons, v)
 			end
-			--[[ if not table.HasValue(trace.Entity:GetTable().ConfiscatedWeapons, v) then
-				table.insert(trace.Entity:GetTable().ConfiscatedWeapons, v)
-			end ]]
 		end
 	end
 
