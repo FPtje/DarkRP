@@ -31,6 +31,13 @@ function ENT:Initialize()
 	self:GetgunModel():SetParent(self)
 
 	phys = self:GetgunModel():GetPhysicsObject()
+
+	if not IsValid(phys) then
+		self:GetgunModel():SetModel("models/weapons/w_rif_ak47.mdl")
+		self:GetgunModel():PhysicsInit(SOLID_VPHYSICS)
+		phys = self:GetgunModel():GetPhysicsObject()
+	end
+
 	phys:EnableMotion(false)
 end
 

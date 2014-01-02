@@ -10,7 +10,22 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
 
+	if not IsValid(phys) then
+		local mdl = self:GetModel()
+		self:SetModel("models/weapons/w_rif_ak47.mdl")
+		self:SetNoDraw(true)
+		self:PhysicsInit(SOLID_VPHYSICS)
+		phys = self:GetPhysicsObject()
+
+		local e = ents.Create("prop_dynamic")
+		e:SetPos(self:GetPos())
+		e:SetAngles(self:GetAngles())
+		e:SetModel(mdl)
+		e:SetParent(self)
+	end
+
 	phys:Wake()
+
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 
 	if self:Getamount() == 0 then
