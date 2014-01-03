@@ -135,10 +135,10 @@ end
 
 hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
 	for i, law in pairs(Laws) do
-		if FixedLaws[i] then continue end
-
-		umsg.Start("DRP_AddLaw", ply)
+		if not FixedLaws[i] then
+			umsg.Start("DRP_AddLaw", ply)
 			umsg.String(law)
-		umsg.End()
+			umsg.End()
+		end
 	end
 end)
