@@ -31,11 +31,15 @@ local function RP_PlayerChat(ply, text)
 	}(text)
 
 	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
-		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
+		local arg = string.sub(text, string.len(tblCmd.command) + 3)
+		if string.sub(arg, 1, 1) == "#" then return "", "", fn.Id end -- Exploit workaround
+
+		callback, DoSayFunc = tblCmd.callback(ply, arg)
 		if callback == "" then
 			return "", "", DoSayFunc;
 		end
-		text = string.sub(text, string.len(tblCmd.command) + 3, string.len(text))
+
+		text = arg
 	end
 
 	if callback ~= "" then
@@ -134,6 +138,10 @@ local function ConCommand(ply, _, args)
 
 	if tbl.delay and ply.DrpCommandDelays[cmd] and ply.DrpCommandDelays[cmd] > time - tbl.delay then
 		return
+	end
+
+	for i = 2, #args do
+		if string.sub(args[i], 1, 1) == "#" then return end -- Exploit workaround
 	end
 
 	ply.DrpCommandDelays[cmd] = time
