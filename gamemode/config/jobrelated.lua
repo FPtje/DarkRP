@@ -46,16 +46,7 @@ TEAM_POLICE = DarkRP.createJob("Civil Protection", {
 	salary = 65,
 	admin = 0,
 	vote = true,
-	hasLicense = true,
-	help = {
-		"Please don't abuse your job",
-		"When you arrest someone they are auto transported to jail.",
-		"They are auto let out of jail after some time",
-		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
-		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect",
-		"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect",
-		"Type /jailpos to set the jail position"
-	}
+	hasLicense = true
 })
 
 TEAM_GANG = DarkRP.createJob("Gangster", {
@@ -100,12 +91,7 @@ TEAM_MOB = DarkRP.createJob("Mob boss", {
 	salary = 60,
 	admin = 0,
 	vote = false,
-	hasLicense = false,
-	help = {
-		"As the Mob boss, you decide what you want the other Gangsters to do.",
-		"You get an Unarrest Stick which you can use to break people out of jail.",
-		"/agenda <Message> Sets the Gangsters' agenda. Use // to go to the next line."
-	}
+	hasLicense = false
 })
 
 TEAM_GUN = DarkRP.createJob("Gun Dealer", {
@@ -157,16 +143,7 @@ TEAM_CHIEF = DarkRP.createJob("Civil Protection Chief", {
 	vote = false,
 	hasLicense = true,
 	chief = true,
-	NeedToChangeFrom = TEAM_POLICE,
-	help = {
-		"Please don't abuse your job",
-		"When you arrest someone they are auto transported to jail.",
-		"They are auto let out of jail after some time",
-		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
-		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect",
-		"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect",
-		"Type /jailpos to set the jail position"
-	}
+	NeedToChangeFrom = TEAM_POLICE
 })
 
 TEAM_MAYOR = DarkRP.createJob("Mayor", {
@@ -187,16 +164,7 @@ TEAM_MAYOR = DarkRP.createJob("Mayor", {
 	admin = 0,
 	vote = true,
 	hasLicense = false,
-	mayor = true,
-	help = {
-		"Type /warrant [Nick|SteamID|Status ID] to set a search warrant for a player.",
-		"Type /wanted [Nick|SteamID|Status ID] to alert everyone to a wanted suspect.",
-		"Type /unwanted [Nick|SteamID|Status ID] to clear the suspect.",
-		"Type /lockdown to initiate a lockdown",
-		"Type /unlockdown to end a lockdown",
-		"Type /placelaws to place a screen containing the laws.",
-		"Type /addlaw and /removelaw to edit the laws."
-	}
+	mayor = true
 })
 
 TEAM_HOBO = DarkRP.createJob("Hobo", {
