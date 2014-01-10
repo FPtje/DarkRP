@@ -175,7 +175,8 @@ local function DamageSleepers(ent, dmginfo)
 				v:SetHealth(v:Health() - amount)
 				if v:Health() <= 0 and v:Alive() then
 					DarkRP.toggleSleep(v, "force")
-					v:SetHealth(GAMEMODE.Config.startinghealth)
+					 -- reapply damage to properly kill the player
+					v:TakeDamageInfo(dmginfo)
 				end
 			end
 		end
