@@ -37,7 +37,6 @@ Config
 ---------------------------------------------------------------------------*/
 local configFiles = {
 	"darkrp_config/settings.lua",
-	"darkrp_config/mysql.lua",
 	"darkrp_config/licenseweapons.lua",
 }
 
@@ -47,6 +46,7 @@ for _, File in pairs(configFiles) do
 	if SERVER then AddCSLuaFile(File) end
 	include(File)
 end
+if SERVER then include("darkrp_config/mysql.lua") end
 
 /*---------------------------------------------------------------------------
 Modules

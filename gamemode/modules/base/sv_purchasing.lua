@@ -368,6 +368,11 @@ local function BuyAmmo(ply, args)
 		end
 	end
 
+	if not found then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "ammo"))
+		return ""
+	end
+
 	local canbuy, suppress, message = hook.Call("canBuyAmmo", DarkRP.hooks, ply, found)
 
 	if not canbuy then
