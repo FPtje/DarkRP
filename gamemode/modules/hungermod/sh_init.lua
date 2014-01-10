@@ -30,57 +30,57 @@ Valid members:
 	customCheckMessage = string -- message to people who cannot buy it because of the customCheck
 ]]
 DarkRP.DARKRP_LOADING = true
-AddFoodItem("Banana", {
+DarkRP.createFood("Banana", {
 	model = "models/props/cs_italy/bananna.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("Bunch of bananas", {
+DarkRP.createFood("Bunch of bananas", {
 	model = "models/props/cs_italy/bananna_bunch.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("Melon", {
+DarkRP.createFood("Melon", {
 	model = "models/props_junk/watermelon01.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("Glass bottle", {
+DarkRP.createFood("Glass bottle", {
 	model = "models/props_junk/GlassBottle01a.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("Pop can", {
+DarkRP.createFood("Pop can", {
 	model = "models/props_junk/PopCan01a.mdl",
 	energy = 5,
 	price = 5
 })
-AddFoodItem("Plastic bottle", {
+DarkRP.createFood("Plastic bottle", {
 	model = "models/props_junk/garbage_plasticbottle003a.mdl",
 	energy = 15,
 	price = 15
 })
-AddFoodItem("Milk", {
+DarkRP.createFood("Milk", {
 	model = "models/props_junk/garbage_milkcarton002a.mdl",
 	energy = 20,
 	price = 20
 })
-AddFoodItem("Bottle 1", {
+DarkRP.createFood("Bottle 1", {
 	model = "models/props_junk/garbage_glassbottle001a.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("Bottle 2", {
+DarkRP.createFood("Bottle 2", {
 	model = "models/props_junk/garbage_glassbottle002a.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("Bottle 3", {
+DarkRP.createFood("Bottle 3", {
 	model = "models/props_junk/garbage_glassbottle003a.mdl",
 	energy = 10,
 	price = 10
 })
-AddFoodItem("Orange", {
+DarkRP.createFood("Orange", {
 	model = "models/props/cs_italy/orange.mdl",
 	energy = 20,
 	price = 20
@@ -93,7 +93,7 @@ Settings for the job and entities
 timer.Simple(0, function()
 	DarkRP.DARKRP_LOADING = true
 
-	TEAM_COOK = AddExtraTeam("Cook", {
+	TEAM_COOK = DarkRP.createJob("Cook", {
 		color = Color(238, 99, 99, 255),
 		model = "models/player/mossman.mdl",
 		description = [[As a cook, it is your responsibility to feed the other members of your city.
@@ -109,7 +109,7 @@ timer.Simple(0, function()
 		cook = true
 	})
 
-	AddEntity("Microwave", {
+	DarkRP.createEntity("Microwave", {
 		ent = "microwave",
 		model = "models/props/cs_office/microwave.mdl",
 		price = 400,
