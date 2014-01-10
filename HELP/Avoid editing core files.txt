@@ -19,7 +19,7 @@ config folder inside it to configure DarkRP.
 /*---------------------------------------------------------------------------
             How to modify DarkRP without modifying the core files
 ---------------------------------------------------------------------------*/
-1. Go to DarkRP/gamemode/modules
+1. Go to darkrpmodification/lua/darkrp_modules
 2. Make a folder with any name, e.g. mydarkrpmod
 	it has to be lowercase
 	no spaces or weird characters
