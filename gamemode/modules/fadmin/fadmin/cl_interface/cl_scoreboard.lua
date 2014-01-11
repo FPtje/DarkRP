@@ -73,7 +73,7 @@ function FAdmin.ScoreBoard.ShowScoreBoard()
 	FAdmin.ScoreBoard.Controls.Hostname:SetVisible(true)
 
 	FAdmin.ScoreBoard.Controls.Description = FAdmin.ScoreBoard.Controls.Description or vgui.Create("DLabel")
-	FAdmin.ScoreBoard.Controls.Description:SetText(GAMEMODE.Name .. "\n\t"..GAMEMODE.Author)
+	FAdmin.ScoreBoard.Controls.Description:SetText(string.format("%s %s\n\t%s", GAMEMODE.Name, GAMEMODE.Version, GAMEMODE.Author))
 	FAdmin.ScoreBoard.Controls.Description:SetFont("ScoreboardSubtitle")
 	FAdmin.ScoreBoard.Controls.Description:SetColor(Color(200,200,200,200))
 	FAdmin.ScoreBoard.Controls.Description:SetPos(FAdmin.ScoreBoard.X + 90, FAdmin.ScoreBoard.Y + 50)

@@ -1,7 +1,3 @@
-NEWS: DarkRP 2.5.0 has been released! Please read the migration wiki if you haven't migrated yet!
-http://wiki.darkrp.com/index.php/MigratingTo2.5.0
-
-
 https://github.com/FPtje/DarkRP/wiki/HOW-TO-REPORT-ISSUES
 ======
 READ THIS FOR MODIFYING DARKRP! VERY USEFUL WIKI!

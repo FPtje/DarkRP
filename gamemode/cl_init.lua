@@ -1,4 +1,4 @@
-GM.Version = "2.5.0"
+GM.Version = "2.5.1"
 GM.Name = "DarkRP"
 GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
 

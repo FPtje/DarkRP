@@ -2,7 +2,7 @@
 {
 	"base"		"sandbox"
     "title"  "DarkRP"
-    "version"   "2.5.0"
+    "version"   "2.5.1"
     "menusystem"	"1"
 
     "author_name"   "LightRP: Rick darkalonio, DarkRP: Rickster, Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
