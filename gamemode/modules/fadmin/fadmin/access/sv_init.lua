@@ -19,6 +19,9 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			ON DELETE CASCADE
 	);]], function()
 
+		-- Remove SetAccess workaround
+		MySQLite.query([[DELETE FROM FADMIN_PRIVILEGES WHERE NAME = "user" AND PRIVILEGE = "SetAccess";]])
+
 		MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE, i.immunity FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME LEFT OUTER JOIN FAdmin_Immunity i ON g.NAME = i.groupname;", function(data)
 			if not data then return end
 
