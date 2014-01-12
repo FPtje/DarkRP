@@ -94,7 +94,7 @@ function plyMeta:unArrest(unarrester)
 
 	self:setDarkRPVar("Arrested", false)
 	arrestedPlayers[self:SteamID()] = nil
-	hook.Call("playerUnArrested", DarkRP.hooks, self)
+	hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester)
 end
 
 /*---------------------------------------------------------------------------
