@@ -249,8 +249,11 @@ local function DrawPlayerInfo(ply)
 	if GAMEMODE.Config.showname and not ply:getDarkRPVar("wanted") then
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, Color(0, 0, 0, 255), 1)
 		draw.DrawText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
+	end
+	
+	if GAMEMODE.Config.showhealth and not ply:getDarkRPVar("wanted") then
 		draw.DrawText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x + 1, pos.y + 21, Color(0, 0, 0, 255), 1)
-		draw.DrawText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x, pos.y + 20, Color(255,255,255,200), 1)
+		draw.DrawText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x, pos.y + 20, Color(255,255,255,200), 1)	
 	end
 
 	if GAMEMODE.Config.showjob then
