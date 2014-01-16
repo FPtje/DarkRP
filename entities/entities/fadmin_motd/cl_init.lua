@@ -82,7 +82,7 @@ function ENT:Draw()
 			surface.DrawRect(-512, 256, 1024, -512)
 			surface.SetTextColor( 255, 255, 255, 255 )
 			surface.SetTextPos( TextPosX, 0 )
-			surface.DrawText("Physgun/use the button to see the MOTD!")
+			surface.DrawNonParsedText("Physgun/use the button to see the MOTD!")
 
 			draw.WordBox(4, -16, 24, "Click!", "default", Color(100, 100, 100, 255), Color(255, 255, 255, 255))
 

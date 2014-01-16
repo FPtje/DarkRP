@@ -17,15 +17,15 @@ function ENT:Draw()
 
 	cam.Start3D2D(Pos + Ang:Up() * 0.9, Ang, 0.1)
 		if recipient == LocalPlayer():Name() and owner ~= LocalPlayer():Name() then
-			draw.DrawText(text, "ChatFont", -TextWidth*0.5, -25, Color(0,255,0,255), 0)
+			draw.DrawNonParsedText(text, "ChatFont", -TextWidth*0.5, -25, Color(0,255,0,255), 0)
 		elseif recipient == LocalPlayer():Name() and owner == LocalPlayer():Name() then
-			draw.DrawText(text, "ChatFont", -TextWidth*0.5, -25, Color(255,255,0,255), 0)
+			draw.DrawNonParsedText(text, "ChatFont", -TextWidth*0.5, -25, Color(255,255,0,255), 0)
 		elseif recipient ~= LocalPlayer():Name() and owner == LocalPlayer():Name() then
-			draw.DrawText(text, "ChatFont", -TextWidth*0.5, -25, Color(0,0,255,255), 0)
+			draw.DrawNonParsedText(text, "ChatFont", -TextWidth*0.5, -25, Color(0,0,255,255), 0)
 		elseif recipient ~= LocalPlayer():Name() and owner ~= LocalPlayer():Name() then
-			draw.DrawText(text, "ChatFont", -TextWidth*0.5, -25, Color(255,0,0,255), 0)
+			draw.DrawNonParsedText(text, "ChatFont", -TextWidth*0.5, -25, Color(255,0,0,255), 0)
 		else
-			draw.DrawText(text, "ChatFont", -TextWidth*0.5, -25, Color(255,255,255,255), 0)
+			draw.DrawNonParsedText(text, "ChatFont", -TextWidth*0.5, -25, Color(255,255,255,255), 0)
 		end
 	cam.End3D2D()
 end

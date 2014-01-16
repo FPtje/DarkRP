@@ -11,8 +11,8 @@ local function DrawZombieInfo()
 		local zPoint = localplayer.DarkRPVars["zPoints".. x]
 		if zPoint then
 			zPoint = zPoint:ToScreen()
-			draw.DrawText(DarkRP.getPhrase("zombie_spawn") .. " (" .. x .. ")", "DarkRPHUD2", zPoint.x, zPoint.y - 20, Color(255, 255, 255, 200), 1)
-			draw.DrawText(DarkRP.getPhrase("zombie_spawn") .. " (" .. x .. ")", "DarkRPHUD2", zPoint.x + 1, zPoint.y - 21, Color(255, 0, 0, 255), 1)
+			draw.DrawNonParsedText(DarkRP.getPhrase("zombie_spawn") .. " (" .. x .. ")", "DarkRPHUD2", zPoint.x, zPoint.y - 20, Color(255, 255, 255, 200), 1)
+			draw.DrawNonParsedText(DarkRP.getPhrase("zombie_spawn") .. " (" .. x .. ")", "DarkRPHUD2", zPoint.x + 1, zPoint.y - 21, Color(255, 0, 0, 255), 1)
 		end
 	end
 end

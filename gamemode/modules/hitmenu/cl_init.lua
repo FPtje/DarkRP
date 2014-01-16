@@ -48,15 +48,15 @@ hook.Add("HUDPaint", "DrawHitOption", function()
 	if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and not ply:hasHit() and localplayer:GetPos():Distance(ply:GetPos()) < GAMEMODE.Config.minHitDistance then
 		x, y = ScrW() / 2, ScrH() / 2 + 30
 
-		draw.DrawText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)
-		draw.DrawText(hudText, "TargetID", x, y, textCol2, 1)
+		draw.DrawNonParsedText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)
+		draw.DrawNonParsedText(hudText, "TargetID", x, y, textCol2, 1)
 	end
 
 	if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
 		x, y = chat.GetChatBoxPos()
 		local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Nick())
-		draw.DrawText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
-		draw.DrawText(text, "HUDNumber5", x, y, textCol2, 0)
+		draw.DrawNonParsedText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
+		draw.DrawNonParsedText(text, "HUDNumber5", x, y, textCol2, 0)
 	end
 end)
 
@@ -96,8 +96,8 @@ function postPlayerDraw(ply)
 	ang:RotateAroundAxis(ang:Forward(), 90)
 
 	cam.Start3D2D(pos, ang, 0.3)
-		draw.DrawText(GAMEMODE.Config.hitmanText, "TargetID", 1, -100, textCol1, 1)
-		draw.DrawText(GAMEMODE.Config.hitmanText, "TargetID", 0, -101, textCol2, 1)
+		draw.DrawNonParsedText(GAMEMODE.Config.hitmanText, "TargetID", 1, -100, textCol1, 1)
+		draw.DrawNonParsedText(GAMEMODE.Config.hitmanText, "TargetID", 0, -101, textCol2, 1)
 	cam.End3D2D()
 end
 
