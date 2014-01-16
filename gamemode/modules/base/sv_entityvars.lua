@@ -83,8 +83,8 @@ local function setRPName(ply, cmd, args)
 		return
 	end
 
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_setname"))
+	if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_setname"))
 		return
 	end
 
