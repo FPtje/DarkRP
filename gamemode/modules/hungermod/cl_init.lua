@@ -75,9 +75,9 @@ local function HMHUD()
 
 	if energy > 0 then
 		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / 100), 7, ConVars.HungerForeground)
-		draw.SimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1)
+		draw.DrawNonParsedSimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1)
 	else
-		draw.SimpleText(DarkRP.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
+		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
 	end
 
 	if FoodAteAlpha > -1 then
@@ -86,8 +86,8 @@ local function HMHUD()
 			mul = -.5
 		end
 
-		draw.SimpleText("++", "HungerPlus", 208, FoodAteY + 1, ColorAlpha(ConVars.FoodEatenBackground, FoodAteAlpha), 0)
-		draw.SimpleText("++", "HungerPlus", 207, FoodAteY, ColorAlpha(ConVars.FoodEatenForeground, FoodAteAlpha), 0)
+		draw.DrawNonParsedSimpleText("++", "HungerPlus", 208, FoodAteY + 1, ColorAlpha(ConVars.FoodEatenBackground, FoodAteAlpha), 0)
+		draw.DrawNonParsedSimpleText("++", "HungerPlus", 207, FoodAteY, ColorAlpha(ConVars.FoodEatenForeground, FoodAteAlpha), 0)
 
 		FoodAteAlpha = math.Clamp(FoodAteAlpha + 4 * FrameTime() * mul, -1, 1) --ColorAlpha works with 0-1 alpha
 		FoodAteY = FoodAteY - 150 * FrameTime()

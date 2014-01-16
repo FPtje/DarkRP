@@ -277,6 +277,6 @@ function SWEP:DrawHUD()
 		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
 		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(0, 0+(status*255), 255-(status*255), 255))
 
-		draw.SimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
+		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 	end
 end

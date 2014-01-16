@@ -18,7 +18,7 @@ function ENT:Draw()
 
 		draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
 
-		draw.SimpleText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
 		local col = Color(255, 255, 255, 255)
 		local lastHeight = 0
