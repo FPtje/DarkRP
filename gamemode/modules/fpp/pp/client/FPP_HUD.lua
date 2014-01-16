@@ -119,11 +119,11 @@ local function DrawNotice( self, k, v, i )
 
 	surface.SetDrawColor( 255, 255, 255, v.a )
 
-	draw.SimpleText(v.text, "TabLarge", x+1, y+1, Color(0,0,0,v.a*0.8), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x-1, y-1, Color(0,0,0,v.a*0.5), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x+1, y-1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x-1, y+1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x, y, Color(255,255,255,v.a), TEXT_ALIGN_RIGHT)
+	draw.DrawNonParsedSimpleText(v.text, "TabLarge", x+1, y+1, Color(0,0,0,v.a*0.8), TEXT_ALIGN_RIGHT)
+	draw.DrawNonParsedSimpleText(v.text, "TabLarge", x-1, y-1, Color(0,0,0,v.a*0.5), TEXT_ALIGN_RIGHT)
+	draw.DrawNonParsedSimpleText(v.text, "TabLarge", x+1, y-1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT)
+	draw.DrawNonParsedSimpleText(v.text, "TabLarge", x-1, y+1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT)
+	draw.DrawNonParsedSimpleText(v.text, "TabLarge", x, y, Color(255,255,255,v.a), TEXT_ALIGN_RIGHT)
 
 	local ideal_y = ScrH() - (HUDNote_c - i) * h
 	local ideal_x = ScrW() / 2 + w*0.5 + (ScrW()/20)
@@ -175,7 +175,7 @@ local function HUDPaint()
 		end
 
 		draw.RoundedBox(4, comingAroundAgain - w, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-		draw.DrawText(LAEnt.FPPOwner, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
+		draw.DrawNonParsedText(LAEnt.FPPOwner, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
 		surface.SetDrawColor(255,255,255,255)
 	elseif not IsValid(LAEnt) then
 		comingAroundAgain = 0
