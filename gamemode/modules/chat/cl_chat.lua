@@ -29,12 +29,12 @@ local function AddToChat(bits)
 		end
 
 		if shouldShow ~= true then
-			chat.AddText(col1, prefixText, col2, ": "..text)
+			chat.AddNonParsedText(col1, prefixText, col2, ": "..text)
 		end
 	else
 		shouldShow = hook.Call("ChatText", nil, "0", prefixText, prefixText, "none")
 		if shouldShow ~= true then
-			chat.AddText(col1, prefixText)
+			chat.AddNonParsedText(col1, prefixText)
 		end
 	end
 	chat.PlaySound()
@@ -80,7 +80,7 @@ People who have contributed (ordered by commits, with at least two commits)
 ]]
 
 local function credits(um)
-	chat.AddText(Color(255,0,0,255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255,0,0,255), "] ", Color(255, 255, 255, 255), DarkRP.getPhrase("credits_see_console"))
+	chat.AddNonParsedText(Color(255,0,0,255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255,0,0,255), "] ", Color(255, 255, 255, 255), DarkRP.getPhrase("credits_see_console"))
 
 	MsgC(Color(255,0,0,255), DarkRP.getPhrase("credits_for", GAMEMODE.Name))
 	MsgC(Color(255,255,255,255), creds)

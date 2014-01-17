@@ -4,7 +4,7 @@ usermessage.Hook("FAdmin_ReceiveAdminMessage", function(um)
 	local Nick = FromPly:IsPlayer() and FromPly:Nick() or "Console"
 	local Text = um:ReadString()
 
-	chat.AddText(Color(255,0,0,255), "[To admins] ", team.GetColor(Team), Nick..": ", Color(255, 255, 255, 255), Text)
+	chat.AddNonParsedText(Color(255,0,0,255), "[To admins] ", team.GetColor(Team), Nick..": ", Color(255, 255, 255, 255), Text)
 end)
 
 FAdmin.StartHooks["Chatting"] = function()
