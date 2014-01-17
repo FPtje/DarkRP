@@ -12,6 +12,27 @@ DarkRP.PLAYER.isInRoom = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.deLocalise = DarkRP.stub{
+	name = "deLocalise",
+	description = "Makes sure the string will not be localised when drawn or printed.",
+	parameters = {
+		{
+			name = "text",
+			description = "The text to delocalise.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "text",
+			description = "The delocalised text.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.textWrap = DarkRP.stub{
 	name = "textWrap",
 	description = "Wrap a text around when reaching a certain width.",

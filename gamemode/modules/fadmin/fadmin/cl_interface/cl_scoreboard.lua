@@ -65,7 +65,7 @@ function FAdmin.ScoreBoard.ShowScoreBoard()
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 
 	FAdmin.ScoreBoard.Controls.Hostname = FAdmin.ScoreBoard.Controls.Hostname or vgui.Create("DLabel", self )
-	FAdmin.ScoreBoard.Controls.Hostname:SetText(GetHostName())
+	FAdmin.ScoreBoard.Controls.Hostname:SetText(DarkRP.deLocalise(GetHostName()))
 	FAdmin.ScoreBoard.Controls.Hostname:SetFont("ScoreboardHeader")
 	FAdmin.ScoreBoard.Controls.Hostname:SetColor(Color(200,200,200,200))
 	FAdmin.ScoreBoard.Controls.Hostname:SetPos(FAdmin.ScoreBoard.X + 90, FAdmin.ScoreBoard.Y + 20)

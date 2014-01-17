@@ -169,7 +169,7 @@ function FPP.AdminMenu(Panel)
 	for k,v in pairs(player.GetAll()) do
 		areplayers = true
 		local rm = general:Add("DButton")
-		rm:SetText(v:Nick())
+		rm:SetText(DarkRP.deLocalise(v:Nick()))
 		rm:SetConsoleCommand("FPP_Cleanup", v:UserID())
 		rm:SetDisabled(not LocalPlayer():IsAdmin() and not superadmin)
 	end
@@ -760,7 +760,7 @@ RetrieveRestrictedTool = function(um)
 
 	for k,v in pairs(team.GetAllTeams()) do
 		local chkbx = vgui.Create("DCheckBoxLabel")
-		chkbx:SetText(v.Name)
+		chkbx:SetText(DarkRP.deLocalise(v.Name))
 		chkbx:SetDark(true)
 		chkbx.Team = k
 		if table.HasValue(Teams, tostring(k)) then
@@ -972,7 +972,7 @@ function FPP.BuddiesMenu(Panel)
 
 		if not cantadd then
 			local add = vgui.Create("DButton")
-			add:SetText(v:Nick())
+			add:SetText(DarkRP.deLocalise(v:Nick()))
 			add.DoClick = function()
 				FPP.SetBuddyMenu(v:SteamID(), v:Nick())
 			end

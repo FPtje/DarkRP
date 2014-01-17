@@ -103,7 +103,7 @@ function PANEL:SetHTML(html)
 	local oldUrlLoaded = self.HTML.urlLoaded
 	self.HTML.urlLoaded = function(panel, url)
 		if oldUrlLoaded then oldUrlLoaded(panel, url) end
-		self.AddressBar:SetText(url)
+		self.AddressBar:SetText(DarkRP.deLocalise(url))
 		self:FinishedLoading()
 	end
 end

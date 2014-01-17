@@ -191,12 +191,12 @@ function PANEL:PerformLayout()
 	if not IsValid(ply) then self:Remove() return end
 
 	self.lblName:SetFont("UiBold")
-	self.lblName:SetText(ply:Nick())
+	self.lblName:SetText(DarkRP.deLocalise(ply:Nick()))
 	self.lblName:SizeToContents()
 	self.lblName:SetPos(10, 1)
 
 	self.lblTeam:SetFont("UiBold")
-	self.lblTeam:SetText((ply.DarkRPVars and ply:getDarkRPVar("job")) or team.GetName(ply:Team()))
+	self.lblTeam:SetText((ply.DarkRPVars and DarkRP.deLocalise(ply:getDarkRPVar("job"))) or team.GetName(ply:Team()))
 	self.lblTeam:SizeToContents()
 	self.lblTeam:SetPos(self:GetWide() / 2, 1)
 end

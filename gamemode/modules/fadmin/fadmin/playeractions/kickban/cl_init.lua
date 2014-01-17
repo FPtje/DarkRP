@@ -76,7 +76,7 @@ local function showBanWindow(SteamID, NICK, time, reason)
 		function TextEntry:OnTextChanged()
 			RunConsoleCommand("_FAdmin", "ban", SteamID, "update", BanTime, self:GetValue())
 		end
-		TextEntry:SetText(reason)
+		TextEntry:SetText(DarkRP.deLocalise(reason))
 		TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "ban", SteamID, "execute", BanTime, TextEntry:GetValue()) end
 		function TextEntry:OnFocusChanged(changed)
 			self:RequestFocus()

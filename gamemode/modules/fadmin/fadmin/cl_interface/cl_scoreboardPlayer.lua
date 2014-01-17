@@ -155,7 +155,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			end
 			local name = v.Name
 			if type(name) == "function" then name = name(FAdmin.ScoreBoard.Player.Player) end
-			ActionButton:SetText(name)
+			ActionButton:SetText(DarkRP.deLocalise(name))
 			ActionButton:SetBorderColor(v.color)
 
 			function ActionButton:DoClick()

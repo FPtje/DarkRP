@@ -104,7 +104,7 @@ ContinueNewGroup = function(ply, name, admin_access, func)
 
 	for Pname, Padmin_access in SortedPairs(FAdmin.Access.Privileges) do
 		local chkBox = vgui.Create("DCheckBoxLabel")
-		chkBox:SetText(Pname)
+		chkBox:SetText(DarkRP.deLocalise(Pname))
 		chkBox:SizeToContents()
 
 		if (Padmin_access - 1) <= admin_access then

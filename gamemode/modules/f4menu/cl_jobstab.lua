@@ -273,7 +273,7 @@ local weaponString = fn.Compose{fn.Curry(fn.Flip(table.concat), 2)("\n"), fn.Cur
 function PANEL:updateInfo(job)
 	self.job = job
 
-	self.lblTitle:SetText(job.name or (job.team and "" or "No jobs available"))
+	self.lblTitle:SetText(DarkRP.deLocalise(job.name) or (job.team and "" or "No jobs available"))
 	self.lblTitle:SizeToContents()
 
 	local weps
@@ -305,7 +305,7 @@ function PANEL:PerformLayout()
 	self.innerPanel:SetPos(3, 3)
 	self.innerPanel:SetSize(self:GetWide() - 6, self:GetTall() - self.pnlChooseMdl:GetTall() - self.btnGetJob:GetTall() - 13)
 	self.innerPanel:InvalidateLayout()
-	self.lblDescription:SetText(DarkRP.textWrap(self.job.description or "", "Ubuntu Light", self:GetWide() - 43))
+	self.lblDescription:SetText(DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""), "Ubuntu Light", self:GetWide() - 43))
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")

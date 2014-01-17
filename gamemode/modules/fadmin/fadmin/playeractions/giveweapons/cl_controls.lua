@@ -49,7 +49,7 @@ function PANEL:Paint()
 end
 
 function PANEL:Setup(NiceName, SpawnName, IconMaterial, AdminOnly, Parent, IsAmmo)
-	self.Label:SetText(NiceName)
+	self.Label:SetText(DarkRP.deLocalise(NiceName))
 
 	self.DoClick = function() Parent:DoGiveWeapon(SpawnName, IsAmmo) end
 	self.DoRightClick = function() end
