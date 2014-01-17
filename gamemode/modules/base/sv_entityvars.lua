@@ -147,17 +147,9 @@ local function RPName(ply, args)
 		return ""
 	end
 
-	local allowed = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-	'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
-	'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
-	'z', 'x', 'c', 'v', 'b', 'n', 'm', ' ',
-	'(', ')', '[', ']', '!', '@', '#', '$', '%', '^', '&', '*', '-', '_', '=', '+', '|', '\\'}
-
-	for k in string.gmatch(args, ".") do
-		if not table.HasValue(allowed, string.lower(k)) then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", k))
-			return ""
-		end
+	if not string.match(args, "^[a-zA-Z0-9 ]+$") then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", "Bad name"))
+		return ""
 	end
 	ply:setRPName(args)
 	ply.LastNameChange = CurTime()
