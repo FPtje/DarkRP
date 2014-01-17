@@ -115,7 +115,7 @@ end
 function eMeta:removeDoorData()
 	net.Start("DarkRP_RemoveDoorData")
 		net.WriteUInt(self:EntIndex(), 32)
-	net.Send(player.GetAll())
+	net.Broadcast()
 end
 
 /*---------------------------------------------------------------------------
@@ -145,5 +145,5 @@ function DarkRP.updateDoorData(door, member)
 		net.WriteUInt(door:EntIndex(), 32)
 		net.WriteString(member)
 		net.WriteType(door.DoorData[member])
-	net.Send(player.GetAll())
+	net.Broadcast()
 end
