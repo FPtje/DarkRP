@@ -26,6 +26,8 @@ local function SetAFK(ply)
 		ply.OldJob = ply:getDarkRPVar("job")
 		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
 
+		ply.AFKDemote = math.huge
+
 		ply:KillSilent()
 		ply:Lock()
 	else
