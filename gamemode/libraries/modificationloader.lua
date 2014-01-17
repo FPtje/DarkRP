@@ -46,7 +46,7 @@ for _, File in pairs(configFiles) do
 	if SERVER then AddCSLuaFile(File) end
 	include(File)
 end
-if SERVER then include("darkrp_config/mysql.lua") end
+if SERVER and file.Exists("darkrp_config/mysql.lua", "LUA") then include("darkrp_config/mysql.lua") end
 
 /*---------------------------------------------------------------------------
 Modules
