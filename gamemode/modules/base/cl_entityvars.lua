@@ -64,9 +64,7 @@ net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 /*---------------------------------------------------------------------------
 Request the DarkRPVars
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "CheckDarkRPVars", function()
-	RunConsoleCommand("_sendDarkRPvars")
-end)
+timer.Simple(1, fn.Curry(RunConsoleCommand, 2)("_sendDarkRPvars"))
 
 timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 	for k,v in pairs(player.GetAll()) do
