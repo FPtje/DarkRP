@@ -12,6 +12,8 @@ local function createShipment(ply, args)
 		return
 	end
 
+	ent.PlayerUse = false
+
 	local shipID
 	for k,v in pairs(CustomShipments) do
 		if v.entity == ent.weaponclass then
@@ -52,7 +54,7 @@ local function splitShipment(ply, args)
 
 	ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" or ent:Getcount() < 2 then
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" or ent:Getcount() < 2 or ent.locked then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return
 	end
