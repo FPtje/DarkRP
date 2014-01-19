@@ -17,6 +17,14 @@ function ENT:Draw()
 	self:drawInfo()
 end
 
+net.Receive("DarkRP_shipmentSpawn", function()
+	local ent = net.ReadEntity()
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" then return end
+
+	ent.height = 0
+	ent.StartTime = CurTime()
+end)
+
 function ENT:drawSpawning()
 	render.MaterialOverride(matBallGlow)
 

@@ -7,8 +7,15 @@ local function createShipment(ply, args)
 
 	ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_weapon" then
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_weapon" or ent.PlayerUse == false then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return
+	end
+
+	local pos = ent:GetPos()
+
+	if pos:Distance(ply:GetShootPos()) > 130 or not pos:isInSight({ent, ply} , ply) then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("distance_too_big"))
 		return
 	end
 
@@ -59,10 +66,20 @@ local function splitShipment(ply, args)
 		return
 	end
 
+	local pos = ent:GetPos()
+
+	if pos:Distance(ply:GetShootPos()) > 130 or not pos:isInSight({ent, ply} , ply) then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("distance_too_big"))
+		return
+	end
+
 	local count = math.floor(ent:Getcount() / 2)
 	ent:Setcount(ent:Getcount() - count)
 
+	ent:StartSpawning()
+
 	local crate = ents.Create("spawned_shipment")
+	crate.locked = true
 	crate.SID = ply.SID
 	crate:SetPos(ent:GetPos())
 	crate.nodupe = true
