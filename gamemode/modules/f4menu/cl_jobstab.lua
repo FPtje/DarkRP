@@ -273,7 +273,7 @@ local weaponString = fn.Compose{fn.Curry(fn.Flip(table.concat), 2)("\n"), fn.Cur
 function PANEL:updateInfo(job)
 	self.job = job
 
-	self.lblTitle:SetText(DarkRP.deLocalise(job.name) or (job.team and "" or "No jobs available"))
+	self.lblTitle:SetText(DarkRP.deLocalise(job.name or "") or (job.team and "" or "No jobs available"))
 	self.lblTitle:SizeToContents()
 
 	local weps
