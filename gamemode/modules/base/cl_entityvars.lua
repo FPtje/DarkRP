@@ -66,16 +66,17 @@ Request the DarkRPVars
 ---------------------------------------------------------------------------*/
 hook.Add("InitPostEntity", "CheckDarkRPVars", function()
 	RunConsoleCommand("_sendDarkRPvars")
-	timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
-		for k,v in pairs(player.GetAll()) do
-			if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
+end)
 
-			RunConsoleCommand("_sendDarkRPvars")
-			return
-		end
+timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
+	for k,v in pairs(player.GetAll()) do
+		if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
 
-		timer.Destroy("DarkRPCheckifitcamethrough")
-	end)
+		RunConsoleCommand("_sendDarkRPvars")
+		return
+	end
+
+	timer.Destroy("DarkRPCheckifitcamethrough")
 end)
 
 /*---------------------------------------------------------------------------
