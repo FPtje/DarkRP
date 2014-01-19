@@ -62,7 +62,7 @@ local function InitializeDarkRPVars(len)
 
 	-- Sometimes players remain uninitialized
 	-- Ask again for data when null players are found or when not every player is in it
-	if askAgain or #vars < #player.GetAll() then -- Timer delay must be larger than 1, command will be ignored otherwise
+	if askAgain or #vars < #player.GetAll() - 1 then -- Timer delay must be larger than 1, command will be ignored otherwise
 		timer.Simple(3, fn.Curry(RunConsoleCommand, 2)("_sendDarkRPvars"))
 	end
 end
