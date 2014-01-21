@@ -23,7 +23,7 @@ function meta:setDarkRPVar(var, value, target)
 	self.DarkRPVars[var] = value
 
 	net.Start("DarkRP_PlayerVar")
-		net.WriteFloat(self:EntIndex())
+		net.WriteFloat(self:UserID())
 		net.WriteString(var)
 		net.WriteType(value)
 	net.Send(target)
