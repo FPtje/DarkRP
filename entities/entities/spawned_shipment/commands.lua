@@ -7,7 +7,7 @@ local function createShipment(ply, args)
 
 	ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_weapon" then
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_weapon" and ent.PlayerUse ~= false then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return
 	end
@@ -43,7 +43,7 @@ local function createShipment(ply, args)
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
 end
-DarkRP.defineChatCommand("makeshipment", createShipment)
+DarkRP.defineChatCommand("makeshipment", createShipment, 0.3)
 
 /*---------------------------------------------------------------------------
 Split a shipment in two
@@ -78,4 +78,4 @@ local function splitShipment(ply, args)
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
 end
-DarkRP.defineChatCommand("splitshipment", splitShipment)
+DarkRP.defineChatCommand("splitshipment", splitShipment, 0.3)
