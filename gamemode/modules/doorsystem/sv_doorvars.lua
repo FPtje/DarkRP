@@ -127,9 +127,9 @@ local function sendDoorData(ply)
 
 	local res = {}
 	for k,v in pairs(ents.GetAll()) do
-		if not IsValid(v) or not v.DoorData then continue end
+		if not IsValid(v) or not v:getDoorData() then continue end
 
-		res[v:EntIndex()] = v.DoorData
+		res[v:EntIndex()] = v:getDoorData()
 	end
 
 	net.Start("DarkRP_AllDoorData")
@@ -139,11 +139,11 @@ end
 concommand.Add("_sendAllDoorData", sendDoorData)
 
 function DarkRP.updateDoorData(door, member)
-	if not IsValid(door) or not door.DoorData then error("Calling updateDoorData on a door that has no data!") end
+	if not IsValid(door) or not door:getDoorData() then error("Calling updateDoorData on a door that has no data!") end
 
 	net.Start("DarkRP_UpdateDoorData")
 		net.WriteUInt(door:EntIndex(), 32)
 		net.WriteString(member)
-		net.WriteType(door.DoorData[member])
+		net.WriteType(door:getDoorData()[member])
 	net.Send(player.GetAll())
 end
