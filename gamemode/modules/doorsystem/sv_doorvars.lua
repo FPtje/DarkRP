@@ -59,7 +59,7 @@ end
 function eMeta:addKeysAllowedToOwn(ply)
 	local doorData = self:getDoorData()
 	doorData.allowedToOwn = doorData.allowedToOwn or {}
-	doorData.allowedToOwn[ply:EntIndex()] = true
+	doorData.allowedToOwn[ply:UserID()] = true
 
 	DarkRP.updateDoorData(self, "allowedToOwn")
 end
@@ -67,7 +67,7 @@ end
 function eMeta:removeKeysAllowedToOwn(ply)
 	local doorData = self:getDoorData()
 	doorData.allowedToOwn = doorData.allowedToOwn or {}
-	doorData.allowedToOwn[ply:EntIndex()] = nil
+	doorData.allowedToOwn[ply:UserID()] = nil
 
 	if fn.Null(doorData.allowedToOwn) then
 		doorData.allowedToOwn = nil
@@ -86,7 +86,7 @@ end
 function eMeta:addKeysDoorOwner(ply)
 	local doorData = self:getDoorData()
 	doorData.extraOwners = doorData.extraOwners or {}
-	doorData.extraOwners[ply:EntIndex()] = true
+	doorData.extraOwners[ply:UserID()] = true
 
 	DarkRP.updateDoorData(self, "extraOwners")
 
@@ -96,7 +96,7 @@ end
 function eMeta:removeKeysDoorOwner(ply)
 	local doorData = self:getDoorData()
 	doorData.extraOwners = doorData.extraOwners or {}
-	doorData.extraOwners[ply:EntIndex()] = nil
+	doorData.extraOwners[ply:UserID()] = nil
 
 	if fn.Null(doorData.extraOwners) then
 		doorData.extraOwners = nil
