@@ -48,9 +48,10 @@ Initialize the DarkRPVars at the start of the game
 local function InitializeDarkRPVars(len)
 	local vars = net.ReadTable()
 
-	if not vars then return end
-	for k,v in pairs(vars) do
-		if not IsValid(k) then continue end
+	local askAgain = false
+	if not vars then askAgain = true end
+	for k,v in pairs(vars or {}) do
+		if not IsValid(k) then askAgain = true continue end
 		k.DarkRPVars = k.DarkRPVars or {}
 
 		-- Merge the tables
@@ -58,24 +59,29 @@ local function InitializeDarkRPVars(len)
 			k.DarkRPVars[a] = b
 		end
 	end
+
+	-- Sometimes players remain uninitialized
+	-- Ask again for data when null players are found or when not every player is in it
+	if askAgain or #vars < #player.GetAll() - 1 then -- Timer delay must be larger than 1, command will be ignored otherwise
+		timer.Simple(3, fn.Curry(RunConsoleCommand, 2)("_sendDarkRPvars"))
+	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 
 /*---------------------------------------------------------------------------
 Request the DarkRPVars
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "CheckDarkRPVars", function()
-	RunConsoleCommand("_sendDarkRPvars")
-	timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
-		for k,v in pairs(player.GetAll()) do
-			if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
+timer.Simple(1, fn.Curry(RunConsoleCommand, 2)("_sendDarkRPvars"))
 
-			RunConsoleCommand("_sendDarkRPvars")
-			return
-		end
+timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
+	for k,v in pairs(player.GetAll()) do
+		if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
 
-		timer.Destroy("DarkRPCheckifitcamethrough")
-	end)
+		RunConsoleCommand("_sendDarkRPvars")
+		return
+	end
+
+	timer.Destroy("DarkRPCheckifitcamethrough")
 end)
 
 /*---------------------------------------------------------------------------

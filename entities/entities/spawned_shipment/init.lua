@@ -4,15 +4,16 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("commands.lua")
 
+util.AddNetworkString("DarkRP_shipmentSpawn")
+
 function ENT:Initialize()
 	self.Destructed = false
 	self:SetModel("models/Items/item_item_crate.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self.locked = true
-	timer.Simple(0, function() self.locked = true end) -- when spawning through pocket it might be unlocked
-	timer.Simple(GAMEMODE.Config.shipmentspawntime, function() if IsValid(self) then self.locked = false end end)
+
+	self:StartSpawning()
 	self.damage = 100
 	self.ShareGravgun = true
 	local phys = self:GetPhysicsObject()
@@ -32,6 +33,18 @@ function ENT:Initialize()
 
 	phys = self:GetgunModel():GetPhysicsObject()
 	phys:EnableMotion(false)
+end
+
+function ENT:StartSpawning()
+	self.locked = true
+	timer.Simple(0, function()
+		net.Start("DarkRP_shipmentSpawn")
+			net.WriteEntity(self)
+		net.Broadcast()
+	end)
+
+	timer.Simple(0, function() self.locked = true end) -- when spawning through pocket it might be unlocked
+	timer.Simple(GAMEMODE.Config.shipmentspawntime, function() if IsValid(self) then self.locked = false end end)
 end
 
 function ENT:OnTakeDamage(dmg)

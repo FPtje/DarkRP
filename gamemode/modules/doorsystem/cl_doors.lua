@@ -131,4 +131,4 @@ net.Receive("DarkRP_RemoveDoorData", removeDoorData)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "getDoorData", fn.Curry(RunConsoleCommand, 2)("_sendAllDoorData"))
+timer.Simple(1, fn.Curry(RunConsoleCommand, 2)("_sendAllDoorData"))
