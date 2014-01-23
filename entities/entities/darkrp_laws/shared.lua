@@ -5,7 +5,6 @@ ENT.Instructions = "Use /addlaws to add a custom law, /removelaw <num> to remove
 ENT.Author = "Drakehawke"
 
 ENT.Spawnable = false
-ENT.AdminSpawnable = false
 
 local plyMeta = FindMetaTable("Player")
 DarkRP.declareChatCommand{
