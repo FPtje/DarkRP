@@ -181,3 +181,32 @@ DarkRP.destroyLastVote = DarkRP.stub{
 	},
 	metatable = DarkRP
 }
+
+DarkRP.hookStub{
+	name = "getVoteResults",
+	description = "Override the results of a vote.",
+	parameters = {
+		{
+			name = "vote",
+			description = "A table that contains information about the vote.",
+			type = "table"
+		},
+		{
+			name = "yea",
+			description = "The amount of people that voted yes.",
+			type = "number"
+		},
+		{
+			name = "nay",
+			description = "The amount of people that voted no.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "result",
+			description = "The result of the vote. Return 1 for win, -1 for lose, 0 for undecided.",
+			type = "number"
+		}
+	}
+}

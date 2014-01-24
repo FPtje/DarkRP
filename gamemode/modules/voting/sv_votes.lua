@@ -3,7 +3,7 @@ local Votes = {}
 
 local function ccDoVote(ply, cmd, args)
 	if ply:EntIndex() == 0 then return end
-	
+
 	local vote = Votes[tonumber(args[1] or 0)]
 
 	if not vote then return end
@@ -33,7 +33,8 @@ function Vote:handleNewVote(ply, choice)
 end
 
 function Vote:handleEnd()
-	local win = self.yea > self.nay and 1 or self.nay > self.yea and -1 or 0
+	local win = hook.Call("getVoteResults", nil, self, self.yea, self.nay)
+	win = win or self.yea > self.nay and 1 or self.nay > self.yea and -1 or 0
 
 	umsg.Start("KillVoteVGUI", self:getFilter())
 		umsg.String(self.id)
