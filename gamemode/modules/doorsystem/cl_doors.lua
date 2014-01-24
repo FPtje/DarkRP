@@ -47,7 +47,7 @@ function meta:drawOwnableInfo()
 		table.insert(doorInfo, doorGroup)
 	elseif doorTeams then
 		for k, v in pairs(doorTeams) do
-			if not v then continue end
+			if not v or not RPExtraTeams[k] then continue end
 
 			table.insert(doorInfo, RPExtraTeams[k].name)
 		end
