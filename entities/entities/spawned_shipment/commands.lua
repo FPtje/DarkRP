@@ -50,7 +50,7 @@ local function createShipment(ply, args)
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
 end
-DarkRP.defineChatCommand("makeshipment", createShipment)
+DarkRP.defineChatCommand("makeshipment", createShipment, 0.3)
 
 /*---------------------------------------------------------------------------
 Split a shipment in two
@@ -95,4 +95,4 @@ local function splitShipment(ply, args)
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
 end
-DarkRP.defineChatCommand("splitshipment", splitShipment)
+DarkRP.defineChatCommand("splitshipment", splitShipment, 0.3)

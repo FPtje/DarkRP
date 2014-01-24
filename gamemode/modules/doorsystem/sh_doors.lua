@@ -60,14 +60,14 @@ function meta:isKeysOwnedBy(ply)
 	if self:isMasterOwner(ply) then return true end
 
 	local coOwners = self:getKeysCoOwners()
-	return coOwners and coOwners[ply:EntIndex()] or false
+	return coOwners and coOwners[ply:UserID()] or false
 end
 
 function meta:isKeysAllowedToOwn(ply)
 	local doorData = self:getDoorData()
 	if not doorData then return false end
 
-	return doorData.allowedToOwn and doorData.allowedToOwn[ply:EntIndex()] or false
+	return doorData.allowedToOwn and doorData.allowedToOwn[ply:UserID()] or false
 end
 
 function meta:getKeysNonOwnable()

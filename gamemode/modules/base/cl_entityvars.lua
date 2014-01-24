@@ -10,15 +10,15 @@ end
 /*---------------------------------------------------------------------------
 Retrieve the information of a player var
 ---------------------------------------------------------------------------*/
-local function RetrievePlayerVar(entIndex, var, value, tries)
-	local ply = Entity(entIndex)
+local function RetrievePlayerVar(userID, var, value, tries)
+	local ply = Player(userID)
 
 	-- Usermessages _can_ arrive before the player is valid.
 	-- In this case, chances are huge that this player will become valid.
 	if not IsValid(ply) then
 		if (tries or 0) >= 5 then return end
 
-		timer.Simple(0.5, function() RetrievePlayerVar(entIndex, var, value, (tries or 0) + 1) end)
+		timer.Simple(0.5, function() RetrievePlayerVar(userID, var, value, (tries or 0) + 1) end)
 		return
 	end
 
@@ -33,12 +33,12 @@ Retrieve a player var.
 Read the usermessage and attempt to set the DarkRP var
 ---------------------------------------------------------------------------*/
 local function doRetrieve()
-	local entIndex = net.ReadFloat()
+	local userID = net.ReadFloat()
 	local var = net.ReadString()
 	local valueType = net.ReadUInt(8)
 	local value = net.ReadType(valueType)
 
-	RetrievePlayerVar(entIndex, var, value)
+	RetrievePlayerVar(userID, var, value)
 end
 net.Receive("DarkRP_PlayerVar", doRetrieve)
 

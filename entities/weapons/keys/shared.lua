@@ -140,7 +140,7 @@ function SWEP:SecondaryAttack()
 			self.Owner:EmitSound("npc/metropolice/gear".. math.floor(math.Rand(1,7)) ..".wav")
 			trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
 
-			timer.Simple(0.9, function() if IsValid(self.Owner) then self.Owner:EmitSound(self.Sound) end end)
+			timer.Simple(0.9, function() if IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sound) end end)
 
 			umsg.Start("anim_keys", RP)
 				umsg.Entity(self.Owner)
