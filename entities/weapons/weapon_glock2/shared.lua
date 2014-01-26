@@ -1,22 +1,20 @@
-if (CLIENT) then
-	SWEP.Author = "DarkRP Developers"
-	SWEP.Contact = ""
-	SWEP.Purpose = ""
-	SWEP.Instructions = ""
+if SERVER then
+	AddCSLuaFile("shared.lua")
+end
+
+if CLIENT then
 	SWEP.PrintName = "Glock"
-	SWEP.Instructions = "Shoot with it"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "c"
 
-	killicon.AddFont("weapon_p228","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
-end
-
-if (SERVER) then
-	AddCSLuaFile("shared.lua")
+	killicon.AddFont("weapon_p228", "CSKillIcons", SWEP.IconLetter,Color(255,80,0,255))
 end
 
 SWEP.Base = "weapon_cs_base2"
+
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
@@ -47,6 +45,5 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
---Start of Firemode configuration
 SWEP.IronSightsPos = Vector(-5.77, -6.6, 2.7)
 SWEP.IronSightsAng = Vector(0.9, 0, 0)

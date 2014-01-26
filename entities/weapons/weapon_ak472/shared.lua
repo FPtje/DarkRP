@@ -4,7 +4,6 @@ end
 
 if CLIENT then
 	SWEP.PrintName = "AK47"
-	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "b"
@@ -14,19 +13,20 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
+
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
 
-SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_ak47.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_ak47.mdl"
+SWEP.HoldType = "ar2"
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
-
-SWEP.HoldType = "ar2"
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5

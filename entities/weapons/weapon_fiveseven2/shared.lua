@@ -4,7 +4,6 @@ end
 
 if CLIENT then
 	SWEP.PrintName = "FiveSeven"
-	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 1
 	SWEP.IconLetter = "u"
@@ -14,17 +13,20 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
+
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_fiveseven.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_fiveseven.mdl"
+SWEP.HoldType = "pistol"
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
-SWEP.HoldType = "pistol"
 
 SWEP.Primary.Sound = Sound("Weapon_FiveSeven.Single")
 SWEP.Primary.Recoil = .5
@@ -44,5 +46,3 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.IronSightsPos = Vector(-5.92, -6.2, 3)
 SWEP.IronSightsAng = Vector(-0.5, 0.07, 0)
-
-

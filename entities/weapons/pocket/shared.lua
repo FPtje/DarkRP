@@ -6,30 +6,27 @@ end
 
 if CLIENT then
 	include("cl_menu.lua")
+	SWEP.PrintName = "Pocket"
+	SWEP.Slot = 1
+	SWEP.SlotPos = 1
+	SWEP.DrawAmmo = false
+	SWEP.DrawCrosshair = true
 end
-
-SWEP.PrintName = "Pocket"
-SWEP.Slot = 1
-SWEP.SlotPos = 1
-SWEP.DrawAmmo = false
-SWEP.DrawCrosshair = true
 
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to pick up, right click to drop, reload for menu"
-SWEP.Contact = ""
-SWEP.Purpose = ""
-SWEP.IconLetter = ""
+SWEP.Instructions = "Left click to pick up, right click to drop and reload for menu."
+
+SWEP.Spawnable = false
+SWEP.AdminSpawnable = true
+SWEP.Category = "DarkRP (Utility)"
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
 SWEP.AnimPrefix	 = "rpg"
 SWEP.WorldModel	= ""
 
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = true
-SWEP.Category = "DarkRP (Utility)"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false

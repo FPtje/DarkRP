@@ -4,7 +4,6 @@ end
 
 if CLIENT then
 	SWEP.PrintName = "Silenced Sniper"
-	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "n"
@@ -14,16 +13,18 @@ end
 
 SWEP.Base = "ls_snip_base"
 
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
+
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_snip_g3sg1.mdl"
 SWEP.WorldModel = "models/weapons/w_snip_g3sg1.mdl"
+SWEP.HoldType = "ar2"
 
 SWEP.Weight = 3
-
-SWEP.HoldType = "ar2"
 
 SWEP.Primary.Sound = Sound("Weapon_M4A1.Silenced")
 SWEP.Primary.Damage = 100

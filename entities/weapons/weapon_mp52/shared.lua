@@ -4,7 +4,6 @@ end
 
 if CLIENT then
 	SWEP.PrintName = "MP5"
-	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "x"
@@ -14,18 +13,20 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
+
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_mp5.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_mp5.mdl"
+SWEP.HoldType = "smg"
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
-
-SWEP.HoldType = "smg"
 
 SWEP.Primary.Sound = Sound("Weapon_MP5Navy.Single")
 SWEP.Primary.Recoil = 0.2
