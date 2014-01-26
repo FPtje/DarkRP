@@ -22,10 +22,10 @@ function DarkRP.log(text, colour)
 	end
 	if not GAMEMODE.Config.logging or not text then return end
 	if not DarkRPFile then -- The log file of this session, if it's not there then make it!
-		if not file.IsDir("DarkRP_logs", "DATA") then
-			file.CreateDir("DarkRP_logs")
+		if not file.IsDir("darkrp_logs", "DATA") then
+			file.CreateDir("darkrp_logs")
 		end
-		DarkRPFile = "DarkRP_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
+		DarkRPFile = "darkrp_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
 		file.Write(DarkRPFile, os.date().. "\t".. text)
 		return
 	end
