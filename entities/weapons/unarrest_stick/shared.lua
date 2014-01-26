@@ -13,7 +13,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to unarrest\nRight click to switch batons"
+SWEP.Instructions = "Left click to unarrest, right click to switch batons."
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.IconLetter = ""

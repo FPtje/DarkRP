@@ -11,17 +11,17 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to Check weapons, right click to confiscate guns, reload to give back the guns"
-SWEP.Contact = ""
-SWEP.Purpose = ""
-
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.AnimPrefix	 = "rpg"
+SWEP.Instructions = "Left click to check weapons, right click to confiscate weapons and reload to give back the weapons."
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Utility)"
+
+SWEP.ViewModelFOV = 62
+SWEP.ViewModelFlip = false
+SWEP.AnimPrefix	 = "rpg"
+SWEP.UseHands = true
+
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false

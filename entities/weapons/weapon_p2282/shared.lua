@@ -1,10 +1,9 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
-if (CLIENT) then
+if CLIENT then
 	SWEP.PrintName = "P228"
-	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 1
 	SWEP.IconLetter = "y"
@@ -14,14 +13,16 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
+
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
 
-SWEP.HoldType = "pistol"
-
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_p228.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_p228.mdl"
+SWEP.HoldType = "pistol"
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false

@@ -5,35 +5,33 @@ if SERVER then
 	util.AddNetworkString("DarkRP_keypadData")
 end
 
+if CLIENT then
+	SWEP.PrintName = "Admin keypad checker"
+	SWEP.Slot = 5
+	SWEP.SlotPos = 1
+end
+
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Admin keypad checker"
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click on a keypad or fading door to check it, right click to clear"
-SWEP.Slot = 5
-SWEP.SlotPos = 1
-SWEP.DrawAmmo = false
-SWEP.ViewModelFlip = false
-SWEP.Primary.ClipSize = 0
-SWEP.Primary.Ammo = ""
+SWEP.Instructions = "Left click on a keypad or fading door to check it and right click to clear."
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Utility)"
 
-SWEP.HoldType = "normal"
-SWEP.ViewModel = Model("models/weapons/c_pistol.mdl")
 SWEP.WorldModel = "models/weapons/w_toolgun.mdl"
-SWEP.IconLetter = ""
-
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
+SWEP.HoldType = "normal"
 SWEP.UseHands = true
+
+SWEP.DrawAmmo = false
+SWEP.Primary.ClipSize = 0
+SWEP.Primary.Ammo = ""
 
 if not SERVER then return end
 
-/*
-	Gets which entities are controlled by which keyboard keys
-*/
+--Gets which entities are controlled by which keyboard keys
 local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 	local targets = {}
 	local Owner = keypad:CPPIGetOwner()
@@ -59,9 +57,7 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 	return targets
 end
 
-/*---------------------------------------------------------------------------
-Get the entities that are affected by the keypad
----------------------------------------------------------------------------*/
+--Get the entities that are affected by the keypad
 local function get_sent_keypad_Info(keypad)
 	local keyPass = keypad:GetNWInt("keypad_keygroup1")
 	local keyDenied = keypad:GetNWInt("keypad_keygroup2")
@@ -71,9 +67,7 @@ local function get_sent_keypad_Info(keypad)
 	return getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 end
 
-/*---------------------------------------------------------------------------
-Overload for a different keypad addon
----------------------------------------------------------------------------*/
+--Overload for a different keypad addon
 local function get_keypad_Info(keypad)
 	local keyPass = tonumber(keypad.KeypadData.KeyGranted) or 0
 	local keyDenied = tonumber(keypad.KeypadData.KeyDenied) or 0
@@ -83,10 +77,7 @@ local function get_keypad_Info(keypad)
 	return getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 end
 
-
-/*---------------------------------------------------------------------------
-Get the keypads that trigger this entity
----------------------------------------------------------------------------*/
+--Get the keypads that trigger this entity
 local function getEntityKeypad(ent)
 	local targets = {}
 	local doorKeys = {} -- The numpad keys that activate this entity
@@ -129,9 +120,7 @@ local function getEntityKeypad(ent)
 	return targets
 end
 
-/*---------------------------------------------------------------------------
-Send the info to the client
----------------------------------------------------------------------------*/
+--Send the info to the client
 function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 	local ent, class = trace.Entity, string.lower(trace.Entity:GetClass() or "")
@@ -153,12 +142,7 @@ function SWEP:PrimaryAttack()
 	net.Send(self.Owner)
 end
 
-function SWEP:SecondaryAttack()
-end
-
-/*---------------------------------------------------------------------------
-Registering numpad data
----------------------------------------------------------------------------*/
+--Registering numpad data
 if not SERVER then return end
 local oldNumpadUp = numpad.OnUp
 local oldNumpadDown = numpad.OnDown

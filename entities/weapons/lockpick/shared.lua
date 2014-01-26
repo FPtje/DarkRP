@@ -11,26 +11,20 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 end
 
--- Variables that are used on both client and server
-
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to pick a lock"
-SWEP.Contact = ""
-SWEP.Purpose = ""
-
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.ViewModel = Model("models/weapons/c_crowbar.mdl")
-SWEP.WorldModel = Model("models/weapons/w_crowbar.mdl")
-
-SWEP.UseHands = true
+SWEP.Instructions = "Left click on a locked door to pick the lock."
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Utility)"
 
-SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
+SWEP.ViewModelFOV = 62
+SWEP.ViewModelFlip = false
+SWEP.ViewModel = Model("models/weapons/c_crowbar.mdl")
+SWEP.WorldModel = Model("models/weapons/w_crowbar.mdl")
+SWEP.UseHands = true
 
+SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
 SWEP.Primary.ClipSize = -1      -- Size of a clip
 SWEP.Primary.DefaultClip = 0        -- Default number of bullets in a clip
 SWEP.Primary.Automatic = false      -- Automatic/Semi Auto

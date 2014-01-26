@@ -14,22 +14,19 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to lock. Right click to unlock"
-SWEP.Contact = ""
-SWEP.Purpose = ""
-
-SWEP.ViewModel = Model("models/weapons/v_hands.mdl")
-SWEP.WorldModel	= ""
-
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.AnimPrefix	 = "rpg"
-
-SWEP.UseHands = true
+SWEP.Instructions = "Left click to lock, right click to unlock."
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Utility)"
+
+SWEP.ViewModel = Model("models/weapons/v_hands.mdl")
+SWEP.WorldModel	= ""
+SWEP.ViewModelFOV = 62
+SWEP.ViewModelFlip = false
+SWEP.AnimPrefix	 = "rpg"
+SWEP.UseHands = true
+
 SWEP.Sound = "doors/door_latch3.wav"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0

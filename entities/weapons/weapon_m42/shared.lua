@@ -1,10 +1,5 @@
-if (CLIENT) then
-	SWEP.Author = "DarkRP Developers"
-	SWEP.Contact = ""
-	SWEP.Purpose = ""
-	SWEP.Instructions = ""
+if CLIENT then
 	SWEP.PrintName = "M4"
-	SWEP.Instructions = "Hold use and right-click to change firemodes or left-click to attach silencer."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "w"
@@ -12,11 +7,14 @@ if (CLIENT) then
 	killicon.AddFont("cse_m4","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
 end
 
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
 SWEP.Base = "weapon_cs_base2"
+
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Hold the use key and right-click to change fire modes, hold use and left-click to attach silencer, right click to aim down the sights and left click to fire."
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true

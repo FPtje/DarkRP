@@ -13,14 +13,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to discipline, right click to kill"
-SWEP.Contact = ""
-SWEP.Purpose = ""
-SWEP.IconLetter = ""
-
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.AnimPrefix = "stunstick"
+SWEP.Instructions = "Left click to discipline, right click to inflict damage."
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
@@ -30,9 +23,11 @@ SWEP.NextStrike = 0
 
 SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
 SWEP.WorldModel = Model("models/weapons/w_stunbaton.mdl")
+SWEP.ViewModelFOV = 62
+SWEP.ViewModelFlip = false
+SWEP.AnimPrefix = "stunstick"
 
 SWEP.Sound = Sound("weapons/stunstick/stunstick_swing1.wav")
-
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false

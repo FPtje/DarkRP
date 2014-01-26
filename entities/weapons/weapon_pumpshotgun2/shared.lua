@@ -1,10 +1,9 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
-if (CLIENT) then
+if CLIENT then
 	SWEP.PrintName = "Pump Shotgun"
-	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "k"
@@ -14,18 +13,20 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.Author = "DarkRP Developers"
+SWEP.Instructions = "Left click to fire, right click to aim down the sights."
+
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_m3super90.mdl"
+SWEP.HoldType = "ar2"
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
-
-SWEP.HoldType = "ar2"
 
 SWEP.Primary.Sound = Sound("Weapon_M3.Single")
 SWEP.Primary.Recoil = 1.5
@@ -45,7 +46,6 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.IronSightsPos = Vector(-7.64, -8, 3.56)
 SWEP.IronSightsAng = Vector(-0.1, 0.02, 0)
-
 
 function SWEP:Reload()
 	-- Already reloading
@@ -105,7 +105,7 @@ function SWEP:PrimaryAttack()
 
 	if self.Weapon.reloading then
 
-		self.queueattack = true -- this way it doesn't interupt the reload animation
+		self.queueattack = true -- this way it doesn't interrupt the reload animation
 		return
 	end
 

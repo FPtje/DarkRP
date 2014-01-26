@@ -1,39 +1,32 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
-if (CLIENT) then
+if CLIENT then
 	SWEP.PrintName = "Battering Ram"
 	SWEP.Slot = 5
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
+	SWEP.IconLetter = ""
 end
 
--- Variables that are used on both client and server
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles."
-SWEP.Contact = ""
-SWEP.Purpose = ""
-
-SWEP.IconLetter = ""
-
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.ViewModel = Model("models/weapons/c_rpg.mdl")
-SWEP.WorldModel = Model("models/weapons/w_rocket_launcher.mdl")
-SWEP.AnimPrefix = "rpg"
-
-SWEP.UseHands = true
+SWEP.Instructions = "Left click to break open doors, unfreeze props or kick people out of their vehicles."
 
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = true
 SWEP.Category = "DarkRP (Utility)"
 
-SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
+SWEP.ViewModel = Model("models/weapons/c_rpg.mdl")
+SWEP.WorldModel = Model("models/weapons/w_rocket_launcher.mdl")
+SWEP.ViewModelFOV = 62
+SWEP.ViewModelFlip = false
+SWEP.AnimPrefix = "rpg"
 
+SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
 SWEP.Primary.ClipSize = -1      -- Size of a clip
 SWEP.Primary.DefaultClip = 0        -- Default number of bullets in a clip
 SWEP.Primary.Automatic = false      -- Automatic/Semi Auto
