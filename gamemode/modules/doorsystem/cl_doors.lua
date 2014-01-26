@@ -28,7 +28,7 @@ function meta:drawOwnableInfo()
 	if self:isKeysOwned() then
 		table.insert(doorInfo, self:getDoorOwner():Nick())
 		for k,v in pairs(self:getKeysCoOwners() or {}) do
-			local ent = Entity(k)
+			local ent = Player(k)
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
 			table.insert(doorInfo, ent:Nick())
 		end
@@ -38,7 +38,7 @@ function meta:drawOwnableInfo()
 			table.insert(doorInfo, DarkRP.getPhrase("keys_other_allowed"))
 
 			for k,v in pairs(allowedCoOwn) do
-				local ent = Entity(k)
+				local ent = Player(k)
 				if not IsValid(ent) or not ent:IsPlayer() then continue end
 				table.insert(doorInfo, ent:Nick())
 			end
