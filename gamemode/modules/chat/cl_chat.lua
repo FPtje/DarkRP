@@ -25,14 +25,14 @@ local function AddToChat(bits)
 	local shouldShow
 	if text and text ~= "" then
 		if IsValid(ply) then
-			shouldShow = hook.Call("OnPlayerChat", nil, ply, text, false, not ply:Alive(), prefixText, col1, col2)
+			shouldShow = hook.Call("OnPlayerChat", GAMEMODE, ply, text, false, not ply:Alive(), prefixText, col1, col2)
 		end
 
 		if shouldShow ~= true then
 			chat.AddNonParsedText(col1, prefixText, col2, ": "..text)
 		end
 	else
-		shouldShow = hook.Call("ChatText", nil, "0", prefixText, prefixText, "none")
+		shouldShow = hook.Call("ChatText", GAMEMODE, "0", prefixText, prefixText, "none")
 		if shouldShow ~= true then
 			chat.AddNonParsedText(col1, prefixText)
 		end

@@ -216,7 +216,7 @@ function connectToMySQL(host, username, password, database_name, database_port)
 			end
 		end)
 
-		hook.Call("DatabaseInitialized")
+		hook.Call("DatabaseInitialized", GAMEMODE)
 	end
 	databaseObject:connect()
 end
