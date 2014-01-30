@@ -5,7 +5,6 @@ function DarkRP.hooks:canBuyPistol(ply, shipment)
 		return false, false, "Custom object does not fit map"
 	end
 
-	print(ply, "playerBoughtPistol")
 	if ply:isArrested() then
 		return false, false, DarkRP.getPhrase("unable", "/buy", "")
 	end
