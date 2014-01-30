@@ -1,11 +1,9 @@
-
 -- This module will make voice sounds play when certain words are typed in the chat
--- You can add/remove sounds as you wish, just follow the format used here
--- To disble them completey, use the command rp_chatsounds 0 or delete this file.
--- TODO: Add female sounds & detect gender of model, Use combine sounds for CPs.
+-- You can add/remove sounds as you wish using DarkRP.setChatSound, just follow the format used here
+-- To disable them completely, set GM.Config.chatsounds to false
+-- TODO: Add female sounds & detect gender of model, and use combine sounds for CPs
 
 -- DaCoolboy: I sorted the entries alphabetically for better overview
--- Sorry for messing up custom entries, you can now add them near the end of the file
 
 local sounds = {}
 sounds[ "ammo" ] = { "vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav", "vo/npc/male01/ammo05.wav" }
@@ -217,32 +215,20 @@ sounds[ "you never know" ] = { "vo/npc/male01/answer22.wav" }
 
 sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
 
--- You should add custom entries below this line to avoid merge issues
-
-
-
-local function CheckChat( ply, text )
-
+local function CheckChat(ply, text)
 	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
-	local prefix = string.sub( text, 0, 1 )
-	if prefix ~= "/" and prefix ~= "!" and prefix ~= "@" then -- should cover most chat commands for various mods/addons
-
-		for k, v in pairs( sounds ) do
-
-			local res1, res2 = string.find( string.lower( text ), k )
-			if res1 and ( not text[ res1 - 1 ] or text[ res1 - 1 ] == "" or text[ res1 - 1 ] == " ") and ( not text[ res2 + 1 ] or text[ res2 + 1 ] == "" or text[ res2 + 1 ] == " ") then
-
-				ply:EmitSound( table.Random( v ), 80, 100 )
-				ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
-				break
-			end
-
+	local prefix = string.sub(text, 0, 1)
+	if prefix == "/" or prefix == "!" or prefix == "@" then return end -- should cover most chat commands for various mods/addons
+	for k, v in pairs(sounds) do
+		local res1, res2 = string.find(string.lower(text), k)
+		if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
+			ply:EmitSound(table.Random(v), 80, 100)
+			ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
+			break
 		end
-
 	end
-
 end
-
+hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
 
 DarkRP.setChatSound = DarkRP.stub{
 	name = "setChatSound",
@@ -269,5 +255,3 @@ DarkRP.setChatSound = DarkRP.stub{
 function DarkRP.setChatSound(text, sndTable)
 	sounds[string.lower(text or "")] = sndTable
 end
-
-hook.Add("PostPlayerSay", "ChatSounds", CheckChat )
