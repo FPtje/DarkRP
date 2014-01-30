@@ -40,12 +40,6 @@ end
 concommand.Add("_FAdmin", concommand_executed, AutoComplete)
 concommand.Add("FAdmin", concommand_executed, AutoComplete)
 
-FAdmin.Commands.AddCommand("reload", function(ply)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
-	include("autorun/FAdmin.lua")
-	if ply:EntIndex() ~= 0 then ply:SendLua("include('autorun/FAdmin.lua')") end
-end)
-
 -- DO NOT EDIT THIS, NO MATTER HOW MUCH YOU'VE EDITED FADMIN IT DOESN'T GIVE YOU ANY RIGHT TO CHANGE CREDITS AND/OR REMOVE THE AUTHOR
 FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
 	if ply:SteamID() == "STEAM_0:0:8944068" and args[1] then
