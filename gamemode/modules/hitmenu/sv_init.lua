@@ -155,7 +155,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 	DarkRP.notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
 	customer.lastHitAccepted = CurTime()
 
-	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for $" .. hits[hitman].price, Color(255, 0, 255))
+	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. GAMEMODE.Config.currency .. hits[hitman].price, Color(255, 0, 255))
 end
 
 function DarkRP.hooks:onHitCompleted(hitman, target, customer)
@@ -169,7 +169,7 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for $" .. hits[hitman].price,
+	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. GAMEMODE.Config.currency .. hits[hitman].price,
 		Color(255, 0, 255))
 
 	target:setDarkRPVar("lastHitTime", CurTime())
