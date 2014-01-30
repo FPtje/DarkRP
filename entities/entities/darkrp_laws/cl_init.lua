@@ -52,6 +52,10 @@ local function RemoveLaw(um)
 end
 usermessage.Hook("DRP_RemoveLaw", RemoveLaw)
 
+function DarkRP.getLaws()
+	return Laws
+end
+
 timer.Simple(0, function()
 	fn.Foldl(function(val,v) AddLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
 end)

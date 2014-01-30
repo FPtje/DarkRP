@@ -142,3 +142,7 @@ hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
 		umsg.End()
 	end
 end)
+
+function DarkRP.getLaws()
+	return Laws
+end
