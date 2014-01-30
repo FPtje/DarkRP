@@ -11,7 +11,7 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to Check weapons, right click to confiscate guns, reload to give back the guns"
+SWEP.Instructions = "Left click to check weapons, right click to confiscate guns, reload to give back the guns"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
@@ -99,10 +99,10 @@ function SWEP:PrimaryAttack()
 	end
 	result = table.concat(result, ", ")
 
-	self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 	if result == "" then
-		self.Owner:ChatPrint(DarkRP.getPhrase("has_no_weapons", trace.Entity:Nick()))
+		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
 	else
+		self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 		if string.len(result) >= 126 then
 			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
