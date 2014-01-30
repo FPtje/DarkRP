@@ -185,8 +185,7 @@ local english = {
 	keypad_off = "OFF",
 	seconds = "seconds",
 
-	persons_weapons = "%s's weapons:",
-	has_no_weapons = "%s has no weapons.",
+	persons_weapons = "%s's illegal weapons:",
 	returned_persons_weapons = "Returned %s's confiscated weapons.",
 	no_weapons_confiscated = "%s had no weapons confiscated!",
 	no_illegal_weapons = "%s had no illegal weapons.",
