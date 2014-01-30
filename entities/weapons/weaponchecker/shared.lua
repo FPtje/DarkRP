@@ -92,7 +92,7 @@ function SWEP:PrimaryAttack()
 			continue
 		end
 
-		if GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class] then continue end
+		if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
 
 		table.insert(result, v:GetPrintName() and language.GetPhrase(v:GetPrintName()) or v:GetClass())
 	end
@@ -182,11 +182,12 @@ function SWEP:Succeed()
 	self.IsWeaponChecking = false
 
 	if CLIENT then return end
-	local result = ""
+	local result = {}
 	local stripped = {}
 	local trace = self.Owner:GetEyeTrace()
 	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() then return end
 	for k,v in pairs(trace.Entity:GetWeapons()) do
+		if not v:IsValid() then continue end
 		local class = v:GetClass()
 
 		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
@@ -194,14 +195,15 @@ function SWEP:Succeed()
 			continue
 		end
 
-		if GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class] then continue end
+		if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
 
 		trace.Entity:StripWeapon(class)
-		result = result..", "..class
+		table.insert(result, class)
 		table.insert(stripped, {class, trace.Entity:GetAmmoCount(v:GetPrimaryAmmoType()),
 		v:GetPrimaryAmmoType(), trace.Entity:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
 		v:Clip1(), v:Clip2()})
 	end
+	result = table.concat(result, ", ")
 
 	if not trace.Entity:GetTable().ConfiscatedWeapons then
 		trace.Entity:GetTable().ConfiscatedWeapons = stripped
@@ -226,16 +228,15 @@ function SWEP:Succeed()
 		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
 		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
 	else
-		local endresult = string.sub(result, 3)
 		self.Owner:EmitSound("ambient/energy/zap1.wav", 50, 100)
 		self.Owner:ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))
-		if string.len(endresult) >= 126 then
-			local amount = math.ceil(string.len(endresult) / 126)
+		if string.len(result) >= 126 then
+			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
-				self.Owner:ChatPrint(string.sub(endresult, (i-1) * 126, i * 126 - 1))
+				self.Owner:ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
 			end
 		else
-			self.Owner:ChatPrint(string.sub(result, 3))
+			self.Owner:ChatPrint(result)
 		end
 	end
 end
