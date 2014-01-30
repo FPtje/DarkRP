@@ -88,6 +88,7 @@ function SWEP:PrimaryAttack()
 		local class = v:GetClass()
 
 		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
+			((trace.Entity:hasDarkRPPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
 			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
 			continue
 		end
@@ -191,6 +192,7 @@ function SWEP:Succeed()
 		local class = v:GetClass()
 
 		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
+			((trace.Entity:hasDarkRPPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
 			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
 			continue
 		end
