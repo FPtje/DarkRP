@@ -27,8 +27,8 @@ SWEP.AnimPrefix	 = "rpg"
 
 SWEP.UseHands = true
 
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = true
+SWEP.Spawnable = true
+SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
 SWEP.Sound = "doors/door_latch3.wav"
 SWEP.Primary.ClipSize = -1

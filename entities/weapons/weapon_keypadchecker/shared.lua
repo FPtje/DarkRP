@@ -17,8 +17,8 @@ SWEP.ViewModelFlip = false
 SWEP.Primary.ClipSize = 0
 SWEP.Primary.Ammo = ""
 
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = true
+SWEP.Spawnable = true
+SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
 
 SWEP.HoldType = "normal"

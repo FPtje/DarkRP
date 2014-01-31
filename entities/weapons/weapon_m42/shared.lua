@@ -1,4 +1,4 @@
-if (CLIENT) then
+if CLIENT then
 	SWEP.Author = "DarkRP Developers"
 	SWEP.Contact = ""
 	SWEP.Purpose = ""
@@ -12,35 +12,35 @@ if (CLIENT) then
 	killicon.AddFont("cse_m4","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
 end
 
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
-SWEP.AdminSpawnable = true
+SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.HoldType = "ar2"
 SWEP.DarkRPViewModelBoneManipulations = {
-	["ValveBiped.Bip01_Spine4"] = { scale = Vector(1, 1, 1), pos = Vector(2, 0, 0), angle = Angle(0, 0, 0) },
-	["ValveBiped.Bip01_L_Hand"] = { scale = Vector(0.7, 0.7, 0.5), pos = Vector(-0.6, -0.6, 0), angle = Angle(17, -21, 0) },
-	["ValveBiped.Bip01_L_Finger0"] = { scale = Vector(1, 1, 1.5), pos = Vector(0, 0, 0), angle = Angle(0, -2, 0) },
-	["ValveBiped.Bip01_L_Finger1"] = { scale = Vector(1, 1, 1.5), pos = Vector(-0.3, -0.8, 0), angle = Angle(0, -10, 0) },
-	["ValveBiped.Bip01_L_Finger11"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0, 0), angle = Angle(0, -15, 0) },
-	["ValveBiped.Bip01_L_Finger12"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0, 0), angle = Angle(0, -14, 0) },
-	["ValveBiped.Bip01_L_Finger2"] = { scale = Vector(1, 1, 1.5), pos = Vector(-0.6, -1, -0), angle = Angle(0, 7, 0) },
-	["ValveBiped.Bip01_L_Finger21"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0, 0), angle = Angle(0, -15, 0) },
-	["ValveBiped.Bip01_L_Finger22"] = { scale = Vector(0.8, 0.8, 1), pos = Vector(0, -0.3, 0), angle = Angle(0, -36, 0) },
-	["ValveBiped.Bip01_L_Finger3"] = { scale = Vector(1, 1, 1.5), pos = Vector(-0.36, -1.2, -0.2), angle = Angle(-6, -2, 0) },
-	["ValveBiped.Bip01_L_Finger31"] = { scale = Vector(1, 1, 1), pos = Vector(0, -0.1, 0), angle = Angle(0, -4, 0) },
-	["ValveBiped.Bip01_L_Finger32"] = { scale = Vector(1, 1, 1), pos = Vector(0, -0.2, 0), angle = Angle(0, -12, 0) },
-	["ValveBiped.Bip01_L_Finger4"] = { scale = Vector(1, 1, 1.5), pos = Vector(-0.3, -1.2, 0.3), angle = Angle(12, -6.2, -4) },
-	["ValveBiped.Bip01_L_Finger41"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0, 0), angle = Angle(0, 38, 0) },
-	["ValveBiped.Bip01_L_Finger42"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0, 0), angle = Angle(0, 30, 0) }
+	["ValveBiped.Bip01_Spine4"]		= { scale = Vector(1, 1, 1),		pos = Vector(2, 0, 0),			angle = Angle(0, 0, 0) },
+	["ValveBiped.Bip01_L_Hand"]		= { scale = Vector(0.7, 0.7, 0.5),	pos = Vector(-0.6, -0.6, 0),	angle = Angle(17, -21, 0) },
+	["ValveBiped.Bip01_L_Finger0"]	= { scale = Vector(1, 1, 1.5),		pos = Vector(0, 0, 0),			angle = Angle(0, -2, 0) },
+	["ValveBiped.Bip01_L_Finger1"]	= { scale = Vector(1, 1, 1.5),		pos = Vector(-0.3, -0.8, 0),	angle = Angle(0, -10, 0) },
+	["ValveBiped.Bip01_L_Finger11"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, 0, 0),			angle = Angle(0, -15, 0) },
+	["ValveBiped.Bip01_L_Finger12"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, 0, 0),			angle = Angle(0, -14, 0) },
+	["ValveBiped.Bip01_L_Finger2"]	= { scale = Vector(1, 1, 1.5),		pos = Vector(-0.6, -1, -0),		angle = Angle(0, 7, 0) },
+	["ValveBiped.Bip01_L_Finger21"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, 0, 0),			angle = Angle(0, -15, 0) },
+	["ValveBiped.Bip01_L_Finger22"]	= { scale = Vector(0.8, 0.8, 1),	pos = Vector(0, -0.3, 0),		angle = Angle(0, -36, 0) },
+	["ValveBiped.Bip01_L_Finger3"]	= { scale = Vector(1, 1, 1.5),		pos = Vector(-0.36, -1.2, -0.2),angle = Angle(-6, -2, 0) },
+	["ValveBiped.Bip01_L_Finger31"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, -0.1, 0),		angle = Angle(0, -4, 0) },
+	["ValveBiped.Bip01_L_Finger32"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, -0.2, 0),		angle = Angle(0, -12, 0) },
+	["ValveBiped.Bip01_L_Finger4"]	= { scale = Vector(1, 1, 1.5),		pos = Vector(-0.3, -1.2, 0.3),	angle = Angle(12, -6.2, -4) },
+	["ValveBiped.Bip01_L_Finger41"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, 0, 0),			angle = Angle(0, 38, 0) },
+	["ValveBiped.Bip01_L_Finger42"]	= { scale = Vector(1, 1, 1),		pos = Vector(0, 0, 0),			angle = Angle(0, 30, 0) }
 }
 
 SWEP.Weight = 5

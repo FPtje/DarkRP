@@ -1,4 +1,4 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
@@ -11,8 +11,8 @@ SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = "Left Click to heal player infront of user."
 
-SWEP.Spawnable = false       -- Change to false to make Admin only.
-SWEP.AdminSpawnable = true
+SWEP.Spawnable = true
+SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
 
 SWEP.ViewModel = "models/weapons/c_medkit.mdl"

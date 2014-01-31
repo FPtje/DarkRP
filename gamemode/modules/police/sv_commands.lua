@@ -105,13 +105,10 @@ local function WaitLock()
 	timer.Destroy("spamlock")
 end
 
-function DarkRP.lockdown(ply, args, cmdargs)
+function DarkRP.lockdown(ply)
 	if lstat then
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
-			return
-		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
 			return
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
@@ -129,8 +126,6 @@ function DarkRP.lockdown(ply, args, cmdargs)
 	else
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
-		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
 		end
@@ -140,13 +135,10 @@ end
 concommand.Add("rp_lockdown", function(ply) DarkRP.lockdown(ply) end)
 DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
 
-function DarkRP.unLockdown(ply, args, cmdargs)
+function DarkRP.unLockdown(ply)
 	if not lstat or wait_lockdown then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("unable", "/ulockdown", DarkRP.getPhrase("lockdown_ended")))
-			return
-		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
+			print(DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
 			return
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
@@ -163,8 +155,6 @@ function DarkRP.unLockdown(ply, args, cmdargs)
 	else
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
-		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
 		end

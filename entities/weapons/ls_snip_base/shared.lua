@@ -1,4 +1,4 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("cl_init.lua")
 	AddCSLuaFile("shared.lua")
 end
@@ -7,7 +7,7 @@ SWEP.DrawCrosshair = false
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = false
-SWEP.AdminSpawnable = false
+SWEP.AdminOnly = false
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5
@@ -63,15 +63,15 @@ Name: GetViewModelPosition
 Desc: Allows you to re-position the view model
 ---------------------------------------------------------*/
 function SWEP:GetViewModelPosition(pos, ang)
-	if (not self.IronSightsPos) then return pos, ang end
+	if not self.IronSightsPos then return pos, ang end
 
 	local bIron = self.Ironsights
 
-	if (bIron != self.bLastIron) then
+	if bIron ~= self.bLastIron then
 		self.bLastIron = bIron
 		self.fIronTime = CurTime()
 
-		if (bIron) then
+		if bIron then
 			self.SwayScale = 0.3
 			self.BobScale = 0.1
 		else
@@ -82,23 +82,23 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	local fIronTime = self.fIronTime or 0
 
-	if (not bIron and fIronTime < CurTime() - IRONSIGHT_TIME) then
+	if not bIron and fIronTime < CurTime() - IRONSIGHT_TIME then
 		return pos, ang
 	end
 
 	local Mul = 1.0
 
-	if (fIronTime > CurTime() - IRONSIGHT_TIME) then
+	if fIronTime > CurTime() - IRONSIGHT_TIME then
 		Mul = math.Clamp((CurTime() - fIronTime) / IRONSIGHT_TIME, 0, 1)
 		if not bIron then Mul = 1 - Mul end
 	end
 
 	local Offset	= self.IronSightsPos
 
-	if (self.IronSightsAng) then
+	if self.IronSightsAng then
 		ang = ang * 1
-		ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * Mul)
-		ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * Mul)
+		ang:RotateAroundAxis(ang:Right(),	self.IronSightsAng.x * Mul)
+		ang:RotateAroundAxis(ang:Up(),		self.IronSightsAng.y * Mul)
 		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * Mul)
 	end
 
@@ -123,16 +123,16 @@ function SWEP:SecondaryAttack()
 	if not IsValid(self.Owner) then return end
 	if not self.IronSightsPos then return end
 
-	if (self.NextSecondaryAttack > CurTime()) then return end
+	if self.NextSecondaryAttack > CurTime() then return end
 
 	self.NextSecondaryAttack = CurTime() + 0.1
 
-	if (self.ScopeLevel == nil) then
+	if self.ScopeLevel == nil then
 		self.ScopeLevel = 0
 	end
 
 	if self.ScopeLevel == 0 then
-		if (SERVER) then
+		if SERVER then
 			self.Owner:SetFOV(25, 0)
 		end
 
@@ -142,7 +142,7 @@ function SWEP:SecondaryAttack()
 		self.CurHoldType = self.HoldType
 	else
 		if self.ScopeLevel == 1 then
-			if (SERVER) then
+			if SERVER then
 				self.Owner:SetFOV(5, 0)
 			end
 
@@ -152,7 +152,7 @@ function SWEP:SecondaryAttack()
 			self:NewSetWeaponHoldType(self.HoldType)
 			self.CurHoldType = self.HoldType
 		else
-			if (SERVER) then
+			if SERVER then
 				self.Owner:SetFOV(0, 0)
 			end
 
@@ -167,7 +167,7 @@ end
 
 function SWEP:Holster()
 	if not IsValid(self.Owner) then return end
-	if (SERVER) then
+	if SERVER then
 		self.Owner:SetFOV(0, 0)
 	end
 
@@ -179,7 +179,7 @@ end
 
 function SWEP:Reload()
 	if not IsValid(self.Owner) then return end
-	if (SERVER) then
+	if SERVER then
 		self.Owner:SetFOV(0, 0)
 	end
 

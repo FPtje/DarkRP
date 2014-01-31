@@ -14,8 +14,8 @@ end
 
 SWEP.Base = "ls_snip_base"
 
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = true
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_snip_g3sg1.mdl"
