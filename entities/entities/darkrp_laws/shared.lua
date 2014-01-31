@@ -40,5 +40,6 @@ DarkRP.getLaws = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = DarkRP,
+	realm = "Shared"
 }
