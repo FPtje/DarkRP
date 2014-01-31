@@ -14,8 +14,9 @@ local print = print
 local GAMEMODE = GM
 local mysqlOO
 
-local RP_MySQLConfig = RP_MySQLConfig
-if RP_MySQLConfig.EnableMySQL then
+local MySQLite_config = MySQLite_config or RP_MySQLConfig or FPP_MySQLConfig
+
+if MySQLite_config.EnableMySQL then
 	require("mysqloo")
 	mysqlOO = mysqloo
 end
@@ -23,9 +24,13 @@ end
 module("MySQLite")
 
 function initialize()
-	if RP_MySQLConfig.EnableMySQL then
+	if not MySQLite_config then
+		ErrorNoHalt("Warning: No MySQL config!")
+	end
+
+	if MySQLite_config.EnableMySQL then
 		timer.Simple(1, function()
-			connectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
+			connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
 		end)
 	else
 		timer.Simple(0, function()
@@ -40,6 +45,10 @@ databaseObject = nil
 
 
 local queuedQueries
+
+function isMySQL()
+	return CONNECTED_TO_MYSQL
+end
 
 function begin()
 	if not CONNECTED_TO_MYSQL then
@@ -212,7 +221,7 @@ function connectToMySQL(host, username, password, database_name, database_port)
 
 		timer.Create("darkrp_check_mysql_status", 60, 0, function()
 			if (databaseObject and databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED) then
-				connectToMySQL(RP_MySQLConfig.Host, RP_MySQLConfig.Username, RP_MySQLConfig.Password, RP_MySQLConfig.Database_name, RP_MySQLConfig.Database_port)
+				connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
 			end
 		end)
 

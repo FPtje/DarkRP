@@ -28,7 +28,7 @@ include("config/licenseweapons.lua")
 
 include("libraries/modificationloader.lua")
 include("libraries/fn.lua")
-include("libraries/database.lua")
+include("libraries/mysqlite/mysqlite.lua")
 include("libraries/disjointset.lua")
 
 /*---------------------------------------------------------------------------
