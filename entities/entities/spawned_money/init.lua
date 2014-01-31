@@ -27,9 +27,10 @@ function ENT:Use(activator,caller)
 end
 
 function ENT:Touch(ent)
-	if ent:GetClass() ~= "spawned_money" or self.hasMerged or ent.hasMerged then return end
+	-- the .USED var is also used in other mods for the same purpose
+	if ent:GetClass() ~= "spawned_money" or self.USED or ent.USED then return end
 
-	ent.hasMerged = true
+	ent.USED = true
 
 	ent:Remove()
 	self:Setamount(self:Getamount() + ent:Getamount())

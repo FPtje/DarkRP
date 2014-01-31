@@ -162,12 +162,13 @@ function ENT:Destruct()
 end
 
 function ENT:Touch(ent)
+	-- the .USED var is also used in other mods for the same purpose
 	if ent:GetClass() ~= "spawned_shipment" or
 		self:Getcontents() ~= ent:Getcontents() or
 		self.locked or ent.locked or
-		self.hasMerged or ent.hasMerged then return end
+		self.USED or ent.USED then return end
 
-	ent.hasMerged = true
+	ent.USED = true
 
 	local selfCount, entCount = self:Getcount(), ent:Getcount()
 	local count = selfCount + entCount
