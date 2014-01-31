@@ -27,3 +27,18 @@ DarkRP.declareChatCommand{
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
+
+DarkRP.getLaws = DarkRP.stub{
+	name = "getLaws",
+	description = "Get the table of all current laws. While the law numbers are only found in the table keys serverside, the table also includes the law number in the table values on the client side.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "laws",
+			description = "A table of all current laws.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
