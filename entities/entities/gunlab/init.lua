@@ -20,7 +20,7 @@ end
 
 function ENT:OnTakeDamage(dmg)
 	self.damage = self.damage - dmg:GetDamage()
-	if (self.damage <= 0) then
+	if self.damage <= 0 then
 		self:Destruct()
 		self:Remove()
 	end
@@ -63,7 +63,7 @@ function ENT:Use(activator)
 		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("gun")))
 		return ""
 	end
-	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
+	local diff = self:SalePrice(activator) - self:SalePrice(owner)
 	if diff < 0 and not owner:canAfford(math.abs(diff)) then
 		DarkRP.notify(activator, 2, 3, DarkRP.getPhrase("owner_poor", DarkRP.getPhrase("gun_lab")))
 		return ""
@@ -71,7 +71,7 @@ function ENT:Use(activator)
 	self.sparking = true
 
 
-	activator:addMoney(cash * -1)
+	activator:addMoney(-cash)
 	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
 
 	if IsValid(owner) and activator ~= owner then
@@ -101,7 +101,6 @@ end
 function ENT:createGun()
 	self.Once = false
 	local gun = ents.Create("spawned_weapon")
-	gun = ents.Create("spawned_weapon")
 	gun:SetModel("models/weapons/w_pist_p228.mdl")
 	gun.weaponclass = "weapon_p2282"
 	local gunPos = self:GetPos()
