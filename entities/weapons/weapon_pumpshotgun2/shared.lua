@@ -1,8 +1,8 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
-if (CLIENT) then
+if CLIENT then
 	SWEP.PrintName = "Pump Shotgun"
 	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 2
@@ -15,7 +15,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
-SWEP.AdminSpawnable = true
+SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
@@ -46,7 +46,6 @@ SWEP.Secondary.Ammo = "none"
 SWEP.IronSightsPos = Vector(-7.64, -8, 3.56)
 SWEP.IronSightsAng = Vector(-0.1, 0.02, 0)
 
-
 function SWEP:Reload()
 	-- Already reloading
 	if self.Weapon.reloading then return end
@@ -76,10 +75,10 @@ function SWEP:Think()
 				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
 				self.Weapon.reloading = false
 				self.Weapon.queueattack = false
-				timer.Simple( 0.8, function()
-					if not IsValid( self ) then return end
+				timer.Simple(0.8, function()
+					if not IsValid(self) then return end
 					self:PrimaryAttack()
-				end )
+				end)
 				return
 			end
 
@@ -104,7 +103,6 @@ function SWEP:PrimaryAttack()
 	if self.queueattack then return end
 
 	if self.Weapon.reloading then
-
 		self.queueattack = true -- this way it doesn't interupt the reload animation
 		return
 	end

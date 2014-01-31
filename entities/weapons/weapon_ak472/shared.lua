@@ -15,7 +15,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
-SWEP.AdminSpawnable = true
+SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.UseHands = true

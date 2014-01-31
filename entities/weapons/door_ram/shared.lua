@@ -1,8 +1,8 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
-if (CLIENT) then
+if CLIENT then
 	SWEP.PrintName = "Battering Ram"
 	SWEP.Slot = 5
 	SWEP.SlotPos = 1
@@ -28,8 +28,8 @@ SWEP.AnimPrefix = "rpg"
 
 SWEP.UseHands = true
 
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = true
+SWEP.Spawnable = true
+SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
 
 SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")

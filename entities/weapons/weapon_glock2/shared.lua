@@ -1,4 +1,4 @@
-if (CLIENT) then
+if CLIENT then
 	SWEP.Author = "DarkRP Developers"
 	SWEP.Contact = ""
 	SWEP.Purpose = ""
@@ -12,14 +12,14 @@ if (CLIENT) then
 	killicon.AddFont("weapon_p228","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
 end
 
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
-SWEP.AdminSpawnable = true
+SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_glock18.mdl"

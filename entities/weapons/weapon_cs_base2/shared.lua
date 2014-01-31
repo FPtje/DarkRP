@@ -37,7 +37,7 @@ SWEP.Purpose = ""
 SWEP.Instructions = ""
 
 SWEP.Spawnable = false
-SWEP.AdminSpawnable = false
+SWEP.AdminOnly = false
 SWEP.UseHands = true
 
 SWEP.HoldType = "normal"
@@ -76,17 +76,15 @@ function SWEP:Initialize()
 	self:SetWeaponHoldType("normal")
 	self.CurHoldType = "normal"
 	if SERVER then
-		self:SetNPCMinBurst( 30 )
-		self:SetNPCMaxBurst( 30 )
-		self:SetNPCFireRate( 0.01 )
+		self:SetNPCMinBurst(30)
+		self:SetNPCMaxBurst(30)
+		self:SetNPCFireRate(0.01)
 	end
 
 	self.Ironsights = false
 
 	if self.Primary.Automatic then
-
 		self.FireMode = "auto"
-
 	end
 end
 
@@ -152,35 +150,25 @@ end
 /*---------------------------------------------------------
 PrimaryAttack
 ---------------------------------------------------------*/
-function SWEP:PrimaryAttack( partofburst )
+function SWEP:PrimaryAttack(partofburst)
+	if not partofburst and (self.LastNonBurst or 0) > CurTime() - 0.6 then return end
 
-	if not partofburst and ( self.LastNonBurst or 0 ) > CurTime() - 0.6 then return end
-
-	if self.Weapon.MultiMode and self.Owner:KeyDown( IN_USE ) then
-
+	if self.Weapon.MultiMode and self.Owner:KeyDown(IN_USE) then
 		if self.FireMode == "semi" then
-
 			self.FireMode = "burst"
 			self.Primary.Automatic = false
 			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
-
 		elseif self.FireMode == "burst" then
-
 			self.FireMode = "auto"
 			self.Primary.Automatic = true
-			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
-
+			self.Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
 		elseif self.FireMode == "auto" then
-
 			self.FireMode = "semi"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
-
+			self.Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
 		end
-
-		self.Weapon:SetNextPrimaryFire( CurTime() + 0.5 )
-		self.Weapon:SetNextSecondaryFire( CurTime() + 0.5 )
-
+		self.Weapon:SetNextPrimaryFire(CurTime() + 0.5)
+		self.Weapon:SetNextSecondaryFire(CurTime() + 0.5)
 		return
 	end
 
@@ -189,10 +177,8 @@ function SWEP:PrimaryAttack( partofburst )
 		self.CurHoldType = self.HoldType
 	end
 
-	if self.FireMode != "burst" then
-
+	if self.FireMode ~= "burst" then
 		self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-
 	end
 
 	self.Weapon:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
@@ -212,18 +198,16 @@ function SWEP:PrimaryAttack( partofburst )
 	self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil + 3, self.Primary.NumShots, self.Primary.Cone + .05)
 
 	if self.FireMode == "burst" and not partofburst then
-
-		timer.Simple( 0.1, function() self:PrimaryAttack(true) end)
-		timer.Simple( 0.2, function() self:PrimaryAttack(true) end)
+		timer.Simple(0.1, function() self:PrimaryAttack(true) end)
+		timer.Simple(0.2, function() self:PrimaryAttack(true) end)
 
 		self.LastNonBurst = CurTime()
-
 	end
 
 	-- Remove 1 bullet from our clip
 	self:TakePrimaryAmmo(1)
 
-	if ( self.Owner:IsNPC() ) then return end
+	if self.Owner:IsNPC() then return end
 
 	-- Punch the player's view
 	self.Owner:ViewPunch(Angle(math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0))
@@ -254,13 +238,13 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 	self.Owner:MuzzleFlash()        -- Crappy muzzle light
 	self.Owner:SetAnimation(PLAYER_ATTACK1)       -- 3rd Person Animation
 
-	if ( self.Owner:IsNPC() ) then return end
+	if self.Owner:IsNPC() then return end
 
-	// CUSTOM RECOIL !
-	if ( (game.SinglePlayer() && SERVER) || ( !game.SinglePlayer() && CLIENT && IsFirstTimePredicted() ) ) then
+	// CUSTOM RECOIL!
+	if  (game.SinglePlayer() and SERVER) or (not game.SinglePlayer() and CLIENT and IsFirstTimePredicted()) then
 		local eyeang = self.Owner:EyeAngles()
 		eyeang.pitch = eyeang.pitch - recoil
-		self.Owner:SetEyeAngles( eyeang )
+		self.Owner:SetEyeAngles(eyeang)
 	end
 
 	-- Part of workaround, different viewmodel position if shots have been fired
@@ -281,14 +265,14 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-9, 9), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER)
 	else
 		// Set us up the texture
-		surface.SetDrawColor( 255, 255, 255, alpha )
-		surface.SetTexture( self.WepSelectIcon )
+		surface.SetDrawColor(255, 255, 255, alpha)
+		surface.SetTexture(self.WepSelectIcon)
 
 		// Lets get a sin wave to make it bounce
 		local fsin = 0
 
 		if self.BounceWeaponIcon then
-			fsin = math.sin( CurTime() * 10 ) * 5
+			fsin = math.sin(CurTime() * 10) * 5
 		end
 
 		// Borders
@@ -297,10 +281,10 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 		wide = wide - 20
 
 		// Draw that motherfucker
-		surface.DrawTexturedRect( x + (fsin), y - (fsin),  wide-fsin*2 , ( wide / 2 ) + (fsin) )
+		surface.DrawTexturedRect(x + (fsin), y - (fsin), wide-fsin*2 , (wide / 2) + (fsin))
 
 		// Draw weapon info box
-		self:PrintWeaponInfo( x + wide + 20, y + tall * 0.95, alpha )
+		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
 	end
 end
 
@@ -313,7 +297,7 @@ Name: GetViewModelPosition
 Desc: Allows you to re-position the view model
 ---------------------------------------------------------*/
 function SWEP:GetViewModelPosition(pos, ang)
-	if (not self.IronSightsPos) then return pos, ang end
+	if not self.IronSightsPos then return pos, ang end
 
 	if not self.hasShot then
 		if self.IronSightsPosAfterShootingAdjustment then pos = pos + self.IronSightsPosAfterShootingAdjustment end
@@ -325,11 +309,11 @@ function SWEP:GetViewModelPosition(pos, ang)
 	end
 	local bIron = self.Ironsights
 
-	if (bIron != self.bLastIron) then
+	if bIron ~= self.bLastIron then
 		self.bLastIron = bIron
 		self.fIronTime = CurTime()
 
-		if (bIron) then
+		if bIron then
 			self.SwayScale 	= 0.3
 			self.BobScale 	= 0.1
 		else
@@ -345,13 +329,13 @@ function SWEP:GetViewModelPosition(pos, ang)
 		ang:RotateAroundAxis(ang:Right(), -15)
 	end
 
-	if (not bIron and fIronTime < CurTime() - IRONSIGHT_TIME) then
+	if not bIron and fIronTime < CurTime() - IRONSIGHT_TIME then
 		return pos, ang
 	end
 
 	local Mul = 1.0
 
-	if (fIronTime > CurTime() - IRONSIGHT_TIME) then
+	if fIronTime > CurTime() - IRONSIGHT_TIME then
 		Mul = math.Clamp((CurTime() - fIronTime) / IRONSIGHT_TIME, 0, 1)
 
 		if not bIron then Mul = 1 - Mul end
@@ -359,11 +343,11 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	local Offset	= self.IronSightsPos
 
-	if (self.IronSightsAng) then
+	if self.IronSightsAng then
 		ang = ang * 1
-		ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAng.x		* Mul)
+		ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAng.x * Mul)
 		ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAng.y * Mul)
-		ang:RotateAroundAxis(ang:Forward(), 	self.IronSightsAng.z * Mul)
+		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * Mul)
 	end
 
 	if GAMEMODE.Config.ironshoot then

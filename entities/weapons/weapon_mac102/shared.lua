@@ -1,8 +1,8 @@
-if (SERVER) then
+if SERVER then
 	AddCSLuaFile("shared.lua")
 end
 
-if (CLIENT) then
+if CLIENT then
 	SWEP.PrintName = "Mac10"
 	SWEP.Author = "DarkRP Developers"
 	SWEP.Slot = 2
@@ -15,7 +15,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
-SWEP.AdminSpawnable = true
+SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_mac10.mdl"
@@ -24,7 +24,6 @@ SWEP.WorldModel = "models/weapons/w_smg_mac10.mdl"
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
-
 
 SWEP.HoldType = "ar2"
 
@@ -46,4 +45,3 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.IronSightsPos = Vector(-9.08, -8, 2.6)
 SWEP.IronSightsAng = Vector(1.8, -7.06, -6.1)
-
