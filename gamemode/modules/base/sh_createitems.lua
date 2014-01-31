@@ -437,6 +437,8 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 	jobCount = jobCount + 1
 	CustomTeam.team = jobCount
 
+	CustomTeam.salary = math.floor(CustomTeam.salary)
+
 	table.insert(RPExtraTeams, CustomTeam)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
 	local Team = #RPExtraTeams
