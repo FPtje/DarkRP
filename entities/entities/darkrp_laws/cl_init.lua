@@ -22,8 +22,8 @@ function ENT:Draw()
 
 		local col = Color(255, 255, 255, 255)
 		local lastHeight = 0
-		for _,v in ipairs(Laws) do
-			draw.DrawNonParsedText(v, "TargetID", 5, 35 + lastHeight, col)
+		for k,v in ipairs(Laws) do
+			draw.DrawNonParsedText(string.format("%s%s %s", k, GAMEMODE.Config.lawBoardChar, v), "TargetID", 5, 35 + lastHeight, col)
 			lastHeight = lastHeight + ((fn.ReverseArgs(string.gsub(v, "\n", "")))+1)*21
 		end
 
@@ -33,22 +33,20 @@ end
 local function AddLaw(inLaw)
 	local law = DarkRP.textWrap(inLaw, "TargetID", 522)
 
-	Laws[#Laws + 1] = (#Laws + 1).. ". " .. law
+	Laws[#Laws + 1] = law
 end
 
 local function AddLawUM(um)
 	timer.Simple(0, fn.Curry(AddLaw, 2)(um:ReadString()))
+	hook.Call("addLaw", um:ReadString())
 end
 usermessage.Hook("DRP_AddLaw", AddLawUM)
 
 local function RemoveLaw(um)
 	local i = um:ReadShort()
 
-	while i < #Laws do
-		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%d%."))))
-		i = i + 1
-	end
 	Laws[i] = nil
+	hook.Call("removeLaw", um:ReadShort())
 end
 usermessage.Hook("DRP_RemoveLaw", RemoveLaw)
 
