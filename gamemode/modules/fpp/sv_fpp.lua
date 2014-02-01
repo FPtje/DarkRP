@@ -9,18 +9,9 @@ include("pp/sh_cppi.lua")
 include("pp/server/settings.lua")
 include("pp/server/core.lua")
 include("pp/server/antispam.lua")
+include("darkrp/gamemode/modules/fpp/pp/server/defaultblockedmodels.lua")
 
-hook.Add("DatabaseInitialized", "FPPInit", function()
-	MySQLite.query("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);", function()
-		MySQLite.queryValue("SELECT COUNT(*) FROM FPP_BLOCKEDMODELS1;", function(modelCount)
-			if modelCount and tonumber(modelCount) > 0 then return end
-
-			include("darkrp/gamemode/modules/fpp/pp/sv_defaultblockedmodels.lua")
-		end)
-	end)
-
-	FPP.Init()
-end)
+hook.Add("DatabaseInitialized", "FPPInit", FPP.Init)
 
 /*---------------------------------------------------------------------------
 DarkRP blocked entities
