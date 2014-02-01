@@ -46,7 +46,7 @@ DarkRP.getLaws = DarkRP.stub{
 
 DarkRP.hookStub{
 	name = "addLaw",
-	description = "Called when a line is added.",
+	description = "Called when a law is added.",
 	parameters = {
 		{
 			name = "law",
@@ -60,7 +60,7 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "removeLaw",
-	description = "Called when a line is removed.",
+	description = "Called when a law is removed.",
 	parameters = {
 		{
 			name = "index",
