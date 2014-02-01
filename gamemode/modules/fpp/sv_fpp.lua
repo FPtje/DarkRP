@@ -9,7 +9,7 @@ include("pp/sh_cppi.lua")
 include("pp/server/settings.lua")
 include("pp/server/core.lua")
 include("pp/server/antispam.lua")
-include("darkrp/gamemode/modules/fpp/pp/server/defaultblockedmodels.lua")
+include("pp/server/defaultblockedmodels.lua")
 
 hook.Add("DatabaseInitialized", "FPPInit", FPP.Init)
 
