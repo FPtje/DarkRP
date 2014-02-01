@@ -43,3 +43,31 @@ DarkRP.getLaws = DarkRP.stub{
 	metatable = DarkRP,
 	realm = "Shared"
 }
+
+DarkRP.hookStub{
+	name = "addLaw",
+	description = "Called when a law is added.",
+	parameters = {
+		{
+			name = "law",
+			description = "Law string",
+			type = "string"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "removeLaw",
+	description = "Called when a law is removed.",
+	parameters = {
+		{
+			name = "index",
+			description = "Index of law",
+			type = "number"
+		}
+	},
+	returns = {
+	}
+}
