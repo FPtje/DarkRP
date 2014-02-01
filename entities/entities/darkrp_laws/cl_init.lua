@@ -37,12 +37,16 @@ local function AddLaw(inLaw)
 end
 
 local function AddLawUM(um)
-	timer.Simple(0, fn.Curry(AddLaw, 2)(um:ReadString()))
+	local law = um:ReadString()
+	timer.Simple(0, fn.Curry(AddLaw, 2)(law))
+	hook.Run("addLaw", #Laws + 1, law)
 end
 usermessage.Hook("DRP_AddLaw", AddLawUM)
 
 local function RemoveLaw(um)
 	local i = um:ReadShort()
+
+	hook.Run("removeLaw", i, string.sub(Laws[i], 4))
 
 	while i < #Laws do
 		Laws[i] = i .. string.sub(Laws[i+1], (fn.ReverseArgs(string.find(Laws[i+1], "%d%."))))

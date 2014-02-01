@@ -46,11 +46,13 @@ local function AddLaw(ply, args)
 		return ""
 	end
 
-	table.insert(Laws, args)
+	local num = table.insert(Laws, args)
 
 	umsg.Start("DRP_AddLaw")
 		umsg.String(args)
 	umsg.End()
+
+	hook.Run("addLaw", num, args)
 
 	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_added"))
 
@@ -64,21 +66,27 @@ local function RemoveLaw(ply, args)
 		return ""
 	end
 
-	if not tonumber(args) or not Laws[tonumber(args)] then
+	local i = tonumber(args)
+
+	if not i or not Laws[i] then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return ""
 	end
 
-	if FixedLaws[tonumber(args)] then
+	if FixedLaws[i] then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
 		return ""
 	end
 
-	table.remove(Laws, tonumber(args))
+	local law = Laws[i]
+
+	table.remove(Laws, i)
 
 	umsg.Start("DRP_RemoveLaw")
-		umsg.Short(tonumber(args))
+		umsg.Short(i)
 	umsg.End()
+
+	hook.Run("removeLaw", i, law)
 
 	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_removed"))
 
