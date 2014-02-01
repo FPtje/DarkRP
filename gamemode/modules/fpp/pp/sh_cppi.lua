@@ -7,7 +7,7 @@ function CPPI:GetName()
 end
 
 function CPPI:GetVersion()
-	return "addon.2"
+	return "universal.1"
 end
 
 function CPPI:GetInterfaceVersion()
@@ -53,7 +53,7 @@ if SERVER then
 					ent.FPPOwnerID = ply:SteamID()
 				end
 			end
-		end		
+		end
 		return true
 	end
 
