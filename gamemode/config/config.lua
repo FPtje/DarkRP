@@ -296,6 +296,9 @@ GM.Config.AdminWeapons = {
 	"weapon_keypadchecker"
 }
 
+-- Law board configurable char of the order.
+GM.Config.lawBoardChar = "."
+
 -- These are the default laws, they're unchangeable in-game.
 GM.Config.DefaultLaws = {
 	"Do not attack other citizens except in self-defence.",
