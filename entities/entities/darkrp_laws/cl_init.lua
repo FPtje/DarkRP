@@ -23,7 +23,7 @@ function ENT:Draw()
 		local col = Color(255, 255, 255, 255)
 		local lastHeight = 0
 		for k,v in ipairs(Laws) do
-			draw.DrawNonParsedText(string.format("%s%s %s",k,".",v), "TargetID", 5, 35 + lastHeight, col)
+			draw.DrawNonParsedText(string.format("%s%s %s", k, ".", v), "TargetID", 5, 35 + lastHeight, col)
 			lastHeight = lastHeight + ((fn.ReverseArgs(string.gsub(v, "\n", "")))+1)*21
 		end
 
@@ -49,7 +49,7 @@ local function RemoveLaw(um)
 	hook.Run("removeLaw", i, Laws[i])
 
 	while i < #Laws do
-		Laws[i] = Laws[i+1]
+		Laws[i] = Laws[i + 1]
 		i = i + 1
 	end
 	Laws[i] = nil
