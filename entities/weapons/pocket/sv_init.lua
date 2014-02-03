@@ -275,6 +275,7 @@ local function canPocket(ply, item)
 	if item.jailWall then return false, DarkRP.getPhrase("cannot_pocket_x") end
 	if GAMEMODE.Config.PocketBlacklist[class] then return false, DarkRP.getPhrase("cannot_pocket_x") end
 	if string.find(class, "func_") then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if item:IsRagdoll() then return false, DarkRP.getPhrase("cannot_pocket_x") end
 
 	local trace = ply:GetEyeTrace()
 	if ply:EyePos():Distance(trace.HitPos) > 150 then return false end
