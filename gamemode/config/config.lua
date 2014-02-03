@@ -209,6 +209,8 @@ GM.Config.propcost						= 10
 GM.Config.quakechance					= 4000
 -- respawntime - Minimum amount of seconds a player has to wait before respawning.
 GM.Config.respawntime					= 1
+-- changejobtime - Minimum amount of seconds a player has to wait before changing job.
+GM.Config.changejobtime					= 10
 -- runspeed - Sets the max running speed.
 GM.Config.runspeed						= 240
 -- runspeed - Sets the max running speed for CP teams
