@@ -456,8 +456,13 @@ DarkRP.hookStub{
 		},
 		{
 			name = "shipmentTable",
-			description = "The table, as defined in the shipments file.",
+			description = "The table, as defined in the shipments file. (You can use this table to get price, using shipmentTable.price)",
 			type = "table"
+		},
+		{
+			name = "price",
+			description = "The price.",
+			type = "number"
 		}
 	},
 	returns = {
@@ -474,6 +479,21 @@ DarkRP.hookStub{
 		{
 			name = "message",
 			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		},
+		{
+			name = "newPrice",
+			description = "The new price which will override the old one.",
+			type = "number"
+		},
+		{
+			name = "suppressMessage2",
+			description = "Suppress the notification message when it is bought.",
+			type = "boolean"
+		},
+		{
+			name = "message2",
+			description = "A replacement for the message that shows when it is bought.",
 			type = "string"
 		}
 	}
@@ -492,6 +512,11 @@ DarkRP.hookStub{
 			name = "shipmentTable",
 			description = "The table, as defined in the shipments file.",
 			type = "table"
+		},
+		{
+			name = "price",
+			description = "The price.",
+			type = "number"
 		}
 	},
 	returns = {
@@ -508,6 +533,21 @@ DarkRP.hookStub{
 		{
 			name = "message",
 			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		},
+		{
+			name = "newPrice",
+			description = "The new price which will override the old one.",
+			type = "number"
+		},
+		{
+			name = "suppressMessage2",
+			description = "Suppress the notification message when it is bought.",
+			type = "boolean"
+		},
+		{
+			name = "message2",
+			description = "A replacement for the message that shows when it is bought.",
 			type = "string"
 		}
 	}
@@ -526,6 +566,11 @@ DarkRP.hookStub{
 			name = "vehicleTable",
 			description = "The table, as defined in the vehicles file.",
 			type = "table"
+		},
+		{
+			name = "price",
+			description = "The price.",
+			type = "number"
 		}
 	},
 	returns = {
@@ -535,13 +580,28 @@ DarkRP.hookStub{
 			type = "boolean"
 		},
 		{
-			name = "suppressMessage",
+			name = "suppressMessage1",
 			description = "Suppress the notification message when it cannot be bought.",
 			type = "boolean"
 		},
 		{
-			name = "message",
+			name = "message1",
 			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		},
+		{
+			name = "newPrice",
+			description = "The new price which will override the old one.",
+			type = "number"
+		},
+		{
+			name = "suppressMessage2",
+			description = "Suppress the notification message when it is bought.",
+			type = "boolean"
+		},
+		{
+			name = "message2",
+			description = "A replacement for the message that shows when it is bought.",
 			type = "string"
 		}
 	}
@@ -577,6 +637,21 @@ DarkRP.hookStub{
 			name = "message",
 			description = "A replacement for the message that shows if it cannot be bought.",
 			type = "string"
+		},
+		{
+			name = "newPrice",
+			description = "The new price which will override the old one.",
+			type = "number"
+		},
+		{
+			name = "suppressMessage2",
+			description = "Suppress the notification message when it is bought.",
+			type = "boolean"
+		},
+		{
+			name = "message2",
+			description = "A replacement for the message that shows when it is bought.",
+			type = "string"
 		}
 	}
 }
@@ -610,6 +685,21 @@ DarkRP.hookStub{
 		{
 			name = "message",
 			description = "A replacement for the message that shows if it cannot be bought.",
+			type = "string"
+		},
+		{
+			name = "newPrice",
+			description = "The new price which will override the old one.",
+			type = "number"
+		},
+		{
+			name = "suppressMessage2",
+			description = "Suppress the notification message when it is bought.",
+			type = "boolean"
+		},
+		{
+			name = "message2",
+			description = "A replacement for the message that shows when it is bought.",
 			type = "string"
 		}
 	}
