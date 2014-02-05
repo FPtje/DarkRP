@@ -667,7 +667,7 @@ DarkRP.hookStub{
 		},
 		{
 			name = "entTable",
-			description = "The table, as defined by the user.",
+			description = "The table, as defined by the user. (Get price of entity using entTable.price!)",
 			type = "table"
 		}
 	},
