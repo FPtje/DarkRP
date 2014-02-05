@@ -382,9 +382,11 @@ local function addEntityCommands(tblEnt)
 			if not suppress and message then DarkRP.notify(ply, 1, 4, message) end
 			return ""
 		end
+		
+		local hookPrice, suppress, message = hook.Call("playerBuyCustomEntity", nil, ply, tblEnt.price)
+		local cost = hookPrice or tblEnt.price
 
-
-		ply:addMoney(-tblEnt.price)
+		ply:addMoney(-cost)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -408,8 +410,10 @@ local function addEntityCommands(tblEnt)
 
 		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item)
 
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency, tblEnt.price))
-
+		if not suppress then
+			DarkRP.notify(ply, 0, 4, message or DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency, cost))
+		end
+		
 		ply:addCustomEntity(tblEnt)
 		return ""
 	end

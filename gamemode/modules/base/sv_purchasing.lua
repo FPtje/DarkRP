@@ -86,10 +86,15 @@ local function BuyPistol(ply, args)
 		shipment.onBought(ply, shipment, weapon)
 	end
 	hook.Call("playerBoughtPistol", nil, ply, shipment, weapon)
-
+	
+	local hookPrice, suppress, message = hook.Call("playerBuyPistol", DarkRP.hooks, ply, price)
+	local price = hookPrice or price
+	
 	if IsValid(weapon) then
 		ply:addMoney(-price)
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, price))
+		if not suppress then
+			DarkRP.notify(ply, 0, 4, message or DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, price))
+		end
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buy", args))
 	end
@@ -203,9 +208,14 @@ local function BuyShipment(ply, args)
 	end
 	hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], crate)
 
+	local hookPrice, suppress, message = hook.Call("playerBuyShipment", DarkRP.hooks, ply, cost)
+	local cost = hookPrice or cost
+	
 	if IsValid(crate) then
 		ply:addMoney(-cost)
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, cost))
+		if not suppress then
+			DarkRP.notify(ply, 0, 4, message or DarkRP.getPhrase("you_bought_x", args, GAMEMODE.Config.currency, cost))
+		end
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", arg))
 	end
@@ -274,9 +284,13 @@ local function BuyVehicle(ply, args)
 	end
 
 	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
-
+	local hookPrice, suppress, message = hook.Call("playerBuyCustomVehicle", DarkRP.hooks, ply, price)
+	local cost = hookPrice or cost
+	
 	ply:addMoney(-cost)
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
+	if not suppress then
+		DarkRP.notify(ply, 0, 4, message or DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
+	end
 
 	local trace = {}
 	trace.start = ply:EyePos()
@@ -381,8 +395,12 @@ local function BuyAmmo(ply, args)
 	end
 
 	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
-
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
+	local hookPrice, suppress, message = hook.Call("playerBuyAmmo", DarkRP.hooks, ply, cost)
+	local cost = hookPrice or cost
+	
+	if not suppress then
+		DarkRP.notify(ply, 0, 4, message or DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
+	end
 	ply:addMoney(-cost)
 
 	local trace = {}

@@ -692,6 +692,176 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "playerBuyPistol",
+	description = "Called when a player buys a pistol.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "price",
+			description = "The price of the gun.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "newPrice",
+			description = "The new price to override.",
+			type = "number",
+		},
+		{
+			name = "suppress",
+			description = "Should we remove notification?",
+			type = "boolean",
+		},
+		{
+			name = "message",
+			description = "Custom message to use in notification, if enabled.",
+			type = "string",
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerBuyShipment",
+	description = "Called when a player buys a shipment.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "price",
+			description = "The price of the shipment.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "newPrice",
+			description = "The new price to override.",
+			type = "number",
+		},
+		{
+			name = "suppress",
+			description = "Should we remove notification?",
+			type = "boolean",
+		},
+		{
+			name = "message",
+			description = "Custom message to use in notification, if enabled.",
+			type = "string",
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerBuyCustomVehicle",
+	description = "Called when a player buys a vehicle.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "price",
+			description = "The price of the vehicle.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "newPrice",
+			description = "The new price to override.",
+			type = "number",
+		},
+		{
+			name = "suppress",
+			description = "Should we remove notification?",
+			type = "boolean",
+		},
+		{
+			name = "message",
+			description = "Custom message to use in notification, if enabled.",
+			type = "string",
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerBuyCustomEntity",
+	description = "Called when a player buys an entity.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "price",
+			description = "The price of the entity.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "newPrice",
+			description = "The new price to override.",
+			type = "number",
+		},
+		{
+			name = "suppress",
+			description = "Should we remove notification?",
+			type = "boolean",
+		},
+		{
+			name = "message",
+			description = "Custom message to use in notification, if enabled.",
+			type = "string",
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerBuyAmmo",
+	description = "Called when a player buys ammo.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "price",
+			description = "The price of the entity.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "newPrice",
+			description = "The new price to override.",
+			type = "number",
+		},
+		{
+			name = "suppress",
+			description = "Should we remove notification?",
+			type = "boolean",
+		},
+		{
+			name = "message",
+			description = "Custom message to use in notification, if enabled.",
+			type = "string",
+		}
+	}
+}
+
+DarkRP.hookStub{
 	name = "playerBoughtPistol",
 	description = "Called when a player bought a pistol.",
 	parameters = {
