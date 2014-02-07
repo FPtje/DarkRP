@@ -102,7 +102,7 @@ function ENT:createGun()
 	self.Once = false
 	local gun = ents.Create("spawned_weapon")
 	gun:SetModel("models/weapons/w_pist_p228.mdl")
-	gun.weaponclass = "weapon_p2282"
+	gun:SetWeaponClass("weapon_p2282")
 	local gunPos = self:GetPos()
 	gun:SetPos(Vector(gunPos.x, gunPos.y, gunPos.z + 27))
 	gun.ShareGravgun = true

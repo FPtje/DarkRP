@@ -75,7 +75,7 @@ local function BuyPistol(ply, args)
 
 	local weapon = ents.Create("spawned_weapon")
 	weapon:SetModel(shipment.model)
-	weapon.weaponclass = shipment.entity
+	weapon:SetWeaponClass(shipment.entity)
 	weapon.ShareGravgun = true
 	weapon:SetPos(tr.HitPos)
 	weapon.ammoadd = weapons.Get(shipment.entity) and weapons.Get(shipment.entity).Primary.DefaultClip

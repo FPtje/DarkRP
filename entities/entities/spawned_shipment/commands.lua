@@ -23,7 +23,7 @@ local function createShipment(ply, args)
 
 	local shipID
 	for k,v in pairs(CustomShipments) do
-		if v.entity == ent.weaponclass then
+		if v.entity == ent:GetWeaponClass() then
 			shipID = k
 			break
 		end

@@ -22,7 +22,7 @@ function meta:dropDRPWeapon(weapon)
 	ent:SetPos(self:GetShootPos() + self:GetAimVector() * 30)
 	ent:SetModel(model)
 	ent:SetSkin(weapon:GetSkin())
-	ent.weaponclass = weapon:GetClass()
+	ent:SetWeaponClass(weapon:GetClass())
 	ent.nodupe = true
 	ent.clip1 = weapon:Clip1()
 	ent.clip2 = weapon:Clip2()

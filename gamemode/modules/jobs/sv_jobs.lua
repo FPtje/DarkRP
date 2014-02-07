@@ -15,8 +15,8 @@ function meta:changeTeam(t, force)
 		return false
 	end
 
-	if self.LastJob and 10 - (CurTime() - self.LastJob) >= 0 and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(10 - (CurTime() - self.LastJob)), "/job"))
+	if self.LastJob and GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob) >= 0 and not force then
+		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
 		return false
 	end
 

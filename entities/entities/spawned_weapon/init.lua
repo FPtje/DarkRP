@@ -37,7 +37,7 @@ function ENT:Use(activator, caller)
 		return self.PlayerUse
 	end
 
-	local class = self.weaponclass
+	local class = self:GetWeaponClass()
 	local weapon = ents.Create(class)
 
 	if not weapon:IsValid() then return false end

@@ -104,7 +104,7 @@ function ENT:SpawnItem()
 		return
 	end
 
-	weapon.weaponclass = class
+	weapon:SetWeaponClass(class)
 	weapon:SetModel(model)
 	weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
 	weapon.clip1 = self.clip1
@@ -150,7 +150,7 @@ function ENT:Destruct()
 
 	local weapon = ents.Create("spawned_weapon")
 	weapon:SetModel(model)
-	weapon.weaponclass = class
+	weapon:SetWeaponClass(class)
 	weapon.ShareGravgun = true
 	weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
 	weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
