@@ -106,13 +106,13 @@ local function lockUnlockAnimation(ply, snd)
 end
 
 local function doKnock(ply, sound)
-	self.Owner:EmitSound(sound, 100, math.random(90, 110))
+	ply:EmitSound(sound, 100, math.random(90, 110))
 	umsg.Start("anim_keys", RP)
-		umsg.Entity(self.Owner)
+		umsg.Entity(ply)
 		umsg.String("knocking")
 	umsg.End()
 
-	self.Owner:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
+	ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 end
 
 function SWEP:PrimaryAttack()
@@ -133,7 +133,7 @@ function SWEP:PrimaryAttack()
 	elseif trace.Entity:IsVehicle() then
 		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 	else
-		doKnock(ply, "physics/wood/wood_crate_impact_hard2.wav")
+		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard2.wav")
 	end
 end
 
@@ -155,7 +155,7 @@ function SWEP:SecondaryAttack()
 	elseif trace.Entity:IsVehicle() then
 		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 	else
-		doKnock(ply, "physics/wood/wood_crate_impact_hard3.wav")
+		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard3.wav")
 	end
 end
 
