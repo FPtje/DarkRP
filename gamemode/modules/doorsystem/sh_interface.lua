@@ -282,3 +282,93 @@ DarkRP.ENTITY.getKeysCoOwners = DarkRP.stub{
 	},
 	metatable = DarkRP.ENTITY
 }
+
+DarkRP.PLAYER.canKeysLock = DarkRP.stub{
+	name = "canKeysLock",
+	description = "Whether the player can lock a given door.",
+	parameters = {
+		{
+			name = "door",
+			description = "The door",
+			optional = false,
+			type = "Entity"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to lock the door.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.PLAYER.canKeysUnlock = DarkRP.stub{
+	name = "canKeysUnlock",
+	description = "Whether the player can unlock a given door.",
+	parameters = {
+		{
+			name = "door",
+			description = "The door",
+			optional = false,
+			type = "Entity"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to unlock the door.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
+DarkRP.hookStub{
+	name = "canKeysLock",
+	description = "Whether the player can lock a given door. This hook is run when ply:canKeysLock is called.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player",
+			type = "Player"
+		},
+		{
+			name = "door",
+			description = "The door",
+			type = "Entity"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to lock the door.",
+			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canKeysUnlock",
+	description = "Whether the player can unlock a given door. This hook is run when ply:canKeysUnlock is called.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player",
+			type = "Player"
+		},
+		{
+			name = "door",
+			description = "The door",
+			type = "Entity"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to unlock the door.",
+			type = "boolean"
+		}
+	}
+}

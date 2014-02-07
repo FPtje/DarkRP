@@ -80,16 +80,6 @@ local function lookingAtLockable(ply, ent)
 
 end
 
-local function canLockUnlock(ply, ent)
-	local Team = ply:Team()
-	local group = ent:getKeysDoorGroup()
-	local teamOwn = ent:getKeysDoorTeams()
-
-	return ent:isKeysOwnedBy(ply) 									  	  or
-		(group   and table.HasValue(RPExtraTeamDoors[group] or {}, Team)) or
-		(teamOwn and teamOwn[Team])
-end
-
 local function lockUnlockAnimation(ply, snd)
 	ply:EmitSound("npc/metropolice/gear" .. math.floor(math.Rand(1,7)) .. ".wav")
 	timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
@@ -127,7 +117,7 @@ function SWEP:PrimaryAttack()
 
 	if CLIENT then return end
 
-	if canLockUnlock(self.Owner, trace.Entity) then
+	if self.Owner:canKeysLock(trace.Entity) then
 		trace.Entity:keysLock() -- Lock the door immediately so it won't annoy people
 		lockUnlockAnimation(self.Owner, self.Sound)
 	elseif trace.Entity:IsVehicle() then
@@ -149,7 +139,7 @@ function SWEP:SecondaryAttack()
 
 	if CLIENT then return end
 
-	if canLockUnlock(self.Owner, trace.Entity) then
+	if self.Owner:canKeysUnlock(trace.Entity) then
 		trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
 		lockUnlockAnimation(self.Owner, self.Sound)
 	elseif trace.Entity:IsVehicle() then
