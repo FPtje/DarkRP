@@ -19,6 +19,7 @@ end
 
 
 function ENT:Use(activator,caller)
+	if self.USED or self.hasMerged then return end
 	local amount = self:Getamount()
 
 	activator:addMoney(amount or 0)

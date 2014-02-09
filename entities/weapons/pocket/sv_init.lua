@@ -195,6 +195,9 @@ Interface functions
 function meta:addPocketItem(ent)
 	if not IsValid(ent) then error("Entity not valid", 2) end
 
+	-- This item cannot be used until it has been removed
+	ent.USED = true
+
 	local serialized = serialize(ent)
 
 	hook.Call("onPocketItemAdded", nil, self, ent, serialized)
@@ -222,6 +225,9 @@ function meta:dropPocketItem(item)
 
 	local id = self.darkRPPocket[item]
 	local ent = deserialize(self, id)
+
+	-- reset USED status
+	ent.USED = nil
 
 	self:removePocketItem(item)
 	return ent
