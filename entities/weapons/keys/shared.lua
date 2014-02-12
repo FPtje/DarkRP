@@ -14,7 +14,7 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to lock. Right click to unlock"
+SWEP.Instructions = "Left click to lock\nRight click to unlock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
