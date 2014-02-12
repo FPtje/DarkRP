@@ -17,7 +17,7 @@ SWEP.DrawCrosshair = true
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to pick up, right click to drop, reload for menu"
+SWEP.Instructions = "Left click to pick up\nRight click to drop\nReload to open the menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.IconLetter = ""
