@@ -14,7 +14,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles."
+SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles\nRight click to raise"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
