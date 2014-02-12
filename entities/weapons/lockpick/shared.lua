@@ -14,7 +14,7 @@ end
 -- Variables that are used on both client and server
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to pick a lock"
+SWEP.Instructions = "Left or right click to pick a lock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
