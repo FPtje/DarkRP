@@ -276,7 +276,7 @@ local function BuyVehicle(ply, args)
 	local cost = found.getPrice and found.getPrice(ply, found.price) or found.price
 
 	ply:addMoney(-cost)
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.name, GAMEMODE.Config.currency, cost))
+	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", found.label or found.name, GAMEMODE.Config.currency, cost))
 
 	local trace = {}
 	trace.start = ply:EyePos()
