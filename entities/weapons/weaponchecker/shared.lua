@@ -11,7 +11,7 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to weapon check\nRight click to confiscate weapons\Reload to give back the weapons"
+SWEP.Instructions = "Left click to weapon check\nRight click to confiscate weapons\nReload to give back the weapons"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
