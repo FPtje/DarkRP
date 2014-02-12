@@ -110,9 +110,13 @@ sounds[ "lead on" ] = sounds[ "lead the way" ]
 sounds[ "lets go" ] = { "vo/npc/male01/letsgo01.wav", "vo/npc/male01/letsgo02.wav" }
 sounds[ "let's go" ] = sounds[ "lets go" ]
 
+sounds[ "never" ] = { "vo/Citadel/eli_nonever.wav" }
+
 sounds[ "never can tell" ] = { "vo/npc/male01/answer23.wav" }
 
 sounds[ "nice" ] = { "vo/npc/male01/nice.wav" }
+
+sounds[ "no" ] = { "vo/Citadel/br_no.wav", "vo/Citadel/eli_notobreen.wav" }
 
 sounds[ "not good" ] = sounds[ "isnt good" ]
 
