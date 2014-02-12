@@ -376,15 +376,16 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		local canbuy, suppress, message = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
+		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
 
 		if canbuy == false then
 			if not suppress and message then DarkRP.notify(ply, 1, 4, message) end
 			return ""
 		end
 
+		price = price or tblEnt.price
 
-		ply:addMoney(-tblEnt.price)
+		ply:addMoney(-price)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -406,9 +407,9 @@ local function addEntityCommands(tblEnt)
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
 
-		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item)
+		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item, price)
 
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency, tblEnt.price))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", tblEnt.name, GAMEMODE.Config.currency, price))
 
 		ply:addCustomEntity(tblEnt)
 		return ""

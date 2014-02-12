@@ -68,15 +68,16 @@ local function canBuyEntity(item)
 
 	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
 	if item.customCheck and not item.customCheck(ply) then return false, true end
-	if not ply:canAfford(item.price) then return false, false end
 
-	local canbuy, suppress, message = hook.Call("canBuyCustomEntity", nil, ply, item)
+	local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, item)
+	local cost = price or item.price
+	if not ply:canAfford(cost) then return false, false, cost end
 
 	if canbuy == false then
-		return false, suppress
+		return false, suppress, cost
 	end
 
-	return true
+	return true, nil, cost
 end
 
 function PANEL:shouldHide()
@@ -89,9 +90,10 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		local canBuy, important = canBuyEntity(v.DarkRPItem)
+		local canBuy, important, price = canBuyEntity(v.DarkRPItem)
 
 		v:SetDisabled(not canBuy, important)
+		v:updatePrice(price)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -105,19 +107,20 @@ PANEL = {}
 
 local function canBuyShipment(ship)
 	local ply = LocalPlayer()
-	local cost = ship.getPrice and ship.getPrice(ply, ship.price) or ship.price
 
 	if not table.HasValue(ship.allowed, ply:Team()) then return false, true end
 	if ship.customCheck and not ship.customCheck(ply) then return false, true end
-	if not ply:canAfford(cost) then return false, false end
 
-	local canbuy, suppress, message = hook.Call("canBuyShipment", nil, ply, ship)
+	local canbuy, suppress, message, price = hook.Call("canBuyShipment", nil, ply, ship)
+	local cost = price or ship.getPrice and ship.getPrice(ply, ship.price) or ship.price
+
+	if not ply:canAfford(cost) then return false, false, cost end
 
 	if canbuy == false then
-		return false, suppress
+		return false, suppress, cost
 	end
 
-	return true
+	return true, nil, cost
 end
 
 function PANEL:generateButtons()
@@ -145,9 +148,10 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		local canBuy, important = canBuyShipment(v.DarkRPItem)
+		local canBuy, important, price = canBuyShipment(v.DarkRPItem)
 
 		v:SetDisabled(not canBuy, important)
+		v:updatePrice(price)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -161,19 +165,20 @@ PANEL = {}
 
 local function canBuyGun(ship)
 	local ply = LocalPlayer()
-	local cost = ship.getPrice and ship.getPrice(ply, ship.pricesep) or ship.pricesep
 
 	if GAMEMODE.Config.restrictbuypistol and not table.HasValue(ship.allowed, ply:Team()) then return false, true end
 	if ship.customCheck and not ship.customCheck(ply) then return false, true end
-	if not ply:canAfford(cost) then return false, false end
 
-	local canbuy, suppress, message = hook.Call("canBuyPistol", nil, ply, ship)
+	local canbuy, suppress, message, price = hook.Call("canBuyPistol", nil, ply, ship)
+	local cost = price or ship.getPrice and ship.getPrice(ply, ship.pricesep) or ship.pricesep
+
+	if not ply:canAfford(cost) then return false, false, cost end
 
 	if canbuy == false then
-		return false, suppress
+		return false, suppress, cost
 	end
 
-	return true
+	return true, nil, cost
 end
 
 function PANEL:generateButtons()
@@ -202,9 +207,10 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		local canBuy, important = canBuyGun(v.DarkRPItem)
+		local canBuy, important, price = canBuyGun(v.DarkRPItem)
 
 		v:SetDisabled(not canBuy, important)
+		v:updatePrice(price)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -221,15 +227,15 @@ local function canBuyAmmo(item)
 	local ply = LocalPlayer()
 
 	if item.customCheck and not item.customCheck(ply) then return false, true end
-	if not ply:canAfford(item.price) then return false, false end
 
-	local canbuy, suppress, message = hook.Call("canBuyAmmo", nil, ply, item)
+	local canbuy, suppress, message, price = hook.Call("canBuyAmmo", nil, ply, item)
+	if not ply:canAfford(price or item.price) then return false, false, price end
 
 	if canbuy == false then
-		return false, suppress
+		return false, suppress, price
 	end
 
-	return true
+	return true, nil, price
 end
 
 function PANEL:generateButtons()
@@ -251,8 +257,9 @@ end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		local canBuy, important = canBuyAmmo(v.DarkRPItem)
+		local canBuy, important, price = canBuyAmmo(v.DarkRPItem)
 		v:SetDisabled(not canBuy, important)
+		v:updatePrice(price)
 	end
 	self.BaseClass.PerformLayout(self)
 end
@@ -279,22 +286,26 @@ local function canBuyVehicle(item)
 
 	if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
 	if item.customCheck and not item.customCheck(ply) then return false, true end
-	if not ply:canAfford(item.price) then return false, false end
 
-	local canbuy, suppress, message = hook.Call("canBuyVehicle", nil, ply, item)
+	local canbuy, suppress, message, price = hook.Call("canBuyVehicle", nil, ply, item)
+
+	cost = price or cost
+
+	if not ply:canAfford(cost) then return false, false, cost end
 
 	if canbuy == false then
-		return false, suppress
+		return false, suppress, cost
 	end
 
-	return true
+	return true, nil, cost
 end
 
 function PANEL:PerformLayout()
 	for k,v in pairs(self.Items) do
-		local canBuy, important = canBuyVehicle(v.DarkRPItem)
+		local canBuy, important, price = canBuyVehicle(v.DarkRPItem)
 
 		v:SetDisabled(not canBuy, important)
+		v:updatePrice(price)
 	end
 	self.BaseClass.PerformLayout(self)
 end

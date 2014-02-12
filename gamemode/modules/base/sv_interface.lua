@@ -709,6 +709,11 @@ DarkRP.hookStub{
 			name = "ent",
 			description = "The spawned weapon.",
 			type = "Weapon"
+		},
+		{
+			name = "price",
+			description = "The eventual price.",
+			type = "number"
 		}
 	},
 	returns = {
@@ -733,6 +738,11 @@ DarkRP.hookStub{
 			name = "ent",
 			description = "The spawned entity.",
 			type = "Entity"
+		},
+		{
+			name = "price",
+			description = "The eventual price.",
+			type = "number"
 		}
 	},
 	returns = {
@@ -757,6 +767,11 @@ DarkRP.hookStub{
 			name = "ent",
 			description = "The spawned vehicle.",
 			type = "Entity"
+		},
+		{
+			name = "price",
+			description = "The eventual price.",
+			type = "number"
 		}
 	},
 	returns = {
@@ -781,6 +796,11 @@ DarkRP.hookStub{
 			name = "ent",
 			description = "The spawned vehicle.",
 			type = "Entity"
+		},
+		{
+			name = "price",
+			description = "The eventual price.",
+			type = "number"
 		}
 	},
 	returns = {
