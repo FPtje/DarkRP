@@ -485,16 +485,6 @@ DarkRP.hookStub{
 			name = "newPrice",
 			description = "The new price which will override the old one.",
 			type = "number"
-		},
-		{
-			name = "suppressMessage2",
-			description = "Suppress the notification message when it is bought.",
-			type = "boolean"
-		},
-		{
-			name = "message2",
-			description = "A replacement for the message that shows when it is bought.",
-			type = "string"
 		}
 	}
 }
@@ -539,16 +529,6 @@ DarkRP.hookStub{
 			name = "newPrice",
 			description = "The new price which will override the old one.",
 			type = "number"
-		},
-		{
-			name = "suppressMessage2",
-			description = "Suppress the notification message when it is bought.",
-			type = "boolean"
-		},
-		{
-			name = "message2",
-			description = "A replacement for the message that shows when it is bought.",
-			type = "string"
 		}
 	}
 }
@@ -593,16 +573,6 @@ DarkRP.hookStub{
 			name = "newPrice",
 			description = "The new price which will override the old one.",
 			type = "number"
-		},
-		{
-			name = "suppressMessage2",
-			description = "Suppress the notification message when it is bought.",
-			type = "boolean"
-		},
-		{
-			name = "message2",
-			description = "A replacement for the message that shows when it is bought.",
-			type = "string"
 		}
 	}
 }
@@ -642,16 +612,6 @@ DarkRP.hookStub{
 			name = "newPrice",
 			description = "The new price which will override the old one.",
 			type = "number"
-		},
-		{
-			name = "suppressMessage2",
-			description = "Suppress the notification message when it is bought.",
-			type = "boolean"
-		},
-		{
-			name = "message2",
-			description = "A replacement for the message that shows when it is bought.",
-			type = "string"
 		}
 	}
 }
@@ -691,16 +651,6 @@ DarkRP.hookStub{
 			name = "newPrice",
 			description = "The new price which will override the old one.",
 			type = "number"
-		},
-		{
-			name = "suppressMessage2",
-			description = "Suppress the notification message when it is bought.",
-			type = "boolean"
-		},
-		{
-			name = "message2",
-			description = "A replacement for the message that shows when it is bought.",
-			type = "string"
 		}
 	}
 }
