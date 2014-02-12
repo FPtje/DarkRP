@@ -9,7 +9,7 @@ SWEP.Base = "weapon_base"
 
 SWEP.PrintName = "Admin keypad checker"
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click on a keypad or fading door to check it, right click to clear"
+SWEP.Instructions = "Left click on a keypad or fading door to check it\nRight click to clear"
 SWEP.Slot = 5
 SWEP.SlotPos = 1
 SWEP.DrawAmmo = false
