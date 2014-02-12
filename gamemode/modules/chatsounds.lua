@@ -219,27 +219,6 @@ sounds[ "you never know" ] = { "vo/npc/male01/answer22.wav" }
 
 sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
 
-sounds[ "0" ] = { "npc/overwatch/radiovoice/zero.wav" }
-sounds[ "1" ] = { "npc/overwatch/radiovoice/one.wav" }
-sounds[ "2" ] = { "npc/overwatch/radiovoice/two.wav" }
-sounds[ "3" ] = { "npc/overwatch/radiovoice/three.wav" }
-sounds[ "4" ] = { "npc/overwatch/radiovoice/four.wav" }
-sounds[ "5" ] = { "npc/overwatch/radiovoice/five.wav" }
-sounds[ "6" ] = { "npc/overwatch/radiovoice/six.wav" }
-sounds[ "7" ] = { "npc/overwatch/radiovoice/seven.wav" }
-sounds[ "8" ] = { "npc/overwatch/radiovoice/eight.wav" }
-sounds[ "9" ] = { "npc/overwatch/radiovoice/nine.wav" }
-sounds[ "zero" ] = sounds[ "0" ]
-sounds[ "one" ] = sounds[ "1" ]
-sounds[ "two" ] = sounds[ "2" ]
-sounds[ "three" ] = sounds[ "3" ]
-sounds[ "four" ] = sounds[ "4" ]
-sounds[ "five" ] = sounds[ "5" ]
-sounds[ "six" ] = sounds[ "6" ]
-sounds[ "seven" ] = sounds[ "7" ]
-sounds[ "eight" ] = sounds[ "8" ]
-sounds[ "nine" ] = sounds[ "9" ]
-
 local function CheckChat(ply, text)
 	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
 	local prefix = string.sub(text, 0, 1)
