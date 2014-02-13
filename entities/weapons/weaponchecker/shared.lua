@@ -3,7 +3,7 @@ if SERVER then
 end
 
 if CLIENT then
-	SWEP.PrintName = "Weapon checker"
+	SWEP.PrintName = "Weapon Checker"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 9
 	SWEP.DrawAmmo = false
@@ -11,7 +11,7 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to check weapons, right click to confiscate guns, reload to give back the guns"
+SWEP.Instructions = "Left click to weapon check\nRight click to confiscate weapons\nReload to give back the weapons"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 

@@ -9,7 +9,7 @@ SWEP.SlotPos = 0
 SWEP.Description = "Heals the wounded."
 SWEP.Contact = ""
 SWEP.Purpose = ""
-SWEP.Instructions = "Left Click to heal player infront of user."
+SWEP.Instructions = "Left click to heal someone\nRight click to heal yourself"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
