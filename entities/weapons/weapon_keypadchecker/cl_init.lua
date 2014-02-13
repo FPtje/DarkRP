@@ -1,6 +1,5 @@
 include("shared.lua")
 
-
 local DrawData = {}
 local KeypadCheckerHalos
 
@@ -36,9 +35,9 @@ end
 KeypadCheckerHalos = function()
 	local drawEnts = {}
 	for k,v in pairs(DrawData) do
-		if IsValid(v.ent) then
-			table.insert(drawEnts, v.ent)
-		end
+		if not IsValid(v.ent) then continue end
+		
+		table.insert(drawEnts, v.ent)		
 	end
 
 	if #drawEnts == 0 then return end
