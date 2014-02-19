@@ -134,8 +134,8 @@ function meta:changeTeam(t, force)
 		effectdata:SetScale(1)
 		util.Effect("entity_remove", effectdata)
 		hook.Call("UpdatePlayerSpeed", GAMEMODE, self)
-		GAMEMODE:PlayerSetModel(self)
-		GAMEMODE:PlayerLoadout(self)
+		gamemode.Call("PlayerSetModel", self)
+		gamemode.Call("PlayerLoadout", self)
 	else
 		self:KillSilent()
 	end
