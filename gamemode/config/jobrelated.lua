@@ -84,7 +84,7 @@ TEAM_GANG = DarkRP.createJob("Gangster", {
 
 TEAM_MOB = DarkRP.createJob("Mob boss", {
 	color = Color(25, 25, 25, 255),
-	model = "models/player/GAMEMODEan_high.mdl",
+	model = "models/player/gman_high.mdl",
 	description = [[The Mob boss is the boss of the criminals in the city.
 		With his power he coordinates the gangsters and forms an efficient crime organization.
 		He has the ability to break into houses by using a lockpick.
