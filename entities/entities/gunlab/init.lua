@@ -72,7 +72,7 @@ function ENT:Use(activator)
 
 
 	activator:addMoney(-cash)
-	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. GAMEMODE.Config.currency .. tostring(cash) .. "!")
+	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. DarkRP.formatMoney(cash) .. "!")
 
 	if IsValid(owner) and activator ~= owner then
 		local gain = 0
@@ -82,12 +82,12 @@ function ENT:Use(activator)
 			gain = math.floor(self:Getprice() - math.ceil(self:Getprice() * 0.90))
 		end
 		if gain == 0 then
-			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. "0 " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
+			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(0) .. " " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 		else
 			owner:addMoney(gain)
 			local word = DarkRP.getPhrase("profit")
 			if gain < 0 then word = DarkRP.getPhrase("loss") end
-			DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", GAMEMODE.Config.currency .. tostring(math.abs(gain)) .. word, "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
+			DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(math.abs(gain)) .. " " .. word, "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 		end
 	end
 

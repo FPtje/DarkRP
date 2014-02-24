@@ -17,13 +17,12 @@ function ENT:Initialize()
 	phys:Wake()
 end
 
-
 function ENT:Use(activator,caller)
 	if self.USED or self.hasMerged then return end
 	local amount = self:Getamount()
 
 	activator:addMoney(amount or 0)
-	DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_cash", GAMEMODE.Config.currency, (self:Getamount() or 0)))
+	DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_money", DarkRP.formatMoney(self:Getamount())))
 	self:Remove()
 end
 

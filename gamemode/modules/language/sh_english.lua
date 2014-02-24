@@ -13,14 +13,20 @@ local english = {
 
 	-- Money things:
 	price = "Price: %s%d",
+	priceTag = "Price: %s",
 	reset_money = "%s has reset all players' money!",
 	has_given = "%s has given you %s",
 	you_gave = "You gave %s %s",
 	npc_killpay = "%s for killing an NPC!",
 	profit = "profit",
 	loss = "loss",
+
+	-- backwards compatibility
 	deducted_x = "Deducted %s%d",
 	need_x = "Need %s%d",
+
+	deducted_money = "Deducted %s",
+	need_money = "Need %s",
 
 	payday_message = "Payday! You received %s!",
 	payday_unemployed = "You received no salary because you are unemployed!",
@@ -36,7 +42,8 @@ local english = {
 	cheque_pay = "Pay: %s",
 	signed = "Signed: %s",
 
-	found_cash = "You have found %s%d!",
+	found_cash = "You have found %s%d!", -- backwards compatibility
+	found_money = "You have found %s!",
 
 	owner_poor = "The %s owner is too poor to subsidize this sale!",
 
@@ -136,7 +143,8 @@ local english = {
 	door_groups = "Door groups",
 	door_group_doesnt_exist = "Door group does not exist!",
 	door_group_set = "Door group set successfully.",
-	sold_x_doors_for_y = "You have sold %d doors for %s%d!",
+	sold_x_doors_for_y = "You have sold %d doors for %s%d!", -- backwards compatibility
+	sold_x_doors = "You have sold %d doors for %s!",
 
 	-- Entities
 	drugs = "Drugs",
@@ -230,7 +238,8 @@ local english = {
 	cant_afford = "You cannot afford this %s",
 	created_x = "%s created a %s",
 	cleaned_up = "Your %s were cleaned up.",
-	you_bought_x = "You have bought %s for %s%d.",
+	you_bought_x = "You have bought %s for %s%d.", -- backwards compatibility
+	you_bought = "You have bought %s for %s.",
 	you_received_x = "You have received %s for %s.",
 
 	created_first_jailpos = "You have created the first jail position!",
@@ -320,12 +329,18 @@ local english = {
 	x_teambanned_y = "%s has banned %s from being a %s.",
 	x_teamunbanned_y = "%s has unbanned %s from being a %s.",
 
+	-- Backwards compatibility:
 	you_set_x_salary_to_y = "You set %s's salary to %s%d.",
 	x_set_your_salary_to_y = "%s set your salary to %s%d.",
 	you_set_x_money_to_y = "You set %s's money to %s%d.",
 	x_set_your_money_to_y = "%s set your money to %s%d.",
-	you_set_x_name_to_y = "You set %s's name to %s",
-	x_set_your_name_to_y = "%s set your name to %s",
+
+	you_set_x_salary = "You set %s's salary to %s.",
+	x_set_your_salary = "%s set your salary to %s.",
+	you_set_x_money = "You set %s's money to %s.",
+	x_set_your_money = "%s set your money to %s.",
+	you_set_x_name = "You set %s's name to %s",
+	x_set_your_name = "%s set your name to %s",
 
 	someone_stole_steam_name = "Someone is already using your Steam name as their RP name so we gave you a '1' after your name.", -- Uh oh
 	already_taken = "Already taken.",
@@ -337,7 +352,8 @@ local english = {
 	cmd_cant_be_run_server_console = "This command cannot be run from the server console.",
 
 	-- The lottery
-	lottery_started = "There is a lottery! Participate for %s%d?",
+	lottery_started = "There is a lottery! Participate for %s%d?", -- backwards compatibility
+	lottery_has_started = "There is a lottery! Participate for %s?",
 	lottery_entered = "You entered the lottery for %s",
 	lottery_not_entered = "%s did not enter the lottery",
 	lottery_noone_entered = "No-one has entered the lottery",
@@ -382,7 +398,8 @@ local english = {
 	price_too_low = "Price too low!",
 	hit_target_recently_killed_by_hit = "The target was recently killed by a hit,",
 	customer_recently_bought_hit = "The customer has recently requested a hit.",
-	accept_hit_question = "Accept hit from %s\nregarding %s for %s%d?",
+	accept_hit_question = "Accept hit from %s\nregarding %s for %s%d?", -- backwards compatibility
+	accept_hit_request = "Accept hit from %s\nregarding %s for %s?",
 	hit_requested = "Hit requested!",
 	hit_aborted = "Hit aborted! %s",
 	hit_accepted = "Hit accepted!",
@@ -390,7 +407,8 @@ local english = {
 	hitman_left_server = "The hitman has left the server!",
 	customer_left_server = "The customer has left the server!",
 	target_left_server = "The target has left the server!",
-	hit_price_set_to_x = "Hit price set to %s%d.",
+	hit_price_set_to_x = "Hit price set to %s%d.", -- backwards compatibility
+	hit_price_set = "Hit price set to %s.",
 	hit_complete = "Hit by %s complete!",
 	hitman_died = "The hitman died!",
 	target_died = "The target has died!",

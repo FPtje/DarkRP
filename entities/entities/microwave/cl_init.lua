@@ -14,7 +14,7 @@ function ENT:Draw()
 
 	surface.SetFont("HUDNumber5")
 	local text = DarkRP.getPhrase("microwave")
-	local text2 = DarkRP.getPhrase("price", GAMEMODE.Config.currency, self:Getprice())
+	local text2 = DarkRP.getPhrase("priceTag", DarkRP.formatMoney(self:Getprice()), "")
 	local TextWidth = surface.GetTextSize(text)
 	local TextWidth2 = surface.GetTextSize(text2)
 

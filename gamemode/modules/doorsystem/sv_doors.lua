@@ -122,7 +122,7 @@ function pmeta:doPropertyTax()
 	if self:canAfford(tax) then
 		if tax ~= 0 then
 			self:addMoney(-tax)
-			DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", GAMEMODE.Config.currency .. tax))
+			DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
 		end
 	else
 		DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
@@ -327,7 +327,7 @@ local function OwnDoor(ply)
 			ply:addMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
 			if( !bSuppress ) then
-				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  GAMEMODE.Config.currency..(GiveMoneyBack)))
+				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  DarkRP.formatMoney(GiveMoneyBack)))
 			end
 
 		else
@@ -364,7 +364,7 @@ local function OwnDoor(ply)
 
 			ply:addMoney(-iCost)
 			if( !bSuppress ) then
-				DarkRP.notify( ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", GAMEMODE.Config.currency, iCost) or DarkRP.getPhrase("door_bought", GAMEMODE.Config.currency, iCost))
+				DarkRP.notify( ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", DarkRP.formatMoney(iCost), "") or DarkRP.getPhrase("door_bought", DarkRP.formatMoney(iCost), ""))
 			end
 
 			trace.Entity:keysOwn(ply)
@@ -391,7 +391,7 @@ local function UnOwnAll(ply, cmd, args)
 		end
 	end
 	ply:GetTable().OwnedNumz = 0
-	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors_for_y", amount, GAMEMODE.Config.currency, amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5))))
+	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount,DarkRP.formatMoney(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))))
 	return ""
 end
 DarkRP.defineChatCommand("unownalldoors", UnOwnAll)

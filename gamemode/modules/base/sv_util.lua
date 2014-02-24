@@ -158,7 +158,7 @@ local function LookPersonUp(ply, cmd, args)
 		ply:PrintMessage(2, DarkRP.getPhrase("kills", P:Frags()))
 		ply:PrintMessage(2, DarkRP.getPhrase("deaths", P:Deaths()))
 		if ply:IsAdmin() then
-			ply:PrintMessage(2, DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
+			ply:PrintMessage(2, DarkRP.getPhrase("wallet", DarkRP.formatMoney(P:getDarkRPVar("money")), ""))
 		end
 	else
 		print(DarkRP.getPhrase("name", P:Nick()))
@@ -167,7 +167,7 @@ local function LookPersonUp(ply, cmd, args)
 		print(DarkRP.getPhrase("job", team.GetName(P:Team())))
 		print(DarkRP.getPhrase("kills", P:Frags()))
 		print(DarkRP.getPhrase("deaths", P:Deaths()))
-		print(DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, P:getDarkRPVar("money")))
+		print(DarkRP.getPhrase("wallet", DarkRP.formatMoney(P:getDarkRPVar("money")), ""))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)

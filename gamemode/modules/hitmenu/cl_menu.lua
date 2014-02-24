@@ -55,7 +55,7 @@ function PANEL:Think()
 	end
 
 	-- update the price (so the hitman can't scam)
-	self.price:SetText(DarkRP.getPhrase("price", GAMEMODE.Config.currency, self:GetHitman():getHitPrice()))
+	self.price:SetText(DarkRP.getPhrase("priceTag", DarkRP.formatMoney(self:GetHitman():getHitPrice()), ""))
 	self.price:SizeToContents()
 end
 
@@ -82,7 +82,7 @@ function PANEL:PerformLayout()
 
 	self.price:SetFont("HUDNumber5")
 	self.price:SetColor(Color(255, 0, 0, 255))
-	self.price:SetText(DarkRP.getPhrase("price", GAMEMODE.Config.currency, self:GetHitman():getHitPrice()))
+	self.price:SetText(DarkRP.getPhrase("priceTag", DarkRP.formatMoney(self:GetHitman():getHitPrice()), ""))
 	self.price:SetPos(20 + 128 + 20, 20 + self.title:GetTall() + 20)
 	self.price:SizeToContents(true)
 

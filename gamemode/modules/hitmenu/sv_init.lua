@@ -20,7 +20,7 @@ function plyMeta:requestHit(customer, target, price)
 		return false
 	end
 
-	DarkRP.createQuestion(DarkRP.getPhrase("accept_hit_question", customer:Nick(), target:Nick(), GAMEMODE.Config.currency, price),
+	DarkRP.createQuestion(DarkRP.getPhrase("accept_hit_request", customer:Nick(), target:Nick(), DarkRP.formatMoney(price)),
 		"hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
 		self,
 		20,
@@ -121,7 +121,7 @@ DarkRP.defineChatCommand("hitprice", function(ply, args)
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
 
-	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("hit_price_set_to_x", GAMEMODE.Config.currency, price))
+	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("hit_price_set", DarkRP.formatMoney(price)))
 
 	return ""
 end)
@@ -155,7 +155,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target, customer)
 	DarkRP.notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
 	customer.lastHitAccepted = CurTime()
 
-	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. GAMEMODE.Config.currency .. hits[hitman].price, Color(255, 0, 255))
+	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price), Color(255, 0, 255))
 end
 
 function DarkRP.hooks:onHitCompleted(hitman, target, customer)
@@ -169,7 +169,7 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. GAMEMODE.Config.currency .. hits[hitman].price,
+	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price),
 		Color(255, 0, 255))
 
 	target:setDarkRPVar("lastHitTime", CurTime())

@@ -10,7 +10,7 @@ function ENT:Draw()
 	local Ang = self:GetAngles()
 
 	surface.SetFont("ChatFont")
-	local text = GAMEMODE.Config.currency..tostring(self:Getamount())
+	local text = DarkRP.formatMoney(self:Getamount())
 	local TextWidth = surface.GetTextSize(text)
 
 	cam.Start3D2D(Pos + Ang:Up() * 0.9, Ang, 0.1)

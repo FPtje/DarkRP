@@ -31,7 +31,7 @@ function meta:payDay()
 				if not suppress then DarkRP.notify(self, 4, 4, message or DarkRP.getPhrase("payday_unemployed")) end
 			else
 				self:addMoney(amount)
-				if not suppress then DarkRP.notify(self, 4, 4, message or DarkRP.getPhrase("payday_message", GAMEMODE.Config.currency .. amount)) end
+				if not suppress then DarkRP.notify(self, 4, 4, message or DarkRP.getPhrase("payday_message", DarkRP.formatMoney(amount))) end
 			end
 		end)
 	else
@@ -99,9 +99,9 @@ local function GiveMoney(ply, args)
 					end
 					DarkRP.payPlayer(ply, trace2.Entity, amount)
 
-					DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
-					DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), GAMEMODE.Config.currency .. tostring(amount)))
-					DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..GAMEMODE.Config.currency .. tostring(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+					DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), DarkRP.formatMoney(amount)))
+					DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), DarkRP.formatMoney(amount)))
+					DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..DarkRP.formatMoney(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
 				end
 			else
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/give", ""))
@@ -155,7 +155,7 @@ local function DropMoney(ply, args)
 
 			local tr = util.TraceLine(trace)
 			DarkRP.createMoneyBag(tr.HitPos, amount)
-			DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped "..GAMEMODE.Config.currency .. tostring(amount))
+			DarkRP.log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped ".. DarkRP.formatMoney(amount))
 		else
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/dropmoney", ""))
 		end
@@ -248,17 +248,17 @@ local function ccSetMoney(ply, cmd, args)
 		target:setDarkRPVar("money", amount)
 
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("you_set_x_money_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			print(DarkRP.getPhrase("you_set_x_money", target:Nick(), DarkRP.formatMoney(amount), ""))
 			nick = "Console"
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_money_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_money", target:Nick(), DarkRP.formatMoney(amount), ""))
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_money_to_y", nick, GAMEMODE.Config.currency, amount))
+		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_money", nick, DarkRP.formatMoney(amount), ""))
 		if ply:EntIndex() == 0 then
-			DarkRP.log("Console set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+			DarkRP.log("Console set " .. target:SteamName() .. "'s money to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
 		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s money to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s money to " ..  DarkRP.formatMoney(amount), Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -312,17 +312,17 @@ local function ccSetSalary(ply, cmd, args)
 		target:setSelfDarkRPVar("salary", amount)
 
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("you_set_x_salary_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			print(DarkRP.getPhrase("you_set_x_salary", target:Nick(), DarkRP.formatMoney(amount), ""))
 			nick = "Console"
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_salary_to_y", target:Nick(), GAMEMODE.Config.currency, amount))
+			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_salary", target:Nick(), DarkRP.formatMoney(amount), ""))
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_salary_to_y", nick, GAMEMODE.Config.currency, amount))
+		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_salary", nick, DarkRP.formatMoney(amount), ""))
 		if ply:EntIndex() == 0 then
-			DarkRP.log("Console set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+			DarkRP.log("Console set " .. target:SteamName() .. "'s salary to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
 		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s salary to "..GAMEMODE.Config.currency..amount, Color(30, 30, 30))
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s salary to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

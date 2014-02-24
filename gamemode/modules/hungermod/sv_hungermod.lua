@@ -59,7 +59,7 @@ local function BuyFood(ply, args)
 			return ""
 		end
 		ply:addMoney(-cost)
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought_x", v.name, GAMEMODE.Config.currency, cost))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", v.name, DarkRP.formatMoney(cost), ""))
 
 		local SpawnedFood = ents.Create("spawned_food")
 		SpawnedFood:Setowning_ent(ply)

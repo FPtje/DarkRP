@@ -27,7 +27,7 @@ function ENT:Use(activator, caller)
 
 	if (IsValid(activator) and IsValid(recipient)) and activator == recipient then
 		owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("disconnected_player")
-		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_cheque", GAMEMODE.Config.currency, amount, owner))
+		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_cheque", DarkRP.formatMoney(amount), "", owner))
 		activator:addMoney(amount)
 		self:Remove()
 	elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then
