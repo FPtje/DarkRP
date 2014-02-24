@@ -43,6 +43,8 @@ GM.Config.copscanunfreeze 				= true
 GM.Config.copscanunweld 				= false
 -- cpcanarrestcp - Allow/Disallow CPs to arrest other CPs.
 GM.Config.cpcanarrestcp 				= true
+-- currencyLeft - The position of the currency symbol. true for left, false for right.
+GM.Config.currencyLeft					= true
 -- customjobs - Enable/disable the /job command (personalized job names).
 GM.Config.customjobs 					= true
 -- customspawns - Enable/disable whether custom spawns should be used.

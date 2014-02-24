@@ -6,6 +6,7 @@ Utility functions
 
 local vector = FindMetaTable("Vector")
 local meta = FindMetaTable("Player")
+local config = GM.Config
 
 /*---------------------------------------------------------------------------
 Decides whether the vector could be seen by the player if they were to look at it
@@ -20,6 +21,29 @@ function vector:isInSight(filter, ply)
 	local TheTrace = util.TraceLine(trace)
 
 	return not TheTrace.Hit, TheTrace.HitPos
+end
+
+/*---------------------------------------------------------------------------
+Turn a money amount into a pretty string
+---------------------------------------------------------------------------*/
+local function attachCurrency(str)
+	return config.currencyLeft and config.currency .. str or str .. config.currency
+end
+
+function DarkRP.formatMoney(n)
+	if not n then return attachCurrency("0") end
+
+	if n >= 1e14 then return attachCurrency(tostring(n)) end
+
+    n = tostring(n)
+    local sep = sep or ","
+    local dp = string.find(n, "%.") or #n+1
+
+	for i=dp-4, 1, -3 do
+		n = n:sub(1, i) .. sep .. n:sub(i+1)
+    end
+
+    return attachCurrency(n)
 end
 
 /*---------------------------------------------------------------------------
