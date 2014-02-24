@@ -110,11 +110,11 @@ local function DrawHealth()
 end
 
 local function DrawInfo()
-	local Salary = DarkRP.getPhrase("salary", GAMEMODE.Config.currency, (localplayer:getDarkRPVar("salary") or 0))
+	local Salary = DarkRP.getPhrase("salary", DarkRP.formatMoney(localplayer:getDarkRPVar("salary")), "")
 
 	JobWallet = string.format("%s\n%s",
 		DarkRP.getPhrase("job", localplayer:getDarkRPVar("job") or ""),
-		DarkRP.getPhrase("wallet", GAMEMODE.Config.currency, formatNumber(localplayer:getDarkRPVar("money") or 0))
+		DarkRP.getPhrase("wallet", DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
 	)
 
 	local wep = localplayer:GetActiveWeapon()
