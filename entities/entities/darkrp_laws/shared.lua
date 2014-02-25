@@ -30,7 +30,7 @@ DarkRP.declareChatCommand{
 
 DarkRP.getLaws = DarkRP.stub{
 	name = "getLaws",
-	description = "Get the table of all current laws. While the law numbers are only found in the table keys serverside, the table also includes the law number in the table values on the client side.",
+	description = "Get the table of all current laws.",
 	parameters = {
 	},
 	returns = {
