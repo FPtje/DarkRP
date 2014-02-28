@@ -97,17 +97,17 @@ local function setRPName(ply, cmd, args)
 		target:setDarkRPVar("rpname", args[2])
 
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("you_set_x_name_to_y", oldname, args[2]))
+			print(DarkRP.getPhrase("you_set_x_name", oldname, args[2]))
 			nick = "Console"
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_name_to_y", oldname, args[2]))
+			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_name", oldname, args[2]))
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_name_to_y", nick, args[2]))
+		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_name", nick, args[2]))
 		if ply:EntIndex() == 0 then
-			DarkRP.log("Console set "..target:SteamName().."'s name to " .. args[2], Color(30, 30, 30))
+			DarkRP.log("Console set " .. target:SteamName() .. "'s name to " .. args[2], Color(30, 30, 30))
 		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") set "..target:SteamName().."'s name to " .. args[2], Color(30, 30, 30))
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s name to " .. args[2], Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
