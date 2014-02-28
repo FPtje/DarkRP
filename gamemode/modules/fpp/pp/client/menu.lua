@@ -20,6 +20,7 @@ function FPP.AdminMenu(Panel)
 	AdminPanel.contents:Clear()
 
 	local superadmin = LocalPlayer():IsSuperAdmin()
+	local admin = LocalPlayer():IsAdmin()
 	if not superadmin then
 		AdminPanel.contents:Add(Label("You are not a superadmin\nThe changes you make will not have any effect."))
 		local AmAdmin = AdminPanel.contents:Add("DButton")
@@ -158,7 +159,7 @@ function FPP.AdminMenu(Panel)
 	local delnow = general:Add("DButton")
 	delnow:SetText("Delete disconnected players' entities")
 	delnow:SetConsoleCommand("FPP_cleanup", "disconnected")
-	delnow:SetDisabled(not superadmin)
+	delnow:SetDisabled(not admin)
 
 	local other = general:Add(Label("\nDelete player's entities:"))
 	other:SizeToContents()
@@ -170,7 +171,7 @@ function FPP.AdminMenu(Panel)
 		local rm = general:Add("DButton")
 		rm:SetText(v:Nick())
 		rm:SetConsoleCommand("FPP_Cleanup", v:UserID())
-		rm:SetDisabled(not LocalPlayer():IsAdmin() and not superadmin)
+		rm:SetDisabled(not admin)
 	end
 	if not areplayers then
 		local nope = general:Add(Label("<No players available>"))
