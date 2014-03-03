@@ -123,8 +123,10 @@ function SWEP:PrimaryAttack()
 			self.NextStrike = CurTime() + duration
 		end)
 	end
-
+	
+	self.Owner:LagComensation(true)
 	local trace = util.QuickTrace(self.Owner:EyePos(), self.Owner:GetAimVector() * 90, {self.Owner})
+	self.Owner:LagComensation(false)
 	if IsValid(trace.Entity) and trace.Entity.onUnArrestStickUsed then
 		trace.Entity:onUnArrestStickUsed(self.Owner)
 		return
