@@ -124,7 +124,7 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 	
-	self.Owner:LagComensation(true)
+	self.Owner:LagCompensation(true)
 	local trace = util.QuickTrace(self.Owner:EyePos(), self.Owner:GetAimVector() * 90, {self.Owner})
 	self.Owner:LagComensation(false)
 	if IsValid(trace.Entity) and trace.Entity.onUnArrestStickUsed then
