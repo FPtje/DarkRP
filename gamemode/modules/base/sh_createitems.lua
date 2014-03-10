@@ -484,7 +484,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	local customShipment = tableSyntaxUsed and model or
 		{model = model, entity = entity, price = price, amount = Amount_of_guns_in_one_shipment,
 		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = AllowedClasses,
-		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
+		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5, spareammo = nil, clip1 = nil, clip2 = nil}
 
 	if customShipment.separate ~= nil then
 		customShipment.seperate = customShipment.separate
