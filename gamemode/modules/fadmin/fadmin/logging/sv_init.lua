@@ -31,7 +31,7 @@ hook.Add("PlayerGiveSWEP", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Gave himself a "..(class or "Unknown"))
 end)
-hook.Add("PlayerSpawnSENT", "FAdmin_Log", function(ply, class)
+hook.Add("PlayerSpawnedSENT", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
@@ -39,7 +39,7 @@ hook.Add("PlayerSpawnSWEP", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
-hook.Add("PlayerSpawnProp", "FAdmin_Log", function(ply, class)
+hook.Add("PlayerSpawnedProp", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	for k,v in pairs(player.GetAll()) do
 		if v:IsAdmin() then
@@ -48,19 +48,19 @@ hook.Add("PlayerSpawnProp", "FAdmin_Log", function(ply, class)
 	end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
-hook.Add("PlayerSpawnNPC", "FAdmin_Log", function(ply, class)
+hook.Add("PlayerSpawnedNPC", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
-hook.Add("PlayerSpawnVehicle", "FAdmin_Log", function(ply, class)
+hook.Add("PlayerSpawnedVehicle", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
-hook.Add("PlayerSpawnEffect", "FAdmin_Log", function(ply, class)
+hook.Add("PlayerSpawnedEffect", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
-hook.Add("PlayerSpawnRagdoll", "FAdmin_Log", function(ply, class)
+hook.Add("PlayerSpawnedRagdoll", "FAdmin_Log", function(ply, class)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
 end)
