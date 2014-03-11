@@ -324,6 +324,21 @@ function setUpNonOwnableDoors()
 	end)
 end
 
+local keyValueActions = {
+	["DarkRPNonOwnable"] = function(ent, val) ent:setKeysNonOwnable(tobool(val)) end,
+	["DarkRPTitle"]      = function(ent, val) ent:setKeysTitle(val) end,
+	["DarkRPDoorGroup"]  = function(ent, val) if RPExtraTeamDoors[val] then ent:setDoorGroup(val) end end
+}
+
+local function onKeyValue(ent, key, value)
+	if not ent:isDoor() then return end
+
+	if keyValueActions[key] then
+		keyValueActions[key](ent, value)
+	end
+end
+hook.Add("EntityKeyValue", "darkrp_doors", onKeyValue)
+
 function DarkRP.storeTeamDoorOwnability(ent)
 	if not ent:CreatedByMap() then return end
 	local map = string.lower(game.GetMap())
