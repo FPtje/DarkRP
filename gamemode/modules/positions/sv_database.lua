@@ -19,34 +19,52 @@ hook.Add("DarkRPDBInitialized", "GetPositions", onDBInitialized)
 
 
 local JailIndex = 1 -- Used to circulate through the jailpos table
+
+-- Function for backwards compatibility
 function DarkRP.storeJailPos(ply, addingPos)
-	local map = string.lower(game.GetMap())
-	local pos = string.Explode(" ", tostring(ply:GetPos()))
-	MySQLite.queryValue("SELECT COUNT(*) FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function(already)
-		if not already or already == 0 then
-			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
-			DarkRP.notify(ply, 0, 4,  DarkRP.getPhrase("created_first_jailpos"))
+	local pos = ply:GetPos()
 
-			return
-		end
+	if addingPos then
+		DarkRP.addJailPos(pos)
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("added_jailpos"))
+	else
+		DarkRP.setJailPos(pos)
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("reset_add_jailpos"))
+	end
+end
 
-		if addingPos then
-			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
+function DarkRP.setJailPos(pos)
+	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
+	local pos = string.Explode(" ", tostring(pos))
 
-			table.insert(jailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
-			DarkRP.notify(ply, 0, 4,  DarkRP.getPhrase("added_jailpos"))
-		else
-			MySQLite.query("DELETE FROM darkrp_position WHERE type = 'J' AND map = " .. MySQLite.SQLStr(map) .. ";", function()
-				MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'J', " .. pos[1] .. ", " .. pos[2] .. ", " .. pos[3] .. ");")
+	jailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
 
+	local remQuery = "DELETE FROM darkrp_position WHERE type = 'J' AND map = %s;"
+	local insQuery = "INSERT INTO darkrp_position VALUES(NULL, %s, 'J', %s, %s, %s);"
 
-				jailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
-				DarkRP.notify(ply, 0, 5,  DarkRP.getPhrase("reset_add_jailpos"))
-			end)
-		end
-	end)
+	remQuery = string.format(remQuery, map)
+	insQuery = string.format(insQuery, map, pos[1], pos[2], pos[3])
+
+	MySQLite.begin()
+	MySQLite.queueQuery(remQuery)
+	MySQLite.queueQuery(insQuery)
+	MySQLite.commit()
 
 	JailIndex = 1
+end
+
+function DarkRP.addJailPos(pos)
+	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
+	local pos = string.Explode(" ", tostring(pos))
+
+	local insQuery = "INSERT INTO darkrp_position VALUES(NULL, %s, 'J', %s, %s, %s);"
+	insQuery = string.format(insQuery, map, pos[1], pos[2], pos[3])
+
+	MySQLite.query(insQuery)
+
+	JailIndex = 1
+
+	table.insert(jailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
 end
 
 function DarkRP.retrieveJailPos()

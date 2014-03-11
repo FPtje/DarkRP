@@ -20,6 +20,38 @@ DarkRP.storeJailPos = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.setJailPos = DarkRP.stub{
+	name = "setJailPos",
+	description = "Remove all jail positions in this map and create a new one. To add a jailpos without removing previous ones use DarkRP.addJailPos. This jail position will be saved in the database.",
+	parameters = {
+		{
+			name = "pos",
+			description = "The position to set as jailpos.",
+			type = "Vector",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.addJailPos = DarkRP.stub{
+	name = "addJailPos",
+	description = "Add a jail position to the map. This jail position will be saved in the database.",
+	parameters = {
+		{
+			name = "pos",
+			description = "The position to add as jailpos.",
+			type = "Vector",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
 DarkRP.retrieveJailPos = DarkRP.stub{
 	name = "retrieveJailPos",
 	description = "Retrieve a jail position.",
