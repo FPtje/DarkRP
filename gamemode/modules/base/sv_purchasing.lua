@@ -79,8 +79,8 @@ local function BuyPistol(ply, args)
 	weapon.ShareGravgun = true
 	weapon:SetPos(tr.HitPos)
 	weapon.ammoadd = weapons.Get(shipment.entity) and ( shipment.spareammo or weapons.Get(shipment.entity).Primary.DefaultClip )
-+	weapon.clip1 = shipment.clip1 or nil
-+	weapon.clip2 = shipment.clip2 or nil
++	weapon.clip1 = shipment.clip1
++	weapon.clip2 = shipment.clip2
 	weapon.nodupe = true
 	weapon:Spawn()
 
@@ -185,9 +185,9 @@ local function BuyShipment(ply, args)
 
 	crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z))
 	crate.nodupe = true
-	crate.ammoadd = found.spareammo or nil
-+	crate.clip1 = found.clip1 or nil
-+	crate.clip2 = found.clip2 or nil
+	crate.ammoadd = found.spareammo
++	crate.clip1 = found.clip1
++	crate.clip2 = found.clip2
 	crate:Spawn()
 	crate:SetPlayer(ply)
 	if found.shipmodel then
