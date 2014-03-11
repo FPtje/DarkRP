@@ -78,7 +78,7 @@ local function BuyPistol(ply, args)
 	weapon:SetWeaponClass(shipment.entity)
 	weapon.ShareGravgun = true
 	weapon:SetPos(tr.HitPos)
-	weapon.ammoadd = weapons.Get(shipment.entity) and ( shipment.spareammo or weapons.Get(shipment.entity).Primary.DefaultClip )
+	weapon.ammoadd = weapons.Get(shipment.entity) and (shipment.spareammo or weapons.Get(shipment.entity).Primary.DefaultClip)
 	weapon.clip1 = shipment.clip1
 	weapon.clip2 = shipment.clip2
 	weapon.nodupe = true
