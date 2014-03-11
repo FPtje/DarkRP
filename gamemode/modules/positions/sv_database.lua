@@ -10,8 +10,8 @@ local function onDBInitialized()
 	end)
 
 	MySQLite.query([[SELECT * FROM darkrp_position WHERE type = 'J' AND map = ]] .. map .. [[;]], function(data)
-		for k,v in pairs(data or {}) do
-			table.insert(jailPos, v)
+		for k, v in pairs(data or {}) do
+			table.insert(jailPos, Vector(v.x, v.y, v.z))
 		end
 	end)
 end
@@ -35,15 +35,15 @@ end
 
 function DarkRP.setJailPos(pos)
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
-	local pos = string.Explode(" ", tostring(pos))
+	local strPos = string.Explode(" ", tostring(pos))
 
-	jailPos = {[1] = {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"}}
+	jailPos = {pos}
 
 	local remQuery = "DELETE FROM darkrp_position WHERE type = 'J' AND map = %s;"
 	local insQuery = "INSERT INTO darkrp_position VALUES(NULL, %s, 'J', %s, %s, %s);"
 
 	remQuery = string.format(remQuery, map)
-	insQuery = string.format(insQuery, map, pos[1], pos[2], pos[3])
+	insQuery = string.format(insQuery, map, strPos[1], strPos[2], strPos[3])
 
 	MySQLite.begin()
 	MySQLite.queueQuery(remQuery)
@@ -55,27 +55,26 @@ end
 
 function DarkRP.addJailPos(pos)
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
-	local pos = string.Explode(" ", tostring(pos))
+	local strPos = string.Explode(" ", tostring(pos))
+
+	table.insert(jailPos, pos)
 
 	local insQuery = "INSERT INTO darkrp_position VALUES(NULL, %s, 'J', %s, %s, %s);"
-	insQuery = string.format(insQuery, map, pos[1], pos[2], pos[3])
+	insQuery = string.format(insQuery, map, strPos[1], strPos[2], strPos[3])
 
 	MySQLite.query(insQuery)
 
 	JailIndex = 1
-
-	table.insert(jailPos, {map = map, x = pos[1], y = pos[2], z = pos[3], type = "J"})
 end
 
 function DarkRP.retrieveJailPos()
-	local map = string.lower(game.GetMap())
-	if not jailPos then return Vector(0,0,0) end
+	if not jailPos then return Vector(0, 0, 0) end
 
 	-- Retrieve the least recently used jail position
 	local oldestPos = jailPos[JailIndex]
 	JailIndex = JailIndex % #jailPos + 1
 
-	return oldestPos and Vector(oldestPos.x, oldestPos.y, oldestPos.z)
+	return oldestPos
 end
 
 function DarkRP.jailPosCount()
