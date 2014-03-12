@@ -92,18 +92,12 @@ function meta:changeTeam(t, force)
 	self.LastJob = CurTime()
 
 	if GAMEMODE.Config.removeclassitems then
-		for k, v in pairs(ents.FindByClass("microwave")) do
-			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
-			if v.SID == self.SID then v:Remove() end
-		end
-		for k, v in pairs(ents.FindByClass("gunlab")) do
-			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
-			if v.SID == self.SID then v:Remove() end
-		end
-
-		for k, v in pairs(ents.FindByClass("drug_lab")) do
-			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
-			if v.SID == self.SID then v:Remove() end
+		for k, v in pairs(DarkRPEntities) do
+			if not v.allowed then continue end
+			if type(v.allowed) == "table" and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
+			for _, e in pairs(ents.FindByClass(v.ent)) do
+				if e.SID == self.SID then e:Remove() end
+			end
 		end
 
 		for k,v in pairs(ents.FindByClass("spawned_shipment")) do
