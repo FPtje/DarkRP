@@ -34,7 +34,7 @@ function ENT:Initialize()
 	phys = self:GetgunModel():GetPhysicsObject()
 	phys:EnableMotion(false)
 
-	-- If per chance a shipment is created with 0 contents
+	-- The following code should not be reached
 	if self:Getcount() < 1 then
 		self.PlayerUse = false
 		SafeRemoveEntity(self)
