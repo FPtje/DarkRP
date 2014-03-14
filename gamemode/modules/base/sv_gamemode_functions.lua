@@ -139,8 +139,14 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 end
 
 function GM:PlayerSpawnSENT(ply, class)
-	if GAMEMODE.Config.adminsents and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+	if (GAMEMODE.Config.adminsents == true or GAMEMODE.Config.adminsents == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
+		return false
+	elseif GAMEMODE.Config.adminsents == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_sadmin", "gm_spawnsent"))
+		return false
+	elseif GAMEMODE.Config.adminsents == 3 and ply:EntIndex() ~= 0 then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("unable", "gm_spawnsent"))
 		return false
 	end
 	return self.BaseClass:PlayerSpawnSENT(ply, class) and not ply:isArrested()
@@ -174,8 +180,14 @@ function GM:PlayerSpawnEffect(ply, model)
 end
 
 function GM:PlayerSpawnVehicle(ply, model, class, info)
-	if GAMEMODE.Config.adminvehicles and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+	if (GAMEMODE.Config.adminvehicles == true or GAMEMODE.Config.adminvehicles == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
+		return false
+	elseif GAMEMODE.Config.adminvehicles == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_sadmin", "gm_spawnvehicle"))
+		return false
+	elseif GAMEMODE.Config.adminvehicles == 3 and ply:EntIndex() ~= 0 then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("unable", "gm_spawnvehicle"))
 		return false
 	end
 	return self.BaseClass:PlayerSpawnVehicle(ply, model, class, info) and not ply:isArrested()
@@ -187,8 +199,14 @@ function GM:PlayerSpawnedVehicle(ply, ent)
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
-	if GAMEMODE.Config.adminnpcs and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+	if (GAMEMODE.Config.adminnpcs == true or GAMEMODE.Config.adminnpcs == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
 		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
+		return false
+	elseif GAMEMODE.Config.adminnpcs == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_sadmin", "gm_spawnnpc"))
+		return false
+	elseif GAMEMODE.Config.adminnpcs == 3 and ply:EntIndex() ~= 0 then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("unable", "gm_spawnnpc"))
 		return false
 	end
 	return self.BaseClass:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested()
