@@ -91,10 +91,9 @@ function meta:changeTeam(t, force)
 
 	self.LastJob = CurTime()
 
-	GAMEMODE.Config.ignoreClassItem = GAMEMODE.Config.ignoreClassItem or {}
 	if GAMEMODE.Config.removeclassitems then
 		for k, v in pairs(DarkRPEntities) do
-			if GAMEMODE.Config.ignoreClassItem[v.ent] then continue end
+			if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
 			if not v.allowed then continue end
 			if type(v.allowed) == "table" and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
 			for _, e in pairs(ents.FindByClass(v.ent)) do

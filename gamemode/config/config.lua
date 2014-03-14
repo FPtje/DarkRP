@@ -328,7 +328,15 @@ GM.Config.PocketBlacklist = {
 -- The latter takes GM.NoLicense weapons as legal (see licenseweapons.lua)
 -- The format of this config is similar to GM.Config.DisallowDrop
 GM.Config.noStripWeapons = {
-	
+
+}
+
+-- The entities listed here will not be removed when a player changes their job.
+-- This only applies when removeclassitems is set to true
+-- Note: entities will only be removed when the player changes to a job that is not allowed to have the entity
+GM.Config.preventClassItemRemoval = {
+	["gunlab"] = false,
+	["microwave"] = false,
 }
 
 -- Properties set to true are allowed to be used. Values set to false or are missing from this list are blocked.
