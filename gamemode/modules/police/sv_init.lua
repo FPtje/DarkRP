@@ -332,7 +332,7 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(ply.FAdminJailPos) end end)
 	end
 
-	timer.Destroy(ply:SteamID() .. "jailtimer")
+	timer.Destroy(ply:UniqueID() .. "jailtimer")
 	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
 end
 
