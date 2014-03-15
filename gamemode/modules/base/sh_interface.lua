@@ -40,6 +40,22 @@ DarkRP.formatMoney = DarkRP.stub{
 	metatable = DarkRP
 }
 
+-- This function is one of the few that's already defined before the stub is created
+DarkRP.stub{
+	name = "SteamName",
+	description = "Retrieve a player's real (steam) name.",
+	parameters = {
+
+	},
+	returns = {
+		{
+			name = "name",
+			description = "The player's steam name.",
+			type = "String"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
 
 DarkRP.PLAYER.getJobTable = DarkRP.stub{
 	name = "getJobTable",
