@@ -5,14 +5,8 @@ Set to true or false
 
 -- voice3D - Enable/disable 3DVoice is enabled
 GM.Config.voice3D						= true
--- adminnpcs - Whether or not NPCs should be admin only.
-GM.Config.adminnpcs 					= true
 -- AdminsCopWeapons - Enable/disable admins spawning with cop weapons
 GM.Config.AdminsCopWeapons 				= true
--- adminsents - Whether or not SENTs should be admin only.
-GM.Config.adminsents 					= true
--- adminvehicles - Whether or not Vehicles should be admin only.
-GM.Config.adminvehicles 				= true
 -- allow people getting their own custom jobs
 GM.Config.allowjobswitch 				= true
 -- allowrpnames - Allow Players to Set their RP names using the /rpname command.
@@ -151,13 +145,20 @@ GM.Config.weaponCheckerHideNoLicense	= false
 /*
 Value settings
 */
+-- adminnpcs - Whether or not NPCs should be admin only. 0 = everyone, 1 = admin or higher, 2 = superadmin or higher, 3 = rcon only
+GM.Config.adminnpcs 					= 3
+-- adminsents - Whether or not SENTs should be admin only. 0 = everyone, 1 = admin or higher, 2 = superadmin or higher, 3 = rcon only
+GM.Config.adminsents 					= 1
+-- adminvehicles - Whether or not vehicles should be admin only. 0 = everyone, 1 = admin or higher, 2 = superadmin or higher, 3 = rcon only
+GM.Config.adminvehicles 				= 3
 -- adminweapons - Who can spawn weapons: 0: admins only, 1: supadmins only, 2: no one
 GM.Config.adminweapons					= 1
 -- arrestspeed - Sets the max arrest speed.
 GM.Config.arrestspeed					= 120
 -- babygodtime - How long the babygod lasts
 GM.Config.babygodtime					= 5
--- chatsoundsdelay - How long to wait before letting a player emit a sound from their chat again. Leave this on at least a few seconds to prevent 'HAXHAXHAXHAXHAXHAX'-ing. Set to 0 to disable.
+-- chatsoundsdelay - How long to wait before letting a player emit a sound from their chat again.
+-- Leave this on at least a few seconds to prevent people from spamming sounds. Set to 0 to disable.
 GM.Config.chatsoundsdelay				= 5
 -- deathfee - the amount of money someone drops when dead.
 GM.Config.deathfee						= 30
@@ -328,7 +329,15 @@ GM.Config.PocketBlacklist = {
 -- The latter takes GM.NoLicense weapons as legal (see licenseweapons.lua)
 -- The format of this config is similar to GM.Config.DisallowDrop
 GM.Config.noStripWeapons = {
-	
+
+}
+
+-- The entities listed here will not be removed when a player changes their job.
+-- This only applies when removeclassitems is set to true
+-- Note: entities will only be removed when the player changes to a job that is not allowed to have the entity
+GM.Config.preventClassItemRemoval = {
+	["gunlab"] = false,
+	["microwave"] = false,
 }
 
 -- Properties set to true are allowed to be used. Values set to false or are missing from this list are blocked.

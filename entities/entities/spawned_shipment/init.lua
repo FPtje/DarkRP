@@ -33,6 +33,13 @@ function ENT:Initialize()
 
 	phys = self:GetgunModel():GetPhysicsObject()
 	phys:EnableMotion(false)
+
+	-- The following code should not be reached
+	if self:Getcount() < 1 then
+		self.PlayerUse = false
+		SafeRemoveEntity(self)
+		error("Shipment created with zero or fewer elements.")
+	end
 end
 
 function ENT:StartSpawning()

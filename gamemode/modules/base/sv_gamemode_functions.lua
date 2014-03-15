@@ -138,12 +138,26 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 	end
 end
 
-function GM:PlayerSpawnSENT(ply, class)
-	if GAMEMODE.Config.adminsents and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnsent"))
+
+local function checkAdminSpawn(ply, configVar, errorStr)
+	local config = GAMEMODE.Config[configVar]
+
+	if (config == true or config == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", errorStr))
+		return false
+	elseif config == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_sadmin", errorStr))
+		return false
+	elseif config == 3 and ply:EntIndex() ~= 0 then
+		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("unable", errorStr, ""))
 		return false
 	end
-	return self.BaseClass:PlayerSpawnSENT(ply, class) and not ply:isArrested()
+
+	return true
+end
+
+function GM:PlayerSpawnSENT(ply, class)
+	return checkAdminSpawn(ply, "adminsents", "gm_spawnsent") and self.BaseClass:PlayerSpawnSENT(ply, class) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedSENT(ply, ent)
@@ -174,11 +188,7 @@ function GM:PlayerSpawnEffect(ply, model)
 end
 
 function GM:PlayerSpawnVehicle(ply, model, class, info)
-	if GAMEMODE.Config.adminvehicles and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnvehicle"))
-		return false
-	end
-	return self.BaseClass:PlayerSpawnVehicle(ply, model, class, info) and not ply:isArrested()
+	return checkAdminSpawn(ply, "adminvehicles", "gm_spawnvehicle") and self.BaseClass:PlayerSpawnVehicle(ply, model, class, info) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
@@ -187,11 +197,7 @@ function GM:PlayerSpawnedVehicle(ply, ent)
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
-	if GAMEMODE.Config.adminnpcs and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "gm_spawnnpc"))
-		return false
-	end
-	return self.BaseClass:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested()
+	return checkAdminSpawn(ply, "adminnpcs", "gm_spawnnpc") and self.BaseClass:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedNPC(ply, ent)
