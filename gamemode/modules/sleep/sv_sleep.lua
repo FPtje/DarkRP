@@ -59,7 +59,7 @@ function DarkRP.toggleSleep(player, command)
 					player:GetTable().BeforeSleepTeam = nil
 					player.WeaponsForSleep = nil
 				else
-					GAMEMODE:PlayerLoadout(player)
+					gamemode.Call("PlayerLoadout", player)
 				end
 
 				if frozen then

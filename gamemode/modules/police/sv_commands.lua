@@ -368,7 +368,7 @@ local function FinishRevokeLicense(vote, win)
 	if choice == 1 then
 		vote.target:setDarkRPVar("HasGunlicense", false)
 		vote.target:StripWeapons()
-		GAMEMODE:PlayerLoadout(vote.target)
+		gamemode.Call("PlayerLoadout", vote.target)
 		DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_removed", vote.target:Nick()))
 	else
 		DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_not_removed", vote.target:Nick()))
