@@ -1,4 +1,5 @@
 local plyMeta = FindMetaTable("Player")
+
 -- automatically block players from doing certain things with their DarkRP entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
@@ -29,6 +30,11 @@ local function checkValid(tbl, requiredItems)
 		end
 	end
 end
+
+-----------------------------------------------------------
+-- Convar for Safety Reasons --
+-----------------------------------------------------------
+CreateConVar("drp_agenda_multimanagers",false)
 
 -----------------------------------------------------------
 -- Job commands --
@@ -577,6 +583,7 @@ function plyMeta:getAgendaTable()
 end
 
 function DarkRP.createAgenda(Title, Manager, Listeners)
+	if not GetConVar("drp_agenda_multimanagers"):GetBool() then Manager = Manager[0] end
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 
 	if not Manager then
@@ -585,11 +592,14 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 		return
 	end
 
-	DarkRPAgendas[Manager] = {Manager = Manager, Title = Title, Listeners = Listeners} -- backwards compat
+	DarkRPAgendas[Manager[0]] = {Manager = Manager, Title = Title, Listeners = Listeners} -- backwards compat
 
-	agendas[Manager] = disjoint.MakeSet(DarkRPAgendas[Manager])
-	for k,v in pairs(Listeners) do
-		agendas[v] = disjoint.MakeSet(v, agendas[Manager]) -- have the manager as parent
+	
+	for uk, uv in pairs(Manager) do
+		agendas[uv] = disjoint.MakeSet(DarkRPAgendas[uv])
+		for k,v in pairs(Listeners) do
+			agendas[v] = disjoint.MakeSet(v, agendas[uv]) -- have the manager as parent
+		end
 	end
 end
 AddAgenda = DarkRP.createAgenda
