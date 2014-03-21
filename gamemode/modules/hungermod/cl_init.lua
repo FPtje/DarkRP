@@ -14,7 +14,7 @@ local pairs = pairs
 local unpack = unpack
 
 local ConVars = {}
-local HUDWidth
+local HUDWidth = 0
 
 local FoodAteAlpha = -1
 local FoodAteY = 0
@@ -49,7 +49,8 @@ local function ReloadConVars()
 		ConVars[name] = Color(unpack(ConVars[name]))
 	end
 
-	if not HUDWidth then
+	if HUDWidth == 0 then
+		HUDWidth = 240
 		cvars.AddChangeCallback("HudW", function() timer.Simple(0, ReloadConVars) end)
 	end
 
