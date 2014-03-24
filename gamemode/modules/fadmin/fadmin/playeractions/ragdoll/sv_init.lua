@@ -271,7 +271,7 @@ local function Ragdoll(ply, cmd, args)
 				end)
 			end
 
-			if not string.find(RagdollType, "kick") and RagdollType ~= "unragdoll" and string.lower(cmd) ~= "unragdoll" then
+			if RagdollType ~= "unragdoll" and string.lower(cmd) ~= "unragdoll" then
 				target:FAdmin_SetGlobal("fadmin_ragdolled", true)
 			end
 		end
