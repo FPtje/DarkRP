@@ -174,7 +174,7 @@ local function Ragdoll(ply, cmd, args)
 				local angle = Angle(0, target:EyeAngles().y + 90, 0)
 				for i = 1, Ragdoll:GetPhysicsObjectCount() do
 					local phys = Ragdoll:GetPhysicsObjectNum(i)
-					if phys and phys:IsValid() then
+					if phys and phys:IsValid() and VictimPos1[i] then
 						phys:EnableMotion(false)
 						-- Copy the vector
 						local pos = Vector(VictimPos1[i].x, VictimPos1[i].y, VictimPos1[i].z)
