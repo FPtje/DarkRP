@@ -80,7 +80,8 @@ local function getMissingCmdTranslations()
 			cmds[i] = nil
 		end
 	end
-	table.ClearKeys(cmds)
+
+	cmds = table.ClearKeys(cmds)
 
 	return cmds
 end
