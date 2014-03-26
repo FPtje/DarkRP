@@ -39,7 +39,7 @@ function meta:changeTeam(t, force)
 	local TEAM = RPExtraTeams[t]
 	if not TEAM then return false end
 
-	if TEAM.customCheck and not TEAM.customCheck(self) then
+	if TEAM.customCheck and not TEAM.customCheck(self) and not force then
 		DarkRP.notify(self, 1, 4, TEAM.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
