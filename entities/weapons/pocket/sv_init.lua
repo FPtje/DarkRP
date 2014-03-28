@@ -193,7 +193,7 @@ end
 Interface functions
 ---------------------------------------------------------------------------*/
 function meta:addPocketItem(ent)
-	if not IsValid(ent) then error("Entity not valid", 2) end
+	if not IsValid(ent) or ent.USED then error("Entity not valid", 2) end
 
 	-- This item cannot be used until it has been removed
 	ent.USED = true
