@@ -65,6 +65,7 @@ function meta:drawOwnableInfo()
 			if v:GetVehicle() ~= self then continue end
 
 			table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
+			break
 		end
 	end
 
