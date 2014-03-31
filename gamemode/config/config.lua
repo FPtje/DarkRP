@@ -367,7 +367,10 @@ GM.Config.hideTeamUnbuyable = true
 /*---------------------------------------------------------------------------
 AFK module
 ---------------------------------------------------------------------------*/
+-- The time of inactivity before being demoted
 GM.Config.afkdemotetime = 600
+-- Prevent people from spamming AFK
+GM.Config.AFKDelay = 300
 
 /*---------------------------------------------------------------------------
 Hitmenu module

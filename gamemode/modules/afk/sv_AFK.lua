@@ -40,7 +40,18 @@ local function SetAFK(ply)
 	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
 	ply:setDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
 end
-DarkRP.defineChatCommand("afk", SetAFK)
+
+DarkRP.defineChatCommand("afk", function(ply)
+	if ply.DarkRPLastAFK and not ply:getDarkRPVar("AFK") and ply.DarkRPLastAFK > CurTime() - GAMEMODE.Config.AFKDelay then
+		DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("unable", "go AFK", "Spam prevention."))
+		return ""
+	end
+
+	ply.DarkRPLastAFK = CurTime()
+	SetAFK(ply)
+
+	return ""
+end)
 
 local function StartAFKOnPlayer(ply)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
