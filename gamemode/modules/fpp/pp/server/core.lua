@@ -182,6 +182,13 @@ local function cantouchsingleEnt(ply, ent, Type1, Type2, TryingToShare)
 	if not IsValid(ply) then
 		return false
 	end
+	
+	local shouldOverride, overrideMessage = hook.Call("FPP_Hooks_CanTouchEntSingle", nil, ply, ent, Type1, Type2, TryingToShare)
+	
+	if shouldOverride ~= nil and type(shouldOverride) == "boolean" then
+		return shouldOverride, overrideMessage or "Blocked!"
+	end
+	
 	local OnlyMine = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
 
 	-- prevent player pickup when you don't want to
