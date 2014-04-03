@@ -387,6 +387,8 @@ GM.Config.hitmanText = "Hit\naccepted!"
 GM.Config.hitTargetCooldown = 120
 -- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted)
 GM.Config.hitCustomerCooldown = 240
+-- If a customer can place a hit on another hitman
+GM.Config.canHitHitman = false
 
 /*---------------------------------------------------------------------------
 Hungermod module
