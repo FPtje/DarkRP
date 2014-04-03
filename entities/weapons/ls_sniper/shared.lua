@@ -21,6 +21,8 @@ SWEP.Category = "DarkRP (Weapon)"
 SWEP.ViewModel = "models/weapons/cstrike/c_snip_g3sg1.mdl"
 SWEP.WorldModel = "models/weapons/w_snip_g3sg1.mdl"
 
+SWEP.ViewModelFOV = 53
+
 SWEP.Weight = 3
 
 SWEP.HoldType = "ar2"
@@ -36,4 +38,4 @@ SWEP.Primary.Delay = 0.7
 SWEP.Primary.DefaultClip = 75
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "smg1"
-SWEP.IronSightsPos = Vector(0, 0, -15) -- this is just to make it disappear so it doesn't show up whilst scoped
+SWEP.IronSightsPos = Vector(0, 0, -15) -- this is just to make it disappear so it doesn't show up whilst scoped 
