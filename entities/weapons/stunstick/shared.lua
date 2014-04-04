@@ -99,8 +99,8 @@ end
 
 function SWEP:DoFlash(ply)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
-	umsg.Start("StunStickFlash", ply)
-	umsg.End()
+	
+	ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
 end
 
 function SWEP:PrimaryAttack()
@@ -242,20 +242,4 @@ function SWEP:Reload()
 	if self.LastReload and self.LastReload > CurTime() - 0.1 then self.LastReload = CurTime() return end
 	self.LastReload = CurTime()
 	self.Owner:EmitSound("weapons/stunstick/spark"..math.random(1,3)..".wav")
-end
-
-if CLIENT then
-	local function StunStickFlash()
-		local alpha = 255
-		hook.Add("HUDPaint", "RP_StunstickFlash", function()
-			alpha = Lerp(0.05, alpha, 0)
-			surface.SetDrawColor(255,255,255,alpha)
-			surface.DrawRect(0,0,ScrW(), ScrH())
-
-			if math.Round(alpha) == 0 then
-				hook.Remove("HUDPaint", "RP_StunstickFlash")
-			end
-		end)
-	end
-	usermessage.Hook("StunStickFlash", StunStickFlash)
 end
