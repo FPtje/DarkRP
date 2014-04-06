@@ -35,9 +35,11 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
 
 	local plyNick = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
 	local plySteamID = IsValid(ply) and ply:IsPlayer() and ply:SteamID() or "Console"
+	local bad = false
 
 	if ply ~= target then
 		if type(target) == "table" then
+			if #target == 0 then Targets = "no one" bad = true end
 			for k,v in pairs(target) do
 				local suffix = ((k == #target-1) and " and ") or (k ~= #target and ", ") or ""
 				local Name = (v == ply and "yourself") or v:Nick()
@@ -49,10 +51,10 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
 			FAdmin.Messages.SendMessage(target, 2, string.format(MessageToTarget, plyNick))
 		end
 
-		FAdmin.Messages.SendMessage(ply, 4, string.format(messageToPly, Targets))
+		FAdmin.Messages.SendMessage(ply, bad and 1 or 4, string.format(messageToPly, Targets))
 
 	else
-		FAdmin.Messages.SendMessage(ply, 4, string.format(messageToPly, "yourself"))
+		FAdmin.Messages.SendMessage(ply, bad and 1 or 4, string.format(messageToPly, "yourself"))
 	end
 
 	local action = plyNick.." (".. plySteamID .. ") ".. string.format(LogMSG, Targets:gsub("yourself", "themselves"))
