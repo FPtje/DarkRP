@@ -405,9 +405,7 @@ function SWEP:SecondaryAttack()
 
 	if self.NextSecondaryAttack > CurTime() or self.reloading then return end
 
-	local bIronsights = not self.Ironsights
-
-	self:SetIronsights(bIronsights)
+	self:SetIronsights(not self.Ironsights)
 	self.NextSecondaryAttack = CurTime() + 0.3
 end
 
