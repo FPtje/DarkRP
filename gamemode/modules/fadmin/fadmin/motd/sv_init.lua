@@ -1,6 +1,4 @@
 FAdmin.MOTD = {}
-resource.AddFile("data/fadmin/MOTD.txt")
-
 
 sql.Query([[CREATE TABLE IF NOT EXISTS FADMIN_MOTD(
 	'map' TEXT NOT NULL PRIMARY KEY,
