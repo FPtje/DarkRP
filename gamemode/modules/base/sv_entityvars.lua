@@ -44,7 +44,14 @@ Get a DarkRPVar
 ---------------------------------------------------------------------------*/
 function meta:getDarkRPVar(var)
 	self.DarkRPVars = self.DarkRPVars or {}
-	return self.DarkRPVars[var]
+	
+	local overridenValue = hook.Call("getDarkRPVar", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil)
+	
+	if overridenValue then
+		return overridenValue	
+	else
+		return self.DarkRPVars[var]	
+	end
 end
 
 /*---------------------------------------------------------------------------
