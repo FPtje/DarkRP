@@ -159,6 +159,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			ActionButton:SetBorderColor(v.color)
 
 			function ActionButton:DoClick()
+				if not IsValid(FAdmin.ScoreBoard.Player.Player) then return end
 				return v.Action(FAdmin.ScoreBoard.Player.Player, self)
 			end
 			FAdmin.ScoreBoard.Player.Controls.ButtonPanel:AddItem(ActionButton)
