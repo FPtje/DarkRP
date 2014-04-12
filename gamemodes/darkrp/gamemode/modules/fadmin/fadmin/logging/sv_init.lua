@@ -46,23 +46,23 @@ hook.Add("PlayerSpawnedProp", "FAdmin_Log", function(ply, model, ent)
 			v:PrintMessage(HUD_PRINTCONSOLE, ply:Nick().." ("..ply:SteamID()..") Spawned a "..(model or "Unknown"))
 		end
 	end
-	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(class or "Unknown"))
+	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(model or "Unknown"))
 end)
 hook.Add("PlayerSpawnedNPC", "FAdmin_Log", function(ply, ent)
 	if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(ent or "Unknown"))
 end)
 hook.Add("PlayerSpawnedVehicle", "FAdmin_Log", function(ply, ent)
-	if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then print(ent) return end
+	if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
 	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(ent:GetClass() or "Unknown"))
 end)
 hook.Add("PlayerSpawnedEffect", "FAdmin_Log", function(ply, model, ent)
-	if not IsValid(ply) or not ply:IsPlayer() or not IsPlayer(ent) then return end
-	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(ent:GetClass() or "Unknown"))
+	if not IsValid(ply) or not ply:IsPlayer() or not model then return end
+	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(model or "Unknown"))
 end)
 hook.Add("PlayerSpawnedRagdoll", "FAdmin_Log", function(ply, model, ent)
 	if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
-	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(ent:GetClass() or "Unknown"))
+	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(model or "Unknown"))
 end)
 hook.Add("CanTool", "FAdmin_Log", function(ply, tr, toolclass)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
