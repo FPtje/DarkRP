@@ -1,7 +1,7 @@
 {
     "author": "Current developer: Falco A.K.A. FPtje Atheos (STEAM_0:0:8944068)",
     "default_changelog": "Please see https://github.com/FPtje/DarkRP/commits/master for the changes",
-    "description": "This is an experimental addon of the official DarkRP.",
+    "description": "This is an experimental, yet offical addon version of DarkRP. You can modify DarkRP with the DarkRPMod, which can be found here: https://github.com/FPtje/darkrpmodification",
     "ignore": [
         ".git*",
         "*.md",
