@@ -6,13 +6,8 @@
         ".git*",
         "*.md",
         "*.jpg",
+        "HELP/*.txt",
         "DON'T TOUCH ANY OF THESE FILES.txt",
-        "HELP/Avoid editing core files.txt",
-        "HELP/DarkRP wiki.txt",
-        "HELP/How to install.txt",
-        "HELP/Problem in DarkRP.txt",
-        "HELP/changelog.txt",
-        "HELP/github issue template.txt",
         "LICENSE.txt",
         "data/fadmin/MOTD.txt"
 
