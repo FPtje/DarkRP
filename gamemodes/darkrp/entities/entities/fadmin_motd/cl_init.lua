@@ -1,4 +1,5 @@
 include("shared.lua")
+local defaultHTML
 
 -- I love the garry's mod wiki!
 -- Credits to whoever made this function!
@@ -12,7 +13,9 @@ end
 
 function ENT:LoadPage()
 	local Page = GetConVarString("_FAdmin_MOTDPage")
-	if string.lower(string.sub(Page, -4)) == ".txt" and string.lower(string.sub(Page, 1, 5)) == "data/" then -- If it's a text file somewhere in data...
+	if string.lower(Page) == "data/fadmin/motd.txt" or string.lower(Page) == "default" then
+		self.HTML:SetHTML(defaultHTML)
+	elseif string.lower(string.sub(Page, -4)) == ".txt" and string.lower(string.sub(Page, 1, 5)) == "data/" then -- If it's a text file somewhere in data...
 		Page = string.sub(Page, 6)
 		self.HTML:SetHTML(file.Read(Page, "DATA") or "")
 	else
@@ -159,3 +162,17 @@ function ENT:Draw()
 		end
 	end
 end
+
+defaultHTML = [[
+<html>
+<title>MOTD!</title>
+<body bgcolor="888888">
+<center><h1>Example MOTD/Instructions on how to set a proper MOTD</h1></center>
+<h2>Of course you have to be superadmin or owner.</h2>
+<ol>
+<li>Copy the website URL to the clipboard<br></li>
+<li>Enter the command: FAdmin MOTDPage "your website here"<br><br></li>
+<i>Example:</i><br>
+FAdmin MOTDPage "www.facepunch.com"
+</body>
+</html>]]

@@ -1,4 +1,4 @@
-CreateConVar("_FAdmin_MOTDPage", "data/FADmin/MOTD.txt", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_SERVER_CAN_EXECUTE})
+CreateConVar("_FAdmin_MOTDPage", "default", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_SERVER_CAN_EXECUTE})
 
 if CLIENT then -- I can't be bothered to make a cl_init when there's a shared file with just one line in it.
 	FAdmin.StartHooks["MOTD"] = function()
@@ -18,7 +18,7 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 			InnerPanel:SetPaintBackground(false) -- clear background
 
 			local Text = vgui.Create("DLabel", InnerPanel)
-			Text:SetText("Set the MOTD page. Click default to reset the MOTD to the text file in data/FAdmin/MOTD.txt.")
+			Text:SetText("Set the MOTD page. Click default to reset the MOTD to default.")
 			Text:SizeToContents()
 			Text:SetContentAlignment(5)
 			Text:SetTextColor(color_white)
@@ -49,7 +49,7 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 				ButtonDefault:SetTall(20)
 				ButtonDefault:SetWide(Button:GetWide() + 20)
 				ButtonDefault:SetPos(5, 5)
-				ButtonDefault.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "motdpage", "data/FADmin/MOTD.txt") end
+				ButtonDefault.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "motdpage", "default") end
 				ButtonDefault:MoveRightOf(Button, 5)
 
 			local ButtonCancel = vgui.Create("DButton", ButtonPanel)
