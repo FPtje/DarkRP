@@ -1,15 +1,16 @@
 {
-    "default_changelog": "Please see https://github.com/FPtje/DarkRP/commits/master for the changes", 
+    "default_changelog": "Please see https://github.com/FPtje/DarkRP/commits/master for the changes",
     "ignore": [
-        ".git*", 
-        "*.txt", 
-        "*.md", 
-        "*.png"
-    ], 
+        ".git*",
+        "*.txt",
+        "*.md",
+        "*.png",
+        "*.jpg"
+    ],
     "tags": [
-        "roleplay", 
+        "roleplay",
         "build"
-    ], 
-    "title": "DarkRP", 
+    ],
+    "title": "DarkRP",
     "type": "gamemode"
 }
