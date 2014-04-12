@@ -52,11 +52,11 @@ function ENT:Use(activator, caller)
 		return
 	end
 
-	local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
+	local CanPickup = hook.Call("canPickupWeapon", GAMEMODE, activator, weapon)
 	if not CanPickup then return end
 	weapon:Remove()
 
-	hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
+	hook.Call("playerPickupDarkRPWeapon", nil, activator, self, weapon)
 
 	activator:Give(class)
 	weapon = activator:GetWeapon(class)
