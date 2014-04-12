@@ -20,6 +20,7 @@ end
 usermessage.Hook("FAdmin_RemovePriv", removePriv)
 
 local function addGroupUI(ply, func)
+	if not IsValid(ply) then return end
 	Derma_StringRequest("Set name",
 	"What will be the name of the new group?",
 	"",

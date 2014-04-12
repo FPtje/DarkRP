@@ -29,7 +29,7 @@ FAdmin.StartHooks["zz_Teleport"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Teleport") and ply ~= LocalPlayer() end,
 	function(ply, button)
 		local menu = DermaMenu()
-		
+
 		local Padding = vgui.Create("DPanel")
 		Padding:SetPaintBackgroundEnabled(false)
 		Padding:SetSize(1,5)
@@ -43,10 +43,12 @@ FAdmin.StartHooks["zz_Teleport"] = function()
 
 		menu:AddPanel(Title)
 
-		menu:AddOption("Yourself", function() RunConsoleCommand("_FAdmin", "bring", ply:UserID()) end)
+		local uid = ply:UserID()
+		menu:AddOption("Yourself", function() RunConsoleCommand("_FAdmin", "bring", uid) end)
 		for k, v in pairs(player.GetAll()) do
 			if v ~= LocalPlayer() then
-				menu:AddOption(v:Nick(), function() RunConsoleCommand("_FAdmin", "bring", ply:UserID(), v:UserID()) end)
+				local vUid = v:UserID()
+				menu:AddOption(v:Nick(), function() RunConsoleCommand("_FAdmin", "bring", uid, vUid) end)
 			end
 		end
 		menu:Open()

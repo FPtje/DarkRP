@@ -191,7 +191,7 @@ function PANEL:DoRightClick()
 	menu:SetPos(gui.MouseX(), gui.MouseY())
 
 	for Name, func in pairs(FAdmin.PlayerIcon.RightClickOptions) do
-		menu:AddOption(Name, function() func(self.Player, self) end)
+		menu:AddOption(Name, function() if IsValid(self.Player) then func(self.Player, self) end end)
 	end
 
 	menu:Open()

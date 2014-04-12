@@ -54,12 +54,13 @@ FAdmin.StartHooks["DarkRP"] = function()
 		menu:AddPanel(Title)
 
 		local command = "rp_teamban"
+		local uid = ply:UserID()
 		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
 			local submenu = menu:AddSubMenu(v.name)
-			submenu:AddOption("2 minutes", function() RunConsoleCommand(command, ply:UserID(), k, 120) end)
-			submenu:AddOption("Half an hour", function() RunConsoleCommand(command, ply:UserID(), k, 1800) end)
-			submenu:AddOption("An hour", function() RunConsoleCommand(command, ply:UserID(), k, 3600) end)
-			submenu:AddOption("Until restart", function() RunConsoleCommand(command, ply:UserID(), k, 0) end)
+			submenu:AddOption("2 minutes",     function() RunConsoleCommand(command, uid, k, 120)  end)
+			submenu:AddOption("Half an hour",  function() RunConsoleCommand(command, uid, k, 1800) end)
+			submenu:AddOption("An hour",       function() RunConsoleCommand(command, uid, k, 3600) end)
+			submenu:AddOption("Until restart", function() RunConsoleCommand(command, uid, k, 0)    end)
 		end
 		menu:Open()
 	end
@@ -82,8 +83,9 @@ FAdmin.StartHooks["DarkRP"] = function()
 		menu:AddPanel(Title)
 
 		local command = "rp_teamunban"
+		local uid = ply:UserID()
 		for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
-			menu:AddOption(v.name, function() RunConsoleCommand(command, ply:UserID(), k) end)
+			menu:AddOption(v.name, function() RunConsoleCommand(command, uid, k) end)
 		end
 		menu:Open()
 	end

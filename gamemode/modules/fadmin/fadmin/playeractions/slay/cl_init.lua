@@ -24,8 +24,9 @@ FAdmin.StartHooks["Slay"] = function()
 		menu:AddPanel(Title)
 
 		for k,v in pairs(FAdmin.PlayerActions.SlayTypes) do
+			local uid = ply:UserID()
 			menu:AddOption(v, function()
-				RunConsoleCommand("_FAdmin", "slay", ply:UserID(), k)
+				RunConsoleCommand("_FAdmin", "slay", uid, k)
 			end)
 		end
 

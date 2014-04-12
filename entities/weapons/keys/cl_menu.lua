@@ -124,8 +124,9 @@ function DarkRP.openKeysMenu(um)
 			menu.found = false
 			for k,v in pairs(player.GetAll()) do
 				if not ent:isKeysOwnedBy(v) and not ent:isKeysAllowedToOwn(v) then
+					local steamID = v:SteamID()
 					menu.found = true
-					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "ao", v:SteamID()) end)
+					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "ao", steamID) end)
 				end
 			end
 			if not menu.found then
@@ -140,8 +141,9 @@ function DarkRP.openKeysMenu(um)
 			local menu = DermaMenu()
 			for k,v in pairs(player.GetAll()) do
 				if (ent:isKeysOwnedBy(v) and not ent:isMasterOwner(v)) or ent:isKeysAllowedToOwn(v) then
+					local steamID = v:SteamID()
 					menu.found = true
-					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "ro", v:SteamID()) end)
+					menu:AddOption(v:Nick(), function() RunConsoleCommand("darkrp", "ro", steamID) end)
 				end
 			end
 			if not menu.found then

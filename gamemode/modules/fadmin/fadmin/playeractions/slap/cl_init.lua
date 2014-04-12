@@ -38,7 +38,8 @@ FAdmin.StartHooks["Slap"] = function()
 			SubMenu:AddPanel(SubMenuTitle)
 
 			for reps, Name in SortedPairs(Repetitions) do
-				SubMenu:AddOption(Name, function() RunConsoleCommand("_FAdmin", "slap", ply:UserID(), v, reps) end)
+				local uid = ply:UserID()
+				SubMenu:AddOption(Name, function() RunConsoleCommand("_FAdmin", "slap", uid, v, reps) end)
 			end
 		end
 		menu:Open()
