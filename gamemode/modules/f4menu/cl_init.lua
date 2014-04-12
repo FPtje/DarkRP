@@ -87,23 +87,23 @@ end)
 /*---------------------------------------------------------------------------
 Fonts
 ---------------------------------------------------------------------------*/
-surface.CreateFont("Ubuntu Light", { -- font is not found otherwise
+surface.CreateFont("Roboto Light", { -- font is not found otherwise
 		size = 19,
 		weight = 300,
 		antialias = true,
 		shadow = false,
-		font = "Ubuntu Light"})
+		font = "Roboto Light"})
 
-surface.CreateFont("F4MenuFont1", {
+surface.CreateFont("F4MenuFont01", {
 		size = 23,
 		weight = 400,
 		antialias = true,
 		shadow = false,
-		font = "Ubuntu Light"})
+		font = "Roboto Light"})
 
-surface.CreateFont("F4MenuFont2", {
+surface.CreateFont("F4MenuFont02", {
 		size = 30,
 		weight = 800,
 		antialias = true,
 		shadow = false,
-		font = "Ubuntu Light"})
+		font = "Roboto Light"})

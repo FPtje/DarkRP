@@ -11,7 +11,7 @@ function PANEL:Init()
 
 	self:SetCursor("hand")
 
-	self:SetFont("F4MenuFont1")
+	self:SetFont("F4MenuFont01")
 	self:SetTextColor(Color(255, 255, 255, 255))
 	self:SetTall(60)
 	self:DockPadding(0, 0, 10, 5)
@@ -21,7 +21,7 @@ function PANEL:Init()
 	self.model:SetPos(0, 0)
 
 	self.txtRight = self.txtRight or vgui.Create("DLabel", self)
-	self.txtRight:SetFont("F4MenuFont1")
+	self.txtRight:SetFont("F4MenuFont01")
 	self.txtRight:Dock(RIGHT)
 	self.txtRight:SetTextColor(Color(255, 255, 255, 255))
 end

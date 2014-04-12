@@ -5,7 +5,7 @@ local PANEL = {}
 
 function PANEL:Init()
 	self.BaseClass.Init(self)
-	self:SetFont("F4MenuFont2")
+	self:SetFont("F4MenuFont02")
 	self:SetTall(50)
 end
 
@@ -227,12 +227,12 @@ function PANEL:Init()
 	self.innerPanel:SetPos(0, 0)
 
 	self.lblTitle = vgui.Create("DLabel")
-	self.lblTitle:SetFont("F4MenuFont2")
+	self.lblTitle:SetFont("F4MenuFont02")
 	self.innerPanel:AddItem(self.lblTitle)
 
 	self.lblDescription = vgui.Create("DLabel")
 	self.lblDescription:SetWide(self:GetWide() - 20)
-	self.lblDescription:SetFont("Ubuntu Light")
+	self.lblDescription:SetFont("Roboto Light")
 	self.lblDescription:SetAutoStretchVertical(true)
 	self.innerPanel:AddItem(self.lblDescription)
 
@@ -241,7 +241,7 @@ function PANEL:Init()
 	self.innerPanel:AddItem(self.filler)
 
 	self.lblWeapons = vgui.Create("DLabel")
-	self.lblWeapons:SetFont("F4MenuFont2")
+	self.lblWeapons:SetFont("F4MenuFont02")
 	self.lblWeapons:SetText("Weapons")
 	self.lblWeapons:SizeToContents()
 	self.lblWeapons:SetTall(50)
@@ -249,7 +249,7 @@ function PANEL:Init()
 
 	self.lblSweps = vgui.Create("DLabel")
 	self.lblSweps:SetAutoStretchVertical(true)
-	self.lblSweps:SetFont("Ubuntu Light")
+	self.lblSweps:SetFont("Roboto Light")
 	self.innerPanel:AddItem(self.lblSweps)
 
 	self.btnGetJob = vgui.Create("F4MenuJobBecomeButton", self)
@@ -305,7 +305,7 @@ function PANEL:PerformLayout()
 	self.innerPanel:SetPos(3, 3)
 	self.innerPanel:SetSize(self:GetWide() - 6, self:GetTall() - self.pnlChooseMdl:GetTall() - self.btnGetJob:GetTall() - 13)
 	self.innerPanel:InvalidateLayout()
-	self.lblDescription:SetText(DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""), "Ubuntu Light", self:GetWide() - 43))
+	self.lblDescription:SetText(DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""):gsub('\t', ''), "Roboto Light", self:GetWide() - 43))
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")
