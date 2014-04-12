@@ -1,10 +1,21 @@
 {
+    "author": "Current developer: Falco A.K.A. FPtje Atheos (STEAM_0:0:8944068)",
     "default_changelog": "Please see https://github.com/FPtje/DarkRP/commits/master for the changes",
+    "description": "This is an experimental addon of the official DarkRP.",
     "ignore": [
         ".git*",
-        "*.txt",
         "*.md",
-        "*.jpg"
+        "*.jpg",
+        "DON'T TOUCH ANY OF THESE FILES.txt",
+        "HELP/Avoid editing core files.txt",
+        "HELP/DarkRP wiki.txt",
+        "HELP/How to install.txt",
+        "HELP/Problem in DarkRP.txt",
+        "HELP/changelog.txt",
+        "HELP/github issue template.txt",
+        "LICENSE.txt",
+        "data/fadmin/MOTD.txt"
+
     ],
     "tags": [
         "roleplay",
