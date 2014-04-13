@@ -365,8 +365,13 @@ local function BuyAmmo(ply, args)
 	end
 
 	local found
-	for k,v in pairs(GAMEMODE.AmmoTypes) do
-		if v.ammoType == args then
+	local num = tonumber(args)
+	if num and GAMEMODE.AmmoTypes[num] then
+		found = GAMEMODE.AmmoTypes[num]
+	else
+		for k,v in pairs(GAMEMODE.AmmoTypes) do
+			if v.ammoType ~= args then continue end
+
 			found = v
 			break
 		end

@@ -242,7 +242,7 @@ function PANEL:generateButtons()
 	for k,v in pairs(GAMEMODE.AmmoTypes) do
 		local pnl = vgui.Create("F4MenuEntityButton", self)
 		pnl:setDarkRPItem(v)
-		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyammo", v.ammoType)
+		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyammo", k)
 		self:AddItem(pnl)
 	end
 end
