@@ -53,6 +53,7 @@ local function Teleport(ply, cmd, args)
 			target:SetPos(InitialPosition)
 
 			zapEffect(target)
+			FAdmin.Log(string.format("FAdmin: %s (%s) teleported %s",ply:Nick() ,ply:SteamID() ,target:Name()))
 		end
 	end
 end
@@ -95,6 +96,7 @@ local function Bring(ply, cmd, args)
 				target:SetPos(DarkRP.findEmptyPos(BringTo:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
 
 				zapEffect(target)
+				FAdmin.Log(string.format("FAdmin: %s (%s) brought %s (%s) to %s", ply:Nick(), ply:SteamID(), target:Name(), target:SteamID(), BringTo:Nick()))
 
 				if PHYSGUN then timer.Simple(0.5, function() target:Give("weapon_physgun") target:SelectWeapon("weapon_physgun") end) end
 			end)
@@ -116,6 +118,7 @@ local function Goto(ply, cmd, args)
 	ply:SetPos(DarkRP.findEmptyPos(target:GetPos(), {ply}, 600, 30, Vector(16, 16, 64)))
 
 	zapEffect(ply)
+	FAdmin.Log(string.format("FAdmin: %s (%s) went to %s",ply:Nick(), ply:SteamID(), target:Name()))
 end
 
 FAdmin.StartHooks["Teleport"] = function()
