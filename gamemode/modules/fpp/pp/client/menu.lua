@@ -902,7 +902,9 @@ usermessage.Hook("FPP_blockedlist", retrieveblocked)
 
 local BuddiesPanel
 function FPP.BuddiesMenu(Panel)
-	BuddiesPanel = Panel
+	BuddiesPanel = BuddiesPanel or Panel
+	if not ValidPanel(BuddiesPanel) then return end
+
 	Panel:ClearControls()
 	BuddiesPanel:Clear()
 
