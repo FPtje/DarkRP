@@ -6,6 +6,10 @@ function GM:Initialize()
 end
 
 function GM:playerBuyDoor(ply, ent)
+	if ply:Team() == TEAM_HOBO then
+		return false, DarkRP.getPhrase("door_hobo_unable")
+	end
+
 	return true
 end
 
