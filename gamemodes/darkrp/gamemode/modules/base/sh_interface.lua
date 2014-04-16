@@ -19,6 +19,21 @@ DarkRP.findPlayer = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.nickSortedPlayers = DarkRP.stub{
+	name = "nickSortedPlayers",
+	description = "A table of players sorted by RP name.",
+	parameters = {},
+	returns = {
+		{
+			name = "players",
+			description = "The list of players sorted by RP name.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
+
 DarkRP.formatMoney = DarkRP.stub{
 	name = "formatMoney",
 	description = "Format a number as a money value. Includes currency symbol.",

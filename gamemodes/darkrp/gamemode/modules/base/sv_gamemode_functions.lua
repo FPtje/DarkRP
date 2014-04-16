@@ -5,16 +5,20 @@ function GM:Initialize()
 	self.BaseClass:Initialize()
 end
 
-function GM:playerBuyDoor( objPl, objEnt )
-	return true;
+function GM:playerBuyDoor(ply, ent)
+	if ply:Team() == TEAM_HOBO then
+		return false, DarkRP.getPhrase("door_hobo_unable")
+	end
+
+	return true
 end
 
-function GM:getDoorCost( objPl, objEnt )
-	return GAMEMODE.Config.doorcost ~= 0 and GAMEMODE.Config.doorcost or 30;
+function GM:getDoorCost(ply, ent)
+	return GAMEMODE.Config.doorcost ~= 0 and GAMEMODE.Config.doorcost or 30
 end
 
-function GM:getVehicleCost( objPl, objEnt )
-	return GAMEMODE.Config.vehiclecost ~= 0 and  GAMEMODE.Config.vehiclecost or 40;
+function GM:getVehicleCost(ply, ent)
+	return GAMEMODE.Config.vehiclecost ~= 0 and  GAMEMODE.Config.vehiclecost or 40
 end
 
 function GM:CanChangeRPName(ply, RPname)
