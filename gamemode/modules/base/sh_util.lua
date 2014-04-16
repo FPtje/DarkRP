@@ -148,3 +148,12 @@ function meta:hasDarkRPPrivilege(priv)
 	end
 	return self:IsAdmin()
 end
+
+/*---------------------------------------------------------------------------
+Convenience function to return the players sorted by name
+---------------------------------------------------------------------------*/
+function DarkRP.nickSortedPlayers()
+	local plys = player.GetAll()
+	table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
+	return plys
+end
