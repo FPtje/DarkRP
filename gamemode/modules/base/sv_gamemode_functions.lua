@@ -341,6 +341,11 @@ function GM:CanTool(ply, trace, mode)
 end
 
 function GM:CanPlayerSuicide(ply)
+	if not GAMEMODE.Config.cansuicide then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+		return false
+	end
+
 	if ply.IsSleeping then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
 		return false
