@@ -129,6 +129,8 @@ GM.Config.unlockdoorsonstart 			= false
 GM.Config.voiceradius 					= true
 -- tax - Whether players pay taxes on their wallets.
 GM.Config.wallettax 					= false
+-- cansuicide - Enable/Disable suiciding.
+GM.Config.cansuicide 					= true
 -- wantedsuicide - Enable/Disable suiciding while you are wanted by the police.
 GM.Config.wantedsuicide 				= false
 -- showcrosshairs - Enable/disable crosshair visibility
