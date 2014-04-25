@@ -114,7 +114,11 @@ function meta:changeTeam(t, force)
 			end
 		end
 	end
-
+	
+	if isMayor and GAMEMODE.Config.shouldResetLaws then
+		DarkRP.resetLaws()
+	end
+	
 	self:SetTeam(t)
 	hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
 	DarkRP.log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))

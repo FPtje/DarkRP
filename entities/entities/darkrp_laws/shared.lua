@@ -24,8 +24,13 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "placelaws",
 	description = "Place a laws board.",
-	delay = 1.5,
-	condition = plyMeta.isMayor
+	delay = 1.5
+}
+
+DarkRP.declareChatCommand{
+	command = "resetlaws",
+	description = "Reset all laws.",
+	delay = 1.5
 }
 
 DarkRP.getLaws = DarkRP.stub{
@@ -42,6 +47,17 @@ DarkRP.getLaws = DarkRP.stub{
 	},
 	metatable = DarkRP,
 	realm = "Shared"
+}
+
+DarkRP.resetLaws = DarkRP.stub{
+	name = "resetLaws",
+	description = "Reset to default laws.",
+	parameters = {
+	},
+	returns = {
+	},
+	metatable = DarkRP,
+	realm = "Server"
 }
 
 DarkRP.hookStub{
@@ -82,4 +98,54 @@ DarkRP.hookStub{
 	returns = {
 	},
 	realm = "Shared"
+}
+
+DarkRP.hookStub{
+	name = "resetLaws",
+	description = "Called when laws are reset.",
+	parameters = {
+		{
+			name = "player",
+			description = "The player resetting the laws.",
+			type = "Player"
+		}
+	},
+	returns = {
+	},
+	realm = "Shared"
+}
+
+DarkRP.hookStub{
+	name = "canEditLaws",
+	description = "Whether someone can edit laws.",
+	parameters = {
+		{
+			name = "player",
+			description = "The player trying to edit laws.",
+			type = "Player"
+		},
+		{
+			name = "action",
+			description = "How the player is trying to edit laws.",
+			type = "string"
+		},
+		{
+			name = "arguments",
+			description = "Arguments related to editing laws.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canEdit",
+			description = "A yes or no as to whether the player can edit the law.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message that is shown when they can't edit the law.",
+			type = "string"
+		}
+	},
+	realm = "Server"
 }
