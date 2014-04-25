@@ -46,7 +46,7 @@ usermessage.Hook("DRP_AddLaw", umAddLaw)
 local function umRemoveLaw(um)
 	local i = um:ReadShort()
 
-	hook.Run("umRemoveLaw", i, Laws[i])
+	hook.Run("removeLaw", i, Laws[i])
 
 	while i < #Laws do
 		Laws[i] = Laws[i + 1]
@@ -59,6 +59,7 @@ usermessage.Hook("DRP_RemoveLaw", umRemoveLaw)
 local function umResetLaws(um)
 	Laws = {}
 	fn.Foldl(function(val,v) addLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
+	hook.Run("resetLaws")
 end
 usermessage.Hook("DRP_ResetLaws", umResetLaws)
 
