@@ -36,7 +36,7 @@ local function addLaw(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "addLaw", args)
 	
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw"))
+		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw", ""))
 		return ""
 	end
 
@@ -73,7 +73,7 @@ local function removeLaw(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "removeLaw", args)
 	
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw"))
+		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw", ""))
 		return ""
 	end
 
@@ -118,7 +118,7 @@ local function resetLaws(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "resetLaws", args)
 	
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws"))
+		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws", ""))
 		return ""
 	end
 	
@@ -137,7 +137,7 @@ local function placeLaws(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "placeLaws", args)
 	
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws"))
+		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws", ""))
 		return ""
 	end
 
