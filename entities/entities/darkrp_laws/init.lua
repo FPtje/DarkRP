@@ -34,7 +34,7 @@ end
 
 local function addLaw(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "addLaw", args)
-	
+
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw", ""))
 		return ""
@@ -71,7 +71,7 @@ DarkRP.defineChatCommand("addLaw", addLaw)
 
 local function removeLaw(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "removeLaw", args)
-	
+
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw", ""))
 		return ""
@@ -106,26 +106,24 @@ end
 DarkRP.defineChatCommand("removeLaw", removeLaw)
 
 function DarkRP.resetLaws()
-	
 	Laws = table.Copy(FixedLaws)
-	
+
 	umsg.Start("DRP_ResetLaws")
 	umsg.End()
-	
 end
 
 local function resetLaws(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "resetLaws", args)
-	
+
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws", ""))
 		return ""
 	end
-	
+
 	hook.Run("resetLaws", ply)
-	
+
 	DarkRP.resetLaws()
-	
+
 	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_reset"))
 
 	return ""
@@ -135,7 +133,7 @@ DarkRP.defineChatCommand("resetLaws", resetLaws)
 local numlaws = 0
 local function placeLaws(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "placeLaws", args)
-	
+
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws", ""))
 		return ""

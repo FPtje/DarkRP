@@ -142,7 +142,7 @@ GM.Config.weaponCheckerHideDefault		= true
 -- weaponCheckerHideNoLicense - Hide weapons that do not require a license
 GM.Config.weaponCheckerHideNoLicense	= false
 -- shouldResetLaws - Enable/Disable resetting the laws back to the default law set when the mayor changes
-GM.Config.shouldResetLaws = false
+GM.Config.shouldResetLaws 				= false
 
 /*
 Value settings
