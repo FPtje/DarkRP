@@ -30,20 +30,20 @@ function ENT:Draw()
 	cam.End3D2D()
 end
 
-local function AddLaw(inLaw)
+local function addLaw(inLaw)
 	local law = DarkRP.textWrap(inLaw, "TargetID", 522)
 
 	Laws[#Laws + 1] = law
 end
 
-local function AddLawUM(um)
+local function umAddLaw(um)
 	local law = um:ReadString()
-	timer.Simple(0, fn.Curry(AddLaw, 2)(law))
+	timer.Simple(0, fn.Curry(addLaw, 2)(law))
 	hook.Run("addLaw", #Laws + 1, law)
 end
-usermessage.Hook("DRP_AddLaw", AddLawUM)
+usermessage.Hook("DRP_AddLaw", umAddLaw)
 
-local function RemoveLaw(um)
+local function umRemoveLaw(um)
 	local i = um:ReadShort()
 
 	hook.Run("removeLaw", i, Laws[i])
@@ -54,12 +54,19 @@ local function RemoveLaw(um)
 	end
 	Laws[i] = nil
 end
-usermessage.Hook("DRP_RemoveLaw", RemoveLaw)
+usermessage.Hook("DRP_RemoveLaw", umRemoveLaw)
+
+local function umResetLaws(um)
+	Laws = {}
+	fn.Foldl(function(val,v) addLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
+	hook.Run("resetLaws")
+end
+usermessage.Hook("DRP_ResetLaws", umResetLaws)
 
 function DarkRP.getLaws()
 	return Laws
 end
 
 timer.Simple(0, function()
-	fn.Foldl(function(val,v) AddLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
+	fn.Foldl(function(val,v) addLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
 end)
