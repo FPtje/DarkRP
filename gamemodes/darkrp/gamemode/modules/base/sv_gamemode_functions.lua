@@ -803,6 +803,10 @@ function GM:PlayerDisconnected(ply)
 		DarkRP.unLockdown(ply)
 	end
 
+	if isMayor and GAMEMODE.Config.shouldResetLaws then
+		DarkRP.resetLaws()
+	end
+
 	if IsValid(ply.SleepRagdoll) then
 		ply.SleepRagdoll:Remove()
 	end

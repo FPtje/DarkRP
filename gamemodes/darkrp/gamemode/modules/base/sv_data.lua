@@ -209,7 +209,7 @@ end
 
 function DarkRP.storeMoney(ply, amount)
 	if not IsValid(ply) then return end
-	if amount < 0  then return end
+	if not isnumber(amount) or amount < 0 or amount >= 1/0 then return end
 
 	MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 end

@@ -196,7 +196,7 @@ function PANEL:PerformLayout()
 	self.lblName:SetPos(10, 1)
 
 	self.lblTeam:SetFont("UiBold")
-	self.lblTeam:SetText((ply.DarkRPVars and DarkRP.deLocalise(ply:getDarkRPVar("job"))) or team.GetName(ply:Team()))
+	self.lblTeam:SetText((ply.DarkRPVars and DarkRP.deLocalise(ply:getDarkRPVar("job") or "")) or team.GetName(ply:Team()))
 	self.lblTeam:SizeToContents()
 	self.lblTeam:SetPos(self:GetWide() / 2, 1)
 end
