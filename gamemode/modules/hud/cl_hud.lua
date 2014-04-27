@@ -126,7 +126,7 @@ local function GunLicense()
 	if localplayer:getDarkRPVar("HasGunlicense") then
 		surface.SetMaterial(Page)
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.DrawTexturedRect(RelativeX + HUDWidth, ScrH() - 34, 32, 32)
+		surface.DrawTexturedRect(RelativeX + HUDWidth, Scrh - 34, 32, 32)
 	end
 end
 
@@ -164,7 +164,7 @@ local function DrawVoiceChat()
 		end
 		surface.SetTexture(VoiceChatTexture)
 		surface.SetDrawColor(ConVars.Healthforeground)
-		surface.DrawTexturedRectRotated(ScrW() - 100, chboxY, Rotating*96, 96, backwards)
+		surface.DrawTexturedRectRotated(Scrw - 100, chboxY, Rotating*96, 96, backwards)
 	end
 end
 
@@ -173,7 +173,7 @@ local function LockDown()
 	local chbxX, chboxY = chat.GetChatBoxPos()
 	if util.tobool(GetConVarNumber("DarkRP_LockDown")) then
 		local cin = (math.sin(CurTime()) + 1) / 2
-		local chatBoxSize = math.floor(ScrH() / 4)
+		local chatBoxSize = math.floor(Scrh / 4)
 		draw.DrawNonParsedText(DarkRP.getPhrase("lockdown_started"), "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
 	end
 end
