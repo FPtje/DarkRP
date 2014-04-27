@@ -796,13 +796,17 @@ function GM:PlayerDisconnected(ply)
 			end
 		end
 	end
-
+	
 	DarkRP.destroyVotesWithEnt(ply)
 
 	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then -- Stop the lockdown
 		DarkRP.unLockdown(ply)
 	end
-
+	
+	if isMayor and GAMEMODE.Config.shouldResetLaws then
+		DarkRP.resetLaws()
+	end
+	
 	if IsValid(ply.SleepRagdoll) then
 		ply.SleepRagdoll:Remove()
 	end
