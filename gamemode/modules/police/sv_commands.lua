@@ -1,3 +1,14 @@
+local function updateAgenda(agenda, text)
+	agenda.text = text
+
+	for k,v in pairs(player.GetAll()) do
+		if v:getAgendaTable() ~= agenda then continue end
+
+		v:setSelfDarkRPVar("agenda", agenda.text)
+		DarkRP.notify(v, 2, 4, DarkRP.getPhrase("agenda_updated"))
+	end
+end
+
 local function CreateAgenda(ply, args)
 	local agenda = ply:getAgendaTable()
 	local plyTeam = ply:Team()
@@ -7,18 +18,26 @@ local function CreateAgenda(ply, args)
 		return ""
 	end
 
-	agenda.text = args
-
-	for k,v in pairs(player.GetAll()) do
-		if v:getAgendaTable() ~= agenda then continue end
-
-		v:setSelfDarkRPVar("agenda", agenda.text)
-		DarkRP.notify(v, 2, 4, DarkRP.getPhrase("agenda_updated"))
-	end
+	updateAgenda(agenda, args)
 
 	return ""
 end
 DarkRP.defineChatCommand("agenda", CreateAgenda, 0.1)
+
+local function addAgenda(ply, args)
+	local agenda = ply:getAgendaTable()
+	local plyTeam = ply:Team()
+
+	if not agenda or agenda.Manager ~= plyTeam then
+		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
+		return ""
+	end
+
+	updateAgenda(agenda, agenda.text .. '\n' .. args)
+
+	return ""
+end
+DarkRP.defineChatCommand("addagenda", addAgenda, 0.1)
 
 /*---------------------------------------------------------
  Mayor stuff
