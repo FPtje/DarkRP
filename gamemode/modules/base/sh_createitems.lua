@@ -588,8 +588,16 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 	DarkRPAgendas[Manager] = {Manager = Manager, Title = Title, Listeners = Listeners} -- backwards compat
 
 	agendas[Manager] = disjoint.MakeSet(DarkRPAgendas[Manager])
+
 	for k,v in pairs(Listeners) do
 		agendas[v] = disjoint.MakeSet(v, agendas[Manager]) -- have the manager as parent
+	end
+
+	if SERVER then
+		timer.Simple(0, function()
+			-- Run after scripts have loaded
+			DarkRPAgendas[Manager].text = hook.Run("agendaUpdated", nil, DarkRPAgendas[Manager], "")
+		end)
 	end
 end
 AddAgenda = DarkRP.createAgenda

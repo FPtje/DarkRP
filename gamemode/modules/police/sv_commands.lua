@@ -1,5 +1,7 @@
-local function updateAgenda(agenda, text)
-	agenda.text = text
+local function updateAgenda(ply, agenda, text)
+	local txt = hook.Run("agendaUpdated", ply, agenda, text)
+
+	agenda.text = txt or text
 
 	for k,v in pairs(player.GetAll()) do
 		if v:getAgendaTable() ~= agenda then continue end
@@ -18,7 +20,7 @@ local function CreateAgenda(ply, args)
 		return ""
 	end
 
-	updateAgenda(agenda, args)
+	updateAgenda(ply, agenda, args)
 
 	return ""
 end
@@ -33,7 +35,7 @@ local function addAgenda(ply, args)
 		return ""
 	end
 
-	updateAgenda(agenda, agenda.text .. '\n' .. args)
+	updateAgenda(ply, agenda, agenda.text .. '\n' .. args)
 
 	return ""
 end
