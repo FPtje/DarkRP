@@ -207,6 +207,5 @@ FAdmin.ScoreBoard.Server:AddInformation("Gamemode", function() return GAMEMODE.N
 FAdmin.ScoreBoard.Server:AddInformation("Author", function() return GAMEMODE.Author end)
 FAdmin.ScoreBoard.Server:AddInformation("Map", game.GetMap)
 FAdmin.ScoreBoard.Server:AddInformation("Players", function() return #player.GetAll().."/"..GetConVarString("maxplayers") end)
-
-FAdmin.ScoreBoard.Server:AddInformation("Ping", function() return LocalPlayer():Ping() end, true)
+FAdmin.ScoreBoard.Server:AddInformation("Ping", function() return LocalPlayer():Ping() end)
 
