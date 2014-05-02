@@ -84,6 +84,7 @@ function PANEL:Init()
 	self.lblTeam	= vgui.Create("DLabel", self)
 	self.lblDeaths 	= vgui.Create("DLabel", self)
 	self.lblPing 	= vgui.Create("DLabel", self)
+	self.lblWanted 	= vgui.Create("DLabel", self)
 
 	// If you don't do this it'll block your clicks
 	self.lblName:SetMouseInputEnabled(false)
@@ -91,12 +92,14 @@ function PANEL:Init()
 	self.lblFrags:SetMouseInputEnabled(false)
 	self.lblDeaths:SetMouseInputEnabled(false)
 	self.lblPing:SetMouseInputEnabled(false)
+	self.lblWanted:SetMouseInputEnabled(false)
 
 	self.lblName:SetColor(Color(255,255,255,200))
 	self.lblTeam:SetColor(Color(255,255,255,200))
 	self.lblFrags:SetColor(Color(255,255,255,200))
 	self.lblDeaths:SetColor(Color(255,255,255,200))
 	self.lblPing:SetColor(Color(255,255,255,200))
+	self.lblWanted:SetColor(Color(255,255,255,200))
 
 	self.imgAvatar = vgui.Create("AvatarImage", self)
 
@@ -163,6 +166,7 @@ function PANEL:UpdatePlayerData()
 	self.lblFrags:SetText(self.Player:Frags())
 	self.lblDeaths:SetText(self.Player:Deaths())
 	self.lblPing:SetText(self.Player:Ping())
+	self.lblWanted:SetText(self.Player:isWanted() and DarkRP.getPhrase("Wanted_text") or "")
 end
 
 function PANEL:ApplySchemeSettings()
@@ -171,12 +175,14 @@ function PANEL:ApplySchemeSettings()
 	self.lblFrags:SetFont("ScoreboardPlayerName")
 	self.lblDeaths:SetFont("ScoreboardPlayerName")
 	self.lblPing:SetFont("ScoreboardPlayerName")
+	self.lblWanted:SetFont("ScoreboardPlayerNameBig")
 
 	self.lblName:SetFGColor(color_white)
 	self.lblTeam:SetFGColor(color_white)
 	self.lblFrags:SetFGColor(color_white)
 	self.lblDeaths:SetFGColor(color_white)
 	self.lblPing:SetFGColor(color_white)
+	self.lblWanted:SetFGColor(color_white)
 end
 
 function PANEL:DoClick(x, y)
@@ -221,6 +227,9 @@ function PANEL:PerformLayout()
 	self.lblFrags:SetPos(self:GetWide() - COLUMN_SIZE * 2.4, 0)
 
 	self.lblTeam:SetPos(self:GetWide() / 2 - (0.5*self.lblTeam:GetWide()))
+
+	self.lblWanted:SizeToContents()
+	self.lblWanted:SetPos(math.floor(self:GetWide() / 4), 2)
 end
 vgui.Register("FadminPlayerRow", PANEL, "Button")
 
