@@ -10,6 +10,11 @@ FAdmin.StartHooks["DarkRP"] = function()
 			return ply:GetNWString("usergroup")
 		end
 	end)
+	FAdmin.ScoreBoard.Player:AddInformation("Wanted reason", function(ply)
+		if ply:isWanted() and LocalPlayer():isCP() then
+			return ply:getWantedReason()
+		end
+	end)
 
 	-- Warrant
 	FAdmin.ScoreBoard.Player:AddActionButton("Warrant", "FAdmin/icons/Message",	Color(0, 0, 200, 255),
