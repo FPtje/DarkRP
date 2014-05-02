@@ -726,6 +726,12 @@ function GM:PlayerLoadout(ply)
 		end
 	end
 
+	if RPExtraTeams[ply:Team()].ammo then
+		for k, v in pairs(RPExtraTeams[ply:Team()].ammo) do
+			ply:SetAmmo(v, k)
+		end
+	end
+
 	for k, v in pairs(self.Config.DefaultWeapons) do
 		ply:Give(v)
 	end

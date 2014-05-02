@@ -50,7 +50,10 @@ TEAM_POLICE = DarkRP.createJob("Civil Protection", {
 	salary = GAMEMODE.Config.normalsalary * 1.45,
 	admin = 0,
 	vote = true,
-	hasLicense = true
+	hasLicense = true,
+	ammo = {
+		["pistol"] = 60,
+	}
 })
 
 TEAM_GANG = DarkRP.createJob("Gangster", {
@@ -147,7 +150,10 @@ TEAM_CHIEF = DarkRP.createJob("Civil Protection Chief", {
 	vote = false,
 	hasLicense = true,
 	chief = true,
-	NeedToChangeFrom = TEAM_POLICE
+	NeedToChangeFrom = TEAM_POLICE,
+	ammo = {
+		["pistol"] = 60,
+	}
 })
 
 TEAM_MAYOR = DarkRP.createJob("Mayor", {
