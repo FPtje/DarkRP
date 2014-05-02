@@ -131,8 +131,6 @@ GM.Config.voiceradius 					= true
 GM.Config.wallettax 					= false
 -- wantedsuicide - Enable/Disable suiciding while you are wanted by the police.
 GM.Config.wantedsuicide 				= false
--- showcrosshairs - Enable/disable crosshair visibility
-GM.Config.showcrosshairs				= true
 -- realisticfalldamage - Enable/Disable dynamic fall damage. Setting mp_falldamage to 1 will over-ride this.
 GM.Config.realisticfalldamage			= true
 -- printeroverheat - Can the default money printer overheat on its own?

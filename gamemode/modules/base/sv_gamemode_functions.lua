@@ -620,10 +620,6 @@ function GM:PlayerSpawn(ply)
 	ply:UnSpectate()
 	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
 
-	if not GAMEMODE.Config.showcrosshairs then
-		ply:CrosshairDisable()
-	end
-
 	-- Kill any colormod
 	SendUserMessage("blackScreen", ply, false)
 
