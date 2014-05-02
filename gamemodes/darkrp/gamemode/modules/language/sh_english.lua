@@ -48,6 +48,7 @@ local english = {
 	owner_poor = "The %s owner is too poor to subsidize this sale!",
 
 	-- Police
+	Wanted_text = "Wanted!",
 	wanted = "Wanted by Police!\nReason: %s",
 	youre_arrested = "You have been arrested for %d seconds!",
 	youre_arrested_by = "You have been arrested by %s.",

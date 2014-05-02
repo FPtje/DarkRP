@@ -310,3 +310,32 @@ DarkRP.hookStub{
 	returns = {
 	}
 }
+
+DarkRP.hookStub{
+	name = "agendaUpdated",
+	description = "When the agenda is updated.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who changed the agenda. Warning: can be nil!",
+			type = "Player"
+		},
+		{
+			name = "agenda",
+			description = "Agenda table (also holds the previous text).",
+			type = "table"
+		},
+		{
+			name = "text",
+			description = "The text the player wants to set the agenda to.",
+			type = "string"
+		}
+	},
+	returns = {
+		{
+			name = "text",
+			description = "An override for the text.",
+			type = "string"
+		}
+	}
+}

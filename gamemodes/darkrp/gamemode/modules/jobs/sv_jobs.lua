@@ -114,11 +114,11 @@ function meta:changeTeam(t, force)
 			end
 		end
 	end
-	
+
 	if isMayor and GAMEMODE.Config.shouldResetLaws then
 		DarkRP.resetLaws()
 	end
-	
+
 	self:SetTeam(t)
 	hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
 	DarkRP.log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
@@ -148,6 +148,7 @@ end
 
 function meta:updateJob(job)
 	self:setDarkRPVar("job", job)
+	self.LastJob = CurTime()
 
 	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
 		if not IsValid(self) then return end
@@ -201,7 +202,6 @@ local function ChangeJob(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), "/job"))
 		return ""
 	end
-	ply.LastJob = CurTime()
 
 	if not ply:Alive() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/job", ""))
