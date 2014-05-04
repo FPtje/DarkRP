@@ -20,7 +20,6 @@ end
 usermessage.Hook("FAdmin_RemovePriv", removePriv)
 
 local function addGroupUI(ply, func)
-	if not IsValid(ply) then return end
 	Derma_StringRequest("Set name",
 	"What will be the name of the new group?",
 	"",
@@ -140,7 +139,7 @@ ContinueNewGroup = function(ply, name, admin_access, func)
 	OKButton:SetText("OK")
 	OKButton:StretchToParent(5, 30 + TickBoxPanel:GetTall(), Window:GetWide()/2 + 2, 5)
 	function OKButton:DoClick()
-		if ply then
+		if IsValid(ply) then
 			RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access, unpack(privs))
 		else
 			RunConsoleCommand("_FAdmin", "AddGroup", name, admin_access, unpack(privs))
