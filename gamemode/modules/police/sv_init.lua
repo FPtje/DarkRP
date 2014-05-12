@@ -215,8 +215,19 @@ local function ccArrest(ply, cmd, args)
 		return
 	end
 
-	local target = DarkRP.findPlayer(args[1])
-	if target then
+	local targets = DarkRP.findPlayers(args[1])
+
+	if not targets then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		end
+
+		return
+	end
+
+	for k, target in pairs(targets) do
 		local length = tonumber(args[2])
 		if length then
 			target:arrest(length, ply)
@@ -228,12 +239,6 @@ local function ccArrest(ply, cmd, args)
 			DarkRP.log("Console force-arrested "..target:SteamName(), Color(0, 255, 255))
 		else
 			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-arrested "..target:SteamName(), Color(0, 255, 255))
-		end
-	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end
 end
@@ -254,9 +259,19 @@ local function ccUnarrest(ply, cmd, args)
 		return
 	end
 
-	local target = DarkRP.findPlayer(args[1])
+	local targets = DarkRP.findPlayers(args[1])
 
-	if target then
+	if not targets then
+		if ply:EntIndex() == 0 then
+			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		else
+			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		end
+
+		return
+	end
+
+	for _, target in pairs(targets) do
 		target:unArrest(ply)
 		if not target:Alive() then target:Spawn() end
 
@@ -264,12 +279,6 @@ local function ccUnarrest(ply, cmd, args)
 			DarkRP.log("Console force-unarrested "..target:SteamName(), Color(0, 255, 255))
 		else
 			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unarrested "..target:SteamName(), Color(0, 255, 255))
-		end
-	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end
 end
