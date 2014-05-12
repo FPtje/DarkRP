@@ -1,6 +1,6 @@
 DarkRP.findPlayer = DarkRP.stub{
 	name = "findPlayer",
-	description = "Find a player based on vague information.",
+	description = "Find a single player based on vague information.",
 	parameters = {
 		{
 			name = "info",
@@ -14,6 +14,27 @@ DarkRP.findPlayer = DarkRP.stub{
 			name = "found",
 			description = "The player that matches the description.",
 			type = "Player"
+		}
+	},
+	metatable = DarkRP
+}
+
+DarkRP.findPlayers = DarkRP.stub{
+	name = "findPlayers",
+	description = "Find a list of players based on vague information.",
+	parameters = {
+		{
+			name = "info",
+			description = "The information of the player (UserID, SteamID, name).",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "found",
+			description = "Table of players that match the description.",
+			type = "table"
 		}
 	},
 	metatable = DarkRP

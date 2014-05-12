@@ -74,6 +74,55 @@ function DarkRP.findPlayer(info)
 	return nil
 end
 
+/*---------------------------------------------------------------------------
+Find multiple players based on a string criterium
+Taken from FAdmin
+---------------------------------------------------------------------------*/
+function DarkRP.findPlayers(info)
+	if not info then return nil end
+	local pls = player.GetAll()
+	local found = {}
+	local players
+
+	if string.lower(info) == "*" or string.lower(info) == "<all>" then return pls end
+
+	local InfoPlayers = {}
+	for A in string.gmatch(info..";", "([a-zA-Z0-9:_.]*)[;(,%s)%c]") do
+		if A ~= "" then table.insert(InfoPlayers, A) end
+	end
+
+	for _, PlayerInfo in pairs(InfoPlayers) do
+		-- Playerinfo is always to be treated as UserID when it's a number
+		-- otherwise people with numbers in their names could get confused with UserID's of other players
+		if tonumber(PlayerInfo) then
+			if IsValid(Player(PlayerInfo)) and not found[Player(PlayerInfo)] then
+				found[Player(PlayerInfo)] = true
+				players = players or {}
+				table.insert(players, Player(PlayerInfo))
+			end
+			continue
+		end
+
+		for k, v in pairs(pls) do
+			-- Prevend duplicates
+			if found[v] then continue end
+
+			-- Find by Steam ID
+			if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") or
+			-- Find by Partial Nick
+			string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
+			-- Find by steam name
+			(v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
+				found[v] = true
+				players = players or {}
+				table.insert(players, v)
+			end
+		end
+	end
+
+	return players
+end
+
 function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	searchDistance = searchDistance or 100
 	hitDistance = hitDistance or 15
