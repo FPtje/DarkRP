@@ -74,18 +74,21 @@ end
 
 function FPP.NewBuddy(um)
 	local ply = um:ReadEntity()
+
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	local SteamID = ply:SteamID()
+
 	local data = sql.Query("SELECT * FROM FPP_Buddies")
-	if data then
-		for k,v in pairs(data) do
-			if v.steamid == SteamID then--make the player buddy if he's in your buddies list
-				RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
-				sql.Query("UPDATE FPP_Buddies SET name = "..sql.SQLStr(ply:Nick()).." WHERE steamid = ".. sql.SQLStr(SteamID) ..";") -- update the name
-				FPP.Buddies[SteamID] = FPP.Buddies[SteamID] or {}
-				FPP.Buddies[SteamID].name = ply:Nick()
-			end
-		end
+	if not data then return end
+
+	for k,v in pairs(data) do
+		-- make the player buddy if they're in your buddies list
+		if v.steamid ~= SteamID then continue end
+
+		RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
+		sql.Query("UPDATE FPP_Buddies SET name = "..sql.SQLStr(ply:Nick()).." WHERE steamid = ".. sql.SQLStr(SteamID) ..";") -- update the name
+		FPP.Buddies[SteamID] = FPP.Buddies[SteamID] or {}
+		FPP.Buddies[SteamID].name = ply:Nick()
 	end
 end
 usermessage.Hook("FPP_CheckBuddy", FPP.NewBuddy)
