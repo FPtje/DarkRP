@@ -527,6 +527,7 @@ local function initPlayer(ply)
 	ply:initiateTax()
 
 	ply:updateJob(team.GetName(GAMEMODE.DefaultTeam))
+	ply:setSelfDarkRPVar("salary", RPExtraTeams[GAMEMODE.DefaultTeam].salary or GAMEMODE.Config.normalsalary)
 
 	ply:GetTable().Ownedz = { }
 	ply:GetTable().OwnedNumz = 0
