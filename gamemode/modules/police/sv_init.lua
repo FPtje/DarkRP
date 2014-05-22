@@ -334,11 +334,9 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 	-- "Arrested" DarkRPVar is set to false BEFORE this hook however, so it is safe here.
 	hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
 	gamemode.Call("PlayerLoadout", ply)
-	if GAMEMODE.Config.telefromjail and (not FAdmin or not ply:FAdmin_GetGlobal("fadmin_jailed")) then
-		local _, pos = GAMEMODE:PlayerSelectSpawn(ply)
-		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos) end end) -- workaround for SetPos in weapon event bug
-	elseif FAdmin and ply:FAdmin_GetGlobal("fadmin_jailed") then
-		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(ply.FAdminJailPos) end end)
+	if GAMEMODE.Config.telefromjail then
+		local ent, pos = GAMEMODE:PlayerSelectSpawn(ply)
+		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
 	end
 
 	timer.Destroy(ply:UniqueID() .. "jailtimer")
