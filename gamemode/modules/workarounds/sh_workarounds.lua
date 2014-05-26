@@ -126,3 +126,14 @@ hook.Add("CanTool", "DoorExploit", function(ply, trace, tool)
 		return false
 	end
 end)
+
+/*---------------------------------------------------------------------------
+ply:UniqueID calculates the CRC of "gm_"..ply:SteamID().."_gm"
+That calculation is slow
+---------------------------------------------------------------------------*/
+local plyMeta = FindMetaTable("Player")
+function plyMeta:UniqueID()
+	self.UIDCache = self.UIDCache or util.CRC("gm_" .. self:SteamID() .. "_gm")
+
+	return self.UIDCache
+end
