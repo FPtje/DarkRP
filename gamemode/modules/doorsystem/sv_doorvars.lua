@@ -127,7 +127,7 @@ local function sendDoorData(ply)
 
 	local res = {}
 	for k,v in pairs(ents.GetAll()) do
-		if not IsValid(v) or not v:getDoorData() then continue end
+		if not IsValid(v) or not v:getDoorData() or table.Count(v:getDoorData()) == 0 then continue end
 
 		res[v:EntIndex()] = v:getDoorData()
 	end
