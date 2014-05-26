@@ -132,8 +132,9 @@ ply:UniqueID calculates the CRC of "gm_"..ply:SteamID().."_gm"
 That calculation is slow
 ---------------------------------------------------------------------------*/
 local plyMeta = FindMetaTable("Player")
+local oldUID = plyMeta.UniqueID
 function plyMeta:UniqueID()
-	self.UIDCache = self.UIDCache or util.CRC("gm_" .. self:SteamID() .. "_gm")
+	self.UIDCache = self.UIDCache or oldUID(self)
 
 	return self.UIDCache
 end
