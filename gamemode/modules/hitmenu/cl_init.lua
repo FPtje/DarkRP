@@ -39,6 +39,10 @@ function DarkRP.hooks:onHitFailed(hitman, target, reason)
 	hitman:stopHitInfo()
 end
 
+hook.Add("EntityRemoved", "hitmenu", function(ent)
+	activeHitmen[ent] = nil
+end)
+
 hook.Add("HUDPaint", "DrawHitOption", function()
 	localplayer = localplayer or LocalPlayer()
 	hudText = hudText or GAMEMODE.Config.hudText
