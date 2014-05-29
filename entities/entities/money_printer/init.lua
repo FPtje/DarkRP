@@ -50,6 +50,9 @@ function ENT:Destruct()
 end
 
 function ENT:BurstIntoFlames()
+	local stopBurst = hook.Run("moneyPrinterCatchFire", self)
+	if stopBurst == true then return end
+
 	DarkRP.notify(self:Getowning_ent(), 0, 4, DarkRP.getPhrase("money_printer_overheating"))
 	self.burningup = true
 	local burntime = math.random(8, 18)
@@ -87,7 +90,14 @@ function ENT:CreateMoneybag()
 
 	local MoneyPos = self:GetPos()
 
-	if GAMEMODE.Config.printeroverheat then 
+	local amount = GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250
+
+	local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)
+	if prevent == true then return end
+
+	amount = hookAmount or amount
+
+	if GAMEMODE.Config.printeroverheat then
 		local overheatchance
 		if GAMEMODE.Config.printeroverheatchance <= 3 then
 			overheatchance = 22
@@ -97,12 +107,8 @@ function ENT:CreateMoneybag()
 		if math.random(1, overheatchance) == 3 then self:BurstIntoFlames() end
 	end
 
-	local amount = GAMEMODE.Config.mprintamount
-	if amount == 0 then
-		amount = 250
-	end
-
-	DarkRP.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
+	local moneybag = DarkRP.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
+	hook.Run("moneyPrinterPrinted", self, moneybag)
 	self.sparking = false
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
 end
