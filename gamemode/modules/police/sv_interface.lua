@@ -339,3 +339,61 @@ DarkRP.hookStub{
 		}
 	}
 }
+
+DarkRP.hookStub{
+        name = "playerEnteredLottery",
+        description = "When a player has entered the lottery.",
+        parameters = {
+                {
+                        name = "ply",
+                        description = "The player.",
+                        type = "Player"
+                }
+        },
+        returns = {
+        }
+}
+
+DarkRP.hookStub{
+        name = "lotteryEnded",
+        description = "When a lottery has ended.",
+        parameters = {
+                {
+                        name = "participants",
+                        description = "The participants of the lottery. An empty table when no one entered the lottery.",
+                        type = "table"
+                },
+                {
+                        name = "chosen",
+                        description = "The winner of the lottery.",
+                        type = "Player"
+                },
+                {
+                        name = "amount",
+                        description = "The amount won by the winner.",
+                        type = "number"
+                }
+        },
+        returns = {
+        }
+}
+
+
+DarkRP.hookStub{
+        name = "lotteryStarted",
+        description = "When a lottery has started.",
+        parameters = {
+                {
+                        name = "ply",
+                        description = "The player who started the lottery.",
+                        type = "Player"
+                },
+                {
+                        name = "price",
+                        description = "The amount of money people have to pay to enter.",
+                        type = "number"
+                }
+        },
+        returns = {
+        }
+}
