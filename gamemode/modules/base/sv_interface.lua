@@ -1004,3 +1004,12 @@ DarkRP.hookStub{
 		}
 	}
 }
+
+DarkRP.hookStub{
+	name = "loadCustomDarkRPItems",
+	description = "Runs right after the scripts from the DarkRPMod are run. You can add custom jobs, entities, shipments and whatever in this hook.",
+	parameters = {
+	},
+	returns = {
+	}
+}
