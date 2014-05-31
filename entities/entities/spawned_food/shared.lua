@@ -1,6 +1,6 @@
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "Spawned Weapon"
+ENT.PrintName = "Spawned Food"
 ENT.Author = "Rickster"
 ENT.Spawnable = false
 
