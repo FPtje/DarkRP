@@ -46,11 +46,7 @@ ZombieEnd = function()
 end
 
 local function LoadTable(ply)
-	ply:setSelfDarkRPVar("numPoints", table.getn(zombieSpawns))
-
-	for k, v in pairs(zombieSpawns) do
-		ply:setSelfDarkRPVar("zPoints" .. k, v)
-	end
+	ply:setSelfDarkRPVar("zPoints", zombieSpawns)
 end
 
 local function ReMoveZombie(ply, index)
