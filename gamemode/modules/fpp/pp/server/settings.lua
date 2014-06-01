@@ -41,6 +41,53 @@ function FPP.NotifyAll(text, bool)
 	end
 end
 
+
+local function getSettingsChangedEntities(settingsType, setting)
+	local plys, entities = {}, {}
+
+	local blockedString = string.sub(settingsType, 5, 5) .. string.lower(string.sub(settingsType, 6))
+
+	if setting == "adminall" then
+		for k,v in pairs(ents.GetAll()) do
+			local owner = v:CPPIGetOwner()
+			if IsValid(owner) then table.insert(entities, v) end
+		end
+
+		for k,v in pairs(player.GetAll()) do
+			if v:IsAdmin() then table.insert(plys, v) end
+		end
+
+		return plys, entities
+	elseif setting == "worldprops" or setting == "adminworldprops" then
+		for k,v in pairs(ents.GetAll()) do
+			if not IsValid(v) then continue end
+
+			if FPP.Blocked[blockedString][string.lower(v:GetClass())] then continue end
+
+			local owner = v:CPPIGetOwner()
+			if not IsValid(owner) then table.insert(entities, v) end
+		end
+
+		for k,v in pairs(player.GetAll()) do
+			if v:IsAdmin() then table.insert(plys, v) end
+		end
+		return setting == "adminworldprops" and plys or player.GetAll(), entities
+	elseif setting == "canblocked" or setting == "admincanblocked" then
+		for k,v in pairs(ents.GetAll()) do
+			if not IsValid(v) then continue end
+			if not FPP.Blocked[blockedString][string.lower(v:GetClass())] then continue end
+			table.insert(entities, v)
+		end
+
+		for k,v in pairs(player.GetAll()) do
+			if v:IsAdmin() then table.insert(plys, v) end
+		end
+		return setting == "admincanblocked" and plys or player.GetAll(), entities
+	elseif setting == "iswhitelist" then
+		return player.GetAll(), ents.GetAll()
+	end
+end
+
 local function FPP_SetSetting(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[3] or not FPP.Settings[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
@@ -58,6 +105,10 @@ local function FPP_SetSetting(ply, cmd, args)
 
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " set ".. string.lower(string.gsub(args[1], "FPP_", "")) .. " "..args[2].." to " .. tostring(args[3]), util.tobool(tonumber(args[3])))
 	end)
+
+	local plys, entities = getSettingsChangedEntities(args[1], args[2])
+	if not plys or not entities or #plys == 0 or #entities == 0 then return end
+	FPP.recalculateCanTouch(plys, entities)
 end
 concommand.Add("FPP_setting", FPP_SetSetting)
 
@@ -68,28 +119,11 @@ local function AddBlocked(ply, cmd, args)
 	if FPP.Blocked[args[1]][args[2]] then return end
 	FPP.Blocked[args[1]][args[2]] = true
 
-	MySQLite.query("SELECT * FROM FPP_BLOCKED1;", function(data)
-		if type(data) == "table" then
-			local found = false
-			local highest = 0
-			for k,v in pairs(data) do
-				if tonumber(v.id) > highest then
-					highest = tonumber(v.id)
-				end
-				if v.var == args[1] and v.setting == args[2] then
-					found = true
-				end
-			end
-			if not found then
-				MySQLite.query("INSERT INTO FPP_BLOCKED1 VALUES("..highest + 1 ..", " .. sql.SQLStr(args[1]) .. ", " .. sql.SQLStr(args[2]) .. ");")
-			end
-		else
-			--insert
-			MySQLite.query("INSERT INTO FPP_BLOCKED1 VALUES(1, " .. sql.SQLStr(args[1]) .. ", " .. sql.SQLStr(args[2]) .. ");")
-		end
+	MySQLite.query(string.format("INSERT INTO FPP_BLOCKED1 (var, setting) VALUES(%s, %s);", sql.SQLStr(args[1]), sql.SQLStr(args[2])))
 
-		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. args[2] .. " to the "..args[1] .. " black/whitelist", true)
-	end)
+	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. args[2] .. " to the "..args[1] .. " black/whitelist", true)
+
+	FPP.recalculateCanTouch(player.GetAll(), ents.FindByClass(args[2]))
 end
 concommand.Add("FPP_AddBlocked", AddBlocked)
 
@@ -117,6 +151,7 @@ local function RemoveBlocked(ply, cmd, args)
 
 	MySQLite.query("DELETE FROM FPP_BLOCKED1 WHERE var = "..sql.SQLStr(args[1]) .. " AND setting = "..sql.SQLStr(args[2])..";")
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. args[2] .. " from the "..args[1] .. " black/whitelist", false)
+	FPP.recalculateCanTouch(player.GetAll(), ents.FindByClass(args[2]))
 end
 concommand.Add("FPP_RemoveBlocked", RemoveBlocked)
 
@@ -146,7 +181,7 @@ local function ShareProp(ply, cmd, args)
 	if not args[1] or not IsValid(Entity(args[1])) or not args[2] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	local ent = Entity(args[1])
 
-	if not FPP.PlayerCanTouchEnt(ply, ent, "Toolgun1", "FPP_TOOLGUN1", true) then --Note: This returns false when it's someone elses shared entity, so that's not a glitch
+	if ent:CPPIGetOwner() ~= ply then
 		FPP.Notify(ply, "You do not have the right to share this entity.", false)
 		return
 	end
@@ -176,6 +211,8 @@ local function ShareProp(ply, cmd, args)
 			end
 		end
 	end
+
+	FPP.recalculateCanTouch(player.GetAll(), {ent})
 end
 concommand.Add("FPP_ShareProp", ShareProp)
 
@@ -631,7 +668,16 @@ local function SetBuddy(ply, cmd, args)
 
 	ply.Buddies = ply.Buddies or {}
 	for k,v in pairs(args) do args[k] = tonumber(v) end
-	ply.Buddies[buddy] = {physgun1 = util.tobool(args[2]), gravgun1 = util.tobool(args[3]), toolgun1 = util.tobool(args[4]), playeruse1 = util.tobool(args[5]), entitydamage1 = util.tobool(args[6])}
+	ply.Buddies[buddy] = {Physgun = util.tobool(args[2]), Gravgun = util.tobool(args[3]), Toolgun = util.tobool(args[4]), PlayerUse = util.tobool(args[5]), EntityDamage = util.tobool(args[6])}
+
+	local affectedProps = {}
+	for k,v in pairs(ents.GetAll()) do
+		local owner = v:CPPIGetOwner()
+		if owner ~= ply then continue end
+		table.insert(affectedProps, v)
+	end
+	FPP.recalculateCanTouch({buddy}, affectedProps)
+	FPP.RecalculateConstrainedEntities({buddy}, affectedProps)
 end
 concommand.Add("FPP_SetBuddy", SetBuddy)
 
@@ -724,6 +770,13 @@ local function RestrictToolPerson(ply, cmd, args)
 end
 concommand.Add("FPP_restricttoolplayer", RestrictToolPerson)
 
+local function refreshPrivatePlayerSettings(ply)
+	timer.Destroy("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())
+
+	timer.Create("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex(), 4, 1, function() FPP.recalculateCanTouch({ply}, ents.GetAll()) end)
+end
+concommand.Add("_FPP_RefreshPrivatePlayerSettings", refreshPrivatePlayerSettings)
+
 /*---------------------------------------------------------------------------
 Load all FPP settings
 ---------------------------------------------------------------------------*/
@@ -748,6 +801,10 @@ function FPP.Init()
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
 
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
+
+		if MySQLite.isMySQL() then
+			MySQLite.query("ALTER TABLE FPP_BLOCKED1 CHANGE id id INTEGER AUTO_INCREMENT;")
+		end
 
 	MySQLite.commit(function()
 
