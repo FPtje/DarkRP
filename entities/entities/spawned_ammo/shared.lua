@@ -1,5 +1,3 @@
-if SERVER then AddCSLuaFile() end
-
 ENT.Type = "anim"
 ENT.Base = "spawned_weapon"
 ENT.PrintName = "Spawned Ammo"
