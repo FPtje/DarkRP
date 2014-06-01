@@ -94,7 +94,7 @@ local function ToggleZombie(ply)
 				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 			end)
 		else
-			ply:setSelfDarkRPVar("zombieToggle", false)
+			ply:setSelfDarkRPVar("zombieToggle", nil)
 			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("zombie_toggled"))
 		end
 	else

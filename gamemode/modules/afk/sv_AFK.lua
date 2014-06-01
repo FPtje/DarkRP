@@ -62,7 +62,7 @@ local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
 	if ply:getDarkRPVar("AFKDemoted") then
 		ply:setDarkRPVar("job", team.GetName(ply:Team()))
-		timer.Simple(3, function() ply:setSelfDarkRPVar("AFKDemoted", false) end)
+		timer.Simple(3, function() ply:setSelfDarkRPVar("AFKDemoted", nil) end)
 	end
 end
 hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)

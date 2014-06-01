@@ -83,7 +83,7 @@ function meta:changeTeam(t, force)
 
 
 	if self:getDarkRPVar("HasGunlicense") then
-		self:setDarkRPVar("HasGunlicense", false)
+		self:setDarkRPVar("HasGunlicense", nil)
 	end
 	if TEAM.hasLicense and GAMEMODE.Config.license then
 		self:setDarkRPVar("HasGunlicense", true)

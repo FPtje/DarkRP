@@ -362,7 +362,7 @@ local function rp_RevokeLicense(ply, cmd, args)
 	local target = DarkRP.findPlayer(args[1])
 
 	if target then
-		target:setDarkRPVar("HasGunlicense", false)
+		target:setDarkRPVar("HasGunlicense", nil)
 
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
@@ -393,7 +393,7 @@ concommand.Add("rp_revokelicense", rp_RevokeLicense)
 
 local function FinishRevokeLicense(vote, win)
 	if choice == 1 then
-		vote.target:setDarkRPVar("HasGunlicense", false)
+		vote.target:setDarkRPVar("HasGunlicense", nil)
 		vote.target:StripWeapons()
 		gamemode.Call("PlayerLoadout", vote.target)
 		DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_removed", vote.target:Nick()))
