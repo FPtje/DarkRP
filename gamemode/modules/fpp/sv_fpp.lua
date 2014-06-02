@@ -3,6 +3,7 @@ AddCSLuaFile("pp/sh_settings.lua")
 AddCSLuaFile("pp/client/menu.lua")
 AddCSLuaFile("pp/client/hud.lua")
 AddCSLuaFile("pp/client/buddies.lua")
+AddCSLuaFile("pp/client/ownability.lua")
 
 include("pp/sh_settings.lua")
 include("pp/sh_cppi.lua")
@@ -10,6 +11,7 @@ include("pp/server/settings.lua")
 include("pp/server/core.lua")
 include("pp/server/antispam.lua")
 include("pp/server/defaultblockedmodels.lua")
+include("pp/server/ownability.lua")
 
 hook.Add("DatabaseInitialized", "FPPInit", FPP.Init)
 
