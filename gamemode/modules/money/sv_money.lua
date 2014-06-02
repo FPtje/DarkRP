@@ -236,6 +236,11 @@ local function ccSetMoney(ply, cmd, args)
 
 	local target = DarkRP.findPlayer(args[1])
 
+	if not target then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "target"))
+		return
+	end
+
 	local amount = math.floor(tonumber(args[2]))
 
 	if args[3] then
