@@ -381,6 +381,7 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 
 		for _, ent in pairs(entities) do
 			if discovered[ent] then continue end -- We've seen this ent in a graph
+			ent.FPPCanTouch[ply] = ent.FPPCanTouch[ply] or 0
 
 			local left, right = 1, 2
 			BFSQueue[left] = ent
@@ -403,6 +404,10 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 
 				black[value] = true
 				discovered[value] = true
+
+				-- The entity doesn't necessarily have CanTouch data at this point
+				value.FPPCanTouch = value.FPPCanTouch or {}
+				value.FPPCanTouch[ply] = value.FPPCanTouch[ply] or 0
 				FPP_CanTouch = bit.band(FPP_CanTouch or 0, value.FPPCanTouch[ply])
 			end
 
