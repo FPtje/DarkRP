@@ -272,7 +272,7 @@ function meta:restorePlayerData()
 		info.salary = info.salary or GAMEMODE.Config.normalsalary
 
 		self:setDarkRPVar("money", tonumber(info.wallet))
-		self:setDarkRPVar("salary", tonumber(info.salary))
+		self:setSelfDarkRPVar("salary", tonumber(info.salary))
 
 		self:setDarkRPVar("rpname", info.rpname)
 
@@ -283,7 +283,7 @@ function meta:restorePlayerData()
 		self.DarkRPUnInitialized = nil
 
 		self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
-		self:setDarkRPVar("salary", GAMEMODE.Config.normalsalary)
+		self:setSelfDarkRPVar("salary", GAMEMODE.Config.normalsalary)
 		self:setDarkRPVar("rpname", string.gsub(self:SteamName(), "\\\"", "\""))
 
 		error("Failed to retrieve player information from MySQL server")

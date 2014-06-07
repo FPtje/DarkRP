@@ -89,11 +89,11 @@ end
 
 -- The money is a double because it accepts higher values than Int and UInt, which are undefined for >32 bits
 DarkRP.registerDarkRPVar("money",         net.WriteDouble, net.ReadDouble)
-DarkRP.registerDarkRPVar("salary",        fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
+DarkRP.registerDarkRPVar("salary",        fp{fn.Flip(net.WriteInt), 32}, fp{net.ReadInt, 32})
 DarkRP.registerDarkRPVar("rpname",        net.WriteString, net.ReadString)
 DarkRP.registerDarkRPVar("job",           net.WriteString, net.ReadString)
-DarkRP.registerDarkRPVar("HasGunlicense", net.WriteBit, fn.Compose{tobool, net.ReadBit})
-DarkRP.registerDarkRPVar("Arrested",      net.WriteBit, fn.Compose{tobool, net.ReadBit})
-DarkRP.registerDarkRPVar("wanted",        net.WriteBit, fn.Compose{tobool, net.ReadBit})
+DarkRP.registerDarkRPVar("HasGunlicense", net.WriteBit, fc{tobool, net.ReadBit})
+DarkRP.registerDarkRPVar("Arrested",      net.WriteBit, fc{tobool, net.ReadBit})
+DarkRP.registerDarkRPVar("wanted",        net.WriteBit, fc{tobool, net.ReadBit})
 DarkRP.registerDarkRPVar("wantedReason",  net.WriteString, net.ReadString)
 DarkRP.registerDarkRPVar("agenda",        net.WriteString, net.ReadString)
