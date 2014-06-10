@@ -314,6 +314,16 @@ local function OwnDoor(ply)
 		end
 
 		if trace.Entity:isKeysOwnedBy(ply) then
+			local bAllowed, strReason = hook.Call("playerSell".. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
+
+			if bAllowed == false then
+				if strReason and strReason != "" then
+					DarkRP.notify(ply, 1, 4, strReason)
+				end
+
+				return ""
+			end
+
 			if trace.Entity:isMasterOwner(ply) then
 				trace.Entity:removeAllKeysExtraOwners()
 				trace.Entity:removeAllKeysAllowedToOwn()
@@ -326,7 +336,7 @@ local function OwnDoor(ply)
 			hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveMoneyBack)
 			ply:addMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
-			if( !bSuppress ) then
+			if not bSuppress then
 				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  DarkRP.formatMoney(GiveMoneyBack)))
 			end
 
@@ -342,12 +352,13 @@ local function OwnDoor(ply)
 				return "";
 			end
 
-			local bAllowed, strReason, bSuppress = hook.Call("playerBuy"..( trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
-			if( bAllowed == false ) then
-				if( strReason and strReason != "") then
-					DarkRP.notify( ply, 1, 4, strReason)
+			local bAllowed, strReason, bSuppress = hook.Call("playerBuy".. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
+			if bAllowed == false then
+				if strReason and strReason != "" then
+					DarkRP.notify(ply, 1, 4, strReason)
 				end
-				return "";
+
+				return ""
 			end
 
 			local bVehicle = trace.Entity:IsVehicle();
@@ -363,7 +374,7 @@ local function OwnDoor(ply)
 			end
 
 			ply:addMoney(-iCost)
-			if( !bSuppress ) then
+			if not bSuppress then
 				DarkRP.notify( ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", DarkRP.formatMoney(iCost), "") or DarkRP.getPhrase("door_bought", DarkRP.formatMoney(iCost), ""))
 			end
 

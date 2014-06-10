@@ -417,6 +417,35 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "playerSellDoor",
+	description = "When a player is about to sell a door.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who is to sell the door.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The door.",
+			type = "Entity"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to sell the door.",
+			type = "boolean"
+		},
+		{
+			name = "reason",
+			description = "The reason why a player is not allowed to sell the door, if applicable.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
 	name = "onAllowedToOwnAdded",
 	description = "When a player adds a co-owner to a door.",
 	parameters = {
@@ -504,6 +533,35 @@ DarkRP.hookStub{
 			name = "surpress",
 			description = "Whether to show the reason in a notification to the player, return true here to surpress the message.",
 			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerSellVehicle",
+	description = "When a player is about to sell a vehicle.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who is to sell the vehicle.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The vehicle.",
+			type = "Entity"
+		}
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the player is allowed to sell the vehicle.",
+			type = "boolean"
+		},
+		{
+			name = "reason",
+			description = "The reason why a player is not allowed to sell the vehicle, if applicable.",
+			type = "string"
 		}
 	}
 }
