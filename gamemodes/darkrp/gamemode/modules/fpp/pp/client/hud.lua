@@ -7,60 +7,24 @@ surface.CreateFont("TabLarge", {
 	shadow = false,
 	font = "Trebuchet MS"})
 
-local TouchAlpha = 0
-local CantTouchOwner = ""
-local cantouch = false
-
--- Can/can not touch sir!
-local function CanTouch(um)
-	if TouchAlpha > 0 then return end
-	CantTouchOwner = um:ReadString()
-	cantouch = um:ReadBool()
-
-	TouchAlpha = 255
-	timer.Simple(1, function()
-		TouchAlpha = 0
-	end)
-end
-usermessage.Hook("FPP_CanTouch", CanTouch)
-
---Show the owner!
-
-local function RetrieveOwner(um)
-	entIndex, canTouch, owner = um:ReadShort(), um:ReadBool(), um:ReadString()
-
-	local i = 0
-	local function setData(ent)
-		if not IsValid(ent) and i < 20 then
-			i = i + 1
-			-- The entity is not always immediately valid
-			timer.Simple(0.1, function() setData(Entity(entIndex)) end)
-			return
-		end
-
-		ent.FPPCanTouch = canTouch
-		ent.FPPOwner = owner
-	end
-	setData(Entity(entIndex))
-end
-usermessage.Hook("FPP_Owner", RetrieveOwner)
+local touchTypeNumbers = {
+	[1] = "Physgun",
+	[2] = "Gravgun",
+	[4] = "Toolgun",
+	[8] = "PlayerUse",
+	[16] = "EntityDamage"
+}
 
 hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool) -- Prevent client from SEEING his toolgun shoot while it doesn't shoot serverside.
-	if IsValid(trace.Entity) and trace.Entity.FPPCanTouch == false then
-		return false
-	end
-
-	if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().GetToolObject and ply:GetActiveWeapon():GetToolObject() and
-	(string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "model" ) or "", "*") or
-	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "material" ) or "", "*") or
-	string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "model" ) or "", "\\")
-	/*or string.find(ply:GetActiveWeapon():GetToolObject():GetClientInfo( "tool" ), "/")*/) then
+	if IsValid(trace.Entity) and not FPP.canTouchEnt(trace.Entity, "Toolgun") then
 		return false
 	end
 end)
 
 hook.Add("PhysgunPickup", "FPP_CL_PhysgunPickup", function(ply, ent)
-	return false
+	if not FPP.canTouchEnt(ent, "Physgun") then
+		return false
+	end
 end)--This looks weird, but whenever a client touches an ent he can't touch, without the code it'll look like he picked it up. WITH the code it really looks like he can't
 -- besides, when the client CAN pick up a prop, it also looks like he can.
 
@@ -155,44 +119,18 @@ local function DrawNotice( self, k, v, i )
 	if math.abs(dist) < 2 and math.abs(v.velx) < 0.1 then v.velx = 0 end
 
 	// Friction.. kind of FPS independant.
-	v.velx = v.velx * (0.95 - RealFrameTime() * 8 )
-	v.vely = v.vely * (0.95 - RealFrameTime() * 8 )
+	v.velx = v.velx * (0.95 - RealFrameTime() * 8)
+	v.vely = v.vely * (0.95 - RealFrameTime() * 8)
 end
 
-local comingAroundAgain = 0
+local weaponClassTouchTypes = {
+	["weapon_physgun"] = "Physgun",
+	["weapon_physcannon"] = "Gravgun",
+	["gmod_tool"] = "Toolgun",
+}
+
 local function HUDPaint()
 
-	--Show the owner:
-	local LAEnt = LocalPlayer():GetEyeTraceNoCursor().Entity
-	if IsValid(LAEnt) and LAEnt.FPPCanTouch ~= nil and LAEnt.FPPOwner then
-
-		surface.SetFont("Default")
-		local w,h = surface.GetTextSize(LAEnt.FPPOwner)
-		local col = LAEnt.FPPCanTouch and Color(0,255,0,255) or Color(255,0,0,255)
-
-		if comingAroundAgain < w then
-			comingAroundAgain = math.Min(comingAroundAgain + (RealFrameTime()*600), w)
-		end
-
-		draw.RoundedBox(4, comingAroundAgain - w, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-		draw.DrawText(LAEnt.FPPOwner, "Default", 5 - w + comingAroundAgain, ScrH()/2 - h, col, 0)
-		surface.SetDrawColor(255,255,255,255)
-	elseif not IsValid(LAEnt) then
-		comingAroundAgain = 0
-	end
-
-	-- Messsage when you can't touch something
-	if TouchAlpha > 0 and LAEnt.FPPOwner then
-		surface.SetDrawColor(255,255,255,TouchAlpha)
-
-		surface.SetFont("Default")
-		local w,h = surface.GetTextSize(LAEnt.FPPOwner)
-		local col = cantouch and Color(0,255,0,255) or Color(255,0,0,255)
-
-		draw.WordBox(4, ScrW()/2 - 0.51*w, ScrH()/2 + h, LAEnt.FPPOwner, "Default", Color(0, 0, 0, 110), col)
-	end
-
-	if not HUDNotes then return end
 	local i = 0
 	for k, v in pairs(HUDNotes) do
 		if v ~= 0 then
@@ -208,5 +146,25 @@ local function HUDPaint()
 			if (HUDNote_c == 0) then HUDNotes = {} end
 		end
 	end
+
+	--Show the owner:
+	local LAEnt = LocalPlayer():GetEyeTraceNoCursor().Entity
+	if not IsValid(LAEnt) then return end
+
+	local weapon = LocalPlayer():GetActiveWeapon()
+	if not IsValid(weapon) then return end
+	local class = weapon:GetClass()
+
+	local touchType = weaponClassTouchTypes[class] or "EntityDamage"
+	local reason = FPP.entGetTouchReason(LAEnt, touchType)
+	if not reason then return end
+
+	surface.SetFont("Default")
+	local w,h = surface.GetTextSize(reason)
+	local col = FPP.canTouchEnt(LAEnt, touchType) and Color(0,255,0,255) or Color(255,0,0,255)
+
+	draw.RoundedBox(4, 0, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
+	draw.DrawText(reason, "Default", 5, ScrH()/2 - h, col, 0)
+	surface.SetDrawColor(255,255,255,255)
 end
 hook.Add("HUDPaint", "FPP_HUDPaint", HUDPaint)

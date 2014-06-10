@@ -33,37 +33,45 @@ Retrieve a player var.
 Read the usermessage and attempt to set the DarkRP var
 ---------------------------------------------------------------------------*/
 local function doRetrieve()
-	local userID = net.ReadFloat()
-	local var = net.ReadString()
-	local valueType = net.ReadUInt(8)
-	local value = net.ReadType(valueType)
+	local userID = net.ReadUInt(16)
+	local var, value = DarkRP.readNetDarkRPVar()
 
 	RetrievePlayerVar(userID, var, value)
 end
 net.Receive("DarkRP_PlayerVar", doRetrieve)
 
 /*---------------------------------------------------------------------------
+Retrieve the message to remove a DarkRPVar
+---------------------------------------------------------------------------*/
+local function doRetrieveRemoval()
+	local userID = net.ReadUInt(16)
+	local var = DarkRP.readNetDarkRPVarRemoval()
+	local ply = Player(userID)
+
+	if not IsValid(ply) then return end
+
+	ply.DarkRPVars = ply.DarkRPVars or {}
+
+	hook.Call("DarkRPVarChanged", nil, ply, var, ply.DarkRPVars[var], nil)
+
+	ply.DarkRPVars[var] = nil
+end
+net.Receive("DarkRP_PlayerVarRemoval", doRetrieveRemoval)
+
+/*---------------------------------------------------------------------------
 Initialize the DarkRPVars at the start of the game
 ---------------------------------------------------------------------------*/
 local function InitializeDarkRPVars(len)
-	local vars = net.ReadTable()
+	local plyCount = net.ReadUInt(8)
 
-	local askAgain = false
-	if not vars then askAgain = true end
-	for k,v in pairs(vars or {}) do
-		if not IsValid(k) then askAgain = true continue end
-		k.DarkRPVars = k.DarkRPVars or {}
+	for i = 1, plyCount, 1 do
+		local userID = net.ReadUInt(16)
+		local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
 
-		-- Merge the tables
-		for a, b in pairs(v) do
-			k.DarkRPVars[a] = b
+		for j = 1, varCount, 1 do
+			local var, value = DarkRP.readNetDarkRPVar()
+			RetrievePlayerVar(userID, var, value)
 		end
-	end
-
-	-- Sometimes players remain uninitialized
-	-- Ask again for data when null players are found or when not every player is in it
-	if askAgain or #vars < #player.GetAll() - 1 then -- Timer delay must be larger than 1, command will be ignored otherwise
-		timer.Simple(3, fn.Curry(RunConsoleCommand, 2)("_sendDarkRPvars"))
 	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)

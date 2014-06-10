@@ -4,28 +4,42 @@ local meta = FindMetaTable("Player")
 Pooled networking strings
 ---------------------------------------------------------------------------*/
 util.AddNetworkString("DarkRP_InitializeVars")
+util.AddNetworkString("DarkRP_PlayerVarRemoval")
 
 /*---------------------------------------------------------------------------
 Player vars
 ---------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------
+Remove a player's DarkRPVar
+---------------------------------------------------------------------------*/
+function meta:removeDarkRPVar(var, target)
+	target = target or player.GetAll()
+	self.DarkRPVars = self.DarkRPVars or {}
+	self.DarkRPVars[var] = nil
+
+	net.Start("DarkRP_PlayerVarRemoval")
+		net.WriteUInt(self:UserID(), 16)
+		DarkRP.writeNetDarkRPVarRemoval(var)
+	net.Send(target)
+end
+
+/*---------------------------------------------------------------------------
 Set a player's DarkRPVar
 ---------------------------------------------------------------------------*/
-
 function meta:setDarkRPVar(var, value, target)
 	if not IsValid(self) then return end
 	target = target or player.GetAll()
 
+	if value == nil then return self:removeDarkRPVar(var, target) end
 	hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, value)
 
 	self.DarkRPVars = self.DarkRPVars or {}
 	self.DarkRPVars[var] = value
 
 	net.Start("DarkRP_PlayerVar")
-		net.WriteFloat(self:UserID())
-		net.WriteString(var)
-		net.WriteType(value)
+		net.WriteUInt(self:UserID(), 16)
+		DarkRP.writeNetDarkRPVar(var, value)
 	net.Send(target)
 end
 
@@ -55,17 +69,24 @@ local function SendDarkRPVars(ply)
 	if ply.DarkRPVarsSent and ply.DarkRPVarsSent > (CurTime() - 1) then return end -- prevent spammers
 	ply.DarkRPVarsSent = CurTime()
 
-	local sendtable = {}
-	for k,v in pairs(player.GetAll()) do
-		sendtable[v] = {}
-		for a,b in pairs(v.DarkRPVars or {}) do
-			if not (v.privateDRPVars or {})[a] or ply == v then
-				sendtable[v][a] = b
+	local plys = player.GetAll()
+
+	net.Start("DarkRP_InitializeVars")
+		net.WriteUInt(#plys, 8)
+		for _, target in pairs(plys) do
+			net.WriteUInt(target:UserID(), 16)
+
+			local DarkRPVars = {}
+			for var, value in pairs(target.DarkRPVars) do
+				if ply ~= target and (target.privateDRPVars or {})[var] then continue end
+				table.insert(DarkRPVars, var)
+			end
+
+			net.WriteUInt(#DarkRPVars, DarkRP.DARKRP_ID_BITS + 2) -- Allow for three times as many unknown DarkRPVars than the limit
+			for i = 1, #DarkRPVars, 1 do
+				DarkRP.writeNetDarkRPVar(DarkRPVars[i], target.DarkRPVars[DarkRPVars[i]])
 			end
 		end
-	end
-	net.Start("DarkRP_InitializeVars")
-		net.WriteTable(sendtable)
 	net.Send(ply)
 end
 concommand.Add("_sendDarkRPvars", SendDarkRPVars)

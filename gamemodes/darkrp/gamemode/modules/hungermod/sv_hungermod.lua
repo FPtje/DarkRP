@@ -7,7 +7,7 @@ local function HMThink()
 	if not GAMEMODE.Config.hungerspeed then return end
 
 	for k, v in pairs(player.GetAll()) do
-		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > 1) then
+		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > 10) then
 			v:hungerUpdate()
 		end
 	end
@@ -68,7 +68,9 @@ local function BuyFood(ply, args)
 		SpawnedFood.onlyremover = true
 		SpawnedFood.SID = ply.SID
 		SpawnedFood:SetModel(v.model)
+		SpawnedFood.FoodName = v.name
 		SpawnedFood.FoodEnergy = v.energy
+		SpawnedFood.FoodPrice = v.price
 		SpawnedFood:Spawn()
 		return ""
 	end

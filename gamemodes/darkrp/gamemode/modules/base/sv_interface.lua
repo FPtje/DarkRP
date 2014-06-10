@@ -479,9 +479,30 @@ DarkRP.findEmptyPos = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.PLAYER.removeDarkRPVar = DarkRP.stub{
+	name = "removeDarkRPVar",
+	description = "Remove a shared variable. Exactly the same as ply:setDarkRPVar(nil).",
+	parameters = {
+		{
+			name = "variable",
+			description = "The name of the variable.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "target",
+			description = "the clients to whom this variable is sent.",
+			type = "CRecipientFilter",
+			optional = true
+		}
+	},
+	returns = {},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.setDarkRPVar = DarkRP.stub{
 	name = "setDarkRPVar",
-	description = "Set a shared variable.",
+	description = "Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!",
 	parameters = {
 		{
 			name = "variable",
@@ -1002,5 +1023,14 @@ DarkRP.hookStub{
 			description = "Override the total amount of money (optional).",
 			type = "number"
 		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "loadCustomDarkRPItems",
+	description = "Runs right after the scripts from the DarkRPMod are run. You can add custom jobs, entities, shipments and whatever in this hook.",
+	parameters = {
+	},
+	returns = {
 	}
 }

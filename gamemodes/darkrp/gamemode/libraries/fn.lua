@@ -4,6 +4,31 @@ Functional library
 by FPtje Atheos
 ---------------------------------------------------------------------------*/
 
+/*---------------------------------------------------------------------------
+Function currying
+	Take a function with n parameters.
+	Currying is the procedure of storing k < n parameters "in the function"
+	 in such a way that the remaining function can be called with n - k parameters
+
+	Example:
+	DebugPrint = fp{print, "[DEBUG]"}
+	DebugPrint("TEST")
+	> [DEBUG] TEST
+---------------------------------------------------------------------------*/
+function fp(tbl)
+	local func = tbl[1]
+	local args = {}
+	for i = 2, #tbl do table.insert(args, tbl[i]) end
+
+	return function(...)
+		local fnArgs = table.Copy(args)
+		local arg = {...}
+		for i = 1, #arg do table.insert(fnArgs, arg[i]) end
+
+		return func(unpack(fnArgs))
+	end
+end
+
 local unpack = unpack
 local table = table
 local pairs = pairs
@@ -57,6 +82,8 @@ Compose = function(funcs)
 		return unpack(res)
 	end
 end
+
+_G.fc = Compose
 
 -- Definition from http://lua-users.org/wiki/CurriedLua
 Curry = function(func, num_args)
@@ -284,12 +311,12 @@ All = function(func, xs)
 	return true
 end
 
-Sum = Curry(Foldr, 3)(Add)(0)
+Sum = _G.fp{Foldr, Add, 0}
 
-Product = Curry(Foldr, 3)(Multiply)(1)
+Product = _G.fp{Foldr, Multiply, 1}
 
-Concat = Curry(Foldr, 3)(Append)({})
+Concat = _G.fp{Foldr, Append, {}}
 
-Maximum = Curry(Foldl, 3)(math.Max)(-math.huge)
+Maximum = _G.fp{Foldl, math.Max, -math.huge}
 
-Minimum = Curry(Foldl, 3)(math.Min)(math.huge)
+Minimum = _G.fp{Foldl, math.Min, math.huge}

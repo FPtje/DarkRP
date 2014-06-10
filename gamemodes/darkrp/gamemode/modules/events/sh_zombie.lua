@@ -11,6 +11,22 @@ DarkRP.addPhrase("en", "zombie_disabled", "Zombies are now disabled.")
 DarkRP.addPhrase("en", "zombie_spawn", "Zombie Spawn")
 DarkRP.addPhrase("en", "zombie_toggled", "Zombies toggled.")
 
+DarkRP.registerDarkRPVar("zombieToggle", net.WriteBit, fn.Compose{tobool, net.ReadBit})
+DarkRP.registerDarkRPVar("zPoints", function(zSpawns)
+	net.WriteUInt(#zSpawns, 16)
+	for _, pos in pairs(zSpawns) do
+		net.WriteVector(pos)
+	end
+end,
+function()
+	local res = {}
+	local count = net.ReadUInt(16)
+	for i = 1, count, 1 do
+		table.insert(res, net.ReadVector())
+	end
+
+	return res
+end)
 
 local hasCommandsPriv = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_commands")
 DarkRP.declareChatCommand{

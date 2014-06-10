@@ -99,7 +99,7 @@ end
 local function DrawInfo()
 	local Salary = DarkRP.getPhrase("salary", DarkRP.formatMoney(localplayer:getDarkRPVar("salary")), "")
 
-	JobWallet = string.format("%s\n%s",
+	local JobWallet = string.format("%s\n%s",
 		DarkRP.getPhrase("job", localplayer:getDarkRPVar("job") or ""),
 		DarkRP.getPhrase("wallet", DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
 	)

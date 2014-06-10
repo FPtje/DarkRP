@@ -64,7 +64,8 @@ end
 
 function plyMeta:unWanted(actor)
 	hook.Call("playerUnWanted", GAMEMODE, self, actor)
-	self:setDarkRPVar("wanted", false)
+	self:setDarkRPVar("wanted", nil)
+	self:setDarkRPVar("wantedReason", nil)
 
 	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
 		DarkRP.getPhrase("wanted_expired", self:Nick())
@@ -92,7 +93,7 @@ end
 function plyMeta:unArrest(unarrester)
 	if not self:isArrested() then return end
 
-	self:setDarkRPVar("Arrested", false)
+	self:setDarkRPVar("Arrested", nil)
 	arrestedPlayers[self:SteamID()] = nil
 	hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester)
 end
@@ -302,7 +303,7 @@ Hooks
 function DarkRP.hooks:playerArrested(ply, time, arrester)
 	if ply:isWanted() then ply:unWanted(arrester) end
 	ply:unWarrant(arrester)
-	ply:setDarkRPVar("HasGunlicense", false)
+	ply:setDarkRPVar("HasGunlicense", nil)
 
 	-- UpdatePlayerSpeed won't work here as the "Arrested" DarkRPVar is set AFTER this hook
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)

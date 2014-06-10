@@ -39,6 +39,14 @@ function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 end
 
 /*---------------------------------------------------------------------------
+DarkRPVars
+---------------------------------------------------------------------------*/
+DarkRP.registerDarkRPVar("hasHit", net.WriteBit, fn.Compose{tobool, net.ReadBit})
+DarkRP.registerDarkRPVar("hitTarget", net.WriteEntity, net.ReadEntity)
+DarkRP.registerDarkRPVar("hitPrice", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
+DarkRP.registerDarkRPVar("lastHitTime", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
+
+/*---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------*/
 DarkRP.declareChatCommand{

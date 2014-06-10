@@ -30,6 +30,9 @@ Valid members:
 	customCheckMessage = string -- message to people who cannot buy it because of the customCheck
 ]]
 DarkRP.DARKRP_LOADING = true
+
+DarkRP.registerDarkRPVar("Energy", net.WriteFloat, net.ReadFloat)
+
 DarkRP.createFood("Banana", {
 	model = "models/props/cs_italy/bananna.mdl",
 	energy = 10,

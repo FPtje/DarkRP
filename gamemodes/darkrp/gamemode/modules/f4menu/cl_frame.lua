@@ -104,6 +104,7 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 	return sheet, index
 end
 
+local F4Bind
 function PANEL:Think()
 	self.CloseButton:SetVisible(not self.tabScroller.btnRight:IsVisible())
 

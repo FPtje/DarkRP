@@ -1,3 +1,104 @@
+DarkRP.registerDarkRPVar = DarkRP.stub{
+	name = "registerDarkRPVar",
+	description = "Register a DarkRPVar by name. You should definitely register DarkRPVars. Registering DarkRPVars will make networking much more efficient.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the DarkRPVar.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "writeFn",
+			description = "The function that writes a value for this DarkRPVar. Examples: net.WriteString, function(val) net.WriteUInt(val, 8) end.",
+			type = "function",
+			optional = false
+		},
+		{
+			name = "readFn",
+			description = "The function that reads a value for this DarkRPVar. Examples: net.ReadString, function() net.ReadUInt(8) end.",
+			type = "function",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.writeNetDarkRPVar = DarkRP.stub{
+	name = "writeNetDarkRPVar",
+	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when sending DarkRPVar net messages. This function writes the net data for a specific DarkRPVar.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the DarkRPVar.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "value",
+			description = "The value of the DarkRPVar.",
+			type = "any",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.writeNetDarkRPVarRemoval = DarkRP.stub{
+	name = "writeNetDarkRPVarRemoval",
+	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when sending DarkRPVar net messages. This function sets a DarkRPVar to nil.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the DarkRPVar.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.readNetDarkRPVar = DarkRP.stub{
+	name = "readNetDarkRPVar",
+	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when reading DarkRPVar net messages. This function reads the net data for a specific DarkRPVar.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "name",
+			description = "The name of the DarkRPVar.",
+			type = "string"
+		},
+		{
+			name = "value",
+			description = "The value of the DarkRPVar.",
+			type = "any"
+		}
+	},
+	metatable = DarkRP
+}
+
+DarkRP.readNetDarkRPVarRemoval = DarkRP.stub{
+	name = "readNetDarkRPVarRemoval",
+	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when reading DarkRPVar net messages. This function the removal of a DarkRPVar.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "name",
+			description = "The name of the DarkRPVar.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.findPlayer = DarkRP.stub{
 	name = "findPlayer",
 	description = "Find a single player based on vague information.",
