@@ -634,13 +634,11 @@ function GM:PlayerSpawn(ply)
 		local c = ply:GetColor()
 		ply:SetRenderMode(RENDERMODE_TRANSALPHA)
 		ply:SetColor(Color(c.r, c.g, c.b, 100))
-		ply:SetCollisionGroup(COLLISION_GROUP_WORLD)
 		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime or 0, 1, function()
 			if not IsValid(ply) or not ply.Babygod then return end
 			ply.Babygod = nil
 			ply:SetColor(Color(c.r, c.g, c.b, c.a))
 			ply:GodDisable()
-			ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
 		end)
 	end
 	ply.IsSleeping = false

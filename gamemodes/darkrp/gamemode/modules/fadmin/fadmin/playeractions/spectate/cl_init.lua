@@ -93,9 +93,9 @@ local function specCalcView(ply, origin, angles, fov)
 end
 
 /*---------------------------------------------------------------------------
-Spectate the person you're looking at while you're roaming
+Find the right player to spectate
 ---------------------------------------------------------------------------*/
-local function spectateLookingAt()
+local function findNearestPlayer()
 	local aimvec = LocalPlayer():GetAimVector()
 
 	local foundPly, foundDot = nil, 0
@@ -119,6 +119,15 @@ local function spectateLookingAt()
 		foundPly, foundDot = ply, dot
 	end
 
+	return foundPly
+end
+
+/*---------------------------------------------------------------------------
+Spectate the person you're looking at while you're roaming
+---------------------------------------------------------------------------*/
+local function spectateLookingAt()
+	local foundPly = findNearestPlayer()
+
 	if not IsValid(foundPly) then return end
 
 	RunConsoleCommand("FAdmin", "Spectate", foundPly:SteamID())
@@ -133,35 +142,27 @@ local keysDown = {}
 local function specBinds(ply, bind, pressed)
 	if bind == "+jump" then
 		stopSpectating()
-
-		if keysDown["ATTACK2"] then
-			local pos = getCalcView().origin - Vector(0, 0, 64)
-			RunConsoleCommand("FAdmin", "TPToPos", string.format("%d, %d, %d", pos.x, pos.y, pos.z),
-				string.format("%d, %d, %d", roamVelocity.x, roamVelocity.y, roamVelocity.z))
-		end
 		return true
+	elseif bind == "+reload" and pressed then
+		local pos = getCalcView().origin - Vector(0, 0, 64)
+		RunConsoleCommand("FAdmin", "TPToPos", string.format("%d, %d, %d", pos.x, pos.y, pos.z),
+			string.format("%d, %d, %d", roamVelocity.x, roamVelocity.y, roamVelocity.z))
+		stopSpectating()
 	elseif bind == "+attack" and pressed then
-		if isRoaming then
-			roamPos = roamPos + LocalPlayer():GetAimVector() * 500
-			return true
-		end
-		thirdperson = not thirdperson
-		return true
-	elseif bind == "+attack2" and pressed then
-
-		keysDown["ATTACK2"] = pressed
-
-		return true
-	elseif bind == "+attack2" and not pressed then
-		keysDown["ATTACK2"] = pressed
-
 		if not isRoaming then
 			startFreeRoam()
 		else
 			spectateLookingAt()
 		end
+		return true
+	elseif bind == "+attack2" and pressed then
+		if isRoaming then
+			roamPos = roamPos + LocalPlayer():GetAimVector() * 500
+			return true
+		end
+		thirdperson = not thirdperson
 
-		return
+		return true
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
 		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
 		if not key or key == "use" then return end
@@ -214,15 +215,28 @@ end
 /*---------------------------------------------------------------------------
 Draw help on the screen
 ---------------------------------------------------------------------------*/
+local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(0, 0, 60, 120)
+local red = Color(255, 0, 0, 255)
 local function drawHelp()
+	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
+
 	if isRoaming then
-		draw.WordBox(2, 10, ScrH() / 2, "Left mouse: teleport forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: quickly move forwards", "UiBold", uiBackground, uiForeground)
 	else
-		draw.WordBox(2, 10, ScrH() / 2, "Left mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
 	end
-	draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, 10, ScrH() / 2 + 60, "Right mouse + Jump: Teleport to spectate pos", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
+
+	if not isRoaming then return end
+
+	local ply = findNearestPlayer()
+	if not IsValid(ply) then return end
+
+	local mins, maxs = ply:LocalToWorld(ply:OBBMins()):ToScreen(), ply:LocalToWorld(ply:OBBMaxs()):ToScreen()
+	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 46, ply:Nick(), "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 26, "Left click to spectate!", "UiBold", uiBackground, uiForeground)
+	draw.RoundedBox(8, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, Color(255, 0, 0, 255))
 end
 
 /*---------------------------------------------------------------------------
