@@ -93,9 +93,9 @@ local function specCalcView(ply, origin, angles, fov)
 end
 
 /*---------------------------------------------------------------------------
-Spectate the person you're looking at while you're roaming
+Find the right player to spectate
 ---------------------------------------------------------------------------*/
-local function spectateLookingAt()
+local function findNearestPlayer()
 	local aimvec = LocalPlayer():GetAimVector()
 
 	local foundPly, foundDot = nil, 0
@@ -118,6 +118,15 @@ local function spectateLookingAt()
 
 		foundPly, foundDot = ply, dot
 	end
+
+	return foundPly
+end
+
+/*---------------------------------------------------------------------------
+Spectate the person you're looking at while you're roaming
+---------------------------------------------------------------------------*/
+local function spectateLookingAt()
+	local foundPly = findNearestPlayer()
 
 	if not IsValid(foundPly) then return end
 
@@ -207,15 +216,25 @@ end
 Draw help on the screen
 ---------------------------------------------------------------------------*/
 local function drawHelp()
-	draw.WordBox(2, 10, ScrH() / 2, "Left mouse: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 
 	if isRoaming then
-		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: quickly move forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: quickly move forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	else
-		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	end
 	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+
+	if not isRoaming then return end
+
+	local ply = findNearestPlayer()
+	if not IsValid(ply) then return end
+
+	local mins, maxs = ply:LocalToWorld(ply:OBBMins()):ToScreen(), ply:LocalToWorld(ply:OBBMaxs()):ToScreen()
+	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 46, ply:Nick(), "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 26, "Left click to spectate!", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.RoundedBox(8, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, Color(255, 0, 0, 255))
 end
 
 /*---------------------------------------------------------------------------
