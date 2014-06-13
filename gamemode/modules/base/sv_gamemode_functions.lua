@@ -513,6 +513,8 @@ function GM:PlayerSetModel(ply)
 		local modelname = player_manager.TranslatePlayerModel(cl_playermodel)
 		ply:SetModel(ply:getPreferredModel(teamNr) or modelname)
 	end
+
+	ply:SetupHands()
 end
 
 local function initPlayer(ply)
@@ -677,6 +679,7 @@ function GM:PlayerSpawn(ply)
 	end
 
 	ply:AllowFlashlight(true)
+
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned")
 end
 
