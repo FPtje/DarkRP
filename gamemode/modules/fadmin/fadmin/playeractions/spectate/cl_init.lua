@@ -133,35 +133,27 @@ local keysDown = {}
 local function specBinds(ply, bind, pressed)
 	if bind == "+jump" then
 		stopSpectating()
-
-		if keysDown["ATTACK2"] then
-			local pos = getCalcView().origin - Vector(0, 0, 64)
-			RunConsoleCommand("FAdmin", "TPToPos", string.format("%d, %d, %d", pos.x, pos.y, pos.z),
-				string.format("%d, %d, %d", roamVelocity.x, roamVelocity.y, roamVelocity.z))
-		end
 		return true
+	elseif bind == "+reload" and pressed then
+		local pos = getCalcView().origin - Vector(0, 0, 64)
+		RunConsoleCommand("FAdmin", "TPToPos", string.format("%d, %d, %d", pos.x, pos.y, pos.z),
+			string.format("%d, %d, %d", roamVelocity.x, roamVelocity.y, roamVelocity.z))
+		stopSpectating()
 	elseif bind == "+attack" and pressed then
-		if isRoaming then
-			roamPos = roamPos + LocalPlayer():GetAimVector() * 500
-			return true
-		end
-		thirdperson = not thirdperson
-		return true
-	elseif bind == "+attack2" and pressed then
-
-		keysDown["ATTACK2"] = pressed
-
-		return true
-	elseif bind == "+attack2" and not pressed then
-		keysDown["ATTACK2"] = pressed
-
 		if not isRoaming then
 			startFreeRoam()
 		else
 			spectateLookingAt()
 		end
+		return true
+	elseif bind == "+attack2" and pressed then
+		if isRoaming then
+			roamPos = roamPos + LocalPlayer():GetAimVector() * 500
+			return true
+		end
+		thirdperson = not thirdperson
 
-		return
+		return true
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
 		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
 		if not key or key == "use" then return end
@@ -215,14 +207,15 @@ end
 Draw help on the screen
 ---------------------------------------------------------------------------*/
 local function drawHelp()
+	draw.WordBox(2, 10, ScrH() / 2, "Left mouse: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+
 	if isRoaming then
-		draw.WordBox(2, 10, ScrH() / 2, "Left mouse: teleport forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: quickly move forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	else
-		draw.WordBox(2, 10, ScrH() / 2, "Left mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	end
-	draw.WordBox(2, 10, ScrH() / 2 + 20, "Right mouse: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, 10, ScrH() / 2 + 60, "Right mouse + Jump: Teleport to spectate pos", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 end
 
 /*---------------------------------------------------------------------------
