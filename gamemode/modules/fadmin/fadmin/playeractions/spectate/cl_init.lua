@@ -215,16 +215,18 @@ end
 /*---------------------------------------------------------------------------
 Draw help on the screen
 ---------------------------------------------------------------------------*/
+local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(0, 0, 60, 120)
+local red = Color(255, 0, 0, 255)
 local function drawHelp()
-	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
 
 	if isRoaming then
-		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: quickly move forwards", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: quickly move forwards", "UiBold", uiBackground, uiForeground)
 	else
-		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: toggle thirdperson", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
 	end
-	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
 
 	if not isRoaming then return end
 
@@ -232,8 +234,8 @@ local function drawHelp()
 	if not IsValid(ply) then return end
 
 	local mins, maxs = ply:LocalToWorld(ply:OBBMins()):ToScreen(), ply:LocalToWorld(ply:OBBMaxs()):ToScreen()
-	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 46, ply:Nick(), "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 26, "Left click to spectate!", "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 46, ply:Nick(), "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 26, "Left click to spectate!", "UiBold", uiBackground, uiForeground)
 	draw.RoundedBox(8, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, Color(255, 0, 0, 255))
 end
 
