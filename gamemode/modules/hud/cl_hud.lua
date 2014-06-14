@@ -25,8 +25,6 @@ local table = table
 local timer = timer
 local tostring = tostring
 
-CreateClientConVar("weaponhud", 0, true, false)
-
 local colors = {}
 colors.black = Color(0, 0, 0, 255)
 colors.blue = Color(0, 0, 255, 255)
@@ -105,13 +103,6 @@ local function DrawInfo()
 		DarkRP.getPhrase("job", localplayer:getDarkRPVar("job") or ""),
 		DarkRP.getPhrase("wallet", DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
 	)
-
-	local wep = localplayer:GetActiveWeapon()
-
-	if IsValid(wep) and GAMEMODE.Config.weaponhud then
-        local name = wep:GetPrintName();
-		draw.DrawNonParsedText(DarkRP.getPhrase("weapon", name), "UiBold", RelativeX + 5, RelativeY - HUDHeight - 18, colors.white, 0)
-	end
 
 	draw.DrawNonParsedText(Salary, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
 	draw.DrawNonParsedText(Salary, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + 5, ConVars.salary2, 0)
