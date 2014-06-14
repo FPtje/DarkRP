@@ -112,7 +112,7 @@ local function HUDPaint()
 		end
 	end
 end
-hook.Add("HUDPaint", "FAdin_MessagePaint", HUDPaint)
+hook.Add("HUDPaint", "FAdmin_MessagePaint", HUDPaint)
 
 local function ConsoleMessage(um)
 	MsgC(Color(255,0,0,255), "(FAdmin) ")
