@@ -6,11 +6,12 @@ local HUDWidth
 local HUDHeight
 
 local Color = Color
+local CurTime = CurTime
 local cvars = cvars
 local DarkRP = DarkRP
-local CurTime = CurTime
 local draw = draw
 local GetConVar = GetConVar
+local hook = hook
 local IsValid = IsValid
 local Lerp = Lerp
 local localplayer
@@ -80,14 +81,15 @@ HUD Seperate Elements
 ---------------------------------------------------------------------------*/
 local Health = 0
 local function DrawHealth()
-	Health = math.min(100, (Health == localplayer:Health() and Health) or Lerp(0.1, Health, localplayer:Health()))
+	local myHealth = localplayer:Health()
+	Health = math.min(100, (Health == myHealth and Health) or Lerp(0.1, Health, myHealth))
 
 	local DrawHealth = math.Min(Health / GAMEMODE.Config.startinghealth, 1)
 	local Border = math.Min(6, math.pow(2, math.Round(3*DrawHealth)))
 	draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
 	draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * DrawHealth, 18, ConVars.Healthforeground)
 
-	draw.DrawNonParsedText(math.Max(0, math.Round(localplayer:Health())), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8)/2, RelativeY - 32, ConVars.HealthText, 1)
+	draw.DrawNonParsedText(math.Max(0, math.Round(myHealth)), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8)/2, RelativeY - 32, ConVars.HealthText, 1)
 
 	-- Armor
 	local armor = localplayer:Armor()
