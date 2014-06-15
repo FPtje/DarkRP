@@ -125,26 +125,27 @@ local function GunLicense()
 	end
 end
 
+local agendaText
 local function Agenda()
 	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
 	if shouldDraw == false then return end
-	local ply = LocalPlayer()
 
-	local agenda = ply:getAgendaTable()
+	local agenda = localplayer:getAgendaTable()
 	if not agenda then return end
+	agendaText = agendaText or DarkRP.textWrap((localplayer:getDarkRPVar("agenda") or ""):gsub("//", "\n"):gsub("\\n", "\n"), "DarkRPHUD1", 440)
 
 	draw.RoundedBox(10, 10, 10, 460, 110, colors.gray1)
 	draw.RoundedBox(10, 12, 12, 456, 106, colors.gray2)
 	draw.RoundedBox(10, 12, 12, 456, 20, colors.darkred)
 
 	draw.DrawNonParsedText(agenda.Title, "DarkRPHUD1", 30, 12, colors.red, 0)
-
-	local text = ply:getDarkRPVar("agenda") or ""
-
-	text = text:gsub("//", "\n"):gsub("\\n", "\n")
-	text = DarkRP.textWrap(text, "DarkRPHUD1", 440)
-	draw.DrawNonParsedText(text, "DarkRPHUD1", 30, 35, colors.white, 0)
+	draw.DrawNonParsedText(agendaText, "DarkRPHUD1", 30, 35, colors.white, 0)
 end
+
+hook.Add("DarkRPVarChanged", "agendaHUD", function(ply, var, _, new)
+	if ply ~= localplayer or var ~= "agenda" or new == nil then agendaText = nil return end
+	agendaText = DarkRP.textWrap(new:gsub("//", "\n"):gsub("\\n", "\n"), "DarkRPHUD1", 440)
+end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
 local function DrawVoiceChat()
