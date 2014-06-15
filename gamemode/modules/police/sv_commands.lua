@@ -44,7 +44,6 @@ DarkRP.defineChatCommand("addagenda", addAgenda, 0.1)
 /*---------------------------------------------------------
  Mayor stuff
  ---------------------------------------------------------*/
-CreateConVar("DarkRP_LockDown", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}) -- Don't save this one!
 local LotteryPeople = {}
 local LotteryON = false
 local LotteryAmount = 0
@@ -148,7 +147,7 @@ function DarkRP.lockdown(ply)
 		end
 		lstat = true
 		DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
-		RunConsoleCommand("DarkRP_LockDown", 1)
+		SetGlobalBool("DarkRP_LockDown", true)
 		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
 	else
 		if ply:EntIndex() == 0 then
@@ -177,7 +176,7 @@ function DarkRP.unLockdown(ply)
 		DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
 		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
 		wait_lockdown = true
-		RunConsoleCommand("DarkRP_LockDown", 0)
+		SetGlobalBool("DarkRP_LockDown", false)
 		timer.Create("spamlock", 20, 1, function() WaitLock() end)
 	else
 		if ply:EntIndex() == 0 then

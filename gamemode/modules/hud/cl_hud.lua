@@ -163,10 +163,9 @@ local function DrawVoiceChat()
 	end
 end
 
-CreateConVar("DarkRP_LockDown", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
 local function LockDown()
 	local chbxX, chboxY = chat.GetChatBoxPos()
-	if util.tobool(GetConVarNumber("DarkRP_LockDown")) then
+	if GetGlobalBool("DarkRP_LockDown") then
 		local cin = (math.sin(CurTime()) + 1) / 2
 		local chatBoxSize = math.floor(Scrh / 4)
 		draw.DrawNonParsedText(DarkRP.getPhrase("lockdown_started"), "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
@@ -336,6 +335,7 @@ end
 Display notifications
 ---------------------------------------------------------------------------*/
 local function DisplayNotify(msg)
+	GAMEMODE = GAMEMODE or debug.getregistry().GAMEMODE
 	local txt = msg:ReadString()
 	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
 	surface.PlaySound("buttons/lightswitch2.wav")
