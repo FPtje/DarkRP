@@ -24,6 +24,7 @@ local surface = surface
 local table = table
 local timer = timer
 local tostring = tostring
+local GAMEMODE
 
 local colors = {}
 colors.black = Color(0, 0, 0, 255)
@@ -83,7 +84,8 @@ local function DrawHealth()
 	Health = math.min(100, (Health == myHealth and Health) or Lerp(0.1, Health, myHealth))
 
 	local DrawHealth = math.Min(Health / GAMEMODE.Config.startinghealth, 1)
-	local Border = math.Min(6, math.pow(2, math.Round(3*DrawHealth)))
+	local rounded = math.Round(3*DrawHealth)
+	local Border = math.Min(6, rounded * rounded)
 	draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
 	draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * DrawHealth, 18, ConVars.Healthforeground)
 
@@ -367,7 +369,9 @@ end
 /*---------------------------------------------------------------------------
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
+
 function GM:HUDPaint()
+	GAMEMODE = self
 	DrawHUD()
 	DrawEntityDisplay()
 
