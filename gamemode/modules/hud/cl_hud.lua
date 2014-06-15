@@ -262,19 +262,21 @@ local function DrawPlayerInfo(ply)
 	pos.y = pos.y - 50 -- Move the text up a few pixels to compensate for the height of the text
 
 	if GAMEMODE.Config.showname and not ply:getDarkRPVar("wanted") then
-		draw.DrawNonParsedText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
-		draw.DrawNonParsedText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
+		local nick, plyTeam = ply:Nick(), ply:Team()
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
 	end
 
 	if GAMEMODE.Config.showhealth and not ply:getDarkRPVar("wanted") then
-		draw.DrawNonParsedText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x + 1, pos.y + 21, colors.black, 1)
-		draw.DrawNonParsedText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x, pos.y + 20, colors.white1, 1)
+		local health = DarkRP.getPhrase("health", ply:Health())
+		draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x + 1, pos.y + 21, colors.black, 1)
+		draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x, pos.y + 20, colors.white1, 1)
 	end
 
 	if GAMEMODE.Config.showjob then
-		local teamname = team.GetName(ply:Team())
-		draw.DrawNonParsedText(ply:getDarkRPVar("job") or teamname, "DarkRPHUD2", pos.x + 1, pos.y + 41, colors.black, 1)
-		draw.DrawNonParsedText(ply:getDarkRPVar("job") or teamname, "DarkRPHUD2", pos.x, pos.y + 40, colors.white1, 1)
+		local teamname = ply:getDarkRPVar("job") or team.GetName(ply:Team())
+		draw.DrawNonParsedText(teamname, "DarkRPHUD2", pos.x + 1, pos.y + 41, colors.black, 1)
+		draw.DrawNonParsedText(teamname, "DarkRPHUD2", pos.x, pos.y + 40, colors.white1, 1)
 	end
 
 	if ply:getDarkRPVar("HasGunlicense") then
@@ -315,14 +317,14 @@ local function DrawEntityDisplay()
 	local aimVec = localplayer:GetAimVector()
 
 	for k, ply in pairs(players or player.GetAll()) do
-		if not ply:Alive() or ply == localplayer then continue end
+		if ply == localplayer or not ply:Alive() then continue end
 		local hisPos = ply:GetShootPos()
 		if ply:getDarkRPVar("wanted") then DrawWantedInfo(ply) end
 
 		if GAMEMODE.Config.globalshow then
 			DrawPlayerInfo(ply)
 		-- Draw when you're (almost) looking at him
-		elseif not GAMEMODE.Config.globalshow and hisPos:DistToSqr(shootPos) < 160000 then
+		elseif hisPos:DistToSqr(shootPos) < 160000 then
 			local pos = hisPos - shootPos
 			local unitPos = pos:GetNormalized()
 			if unitPos:Dot(aimVec) > 0.95 then
@@ -386,7 +388,6 @@ end
 /*---------------------------------------------------------------------------
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
-
 function GM:HUDPaint()
 	GAMEMODE = self
 	DrawHUD()
