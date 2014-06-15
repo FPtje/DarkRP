@@ -74,7 +74,7 @@ function meta:changeTeam(t, force)
 	if hookValue == false then return false end
 
 	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
-	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then
+	if isMayor and GetGlobalBool("DarkRP_LockDown") then
 		DarkRP.unLockdown(self)
 	end
 	self:updateJob(TEAM.name)
