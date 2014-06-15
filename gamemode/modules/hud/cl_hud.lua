@@ -98,22 +98,23 @@ local function DrawHealth()
 	end
 end
 
+local salaryText, JobWalletText
 local function DrawInfo()
-	local Salary = DarkRP.getPhrase("salary", DarkRP.formatMoney(localplayer:getDarkRPVar("salary")), "")
+	salaryText = salaryText or DarkRP.getPhrase("salary", DarkRP.formatMoney(localplayer:getDarkRPVar("salary")), "")
 
-	local JobWallet = string.format("%s\n%s",
+	JobWalletText = JobWalletText or string.format("%s\n%s",
 		DarkRP.getPhrase("job", localplayer:getDarkRPVar("job") or ""),
 		DarkRP.getPhrase("wallet", DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
 	)
 
-	draw.DrawNonParsedText(Salary, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
-	draw.DrawNonParsedText(Salary, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + 5, ConVars.salary2, 0)
+	draw.DrawNonParsedText(salaryText, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
+	draw.DrawNonParsedText(salaryText, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + 5, ConVars.salary2, 0)
 
 	surface.SetFont("DarkRPHUD2")
-	local w, h = surface.GetTextSize(Salary)
+	local w, h = surface.GetTextSize(salaryText)
 
-	draw.DrawNonParsedText(JobWallet, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + h + 6, ConVars.Job1, 0)
-	draw.DrawNonParsedText(JobWallet, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + h + 5, ConVars.Job2, 0)
+	draw.DrawNonParsedText(JobWalletText, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + h + 6, ConVars.Job1, 0)
+	draw.DrawNonParsedText(JobWalletText, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + h + 5, ConVars.Job2, 0)
 end
 
 local Page = Material("icon16/page_white_text.png")
@@ -143,8 +144,23 @@ local function Agenda()
 end
 
 hook.Add("DarkRPVarChanged", "agendaHUD", function(ply, var, _, new)
-	if ply ~= localplayer or var ~= "agenda" or new == nil then agendaText = nil return end
-	agendaText = DarkRP.textWrap(new:gsub("//", "\n"):gsub("\\n", "\n"), "DarkRPHUD1", 440)
+	if ply ~= localplayer then return end
+	if var == "agenda" and new then
+		agendaText = DarkRP.textWrap(new:gsub("//", "\n"):gsub("\\n", "\n"), "DarkRPHUD1", 440)
+	else
+		agendaText = nil
+	end
+
+	if var == "salary" then
+		salaryText = DarkRP.getPhrase("salary", DarkRP.formatMoney(new), "")
+	end
+
+	if var == "job" or var == "money" then
+		JobWalletText = string.format("%s\n%s",
+			DarkRP.getPhrase("job", var == "job" and new or localplayer:getDarkRPVar("job") or ""),
+			DarkRP.getPhrase("wallet", var == "money" and DarkRP.formatMoney(new) or DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
+		)
+	end
 end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
