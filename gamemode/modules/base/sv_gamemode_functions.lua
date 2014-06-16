@@ -637,6 +637,7 @@ function GM:PlayerSpawn(ply)
 		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime or 0, 1, function()
 			if not IsValid(ply) or not ply.Babygod then return end
 			ply.Babygod = nil
+			ply:SetRenderMode(RENDERMODE_NORMAL)
 			ply:SetColor(Color(c.r, c.g, c.b, c.a))
 			ply:GodDisable()
 		end)
