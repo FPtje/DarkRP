@@ -10,6 +10,12 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
 
+	if not phys:IsValid() then
+		self:SetModel("models/weapons/w_rif_ak47.mdl")
+		self:PhysicsInit(SOLID_VPHYSICS)
+		phys = self:GetPhysicsObject()
+	end
+
 	phys:Wake()
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 

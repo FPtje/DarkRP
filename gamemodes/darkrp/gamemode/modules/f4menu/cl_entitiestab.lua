@@ -229,7 +229,8 @@ local function canBuyAmmo(item)
 	if item.customCheck and not item.customCheck(ply) then return false, true end
 
 	local canbuy, suppress, message, price = hook.Call("canBuyAmmo", nil, ply, item)
-	if not ply:canAfford(price or item.price) then return false, false, price end
+	local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
+	if not ply:canAfford(cost) then return false, false, price end
 
 	if canbuy == false then
 		return false, suppress, price
