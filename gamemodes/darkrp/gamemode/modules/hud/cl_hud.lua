@@ -6,11 +6,12 @@ local HUDWidth
 local HUDHeight
 
 local Color = Color
+local CurTime = CurTime
 local cvars = cvars
 local DarkRP = DarkRP
-local CurTime = CurTime
 local draw = draw
 local GetConVar = GetConVar
+local hook = hook
 local IsValid = IsValid
 local Lerp = Lerp
 local localplayer
@@ -23,8 +24,6 @@ local surface = surface
 local table = table
 local timer = timer
 local tostring = tostring
-
-CreateClientConVar("weaponhud", 0, true, false)
 
 local colors = {}
 colors.black = Color(0, 0, 0, 255)
@@ -80,14 +79,16 @@ HUD Seperate Elements
 ---------------------------------------------------------------------------*/
 local Health = 0
 local function DrawHealth()
-	Health = math.min(100, (Health == localplayer:Health() and Health) or Lerp(0.1, Health, localplayer:Health()))
+	local myHealth = localplayer:Health()
+	Health = math.min(100, (Health == myHealth and Health) or Lerp(0.1, Health, myHealth))
 
 	local DrawHealth = math.Min(Health / GAMEMODE.Config.startinghealth, 1)
-	local Border = math.Min(6, math.pow(2, math.Round(3*DrawHealth)))
+	local rounded = math.Round(3*DrawHealth)
+	local Border = math.Min(6, rounded * rounded)
 	draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
 	draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * DrawHealth, 18, ConVars.Healthforeground)
 
-	draw.DrawNonParsedText(math.Max(0, math.Round(localplayer:Health())), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8)/2, RelativeY - 32, ConVars.HealthText, 1)
+	draw.DrawNonParsedText(math.Max(0, math.Round(myHealth)), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8)/2, RelativeY - 32, ConVars.HealthText, 1)
 
 	-- Armor
 	local armor = localplayer:Armor()
@@ -96,29 +97,23 @@ local function DrawHealth()
 	end
 end
 
+local salaryText, JobWalletText
 local function DrawInfo()
-	local Salary = DarkRP.getPhrase("salary", DarkRP.formatMoney(localplayer:getDarkRPVar("salary")), "")
+	salaryText = salaryText or DarkRP.getPhrase("salary", DarkRP.formatMoney(localplayer:getDarkRPVar("salary")), "")
 
-	local JobWallet = string.format("%s\n%s",
+	JobWalletText = JobWalletText or string.format("%s\n%s",
 		DarkRP.getPhrase("job", localplayer:getDarkRPVar("job") or ""),
 		DarkRP.getPhrase("wallet", DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
 	)
 
-	local wep = localplayer:GetActiveWeapon()
-
-	if IsValid(wep) and GAMEMODE.Config.weaponhud then
-        local name = wep:GetPrintName();
-		draw.DrawNonParsedText(DarkRP.getPhrase("weapon", name), "UiBold", RelativeX + 5, RelativeY - HUDHeight - 18, colors.white, 0)
-	end
-
-	draw.DrawNonParsedText(Salary, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
-	draw.DrawNonParsedText(Salary, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + 5, ConVars.salary2, 0)
+	draw.DrawNonParsedText(salaryText, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
+	draw.DrawNonParsedText(salaryText, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + 5, ConVars.salary2, 0)
 
 	surface.SetFont("DarkRPHUD2")
-	local w, h = surface.GetTextSize(Salary)
+	local w, h = surface.GetTextSize(salaryText)
 
-	draw.DrawNonParsedText(JobWallet, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + h + 6, ConVars.Job1, 0)
-	draw.DrawNonParsedText(JobWallet, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + h + 5, ConVars.Job2, 0)
+	draw.DrawNonParsedText(JobWalletText, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + h + 6, ConVars.Job1, 0)
+	draw.DrawNonParsedText(JobWalletText, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + h + 5, ConVars.Job2, 0)
 end
 
 local Page = Material("icon16/page_white_text.png")
@@ -130,26 +125,42 @@ local function GunLicense()
 	end
 end
 
+local agendaText
 local function Agenda()
 	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
 	if shouldDraw == false then return end
-	local ply = LocalPlayer()
 
-	local agenda = ply:getAgendaTable()
+	local agenda = localplayer:getAgendaTable()
 	if not agenda then return end
+	agendaText = agendaText or DarkRP.textWrap((localplayer:getDarkRPVar("agenda") or ""):gsub("//", "\n"):gsub("\\n", "\n"), "DarkRPHUD1", 440)
 
 	draw.RoundedBox(10, 10, 10, 460, 110, colors.gray1)
 	draw.RoundedBox(10, 12, 12, 456, 106, colors.gray2)
 	draw.RoundedBox(10, 12, 12, 456, 20, colors.darkred)
 
 	draw.DrawNonParsedText(agenda.Title, "DarkRPHUD1", 30, 12, colors.red, 0)
-
-	local text = ply:getDarkRPVar("agenda") or ""
-
-	text = text:gsub("//", "\n"):gsub("\\n", "\n")
-	text = DarkRP.textWrap(text, "DarkRPHUD1", 440)
-	draw.DrawNonParsedText(text, "DarkRPHUD1", 30, 35, colors.white, 0)
+	draw.DrawNonParsedText(agendaText, "DarkRPHUD1", 30, 35, colors.white, 0)
 end
+
+hook.Add("DarkRPVarChanged", "agendaHUD", function(ply, var, _, new)
+	if ply ~= localplayer then return end
+	if var == "agenda" and new then
+		agendaText = DarkRP.textWrap(new:gsub("//", "\n"):gsub("\\n", "\n"), "DarkRPHUD1", 440)
+	else
+		agendaText = nil
+	end
+
+	if var == "salary" then
+		salaryText = DarkRP.getPhrase("salary", DarkRP.formatMoney(new), "")
+	end
+
+	if var == "job" or var == "money" then
+		JobWalletText = string.format("%s\n%s",
+			DarkRP.getPhrase("job", var == "job" and new or localplayer:getDarkRPVar("job") or ""),
+			DarkRP.getPhrase("wallet", var == "money" and DarkRP.formatMoney(new) or DarkRP.formatMoney(localplayer:getDarkRPVar("money")), "")
+		)
+	end
+end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
 local function DrawVoiceChat()
@@ -168,10 +179,9 @@ local function DrawVoiceChat()
 	end
 end
 
-CreateConVar("DarkRP_LockDown", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
 local function LockDown()
 	local chbxX, chboxY = chat.GetChatBoxPos()
-	if util.tobool(GetConVarNumber("DarkRP_LockDown")) then
+	if GetGlobalBool("DarkRP_LockDown") then
 		local cin = (math.sin(CurTime()) + 1) / 2
 		local chatBoxSize = math.floor(Scrh / 4)
 		draw.DrawNonParsedText(DarkRP.getPhrase("lockdown_started"), "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
@@ -251,19 +261,21 @@ local function DrawPlayerInfo(ply)
 	pos.y = pos.y - 50 -- Move the text up a few pixels to compensate for the height of the text
 
 	if GAMEMODE.Config.showname and not ply:getDarkRPVar("wanted") then
-		draw.DrawNonParsedText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
-		draw.DrawNonParsedText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
+		local nick, plyTeam = ply:Nick(), ply:Team()
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
 	end
 
 	if GAMEMODE.Config.showhealth and not ply:getDarkRPVar("wanted") then
-		draw.DrawNonParsedText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x + 1, pos.y + 21, colors.black, 1)
-		draw.DrawNonParsedText(DarkRP.getPhrase("health", ply:Health()), "DarkRPHUD2", pos.x, pos.y + 20, colors.white1, 1)
+		local health = DarkRP.getPhrase("health", ply:Health())
+		draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x + 1, pos.y + 21, colors.black, 1)
+		draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x, pos.y + 20, colors.white1, 1)
 	end
 
 	if GAMEMODE.Config.showjob then
-		local teamname = team.GetName(ply:Team())
-		draw.DrawNonParsedText(ply:getDarkRPVar("job") or teamname, "DarkRPHUD2", pos.x + 1, pos.y + 41, colors.black, 1)
-		draw.DrawNonParsedText(ply:getDarkRPVar("job") or teamname, "DarkRPHUD2", pos.x, pos.y + 40, colors.white1, 1)
+		local teamname = ply:getDarkRPVar("job") or team.GetName(ply:Team())
+		draw.DrawNonParsedText(teamname, "DarkRPHUD2", pos.x + 1, pos.y + 41, colors.black, 1)
+		draw.DrawNonParsedText(teamname, "DarkRPHUD2", pos.x, pos.y + 40, colors.white1, 1)
 	end
 
 	if ply:getDarkRPVar("HasGunlicense") then
@@ -304,14 +316,14 @@ local function DrawEntityDisplay()
 	local aimVec = localplayer:GetAimVector()
 
 	for k, ply in pairs(players or player.GetAll()) do
-		if not ply:Alive() or ply == localplayer then continue end
+		if ply == localplayer or not ply:Alive() then continue end
 		local hisPos = ply:GetShootPos()
 		if ply:getDarkRPVar("wanted") then DrawWantedInfo(ply) end
 
 		if GAMEMODE.Config.globalshow then
 			DrawPlayerInfo(ply)
 		-- Draw when you're (almost) looking at him
-		elseif not GAMEMODE.Config.globalshow and hisPos:DistToSqr(shootPos) < 160000 then
+		elseif hisPos:DistToSqr(shootPos) < 160000 then
 			local pos = hisPos - shootPos
 			local unitPos = pos:GetNormalized()
 			if unitPos:Dot(aimVec) > 0.95 then

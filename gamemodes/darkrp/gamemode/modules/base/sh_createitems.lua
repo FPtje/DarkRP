@@ -395,6 +395,7 @@ local function addEntityCommands(tblEnt)
 		local tr = util.TraceLine(trace)
 
 		local item = ents.Create(tblEnt.ent)
+		if not item:IsValid() then error("Entity '"..tblEnt.ent.."' does not exist or is not valid.") end
 		item.dt = item.dt or {}
 		item.dt.owning_ent = ply
 		if item.Setowning_ent then item:Setowning_ent(ply) end

@@ -513,14 +513,16 @@ function GM:PlayerSetModel(ply)
 		local modelname = player_manager.TranslatePlayerModel(cl_playermodel)
 		ply:SetModel(ply:getPreferredModel(teamNr) or modelname)
 	end
+
+	ply:SetupHands()
 end
 
 local function initPlayer(ply)
 	timer.Simple(5, function()
 		if not IsValid(ply) then return end
 
-		if tobool(GetConVarNumber("DarkRP_Lockdown")) then
-			RunConsoleCommand("DarkRP_Lockdown", 1) -- so new players who join know there's a lockdown
+		if GetGlobalBool("DarkRP_Lockdown") then
+			SetGlobalBool("DarkRP_Lockdown", true) -- so new players who join know there's a lockdown, is this bug still there?
 		end
 	end)
 
@@ -632,13 +634,12 @@ function GM:PlayerSpawn(ply)
 		local c = ply:GetColor()
 		ply:SetRenderMode(RENDERMODE_TRANSALPHA)
 		ply:SetColor(Color(c.r, c.g, c.b, 100))
-		ply:SetCollisionGroup(COLLISION_GROUP_WORLD)
 		timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime or 0, 1, function()
 			if not IsValid(ply) or not ply.Babygod then return end
 			ply.Babygod = nil
+			ply:SetRenderMode(RENDERMODE_NORMAL)
 			ply:SetColor(Color(c.r, c.g, c.b, c.a))
 			ply:GodDisable()
-			ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
 		end)
 	end
 	ply.IsSleeping = false
@@ -677,6 +678,7 @@ function GM:PlayerSpawn(ply)
 	end
 
 	ply:AllowFlashlight(true)
+
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned")
 end
 
@@ -802,7 +804,7 @@ function GM:PlayerDisconnected(ply)
 
 	DarkRP.destroyVotesWithEnt(ply)
 
-	if isMayor and tobool(GetConVarNumber("DarkRP_LockDown")) then -- Stop the lockdown
+	if isMayor and GetGlobalBool("DarkRP_LockDown") then -- Stop the lockdown
 		DarkRP.unLockdown(ply)
 	end
 
