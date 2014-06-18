@@ -24,7 +24,6 @@ local surface = surface
 local table = table
 local timer = timer
 local tostring = tostring
-local GAMEMODE
 
 local colors = {}
 colors.black = Color(0, 0, 0, 255)
@@ -354,7 +353,6 @@ end
 Display notifications
 ---------------------------------------------------------------------------*/
 local function DisplayNotify(msg)
-	GAMEMODE = GAMEMODE or debug.getregistry().GAMEMODE
 	local txt = msg:ReadString()
 	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
 	surface.PlaySound("buttons/lightswitch2.wav")
@@ -389,7 +387,6 @@ end
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
 function GM:HUDPaint()
-	GAMEMODE = self
 	DrawHUD()
 	DrawEntityDisplay()
 
