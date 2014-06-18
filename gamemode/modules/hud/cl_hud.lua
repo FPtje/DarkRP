@@ -24,6 +24,7 @@ local surface = surface
 local table = table
 local timer = timer
 local tostring = tostring
+local plyMeta = FindMetaTable("Player")
 
 local colors = {}
 colors.black = Color(0, 0, 0, 255)
@@ -253,53 +254,60 @@ end
 /*---------------------------------------------------------------------------
 Entity HUDPaint things
 ---------------------------------------------------------------------------*/
-local function DrawPlayerInfo(ply)
-	local pos = ply:EyePos()
+-- Draw a player's name, health and/or job above the head
+-- This syntax allows for easy overriding
+plyMeta.drawPlayerInfo = plyMeta.drawPlayerInfo or function(self)
+	local pos = self:EyePos()
 
 	pos.z = pos.z + 10 -- The position we want is a bit above the position of the eyes
 	pos = pos:ToScreen()
-	pos.y = pos.y - 50 -- Move the text up a few pixels to compensate for the height of the text
+	if not self:getDarkRPVar("wanted") then
+		-- Move the text up a few pixels to compensate for the height of the text
+		pos.y = pos.y - 50
+	end
 
-	if GAMEMODE.Config.showname and not ply:getDarkRPVar("wanted") then
-		local nick, plyTeam = ply:Nick(), ply:Team()
+	if GAMEMODE.Config.showname then
+		local nick, plyTeam = self:Nick(), self:Team()
 		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
 		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
 	end
 
-	if GAMEMODE.Config.showhealth and not ply:getDarkRPVar("wanted") then
-		local health = DarkRP.getPhrase("health", ply:Health())
+	if GAMEMODE.Config.showhealth then
+		local health = DarkRP.getPhrase("health", self:Health())
 		draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x + 1, pos.y + 21, colors.black, 1)
 		draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x, pos.y + 20, colors.white1, 1)
 	end
 
 	if GAMEMODE.Config.showjob then
-		local teamname = ply:getDarkRPVar("job") or team.GetName(ply:Team())
+		local teamname = self:getDarkRPVar("job") or team.GetName(self:Team())
 		draw.DrawNonParsedText(teamname, "DarkRPHUD2", pos.x + 1, pos.y + 41, colors.black, 1)
 		draw.DrawNonParsedText(teamname, "DarkRPHUD2", pos.x, pos.y + 40, colors.white1, 1)
 	end
 
-	if ply:getDarkRPVar("HasGunlicense") then
+	if self:getDarkRPVar("HasGunlicense") then
 		surface.SetMaterial(Page)
 		surface.SetDrawColor(255,255,255,255)
 		surface.DrawTexturedRect(pos.x-16, pos.y + 60, 32, 32)
 	end
 end
 
-local function DrawWantedInfo(ply)
-	if not ply:Alive() then return end
+-- Draw wanted information above a player's head
+-- This syntax allows for easy overriding
+plyMeta.drawWantedInfo = plyMeta.drawWantedInfo or function(self)
+	if not self:Alive() then return end
 
-	local pos = ply:EyePos()
-	if not pos:isInSight({localplayer, ply}) then return end
+	local pos = self:EyePos()
+	if not pos:isInSight({localplayer, self}) then return end
 
-	pos.z = pos.z + 14
+	pos.z = pos.z + 10
 	pos = pos:ToScreen()
 
 	if GAMEMODE.Config.showname then
-		draw.DrawNonParsedText(ply:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
-		draw.DrawNonParsedText(ply:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(ply:Team()), 1)
+		draw.DrawNonParsedText(self:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
+		draw.DrawNonParsedText(self:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(self:Team()), 1)
 	end
 
-	local wantedText = DarkRP.getPhrase("wanted", tostring(ply:getDarkRPVar("wantedReason")))
+	local wantedText = DarkRP.getPhrase("wanted", tostring(self:getDarkRPVar("wantedReason")))
 
 	draw.DrawNonParsedText(wantedText, "DarkRPHUD2", pos.x, pos.y - 40, colors.white1, 1)
 	draw.DrawNonParsedText(wantedText, "DarkRPHUD2", pos.x + 1, pos.y - 41, colors.red, 1)
@@ -318,10 +326,10 @@ local function DrawEntityDisplay()
 	for k, ply in pairs(players or player.GetAll()) do
 		if ply == localplayer or not ply:Alive() then continue end
 		local hisPos = ply:GetShootPos()
-		if ply:getDarkRPVar("wanted") then DrawWantedInfo(ply) end
+		if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 
 		if GAMEMODE.Config.globalshow then
-			DrawPlayerInfo(ply)
+			ply:drawPlayerInfo()
 		-- Draw when you're (almost) looking at him
 		elseif hisPos:DistToSqr(shootPos) < 160000 then
 			local pos = hisPos - shootPos
@@ -329,7 +337,7 @@ local function DrawEntityDisplay()
 			if unitPos:Dot(aimVec) > 0.95 then
 				local trace = util.QuickTrace(shootPos, pos, localplayer)
 				if trace.Hit and trace.Entity ~= ply then return end
-				DrawPlayerInfo(ply)
+				ply:drawPlayerInfo()
 			end
 		end
 	end
