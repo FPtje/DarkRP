@@ -28,6 +28,7 @@ Valid members:
 	requiresCook = boolean, -- whether only cooks can buy this food
 	customCheck = function(ply) return boolean end, -- customCheck on purchase function
 	customCheckMessage = string -- message to people who cannot buy it because of the customCheck
+	hidden = boolean -- whether the food will be hidden or not on the F4 Food tab
 ]]
 DarkRP.DARKRP_LOADING = true
 
