@@ -1,9 +1,9 @@
 local checkModel = function(model) return model ~= nil and (CLIENT or util.IsValidModel(model)) end
-local validFood = {"name", model = checkModel, "energy", "price"}
+local validFood = {"name", model = checkModel, "energy", "price", "hidden"}
 
 FoodItems = {}
-function DarkRP.createFood(name, mdl, energy, price)
-	local foodItem = istable(mdl) and mdl or {model = mdl, energy = energy, price = price}
+function DarkRP.createFood(name, mdl, energy, price, hidden)
+	local foodItem = istable(mdl) and mdl or {model = mdl, energy = energy, price = price, hidden = hidden}
 	foodItem.name = name
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["food"][name] then return end
@@ -11,7 +11,7 @@ function DarkRP.createFood(name, mdl, energy, price)
 	for k,v in pairs(validFood) do
 		local isFunction = isfunction(v)
 
-		if (isFunction and not v(foodItem[k])) or (not isFunction and foodItem[v] == nil) then
+		if (isFunction and not v(foodItem[k])) or (not isFunction and foodItem[v] == nil and v ~= "hidden") then
 			ErrorNoHalt("Corrupt food \"" .. (name or "") .. "\": element " .. (isFunction and k or v) .. " is corrupt.\n")
 		end
 	end

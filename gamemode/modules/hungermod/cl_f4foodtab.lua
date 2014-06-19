@@ -14,6 +14,7 @@ end
 
 function PANEL:generateButtons()
 	for k,v in pairs(FoodItems) do
+		if v["hidden"] == true then continue end
 		local pnl = vgui.Create("F4MenuEntityButton", self)
 		pnl:setDarkRPItem(v)
 		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyfood", v.name)
