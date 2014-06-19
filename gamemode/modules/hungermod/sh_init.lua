@@ -11,9 +11,7 @@ function DarkRP.createFood(name, mdl, energy, price, hidden)
 	for k,v in pairs(validFood) do
 		local isFunction = isfunction(v)
 
-		if ((k == "name" or k == "energy" or k == "price") and (isFunction or v == nil) or
-			(k == "model" and (isFunction and not v(foodItem[k]))) or
-			(k == "hidden" and isFunction)) then
+		if (isFunction and not v(foodItem[k])) or (not isFunction and foodItem[v] == nil and v ~= "hidden") then
 			ErrorNoHalt("Corrupt food \"" .. (name or "") .. "\": element " .. (isFunction and k or v) .. " is corrupt.\n")
 		end
 	end
