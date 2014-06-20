@@ -99,7 +99,7 @@ end
 
 function SWEP:DoFlash(ply)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
-	
+
 	ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
 end
 
@@ -153,7 +153,7 @@ function SWEP:PrimaryAttack()
 		self.Owner:EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
 	else
 		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
-		if FPP and FPP.PlayerCanTouchEnt(self.Owner, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
+		if FPP and FPP.plyCanTouchEnt(self.Owner, trace.Entity, "EntityDamage") then
 			if trace.Entity.SeizeReward and not trace.Entity.burningup and self.Owner:isCP() and trace.Entity.Getowning_ent and self.Owner != trace.Entity:Getowning_ent() then
 				self.Owner:addMoney( trace.Entity.SeizeReward )
 				DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
@@ -218,7 +218,7 @@ function SWEP:SecondaryAttack()
 			self.Owner:EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
 		else
 			self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
-			if FPP and FPP.PlayerCanTouchEnt(ply, self, "EntityDamage1", "FPP_ENTITYDAMAGE1") then
+			if FPP and FPP.plyCanTouchEnt(self.Owner, trace.Entity, "EntityDamage") then
 				if trace.Entity.Getowning_ent and trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
 					self.Owner:addMoney( trace.Entity.SeizeReward )
 					DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
