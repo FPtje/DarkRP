@@ -864,12 +864,12 @@ function GM:InitPostEntity()
 	-- This will fix the rp_voiceradius not working
 	game.ConsoleCommand("sv_alltalk 0\n")
 
-	for k, v in pairs(ents.GetAll()) do
-		local class = v:GetClass()
-		if GAMEMODE.Config.unlockdoorsonstart and v:isDoor() then
+	if GAMEMODE.Config.unlockdoorsonstart then
+		for k, v in pairs(ents.GetAll()) do
+			if not v:isDoor() then continue end
 			v:Fire("unlock", "", 0)
 		end
-    end
+	end
 end
 timer.Simple(0.1, function()
 	if not InitPostEntityCalled then

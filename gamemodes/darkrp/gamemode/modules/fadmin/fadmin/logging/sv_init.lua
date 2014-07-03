@@ -50,7 +50,7 @@ hook.Add("PlayerSpawnedProp", "FAdmin_Log", function(ply, model, ent)
 end)
 hook.Add("PlayerSpawnedNPC", "FAdmin_Log", function(ply, ent)
 	if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
-	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(ent or "Unknown"))
+	FAdmin.Log(ply:Nick().." ("..ply:SteamID()..") Spawned a "..(ent:GetClass() or "Unknown"))
 end)
 hook.Add("PlayerSpawnedVehicle", "FAdmin_Log", function(ply, ent)
 	if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
