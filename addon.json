@@ -8,6 +8,8 @@
         "*.jpg",
         "HELP/*.txt",
         "DON'T TOUCH ANY OF THESE FILES.txt",
+        "gamemodes/darkrp/gamemode/config/DO NOT TOUCH THESE FILES.txt",
+        "gamemodes/darkrp/gamemode/modules/DO NOT TOUCH THESE MODULES.txt",
         "LICENSE.txt",
         "data/fadmin/MOTD.txt"
 
