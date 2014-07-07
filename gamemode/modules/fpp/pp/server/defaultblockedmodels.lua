@@ -17,6 +17,7 @@ local defaultblocked = {
 "models/props_buildings/building_002a.mdl",
 "models/props_buildings/collapsedbuilding01a.mdl",
 "models/props_buildings/project_building01.mdl",
+"models/props_buildings/row_church_fullscale.mdl",
 "models/props_c17/consolebox01a.mdl",
 "models/props_c17/oildrum001_explosive.mdl",
 "models/props_c17/paper01.mdl",
