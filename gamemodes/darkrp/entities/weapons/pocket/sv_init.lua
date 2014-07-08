@@ -171,7 +171,7 @@ local function deserialize(ply, item)
 	ent:SetPos(tr.HitPos + Vector(0, 0, offset))
 
 	local phys = ent:GetPhysicsObject()
-	if phys:IsValid() then phys:Wake() end
+	timer.Simple(0, function() if phys:IsValid() then phys:Wake() end end)
 
 	return ent
 end
