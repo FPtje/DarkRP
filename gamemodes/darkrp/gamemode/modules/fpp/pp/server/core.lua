@@ -653,3 +653,29 @@ hook.Add("EntityRemoved","jeepWorkaround",function(ent)
         ent:GetPassenger(1):ExitVehicle()
     end
 end)
+
+-- Hydraulic exploit workaround
+-- One should not be able to constrain doors to anything
+local canConstrain = constraint.CanConstrain
+local disallowedConstraints = {
+	["prop_door_rotating"] = true,
+	["func_door"] = true,
+	["func_breakable_surf"] = true
+}
+function constraint.CanConstrain(ent, bone)
+	if IsValid(ent) and disallowedConstraints[string.lower(ent:GetClass())] then return false end
+
+	return canConstrain(ent, bone)
+end
+
+-- Crash exploit workaround
+local setAngles = ENTITY.SetAngles
+function ENTITY:SetAngles(ang)
+	if not ang then return setAngles(self, ang) end
+
+	ang.p = ang.p % 360
+	ang.y = ang.y % 360
+	ang.r = ang.r % 360
+
+	return setAngles(self, ang)
+end
