@@ -50,7 +50,7 @@ Desc: Called when the weapon is first loaded
 ---------------------------------------------------------*/
 function SWEP:Initialize()
 	self.LastIron = CurTime()
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 	self.Ready = false
 end
 
@@ -187,14 +187,14 @@ function SWEP:SecondaryAttack()
 	self.Ready = not self.Ready
 	self.Ironsights = not self.Ironsights
 	if self.Ready then
-		self:SetWeaponHoldType("rpg")
+		self:SetHoldType("rpg")
 		if SERVER then
 			-- Prevent them from being able to run and jump
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 			self.Owner:SetJumpPower(0)
 		end
 	else
-		self:SetWeaponHoldType("normal")
+		self:SetHoldType("normal")
 		if SERVER then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 			self.Owner:SetJumpPower(200)

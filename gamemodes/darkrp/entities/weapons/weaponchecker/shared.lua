@@ -33,7 +33,7 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 end
 
 if CLIENT then
@@ -245,7 +245,7 @@ end
 
 function SWEP:Fail()
 	self.IsWeaponChecking = false
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 	if SERVER then timer.Destroy("WeaponCheckSounds") end
 	if CLIENT then timer.Destroy("WeaponCheckDots") end
 end

@@ -44,7 +44,7 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
 function SWEP:Initialize()
-	self:NewSetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 end
 
 function SWEP:Deploy()
@@ -90,8 +90,8 @@ end
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
-	self:NewSetWeaponHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
+	self:SetHoldType("melee")
+	timer.Simple(0.3, function() if self:IsValid() then self:SetHoldType("normal") end end)
 
 	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later.
 

@@ -56,9 +56,9 @@ function SWEP:Reload()
 		self.Weapon:SetVar("reloadtimer", CurTime() + 0.3)
 		self.Weapon:SendWeaponAnim(ACT_VM_RELOAD)
 		self:SetIronsights(false)
-		self:NewSetWeaponHoldType(self.HoldType)
+		self:SetHoldType(self.HoldType)
 		self.Owner:SetAnimation(PLAYER_RELOAD)
-		self:NewSetWeaponHoldType("normal")
+		self:SetHoldType("normal")
 	end
 end
 
