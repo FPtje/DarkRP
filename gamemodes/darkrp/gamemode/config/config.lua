@@ -117,6 +117,8 @@ GM.Config.restrictallteams 				= false
 GM.Config.restrictbuypistol 			= false
 -- restrictdrop - Enable/disable restricting the weapons players can drop. Setting this to true disallows weapons from shipments from being dropped
 GM.Config.restrictdrop 					= false
+-- shouldResetLaws - Enable/Disable resetting the laws back to the default law set when the mayor changes
+GM.Config.shouldResetLaws 				= false
 -- strictsuicide - Whether or not players should spawn where they suicided
 GM.Config.strictsuicide 				= false
 -- telefromjail - Enable/disable teleporting from jail.
@@ -139,8 +141,6 @@ GM.Config.printeroverheat				= true
 GM.Config.weaponCheckerHideDefault		= true
 -- weaponCheckerHideNoLicense - Hide weapons that do not require a license
 GM.Config.weaponCheckerHideNoLicense	= false
--- shouldResetLaws - Enable/Disable resetting the laws back to the default law set when the mayor changes
-GM.Config.shouldResetLaws 				= false
 
 /*
 Value settings
@@ -254,6 +254,8 @@ Other settings
 -- The classname of money packets. Use this to create your own money entity!
 -- Note: the money packet must support the "Setamount" method (or the amount DTVar)
 GM.Config.MoneyClass = "spawned_money"
+-- In case you do wish to keep the default money, but change the model, this option is the way to go:
+GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
 
 -- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
 GM.Config.DarkRPSkin = "DarkRP"

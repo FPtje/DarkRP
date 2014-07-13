@@ -614,8 +614,6 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 function GM:PlayerSpawn(ply)
-	self.BaseClass:PlayerSpawn(ply)
-
 	player_manager.SetPlayerClass(ply, "player_DarkRP")
 
 	ply:SetNoCollideWithTeammates(false)
@@ -664,11 +662,11 @@ function GM:PlayerSpawn(ply)
 
 	if ply.demotedWhileDead then
 		ply.demotedWhileDead = nil
-		ply:changeTeam(GAMEMODE.DefaultTeam)
+		ply:changeTeam(GAMEMODE.DefaultTeam, true)
 	end
 
-	gamemode.Call("PlayerSetModel", ply)
-	gamemode.Call("PlayerLoadout", ply)
+	-- Skip sandbox PlayerSpawn and call base PlayerSpawn directly
+	self.BaseClass.BaseClass:PlayerSpawn(ply)
 
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
