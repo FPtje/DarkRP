@@ -6,6 +6,10 @@ end
 function ENT:Draw()
 	self:DrawModel()
 
+	-- Do not draw labels when a different model is used.
+	-- If you want a different model with labels, make your own money entity and use GM.Config.MoneyClass.
+	if self:GetModel() ~= "models/props/cs_assault/money.mdl" then return end
+
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
 

@@ -254,6 +254,8 @@ Other settings
 -- The classname of money packets. Use this to create your own money entity!
 -- Note: the money packet must support the "Setamount" method (or the amount DTVar)
 GM.Config.MoneyClass = "spawned_money"
+-- In case you do wish to keep the default money, but change the model, this option is the way to go:
+GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
 
 -- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
 GM.Config.DarkRPSkin = "DarkRP"
