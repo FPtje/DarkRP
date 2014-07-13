@@ -668,7 +668,6 @@ function GM:PlayerSpawn(ply)
 	end
 
 	gamemode.Call("PlayerSetModel", ply)
-	gamemode.Call("PlayerLoadout", ply)
 
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
