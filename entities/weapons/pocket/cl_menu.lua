@@ -81,8 +81,8 @@ function reload()
 			fn.Map(self.Remove, items)
 			items = {}
 
-			LocalPlayer():GetActiveWeapon():SetWeaponHoldType("pistol")
-			timer.Simple(0.2, function() if LocalPlayer():GetActiveWeapon():IsValid() then LocalPlayer():GetActiveWeapon():SetWeaponHoldType("normal") end end)
+			LocalPlayer():GetActiveWeapon():SetHoldType("pistol")
+			timer.Simple(0.2, function() if LocalPlayer():GetActiveWeapon():IsValid() then LocalPlayer():GetActiveWeapon():SetHoldType("normal") end end)
 		end
 
 		table.insert(items, icon)

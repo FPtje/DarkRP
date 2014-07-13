@@ -69,7 +69,7 @@ function SWEP:SecondaryAttack()
 	self.ScopeLevel = (self.ScopeLevel + 1) % 4
 	self:SetIronsights(self.ScopeLevel > 0)
 	self.CurHoldType = self.ScopeLevel > 0 and self.HoldType or "normal"
-	self:NewSetWeaponHoldType(self.CurHoldType)
+	self:SetHoldType(self.CurHoldType)
 
 	if CLIENT then return end
 

@@ -44,7 +44,7 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 
 	self.Hit = {
 		Sound("weapons/stunstick/stunstick_impact1.wav"),
@@ -106,8 +106,8 @@ end
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
-	self:NewSetWeaponHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
+	self:SetHoldType("melee")
+	timer.Simple(0.3, function() if self:IsValid() then self:SetHoldType("normal") end end)
 
 	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later.
 
@@ -166,8 +166,8 @@ end
 function SWEP:SecondaryAttack()
 	if CurTime() < self.NextStrike then return end
 
-	self:NewSetWeaponHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:NewSetWeaponHoldType("normal") end end)
+	self:SetHoldType("melee")
+	timer.Simple(0.3, function() if self:IsValid() then self:SetHoldType("normal") end end)
 
 	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later.
 
@@ -230,11 +230,11 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
-	self:NewSetWeaponHoldType("melee")
+	self:SetHoldType("melee")
 	timer.Destroy("rp_stunstick_threaten")
 	timer.Create("rp_stunstick_threaten", 1, 1, function()
 		if not IsValid(self) then return end
-		self:NewSetWeaponHoldType("normal")
+		self:SetHoldType("normal")
 	end)
 
 	if not SERVER then return end

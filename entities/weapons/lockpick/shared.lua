@@ -47,7 +47,7 @@ Name: SWEP:Initialize()
 Desc: Called when the weapon is first loaded
 ---------------------------------------------------------*/
 function SWEP:Initialize()
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 end
 
 if CLIENT then
@@ -100,7 +100,7 @@ function SWEP:PrimaryAttack()
 		self.EndPick = CurTime() + self.LockPickTime
 	end
 
-	self:SetWeaponHoldType("pistol")
+	self:SetHoldType("pistol")
 
 	if SERVER then
 		timer.Create("LockPickSounds", 1, self.LockPickTime, function()
@@ -128,7 +128,7 @@ end
 
 function SWEP:Succeed()
 	self.IsLockPicking = false
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 	local trace = self.Owner:GetEyeTrace()
 	if trace.Entity.isFadingDoor and trace.Entity.fadeActivate then
 		if not trace.Entity.fadeActive then
@@ -146,7 +146,7 @@ end
 
 function SWEP:Fail()
 	self.IsLockPicking = false
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
 end
