@@ -642,15 +642,6 @@ function GM:PlayerSpawn(ply)
 	end
 	ply.IsSleeping = false
 
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	if ply:isCP() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
-	end
-
-	if ply:isArrested() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	end
-
 	ply:Extinguish()
 	if ply:GetActiveWeapon() and IsValid(ply:GetActiveWeapon()) then
 		ply:GetActiveWeapon():Extinguish()
@@ -667,6 +658,15 @@ function GM:PlayerSpawn(ply)
 
 	-- Skip sandbox PlayerSpawn and call base PlayerSpawn directly
 	self.BaseClass.BaseClass:PlayerSpawn(ply)
+
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+	if ply:isCP() then
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
+	end
+
+	if ply:isArrested() then
+		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
+	end
 
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
