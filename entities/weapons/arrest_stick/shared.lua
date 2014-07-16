@@ -142,6 +142,8 @@ function DarkRP.hooks:canArrest(arrester, arrestee)
 	if FAdmin and arrestee:IsPlayer() and arrestee:FAdmin_GetGlobal("fadmin_jailed") then
 		return false, DarkRP.getPhrase("cant_arrest_fadmin_jailed")
 	end
+	
+	return true
 end
 
 
