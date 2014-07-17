@@ -1,6 +1,7 @@
 local PLAYER_CLASS = {}
 
 PLAYER_CLASS.DisplayName = "DarkRP Player Class"
+PLAYER_CLASS.TeammateNoCollide = false
 
 local models = {}
 
@@ -17,6 +18,14 @@ function PLAYER_CLASS:GetHandsModel()
 	local name = models[string.lower(model)]
 
 	return player_manager.TranslatePlayerHands(name)
+end
+
+function PLAYER_CLASS:Spawn()
+	local col = self.Player:GetInfo( "cl_playercolor" )
+	self.Player:SetPlayerColor( Vector( col ) )
+
+	local col = self.Player:GetInfo( "cl_weaponcolor" )
+	self.Player:SetWeaponColor( Vector( col ) )
 end
 
 player_manager.RegisterClass("player_DarkRP", PLAYER_CLASS, "player_default")
