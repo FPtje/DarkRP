@@ -1,6 +1,7 @@
 local PLAYER_CLASS = {}
 
 PLAYER_CLASS.DisplayName = "DarkRP Player Class"
+PLAYER_CLASS.TeammateNoCollide = false
 
 local models = {}
 
