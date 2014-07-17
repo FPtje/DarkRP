@@ -20,4 +20,12 @@ function PLAYER_CLASS:GetHandsModel()
 	return player_manager.TranslatePlayerHands(name)
 end
 
+function PLAYER_CLASS:Spawn()
+	local col = self.Player:GetInfo( "cl_playercolor" )
+	self.Player:SetPlayerColor( Vector( col ) )
+
+	local col = self.Player:GetInfo( "cl_weaponcolor" )
+	self.Player:SetWeaponColor( Vector( col ) )
+end
+
 player_manager.RegisterClass("player_DarkRP", PLAYER_CLASS, "player_default")
