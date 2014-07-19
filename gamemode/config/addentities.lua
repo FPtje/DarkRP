@@ -4,7 +4,7 @@ DarkRP.createShipment("Desert eagle", {
 	price = 215,
 	amount = 10,
 	seperate = true,
-	pricesep = 215,
+	pricesep = 100000,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
@@ -15,7 +15,7 @@ DarkRP.createShipment("Fiveseven", {
 	price = 0,
 	amount = 10,
 	seperate = true,
-	pricesep = 205,
+	pricesep = 90000,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
@@ -26,7 +26,7 @@ DarkRP.createShipment("Glock", {
 	price = 0,
 	amount = 10,
 	seperate = true,
-	pricesep = 160,
+	pricesep = 90000,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
@@ -34,10 +34,10 @@ DarkRP.createShipment("Glock", {
 DarkRP.createShipment("P228", {
 	model = "models/weapons/w_pist_p228.mdl",
 	entity = "weapon_p2282",
-	price = 0,
+	price = ,
 	amount = 10,
 	seperate = true,
-	pricesep = 185,
+	pricesep = 90000,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
@@ -45,7 +45,7 @@ DarkRP.createShipment("P228", {
 DarkRP.createShipment("AK47", {
 	model = "models/weapons/w_rif_ak47.mdl",
 	entity = "weapon_ak472",
-	price = 2450,
+	price = 230000,
 	amount = 10,
 	seperate = false,
 	pricesep = nil,
@@ -56,7 +56,7 @@ DarkRP.createShipment("AK47", {
 DarkRP.createShipment("MP5", {
 	model = "models/weapons/w_smg_mp5.mdl",
 	entity = "weapon_mp52",
-	price = 2200,
+	price = 190000,
 	amount = 10,
 	seperate = false,
 	pricesep = nil,
@@ -67,7 +67,7 @@ DarkRP.createShipment("MP5", {
 DarkRP.createShipment("M4", {
 	model = "models/weapons/w_rif_m4a1.mdl",
 	entity = "weapon_m42",
-	price = 2450,
+	price = 230000,
 	amount = 10,
 	seperate = false,
 	pricesep = nil,
@@ -78,7 +78,7 @@ DarkRP.createShipment("M4", {
 DarkRP.createShipment("Mac 10", {
 	model = "models/weapons/w_smg_mac10.mdl",
 	entity = "weapon_mac102",
-	price = 2150,
+	price = 150000,
 	amount = 10,
 	seperate = false,
 	pricesep = nil,
@@ -89,7 +89,7 @@ DarkRP.createShipment("Mac 10", {
 DarkRP.createShipment("Pump shotgun", {
 	model = "models/weapons/w_shot_m3super90.mdl",
 	entity = "weapon_pumpshotgun2",
-	price = 1750,
+	price = 270000,
 	amount = 10,
 	seperate = false,
 	pricesep = nil,
@@ -100,7 +100,7 @@ DarkRP.createShipment("Pump shotgun", {
 DarkRP.createShipment("Sniper rifle", {
 	model = "models/weapons/w_snip_g3sg1.mdl",
 	entity = "ls_sniper",
-	price = 3750,
+	price = 350000,
 	amount = 10,
 	seperate = false,
 	pricesep = nil,
@@ -111,7 +111,7 @@ DarkRP.createShipment("Sniper rifle", {
 DarkRP.createEntity("Drug lab", {
 	ent = "drug_lab",
 	model = "models/props_lab/crematorcase.mdl",
-	price = 400,
+	price = 30000,
 	max = 3,
 	cmd = "buydruglab",
 	allowed = {TEAM_GANG, TEAM_MOB}
@@ -120,7 +120,7 @@ DarkRP.createEntity("Drug lab", {
 DarkRP.createEntity("Money printer", {
 	ent = "money_printer",
 	model = "models/props_c17/consolebox01a.mdl",
-	price = 1000,
+	price = 10000,
 	max = 2,
 	cmd = "buymoneyprinter"
 })
@@ -128,7 +128,7 @@ DarkRP.createEntity("Money printer", {
 DarkRP.createEntity("Gun lab", {
 	ent = "gunlab",
 	model = "models/props_c17/TrapPropeller_Engine.mdl",
-	price = 500,
+	price = 1500,
 	max = 1,
 	cmd = "buygunlab",
 	allowed = TEAM_GUN
