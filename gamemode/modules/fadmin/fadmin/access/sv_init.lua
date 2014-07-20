@@ -44,22 +44,26 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			end
 		end)
 
-		FAdmin.Access.AddGroup("superadmin", 2, nil, 100)
-		FAdmin.Access.AddGroup("admin", 1, nil, 50)
-		FAdmin.Access.AddGroup("user", 0, nil, 10)
-		FAdmin.Access.AddGroup("noaccess", 0, nil, 0)
+		local function createGroups(privs)
+			FAdmin.Access.AddGroup("superadmin", 2, privs.superadmin, 100)
+			FAdmin.Access.AddGroup("admin", 1, privs.admin, 50)
+			FAdmin.Access.AddGroup("user", 0, privs.user, 10)
+			FAdmin.Access.AddGroup("noaccess", 0, privs.noaccess, 0)
+		end
 
 		MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
-			if val ~= "0" then return end
+			if val ~= "0" then return createGroups{} end
 
 			local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
+			local privs = {}
 			for priv, access in pairs(FAdmin.Access.Privileges) do
 				for i = access + 1, #hasPrivs, 1 do
-					FAdmin.Access.Groups[hasPrivs[i]].PRIVS[priv] = true
-					MySQLite.query("INSERT INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(hasPrivs[i]) .. ", " .. MySQLite.SQLStr(priv) .. ");")
+					privs[hasPrivs[i]] = privs[hasPrivs[i]] or {}
+					privs[hasPrivs[i]][priv] = true
 				end
 			end
+			createGroups(privs)
 		end)
 	end)
 end)
