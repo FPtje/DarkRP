@@ -196,7 +196,7 @@ function DarkRP.storeZombies()
 	MySQLite.begin()
 	MySQLite.query([[DELETE FROM darkrp_position WHERE type = 'Z' AND map = ]] .. MySQLite.SQLStr(map) .. ";", function()
 		for k, v in pairs(zombieSpawns) do
-			MySQLite.query("INSERT INTO darkrp_position VALUES(NULL, " .. MySQLite.SQLStr(map) .. ", 'Z', " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
+			MySQLite.query("INSERT INTO darkrp_position(map, type, x, y, z) VALUES(" .. MySQLite.SQLStr(map) .. ", 'Z', " .. v.x .. ", " .. v.y .. ", " .. v.z .. ");")
 		end
 	end)
 	MySQLite.commit()
