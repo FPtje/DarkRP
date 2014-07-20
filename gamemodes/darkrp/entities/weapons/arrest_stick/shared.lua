@@ -87,6 +87,66 @@ function SWEP:OnRemove()
 	end
 end
 
+DarkRP.hookStub{
+	name = "canArrest",
+	description = "Whether someone can arrest another player.",
+	parameters = {
+		{
+			name = "arrester",
+			description = "The player trying to arrest someone.",
+			type = "Player"
+		},
+		{
+			name = "arrestee",
+			description = "The player being arrested.",
+			type = "Player"
+		}
+	},
+	returns = {
+		{
+			name = "canArrest",
+			description = "A yes or no as to whether the arrester can arrest the arestee.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message that is shown when they can't arrest the player.",
+			type = "string"
+		}
+	},
+	realm = "Server"
+}
+
+function DarkRP.hooks:canArrest(arrester, arrestee)
+	if IsValid(arrestee) and arrestee:IsPlayer() and arrestee:isCP() and not GAMEMODE.Config.cpcanarrestcp then
+		return false, DarkRP.getPhrase("cant_arrest_other_cp")
+	end
+
+	if arrestee:GetClass() == "prop_ragdoll" then
+		for k,v in pairs(player.GetAll()) do
+			if arrestee.OwnerINT and arrestee.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
+				DarkRP.toggleSleep(v, true)
+				return false, nil
+			end
+		end
+	end
+
+	if not GAMEMODE.Config.npcarrest and arrestee:IsNPC() then
+		return false, DarkRP.getPhrase("unable", "arrest", "NPC")
+	end
+
+	if GAMEMODE.Config.needwantedforarrest and not arrestee:IsNPC() and not arrestee:getDarkRPVar("wanted") then
+		return false, DarkRP.getPhrase("must_be_wanted_for_arrest")
+	end
+
+	if FAdmin and arrestee:IsPlayer() and arrestee:FAdmin_GetGlobal("fadmin_jailed") then
+		return false, DarkRP.getPhrase("cant_arrest_fadmin_jailed")
+	end
+	
+	return true
+end
+
+
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
@@ -137,32 +197,10 @@ function SWEP:PrimaryAttack()
 	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) or (not ent:IsPlayer() and not ent:IsNPC()) then
 		return
 	end
-
-	if IsValid(ent) and ent:IsPlayer() and ent:isCP() and not GAMEMODE.Config.cpcanarrestcp then
-		DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("cant_arrest_other_cp"))
-		return
-	end
-
-	if ent:GetClass() == "prop_ragdoll" then
-		for k,v in pairs(player.GetAll()) do
-			if ent.OwnerINT and ent.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
-				DarkRP.toggleSleep(v, true)
-				return
-			end
-		end
-	end
-
-	if not GAMEMODE.Config.npcarrest and ent:IsNPC() then
-		return
-	end
-
-	if GAMEMODE.Config.needwantedforarrest and not ent:IsNPC() and not ent:getDarkRPVar("wanted") then
-		DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("must_be_wanted_for_arrest"))
-		return
-	end
-
-	if FAdmin and ent:IsPlayer() and ent:FAdmin_GetGlobal("fadmin_jailed") then
-		DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("cant_arrest_fadmin_jailed"))
+	
+	local canArrest, message = hook.Call("canArrest", DarkRP.hooks, self.Owner, ent)
+	if not canArrest then
+		if message then DarkRP.notify(self.Owner, 1, 5, message) end
 		return
 	end
 

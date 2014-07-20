@@ -111,6 +111,7 @@ end
 function queueQuery(sqlText, callback, errorCallback)
 	if CONNECTED_TO_MYSQL then
 		table.insert(queuedQueries, {query = sqlText, callback = callback, onError = errorCallback})
+		return
 	end
 	-- SQLite is instantaneous, simply running the query is equal to queueing it
 	query(sqlText, callback, errorCallback)

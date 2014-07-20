@@ -803,7 +803,7 @@ function FPP.Init()
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
 
 		if MySQLite.isMySQL() then
-			MySQLite.query("ALTER TABLE FPP_BLOCKED1 CHANGE id id INTEGER AUTO_INCREMENT;")
+			MySQLite.queueQuery("ALTER TABLE FPP_BLOCKED1 CHANGE id id INTEGER AUTO_INCREMENT;")
 		end
 
 	MySQLite.commit(function()

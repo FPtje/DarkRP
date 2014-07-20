@@ -154,9 +154,10 @@ function SWEP:PrimaryAttack()
 	else
 		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 		if FPP and FPP.plyCanTouchEnt(self.Owner, trace.Entity, "EntityDamage") then
-			if trace.Entity.SeizeReward and not trace.Entity.burningup and self.Owner:isCP() and trace.Entity.Getowning_ent and self.Owner != trace.Entity:Getowning_ent() then
-				self.Owner:addMoney( trace.Entity.SeizeReward )
-				DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
+			if trace.Entity.SeizeReward and not trace.Entity.beenSeized and not trace.Entity.burningup and self.Owner:isCP() and trace.Entity.Getowning_ent and self.Owner != trace.Entity:Getowning_ent() then
+				self.Owner:addMoney(trace.Entity.SeizeReward)
+				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
+				trace.Entity.beenSeized = true
 			end
 			trace.Entity:TakeDamage(1000, self.Owner, self) -- for illegal entities
 		end
@@ -219,9 +220,10 @@ function SWEP:SecondaryAttack()
 		else
 			self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 			if FPP and FPP.plyCanTouchEnt(self.Owner, trace.Entity, "EntityDamage") then
-				if trace.Entity.Getowning_ent and trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
+				if trace.Entity.Getowning_ent and not trace.Entity.beenSeized and trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
 					self.Owner:addMoney( trace.Entity.SeizeReward )
 					DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
+					trace.Entity.beenSeized = true
 				end
 				trace.Entity:TakeDamage(990, self.Owner, self)
 			end

@@ -40,8 +40,9 @@ function DarkRP.setJailPos(pos)
 	jailPos = {pos}
 
 	local remQuery = "DELETE FROM darkrp_position WHERE type = 'J' AND map = %s;"
-	local insQuery = "INSERT INTO darkrp_position VALUES(NULL, %s, 'J', %s, %s, %s);"
+	local insQuery = "INSERT INTO darkrp_position(map, type, x, y, z) VALUES(%s, 'J', %s, %s, %s);"
 
+	print("new setjailpos")
 	remQuery = string.format(remQuery, map)
 	insQuery = string.format(insQuery, map, strPos[1], strPos[2], strPos[3])
 
@@ -59,7 +60,7 @@ function DarkRP.addJailPos(pos)
 
 	table.insert(jailPos, pos)
 
-	local insQuery = "INSERT INTO darkrp_position VALUES(NULL, %s, 'J', %s, %s, %s);"
+	local insQuery = "INSERT INTO darkrp_position(map, type, x, y, z) VALUES(%s, 'J', %s, %s, %s);"
 	insQuery = string.format(insQuery, map, strPos[1], strPos[2], strPos[3])
 
 	MySQLite.query(insQuery)
@@ -86,7 +87,7 @@ function DarkRP.storeTeamSpawnPos(t, pos)
 
 	MySQLite.query([[DELETE FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND id IN (SELECT id FROM darkrp_jobspawn WHERE team = ]] .. t .. [[)]])
 
-	MySQLite.query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
+	MySQLite.query([[INSERT INTO darkrp_position(map, type, x, y, z) VALUES(]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
 		, function()
 		MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
 			if not id then return end
@@ -101,7 +102,7 @@ end
 function DarkRP.addTeamSpawnPos(t, pos)
 	local map = string.lower(game.GetMap())
 
-	MySQLite.query([[INSERT INTO darkrp_position VALUES(NULL, ]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
+	MySQLite.query([[INSERT INTO darkrp_position(map, type, x, y, z) VALUES(]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
 		, function()
 		MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
 			if type(id) == "boolean" then return end

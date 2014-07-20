@@ -87,6 +87,40 @@ function SWEP:OnRemove()
 	end
 end
 
+DarkRP.hookStub{
+	name = "canUnarrest",
+	description = "Whether someone can unarrest another player.",
+	parameters = {
+		{
+			name = "unarrester",
+			description = "The player trying to unarrest someone.",
+			type = "Player"
+		},
+		{
+			name = "unarrestee",
+			description = "The player being unarrested.",
+			type = "Player"
+		}
+	},
+	returns = {
+		{
+			name = "canUnarrest",
+			description = "A yes or no as to whether the player can unarrest the other player.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message that is shown when they can't unarrest the player.",
+			type = "string"
+		}
+	},
+	realm = "Server"
+}
+
+function DarkRP.hooks:canUnarrest(unarrester, unarrestee)
+	return true
+end
+
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
 
@@ -138,7 +172,13 @@ function SWEP:PrimaryAttack()
 	if not IsValid(ent) or not ent:IsPlayer() or (self.Owner:EyePos():Distance(ent:GetPos()) > 115) or not ent:getDarkRPVar("Arrested") then
 		return
 	end
-
+	
+	local canUnarrest, message = hook.Call("canUnarrest", DarkRP.hooks, self.Owner, ent)
+	if not canUnarrest then
+		if message then DarkRP.notify(self.Owner, 1, 5, message) end
+		return
+	end
+	
 	ent:unArrest(self.Owner)
 	DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("youre_unarrested_by", self.Owner:Nick()))
 

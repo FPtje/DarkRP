@@ -530,6 +530,7 @@ local function initPlayer(ply)
 
 	ply:updateJob(team.GetName(GAMEMODE.DefaultTeam))
 	ply:setSelfDarkRPVar("salary", RPExtraTeams[GAMEMODE.DefaultTeam].salary or GAMEMODE.Config.normalsalary)
+	ply.LastJob = nil -- so players don't have to wait to get a job after joining
 
 	ply:GetTable().Ownedz = { }
 	ply:GetTable().OwnedNumz = 0
