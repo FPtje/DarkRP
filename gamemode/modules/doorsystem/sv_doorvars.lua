@@ -1,4 +1,3 @@
-util.AddNetworkString("DarkRP_PlayerVar")
 util.AddNetworkString("DarkRP_UpdateDoorData")
 util.AddNetworkString("DarkRP_RemoveDoorData")
 util.AddNetworkString("DarkRP_AllDoorData")
