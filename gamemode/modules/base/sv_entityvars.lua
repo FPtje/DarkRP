@@ -4,6 +4,7 @@ local meta = FindMetaTable("Player")
 Pooled networking strings
 ---------------------------------------------------------------------------*/
 util.AddNetworkString("DarkRP_InitializeVars")
+util.AddNetworkString("DarkRP_PlayerVar")
 util.AddNetworkString("DarkRP_PlayerVarRemoval")
 
 /*---------------------------------------------------------------------------
