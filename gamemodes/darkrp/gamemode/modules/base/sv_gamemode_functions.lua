@@ -842,6 +842,14 @@ function GM:GetFallDamage( ply, flFallSpeed )
 	end
 end
 local InitPostEntityCalled = false
+
+local function fuckQAC()
+	local netRecs = {"Debug1", "Debug2", "checksaum", "gcontrol_vars", "control_vars", "QUACK_QUACK_MOTHER_FUCKER"}
+	for k,v in pairs(netRecs) do
+		net.Receivers[v] = fn.Id
+	end
+end
+
 function GM:InitPostEntity()
 	InitPostEntityCalled = true
 
@@ -854,6 +862,7 @@ function GM:InitPostEntity()
 	-- Scriptenforcer enabled by default? Fuck you, not gonna happen.
 	if not GAMEMODE.Config.disallowClientsideScripts then
 		game.ConsoleCommand("sv_allowcslua 1\n")
+		timer.Simple(1, fuckQAC) -- Also, fuck QAC which bans innocent people when allowcslua = 1
 	end
 	game.ConsoleCommand("physgun_DampingFactor 0.9\n")
 	game.ConsoleCommand("sv_sticktoground 0\n")
