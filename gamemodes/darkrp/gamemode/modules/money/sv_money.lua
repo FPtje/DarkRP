@@ -71,7 +71,7 @@ local function GiveMoney(ply, args)
 
 		if amount < 1 then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">=1"))
-			return
+			return ""
 		end
 
 		if not ply:canAfford(amount) then
