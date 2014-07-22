@@ -101,9 +101,11 @@ function meta:changeTeam(t, force)
 			end
 		end
 
-		for k,v in pairs(ents.FindByClass("spawned_shipment")) do
-			if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
-			if v.SID == self.SID then v:Remove() end
+		if not GAMEMODE.Config.preventClassItemRemoval["spawned_shipment"] then
+			for k,v in pairs(ents.FindByClass("spawned_shipment")) do
+				if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
+				if v.SID == self.SID then v:Remove() end
+			end
 		end
 	end
 

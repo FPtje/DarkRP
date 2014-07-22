@@ -340,6 +340,7 @@ GM.Config.noStripWeapons = {
 GM.Config.preventClassItemRemoval = {
 	["gunlab"] = false,
 	["microwave"] = false,
+	["spawned_shipment"] = false,
 }
 
 -- Properties set to true are allowed to be used. Values set to false or are missing from this list are blocked.
