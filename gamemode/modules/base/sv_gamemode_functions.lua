@@ -861,6 +861,7 @@ function GM:InitPostEntity()
 
 	-- Scriptenforcer enabled by default? Fuck you, not gonna happen.
 	if not GAMEMODE.Config.disallowClientsideScripts then
+		ServerLog("[DarkRP] Alert: Allowing client-side custom scripts, to disable change Config.disallowClientsideScripts to false!\n")
 		game.ConsoleCommand("sv_allowcslua 1\n")
 		timer.Simple(1, fuckQAC) -- Also, fuck QAC which bans innocent people when allowcslua = 1
 	end
