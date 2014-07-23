@@ -153,7 +153,7 @@ local function checkAdminSpawn(ply, configVar, errorStr)
 		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_sadmin", errorStr))
 		return false
 	elseif config == 3 and ply:EntIndex() ~= 0 then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("disabled", errorStr, DarkRP.getPhrase("see_settings")))
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("disabled", DarkRP.getPhrase(errorStr) or errorStr, DarkRP.getPhrase("see_settings")))
 		return false
 	end
 

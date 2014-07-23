@@ -21,7 +21,7 @@ end
 function DarkRP.getPhrase(name, ...)
 	local langTable = rp_languages[selectedLanguage] or rp_languages.en
 
-	return string.format(langTable[name] or rp_languages.en[name], ...)
+	return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
 end
 
 function DarkRP.getMissingPhrases(lang)
