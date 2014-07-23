@@ -229,7 +229,11 @@ local english = {
 	channel_set_to_x = "Channel set to %s!",
 
 	-- Notifies
-	disabled = "%s is disabled! %s",
+	disabled = "%s has been disabled! %s",
+	gm_spawnvehicle = "The spawning of vehicles",
+	gm_spawnsent = "The spawning of scripted entities (SENTs)",
+	gm_spawnnpc = "The spawning of Non-Player Characters (NPCs)",
+	see_settings = "Please see the DarkRP settings.",
 	limit = "You have reached the %s limit!",
 	have_to_wait = "You need to wait another %d seconds before using %s!",
 	must_be_looking_at = "You need to be looking at a %s!",
@@ -241,6 +245,7 @@ local english = {
 	cleaned_up = "Your %s were cleaned up.",
 	you_bought_x = "You have bought %s for %s%d.", -- backwards compatibility
 	you_bought = "You have bought %s for %s.",
+	you_received_x = "You have received %s for %s.",
 	you_received_x = "You have received %s for %s.",
 
 	created_first_jailpos = "You have created the first jail position!",
