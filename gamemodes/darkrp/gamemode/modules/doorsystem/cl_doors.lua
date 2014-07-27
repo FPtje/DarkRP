@@ -98,7 +98,9 @@ Networking
 /*---------------------------------------------------------------------------
 Retrieve all the data for all doors
 ---------------------------------------------------------------------------*/
+local receivedDoorData = false
 local function retrieveAllDoorData(len)
+	receivedDoorData = true
 	local data = net.ReadTable()
 	DarkRP.doorData = data
 end
@@ -132,4 +134,7 @@ net.Receive("DarkRP_RemoveDoorData", removeDoorData)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-timer.Simple(1, fn.Curry(RunConsoleCommand, 2)("_sendAllDoorData"))
+timer.Simple(15, function()
+	if not receivedDoorData then RunConsoleCommand("_sendAllDoorData") end
+	receivedDoorData = nil
+end)

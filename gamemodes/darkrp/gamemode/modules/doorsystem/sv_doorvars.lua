@@ -120,9 +120,9 @@ end
 /*---------------------------------------------------------------------------
 Networking
 ---------------------------------------------------------------------------*/
-local function sendDoorData(ply)
-	if ply:EntIndex() == 0 then return end
-	if ply.doorDataSent and ply.doorDataSent > (CurTime() - 1) then return end -- prevent spammers
+local plyMeta = FindMetaTable("Player")
+function plyMeta:sendDoorData()
+	if self:EntIndex() == 0 then return end
 
 	local res = {}
 	for k,v in pairs(ents.GetAll()) do
@@ -133,9 +133,14 @@ local function sendDoorData(ply)
 
 	net.Start("DarkRP_AllDoorData")
 		net.WriteTable(res)
-	net.Send(ply)
+	net.Send(self)
 end
-concommand.Add("_sendAllDoorData", sendDoorData)
+concommand.Add("_sendAllDoorData", function(ply)
+	if self.doorDataSent and self.doorDataSent > (CurTime() - 3) then return end -- prevent spammers
+	self.doorDataSent = CurTime()
+
+	ply:sendDoorData()
+end)
 
 function DarkRP.updateDoorData(door, member)
 	if not IsValid(door) or not door:getDoorData() then error("Calling updateDoorData on a door that has no data!") end

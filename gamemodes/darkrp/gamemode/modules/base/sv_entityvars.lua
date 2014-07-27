@@ -65,10 +65,8 @@ end
 /*---------------------------------------------------------------------------
 Send the DarkRPVars to a client
 ---------------------------------------------------------------------------*/
-local function SendDarkRPVars(ply)
-	if ply:EntIndex() == 0 then return end
-	if ply.DarkRPVarsSent and ply.DarkRPVarsSent > (CurTime() - 1) then return end -- prevent spammers
-	ply.DarkRPVarsSent = CurTime()
+function meta:sendDarkRPVars()
+	if self:EntIndex() == 0 then return end
 
 	local plys = player.GetAll()
 
@@ -79,7 +77,7 @@ local function SendDarkRPVars(ply)
 
 			local DarkRPVars = {}
 			for var, value in pairs(target.DarkRPVars) do
-				if ply ~= target and (target.privateDRPVars or {})[var] then continue end
+				if self ~= target and (target.privateDRPVars or {})[var] then continue end
 				table.insert(DarkRPVars, var)
 			end
 
@@ -88,9 +86,13 @@ local function SendDarkRPVars(ply)
 				DarkRP.writeNetDarkRPVar(DarkRPVars[i], target.DarkRPVars[DarkRPVars[i]])
 			end
 		end
-	net.Send(ply)
+	net.Send(self)
 end
-concommand.Add("_sendDarkRPvars", SendDarkRPVars)
+concommand.Add("_sendDarkRPvars", function(ply)
+	if ply.DarkRPVarsSent and ply.DarkRPVarsSent > (CurTime() - 3) then return end -- prevent spammers
+	ply.DarkRPVarsSent = CurTime()
+	ply:sendDarkRPVars()
+end)
 
 /*---------------------------------------------------------------------------
 Admin DarkRPVar commands
