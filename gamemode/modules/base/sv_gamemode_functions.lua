@@ -549,6 +549,7 @@ local function initPlayer(ply)
 	end
 
 	ply:sendDarkRPVars()
+	if ply.sendDoorData then ply:sendDoorData() end
 end
 
 function GM:PlayerInitialSpawn(ply)
