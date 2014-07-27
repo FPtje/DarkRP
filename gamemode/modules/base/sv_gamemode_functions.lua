@@ -547,6 +547,8 @@ local function initPlayer(ply)
 			ply:teamBan(i, 0)
 		end
 	end
+
+	ply:sendDarkRPVars()
 end
 
 function GM:PlayerInitialSpawn(ply)

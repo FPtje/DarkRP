@@ -77,10 +77,8 @@ end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 
 /*---------------------------------------------------------------------------
-Request the DarkRPVars
+Request the DarkRPVars when they haven't arrived
 ---------------------------------------------------------------------------*/
-timer.Simple(1, fn.Curry(RunConsoleCommand, 2)("_sendDarkRPvars"))
-
 timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 	for k,v in pairs(player.GetAll()) do
 		if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
