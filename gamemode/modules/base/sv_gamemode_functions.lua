@@ -547,9 +547,6 @@ local function initPlayer(ply)
 			ply:teamBan(i, 0)
 		end
 	end
-
-	ply:sendDarkRPVars()
-	if ply.sendDoorData then ply:sendDoorData() end
 end
 
 function GM:PlayerInitialSpawn(ply)
