@@ -548,6 +548,15 @@ DarkRP.PLAYER.setSelfDarkRPVar = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.sendDarkRPVars = DarkRP.stub{
+	name = "sendDarkRPVars",
+	description = "Internal function. Sends all visibleDarkRPVars of all players to this player.",
+	parameters = {
+	},
+	returns = {},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.setRPName = DarkRP.stub{
 	name = "setRPName",
 	description = "Set the RPName of a player.",
