@@ -16,7 +16,7 @@ local function drawMOTD(text)
 end
 
 local function receiveMOTD(html, len, headers, code)
-	if not headers or not headers.Status or string.sub(headers.Status, 1, 3) ~= "200" then return end
+	if not headers or headers.Status and string.sub(headers.Status, 1, 3) ~= "200" then return end
 	drawMOTD(html)
 end
 
