@@ -75,6 +75,7 @@ local function InitializeDarkRPVars(len)
 	end
 end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
+timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 /*---------------------------------------------------------------------------
 Request the DarkRPVars when they haven't arrived

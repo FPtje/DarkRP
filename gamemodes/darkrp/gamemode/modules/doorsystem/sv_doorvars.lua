@@ -136,8 +136,8 @@ function plyMeta:sendDoorData()
 	net.Send(self)
 end
 concommand.Add("_sendAllDoorData", function(ply)
-	if self.doorDataSent and self.doorDataSent > (CurTime() - 3) then return end -- prevent spammers
-	self.doorDataSent = CurTime()
+	if ply.doorDataSent and ply.doorDataSent > (CurTime() - 3) then return end -- prevent spammers
+	ply.doorDataSent = CurTime()
 
 	ply:sendDoorData()
 end)
