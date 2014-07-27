@@ -235,6 +235,16 @@ DarkRP.PLAYER.keysUnOwnAll = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.sendDoorData = DarkRP.stub{
+	name = "sendDoorData",
+	description = "Internal function. Sends all door data to a player.",
+	parameters = {
+	},
+	returns = {
+	},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.doPropertyTax = DarkRP.stub{
 	name = "doPropertyTax",
 	description = "Tax a player based on the amount of doors and vehicles they have.",
