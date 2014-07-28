@@ -52,10 +52,19 @@ end
 Generic InitPostEntity workarounds
 ---------------------------------------------------------------------------*/
 hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
-	game.ConsoleCommand("durgz_witty_sayings 0\n") -- Deals with the cigarettes exploit. I'm fucking tired of them. I hate having to fix other people's mods, but this mod maker is retarded and refuses to update his mod.
+	local commands = concommand.GetTable()
+	if commands["durgz_witty_sayings"] then
+		game.ConsoleCommand("durgz_witty_sayings 0\n") -- Deals with the cigarettes exploit. I'm fucking tired of them. I hate having to fix other people's mods, but this mod maker is retarded and refuses to update his mod.
+	end
 
 	-- Remove ULX /me command. (the /me command is the only thing this hook does)
 	hook.Remove("PlayerSay", "ULXMeCheck")
+
+	-- why can people even save multiplayer games?
+	-- Lag exploit
+	if SERVER and not game.SinglePlayer() then
+		concommand.Remove("gm_save")
+	end
 end)
 
 /*---------------------------------------------------------------------------
