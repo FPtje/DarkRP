@@ -11,12 +11,12 @@ timer.Simple(0, function()
 	FixedLaws = table.Copy(Laws)
 end)
 
-function DarkRP.hooks:canEditLaws(ply, action, args)
+local hookCanEditLaws = {canEditLaws = function(_, ply, action, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
 		return false, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. action)
 	end
 	return true
-end
+end}
 
 function ENT:Initialize()
 	self:SetModel("models/props/cs_assault/Billboard.mdl")
@@ -33,7 +33,7 @@ function ENT:Initialize()
 end
 
 local function addLaw(ply, args)
-	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "addLaw", args)
+	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "addLaw", args)
 
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw", ""))
@@ -70,7 +70,7 @@ end
 DarkRP.defineChatCommand("addLaw", addLaw)
 
 local function removeLaw(ply, args)
-	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "removeLaw", args)
+	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "removeLaw", args)
 
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw", ""))
@@ -113,7 +113,7 @@ function DarkRP.resetLaws()
 end
 
 local function resetLaws(ply, args)
-	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "resetLaws", args)
+	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "resetLaws", args)
 
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws", ""))
@@ -132,7 +132,7 @@ DarkRP.defineChatCommand("resetLaws", resetLaws)
 
 local numlaws = 0
 local function placeLaws(ply, args)
-	local canEdit, message = hook.Call("canEditLaws", DarkRP.hooks, ply, "placeLaws", args)
+	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "placeLaws", args)
 
 	if not canEdit then
 		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws", ""))

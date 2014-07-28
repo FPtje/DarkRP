@@ -117,9 +117,8 @@ DarkRP.hookStub{
 	realm = "Server"
 }
 
-function DarkRP.hooks:canUnarrest(unarrester, unarrestee)
-	return true
-end
+-- Default for canUnarrest hook
+local hookCanUnarrest = {canUnarrest = fp{fn.Id, true}}
 
 function SWEP:PrimaryAttack()
 	if CurTime() < self.NextStrike then return end
@@ -172,13 +171,13 @@ function SWEP:PrimaryAttack()
 	if not IsValid(ent) or not ent:IsPlayer() or (self.Owner:EyePos():Distance(ent:GetPos()) > 115) or not ent:getDarkRPVar("Arrested") then
 		return
 	end
-	
-	local canUnarrest, message = hook.Call("canUnarrest", DarkRP.hooks, self.Owner, ent)
+
+	local canUnarrest, message = hook.Call("canUnarrest", hookCanUnarrest, self.Owner, ent)
 	if not canUnarrest then
 		if message then DarkRP.notify(self.Owner, 1, 5, message) end
 		return
 	end
-	
+
 	ent:unArrest(self.Owner)
 	DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("youre_unarrested_by", self.Owner:Nick()))
 
