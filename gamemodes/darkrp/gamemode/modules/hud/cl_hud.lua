@@ -269,7 +269,7 @@ plyMeta.drawPlayerInfo = plyMeta.drawPlayerInfo or function(self)
 	if GAMEMODE.Config.showname then
 		local nick, plyTeam = self:Nick(), self:Team()
 		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
-		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam] and RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
 	end
 
 	if GAMEMODE.Config.showhealth then
