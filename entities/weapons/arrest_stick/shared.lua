@@ -117,7 +117,7 @@ DarkRP.hookStub{
 	realm = "Server"
 }
 
-function DarkRP.hooks:canArrest(arrester, arrestee)
+local hookCanArrest = {canArrest = function(_, arrester, arrestee)
 	if IsValid(arrestee) and arrestee:IsPlayer() and arrestee:isCP() and not GAMEMODE.Config.cpcanarrestcp then
 		return false, DarkRP.getPhrase("cant_arrest_other_cp")
 	end
@@ -142,9 +142,9 @@ function DarkRP.hooks:canArrest(arrester, arrestee)
 	if FAdmin and arrestee:IsPlayer() and arrestee:FAdmin_GetGlobal("fadmin_jailed") then
 		return false, DarkRP.getPhrase("cant_arrest_fadmin_jailed")
 	end
-	
+
 	return true
-end
+end}
 
 
 function SWEP:PrimaryAttack()
@@ -197,8 +197,8 @@ function SWEP:PrimaryAttack()
 	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) or (not ent:IsPlayer() and not ent:IsNPC()) then
 		return
 	end
-	
-	local canArrest, message = hook.Call("canArrest", DarkRP.hooks, self.Owner, ent)
+
+	local canArrest, message = hook.Call("canArrest", hookCanArrest, self.Owner, ent)
 	if not canArrest then
 		if message then DarkRP.notify(self.Owner, 1, 5, message) end
 		return
