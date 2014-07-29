@@ -49,7 +49,7 @@ function meta:getDoorOwner()
 	local doorData = self:getDoorData()
 	if not doorData then return nil end
 
-	return doorData.owner
+	return doorData.owner and Player(doorData.owner) or nil
 end
 
 function meta:isMasterOwner(ply)
