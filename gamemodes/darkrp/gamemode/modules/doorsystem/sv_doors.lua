@@ -48,7 +48,7 @@ function meta:keysOwn(ply)
 
 	if not self:isKeysOwned() and not self:isKeysOwnedBy(ply) then
 		local doorData = self:getDoorData()
-		doorData.owner = ply
+		doorData.owner = ply:UserID()
 		DarkRP.updateDoorData(self, "owner")
 	end
 
