@@ -83,6 +83,8 @@ GM.Config.showjob 						= true
 GM.Config.letters 						= true
 -- license - Enable/disable People need a license to be able to pick up guns
 GM.Config.license 						= false
+-- lockpickfading - Enable/disable the lockpicking of fading doors
+GM.Config.lockpickfading				= true
 -- logging - Enable/disable logging everything that happens.
 GM.Config.logging 						= true
 -- lottery - Enable/disable creating lotteries for mayors
