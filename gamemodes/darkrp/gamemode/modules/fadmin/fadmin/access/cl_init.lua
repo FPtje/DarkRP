@@ -285,7 +285,7 @@ EditGroups = function()
 	RemPriv.DoClick = function()
 		for k,v in pairs(SelectedPrivs:GetSelected()) do
 			local priv = v.Columns[1]:GetValue()
-			if SelectedGroup:GetValue() == LocalPlayer():GetNWString("usergroup") and priv == "SetAccess" then
+			if SelectedGroup:GetValue() == LocalPlayer():GetUserGroup() and priv == "SetAccess" then
 				return Derma_Message("You shouldn't be removing SetAccess. It will make you unable to edit the groups. This is preventing you from locking yourself out of the system.", "Clever move.")
 			end
 			RunConsoleCommand("FAdmin", "RemovePrivilege", SelectedGroup:GetValue(), priv)

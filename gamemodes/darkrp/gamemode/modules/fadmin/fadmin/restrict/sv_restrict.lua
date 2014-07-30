@@ -27,7 +27,7 @@ local function DoRestrictWeapons(ply, cmd, args)
 end
 
 local function RestrictWeapons(ply, Weapon, WeaponTable)
-	local Group = ply:GetNWString("usergroup")
+	local Group = ply:GetUserGroup()
 	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[Group]
 	or not FAdmin.Access.Groups[Restricted.Weapons[Weapon]] then return end
 	local RequiredGroup = Restricted.Weapons[Weapon]

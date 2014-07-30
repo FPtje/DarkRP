@@ -392,7 +392,7 @@ DarkRP.defineChatCommand("toggleown", OwnDoor)
 local function UnOwnAll(ply, cmd, args)
 	local amount = 0
 	for k,v in pairs(ents.GetAll()) do
-		if v:isKeysOwnedBy(ply) and not IsValid(v.EntOwner) --[[SCars]]then
+		if v:isKeysOwnedBy(ply) and v:isDoor() and not IsValid(v.EntOwner) --[[SCars]]then
 			amount = amount + 1
 			v:Fire("unlock", "", 0)
 			v:keysUnOwn(ply)
