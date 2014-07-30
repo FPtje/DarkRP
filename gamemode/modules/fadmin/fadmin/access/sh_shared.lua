@@ -51,7 +51,7 @@ local PLAYER = FindMetaTable("Player")
 
 local oldplyIsAdmin = PLAYER.IsAdmin
 function PLAYER:IsAdmin(...)
-	local usergroup = self:GetNWString("usergroup")
+	local usergroup = self:GetUserGroup()
 
 	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsAdmin(self, ...) or game.SinglePlayer() end
 
@@ -66,7 +66,7 @@ end
 
 local oldplyIsSuperAdmin = PLAYER.IsSuperAdmin
 function PLAYER:IsSuperAdmin(...)
-	local usergroup = self:GetNWString("usergroup")
+	local usergroup = self:GetUserGroup()
 	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsSuperAdmin(self, ...) or game.SinglePlayer() end
 	if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 2/*2 = superadmin*/) or (self.IsListenServerHost and self:IsListenServerHost()) then
 		return true
@@ -86,7 +86,7 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 	-- Privilege does not exist
 	if not FAdmin.Access.Privileges[priv] then return ply:IsAdmin() end
 
-	local Usergroup = ply:GetNWString("usergroup")
+	local Usergroup = ply:GetUserGroup()
 
 	local canTarget = hook.Call("FAdmin_CanTarget", nil, ply, priv, target)
 	if canTarget ~= nil then
@@ -95,9 +95,9 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 
 	if FAdmin.GlobalSetting.Immunity and
 		not isstring(target) and IsValid(target) and target ~= ply and
-		FAdmin.Access.Groups[Usergroup] and	FAdmin.Access.Groups[target:GetNWString("usergroup")] and
-		FAdmin.Access.Groups[Usergroup].immunity and FAdmin.Access.Groups[target:GetNWString("usergroup")].immunity and
-		FAdmin.Access.Groups[target:GetNWString("usergroup")].immunity >= FAdmin.Access.Groups[Usergroup].immunity then
+		FAdmin.Access.Groups[Usergroup] and	FAdmin.Access.Groups[target:GetUserGroup()] and
+		FAdmin.Access.Groups[Usergroup].immunity and FAdmin.Access.Groups[target:GetUserGroup()].immunity and
+		FAdmin.Access.Groups[target:GetUserGroup()].immunity >= FAdmin.Access.Groups[Usergroup].immunity then
 		return false
 	end
 
@@ -115,11 +115,11 @@ FAdmin.StartHooks["AccessFunctions"] = function()
 	FAdmin.Access.AddPrivilege("SeeAdmins", 1)
 	FAdmin.Commands.AddCommand("RemoveGroup", FAdmin.Access.RemoveGroup)
 
-	local printPlyGroup = function(ply) print(ply:Nick(), "\t|\t", ply:GetNWString("usergroup")) end
+	local printPlyGroup = function(ply) print(ply:Nick(), "\t|\t", ply:GetUserGroup()) end
 	FAdmin.Commands.AddCommand("Admins", function(ply)
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return end
 		for k,v in pairs(player.GetAll()) do
-			ply:PrintMessage(HUD_PRINTCONSOLE, v:Nick() .. "\t|\t" .. v:GetNWString("usergroup"))
+			ply:PrintMessage(HUD_PRINTCONSOLE, v:Nick() .. "\t|\t" .. v:GetUserGroup())
 		end
 	end
 	)

@@ -7,7 +7,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 	FAdmin.ScoreBoard.Player:AddInformation("Community link", function(ply) return FAdmin.SteamToProfile(ply) end)
 	FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply)
 		if FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SeeAdmins") then
-			return ply:GetNWString("usergroup")
+			return ply:GetUserGroup()
 		end
 	end)
 	FAdmin.ScoreBoard.Player:AddInformation("Wanted reason", function(ply)
