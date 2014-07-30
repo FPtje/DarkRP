@@ -79,9 +79,9 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 	local e = trace.Entity
-	if SERVER and e.isFadingDoor then SendUserMessage("IsFadingDoor", self.Owner, e) end -- The fading door tool only sets isFadingDoor serverside, for the lockpick to work we need this to be set clientside too.
+	if SERVER and GAMEMODE.Config.lockpickfading and e.isFadingDoor then SendUserMessage("IsFadingDoor", self.Owner, e) end -- The fading door tool only sets isFadingDoor serverside, for the lockpick to work we need this to be set clientside too.
 	if not IsValid(e) or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
-		(not e:isDoor() and not e:IsVehicle() and not string.find(string.lower(e:GetClass()), "vehicle") and not e.isFadingDoor) then
+		(not e:isDoor() and not e:IsVehicle() and not string.find(string.lower(e:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not e.isFadingDoor)) then
 		return
 	end
 
