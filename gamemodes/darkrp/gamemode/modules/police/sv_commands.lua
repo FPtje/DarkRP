@@ -122,69 +122,61 @@ local function DoLottery(ply, amount)
 end
 DarkRP.defineChatCommand("lottery", DoLottery, 1)
 
-local lstat = false
 local wait_lockdown = false
 
 local function WaitLock()
 	wait_lockdown = false
-	lstat = false
 	timer.Destroy("spamlock")
 end
 
 function DarkRP.lockdown(ply)
-	if lstat then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
-			return ""
-		end
+	local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
+	if GetGlobalBool("DarkRP_LockDown") then
+		show(DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
+		return ""
 	end
-	if ply:EntIndex() == 0 or (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor) then
-		for k,v in pairs(player.GetAll()) do
-			v:ConCommand("play npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav\n")
-		end
-		lstat = true
-		DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
-		SetGlobalBool("DarkRP_LockDown", true)
-		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
-	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
-		end
+
+	if ply:EntIndex() ~= 0 and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
+		show(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
+		return ""
 	end
+
+	for k,v in pairs(player.GetAll()) do
+		v:ConCommand("play npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav\n")
+	end
+
+	DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
+	SetGlobalBool("DarkRP_LockDown", true)
+	DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
+
 	return ""
 end
 concommand.Add("rp_lockdown", function(ply) DarkRP.lockdown(ply) end)
 DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
 
 function DarkRP.unLockdown(ply)
-	if not lstat or wait_lockdown then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
-			return ""
-		end
+	local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
+
+	if not GetGlobalBool("DarkRP_LockDown") then
+		show(DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
+		return ""
+	end
+	if wait_lockdown then
+		show(DarkRP.getPhrase("wait_with_that"))
+		return ""
 	end
 
-	if ply:EntIndex() == 0 or (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].mayor) then
-		DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
-		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
-		wait_lockdown = true
-		SetGlobalBool("DarkRP_LockDown", false)
-		timer.Create("spamlock", 20, 1, function() WaitLock() end)
-	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
-		end
+	if ply:EntIndex() ~= 0 and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
+		show(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
+		return ""
 	end
+
+	DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
+	DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
+	wait_lockdown = true
+	SetGlobalBool("DarkRP_LockDown", false)
+	timer.Create("spamlock", 20, 1, WaitLock)
+
 	return ""
 end
 concommand.Add("rp_unlockdown", function(ply) DarkRP.unLockdown(ply) end)
