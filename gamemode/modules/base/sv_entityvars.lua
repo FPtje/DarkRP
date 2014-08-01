@@ -32,8 +32,8 @@ function meta:setDarkRPVar(var, value, target)
 	if not IsValid(self) then return end
 	target = target or player.GetAll()
 
-	hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, value)
 	if value == nil then return self:removeDarkRPVar(var, target) end
+	hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, value)
 
 	self.DarkRPVars = self.DarkRPVars or {}
 	self.DarkRPVars[var] = value
