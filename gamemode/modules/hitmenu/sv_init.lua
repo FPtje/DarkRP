@@ -193,9 +193,14 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 	if hits[ply] then -- player was hitman
 		ply:abortHit(DarkRP.getPhrase("hitman_died"))
 	end
-
+	
 	if IsValid(attacker) and attacker:IsPlayer() and attacker:getHitTarget() == ply then
-		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply, hits[attacker].customer)
+		
+		if IsValid(attacker:getHitCustomer()) then
+			hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply, hits[attacker].customer)		
+		else
+			hitman:abortHit(DarkRP.getPhrase("customer_left_server"))
+		end
 	end
 
 	for hitman, hit in pairs(hits) do
