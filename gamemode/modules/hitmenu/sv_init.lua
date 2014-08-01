@@ -195,7 +195,7 @@ hook.Add("PlayerDeath", "DarkRP Hitman System", function(ply, inflictor, attacke
 	end
 
 	if IsValid(attacker) and attacker:IsPlayer() and attacker:getHitTarget() == ply then
-		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply, hits[attacker].customer)
+		hook.Call("onHitCompleted", DarkRP.hooks, attacker, ply, attacker:getHitCustomer())
 	end
 
 	for hitman, hit in pairs(hits) do
