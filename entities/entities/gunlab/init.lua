@@ -11,7 +11,7 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	local phys = self:GetPhysicsObject()
 
-	self:Setprice(200)
+	self:Setprice(GAMEMODE.Config.gunLabPrice or 200)
 	phys:Wake()
 
 	self.sparking = false
@@ -37,7 +37,7 @@ end
 
 function ENT:SalePrice(activator)
 	local owner = self:Getowning_ent()
-
+	
 	if IsValid(owner) and activator == owner then
 		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, activator:Team()) then
 			-- Hey, hey, hey! Get 20% off production costs of the award winning gun lab if you own the gun lab and are a gun dealer!
@@ -59,38 +59,27 @@ function ENT:Use(activator)
 
 	if self.Once then return end
 
-	if not activator:canAfford(self:SalePrice(activator)) then
+	if not activator:canAfford(cash) then
 		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("gun")))
 		return ""
 	end
-	local diff = self:SalePrice(activator) - self:SalePrice(owner)
+	local diff = cash - self:SalePrice(owner)
 	if diff < 0 and not owner:canAfford(math.abs(diff)) then
 		DarkRP.notify(activator, 2, 3, DarkRP.getPhrase("owner_poor", DarkRP.getPhrase("gun_lab")))
 		return ""
 	end
 	self.sparking = true
 
-
 	activator:addMoney(-cash)
-	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. DarkRP.formatMoney(cash) .. "!")
-
+	local shipment = DarkRP.getShipmentsByClass(GAMEMODE.Config.gunLabWeapon or "weapon_p2282")[1]
+	DarkRP.notify(activator, 0, 3, "You purchased a " .. (shipment and shipment.name or "Unknown Entity") .. " for " .. DarkRP.formatMoney(cash) .. "!")
+	
 	if IsValid(owner) and activator ~= owner then
-		local gain = 0
-		if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, owner:Team()) then
-			gain = math.floor(self:Getprice() - math.ceil(self:Getprice() * 0.80))
-		else
-			gain = math.floor(self:Getprice() - math.ceil(self:Getprice() * 0.90))
-		end
-		if gain == 0 then
-			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(0) .. " " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
-		else
-			owner:addMoney(gain)
-			local word = DarkRP.getPhrase("profit")
-			if gain < 0 then word = DarkRP.getPhrase("loss") end
-			DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(math.abs(gain)) .. " " .. word, "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
-		end
+		owner:addMoney(diff)
+		local word = diff < 0 and DarkRP.getPhrase("loss") or DarkRP.getPhrase("profit")
+		DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(math.abs(diff)) .. " " .. word, (shipment and shipment.name or "Unknown Entity") .. " (" .. DarkRP.getPhrase("gun_lab") .. ")"))
 	end
-
+	
 	self.Once = true
 	timer.Create(self:EntIndex() .. "spawned_weapon", 1, 1, function()
 		if not IsValid(self) then return end
@@ -101,8 +90,9 @@ end
 function ENT:createGun()
 	self.Once = false
 	local gun = ents.Create("spawned_weapon")
-	gun:SetModel("models/weapons/w_pist_p228.mdl")
-	gun:SetWeaponClass("weapon_p2282")
+	local shipment = DarkRP.getShipmentsByClass(GAMEMODE.Config.gunLabWeapon or "weapon_p2282")[1]
+	gun:SetModel(shipment and shipment.model or "models/weapons/w_pist_p228.mdl")
+	gun:SetWeaponClass(shipment and shipment.entity or "weapon_p2282")
 	local gunPos = self:GetPos()
 	gun:SetPos(Vector(gunPos.x, gunPos.y, gunPos.z + 27))
 	gun.ShareGravgun = true
