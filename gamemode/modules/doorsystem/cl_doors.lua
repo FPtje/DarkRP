@@ -68,7 +68,9 @@ function meta:drawOwnableInfo()
 			break
 		end
 	end
-
+	
+	hook.Call( "HUDModifyDoorData", nil, self, doorInfo )
+	
 	local x, y = ScrW()/2, ScrH() / 2
 	draw.DrawNonParsedText(table.concat(doorInfo, "\n"), "TargetID", x , y + 1 , black, 1)
 	draw.DrawNonParsedText(table.concat(doorInfo, "\n"), "TargetID", x, y, (blocked or owned) and white or red, 1)
