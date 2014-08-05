@@ -155,6 +155,26 @@ DarkRP.nickSortedPlayers = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.getShipmentsByClass = DarkRP.stub{
+	name = "getShipmentsByClass",
+	description = "Gets the custom shipment(s) table(s) associated with a class name.",
+	parameters = {
+		{
+			name = "wep",
+			description = "The class name of the weapon you're looking up.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "class",
+			description = "The custom shipment table(s) associated with the class name.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
 
 DarkRP.formatMoney = DarkRP.stub{
 	name = "formatMoney",

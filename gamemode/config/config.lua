@@ -358,6 +358,15 @@ GM.Config.allowedProperties = {
 }
 
 /*---------------------------------------------------------------------------
+Entity Configurations
+---------------------------------------------------------------------------*/
+
+-- Set which weapon the gun lab will spawn
+GM.Config.gunLabWeapon = "weapon_p2282"
+-- Set the default price for the weapon spawned by the gun lab						
+GM.Config.gunLabPrice = 200
+
+/*---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------*/
 -- hide the items that you can't buy and the jobs you can't get (instead of graying them out)

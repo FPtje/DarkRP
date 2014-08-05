@@ -206,3 +206,27 @@ function DarkRP.nickSortedPlayers()
 	table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
 	return plys
 end
+
+/*---------------------------------------------------------------------------
+Convenience function to return the custom shipment(s) table(s) of a weapon class
+---------------------------------------------------------------------------*/
+local getShipmentCache = {}
+function DarkRP.getShipmentsByClass(ent)
+	if not ent or type(ent) ~= "string" then return end
+	if getShipmentCache[ent] then return getShipmentCache[ent] end
+	
+	getShipmentCache[ent] = {}
+	
+	for index, tbl in pairs(CustomShipments) do
+		if tbl.entity == ent then
+			table.insert(getShipmentCache[ent], tbl)
+		end
+	end
+	
+	if #getShipmentCache[ent] > 0 then
+		return getShipmentCache[ent]
+	end
+	
+	getShipmentCache[ent] = nil
+	return nil
+end
