@@ -151,14 +151,11 @@ DarkRP.hookStub{
 	realm = "Shared"
 }
 
-local hookOnLockpickCompleted = {onLockpickCompleted = function(_, ply, success, ent)
-end}
-
 function SWEP:Succeed()
 	self.IsLockPicking = false
 	self:SetHoldType("normal")
 	local trace = self.Owner:GetEyeTrace()
-	hook.Call("onLockpickCompleted", hookOnLockpickCompleted, self.Owner, true, trace.Entity)
+	hook.Call("onLockpickCompleted", nil, self.Owner, true, trace.Entity)
 	if trace.Entity.isFadingDoor and trace.Entity.fadeActivate then
 		if not trace.Entity.fadeActive then
 			trace.Entity:fadeActivate()
@@ -177,7 +174,7 @@ function SWEP:Fail()
 	self.IsLockPicking = false
 	self:SetHoldType("normal")
 	local trace = self.Owner:GetEyeTrace()
-	hook.Call("onLockpickCompleted", hookOnLockpickCompleted, self.Owner, false, trace.Entity)
+	hook.Call("onLockpickCompleted", nil, self.Owner, false, trace.Entity)
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
 end
