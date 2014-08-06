@@ -15,9 +15,11 @@ Player vars
 Remove a player's DarkRPVar
 ---------------------------------------------------------------------------*/
 function meta:removeDarkRPVar(var, target)
+	hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, nil)
 	target = target or player.GetAll()
 	self.DarkRPVars = self.DarkRPVars or {}
 	self.DarkRPVars[var] = nil
+
 
 	net.Start("DarkRP_PlayerVarRemoval")
 		net.WriteUInt(self:UserID(), 16)

@@ -53,9 +53,11 @@ end
 if CLIENT then
 	net.Receive("lockpick_time", function()
 		local wep = net.ReadEntity()
+		local ent = net.ReadEntity()
 		local time = net.ReadUInt(5)
 
 		wep.IsLockPicking = true
+		wep.LockPickEnt = ent
 		wep.StartPick = CurTime()
 		wep.LockPickTime = time
 		wep.EndPick = CurTime() + time
@@ -91,10 +93,12 @@ function SWEP:PrimaryAttack()
 
 	if SERVER then
 		self.IsLockPicking = true
+		self.LockPickEnt = e
 		self.StartPick = CurTime()
 		self.LockPickTime = math.Rand(10, 30)
 		net.Start("lockpick_time")
 			net.WriteEntity(self)
+			net.WriteEntity(e)
 			net.WriteUInt(self.LockPickTime, 5) -- 2^5 = 32 max
 		net.Send(self.Owner)
 		self.EndPick = CurTime() + self.LockPickTime
@@ -121,25 +125,55 @@ end
 
 function SWEP:Holster()
 	self.IsLockPicking = false
+	self.LockPickEnt = nil
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
 	return true
 end
 
+DarkRP.hookStub{
+	name = "onLockpickCompleted",
+	description = "Result of a player attempting to lockpick an entity.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player attempting to lockpick an entity.",
+			type = "Player"
+		},
+		{
+			name = "success",
+			description = "If the player succeeded in lockpicking an entity.",
+			type = "boolean"
+		},
+		{
+			name = "ent",
+			description = "The entity that was being lockpicked.",
+			type = "Entity"
+		},
+	},
+	returns = {
+	},
+	realm = "Shared"
+}
+
 function SWEP:Succeed()
 	self.IsLockPicking = false
 	self:SetHoldType("normal")
-	local trace = self.Owner:GetEyeTrace()
-	if trace.Entity.isFadingDoor and trace.Entity.fadeActivate then
-		if not trace.Entity.fadeActive then
-			trace.Entity:fadeActivate()
-			timer.Simple(5, function() if trace.Entity.fadeActive then trace.Entity:fadeDeactivate() end end)
+
+	hook.Call("onLockpickCompleted", nil, self.Owner, true, self.LockPickEnt)
+
+	if self.LockPickEnt.isFadingDoor and self.LockPickEnt.fadeActivate then
+		if not self.LockPickEnt.fadeActive then
+			self.LockPickEnt:fadeActivate()
+			timer.Simple(5, function() if self.LockPickEnt.fadeActive then self.LockPickEnt:fadeDeactivate() end end)
 		end
-	elseif IsValid(trace.Entity) and trace.Entity.Fire then
-		trace.Entity:keysUnLock()
-		trace.Entity:Fire("open", "", .6)
-		trace.Entity:Fire("setanimation","open",.6)
+	elseif IsValid(self.LockPickEnt) and self.LockPickEnt.Fire then
+		self.LockPickEnt:keysUnLock()
+		self.LockPickEnt:Fire("open", "", .6)
+		self.LockPickEnt:Fire("setanimation", "open", .6)
 	end
+
+	self.LockPickEnt = nil
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
 end
@@ -147,22 +181,22 @@ end
 function SWEP:Fail()
 	self.IsLockPicking = false
 	self:SetHoldType("normal")
+
+	hook.Call("onLockpickCompleted", nil, self.Owner, false, self.LockPickEnt)
+	self.LockPickEnt = nil
+
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
 end
 
 function SWEP:Think()
-	if self.IsLockPicking and self.EndPick then
-		local trace = self.Owner:GetEyeTrace()
-		if not IsValid(trace.Entity) then
-			self:Fail()
-		end
-		if trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or (not trace.Entity:isDoor() and not trace.Entity:IsVehicle() and not string.find(string.lower(trace.Entity:GetClass()), "vehicle") and not trace.Entity.isFadingDoor) then
-			self:Fail()
-		end
-		if self.EndPick <= CurTime() then
-			self:Succeed()
-		end
+	if not self.IsLockPicking or not self.EndPick then return end
+
+	local trace = self.Owner:GetEyeTrace()
+	if not IsValid(trace.Entity) or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
+		self:Fail()
+	elseif self.EndPick <= CurTime() then
+		self:Succeed()
 	end
 end
 
@@ -181,7 +215,7 @@ function SWEP:DrawHUD()
 		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
 		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
 
-		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
+		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 	end
 end
 
