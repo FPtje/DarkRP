@@ -38,6 +38,11 @@ end
 function plyMeta:placeHit(customer, target, price)
 	if hits[self] then error("This person has an active hit!") end
 
+	if not customer:canAfford(price) then
+		DarkRP.notify(customer, 1, 4, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit")))
+		return
+	end
+
 	hits[self] = {}
 	hits[self].price = price -- the agreed upon price (as opposed to the price set by the hitman)
 
