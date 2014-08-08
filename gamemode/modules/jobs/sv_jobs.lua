@@ -226,6 +226,11 @@ local function ChangeJob(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/job", "<26"))
 		return ""
 	end
+	
+	if not string.match(args, "^[a-zA-Z0-9-_ ]+$") then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/job", "Bad name"))
+		return ""
+	end
 
 	local canChangeJob, message, replace = hook.Call("canChangeJob", nil, ply, args)
 	if canChangeJob == false then
