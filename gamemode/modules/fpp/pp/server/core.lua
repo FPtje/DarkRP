@@ -436,7 +436,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 
 
 	if not ignoreGeneralRestrictTool then
-		local Group = FPP.Groups[FPP.GroupMembers[SteamID]] or FPP.Groups[ply:GetNWString("usergroup")] or FPP.Groups.default  -- What group is the player in. If not in a special group, then he's in default group
+		local Group = FPP.Groups[FPP.GroupMembers[SteamID]] or FPP.Groups[ply:GetUserGroup()] or FPP.Groups.default  -- What group is the player in. If not in a special group, then he's in default group
 
 		local CanGroup = true
 		if Group and ((Group.allowdefault and table.HasValue(Group.tools, tool)) or -- If the tool is on the BLACKLIST or
