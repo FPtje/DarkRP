@@ -155,7 +155,9 @@ local function RPName(ply, args)
 		DarkRP.notify(ply, 1, 6,  DarkRP.getPhrase("disabled", "RPname", ""))
 		return ""
 	end
-
+	
+	args = (args:find'^%s*$' and '' or args:match'^%s*(.*%S)')
+	
 	local len = string.len(args)
 	local low = string.lower(args)
 
