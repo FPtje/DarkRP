@@ -229,7 +229,10 @@ function meta:dropPocketItem(item)
 	-- reset USED status
 	ent.USED = nil
 
+	hook.Call("onPocketItemDropped", nil, self, ent, item, id)
+
 	self:removePocketItem(item)
+	
 	return ent
 end
 
