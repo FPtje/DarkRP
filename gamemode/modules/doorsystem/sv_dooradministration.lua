@@ -220,6 +220,6 @@ local function ccUnLock(ply, cmd, args)
 
 	if not trace.Entity:CreatedByMap() then return end
 	MySQLite.query("REPLACE INTO darkrp_door VALUES("..MySQLite.SQLStr(trace.Entity:doorIndex())..", "..MySQLite.SQLStr(string.lower(game.GetMap()))..", "..MySQLite.SQLStr(trace.Entity:getKeysTitle() or "")..", 0, "..(trace.Entity:getKeysNonOwnable() and 1 or 0)..");")
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (ulocked door is saved)", Color(30, 30, 30))
+	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unlocked a door with rp_unlock (unlocked door is saved)", Color(30, 30, 30))
 end
 concommand.Add("rp_unlock", ccUnLock)
