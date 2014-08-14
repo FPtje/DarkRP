@@ -16,7 +16,7 @@ DarkRP.registerDarkRPVar = DarkRP.stub{
 		},
 		{
 			name = "readFn",
-			description = "The function that reads a value for this DarkRPVar. Examples: net.ReadString, function() net.ReadUInt(8) end.",
+			description = "The function that reads and returns a value for this DarkRPVar. Examples: net.ReadString, function() return net.ReadUInt(8) end.",
 			type = "function",
 			optional = false
 		}
