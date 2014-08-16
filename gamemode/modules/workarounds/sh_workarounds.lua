@@ -25,14 +25,17 @@ function DarkRP.getAvailableVehicles()
 end
 
 local osdate = os.date
-function os.date(format, time)
-	if format then format = string.Replace(format, "%R", "%H:%M") end
-	if format then format = string.Replace(format, "%e", "") end
-	if format then format = string.Replace(format, "%T", "") end
-	if format then format = string.Replace(format, "%s", "") end
-	if format then format = string.Replace(format, "%k", "") end
+if system.IsWindows() then
+	local replace = function(txt)
+		if txt == "%%" then return txt end -- Edge case, %% is allowed
+		return ""
+	end
 
-	return osdate(format, time)
+	function os.date(format, time)
+		if format then format = string.gsub(format, "%%[^aAbBcdHIjmMpSUwWxXyYz]", replace) end
+
+		return osdate(format, time)
+	end
 end
 
 -- Clientside part
