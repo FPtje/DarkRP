@@ -62,6 +62,10 @@ function DarkRP.findPlayer(info)
 		if info == v:SteamID() then
 			return v
 		end
+		
+		if info == v:SteamID64() then
+			return v
+		end
 
 		if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
 			return v
