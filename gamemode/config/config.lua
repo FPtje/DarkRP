@@ -8,7 +8,7 @@ GM.Config.voice3D						= true
 -- AdminsCopWeapons - Enable/disable admins spawning with cop weapons
 GM.Config.AdminsCopWeapons 				= true
 -- adminBypassJobCustomCheck - Enable/disable whether an admin can force set a job with whenever customCheck returns false
-GM.Config.adminBypassJobCustomCheck		= true
+GM.Config.adminBypassJobRestrictions	= true
 -- allow people getting their own custom jobs
 GM.Config.allowjobswitch 				= true
 -- allowrpnames - Allow Players to Set their RP names using the /rpname command.
