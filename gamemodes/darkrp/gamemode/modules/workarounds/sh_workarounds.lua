@@ -24,6 +24,20 @@ function DarkRP.getAvailableVehicles()
 	return vehicles
 end
 
+local osdate = os.date
+if system.IsWindows() then
+	local replace = function(txt)
+		if txt == "%%" then return txt end -- Edge case, %% is allowed
+		return ""
+	end
+
+	function os.date(format, time)
+		if format then format = string.gsub(format, "%%[^aAbBcdHIjmMpSUwWxXyYz]", replace) end
+
+		return osdate(format, time)
+	end
+end
+
 -- Clientside part
 if CLIENT then
 	/*---------------------------------------------------------------------------
@@ -32,6 +46,21 @@ if CLIENT then
 	hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 		if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
 	end)
+
+	local camstart3D = cam.Start3D
+	local camend3D = cam.End3D
+	local cam3DStarted = 0
+	function cam.Start3D(a,b,c,d,e,f,g,h,i,j)
+		cam3DStarted = cam3DStarted + 1
+		return camstart3D(a,b,c,d,e,f,g,h,i,j)
+	end
+
+	-- cam.End3D should not crash a player when 3D hasn't been started
+	function cam.End3D()
+		if not cam3DStarted then return end
+		cam3DStarted = cam3DStarted - 1
+		return camend3D()
+	end
 
 	return
 end
