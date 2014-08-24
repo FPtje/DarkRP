@@ -64,7 +64,7 @@ if CLIENT then
 
 		wep.Dots = wep.Dots or ""
 		timer.Create("LockPickDots", 0.5, 0, function()
-			if not wep:IsValid() then timer.Destroy("LockPickDots") return end
+			if not IsValid(wep) then timer.Destroy("LockPickDots") return end
 			local len = string.len(wep.Dots)
 			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
 			wep.Dots = dots[len]
@@ -107,7 +107,7 @@ function SWEP:PrimaryAttack()
 
 	local trace = self.Owner:GetEyeTrace()
 	local e = trace.Entity
-	if not (e:IsValid() and trace.HitPos:Distance(self.Owner:GetShootPos()) <= 100 and
+	if not (IsValid(e) and trace.HitPos:Distance(self.Owner:GetShootPos()) <= 100 and
 		(e:isDoor() or e:IsVehicle() or string.find(string.lower(e:GetClass()), "vehicle") or (GAMEMODE.Config.lockpickfading and e.isFadingDoor) or hook.Call("canLockpick", nil, self.Owner, e))) then
 		return
 	end
@@ -186,7 +186,7 @@ function SWEP:Succeed()
 				if not self.LockPickEnt.fadeActive then
 					local ent = self.LockPickEnt
 					ent:fadeActivate()
-					timer.Simple(5, function() if ent:IsValid() and ent.fadeActive then self.LockPickEnt:fadeDeactivate() end end)
+					timer.Simple(5, function() if IsValid(ent) and ent.fadeActive then self.LockPickEnt:fadeDeactivate() end end)
 				end
 			elseif self.LockPickEnt.Fire then
 				self.LockPickEnt:keysUnLock()
@@ -216,7 +216,7 @@ function SWEP:Think()
 	if not self.IsLockPicking or not self.EndPick then return end
 
 	local trace = self.Owner:GetEyeTrace()
-	if not trace.Entity:IsValid() or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
+	if not IsValid(trace.Entity) or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
 		self:Fail()
 	elseif self.EndPick <= CurTime() then
 		self:Succeed()
