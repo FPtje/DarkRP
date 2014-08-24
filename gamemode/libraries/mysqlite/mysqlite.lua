@@ -7,6 +7,7 @@ local include = include
 local pairs = pairs
 local require = require
 local sql = sql
+local string = string
 local table = table
 local timer = timer
 local tostring = tostring
@@ -204,7 +205,7 @@ function connectToMySQL(host, username, password, database_name, database_port)
 	if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
 
 	databaseObject.onConnectionFailed = function(_, msg)
-		Error("Connection failed! " ..tostring(msg))
+		Error("Connection failed! " .. tostring(msg) ..  "\n")
 	end
 
 	databaseObject.onConnected = function()
@@ -237,4 +238,17 @@ function SQLStr(str)
 	end
 
 	return "\"" .. databaseObject:escape(tostring(str)) .. "\""
+end
+
+function tableExists(tbl, callback, errorCallback)
+	if not CONNECTED_TO_MYSQL then
+		local exists = sql.TableExists(tbl)
+		callback(exists)
+
+		return exists
+	end
+
+	queryValue(string.format("SHOW TABLES LIKE %s", SQLStr(tbl)), function(v)
+		callback(v ~= nil)
+	end, errorCallback)
 end
