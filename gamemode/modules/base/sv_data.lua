@@ -79,7 +79,7 @@ function DarkRP.initDatabase()
 			CREATE TABLE IF NOT EXISTS darkrp_doorjobs(
 				idx INTEGER NOT NULL,
 				map VARCHAR(45) NOT NULL,
-				job VARCHAR(45) NOT NULL,
+				job VARCHAR(255) NOT NULL,
 
 				PRIMARY KEY(idx, map, job)
 			);
