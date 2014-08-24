@@ -76,10 +76,10 @@ function DarkRP.initDatabase()
 
 		-- Some doors are owned by certain teams
 		MySQLite.query([[
-			CREATE TABLE IF NOT EXISTS darkrp_jobown(
+			CREATE TABLE IF NOT EXISTS darkrp_doorjobs(
 				idx INTEGER NOT NULL,
 				map VARCHAR(45) NOT NULL,
-				job INTEGER NOT NULL,
+				job VARCHAR(45) NOT NULL,
 
 				PRIMARY KEY(idx, map, job)
 			);
@@ -344,21 +344,35 @@ function DarkRP.storeTeamDoorOwnability(ent)
 	if not ent:CreatedByMap() then return end
 	local map = string.lower(game.GetMap())
 
-	MySQLite.query("DELETE FROM darkrp_jobown WHERE idx = " .. ent:doorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
+	MySQLite.query("DELETE FROM darkrp_doorjobs WHERE idx = " .. ent:doorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
 	for k,v in pairs(ent:getKeysDoorTeams() or {}) do
-		MySQLite.query("INSERT INTO darkrp_jobown VALUES(" .. ent:doorIndex() .. ", " .. MySQLite.SQLStr(map) .. ", " .. k .. ");")
+		MySQLite.query("INSERT INTO darkrp_doorjobs VALUES(" .. ent:doorIndex() .. ", " .. MySQLite.SQLStr(map) .. ", " .. MySQLite.SQLStr(RPExtraTeams[k].command) .. ");")
 	end
 end
 
 function setUpTeamOwnableDoors()
-	MySQLite.query("SELECT idx, job FROM darkrp_jobown WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
+	MySQLite.query("SELECT idx, job FROM darkrp_doorjobs WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
 		if not r then return end
 
 		for _, row in pairs(r) do
-			local e = DarkRP.doorIndexToEnt(tonumber(row.idx))
+			row.idx = tonumber(row.idx)
+
+			local e = DarkRP.doorIndexToEnt(row.idx)
 			if not IsValid(e) then continue end
 
-			e:addKeysDoorTeam(tonumber(row.job))
+			local job
+			for k, v in pairs(RPExtraTeams) do
+				if v.command:Left(row.job:len()) == row.job then -- funny string stuff because of type length in database
+					job = k
+					break
+				end
+			end
+			if job then
+				e:addKeysDoorTeam(job)
+			else
+				print(("can't find job %s for door %d, removing from database"):format(row.job, row.idx))
+				MySQLite.query(("DELETE FROM darkrp_doorjobs WHERE idx = %d AND map = %s AND job = %s;"):format(row.idx, MySQLite.SQLStr(map), MySQLite.SQLStr(row.job)))
+			end
 		end
 	end)
 end

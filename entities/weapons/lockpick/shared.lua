@@ -42,10 +42,10 @@ SWEP.Secondary.Automatic = false        -- Automatic/Semi Auto
 SWEP.Secondary.Ammo = ""
 SWEP.LockPickTime = 30
 
-/*---------------------------------------------------------
+--[[-------------------------------------------------------
 Name: SWEP:Initialize()
 Desc: Called when the weapon is first loaded
----------------------------------------------------------*/
+---------------------------------------------------------]]
 function SWEP:Initialize()
 	self:SetHoldType("normal")
 end
@@ -61,35 +61,62 @@ if CLIENT then
 		wep.StartPick = CurTime()
 		wep.LockPickTime = time
 		wep.EndPick = CurTime() + time
-	end)
 
-	usermessage.Hook("IsFadingDoor", function(um) -- Set isFadingDoor clientside (this is the best way I could think of to do this, if anyone can think of a better way feel free to change it.
-		local door = um:ReadEntity()
-		if IsValid(door) then
-			door.isFadingDoor = true
-		end
+		wep.Dots = wep.Dots or ""
+		timer.Create("LockPickDots", 0.5, 0, function()
+			if not wep:IsValid() then timer.Destroy("LockPickDots") return end
+			local len = string.len(wep.Dots)
+			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
+			wep.Dots = dots[len]
+		end)
 	end)
 end
 
-/*---------------------------------------------------------
+DarkRP.hookStub{
+	name = "canLockpick",
+	description = "Can entity be lockpicked?",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player attempting to lockpick an entity.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The entity that is being lockpicked.",
+			type = "Entity"
+		},
+	},
+	returns = {
+		{
+			name = "can",
+			description = "Can entity be lockpicked?",
+			type = "boolean"
+		}
+	},
+	realm = "Server"
+}
+
+--[[-------------------------------------------------------
 Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
----------------------------------------------------------*/
+---------------------------------------------------------]]
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + 2)
 	if self.IsLockPicking then return end
 
 	local trace = self.Owner:GetEyeTrace()
 	local e = trace.Entity
-	if SERVER and GAMEMODE.Config.lockpickfading and e.isFadingDoor then SendUserMessage("IsFadingDoor", self.Owner, e) end -- The fading door tool only sets isFadingDoor serverside, for the lockpick to work we need this to be set clientside too.
-	if not IsValid(e) or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
-		(not e:isDoor() and not e:IsVehicle() and not string.find(string.lower(e:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not e.isFadingDoor)) then
+	if not (e:IsValid() and trace.HitPos:Distance(self.Owner:GetShootPos()) <= 100 and
+		(e:isDoor() or e:IsVehicle() or string.find(string.lower(e:GetClass()), "vehicle") or (GAMEMODE.Config.lockpickfading and e.isFadingDoor) or hook.Call("canLockpick", nil, self.Owner, e))) then
 		return
 	end
 
 	if not GAMEMODE.Config.canforcedooropen and e:getKeysNonOwnable() then
 		return
 	end
+
+	self:SetHoldType("pistol")
 
 	if SERVER then
 		self.IsLockPicking = true
@@ -102,23 +129,11 @@ function SWEP:PrimaryAttack()
 			net.WriteUInt(self.LockPickTime, 5) -- 2^5 = 32 max
 		net.Send(self.Owner)
 		self.EndPick = CurTime() + self.LockPickTime
-	end
 
-	self:SetHoldType("pistol")
-
-	if SERVER then
 		timer.Create("LockPickSounds", 1, self.LockPickTime, function()
 			if not IsValid(self) then return end
 			local snd = {1,3,4}
 			self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
-		end)
-	elseif CLIENT then
-		self.Dots = self.Dots or ""
-		timer.Create("LockPickDots", 0.5, 0, function()
-			if not self:IsValid() then timer.Destroy("LockPickDots") return end
-			local len = string.len(self.Dots)
-			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
-			self.Dots = dots[len]
 		end)
 	end
 end
@@ -152,6 +167,11 @@ DarkRP.hookStub{
 		},
 	},
 	returns = {
+		{
+			name = "handled",
+			description = "Return true if you handled this, otherwise don't return anything.",
+			type = "boolean"
+		}
 	},
 	realm = "Shared"
 }
@@ -160,17 +180,20 @@ function SWEP:Succeed()
 	self.IsLockPicking = false
 	self:SetHoldType("normal")
 
-	hook.Call("onLockpickCompleted", nil, self.Owner, true, self.LockPickEnt)
-
-	if self.LockPickEnt.isFadingDoor and self.LockPickEnt.fadeActivate then
-		if not self.LockPickEnt.fadeActive then
-			self.LockPickEnt:fadeActivate()
-			timer.Simple(5, function() if self.LockPickEnt.fadeActive then self.LockPickEnt:fadeDeactivate() end end)
+	if IsValid(self.LockPickEnt) then
+		if not hook.Call("onLockpickCompleted", nil, self.Owner, true, self.LockPickEnt) then -- not already handled
+			if self.LockPickEnt.isFadingDoor and self.LockPickEnt.fadeActivate then
+				if not self.LockPickEnt.fadeActive then
+					local ent = self.LockPickEnt
+					ent:fadeActivate()
+					timer.Simple(5, function() if ent:IsValid() and ent.fadeActive then self.LockPickEnt:fadeDeactivate() end end)
+				end
+			elseif self.LockPickEnt.Fire then
+				self.LockPickEnt:keysUnLock()
+				self.LockPickEnt:Fire("open", "", .6)
+				self.LockPickEnt:Fire("setanimation", "open", .6)
+			end
 		end
-	elseif IsValid(self.LockPickEnt) and self.LockPickEnt.Fire then
-		self.LockPickEnt:keysUnLock()
-		self.LockPickEnt:Fire("open", "", .6)
-		self.LockPickEnt:Fire("setanimation", "open", .6)
 	end
 
 	self.LockPickEnt = nil
@@ -193,7 +216,7 @@ function SWEP:Think()
 	if not self.IsLockPicking or not self.EndPick then return end
 
 	local trace = self.Owner:GetEyeTrace()
-	if not IsValid(trace.Entity) or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
+	if not trace.Entity:IsValid() or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
 		self:Fail()
 	elseif self.EndPick <= CurTime() then
 		self:Succeed()

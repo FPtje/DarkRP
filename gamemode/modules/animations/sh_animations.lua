@@ -159,7 +159,7 @@ local function AnimationMenu()
 	end
 
 	AnimFrame = AnimFrame or vgui.Create("DFrame", Panel)
-	local Height = table.Count(Anims) * 60
+	local Height = table.Count(Anims) * 55 + 32
 	AnimFrame:SetSize(130, Height)
 	AnimFrame:SetPos(ScrW()/2 + ScrW() * 0.1, ScrH()/2 - (Height/2))
 	AnimFrame:SetTitle(DarkRP.getPhrase("custom_animation"))
