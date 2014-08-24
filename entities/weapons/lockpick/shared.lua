@@ -72,31 +72,6 @@ if CLIENT then
 	end)
 end
 
-DarkRP.hookStub{
-	name = "canLockpick",
-	description = "Can entity be lockpicked?",
-	parameters = {
-		{
-			name = "ply",
-			description = "The player attempting to lockpick an entity.",
-			type = "Player"
-		},
-		{
-			name = "ent",
-			description = "The entity that is being lockpicked.",
-			type = "Entity"
-		},
-	},
-	returns = {
-		{
-			name = "can",
-			description = "Can entity be lockpicked?",
-			type = "boolean"
-		}
-	},
-	realm = "Server"
-}
-
 --[[-------------------------------------------------------
 Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
@@ -106,36 +81,40 @@ function SWEP:PrimaryAttack()
 	if self.IsLockPicking then return end
 
 	local trace = self.Owner:GetEyeTrace()
-	local e = trace.Entity
-	if not (IsValid(e) and trace.HitPos:Distance(self.Owner:GetShootPos()) <= 100 and
-		(e:isDoor() or e:IsVehicle() or string.find(string.lower(e:GetClass()), "vehicle") or (GAMEMODE.Config.lockpickfading and e.isFadingDoor) or hook.Call("canLockpick", nil, self.Owner, e))) then
-		return
-	end
+	local ent = trace.Entity
 
-	if not GAMEMODE.Config.canforcedooropen and e:getKeysNonOwnable() then
+	if not IsValid(ent) then return end
+	local canLockpick = hook.Call("canLockpick", nil, self.Owner, ent)
+
+	if canLockpick == false then return end
+	if canLockpick ~= true and (
+			trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
+			(not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
+			(not ent:isDoor() and not ent:IsVehicle() and not string.find(string.lower(ent:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not ent.isFadingDoor))
+		) then
 		return
 	end
 
 	self:SetHoldType("pistol")
 
-	if SERVER then
-		self.IsLockPicking = true
-		self.LockPickEnt = e
-		self.StartPick = CurTime()
-		self.LockPickTime = math.Rand(10, 30)
-		net.Start("lockpick_time")
-			net.WriteEntity(self)
-			net.WriteEntity(e)
-			net.WriteUInt(self.LockPickTime, 5) -- 2^5 = 32 max
-		net.Send(self.Owner)
-		self.EndPick = CurTime() + self.LockPickTime
+	if CLIENT then return end
 
-		timer.Create("LockPickSounds", 1, self.LockPickTime, function()
-			if not IsValid(self) then return end
-			local snd = {1,3,4}
-			self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
-		end)
-	end
+	self.IsLockPicking = true
+	self.LockPickEnt = ent
+	self.StartPick = CurTime()
+	self.LockPickTime = math.Rand(10, 30)
+	net.Start("lockpick_time")
+		net.WriteEntity(self)
+		net.WriteEntity(ent)
+		net.WriteUInt(self.LockPickTime, 5) -- 2^5 = 32 max
+	net.Send(self.Owner)
+	self.EndPick = CurTime() + self.LockPickTime
+
+	timer.Create("LockPickSounds", 1, self.LockPickTime, function()
+		if not IsValid(self) then return end
+		local snd = {1,3,4}
+		self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
+	end)
 end
 
 function SWEP:Holster()
@@ -146,59 +125,30 @@ function SWEP:Holster()
 	return true
 end
 
-DarkRP.hookStub{
-	name = "onLockpickCompleted",
-	description = "Result of a player attempting to lockpick an entity.",
-	parameters = {
-		{
-			name = "ply",
-			description = "The player attempting to lockpick an entity.",
-			type = "Player"
-		},
-		{
-			name = "success",
-			description = "If the player succeeded in lockpicking an entity.",
-			type = "boolean"
-		},
-		{
-			name = "ent",
-			description = "The entity that was being lockpicked.",
-			type = "Entity"
-		},
-	},
-	returns = {
-		{
-			name = "handled",
-			description = "Return true if you handled this, otherwise don't return anything.",
-			type = "boolean"
-		}
-	},
-	realm = "Shared"
-}
-
 function SWEP:Succeed()
-	self.IsLockPicking = false
 	self:SetHoldType("normal")
 
-	if IsValid(self.LockPickEnt) then
-		if not hook.Call("onLockpickCompleted", nil, self.Owner, true, self.LockPickEnt) then -- not already handled
-			if self.LockPickEnt.isFadingDoor and self.LockPickEnt.fadeActivate then
-				if not self.LockPickEnt.fadeActive then
-					local ent = self.LockPickEnt
-					ent:fadeActivate()
-					timer.Simple(5, function() if IsValid(ent) and ent.fadeActive then self.LockPickEnt:fadeDeactivate() end end)
-				end
-			elseif self.LockPickEnt.Fire then
-				self.LockPickEnt:keysUnLock()
-				self.LockPickEnt:Fire("open", "", .6)
-				self.LockPickEnt:Fire("setanimation", "open", .6)
-			end
-		end
-	end
-
+	local ent = self.LockPickEnt
+	self.IsLockPicking = false
 	self.LockPickEnt = nil
+
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
+
+	if not IsValid(ent) then return end
+
+	local override = hook.Call("onLockpickCompleted", nil, self.Owner, true, ent)
+
+	if override then return end
+
+	if ent.isFadingDoor and ent.fadeActivate and not ent.fadeActive then
+		ent:fadeActivate()
+		timer.Simple(5, function() if IsValid(ent) and ent.fadeActive then ent:fadeDeactivate() end end)
+	elseif ent.Fire then
+		ent:keysUnLock()
+		ent:Fire("open", "", .6)
+		ent:Fire("setanimation", "open", .6)
+	end
 end
 
 function SWEP:Fail()
@@ -224,24 +174,80 @@ function SWEP:Think()
 end
 
 function SWEP:DrawHUD()
-	if self.IsLockPicking and self.EndPick then
-		self.Dots = self.Dots or ""
-		local w = ScrW()
-		local h = ScrH()
-		local x,y,width,height = w/2-w/10, h/2-60, w/5, h/15
-		draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
+	if not self.IsLockPicking or not self.EndPick then return end
 
-		local time = self.EndPick - self.StartPick
-		local curtime = CurTime() - self.StartPick
-		local status = math.Clamp(curtime/time, 0, 1)
-		local BarWidth = status * (width - 16)
-		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
-		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
+	self.Dots = self.Dots or ""
+	local w = ScrW()
+	local h = ScrH()
+	local x,y,width,height = w/2-w/10, h/2-60, w/5, h/15
+	draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
-		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
-	end
+	local time = self.EndPick - self.StartPick
+	local curtime = CurTime() - self.StartPick
+	local status = math.Clamp(curtime/time, 0, 1)
+	local BarWidth = status * (width - 16)
+	local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
+	draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
+
+	draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 end
 
 function SWEP:SecondaryAttack()
 	self:PrimaryAttack()
 end
+
+
+DarkRP.hookStub{
+	name = "canLockpick",
+	description = "Whether an entity can be lockpicked.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player attempting to lockpick an entity.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The entity being lockpicked.",
+			type = "Entity"
+		},
+	},
+	returns = {
+		{
+			name = "allowed",
+			description = "Whether the entity can be lockpicked",
+			type = "boolean"
+		}
+	},
+	realm = "Server"
+}
+
+DarkRP.hookStub{
+	name = "onLockpickCompleted",
+	description = "Result of a player attempting to lockpick an entity.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player attempting to lockpick the entity.",
+			type = "Player"
+		},
+		{
+			name = "success",
+			description = "Whether the player succeeded in lockpicking the entity.",
+			type = "boolean"
+		},
+		{
+			name = "ent",
+			description = "The entity that was lockpicked.",
+			type = "Entity"
+		},
+	},
+	returns = {
+		{
+			name = "override",
+			description = "Return true to override default behaviour, which is opening the (fading) door.",
+			type = "boolean"
+		}
+	},
+	realm = "Shared"
+}
