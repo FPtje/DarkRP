@@ -3,7 +3,8 @@ Functions and variables
 ---------------------------------------------------------------------------*/
 local setUpNonOwnableDoors,
 	setUpTeamOwnableDoors,
-	setUpGroupDoors
+	setUpGroupDoors,
+	migrateDB
 
 /*---------------------------------------------------------
  Database initialize
@@ -146,28 +147,63 @@ function DarkRP.initDatabase()
 					END;
 			]])
 		end
-	MySQLite.commit(function() -- Initialize the data after all the tables have been created
+	MySQLite.commit(fp{migrateDB, -- Migrate the database
+		function() -- Initialize the data after all the tables have been created
+			setUpNonOwnableDoors()
+			setUpTeamOwnableDoors()
+			setUpGroupDoors()
 
-		setUpNonOwnableDoors()
-		setUpTeamOwnableDoors()
-		setUpGroupDoors()
+			if MySQLite.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
+										--so he walks around with the settings from the SQLite database
+				for k,v in pairs(player.GetAll()) do
+					local UniqueID = MySQLite.SQLStr(v:UniqueID())
+					MySQLite.query([[SELECT * FROM darkrp_player WHERE uid = ]].. UniqueID ..[[;]], function(data)
+						if not data or not data[1] then return end
 
-		if MySQLite.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
-									--so he walks around with the settings from the SQLite database
-			for k,v in pairs(player.GetAll()) do
-				local UniqueID = MySQLite.SQLStr(v:UniqueID())
-				MySQLite.query([[SELECT * FROM darkrp_player WHERE uid = ]].. UniqueID ..[[;]], function(data)
-					if not data or not data[1] then return end
-
-					local Data = data[1]
-					v:setDarkRPVar("rpname", Data.rpname)
-					v:setSelfDarkRPVar("salary", Data.salary)
-					v:setDarkRPVar("money", Data.wallet)
-				end)
+						local Data = data[1]
+						v:setDarkRPVar("rpname", Data.rpname)
+						v:setSelfDarkRPVar("salary", Data.salary)
+						v:setDarkRPVar("money", Data.wallet)
+					end)
+				end
 			end
-		end
 
-		hook.Call("DarkRPDBInitialized")
+			hook.Call("DarkRPDBInitialized")
+		end})
+end
+
+/*---------------------------------------------------------------------------
+Database migration
+backwards compatibility with older versions of DarkRP
+---------------------------------------------------------------------------*/
+function migrateDB(callback)
+	-- migrte from darkrp_jobown to darkrp_doorjobs
+	MySQLite.tableExists("darkrp_jobown", function(exists)
+		if not exists then return callback() end
+
+		MySQLite.begin()
+			-- Create a temporary table that links job IDs to job commands
+			MySQLite.queueQuery("CREATE TABLE TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
+			if MySQLite.isMySQL() then
+				local jobCommands = {}
+				for k,v in pairs(RPExtraTeams) do
+					table.insert(jobCommands, "(" .. k .. "," .. MySQLite.SQLStr(v.command) .. ")")
+				end
+
+				-- This WOULD work with SQLite if the implementation in GMod wasn't out of date.
+				MySQLite.queueQuery("INSERT IGNORE INTO TempJobCommands VALUES " .. table.concat(jobCommands, ",") .. ";")
+			else
+				for k,v in pairs(RPExtraTeams) do
+					MySQLite.queueQuery("INSERT INTO TempJobCommands VALUES(" .. k .. ", " .. MySQLite.SQLStr(v.command) .. ");")
+				end
+			end
+
+			MySQLite.queueQuery("INSERT INTO darkrp_doorjobs SELECT darkrp_jobown.idx AS idx, darkrp_jobown.map AS map, TempJobCommands.cmd AS job FROM darkrp_jobown JOIN TempJobCommands ON darkrp_jobown.job = TempJobCommands.id;")
+
+			-- Clean up the transition table and the old table
+			MySQLite.queueQuery("DROP TABLE TempJobCommands;")
+			MySQLite.queueQuery("DROP TABLE darkrp_jobown;")
+		MySQLite.commit(callback) -- callback
 	end)
 end
 
