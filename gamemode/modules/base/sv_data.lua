@@ -396,13 +396,8 @@ function setUpTeamOwnableDoors()
 			local e = DarkRP.doorIndexToEnt(row.idx)
 			if not IsValid(e) then continue end
 
-			local job
-			for k, v in pairs(RPExtraTeams) do
-				if v.command:Left(row.job:len()) == row.job then -- funny string stuff because of type length in database
-					job = k
-					break
-				end
-			end
+			local _, job = DarkRP.getJobByCommand(row.job)
+
 			if job then
 				e:addKeysDoorTeam(job)
 			else
