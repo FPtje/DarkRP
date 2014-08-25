@@ -177,6 +177,32 @@ DarkRP.formatMoney = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.getJobByCommand = DarkRP.stub{
+	name = "getJobByCommand",
+	description = "Get the job table and number from the command of the job.",
+	parameters = {
+		{
+			name = "command",
+			description = "The command of the job, without preceding slash (e.g. 'medic' for medic)",
+			type = "numbstringer",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "tbl",
+			description = "A table containing all information about the job.",
+			type = "table"
+		},
+		{
+			name = "jobindex",
+			description = "The index of the job (for 'medic' it's the value of TEAM_MEDIC).",
+			type = "number"
+		}
+	},
+	metatable = DarkRP
+}
+
 -- This function is one of the few that's already defined before the stub is created
 DarkRP.stub{
 	name = "SteamName",
