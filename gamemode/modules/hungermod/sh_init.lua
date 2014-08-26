@@ -88,38 +88,5 @@ DarkRP.createFood("Orange", {
 	energy = 20,
 	price = 20
 })
+
 DarkRP.DARKRP_LOADING = nil
-
-/*---------------------------------------------------------------------------
-Settings for the job and entities
----------------------------------------------------------------------------*/
-timer.Simple(0, function()
-	DarkRP.DARKRP_LOADING = true
-
-	TEAM_COOK = DarkRP.createJob("Cook", {
-		color = Color(238, 99, 99, 255),
-		model = "models/player/mossman.mdl",
-		description = [[As a cook, it is your responsibility to feed the other members of your city.
-			You can spawn a microwave and sell the food you make:
-			/buymicrowave]],
-		weapons = {},
-		command = "cook",
-		max = 2,
-		salary = 45,
-		admin = 0,
-		vote = false,
-		hasLicense = false,
-		cook = true
-	})
-
-	DarkRP.createEntity("Microwave", {
-		ent = "microwave",
-		model = "models/props/cs_office/microwave.mdl",
-		price = 400,
-		max = 1,
-		cmd = "buymicrowave",
-		allowed = TEAM_COOK
-	})
-
-	DarkRP.DARKRP_LOADING = nil
-end)

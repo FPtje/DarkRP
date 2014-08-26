@@ -196,6 +196,24 @@ TEAM_HOBO = DarkRP.createJob("Hobo", {
 	hobo = true
 })
 
+if not DarkRP.disabledDefaults["modules"]["hungermod"] then
+	TEAM_COOK = DarkRP.createJob("Cook", {
+		color = Color(238, 99, 99, 255),
+		model = "models/player/mossman.mdl",
+		description = [[As a cook, it is your responsibility to feed the other members of your city.
+			You can spawn a microwave and sell the food you make:
+			/buymicrowave]],
+		weapons = {},
+		command = "cook",
+		max = 2,
+		salary = 45,
+		admin = 0,
+		vote = false,
+		hasLicense = false,
+		cook = true
+	})
+end
+
 -- Compatibility for when default teams are disabled
 TEAM_CITIZEN = TEAM_CITIZEN  or -1
 TEAM_POLICE  = TEAM_POLICE   or -1
