@@ -363,8 +363,6 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		local max = tonumber(tblEnt.max or 3)
-
 		if ply:customEntityLimitReached(tblEnt) then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", tblEnt.cmd))
 			return ""
