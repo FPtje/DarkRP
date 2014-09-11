@@ -10,7 +10,7 @@ local validShipment = {
 	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
 	"amount",
 	"seperate",
-	"allowed"
+	allowed = fn.FOr{fp{fn.Eq, nil}, istable}
 }
 local validVehicle = {"name", model = checkModel, price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end}
 local validEntity = {
@@ -363,8 +363,6 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		local max = tonumber(tblEnt.max or 3)
-
 		if ply:customEntityLimitReached(tblEnt) then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", tblEnt.cmd))
 			return ""
@@ -419,6 +417,11 @@ local function addEntityCommands(tblEnt)
 end
 
 RPExtraTeams = {}
+local jobByCmd = {}
+DarkRP.getJobByCommand = function(cmd)
+	if not jobByCmd[cmd] then return nil, nil end
+	return RPExtraTeams[jobByCmd[cmd]], jobByCmd[cmd]
+end
 plyMeta.getJobTable = fn.FOr{fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}, fn.Curry(fn.Id, 2)({})}
 local jobCount = 0
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
@@ -441,7 +444,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
 	CustomTeam.salary = math.floor(CustomTeam.salary)
 
-	table.insert(RPExtraTeams, CustomTeam)
+	jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
 	local Team = #RPExtraTeams
 
