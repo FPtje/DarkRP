@@ -550,16 +550,16 @@ end
 hook.Add("CanTool", "FPP.Protect.CanTool", FPP.Protect.CanTool)
 
 function FPP.Protect.CanProperty(ply, property, ent)
-	-- Use physgun because I'm way too lazy to make a new type
-	local cantouch = FPP.plyCanTouchEnt(ply, ent, "Physgun")
+	-- Use Toolgun because I'm way too lazy to make a new type
+	local cantouch = FPP.plyCanTouchEnt(ply, ent, "Toolgun")
 
 	if not cantouch then return false end
 end
 hook.Add("CanProperty", "FPP.Protect.CanProperty", FPP.Protect.CanProperty)
 
 function FPP.Protect.CanDrive(ply, ent)
-	-- Use physgun because I'm way too lazy to make a new type
-	local cantouch = FPP.plyCanTouchEnt(ply, ent, "Physgun")
+	-- Use Toolgun because I'm way too lazy to make a new type
+	local cantouch = FPP.plyCanTouchEnt(ply, ent, "Toolgun")
 
 	if not cantouch then return false end
 end
