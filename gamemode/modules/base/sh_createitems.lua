@@ -10,7 +10,7 @@ local validShipment = {
 	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
 	"amount",
 	"seperate",
-	"allowed"
+	allowed = fn.FOr{fp{fn.Eq, nil}, istable}
 }
 local validVehicle = {"name", model = checkModel, price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end}
 local validEntity = {
