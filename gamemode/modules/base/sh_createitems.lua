@@ -10,7 +10,7 @@ local validShipment = {
 	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
 	"amount",
 	"seperate",
-	allowed = fn.FOr{fp{fn.Eq, nil}, istable}
+	allowed = fn.FOr{fp{fn.Eq, nil}, istable, isnumber}
 }
 local validVehicle = {"name", model = checkModel, price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end}
 local validEntity = {
@@ -500,6 +500,8 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 
 	local corrupt = checkValid(customShipment, validShipment)
 	if corrupt then ErrorNoHalt("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
+
+	customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
 
 	-- if SERVER and FPP then
 	-- 	FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
