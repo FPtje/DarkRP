@@ -14,7 +14,7 @@ function GM:playerBuyDoor(ply, ent)
 end
 
 function GM:getDoorCost(ply, ent)
-	return GAMEMODE.Config.doorcost ~= 0 and GAMEMODE.Config.doorcost or 30
+	return ent.doorcost or GAMEMODE.Config.doorcost ~= 0 and GAMEMODE.Config.doorcost or 30
 end
 
 function GM:getVehicleCost(ply, ent)
