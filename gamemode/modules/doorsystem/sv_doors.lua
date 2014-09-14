@@ -332,7 +332,7 @@ local function OwnDoor(ply)
 
 			trace.Entity:keysUnOwn(ply)
 			trace.Entity:setKeysTitle(nil)
-			local GiveMoneyBack = math.floor((((trace.Entity:IsVehicle() and GAMEMODE.Config.vehiclecost) or GAMEMODE.Config.doorcost) * 0.666) + 0.5)
+			local GiveMoneyBack = math.floor(( hook.Call("get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity) * 0.666) + 0.5)
 			hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveMoneyBack)
 			ply:addMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
