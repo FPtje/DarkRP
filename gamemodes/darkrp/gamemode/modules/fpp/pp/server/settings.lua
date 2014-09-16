@@ -134,6 +134,17 @@ local function AddBlockedModel(ply, cmd, args)
 	local model = string.lower(args[1])
 	model = string.Replace(model, "\\", "/")
 
+	-- Models can differ between server and client. Famous example being:
+	-- models/props_phx/cannonball_solid.mdl <-- serverside
+	-- models/props_phx/cannonball.mdl       <-- clientside
+	-- Add both models
+	local serverModel = tonumber(args[2]) and IsValid(Entity(args[2])) and string.lower(Entity(args[2]):GetModel())
+	if serverModel and serverModel ~= model and not FPP.BlockedModels[serverModel] then
+			FPP.BlockedModels[serverModel] = true
+			MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(serverModel)..");")
+			FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. serverModel .. " to the blocked models black/whitelist", true)
+	end
+
 	if FPP.BlockedModels[model] then FPP.Notify(ply, "This model is already in the black/whitelist", false) return end
 
 	FPP.BlockedModels[model] = true
