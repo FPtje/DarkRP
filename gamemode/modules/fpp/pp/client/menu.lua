@@ -264,7 +264,7 @@ function FPP.AdminMenu(Panel)
 	BlockedModelsAddLA:SetText("Add model of entity you're looking at")
 	function BlockedModelsAddLA:DoClick()
 		if not IsValid(LocalPlayer():GetEyeTraceNoCursor().Entity) then return end
-		RunConsoleCommand("FPP_AddBlockedModel", LocalPlayer():GetEyeTraceNoCursor().Entity:GetModel())
+		RunConsoleCommand("FPP_AddBlockedModel", LocalPlayer():GetEyeTraceNoCursor().Entity:GetModel(), LocalPlayer():GetEyeTraceNoCursor().Entity:EntIndex())
 	end
 
 	local BlockedModelsList = blockedmodels:Add("DButton")
@@ -1159,7 +1159,7 @@ properties.Add("addFPPBlocked",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("FPP_AddBlockedModel", ent:GetModel())
+						RunConsoleCommand("FPP_AddBlockedModel", ent:GetModel(), ent:EntIndex())
 					end
 })
 
