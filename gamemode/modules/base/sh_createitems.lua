@@ -7,17 +7,17 @@ local checkModel = function(model) return model ~= nil and (CLIENT or util.IsVal
 local requiredTeamItems = {"color", "model", "description", "weapons", "command", "max", "salary", "admin", "vote"}
 local validShipment = {
 	model = checkModel, "entity",
-	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
+	price = function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end,
 	"amount",
 	"seperate",
 	allowed = fn.FOr{fp{fn.Eq, nil}, istable, isnumber}
 }
-local validVehicle = {"name", model = checkModel, price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end}
+local validVehicle = {"name", model = checkModel, price = function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end}
 local validEntity = {
 	"ent",
 	model = checkModel,
-	price = function(v, tbl) return v ~= nil or isfunction(tbl.getPrice) end,
-	max = function(v, tbl) return v ~= nil or isfunction(tbl.getMax) end, "cmd", "name"
+	price = function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end,
+	max = function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "cmd", "name"
 }
 
 local function checkValid(tbl, requiredItems)
