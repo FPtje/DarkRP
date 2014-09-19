@@ -48,3 +48,28 @@ DarkRP.hookStub{
 
 	}
 }
+
+DarkRP.hookStub{
+	name = "canChatCommand",
+	description = "Called when a player tries to run any chat command or uses the DarkRP console command. ",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who spoke.",
+			type = "Player"
+		},
+		{
+			name = "command",
+			description = "The thing they said.",
+			type = "string"
+		},
+		{
+			name = "arguments",
+			description = "The arguments of the chat command, given as one string.",
+			type = "string"
+		}
+	},
+	returns = {
+
+	}
+}
