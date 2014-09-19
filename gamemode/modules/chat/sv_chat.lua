@@ -1,9 +1,8 @@
 function DarkRP.defineChatCommand(cmd, callback)
 	cmd = string.lower(cmd)
 	local detour = function(ply, arg, ...)
-		if ply.DarkRPUnInitialized then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_two"))
+		local canChatCommand = gamemode.Call("canChatCommand", ply, cmd, arg, ...)
+		if not canChatCommand then
 			return ""
 		end
 		return callback(ply, arg, ...)
@@ -63,6 +62,15 @@ local function RP_ActualDoSay(ply, text, callback)
 		DarkRP.talkToRange(ply, callback..ply:Name(), text, 250)
 	end
 	return ""
+end
+
+function GM:canChatCommand(ply, cmd, ...)
+	if not ply.DarkRPUnInitialized then return true end
+
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
+	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_two"))
+
+	return false
 end
 
 GM.OldChatHooks = GM.OldChatHooks or {}
