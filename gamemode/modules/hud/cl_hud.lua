@@ -324,7 +324,7 @@ local function DrawEntityDisplay()
 	local aimVec = localplayer:GetAimVector()
 
 	for k, ply in pairs(players or player.GetAll()) do
-		if ply == localplayer or not ply:Alive() then continue end
+		if ply == localplayer or not ply:Alive() or ply:GetNoDraw() then continue end
 		local hisPos = ply:GetShootPos()
 		if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 

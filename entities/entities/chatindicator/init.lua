@@ -14,10 +14,10 @@ end
 function ENT:Think()
 	if not IsValid(self.ply) then -- just in case
 		self:Remove()
-
 		return
 	end
 
+	self:SetNoDraw(self.ply:GetNoDraw())
 	self:SetPos(self.ply:GetPos() + Vector(0, 0, 85))
 end
 
@@ -27,6 +27,7 @@ local function ToggleChatIndicator(len, ply)
 		ply.ChatIndicator = ents.Create("chatindicator")
 		ply.ChatIndicator.ply = ply -- plyception
 		ply.ChatIndicator:SetPos(ply:GetPos() + Vector(0, 0, 85))
+		ply.ChatIndicator:SetNoDraw(ply:GetNoDraw())
 		ply.ChatIndicator:Spawn()
 		ply.ChatIndicator:Activate()
 	else
