@@ -94,6 +94,7 @@ end
 
 function questionCallback(answer, hitman, customer, target, price)
 	if not IsValid(customer) then return end
+	if not IsValid(hitman) or not hitman:isHitman() then return end
 
 	if not IsValid(customer) then
 		DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("customer_left_server"))

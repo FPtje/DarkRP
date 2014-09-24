@@ -70,6 +70,10 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
-
+		{
+			name = "canChatCommand",
+			description = "Whether the player is allowed to run the chat command.",
+			type = "boolean"
+		},
 	}
 }
