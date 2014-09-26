@@ -62,7 +62,7 @@ function plyMeta:setHitTarget(target)
 end
 
 function plyMeta:setHitPrice(price)
-	self:setDarkRPVar("hitPrice", math.Max(GAMEMODE.Config.minHitPrice or 200, price))
+	self:setDarkRPVar("hitPrice", math.Min(GAMEMODE.Config.maxHitPrice or 50000, math.Max(GAMEMODE.Config.minHitPrice or 200, price)))
 end
 
 function plyMeta:setHitCustomer(customer)
