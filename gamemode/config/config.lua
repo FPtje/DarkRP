@@ -384,6 +384,8 @@ Hitmenu module
 ---------------------------------------------------------------------------*/
 -- The minimum price for a hit
 GM.Config.minHitPrice = 200
+-- The maximum price for a hit
+GM.Config.maxHitPrice = 50000
 -- The minimum distance between a hitman and his customer when they make the deal
 GM.Config.minHitDistance = 150
 -- The text that tells the player he can press use on the hitman to request a hit
