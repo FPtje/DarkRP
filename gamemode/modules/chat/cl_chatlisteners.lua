@@ -90,6 +90,7 @@ local function chatGetRecipients()
 	receivers = {}
 	for _, ply in pairs(player.GetAll()) do
 		if not IsValid(ply) or ply == LocalPlayer() then continue end
+		if not ply:GetNoDraw() then continue end
 
 		local val = currentConfig.hearFunc(ply, currentChatText)
 
