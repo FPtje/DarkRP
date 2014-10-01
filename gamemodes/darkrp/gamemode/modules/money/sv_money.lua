@@ -131,6 +131,11 @@ local function DropMoney(ply, args)
 		return ""
 	end
 
+	if amount >= 2147483647 then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "<2,147,483,647"))
+		return ""
+	end
+
 	if not ply:canAfford(amount) then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
 
