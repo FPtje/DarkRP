@@ -10,6 +10,7 @@ util.AddNetworkString("DarkRP_PlayerVarRemoval")
 /*---------------------------------------------------------------------------
 Player vars
 ---------------------------------------------------------------------------*/
+local privateDRPVars
 
 /*---------------------------------------------------------------------------
 Remove a player's DarkRPVar
@@ -50,8 +51,8 @@ end
 Set a private DarkRPVar
 ---------------------------------------------------------------------------*/
 function meta:setSelfDarkRPVar(var, value)
-	self.privateDRPVars = self.privateDRPVars or {}
-	self.privateDRPVars[var] = true
+	privateDRPVars = privateDRPVars or {}
+	privateDRPVars[var] = true
 
 	self:setDarkRPVar(var, value, self)
 end
@@ -79,7 +80,7 @@ function meta:sendDarkRPVars()
 
 			local DarkRPVars = {}
 			for var, value in pairs(target.DarkRPVars) do
-				if self ~= target and (target.privateDRPVars or {})[var] then continue end
+				if self ~= target and (privateDRPVars or {})[var] then continue end
 				table.insert(DarkRPVars, var)
 			end
 
