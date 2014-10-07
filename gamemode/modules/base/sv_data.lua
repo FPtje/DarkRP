@@ -183,7 +183,7 @@ function migrateDB(callback)
 
 		MySQLite.begin()
 			-- Create a temporary table that links job IDs to job commands
-			MySQLite.queueQuery("CREATE TABLE TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
+			MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
 			if MySQLite.isMySQL() then
 				local jobCommands = {}
 				for k,v in pairs(RPExtraTeams) do
