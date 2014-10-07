@@ -198,7 +198,7 @@ function migrateDB(callback)
 				end
 			end
 
-			MySQLite.queueQuery("INSERT INTO darkrp_doorjobs SELECT darkrp_jobown.idx AS idx, darkrp_jobown.map AS map, TempJobCommands.cmd AS job FROM darkrp_jobown JOIN TempJobCommands ON darkrp_jobown.job = TempJobCommands.id;")
+			MySQLite.queueQuery("REPLACE INTO darkrp_doorjobs SELECT darkrp_jobown.idx AS idx, darkrp_jobown.map AS map, TempJobCommands.cmd AS job FROM darkrp_jobown JOIN TempJobCommands ON darkrp_jobown.job = TempJobCommands.id;")
 
 			-- Clean up the transition table and the old table
 			MySQLite.queueQuery("DROP TABLE TempJobCommands;")
