@@ -368,22 +368,21 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		if not ply:canAfford(tblEnt.price) then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.cmd))
+		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
 
+		local cost = price or tblEnt.getPrice and tblEnt.getPrice(ply, tblEnt.price) or tblEnt.price
+
+		if not ply:canAfford(cost) then
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.cmd))
 			return ""
 		end
-
-		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
 
 		if canbuy == false then
 			if not suppress and message then DarkRP.notify(ply, 1, 4, message) end
 			return ""
 		end
 
-		price = price or tblEnt.price
-
-		ply:addMoney(-price)
+		ply:addMoney(-cost)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -406,9 +405,9 @@ local function addEntityCommands(tblEnt)
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
 
-		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item, price)
+		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item, cost)
 
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(price), ""))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(cost), ""))
 
 		ply:addCustomEntity(tblEnt)
 		return ""
