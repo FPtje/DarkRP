@@ -101,7 +101,7 @@ function SWEP:DoFlash(ply)
 	ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
 end
 
-function SWEP:PrimaryAttack()
+function SWEP:DoAttack(dmg)
 	if CurTime() < self.NextStrike then return end
 
 	self:SetHoldType("melee")
@@ -138,95 +138,48 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
-	local trace = self.Owner:GetEyeTrace()
-
-	if not IsValid(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 100) then return end
-
-	if not trace.Entity:isDoor() then
-		trace.Entity:SetVelocity((trace.Entity:GetPos() - self.Owner:GetPos()) * 7)
+	self.Owner:LagCompensation(true)
+	local trace = util.QuickTrace(self.Owner:EyePos(), self.Owner:GetAimVector() * 90, {self.Owner})
+	self.Owner:LagCompensation(false)
+	if IsValid(trace.Entity) and trace.Entity.onArrestStickUsed then
+		trace.Entity:onStunStickUsed(self.Owner)
+		return
 	end
 
-	if trace.Entity:IsPlayer() or trace.Entity:IsNPC() or trace.Entity:IsVehicle() then
-		self.DoFlash(self, trace.Entity)
+	local ent = self.Owner:getEyeSightHitEntity()
+
+	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) then return end
+
+	if not ent:isDoor() then
+		ent:SetVelocity((ent:GetPos() - self.Owner:GetPos()) * 7)
+	end
+
+	if dmg > 0 then
+		ent:TakeDamage(dmg, self.Owner, self)
+	end
+
+	if ent:IsPlayer() or ent:IsNPC() or ent:IsVehicle() then
+		self.DoFlash(self, ent)
 		self.Owner:EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
 	else
 		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
-		if FPP and FPP.plyCanTouchEnt(self.Owner, trace.Entity, "EntityDamage") then
-			if trace.Entity.SeizeReward and not trace.Entity.beenSeized and not trace.Entity.burningup and self.Owner:isCP() and trace.Entity.Getowning_ent and self.Owner != trace.Entity:Getowning_ent() then
-				self.Owner:addMoney(trace.Entity.SeizeReward)
-				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
-				trace.Entity.beenSeized = true
+		if FPP and FPP.plyCanTouchEnt(self.Owner, ent, "EntityDamage") then
+			if ent.SeizeReward and not ent.beenSeized and not ent.burningup and self.Owner:isCP() and ent.Getowning_ent and self.Owner ~= ent:Getowning_ent() then
+				self.Owner:addMoney(ent.SeizeReward)
+				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(ent.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
+				ent.beenSeized = true
 			end
-			trace.Entity:TakeDamage(1000, self.Owner, self) -- for illegal entities
+			ent:TakeDamage(1000-dmg, self.Owner, self) -- for illegal entities
 		end
 	end
 end
 
+function SWEP:PrimaryAttack()
+	self:DoAttack(0)
+end
+
 function SWEP:SecondaryAttack()
-	if CurTime() < self.NextStrike then return end
-
-	self:SetHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:SetHoldType("normal") end end)
-
-	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later.
-
-	if CLIENT then return end
-
-	timer.Stop(self:GetClass() .. "_idle" .. self:EntIndex())
-	local vm = self.Owner:GetViewModel()
-	if IsValid(vm) then
-		vm:ResetSequence(vm:LookupSequence("idle01"))
-		timer.Simple(0, function()
-			if not IsValid(self) or not IsValid(self.Owner) or not IsValid(self.Owner:GetActiveWeapon()) or self.Owner:GetActiveWeapon() ~= self then return end
-			self.Owner:SetAnimation(PLAYER_ATTACK1)
-
-			if IsValid(self.Weapon) then
-				self.Weapon:EmitSound(self.Sound)
-			end
-
-			local vm = self.Owner:GetViewModel()
-			if not IsValid(vm) then return end
-			vm:ResetSequence(vm:LookupSequence("attackch"))
-			vm:SetPlaybackRate(1 + 1/3)
-			local duration = vm:SequenceDuration() / vm:GetPlaybackRate()
-			timer.Create(self:GetClass() .. "_idle" .. self:EntIndex(), duration, 1, function()
-				if not IsValid(self) or not IsValid(self.Owner) then return end
-				local vm = self.Owner:GetViewModel()
-				if not IsValid(vm) then return end
-				vm:ResetSequence(vm:LookupSequence("idle01"))
-			end)
-			self.NextStrike = CurTime() + duration
-		end)
-	end
-
-	local trace = self.Owner:GetEyeTrace()
-
-	if (not IsValid(trace.Entity) or (self.Owner:EyePos():Distance(trace.Entity:GetPos()) > 100)) then return end
-
-	if SERVER then
-		if not trace.Entity:isDoor() then
-			trace.Entity:SetVelocity((trace.Entity:GetPos() - self.Owner:GetPos()) * 7)
-		end
-
-		trace.Entity:TakeDamage(10, self.Owner, self)
-
-		if trace.Entity:IsPlayer() or trace.Entity:IsVehicle() then
-			self.DoFlash(self, trace.Entity)
-			self.Owner:EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
-		elseif trace.Entity:IsNPC() then
-			self.Owner:EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
-		else
-			self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
-			if FPP and FPP.plyCanTouchEnt(self.Owner, trace.Entity, "EntityDamage") then
-				if trace.Entity.Getowning_ent and not trace.Entity.beenSeized and trace.Entity.SeizeReward and trace.Entity:Getowning_ent() != self.Owner then
-					self.Owner:addMoney( trace.Entity.SeizeReward )
-					DarkRP.notify( self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(trace.Entity.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
-					trace.Entity.beenSeized = true
-				end
-				trace.Entity:TakeDamage(990, self.Owner, self)
-			end
-		end
-	end
+	self:DoAttack(10)
 end
 
 function SWEP:Reload()
