@@ -234,6 +234,31 @@ local function CheckChat(ply, text)
 end
 hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
 
+DarkRP.getChatSound = DarkRP.stub{
+	name = "getChatSound",
+	description = "Get a chat sound (play a noise when someone says something) associated with the given phrase.",
+	parameters = {
+		{
+			name = "text",
+			description = "The text that triggers the chat sound.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "soundPaths",
+			description = "A table of string sound paths associated with the given text.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
+function DarkRP.getChatSound(text)
+	return sounds[string.lower(text or "")]
+end
+
 DarkRP.setChatSound = DarkRP.stub{
 	name = "setChatSound",
 	description = "Set a chat sound (play a noise when someone says something)",
