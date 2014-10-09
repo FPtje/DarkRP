@@ -147,10 +147,10 @@ local function checkAdminSpawn(ply, configVar, errorStr)
 	local config = GAMEMODE.Config[configVar]
 
 	if (config == true or config == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_admin", errorStr))
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_admin", DarkRP.getPhrase(errorStr) or errorStr))
 		return false
 	elseif config == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_sadmin", errorStr))
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_sadmin", DarkRP.getPhrase(errorStr) or errorStr))
 		return false
 	elseif config == 3 and ply:EntIndex() ~= 0 then
 		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("disabled", DarkRP.getPhrase(errorStr) or errorStr, DarkRP.getPhrase("see_settings")))
