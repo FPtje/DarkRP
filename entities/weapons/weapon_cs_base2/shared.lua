@@ -102,6 +102,7 @@ end
 
 function SWEP:Holster()
 	self.Ironsights = false
+	self.hasShot = false -- We do this here because SWEP:Deploy is currently unreliable clientside
 
 	if not IsValid(self.Owner) then return true end
 	if CLIENT then
@@ -138,8 +139,7 @@ function SWEP:Reload()
 		if not IsValid(self) then return end
 		self.Reloading = false
 		self:SetHoldType("normal")
-		// WORKAROUND: Some models have shit viewmodel positions until they fire
-		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+		self.hasShot = false
 	end)
 end
 
@@ -294,14 +294,6 @@ Desc: Allows you to re-position the view model
 function SWEP:GetViewModelPosition(pos, ang)
 	if not self.IronSightsPos then return pos, ang end
 
-	if not self.hasShot then
-		if self.IronSightsPosAfterShootingAdjustment then pos = pos + self.IronSightsPosAfterShootingAdjustment end
-		if self.IronSightsAngAfterShootingAdjustment then
-			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x)
-			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y)
-			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z)
-		end
-	end
 	local bIron = self.Ironsights
 
 	if bIron ~= self.bLastIron then
@@ -358,6 +350,25 @@ function SWEP:GetViewModelPosition(pos, ang)
 	pos = pos + Offset.x * Right * Mul
 	pos = pos + Offset.y * Forward * Mul
 	pos = pos + Offset.z * Up * Mul
+
+	if not self.hasShot then
+		if self.IronSightsAngAfterShootingAdjustment then
+			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x * Mul)
+			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y * Mul)
+			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z * Mul)
+		end
+
+		if self.IronSightsPosAfterShootingAdjustment then
+			Offset = self.IronSightsPosAfterShootingAdjustment
+			Right = ang:Right()
+			Up = ang:Up()
+			Forward = ang:Forward()
+
+			pos = pos + Offset.x * Right * Mul
+			pos = pos + Offset.y * Forward * Mul
+			pos = pos + Offset.z * Up * Mul
+		end
+	end
 
 	return pos, ang
 end
@@ -438,11 +449,8 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	function SWEP:ViewModelDrawn()
-		if not IsValid(self.Owner) then return end
-		local vm = self.Owner:GetViewModel()
-
-		if self.DarkRPViewModelBoneManipulations then
+	function SWEP:ViewModelDrawn(vm)
+		if self.DarkRPViewModelBoneManipulations and not self.Reloading then
 			self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
 		else
 			self:ResetDarkRPBones(vm)
