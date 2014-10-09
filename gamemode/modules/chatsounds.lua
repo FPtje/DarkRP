@@ -219,6 +219,59 @@ sounds[ "you never know" ] = { "vo/npc/male01/answer22.wav" }
 
 sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
 
+DarkRP.hookStub{
+	name = "canChatSound",
+	description = "Whether a chat sound can be played.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who triggered the chat sound.",
+			type = "Player"
+		},
+		{
+			name = "chatPhrase",
+			description = "The chat sound phrase that has been detected.",
+			type = "string"
+		},
+		{
+			name = "chatText",
+			description = "The whole chat text the player sent that contains the chat sound phrase.",
+			type = "string"
+		}
+	},
+	returns = {
+		{
+			name = "canChatSound",
+			description = "False if the chat sound should not be played.",
+			type = "boolean"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "onChatSound",
+	description = "When a chat sound is played.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who triggered the chat sound.",
+			type = "Player"
+		},
+		{
+			name = "chatPhrase",
+			description = "The chat sound phrase that was detected.",
+			type = "string"
+		},
+		{
+			name = "chatText",
+			description = "The whole chat text the player sent that contains the chat sound phrase.",
+			type = "string"
+		}
+	},
+	returns = {
+	}
+}
+
 local function CheckChat(ply, text)
 	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
 	local prefix = string.sub(text, 0, 1)
@@ -226,13 +279,41 @@ local function CheckChat(ply, text)
 	for k, v in pairs(sounds) do
 		local res1, res2 = string.find(string.lower(text), k)
 		if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
+			local canChatSound = hook.Call("canChatSound", nil, ply, k, text)
+			if canChatSound == false then return end
 			ply:EmitSound(table.Random(v), 80, 100)
 			ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
+			hook.Call("onChatSound", nil, ply, k, text)
 			break
 		end
 	end
 end
 hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
+
+DarkRP.getChatSound = DarkRP.stub{
+	name = "getChatSound",
+	description = "Get a chat sound (play a noise when someone says something) associated with the given phrase.",
+	parameters = {
+		{
+			name = "text",
+			description = "The text that triggers the chat sound.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+		{
+			name = "soundPaths",
+			description = "A table of string sound paths associated with the given text.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
+function DarkRP.getChatSound(text)
+	return sounds[string.lower(text or "")]
+end
 
 DarkRP.setChatSound = DarkRP.stub{
 	name = "setChatSound",
