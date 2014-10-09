@@ -44,7 +44,7 @@ function meta:changeTeam(t, force)
 		return false
 	end
 
-	if not self.DarkRPVars["Priv"..TEAM.command] and not force then
+	if not force then
 		if type(TEAM.NeedToChangeFrom) == "number" and prevTeam ~= TEAM.NeedToChangeFrom then
 			DarkRP.notify(self, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
 			return false
