@@ -1,5 +1,6 @@
+AddCSLuaFile()
+
 if SERVER then
-	AddCSLuaFile("shared.lua")
 	util.AddNetworkString("lockpick_time")
 end
 

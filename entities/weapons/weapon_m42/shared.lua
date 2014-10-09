@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 if CLIENT then
 	SWEP.Author = "DarkRP Developers"
 	SWEP.Contact = ""
@@ -9,11 +11,7 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "w"
 
-	killicon.AddFont("cse_m4","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
-end
-
-if SERVER then
-	AddCSLuaFile("shared.lua")
+	killicon.AddFont("weapon_m42", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"
