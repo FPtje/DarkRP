@@ -19,9 +19,12 @@ local function HMPlayerInitialSpawn(ply)
 end
 hook.Add("PlayerInitialSpawn", "HMPlayerInitialSpawn", HMPlayerInitialSpawn)
 
-for k, v in pairs(player.GetAll()) do
-	v:newHungerData()
-end
+timer.Simple(0, function()
+	for k, v in pairs(player.GetAll()) do
+		if v:getDarkRPVar("Energy") ~= nil then continue end
+		v:newHungerData()
+	end
+end)
 
 local function BuyFood(ply, args)
 	if args == "" then
