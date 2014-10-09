@@ -20,6 +20,9 @@ function DarkRP.createFood(name, mdl, energy, price)
 end
 AddFoodItem = DarkRP.createFood
 
+local plyMeta = FindMetaTable("Player")
+plyMeta.isCook = fn.Compose{fn.Curry(fn.GetValue, 2)("cook"), plyMeta.getJobTable}
+
 --[[
 Valid members:
 	model = string, -- the model of the food item
