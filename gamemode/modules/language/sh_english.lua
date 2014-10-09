@@ -269,7 +269,6 @@ local my_language = {
 	you_bought_x = "You have bought %s for %s%d.", -- backwards compatibility
 	you_bought = "You have bought %s for %s.",
 	you_received_x = "You have received %s for %s.",
-	you_received_x = "You have received %s for %s.",
 
 	created_first_jailpos = "You have created the first jail position!",
 	added_jailpos = "You have added one extra jail position!",
