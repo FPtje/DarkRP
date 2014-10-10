@@ -368,22 +368,21 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		if not ply:canAfford(tblEnt.price) then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.cmd))
+		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
 
+		local cost = price or tblEnt.getPrice and tblEnt.getPrice(ply, tblEnt.price) or tblEnt.price
+
+		if not ply:canAfford(cost) then
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.cmd))
 			return ""
 		end
-
-		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
 
 		if canbuy == false then
 			if not suppress and message then DarkRP.notify(ply, 1, 4, message) end
 			return ""
 		end
 
-		price = price or tblEnt.price
-
-		ply:addMoney(-price)
+		ply:addMoney(-cost)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -406,9 +405,9 @@ local function addEntityCommands(tblEnt)
 		local phys = item:GetPhysicsObject()
 		if phys:IsValid() then phys:Wake() end
 
-		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item, price)
+		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item, cost)
 
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(price), ""))
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(cost), ""))
 
 		ply:addCustomEntity(tblEnt)
 		return ""
@@ -425,7 +424,7 @@ end
 plyMeta.getJobTable = fn.FOr{fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}, fn.Curry(fn.Id, 2)({})}
 local jobCount = 0
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
-	local tableSyntaxUsed = colorOrTable.r == nil -- the color is not a color table.
+	local tableSyntaxUsed = not IsColor(colorOrTable)
 
 	local CustomTeam = tableSyntaxUsed and colorOrTable or
 		{color = colorOrTable, model = model, description = Description, weapons = Weapons, command = command,

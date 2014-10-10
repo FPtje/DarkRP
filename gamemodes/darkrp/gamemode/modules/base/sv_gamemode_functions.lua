@@ -6,7 +6,7 @@ function GM:Initialize()
 end
 
 function GM:playerBuyDoor(ply, ent)
-	if ply:Team() == TEAM_HOBO then
+	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].hobo then
 		return false, DarkRP.getPhrase("door_hobo_unable")
 	end
 
@@ -147,10 +147,10 @@ local function checkAdminSpawn(ply, configVar, errorStr)
 	local config = GAMEMODE.Config[configVar]
 
 	if (config == true or config == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_admin", errorStr))
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_admin", DarkRP.getPhrase(errorStr) or errorStr))
 		return false
 	elseif config == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_sadmin", errorStr))
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_sadmin", DarkRP.getPhrase(errorStr) or errorStr))
 		return false
 	elseif config == 3 and ply:EntIndex() ~= 0 then
 		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("disabled", DarkRP.getPhrase(errorStr) or errorStr, DarkRP.getPhrase("see_settings")))
@@ -660,14 +660,7 @@ function GM:PlayerSpawn(ply)
 	-- Skip sandbox PlayerSpawn and call base PlayerSpawn directly
 	self.BaseClass.BaseClass:PlayerSpawn(ply)
 
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	if ply:isCP() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
-	end
-
-	if ply:isArrested() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	end
+	hook.Call("UpdatePlayerSpeed", self, ply)
 
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)

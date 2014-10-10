@@ -1,5 +1,6 @@
+AddCSLuaFile()
+
 if SERVER then
-	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_menu.lua")
 end
 

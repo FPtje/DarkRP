@@ -1,6 +1,7 @@
+AddCSLuaFile()
+
 if SERVER then
 	AddCSLuaFile("cl_init.lua")
-	AddCSLuaFile("shared.lua")
 end
 
 if CLIENT then
@@ -10,7 +11,7 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "n"
 
-	killicon.AddFont("ls_sniper", "CSKillIcons", "n", Color(200, 200, 200, 255))
+	killicon.AddFont("ls_sniper", "CSKillIcons", SWEP.IconLetter, Color(200, 200, 200, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"
@@ -68,8 +69,7 @@ function SWEP:SecondaryAttack()
 	self.ScopeLevel = self.ScopeLevel or 0
 	self.ScopeLevel = (self.ScopeLevel + 1) % 4
 	self:SetIronsights(self.ScopeLevel > 0)
-	self.CurHoldType = self.ScopeLevel > 0 and self.HoldType or "normal"
-	self:SetHoldType(self.CurHoldType)
+	self:SetHoldType(self.ScopeLevel > 0 and self.HoldType or "normal")
 
 	if CLIENT then return end
 

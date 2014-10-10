@@ -140,7 +140,6 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 		if not IsValid(ent) or filter(ent) == false then continue end
 
 		local center = ent:GetPos()
-		center.z = eyeVector.z
 
 		-- project the center vector on the aim vector
 		local projected = shootPos + (center - shootPos):Dot(aimvec) * aimvec
