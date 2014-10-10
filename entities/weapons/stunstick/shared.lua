@@ -141,7 +141,7 @@ function SWEP:DoAttack(dmg)
 	self.Owner:LagCompensation(true)
 	local trace = util.QuickTrace(self.Owner:EyePos(), self.Owner:GetAimVector() * 90, {self.Owner})
 	self.Owner:LagCompensation(false)
-	if IsValid(trace.Entity) and trace.Entity.onArrestStickUsed then
+	if IsValid(trace.Entity) and trace.Entity.onStunStickUsed then
 		trace.Entity:onStunStickUsed(self.Owner)
 		return
 	end
