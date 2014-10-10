@@ -319,7 +319,7 @@ DarkRP.PLAYER.getEyeSightHitEntity = DarkRP.stub{
 		},
 		{
 			name = "hitDistance",
-			description = "The maximum distance between the player's line of sight and the object. The default is 15.",
+			description = "The maximum distance between the player's line of sight and the object. Basically how far the player can be 'looking away' from the object. The default is 15 units.",
 			type = "number",
 			optional = true
 		},
