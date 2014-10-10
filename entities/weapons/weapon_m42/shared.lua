@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 if CLIENT then
 	SWEP.Author = "DarkRP Developers"
 	SWEP.Contact = ""
@@ -9,11 +11,7 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "w"
 
-	killicon.AddFont("cse_m4","CSKillIcons",SWEP.IconLetter,Color(255,80,0,255))
-end
-
-if SERVER then
-	AddCSLuaFile("shared.lua")
+	killicon.AddFont("weapon_m42", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"
@@ -67,7 +65,7 @@ SWEP.Secondary.Ammo = "none"
 -- Start of Firemode configuration
 SWEP.IronSightsPos = Vector(-8.09, -4.5, 0.56)
 SWEP.IronSightsAng = Vector(2.75, -3.97, -3.8)
-SWEP.IronSightsPosAfterShootingAdjustment = Vector(-0.2, 0, -0.1)
-SWEP.IronSightsAngAfterShootingAdjustment = Vector(0, 1.5, 0)
+SWEP.IronSightsPosAfterShootingAdjustment = Vector(0.5, 0, 0)
+SWEP.IronSightsAngAfterShootingAdjustment = Vector(0, 1.65, 0)
 
 SWEP.MultiMode = true

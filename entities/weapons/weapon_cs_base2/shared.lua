@@ -1,5 +1,6 @@
+AddCSLuaFile()
+
 if SERVER then
-	AddCSLuaFile()
 	include("sv_commands.lua")
 	include("sh_commands.lua")
 	SWEP.Weight = 5
@@ -41,7 +42,6 @@ SWEP.AdminOnly = false
 SWEP.UseHands = true
 
 SWEP.HoldType = "normal"
-SWEP.CurHoldType = "normal"
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5
@@ -74,7 +74,6 @@ function SWEP:Initialize()
 	end
 
 	self:SetHoldType("normal")
-	self.CurHoldType = "normal"
 	if SERVER then
 		self:SetNPCMinBurst(30)
 		self:SetNPCMaxBurst(30)
@@ -93,7 +92,6 @@ Deploy
 ---------------------------------------------------------*/
 function SWEP:Deploy()
 	self:SetHoldType("normal")
-	self.CurHoldType = "normal"
 
 	self.LASTOWNER = self.Owner
 
@@ -104,6 +102,7 @@ end
 
 function SWEP:Holster()
 	self.Ironsights = false
+	self.hasShot = false -- We do this here because SWEP:Deploy is currently unreliable clientside
 
 	if not IsValid(self.Owner) then return true end
 	if CLIENT then
@@ -135,15 +134,12 @@ function SWEP:Reload()
 	self.Reloading = true
 	self:SetIronsights(false)
 	self:SetHoldType(self.HoldType)
-	self.CurHoldType = self.HoldType
 	self.Owner:SetAnimation(PLAYER_RELOAD)
 	timer.Simple(2, function()
 		if not IsValid(self) then return end
 		self.Reloading = false
 		self:SetHoldType("normal")
-		self.CurHoldType = "normal"
-		// WORKAROUND: Some models have shit viewmodel positions until they fire
-		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+		self.hasShot = false
 	end)
 end
 
@@ -172,9 +168,8 @@ function SWEP:PrimaryAttack(partofburst)
 		return
 	end
 
-	if self.CurHoldType == "normal" and not GAMEMODE.Config.ironshoot then
+	if self:GetHoldType() == "normal" and not GAMEMODE.Config.ironshoot then
 		self:SetHoldType(self.HoldType)
-		self.CurHoldType = self.HoldType
 	end
 
 	if self.FireMode ~= "burst" then
@@ -241,7 +236,7 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 	if self.Owner:IsNPC() then return end
 
 	// CUSTOM RECOIL!
-	if  (game.SinglePlayer() and SERVER) or (not game.SinglePlayer() and CLIENT and IsFirstTimePredicted()) then
+	if (game.SinglePlayer() and SERVER) or (not game.SinglePlayer() and CLIENT and IsFirstTimePredicted()) then
 		local eyeang = self.Owner:EyeAngles()
 		eyeang.pitch = eyeang.pitch - recoil
 		self.Owner:SetEyeAngles(eyeang)
@@ -256,7 +251,7 @@ Checks the objects before any action is taken
 This is to make sure that the entities haven't been removed
 ---------------------------------------------------------*/
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
-	local iconletters = {"x", "w", "b", "k", "u", "f", "d", "l", "z", "c"}
+	local iconletters = {"x", "w", "b", "k", "u", "f", "d", "l", "z", "c", "n"}
 	if self.IconLetter and table.HasValue(iconletters, self.IconLetter) then
 		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2, y + tall*0.2, Color(255, 210, 0, 255), TEXT_ALIGN_CENTER)
 
@@ -299,14 +294,6 @@ Desc: Allows you to re-position the view model
 function SWEP:GetViewModelPosition(pos, ang)
 	if not self.IronSightsPos then return pos, ang end
 
-	if not self.hasShot then
-		if self.IronSightsPosAfterShootingAdjustment then pos = pos + self.IronSightsPosAfterShootingAdjustment end
-		if self.IronSightsAngAfterShootingAdjustment then
-			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x)
-			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y)
-			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z)
-		end
-	end
 	local bIron = self.Ironsights
 
 	if bIron ~= self.bLastIron then
@@ -364,6 +351,25 @@ function SWEP:GetViewModelPosition(pos, ang)
 	pos = pos + Offset.y * Forward * Mul
 	pos = pos + Offset.z * Up * Mul
 
+	if not self.hasShot then
+		if self.IronSightsAngAfterShootingAdjustment then
+			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x * Mul)
+			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y * Mul)
+			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z * Mul)
+		end
+
+		if self.IronSightsPosAfterShootingAdjustment then
+			Offset = self.IronSightsPosAfterShootingAdjustment
+			Right = ang:Right()
+			Up = ang:Up()
+			Forward = ang:Forward()
+
+			pos = pos + Offset.x * Right * Mul
+			pos = pos + Offset.y * Forward * Mul
+			pos = pos + Offset.z * Up * Mul
+		end
+	end
+
 	return pos, ang
 end
 
@@ -379,13 +385,11 @@ function SWEP:SetIronsights(b)
 	self.Ironsights = b
 	if b then
 		self:SetHoldType(self.HoldType)
-		self.CurHoldType = self.HoldType
 		if SERVER and IsValid(self.Owner) then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
 	else
 		self:SetHoldType("normal")
-		self.CurHoldType = "normal"
 		if SERVER and IsValid(self.Owner) then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
@@ -439,18 +443,14 @@ function SWEP:Equip(NewOwner)
 end
 
 function SWEP:Think()
-	if self.Primary.ClipSize ~= -1 and not self.Reloading and not self.Ironsights and self.LastPrimaryAttack + 1 < CurTime() and self.CurHoldType == self.HoldType then
-		self.CurHoldType = "normal"
+	if self.Primary.ClipSize ~= -1 and not self.Reloading and not self.Ironsights and self.LastPrimaryAttack + 1 < CurTime() and self:GetHoldType() == self.HoldType then
 		self:SetHoldType("normal")
 	end
 end
 
 if CLIENT then
-	function SWEP:ViewModelDrawn()
-		if not IsValid(self.Owner) then return end
-		local vm = self.Owner:GetViewModel()
-
-		if self.DarkRPViewModelBoneManipulations then
+	function SWEP:ViewModelDrawn(vm)
+		if self.DarkRPViewModelBoneManipulations and not self.Reloading then
 			self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
 		else
 			self:ResetDarkRPBones(vm)

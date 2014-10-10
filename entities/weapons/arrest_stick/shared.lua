@@ -1,6 +1,4 @@
-if SERVER then
-	AddCSLuaFile("shared.lua")
-end
+AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Arrest Baton"

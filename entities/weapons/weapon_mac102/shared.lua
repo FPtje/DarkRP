@@ -1,6 +1,4 @@
-if SERVER then
-	AddCSLuaFile("shared.lua")
-end
+AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Mac10"
@@ -9,7 +7,7 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "l"
 
-	killicon.AddFont("weapon_mac10", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+	killicon.AddFont("weapon_mac102", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"
