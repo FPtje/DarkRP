@@ -7,7 +7,7 @@ local function SetNoclip(ply, cmd, args)
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
 		return
 	end
-	local Toggle = util.tobool(tonumber(args[2])) or false
+	local Toggle = tobool(tonumber(args[2])) or false
 
 
 	for _, target in pairs(targets) do
@@ -44,7 +44,7 @@ FAdmin.StartHooks["Noclip"] = function()
 end
 
 hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
-	if not util.tobool(GetConVarNumber("sbox_noclip")) and
+	if not tobool(GetConVarNumber("sbox_noclip")) and
 	((FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") and not ply:FAdmin_GetGlobal("FADmin_DisableNoclip")) or ply:FAdmin_GetGlobal("FADmin_CanNoclip")) then
 		-- If Other hooks explicitly say the user can't noclip, then disallow him the noclip unless FAdmin explicitly says the user can Noclip.
 		if not ply:FAdmin_GetGlobal("FADmin_CanNoclip") then

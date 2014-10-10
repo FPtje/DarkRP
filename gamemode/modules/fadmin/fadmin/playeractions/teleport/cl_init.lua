@@ -1,8 +1,3 @@
-local function EnableDisableNoclip(ply)
-	return ply:GetNWBool("FADmin_CanNoclip") or
-		((FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") or util.tobool(GetConVarNumber("sbox_noclip")))
-			and not ply:GetNWBool("FADmin_DisableNoclip"))
-end
 
 FAdmin.StartHooks["zz_Teleport"] = function()
 	FAdmin.Access.AddPrivilege("Teleport", 2)
@@ -14,7 +9,7 @@ FAdmin.StartHooks["zz_Teleport"] = function()
 
 
 	FAdmin.ScoreBoard.Player:AddActionButton("Teleport", "FAdmin/icons/Teleport", Color(0, 200, 0, 255),
-	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Teleport")/* and ply == LocalPlayer()*/ end,
+	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Teleport") end,
 	function(ply, button)
 		RunConsoleCommand("_FAdmin", "Teleport", ply:UserID())
 	end)
@@ -45,7 +40,7 @@ FAdmin.StartHooks["zz_Teleport"] = function()
 
 		local uid = ply:UserID()
 		menu:AddOption("Yourself", function() RunConsoleCommand("_FAdmin", "bring", uid) end)
-		for k, v in pairs(player.GetAll()) do
+		for k, v in pairs(DarkRP.nickSortedPlayers()) do
 			if v ~= LocalPlayer() then
 				local vUid = v:UserID()
 				menu:AddOption(v:Nick(), function() RunConsoleCommand("_FAdmin", "bring", uid, vUid) end)
