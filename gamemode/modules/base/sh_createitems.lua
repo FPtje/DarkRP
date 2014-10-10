@@ -424,7 +424,7 @@ end
 plyMeta.getJobTable = fn.FOr{fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}, fn.Curry(fn.Id, 2)({})}
 local jobCount = 0
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
-	local tableSyntaxUsed = colorOrTable.r == nil -- the color is not a color table.
+	local tableSyntaxUsed = not IsColor(colorOrTable)
 
 	local CustomTeam = tableSyntaxUsed and colorOrTable or
 		{color = colorOrTable, model = model, description = Description, weapons = Weapons, command = command,
