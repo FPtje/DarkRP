@@ -101,6 +101,7 @@ function SWEP:DoFlash(ply)
 	ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
 end
 
+local entMeta = FindMetaTable("Entity")
 function SWEP:DoAttack(dmg)
 	if CurTime() < self.NextStrike then return end
 
@@ -146,9 +147,9 @@ function SWEP:DoAttack(dmg)
 		return
 	end
 
-	local ent = self.Owner:getEyeSightHitEntity()
+	local ent = self.Owner:getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self.Owner}, fc{IsValid, entMeta.GetPhysicsObject}})
 
-	if not IsValid(ent) or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) then return end
+	if not IsValid(ent) then return end
 
 	if not ent:isDoor() then
 		ent:SetVelocity((ent:GetPos() - self.Owner:GetPos()) * 7)
