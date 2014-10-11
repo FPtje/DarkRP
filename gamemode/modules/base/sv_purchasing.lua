@@ -41,17 +41,8 @@ local function BuyPistol(ply, args)
 		return ""
 	end
 
-	local shipment
-	for k, v in pairs(CustomShipments) do
-		if not v.seperate or string.lower(v.name) ~= string.lower(args) then
-			continue
-		end
-
-		shipment = v
-		break
-	end
-
-	if not shipment then
+	local shipment = DarkRP.getShipmentByName(args)
+	if not shipment or not shipment.seperate then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "weapon"))
 		return ""
 	end
@@ -144,16 +135,10 @@ local function BuyShipment(ply, args)
 		return ""
 	end
 
-	local found = false
-	local foundKey
-	for k,v in pairs(CustomShipments) do
-		if string.lower(args) ~= string.lower(v.name) or v.noship or not GAMEMODE:CustomObjFitsMap(v) then
-			continue
-		end
-
-		found = v
-		foundKey = k
-		break
+	local found, foundKey = DarkRP.getShipmentByName(args)
+	if not found or found.noship or not GAMEMODE:CustomObjFitsMap(found) then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "shipment"))
+		return ""
 	end
 
 	if not found then

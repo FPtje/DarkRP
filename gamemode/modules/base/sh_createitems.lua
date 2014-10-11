@@ -471,6 +471,14 @@ AddDoorGroup = DarkRP.createEntityGroup
 
 CustomVehicles = {}
 CustomShipments = {}
+local shipByName = {}
+DarkRP.getShipmentByName = function(name)
+	name = string.lower(name or "")
+
+	if not shipByName[name] then return nil, nil end
+	return CustomShipments[shipByName[name]], shipByName[name]
+end
+
 function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_seperately, price_seperately, noshipment, classes, shipmodel, CustomCheck)
 	local tableSyntaxUsed = type(model) == "table"
 
@@ -506,7 +514,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	-- 	FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
 	-- end
 
-	table.insert(CustomShipments, customShipment)
+	shipByName[string.lower(name or "")] = table.insert(CustomShipments, customShipment)
 	util.PrecacheModel(customShipment.model)
 end
 AddCustomShipment = DarkRP.createShipment
