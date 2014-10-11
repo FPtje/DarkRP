@@ -230,11 +230,12 @@ end)
 
 hook.Add("playerArrested", "Hitman system", function(ply)
 	if not hits[ply] or not IsValid(hits[ply].customer) then return end
-
+	
+	local plyNick, customerNick = ply:Nick(), hits[ply].customer:Nick()
 	for k, v in pairs(player.GetAll()) do
 		if not GAMEMODE.CivilProtection[v:Team()] then continue end
 
-		DarkRP.notify(v, 0, 8, DarkRP.getPhrase("x_had_hit_ordered_by_y", ply:Nick(), hits[ply].customer:Nick()))
+		DarkRP.notify(v, 0, 8, DarkRP.getPhrase("x_had_hit_ordered_by_y", plyNick, customerNick))
 	end
 
 	ply:abortHit(DarkRP.getPhrase("hitman_arrested"))
