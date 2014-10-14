@@ -141,11 +141,6 @@ local function BuyShipment(ply, args)
 		return ""
 	end
 
-	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "shipment"))
-		return ""
-	end
-
 	local canbuy, suppress, message, price = hook.Call("canBuyShipment", DarkRP.hooks, ply, found)
 
 	if not canbuy then
