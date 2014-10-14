@@ -620,7 +620,6 @@ function GM:PlayerSpawn(ply)
 	ply:SetNoCollideWithTeammates(false)
 	ply:CrosshairEnable()
 	ply:UnSpectate()
-	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
 
 	-- Kill any colormod
 	SendUserMessage("blackScreen", ply, false)
@@ -664,6 +663,7 @@ function GM:PlayerSpawn(ply)
 
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
+	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSpawn then
 		RPExtraTeams[ply:Team()].PlayerSpawn(ply)
