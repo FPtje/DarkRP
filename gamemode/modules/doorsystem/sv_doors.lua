@@ -198,6 +198,9 @@ local function SetDoorOwnable(ply)
 
 	-- Save it for future map loads
 	DarkRP.storeDoorData(ent)
+	DarkRP.storeDoorGroup(ent, nil)
+	DarkRP.storeTeamDoorOwnability(ent)
+
 	return ""
 end
 DarkRP.defineChatCommand("toggleownable", SetDoorOwnable)
