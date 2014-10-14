@@ -163,8 +163,8 @@ local function HUDPaint()
 	local w,h = surface.GetTextSize(reason)
 	local col = FPP.canTouchEnt(LAEnt, touchType) and Color(0,255,0,255) or Color(255,0,0,255)
 
-	draw.RoundedBox(4, 0, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-	draw.DrawText(reason, "Default", 5, ScrH()/2 - h, col, 0)
+	draw.RoundedBox(4, 0, ScrH()/1.18 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
+	draw.DrawText(reason, "Default", 5, ScrH()/1.18 - h, col, 0)
 	surface.SetDrawColor(255,255,255,255)
 end
 hook.Add("HUDPaint", "FPP_HUDPaint", HUDPaint)
