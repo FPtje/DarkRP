@@ -625,3 +625,28 @@ DarkRP.hookStub{
 
 	}
 }
+
+DarkRP.hookStub{
+	name = "onPaidTax",
+	description = "Called when a player has paid tax.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who was taxed.",
+			type = "Player"
+		},
+		{
+			name = "tax",
+			description = "The percentage of tax taken from his wallet.",
+			type = "number"
+		},
+		{
+			name = "wallet",
+			description = "The amount of money the player had before the tax was applied.",
+			type = "number"
+		}
+	},
+	returns = {
+
+	}
+}
