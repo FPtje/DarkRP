@@ -159,6 +159,7 @@ function pmeta:initiateTax()
 		self:addMoney(-tax * money)
 		DarkRP.notify(self, 3, 7, DarkRP.getPhrase("taxday", math.Round(tax * 100, 3)))
 
+		hook.Call("onPaidTax", DarkRP.hooks, self, tax, money)
 	end)
 end
 
@@ -198,6 +199,9 @@ local function SetDoorOwnable(ply)
 
 	-- Save it for future map loads
 	DarkRP.storeDoorData(ent)
+	DarkRP.storeDoorGroup(ent, nil)
+	DarkRP.storeTeamDoorOwnability(ent)
+
 	return ""
 end
 DarkRP.defineChatCommand("toggleownable", SetDoorOwnable)

@@ -80,10 +80,11 @@ HUD Seperate Elements
 ---------------------------------------------------------------------------*/
 local Health = 0
 local function DrawHealth()
+	local startingHealth = GAMEMODE.Config.startinghealth
 	local myHealth = localplayer:Health()
-	Health = math.min(100, (Health == myHealth and Health) or Lerp(0.1, Health, myHealth))
+	Health = math.min(startingHealth, (Health == myHealth and Health) or Lerp(0.1, Health, myHealth))
 
-	local DrawHealth = math.Min(Health / GAMEMODE.Config.startinghealth, 1)
+	local DrawHealth = math.Min(Health / startingHealth, 1)
 	local rounded = math.Round(3*DrawHealth)
 	local Border = math.Min(6, rounded * rounded)
 	draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
