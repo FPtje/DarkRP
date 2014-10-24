@@ -35,6 +35,9 @@ local function addAgenda(ply, args)
 		return ""
 	end
 
+	agenda.text = agenda.text or ""
+	args = args or ""
+
 	updateAgenda(ply, agenda, agenda.text .. '\n' .. args)
 
 	return ""
