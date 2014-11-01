@@ -32,7 +32,9 @@ function ENT:Initialize()
 	self:GetgunModel():SetParent(self)
 
 	phys = self:GetgunModel():GetPhysicsObject()
-	phys:EnableMotion(false)
+	if IsValid(phys) then
+		phys:EnableMotion(false)
+	end
 
 	-- The following code should not be reached
 	if self:Getcount() < 1 then
