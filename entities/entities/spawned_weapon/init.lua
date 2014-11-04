@@ -62,17 +62,21 @@ function ENT:Use(activator, caller)
 	if not CanPickup then return end
 	weapon:Remove()
 
-	hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
+	local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
+	
+	if !ShouldntContinue then
 
-	activator:Give(class)
-	weapon = activator:GetWeapon(class)
+		activator:Give(class)
+		weapon = activator:GetWeapon(class)
 
-	if self.clip1 then
-		weapon:SetClip1(self.clip1)
-		weapon:SetClip2(self.clip2 or -1)
+		if self.clip1 then
+			weapon:SetClip1(self.clip1)
+			weapon:SetClip2(self.clip2 or -1)
+		end
+
+		activator:GiveAmmo(self.ammoadd or 0, weapon:GetPrimaryAmmoType())
+
+		self:DecreaseAmount()
+
 	end
-
-	activator:GiveAmmo(self.ammoadd or 0, weapon:GetPrimaryAmmoType())
-
-	self:DecreaseAmount()
 end
