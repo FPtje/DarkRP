@@ -132,6 +132,10 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
-
+		{
+			name = "ShouldntContinue",
+			description = "Whether weapon should be picked up or not.",
+			type = "boolean"
+		}
 	}
 }
