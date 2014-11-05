@@ -2,9 +2,9 @@
 interface functions
 ---------------------------------------------------------------------------*/
 local pmeta = FindMetaTable("Player")
-function pmeta:getDarkRPVar(var)
+function pmeta:getDarkRPVar(var, default)
 	self.DarkRPVars = self.DarkRPVars or {}
-	return self.DarkRPVars[var]
+	return self.DarkRPVars[var] or default
 end
 
 /*---------------------------------------------------------------------------
