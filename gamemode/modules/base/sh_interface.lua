@@ -250,6 +250,7 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
 			description = "The value which will be returned if the DarkRPVar its value is nil",
 			type = "%",
 			optional = true
+		}
 	},
 	returns = {
 		{
