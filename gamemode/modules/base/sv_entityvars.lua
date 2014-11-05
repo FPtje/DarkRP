@@ -59,9 +59,9 @@ end
 /*---------------------------------------------------------------------------
 Get a DarkRPVar
 ---------------------------------------------------------------------------*/
-function meta:getDarkRPVar(var)
+function meta:getDarkRPVar(var, default)
 	self.DarkRPVars = self.DarkRPVars or {}
-	return self.DarkRPVars[var]
+	return self.DarkRPVars[var] or default
 end
 
 /*---------------------------------------------------------------------------
