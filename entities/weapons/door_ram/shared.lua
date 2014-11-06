@@ -205,6 +205,8 @@ function SWEP:PrimaryAttack()
 
 	local hasRammed = getRamFunction(self.Owner, trace)()
 
+	hook.Call("onDoorRamUsed", GAMEMODE, hasRammed, self.Owner, trace)
+
 	if not hasRammed then return end
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
@@ -246,4 +248,31 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	ang:RotateAroundAxis(ang:Right(), - 15 * Mul)
 	return pos,ang
+end
+
+if SERVER then
+	DarkRP.hookStub{
+		name = "onDoorRamUsed",
+		description = "Called when the door ram has been used.",
+		parameters = {
+			{
+				name = "success",
+				description = "Whether the door ram has been successful in ramming.",
+				type = "boolean"
+			},
+			{
+				name = "ply",
+				description = "The player that used the door ram.",
+				type = "Player"
+			},
+			{
+				name = "trace",
+				description = "The trace containing information about the hit position and ram entity.",
+				type = "table"
+			}
+		},
+		returns = {
+
+		}
+	}
 end
