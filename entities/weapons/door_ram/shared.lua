@@ -70,6 +70,126 @@ function SWEP:Holster()
 	return true
 end
 
+-- Check whether an object of this player can be rammed
+local function canRam(ply)
+	return IsValid(ply) and (ply.warranted == true or ply:isWanted() or ply:isArrested())
+end
+
+-- Ram action when ramming a door
+local function ramDoor(ply, trace, ent)
+	if ply:EyePos():Distance(trace.HitPos) > 45 or (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) then return false end
+
+	local allowed = false
+
+	-- if we need a warrant to get in
+	if GAMEMODE.Config.doorwarrants and ent:isKeysOwned() and not ent:isKeysOwnedBy(ply) then
+		-- if anyone who owns this door has a warrant for their arrest
+		-- allow the police to smash the door in
+		for k, v in pairs(player.GetAll()) do
+			if ent:isKeysOwnedBy(v) and canRam(v) then
+				allowed = true
+				break
+			end
+		end
+	else
+		-- door warrants not needed, allow warrantless entry
+		allowed = true
+	end
+
+	-- Be able to open the door if any member of the door group is warranted
+	if GAMEMODE.Config.doorwarrants and ent:getKeysDoorGroup() and RPExtraTeamDoors[ent:getKeysDoorGroup()] then
+		allowed = false
+		for k,v in pairs(player.GetAll()) do
+			if table.HasValue(RPExtraTeamDoors[ent:getKeysDoorGroup()], v:Team()) and canRam(v) then
+				allowed = true
+				break
+			end
+		end
+	end
+
+	-- Do we have a warrant for this player?
+	if not allowed then
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("warrant_required"))
+
+		return false
+	end
+
+	ent:keysUnLock()
+	ent:Fire("open", "", .6)
+	ent:Fire("setanimation", "open", .6)
+
+	return true
+end
+
+-- Ram action when ramming a vehicle
+local function ramVehicle(ply, trace, ent)
+	if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
+
+	local driver = ent:GetDriver()
+	if not driver or not driver.ExitVehicle then return false end
+
+	driver:ExitVehicle()
+	ent:keysLock()
+
+	return true
+end
+
+-- Ram action when ramming a fading door
+local function ramFadingDoor(ply, trace, ent)
+	if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
+
+	local Owner = ent:CPPIGetOwner()
+
+	if not canRam(Owner) then
+		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("warrant_required"))
+		return false
+	end
+
+	if not ent.fadeActive then
+	    ent:fadeActivate()
+	    timer.Simple(5, function() if IsValid(ent) and ent.fadeActive then ent:fadeDeactivate() end end)
+	end
+
+	return true
+end
+
+-- Ram action when ramming a frozen prop
+local function ramProp(ply, trace, ent)
+	if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
+	if ent:GetClass() ~= "prop_physics" then return false end
+
+	local Owner = ent:CPPIGetOwner()
+
+	if not canRam(Owner) then
+	    DarkRP.notify(ply, 1, 5, DarkRP.getPhrase(GAMEMODE.Config.copscanunweld and "warrant_required_unweld" or "warrant_required_unfreeze"))
+	    return false
+	end
+
+	if GAMEMODE.Config.copscanunweld then
+		constraint.RemoveConstraints(ent, "Weld")
+	end
+
+	if GAMEMODE.Config.copscanunfreeze then
+		ent:GetPhysicsObject():EnableMotion(true)
+	end
+
+	return true
+end
+
+-- Decides the behaviour of the ram function for the given entity
+local function getRamFunction(ply, trace)
+	local ent = trace.Entity
+
+	if not IsValid(ent) then return fp{fn.Id, false} end
+
+	return
+		ent:isDoor() 		and fp{ramDoor, ply, trace, ent} 					   or
+		ent:IsVehicle() 	and fp{ramVehicle, ply, trace, ent} 				   or
+		ent.fadeActivate 	and fp{ramFadingDoor, ply, trace, ent}  			   or
+		not ent:GetPhysicsObject():IsMoveable() and fp{ramProp, ply, trace, ent}   or
+		fp{fn.Id, false} -- no ramming was performed
+end
+
 /*---------------------------------------------------------
 Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
@@ -82,97 +202,10 @@ function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
 	self.Weapon:SetNextPrimaryFire(CurTime() + 2.5)
-	if (not IsValid(trace.Entity) or (not trace.Entity:isDoor() and not trace.Entity:IsVehicle() and trace.Entity:GetClass() ~= "prop_physics")) then
-		return
-	end
 
-	if trace.Entity:isDoor() and (self.Owner:EyePos():Distance(trace.HitPos) > 45 or
-		(not GAMEMODE.Config.canforcedooropen and trace.Entity:getKeysNonOwnable())) then
-		return
-	end
+	local hasRammed = getRamFunction(self.Owner, trace)()
 
-	if (trace.Entity:IsVehicle() and self.Owner:EyePos():Distance(trace.HitPos) > 100) then
-		return
-	end
-
-	local a = GAMEMODE.Config.copscanunfreeze
-	local d = GAMEMODE.Config.copscanunweld
-	local b = trace.Entity:GetClass() == "prop_physics"
-	local c = false
-
-	local Owner = trace.Entity:CPPIGetOwner()
-	if Owner then
-		c = Owner.warranted or Owner:isWanted() or Owner:isArrested()
-	end
-	if (trace.Entity:isDoor()) then
-		local allowed = false
-		local team = self.Owner:Team()
-		-- if we need a warrant to get in
-		if GAMEMODE.Config.doorwarrants and trace.Entity:isKeysOwned() and not trace.Entity:isKeysOwnedBy(self.Owner) then
-			-- if anyone who owns this door has a warrant for their arrest
-			-- allow the police to smash the door in
-			for k, v in pairs(player.GetAll()) do
-				if trace.Entity:isKeysOwnedBy(v) and (v.warranted == true or v:isWanted() or v:isArrested()) then
-					allowed = true
-					break
-				end
-			end
-		else
-			-- rp_doorwarrants 0, allow warrantless entry
-			allowed = true
-		end
-
-		-- Be able to open the door if anyone is warranted
-		if GAMEMODE.Config.doorwarrants and trace.Entity:getKeysDoorGroup() and RPExtraTeamDoors[trace.Entity:getKeysDoorGroup()] then
-			allowed = false
-			for k,v in pairs(player.GetAll()) do
-				if table.HasValue(RPExtraTeamDoors[trace.Entity:getKeysDoorGroup()], v:Team()) and (v.warranted or v:isWanted() or v:isArrested()) then
-					allowed = true
-					break
-				end
-			end
-		end
-		-- Do we have a warrant for this player?
-		if allowed then
-			trace.Entity:keysUnLock()
-			trace.Entity:Fire("open", "", .6)
-			trace.Entity:Fire("setanimation", "open", .6)
-		else
-			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))
-			return
-		end
-	elseif (trace.Entity:IsVehicle()) then
-		local driver = trace.Entity:GetDriver()
-		if driver and driver.ExitVehicle then
-			driver:ExitVehicle()
-		end
-		trace.Entity:keysLock()
-	elseif trace.Entity.isFadingDoor and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
-		if not c then
-			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required"))
-			return
-		end
-
-		if trace.Entity.isFadingDoor and trace.Entity.fadeActivate and not trace.Entity.fadeActive then
-			trace.Entity:fadeActivate()
-			timer.Simple(5, function() if trace.Entity.fadeActive then trace.Entity:fadeDeactivate() end end)
-		end
-	elseif a and b and not trace.Entity:GetPhysicsObject():IsMoveable() and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
-		if not c then
-			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required_unfreeze"))
-			return
-		end
-
-		trace.Entity:GetPhysicsObject():EnableMotion(true)
-	end
-	if d and b and self.Owner:EyePos():Distance(trace.HitPos) < 100 then
-		if not c then
-			DarkRP.notify(self.Owner, 1, 5, DarkRP.getPhrase("warrant_required_unweld"))
-			return
-		end
-
-		constraint.RemoveConstraints(trace.Entity, "Weld")
-	end
+	if not hasRammed then return end
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.Owner:EmitSound(self.Sound)
