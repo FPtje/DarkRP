@@ -59,10 +59,11 @@ function ENT:Use(activator, caller)
 	end
 
 	local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
-	if not CanPickup then return end
+	local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
+	if not CanPickup or ShouldntContinue then return end
+
 	weapon:Remove()
 
-	hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
 
 	activator:Give(class)
 	weapon = activator:GetWeapon(class)
@@ -75,4 +76,5 @@ function ENT:Use(activator, caller)
 	activator:GiveAmmo(self.ammoadd or 0, weapon:GetPrimaryAmmoType())
 
 	self:DecreaseAmount()
+
 end
