@@ -8,6 +8,8 @@ function PLAYER_CLASS:GetHandsModel()
 	if not jobTable then return end
 
 	local model = istable(jobTable.model) and jobTable.model[1] or jobTable.model
+	if not model then return end
+	
 	local name = player_manager.TranslateToPlayerModelName(model)
 
 	return player_manager.TranslatePlayerHands(name)
