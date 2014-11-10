@@ -304,8 +304,9 @@ plyMeta.drawWantedInfo = plyMeta.drawWantedInfo or function(self)
 	pos = pos:ToScreen()
 
 	if GAMEMODE.Config.showname then
-		draw.DrawNonParsedText(self:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
-		draw.DrawNonParsedText(self:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(self:Team()), 1)
+		local nick, plyTeam = self:Nick(), self:Team()
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam] and RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
 	end
 
 	local wantedText = DarkRP.getPhrase("wanted", tostring(self:getDarkRPVar("wantedReason")))
