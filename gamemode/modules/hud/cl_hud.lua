@@ -212,9 +212,9 @@ usermessage.Hook("AdminTell", function(msg)
 	local Message = msg:ReadString()
 
 	AdminTell = function()
-		draw.RoundedBox(4, 10, 10, ScrW() - 20, 110, colors.darkblack)
-		draw.DrawNonParsedText(DarkRP.getPhrase("listen_up"), "GModToolName", ScrW() / 2 + 10, 10, colors.white, 1)
-		draw.DrawNonParsedText(Message, "ChatFont", ScrW() / 2 + 10, 90, colors.brightred, 1)
+		draw.RoundedBox(4, 10, 10, Scrw - 20, 110, colors.darkblack)
+		draw.DrawNonParsedText(DarkRP.getPhrase("listen_up"), "GModToolName", Scrw / 2 + 10, 10, colors.white, 1)
+		draw.DrawNonParsedText(Message, "ChatFont", Scrw / 2 + 10, 90, colors.brightred, 1)
 	end
 
 	timer.Create("DarkRP_AdminTell", 10, 1, function()
