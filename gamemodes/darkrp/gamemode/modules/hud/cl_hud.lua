@@ -198,7 +198,7 @@ usermessage.Hook("GotArrested", function(msg)
 
 	Arrested = function()
 		if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
-		draw.DrawNonParsedText(DarkRP.getPhrase("youre_arrested", math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", ScrW()/2, ScrH() - ScrH()/12, colors.white, 1)
+			draw.DrawNonParsedText(DarkRP.getPhrase("youre_arrested", math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", Scrw/2, Scrh - Scrh/12, colors.white, 1)
 		elseif not localplayer:getDarkRPVar("Arrested") then
 			Arrested = function() end
 		end
@@ -212,9 +212,9 @@ usermessage.Hook("AdminTell", function(msg)
 	local Message = msg:ReadString()
 
 	AdminTell = function()
-		draw.RoundedBox(4, 10, 10, ScrW() - 20, 110, colors.darkblack)
-		draw.DrawNonParsedText(DarkRP.getPhrase("listen_up"), "GModToolName", ScrW() / 2 + 10, 10, colors.white, 1)
-		draw.DrawNonParsedText(Message, "ChatFont", ScrW() / 2 + 10, 90, colors.brightred, 1)
+		draw.RoundedBox(4, 10, 10, Scrw - 20, 110, colors.darkblack)
+		draw.DrawNonParsedText(DarkRP.getPhrase("listen_up"), "GModToolName", Scrw / 2 + 10, 10, colors.white, 1)
+		draw.DrawNonParsedText(Message, "ChatFont", Scrw / 2 + 10, 90, colors.brightred, 1)
 	end
 
 	timer.Create("DarkRP_AdminTell", 10, 1, function()
@@ -304,8 +304,9 @@ plyMeta.drawWantedInfo = plyMeta.drawWantedInfo or function(self)
 	pos = pos:ToScreen()
 
 	if GAMEMODE.Config.showname then
-		draw.DrawNonParsedText(self:Nick(), "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
-		draw.DrawNonParsedText(self:Nick(), "DarkRPHUD2", pos.x, pos.y, team.GetColor(self:Team()), 1)
+		local nick, plyTeam = self:Nick(), self:Team()
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x + 1, pos.y + 1, colors.black, 1)
+		draw.DrawNonParsedText(nick, "DarkRPHUD2", pos.x, pos.y, RPExtraTeams[plyTeam] and RPExtraTeams[plyTeam].color or team.GetColor(plyTeam) , 1)
 	end
 
 	local wantedText = DarkRP.getPhrase("wanted", tostring(self:getDarkRPVar("wantedReason")))
