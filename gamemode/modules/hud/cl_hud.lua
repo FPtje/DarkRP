@@ -198,7 +198,7 @@ usermessage.Hook("GotArrested", function(msg)
 
 	Arrested = function()
 		if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
-		draw.DrawNonParsedText(DarkRP.getPhrase("youre_arrested", math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", ScrW()/2, ScrH() - ScrH()/12, colors.white, 1)
+			draw.DrawNonParsedText(DarkRP.getPhrase("youre_arrested", math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", Scrw/2, Scrh - Scrh/12, colors.white, 1)
 		elseif not localplayer:getDarkRPVar("Arrested") then
 			Arrested = function() end
 		end
