@@ -542,8 +542,8 @@ local function initPlayer(ply)
 
 	-- Whether or not a player is being prevented from joining
 	-- a specific team for a certain length of time
-	for i = 1, #RPExtraTeams do
-		if GAMEMODE.Config.restrictallteams then
+	if GAMEMODE.Config.restrictallteams then
+		for i = 1, #RPExtraTeams do
 			ply:teamBan(i, 0)
 		end
 	end
