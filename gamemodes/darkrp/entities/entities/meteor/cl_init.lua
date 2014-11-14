@@ -6,7 +6,7 @@ include("shared.lua")
 language.Add("meteor", "meteor")
 
 function ENT:Initialize()
-	mx, mn = self:GetRenderBounds()
+	local mx, mn = self:GetRenderBounds()
 	self:SetRenderBounds(mn + Vector(0,0,128), mx, 0)
 	self.emitter = ParticleEmitter(LocalPlayer():GetShootPos())
 end

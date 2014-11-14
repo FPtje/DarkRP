@@ -6,6 +6,7 @@ Pooled networking strings
 util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_PlayerVar")
 util.AddNetworkString("DarkRP_PlayerVarRemoval")
+util.AddNetworkString("DarkRP_DarkRPVarDisconnect")
 
 /*---------------------------------------------------------------------------
 Player vars
@@ -155,9 +156,9 @@ local function RPName(ply, args)
 		DarkRP.notify(ply, 1, 6,  DarkRP.getPhrase("disabled", "RPname", ""))
 		return ""
 	end
-	
+
 	args = (args:find'^%s*$' and '' or args:match'^%s*(.*%S)')
-	
+
 	local len = string.len(args)
 	local low = string.lower(args)
 
@@ -252,4 +253,7 @@ end
 
 hook.Add("PlayerDisconnected", "removeLimits", function(ply)
 	maxEntities[ply] = nil
+	net.Start("DarkRP_DarkRPVarDisconnect")
+		net.WriteUInt(ply:UserID(), 16)
+	net.Broadcast()
 end)

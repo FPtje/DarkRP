@@ -447,7 +447,8 @@ local function RemoveDoorOwner(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
 		return ""
 	end
-	target = DarkRP.findPlayer(args)
+
+	local target = DarkRP.findPlayer(args)
 
 	if trace.Entity:getKeysNonOwnable() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
@@ -489,7 +490,7 @@ local function AddDoorOwner(ply, args)
 		return ""
 	end
 
-	target = DarkRP.findPlayer(args)
+	local target = DarkRP.findPlayer(args)
 
 	if trace.Entity:getKeysNonOwnable() then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))

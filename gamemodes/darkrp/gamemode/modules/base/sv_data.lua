@@ -13,7 +13,7 @@ function DarkRP.initDatabase()
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
 	MySQLite.begin()
 		-- Gotta love the difference between SQLite and MySQL
-		local AUTOINCREMENT = MySQLite.CONNECTED_TO_MYSQL and "AUTO_INCREMENT" or "AUTOINCREMENT"
+		local AUTOINCREMENT = MySQLite.isMySQL() and "AUTO_INCREMENT" or "AUTOINCREMENT"
 
 		-- Table that holds all position data (jail, zombie spawns etc.)
 		-- Queue these queries because other queries depend on the existence of the darkrp_position table
@@ -37,7 +37,7 @@ function DarkRP.initDatabase()
 			);
 		]])
 
-		if MySQLite.CONNECTED_TO_MYSQL then
+		if MySQLite.isMySQL() then
 			MySQLite.queueQuery([[
 				ALTER TABLE darkrp_jobspawn ADD FOREIGN KEY(id) REFERENCES darkrp_position(id)
 					ON UPDATE CASCADE
@@ -102,7 +102,7 @@ function DarkRP.initDatabase()
 		-- For now it's deletion only, since updating of the common attribute doesn't happen.
 
 		-- MySQL trigger
-		if MySQLite.CONNECTED_TO_MYSQL then
+		if MySQLite.isMySQL() then
 			MySQLite.query("show triggers", function(data)
 				-- Check if the trigger exists first
 				if data then
@@ -153,7 +153,7 @@ function DarkRP.initDatabase()
 			setUpTeamOwnableDoors()
 			setUpGroupDoors()
 
-			if MySQLite.CONNECTED_TO_MYSQL then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
+			if MySQLite.isMySQL() then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
 										--so he walks around with the settings from the SQLite database
 				for k,v in pairs(player.GetAll()) do
 					local UniqueID = MySQLite.SQLStr(v:UniqueID())

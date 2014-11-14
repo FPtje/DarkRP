@@ -67,8 +67,8 @@ local function unownAll(ply, cmd, args)
 		return
 	end
 
-	target = DarkRP.findPlayer(args[1])
-
+	local target = DarkRP.findPlayer(args[1])
+	
 	if not IsValid(target) then
 		if ply:EntIndex() == 0 then
 			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
@@ -110,7 +110,7 @@ local function ccAddOwner(ply, cmd, args)
 		return
 	end
 
-	target = DarkRP.findPlayer(args[1])
+	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		if trace.Entity:isKeysOwned() then
@@ -152,7 +152,7 @@ local function ccRemoveOwner(ply, cmd, args)
 		return
 	end
 
-	target = DarkRP.findPlayer(args[1])
+	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		if trace.Entity:isKeysAllowedToOwn(target) then

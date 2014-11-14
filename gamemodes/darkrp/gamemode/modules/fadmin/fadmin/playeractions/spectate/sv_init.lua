@@ -58,11 +58,11 @@ local function playerVoice(listener, talker)
 	if not IsValid(listener.FAdminSpectatingEnt) then return end
 
 	-- You can hear someone if your spectate target can hear them
-	canhear, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener.FAdminSpectatingEnt, talker)
-	canHearLocal = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
+	local canHear, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener.FAdminSpectatingEnt, talker)
+	local canHearLocal = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
 
 	-- you can always hear the person you're spectating
-	return canhear or canHearLocal or listener.FAdminSpectatingEnt == talker, surround
+	return canHear or canHearLocal or listener.FAdminSpectatingEnt == talker, surround
 end
 hook.Add("PlayerCanHearPlayersVoice", "FAdminSpectate", playerVoice)
 
