@@ -310,7 +310,8 @@ local function rp_GiveLicense(ply, cmd, args)
 
 	if target then
 		target:setDarkRPVar("HasGunlicense", true)
-
+		
+		local nick, steamID
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
 			steamID = ply:SteamID()
@@ -357,7 +358,8 @@ local function rp_RevokeLicense(ply, cmd, args)
 
 	if target then
 		target:setDarkRPVar("HasGunlicense", nil)
-
+		
+		local nick, steamID
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
 			steamID = ply:SteamID()

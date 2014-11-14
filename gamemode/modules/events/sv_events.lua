@@ -48,7 +48,7 @@ local function ControlStorm()
 end
 
 local function AttackEnt(ent)
-	meteor = ents.Create("meteor")
+	local meteor = ents.Create("meteor")
 	meteor.nodupe = true
 	meteor:Spawn()
 	meteor:SetMeteorTarget(ent)

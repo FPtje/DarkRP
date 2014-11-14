@@ -18,7 +18,7 @@ local function ServerSetting(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "ServerSetting") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 	if not args[2] then FAdmin.Messages.SendMessage(ply, 5, "Incorrect argument") return end
 
-	found = false
+	local found = false
 	for k,v in pairs(Whitelist) do
 		if string.match(args[1], v) then
 			found = true
