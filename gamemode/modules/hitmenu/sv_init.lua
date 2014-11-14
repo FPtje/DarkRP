@@ -78,7 +78,7 @@ end
 function plyMeta:abortHit(message)
 	if not hits[self] then error("This person has no active hit!") end
 
-	local message = message or ""
+	message = message or ""
 
 	hook.Call("onHitFailed", DarkRP.hooks, self, self:getHitTarget(), message)
 	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hit_aborted", message))
