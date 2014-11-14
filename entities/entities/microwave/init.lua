@@ -50,7 +50,7 @@ function ENT:SalePrice(activator)
 end
 
 ENT.Once = false
-function ENT:Use(activator,caller)
+function ENT:Use(activator, caller)
 	local owner = self:Getowning_ent()
 	self.user = activator
 	if not activator:canAfford(self:SalePrice(activator)) then
@@ -95,10 +95,10 @@ function ENT:Use(activator,caller)
 end
 
 function ENT:createFood()
-	activator = self.user
+	local activator = self.user
 	self.Once = false
 	local foodPos = self:GetPos()
-	food = ents.Create("food")
+	local food = ents.Create("food")
 	food:SetPos(Vector(foodPos.x,foodPos.y,foodPos.z + 23))
 	food:Setowning_ent(activator)
 	food.ShareGravgun = true

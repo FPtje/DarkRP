@@ -62,7 +62,7 @@ function ENT:createDrug()
 	self.CanUse = true
 	local userb = self.drug_user
 	local drugPos = self:GetPos()
-	drug = ents.Create("drug")
+	local drug = ents.Create("drug")
 	drug:SetPos(Vector(drugPos.x,drugPos.y,drugPos.z + 35))
 	drug:Setowning_ent(userb)
 	drug.SID = userb.SID

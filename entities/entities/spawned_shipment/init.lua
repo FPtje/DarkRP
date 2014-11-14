@@ -104,14 +104,14 @@ function ENT:SpawnItem()
 	local weaponPos = self:GetAngles():Up() * 40 + weaponAng:Up() * (math.sin(CurTime() * 3) * 8)
 	weaponAng:RotateAroundAxis(weaponAng:Up(), (CurTime() * 180) % 360)
 
-	if CustomShipments[contents] then
-		class = CustomShipments[contents].entity
-		model = CustomShipments[contents].model
-	else
+	if not CustomShipments[contents] then
 		weapon:Remove()
 		self:Remove()
 		return
 	end
+
+	local class = CustomShipments[contents].entity
+	local model = CustomShipments[contents].model
 
 	weapon:SetWeaponClass(class)
 	weapon:SetModel(model)

@@ -77,6 +77,7 @@ GM.OldChatHooks = GM.OldChatHooks or {}
 function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
 	local text2 = (not teamonly and "" or "/g ") .. text
 	local callback
+	local DoSayFunc
 
 	for k,v in pairs(self.OldChatHooks) do
 		if type(v) ~= "function" then continue end
