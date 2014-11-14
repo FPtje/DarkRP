@@ -1,31 +1,22 @@
+local DarkRPVars = {}
+
 /*---------------------------------------------------------------------------
 interface functions
 ---------------------------------------------------------------------------*/
 local pmeta = FindMetaTable("Player")
 function pmeta:getDarkRPVar(var)
-	self.DarkRPVars = self.DarkRPVars or {}
-	return self.DarkRPVars[var]
+	local vars = DarkRPVars[self:UserID()]
+	return vars and vars[var] or nil
 end
 
 /*---------------------------------------------------------------------------
 Retrieve the information of a player var
 ---------------------------------------------------------------------------*/
 local function RetrievePlayerVar(userID, var, value, tries)
-	local ply = Player(userID)
+	DarkRPVars[userID] = DarkRPVars[userID] or {}
 
-	-- Usermessages _can_ arrive before the player is valid.
-	-- In this case, chances are huge that this player will become valid.
-	if not IsValid(ply) then
-		if (tries or 0) >= 5 then return end
-
-		timer.Simple(0.5, function() RetrievePlayerVar(userID, var, value, (tries or 0) + 1) end)
-		return
-	end
-
-	ply.DarkRPVars = ply.DarkRPVars or {}
-
-	hook.Call("DarkRPVarChanged", nil, ply, var, ply.DarkRPVars[var], value)
-	ply.DarkRPVars[var] = value
+	hook.Call("DarkRPVarChanged", nil, Player(userID), var, DarkRPVars[userID], value)
+	DarkRPVars[userID][var] = value
 end
 
 /*---------------------------------------------------------------------------
@@ -45,16 +36,13 @@ Retrieve the message to remove a DarkRPVar
 ---------------------------------------------------------------------------*/
 local function doRetrieveRemoval()
 	local userID = net.ReadUInt(16)
+	local vars = DarkRPVars[userID] or {}
 	local var = DarkRP.readNetDarkRPVarRemoval()
 	local ply = Player(userID)
 
-	if not IsValid(ply) then return end
+	hook.Call("DarkRPVarChanged", nil, ply, var, vars[var], nil)
 
-	ply.DarkRPVars = ply.DarkRPVars or {}
-
-	hook.Call("DarkRPVarChanged", nil, ply, var, ply.DarkRPVars[var], nil)
-
-	ply.DarkRPVars[var] = nil
+	vars[var] = nil
 end
 net.Receive("DarkRP_PlayerVarRemoval", doRetrieveRemoval)
 
@@ -77,12 +65,17 @@ end
 net.Receive("DarkRP_InitializeVars", InitializeDarkRPVars)
 timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
+net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
+	local userID = net.ReadUInt(16)
+	DarkRPVars[userID] = nil
+end)
+
 /*---------------------------------------------------------------------------
 Request the DarkRPVars when they haven't arrived
 ---------------------------------------------------------------------------*/
 timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 	for k,v in pairs(player.GetAll()) do
-		if v.DarkRPVars and v:getDarkRPVar("rpname") then continue end
+		if v:getDarkRPVar("rpname") then continue end
 
 		RunConsoleCommand("_sendDarkRPvars")
 		return
