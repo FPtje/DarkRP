@@ -13,10 +13,16 @@ end
 Retrieve the information of a player var
 ---------------------------------------------------------------------------*/
 local function RetrievePlayerVar(userID, var, value, tries)
+	local ply = Player(userID)
 	DarkRPVars[userID] = DarkRPVars[userID] or {}
 
-	hook.Call("DarkRPVarChanged", nil, Player(userID), var, DarkRPVars[userID], value)
+	hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID], value)
 	DarkRPVars[userID][var] = value
+
+	-- Backwards compatibility
+	if IsValid(ply) then
+		ply.DarkRPVars = DarkRPVars[userID]
+	end
 end
 
 /*---------------------------------------------------------------------------
