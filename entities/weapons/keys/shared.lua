@@ -31,7 +31,7 @@ SWEP.UseHands = true
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
-SWEP.Sound = "doors/door_latch3.wav"
+SWEP.Sound = Sound("doors/door_latch3.wav")
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
@@ -41,6 +41,9 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
+
+local primarySound = Sound("physics/wood/wood_crate_impact_hard2.wav")
+local secondarySound = Sound("physics/wood/wood_crate_impact_hard3.wav")
 
 function SWEP:Initialize()
 	self:SetHoldType("normal")
@@ -124,7 +127,7 @@ function SWEP:PrimaryAttack()
 	elseif trace.Entity:IsVehicle() then
 		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 	else
-		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard2.wav")
+		doKnock(self.Owner, primarySound)
 	end
 end
 
@@ -146,7 +149,7 @@ function SWEP:SecondaryAttack()
 	elseif trace.Entity:IsVehicle() then
 		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 	else
-		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard3.wav")
+		doKnock(self.Owner, secondarySound)
 	end
 end
 
