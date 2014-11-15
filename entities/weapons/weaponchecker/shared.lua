@@ -20,6 +20,8 @@ SWEP.AnimPrefix	 = "rpg"
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
+SWEP.Sound = Sound("npc/combine_soldier/gear5.wav")
+
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
@@ -75,8 +77,8 @@ function SWEP:PrimaryAttack()
 	end
 
 	if SERVER then
-		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+		self.Owner:EmitSound(self.Sound, 50, 100)
+		timer.Simple(0.3, function() self.Owner:EmitSound(self.Sound, 50, 100) end)
 		return
 	end
 
@@ -134,7 +136,7 @@ function SWEP:SecondaryAttack()
 
 		timer.Create("WeaponCheckSounds", 0.5, self.WeaponCheckTime * 2, function()
 			if not IsValid(self) then return end
-			self:EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
+			self:EmitSound(self.Sound, 100, 100)
 		end)
 	end
 end
@@ -225,8 +227,8 @@ function SWEP:Succeed()
 
 	if result == "" then
 		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
-		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+		self.Owner:EmitSound(self.Sound, 50, 100)
+		timer.Simple(0.3, function() self.Owner:EmitSound(self.Sound, 50, 100) end)
 	else
 		self.Owner:EmitSound("ambient/energy/zap1.wav", 50, 100)
 		self.Owner:ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))

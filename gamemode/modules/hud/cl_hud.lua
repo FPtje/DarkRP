@@ -362,6 +362,8 @@ end
 /*---------------------------------------------------------------------------
 Display notifications
 ---------------------------------------------------------------------------*/
+util.PrecacheSound("buttons/lightswitch2.wav")
+
 local function DisplayNotify(msg)
 	local txt = msg:ReadString()
 	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())

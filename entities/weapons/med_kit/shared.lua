@@ -33,6 +33,7 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Delay = 0.3
 SWEP.Secondary.Ammo = "none"
 
+util.PrecacheSound("hl1/fvox/boop.wav")
 
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)

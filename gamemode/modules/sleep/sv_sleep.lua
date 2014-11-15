@@ -1,4 +1,6 @@
 -- very old sleep module
+util.PrecacheSound("npc/ichthyosaur/water_breath.wav")
+
 local KnockoutTime = 5
 
 local function ResetKnockouts(player)
