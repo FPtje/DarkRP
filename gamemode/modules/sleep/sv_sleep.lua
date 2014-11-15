@@ -1,5 +1,6 @@
 -- very old sleep module
 local KnockoutTime = 5
+local breathSound = Sound("npc/ichthyosaur/water_breath.wav")
 
 local function ResetKnockouts(player)
 	player.SleepRagdoll = nil
@@ -15,7 +16,7 @@ end
 
 function DarkRP.toggleSleep(player, command)
 	if not player.SleepSound then
-		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
+		player.SleepSound = CreateSound(player, breathSound)
 	end
 	local timerName = player:EntIndex() .. "SleepExploit"
 
@@ -125,7 +126,7 @@ function DarkRP.toggleSleep(player, command)
 
 				SendUserMessage("blackScreen", player, true)
 
-				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
+				player.SleepSound = CreateSound(ragdoll, breathSound)
 				player.SleepSound:PlayEx(0.10, 100)
 				player.Sleeping = true
 
