@@ -12,7 +12,7 @@ end
 /*---------------------------------------------------------------------------
 Retrieve the information of a player var
 ---------------------------------------------------------------------------*/
-local function RetrievePlayerVar(userID, var, value, tries)
+local function RetrievePlayerVar(userID, var, value)
 	local ply = Player(userID)
 	DarkRPVars[userID] = DarkRPVars[userID] or {}
 
