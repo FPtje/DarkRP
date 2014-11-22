@@ -49,8 +49,6 @@ function ENT:Use(activator, caller)
 
 	if not weapon:IsValid() then return false end
 
-	local ammoType = weapon:GetPrimaryAmmoType()
-	
 	if not weapon:IsWeapon() then
 		weapon:SetPos(self:GetPos())
 		weapon:SetAngles(self:GetAngles())
@@ -60,6 +58,7 @@ function ENT:Use(activator, caller)
 		return
 	end
 
+	local ammoType = weapon:GetPrimaryAmmoType()
 	local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
 	local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
 	if not CanPickup or ShouldntContinue then return end
