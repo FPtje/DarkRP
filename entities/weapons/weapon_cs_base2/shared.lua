@@ -41,7 +41,7 @@ SWEP.Spawnable = false
 SWEP.AdminOnly = false
 SWEP.UseHands = true
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "passive"
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5
@@ -72,8 +72,8 @@ function SWEP:Initialize()
 		local vm = self.Owner:GetViewModel()
 		self:ResetDarkRPBones(vm)
 	end
-
-	self:SetHoldType("normal")
+	
+	self:SetHoldType("passive")
 	if SERVER then
 		self:SetNPCMinBurst(30)
 		self:SetNPCMaxBurst(30)
@@ -91,7 +91,7 @@ end
 Deploy
 ---------------------------------------------------------*/
 function SWEP:Deploy()
-	self:SetHoldType("normal")
+	self:SetHoldType("passive")
 
 	self.LASTOWNER = self.Owner
 
@@ -138,7 +138,7 @@ function SWEP:Reload()
 	timer.Simple(2, function()
 		if not IsValid(self) then return end
 		self.Reloading = false
-		self:SetHoldType("normal")
+		self:SetHoldType("passive")
 		self.hasShot = false
 	end)
 end
@@ -168,7 +168,7 @@ function SWEP:PrimaryAttack(partofburst)
 		return
 	end
 
-	if self:GetHoldType() == "normal" and not GAMEMODE.Config.ironshoot then
+	if self:GetHoldType() == "passive" and not GAMEMODE.Config.ironshoot then
 		self:SetHoldType(self.HoldType)
 	end
 
@@ -389,7 +389,7 @@ function SWEP:SetIronsights(b)
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
 	else
-		self:SetHoldType("normal")
+		self:SetHoldType("passive")
 		if SERVER and IsValid(self.Owner) then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 		end
@@ -444,7 +444,7 @@ end
 
 function SWEP:Think()
 	if self.Primary.ClipSize ~= -1 and not self.Reloading and not self.Ironsights and self.LastPrimaryAttack + 1 < CurTime() and self:GetHoldType() == self.HoldType then
-		self:SetHoldType("normal")
+		self:SetHoldType("passive")
 	end
 end
 
