@@ -33,11 +33,9 @@ derma.DefineControl("FAdminPanelList", "DPanellist adapted for FAdmin", PANEL, "
 -- FAdminPlayerCatagoryHeader
 local PANEL2 = {}
 
-function PANEL2:ApplySchemeSettings()
+function PANEL2:PerformLayout()
 	self:SetFont("Trebuchet24")
 end
-
-
 
 derma.DefineControl("FAdminPlayerCatagoryHeader", "DCatagoryCollapse header adapted for FAdmin", PANEL2, "DCategoryHeader")
 
