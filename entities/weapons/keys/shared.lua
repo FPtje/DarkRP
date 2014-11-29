@@ -19,7 +19,7 @@ SWEP.Instructions = "Left click to lock\nRight click to unlock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
-SWEP.ViewModel = Model("models/weapons/v_hands.mdl")
+SWEP.ViewModel = ""
 SWEP.WorldModel	= ""
 
 SWEP.ViewModelFOV = 62
@@ -50,11 +50,6 @@ function SWEP:Deploy()
 	if CLIENT or not IsValid(self.Owner) then return true end
 	self.Owner:DrawWorldModel(false)
 	return true
-end
-
-function SWEP:PreDrawViewModel()
-	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
-	self.Owner:GetViewModel():SetMaterial("debug/hsv")
 end
 
 function SWEP:Holster()
