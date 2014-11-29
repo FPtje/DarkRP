@@ -73,8 +73,10 @@ function DarkRP.toggleSleep(player, command)
 					player:arrest()
 				end
 				player.Sleeping = false
-				player:setSelfDarkRPVar("Energy", player.OldHunger)
-				player.OldHunger = nil
+				if player:getDarkRPVar("Energy") then
+					player:setSelfDarkRPVar("Energy", player.OldHunger)
+					player.OldHunger = nil
+				end
 
 				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)

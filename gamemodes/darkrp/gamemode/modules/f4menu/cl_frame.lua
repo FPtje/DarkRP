@@ -5,7 +5,6 @@ local PANEL = {}
 
 function PANEL:Init()
 	self.BaseClass.Init(self)
-	self:SetFont("DarkRPHUD2")
 end
 
 local gray = Color(110, 110, 110, 255)
@@ -76,8 +75,9 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 	sheet.Name = label
 
 	sheet.Tab = vgui.Create("F4MenuTab", self)
-	sheet.Tab:SetTooltip(Tooltip)
 	sheet.Tab:Setup(label, self, panel, material)
+	sheet.Tab:SetTooltip(Tooltip)
+	sheet.Tab:SetFont("DarkRPHUD2")
 
 	sheet.Panel = panel
 	sheet.Panel.tab = sheet.Tab
