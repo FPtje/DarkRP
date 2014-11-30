@@ -37,5 +37,11 @@ FAdmin.StartHooks["CleanUp"] = function()
 	FAdmin.Commands.AddCommand("StopSounds", StopSounds)
 	FAdmin.Commands.AddCommand("CleanUp", CleanUp)
 
+	local oldCleanup = concommand.GetTable()["gmod_admin_cleanup"]
+	concommand.Add("gmod_admin_cleanup", function(ply, cmd, args)
+		if args[1] then return oldCleanup(ply, cmd, args) end
+		return CleanUp(ply, cmd, args)
+	end)
+
 	FAdmin.Access.AddPrivilege("CleanUp", 2)
 end
