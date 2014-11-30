@@ -19,7 +19,6 @@ SWEP.Instructions = "Left click to lock\nRight click to unlock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
-SWEP.ViewModel = ""
 SWEP.WorldModel	= ""
 
 SWEP.ViewModelFOV = 62
@@ -53,14 +52,11 @@ function SWEP:Deploy()
 end
 
 function SWEP:Holster()
-	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return true end
-	self.Owner:GetViewModel():SetMaterial("")
 	return true
 end
 
-function SWEP:OnRemove()
-	if SERVER or not IsValid(self.Owner) or not IsValid(self.Owner:GetViewModel()) then return end
-	self.Owner:GetViewModel():SetMaterial("")
+function SWEP:PreDrawViewModel()
+	return true
 end
 
 local function lookingAtLockable(ply, ent)
