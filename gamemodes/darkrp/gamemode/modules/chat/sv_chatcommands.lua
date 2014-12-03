@@ -15,9 +15,9 @@ local function PM(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
-	
+
 	local target = DarkRP.findPlayer(name)
-	
+
 	if target then
 		local col = team.GetColor(ply:Team())
 		DarkRP.talkToPerson(target, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
@@ -176,12 +176,8 @@ end
 DarkRP.defineChatCommand("radio", SayThroughRadio, 1.5)
 
 local function GroupMsg(ply, args)
-	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
-		return ""
-	end
-
 	local DoSay = function(text)
+		local plyMeta = FindMetaTable("Player")
 		if text == "" then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 			return
@@ -190,25 +186,26 @@ local function GroupMsg(ply, args)
 		local t = ply:Team()
 		local col = team.GetColor(ply:Team())
 
+		local groupChat
 		local hasReceived = {}
 		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
 			-- not the group of the player
 			if not func(ply) then continue end
-
-			for _, target in pairs(player.GetAll()) do
-				if func(target) and not hasReceived[target] then
-					hasReceived[target] = true
-					DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
-				end
-			end
+			groupChat = func
+			break
 		end
-		if next(hasReceived) == nil then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/g", ""))
+
+		groupChat = groupChat or fc{fp{fn.Eq, ply:Team()}, plyMeta.Team} -- Either in group chat or in the same team
+
+		for _, target in pairs(player.GetAll()) do
+			if groupChat(target) then
+				DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
+			end
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("g", GroupMsg, 1.5)
+DarkRP.defineChatCommand("g", GroupMsg, 0)
 
 -- here's the new easter egg. Easier to find, more subtle, doesn't only credit FPtje and unib5
 -- WARNING: DO NOT EDIT THIS

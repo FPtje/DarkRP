@@ -16,11 +16,12 @@ function DarkRP.defineChatCommand(cmd, callback)
 end
 
 
-local function RP_PlayerChat(ply, text)
+local function RP_PlayerChat(ply, text, teamonly)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID().."): "..text )
 	local chatcommands = DarkRP.getChatCommands()
 	local callback = ""
 	local DoSayFunc
+	local groupSay = DarkRP.getChatCommand("g")
 	local tblCmd = fn.Compose{ -- Extract the chat command
 		DarkRP.getChatCommand,
 		string.lower,
@@ -32,9 +33,12 @@ local function RP_PlayerChat(ply, text)
 	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
 		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
 		if callback == "" then
-			return "", "", DoSayFunc;
+			return "", "", DoSayFunc
 		end
 		text = string.sub(text, string.len(tblCmd.command) + 3, string.len(text))
+	elseif teamonly and groupSay then
+		callback, DoSayFunc = groupSay.callback(ply, text)
+		return text, "", DoSayFunc
 	end
 
 	if callback ~= "" then
@@ -75,7 +79,7 @@ end
 
 GM.OldChatHooks = GM.OldChatHooks or {}
 function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
-	local text2 = (not teamonly and "" or "/g ") .. text
+	local text2 = text
 	local callback
 	local DoSayFunc
 
@@ -89,7 +93,7 @@ function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks r
 		end
 	end
 
-	text2, callback, DoSayFunc = RP_PlayerChat(ply, text2)
+	text2, callback, DoSayFunc = RP_PlayerChat(ply, text2, teamonly)
 	if tostring(text2) == " " then text2, callback = callback, text2 end
 
 	if game.IsDedicated() then
