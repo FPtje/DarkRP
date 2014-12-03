@@ -15,9 +15,9 @@ local function PM(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
-	
+
 	local target = DarkRP.findPlayer(name)
-	
+
 	if target then
 		local col = team.GetColor(ply:Team())
 		DarkRP.talkToPerson(target, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
