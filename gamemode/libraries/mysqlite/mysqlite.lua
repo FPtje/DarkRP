@@ -41,11 +41,11 @@ function initialize()
 	end
 end
 
-CONNECTED_TO_MYSQL = false
-databaseObject = nil
-
+local CONNECTED_TO_MYSQL = false
+local databaseObject = nil
 
 local queuedQueries
+local cachedQueries
 
 function isMySQL()
 	return CONNECTED_TO_MYSQL
