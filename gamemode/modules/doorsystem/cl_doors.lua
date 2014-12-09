@@ -14,7 +14,8 @@ function meta:drawOwnableInfo()
 	local superadmin = LocalPlayer():IsSuperAdmin()
 	local doorTeams = self:getKeysDoorTeams()
 	local doorGroup = self:getKeysDoorGroup()
-	local owned = self:isKeysOwned() or doorGroup or doorTeams
+	local playerOwned = self:isKeysOwned() or table.GetFirstValue(self:getKeysCoOwners() or {}) ~= nil
+	local owned = playerOwned or doorGroup or doorTeams
 
 	local doorInfo = {}
 
@@ -25,8 +26,8 @@ function meta:drawOwnableInfo()
 		table.insert(doorInfo, DarkRP.getPhrase("keys_owned_by"))
 	end
 
-	if self:isKeysOwned() then
-		table.insert(doorInfo, self:getDoorOwner():Nick())
+	if playerOwned then
+		if self:isKeysOwned() then table.insert(doorInfo, self:getDoorOwner():Nick()) end
 		for k,v in pairs(self:getKeysCoOwners() or {}) do
 			local ent = Player(k)
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
