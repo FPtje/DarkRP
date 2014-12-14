@@ -53,7 +53,7 @@ function FAdmin.FindPlayer(info)
 		empty = false
 		table.insert(players, k)
 	end
-	return empty and nil or players
+	return not empty and players or nil
 end
 
 function FAdmin.SteamToProfile(ply) -- Thanks decodaman
