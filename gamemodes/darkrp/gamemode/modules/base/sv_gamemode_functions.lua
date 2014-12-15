@@ -86,7 +86,7 @@ function GM:DatabaseInitialized()
 end
 
 function GM:canSeeLogMessage(ply, message, colour)
-	return ply:IsAdmin()
+	return ply:hasDarkRPPrivilege("rp_viewlog") or ply:IsAdmin()
 end
 
 function GM:UpdatePlayerSpeed(ply)
