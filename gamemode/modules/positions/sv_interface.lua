@@ -56,11 +56,17 @@ DarkRP.retrieveJailPos = DarkRP.stub{
 	name = "retrieveJailPos",
 	description = "Retrieve a jail position.",
 	parameters = {
+		{
+			name = "index",
+			description = "Which jailpos to return.",
+			type = "number",
+			optional = true
+		}
 	},
 	returns = {
 		{
 			name = "pos",
-			description = "A random jail position.",
+			description = "A jail position.",
 			type = "Vector"
 		}
 	},

@@ -68,9 +68,11 @@ function DarkRP.addJailPos(pos)
 	JailIndex = 1
 end
 
-function DarkRP.retrieveJailPos()
+function DarkRP.retrieveJailPos(index)
 	if not jailPos then return Vector(0, 0, 0) end
-
+	if index then
+		return jailPos[index]
+	end
 	-- Retrieve the least recently used jail position
 	local oldestPos = jailPos[JailIndex]
 	JailIndex = JailIndex % #jailPos + 1
