@@ -609,7 +609,9 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 	if SERVER then
 		timer.Simple(0, function()
 			-- Run after scripts have loaded
-			DarkRPAgendas[Manager].text = hook.Run("agendaUpdated", nil, DarkRPAgendas[Manager], "")
+			local set = agendas[Manager]
+			set = set and disjoint.FindSet(set).value or {}
+			set.text = hook.Run("agendaUpdated", nil, DarkRPAgendas[Manager], "")
 		end)
 	end
 end
