@@ -85,7 +85,9 @@ function meta:changeTeam(t, force)
 	if self:getDarkRPVar("HasGunlicense") then
 		self:setDarkRPVar("HasGunlicense", nil)
 	end
-	self:setDarkRPVar("HasGunlicense", true)
+	if TEAM.hasLicense and GAMEMODE.Config.license then
+		self:setDarkRPVar("HasGunlicense", true)
+	end
 
 	self.LastJob = CurTime()
 
