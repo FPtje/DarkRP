@@ -192,7 +192,7 @@ local function addTeamCommands(CTeam, max)
 			end
 
 			if CTeam.customCheck and not CTeam.customCheck(ply) then
-				DarkRP.notify(ply, 1, 4, CTeam.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), ""))
+				DarkRP.notify(ply, 1, 4, CTeam.CustomCheckFailMsg(ply, CTeam) or DarkRP.getPhrase("unable", team.GetName(t), ""))
 				return ""
 			end
 			if not ply:changeAllowed(k) then
@@ -359,7 +359,7 @@ local function addEntityCommands(tblEnt)
 		end
 
 		if tblEnt.customCheck and not tblEnt.customCheck(ply) then
-			DarkRP.notify(ply, 1, 4, tblEnt.CustomCheckFailMsg or DarkRP.getPhrase("not_allowed_to_purchase"))
+			DarkRP.notify(ply, 1, 4, tblEnt.CustomCheckFailMsg(ply, tblEnt) or DarkRP.getPhrase("not_allowed_to_purchase"))
 			return ""
 		end
 
@@ -432,6 +432,8 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 			NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
 		}
 	CustomTeam.name = Name
+	-- Force CustomCheckFailMsg into a function
+	CustomTeam.CustomCheckFailMsg = not isfunction(CustomTeam.CustomCheckFailMsg) and fp{fn.Id, CustomTeam.CustomCheckFailMsg} or CustomTeam.CustomCheckFailMsg
 
 	-- Disabled job
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
@@ -502,6 +504,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	end
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
+	customShipment.CustomCheckFailMsg = not isfunction(customShipment.CustomCheckFailMsg) and fp{fn.Id, customShipment.CustomCheckFailMsg} or customShipment.CustomCheckFailMsg
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
@@ -522,6 +525,7 @@ AddCustomShipment = DarkRP.createShipment
 function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
 	local vehicle = istable(Name_of_vehicle) and Name_of_vehicle or
 		{name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
+	vehicle.CustomCheckFailMsg = not isfunction(vehicle.CustomCheckFailMsg) and fp{fn.Id, vehicle.CustomCheckFailMsg} or vehicle.CustomCheckFailMsg
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["vehicles"][vehicle.name] then return end
 
@@ -559,6 +563,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 		{ent = entity, model = model, price = price, max = max,
 		cmd = command, allowed = classes, customCheck = CustomCheck}
 	tblEnt.name = name
+	tblEnt.CustomCheckFailMsg = not isfunction(tblEnt.CustomCheckFailMsg) and fp{fn.Id, tblEnt.CustomCheckFailMsg} or tblEnt.CustomCheckFailMsg
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["entities"][tblEnt.name] then return end
 
@@ -649,6 +654,7 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 		customCheck = customCheck
 	}
 	ammo.ammoType = ammoType
+	ammo.CustomCheckFailMsg = not isfunction(ammo.CustomCheckFailMsg) and fp{fn.Id, ammo.CustomCheckFailMsg} or ammo.CustomCheckFailMsg
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
 	table.insert(gm.AmmoTypes, ammo)
