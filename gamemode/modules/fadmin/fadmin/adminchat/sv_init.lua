@@ -7,7 +7,7 @@ local function ToAdmins(ply, cmd, args)
 
 	if ply ~= game.GetWorld() then table.insert(send, ply) end
 	for k,v in pairs(player.GetAll()) do
-		if FAdmin.Access.PlayerHasPrivilege(v, "AdminChat") then
+		if FAdmin.Access.PlayerHasPrivilege(v, "AdminChat") or ply:IsAdmin() then
 			table.insert(send, v)
 		end
 	end
@@ -21,6 +21,6 @@ end
 FAdmin.StartHooks["Chatting"] = function()
 	FAdmin.Commands.AddCommand("adminhelp", ToAdmins)
 	FAdmin.Commands.AddCommand("//", ToAdmins)
-	
+
 	FAdmin.Access.AddPrivilege("AdminChat", 2)
 end
