@@ -157,29 +157,14 @@ local function RPName(ply, args)
 		return ""
 	end
 
-	args = (args:find'^%s*$' and '' or args:match'^%s*(.*%S)')
+	args = args:find'^%s*$' and '' or args:match'^%s*(.*%S)'
 
-	local len = string.len(args)
-	local low = string.lower(args)
-
-	if len > 30 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", "<=30"))
-		return ""
-	elseif len < 3 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", ">2"))
-		return ""
-	end
-
-	local canChangeName = hook.Call("CanChangeRPName", GAMEMODE, ply, low)
+	local canChangeName, reason = hook.Call("CanChangeRPName", GAMEMODE, ply, args)
 	if canChangeName == false then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", ""))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", reason or ""))
 		return ""
 	end
 
-	if not string.match(args, "^[a-zA-Z0-9 ]+$") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", "Bad name"))
-		return ""
-	end
 	ply:setRPName(args)
 	ply.LastNameChange = CurTime()
 	return ""

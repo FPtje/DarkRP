@@ -693,6 +693,11 @@ DarkRP.hookStub{
 			name = "answer",
 			description = "Whether the player can change their RP names.",
 			type = "boolean"
+		},
+		{
+			name = "reason",
+			description = "When answer is false, this return value is the reason why.",
+			type = "string"
 		}
 	}
 }
