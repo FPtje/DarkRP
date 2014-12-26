@@ -21,14 +21,14 @@ function GM:getVehicleCost(ply, ent)
 	return GAMEMODE.Config.vehiclecost ~= 0 and  GAMEMODE.Config.vehiclecost or 40
 end
 
+local disallowedNames = {["ooc"] = true, ["shared"] = true, ["world"] = true, ["world prop"] = true}
 function GM:CanChangeRPName(ply, RPname)
-	if string.find(RPname, "\160") or string.find(RPname, " ") == 1 then -- disallow system spaces
-		return false
-	end
+	if disallowedNames[string.lower(RPname)] then return false, "Forbidden name." end
+	if not string.match(RPname, "^[a-zA-Z0-9 ]+$") then return false, "Illegal characters." end
 
-	if table.HasValue({"ooc", "shared", "world", "n/a", "world prop"}, RPname) then
-		return false
-	end
+	local len = string.len(RPname)
+	if len > 30 then return false, "Too long." end
+	if len < 3 then return false, "Too short." end
 end
 
 function GM:canDemote(ply, target, reason)
