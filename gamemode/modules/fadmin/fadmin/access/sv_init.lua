@@ -112,13 +112,13 @@ end
 -- AddGroup <Groupname> <Adminstatus> <Privileges>
 local function AddGroup(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-
-	local Privs = {}
-	for i = 3, #args, 1 do
-		Privs[args[i]] = true
+	local admin = tonumber(args[2])
+	local privs = {}
+	for priv, am in SortedPairs(FAdmin.Access.Privileges) do
+		if am <= admin + 1 then privs[priv] = true end
 	end
 
-	FAdmin.Access.AddGroup(args[1], tonumber(args[2]), Privs)-- Add new group
+	FAdmin.Access.AddGroup(args[1], admin, privs, FAdmin.Access.Groups[FAdmin.Access.ADMIN[admin + 1]].immunity) -- Add new group
 	FAdmin.Messages.SendMessage(ply, 4, "Group created")
 	FAdmin.Access.SendGroups()
 end
@@ -168,18 +168,19 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
 
 	local targets = FAdmin.FindPlayer(args[1])
+	local admin = tonumber(args[3])
 
 	if not args[2] or (not FAdmin.Access.Groups[args[2]] and not tonumber(args[3])) then
 		FAdmin.Messages.SendMessage(ply, 1, "Group not found")
 		return
-	elseif args[2] and not FAdmin.Access.Groups[args[2]] and tonumber(args[3]) then
-		local Privs = {}
-		for i = 4, #args, 1 do
-			Privs[args[i]] = true
+	elseif args[2] and not FAdmin.Access.Groups[args[2]] and admin then
+		local privs = {}
+		for priv, am in SortedPairs(FAdmin.Access.Privileges) do
+			if am <= admin + 1 then privs[priv] = true end
 		end
 
-		FAdmin.Access.AddGroup(args[2], tonumber(args[3]), Privs)-- Add new group
-		FAdmin.Messages.SendMessage(ply, 2, "Group created")
+		FAdmin.Access.AddGroup(args[2], tonumber(args[3]), privs, FAdmin.Access.Groups[FAdmin.Access.ADMIN[admin + 1]].immunity) -- Add new group
+		FAdmin.Messages.SendMessage(ply, 4, "Group created")
 		FAdmin.Access.SendGroups()
 	end
 

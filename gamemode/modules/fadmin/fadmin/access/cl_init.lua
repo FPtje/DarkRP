@@ -82,80 +82,14 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 end
 
 ContinueNewGroup = function(ply, name, admin_access, func)
-	local privs = {}
-
-	local Window = vgui.Create("DFrame")
-	Window:SetTitle("Set the privileges")
-	Window:SetDraggable(false)
-	Window:ShowCloseButton(true)
-	Window:SetBackgroundBlur(true)
-	Window:SetDrawOnTop(true)
-	Window:SetSize(120, 400)
-	gui.EnableScreenClicker(true)
-	function Window:Close()
-		gui.EnableScreenClicker(false)
-		self:Remove()
+	if IsValid(ply) then
+		RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access)
+	else
+		RunConsoleCommand("_FAdmin", "AddGroup", name, admin_access)
 	end
 
-	local TickBoxPanel = vgui.Create("DPanelList", Window)
-	TickBoxPanel:EnableHorizontal(false)
-	TickBoxPanel:EnableVerticalScrollbar()
-	TickBoxPanel:SetSpacing(5)
-
-	for Pname, Padmin_access in SortedPairs(FAdmin.Access.Privileges) do
-		local chkBox = vgui.Create("DCheckBoxLabel")
-		chkBox:SetText(DarkRP.deLocalise(Pname))
-		chkBox:SizeToContents()
-
-		if (Padmin_access - 1) <= admin_access then
-			chkBox:SetValue(true)
-			table.insert(privs, Pname)
-		end
-
-		function chkBox.Button:Toggle()
-			if not self:GetChecked() then
-				self:SetValue(true)
-				table.insert(privs, Pname)
-			else
-				self:SetValue(false)
-				for k,v in pairs(privs) do
-					if v == Pname then
-						table.remove(privs, k)
-					end
-				end
-			end
-		end
-
-		TickBoxPanel:AddItem(chkBox)
-	end
-
-	Window:SetTall(math.Min(#TickBoxPanel.Items*20 + 30 + 30, ScrH()))
-	Window:Center()
-	Window:RequestFocus()
-	Window:MakePopup()
-	TickBoxPanel:StretchToParent(5, 25, 5, 35)
-
-	local OKButton = vgui.Create("DButton", Window)
-	OKButton:SetText("OK")
-	OKButton:StretchToParent(5, 30 + TickBoxPanel:GetTall(), Window:GetWide()/2 + 2, 5)
-	function OKButton:DoClick()
-		if IsValid(ply) then
-			RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), name, admin_access, unpack(privs))
-		else
-			RunConsoleCommand("_FAdmin", "AddGroup", name, admin_access, unpack(privs))
-		end
-		Window:Close()
-
-		if func then
-			func(name, admin_access, privs)
-		end
-	end
-
-	local CancelButton = vgui.Create("DButton", Window)
-	CancelButton:SetText("Cancel")
-	CancelButton:StretchToParent(Window:GetWide()/2 + 2, 30 + TickBoxPanel:GetTall(), 5, 5)
-	function CancelButton:DoClick()
-		Window:Close()
+	if func then
+		func(name, admin_access)
 	end
 end
 
@@ -192,9 +126,12 @@ EditGroups = function()
 
 			Privileges:Clear()
 			SelectedPrivs:Clear()
+			nmbrImmunity:SetText(FAdmin.Access.Groups[FAdmin.Access.ADMIN[admin + 1]].immunity)
+			nmbrImmunity:SetDisabled(false)
+			nmbrImmunity:SetEditable(true)
 
-			for priv, _ in SortedPairs(FAdmin.Access.Privileges) do
-				if table.HasValue(privs, priv) then
+			for priv, am in SortedPairs(FAdmin.Access.Privileges) do
+				if am <= admin + 1 then
 					SelectedPrivs:AddLine(priv)
 				else
 					Privileges:AddLine(priv)
