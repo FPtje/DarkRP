@@ -169,7 +169,7 @@ local function addTeamCommands(CTeam, max)
 			end
 
 			if CTeam.canStartVote and not CTeam.canStartVote(ply) then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, CTeam.canStartVoteReason or ""))
+				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote"..CTeam.command, CTeam.canStartVoteReason(ply, CTeam) or ""))
 				return ""
 			end
 
@@ -432,8 +432,9 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 			NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
 		}
 	CustomTeam.name = Name
-	-- Force CustomCheckFailMsg into a function
+	-- Force CustomCheckFailMsg and canStartVoteReason into a function
 	CustomTeam.CustomCheckFailMsg = not isfunction(CustomTeam.CustomCheckFailMsg) and fp{fn.Id, CustomTeam.CustomCheckFailMsg} or CustomTeam.CustomCheckFailMsg
+	CustomTeam.canStartVoteReason = not isfunction(CustomTeam.canStartVoteReason) and fp{fn.Id, CustomTeam.canStartVoteReason} or CustomTeam.canStartVoteReason
 
 	-- Disabled job
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
