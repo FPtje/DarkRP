@@ -91,6 +91,10 @@
         onFinished is NOT called when an error occurs in one of the queued queries.
 
         onFinished is called without arguments.
+
+    ----------------------------- Hooks -----------------------------
+    DatabaseInitialized
+        Called when a successful connection to the database has been made.
 ]]
 
 local bit = bit
@@ -155,7 +159,7 @@ function initialize(config)
 end
 
 local CONNECTED_TO_MYSQL = false
-local databaseObject = nil
+databaseObject = nil
 
 local queuedQueries
 local cachedQueries
@@ -257,21 +261,20 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 end
 
 local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
-    local call = function(res, succeed, err)
-        if not succeed then
-            local supp = errorCallback and errorCallback(err, sqlText)
-            if not supp then error(err .. " (" .. sqlText .. ")") end
+    local call = function(res)
+        res = res[1] -- For now only support one result set
+        if not res.status then
+            local supp = errorCallback and errorCallback(res.error, sqlText)
+            if not supp then error(res.error .. " (" .. sqlText .. ")") end
             return
         end
 
-        if #res == 0 then res = nil end -- compatibility with other backends
-        if queryValue and callback then return callback(res and res[1] and res[1][1] or nil) end
-        if callback then callback(res, err) end -- err is last inserted row on succeed
+        if not res.data or #res.data == 0 then res.data = nil end -- compatibility with other backends
+        if queryValue and callback then return callback(res.data and res.data[1] and res.data[1]["1"] or nil) end
+        if callback then callback(res.data, res.lastid) end
     end
 
-    -- We don't want column names when asking for a value
-    local flags = bit.bor(queryValue and 0 or _G.QUERY_FLAG_ASSOC, _G.QUERY_FLAG_LASTID)
-    databaseObject:Query(sqlText, call, flags)
+    databaseObject:Query(sqlText, call)
 end
 
 local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
@@ -361,7 +364,7 @@ function SQLStr(str)
     local escape =
         not CONNECTED_TO_MYSQL and sql.SQLStr or
         mysqlOO                and function(str) return "\"" .. databaseObject:escape(tostring(str)) .. "\"" end or
-        TMySQL                 and function(str) return "\"" .. TMySQL.escape(tostring(str))         .. "\"" end
+        TMySQL                 and function(str) return "\"" .. databaseObject:Escape(tostring(str)) .. "\"" end
 
     return escape(str)
 end
