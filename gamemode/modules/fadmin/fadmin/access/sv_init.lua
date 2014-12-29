@@ -52,7 +52,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 		end
 
 		MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
-			if val ~= "0" then return createGroups{} end
+			if tonumber(val) ~= 0 then return createGroups{} end
 
 			local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
