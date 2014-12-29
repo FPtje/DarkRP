@@ -40,7 +40,10 @@ function meta:changeTeam(t, force)
 	if not TEAM then return false end
 
 	if TEAM.customCheck and not TEAM.customCheck(self) and (not force or force and not GAMEMODE.Config.adminBypassJobRestrictions) then
-		DarkRP.notify(self, 1, 4, TEAM.CustomCheckFailMsg(self, TEAM) or DarkRP.getPhrase("unable", team.GetName(t), ""))
+		local message = isfunction(TEAM.CustomCheckFailMsg) and TEAM.CustomCheckFailMsg(self, TEAM) or
+			TEAM.CustomCheckFailMsg or
+			DarkRP.getPhrase("unable", team.GetName(t), "")
+		DarkRP.notify(self, 1, 4, message)
 		return false
 	end
 
