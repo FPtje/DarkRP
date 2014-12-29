@@ -10,7 +10,10 @@ function DarkRP.hooks:canBuyPistol(ply, shipment)
 	end
 
 	if shipment.customCheck and not shipment.customCheck(ply) then
-		return false, false, shipment.CustomCheckFailMsg(ply, shipment) or DarkRP.getPhrase("not_allowed_to_purchase")
+		local message = isfunction(shipment.CustomCheckFailMsg) and shipment.CustomCheckFailMsg(ply, shipment) or
+				shipment.CustomCheckFailMsg or
+				DarkRP.getPhrase("not_allowed_to_purchase")
+		return false, false, message
 	end
 
 	if not ply:canAfford(price) then
@@ -105,7 +108,10 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
 	end
 
 	if shipment.customCheck and not shipment.customCheck(ply) then
-		return false, false, shipment.CustomCheckFailMsg(ply, shipment) or DarkRP.getPhrase("not_allowed_to_purchase")
+		local message = isfunction(shipment.CustomCheckFailMsg) and shipment.CustomCheckFailMsg(ply, shipment) or
+				shipment.CustomCheckFailMsg or
+				DarkRP.getPhrase("not_allowed_to_purchase")
+		return false, false, message
 	end
 
 	local canbecome = false
@@ -215,7 +221,10 @@ function DarkRP.hooks:canBuyVehicle(ply, vehicle)
 	end
 
 	if vehicle.customCheck and not vehicle.customCheck(ply) then
-		return false, false, vehicle.CustomCheckFailMsg(ply, vehicle) or DarkRP.getPhrase("not_allowed_to_purchase")
+		local message = isfunction(vehicle.CustomCheckFailMsg) and vehicle.CustomCheckFailMsg(ply, vehicle) or
+				vehicle.CustomCheckFailMsg or
+				DarkRP.getPhrase("not_allowed_to_purchase")
+		return false, false, message
 	end
 
 	ply.Vehicles = ply.Vehicles or 0
@@ -322,7 +331,10 @@ function DarkRP.hooks:canBuyAmmo(ply, ammo)
 	end
 
 	if ammo.customCheck and not ammo.customCheck(ply) then
-		return false, false, ammo.CustomCheckFailMsg(ply, ammo) or DarkRP.getPhrase("not_allowed_to_purchase")
+		local message = isfunction(ammo.CustomCheckFailMsg) and ammo.CustomCheckFailMsg(ply, ammo) or
+			ammo.CustomCheckFailMsg or
+			DarkRP.getPhrase("not_allowed_to_purchase")
+		return false, false, message
 	end
 
 	local cost = ammo.getPrice and ammo.getPrice(ply, ammo.price) or ammo.price
