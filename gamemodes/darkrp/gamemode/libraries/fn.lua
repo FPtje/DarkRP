@@ -37,6 +37,7 @@ local error = error
 local math = math
 local select = select
 local _G = _G
+local fp = fp
 
 
 module("fn")
@@ -136,23 +137,23 @@ GetGlobalVar = function(key) return _G[key] end
 Mathematical operators and functions
 ---------------------------------------------------------------------------*/
 Add = function(a, b) return a + b end
-Substract = function(a, b) return a - b end
-Multiply = function(a, b) return a * b end
-Divide = function(a, b) return a / b end
+Sub = function(a, b) return a - b end
+Mul = function(a, b) return a * b end
+Div = function(a, b) return a / b end
 Mod = function(a, b) return a % b end
-Neg = function(a) return -a end
+Neg = function(a)    return -a    end
 
-Eq = function(a, b) return a == b end
+Eq  = function(a, b) return a == b end
 Neq = function(a, b) return a ~= b end
-Gt = function(a, b) return a > b end
-Lt = function(a, b) return a < b end
+Gt  = function(a, b) return a > b  end
+Lt  = function(a, b) return a < b  end
 Gte = function(a, b) return a >= b end
 Lte = function(a, b) return a <= b end
 
-Succ = Curry(Add, 2)(1)
-Pred = Curry(Flip(Substract), 2)(1)
-Even = Compose{Curry(Eq, 2)(0), Curry(Flip(Mod), 2)(2)}
-Odd = Compose{Not, Even}
+Succ = Compose{Add, 1}
+Pred = Compose{Flip(Sub), 1}
+Even = Compose{fp{Eq, 0}, fp{Flip(Mod), 2}}
+Odd  = Compose{Not, Even}
 
 /*---------------------------------------------------------------------------
 Functional logical operators and conditions

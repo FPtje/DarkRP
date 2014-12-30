@@ -16,7 +16,7 @@ local function RetrievePlayerVar(userID, var, value)
 	local ply = Player(userID)
 	DarkRPVars[userID] = DarkRPVars[userID] or {}
 
-	hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID], value)
+	hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID][var], value)
 	DarkRPVars[userID][var] = value
 
 	-- Backwards compatibility
