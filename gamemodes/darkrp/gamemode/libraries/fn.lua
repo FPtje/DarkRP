@@ -314,7 +314,7 @@ end
 
 Sum = _G.fp{Foldr, Add, 0}
 
-Product = _G.fp{Foldr, Multiply, 1}
+Product = _G.fp{Foldr, Mul, 1}
 
 Concat = _G.fp{Foldr, Append, {}}
 

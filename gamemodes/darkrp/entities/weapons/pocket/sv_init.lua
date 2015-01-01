@@ -232,7 +232,7 @@ function meta:dropPocketItem(item)
 	hook.Call("onPocketItemDropped", nil, self, ent, item, id)
 
 	self:removePocketItem(item)
-	
+
 	return ent
 end
 
@@ -257,7 +257,7 @@ Commands
 util.AddNetworkString("DarkRP_spawnPocket")
 net.Receive("DarkRP_spawnPocket", function(len, ply)
 	local item = net.ReadFloat()
-	if not ply.darkRPPocket[item] then return end
+	if not ply.darkRPPocket or not ply.darkRPPocket[item] then return end
 	ply:dropPocketItem(item)
 end)
 
