@@ -17,15 +17,16 @@ Function currying
 ---------------------------------------------------------------------------*/
 function fp(tbl)
 	local func = tbl[1]
-	local args = {}
-	for i = 2, #tbl do table.insert(args, tbl[i]) end
 
 	return function(...)
-		local fnArgs = table.Copy(args)
+		local fnArgs = {}
 		local arg = {...}
-		for i = 1, #arg do table.insert(fnArgs, arg[i]) end
+		local tblN = table.maxn(tbl)
 
-		return func(unpack(fnArgs))
+		for i = 2, tblN do fnArgs[i - 1] = tbl[i] end
+		for i = 1, table.maxn(arg) do fnArgs[tblN + i - 1] = arg[i] end
+
+		return func(unpack(fnArgs, 1, table.maxn(fnArgs)))
 	end
 end
 
