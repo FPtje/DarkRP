@@ -2,17 +2,28 @@ local Whitelist = {"sv_password"} -- Make sure people don't use FAdmin serverset
 table.insert(Whitelist, "sbox_.*")
 table.insert(Whitelist, "_FAdmin_.*")
 
-sql.Query([[CREATE TABLE IF NOT EXISTS FAdmin_ServerSettings(setting STRING NOT NULL PRIMARY KEY, value STRING NOT NULL);]])
 function FAdmin.SaveSetting(var, value)
-	sql.Query([[REPLACE INTO FAdmin_ServerSettings VALUES(]]..MySQLite.SQLStr(var:lower())..[[, ]]..MySQLite.SQLStr(value)..");")
+	MySQLite.query("REPLACE INTO FAdmin_ServerSettings VALUES("..MySQLite.SQLStr(var:lower())..", "..MySQLite.SQLStr(value)..");")
 end
 
-hook.Add("InitPostEntity", "FAdmin_Settings", function()
-	local Settings = sql.Query("SELECT * FROM FAdmin_ServerSettings;") or {}
-	for k,v in pairs(Settings) do
-		RunConsoleCommand(v.setting, v.value)
+hook.Add("DatabaseInitialized", "FAdmin_Settings", function()
+	MySQLite.query("SELECT * FROM FAdmin_ServerSettings;", function(data)
+		if not data then return end
+		
+		for k,v in pairs(data) do
+			RunConsoleCommand(v.setting, v.value)
+		end
+	end) 
+	
+	if sql.TableExists("FAdmin_ServerSettings") and MySQLite.isMySQL() then -- Read Settings out of the local DB and add them to MySQL one
+		local settings = sql.Query("SELECT * FROM FAdmin_ServerSettings;") or {}
+		for k,v in pairs(Settings) do
+			FAdmin.SaveSetting(v.setting, v.value)
+			RunConsoleCommand(v.setting, v.value)
+		end
+		sql.Query("DROP TABLE FAdmin_ServerSettings;") -- Drop the old table so we only load it once.
 	end
-end)
+end) 
 
 local function ServerSetting(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "ServerSetting") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
