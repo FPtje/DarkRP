@@ -1,11 +1,13 @@
 /*---------------------------------------------------------------------------
-Create the tables used for banning
+Create the tables used in FAdmin
 ---------------------------------------------------------------------------*/
 hook.Add("DatabaseInitialized", "FAdmin_CreateMySQLTables", function()
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdminBans(SteamID VARCHAR(25) NOT NULL PRIMARY KEY, Nick VARCHAR(40), BanDate DATETIME, UnbanDate DATETIME, Reason VARCHAR(100), AdminName VARCHAR(40), Admin_steam VARCHAR(25));", function()
 
 		hook.Call("FAdmin_RetrieveBans", nil)
 	end)
+	
+	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_ServerSettings(setting VARCHAR(40) NOT NULL PRIMARY KEY, value VARCHAR(40) NOT NULL);")
 end)
 
 /*---------------------------------------------------------------------------
