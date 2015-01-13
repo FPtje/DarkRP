@@ -1,14 +1,22 @@
+# THE GITHUB ISSUES PAGE IS NOT FOR GETTING HELP!
+Remember that! We've got a forum for that kind of stuff. It can be found here:
+http://forum.darkrp.com/
+
 # What to do when you have a problem in DarkRP
 
 There are three kinds of problems that can happen in DarkRP:
 - The problem caused by the end user (think of a bad modification or a bad setting)
 - The problem caused by a mod for DarkRP (think of a weapon pack, model pack or extra money printers or things like that)
-- The problem caused by the developer of DarkRP
+- The problem for which the developer of DarkRP is responsible
 
 The very first step of solving your problem is figuring out who caused it. Often this is easy to figure out. If DarkRP started to error
 when you edited your HUD, it's probably your fault (or the server host's). If the server starts in sandbox, or if you get the error
-"couldn't include file darkrp\gamemode\cl_init.lua (File not found)"
-it's your fault. 
+
+```
+"couldn't include file <ANYTHING> (File not found)"
+```
+
+it's your fault. Did you try uploading the entire unzipped DarkRP folder to the server with FileZilla? That's a known problem, it's FileZilla's fault. Half of your files didn't upload properly.
 
 When a weapon from a weapon pack does crazy things, it's probably the person who made that weapon pack.
 When the problem occurs with unedited DarkRP features, it might be DarkRP's fault.
