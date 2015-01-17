@@ -246,6 +246,11 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
+		{
+			name = "suppressMsg",
+			description = "Return true to make the warrant silent.",
+			type = "boolean"
+		}
 	}
 }
 
@@ -265,6 +270,11 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
+		{
+			name = "suppressMsg",
+			description = "Return true to make the unwarrant silent.",
+			type = "boolean"
+		}
 	}
 }
 
@@ -289,6 +299,11 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
+		{
+			name = "suppressMsg",
+			description = "Return true to make the unwarrant silent.",
+			type = "boolean"
+		}
 	}
 }
 
@@ -308,6 +323,11 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
+		{
+			name = "suppressMsg",
+			description = "Return true to make the unwarrant silent.",
+			type = "boolean"
+		}
 	}
 }
 

@@ -7,13 +7,15 @@ Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:warrant(warranter, reason)
 	if self.warranted then return end
-	hook.Call("playerWarranted", GAMEMODE, self, warranter, reason)
+	local suppressMsg = hook.Call("playerWarranted", GAMEMODE, self, warranter, reason)
 
 	self.warranted = true
 	timer.Simple(GAMEMODE.Config.searchtime, function()
 		if not IsValid(self) then return end
 		self:unWarrant(warranter)
 	end)
+
+	if suppressMsg then return end
 
 	local warranterNick = IsValid(warranter) and warranter:Nick() or DarkRP.getPhrase("disconnected_player")
 	local centerMessage = DarkRP.getPhrase("warrant_approved", self:Nick(), reason, warranterNick)
@@ -30,9 +32,12 @@ end
 function plyMeta:unWarrant(unwarranter)
 	if not self.warranted then return end
 
-	hook.Call("playerUnWarranted", GAMEMODE, self, unwarranter)
+	local suppressMsg = hook.Call("playerUnWarranted", GAMEMODE, self, unwarranter)
 
 	self.warranted = false
+
+	if suppressMsg then return end
+
 	DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
 end
 
@@ -42,10 +47,17 @@ function plyMeta:requestWarrant(suspect, actor, reason)
 end
 
 function plyMeta:wanted(actor, reason)
-	hook.Call("playerWanted", DarkRP.hooks, self, actor, reason)
+	local suppressMsg = hook.Call("playerWanted", DarkRP.hooks, self, actor, reason)
 
 	self:setDarkRPVar("wanted", true)
 	self:setDarkRPVar("wantedReason", reason)
+
+	timer.Create(self:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function()
+		if not IsValid(self) then return end
+		self:unWanted()
+	end)
+
+	if suppressMsg then return end
 
 	local actorNick = IsValid(actor) and actor:Nick() or DarkRP.getPhrase("disconnected_player")
 	local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
@@ -55,17 +67,16 @@ function plyMeta:wanted(actor, reason)
 		ply:PrintMessage(HUD_PRINTCENTER, centerMessage)
 		ply:PrintMessage(HUD_PRINTCONSOLE, printMessage)
 	end
-
-	timer.Create(self:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function()
-		if not IsValid(self) then return end
-		self:unWanted()
-	end)
 end
 
 function plyMeta:unWanted(actor)
-	hook.Call("playerUnWanted", GAMEMODE, self, actor)
+	local suppressMsg = hook.Call("playerUnWanted", GAMEMODE, self, actor)
 	self:setDarkRPVar("wanted", nil)
 	self:setDarkRPVar("wantedReason", nil)
+
+	timer.Destroy(self:UniqueID() .. " wantedtimer")
+
+	if suppressMsg then return end
 
 	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
 		DarkRP.getPhrase("wanted_expired", self:Nick())
@@ -74,7 +85,6 @@ function plyMeta:unWanted(actor)
 		ply:PrintMessage(HUD_PRINTCENTER, expiredMessage)
 		ply:PrintMessage(HUD_PRINTCONSOLE, expiredMessage)
 	end
-	timer.Destroy(self:UniqueID() .. " wantedtimer")
 end
 
 function plyMeta:arrest(time, arrester)
