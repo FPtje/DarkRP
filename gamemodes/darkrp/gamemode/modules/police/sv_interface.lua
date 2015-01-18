@@ -301,7 +301,7 @@ DarkRP.hookStub{
 	returns = {
 		{
 			name = "suppressMsg",
-			description = "Return true to make the unwarrant silent.",
+			description = "Return true to make the wanted silent.",
 			type = "boolean"
 		}
 	}
@@ -325,7 +325,7 @@ DarkRP.hookStub{
 	returns = {
 		{
 			name = "suppressMsg",
-			description = "Return true to make the unwarrant silent.",
+			description = "Return true to make the unwanted silent.",
 			type = "boolean"
 		}
 	}

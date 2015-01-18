@@ -61,8 +61,13 @@ local function splitShipment(ply, args)
 
 	ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" or ent:Getcount() < 2 or ent.locked then
+	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		return
+	end
+
+	if ent:Getcount() < 2 or ent.locked then
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("shipment_cannot_split"))
 		return
 	end
 
