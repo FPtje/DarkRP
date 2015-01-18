@@ -225,6 +225,7 @@ local my_language = {
 	checking_weapons = "Checking weapons",
 
 	shipment_antispam_wait = "Please wait before spawning another shipment.",
+	shipment_cannot_split = "Cannot split this shipment.",
 
 	-- Talking
 	hear_noone = "No-one can hear you %s!",
