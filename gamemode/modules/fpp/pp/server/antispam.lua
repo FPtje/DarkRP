@@ -125,7 +125,33 @@ local function IsEmpty(ent)
 	return trace.Entity
 end
 
-hook.Add("InitPostEntity", "FPP.InitializePreventSpawnInProp", function()
+local function e2AntiMinge()
+	if not wire_expression2_funcs then return end
+	local e2func = wire_expression2_funcs["applyForce(e:v)"]
+	if not e2func or not e2func[3] then return end
+
+	local applyForce = e2func[3]
+	e2func[3] = function(self, args, ...)
+		if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) then return applyForce(self, args, ...) end
+
+		local ent = args[2][1](self, op1) -- Assumption: args[2][1] is a function
+		if not IsValid(ent) then return applyForce(self, args, ...) end
+
+		-- No check for whether the entity has already been no collided with players
+		-- because while it would help performance,
+		-- it would make it possible to get around this with constrained ents
+		local ConstrainedEnts = constraint.GetAllConstrainedEntities(ent)
+		if ConstrainedEnts then -- Includes original entity
+			for k,v in pairs(ConstrainedEnts) do
+				v:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+			end
+		end
+
+		return applyForce(self, args, ...)
+	end
+end
+
+hook.Add("InitPostEntity", "FPP.InitializeAntiMinge", function()
 	local backupPropSpawn = DoPlayerEntitySpawn
 	function DoPlayerEntitySpawn(ply, ...)
 		local ent = backupPropSpawn(ply, ...)
@@ -137,6 +163,8 @@ hook.Add("InitPostEntity", "FPP.InitializePreventSpawnInProp", function()
 		ent:SetPos(pos)
 		return ent
 	end
+
+	e2AntiMinge()
 end)
 
 --More crash preventing:

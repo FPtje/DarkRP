@@ -456,7 +456,7 @@ local function AddGroup(ply, cmd, args)
 	FPP.Groups[name].tools = {}
 
 	MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(allowdefault)..");")
-	FPP.Notify(ply, "Group added succesfully", true)
+	FPP.Notify(ply, "Group added successfully", true)
 end
 concommand.Add("FPP_AddGroup", AddGroup)
 
@@ -492,7 +492,7 @@ local function RemoveGroup(ply, cmd, args)
 			FPP.GroupMembers[k] = nil -- Set group to standard if group is removed
 		end
 	end
-	FPP.Notify(ply, "Group removed succesfully", true)
+	FPP.Notify(ply, "Group removed successfully", true)
 end
 concommand.Add("FPP_RemoveGroup", RemoveGroup)
 
@@ -510,7 +510,7 @@ local function GroupChangeAllowDefault(ply, cmd, args)
 
 	FPP.Groups[name].allowdefault = util.tobool(newval)
 	MySQLite.query("UPDATE FPP_GROUPS3 SET allowdefault = "..sql.SQLStr(newval).." WHERE groupname = "..sql.SQLStr(name)..";")
-	FPP.Notify(ply, "Group status changed succesfully", true)
+	FPP.Notify(ply, "Group status changed successfully", true)
 end
 concommand.Add("FPP_ChangeGroupStatus", GroupChangeAllowDefault)
 
@@ -536,7 +536,7 @@ local function GroupAddTool(ply, cmd, args)
 	table.insert(FPP.Groups[name].tools, tool)
 
 	MySQLite.query("REPLACE INTO FPP_GROUPTOOL VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(tool)..");")
-	FPP.Notify(ply, "Tool added succesfully", true)
+	FPP.Notify(ply, "Tool added successfully", true)
 end
 concommand.Add("FPP_AddGroupTool", GroupAddTool)
 
@@ -565,7 +565,7 @@ local function GroupRemoveTool(ply, cmd, args)
 
 	MySQLite.query("DELETE FROM FPP_GROUPTOOL WHERE groupname = "..sql.SQLStr(name).." AND tool = "..sql.SQLStr(tool)..";")
 
-	FPP.Notify(ply, "Tool removed succesfully", true)
+	FPP.Notify(ply, "Tool removed successfully", true)
 end
 concommand.Add("FPP_RemoveGroupTool", GroupRemoveTool)
 
@@ -591,7 +591,7 @@ local function PlayerSetGroup(ply, cmd, args)
 		MySQLite.query("DELETE FROM FPP_GROUPMEMBERS1 WHERE steamid = "..sql.SQLStr(name)..";")
 	end
 
-	FPP.Notify(ply, "Player group succesfully set", true)
+	FPP.Notify(ply, "Player group successfully set", true)
 end
 concommand.Add("FPP_SetPlayerGroup", PlayerSetGroup)
 
@@ -779,6 +779,7 @@ local function RestrictToolPerson(ply, cmd, args)
 		FPP.RestrictedToolsPlayers[toolname][target:SteamID()] = nil
 		MySQLite.query("DELETE FROM FPP_TOOLRESTRICTPERSON1 WHERE toolname = "..sql.SQLStr(toolname).." AND steamid = "..sql.SQLStr(target:SteamID())..";")
 	end
+	FPP.Notify(ply, "Tool restrictions set successfully", true)
 end
 concommand.Add("FPP_restricttoolplayer", RestrictToolPerson)
 

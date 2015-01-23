@@ -74,10 +74,12 @@ function FPP.entGetTouchReason(ent, touchType)
 	local maxReasonValue = 15
 	local reasonNr = bit.band(idx, bit.lshift(maxReasonValue, reasonSize * touchTypeMultiplier[touchType]))
 	local reason = reasons[reasonNr]
+	local owner = ent:CPPIGetOwner()
 
 	if reasonNr == 1 then -- convert owner to the actual player
-		local owner = ent:CPPIGetOwner()
-		reason = IsValid(owner) and owner:Nick() or "Unknown player"
+		return IsValid(owner) and owner:Nick() or "Unknown player"
+	elseif reasonNr == 6 then
+		return "Buddy (" .. (IsValid(owner) and owner:Nick() or "Unknown player") .. ")"
 	end
 
 	return reason
