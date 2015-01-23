@@ -6,13 +6,8 @@ Functions
 ---------------------------------------------------------------------------*/
 
 function meta:isLocked( )
-	if ( self:isDoor( ) ) then
-		return ( self:GetSaveTable( ).m_bLocked )
-	elseif ( self:IsVehicle( ) ) then
-		return ( self:GetSaveTable( ).VehicleLocked )
-	else
-		return false
-	end
+	local save = self:GetSaveTable()
+	return save and (self:isDoor() and save.m_bLocked) or (self:IsVehicle() and save.VehicleLocked)
 end
 
 function meta:keysLock()
