@@ -7,7 +7,7 @@ Functions
 
 function meta:isLocked( )
 	local save = self:GetSaveTable()
-	return save and (self:isDoor() and save.m_bLocked) or (self:IsVehicle() and save.VehicleLocked)
+	return save and ((self:isDoor() and save.m_bLocked) or (self:IsVehicle() and save.VehicleLocked))
 end
 
 function meta:keysLock()
