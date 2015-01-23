@@ -4,6 +4,17 @@ local pmeta = FindMetaTable("Player")
 /*---------------------------------------------------------------------------
 Functions
 ---------------------------------------------------------------------------*/
+
+function meta:isLocked( )
+	if ( self:isDoor( ) ) then
+		return ( self:GetSaveTable( ).m_bLocked )
+	elseif ( self:IsVehicle( ) ) then
+		return ( self:GetSaveTable( ).VehicleLocked )
+	else
+		return false
+	end
+end
+
 function meta:keysLock()
 	self:Fire("lock", "", 0)
 	if isfunction(self.Lock) then self:Lock(true) end -- SCars
