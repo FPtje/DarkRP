@@ -178,6 +178,7 @@ Nickname override to show RP name
 ---------------------------------------------------------------------------*/
 meta.SteamName = meta.SteamName or meta.Name
 function meta:Name()
+	if not IsValid(self) then return DarkRP.error("Tried to use a NULL entity!", 2) end
 	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
 		or self:SteamName()
 end
