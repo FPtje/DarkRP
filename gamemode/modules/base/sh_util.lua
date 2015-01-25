@@ -145,6 +145,7 @@ function DarkRP.error(err, level)
 	end
 
 	Error(table.concat(txt, "\n") .. "\n")
+	error("THIS IS A DUMMY ERROR.\nError handling is fucked because of a bug in gmod.\nThere's an error right above this one.\nThat's the one you need.\nThis error is to be IGNORED.\nDon't start whining about this dummy error on the GitHub issue tracker or I'll fucking hurt you.\nThe error above this one is the one you need.")
 end
 
 function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
