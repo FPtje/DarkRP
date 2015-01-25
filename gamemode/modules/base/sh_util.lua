@@ -123,6 +123,29 @@ function DarkRP.findPlayers(info)
 	return players
 end
 
+/*---------------------------------------------------------------------------
+Custom error function.
+Because the default error function doesn't allow levels anymore apparently
+---------------------------------------------------------------------------*/
+function DarkRP.error(err, level)
+	if not tonumber(level) then return DarkRP.error("The second parameter to DarkRP.error must be a number", 2) end
+
+	local info = debug.getinfo(2, "Sln")
+	local txt = {string.format("\n[ERROR] %s:%i: %s", info.short_src, info.currentline, err)}
+	local i = 1
+
+	info = debug.getinfo(level, "Sln")
+	while info do
+		local name = info.name ~= nil and info.name or "unknown"
+		txt[#txt + 1] = string.format("%s%i. %s - %s:%i", string.rep(" ", i), i, name, info.short_src, info.currentline)
+		i = i + 1
+		level = level + 1
+		info = debug.getinfo(level, "Sln")
+	end
+
+	Error(table.concat(txt, "\n") .. "\n")
+end
+
 function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	searchDistance = searchDistance or 100
 	hitDistance = hitDistance or 15
