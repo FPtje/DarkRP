@@ -20,7 +20,7 @@ end
 function DarkRP.declareChatCommand(tbl)
 	local valid, element = checkChatCommand(tbl)
 	if not valid then
-		error("Incorrect chat command! " .. element .. " is invalid!", 2)
+		DarkRP.error("Incorrect chat command! " .. element .. " is invalid!", 2)
 	end
 
 	tbl.command = string.lower(tbl.command)

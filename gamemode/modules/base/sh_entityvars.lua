@@ -11,7 +11,7 @@ function DarkRP.registerDarkRPVar(name, writeFn, readFn)
 	maxId = maxId + 1
 
 	-- UNKNOWN_DARKRPVAR is reserved for unknown values
-	if maxId >= UNKNOWN_DARKRPVAR then error(string.format("Too many DarkRPVar registrations! DarkRPVar '%s' triggered this error", name)) end
+	if maxId >= UNKNOWN_DARKRPVAR then DarkRP.error(string.format("Too many DarkRPVar registrations! DarkRPVar '%s' triggered this error", name), 2) end
 
 	DarkRPVars[name] = {id = maxId, name = name, writeFn = writeFn, readFn = readFn}
 	DarkRPVarById[maxId] = DarkRPVars[name]

@@ -36,7 +36,7 @@ function plyMeta:requestHit(customer, target, price)
 end
 
 function plyMeta:placeHit(customer, target, price)
-	if hits[self] then error("This person has an active hit!") end
+	if hits[self] then DarkRP.error("This person has an active hit!", 2) end
 
 	if not customer:canAfford(price) then
 		DarkRP.notify(customer, 1, 4, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit")))
@@ -55,7 +55,7 @@ function plyMeta:placeHit(customer, target, price)
 end
 
 function plyMeta:setHitTarget(target)
-	if not hits[self] then error("This person has no active hit!") end
+	if not hits[self] then DarkRP.error("This person has no active hit!", 2) end
 
 	self:setSelfDarkRPVar("hitTarget", target)
 	self:setDarkRPVar("hasHit", target and true or nil)
@@ -66,7 +66,7 @@ function plyMeta:setHitPrice(price)
 end
 
 function plyMeta:setHitCustomer(customer)
-	if not hits[self] then error("This person has no active hit!") end
+	if not hits[self] then DarkRP.error("This person has no active hit!", 2) end
 
 	hits[self].customer = customer
 end
@@ -76,7 +76,7 @@ function plyMeta:getHitCustomer()
 end
 
 function plyMeta:abortHit(message)
-	if not hits[self] then error("This person has no active hit!") end
+	if not hits[self] then DarkRP.error("This person has no active hit!", 2) end
 
 	message = message or ""
 

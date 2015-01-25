@@ -193,7 +193,8 @@ end
 Interface functions
 ---------------------------------------------------------------------------*/
 function meta:addPocketItem(ent)
-	if not IsValid(ent) or ent.USED then error("Entity not valid", 2) end
+	if not IsValid(ent) then DarkRP.error("Entity not valid", 2) end
+	if ent.USED then return end
 
 	-- This item cannot be used until it has been removed
 	ent.USED = true
@@ -212,7 +213,7 @@ function meta:addPocketItem(ent)
 end
 
 function meta:removePocketItem(item)
-	if not self.darkRPPocket or not self.darkRPPocket[item] then error("Player does not contain " .. item .. " in their pocket.", 2) end
+	if not self.darkRPPocket or not self.darkRPPocket[item] then DarkRP.error("Player does not contain " .. item .. " in their pocket.", 2) end
 
 	hook.Call("onPocketItemRemoved", nil, self, item)
 
@@ -221,7 +222,7 @@ function meta:removePocketItem(item)
 end
 
 function meta:dropPocketItem(item)
-	if not self.darkRPPocket or not self.darkRPPocket[item] then error("Player does not contain " .. item .. " in their pocket.", 2) end
+	if not self.darkRPPocket or not self.darkRPPocket[item] then DarkRP.error("Player does not contain " .. item .. " in their pocket.", 2) end
 
 	local id = self.darkRPPocket[item]
 	local ent = deserialize(self, id)
