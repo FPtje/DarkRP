@@ -40,7 +40,11 @@ function ENT:Initialize()
 	if self:Getcount() < 1 then
 		self.PlayerUse = false
 		SafeRemoveEntity(self)
-		error("Shipment created with zero or fewer elements.")
+		if not contents then
+			DarkRP.error("Shipment created with zero or fewer elements.", 2)
+		else
+			DarkRP.error(string.format("Some smartass thought they were clever by setting the 'amount' of shipment '%s' to 0.\nWhat the fuck do you expect the use of an empty shipment to be?", contents.name), 2)
+		end
 	end
 end
 
