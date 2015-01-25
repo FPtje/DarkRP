@@ -130,6 +130,7 @@ Because the default error function doesn't allow levels anymore apparently
 function DarkRP.error(err, level)
 	if not tonumber(level) then return DarkRP.error("The second parameter to DarkRP.error must be a number", 2) end
 
+	level = level + 1 -- Ignore this level
 	local info = debug.getinfo(2, "Sln")
 	local txt = {string.format("\n[ERROR] %s:%i: %s", info.short_src, info.currentline, err)}
 	local i = 1
