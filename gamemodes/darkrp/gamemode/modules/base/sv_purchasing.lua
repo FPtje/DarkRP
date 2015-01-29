@@ -274,7 +274,7 @@ local function BuyVehicle(ply, args)
 
 	local trace = {}
 	trace.start = ply:EyePos()
-	trace.endpos = trace.start + ply:GetAimVector() * 85
+	trace.endpos = trace.start + ply:GetAimVector() * (found.distance or 85)
 	trace.filter = ply
 	local tr = util.TraceLine(trace)
 
@@ -294,7 +294,8 @@ local function BuyVehicle(ply, args)
 	Angles.pitch = 0
 	Angles.roll = 0
 	Angles.yaw = Angles.yaw + 180
-	ent:SetAngles(Angles)
+	local angOff = found.angle or Angle(0, 0, 0)
+	ent:SetAngles(Angles + angOff)
 	ent:SetPos(tr.HitPos)
 	ent.VehicleName = found.name
 	ent.VehicleTable = Vehicle
