@@ -355,6 +355,27 @@ local function addEntityCommands(tblEnt)
 	}
 	if CLIENT then return end
 
+	-- Default spawning function of an entity
+	-- used if tblEnt.spawn is not defined
+	local function defaultSpawn(ply, tr, tblEnt)
+		local ent = ents.Create(tblEnt.ent)
+		if not ent:IsValid() then error("Entity '"..tblEnt.ent.."' does not exist or is not valid.") end
+		ent.dt = ent.dt or {}
+		ent.dt.owning_ent = ply
+		if ent.Setowning_ent then ent:Setowning_ent(ply) end
+		ent:SetPos(tr.HitPos)
+		-- These must be set before :Spawn()
+		ent.SID = ply.SID
+		ent.allowed = tblEnt.allowed
+		ent.DarkRPItem = tblEnt
+		ent:Spawn()
+
+		local phys = ent:GetPhysicsObject()
+		if phys:IsValid() then phys:Wake() end
+
+		return ent
+	end
+
 	local function buythis(ply, args)
 		if ply:isArrested() then return "" end
 		if type(tblEnt.allowed) == "table" and not table.HasValue(tblEnt.allowed, ply:Team()) then
@@ -398,21 +419,14 @@ local function addEntityCommands(tblEnt)
 
 		local tr = util.TraceLine(trace)
 
-		local item = ents.Create(tblEnt.ent)
-		if not item:IsValid() then error("Entity '"..tblEnt.ent.."' does not exist or is not valid.") end
-		item.dt = item.dt or {}
-		item.dt.owning_ent = ply
-		if item.Setowning_ent then item:Setowning_ent(ply) end
-		item:SetPos(tr.HitPos)
-		item.SID = ply.SID
-		item.onlyremover = true
-		item.allowed = tblEnt.allowed
-		item.DarkRPItem = tblEnt
-		item:Spawn()
-		local phys = item:GetPhysicsObject()
-		if phys:IsValid() then phys:Wake() end
+		local ent = (tblEnt.spawn or defaultSpawn)(ply, tr, tblEnt)
+		ent.onlyremover = true
+		-- Repeat these properties to alleviate work in tblEnt.spawn:
+		ent.SID = ply.SID
+		ent.allowed = tblEnt.allowed
+		ent.DarkRPItem = tblEnt
 
-		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, item, cost)
+		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, ent, cost)
 
 		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(cost), ""))
 
