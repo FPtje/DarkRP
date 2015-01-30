@@ -182,7 +182,10 @@ local function getRamFunction(ply, trace)
 
 	if not IsValid(ent) then return fp{fn.Id, false} end
 
+	local override = hook.Call("canDoorRam", nil, ply, trace, ent)
+
 	return
+		override ~= nil     and fp{fn.Id, override}								   or
 		ent:isDoor() 		and fp{ramDoor, ply, trace, ent} 					   or
 		ent:IsVehicle() 	and fp{ramVehicle, ply, trace, ent} 				   or
 		ent.fadeActivate 	and fp{ramFadingDoor, ply, trace, ent}  			   or
@@ -251,6 +254,35 @@ function SWEP:GetViewModelPosition(pos, ang)
 end
 
 if SERVER then
+	DarkRP.hookStub{
+		name = "canDoorRam",
+		description = "Called when a player attempts to ram something. Use this to override ram behaviour or to disallow ramming.",
+		parameters = {
+			{
+				name = "ply",
+				description = "The player using the door ram.",
+				type = "Player"
+			},
+			{
+				name = "trace",
+				description = "The trace containing information about the hit position and ram entity.",
+				type = "table"
+			},
+			{
+				name = "ent",
+				description = "Short for the entity that is about to be hit by the door ram.",
+				type = "table"
+			}
+		},
+		returns = {
+			{
+				name = "override",
+				description = "Return true to override behaviour, false to disallow ramming and nil (or no value) to defer the decision.",
+				type = "boolean"
+			}
+		}
+	}
+
 	DarkRP.hookStub{
 		name = "onDoorRamUsed",
 		description = "Called when the door ram has been used.",
