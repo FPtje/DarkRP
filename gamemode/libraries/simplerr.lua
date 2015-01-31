@@ -151,7 +151,8 @@ local runErrs = {
         text = "'%s' is being indexed like it is a table, but in reality it does not exist (is nil).",
         format = function(m) return m[1] end,
         hints = {
-            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here does not exist."
+            "You either have 'something.somethingElse', 'something<somethingElse>' or 'something:somethingElse(more)'. The 'something' here does not exist.",
+            "The < and > in the above example should be replaced by square brackets. Due to a limitation in the GMod error system it is impossible to have square brackets in errors."
         }
     },
     {
@@ -167,7 +168,8 @@ local runErrs = {
         text = "Something is being indexed like it is a table, but in reality does not exist (is nil).",
         format = function() end,
         hints = {
-            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here does not exist."
+            "You either have 'something.somethingElse', 'something<somethingElse>' or 'something:somethingElse(more)'. The 'something' here does not exist.",
+            "The < and > in the above example should be replaced by square brackets. Due to a limitation in the GMod error system it is impossible to have square brackets in errors."
         }
     },
     {
@@ -175,7 +177,8 @@ local runErrs = {
         text = "Something is being indexed like it is a table, but in reality it is a %s value.",
         format = function(m) return m[1] end,
         hints = {
-            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here is not a table."
+            "You either have 'something.somethingElse', 'something<somethingElse>' or 'something:somethingElse(more)'. The 'something' here is not a table.",
+            "The < and > in the above example should be replaced by square brackets. Due to a limitation in the GMod error system it is impossible to have square brackets in errors."
         }
     },
     {
