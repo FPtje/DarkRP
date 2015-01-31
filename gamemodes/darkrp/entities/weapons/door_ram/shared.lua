@@ -271,7 +271,7 @@ if SERVER then
 			{
 				name = "ent",
 				description = "Short for the entity that is about to be hit by the door ram.",
-				type = "table"
+				type = "Entity"
 			}
 		},
 		returns = {
