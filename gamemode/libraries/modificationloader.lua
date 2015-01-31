@@ -26,9 +26,21 @@ DarkRP.disabledDefaults["jobs"]       		= {}
 DarkRP.disabledDefaults["shipments"]  		= {}
 DarkRP.disabledDefaults["vehicles"]   		= {}
 
+-- include a file
+local function doInclude(file)
+	local inc = simplerr and simplerr.runFile or include
+	local succ, err = inc(file)
+
+	-- Throw a normal error on failure for now
+	-- Todo: bug admins with it
+	if succ == false then error(err) end
+
+	return succ
+end
+
 if file.Exists("darkrp_config/disabled_defaults.lua", "LUA") then
 	if SERVER then AddCSLuaFile("darkrp_config/disabled_defaults.lua") end
-	include("darkrp_config/disabled_defaults.lua")
+	doInclude("darkrp_config/disabled_defaults.lua")
 end
 
 /*---------------------------------------------------------------------------
@@ -43,9 +55,9 @@ for _, File in pairs(configFiles) do
 	if not file.Exists(File, "LUA") then continue end
 
 	if SERVER then AddCSLuaFile(File) end
-	include(File)
+	doInclude(File)
 end
-if SERVER and file.Exists("darkrp_config/mysql.lua", "LUA") then include("darkrp_config/mysql.lua") end
+if SERVER and file.Exists("darkrp_config/mysql.lua", "LUA") then doInclude("darkrp_config/mysql.lua") end
 
 /*---------------------------------------------------------------------------
 Modules
@@ -62,20 +74,20 @@ local function loadModules()
 			if SERVER then AddCSLuaFile(fol..folder .. "/" ..File) end
 
 			if File == "sh_interface.lua" then continue end
-			include(fol.. folder .. "/" ..File)
+			doInclude(fol.. folder .. "/" ..File)
 		end
 
 		if SERVER then
 			for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", "LUA"), true) do
 				if File == "sv_interface.lua" then continue end
-				include(fol.. folder .. "/" ..File)
+				doInclude(fol.. folder .. "/" ..File)
 			end
 		end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", "LUA"), true) do
 			if File == "cl_interface.lua" then continue end
 			if SERVER then AddCSLuaFile(fol.. folder .. "/" ..File)
-			else include(fol.. folder .. "/" ..File)  end
+			else doInclude(fol.. folder .. "/" ..File)  end
 		end
 	end
 end
@@ -86,7 +98,7 @@ local function loadLanguages()
 	local files, folders = file.Find(fol .. "*", "LUA")
 	for _, File in pairs(files) do
 		if SERVER then AddCSLuaFile(fol .. File) end
-		include(fol .. File)
+		doInclude(fol .. File)
 	end
 end
 
@@ -108,7 +120,7 @@ local function loadCustomDarkRPItems()
 		if File == "darkrp_customthings/food.lua" and DarkRP.disabledDefaults["modules"]["hungermod"] then continue end
 
 		if SERVER then AddCSLuaFile(File) end
-		include(File)
+		doInclude(File)
 	end
 end
 
