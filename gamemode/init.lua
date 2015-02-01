@@ -5,6 +5,7 @@ GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome 
 
 DeriveGamemode("sandbox")
 
+AddCSLuaFile("libraries/simplerr.lua")
 AddCSLuaFile("libraries/interfaceloader.lua")
 AddCSLuaFile("libraries/modificationloader.lua")
 AddCSLuaFile("libraries/disjointset.lua")
