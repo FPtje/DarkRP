@@ -375,6 +375,7 @@ end
 -- Run a file or explain its syntax errors in layman's terms
 -- Returns bool succeed, [string error]
 function runFile(path)
+    if not file.Exists(path, "LUA") then error(string.format("Could not run file '%s' (file not found)", path)) end
     local contents = file.Read(path, "LUA")
     local err = CompileString(contents, path, false)
 
