@@ -26,7 +26,6 @@ include("config/_MySQL.lua")
 include("config/config.lua")
 include("config/licenseweapons.lua")
 
-include("libraries/simplerr.lua")
 include("libraries/modificationloader.lua")
 include("libraries/fn.lua")
 include("libraries/mysqlite/mysqlite.lua")
