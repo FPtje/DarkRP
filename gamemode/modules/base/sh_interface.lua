@@ -203,6 +203,33 @@ DarkRP.getJobByCommand = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.simplerrRun = DarkRP.stub{
+	name = "simplerrRun",
+	description = "Run a function with the given parameters and send any runtime errors to admins.",
+	parameters = {
+		{
+			name = "f",
+			description = "The function to be called.",
+			type = "function",
+			optional = false
+		},
+		{
+			name = "args",
+			description = "The arguments to be given to f.",
+			type = "vararg",
+			optional = true
+		},
+	},
+	returns = {
+		{
+			name = "succ",
+			description = "Whether the function call succeeded.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP
+}
+
 -- This function is one of the few that's already defined before the stub is created
 DarkRP.stub{
 	name = "SteamName",
