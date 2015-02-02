@@ -23,7 +23,7 @@ Hints:
 ------]]
 
 -- Template for runtime errors
-local runErrTranslation = [[A runtime error has occurred in "%s". Its author should look around line number %i of that file.
+local runErrTranslation = [[A runtime error has occurred in "%s" on line %i.
 The best help I can give you is this:
 
 %s
@@ -31,6 +31,8 @@ The best help I can give you is this:
 Hints:
 %s
 
+The responsibility for this error lies with (the authors of) one (or more) of these files:
+%s
 ------]]
 
 -- Structure that contains syntax errors and their translations. Catches only the most common errors.
@@ -359,22 +361,37 @@ local function translateMsg(msg, path, line, errs)
 end
 
 -- Translate an error into a language understandable by non-programmers
-local function translateError(path, err, translation, errs)
+local function translateError(path, err, translation, errs, stack)
     local line, msg = string.match(err, path .. ":([0-9]+): (.*)")
     line = tonumber(line)
 
-    local res = string.format(translation, path, line, translateMsg(msg, path, line, errs))
+    local msg, hints = translateMsg(msg, path, line, errs)
+    local res = string.format(translation, path, line, msg, hints, stack)
     return res
 end
 
 -- Call a function and catch immediate runtime errors
 function safeCall(f, ...)
     local succ, err = pcall(f, ...)
-    local path = debug.getinfo(f).short_src
 
     if succ then return true end
 
-    return false, translateError(path, err, runErrTranslation, runErrs)
+    local path = debug.getinfo(f).short_src
+
+    -- Investigate the stack
+    local line = string.match(err, path .. ":([0-9]+)")
+    local level, stack = 2, {string.format("\t1. %s on line %i", path, line)}
+
+    while true do
+        local info = debug.getinfo(level, "Sln")
+        if not info then break end
+
+        table.insert(stack, string.format("\t%i. %s on line %i", level, info.short_src, info.currentline))
+
+        level = level + 1
+    end
+
+    return false, translateError(path, err, runErrTranslation, runErrs, table.concat(stack, '\n'))
 end
 
 -- Run a file or explain its syntax errors in layman's terms
