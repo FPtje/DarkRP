@@ -31,6 +31,10 @@ util.AddNetworkString("DarkRP_simplerrError")
 
 -- Send all errors to the client
 local function sendErrors(plys, errs)
+    local count = #errs
+    local one = count == 1
+
+    DarkRP.notify(plys, 1, 120, string.format("There %s %i Lua problem%s!\nPlease check your console for more information!", one and "is" or "are", count, one and '' or 's'))
     net.Start("DarkRP_simplerrError")
         net.WriteUInt(#errs, 16)
         fn.ForEach(fn.Flip(net.WriteString), errs)
