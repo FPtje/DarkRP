@@ -18,7 +18,7 @@ if CLIENT then
 
         for i = 1, count do
             local err = net.ReadString()
-            MsgC(Color(137, 222, 255), string.format("[ERROR] %s\n", err))
+            MsgC(Color(137, 222, 255), err .. "\n")
         end
     end)
 
