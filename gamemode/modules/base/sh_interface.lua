@@ -222,9 +222,9 @@ DarkRP.simplerrRun = DarkRP.stub{
 	},
 	returns = {
 		{
-			name = "succ",
-			description = "Whether the function call succeeded.",
-			type = "boolean"
+			name = "retVals",
+			description = "The return values of f.",
+			type = "vararg"
 		}
 	},
 	metatable = DarkRP

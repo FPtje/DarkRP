@@ -1,5 +1,6 @@
 -- simplerrRun: Run a function with the given parameters and send any runtime errors to admins
 DarkRP.simplerrRun = fc{
+    fn.Snd, -- On success ignore the first return value
     simplerr.wrapError,
     simplerr.wrapHook,
     simplerr.wrapLog,
