@@ -13,7 +13,9 @@ local tonumber = tonumber
 local unpack = unpack
 
 -- Template for syntax errors
-local synErrTranslation = [[Lua is unable to understand file "%s" because its author made a mistake around line number %i.
+-- The [ERROR] start of it cannot be removed, because that would make the
+-- error mechanism remove all square brackets. Only Garry can make that bullshit up.
+local synErrTranslation = [=[[ERROR] Lua is unable to understand file "%s" because its author made a mistake around line number %i.
 The best help I can give you is this:
 
 %s
@@ -21,10 +23,10 @@ The best help I can give you is this:
 Hints:
 %s
 
-------]]
+------]=]
 
 -- Template for runtime errors
-local runErrTranslation = [[A runtime error has occurred in "%s" on line %i.
+local runErrTranslation = [=[[ERROR] A runtime error has occurred in "%s" on line %i.
 The best help I can give you is this:
 
 %s
@@ -34,7 +36,7 @@ Hints:
 
 The responsibility for this error lies with (the authors of) one (or more) of these files:
 %s
-------]]
+------]=]
 
 -- Structure that contains syntax errors and their translations. Catches only the most common errors.
 -- Order is important: the structure with the first match is taken.
@@ -158,8 +160,7 @@ local runErrs = {
         text = "'%s' is being indexed like it is a table, but in reality it does not exist (is nil).",
         format = function(m) return m[1] end,
         hints = {
-            "You either have 'something.somethingElse', 'something<somethingElse>' or 'something:somethingElse(more)'. The 'something' here does not exist.",
-            "The < and > in the above example should be replaced by square brackets. Due to a limitation in the GMod error system it is impossible to have square brackets in errors."
+            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here does not exist."
         }
     },
     {
@@ -175,8 +176,7 @@ local runErrs = {
         text = "Something is being indexed like it is a table, but in reality does not exist (is nil).",
         format = function() end,
         hints = {
-            "You either have 'something.somethingElse', 'something<somethingElse>' or 'something:somethingElse(more)'. The 'something' here does not exist.",
-            "The < and > in the above example should be replaced by square brackets. Due to a limitation in the GMod error system it is impossible to have square brackets in errors."
+            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here does not exist."
         }
     },
     {
@@ -184,8 +184,7 @@ local runErrs = {
         text = "Something is being indexed like it is a table, but in reality it is a %s value.",
         format = function(m) return m[1] end,
         hints = {
-            "You either have 'something.somethingElse', 'something<somethingElse>' or 'something:somethingElse(more)'. The 'something' here is not a table.",
-            "The < and > in the above example should be replaced by square brackets. Due to a limitation in the GMod error system it is impossible to have square brackets in errors."
+            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here is not a table."
         }
     },
     {
