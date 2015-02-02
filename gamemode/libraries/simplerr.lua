@@ -1,4 +1,5 @@
 local CompileString = CompileString
+local debug = debug
 local error = error
 local error = error
 local file = file
@@ -367,8 +368,9 @@ local function translateError(path, err, translation, errs)
 end
 
 -- Call a function and catch immediate runtime errors
-function safeCall(f, path)
-    local succ, err = pcall(f)
+function safeCall(f, ...)
+    local succ, err = pcall(f, ...)
+    local path = debug.getinfo(f).short_src
 
     if succ then return true end
 
