@@ -10,6 +10,7 @@ local pcall = pcall
 local string = string
 local table = table
 local tonumber = tonumber
+local unpack = unpack
 
 -- Template for syntax errors
 local synErrTranslation = [[Lua is unable to understand file "%s" because its author made a mistake around line number %i.
@@ -372,9 +373,10 @@ end
 
 -- Call a function and catch immediate runtime errors
 function safeCall(f, ...)
-    local succ, err = pcall(f, ...)
+    local res = {pcall(f, ...)}
+    local succ, err = res[1], res[2]
 
-    if succ then return true end
+    if succ then return unpack(res) end
 
     local path = debug.getinfo(f).short_src
 
