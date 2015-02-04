@@ -57,7 +57,7 @@ if CLIENT then
 
 	-- cam.End3D should not crash a player when 3D hasn't been started
 	function cam.End3D()
-		if not cam3DStarted then return end
+		if not cam3DStarted or cam3DStarted <= 0 then return end
 		cam3DStarted = cam3DStarted - 1
 		return camend3D()
 	end
