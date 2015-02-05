@@ -464,6 +464,21 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
 	CustomTeam.salary = math.floor(CustomTeam.salary)
 
+	CustomTeam.customCheck           = CustomTeam.customCheck           and fp{DarkRP.simplerrRun, CustomTeam.customCheck}
+	CustomTeam.CustomCheckFailMsg = isfunction(CustomTeam.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomTeam.CustomCheckFailMsg} or CustomTeam.CustomCheckFailMsg
+	CustomTeam.CanPlayerSuicide      = CustomTeam.CanPlayerSuicide      and fp{DarkRP.simplerrRun, CustomTeam.CanPlayerSuicide}
+	CustomTeam.PlayerCanPickupWeapon = CustomTeam.PlayerCanPickupWeapon and fp{DarkRP.simplerrRun, CustomTeam.PlayerCanPickupWeapon}
+	CustomTeam.PlayerDeath           = CustomTeam.PlayerDeath           and fp{DarkRP.simplerrRun, CustomTeam.PlayerDeath}
+	CustomTeam.PlayerLoadout         = CustomTeam.PlayerLoadout         and fp{DarkRP.simplerrRun, CustomTeam.PlayerLoadout}
+	CustomTeam.PlayerSelectSpawn     = CustomTeam.PlayerSelectSpawn     and fp{DarkRP.simplerrRun, CustomTeam.PlayerSelectSpawn}
+	CustomTeam.PlayerSetModel        = CustomTeam.PlayerSetModel        and fp{DarkRP.simplerrRun, CustomTeam.PlayerSetModel}
+	CustomTeam.PlayerSpawn           = CustomTeam.PlayerSpawn           and fp{DarkRP.simplerrRun, CustomTeam.PlayerSpawn}
+	CustomTeam.PlayerSpawnProp       = CustomTeam.PlayerSpawnProp       and fp{DarkRP.simplerrRun, CustomTeam.PlayerSpawnProp}
+	CustomTeam.RequiresVote          = CustomTeam.RequiresVote          and fp{DarkRP.simplerrRun, CustomTeam.RequiresVote}
+	CustomTeam.ShowSpare1            = CustomTeam.ShowSpare1            and fp{DarkRP.simplerrRun, CustomTeam.ShowSpare1}
+	CustomTeam.ShowSpare2            = CustomTeam.ShowSpare2            and fp{DarkRP.simplerrRun, CustomTeam.ShowSpare2}
+	CustomTeam.canStartVote          = CustomTeam.canStartVote          and fp{DarkRP.simplerrRun, CustomTeam.canStartVote}
+
 	jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
 	local Team = #RPExtraTeams
@@ -530,6 +545,8 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	if corrupt then ErrorNoHalt("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
 
 	customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
+	customShipment.customCheck = customShipment.customCheck   and fp{DarkRP.simplerrRun, customShipment.customCheck}
+	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
 	-- if SERVER and FPP then
 	-- 	FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
@@ -554,6 +571,9 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
 	local corrupt = checkValid(vehicle, validVehicle)
 	if corrupt then ErrorNoHalt("Corrupt vehicle \"" .. (vehicle.name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
 	if not found then ErrorNoHalt("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.") end
+
+	CustomVehicles.customCheck = CustomVehicles.customCheck and fp{DarkRP.simplerrRun, CustomVehicles.customCheck}
+	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
 	table.insert(CustomVehicles, vehicle)
 end
@@ -589,6 +609,12 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 
 	local corrupt = checkValid(tblEnt, validEntity)
 	if corrupt then ErrorNoHalt("Corrupt Entity \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
+
+	tblEnt.customCheck = tblEnt.customCheck and fp{DarkRP.simplerrRun, tblEnt.customCheck}
+	tblEnt.CustomCheckFailMsg = isfunction(tblEnt.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, tblEnt.CustomCheckFailMsg} or tblEnt.CustomCheckFailMsg
+	tblEnt.getPrice    = tblEnt.getPrice    and fp{DarkRP.simplerrRun, tblEnt.getPrice}
+	tblEnt.getMax      = tblEnt.getMax      and fp{DarkRP.simplerrRun, tblEnt.getMax}
+	tblEnt.spawn       = tblEnt.spawn       and fp{DarkRP.simplerrRun, tblEnt.spawn}
 
 	-- if SERVER and FPP then
 	-- 	FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
@@ -649,7 +675,7 @@ function DarkRP.createGroupChat(funcOrTeam, ...)
 	end
 	-- People can enter either functions or a list of teams as parameter(s)
 	if type(funcOrTeam) == "function" then
-		table.insert(gm.DarkRPGroupChats, funcOrTeam)
+		table.insert(gm.DarkRPGroupChats, fp{DarkRP.simplerrRun, funcOrTeam})
 	else
 		local teams = {funcOrTeam, ...}
 		table.insert(gm.DarkRPGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
@@ -672,6 +698,9 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 	ammo.ammoType = ammoType
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
+
+	ammo.customCheck = ammo.customCheck and fp{DarkRP.simplerrRun, ammo.customCheck}
+	ammo.CustomCheckFailMsg = isfunction(ammo.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, ammo.CustomCheckFailMsg} or ammo.CustomCheckFailMsg
 	table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end

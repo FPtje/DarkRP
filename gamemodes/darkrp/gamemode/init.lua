@@ -5,6 +5,7 @@ GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome 
 
 DeriveGamemode("sandbox")
 
+AddCSLuaFile("libraries/simplerr.lua")
 AddCSLuaFile("libraries/interfaceloader.lua")
 AddCSLuaFile("libraries/modificationloader.lua")
 AddCSLuaFile("libraries/disjointset.lua")
@@ -26,8 +27,9 @@ include("config/_MySQL.lua")
 include("config/config.lua")
 include("config/licenseweapons.lua")
 
-include("libraries/modificationloader.lua")
 include("libraries/fn.lua")
+include("libraries/simplerr.lua")
+include("libraries/modificationloader.lua")
 include("libraries/mysqlite/mysqlite.lua")
 include("libraries/disjointset.lua")
 

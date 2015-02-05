@@ -18,7 +18,6 @@ end
 
 local function RP_PlayerChat(ply, text, teamonly)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID().."): "..text )
-	local chatcommands = DarkRP.getChatCommands()
 	local callback = ""
 	local DoSayFunc
 	local groupSay = DarkRP.getChatCommand("g")

@@ -322,3 +322,7 @@ Concat = _G.fp{Foldr, Append, {}}
 Maximum = _G.fp{Foldl, math.Max, -math.huge}
 
 Minimum = _G.fp{Foldl, math.Min, math.huge}
+
+Snd = _G.fp{select, 2}
+
+Thrd = _G.fp{select, 3}
