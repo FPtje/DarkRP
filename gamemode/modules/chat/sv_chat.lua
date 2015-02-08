@@ -77,7 +77,10 @@ function GM:canChatCommand(ply, cmd, ...)
 end
 
 GM.OldChatHooks = GM.OldChatHooks or {}
-function GM:PlayerSay(ply, text, teamonly, dead) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
+function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
+	local dead = not ply:Alive()
+	if not self.Config.deadtalk and dead then return "" end
+
 	local text2 = text
 	local callback
 	local DoSayFunc
@@ -134,6 +137,7 @@ hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
 local function ConCommand(ply, _, args)
 	if not args[1] then return end
+	if not GAMEMODE.Config.deadtalk and not ply:Alive() then return end
 
 	local cmd = string.lower(args[1])
 	local arg = table.concat(args, ' ', 2)
