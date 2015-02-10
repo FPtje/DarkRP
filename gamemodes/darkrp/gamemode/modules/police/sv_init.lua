@@ -304,8 +304,9 @@ function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
 		DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
 		return
 	end
-
-	suspect:warrant(initiator, reason)
+	if IsValid(suspect) then
+		suspect:warrant(initiator, reason)
+	end
 end
 
 /*---------------------------------------------------------------------------
