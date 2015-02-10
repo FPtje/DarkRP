@@ -79,7 +79,6 @@ end
 GM.OldChatHooks = GM.OldChatHooks or {}
 function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
 	local dead = not ply:Alive()
-	if not self.Config.deadtalk and dead then return "" end
 
 	local text2 = text
 	local callback
@@ -97,6 +96,7 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
 
 	text2, callback, DoSayFunc = RP_PlayerChat(ply, text2, teamonly)
 	if tostring(text2) == " " then text2, callback = callback, text2 end
+	if not self.Config.deadtalk and dead then return "" end
 
 	if game.IsDedicated() then
 		ServerLog("\""..ply:Nick().."<"..ply:UserID()..">" .."<"..ply:SteamID()..">".."<"..team.GetName(ply:Team())..">\" say \""..text.. "\"\n" .. "\n")
@@ -137,7 +137,6 @@ hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
 local function ConCommand(ply, _, args)
 	if not args[1] then return end
-	if not GAMEMODE.Config.deadtalk and not ply:Alive() then return end
 
 	local cmd = string.lower(args[1])
 	local arg = table.concat(args, ' ', 2)
