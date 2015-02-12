@@ -1,43 +1,43 @@
 DarkRP.createShipment("Desert eagle", {
-	model = "models/weapons/w_pist_deagle.mdl",
-	entity = "weapon_deagle2",
-	price = 215,
+	model = "models/weapons/w_deserteagle.mdl",
+	entity = "fas2_deagle",
+	price = 0,
 	amount = 10,
 	seperate = true,
-	pricesep = 215,
+	pricesep = 2200,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
 
-DarkRP.createShipment("Fiveseven", {
-	model = "models/weapons/w_pist_fiveseven.mdl",
-	entity = "weapon_fiveseven2",
+DarkRP.createShipment("M1911", {
+	model = "models/weapons/w_1911.mdl",
+	entity = "fas2_m1911",
 	price = 0,
 	amount = 10,
 	seperate = true,
-	pricesep = 205,
+	pricesep = 1000,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
 
-DarkRP.createShipment("Glock", {
-	model = "models/weapons/w_pist_glock18.mdl",
-	entity = "weapon_glock2",
+DarkRP.createShipment("OTs-33 Pernach", {
+	model = "models/weapons/world/pistols/ots33.mdl",
+	entity = "fas2_ots33",
 	price = 0,
 	amount = 10,
 	seperate = true,
-	pricesep = 160,
+	pricesep = 1350,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
 
-DarkRP.createShipment("P228", {
-	model = "models/weapons/w_pist_p228.mdl",
-	entity = "weapon_p2282",
+DarkRP.createShipment("Ragging Bull", {
+	model = "models/weapons/view/pistols/ragingbull.mdl",
+	entity = "fas2_ragingbull",
 	price = 0,
 	amount = 10,
 	seperate = true,
-	pricesep = 185,
+	pricesep = 2200,
 	noship = true,
 	allowed = {TEAM_GUN}
 })
