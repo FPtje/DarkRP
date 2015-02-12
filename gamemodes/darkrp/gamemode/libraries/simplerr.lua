@@ -52,7 +52,7 @@ local synErrs = {
         }
     },
     {
-        match = "'.' expected [(]to close '([{[(])' at line ([0-9]+)[)] near '(.*)'",
+        match = "'.' expected [(]to close '([{[(])' at line ([0-9-]+)[)] near '(.*)'",
         text = "There is an opening '%s' bracket at line %i, but this bracket is never closed or not closed in time. It was expected to be closed before the '%s' at line %i.",
         format = function(m, l) return m[1], m[2], m[3], l end,
         hints = {
@@ -62,7 +62,7 @@ local synErrs = {
         }
     },
     {
-        match = "'end' expected [(]to close '(.*)' at line ([0-9]+)[)] near '(.*)'",
+        match = "'end' expected [(]to close '(.*)' at line ([0-9-]+)[)] near '(.*)'",
         text = "An '%s' was started on line %i, but it was never ended or not ended in time. It was expected to be ended before the '%s' at line %i",
         format = function(m, l) return m[1], m[2], m[3], l end,
         hints = {
@@ -345,7 +345,6 @@ local function translateMsg(msg, path, line, errs)
 
     for i = 1, #errs do
         local trans = errs[i]
-
         if not string.find(msg, trans.match) then continue end
 
         -- translate <eof>
@@ -362,7 +361,8 @@ end
 
 -- Translate an error into a language understandable by non-programmers
 local function translateError(path, err, translation, errs, stack)
-    local line, msg = string.match(err, path .. ":([0-9]+): (.*)")
+    -- Using .* instead of path because path may be wrong when error is called
+    local line, msg = string.match(err, ".*:([0-9-]+): (.*)")
     line = tonumber(line)
 
     local msg, hints = translateMsg(msg, path, line, errs)
@@ -377,17 +377,24 @@ function safeCall(f, ...)
 
     if succ then return unpack(res) end
 
-    local path = debug.getinfo(f).short_src
+    local info = debug.getinfo(f)
+    local path = info.short_src
 
-    -- Investigate the stack
-    local line = string.match(err, path .. ":([0-9]+)")
-    local level, stack = 2, {string.format("\t1. %s on line %i", path, line)}
+    -- Investigate the stack. Not using path in match because calls to error can give a different path
+    local line = string.match(err, ".*:([0-9-]+)")
+    local level, stack = 2, {string.format("\t1. %s on line %s", path, line)}
+
+    -- Line and source info aren't always in the error
+    if not line then
+        line = info.currentline
+        err = string.format("%s:%s: %s", path, line, err)
+    end
 
     while true do
-        local info = debug.getinfo(level, "Sln")
+        info = debug.getinfo(level, "Sln")
         if not info then break end
 
-        table.insert(stack, string.format("\t%i. %s on line %i", level, info.short_src, info.currentline))
+        table.insert(stack, string.format("\t%i. %s on line %s", level, info.short_src, info.currentline or "unknown"))
 
         level = level + 1
     end
