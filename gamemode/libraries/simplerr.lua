@@ -5,6 +5,7 @@ local error = error
 local file = file
 local hook = hook
 local isfunction = isfunction
+local math = math
 local os = os
 local pcall = pcall
 local string = string
@@ -338,6 +339,39 @@ local runErrs = {
 
 module("simplerr")
 
+-- Get a nicely formatted stack trace. Start is where to start numbering
+local function getStack(i, start)
+    i = i or 1
+    start = start or 1
+    local stack = {}
+
+    -- Invariant: stack level (i + count) >= 2 and <= last stack item
+    for count = 1, math.huge do -- user visible count
+        info = debug.getinfo(i + count, "Sln")
+        if not info then break end
+
+        table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"))
+    end
+
+    return table.concat(stack, "\n")
+end
+
+-- Translate a runtime error to simplerr format.
+-- Decorate with e.g. wrapError to have it actually throw the error.
+function runError(msg, stackNr, hints, path, line)
+    stackNr = stackNr or 1
+    hints = hints or {"No hints, sorry."}
+    hints = "\t- " .. table.concat(hints, "\n\t- ")
+
+    if not path and not line then
+        local info = debug.getinfo(stackNr + 1, "Sln")
+        path = info.short_src
+        line = info.currentline
+    end
+
+    return false, string.format(runErrTranslation, path, line, msg, hints, getStack(stackNr + 1))
+end
+
 -- Translate the message of an error
 local function translateMsg(msg, path, line, errs)
     local res
@@ -382,7 +416,7 @@ function safeCall(f, ...)
 
     -- Investigate the stack. Not using path in match because calls to error can give a different path
     local line = string.match(err, ".*:([0-9-]+)")
-    local level, stack = 2, {string.format("\t1. %s on line %s", path, line)}
+    local stack = string.format("\t1. %s on line %s\n", path, line) .. getStack(2, 2) -- add called func to stack
 
     -- Line and source info aren't always in the error
     if not line then
@@ -390,16 +424,7 @@ function safeCall(f, ...)
         err = string.format("%s:%s: %s", path, line, err)
     end
 
-    while true do
-        info = debug.getinfo(level, "Sln")
-        if not info then break end
-
-        table.insert(stack, string.format("\t%i. %s on line %s", level, info.short_src, info.currentline or "unknown"))
-
-        level = level + 1
-    end
-
-    return false, translateError(path, err, runErrTranslation, runErrs, table.concat(stack, '\n'))
+    return false, translateError(path, err, runErrTranslation, runErrs, stack)
 end
 
 -- Run a file or explain its syntax errors in layman's terms
