@@ -32,6 +32,37 @@ local requiredTeamItems = {
 	salary      = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The salary must be a number greater than zero."),
 	admin       = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}}, "The admin value must be a number greater than or equal to zero and smaller than three."),
 	vote        = ass(optional(isbool), "The vote must be either true or false."),
+
+	-- Optional advanced stuff
+	buttonColor           = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label                 = ass(optional(isstring), "The label must be a valid string."),
+	ammo                  = ass(optional(tableOf(isnumber)), "The ammo must be a table containing numbers.", {"See example on http://wiki.darkrp.com/index.php/DarkRP:CustomJobFields"}),
+	hasLicense            = ass(optional(isbool), "The hasLicense must be either true or false."),
+	NeedToChangeFrom      = ass(optional(tableOf(isnumber), isnumber), "The NeedToChangeFrom must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
+	customCheck           = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg    = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	modelScale            = ass(optional(isnumber), "The modelScale must be a number."),
+	maxpocket             = ass(optional(isnumber), "The maxPocket must be a number."),
+	maps                  = ass(optional(tableOf(isstring)), "The maps value must be a table of valid map names."),
+	candemote             = ass(optional(isbool), "The candemote value must be either true or false."),
+	mayor                 = ass(optional(isbool), "The mayor value must be either true or false."),
+	chief                 = ass(optional(isbool), "The chief value must be either true or false."),
+	medic                 = ass(optional(isbool), "The medic value must be either true or false."),
+	cook                  = ass(optional(isbool), "The cook value must be either true or false."),
+	hobo                  = ass(optional(isbool), "The hobo value must be either true or false."),
+	CanPlayerSuicide      = ass(optional(isfunction), "The CanPlayerSuicide must be a function."),
+	PlayerCanPickupWeapon = ass(optional(isfunction), "The PlayerCanPickupWeapon must be a function."),
+	PlayerDeath           = ass(optional(isfunction), "The PlayerDeath must be a function."),
+	PlayerLoadout         = ass(optional(isfunction), "The PlayerLoadout must be a function."),
+	PlayerSelectSpawn     = ass(optional(isfunction), "The PlayerSelectSpawn must be a function."),
+	PlayerSetModel        = ass(optional(isfunction), "The PlayerSetModel must be a function."),
+	PlayerSpawn           = ass(optional(isfunction), "The PlayerSpawn must be a function."),
+	PlayerSpawnProp       = ass(optional(isfunction), "The PlayerSpawnProp must be a function."),
+	RequiresVote          = ass(optional(isfunction), "The RequiresVote must be a function."),
+	ShowSpare1            = ass(optional(isfunction), "The ShowSpare1 must be a function."),
+	ShowSpare2            = ass(optional(isfunction), "The ShowSpare2 must be a function."),
+	canStartVote          = ass(optional(isfunction), "The canStartVote must be a function."),
+	canStartVoteReason    = ass(optional(isstring, isfunction), "The canStartVoteReason must be either a string or a function."),
 }
 
 -- Template for correct shipment
@@ -41,7 +72,22 @@ local validShipment = {
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	amount   = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The amount must be a number greater than zero."),
 	seperate = ass(optional(isbool), "the seperate field must be either true or false.", {"It's spelled as 'seperate' because of a really old mistake."}),
+	pricesep = ass(function(v, tbl) return not tbl.seperate or isnumber(v) and v >= 0 end, "The pricesep must be a number greater than or equal to zero."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
+
+	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label              = ass(optional(isstring), "The label must be a valid string."),
+	noship             = ass(optional(isbool), "The noship must be either true or false."),
+	shipmodel          = ass(optional(checkModel), "The shipmodel must be a valid model."),
+	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	weight             = ass(optional(isnumber), "The weight must be a number."),
+	spareammo          = ass(optional(isnumber), "The spareammo must be a number."),
+	clip1              = ass(optional(isnumber), "The clip1 must be a number."),
+	clip2              = ass(optional(isnumber), "The clip2 must be a number."),
+	shipmentClass      = ass(optional(isstring), "The shipmentClass must be a string."),
+	onBought           = ass(optional(isfunction), "The onBought must be a function."),
+	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
 }
 
 -- Template for correct vehicle
@@ -50,6 +96,14 @@ local validVehicle = {
 	model    = ass(checkModel, "The model of the vehicle must be a valid model."),
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
+
+	distance           = ass(optional(isnumber), "The distance must be a number."),
+	angle              = ass(optional(isangle), "The distance must be a valid Angle."),
+	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label              = ass(optional(isstring), "The label must be a valid string."),
+	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
 }
 
 -- Template for correct entity
@@ -60,6 +114,12 @@ local validEntity = {
 	max   = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "The max must be an existing number or (for advanced users) the getMax field must be a function."),
 	cmd   = ass(isstring, "The cmd must be a valid string."),
 	name  = ass(isstring, "The name must be a valid string."),
+
+	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label              = ass(optional(isstring), "The label must be a valid string."),
+	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
 }
 
 -- Check template against actual implementation
@@ -68,7 +128,7 @@ local function checkValid(tbl, requiredItems)
 		local correct, err, hints = tbl[v] ~= nil
 
 		if isfunction(v) then correct, err, hints = v(tbl[k], tbl) end
-
+		err = err or string.format("Element '%s' is corrupt!", k)
 		if not correct then return correct, err, hints end
 	end
 
