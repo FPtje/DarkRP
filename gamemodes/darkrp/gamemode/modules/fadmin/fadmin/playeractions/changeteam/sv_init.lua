@@ -23,13 +23,13 @@ local function SetTeam(ply, cmd, args)
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 
 	for k,v in pairs(team.GetAllTeams()) do
 		if k == tonumber(args[2]) or string.lower(v.Name) == string.lower(args[2] or "") then
 			for _, target in pairs(targets) do
-				if not FAdmin.Access.PlayerHasPrivilege(ply, "SetTeam", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+				if not FAdmin.Access.PlayerHasPrivilege(ply, "SetTeam", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 				local SetTeam = target.changeTeam or target.SetTeam -- DarkRP compatibility
 				if IsValid(target) and checkDarkRP(ply, target, k) then
 					SetTeam(target, k, true)
@@ -39,6 +39,8 @@ local function SetTeam(ply, cmd, args)
 			break
 		end
 	end
+
+	return true, targets
 end
 
 FAdmin.StartHooks["SetTeam"] = function()

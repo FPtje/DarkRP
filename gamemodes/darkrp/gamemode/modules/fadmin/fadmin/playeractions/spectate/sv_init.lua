@@ -1,7 +1,7 @@
 local OnPlayerSay
 
 local function Spectate(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "Spectate") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Spectate") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
 	local target = FAdmin.FindPlayer(args[1])
 	target = target and target[1] or nil
@@ -21,6 +21,8 @@ local function Spectate(ply, cmd, args)
 
 	local targetText = IsValid(target) and (target:Nick() .. " ("..target:SteamID()..")") or ""
 	FAdmin.Messages.SendMessage(ply, 4, "You are now spectating "..targetText)
+
+	return true, target
 end
 
 local function SpectateVisibility(ply, viewEnt)

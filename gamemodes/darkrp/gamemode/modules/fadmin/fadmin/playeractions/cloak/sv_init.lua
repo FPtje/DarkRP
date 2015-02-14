@@ -4,7 +4,7 @@ local function Cloak(ply, cmd, args)
 	local targets = FAdmin.FindPlayer(args[1]) or {ply}
 
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Cloak", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Cloak", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_cloaked") then
 			target:FAdmin_SetGlobal("FAdmin_cloaked", true)
 			target:SetNoDraw(true)
@@ -22,13 +22,15 @@ local function Cloak(ply, cmd, args)
 		end
 	end
 	FAdmin.Messages.ActionMessage(ply, targets, "You have cloaked %s", "You were cloaked by %s", "Cloaked %s")
+
+	return true, targets
 end
 
 local function UnCloak(ply, cmd, args)
 	local targets = FAdmin.FindPlayer(args[1]) or {ply}
 
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Cloak", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Cloak", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) and target:FAdmin_GetGlobal("FAdmin_cloaked") then
 			target:FAdmin_SetGlobal("FAdmin_cloaked", false)
 
@@ -57,6 +59,8 @@ local function UnCloak(ply, cmd, args)
 		end
 	end
 	FAdmin.Messages.ActionMessage(ply, targets, "You have uncloaked %s", "You were uncloaked by %s", "Uncloaked %s")
+
+	return true, targets
 end
 
 FAdmin.StartHooks["Cloak"] = function()

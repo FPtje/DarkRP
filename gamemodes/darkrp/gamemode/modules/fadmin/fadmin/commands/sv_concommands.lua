@@ -16,7 +16,8 @@ local function concommand_executed(ply, cmd, args)
 		end
 	end
 	table.ClearKeys(args2)
-	FAdmin.Commands.List[name].callback(ply, name, args2)
+	local res = {FAdmin.Commands.List[name].callback(ply, name, args2)}
+	hook.Call("FAdmin_OnCommandExecuted", nil, ply, name, args2, res)
 end
 
 local function AutoComplete(command, ...)
@@ -46,7 +47,7 @@ FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
 		local targets = FAdmin.FindPlayer(args[1])
 		if not targets or (#targets == 1 and not IsValid(targets[1])) then
 			FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-			return
+			return false
 		end
 		for _, target in pairs(targets) do
 			if IsValid(target) then
@@ -55,14 +56,16 @@ FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
 		end
 
 		FAdmin.Messages.SendMessage(ply, 4, "Credits sent!")
-		return
+		return true
 	end
 	FAdmin.Messages.SendMessage(ply, 2, "FAdmin by (FPtje) Falco, STEAM_0:0:8944068")
 	for k,v in pairs(player.GetAll()) do
 		if v:SteamID() == "STEAM_0:0:8944068" then
 			FAdmin.Messages.SendMessage(ply, 4, "(FPtje) Falco is in the server at this moment")
-			return
+			return true
 		end
 	end
 	FAdmin.Messages.SendMessage(ply, 5, "(FPtje) Falco is NOT in the server at this moment")
+
+	return true
 end)

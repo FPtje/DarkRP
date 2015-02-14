@@ -3,12 +3,12 @@ local function Kick(ply, cmd, args)
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 
 	local CanKick = hook.Call("FAdmin_CanKick", nil, ply, targets)
 
-	if CanKick == false then return end
+	if CanKick == false then return false end
 
 	local stage = args[2] or ""
 	stage = string.lower(stage)
@@ -16,7 +16,7 @@ local function Kick(ply, cmd, args)
 	local Reason = (not table.HasValue(stages, stage) and table.concat(args, ' ', 2)) or table.concat(args, ' ', 3) or ply.FAdminKickReason
 
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Kick", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!")  return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Kick", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!")  return false end
 		if IsValid(target) then
 			if stage == "start" then
 				SendUserMessage("FAdmin_kick_start", target) -- Tell him he's getting kicked
@@ -28,7 +28,7 @@ local function Kick(ply, cmd, args)
 				target:Spawn()
 				ply.FAdminKickReason = nil
 			elseif stage == "update" then -- Update reason text
-				if not args[3] then return end
+				if not args[3] then return false end
 				ply.FAdminKickReason = args[3]
 				SendUserMessage("FAdmin_kick_update", target, args[3])
 			else//if stage == "execute" or stage == "" then--execute or no stage = kick instantly
@@ -42,6 +42,8 @@ local function Kick(ply, cmd, args)
 			end
 		end
 	end
+
+	return true, targets, stage, Reason
 end
 
 local StartBannedUsers = {} -- Prevent rejoining before actual ban occurs
@@ -55,10 +57,12 @@ end)
 FAdmin.BANS = FAdmin.BANS or {}
 
 local function RequestBans(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 	net.Start("FAdmin_retrievebans")
 		net.WriteTable(FAdmin.BANS)
 	net.Send(ply)
+
+	return true, FAdmin.BANS
 end
 
 timer.Create("FAdminCheckBans", 60, 0, function()
@@ -92,14 +96,14 @@ local function SaveBan(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
 end
 
 local function Ban(ply, cmd, args)
-	if not args[2] then return end
+	if not args[2] then return false end
 	--start cancel update execute
 
 	local targets = FAdmin.FindPlayer(args[1])
 
 	if not targets and string.find(args[1], "STEAM_") ~= 1 and string.find(args[2], "STEAM_") ~= 1 then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	elseif not targets and (string.find(args[1], "STEAM_") == 1 or string.find(args[2], "STEAM_") == 1) then
 		targets = {(args[1] ~= "execute" and args[1]) or args[2]}
 		if args[1] == "STEAM_0" then
@@ -115,7 +119,7 @@ local function Ban(ply, cmd, args)
 
 	local CanBan = hook.Call("FAdmin_CanBan", nil, ply, targets)
 
-	if CanBan == false then return end
+	if CanBan == false then return false end
 
 	local stage = string.lower(args[2])
 	local stages = {"start", "cancel", "update", "execute"}
@@ -125,7 +129,7 @@ local function Ban(ply, cmd, args)
 		if (type(target) == "string" and not FAdmin.Access.PlayerHasPrivilege(ply, "Ban")) or
 		not FAdmin.Access.PlayerHasPrivilege(ply, "Ban", target) then
 			FAdmin.Messages.SendMessage(ply, 5, "No access!")
-			return
+			return false
 		end
 		if stage == "start" and type(target) ~= "string" and IsValid(target) then
 			SendUserMessage("FAdmin_ban_start", target) -- Tell him he's getting banned
@@ -151,7 +155,7 @@ local function Ban(ply, cmd, args)
 				end
 			end
 		elseif stage == "update" then -- Update reason text
-			if not args[4] or type(target) == "string" or not IsValid(target) then return end
+			if not args[4] or type(target) == "string" or not IsValid(target) then return false end
 			ply.FAdminKickReason = args[4]
 			umsg.Start("FAdmin_ban_update", target)
 				umsg.Long(tonumber(args[3]))
@@ -194,12 +198,14 @@ local function Ban(ply, cmd, args)
 			ply.FAdminKickReason = nil
 		end
 	end
+
+	return true, targets, stage, Reason
 end
 
 -- Unbanning
 local function UnBan(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	if not args[1] then return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[1] then return false end
 	local SteamID = string.upper(args[1])
 
 	hook.Call("FAdmin_UnBan", nil, ply, SteamID)
@@ -220,6 +226,8 @@ local function UnBan(ply, cmd, args)
 
 	game.ConsoleCommand("removeid ".. SteamID .. "\n")
 	FAdmin.Messages.ActionMessage(ply, {}, "You have Unbanned "..SteamID, "", "Unbanned "..SteamID)
+
+	return true, SteamID
 end
 
 -- Commands and privileges

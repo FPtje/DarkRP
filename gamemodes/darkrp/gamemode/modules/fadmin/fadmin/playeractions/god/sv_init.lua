@@ -1,10 +1,10 @@
 local function God(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "God") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "God") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 
 	for _, target in pairs(targets) do
@@ -14,15 +14,17 @@ local function God(ply, cmd, args)
 		end
 	end
 	FAdmin.Messages.ActionMessage(ply, targets, "Godded %s", "You were godded by %s", "Godded %s")
+
+	return true, targets
 end
 
 local function Ungod(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "God") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "God") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 
 	for _, target in pairs(targets) do
@@ -32,6 +34,8 @@ local function Ungod(ply, cmd, args)
 		end
 	end
 	FAdmin.Messages.ActionMessage(ply, targets, "Ungodded %s", "You were ungodded by %s", "Ungodded %s")
+
+	return true, targets
 end
 
 FAdmin.StartHooks["God"] = function()

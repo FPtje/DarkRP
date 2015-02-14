@@ -17,7 +17,8 @@ hook.Add("PlayerSay", "FAdminChatCommands", function(ply, text, Team, dead)
 		Args[1] = nil
 		Args = table.ClearKeys(Args)
 		if FAdmin.Commands.List[Command] then
-			FAdmin.Commands.List[Command].callback(ply, Command, Args)
+			local res = {FAdmin.Commands.List[Command].callback(ply, Command, Args)}
+			hook.Call("FAdmin_OnCommandExecuted", nil, ply, Command, Args, res)
 			return ""
 		end
 	end

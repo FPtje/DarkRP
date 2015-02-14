@@ -14,20 +14,24 @@ local function zapEffect(target)
 end
 
 local function TPToPos(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
 	local x, y, z = string.match(args[1] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
 	local vx, vy, vz = string.match(args[2] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
+	local pos = Vector(tonumber(x), tonumber(y), tonumber(z))
+	local vel = Vector(tonumber(vx), tonumber(vy), tonumber(vz))
 
-	if not args[1] or not x or not y or not z then return end
+	if not args[1] or not x or not y or not z then return false end
 
-	ply:SetPos(Vector(tonumber(x), tonumber(y), tonumber(z)))
-	if vx and vy and vz then ply:SetVelocity(Vector(tonumber(vx), tonumber(vy), tonumber(vz))) end
+	ply:SetPos(pos)
+	if vx and vy and vz then ply:SetVelocity(vel) end
 	zapEffect(ply)
+
+	return true, pos, vel
 end
 
 local function Teleport(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
@@ -56,11 +60,13 @@ local function Teleport(ply, cmd, args)
 			FAdmin.Log(string.format("FAdmin: %s (%s) teleported %s",ply:Nick() ,ply:SteamID() ,target:Name()))
 		end
 	end
+
+	return true, targets, ply:GetEyeTrace().HitPos
 end
 
 local function Bring(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	if not args[1] then return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[1] then return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	local BringTo = FAdmin.FindPlayer(args[2])
@@ -68,7 +74,7 @@ local function Bring(ply, cmd, args)
 	BringTo = (BringTo and BringTo[1]) or ply
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 
 	for _, target in pairs(targets) do
@@ -102,15 +108,17 @@ local function Bring(ply, cmd, args)
 			end)
 		end
 	end
+
+	return true, targets, BringTo
 end
 
 local function Goto(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	if not args[1] then return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[1] then return false end
 
 	local target = FAdmin.FindPlayer(args[1])
 	target = target and target[1]
-	if not IsValid(target) then return end
+	if not IsValid(target) then return false end
 
 	ply:ExitVehicle()
 	if not ply:Alive() then ply:Spawn() end
@@ -119,6 +127,8 @@ local function Goto(ply, cmd, args)
 
 	zapEffect(ply)
 	FAdmin.Log(string.format("FAdmin: %s (%s) went to %s",ply:Nick(), ply:SteamID(), target:Name()))
+
+	return true, target
 end
 
 FAdmin.StartHooks["Teleport"] = function()

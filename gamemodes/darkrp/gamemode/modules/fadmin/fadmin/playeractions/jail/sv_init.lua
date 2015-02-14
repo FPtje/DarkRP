@@ -1,10 +1,10 @@
 local function Jail(ply, cmd, args)
-	if not args[1] then return end
+	if not args[1] then return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 
 	local JailType = FAdmin.PlayerActions.JailTypes[tonumber(args[2])] or args[2] or FAdmin.PlayerActions.JailTypes[2]
@@ -13,7 +13,7 @@ local function Jail(ply, cmd, args)
 	local time = ""
 
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) then
 			local JailProps = {}
 			if JailType == "unjail" or string.lower(cmd) == "unjail" then
@@ -101,6 +101,8 @@ local function Jail(ply, cmd, args)
 	else
 		FAdmin.Messages.ActionMessage(ply, targets, "Jailed %s in a "..JailType.." jail ".. time, "You were jailed " .. time .. " by %s", "Jailed %s for "..time)
 	end
+
+	return true, targets, JailType, time
 end
 
 FAdmin.StartHooks["Jail"] = function()
