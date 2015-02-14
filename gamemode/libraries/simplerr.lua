@@ -4,6 +4,7 @@ local error = error
 local error = error
 local file = file
 local hook = hook
+local include = include
 local isfunction = isfunction
 local math = math
 local os = os
@@ -434,6 +435,10 @@ end
 function runFile(path)
     if not file.Exists(path, "LUA") then error(string.format("Could not run file '%s' (file not found)", path)) end
     local contents = file.Read(path, "LUA")
+
+    -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh)
+    if string.find(contents, "#NoSimplerr#") then include(path) return true end
+
     local err = CompileString(contents, path, false)
 
     if isfunction(err) then return safeCall(err, path) end -- No syntax errors, check for immediate runtime errors
