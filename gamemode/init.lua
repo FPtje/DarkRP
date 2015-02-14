@@ -1,6 +1,6 @@
-GM.Version = "2.5.1"
+GM.Version = "2.6.0"
 GM.Name = "DarkRP"
-GM.Author = "By Rickster, Updated: Pcwizdan, Sibre, philxyz, [GNC] Matt, Chrome Bolt, FPtje Falco, Eusion, Drakehawke"
+GM.Author = "By FPtje Falco et al."
 
 
 DeriveGamemode("sandbox")
