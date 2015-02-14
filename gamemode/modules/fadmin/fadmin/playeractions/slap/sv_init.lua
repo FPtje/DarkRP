@@ -14,18 +14,18 @@ local function ExecuteSlap(target, Amount, ply)
 end
 
 local function Slap(ply, cmd, args)
-	if not args[1] then return end
+	if not args[1] then return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 	local Amount = tonumber(args[2]) or 10
 	local Repetitions = tonumber(args[3])
 
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Slap", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Slap", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) then
 			if not Repetitions or Repetitions == 1 then
 				ExecuteSlap(target, Amount, ply)
@@ -43,6 +43,8 @@ local function Slap(ply, cmd, args)
 		FAdmin.Messages.ActionMessage(ply, targets, "Slapping %s " .. Repetitions.." times with "..Amount.." damage",
 			"You are being slapped "..Repetitions.." times with "..Amount.." damage by %s", "Slapped %s "..Repetitions.." times with "..Amount.." damage")
 	end
+
+	return true, targets, Amount, Repetitions
 end
 
 FAdmin.StartHooks["Slap"] = function()

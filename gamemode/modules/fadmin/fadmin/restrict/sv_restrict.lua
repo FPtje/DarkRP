@@ -13,10 +13,10 @@ local function RetrieveRestricted()
 end RetrieveRestricted()
 
 local function DoRestrictWeapons(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "Restrict") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Restrict") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 	local Weapon = args[1]
 	local Group = args[2]
-	if not Group or not FAdmin.Access.Groups[Group] or not Weapon then return end
+	if not Group or not FAdmin.Access.Groups[Group] or not Weapon then return false end
 	if Restricted.Weapons[Weapon] then
 		sql.Query("UPDATE FADMIN_RESTRICTEDENTS SET ADMIN_GROUP = " .. MySQLite.SQLStr(Group).." WHERE ENTITY = " .. MySQLite.SQLStr(Weapon).." AND TYPE = " .. MySQLite.SQLStr("Weapons")..";")
 	else
@@ -24,6 +24,8 @@ local function DoRestrictWeapons(ply, cmd, args)
 	end
 	Restricted.Weapons[Weapon] = Group
 	FAdmin.Messages.SendMessage(ply, 4, "Weapon restricted!")
+
+	return true, Weapon, Group
 end
 
 local function RestrictWeapons(ply, Weapon, WeaponTable)

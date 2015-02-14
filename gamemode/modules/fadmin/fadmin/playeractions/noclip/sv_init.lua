@@ -1,11 +1,11 @@
 local function SetNoclip(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetNoclip") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	if not args[1] then return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetNoclip") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[1] then return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 	local Toggle = tobool(tonumber(args[2])) or false
 
@@ -34,6 +34,8 @@ local function SetNoclip(ply, cmd, args)
 	else
 		FAdmin.Messages.ActionMessage(ply, targets, "You have disabled noclip for %s", "%s has disabled noclip for you", "Disabled noclip for %s")
 	end
+
+	return true, targets, Toggle
 end
 
 FAdmin.StartHooks["Noclip"] = function()

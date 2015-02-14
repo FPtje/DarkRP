@@ -73,12 +73,12 @@ local KickerAng = {
 }
 
 local function Ragdoll(ply, cmd, args)
-	if not args[1] then return end
+	if not args[1] then return false end
 
 	local targets = FAdmin.FindPlayer(args[1])
 	if not targets or #targets == 1 and not IsValid(targets[1]) then
 		FAdmin.Messages.SendMessage(ply, 1, "Player not found")
-		return
+		return false
 	end
 	local RagdollType = string.lower(FAdmin.PlayerActions.RagdollTypes[tonumber(args[2])] or args[2] or cmd)
 
@@ -86,7 +86,7 @@ local function Ragdoll(ply, cmd, args)
 	local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
 
 	for _, target in pairs(targets) do
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Ragdoll", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Ragdoll", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) then
 			if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" and target:FAdmin_GetGlobal("fadmin_ragdolled") then
 				timer.Destroy(target:SteamID() .. "FAdminRagdoll")
@@ -109,7 +109,7 @@ local function Ragdoll(ply, cmd, args)
 				end
 				target.FAdminRagdoll = nil
 			elseif RagdollType == "normal" or RagdollType == "ragdoll" then
-				if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return end
+				if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
 				local Ragdoll = ents.Create("prop_ragdoll")
 
 				Ragdoll:SetModel(target:GetModel())
@@ -124,7 +124,7 @@ local function Ragdoll(ply, cmd, args)
 
 				target.FAdminRagdoll = Ragdoll
 			elseif RagdollType == "hang" then
-				if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return end
+				if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
 				target.FAdminRagdoll = {}
 
 				local Ragdoll = ents.Create("prop_ragdoll")
@@ -156,12 +156,12 @@ local function Ragdoll(ply, cmd, args)
 					table.insert(target.FAdminRagdoll, prop)
 					HangOn = prop -- Hang on the last prop
 				end
-				if not HangOn then return end
+				if not HangOn then return false end
 
 				Ragdoll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
 				timer.Simple(0.2, function() constraint.Rope(Ragdoll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
 			elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
-				if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return end
+				if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
 				local Ragdoll = ents.Create("prop_ragdoll")
 
 				Ragdoll:SetModel(target:GetModel())
@@ -281,6 +281,8 @@ local function Ragdoll(ply, cmd, args)
 	else
 		FAdmin.Messages.ActionMessage(ply, targets, "Ragdolled %s ".. timeText, "You were ragdolled by %s ".. timeText, "Ragdolled %s ".. timeText)
 	end
+
+	return true, targets, RagdollType, time
 end
 
 FAdmin.StartHooks["Ragdoll"] = function()

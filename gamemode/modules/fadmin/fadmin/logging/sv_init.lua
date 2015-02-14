@@ -1,13 +1,15 @@
 FAdmin.StartHooks["Logging"] = function()
 	FAdmin.Access.AddPrivilege("Logging", 3)
 	FAdmin.Commands.AddCommand("Logging", function(ply, cmd, args)
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "Logging") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "Logging") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if not tonumber(args[1]) then return end
 
 		local OnOff = (tobool(tonumber(args[1])) and "on") or "off"
 		FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Nick().." turned logging "..OnOff, "Logging has been turned "..OnOff, "Turned logging "..OnOff)
 
 		RunConsoleCommand("FAdmin_logging", args[1])
+
+		return true, OnOff
 	end)
 end
 

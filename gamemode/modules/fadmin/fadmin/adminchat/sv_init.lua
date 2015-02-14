@@ -1,6 +1,6 @@
 util.AddNetworkString("FAdmin_ReceiveAdminMessage")
 local function ToAdmins(ply, cmd, args)
-	if not args[1] then return end
+	if not args[1] then return false end
 
 	local text = table.concat(args, " ")
 	local send = {}
@@ -16,6 +16,8 @@ local function ToAdmins(ply, cmd, args)
 		net.WriteEntity(ply)
 		net.WriteString(text)
 	net.Send(send)
+
+	return true, text
 end
 
 FAdmin.StartHooks["Chatting"] = function()

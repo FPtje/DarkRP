@@ -15,8 +15,8 @@ hook.Add("InitPostEntity", "FAdmin_Settings", function()
 end)
 
 local function ServerSetting(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "ServerSetting") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	if not args[2] then FAdmin.Messages.SendMessage(ply, 5, "Incorrect argument") return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "ServerSetting") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[2] then FAdmin.Messages.SendMessage(ply, 5, "Incorrect argument") return false end
 
 	local found = false
 	for k,v in pairs(Whitelist) do
@@ -25,7 +25,7 @@ local function ServerSetting(ply, cmd, args)
 			break
 		end
 	end
-	if not found then return end
+	if not found then return false end
 
 	local CommandArgs = table.Copy(args)
 	CommandArgs[1] = nil
@@ -34,6 +34,8 @@ local function ServerSetting(ply, cmd, args)
 	FAdmin.SaveSetting(args[1], CommandArgs[1])
 	FAdmin.Messages.ActionMessage(ply, player.GetAll(), "You have set ".. args[1].. " to ".. unpack(CommandArgs),
 	args[1].. " was set to " .. unpack(CommandArgs), "Set ".. args[1].. " to ".. unpack(CommandArgs))
+
+	return true, args[1], CommandArgs
 end
 
 FAdmin.StartHooks["ServerSettings"] = function()

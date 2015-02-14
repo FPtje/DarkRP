@@ -33,8 +33,8 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 end
 
 function FAdmin.Access.RemoveGroup(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return end
-	if not args[1] then return end
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[1] then return false end
 
 	if FAdmin.Access.Groups[args[1]] and not table.HasValue({"superadmin", "admin", "user", "noaccess"}, string.lower(args[1])) then
 		MySQLite.query("DELETE FROM FADMIN_GROUPS WHERE NAME = ".. MySQLite.SQLStr(args[1])..";")
@@ -45,6 +45,7 @@ function FAdmin.Access.RemoveGroup(ply, cmd, args)
 			FAdmin.Access.SendGroups(v)
 		end
 	end
+	return true, args[1]
 end
 
 local PLAYER = FindMetaTable("Player")
@@ -117,10 +118,11 @@ FAdmin.StartHooks["AccessFunctions"] = function()
 
 	local printPlyGroup = function(ply) print(ply:Nick(), "\t|\t", ply:GetUserGroup()) end
 	FAdmin.Commands.AddCommand("Admins", function(ply)
-		if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return end
+		if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return false end
 		for k,v in pairs(player.GetAll()) do
 			ply:PrintMessage(HUD_PRINTCONSOLE, v:Nick() .. "\t|\t" .. v:GetUserGroup())
 		end
+		return true
 	end
 	)
 end
