@@ -24,7 +24,7 @@ local nonempty = function(f) return function(tbl) return istable(tbl) and #tbl >
 -- Template for a correct job
 local requiredTeamItems = {
 	color       = ass(tableOf(isnumber), "The color must be a Color value.", {"Color values look like this: Color(r, g, b, a), where r, g, b and a are numbers between 0 and 255."}),
-	model       = ass(fn.FOr{checkModel, nonempty(tableOf(checkModel))}, "The model must either be a table of correct model strings or a single correct model string."),
+	model       = ass(fn.FOr{checkModel, nonempty(tableOf(checkModel))}, "The model must either be a table of correct model strings or a single correct model string.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	description = ass(isstring, "The description must be a string."),
 	weapons     = ass(optional(tableOf(isstring)), "The weapons must be a valid table of strings.", {"Example: weapons = {\"med_kit\", \"weapon_bugbait\"},"}),
 	command     = ass(isstring, "The command must be a string."),
@@ -67,7 +67,7 @@ local requiredTeamItems = {
 
 -- Template for correct shipment
 local validShipment = {
-	model    = ass(checkModel, "The model of the shipment must be a valid model."),
+	model    = ass(checkModel, "The model of the shipment must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	entity   = ass(isstring, "The entity of the shipment must be a string."),
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	amount   = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The amount must be a number greater than zero."),
@@ -78,7 +78,7 @@ local validShipment = {
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label              = ass(optional(isstring), "The label must be a valid string."),
 	noship             = ass(optional(isbool), "The noship must be either true or false."),
-	shipmodel          = ass(optional(checkModel), "The shipmodel must be a valid model."),
+	shipmodel          = ass(optional(checkModel), "The shipmodel must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
 	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
 	weight             = ass(optional(isnumber), "The weight must be a number."),
@@ -93,7 +93,7 @@ local validShipment = {
 -- Template for correct vehicle
 local validVehicle = {
 	name     = ass(isstring, "The name of the vehicle must be a string."),
-	model    = ass(checkModel, "The model of the vehicle must be a valid model."),
+	model    = ass(checkModel, "The model of the vehicle must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
 
@@ -109,7 +109,7 @@ local validVehicle = {
 -- Template for correct entity
 local validEntity = {
 	ent   = ass(isstring, "The name of the entity must be a string."),
-	model = ass(checkModel, "The model of the entity must be a valid model."),
+	model = ass(checkModel, "The model of the entity must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	price = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	max   = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "The max must be an existing number or (for advanced users) the getMax field must be a function."),
 	cmd   = ass(isstring, "The cmd must be a valid string."),
