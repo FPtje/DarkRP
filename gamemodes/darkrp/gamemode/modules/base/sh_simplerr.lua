@@ -7,6 +7,15 @@ DarkRP.simplerrRun = fc{
     simplerr.safeCall
 }
 
+-- error: throw a runtime error
+-- parameters: msg, [stackNr], [hints], [path], [line]
+DarkRP.error = fc{
+    simplerr.wrapError,
+    simplerr.wrapHook,
+    simplerr.wrapLog,
+    simplerr.runError
+}
+
 -- Print errors from the server in the console and show a message in chat
 if CLIENT then
     net.Receive("DarkRP_simplerrError", function()

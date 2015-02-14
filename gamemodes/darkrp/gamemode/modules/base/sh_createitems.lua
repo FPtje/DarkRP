@@ -2,32 +2,137 @@ local plyMeta = FindMetaTable("Player")
 -- automatically block players from doing certain things with their DarkRP entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
+-- Assert function, asserts a property and returns the error if false
+local ass = function(f, err, hints) return function(...) return f(...), err, hints end end
+-- Returns whether a value is nil
+local isnil = fp{fn.Eq, nil}
+-- Optional value, when filled in it must meet the conditions
+local optional = function(...) return fn.FOr{isnil, ...} end
+-- Check the correctness of a model
+local checkModel = function(model) return isstring(model) and (CLIENT or util.IsValidModel(model)) end
 
-local checkModel = function(model) return model ~= nil and (CLIENT or util.IsValidModel(model)) end
-local requiredTeamItems = {"color", "model", "description", "weapons", "command", "max", "salary", "admin", "vote"}
+-- A table of which each element must meet condition f
+local tableOf = function(f) return function(tbl)
+	if not istable(tbl) then return false end
+	for k,v in pairs(tbl) do if not f(v) then return false end end
+	return true
+end end
+
+-- A table that is nonempty, wrap around tableOf
+local nonempty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and f(tbl) end end
+
+-- Template for a correct job
+local requiredTeamItems = {
+	color       = ass(tableOf(isnumber), "The color must be a Color value.", {"Color values look like this: Color(r, g, b, a), where r, g, b and a are numbers between 0 and 255."}),
+	model       = ass(fn.FOr{checkModel, nonempty(tableOf(checkModel))}, "The model must either be a table of correct model strings or a single correct model string.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
+	description = ass(isstring, "The description must be a string."),
+	weapons     = ass(optional(tableOf(isstring)), "The weapons must be a valid table of strings.", {"Example: weapons = {\"med_kit\", \"weapon_bugbait\"},"}),
+	command     = ass(isstring, "The command must be a string."),
+	max         = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The max must be a number greater than or equal to zero.", {"Zero means infinite.", "A decimal between 0 and 1 is seen as a percentage."}),
+	salary      = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The salary must be a number greater than zero."),
+	admin       = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}}, "The admin value must be a number greater than or equal to zero and smaller than three."),
+	vote        = ass(optional(isbool), "The vote must be either true or false."),
+
+	-- Optional advanced stuff
+	buttonColor           = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label                 = ass(optional(isstring), "The label must be a valid string."),
+	ammo                  = ass(optional(tableOf(isnumber)), "The ammo must be a table containing numbers.", {"See example on http://wiki.darkrp.com/index.php/DarkRP:CustomJobFields"}),
+	hasLicense            = ass(optional(isbool), "The hasLicense must be either true or false."),
+	NeedToChangeFrom      = ass(optional(tableOf(isnumber), isnumber), "The NeedToChangeFrom must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
+	customCheck           = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg    = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	modelScale            = ass(optional(isnumber), "The modelScale must be a number."),
+	maxpocket             = ass(optional(isnumber), "The maxPocket must be a number."),
+	maps                  = ass(optional(tableOf(isstring)), "The maps value must be a table of valid map names."),
+	candemote             = ass(optional(isbool), "The candemote value must be either true or false."),
+	mayor                 = ass(optional(isbool), "The mayor value must be either true or false."),
+	chief                 = ass(optional(isbool), "The chief value must be either true or false."),
+	medic                 = ass(optional(isbool), "The medic value must be either true or false."),
+	cook                  = ass(optional(isbool), "The cook value must be either true or false."),
+	hobo                  = ass(optional(isbool), "The hobo value must be either true or false."),
+	CanPlayerSuicide      = ass(optional(isfunction), "The CanPlayerSuicide must be a function."),
+	PlayerCanPickupWeapon = ass(optional(isfunction), "The PlayerCanPickupWeapon must be a function."),
+	PlayerDeath           = ass(optional(isfunction), "The PlayerDeath must be a function."),
+	PlayerLoadout         = ass(optional(isfunction), "The PlayerLoadout must be a function."),
+	PlayerSelectSpawn     = ass(optional(isfunction), "The PlayerSelectSpawn must be a function."),
+	PlayerSetModel        = ass(optional(isfunction), "The PlayerSetModel must be a function."),
+	PlayerSpawn           = ass(optional(isfunction), "The PlayerSpawn must be a function."),
+	PlayerSpawnProp       = ass(optional(isfunction), "The PlayerSpawnProp must be a function."),
+	RequiresVote          = ass(optional(isfunction), "The RequiresVote must be a function."),
+	ShowSpare1            = ass(optional(isfunction), "The ShowSpare1 must be a function."),
+	ShowSpare2            = ass(optional(isfunction), "The ShowSpare2 must be a function."),
+	canStartVote          = ass(optional(isfunction), "The canStartVote must be a function."),
+	canStartVoteReason    = ass(optional(isstring, isfunction), "The canStartVoteReason must be either a string or a function."),
+}
+
+-- Template for correct shipment
 local validShipment = {
-	model = checkModel, "entity",
-	price = function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end,
-	"amount",
-	"seperate",
-	allowed = fn.FOr{fp{fn.Eq, nil}, istable, isnumber}
-}
-local validVehicle = {"name", model = checkModel, price = function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end}
-local validEntity = {
-	"ent",
-	model = checkModel,
-	price = function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end,
-	max = function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "cmd", "name"
+	model    = ass(checkModel, "The model of the shipment must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
+	entity   = ass(isstring, "The entity of the shipment must be a string."),
+	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
+	amount   = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The amount must be a number greater than zero."),
+	seperate = ass(optional(isbool), "the seperate field must be either true or false.", {"It's spelled as 'seperate' because of a really old mistake."}),
+	pricesep = ass(function(v, tbl) return not tbl.seperate or isnumber(v) and v >= 0 end, "The pricesep must be a number greater than or equal to zero."),
+	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
+
+	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label              = ass(optional(isstring), "The label must be a valid string."),
+	noship             = ass(optional(isbool), "The noship must be either true or false."),
+	shipmodel          = ass(optional(checkModel), "The shipmodel must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
+	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	weight             = ass(optional(isnumber), "The weight must be a number."),
+	spareammo          = ass(optional(isnumber), "The spareammo must be a number."),
+	clip1              = ass(optional(isnumber), "The clip1 must be a number."),
+	clip2              = ass(optional(isnumber), "The clip2 must be a number."),
+	shipmentClass      = ass(optional(isstring), "The shipmentClass must be a string."),
+	onBought           = ass(optional(isfunction), "The onBought must be a function."),
+	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
 }
 
+-- Template for correct vehicle
+local validVehicle = {
+	name     = ass(isstring, "The name of the vehicle must be a string."),
+	model    = ass(checkModel, "The model of the vehicle must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
+	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
+	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
+
+	distance           = ass(optional(isnumber), "The distance must be a number."),
+	angle              = ass(optional(isangle), "The distance must be a valid Angle."),
+	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label              = ass(optional(isstring), "The label must be a valid string."),
+	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
+}
+
+-- Template for correct entity
+local validEntity = {
+	ent   = ass(isstring, "The name of the entity must be a string."),
+	model = ass(checkModel, "The model of the entity must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
+	price = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
+	max   = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "The max must be an existing number or (for advanced users) the getMax field must be a function."),
+	cmd   = ass(isstring, "The cmd must be a valid string."),
+	name  = ass(isstring, "The name must be a valid string."),
+
+	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
+	label              = ass(optional(isstring), "The label must be a valid string."),
+	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
+	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
+	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
+}
+
+-- Check template against actual implementation
 local function checkValid(tbl, requiredItems)
 	for k,v in pairs(requiredItems) do
-		local isFunction = type(v) == "function"
+		local correct, err, hints = tbl[v] ~= nil
 
-		if (isFunction and not v(tbl[k], tbl)) or (not isFunction and tbl[v] == nil) then
-			return isFunction and k or v
-		end
+		if isfunction(v) then correct, err, hints = v(tbl[k], tbl) end
+		err = err or string.format("Element '%s' is corrupt!", k)
+		if not correct then return correct, err, hints end
 	end
+
+	return true
 end
 
 -----------------------------------------------------------
@@ -457,8 +562,9 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 	-- Disabled job
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
 
-	local corrupt = checkValid(CustomTeam, requiredTeamItems)
-	if corrupt then ErrorNoHalt("Corrupt team \"" ..(CustomTeam.name or "") .. "\": element " .. corrupt .. " is incorrect.\n") end
+	local valid, err, hints = checkValid(CustomTeam, requiredTeamItems)
+	if not valid then DarkRP.error(string.format("Corrupt team: %s!\n%s", CustomTeam.name or "", err), 3, hints) end
+
 	jobCount = jobCount + 1
 	CustomTeam.team = jobCount
 
@@ -541,8 +647,8 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
-	local corrupt = checkValid(customShipment, validShipment)
-	if corrupt then ErrorNoHalt("Corrupt shipment \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
+	local valid, err, hints = checkValid(customShipment, validShipment)
+	if not valid then DarkRP.error(string.format("Corrupt shipment: %s!\n%s", name or "", err), 3, hints) end
 
 	customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
 	customShipment.customCheck = customShipment.customCheck   and fp{DarkRP.simplerrRun, customShipment.customCheck}
@@ -568,9 +674,10 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
 		if string.lower(k) == string.lower(vehicle.name) then found = true break end
 	end
 
-	local corrupt = checkValid(vehicle, validVehicle)
-	if corrupt then ErrorNoHalt("Corrupt vehicle \"" .. (vehicle.name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
-	if not found then ErrorNoHalt("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.") end
+	local valid, err, hints = checkValid(vehicle, validVehicle)
+	if not valid then DarkRP.error(string.format("Corrupt vehicle: %s!\n%s", vehicle.name or "", err), 3, hints) end
+
+	if not found then DarkRP.error("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.", 3) end
 
 	CustomVehicles.customCheck = CustomVehicles.customCheck and fp{DarkRP.simplerrRun, CustomVehicles.customCheck}
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
@@ -607,8 +714,8 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 		tblEnt.allowed = {tblEnt.allowed}
 	end
 
-	local corrupt = checkValid(tblEnt, validEntity)
-	if corrupt then ErrorNoHalt("Corrupt Entity \"" .. (name or "") .. "\": element " .. corrupt .. " is corrupt.\n") end
+	local valid, err, hints = checkValid(tblEnt, validEntity)
+	if not valid then DarkRP.error(string.format("Corrupt entity: %s!\n%s", name or "", err), 3, hints) end
 
 	tblEnt.customCheck = tblEnt.customCheck and fp{DarkRP.simplerrRun, tblEnt.customCheck}
 	tblEnt.CustomCheckFailMsg = isfunction(tblEnt.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, tblEnt.CustomCheckFailMsg} or tblEnt.CustomCheckFailMsg
