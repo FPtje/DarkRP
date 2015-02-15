@@ -1,3 +1,4 @@
+local CompileFile = CompileFile
 local CompileString = CompileString
 local debug = debug
 local error = error
@@ -439,9 +440,12 @@ function runFile(path)
     -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh)
     if string.find(contents, "#NoSimplerr#") then include(path) return true end
 
+    -- Catch syntax errors with CompileString
     local err = CompileString(contents, path, false)
 
-    if isfunction(err) then return safeCall(err, path) end -- No syntax errors, check for immediate runtime errors
+    -- No syntax errors, check for immediate runtime errors using CompileFile
+    -- Using the function CompileString returned leads to relative path trouble
+    if isfunction(err) then return safeCall(CompileFile(path), path) end
 
     return false, translateError(path, err, synErrTranslation, synErrs)
 end
