@@ -189,7 +189,8 @@ local function getRamFunction(ply, trace)
 		ent:isDoor() 		and fp{ramDoor, ply, trace, ent} 					   or
 		ent:IsVehicle() 	and fp{ramVehicle, ply, trace, ent} 				   or
 		ent.fadeActivate 	and fp{ramFadingDoor, ply, trace, ent}  			   or
-		not ent:GetPhysicsObject():IsMoveable() and fp{ramProp, ply, trace, ent}   or
+		ent:GetPhysicsObject():IsValid() and not ent:GetPhysicsObject():IsMoveable()
+							and fp{ramProp, ply, trace, ent}   					   or
 		fp{fn.Id, false} -- no ramming was performed
 end
 
