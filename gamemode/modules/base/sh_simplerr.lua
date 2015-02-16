@@ -13,7 +13,8 @@ DarkRP.error = fc{
     simplerr.wrapError,
     simplerr.wrapHook,
     simplerr.wrapLog,
-    simplerr.runError
+    simplerr.runError,
+    function(msg, err, ...) err = err or 1 err = err + 1 return msg, err, ... end -- Raise error level one higher
 }
 
 -- Print errors from the server in the console and show a message in chat
