@@ -172,6 +172,7 @@ That calculation is slow
 local plyMeta = FindMetaTable("Player")
 local oldUID = plyMeta.UniqueID
 function plyMeta:UniqueID()
+	if not self:IsValid() then DarkRP.error("Attempt to get UniqueID of non-existing player", 2) end
 	self.UIDCache = self.UIDCache or oldUID(self)
 
 	return self.UIDCache
