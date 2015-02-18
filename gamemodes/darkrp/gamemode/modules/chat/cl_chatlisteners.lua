@@ -9,18 +9,8 @@ Variables
 ---------------------------------------------------------------------------*/
 local receivers
 local currentChatText = {}
-local receiverConfigs = {
-	[""] = { -- The default config decides who can hear you when you speak normally
-		text = DarkRP.getPhrase("talk"),
-		hearFunc = function(ply)
-			if GAMEMODE.Config.alltalk then return nil end
-
-			return LocalPlayer():GetPos():Distance(ply:GetPos()) < 250
-		end
-	}
-}
-
-local currentConfig = receiverConfigs[""] -- Default config is normal talk
+local receiverConfigs = {}
+local currentConfig = {text = "", hearFunc = fn.Id} -- Default config is not loaded yet
 
 /*---------------------------------------------------------------------------
 addChatReceiver
@@ -39,6 +29,17 @@ function DarkRP.addChatReceiver(prefix, text, hearFunc)
 		hearFunc = hearFunc
 	}
 end
+
+-- Add initial chat receiver (normal talk, no prefix)
+-- Load after the custom languages have been loaded
+local function loadDefaultChat()
+	DarkRP.addChatReceiver("", DarkRP.getPhrase("talk"), function(ply)
+		if GAMEMODE.Config.alltalk then return nil end
+
+		return LocalPlayer():GetPos():Distance(ply:GetPos()) < 250
+	end)
+end
+hook.Add("loadCustomDarkRPItems", "loadChatListeners", loadDefaultChat)
 
 /*---------------------------------------------------------------------------
 removeChatReceiver

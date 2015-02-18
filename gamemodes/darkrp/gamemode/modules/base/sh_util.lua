@@ -6,7 +6,6 @@ Utility functions
 
 local vector = FindMetaTable("Vector")
 local meta = FindMetaTable("Player")
-local config = GM.Config
 
 /*---------------------------------------------------------------------------
 Decides whether the vector could be seen by the player if they were to look at it
@@ -27,6 +26,7 @@ end
 Turn a money amount into a pretty string
 ---------------------------------------------------------------------------*/
 local function attachCurrency(str)
+	local config = GAMEMODE.Config
 	return config.currencyLeft and config.currency .. str or str .. config.currency
 end
 
