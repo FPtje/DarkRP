@@ -871,6 +871,19 @@ function GM:InitPostEntity()
 			v:Fire("unlock", "", 0)
 		end
 	end
+
+	-- Error when the default team isn't set
+	if not GAMEMODE.DefaultTeam or not RPExtraTeams[GAMEMODE.DefaultTeam] then
+		local hints = {
+			"This may happen when you disable the default citizen job. Make sure you update GAMEMODE.DefaultTeam to the new default team.",
+			"GAMEMODE.DefaultTeam may be set to a job that does not exist anymore. Did you remove the job you had set to default?",
+			"The error being in jobs.lua is a guess. This is usually right, but the problem might lie somewhere else."
+		}
+
+		-- Gotta be totally clear here
+		local stack = "\tjobs.lua, settings.lua, disabled_defaults.lua or any of your other custom files."
+		DarkRP.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/darkrp_customthings/jobs.lua", -1, stack)
+	end
 end
 timer.Simple(0.1, function()
 	if not InitPostEntityCalled then

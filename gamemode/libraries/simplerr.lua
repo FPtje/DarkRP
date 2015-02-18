@@ -360,7 +360,7 @@ end
 
 -- Translate a runtime error to simplerr format.
 -- Decorate with e.g. wrapError to have it actually throw the error.
-function runError(msg, stackNr, hints, path, line)
+function runError(msg, stackNr, hints, path, line, stack)
     stackNr = stackNr or 1
     hints = hints or {"No hints, sorry."}
     hints = "\t- " .. table.concat(hints, "\n\t- ")
@@ -371,7 +371,7 @@ function runError(msg, stackNr, hints, path, line)
         line = info.currentline
     end
 
-    return false, string.format(runErrTranslation, path, line, msg, hints, getStack(stackNr + 1))
+    return false, string.format(runErrTranslation, path, line, msg, hints, stack or getStack(stackNr + 1))
 end
 
 -- Translate the message of an error
