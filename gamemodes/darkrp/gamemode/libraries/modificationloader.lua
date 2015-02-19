@@ -125,7 +125,7 @@ local function load()
 	loadLanguages()
 	loadModules()
 	loadCustomDarkRPItems()
-	hook.Run("loadCustomDarkRPItems")
+	hook.Run("loadCustomDarkRPItems", GAMEMODE)
 end
 hook.Add("Initialize", "loadDarkRPModules", load)
 hook.Add("OnReloaded", "loadDarkRPModules", load)
