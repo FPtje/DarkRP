@@ -871,7 +871,14 @@ function GM:InitPostEntity()
 			v:Fire("unlock", "", 0)
 		end
 	end
+end
+timer.Simple(0.1, function()
+	if not InitPostEntityCalled then
+		GAMEMODE:InitPostEntity()
+	end
+end)
 
+function GM:loadCustomDarkRPItems()
 	-- Error when the default team isn't set
 	if not GAMEMODE.DefaultTeam or not RPExtraTeams[GAMEMODE.DefaultTeam] then
 		local hints = {
@@ -885,11 +892,6 @@ function GM:InitPostEntity()
 		DarkRP.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/darkrp_customthings/jobs.lua", -1, stack)
 	end
 end
-timer.Simple(0.1, function()
-	if not InitPostEntityCalled then
-		GAMEMODE:InitPostEntity()
-	end
-end)
 
 function GM:PlayerLeaveVehicle(ply, vehicle)
 	if GAMEMODE.Config.autovehiclelock and vehicle:isKeysOwnedBy(ply) then
