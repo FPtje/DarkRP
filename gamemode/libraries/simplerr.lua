@@ -26,7 +26,8 @@ The best help I can give you is this:
 Hints:
 %s
 
-------]=]
+------- End of Simplerr error -------
+]=] -- The end is a special string by which simplerr errors are internally recognised
 
 -- Template for runtime errors
 local runErrTranslation = [=[[ERROR] A runtime error has occurred in "%s" on line %i.
@@ -39,7 +40,8 @@ Hints:
 
 The responsibility for this error lies with (the authors of) one (or more) of these files:
 %s
-------]=]
+------- End of Simplerr error -------
+]=]
 
 -- Structure that contains syntax errors and their translations. Catches only the most common errors.
 -- Order is important: the structure with the first match is taken.
@@ -426,7 +428,10 @@ function safeCall(f, ...)
         err = string.format("%s:%s: %s", path, line, err)
     end
 
-    return false, translateError(path, err, runErrTranslation, runErrs, stack)
+    -- Skip translation if the error is already a simplerr error
+    -- This prevents nested simplerr errors when runError is called by a file loaded by runFile
+    local mustTranslate = not string.find(err, "------- End of Simplerr error -------")
+    return false, mustTranslate and translateError(path, err, runErrTranslation, runErrs, stack) or err
 end
 
 -- Run a file or explain its syntax errors in layman's terms
