@@ -19,6 +19,12 @@ function DarkRP.addPlayerGesture(anim, text)
 	Anims[anim] = text
 end
 
+function DarkRP.removePlayerGesture(anim)
+	if not anim then DarkRP.error("Argument #1 of DarkRP.removePlayerGesture (animation/gesture) does not exist.", 2) end
+
+	Anims[anim] = nil
+end
+
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!
 	if ply.anim_DroppingItem then

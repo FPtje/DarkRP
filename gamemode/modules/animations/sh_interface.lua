@@ -19,3 +19,19 @@ DarkRP.addPlayerGesture = DarkRP.stub{
     },
     metatable = DarkRP
 }
+
+DarkRP.removePlayerGesture = DarkRP.stub{
+    name = "removePlayerGesture",
+    description = "Removes a player gesture from the DarkRP animations menu (the one that opens with the keys weapon.). Note: This function must be called BOTH serverside AND clientside!",
+    parameters = {
+        {
+            name = "anim",
+            description = "The gesture enumeration.",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
+}
