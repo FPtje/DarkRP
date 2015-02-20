@@ -12,6 +12,13 @@ hook.Add("loadCustomDarkRPItems", "loadAnimations", function()
 	Anims[ACT_GMOD_GESTURE_WAVE] = DarkRP.getPhrase("wave")
 end)
 
+function DarkRP.addPlayerGesture(anim, text)
+	if not anim then DarkRP.error("Argument #1 of DarkRP.addPlayerGesture (animation/gesture) does not exist.", 2) end
+	if not text then DarkRP.error("Argument #2 of DarkRP.addPlayerGesture (text) does not exist.", 2) end
+
+	Anims[anim] = text
+end
+
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!
 	if ply.anim_DroppingItem then
