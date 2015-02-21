@@ -13,7 +13,8 @@ util.AddNetworkString("onHitFailed")
 Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:requestHit(customer, target, price)
-	local canRequest, msg = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
+	local canRequest, msg, cost = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
+	price = cost or price
 
 	if canRequest == false then
 		DarkRP.notify(customer, 1, 4, msg)
