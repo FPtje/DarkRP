@@ -109,6 +109,11 @@ DarkRP.hookStub{
 			name = "message",
 			description = "The message that is shown when they can't request the hit.",
 			type = "string"
+		},
+		{
+			name = "price",
+			description = "An override for the price of the hit.",
+			type = "number"
 		}
 	}
 }
