@@ -53,6 +53,7 @@ Interface
 DarkRP.hookStub{
 	name = "onDrawSpawnedWeapon",
 	description = "Draw spawned weapons.",
+	realm = "Client",
 	parameters = {
 		{
 			name = "weapon",
