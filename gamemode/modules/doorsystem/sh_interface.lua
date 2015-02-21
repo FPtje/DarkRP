@@ -70,21 +70,6 @@ DarkRP.ENTITY.isKeysOwnable = DarkRP.stub{
 	metatable = DarkRP.ENTITY
 }
 
-DarkRP.ENTITY.isLocked = DarkRP.stub{
-	name = "isLocked",
-	description = "Whether this door/vehicle is locked.",
-	parameters = {
-	},
-	returns = {
-		{
-			name = "answer",
-			description = "Whether it's locked.",
-			type = "boolean"
-		}
-	},
-	metatable = DarkRP.ENTITY
-}
-
 DarkRP.ENTITY.isDoor = DarkRP.stub{
 	name = "isDoor",
 	description = "Whether this entity is considered a door in DarkRP.",
