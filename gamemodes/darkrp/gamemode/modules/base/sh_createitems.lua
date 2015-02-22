@@ -122,6 +122,17 @@ local validEntity = {
 	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
 }
 
+local validAgenda = {
+	Title = ass(isstring, "The title must be a string."),
+	Manager = ass(fn.FOr{isnumber, nonempty(tableOf(isnumber))}, "The Manager must either be a single team or a non-empty table of existing teams.", {"Is there a job here that doesn't exist (anymore)?"}),
+	Listeners = ass(nonempty(tableOf(isnumber)), "The Listeners must be a non-empty table of existing teams.",
+		{
+			"Is there a job here that doesn't exist (anymore)?",
+			"Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
+			[[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
+		})
+}
+
 -- Check template against actual implementation
 local function checkValid(tbl, requiredItems)
 	for k,v in pairs(requiredItems) do
@@ -736,36 +747,36 @@ AddEntity = DarkRP.createEntity
 DarkRPAgendas = {}
 
 local agendas = {}
+-- Returns the agenda managed by the player
 plyMeta.getAgenda = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
 
+-- Returns the agenda this player is member of
 function plyMeta:getAgendaTable()
-	local set = agendas[self:Team()]
-	return set and disjoint.FindSet(set).value or nil
+	return agendas[self:Team()]
 end
 
 function DarkRP.createAgenda(Title, Manager, Listeners)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 
-	if not Manager then
-		hook.Add("PlayerSpawn", "AgendaError", function(ply)
-		if ply:IsAdmin() then ply:ChatPrint("WARNING: Agenda made incorrectly, there is no manager! failed to load!") end end)
-		return
-	end
+	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners, ManagersByKey = {}}
 
-	DarkRPAgendas[Manager] = {Manager = Manager, Title = Title, Listeners = Listeners} -- backwards compat
-
-	agendas[Manager] = disjoint.MakeSet(DarkRPAgendas[Manager])
+	local valid, err, hints = checkValid(agenda, validAgenda)
+	if not valid then DarkRP.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
 
 	for k,v in pairs(Listeners) do
-		agendas[v] = disjoint.MakeSet(v, agendas[Manager]) -- have the manager as parent
+		agendas[v] = agenda
+	end
+
+	for k,v in pairs(istable(Manager) and Manager or {Manager}) do
+		agendas[v] = agenda
+		DarkRPAgendas[v] = agenda -- backwards compat
+		agenda.ManagersByKey[v] = true
 	end
 
 	if SERVER then
 		timer.Simple(0, function()
 			-- Run after scripts have loaded
-			local set = agendas[Manager]
-			set = set and disjoint.FindSet(set).value or {}
-			set.text = hook.Run("agendaUpdated", nil, DarkRPAgendas[Manager], "")
+			agenda.text = hook.Run("agendaUpdated", nil, agenda, "")
 		end)
 	end
 end

@@ -72,6 +72,7 @@ DarkRP.stub{
 	name = "openKeysMenu",
 	description = "Open the keys/F2 menu.",
 	parameters = {},
+	realm = "Client",
 	returns = {},
 	metatable = DarkRP
 }

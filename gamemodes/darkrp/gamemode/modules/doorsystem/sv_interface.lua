@@ -225,6 +225,21 @@ DarkRP.ENTITY.removeKeysAllowedToOwn = DarkRP.stub{
 	metatable = DarkRP.ENTITY
 }
 
+DarkRP.ENTITY.isLocked = DarkRP.stub{
+	name = "isLocked",
+	description = "Whether this door/vehicle is locked.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "Whether it's locked.",
+			type = "boolean"
+		}
+	},
+	metatable = DarkRP.ENTITY
+}
+
 DarkRP.PLAYER.keysUnOwnAll = DarkRP.stub{
 	name = "keysUnOwnAll",
 	description = "Unown every door and vehicle owned by this player.",
