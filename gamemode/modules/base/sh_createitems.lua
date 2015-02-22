@@ -739,8 +739,7 @@ local agendas = {}
 plyMeta.getAgenda = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
 
 function plyMeta:getAgendaTable()
-	local set = agendas[self:Team()]
-	return set and disjoint.FindSet(set).value or nil
+	return agendas[self:Team()]
 end
 
 function DarkRP.createAgenda(Title, Manager, Listeners)
@@ -752,20 +751,19 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 		return
 	end
 
-	DarkRPAgendas[Manager] = {Manager = Manager, Title = Title, Listeners = Listeners} -- backwards compat
+	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners}
+	DarkRPAgendas[Manager] = agenda -- backwards compat
 
-	agendas[Manager] = disjoint.MakeSet(DarkRPAgendas[Manager])
+	agendas[Manager] = agenda
 
 	for k,v in pairs(Listeners) do
-		agendas[v] = disjoint.MakeSet(v, agendas[Manager]) -- have the manager as parent
+		agendas[v] = agenda
 	end
 
 	if SERVER then
 		timer.Simple(0, function()
 			-- Run after scripts have loaded
-			local set = agendas[Manager]
-			set = set and disjoint.FindSet(set).value or {}
-			set.text = hook.Run("agendaUpdated", nil, DarkRPAgendas[Manager], "")
+			agenda.text = hook.Run("agendaUpdated", nil, agenda, "")
 		end)
 	end
 end
