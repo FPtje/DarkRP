@@ -736,8 +736,10 @@ AddEntity = DarkRP.createEntity
 DarkRPAgendas = {}
 
 local agendas = {}
+-- Returns the agenda managed by the player
 plyMeta.getAgenda = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(DarkRPAgendas), plyMeta.Team}
 
+-- Returns the agenda this player is member of
 function plyMeta:getAgendaTable()
 	return agendas[self:Team()]
 end
@@ -751,13 +753,16 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 		return
 	end
 
-	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners}
-	DarkRPAgendas[Manager] = agenda -- backwards compat
-
-	agendas[Manager] = agenda
+	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners, ManagersByKey = {}}
 
 	for k,v in pairs(Listeners) do
 		agendas[v] = agenda
+	end
+
+	for k,v in pairs(istable(Manager) and Manager or {Manager}) do
+		agendas[v] = agenda
+		DarkRPAgendas[v] = agenda -- backwards compat
+		agenda.ManagersByKey[v] = true
 	end
 
 	if SERVER then

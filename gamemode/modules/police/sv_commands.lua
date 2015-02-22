@@ -15,7 +15,7 @@ local function CreateAgenda(ply, args)
 	local agenda = ply:getAgendaTable()
 	local plyTeam = ply:Team()
 
-	if not agenda or agenda.Manager ~= plyTeam then
+	if not agenda or not agenda.ManagersByKey[plyTeam] then
 		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
 		return ""
 	end
@@ -30,7 +30,7 @@ local function addAgenda(ply, args)
 	local agenda = ply:getAgendaTable()
 	local plyTeam = ply:Team()
 
-	if not agenda or agenda.Manager ~= plyTeam then
+	if not agenda or not agenda.ManagersByKey[plyTeam] then
 		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
 		return ""
 	end
@@ -310,7 +310,7 @@ local function rp_GiveLicense(ply, cmd, args)
 
 	if target then
 		target:setDarkRPVar("HasGunlicense", true)
-		
+
 		local nick, steamID
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
@@ -358,7 +358,7 @@ local function rp_RevokeLicense(ply, cmd, args)
 
 	if target then
 		target:setDarkRPVar("HasGunlicense", nil)
-		
+
 		local nick, steamID
 		if ply:EntIndex() ~= 0 then
 			nick = ply:Nick()
