@@ -244,11 +244,12 @@ AddDoorGroup("Gundealer only", TEAM_GUN)
 HOW TO MAKE AN AGENDA
 --------------------------------------------------------
 AddAgenda(Title of the agenda, Manager (who edits it), Listeners (the ones who just see and follow the agenda))
+It's possible to have multiple managers. In that case you have to put all the managers in '{}' (see Police agenda)
 
-The default agenda's, can also be used as examples:
+The default agendas, can also be used as examples:
 */
 AddAgenda("Gangster's agenda", TEAM_MOB, {TEAM_GANG})
-AddAgenda("Police agenda", TEAM_MAYOR, {TEAM_CHIEF, TEAM_POLICE})
+AddAgenda("Police agenda", {TEAM_MAYOR, TEAM_CHIEF}, {TEAM_POLICE})
 
 
 /*
