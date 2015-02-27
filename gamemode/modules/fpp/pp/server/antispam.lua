@@ -134,7 +134,7 @@ local function e2AntiMinge()
 	e2func[3] = function(self, args, ...)
 		if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.antie2minge) then return applyForce(self, args, ...) end
 
-		local ent = args[2][1](self, op1) -- Assumption: args[2][1] is a function
+		local ent = args[2][1](self, args[2]) -- Assumption: args[2][1] is a function
 		if not IsValid(ent) then return applyForce(self, args, ...) end
 
 		-- No check for whether the entity has already been no collided with players

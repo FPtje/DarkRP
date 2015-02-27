@@ -2,7 +2,6 @@ local CompileFile = CompileFile
 local CompileString = CompileString
 local debug = debug
 local error = error
-local error = error
 local file = file
 local hook = hook
 local include = include

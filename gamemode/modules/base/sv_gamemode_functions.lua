@@ -686,8 +686,13 @@ end
 function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
 	local agenda = ply:getAgendaTable()
 
-	if agenda and oldTeam == agenda.Manager and team.NumPlayers(oldTeam) == 0 then
-		agenda.text = nil
+	-- Remove agenda text when last manager left
+	if agenda and agenda.ManagersByKey[oldTeam] then
+		local found = false
+		for man, _ in pairs(agenda.ManagersByKey) do
+			if team.NumPlayers(man) > 0 then found = true break end
+		end
+		if not found then agenda.text = nil end
 	end
 
 	ply:setSelfDarkRPVar("agenda", agenda and agenda.text or nil)
