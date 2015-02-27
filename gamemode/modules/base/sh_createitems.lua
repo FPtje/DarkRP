@@ -2,10 +2,18 @@ local plyMeta = FindMetaTable("Player")
 -- automatically block players from doing certain things with their DarkRP entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
--- Assert function, asserts a property and returns the error if false
-local ass = function(f, err, hints) return function(...) return f(...), err, hints end end
+-- Assert function, asserts a property and returns the error if false.
+-- Allows f to override err and hints by simply returning them
+local ass = function(f, err, hints) return function(...)
+	local res = {f(...)}
+	table.insert(res, err)
+	table.insert(res, hints)
+
+	return unpack(res)
+end end
+
 -- Returns whether a value is nil
-local isnil = fp{fn.Eq, nil}
+local isnil = fn.Curry(fn.Eq, 2)(nil)
 -- Optional value, when filled in it must meet the conditions
 local optional = function(...) return fn.FOr{isnil, ...} end
 -- Check the correctness of a model
@@ -21,13 +29,36 @@ end end
 -- A table that is nonempty, wrap around tableOf
 local nonempty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and f(tbl) end end
 
+-- A value must be unique amongst all `kind`. Uses optional `hash` function to create custom hashes in the internal table
+local unique = function(name, kind, hash)
+	return function(v, tbl, env)
+		env[name] = env[name] or {}
+		local hval = hash and hash(v) or v -- hashed value
+		local uEnv = env[name] -- Either specific to `kind` or global
+
+		if kind then
+			env[name][kind] = env[name][kind] or {}
+			uEnv = env[name][kind]
+		end
+
+		if uEnv[hval] then
+			return false,
+				string.format("This %s does not have a unique value for '%s'.", kind or "thing", name),
+				{string.format("There must be some other %s that has the value '%s' for '%s'.", kind or "thing", tostring(v), name)}
+		end
+
+		uEnv[hval] = true
+		return true
+	end
+end
+
 -- Template for a correct job
 local requiredTeamItems = {
 	color       = ass(tableOf(isnumber), "The color must be a Color value.", {"Color values look like this: Color(r, g, b, a), where r, g, b and a are numbers between 0 and 255."}),
 	model       = ass(fn.FOr{checkModel, nonempty(tableOf(checkModel))}, "The model must either be a table of correct model strings or a single correct model string.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	description = ass(isstring, "The description must be a string."),
 	weapons     = ass(optional(tableOf(isstring)), "The weapons must be a valid table of strings.", {"Example: weapons = {\"med_kit\", \"weapon_bugbait\"},"}),
-	command     = ass(isstring, "The command must be a string."),
+	command     = ass(fn.FAnd{isstring, unique("command", "job")}, "The command must be a string."),
 	max         = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The max must be a number greater than or equal to zero.", {"Zero means infinite.", "A decimal between 0 and 1 is seen as a percentage."}),
 	salary      = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The salary must be a number greater than zero."),
 	admin       = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}}, "The admin value must be a number greater than or equal to zero and smaller than three."),
@@ -112,7 +143,7 @@ local validEntity = {
 	model = ass(checkModel, "The model of the entity must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	price = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	max   = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "The max must be an existing number or (for advanced users) the getMax field must be a function."),
-	cmd   = ass(isstring, "The cmd must be a valid string."),
+	cmd   = ass(fn.FAnd{isstring, unique("cmd", "entity")}, "The cmd must be a valid string."),
 	name  = ass(isstring, "The name must be a valid string."),
 
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
@@ -134,11 +165,11 @@ local validAgenda = {
 }
 
 -- Check template against actual implementation
-local function checkValid(tbl, requiredItems)
+local env = {} -- environment used to be check propositions between multiple tables
+local function checkValid(tbl, requiredItems, oEnv) -- Allow override environment
 	for k,v in pairs(requiredItems) do
 		local correct, err, hints = tbl[v] ~= nil
-
-		if isfunction(v) then correct, err, hints = v(tbl[k], tbl) end
+		if isfunction(v) then correct, err, hints = v(tbl[k], tbl, oEnv or env) end
 		err = err or string.format("Element '%s' is corrupt!", k)
 		if not correct then return correct, err, hints end
 	end
