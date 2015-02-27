@@ -1,6 +1,6 @@
 CPPI = CPPI or {}
 CPPI.CPPI_DEFER = 102112 --\102\112 = fp
-CPPI.CPPI_NOTIMPLEMENTED = 7080// FP
+CPPI.CPPI_NOTIMPLEMENTED = 7080 --\70\80 = FP
 
 function CPPI:GetName()
 	return "Falco's prop protection"
@@ -11,7 +11,7 @@ function CPPI:GetVersion()
 end
 
 function CPPI:GetInterfaceVersion()
-	return 1.1
+	return 1.3
 end
 
 function CPPI:GetNameFromUID(uid)
@@ -52,20 +52,9 @@ if SERVER then
 	end
 
 	function ENTITY:CPPISetOwnerUID(UID)
-		local ply = player.GetByUniqueID(tostring(UID))
-		if self.FPPOwner and ply:IsValid() then
-			if self.AllowedPlayers then
-				table.insert(self.AllowedPlayers, ply)
-			else
-				self.AllowedPlayers = {ply}
-			end
-			return true
-		elseif ply:IsValid() then
-			self.FPPOwner = ply
-			self.FPPOwnerID = ply:SteamID()
-			return true
-		end
-		return false
+		local ply = UID and player.GetByUniqueID(tostring(UID)) or nil
+		if UID and not IsValid(ply) then return false end
+		return self:CPPISetOwner(ply)
 	end
 
 	function ENTITY:CPPICanTool(ply, tool)
@@ -84,5 +73,29 @@ if SERVER then
 
 	function ENTITY:CPPICanPunt(ply)
 		return FPP.plyCanTouchEnt(ply, self, "Gravgun")
+	end
+
+	function ENTITY:CPPICanUse(ply)
+		return FPP.plyCanTouchEnt(ply, self, "PlayerUse")
+	end
+
+	function ENTITY:CPPICanDamage(ply)
+		return FPP.plyCanTouchEnt(ply,  self, "EntityDamage")
+	end
+
+	function ENTITY:CPPIDrive(ply)
+		local Value = FPP.Protect.CanDrive(ply, self)
+		if Value ~= false and Value ~= true then Value = true end
+		return Value
+	end
+
+	function ENTITY:CPPICanProperty(ply, property)
+		local Value = FPP.Protect.CanProperty(ply, property, self)
+		if Value ~= false and Value ~= true then Value = true end
+		return Value
+	end
+
+	function ENTITY:CPPICanEditVariable(ply, key, val, editTbl)
+		return self:CPPICanProperty(ply, "editentity")
 	end
 end

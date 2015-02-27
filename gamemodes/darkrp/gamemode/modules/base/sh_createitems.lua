@@ -9,7 +9,7 @@ local isnil = fp{fn.Eq, nil}
 -- Optional value, when filled in it must meet the conditions
 local optional = function(...) return fn.FOr{isnil, ...} end
 -- Check the correctness of a model
-local checkModel = function(model) return isstring(model) and (CLIENT or util.IsValidModel(model)) end
+local checkModel = isstring
 
 -- A table of which each element must meet condition f
 local tableOf = function(f) return function(tbl)
