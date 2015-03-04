@@ -49,6 +49,10 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			FAdmin.Access.AddGroup("admin", 1, privs.admin, 50)
 			FAdmin.Access.AddGroup("user", 0, privs.user, 10)
 			FAdmin.Access.AddGroup("noaccess", 0, privs.noaccess, 0)
+			
+			if serverguard then
+				FAdmin.Access.AddGroup("founder", 2, privs.superadmin, 101)
+			end
 		end
 
 		MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
