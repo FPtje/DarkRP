@@ -1,3 +1,5 @@
+hook.Run("DarkRPStartedLoading")
+
 GM.Version = "2.6.0 (Workshop)"
 GM.Name = "DarkRP"
 GM.Author = "By FPtje Falco et al."
@@ -41,3 +43,5 @@ include("config/ammotypes.lua")
 DarkRP.DARKRP_LOADING = nil
 
 DarkRP.finish()
+
+hook.Run("DarkRPFinishedLoading")

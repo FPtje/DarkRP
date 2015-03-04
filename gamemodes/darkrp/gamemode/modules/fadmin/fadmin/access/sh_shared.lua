@@ -83,7 +83,7 @@ end
 
 function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 	-- This is the server console
-	if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end
+	--if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end
 	-- Privilege does not exist
 	if not FAdmin.Access.Privileges[priv] then return ply:IsAdmin() end
 
@@ -102,7 +102,11 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 		return false
 	end
 
-	if FAdmin.Access.Groups[Usergroup] and FAdmin.Access.Groups[Usergroup].PRIVS[priv] then
+	if not FAdmin.Access.Groups[Usergroup] then
+		return ply:IsAdmin() -- solution until CAMI exists
+	end
+
+	if FAdmin.Access.Groups[Usergroup].PRIVS[priv] then
 		return true
 	end
 

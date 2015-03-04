@@ -122,10 +122,11 @@ end
 
 
 local function load()
+	-- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
+	GAMEMODE = GAMEMODE or GM
 	loadLanguages()
 	loadModules()
 	loadCustomDarkRPItems()
 	hook.Run("loadCustomDarkRPItems", GAMEMODE)
 end
-hook.Add("Initialize", "loadDarkRPModules", load)
-hook.Add("OnReloaded", "loadDarkRPModules", load)
+hook.Add("DarkRPFinishedLoading", "loadDarkRPModules", load)
