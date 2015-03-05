@@ -35,9 +35,11 @@ local function Kick(ply, cmd, args)
 				local name = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
 
 				FAdmin.Messages.ActionMessage(ply, target, "You have kicked %s", "You were kicked by %s", "Kicked %s")
-
+				
+				Reason = Reason and string.gsub(Reason, ";", " ") or "No reason provided"
+				
 				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), "Kicked by " .. name ..
-					" (" .. (Reason or "No reason provided") .. ")"))
+					" (" .. Reason .. ")"))
 				ply.FAdminKickReason = nil
 			end
 		end
@@ -165,10 +167,11 @@ local function Ban(ply, cmd, args)
 			local time, Reason = tonumber(args[2]) or 0, (Reason ~= "" and Reason) or args[3] or ""
 			if stage == "execute" then
 				time = tonumber(args[3]) or 60 --Default to one hour, not permanent.
-				Reason = args[4] or ""
+				Reason = args[4]  or ""
 			end
 
 			local TimeText = FAdmin.PlayerActions.ConvertBanTime(time)
+			
 			if type(target) ~= "string" and  IsValid(target) then
 				for k,v in pairs(StartBannedUsers) do
 					if v == target:SteamID() then
@@ -178,9 +181,11 @@ local function Ban(ply, cmd, args)
 				end
 				local nick = ply.Nick and ply:Nick() or "console"
 				SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
-
+				
+				Reason = string.gsub(Reason, ";", " ")
+				
 				FAdmin.Messages.ActionMessage(ply, target, "You have Banned %s for " .. TimeText, "You were Banned by %s", "Banned %s (".. TimeText.. ") (".. Reason.. ")")
-				game.ConsoleCommand("banid " .. time.." ".. target:SteamID().."\n") -- Don't use banid in combination with RunConsoleCommand
+				game.ConsoleCommand("banid " .. time.." ".. target:SteamID().."\n")
 				game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), " banned by "..nick.." for "..TimeText.." ("..Reason .. ")" ))
 			else
 				for k,v in pairs(StartBannedUsers) do
