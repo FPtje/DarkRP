@@ -682,6 +682,11 @@ local function SetBuddy(ply, cmd, args)
 	for k,v in pairs(args) do args[k] = tonumber(v) end
 	ply.Buddies[buddy] = {Physgun = util.tobool(args[2]), Gravgun = util.tobool(args[3]), Toolgun = util.tobool(args[4]), PlayerUse = util.tobool(args[5]), EntityDamage = util.tobool(args[6])}
 
+	local CPPIBuddies = {}
+	for k,v in pairs(ply.Buddies) do if table.HasValue(v, true) then table.insert(CPPIBuddies, k) end end
+	-- Also run at player spawn because clients send their buddies through this command
+	hook.Run("CPPIFriendsChanged", ply, CPPIBuddies)
+
 	local affectedProps = {}
 	for k,v in pairs(ents.GetAll()) do
 		local owner = v:CPPIGetOwner()
