@@ -65,6 +65,17 @@ local function loadModules()
 
 	for _, folder in SortedPairs(folders, true) do
 		if folder == "." or folder == ".." or GAMEMODE.Config.DisabledCustomModules[folder] then continue end
+		-- Sound but incomplete way of detecting the error of putting addons in the darkrpmod folder
+		if file.Exists(fol .. folder .. "/addon.txt", "LUA") or file.Exists(fol .. folder .. "/addon.json", "LUA") then
+			DarkRP.errorNoHalt("Addon detected in the darkrp_modules folder.", 2, {
+				"This addon is not supposed to be in the darkrp_modules folder.",
+				"It is supposed to be in garrysmod/addons/ instead.",
+				"Whether a mod is to be installed in darkrp_modules or addons is the author's decision.",
+				"Please read the readme of the addons you're installing next time."
+			},
+			"<darkrpmod addon>/lua/darkrp_modules/" .. folder, -1)
+			continue
+		end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 			if SERVER then AddCSLuaFile(fol..folder .. "/" ..File) end
