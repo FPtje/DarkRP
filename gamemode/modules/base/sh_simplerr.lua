@@ -7,14 +7,20 @@ DarkRP.simplerrRun = fc{
     simplerr.safeCall
 }
 
--- error: throw a runtime error
+-- error: throw a runtime error without exiting the stack
 -- parameters: msg, [stackNr], [hints], [path], [line]
-DarkRP.error = fc{
-    simplerr.wrapError,
+DarkRP.errorNoHalt = fc{
     simplerr.wrapHook,
     simplerr.wrapLog,
     simplerr.runError,
     function(msg, err, ...) return msg, err and err + 1 or 2, ... end -- Raise error level one higher
+}
+
+-- error: throw a runtime error
+-- parameters: msg, [stackNr], [hints], [path], [line]
+DarkRP.error = fc{
+    simplerr.wrapError,
+    DarkRP.errorNoHalt
 }
 
 -- Print errors from the server in the console and show a message in chat
