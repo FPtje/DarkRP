@@ -15,7 +15,7 @@ if CLIENT then
 end
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to lock\nRight click to unlock"
+SWEP.Instructions = "Left click to lock\nRight click to unlock\nReload for door settings or animation menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 
@@ -100,9 +100,7 @@ end
 function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
-	if not lookingAtLockable(self.Owner, trace.Entity) then
-		return
-	end
+	if not lookingAtLockable(self.Owner, trace.Entity) then return end
 
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.3)
 
@@ -121,9 +119,7 @@ end
 function SWEP:SecondaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
-	if not lookingAtLockable(self.Owner, trace.Entity) then
-		return
-	end
+	if not lookingAtLockable(self.Owner, trace.Entity) then return end
 
 	self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
 
