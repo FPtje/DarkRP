@@ -18,14 +18,26 @@ local function DoRestrictWeapons(ply, cmd, args)
 	local Group = args[2]
 	if not Group or not FAdmin.Access.Groups[Group] or not Weapon then return false end
 	if Restricted.Weapons[Weapon] then
-		sql.Query("UPDATE FADMIN_RESTRICTEDENTS SET ADMIN_GROUP = " .. MySQLite.SQLStr(Group).." WHERE ENTITY = " .. MySQLite.SQLStr(Weapon).." AND TYPE = " .. MySQLite.SQLStr("Weapons")..";")
+		sql.Query("UPDATE FADMIN_RESTRICTEDENTS SET ADMIN_GROUP = " .. sql.SQLStr(Group).." WHERE ENTITY = " .. sql.SQLStr(Weapon).." AND TYPE = " .. sql.SQLStr("Weapons")..";")
 	else
-		sql.Query("INSERT INTO FADMIN_RESTRICTEDENTS VALUES(" .. MySQLite.SQLStr("Weapons")..", " .. MySQLite.SQLStr(Weapon)..", " .. MySQLite.SQLStr(Group)..");")
+		sql.Query("INSERT INTO FADMIN_RESTRICTEDENTS VALUES(" .. sql.SQLStr("Weapons")..", " .. sql.SQLStr(Weapon)..", " .. sql.SQLStr(Group)..");")
 	end
 	Restricted.Weapons[Weapon] = Group
 	FAdmin.Messages.SendMessage(ply, 4, "Weapon restricted!")
 
 	return true, Weapon, Group
+end
+
+local function UnRestrictWeapons(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Restrict") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	local Weapon = args[1]
+
+	sql.Query("DELETE FROM FADMIN_RESTRICTEDENTS WHERE ENTITY = " .. sql.SQLStr(Weapon).." AND TYPE = " .. sql.SQLStr("Weapons")..";")
+
+	Restricted.Weapons[Weapon] = nil
+	FAdmin.Messages.SendMessage(ply, 4, "Weapon unrestricted!")
+
+	return true, Weapon
 end
 
 local function RestrictWeapons(ply, Weapon, WeaponTable)
@@ -41,6 +53,7 @@ hook.Add("PlayerSpawnSWEP", "FAdmin_RestrictWeapons", RestrictWeapons)
 
 FAdmin.StartHooks["Restrict"] = function()
 	FAdmin.Commands.AddCommand("RestrictWeapon", DoRestrictWeapons)
+	FAdmin.Commands.AddCommand("UnRestrictWeapon", UnRestrictWeapons)
 
 	FAdmin.Access.AddPrivilege("Restrict", 3)
 end
