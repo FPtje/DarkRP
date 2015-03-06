@@ -101,7 +101,6 @@ function SWEP:PrimaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
 	if not lookingAtLockable(self.Owner, trace.Entity) then
-		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
 		return
 	end
 
@@ -123,7 +122,6 @@ function SWEP:SecondaryAttack()
 	local trace = self.Owner:GetEyeTrace()
 
 	if not lookingAtLockable(self.Owner, trace.Entity) then
-		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
 		return
 	end
 
@@ -145,11 +143,7 @@ SWEP.OnceReload = false
 function SWEP:Reload()
 	local trace = self.Owner:GetEyeTrace()
 	if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
-		if not self.OnceReload then
-			if SERVER then DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle"))) end
-			self.OnceReload = true
-			timer.Simple(3, function() self.OnceReload = false end)
-		end
+		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
 		return
 	end
 	if SERVER then
