@@ -14,6 +14,7 @@ local function Jail(ply, cmd, args)
 
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+		local jailDistance = 50
 		if IsValid(target) then
 			local JailProps = {}
 			if JailType == "unjail" or string.lower(cmd) == "unjail" then
@@ -28,11 +29,13 @@ local function Jail(ply, cmd, args)
 
 				target.FAdminJailProps = nil
 				timer.Destroy("FAdmin_jail"..target:UserID())
+				timer.Destroy("FAdmin_jail_watch"..target:UserID())
 				target:FAdmin_SetGlobal("fadmin_jailed", false)
 
 			elseif JailType == "small" then
 				table.insert(JailProps, {pos = Vector(0,0,58), ang = Angle(0,0,0), model = "models/props_wasteland/laundry_dryer001.mdl"})
 			elseif JailType == "normal" then
+				jailDistance = 70
 				table.insert(JailProps, {pos = Vector(0,0,-5), ang = Angle(90,0,0), model = "models/props_building_details/Storefront_Template001a_Bars.mdl"})
 				table.insert(JailProps, {pos = Vector(0,0,97), ang = Angle(90,0,0), model = "models/props_building_details/Storefront_Template001a_Bars.mdl"})
 
@@ -45,6 +48,7 @@ local function Jail(ply, cmd, args)
 				table.insert(JailProps, {pos = Vector(52,0,46), ang = Angle(0,0,0), model = "models/props_building_details/Storefront_Template001a_Bars.mdl"})
 
 			elseif JailType == "big" then -- Requires CSS but it's really funny
+				jailDistance = 80
 				table.insert(JailProps, {pos = Vector(0,0,-5), ang = Angle(0,0,0), model = "models/props/cs_havana/gazebo.mdl"})
 				table.insert(JailProps, {pos = Vector(70,0,50), ang = Angle(0,0,0), model = "models/props_borealis/borealis_door001a.mdl"})
 
@@ -77,19 +81,30 @@ local function Jail(ply, cmd, args)
 
 				if JailTime ~= 0 then
 					timer.Create("FAdmin_jail"..target:UserID(), JailTime, 1, function()
-						if IsValid(target) and target:FAdmin_GetGlobal("fadmin_jailed") then
-							target:FAdmin_SetGlobal("fadmin_jailed", false)
-							for k,v in pairs(target.FAdminJailProps) do
-								if IsValid(k) then
-									k:SetCanRemove(true)
-									k:Remove()
-								end
-							end
+						if not IsValid(target) then timer.Destroy("FAdmin_jail"..target:UserID()) end
+						if not target:FAdmin_GetGlobal("fadmin_jailed") then return end
 
-							target.FAdminJailProps = nil
+						target:FAdmin_SetGlobal("fadmin_jailed", false)
+
+						for k,v in pairs(target.FAdminJailProps) do
+							if IsValid(k) then
+								k:SetCanRemove(true)
+								k:Remove()
+							end
 						end
+
+						target.FAdminJailProps = nil
 					end)
 				end
+
+				jailDistance = jailDistance * jailDistance
+				timer.Create("FAdmin_jail_watch"..target:UserID(), 1, 0, function()
+					if not IsValid(target) then timer.Destroy("FAdmin_jail_watch"..target:UserID()) return end
+
+					if target:GetPos():DistToSqr(target.FAdminJailPos) > jailDistance then
+						target:SetPos(target.FAdminJailPos)
+					end
+				end)
 
 				time = "for ".. JailTime.." seconds"
 				if JailTime == 0 then time = "indefinitely" end

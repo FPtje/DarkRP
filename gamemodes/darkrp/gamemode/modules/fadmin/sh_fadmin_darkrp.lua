@@ -60,33 +60,11 @@ function FAdmin.SteamToProfile(ply) -- Thanks decodaman
 	return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
 end
 
-hook.Add("CanTool", "EntityCanTool", function(ply, trace, mode)
-	if trace.Entity.CanTool and not FPP then
-		return trace.Entity:CanTool(ply, trace, mode)
-	end
-end)
-
-hook.Add("PhysgunPickup", "EntityPhysgunPickup", function(ply, ent)
-	if ent.PhysgunPickup and not FPP then --FPP has this function too
-		return ent:PhysgunPickup(ply)
-	end
-end)
-
-hook.Add("OnPhysgunFreeze", "EntityPhysgunFreeze", function(weapon, physobj, ent, ply, ...)
-	if ent.OnPhysgunFreeze and not FPP then
-		return ent:OnPhysgunFreeze(weapon, physobj, ent, ply, ...)
-	end
-end)
-
 /*
 	FAdmin global settings
 */
 FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
 
-
-FindMetaTable("Player").FAdmin_GetGlobal = function(self, setting)
-	return self.GlobalSetting and self.GlobalSetting[setting]
-end
 
 /*Dependency solver:
 	Many plugins are dependant of one another.

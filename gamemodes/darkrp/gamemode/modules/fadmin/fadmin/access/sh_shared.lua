@@ -14,7 +14,7 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 	MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = " .. MySQLite.SQLStr(name) .. ";", function(val)
 		if tonumber(val or 0) > 0 then return end
 
-		MySQLite.query("REPLACE INTO FADMIN_GROUPS VALUES(".. MySQLite.SQLStr(name) .. ", " .. admin_access..");")
+		MySQLite.query("REPLACE INTO FADMIN_GROUPS VALUES(".. MySQLite.SQLStr(name) .. ", " .. tonumber(admin_access) .. ");")
 
 		for priv, _ in pairs(privs or {}) do
 			MySQLite.query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(name) .. ", " .. MySQLite.SQLStr(priv) .. ");")
