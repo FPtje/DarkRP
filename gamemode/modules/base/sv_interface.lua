@@ -80,7 +80,7 @@ DarkRP.createPlayerData = DarkRP.stub{
 	parameters = {
 		{
 			name = "ply",
-			description = "The player to get the data for.",
+			description = "The player to create the data for.",
 			type = "Player",
 			optional = false
 		},
@@ -282,7 +282,7 @@ DarkRP.notifyAll = DarkRP.stub{
 	description = "Make a notification pop up on the everyone's screen.",
 	parameters = {
 		{
-			name = "MsgType",
+			name = "msgType",
 			description = "The type of the message.",
 			type = "number",
 			optional = false
@@ -310,7 +310,7 @@ DarkRP.printMessageAll = DarkRP.stub{
 	description = "Make a notification pop up in the middle of everyone's screen.",
 	parameters = {
 		{
-			name = "MsgType",
+			name = "msgType",
 			description = "The type of the message.",
 			type = "number",
 			optional = false
@@ -338,7 +338,7 @@ DarkRP.talkToRange = DarkRP.stub{
 			optional = false
 		},
 		{
-			name = "PlayerName",
+			name = "playerName",
 			description = "The name of the sender of the message.",
 			type = "string",
 			optional = false
@@ -584,7 +584,7 @@ DarkRP.PLAYER.addCustomEntity = DarkRP.stub{
 	parameters = {
 		{
 			name = "tblEnt",
-			description = "The entity table (from the DarkRPEntities table.)",
+			description = "The entity table (from the DarkRPEntities table).",
 			type = "table",
 			optional = false
 		}
@@ -599,7 +599,7 @@ DarkRP.PLAYER.removeCustomEntity = DarkRP.stub{
 	parameters = {
 		{
 			name = "tblEnt",
-			description = "The entity table (from the DarkRPEntities table.)",
+			description = "The entity table (from the DarkRPEntities table).",
 			type = "table",
 			optional = false
 		}
@@ -614,7 +614,7 @@ DarkRP.PLAYER.customEntityLimitReached = DarkRP.stub{
 	parameters = {
 		{
 			name = "tblEnt",
-			description = "The entity table (from the DarkRPEntities table.)",
+			description = "The entity table (from the DarkRPEntities table).",
 			type = "table",
 			optional = false
 		}
@@ -736,8 +736,8 @@ DarkRP.hookStub{
 			type = "Player"
 		},
 		{
-			name = "entityTable",
-			description = "The table, as defined in addentities.lua.",
+			name = "weaponTable",
+			description = "The table (from the CustomShipments table).",
 			type = "table"
 		},
 		{
@@ -765,8 +765,8 @@ DarkRP.hookStub{
 			type = "Player"
 		},
 		{
-			name = "entityTable",
-			description = "The table, as defined in addentities.lua.",
+			name = "shipmentTable",
+			description = "The table (from the CustomShipments table).",
 			type = "table"
 		},
 		{
@@ -794,8 +794,8 @@ DarkRP.hookStub{
 			type = "Player"
 		},
 		{
-			name = "entityTable",
-			description = "The table, as defined in addentities.lua.",
+			name = "vehicleTable",
+			description = "The table (from the CustomVehicles table).",
 			type = "table"
 		},
 		{
@@ -824,7 +824,7 @@ DarkRP.hookStub{
 		},
 		{
 			name = "entityTable",
-			description = "The table of the custom entity.",
+			description = "The table of the custom entity (from the DarkRPEntities table).",
 			type = "table"
 		},
 		{
@@ -906,7 +906,7 @@ DarkRP.hookStub{
 	parameters = {
 		{
 			name = "ply",
-			description = "The player who wants to demote.",
+			description = "The player who wants to drop the weapon.",
 			type = "Player"
 		},
 		{
@@ -1017,7 +1017,7 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
-	name = "PlayerWalletChanged",
+	name = "playerWalletChanged",
 	description = "When a player receives money.",
 	parameters = {
 		{
