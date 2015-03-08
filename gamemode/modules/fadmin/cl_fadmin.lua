@@ -20,21 +20,68 @@ IncludeFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/playeractions/")
 /*---------------------------------------------------------------------------
 FAdmin global settings
 ---------------------------------------------------------------------------*/
-local GetTypes = {Angle = "ReadAngle",
-boolean = "ReadBool",
-Entity = "ReadEntity",
-number = "ReadFloat",
-Player = "ReadEntity",
-string = "ReadString",
-Vector = "ReadVector"}
-usermessage.Hook("FAdmin_GlobalSetting", function(um)
+net.Receive("FAdmin_GlobalSetting", function(len)
+	local setting, value = net.ReadString(), net.ReadType(net.ReadUInt(8))
+
 	FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
-	local key, value = um:ReadString(), um:ReadString()
-	FAdmin.GlobalSetting[key] = um[GetTypes[value]](um)
+	FAdmin.GlobalSetting[setting] = value
 end)
-usermessage.Hook("FAdmin_PlayerSetting", function(um)
-	local ply = um:ReadEntity()
-	if not ply:IsValid() then return end
-	ply.GlobalSetting = ply.GlobalSetting or {}
-	ply.GlobalSetting[um:ReadString()] = um[GetTypes[um:ReadString()]](um)
+
+net.Receive("FAdmin_PlayerSetting", function(len)
+	local uid, setting, value = net.ReadUInt(16), net.ReadString(), net.ReadType(net.ReadUInt(8))
+
+	FAdmin.PlayerSettings = FAdmin.PlayerSettings or {}
+	FAdmin.PlayerSettings[uid] = FAdmin.PlayerSettings[uid] or {}
+	FAdmin.PlayerSettings[uid][setting] = value
 end)
+
+timer.Create("FAdmin_CleanPlayerSettings", 300, 0, function()
+	if not FAdmin.PlayerSettings then return end
+
+	-- find highest userID
+	local max = math.huge
+	for k, v in pairs(player.GetAll()) do
+		if v:UserID() > max then max = v:UserID() end
+	end
+
+	-- Anything lower than the maximal UserID can be culled
+	-- This prevents data from joining players from being removed
+	-- New players always get a strictly higher UserID than any player before them
+	for uid, settings in pairs(FAdmin.PlayerSettings) do
+		if IsValid(Player(uid)) or uid > max then continue end
+
+		FAdmin.PlayerSettings[uid] = nil
+	end
+end)
+
+local plyMeta = FindMetaTable("Player")
+
+function plyMeta:FAdmin_GetGlobal(setting)
+	local uid = self:UserID()
+	return FAdmin.PlayerSettings and FAdmin.PlayerSettings[uid] and FAdmin.PlayerSettings[uid][setting] or nil
+end
+
+net.Receive("FAdmin_GlobalPlayerSettings", function(len)
+	local globalCount = net.ReadUInt(8)
+
+	FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
+
+	for i = 1, globalCount do
+		FAdmin.GlobalSetting[net.ReadString()] = net.ReadType(net.ReadUInt(8))
+	end
+
+	local plyCount = net.ReadUInt(8)
+	FAdmin.PlayerSettings = FAdmin.PlayerSettings or {}
+
+	for i = 1, plyCount do
+		local uid = net.ReadUInt(16)
+		local count = net.ReadUInt(8)
+
+		FAdmin.PlayerSettings[uid] = FAdmin.PlayerSettings[uid] or {}
+
+		for j = 1, count do
+			FAdmin.PlayerSettings[uid][net.ReadString()] = net.ReadType(net.ReadUInt(8))
+		end
+	end
+end)
+

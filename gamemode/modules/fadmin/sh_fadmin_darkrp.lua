@@ -66,10 +66,6 @@ end
 FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
 
 
-FindMetaTable("Player").FAdmin_GetGlobal = function(self, setting)
-	return self.GlobalSetting and self.GlobalSetting[setting]
-end
-
 /*Dependency solver:
 	Many plugins are dependant of one another.
 	To prevent plugins calling functions from other plugins that haven't been opened yet
