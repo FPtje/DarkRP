@@ -230,6 +230,108 @@ DarkRP.simplerrRun = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.error = DarkRP.stub{
+	name = "error",
+	description = "Throw a simplerr formatted error. Also halts the stack, which means that statements after calling this function will not execute.",
+	parameters = {
+		{
+			name = "message",
+			description = "The message of the error.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "stack",
+			description = "From which point in the function call stack to report the error. 1 to include the function that called DarkRP.error, 2 to exclude it, etc. The default value is 1.",
+			type = "number",
+			optional = true
+		},
+		{
+			name = "hints",
+			description = "Table containing hint strings. Use these hints to explain the error, describe possible causes or provide help to solve the problem.",
+			type = "table",
+			optional = true
+		},
+		{
+			name = "path",
+			description = "Override the path of the error. Will be shown in the error message. By default this is determined by the stack level.",
+			type = "string",
+			optional = true
+		},
+		{
+			name = "line",
+			description = "Override the line number of the error. By default this is determined by the stack level.",
+			type = "number",
+			optional = true
+		},
+
+	},
+	returns = {
+		{
+			name = "succeed",
+			description = "Simplerr return value: whether the calculation succeeded. Always false. This return value will never be reached.",
+			type = "boolean"
+		},
+		{
+			name = "msg",
+			description = "Simplerr return value: nicely formatted error message. This return value will never be reached.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
+DarkRP.errorNoHalt = DarkRP.stub{
+	name = "errorNoHalt",
+	description = "Throw a simplerr formatted error. Unlike DarkRP.error, this does not halt the stack. This means that statements after calling this function will be executed like normal.",
+	parameters = {
+		{
+			name = "message",
+			description = "The message of the error.",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "stack",
+			description = "From which point in the function call stack to report the error. 1 to include the function that called DarkRP.error, 2 to exclude it, etc. The default value is 1.",
+			type = "number",
+			optional = true
+		},
+		{
+			name = "hints",
+			description = "Table containing hint strings. Use these hints to explain the error, describe possible causes or provide help to solve the problem.",
+			type = "table",
+			optional = true
+		},
+		{
+			name = "path",
+			description = "Override the path of the error. Will be shown in the error message. By default this is determined by the stack level.",
+			type = "string",
+			optional = true
+		},
+		{
+			name = "line",
+			description = "Override the line number of the error. By default this is determined by the stack level.",
+			type = "number",
+			optional = true
+		},
+
+	},
+	returns = {
+		{
+			name = "succeed",
+			description = "Simplerr return value: whether the calculation succeeded. Always false.",
+			type = "boolean"
+		},
+		{
+			name = "msg",
+			description = "Simplerr return value: nicely formatted error message.",
+			type = "string"
+		}
+	},
+	metatable = DarkRP
+}
+
 -- This function is one of the few that's already defined before the stub is created
 DarkRP.stub{
 	name = "SteamName",
