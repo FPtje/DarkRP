@@ -1023,13 +1023,18 @@ local PrivateSettings = {
 	["touch world entities"] = "WorldProps",
 	["touch other people's entities"] = "OtherPlayerProps",
 	["touch blocked entities"] = "BlockedProps",
-	["see an icon in the middle of the screen"] = "ShowIcon"
+	["see the owners of props"] = "HideOwner"
 }
 
+local privateSettingVars = {}
 for k,v in pairs(PrivateSettings) do
-	CreateClientConVar("FPP_PrivateSettings_"..v, 0, true, true)
+	privateSettingVars[v] = CreateClientConVar("FPP_PrivateSettings_"..v, 0, true, true)
 end
 CreateClientConVar("cl_pickupplayers", 1, true, true)
+
+function FPP.getPrivateSetting(setting)
+	return privateSettingVars[setting]:GetBool()
+end
 
 function FPP.PrivateSettings(Panel)
 	//PrivateSettingsPanel = PrivateSettingsPanel or Panel
