@@ -189,6 +189,20 @@ function meta:changeAllowed(t)
 	if self.bannedfrom[group] then return false else return true end
 end
 
+
+function GM:canChangeJob(ply, args)
+	if ply:isArrested() then return false end
+	if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then return false, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), "/job") end
+	if not ply:Alive() then return false end
+
+	local len = string.len(args)
+
+	if len < 3 then return false, DarkRP.getPhrase("unable", "/job", ">2") end
+	if len > 25 then return false, DarkRP.getPhrase("unable", "/job", "<26") end
+
+	return true
+end
+
 /*---------------------------------------------------------------------------
 Commands
 ---------------------------------------------------------------------------*/
@@ -198,39 +212,12 @@ local function ChangeJob(ply, args)
 		return ""
 	end
 
-	if ply:isArrested() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("unable", "/job", ""))
-		return ""
-	end
-
-	if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), "/job"))
-		return ""
-	end
-
-	if not ply:Alive() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/job", ""))
-		return ""
-	end
-
 	if not GAMEMODE.Config.customjobs then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/job", ""))
 		return ""
 	end
 
-	local len = string.len(args)
-
-	if len < 3 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/job", ">2"))
-		return ""
-	end
-
-	if len > 25 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/job", "<26"))
-		return ""
-	end
-
-	local canChangeJob, message, replace = hook.Call("canChangeJob", nil, ply, args)
+	local canChangeJob, message, replace = gamemode.Call("canChangeJob", ply, args)
 	if canChangeJob == false then
 		DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "/job", ""))
 		return ""
