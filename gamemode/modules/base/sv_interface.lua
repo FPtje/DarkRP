@@ -1039,30 +1039,3 @@ DarkRP.hookStub{
 		}
 	}
 }
-
-DarkRP.hookStub{
-	name = "loadCustomDarkRPItems",
-	description = "Runs right after the scripts from the DarkRPMod are run. You can add custom jobs, entities, shipments and whatever in this hook.",
-	parameters = {
-	},
-	returns = {
-	}
-}
-
-DarkRP.hookStub{
-	name = "DarkRPStartedLoading",
-	description = "Runs at the very start of loading DarkRP. Not even sandbox has loaded here yet.",
-	parameters = {
-	},
-	returns = {
-	}
-}
-
-DarkRP.hookStub{
-	name = "DarkRPFinishedLoading",
-	description = "Runs right after DarkRP itself has loaded. All DarkRPMod stuff (except for disabled_defaults) is loaded during this hook. NOTE! NO CUSTOM STUFF WILL BE AVAILABLE DURING THIS HOOK. USE `loadCustomDarkRPItems` INSTEAD IF YOU WANT THAT!",
-	parameters = {
-	},
-	returns = {
-	}
-}
