@@ -58,13 +58,14 @@ function meta:keysOwn(ply)
 		DarkRP.updateDoorData(self, "owner")
 	end
 
-	if ply:GetTable().OwnedNumz == 0 then
+	ply.OwnedNumz = ply.OwnedNumz or 0
+	if ply.OwnedNumz == 0 then
 		timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
 	end
 
-	ply:GetTable().OwnedNumz = ply:GetTable().OwnedNumz + 1
+	ply.OwnedNumz = ply.OwnedNumz + 1
 
-	ply:GetTable().Ownedz[self:EntIndex()] = self
+	ply.Ownedz[self:EntIndex()] = self
 end
 
 function meta:keysUnOwn(ply)
