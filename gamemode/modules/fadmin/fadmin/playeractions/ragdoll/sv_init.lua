@@ -82,7 +82,7 @@ local function Ragdoll(ply, cmd, args)
 	end
 	local RagdollType = string.lower(FAdmin.PlayerActions.RagdollTypes[tonumber(args[2])] or args[2] or cmd)
 
-	local time = tonumber(args[3] or 0)
+	local time = tonumber(args[3]) or 0
 	local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
 
 	for _, target in pairs(targets) do
