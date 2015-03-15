@@ -8,6 +8,7 @@ local function Freeze(ply, cmd, args)
 	end
 
 	local time = tonumber(args[2] or 0)
+	if not time then return end
 	local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
 
 	for _, target in pairs(targets) do
