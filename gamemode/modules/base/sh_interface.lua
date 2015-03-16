@@ -184,7 +184,7 @@ DarkRP.getJobByCommand = DarkRP.stub{
 		{
 			name = "command",
 			description = "The command of the job, without preceding slash (e.g. 'medic' for medic)",
-			type = "numbstringer",
+			type = "string",
 			optional = false
 		}
 	},
@@ -343,7 +343,7 @@ DarkRP.stub{
 		{
 			name = "name",
 			description = "The player's steam name.",
-			type = "String"
+			type = "string"
 		}
 	},
 	metatable = DarkRP.PLAYER
