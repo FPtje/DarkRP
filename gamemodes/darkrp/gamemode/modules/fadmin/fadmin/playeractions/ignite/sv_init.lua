@@ -5,7 +5,7 @@ local function Ignite(ply, cmd, args)
 		return false
 	end
 
-	local time = tonumber(args[2] or 10)
+	local time = tonumber(args[2]) or 10
 
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Ignite", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
