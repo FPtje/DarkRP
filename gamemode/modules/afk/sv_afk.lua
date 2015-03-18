@@ -81,7 +81,7 @@ hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
 local function BlockAFKTeamChange(ply, t, force)
 	if ply:getDarkRPVar("AFK") and (not force or t ~= GAMEMODE.DefaultTeam) then
 		local TEAM = RPExtraTeams[t]
-		if TEAM then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. TEAM.command, DarkRP.getPhrase("afk_mode"))) end
+		if TEAM then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix[1] .. TEAM.command, DarkRP.getPhrase("afk_mode"))) end
 		return false
 	end
 end

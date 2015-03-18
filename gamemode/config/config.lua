@@ -266,7 +266,7 @@ GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
 -- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
 GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
-GM.Config.chatCommandPrefix = "/"
+GM.Config.chatCommandPrefix = { "/", "!" }
 GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
 GM.Config.F1MenuHelpPageTitle = "Wiki page"
 
