@@ -28,8 +28,18 @@ local function RP_PlayerChat(ply, text, teamonly)
 		fn.Curry(fn.GetValue, 2)(1), -- Get the first word
 		fn.Curry(string.Explode, 2)(' ') -- split by spaces
 	}(text)
-
-	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
+	
+	local prefixes = GAMEMODE.Config.chatCommandPrefix
+	local prefix = string.sub(text, 1, 1)
+	
+	for k,v in pairs(prefixes) do
+		if prefix == v then
+			prefix = nil
+			break
+		end
+	end
+	
+	if (not prefix) and tblCmd then
 		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
 		if callback == "" then
 			return "", "", DoSayFunc
