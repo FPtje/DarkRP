@@ -15,7 +15,7 @@ function DarkRP.initDatabase()
 		-- Gotta love the difference between SQLite and MySQL
 		local AUTOINCREMENT = MySQLite.isMySQL() and "AUTO_INCREMENT" or "AUTOINCREMENT"
 
-		-- Table that holds all position data (jail, zombie spawns etc.)
+		-- Table that holds all position data (jail, spawns etc.)
 		-- Queue these queries because other queries depend on the existence of the darkrp_position table
 		-- Race conditions could occur if the queries are executed simultaneously
 		MySQLite.queueQuery([[

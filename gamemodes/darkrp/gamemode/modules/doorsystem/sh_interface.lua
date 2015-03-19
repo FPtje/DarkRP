@@ -276,7 +276,7 @@ DarkRP.ENTITY.getKeysCoOwners = DarkRP.stub{
 	returns = {
 		{
 			name = "players",
-			description = "The list of people allowed to own.",
+			description = "The list of people allowed to own. The keys of this table are UserIDs, the values are booleans.",
 			type = "table"
 		}
 	},
