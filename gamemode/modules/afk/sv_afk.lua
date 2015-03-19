@@ -24,6 +24,7 @@ local function SetAFK(ply)
 	if ply:getDarkRPVar("AFK") then
 		DarkRP.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
 		ply.OldJob = ply:getDarkRPVar("job")
+		ply.lastHealth = ply:Health()
 		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
 
 		ply.AFKDemote = math.huge
@@ -36,6 +37,9 @@ local function SetAFK(ply)
 		DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("salary_restored"))
 		ply:Spawn()
 		ply:UnLock()
+
+		ply:SetHealth(ply.lastHealth or 100)
+		ply.lastHealth = nil
 	end
 	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
 	ply:setSelfDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
