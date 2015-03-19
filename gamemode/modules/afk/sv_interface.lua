@@ -31,3 +31,22 @@ DarkRP.hookStub{
 		}
 	}
 }
+
+DarkRP.hookStub{
+	name = "playerSetAFK",
+	description = "When a player is set to AFK or returns from AFK.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "afk",
+			description = "True when the player starts being AFK, false when the player stops being AFK.",
+			type = "boolean"
+		}
+	},
+	returns = {
+	}
+}

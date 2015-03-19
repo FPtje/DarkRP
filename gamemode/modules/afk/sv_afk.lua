@@ -39,6 +39,8 @@ local function SetAFK(ply)
 	end
 	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
 	ply:setSelfDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
+
+	hook.Run("playerSetAFK", ply, ply:getDarkRPVar("AFK"))
 end
 
 DarkRP.defineChatCommand("afk", function(ply)
