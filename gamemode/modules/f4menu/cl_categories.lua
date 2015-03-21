@@ -7,14 +7,14 @@ function PANEL:Init()
     self:SetContentAlignment(4)
     self:SetTextInset(5, 0)
     self:SetFont("DarkRPHUD2")
-
-    self:SetText("bollocks")
 end
 
 function PANEL:Paint(w, h)
     if not self.category then return end
     draw.RoundedBox(4, 0, 0, w, h, self.category.color)
 end
+
+function PANEL:UpdateColours() end
 
 function PANEL:SetCategory(cat)
     self.category = cat

@@ -128,7 +128,7 @@ function PANEL:DoDoubleClick()
 		RunConsoleCommand("darkrp", job.command)
 	end
 
-	timer.Simple(1, fn.Partial(self:GetParent():GetParent():GetParent():GetParent():GetParent().Refresh, self:GetParent():GetParent():GetParent():GetParent():GetParent()))
+	timer.Simple(1, function() DarkRP.getF4MenuPanel():Refresh() end)
 end
 
 function PANEL:Refresh()
