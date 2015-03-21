@@ -176,14 +176,14 @@ local validAgenda = {
 }
 
 local validCategory = {
-    name                      = ass(isstring, "The name must be a string."),
-    categorises               = ass(oneOf{"jobs", "entities", "shipments", "weapons", "vehicles", "ammo"},
-        [[The categorises must be one of "jobs", "entities", "shipments", "weapons", "vehicles", "ammo"]],
-        {"Mind that this is case sensitive.", "Also mind the quotation marks."}),
-    startExpanded             = ass(isbool, "The startExpanded must be either true or false."),
-    color                     = ass(tableOf(isnumber), "The color must be a Color value."),
-    canSee                    = ass(optional(isfunction), "The canSee must be a function."),
-    sortOrder                 = ass(optional(isnumber), "The sortOrder must be a number."),
+	name                      = ass(isstring, "The name must be a string."),
+	categorises               = ass(oneOf{"jobs", "entities", "shipments", "weapons", "vehicles", "ammo"},
+		[[The categorises must be one of "jobs", "entities", "shipments", "weapons", "vehicles", "ammo"]],
+		{"Mind that this is case sensitive.", "Also mind the quotation marks."}),
+	startExpanded             = ass(isbool, "The startExpanded must be either true or false."),
+	color                     = ass(tableOf(isnumber), "The color must be a Color value."),
+	canSee                    = ass(optional(isfunction), "The canSee must be a function."),
+	sortOrder                 = ass(optional(isnumber), "The sortOrder must be a number."),
 }
 
 -- Check template against actual implementation
@@ -904,7 +904,7 @@ end
 local categories = {
 	jobs = {},
 	entities = {},
-    shipments = {},
+	shipments = {},
 	weapons = {},
 	vehicles = {},
 	ammo = {},
@@ -954,12 +954,12 @@ local function mergeCategories(customs, categories, path)
 end
 
 hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
-    local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments)
-    local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments)
+	local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments)
+	local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments)
 
 	mergeCategories(RPExtraTeams, categories.jobs, "your jobs")
 	mergeCategories(DarkRPEntities, categories.entities, "your custom entities")
-    mergeCategories(shipments, categories.shipments, "your custom shipments")
+	mergeCategories(shipments, categories.shipments, "your custom shipments")
 	mergeCategories(guns, categories.weapons, "your custom weapons")
 	mergeCategories(CustomVehicles, categories.vehicles, "your custom vehicles")
 	mergeCategories(GAMEMODE.AmmoTypes, categories.ammo, "your custom ammo")
