@@ -746,6 +746,37 @@ DarkRP.getDemoteGroup = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.createCategory = DarkRP.stub{
+    name = "createCategory",
+    description = "Create a category for the F4 menu.",
+    parameters = {
+        {
+            name = "tbl",
+            description = "Table describing the category.",
+            type = "table",
+            optional = false
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
+}
+
+DarkRP.getCategories = DarkRP.stub{
+    name = "getCategories",
+    description = "Get all categories for all F4 menu tabs.",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "tbl",
+            description = "all categories.",
+            type = "table"
+        }
+    },
+    metatable = DarkRP
+}
+
 DarkRP.hookStub{
 	name = "DarkRPVarChanged",
 	description = "Called when a DarkRPVar was changed.",

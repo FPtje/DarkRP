@@ -155,8 +155,17 @@ DarkRP.createCategory{
 }
 
 DarkRP.createCategory{
+    name = "other",
+    categorises = "shipments",
+    startExpanded = true,
+    color = Color(20, 150, 20, 255),
+    canSee = fp{fn.Id, true},
+    sortOrder = 255,
+}
+
+DarkRP.createCategory{
 	name = "other",
-	categorises = "shipments",
+	categorises = "weapons",
 	startExpanded = true,
 	color = Color(20, 150, 20, 255),
 	canSee = fp{fn.Id, true},
