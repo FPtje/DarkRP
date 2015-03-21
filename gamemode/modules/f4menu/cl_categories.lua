@@ -20,6 +20,7 @@ function PANEL:SetCategory(cat)
     self.category = cat
     self:SetText(cat.name)
 end
+
 derma.DefineControl("F4MenuCategoryHeader", "", PANEL, "DCategoryHeader")
 
 /*---------------------------------------------------------------------------
@@ -99,6 +100,10 @@ function PANEL:SetPerformLayout(f)
         f(self)
         self.BaseClass.PerformLayout(self)
     end
+end
+
+function PANEL:GetItems()
+    return self.Contents:GetItems()
 end
 
 function PANEL:Fill()

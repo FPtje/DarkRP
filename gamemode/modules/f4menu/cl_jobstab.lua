@@ -300,12 +300,16 @@ function PANEL:updateInfo(job)
 end
 
 function PANEL:PerformLayout()
+	local text = DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""):gsub('\t', ''), "Roboto Light", self:GetWide() - 43)
+	surface.SetFont("Roboto Light")
+	local w, h = surface.GetTextSize(text)
 	self.BaseClass.PerformLayout(self)
 
 	self.innerPanel:SetPos(3, 3)
 	self.innerPanel:SetSize(self:GetWide() - 6, self:GetTall() - self.pnlChooseMdl:GetTall() - self.btnGetJob:GetTall() - 13)
 	self.innerPanel:InvalidateLayout()
-	self.lblDescription:SetText(DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""):gsub('\t', ''), "Roboto Light", self:GetWide() - 43))
+	self.lblDescription:SetText(text)
+	self.lblDescription:SetTall(h)
 end
 
 derma.DefineControl("F4JobsPanelRight", "", PANEL, "F4EmptyPanel")
@@ -340,24 +344,44 @@ function PANEL:Refresh()
 	if not self.pnlLeft.Items then self.pnlRight:updateInfo({}) return end
 
 	-- don't refresh if still valid
-	if self.pnlRight.job and self.pnlLeft.Items[self.pnlRight.job.team] and not self.pnlLeft.Items[self.pnlRight.job.team]:GetDisabled() then return end
+	if table.Count(self.pnlRight.job) ~= 0 then return end
 
 	local job
-	for k, v in ipairs(self.pnlLeft:GetItems()) do
-		if v:GetDisabled() then continue end
-		job = v.DarkRPItem
-		break
+	for _, cat in ipairs(self.pnlLeft:GetItems()) do
+		for k,v in pairs(cat:GetItems()) do
+			show(k, v)
+			if v:GetDisabled() then continue end
+			job = v.DarkRPItem
+			goto break2
+		end
 	end
+	::break2::
 	self.pnlRight:updateInfo(job or {})
 end
 
 function PANEL:fillData()
-	for i, job in ipairs(RPExtraTeams) do
-		local item = vgui.Create("F4MenuJobButton")
-		item:setDarkRPItem(job)
-		item.DoClick = fn.Compose{fn.Curry(self.pnlRight.updateInfo, 2)(self.pnlRight), fn.Curry(fn.GetValue, 3)("DarkRPItem")(item)}
-		self.pnlLeft:AddItem(item)
-		item:Refresh()
+	local categories = DarkRP.getCategories().jobs
+
+	for _, cat in pairs(categories) do
+		if #cat.members == 0 or isfunction(cat.canSee) and not cat.canSee(LocalPlayer()) then continue end
+
+		local dCat = vgui.Create("F4MenuCategory", self)
+
+		dCat:SetButtonFactory(function(item, ui)
+			local pnl = vgui.Create("F4MenuJobButton", ui)
+			pnl:setDarkRPItem(item)
+			pnl.DoClick = fc{fp{self.pnlRight.updateInfo, self.pnlRight}, fp{fn.GetValue, "DarkRPItem", pnl}}
+
+			pnl:Refresh()
+			return pnl
+		end)
+
+		dCat:SetPerformLayout(function(contents)
+
+		end)
+
+		dCat:SetCategory(cat)
+		self.pnlLeft:AddItem(dCat)
 	end
 end
 
