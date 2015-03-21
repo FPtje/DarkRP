@@ -26,6 +26,9 @@ local tableOf = function(f) return function(tbl)
 	return true
 end end
 
+-- Any of the given elements
+local oneOf = function(f) return fp{table.HasValue, f} end
+
 -- A table that is nonempty, wrap around tableOf
 local nonempty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and f(tbl) end end
 
@@ -162,6 +165,16 @@ local validAgenda = {
 			"Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
 			[[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
 		})
+}
+
+local validCategory = {
+	name 					= ass(isstring, "The name must be a string."),
+	categorises 			= ass(oneOf{"jobs", "entities", "shipments", "vehicles", "ammo"}, [[The categorises must be one of "jobs", "entities", "shipments", "vehicles", "ammo"]],
+		{"Mind that this is case sensitive.", "Also mind the quotation marks."}),
+	startExpanded 			= ass(isbool, "The startExpanded must be either true or false."),
+	color 					= ass(tableOf(isnumber), "The color must be a Color value."),
+	canSee 					= ass(optional(isfunction), "The canSee must be a function."),
+	sortOrder 				= ass(optional(isnumber), "The sortOrder must be a number."),
 }
 
 -- Check template against actual implementation
@@ -877,4 +890,26 @@ end
 function DarkRP.getDemoteGroup(teamNr)
 	demoteGroups[teamNr] = demoteGroups[teamNr] or disjoint.MakeSet(teamNr)
 	return disjoint.FindSet(demoteGroups[teamNr])
+end
+
+local categories = {
+	jobs = {},
+	entities = {},
+	shipments = {},
+	vehicles = {},
+	ammo = {},
+}
+
+local categoryOrder = function(a, b) return a.sortOrder < b.sortOrder or a.sortOrder == b.sortOrder and a.name <= b.name end
+function DarkRP.createCategory(tbl)
+	local valid, err, hints = checkValid(tbl, validCategory)
+	if not valid then DarkRP.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
+	local destination = categories[tbl.categorises]
+
+	local i = table.insert(destination, tbl)
+	while i > 1 do
+		if categoryOrder(destination[i - 1], tbl) then break end
+		destination[i - 1], destination[i] = destination[i], destination[i - 1]
+		i = i - 1
+	end
 end

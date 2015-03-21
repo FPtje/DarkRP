@@ -293,3 +293,15 @@ Default demote groups
 ---------------------------------------------------------------------------*/
 DarkRP.createDemoteGroup("Cops", {TEAM_POLICE, TEAM_CHIEF})
 DarkRP.createDemoteGroup("Gangsters", {TEAM_GANG, TEAM_MOB})
+
+/*---------------------------------------------------------------------------
+Default categories
+---------------------------------------------------------------------------*/
+DarkRP.createCategory{
+	name = "other",
+	categorises = "jobs",
+	startExpanded = true,
+	color = Color(20, 150, 20, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}
