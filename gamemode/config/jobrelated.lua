@@ -298,10 +298,10 @@ DarkRP.createDemoteGroup("Gangsters", {TEAM_GANG, TEAM_MOB})
 Default categories
 ---------------------------------------------------------------------------*/
 DarkRP.createCategory{
-	name = "other",
+	name = "Other",
 	categorises = "jobs",
 	startExpanded = true,
-	color = Color(20, 150, 20, 255),
+	color = Color(0, 107, 0, 255),
 	canSee = fp{fn.Id, true},
 	sortOrder = 255,
 }

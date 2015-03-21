@@ -49,19 +49,37 @@ end
 
 derma.DefineControl("F4MenuEntitiesBase", "", PANEL, "DPanelList")
 
+-- Create categories for an entity tab
+local function createCategories(self, categories, itemClick, canBuy)
+	for _, cat in pairs(categories) do
+		if #cat.members == 0 or isfunction(cat.canSee) and not cat.canSee(LocalPlayer()) then continue end
+		local dCat = vgui.Create("F4MenuCategory", self)
+
+		dCat:SetButtonFactory(function(item, ui)
+			local pnl = vgui.Create("F4MenuEntityButton", ui)
+			pnl:setDarkRPItem(item)
+			pnl.DoClick = fp{itemClick, item}
+
+			return pnl
+		end)
+
+		dCat:SetPerformLayout(function(contents)
+			for k,v in pairs(contents.Items) do
+				local canBuy, important, price = canBuy(v.DarkRPItem)
+				v:SetDisabled(not canBuy, important)
+				v:updatePrice(price)
+			end
+		end)
+
+		dCat:SetCategory(cat)
+		self:AddItem(dCat)
+	end
+end
+
 /*---------------------------------------------------------------------------
 Entities panel
 ---------------------------------------------------------------------------*/
 PANEL = {}
-
-function PANEL:generateButtons()
-	for k,v in pairs(DarkRPEntities) do
-		local pnl = vgui.Create("F4MenuEntityButton", self)
-		pnl:setDarkRPItem(v)
-		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", v.cmd)
-		self:AddItem(pnl)
-	end
-end
 
 local function canBuyEntity(item)
 	local ply = LocalPlayer()
@@ -80,22 +98,18 @@ local function canBuyEntity(item)
 	return true, nil, cost
 end
 
+function PANEL:generateButtons()
+	local categories = DarkRP.getCategories().entities
+
+	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", item.cmd) end, canBuyEntity)
+end
+
 function PANEL:shouldHide()
 	for k,v in pairs(DarkRPEntities) do
 		local canBuy, important = canBuyEntity(v)
 		if not self:isItemHidden(not canBuy, important) then return false end
 	end
 	return true
-end
-
-function PANEL:PerformLayout()
-	for k,v in pairs(self.Items) do
-		local canBuy, important, price = canBuyEntity(v.DarkRPItem)
-
-		v:SetDisabled(not canBuy, important)
-		v:updatePrice(price)
-	end
-	self.BaseClass.PerformLayout(self)
 end
 
 derma.DefineControl("F4MenuEntities", "", PANEL, "F4MenuEntitiesBase")
@@ -124,15 +138,9 @@ local function canBuyShipment(ship)
 end
 
 function PANEL:generateButtons()
-	local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
+	local categories = DarkRP.getCategories().shipments
 
-	for k,v in pairs(shipments) do
-		local pnl = vgui.Create("F4MenuEntityButton", self)
-		pnl:setDarkRPItem(v)
-
-		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyshipment", v.name)
-		self:AddItem(pnl)
-	end
+	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyshipment", item.name) end, canBuyShipment)
 end
 
 function PANEL:shouldHide()
@@ -144,16 +152,6 @@ function PANEL:shouldHide()
 	end
 
 	return true
-end
-
-function PANEL:PerformLayout()
-	for k,v in pairs(self.Items) do
-		local canBuy, important, price = canBuyShipment(v.DarkRPItem)
-
-		v:SetDisabled(not canBuy, important)
-		v:updatePrice(price)
-	end
-	self.BaseClass.PerformLayout(self)
 end
 
 derma.DefineControl("F4MenuShipments", "", PANEL, "F4MenuEntitiesBase")
@@ -182,14 +180,9 @@ local function canBuyGun(ship)
 end
 
 function PANEL:generateButtons()
-	local shipments = fn.Filter(fn.Curry(fn.GetValue, 2)("seperate"), CustomShipments)
+	local categories = DarkRP.getCategories().weapons
 
-	for k,v in pairs(shipments) do
-		local pnl = vgui.Create("F4MenuPistolButton", self)
-		pnl:setDarkRPItem(v)
-
-		self:AddItem(pnl)
-	end
+	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buy", item.name) end, canBuyGun)
 end
 
 function PANEL:shouldHide()
@@ -203,18 +196,6 @@ function PANEL:shouldHide()
 
 	return true
 end
-
-
-function PANEL:PerformLayout()
-	for k,v in pairs(self.Items) do
-		local canBuy, important, price = canBuyGun(v.DarkRPItem)
-
-		v:SetDisabled(not canBuy, important)
-		v:updatePrice(price)
-	end
-	self.BaseClass.PerformLayout(self)
-end
-
 
 derma.DefineControl("F4MenuGuns", "", PANEL, "F4MenuEntitiesBase")
 
@@ -240,12 +221,9 @@ local function canBuyAmmo(item)
 end
 
 function PANEL:generateButtons()
-	for k,v in pairs(GAMEMODE.AmmoTypes) do
-		local pnl = vgui.Create("F4MenuEntityButton", self)
-		pnl:setDarkRPItem(v)
-		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyammo", k)
-		self:AddItem(pnl)
-	end
+	local categories = DarkRP.getCategories().ammo
+
+	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyammo", item.id) end, canBuyAmmo)
 end
 
 function PANEL:shouldHide()
@@ -256,30 +234,12 @@ function PANEL:shouldHide()
 	return true
 end
 
-function PANEL:PerformLayout()
-	for k,v in pairs(self.Items) do
-		local canBuy, important, price = canBuyAmmo(v.DarkRPItem)
-		v:SetDisabled(not canBuy, important)
-		v:updatePrice(price)
-	end
-	self.BaseClass.PerformLayout(self)
-end
-
 derma.DefineControl("F4MenuAmmo", "", PANEL, "F4MenuEntitiesBase")
 
 /*---------------------------------------------------------------------------
 Vehicles panel
 ---------------------------------------------------------------------------*/
 PANEL = {}
-
-function PANEL:generateButtons()
-	for k,v in pairs(CustomVehicles) do
-		local pnl = vgui.Create("F4MenuEntityButton", self)
-		pnl:setDarkRPItem(v)
-		pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyvehicle", v.name)
-		self:AddItem(pnl)
-	end
-end
 
 local function canBuyVehicle(item)
 	local ply = LocalPlayer()
@@ -301,14 +261,10 @@ local function canBuyVehicle(item)
 	return true, nil, cost
 end
 
-function PANEL:PerformLayout()
-	for k,v in pairs(self.Items) do
-		local canBuy, important, price = canBuyVehicle(v.DarkRPItem)
+function PANEL:generateButtons()
+	local categories = DarkRP.getCategories().vehicles
 
-		v:SetDisabled(not canBuy, important)
-		v:updatePrice(price)
-	end
-	self.BaseClass.PerformLayout(self)
+	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyvehicle", item.name) end, canBuyVehicle)
 end
 
 derma.DefineControl("F4MenuVehicles", "", PANEL, "F4MenuEntitiesBase")

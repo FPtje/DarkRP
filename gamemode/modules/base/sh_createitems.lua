@@ -872,7 +872,7 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 
 	ammo.customCheck = ammo.customCheck and fp{DarkRP.simplerrRun, ammo.customCheck}
 	ammo.CustomCheckFailMsg = isfunction(ammo.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, ammo.CustomCheckFailMsg} or ammo.CustomCheckFailMsg
-	table.insert(gm.AmmoTypes, ammo)
+	ammo.id = table.insert(gm.AmmoTypes, ammo)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
 
@@ -937,7 +937,7 @@ local function mergeCategories(customs, categories, path)
 	local catByName = {}
 	for k,v in pairs(categories) do catByName[v.name] = v end
 	for k,v in pairs(customs) do
-		local cat = catByName[v.category or "other"]
+		local cat = catByName[v.category or "Other"]
 		if not cat then
 			DarkRP.error(string.format([[The category of "%s" does not exist!]], v.name), 1, {
 				"Make sure the category is created with DarkRP.createCategory.",
