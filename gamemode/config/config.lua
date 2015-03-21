@@ -1,7 +1,19 @@
-/*
+--[[---------------------------------------------------------------------------
+DarkRP config settings
+---------------------------------------------------------------------------
+
+This is the settings file of DarkRP. Every DarkRP setting is listed here.
+
+Warning:
+If this file is missing settings (because of e.g. an update), DarkRP will assume default values for these settings.
+You need not worry about updating this file. If a new setting is added you can manually add them to this file.
+---------------------------------------------------------------------------]]
+
+
+--[[
 Toggle settings
 Set to true or false
-*/
+]]
 
 -- voice3D - Enable/disable 3DVoice is enabled
 GM.Config.voice3D						= true
@@ -150,9 +162,9 @@ GM.Config.weaponCheckerHideDefault		= true
 -- weaponCheckerHideNoLicense - Hide weapons that do not require a license
 GM.Config.weaponCheckerHideNoLicense	= false
 
-/*
+--[[
 Value settings
-*/
+]]
 -- adminnpcs - Whether or not NPCs should be admin only. 0 = everyone, 1 = admin or higher, 2 = superadmin or higher, 3 = rcon only
 GM.Config.adminnpcs 					= 3
 -- adminsents - Whether or not SENTs should be admin only. 0 = everyone, 1 = admin or higher, 2 = superadmin or higher, 3 = rcon only
@@ -255,9 +267,9 @@ GM.Config.falldamageamount				= 10
 -- printeroverheatchance - The likelyhood of a printer overheating. The higher this number, the less likely. Minimum 3. Default 22
 GM.Config.printeroverheatchance			= 22
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Other settings
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 -- The classname of money packets. Use this to create your own money entity!
 -- Note: the money packet must support the "Setamount" method (or the amount DTVar)
@@ -276,6 +288,12 @@ GM.Config.F1MenuHelpPageTitle = "Wiki page"
 GM.Config.DefaultPlayerGroups = {
 	["STEAM_0:0:00000000"] = "superadmin",
 	["STEAM_0:0:11111111"] = "admin",
+}
+
+-- Custom modules in this addon that are disabled.
+GM.Config.DisabledCustomModules = {
+       ["hudreplacement"] = false,
+       ["extraf4tab"] = false,
 }
 
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped
@@ -363,9 +381,9 @@ GM.Config.allowedProperties = {
 	bodygroups = true,
 }
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 F4 menu
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 -- hide the items that you can't buy and the jobs you can't get (instead of graying them out)
 -- this option hides items when you don't have enough money, when the maximum is reached for a job or any other reason
 GM.Config.hideNonBuyable = false
@@ -375,17 +393,17 @@ GM.Config.hideNonBuyable = false
 -- but you won't see gundealer shipments when you have the citizen job
 GM.Config.hideTeamUnbuyable = true
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 AFK module
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 -- The time of inactivity before being demoted
 GM.Config.afkdemotetime = 600
 -- Prevent people from spamming AFK
 GM.Config.AFKDelay = 300
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Hitmenu module
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 -- The minimum price for a hit
 GM.Config.minHitPrice = 200
 -- The maximum price for a hit
@@ -401,13 +419,10 @@ GM.Config.hitTargetCooldown = 120
 -- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted)
 GM.Config.hitCustomerCooldown = 240
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Hungermod module
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 -- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)
 GM.Config.hungerspeed = 2
 -- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
 GM.Config.starverate = 3
-
--- Empty disabled modules set
-GM.Config.DisabledCustomModules = {}
