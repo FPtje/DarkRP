@@ -6,7 +6,7 @@ local PANEL = {}
 function PANEL:Init()
     self:SetContentAlignment(4)
     self:SetTextInset(5, 0)
-    self:SetFont("F4MenuFont01")
+    self:SetFont("DarkRPHUD2")
 
     self:SetText("bollocks")
 end
@@ -118,6 +118,11 @@ end
 
 function PANEL:Refresh()
     if ValidPanel(self.Contents) then self.Contents:Refresh() end
+
+    if not self.category then return end
+    local canSee = #self.category.members == 0 or isfunction(self.category.canSee) and not self.category.canSee(LocalPlayer())
+    self:SetVisible(not canSee)
+
     self:InvalidateLayout()
 end
 

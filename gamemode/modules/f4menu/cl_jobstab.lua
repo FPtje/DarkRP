@@ -210,6 +210,11 @@ function PANEL:Refresh()
 	self:InvalidateLayout()
 end
 
+function PANEL:Paint(w, h)
+    if not self.category then return end
+    draw.RoundedBox(4, 0, 0, w, h, Color(255,255,255,255))
+end
+
 derma.DefineControl("F4EmptyPanel", "", PANEL, "DPanelList")
 
 /*---------------------------------------------------------------------------
@@ -349,7 +354,6 @@ function PANEL:Refresh()
 	local job
 	for _, cat in ipairs(self.pnlLeft:GetItems()) do
 		for k,v in pairs(cat:GetItems()) do
-			show(k, v)
 			if v:GetDisabled() then continue end
 			job = v.DarkRPItem
 			goto break2
@@ -363,8 +367,6 @@ function PANEL:fillData()
 	local categories = DarkRP.getCategories().jobs
 
 	for _, cat in pairs(categories) do
-		if #cat.members == 0 or isfunction(cat.canSee) and not cat.canSee(LocalPlayer()) then continue end
-
 		local dCat = vgui.Create("F4MenuCategory", self)
 
 		dCat:SetButtonFactory(function(item, ui)

@@ -11,6 +11,7 @@ end
 function PANEL:Rebuild()
 	if #self.Items == 0 then return end
 
+	local lHeight, rHeight = 0, 0
 	local height = 0
 	local k = 0
 	for i, item in pairs(self.Items) do
@@ -19,13 +20,14 @@ function PANEL:Rebuild()
 		item:SetWide(self:GetWide() / 2 - 10)
 		local goRight = k % 2 == 0
 		local x = goRight and self:GetWide() / 2 or 0
-		item:SetPos(x, height)
+		item:SetPos(x, goRight and rHeight or lHeight)
 
-		if goRight then
-			height = height + math.Max(item:GetTall(), self.Items[k - 1]:GetTall()) + 2
-		end
+		rHeight = goRight and rHeight + item:GetTall() + 2 or rHeight
+		lHeight = goRight and lHeight or lHeight + item:GetTall() + 2
+			-- height = height + math.Max(item:GetTall(), self.Items[k - 1]:GetTall()) + 2
 	end
-	self:GetCanvas():SetTall(height + self.Items[#self.Items]:GetTall())
+	height = math.max(lHeight, rHeight)
+	self:GetCanvas():SetTall(height)
 end
 
 function PANEL:generateButtons()
