@@ -85,7 +85,7 @@ function meta:changeTeam(t, force)
 	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
 
 
-	if self:getDarkRPVar("HasGunlicense") then
+	if self:getDarkRPVar("HasGunlicense") and GAMEMODE.Config.revokeLicenseOnJobChange then
 		self:setDarkRPVar("HasGunlicense", nil)
 	end
 	if TEAM.hasLicense then

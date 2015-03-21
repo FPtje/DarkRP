@@ -123,6 +123,8 @@ GM.Config.restrictallteams 				= false
 GM.Config.restrictbuypistol 			= false
 -- restrictdrop - Enable/disable restricting the weapons players can drop. Setting this to true disallows weapons from shipments from being dropped
 GM.Config.restrictdrop 					= false
+-- revokeLicenseOnJobChange - Whether licenses are revoked when a player changes jobs
+GM.Config.revokeLicenseOnJobChange		= true
 -- shouldResetLaws - Enable/Disable resetting the laws back to the default law set when the mayor changes
 GM.Config.shouldResetLaws 				= false
 -- strictsuicide - Whether or not players should spawn where they suicided
