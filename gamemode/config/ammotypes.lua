@@ -58,3 +58,12 @@ DarkRP.createAmmoType("smg1", {
 	price = 80,
 	amountGiven = 30
 })
+
+DarkRP.createCategory{
+    name = "other",
+    categorises = "ammo",
+    startExpanded = true,
+    color = Color(20, 150, 20, 255),
+    canSee = fp{fn.Id, true},
+    sortOrder = 255,
+}

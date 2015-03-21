@@ -144,3 +144,30 @@ if not DarkRP.disabledDefaults["modules"]["hungermod"] then
 		allowed = TEAM_COOK
 	})
 end
+
+DarkRP.createCategory{
+	name = "other",
+	categorises = "entities",
+	startExpanded = true,
+	color = Color(20, 150, 20, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}
+
+DarkRP.createCategory{
+	name = "other",
+	categorises = "shipments",
+	startExpanded = true,
+	color = Color(20, 150, 20, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}
+
+DarkRP.createCategory{
+	name = "other",
+	categorises = "vehicles",
+	startExpanded = true,
+	color = Color(20, 150, 20, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}

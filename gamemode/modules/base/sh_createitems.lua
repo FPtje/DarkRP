@@ -68,6 +68,8 @@ local requiredTeamItems = {
 	vote        = ass(optional(isbool), "The vote must be either true or false."),
 
 	-- Optional advanced stuff
+	category              = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder             = ass(optional(isnumber), "The sortOrder must be a number."),
 	buttonColor           = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label                 = ass(optional(isstring), "The label must be a valid string."),
 	ammo                  = ass(optional(tableOf(isnumber)), "The ammo must be a table containing numbers.", {"See example on http://wiki.darkrp.com/index.php/DarkRP:CustomJobFields"}),
@@ -109,6 +111,8 @@ local validShipment = {
 	pricesep = ass(function(v, tbl) return not tbl.seperate or isnumber(v) and v >= 0 end, "The pricesep must be a number greater than or equal to zero."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
 
+	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder          = ass(optional(isnumber), "The sortOrder must be a number."),
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label              = ass(optional(isstring), "The label must be a valid string."),
 	noship             = ass(optional(isbool), "The noship must be either true or false."),
@@ -131,6 +135,8 @@ local validVehicle = {
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
 
+	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder          = ass(optional(isnumber), "The sortOrder must be a number."),
 	distance           = ass(optional(isnumber), "The distance must be a number."),
 	angle              = ass(optional(isangle), "The distance must be a valid Angle."),
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
@@ -149,6 +155,8 @@ local validEntity = {
 	cmd   = ass(fn.FAnd{isstring, unique("cmd", "entity")}, "The cmd must be a valid string."),
 	name  = ass(isstring, "The name must be a valid string."),
 
+	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder          = ass(optional(isnumber), "The sortOrder must be a number."),
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label              = ass(optional(isstring), "The label must be a valid string."),
 	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
@@ -168,13 +176,13 @@ local validAgenda = {
 }
 
 local validCategory = {
-	name 					= ass(isstring, "The name must be a string."),
-	categorises 			= ass(oneOf{"jobs", "entities", "shipments", "vehicles", "ammo"}, [[The categorises must be one of "jobs", "entities", "shipments", "vehicles", "ammo"]],
-		{"Mind that this is case sensitive.", "Also mind the quotation marks."}),
-	startExpanded 			= ass(isbool, "The startExpanded must be either true or false."),
-	color 					= ass(tableOf(isnumber), "The color must be a Color value."),
-	canSee 					= ass(optional(isfunction), "The canSee must be a function."),
-	sortOrder 				= ass(optional(isnumber), "The sortOrder must be a number."),
+    name                      = ass(isstring, "The name must be a string."),
+    categorises               = ass(oneOf{"jobs", "entities", "shipments", "vehicles", "ammo"}, [[The categorises must be one of "jobs", "entities", "shipments", "vehicles", "ammo"]],
+        {"Mind that this is case sensitive.", "Also mind the quotation marks."}),
+    startExpanded             = ass(isbool, "The startExpanded must be either true or false."),
+    color                     = ass(tableOf(isnumber), "The color must be a Color value."),
+    canSee                    = ass(optional(isfunction), "The canSee must be a function."),
+    sortOrder                 = ass(optional(isnumber), "The sortOrder must be a number."),
 }
 
 -- Check template against actual implementation
@@ -900,10 +908,18 @@ local categories = {
 	ammo = {},
 }
 
-local categoryOrder = function(a, b) return a.sortOrder < b.sortOrder or a.sortOrder == b.sortOrder and a.name <= b.name end
+DarkRP.getCategories = fp{fn.Id, categories}
+
+local categoryOrder = function(a, b)
+	local aso = a.sortOrder or 100
+	local bso = b.sortOrder or 100
+	return aso < bso or aso == bso and a.name <= b.name
+end
 function DarkRP.createCategory(tbl)
 	local valid, err, hints = checkValid(tbl, validCategory)
 	if not valid then DarkRP.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
+	tbl.members = {}
+
 	local destination = categories[tbl.categorises]
 
 	local i = table.insert(destination, tbl)
@@ -913,3 +929,32 @@ function DarkRP.createCategory(tbl)
 		i = i - 1
 	end
 end
+
+-- Assign custom stuff to their categories
+local function mergeCategories(customs, categories, path)
+	local catByName = {}
+	for k,v in pairs(categories) do catByName[v.name] = v end
+	for k,v in pairs(customs) do
+		local cat = catByName[v.category or "other"]
+		if not cat then
+			DarkRP.error(string.format([[The category of "%s" does not exist!]], v.name), 1, {
+				"Make sure the category is created with DarkRP.createCategory.",
+				"The category name is case sensitive!"
+			}, path, -1, path)
+		end
+
+		cat.members = cat.members or {}
+		table.insert(cat.members, v)
+	end
+
+	-- Sort category members
+	for k,v in pairs(categories) do table.sort(v.members, categoryOrder) end
+end
+
+hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
+	mergeCategories(RPExtraTeams, categories.jobs, "your jobs")
+	mergeCategories(DarkRPEntities, categories.entities, "your custom entities")
+	mergeCategories(CustomShipments, categories.shipments, "your custom shipments")
+	mergeCategories(CustomVehicles, categories.vehicles, "your custom vehicles")
+	mergeCategories(GAMEMODE.AmmoTypes, categories.ammo, "your custom ammo")
+end)
