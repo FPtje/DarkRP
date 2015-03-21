@@ -622,6 +622,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 			NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
 		}
 	CustomTeam.name = Name
+	CustomTeam.default = DarkRP.DARKRP_LOADING
 
 	-- Disabled job
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
@@ -708,6 +709,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	end
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
+	customShipment.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
@@ -730,6 +732,8 @@ AddCustomShipment = DarkRP.createShipment
 function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
 	local vehicle = istable(Name_of_vehicle) and Name_of_vehicle or
 		{name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
+
+	vehicle.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["vehicles"][vehicle.name] then return end
 
@@ -771,6 +775,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 		{ent = entity, model = model, price = price, max = max,
 		cmd = command, allowed = classes, customCheck = CustomCheck}
 	tblEnt.name = name
+	tblEnt.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["entities"][tblEnt.name] then return end
 
@@ -812,6 +817,7 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 
 	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners, ManagersByKey = {}}
+	agenda.default = DarkRP.DARKRP_LOADING
 
 	local valid, err, hints = checkValid(agenda, validAgenda)
 	if not valid then DarkRP.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
@@ -867,6 +873,7 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 		customCheck = customCheck
 	}
 	ammo.ammoType = ammoType
+	ammo.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
 
@@ -933,13 +940,16 @@ function DarkRP.createCategory(tbl)
 end
 
 -- Assign custom stuff to their categories
-local function mergeCategories(customs, categories, path)
+local function mergeCategories(customs, catKind, path)
+	local categories = categories[catKind]
 	local catByName = {}
 	for k,v in pairs(categories) do catByName[v.name] = v end
 	for k,v in pairs(customs) do
-		local cat = catByName[v.category or "Other"]
+		-- Override default thing categories:
+		local catName = v.default and GAMEMODE.Config.CategoryOverride[catKind][v.name] or v.category or "Other"
+		local cat = catByName[catName]
 		if not cat then
-			DarkRP.error(string.format([[The category of "%s" does not exist!]], v.name), 1, {
+			DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 1, {
 				"Make sure the category is created with DarkRP.createCategory.",
 				"The category name is case sensitive!"
 			}, path, -1, path)
@@ -957,10 +967,10 @@ hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
 	local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments)
 	local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments)
 
-	mergeCategories(RPExtraTeams, categories.jobs, "your jobs")
-	mergeCategories(DarkRPEntities, categories.entities, "your custom entities")
-	mergeCategories(shipments, categories.shipments, "your custom shipments")
-	mergeCategories(guns, categories.weapons, "your custom weapons")
-	mergeCategories(CustomVehicles, categories.vehicles, "your custom vehicles")
-	mergeCategories(GAMEMODE.AmmoTypes, categories.ammo, "your custom ammo")
+	mergeCategories(RPExtraTeams, "jobs", "your jobs")
+	mergeCategories(DarkRPEntities, "entities", "your custom entities")
+	mergeCategories(shipments, "shipments", "your custom shipments")
+	mergeCategories(guns, "weapons", "your custom weapons")
+	mergeCategories(CustomVehicles, "vehicles", "your custom vehicles")
+	mergeCategories(GAMEMODE.AmmoTypes, "ammo", "your custom ammo")
 end)

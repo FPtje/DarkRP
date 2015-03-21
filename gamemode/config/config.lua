@@ -324,6 +324,52 @@ GM.Config.DefaultWeapons = {
 	"weapon_physgun"
 }
 
+-- Override categories
+-- NOTE: categories are to be set in the "category" field of the custom jobs/shipments/entities/ammo/pistols/vehicles
+-- Use this only to override the categories of _default_ things.
+-- This will NOT work for your own custom stuff.
+-- Make sure the category is created in the darkrp_customthings/categories.lua, otherwise it won't work!
+GM.Config.CategoryOverride = {
+	jobs = {
+		["Citizen"] 							= "Citizens",
+		["Hobo"] 								= "Citizens",
+		["Gun Dealer"] 							= "Citizens",
+		["Medic"] 								= "Citizens",
+		["Civil Protection"] 					= "Civil Protection",
+		["Gangster"] 							= "Gangsters",
+		["Mob boss"] 							= "Gangsters",
+		["Civil Protection Chief"] 				= "Civil Protection",
+		["Mayor"] 								= "Civil Protection"
+	},
+	entities = {
+		["Drug lab"]							= "Other",
+		["Money printer"]						= "Other",
+		["Gun lab"]								= "Other"
+
+	},
+	shipments = {
+		["AK47"] 								= "Rifles",
+		["MP5"] 								= "Rifles",
+		["M4"] 									= "Rifles",
+		["Mac 10"] 								= "Other",
+		["Pump shotgun"] 						= "Shotguns",
+		["Sniper rifle"] 						= "Snipers"
+
+	},
+	weapons = {
+		["Desert eagle"] 						= "Pistols",
+		["Fiveseven"] 							= "Pistols",
+		["Glock"] 								= "Pistols",
+		["P228"] 								= "Pistols"
+	},
+	vehicles = {}, -- There are no default vehicles
+	ammo = {
+		["Pistol ammo"]							= "Other",
+		["Shotgun ammo"]						= "Other",
+		["Rifle ammo"]							= "Other"
+	},
+}
+
 -- The list of weapons admins spawn with, in addition to the default weapons, a job's weapons and GM.Config.AdminCopWeapons
 GM.Config.AdminWeapons = {
 	"weapon_keypadchecker"
