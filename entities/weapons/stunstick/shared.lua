@@ -102,6 +102,7 @@ function SWEP:DoFlash(ply)
 end
 
 local entMeta = FindMetaTable("Entity")
+
 function SWEP:DoAttack(dmg)
 	if CurTime() < self.NextStrike then return end
 
@@ -117,7 +118,7 @@ function SWEP:DoAttack(dmg)
 	if IsValid(vm) then
 		vm:ResetSequence(vm:LookupSequence("idle01"))
 		timer.Simple(0, function()
-			if not IsValid(self) or not IsValid(self.Owner) or not IsValid(self.Owner:GetActiveWeapon()) or self.Owner:GetActiveWeapon() ~= self then return end
+			if !IsValid(self) or !IsValid(self.Owner) or !IsValid(self.Owner:GetActiveWeapon()) or self.Owner:GetActiveWeapon() ~= self then return end
 			self.Owner:SetAnimation(PLAYER_ATTACK1)
 
 			if IsValid(self.Weapon) then
@@ -125,14 +126,14 @@ function SWEP:DoAttack(dmg)
 			end
 
 			local vm = self.Owner:GetViewModel()
-			if not IsValid(vm) then return end
+			if !IsValid(vm) then return end
 			vm:ResetSequence(vm:LookupSequence("attackch"))
 			vm:SetPlaybackRate(1 + 1/3)
 			local duration = vm:SequenceDuration() / vm:GetPlaybackRate()
 			timer.Create(self:GetClass() .. "_idle" .. self:EntIndex(), duration, 1, function()
-				if not IsValid(self) or not IsValid(self.Owner) then return end
+				if !IsValid(self) or !IsValid(self.Owner) then return end
 				local vm = self.Owner:GetViewModel()
-				if not IsValid(vm) then return end
+				if !IsValid(vm) then return end
 				vm:ResetSequence(vm:LookupSequence("idle01"))
 			end)
 			self.NextStrike = CurTime() + duration
@@ -146,25 +147,24 @@ function SWEP:DoAttack(dmg)
 		trace.Entity:onStunStickUsed(self.Owner)
 		return
 	end
+	
+	if IsValid( trace.Entity ) and !trace.Entity:IsPlayer() and !trace.Entity:IsNPC() and trace.Entity:GetClass() == "func_breakable_surf" then
+        self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
+        local func_DMG = DamageInfo()
+        func_DMG:SetDamage(1)
+        func_DMG:SetAttacker(self.Owner)
+        func_DMG:SetInflictor(self.Weapon)
+        func_DMG:SetDamageForce(self.Owner:GetAimVector() * 2000)
+        func_DMG:SetDamagePosition(self.Owner:GetPos())
+        trace.Entity:DispatchTraceAttack(func_DMG, self.Owner:GetShootPos() + (self.Owner:GetAimVector() * 3), self.Owner:GetShootPos() + (self.Owner:GetAimVector() * 70))
+	end
 
 	local ent = self.Owner:getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self.Owner}, fc{IsValid, entMeta.GetPhysicsObject}})
 
-	if not IsValid(ent) then return end
+	if !IsValid(ent) then return end
 
-	if not ent:isDoor() then
+	if !ent:isDoor() then
 		ent:SetVelocity((ent:GetPos() - self.Owner:GetPos()) * 7)
-	end
-	
-	if IsValid( trace.Entity ) and !trace.Entity:IsPlayer() and !trace.Entity:IsNPC() and trace.Entity:GetClass() == "func_breakable_surf" then
-	    self.Owner:FireBullets({
-			pread = Vector(0, 0, 0),
-			Damage = 0,
-			Tracer = 0,
-			Force = 1,
-			Num = 1,
-		    Src = self.Owner:GetShootPos(),
-			Dir = self.Owner:GetAimVector()
-		});
 	end
 
 	if dmg > 0 then
@@ -177,7 +177,7 @@ function SWEP:DoAttack(dmg)
 	else
 		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 		if FPP and FPP.plyCanTouchEnt(self.Owner, ent, "EntityDamage") then
-			if ent.SeizeReward and not ent.beenSeized and not ent.burningup and self.Owner:isCP() and ent.Getowning_ent and self.Owner ~= ent:Getowning_ent() then
+			if ent.SeizeReward and !ent.beenSeized and !ent.burningup and self.Owner:isCP() and ent.Getowning_ent and self.Owner ~= ent:Getowning_ent() then
 				self.Owner:addMoney(ent.SeizeReward)
 				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(ent.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
 				ent.beenSeized = true
