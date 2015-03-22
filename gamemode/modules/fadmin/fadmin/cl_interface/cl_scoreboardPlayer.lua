@@ -16,7 +16,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackgroundCrop:SetSize( 184, 184 )
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground = vgui.Create("AvatarImage", FAdmin.ScoreBoard.Player.Controls.AvatarBackgroundCrop)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPos(0, 0)
-	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(256, 256)
+	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(184, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPlayer(ply, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetVisible(true)
 
