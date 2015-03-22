@@ -145,6 +145,10 @@ function SWEP:DoAttack(dmg)
 	if IsValid(trace.Entity) and trace.Entity.onStunStickUsed then
 		trace.Entity:onStunStickUsed(self.Owner)
 		return
+	elseif IsValid(trace.Entity) and trace.Entity:GetClass() == "func_breakable_surf" then
+		trace.Entity:Fire("Shatter")
+		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
+		return
 	end
 
 	local ent = self.Owner:getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self.Owner}, fc{IsValid, entMeta.GetPhysicsObject}})
