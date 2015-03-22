@@ -651,6 +651,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 	CustomTeam.canStartVote          = CustomTeam.canStartVote          and fp{DarkRP.simplerrRun, CustomTeam.canStartVote}
 
 	jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
+	DarkRP.addToCategory(CustomTeam, "jobs", CustomTeam.category)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
 	local Team = #RPExtraTeams
 
@@ -720,9 +721,8 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	customShipment.customCheck = customShipment.customCheck   and fp{DarkRP.simplerrRun, customShipment.customCheck}
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
-	-- if SERVER and FPP then
-	-- 	FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
-	-- end
+	if not customShipment.noship then DarkRP.addToCategory(customShipment, "shipments", customShipment.category) end
+	if customShipment.seperate then DarkRP.addToCategory(customShipment, "weapons", customShipment.category) end
 
 	shipByName[string.lower(name or "")] = table.insert(CustomShipments, customShipment)
 	util.PrecacheModel(customShipment.model)
@@ -751,6 +751,7 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
 	table.insert(CustomVehicles, vehicle)
+	DarkRP.addToCategory(vehicle, "vehicles", vehicle.category)
 end
 AddCustomVehicle = DarkRP.createVehicle
 
@@ -797,6 +798,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 	-- end
 
 	table.insert(DarkRPEntities, tblEnt)
+	DarkRP.addToCategory(tblEnt, "entities", tblEnt.category)
 	timer.Simple(0, function() addEntityCommands(tblEnt) end)
 end
 AddEntity = DarkRP.createEntity
@@ -880,6 +882,8 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 	ammo.customCheck = ammo.customCheck and fp{DarkRP.simplerrRun, ammo.customCheck}
 	ammo.CustomCheckFailMsg = isfunction(ammo.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, ammo.CustomCheckFailMsg} or ammo.CustomCheckFailMsg
 	ammo.id = table.insert(gm.AmmoTypes, ammo)
+
+	DarkRP.addToCategory(ammo, "ammo", ammo.category)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
 
@@ -916,6 +920,7 @@ local categories = {
 	vehicles = {},
 	ammo = {},
 }
+local categoriesMerged = false -- whether categories and custom items are merged.
 
 DarkRP.getCategories = fp{fn.Id, categories}
 
@@ -939,6 +944,35 @@ function DarkRP.createCategory(tbl)
 	end
 end
 
+function DarkRP.addToCategory(item, kind, cat)
+	cat = cat or "Other"
+	item.category = cat
+
+	-- The merge process will take care of the category:
+	if not categoriesMerged then return end
+
+	-- Post-merge: manual insertion into category
+	local cats = categories[kind]
+	for _, c in ipairs(cats) do
+		if c.name ~= cat then continue end
+		local i = table.insert(c.members, item)
+
+		while i > 1 do
+			if categoryOrder(c.members[i - 1], item) then break end
+			c.members[i - 1], c.members[i] = c.members[i], c.members[i - 1]
+			i = i - 1
+		end
+
+		return
+	end
+
+	DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], item.name, cat), 2, {
+		"Make sure the category is created with DarkRP.createCategory.",
+		"The category name is case sensitive!",
+		"Categories must be created before DarkRP finished loading."
+	})
+end
+
 -- Assign custom stuff to their categories
 local function mergeCategories(customs, catKind, path)
 	local categories = categories[catKind]
@@ -951,7 +985,8 @@ local function mergeCategories(customs, catKind, path)
 		if not cat then
 			DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 1, {
 				"Make sure the category is created with DarkRP.createCategory.",
-				"The category name is case sensitive!"
+				"The category name is case sensitive!",
+				"Categories must be created before DarkRP finished loading."
 			}, path, -1, path)
 		end
 
@@ -973,4 +1008,6 @@ hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
 	mergeCategories(guns, "weapons", "your custom weapons")
 	mergeCategories(CustomVehicles, "vehicles", "your custom vehicles")
 	mergeCategories(GAMEMODE.AmmoTypes, "ammo", "your custom ammo")
+
+	categoriesMerged = true
 end)
