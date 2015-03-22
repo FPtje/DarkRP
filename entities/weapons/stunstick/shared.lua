@@ -106,7 +106,7 @@ function SWEP:DoAttack(dmg)
 	if CurTime() < self.NextStrike then return end
 
 	self:SetHoldType("melee")
-	timer.Simple(0.3, function() if self:IsValid() then self:SetHoldType("normal") end end)
+	timer.Simple(0.3, function() if IsValid(self) then self:SetHoldType("normal") end end)
 
 	self.NextStrike = CurTime() + 0.51 -- Actual delay is set later.
 
@@ -153,6 +153,18 @@ function SWEP:DoAttack(dmg)
 
 	if not ent:isDoor() then
 		ent:SetVelocity((ent:GetPos() - self.Owner:GetPos()) * 7)
+	end
+	
+	if IsValid( trace.Entity ) and !trace.Entity:IsPlayer() and !trace.Entity:IsNPC() and trace.Entity:GetClass() == "func_breakable_surf" then
+	    self.Owner:FireBullets({
+			pread = Vector(0, 0, 0),
+			Damage = 0,
+			Tracer = 0,
+			Force = 1,
+			Num = 1,
+		    Src = self.Owner:GetShootPos(),
+			Dir = self.Owner:GetAimVector()
+		});
 	end
 
 	if dmg > 0 then
