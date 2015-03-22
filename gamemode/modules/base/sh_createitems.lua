@@ -927,7 +927,7 @@ DarkRP.getCategories = fp{fn.Id, categories}
 local categoryOrder = function(a, b)
 	local aso = a.sortOrder or 100
 	local bso = b.sortOrder or 100
-	return aso < bso or aso == bso and a.name <= b.name
+	return aso < bso or aso == bso and a.name < b.name
 end
 function DarkRP.createCategory(tbl)
 	local valid, err, hints = checkValid(tbl, validCategory)
