@@ -98,8 +98,9 @@ local function Jail(ply, cmd, args)
 				end
 
 				jailDistance = jailDistance * jailDistance
+				local userid = target:UserID()
 				timer.Create("FAdmin_jail_watch"..target:UserID(), 1, 0, function()
-					if not IsValid(target) then timer.Destroy("FAdmin_jail_watch"..target:UserID()) return end
+					if not IsValid(target) then timer.Destroy("FAdmin_jail_watch"..userid) return end
 
 					if target:GetPos():DistToSqr(target.FAdminJailPos) > jailDistance then
 						target:SetPos(target.FAdminJailPos)

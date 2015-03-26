@@ -11,7 +11,7 @@ end
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Author = "DarkRP Developers"
-SWEP.Instructions = "Left click to discipline\nRight click to kill"
+SWEP.Instructions = "Left click to discipline\nRight click to kill\nReload to threaten"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.IconLetter = ""
@@ -144,6 +144,10 @@ function SWEP:DoAttack(dmg)
 	self.Owner:LagCompensation(false)
 	if IsValid(trace.Entity) and trace.Entity.onStunStickUsed then
 		trace.Entity:onStunStickUsed(self.Owner)
+		return
+	elseif IsValid(trace.Entity) and trace.Entity:GetClass() == "func_breakable_surf" then
+		trace.Entity:Fire("Shatter")
+		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 		return
 	end
 

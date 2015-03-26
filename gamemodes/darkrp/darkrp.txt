@@ -2,7 +2,7 @@
 {
 	"base"		"sandbox"
     "title"  "DarkRP"
-    "version"   "2.6.0 (Workshop)"
+    "version"   "2.6.1 (Workshop)"
     "menusystem"	"1"
 
     "author_name"   "FPtje Falco et al."

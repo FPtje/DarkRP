@@ -6,7 +6,8 @@ DarkRP.createShipment("Desert eagle", {
 	seperate = true,
 	pricesep = 215,
 	noship = true,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Pistols",
 })
 
 DarkRP.createShipment("Fiveseven", {
@@ -17,7 +18,8 @@ DarkRP.createShipment("Fiveseven", {
 	seperate = true,
 	pricesep = 205,
 	noship = true,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Pistols",
 })
 
 DarkRP.createShipment("Glock", {
@@ -28,7 +30,8 @@ DarkRP.createShipment("Glock", {
 	seperate = true,
 	pricesep = 160,
 	noship = true,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Pistols",
 })
 
 DarkRP.createShipment("P228", {
@@ -39,7 +42,8 @@ DarkRP.createShipment("P228", {
 	seperate = true,
 	pricesep = 185,
 	noship = true,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Pistols",
 })
 
 DarkRP.createShipment("AK47", {
@@ -50,7 +54,8 @@ DarkRP.createShipment("AK47", {
 	seperate = false,
 	pricesep = nil,
 	noship = false,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Rifles",
 })
 
 DarkRP.createShipment("MP5", {
@@ -61,7 +66,8 @@ DarkRP.createShipment("MP5", {
 	seperate = false,
 	pricesep = nil,
 	noship = false,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Rifles",
 })
 
 DarkRP.createShipment("M4", {
@@ -72,7 +78,8 @@ DarkRP.createShipment("M4", {
 	seperate = false,
 	pricesep = nil,
 	noship = false,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Rifles",
 })
 
 DarkRP.createShipment("Mac 10", {
@@ -94,7 +101,8 @@ DarkRP.createShipment("Pump shotgun", {
 	seperate = false,
 	pricesep = nil,
 	noship = false,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Shotguns",
 })
 
 DarkRP.createShipment("Sniper rifle", {
@@ -105,7 +113,8 @@ DarkRP.createShipment("Sniper rifle", {
 	seperate = false,
 	pricesep = nil,
 	noship = false,
-	allowed = {TEAM_GUN}
+	allowed = {TEAM_GUN},
+	category = "Snipers",
 })
 
 DarkRP.createEntity("Drug lab", {
@@ -144,3 +153,75 @@ if not DarkRP.disabledDefaults["modules"]["hungermod"] then
 		allowed = TEAM_COOK
 	})
 end
+
+DarkRP.createCategory{
+	name = "Other",
+	categorises = "entities",
+	startExpanded = true,
+	color = Color(0, 107, 0, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}
+
+DarkRP.createCategory{
+    name = "Other",
+    categorises = "shipments",
+    startExpanded = true,
+    color = Color(0, 107, 0, 255),
+    canSee = fp{fn.Id, true},
+    sortOrder = 255,
+}
+
+DarkRP.createCategory{
+    name = "Rifles",
+    categorises = "shipments",
+    startExpanded = true,
+    color = Color(0, 107, 0, 255),
+    canSee = fp{fn.Id, true},
+    sortOrder = 100,
+}
+
+DarkRP.createCategory{
+    name = "Shotguns",
+    categorises = "shipments",
+    startExpanded = true,
+    color = Color(0, 107, 0, 255),
+    canSee = fp{fn.Id, true},
+    sortOrder = 101,
+}
+
+DarkRP.createCategory{
+    name = "Snipers",
+    categorises = "shipments",
+    startExpanded = true,
+    color = Color(0, 107, 0, 255),
+    canSee = fp{fn.Id, true},
+    sortOrder = 102,
+}
+
+DarkRP.createCategory{
+	name = "Pistols",
+	categorises = "weapons",
+	startExpanded = true,
+	color = Color(0, 107, 0, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 100,
+}
+
+DarkRP.createCategory{
+	name = "Other",
+	categorises = "weapons",
+	startExpanded = true,
+	color = Color(0, 107, 0, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}
+
+DarkRP.createCategory{
+	name = "Other",
+	categorises = "vehicles",
+	startExpanded = true,
+	color = Color(0, 107, 0, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}

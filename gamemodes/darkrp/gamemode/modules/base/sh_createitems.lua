@@ -26,6 +26,9 @@ local tableOf = function(f) return function(tbl)
 	return true
 end end
 
+-- Any of the given elements
+local oneOf = function(f) return fp{table.HasValue, f} end
+
 -- A table that is nonempty, wrap around tableOf
 local nonempty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and f(tbl) end end
 
@@ -65,6 +68,8 @@ local requiredTeamItems = {
 	vote        = ass(optional(isbool), "The vote must be either true or false."),
 
 	-- Optional advanced stuff
+	category              = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder             = ass(optional(isnumber), "The sortOrder must be a number."),
 	buttonColor           = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label                 = ass(optional(isstring), "The label must be a valid string."),
 	ammo                  = ass(optional(tableOf(isnumber)), "The ammo must be a table containing numbers.", {"See example on http://wiki.darkrp.com/index.php/DarkRP:CustomJobFields"}),
@@ -106,6 +111,8 @@ local validShipment = {
 	pricesep = ass(function(v, tbl) return not tbl.seperate or isnumber(v) and v >= 0 end, "The pricesep must be a number greater than or equal to zero."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
 
+	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder          = ass(optional(isnumber), "The sortOrder must be a number."),
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label              = ass(optional(isstring), "The label must be a valid string."),
 	noship             = ass(optional(isbool), "The noship must be either true or false."),
@@ -128,6 +135,8 @@ local validVehicle = {
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
 
+	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder          = ass(optional(isnumber), "The sortOrder must be a number."),
 	distance           = ass(optional(isnumber), "The distance must be a number."),
 	angle              = ass(optional(isangle), "The distance must be a valid Angle."),
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
@@ -146,6 +155,8 @@ local validEntity = {
 	cmd   = ass(fn.FAnd{isstring, unique("cmd", "entity")}, "The cmd must be a valid string."),
 	name  = ass(isstring, "The name must be a valid string."),
 
+	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
+	sortOrder          = ass(optional(isnumber), "The sortOrder must be a number."),
 	buttonColor        = ass(optional(tableOf(isnumber)), "The buttonColor must be a Color value."),
 	label              = ass(optional(isstring), "The label must be a valid string."),
 	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
@@ -162,6 +173,17 @@ local validAgenda = {
 			"Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
 			[[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
 		})
+}
+
+local validCategory = {
+	name                      = ass(isstring, "The name must be a string."),
+	categorises               = ass(oneOf{"jobs", "entities", "shipments", "weapons", "vehicles", "ammo"},
+		[[The categorises must be one of "jobs", "entities", "shipments", "weapons", "vehicles", "ammo"]],
+		{"Mind that this is case sensitive.", "Also mind the quotation marks."}),
+	startExpanded             = ass(isbool, "The startExpanded must be either true or false."),
+	color                     = ass(tableOf(isnumber), "The color must be a Color value."),
+	canSee                    = ass(optional(isfunction), "The canSee must be a function."),
+	sortOrder                 = ass(optional(isnumber), "The sortOrder must be a number."),
 }
 
 -- Check template against actual implementation
@@ -600,6 +622,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 			NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
 		}
 	CustomTeam.name = Name
+	CustomTeam.default = DarkRP.DARKRP_LOADING
 
 	-- Disabled job
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
@@ -628,6 +651,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 	CustomTeam.canStartVote          = CustomTeam.canStartVote          and fp{DarkRP.simplerrRun, CustomTeam.canStartVote}
 
 	jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
+	DarkRP.addToCategory(CustomTeam, "jobs", CustomTeam.category)
 	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
 	local Team = #RPExtraTeams
 
@@ -686,6 +710,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	end
 	customShipment.name = name
 	customShipment.allowed = customShipment.allowed or {}
+	customShipment.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
@@ -696,9 +721,8 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	customShipment.customCheck = customShipment.customCheck   and fp{DarkRP.simplerrRun, customShipment.customCheck}
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
-	-- if SERVER and FPP then
-	-- 	FPP.AddDefaultBlocked(blockTypes, customShipment.entity)
-	-- end
+	if not customShipment.noship then DarkRP.addToCategory(customShipment, "shipments", customShipment.category) end
+	if customShipment.seperate then DarkRP.addToCategory(customShipment, "weapons", customShipment.category) end
 
 	shipByName[string.lower(name or "")] = table.insert(CustomShipments, customShipment)
 	util.PrecacheModel(customShipment.model)
@@ -708,6 +732,8 @@ AddCustomShipment = DarkRP.createShipment
 function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
 	local vehicle = istable(Name_of_vehicle) and Name_of_vehicle or
 		{name = Name_of_vehicle, model = model, price = price, allowed = Jobs_that_can_buy_it, customCheck = customcheck}
+
+	vehicle.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["vehicles"][vehicle.name] then return end
 
@@ -725,6 +751,7 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
 	table.insert(CustomVehicles, vehicle)
+	DarkRP.addToCategory(vehicle, "vehicles", vehicle.category)
 end
 AddCustomVehicle = DarkRP.createVehicle
 
@@ -749,6 +776,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 		{ent = entity, model = model, price = price, max = max,
 		cmd = command, allowed = classes, customCheck = CustomCheck}
 	tblEnt.name = name
+	tblEnt.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["entities"][tblEnt.name] then return end
 
@@ -770,6 +798,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 	-- end
 
 	table.insert(DarkRPEntities, tblEnt)
+	DarkRP.addToCategory(tblEnt, "entities", tblEnt.category)
 	timer.Simple(0, function() addEntityCommands(tblEnt) end)
 end
 AddEntity = DarkRP.createEntity
@@ -790,6 +819,7 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 
 	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners, ManagersByKey = {}}
+	agenda.default = DarkRP.DARKRP_LOADING
 
 	local valid, err, hints = checkValid(agenda, validAgenda)
 	if not valid then DarkRP.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
@@ -845,12 +875,15 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 		customCheck = customCheck
 	}
 	ammo.ammoType = ammoType
+	ammo.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["ammo"][ammo.name] then return end
 
 	ammo.customCheck = ammo.customCheck and fp{DarkRP.simplerrRun, ammo.customCheck}
 	ammo.CustomCheckFailMsg = isfunction(ammo.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, ammo.CustomCheckFailMsg} or ammo.CustomCheckFailMsg
-	table.insert(gm.AmmoTypes, ammo)
+	ammo.id = table.insert(gm.AmmoTypes, ammo)
+
+	DarkRP.addToCategory(ammo, "ammo", ammo.category)
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
 
@@ -878,3 +911,103 @@ function DarkRP.getDemoteGroup(teamNr)
 	demoteGroups[teamNr] = demoteGroups[teamNr] or disjoint.MakeSet(teamNr)
 	return disjoint.FindSet(demoteGroups[teamNr])
 end
+
+local categories = {
+	jobs = {},
+	entities = {},
+	shipments = {},
+	weapons = {},
+	vehicles = {},
+	ammo = {},
+}
+local categoriesMerged = false -- whether categories and custom items are merged.
+
+DarkRP.getCategories = fp{fn.Id, categories}
+
+local categoryOrder = function(a, b)
+	local aso = a.sortOrder or 100
+	local bso = b.sortOrder or 100
+	return aso < bso or aso == bso and a.name < b.name
+end
+function DarkRP.createCategory(tbl)
+	local valid, err, hints = checkValid(tbl, validCategory)
+	if not valid then DarkRP.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
+	tbl.members = {}
+
+	local destination = categories[tbl.categorises]
+
+	local i = table.insert(destination, tbl)
+	while i > 1 do
+		if categoryOrder(destination[i - 1], tbl) then break end
+		destination[i - 1], destination[i] = destination[i], destination[i - 1]
+		i = i - 1
+	end
+end
+
+function DarkRP.addToCategory(item, kind, cat)
+	cat = cat or "Other"
+	item.category = cat
+
+	-- The merge process will take care of the category:
+	if not categoriesMerged then return end
+
+	-- Post-merge: manual insertion into category
+	local cats = categories[kind]
+	for _, c in ipairs(cats) do
+		if c.name ~= cat then continue end
+		local i = table.insert(c.members, item)
+
+		while i > 1 do
+			if categoryOrder(c.members[i - 1], item) then break end
+			c.members[i - 1], c.members[i] = c.members[i], c.members[i - 1]
+			i = i - 1
+		end
+
+		return
+	end
+
+	DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], item.name, cat), 2, {
+		"Make sure the category is created with DarkRP.createCategory.",
+		"The category name is case sensitive!",
+		"Categories must be created before DarkRP finished loading."
+	})
+end
+
+-- Assign custom stuff to their categories
+local function mergeCategories(customs, catKind, path)
+	local categories = categories[catKind]
+	local catByName = {}
+	for k,v in pairs(categories) do catByName[v.name] = v end
+	for k,v in pairs(customs) do
+		-- Override default thing categories:
+		local catName = v.default and GAMEMODE.Config.CategoryOverride[catKind][v.name] or v.category or "Other"
+		local cat = catByName[catName]
+		if not cat then
+			DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 1, {
+				"Make sure the category is created with DarkRP.createCategory.",
+				"The category name is case sensitive!",
+				"Categories must be created before DarkRP finished loading."
+			}, path, -1, path)
+		end
+
+		cat.members = cat.members or {}
+		table.insert(cat.members, v)
+	end
+
+	-- Sort category members
+	for k,v in pairs(categories) do table.sort(v.members, categoryOrder) end
+end
+
+hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
+	local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments)
+	local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments)
+
+	mergeCategories(RPExtraTeams, "jobs", "your jobs")
+	mergeCategories(DarkRPEntities, "entities", "your custom entities")
+	mergeCategories(shipments, "shipments", "your custom shipments")
+	mergeCategories(guns, "weapons", "your custom weapons")
+	mergeCategories(CustomVehicles, "vehicles", "your custom vehicles")
+	mergeCategories(GAMEMODE.AmmoTypes, "ammo", "your custom ammo")
+
+	categoriesMerged = true
+end)

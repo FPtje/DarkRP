@@ -31,7 +31,8 @@ TEAM_CITIZEN = DarkRP.createJob("Citizen", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	candemote = false
+	candemote = false,
+	category = "Citizens",
 })
 
 TEAM_POLICE = DarkRP.createJob("Civil Protection", {
@@ -53,7 +54,8 @@ TEAM_POLICE = DarkRP.createJob("Civil Protection", {
 	hasLicense = true,
 	ammo = {
 		["pistol"] = 60,
-	}
+	},
+	category = "Civil Protection",
 })
 
 TEAM_GANG = DarkRP.createJob("Gangster", {
@@ -82,7 +84,8 @@ TEAM_GANG = DarkRP.createJob("Gangster", {
 	salary = GAMEMODE.Config.normalsalary,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	category = "Gangsters",
 })
 
 TEAM_MOB = DarkRP.createJob("Mob boss", {
@@ -98,7 +101,8 @@ TEAM_MOB = DarkRP.createJob("Mob boss", {
 	salary = GAMEMODE.Config.normalsalary * 1.34,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	category = "Gangsters",
 })
 
 TEAM_GUN = DarkRP.createJob("Gun Dealer", {
@@ -112,7 +116,8 @@ TEAM_GUN = DarkRP.createJob("Gun Dealer", {
 	salary = GAMEMODE.Config.normalsalary,
 	admin = 0,
 	vote = false,
-	hasLicense = false
+	hasLicense = false,
+	category = "Citizens",
 })
 
 TEAM_MEDIC = DarkRP.createJob("Medic", {
@@ -129,7 +134,8 @@ TEAM_MEDIC = DarkRP.createJob("Medic", {
 	admin = 0,
 	vote = false,
 	hasLicense = false,
-	medic = true
+	medic = true,
+	category = "Citizens",
 })
 
 TEAM_CHIEF = DarkRP.createJob("Civil Protection Chief", {
@@ -153,7 +159,8 @@ TEAM_CHIEF = DarkRP.createJob("Civil Protection Chief", {
 	NeedToChangeFrom = TEAM_POLICE,
 	ammo = {
 		["pistol"] = 60,
-	}
+	},
+	category = "Civil Protection",
 })
 
 TEAM_MAYOR = DarkRP.createJob("Mayor", {
@@ -174,7 +181,8 @@ TEAM_MAYOR = DarkRP.createJob("Mayor", {
 	admin = 0,
 	vote = true,
 	hasLicense = false,
-	mayor = true
+	mayor = true,
+	category = "Civil Protection",
 })
 
 TEAM_HOBO = DarkRP.createJob("Hobo", {
@@ -193,7 +201,8 @@ TEAM_HOBO = DarkRP.createJob("Hobo", {
 	vote = false,
 	hasLicense = false,
 	candemote = false,
-	hobo = true
+	hobo = true,
+	category = "Citizens",
 })
 
 if not DarkRP.disabledDefaults["modules"]["hungermod"] then
@@ -293,3 +302,42 @@ Default demote groups
 ---------------------------------------------------------------------------*/
 DarkRP.createDemoteGroup("Cops", {TEAM_POLICE, TEAM_CHIEF})
 DarkRP.createDemoteGroup("Gangsters", {TEAM_GANG, TEAM_MOB})
+
+/*---------------------------------------------------------------------------
+Default categories
+---------------------------------------------------------------------------*/
+DarkRP.createCategory{
+	name = "Citizens",
+	categorises = "jobs",
+	startExpanded = true,
+	color = Color(0, 107, 0, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 100,
+}
+
+DarkRP.createCategory{
+	name = "Civil Protection",
+	categorises = "jobs",
+	startExpanded = true,
+	color = Color(25, 25, 170, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 101,
+}
+
+DarkRP.createCategory{
+	name = "Gangsters",
+	categorises = "jobs",
+	startExpanded = true,
+	color = Color(75, 75, 75, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 101,
+}
+
+DarkRP.createCategory{
+	name = "Other",
+	categorises = "jobs",
+	startExpanded = true,
+	color = Color(0, 107, 0, 255),
+	canSee = fp{fn.Id, true},
+	sortOrder = 255,
+}
