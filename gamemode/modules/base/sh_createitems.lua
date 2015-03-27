@@ -912,7 +912,7 @@ function DarkRP.getDemoteGroup(teamNr)
 	return disjoint.FindSet(demoteGroups[teamNr])
 end
 
-local categories = {
+RPExtraCategories = {
 	jobs = {},
 	entities = {},
 	shipments = {},
@@ -920,9 +920,9 @@ local categories = {
 	vehicles = {},
 	ammo = {},
 }
-local categoriesMerged = false -- whether categories and custom items are merged.
+local categoriesMerged = false -- whether RPExtraCategories and custom items are merged.
 
-DarkRP.getCategories = fp{fn.Id, categories}
+DarkRP.getCategories = fp{fn.Id, RPExtraCategories}
 
 local categoryOrder = function(a, b)
 	local aso = a.sortOrder or 100
@@ -934,7 +934,7 @@ function DarkRP.createCategory(tbl)
 	if not valid then DarkRP.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
 	tbl.members = {}
 
-	local destination = categories[tbl.categorises]
+	local destination = RPExtraCategories[tbl.categorises]
 
 	local i = table.insert(destination, tbl)
 	while i > 1 do
@@ -952,7 +952,7 @@ function DarkRP.addToCategory(item, kind, cat)
 	if not categoriesMerged then return end
 
 	-- Post-merge: manual insertion into category
-	local cats = categories[kind]
+	local cats = RPExtraCategories[kind]
 	for _, c in ipairs(cats) do
 		if c.name ~= cat then continue end
 		local i = table.insert(c.members, item)
@@ -973,13 +973,13 @@ function DarkRP.addToCategory(item, kind, cat)
 	})
 end
 
--- Assign custom stuff to their categories
+-- Assign custom stuff to their RPExtraCategories
 local function mergeCategories(customs, catKind, path)
-	local categories = categories[catKind]
+	local RPExtraCategories = RPExtraCategories[catKind]
 	local catByName = {}
-	for k,v in pairs(categories) do catByName[v.name] = v end
+	for k,v in pairs(RPExtraCategories) do catByName[v.name] = v end
 	for k,v in pairs(customs) do
-		-- Override default thing categories:
+		-- Override default thing RPExtraCategories:
 		local catName = v.default and GAMEMODE.Config.CategoryOverride[catKind][v.name] or v.category or "Other"
 		local cat = catByName[catName]
 		if not cat then
@@ -995,7 +995,7 @@ local function mergeCategories(customs, catKind, path)
 	end
 
 	-- Sort category members
-	for k,v in pairs(categories) do table.sort(v.members, categoryOrder) end
+	for k,v in pairs(RPExtraCategories) do table.sort(v.members, categoryOrder) end
 end
 
 hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
