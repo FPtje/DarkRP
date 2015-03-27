@@ -24,6 +24,8 @@ function DarkRP.addHitmanTeam(job)
 	hitmanTeams[job] = true
 end
 
+DarkRP.getHitmanTeams = fp{fn.Id, hitmanTeams}
+
 function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 	if not hitman:isHitman() then return false, DarkRP.getPhrase("player_not_hitman") end
 	if customer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return false, DarkRP.getPhrase("distance_too_big") end
