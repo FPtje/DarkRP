@@ -537,6 +537,22 @@ DarkRP.createJob = DarkRP.stub{
 }
 AddExtraTeam = DarkRP.createJob
 
+DarkRP.removeJob = DarkRP.stub{
+	name = "removeJob",
+	description = "Remove a job from DarkRP.",
+	parameters = {
+		{
+			name = "i",
+			description = "The TEAM_ number of the job. Also the index of the job in RPExtraTeams.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
 DarkRP.createEntityGroup = DarkRP.stub{
 	name = "createEntityGroup",
 	description = "Create a entity group for DarkRP.",
@@ -754,6 +770,56 @@ DarkRP.createCategory = DarkRP.stub{
             name = "tbl",
             description = "Table describing the category.",
             type = "table",
+            optional = false
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
+}
+
+DarkRP.addToCategory = DarkRP.stub{
+    name = "addToCategory",
+    description = "Create a category for the F4 menu.",
+    parameters = {
+        {
+            name = "item",
+            description = "Table of the custom entity/job/etc.",
+            type = "table",
+            optional = false
+        },
+        {
+            name = "kind",
+            description = "The kind of the category (e.g. 'jobs' for job stuff).",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "cat",
+            description = "The name of the category. Note that the category must exist. Defaults to 'Other'.",
+            type = "string",
+            optional = true
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
+}
+
+DarkRP.removeFromCategory = DarkRP.stub{
+    name = "removeFromCategory",
+    description = "Create a category for the F4 menu.",
+    parameters = {
+        {
+            name = "item",
+            description = "Table of the custom entity/job/etc.",
+            type = "table",
+            optional = false
+        },
+        {
+            name = "kind",
+            description = "The kind of the category (e.g. 'jobs' for job stuff).",
+            type = "string",
             optional = false
         }
     },

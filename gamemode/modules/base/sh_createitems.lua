@@ -55,13 +55,19 @@ local unique = function(name, kind, hash)
 	end
 end
 
+local uniqueJob = function(v, tbl)
+	local job = DarkRP.getJobByCommand(v)
+	if job then return false, "This job does not have a unique command.", {"There must be some other job that has the same command."} end
+	return true
+end
+
 -- Template for a correct job
 local requiredTeamItems = {
 	color       = ass(tableOf(isnumber), "The color must be a Color value.", {"Color values look like this: Color(r, g, b, a), where r, g, b and a are numbers between 0 and 255."}),
 	model       = ass(fn.FOr{checkModel, nonempty(tableOf(checkModel))}, "The model must either be a table of correct model strings or a single correct model string.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	description = ass(isstring, "The description must be a string."),
 	weapons     = ass(optional(tableOf(isstring)), "The weapons must be a valid table of strings.", {"Example: weapons = {\"med_kit\", \"weapon_bugbait\"},"}),
-	command     = ass(fn.FAnd{isstring, unique("command", "job")}, "The command must be a string."),
+	command     = ass(fn.FAnd{isstring, uniqueJob}, "The command must be a string."),
 	max         = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The max must be a number greater than or equal to zero.", {"Zero means infinite.", "A decimal between 0 and 1 is seen as a percentage."}),
 	salary      = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The salary must be a number greater than zero."),
 	admin       = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}}, "The admin value must be a number greater than or equal to zero and smaller than three."),
@@ -670,6 +676,13 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 end
 AddExtraTeam = DarkRP.createJob
 
+function DarkRP.removeJob(i)
+	local job = RPExtraTeams[i]
+	RPExtraTeams[i] = nil
+	jobByCmd[job.command] = nil
+	DarkRP.removeFromCategory(job, "jobs")
+end
+
 RPExtraTeamDoors = {}
 function DarkRP.createEntityGroup(name, ...)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["doorgroups"][name] then return end
@@ -971,6 +984,22 @@ function DarkRP.addToCategory(item, kind, cat)
 		"The category name is case sensitive!",
 		"Categories must be created before DarkRP finished loading."
 	})
+end
+
+function DarkRP.removeFromCategory(item, kind)
+	local cats = categories[kind]
+	if not cats then DarkRP.error(string.format("Invalid category kind '%s'.", kind), 2) end
+	local cat = item.category
+	if not cat then return end
+	for _, v in pairs(cats) do
+		if v.name ~= item.category then continue end
+		for k, mem in pairs(v.members) do
+			if mem ~= item then continue end
+			table.remove(v.members, k)
+			break
+		end
+		break
+	end
 end
 
 -- Assign custom stuff to their categories
