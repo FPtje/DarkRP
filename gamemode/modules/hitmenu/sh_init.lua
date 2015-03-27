@@ -38,6 +38,10 @@ function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
 	return true
 end
 
+hook.Add("onJobRemoved", "hitmenuUpdate", function(i, job)
+	hitmanTeams[i] = nil
+end)
+
 /*---------------------------------------------------------------------------
 DarkRPVars
 ---------------------------------------------------------------------------*/

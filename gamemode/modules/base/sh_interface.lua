@@ -1068,6 +1068,25 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "onJobRemoved",
+	description = "Called when a job was removed.",
+	parameters = {
+		{
+			name = "num",
+			description = "The TEAM_ number of the job.",
+			type = "number"
+		},
+		{
+			name = "jobbtable",
+			description = "The table containing all the job info.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
 	name = "loadCustomDarkRPItems",
 	description = "Runs right after the scripts from the DarkRPMod are run. You can add custom jobs, entities, shipments and whatever in this hook.",
 	parameters = {
