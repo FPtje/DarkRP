@@ -910,8 +910,10 @@ function DarkRP.createDemoteGroup(name, tbl)
 	if not tbl or not tbl[1] then error("No members in the demote group!") end
 
 	local set = demoteGroups[tbl[1]] or disjoint.MakeSet(tbl[1])
+	set.name = name
 	for i = 2, #tbl do
-		set = set + (demoteGroups[tbl[i]] or disjoint.MakeSet(tbl[i]))
+		set = (demoteGroups[tbl[i]] or disjoint.MakeSet(tbl[i])) + set
+		set.name = name
 	end
 
 	for _, teamNr in pairs(tbl) do
