@@ -830,6 +830,8 @@ function plyMeta:getAgendaTable()
 	return agendas[self:Team()]
 end
 
+DarkRP.getAgendas = fp{fn.Id, agendas}
+
 function DarkRP.createAgenda(Title, Manager, Listeners)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 

@@ -674,6 +674,22 @@ DarkRP.createAgenda = DarkRP.stub{
 }
 AddAgenda = DarkRP.createAgenda
 
+DarkRP.getAgendas = DarkRP.stub{
+	name = "getAgendas",
+	description = "Get all agendas. Note: teams that share an agenda use the exact same agenda table. E.g. when you change the agenda of the CP, the agenda of the Chief will automatically be updated as well. Make sure this property is maintained when modifying the agenda table. Not maintaining that property will lead to players not seeing the right agenda text.",
+	parameters = {
+
+	},
+	returns = {
+		{
+			name = "agendas",
+			description = "Table in which the keys are team numbers and the values agendas.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.createGroupChat = DarkRP.stub{
 	name = "createGroupChat",
 	description = "Create a group chat.",
