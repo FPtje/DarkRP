@@ -762,6 +762,22 @@ DarkRP.getDemoteGroup = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.getDemoteGroups = DarkRP.stub{
+	name = "getDemoteGroups",
+	description = "Get all demote groups Every team in the same group will return the same object.",
+	parameters = {
+
+	},
+	returns = {
+		{
+			name = "set",
+			description = "Table in which the keys are team numbers and the values Disjoint-Set.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.createCategory = DarkRP.stub{
     name = "createCategory",
     description = "Create a category for the F4 menu.",

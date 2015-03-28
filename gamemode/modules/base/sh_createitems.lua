@@ -927,6 +927,8 @@ function DarkRP.getDemoteGroup(teamNr)
 	return disjoint.FindSet(demoteGroups[teamNr])
 end
 
+DarkRP.getDemoteGroups = fp{fn.Id, demoteGroups}
+
 local categories = {
 	jobs = {},
 	entities = {},
