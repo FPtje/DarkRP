@@ -4,7 +4,7 @@ local f4Frame
 Interface functions
 ---------------------------------------------------------------------------*/
 function DarkRP.openF4Menu()
-	if f4Frame then
+	if ValidPanel(f4Frame) then
 		f4Frame:Show()
 		f4Frame:InvalidateLayout()
 	else

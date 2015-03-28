@@ -74,6 +74,21 @@ DarkRP.addHitmanTeam = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.getHitmanTeams = DarkRP.stub{
+	name = "getHitmanTeams",
+	description = "Get all the hitman teams.",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "tbl",
+			description = "A table in which the keys are TEAM_ numbers and the values are just true.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.hookStub{
 	name = "canRequestHit",
 	description = "Whether someone can request a hit.",
