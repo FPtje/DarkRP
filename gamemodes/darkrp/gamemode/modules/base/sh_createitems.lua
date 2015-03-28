@@ -830,6 +830,8 @@ function plyMeta:getAgendaTable()
 	return agendas[self:Team()]
 end
 
+DarkRP.getAgendas = fp{fn.Id, agendas}
+
 function DarkRP.createAgenda(Title, Manager, Listeners)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["agendas"][Title] then return end
 
@@ -926,6 +928,8 @@ function DarkRP.getDemoteGroup(teamNr)
 	demoteGroups[teamNr] = demoteGroups[teamNr] or disjoint.MakeSet(teamNr)
 	return disjoint.FindSet(demoteGroups[teamNr])
 end
+
+DarkRP.getDemoteGroups = fp{fn.Id, demoteGroups}
 
 local categories = {
 	jobs = {},

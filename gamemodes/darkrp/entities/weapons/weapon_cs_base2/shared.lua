@@ -379,7 +379,7 @@ SetIronsights
 ---------------------------------------------------------*/
 
 function SWEP:SetIronsights(b)
-	if game.SinglePlayer() then -- Make ironsights work on SP
+	if game.SinglePlayer() and SERVER then -- Make ironsights work on SP
 		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b))
 	end
 	self.Ironsights = b
