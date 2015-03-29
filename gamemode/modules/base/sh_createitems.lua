@@ -990,7 +990,8 @@ function DarkRP.addToCategory(item, kind, cat)
 	DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], item.name, cat), 2, {
 		"Make sure the category is created with DarkRP.createCategory.",
 		"The category name is case sensitive!",
-		"Categories must be created before DarkRP finished loading."
+		"Categories must be created before DarkRP finished loading.",
+		"When you have a shipment that can also have its weapon sold separately, you need two categories: one for shipments and one for weapons.",
 	})
 end
 
