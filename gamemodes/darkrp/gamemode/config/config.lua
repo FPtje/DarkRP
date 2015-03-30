@@ -395,6 +395,7 @@ GM.Config.PocketBlacklist = {
 	["prop_physics"] = true,
 	["money_printer"] = true,
 	["gunlab"] = true,
+	["prop_dynamic"] = true,
 }
 
 -- These weapons are classed as 'legal' in the weapon checker and are not stripped when confiscating weapons.
