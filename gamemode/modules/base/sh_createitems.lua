@@ -680,6 +680,7 @@ function DarkRP.removeJob(i)
 	local job = RPExtraTeams[i]
 	RPExtraTeams[i] = nil
 	jobByCmd[job.command] = nil
+	jobCount = jobCount - 1
 	DarkRP.removeFromCategory(job, "jobs")
 	hook.Run("onJobRemoved", i, job)
 	if CLIENT and ValidPanel(DarkRP.getF4MenuPanel()) then DarkRP.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
