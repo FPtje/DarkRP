@@ -55,7 +55,7 @@ if CLIENT then
 	net.Receive("lockpick_time", function()
 		local wep = net.ReadEntity()
 		local ent = net.ReadEntity()
-		local time = net.ReadUInt(5)
+		local time = net.ReadUInt(32)
 
 		wep.IsLockPicking = true
 		wep.LockPickEnt = ent
@@ -111,11 +111,11 @@ function SWEP:PrimaryAttack()
 	self.IsLockPicking = true
 	self.LockPickEnt = ent
 	self.StartPick = CurTime()
-	self.LockPickTime = math.Rand(10, 30)
+	self.LockPickTime = hook.Call("LockpickTime", nil, ply, ent) or math.Rand(10, 30)
 	net.Start("lockpick_time")
 		net.WriteEntity(self)
 		net.WriteEntity(ent)
-		net.WriteUInt(self.LockPickTime, 5) -- 2^5 = 32 max
+		net.WriteUInt(self.LockPickTime, 32) -- unknown so 32
 	net.Send(self.Owner)
 	self.EndPick = CurTime() + self.LockPickTime
 
@@ -259,4 +259,29 @@ DarkRP.hookStub{
 		}
 	},
 	realm = "Shared"
+}
+
+DarkRP.hookStub{
+	name = "LockpickTime",
+	description = "The time an entity can be lockpicked.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player attempting to lockpick an entity.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The entity being lockpicked.",
+			type = "Entity"
+		},
+	},
+	returns = {
+		{
+			name = "override",
+			description = "Whether the entity can be lockpicked",
+			type = "number"
+		}
+	},
+	realm = "Server"
 }
