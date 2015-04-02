@@ -263,7 +263,7 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "lockpickTime",
-	description = "Seconds in which it takes a player to lockpick an entity.",
+	description = "The length of time, in seconds, it takes to lockpick an entity.",
 	parameters = {
 		{
 			name = "ply",
@@ -279,7 +279,7 @@ DarkRP.hookStub{
 	returns = {
 		{
 			name = "time",
-			description = "Whether the entity can be lockpicked",
+			description = "Seconds in which it takes a player to lockpick an entity",
 			type = "number"
 		}
 	},
