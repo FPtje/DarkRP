@@ -680,6 +680,7 @@ function DarkRP.removeJob(i)
 	local job = RPExtraTeams[i]
 	RPExtraTeams[i] = nil
 	jobByCmd[job.command] = nil
+	jobCount = jobCount - 1
 	DarkRP.removeFromCategory(job, "jobs")
 	hook.Run("onJobRemoved", i, job)
 	if CLIENT and ValidPanel(DarkRP.getF4MenuPanel()) then DarkRP.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
@@ -976,8 +977,8 @@ function DarkRP.addToCategory(item, kind, cat)
 	local cats = categories[kind]
 	for _, c in ipairs(cats) do
 		if c.name ~= cat then continue end
-		local i = table.insert(c.members, item)
-
+		table.insert(c.members, item)
+		local i = #c.members
 		while i > 1 do
 			if categoryOrder(c.members[i - 1], item) then break end
 			c.members[i - 1], c.members[i] = c.members[i], c.members[i - 1]
