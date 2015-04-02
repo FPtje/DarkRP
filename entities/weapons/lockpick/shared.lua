@@ -111,7 +111,7 @@ function SWEP:PrimaryAttack()
 	self.IsLockPicking = true
 	self.LockPickEnt = ent
 	self.StartPick = CurTime()
-	self.LockPickTime = hook.Call("LockpickTime", nil, ply, ent) or math.Rand(10, 30)
+	self.LockPickTime = hook.Call("lockpickTime", nil, ply, ent) or math.Rand(10, 30)
 	net.Start("lockpick_time")
 		net.WriteEntity(self)
 		net.WriteEntity(ent)
@@ -262,8 +262,8 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
-	name = "LockpickTime",
-	description = "The time an entity can be lockpicked.",
+	name = "lockpickTime",
+	description = "Seconds in which it takes a player to lockpick an entity.",
 	parameters = {
 		{
 			name = "ply",
@@ -278,7 +278,7 @@ DarkRP.hookStub{
 	},
 	returns = {
 		{
-			name = "override",
+			name = "time",
 			description = "Whether the entity can be lockpicked",
 			type = "number"
 		}
