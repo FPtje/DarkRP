@@ -4,6 +4,8 @@ if CLIENT then
 	SWEP.PrintName = "Stun Stick"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 5
+
+	killicon.AddAlias("stunstick", "weapon_stunstick")
 end
 
 DEFINE_BASECLASS("stick_base")
