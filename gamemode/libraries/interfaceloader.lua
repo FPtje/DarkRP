@@ -1,6 +1,6 @@
-module("DarkRP", package.seeall)
+module("fprp", package.seeall)
 
-MetaName = "DarkRP"
+MetaName = "fprp"
 
 -- Variables that maintain the existing stubs and hooks
 local stubs = {}
@@ -48,7 +48,7 @@ local stubLayout = {
 	description = isstring,
 	parameters = isparameters, -- the parameters of a method
 	returns = isreturns, -- the return values of a method
-	metatable = istable -- DarkRP, Player, Entity, Vector, ...
+	metatable = istable -- fprp, Player, Entity, Vector, ...
 }
 
 local hookLayout = {
@@ -105,7 +105,7 @@ Generate a stub
 function stub(tbl)
 	local isStub, field = checkStub(tbl, stubLayout)
 	if not isStub then
-		error("Invalid DarkRP method stub! Field \"" .. field .. "\" is invalid!", 2)
+		error("Invalid fprp method stub! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
 	tbl.realm = tbl.realm or realm
@@ -124,7 +124,7 @@ Generate a hook stub
 function hookStub(tbl)
 	local isStub, field = checkStub(tbl, hookLayout)
 	if not isStub then
-		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
+		error("Invalid fprp hook! Field \"" .. field .. "\" is invalid!", 2)
 	end
 
 	tbl.realm = tbl.realm or realm

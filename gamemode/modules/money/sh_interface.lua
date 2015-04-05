@@ -1,4 +1,4 @@
-DarkRP.PLAYER.canAfford = DarkRP.stub{
+fprp.PLAYER.canAfford = fprp.stub{
 	name = "canAfford",
 	description = "Whether the player can afford the given amount of money",
 	parameters = {
@@ -16,10 +16,10 @@ DarkRP.PLAYER.canAfford = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.ENTITY.isMoneyBag = DarkRP.stub{
+fprp.ENTITY.isMoneyBag = fprp.stub{
 	name = "isMoneyBag",
 	description = "Whether this entity is a money bag",
 	parameters = {
@@ -32,5 +32,5 @@ DarkRP.ENTITY.isMoneyBag = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }

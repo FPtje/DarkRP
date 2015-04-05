@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "AK47"
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "b"
@@ -14,7 +14,7 @@ SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_ak47.mdl"

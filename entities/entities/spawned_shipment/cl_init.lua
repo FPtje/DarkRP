@@ -17,7 +17,7 @@ function ENT:Draw()
 	self:drawInfo()
 end
 
-net.Receive("DarkRP_shipmentSpawn", function()
+net.Receive("fprp_shipmentSpawn", function()
 	local ent = net.ReadEntity()
 	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" then return end
 
@@ -116,7 +116,7 @@ function ENT:drawInfo()
 	contents = contents.name
 
 	surface.SetFont("HUDNumber5")
-	local text = DarkRP.getPhrase("contents")
+	local text = fprp.getPhrase("contents")
 	local TextWidth = surface.GetTextSize(text)
 	local TextWidth2 = surface.GetTextSize(contents)
 
@@ -127,7 +127,7 @@ function ENT:drawInfo()
 
 	Ang:RotateAroundAxis(Ang:Forward(), 90)
 
-	text = DarkRP.getPhrase("amount")
+	text = fprp.getPhrase("amount")
 	TextWidth = surface.GetTextSize(text)
 	TextWidth2 = surface.GetTextSize(self:Getcount())
 
@@ -153,6 +153,6 @@ properties.Add("splitShipment",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("darkrp", "splitshipment", ent:EntIndex())
+						RunConsoleCommand("fprp", "splitshipment", ent:EntIndex())
 					end
 })

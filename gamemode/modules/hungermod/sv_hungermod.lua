@@ -1,5 +1,5 @@
 local function HMPlayerSpawn(ply)
-	ply:setSelfDarkRPVar("Energy", 100)
+	ply:setSelffprpVar("Energy", 100)
 end
 hook.Add("PlayerSpawn", "HMPlayerSpawn", HMPlayerSpawn)
 
@@ -21,14 +21,14 @@ hook.Add("PlayerInitialSpawn", "HMPlayerInitialSpawn", HMPlayerInitialSpawn)
 
 timer.Simple(0, function()
 	for k, v in pairs(player.GetAll()) do
-		if v:getDarkRPVar("Energy") ~= nil then continue end
+		if v:getfprpVar("Energy") ~= nil then continue end
 		v:newHungerData()
 	end
 end)
 
 local function BuyFood(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
 
@@ -43,13 +43,13 @@ local function BuyFood(ply, args)
 		if string.lower(args) ~= string.lower(v.name) then continue end
 
 		if (v.requiresCook == nil or v.requiresCook == true) and not ply:isCook() then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyfood", DarkRP.getPhrase("cooks_only")))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/buyfood", fprp.getPhrase("cooks_only")))
 			return ""
 		end
 
 		if v.customCheck and not v.customCheck(ply) then
 			if v.customCheckMessage then
-				DarkRP.notify(ply, 1, 4, v.customCheckMessage)
+				fprp.notify(ply, 1, 4, v.customCheckMessage)
 			end
 			return ""
 		end
@@ -57,11 +57,11 @@ local function BuyFood(ply, args)
 		local cost = v.price
 
 		if not ply:canAfford(cost) then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("food"))))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("cant_afford", string.lower(fprp.getPhrase("food"))))
 			return ""
 		end
 		ply:addMoney(-cost)
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", v.name, DarkRP.formatMoney(cost), ""))
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", v.name, fprp.formatMoney(cost), ""))
 
 		local SpawnedFood = ents.Create("spawned_food")
 		SpawnedFood:Setowning_ent(ply)
@@ -76,7 +76,7 @@ local function BuyFood(ply, args)
 		SpawnedFood:Spawn()
 		return ""
 	end
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""))
 	return ""
 end
-DarkRP.defineChatCommand("buyfood", BuyFood)
+fprp.defineChatCommand("buyfood", BuyFood)

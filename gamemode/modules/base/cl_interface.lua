@@ -1,4 +1,4 @@
-DarkRP.PLAYER.isInRoom = DarkRP.stub{
+fprp.PLAYER.isInRoom = fprp.stub{
 	name = "isInRoom",
 	description = "Whether the player is in the same room as the LocalPlayer.",
 	parameters = {},
@@ -9,10 +9,10 @@ DarkRP.PLAYER.isInRoom = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.deLocalise = DarkRP.stub{
+fprp.deLocalise = fprp.stub{
 	name = "deLocalise",
 	description = "Makes sure the string will not be localised when drawn or printed.",
 	parameters = {
@@ -30,10 +30,10 @@ DarkRP.deLocalise = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.textWrap = DarkRP.stub{
+fprp.textWrap = fprp.stub{
 	name = "textWrap",
 	description = "Wrap a text around when reaching a certain width.",
 	parameters = {},
@@ -54,10 +54,10 @@ DarkRP.textWrap = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.setPreferredJobModel = DarkRP.stub{
+fprp.setPreferredJobModel = fprp.stub{
 	name = "setPreferredJobModel",
 	description = "Set the model preferred by the player (if the job allows multiple models).",
 	parameters = {
@@ -76,10 +76,10 @@ DarkRP.setPreferredJobModel = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getPreferredJobModel = DarkRP.stub{
+fprp.getPreferredJobModel = fprp.stub{
 	name = "getPreferredJobModel",
 	description = "Get the model preferred by the player (if the job allows multiple models).",
 	parameters = {
@@ -97,10 +97,10 @@ DarkRP.getPreferredJobModel = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "teamChanged",
 	description = "When your team is changed.",
 	parameters = {

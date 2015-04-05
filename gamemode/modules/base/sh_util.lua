@@ -30,7 +30,7 @@ local function attachCurrency(str)
 	return config.currencyLeft and config.currency .. str or str .. config.currency
 end
 
-function DarkRP.formatMoney(n)
+function fprp.formatMoney(n)
 	if not n then return attachCurrency("0") end
 
 	if n >= 1e14 then return attachCurrency(tostring(n)) end
@@ -49,7 +49,7 @@ end
 /*---------------------------------------------------------------------------
 Find a player based on given information
 ---------------------------------------------------------------------------*/
-function DarkRP.findPlayer(info)
+function fprp.findPlayer(info)
 	if not info or info == "" then return nil end
 	local pls = player.GetAll()
 
@@ -78,7 +78,7 @@ end
 Find multiple players based on a string criterium
 Taken from FAdmin
 ---------------------------------------------------------------------------*/
-function DarkRP.findPlayers(info)
+function fprp.findPlayers(info)
 	if not info then return nil end
 	local pls = player.GetAll()
 	local found = {}
@@ -176,8 +176,8 @@ local function GetAvailableVehicles(ply)
 	if SERVER and IsValid(ply) and not ply:IsAdmin() then return end
 	local print = SERVER and ServerLog or Msg
 
-	print(DarkRP.getPhrase("rp_getvehicles") .. "\n")
-	for k,v in pairs(DarkRP.getAvailableVehicles()) do
+	print(fprp.getPhrase("rp_getvehicles") .. "\n")
+	for k,v in pairs(fprp.getAvailableVehicles()) do
 		print("\""..k.."\"" .. "\n")
 	end
 end
@@ -188,9 +188,9 @@ else
 end
 
 /*---------------------------------------------------------------------------
-Whether a player has a DarkRP privilege
+Whether a player has a fprp privilege
 ---------------------------------------------------------------------------*/
-function meta:hasDarkRPPrivilege(priv)
+function meta:hasfprpPrivilege(priv)
 	if FAdmin then
 		return FAdmin.Access.PlayerHasPrivilege(self, priv)
 	end
@@ -200,7 +200,7 @@ end
 /*---------------------------------------------------------------------------
 Convenience function to return the players sorted by name
 ---------------------------------------------------------------------------*/
-function DarkRP.nickSortedPlayers()
+function fprp.nickSortedPlayers()
 	local plys = player.GetAll()
 	table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
 	return plys

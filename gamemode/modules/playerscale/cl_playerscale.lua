@@ -6,4 +6,4 @@ local function doScale(um)
 	ply:SetModelScale(scale, 1)
 	ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale))
 end
-usermessage.Hook("darkrp_playerscale", doScale)
+usermessage.Hook("fprp_playerscale", doScale)

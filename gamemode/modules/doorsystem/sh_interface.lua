@@ -1,4 +1,4 @@
-DarkRP.doorToEntIndex = DarkRP.stub{
+fprp.doorToEntIndex = fprp.stub{
 	name = "doorToEntIndex",
 	description = "Get an ENT index from a door index.",
 	parameters = {
@@ -16,10 +16,10 @@ DarkRP.doorToEntIndex = DarkRP.stub{
 			type = "number",
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.doorIndexToEnt = DarkRP.stub{
+fprp.doorIndexToEnt = fprp.stub{
 	name = "doorIndexToEnt",
 	description = "Get the entity of a door index (inverse of ent:doorIndexToEnt()). Note: the door MUST have been created by the map!",
 	parameters = {
@@ -37,10 +37,10 @@ DarkRP.doorIndexToEnt = DarkRP.stub{
 			type = "Entity",
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.ENTITY.getDoorData = DarkRP.stub{
+fprp.ENTITY.getDoorData = fprp.stub{
 	name = "getDoorData",
 	description = "Internal function to get the door/vehicle data.",
 	parameters = {
@@ -48,14 +48,14 @@ DarkRP.ENTITY.getDoorData = DarkRP.stub{
 	returns = {
 		{
 			name = "doordata",
-			description = "All the DarkRP information on a door or vehicle.",
+			description = "All the fprp information on a door or vehicle.",
 			type = "table"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isKeysOwnable = DarkRP.stub{
+fprp.ENTITY.isKeysOwnable = fprp.stub{
 	name = "isKeysOwnable",
 	description = "Whether this door can be bought.",
 	parameters = {
@@ -67,12 +67,12 @@ DarkRP.ENTITY.isKeysOwnable = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isDoor = DarkRP.stub{
+fprp.ENTITY.isDoor = fprp.stub{
 	name = "isDoor",
-	description = "Whether this entity is considered a door in DarkRP.",
+	description = "Whether this entity is considered a door in fprp.",
 	parameters = {
 	},
 	returns = {
@@ -82,10 +82,10 @@ DarkRP.ENTITY.isDoor = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.doorIndex = DarkRP.stub{
+fprp.ENTITY.doorIndex = fprp.stub{
 	name = "doorIndex",
 	description = "Get the door index of a door. Use this to store door information in the database.",
 	parameters = {
@@ -97,10 +97,10 @@ DarkRP.ENTITY.doorIndex = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isKeysOwned = DarkRP.stub{
+fprp.ENTITY.isKeysOwned = fprp.stub{
 	name = "isKeysOwned",
 	description = "Whether this door is owned by someone.",
 	parameters = {
@@ -112,10 +112,10 @@ DarkRP.ENTITY.isKeysOwned = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getDoorOwner = DarkRP.stub{
+fprp.ENTITY.getDoorOwner = fprp.stub{
 	name = "getDoorOwner",
 	description = "Get the owner of a door.",
 	parameters = {
@@ -127,10 +127,10 @@ DarkRP.ENTITY.getDoorOwner = DarkRP.stub{
 			type = "Player"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isMasterOwner = DarkRP.stub{
+fprp.ENTITY.isMasterOwner = fprp.stub{
 	name = "isMasterOwner",
 	description = "Whether the player is the main owner of the door (as opposed to a co-owner).",
 	parameters = {
@@ -148,10 +148,10 @@ DarkRP.ENTITY.isMasterOwner = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isKeysOwnedBy = DarkRP.stub{
+fprp.ENTITY.isKeysOwnedBy = fprp.stub{
 	name = "isKeysOwnedBy",
 	description = "Whether this door is owned or co-owned by this player",
 	parameters = {
@@ -169,10 +169,10 @@ DarkRP.ENTITY.isKeysOwnedBy = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isKeysAllowedToOwn = DarkRP.stub{
+fprp.ENTITY.isKeysAllowedToOwn = fprp.stub{
 	name = "isKeysAllowedToOwn",
 	description = "Whether this player is allowed to co-own a door, as decided by the master door owner.",
 	parameters = {
@@ -190,10 +190,10 @@ DarkRP.ENTITY.isKeysAllowedToOwn = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getKeysNonOwnable = DarkRP.stub{
+fprp.ENTITY.getKeysNonOwnable = fprp.stub{
 	name = "getKeysNonOwnable",
 	description = "Whether ownability of this door/vehicle is disabled.",
 	parameters = {
@@ -205,10 +205,10 @@ DarkRP.ENTITY.getKeysNonOwnable = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getKeysTitle = DarkRP.stub{
+fprp.ENTITY.getKeysTitle = fprp.stub{
 	name = "getKeysTitle",
 	description = "Get the title of this door or vehicle.",
 	parameters = {
@@ -220,10 +220,10 @@ DarkRP.ENTITY.getKeysTitle = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getKeysDoorGroup = DarkRP.stub{
+fprp.ENTITY.getKeysDoorGroup = fprp.stub{
 	name = "getKeysDoorGroup",
 	description = "The door group of a door if it exists.",
 	parameters = {
@@ -235,10 +235,10 @@ DarkRP.ENTITY.getKeysDoorGroup = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getKeysDoorTeams = DarkRP.stub{
+fprp.ENTITY.getKeysDoorTeams = fprp.stub{
 	name = "getKeysDoorTeams",
 	description = "The teams that are allowed to open this door.",
 	parameters = {
@@ -250,10 +250,10 @@ DarkRP.ENTITY.getKeysDoorTeams = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getKeysAllowedToOwn = DarkRP.stub{
+fprp.ENTITY.getKeysAllowedToOwn = fprp.stub{
 	name = "getKeysAllowedToOwn",
 	description = "The list of people of which the master door owner has added as allowed to own.",
 	parameters = {
@@ -265,10 +265,10 @@ DarkRP.ENTITY.getKeysAllowedToOwn = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.getKeysCoOwners = DarkRP.stub{
+fprp.ENTITY.getKeysCoOwners = fprp.stub{
 	name = "getKeysCoOwners",
 	description = "The list of people who co-own the door.",
 	parameters = {
@@ -280,10 +280,10 @@ DarkRP.ENTITY.getKeysCoOwners = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.PLAYER.canKeysLock = DarkRP.stub{
+fprp.PLAYER.canKeysLock = fprp.stub{
 	name = "canKeysLock",
 	description = "Whether the player can lock a given door.",
 	parameters = {
@@ -301,10 +301,10 @@ DarkRP.PLAYER.canKeysLock = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.canKeysUnlock = DarkRP.stub{
+fprp.PLAYER.canKeysUnlock = fprp.stub{
 	name = "canKeysUnlock",
 	description = "Whether the player can unlock a given door.",
 	parameters = {
@@ -322,10 +322,10 @@ DarkRP.PLAYER.canKeysUnlock = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canKeysLock",
 	description = "Whether the player can lock a given door. This hook is run when ply:canKeysLock is called.",
 	parameters = {
@@ -349,7 +349,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canKeysUnlock",
 	description = "Whether the player can unlock a given door. This hook is run when ply:canKeysUnlock is called.",
 	parameters = {

@@ -10,7 +10,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to unarrest\nRight click to switch batons"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -22,7 +22,7 @@ SWEP.AnimPrefix = "stunstick"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 
 SWEP.NextStrike = 0
 
@@ -85,7 +85,7 @@ function SWEP:OnRemove()
 	end
 end
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canUnarrest",
 	description = "Whether someone can unarrest another player.",
 	parameters = {
@@ -166,21 +166,21 @@ function SWEP:PrimaryAttack()
 	local ent = self.Owner:getEyeSightHitEntity(nil, nil, function(p) return p ~= self.Owner and p:IsPlayer() and p:Alive() end)
 	if not ent then return end
 
-	if not IsValid(ent) or not ent:IsPlayer() or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) or not ent:getDarkRPVar("Arrested") then
+	if not IsValid(ent) or not ent:IsPlayer() or (self.Owner:EyePos():Distance(ent:GetPos()) > 90) or not ent:getfprpVar("Arrested") then
 		return
 	end
 
 	local canUnarrest, message = hook.Call("canUnarrest", hookCanUnarrest, self.Owner, ent)
 	if not canUnarrest then
-		if message then DarkRP.notify(self.Owner, 1, 5, message) end
+		if message then fprp.notify(self.Owner, 1, 5, message) end
 		return
 	end
 
 	ent:unArrest(self.Owner)
-	DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("youre_unarrested_by", self.Owner:Nick()))
+	fprp.notify(ent, 0, 4, fprp.getPhrase("youre_unarrested_by", self.Owner:Nick()))
 
 	if self.Owner.SteamName then
-		DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") unarrested "..ent:Nick(), Color(0, 255, 255))
+		fprp.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") unarrested "..ent:Nick(), Color(0, 255, 255))
 	end
 end
 

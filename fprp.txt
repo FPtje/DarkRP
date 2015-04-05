@@ -1,13 +1,13 @@
-"darkrp"
+"fprp"
 {
 	"base"		"sandbox"
-    "title"  "DarkRP"
+    "title"  "fprp"
     "version"   "2.6.1"
     "menusystem"	"1"
 
     "author_name"   "FPtje Falco et al."
     "author_email"  ""
-    "author_url"    "https://github.com/FPtje/DarkRP"
+    "author_url"    "https://github.com/FPtje/fprp"
 
     "icon"  ""
     "info"  ""

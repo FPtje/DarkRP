@@ -1,4 +1,4 @@
-DarkRP.createShipment("Desert eagle", {
+fprp.createShipment("Desert eagle", {
 	model = "models/weapons/w_pist_deagle.mdl",
 	entity = "weapon_deagle2",
 	price = 215,
@@ -10,7 +10,7 @@ DarkRP.createShipment("Desert eagle", {
 	category = "Pistols",
 })
 
-DarkRP.createShipment("Fiveseven", {
+fprp.createShipment("Fiveseven", {
 	model = "models/weapons/w_pist_fiveseven.mdl",
 	entity = "weapon_fiveseven2",
 	price = 0,
@@ -22,7 +22,7 @@ DarkRP.createShipment("Fiveseven", {
 	category = "Pistols",
 })
 
-DarkRP.createShipment("Glock", {
+fprp.createShipment("Glock", {
 	model = "models/weapons/w_pist_glock18.mdl",
 	entity = "weapon_glock2",
 	price = 0,
@@ -34,7 +34,7 @@ DarkRP.createShipment("Glock", {
 	category = "Pistols",
 })
 
-DarkRP.createShipment("P228", {
+fprp.createShipment("P228", {
 	model = "models/weapons/w_pist_p228.mdl",
 	entity = "weapon_p2282",
 	price = 0,
@@ -46,7 +46,7 @@ DarkRP.createShipment("P228", {
 	category = "Pistols",
 })
 
-DarkRP.createShipment("AK47", {
+fprp.createShipment("AK47", {
 	model = "models/weapons/w_rif_ak47.mdl",
 	entity = "weapon_ak472",
 	price = 2450,
@@ -58,7 +58,7 @@ DarkRP.createShipment("AK47", {
 	category = "Rifles",
 })
 
-DarkRP.createShipment("MP5", {
+fprp.createShipment("MP5", {
 	model = "models/weapons/w_smg_mp5.mdl",
 	entity = "weapon_mp52",
 	price = 2200,
@@ -70,7 +70,7 @@ DarkRP.createShipment("MP5", {
 	category = "Rifles",
 })
 
-DarkRP.createShipment("M4", {
+fprp.createShipment("M4", {
 	model = "models/weapons/w_rif_m4a1.mdl",
 	entity = "weapon_m42",
 	price = 2450,
@@ -82,7 +82,7 @@ DarkRP.createShipment("M4", {
 	category = "Rifles",
 })
 
-DarkRP.createShipment("Mac 10", {
+fprp.createShipment("Mac 10", {
 	model = "models/weapons/w_smg_mac10.mdl",
 	entity = "weapon_mac102",
 	price = 2150,
@@ -93,7 +93,7 @@ DarkRP.createShipment("Mac 10", {
 	allowed = {TEAM_GUN}
 })
 
-DarkRP.createShipment("Pump shotgun", {
+fprp.createShipment("Pump shotgun", {
 	model = "models/weapons/w_shot_m3super90.mdl",
 	entity = "weapon_pumpshotgun2",
 	price = 1750,
@@ -105,7 +105,7 @@ DarkRP.createShipment("Pump shotgun", {
 	category = "Shotguns",
 })
 
-DarkRP.createShipment("Sniper rifle", {
+fprp.createShipment("Sniper rifle", {
 	model = "models/weapons/w_snip_g3sg1.mdl",
 	entity = "ls_sniper",
 	price = 3750,
@@ -117,7 +117,7 @@ DarkRP.createShipment("Sniper rifle", {
 	category = "Snipers",
 })
 
-DarkRP.createEntity("Drug lab", {
+fprp.createEntity("Drug lab", {
 	ent = "drug_lab",
 	model = "models/props_lab/crematorcase.mdl",
 	price = 400,
@@ -126,7 +126,7 @@ DarkRP.createEntity("Drug lab", {
 	allowed = {TEAM_GANG, TEAM_MOB}
 })
 
-DarkRP.createEntity("Money printer", {
+fprp.createEntity("Money printer", {
 	ent = "money_printer",
 	model = "models/props_c17/consolebox01a.mdl",
 	price = 1000,
@@ -134,7 +134,7 @@ DarkRP.createEntity("Money printer", {
 	cmd = "buymoneyprinter"
 })
 
-DarkRP.createEntity("Gun lab", {
+fprp.createEntity("Gun lab", {
 	ent = "gunlab",
 	model = "models/props_c17/TrapPropeller_Engine.mdl",
 	price = 500,
@@ -143,8 +143,8 @@ DarkRP.createEntity("Gun lab", {
 	allowed = TEAM_GUN
 })
 
-if not DarkRP.disabledDefaults["modules"]["hungermod"] then
-	DarkRP.createEntity("Microwave", {
+if not fprp.disabledDefaults["modules"]["hungermod"] then
+	fprp.createEntity("Microwave", {
 		ent = "microwave",
 		model = "models/props/cs_office/microwave.mdl",
 		price = 400,
@@ -154,7 +154,7 @@ if not DarkRP.disabledDefaults["modules"]["hungermod"] then
 	})
 end
 
-DarkRP.createCategory{
+fprp.createCategory{
 	name = "Other",
 	categorises = "entities",
 	startExpanded = true,
@@ -163,7 +163,7 @@ DarkRP.createCategory{
 	sortOrder = 255,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
     name = "Other",
     categorises = "shipments",
     startExpanded = true,
@@ -172,7 +172,7 @@ DarkRP.createCategory{
     sortOrder = 255,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
     name = "Rifles",
     categorises = "shipments",
     startExpanded = true,
@@ -181,7 +181,7 @@ DarkRP.createCategory{
     sortOrder = 100,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
     name = "Shotguns",
     categorises = "shipments",
     startExpanded = true,
@@ -190,7 +190,7 @@ DarkRP.createCategory{
     sortOrder = 101,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
     name = "Snipers",
     categorises = "shipments",
     startExpanded = true,
@@ -199,7 +199,7 @@ DarkRP.createCategory{
     sortOrder = 102,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
 	name = "Pistols",
 	categorises = "weapons",
 	startExpanded = true,
@@ -208,7 +208,7 @@ DarkRP.createCategory{
 	sortOrder = 100,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
 	name = "Other",
 	categorises = "weapons",
 	startExpanded = true,
@@ -217,7 +217,7 @@ DarkRP.createCategory{
 	sortOrder = 255,
 }
 
-DarkRP.createCategory{
+fprp.createCategory{
 	name = "Other",
 	categorises = "vehicles",
 	startExpanded = true,

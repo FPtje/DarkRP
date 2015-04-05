@@ -1,17 +1,17 @@
 -----------------------------------------------------------------------------[[
 /*---------------------------------------------------------------------------
-The fonts that DarkRP uses
+The fonts that fprp uses
 ---------------------------------------------------------------------------*/
 -----------------------------------------------------------------------------]]
 local function loadFonts()
-	surface.CreateFont ("DarkRPHUD1", {
+	surface.CreateFont ("fprpHUD1", {
 		size = 16,
 		weight = 600,
 		antialias = true,
 		shadow = true,
 		font = "DejaVu Sans"})
 
-	surface.CreateFont ("DarkRPHUD2", {
+	surface.CreateFont ("fprpHUD2", {
 		size = 23,
 		weight = 400,
 		antialias = true,
@@ -118,5 +118,5 @@ local function loadFonts()
 end
 loadFonts()
 -- Load twice because apparently once is not enough
-hook.Add("InitPostEntity", "DarkRP_LoadFonts", loadFonts)
+hook.Add("InitPostEntity", "fprp_LoadFonts", loadFonts)
 

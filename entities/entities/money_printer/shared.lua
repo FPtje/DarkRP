@@ -9,7 +9,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Entity", 0, "owning_ent")
 end
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "moneyPrinterCatchFire",
 	description = "Called when a money printer is about to catch fire.",
 	parameters = {
@@ -29,7 +29,7 @@ DarkRP.hookStub{
 	realm = "Server"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "moneyPrinterPrintMoney",
 	description = "Called when a money printer is about to print money.",
 	parameters = {
@@ -59,7 +59,7 @@ DarkRP.hookStub{
 	realm = "Server"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "moneyPrinterPrinted",
 	description = "Called after a money printer is has printed money.",
 	parameters = {

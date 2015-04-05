@@ -10,19 +10,19 @@ local preferredModels = {}
 /*---------------------------------------------------------------------------
 Interface functions
 ---------------------------------------------------------------------------*/
-function DarkRP.setPreferredJobModel(teamNr, model)
+function fprp.setPreferredJobModel(teamNr, model)
 	local job = RPExtraTeams[teamNr]
 	if not job then return end
 	preferredModels[job.command] = model
 	sql.Query(string.format([[REPLACE INTO darkp_playermodels VALUES(%s, %s);]], sql.SQLStr(job.command), sql.SQLStr(model)))
 
-	net.Start("DarkRP_preferredjobmodel")
+	net.Start("fprp_preferredjobmodel")
 		net.WriteUInt(teamNr, 8)
 		net.WriteString(model)
 	net.SendToServer()
 end
 
-function DarkRP.getPreferredJobModel(teamNr)
+function fprp.getPreferredJobModel(teamNr)
 	local job = RPExtraTeams[teamNr]
 	if not job then return end
 	return preferredModels[job.command]
@@ -32,7 +32,7 @@ end
 Load the preferred models
 ---------------------------------------------------------------------------*/
 local function sendModels() -- run after the jobs have loaded
-	net.Start("DarkRP_preferredjobmodels")
+	net.Start("fprp_preferredjobmodels")
 		for _, job in ipairs(RPExtraTeams) do
 			if not preferredModels[job.command] then net.WriteBit(false) continue end
 

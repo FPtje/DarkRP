@@ -7,25 +7,25 @@ local function AFKDemote(ply)
 	demoteTeam = demoteTeam or GAMEMODE.DefaultTeam
 
 	if ply:Team() ~= demoteTeam and shouldDemote ~= false then
-		local rpname = ply:getDarkRPVar("rpname")
+		local rpname = ply:getfprpVar("rpname")
 		ply:changeTeam(demoteTeam, true)
-		if not suppressMsg then DarkRP.notifyAll(0, 5, msg or DarkRP.getPhrase("hes_afk_demoted", rpname)) end
+		if not suppressMsg then fprp.notifyAll(0, 5, msg or fprp.getPhrase("hes_afk_demoted", rpname)) end
 	end
-	ply:setSelfDarkRPVar("AFKDemoted", true)
-	ply:setDarkRPVar("job", "AFK")
+	ply:setSelffprpVar("AFKDemoted", true)
+	ply:setfprpVar("job", "AFK")
 end
 
 local function SetAFK(ply)
-	local rpname = ply:getDarkRPVar("rpname")
-	ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
+	local rpname = ply:getfprpVar("rpname")
+	ply:setSelffprpVar("AFK", not ply:getfprpVar("AFK"))
 
-	SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
+	SendUserMessage("blackScreen", ply, ply:getfprpVar("AFK"))
 
-	if ply:getDarkRPVar("AFK") then
-		DarkRP.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
-		ply.OldJob = ply:getDarkRPVar("job")
+	if ply:getfprpVar("AFK") then
+		fprp.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
+		ply.OldJob = ply:getfprpVar("job")
 		ply.lastHealth = ply:Health()
-		DarkRP.notifyAll(0, 5, DarkRP.getPhrase("player_now_afk", rpname))
+		fprp.notifyAll(0, 5, fprp.getPhrase("player_now_afk", rpname))
 
 		ply.AFKDemote = math.huge
 
@@ -33,27 +33,27 @@ local function SetAFK(ply)
 		ply:Lock()
 	else
 		ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
-		DarkRP.notifyAll(1, 5, DarkRP.getPhrase("player_no_longer_afk", rpname))
-		DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("salary_restored"))
+		fprp.notifyAll(1, 5, fprp.getPhrase("player_no_longer_afk", rpname))
+		fprp.notify(ply, 0, 5, fprp.getPhrase("salary_restored"))
 		ply:Spawn()
 		ply:UnLock()
 
 		ply:SetHealth(ply.lastHealth or 100)
 		ply.lastHealth = nil
 	end
-	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
-	ply:setSelfDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
+	ply:setfprpVar("job", ply:getfprpVar("AFK") and "AFK" or ply:getfprpVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
+	ply:setSelffprpVar("salary", ply:getfprpVar("AFK") and 0 or ply.OldSalary or 0)
 
-	hook.Run("playerSetAFK", ply, ply:getDarkRPVar("AFK"))
+	hook.Run("playerSetAFK", ply, ply:getfprpVar("AFK"))
 end
 
-DarkRP.defineChatCommand("afk", function(ply)
-	if ply.DarkRPLastAFK and not ply:getDarkRPVar("AFK") and ply.DarkRPLastAFK > CurTime() - GAMEMODE.Config.AFKDelay then
-		DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("unable", "go AFK", "Spam prevention."))
+fprp.defineChatCommand("afk", function(ply)
+	if ply.fprpLastAFK and not ply:getfprpVar("AFK") and ply.fprpLastAFK > CurTime() - GAMEMODE.Config.AFKDelay then
+		fprp.notify(ply, 0, 5, fprp.getPhrase("unable", "go AFK", "Spam prevention."))
 		return ""
 	end
 
-	ply.DarkRPLastAFK = CurTime()
+	ply.fprpLastAFK = CurTime()
 	SetAFK(ply)
 
 	return ""
@@ -66,28 +66,28 @@ hook.Add("PlayerInitialSpawn", "StartAFKOnPlayer", StartAFKOnPlayer)
 
 local function AFKTimer(ply, key)
 	ply.AFKDemote = CurTime() + GAMEMODE.Config.afkdemotetime
-	if ply:getDarkRPVar("AFKDemoted") then
-		ply:setDarkRPVar("job", team.GetName(ply:Team()))
-		timer.Simple(3, function() ply:setSelfDarkRPVar("AFKDemoted", nil) end)
+	if ply:getfprpVar("AFKDemoted") then
+		ply:setfprpVar("job", team.GetName(ply:Team()))
+		timer.Simple(3, function() ply:setSelffprpVar("AFKDemoted", nil) end)
 	end
 end
-hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)
+hook.Add("KeyPress", "fprpKeyReleasedCheck", AFKTimer)
 
 local function KillAFKTimer()
 	for id, ply in pairs(player.GetAll()) do
-		if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getDarkRPVar("AFK") then
+		if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getfprpVar("AFK") then
 			SetAFK(ply)
 			AFKDemote(ply)
 			ply.AFKDemote = math.huge
 		end
 	end
 end
-hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
+hook.Add("Think", "fprpKeyPressedCheck", KillAFKTimer)
 
 local function BlockAFKTeamChange(ply, t, force)
-	if ply:getDarkRPVar("AFK") and (not force or t ~= GAMEMODE.DefaultTeam) then
+	if ply:getfprpVar("AFK") and (not force or t ~= GAMEMODE.DefaultTeam) then
 		local TEAM = RPExtraTeams[t]
-		if TEAM then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. TEAM.command, DarkRP.getPhrase("afk_mode"))) end
+		if TEAM then fprp.notify(ply, 1, 4, fprp.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. TEAM.command, fprp.getPhrase("afk_mode"))) end
 		return false
 	end
 end

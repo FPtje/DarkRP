@@ -14,7 +14,7 @@ end
 
 -- Variables that are used on both client and server
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left or right click to pick a lock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -28,7 +28,7 @@ SWEP.UseHands = true
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 
 SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
 
@@ -198,7 +198,7 @@ function SWEP:DrawHUD()
 	local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
 	draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
 
-	draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
+	draw.DrawNonParsedSimpleText(fprp.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 end
 
 function SWEP:SecondaryAttack()
@@ -206,7 +206,7 @@ function SWEP:SecondaryAttack()
 end
 
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canLockpick",
 	description = "Whether an entity can be lockpicked.",
 	parameters = {
@@ -231,7 +231,7 @@ DarkRP.hookStub{
 	realm = "Server"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onLockpickCompleted",
 	description = "Result of a player attempting to lockpick an entity.",
 	parameters = {
@@ -261,7 +261,7 @@ DarkRP.hookStub{
 	realm = "Shared"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "lockpickTime",
 	description = "The length of time, in seconds, it takes to lockpick an entity.",
 	parameters = {

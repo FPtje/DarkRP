@@ -1,14 +1,14 @@
-DarkRP.initDatabase = DarkRP.stub{
+fprp.initDatabase = fprp.stub{
 	name = "initDatabase",
-	description = "Initialize the DarkRP database.",
+	description = "Initialize the fprp database.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeRPName = DarkRP.stub{
+fprp.storeRPName = fprp.stub{
 	name = "storeRPName",
 	description = "Store an RP name in the database.",
 	parameters = {
@@ -27,10 +27,10 @@ DarkRP.storeRPName = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.retrieveRPNames = DarkRP.stub{
+fprp.retrieveRPNames = fprp.stub{
 	name = "retrieveRPNames",
 	description = "Whether a given RP name is taken by someone else.",
 	parameters = {
@@ -49,10 +49,10 @@ DarkRP.retrieveRPNames = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.retrievePlayerData = DarkRP.stub{
+fprp.retrievePlayerData = fprp.stub{
 	name = "retrievePlayerData",
 	description = "Get a player's information from the database.",
 	parameters = {
@@ -71,10 +71,10 @@ DarkRP.retrievePlayerData = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createPlayerData = DarkRP.stub{
+fprp.createPlayerData = fprp.stub{
 	name = "createPlayerData",
 	description = "Internal function: creates an entry in the database for a player who has joined for the first time.",
 	parameters = {
@@ -105,10 +105,10 @@ DarkRP.createPlayerData = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeMoney = DarkRP.stub{
+fprp.storeMoney = fprp.stub{
 	name = "storeMoney",
 	description = "Internal function. Store a player's money in the database. Do not call this if you just want to set someone's money, the player will not see the change!",
 	parameters = {
@@ -127,10 +127,10 @@ DarkRP.storeMoney = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeSalary = DarkRP.stub{
+fprp.storeSalary = fprp.stub{
 	name = "storeSalary",
 	description = "Internal function. Store a player's salary in the database. Do not call this if you just want to set someone's salary, the player will not see the change!",
 	parameters = {
@@ -154,10 +154,10 @@ DarkRP.storeSalary = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.retrieveSalary = DarkRP.stub{
+fprp.retrieveSalary = fprp.stub{
 	name = "retrieveSalary",
 	description = "Get a player's salary from the database.",
 	parameters = {
@@ -176,20 +176,20 @@ DarkRP.retrieveSalary = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.restorePlayerData = DarkRP.stub{
+fprp.restorePlayerData = fprp.stub{
 	name = "restorePlayerData",
-	description = "Internal function that restores a player's DarkRP information when they join.",
+	description = "Internal function that restores a player's fprp information when they join.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeDoorData = DarkRP.stub{
+fprp.storeDoorData = fprp.stub{
 	name = "storeDoorData",
 	description = "Store the information about a door in the database.",
 	parameters = {
@@ -202,10 +202,10 @@ DarkRP.storeDoorData = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeTeamDoorOwnability = DarkRP.stub{
+fprp.storeTeamDoorOwnability = fprp.stub{
 	name = "storeTeamDoorOwnability",
 	description = "Store the ownability information of a door in the database.",
 	parameters = {
@@ -218,10 +218,10 @@ DarkRP.storeTeamDoorOwnability = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeDoorGroup = DarkRP.stub{
+fprp.storeDoorGroup = fprp.stub{
 	name = "storeDoorGroup",
 	description = "Store the group of a door in the database.",
 	parameters = {
@@ -240,10 +240,10 @@ DarkRP.storeDoorGroup = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.notify = DarkRP.stub{
+fprp.notify = fprp.stub{
 	name = "notify",
 	description = "Make a notification pop up on the player's screen.",
 	parameters = {
@@ -274,10 +274,10 @@ DarkRP.notify = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.notifyAll = DarkRP.stub{
+fprp.notifyAll = fprp.stub{
 	name = "notifyAll",
 	description = "Make a notification pop up on the everyone's screen.",
 	parameters = {
@@ -302,10 +302,10 @@ DarkRP.notifyAll = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.printMessageAll = DarkRP.stub{
+fprp.printMessageAll = fprp.stub{
 	name = "printMessageAll",
 	description = "Make a notification pop up in the middle of everyone's screen.",
 	parameters = {
@@ -324,10 +324,10 @@ DarkRP.printMessageAll = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.talkToRange = DarkRP.stub{
+fprp.talkToRange = fprp.stub{
 	name = "talkToRange",
 	description = "Send a chat message to people close to a player.",
 	parameters = {
@@ -358,10 +358,10 @@ DarkRP.talkToRange = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.talkToPerson = DarkRP.stub{
+fprp.talkToPerson = fprp.stub{
 	name = "talkToPerson",
 	description = "Send a chat message to a player.",
 	parameters = {
@@ -404,10 +404,10 @@ DarkRP.talkToPerson = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.isEmpty = DarkRP.stub{
+fprp.isEmpty = fprp.stub{
 	name = "isEmpty",
 	description = "Check whether the given position is empty.",
 	parameters = {
@@ -431,10 +431,10 @@ DarkRP.isEmpty = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 -- findEmptyPos(pos, ignore, distance, step, area) -- returns pos
-DarkRP.findEmptyPos = DarkRP.stub{
+fprp.findEmptyPos = fprp.stub{
 	name = "findEmptyPos",
 	description = "Find an empty position as close as possible to the given position (Note: this algorithm is slow!).",
 	parameters = {
@@ -476,12 +476,12 @@ DarkRP.findEmptyPos = DarkRP.stub{
 			type = "Vector"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.PLAYER.removeDarkRPVar = DarkRP.stub{
-	name = "removeDarkRPVar",
-	description = "Remove a shared variable. Exactly the same as ply:setDarkRPVar(nil).",
+fprp.PLAYER.removefprpVar = fprp.stub{
+	name = "removefprpVar",
+	description = "Remove a shared variable. Exactly the same as ply:setfprpVar(nil).",
 	parameters = {
 		{
 			name = "variable",
@@ -497,12 +497,12 @@ DarkRP.PLAYER.removeDarkRPVar = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.setDarkRPVar = DarkRP.stub{
-	name = "setDarkRPVar",
-	description = "Set a shared variable. Make sure the variable is registered with DarkRP.registerDarkRPVar!",
+fprp.PLAYER.setfprpVar = fprp.stub{
+	name = "setfprpVar",
+	description = "Set a shared variable. Make sure the variable is registered with fprp.registerfprpVar!",
 	parameters = {
 		{
 			name = "variable",
@@ -524,11 +524,11 @@ DarkRP.PLAYER.setDarkRPVar = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.setSelfDarkRPVar = DarkRP.stub{
-	name = "setSelfDarkRPVar",
+fprp.PLAYER.setSelffprpVar = fprp.stub{
+	name = "setSelffprpVar",
 	description = "Set a shared variable that is only seen by the player to whom this variable applies.",
 	parameters = {
 		{
@@ -545,19 +545,19 @@ DarkRP.PLAYER.setSelfDarkRPVar = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.sendDarkRPVars = DarkRP.stub{
-	name = "sendDarkRPVars",
-	description = "Internal function. Sends all visibleDarkRPVars of all players to this player.",
+fprp.PLAYER.sendfprpVars = fprp.stub{
+	name = "sendfprpVars",
+	description = "Internal function. Sends all visiblefprpVars of all players to this player.",
 	parameters = {
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.setRPName = DarkRP.stub{
+fprp.PLAYER.setRPName = fprp.stub{
 	name = "setRPName",
 	description = "Set the RPName of a player.",
 	parameters = {
@@ -575,46 +575,46 @@ DarkRP.PLAYER.setRPName = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.addCustomEntity = DarkRP.stub{
+fprp.PLAYER.addCustomEntity = fprp.stub{
 	name = "addCustomEntity",
 	description = "Add a custom entity to the player's limit.",
 	parameters = {
 		{
 			name = "tblEnt",
-			description = "The entity table (from the DarkRPEntities table).",
+			description = "The entity table (from the fprpEntities table).",
 			type = "table",
 			optional = false
 		}
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.removeCustomEntity = DarkRP.stub{
+fprp.PLAYER.removeCustomEntity = fprp.stub{
 	name = "removeCustomEntity",
 	description = "Remove a custom entity to the player's limit.",
 	parameters = {
 		{
 			name = "tblEnt",
-			description = "The entity table (from the DarkRPEntities table).",
+			description = "The entity table (from the fprpEntities table).",
 			type = "table",
 			optional = false
 		}
 	},
 	returns = {},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.customEntityLimitReached = DarkRP.stub{
+fprp.PLAYER.customEntityLimitReached = fprp.stub{
 	name = "customEntityLimitReached",
 	description = "Set a shared variable.",
 	parameters = {
 		{
 			name = "tblEnt",
-			description = "The entity table (from the DarkRPEntities table).",
+			description = "The entity table (from the fprpEntities table).",
 			type = "table",
 			optional = false
 		}
@@ -626,10 +626,10 @@ DarkRP.PLAYER.customEntityLimitReached = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
+fprp.PLAYER.getPreferredModel = fprp.stub{
 	name = "getPreferredModel",
 	description = "Get the preferred model of a player for a job.",
 	parameters = {
@@ -647,10 +647,10 @@ DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "UpdatePlayerSpeed",
 	description = "Change a player's walking and running speed.",
 	parameters = {
@@ -664,16 +664,16 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
-	name = "DarkRPDBInitialized",
-	description = "Called when DarkRP is done initializing the database.",
+fprp.hookStub{
+	name = "fprpDBInitialized",
+	description = "Called when fprp is done initializing the database.",
 	parameters = {
 	},
 	returns = {
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "CanChangeRPName",
 	description = "Whether a player can change their RP name.",
 	parameters = {
@@ -702,9 +702,9 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onPlayerChangedName",
-	description = "Called when a player's DarkRP name has been changed.",
+	description = "Called when a player's fprp name has been changed.",
 	parameters = {
 		{
 			name = "ply",
@@ -726,7 +726,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBoughtPistol",
 	description = "Called when a player bought a pistol.",
 	parameters = {
@@ -755,7 +755,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBoughtShipment",
 	description = "Called when a player bought a shipment.",
 	parameters = {
@@ -784,7 +784,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBoughtCustomVehicle",
 	description = "Called when a player bought a vehicle.",
 	parameters = {
@@ -813,7 +813,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBoughtCustomEntity",
 	description = "Called when a player bought an entity (like a money printer or a gun lab).",
 	parameters = {
@@ -824,7 +824,7 @@ DarkRP.hookStub{
 		},
 		{
 			name = "entityTable",
-			description = "The table of the custom entity (from the DarkRPEntities table).",
+			description = "The table of the custom entity (from the fprpEntities table).",
 			type = "table"
 		},
 		{
@@ -842,7 +842,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canDemote",
 	description = "Whether a player can demote another player.",
 	parameters = {
@@ -876,7 +876,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onPlayerDemoted",
 	description = "Called when a player is demoted.",
 	parameters = {
@@ -900,7 +900,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canDropWeapon",
 	description = "Whether a player can drop a certain weapon.",
 	parameters = {
@@ -924,9 +924,9 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canSeeLogMessage",
-	description = "Whether a player can see a DarkRP log message in the console.",
+	description = "Whether a player can see a fprp log message in the console.",
 	parameters = {
 		{
 			name = "ply",
@@ -953,7 +953,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canVote",
 	description = "Whether a player can cast a vote.",
 	parameters = {
@@ -982,7 +982,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerGetSalary",
 	description = "When a player receives salary.",
 	parameters = {
@@ -1016,7 +1016,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerWalletChanged",
 	description = "When a player receives money.",
 	parameters = {

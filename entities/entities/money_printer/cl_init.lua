@@ -10,10 +10,10 @@ function ENT:Draw()
 	local Ang = self:GetAngles()
 
 	local owner = self:Getowning_ent()
-	owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("unknown")
+	owner = (IsValid(owner) and owner:Nick()) or fprp.getPhrase("unknown")
 
 	surface.SetFont("HUDNumber5")
-	local text = DarkRP.getPhrase("money_printer")
+	local text = fprp.getPhrase("money_printer")
 	local TextWidth = surface.GetTextSize(text)
 	local TextWidth2 = surface.GetTextSize(owner)
 

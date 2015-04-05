@@ -1,4 +1,4 @@
-DarkRP.defineChatCommand = DarkRP.stub{
+fprp.defineChatCommand = fprp.stub{
 	name = "defineChatCommand",
 	description = "Create a chat command that calls the function",
 	parameters = {
@@ -16,10 +16,10 @@ DarkRP.defineChatCommand = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "PostPlayerSay",
 	description = "Called after a player has said something.",
 	parameters = {
@@ -49,9 +49,9 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canChatCommand",
-	description = "Called when a player tries to run any chat command or uses the DarkRP console command. ",
+	description = "Called when a player tries to run any chat command or uses the fprp console command. ",
 	parameters = {
 		{
 			name = "ply",

@@ -1,4 +1,4 @@
-DarkRP.openHitMenu = DarkRP.stub{
+fprp.openHitMenu = fprp.stub{
 	name = "openHitMenu",
 	description = "Open the menu that requests a hit.",
 	parameters = {
@@ -11,25 +11,25 @@ DarkRP.openHitMenu = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.PLAYER.drawHitInfo = DarkRP.stub{
+fprp.PLAYER.drawHitInfo = fprp.stub{
 	name = "drawHitInfo",
 	description = "Start drawing the hit information above a hitman.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.stopHitInfo = DarkRP.stub{
+fprp.PLAYER.stopHitInfo = fprp.stub{
 	name = "stopHitInfo",
 	description = "Stop drawing the hit information above a hitman.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }

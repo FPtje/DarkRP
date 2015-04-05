@@ -3,7 +3,7 @@ local meta = FindMetaTable("Player")
 /*---------------------------------------------------------------------------
 Stubs
 ---------------------------------------------------------------------------*/
-DarkRP.stub{
+fprp.stub{
 	name = "dropPocketItem",
 	description = "Make the player drop an item from the pocket.",
 	parameters = {
@@ -19,7 +19,7 @@ DarkRP.stub{
 	metatable = meta
 }
 
-DarkRP.stub{
+fprp.stub{
 	name = "addPocketItem",
 	description = "Add an item to the pocket of the player.",
 	parameters = {
@@ -35,7 +35,7 @@ DarkRP.stub{
 	metatable = meta
 }
 
-DarkRP.stub{
+fprp.stub{
 	name = "removePocketItem",
 	description = "Remove an item from the pocket of the player.",
 	parameters = {
@@ -51,7 +51,7 @@ DarkRP.stub{
 	metatable = meta
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canPocket",
 	description = "Whether a player can pocket a certain item.",
 	parameters = {
@@ -80,7 +80,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onPocketItemAdded",
 	description = "Called when an entity is added to the pocket.",
 	parameters = {
@@ -104,7 +104,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onPocketItemRemoved",
 	description = "Called when an item is removed from the pocket.",
 	parameters = {
@@ -177,14 +177,14 @@ local function deserialize(ply, item)
 end
 
 local function dropAllPocketItems(ply)
-	for k,v in pairs(ply.darkRPPocket or {}) do
+	for k,v in pairs(ply.fprpPocket or {}) do
 		ply:dropPocketItem(k)
 	end
 end
 
-util.AddNetworkString("DarkRP_Pocket")
+util.AddNetworkString("fprp_Pocket")
 local function sendPocketItems(ply)
-	net.Start("DarkRP_Pocket")
+	net.Start("fprp_Pocket")
 		net.WriteTable(ply:getPocketItems())
 	net.Send(ply)
 end
@@ -193,7 +193,7 @@ end
 Interface functions
 ---------------------------------------------------------------------------*/
 function meta:addPocketItem(ent)
-	if not IsValid(ent) then DarkRP.error("Entity not valid", 2) end
+	if not IsValid(ent) then fprp.error("Entity not valid", 2) end
 	if ent.USED then return end
 
 	-- This item cannot be used until it has been removed
@@ -205,26 +205,26 @@ function meta:addPocketItem(ent)
 
 	ent:Remove()
 
-	self.darkRPPocket = self.darkRPPocket or {}
+	self.fprpPocket = self.fprpPocket or {}
 
-	local id = table.insert(self.darkRPPocket, serialized)
+	local id = table.insert(self.fprpPocket, serialized)
 	sendPocketItems(self)
 	return id
 end
 
 function meta:removePocketItem(item)
-	if not self.darkRPPocket or not self.darkRPPocket[item] then DarkRP.error("Player does not contain " .. item .. " in their pocket.", 2) end
+	if not self.fprpPocket or not self.fprpPocket[item] then fprp.error("Player does not contain " .. item .. " in their pocket.", 2) end
 
 	hook.Call("onPocketItemRemoved", nil, self, item)
 
-	self.darkRPPocket[item] = nil
+	self.fprpPocket[item] = nil
 	sendPocketItems(self)
 end
 
 function meta:dropPocketItem(item)
-	if not self.darkRPPocket or not self.darkRPPocket[item] then DarkRP.error("Player does not contain " .. item .. " in their pocket.", 2) end
+	if not self.fprpPocket or not self.fprpPocket[item] then fprp.error("Player does not contain " .. item .. " in their pocket.", 2) end
 
-	local id = self.darkRPPocket[item]
+	local id = self.fprpPocket[item]
 	local ent = deserialize(self, id)
 
 	-- reset USED status
@@ -239,10 +239,10 @@ end
 
 -- serverside implementation
 function meta:getPocketItems()
-	self.darkRPPocket = self.darkRPPocket or {}
+	self.fprpPocket = self.fprpPocket or {}
 
 	local res = {}
-	for k,v in pairs(self.darkRPPocket) do
+	for k,v in pairs(self.fprpPocket) do
 		res[k] = {
 			model = v.Model,
 			class = v.Class
@@ -255,10 +255,10 @@ end
 /*---------------------------------------------------------------------------
 Commands
 ---------------------------------------------------------------------------*/
-util.AddNetworkString("DarkRP_spawnPocket")
-net.Receive("DarkRP_spawnPocket", function(len, ply)
+util.AddNetworkString("fprp_spawnPocket")
+net.Receive("fprp_spawnPocket", function(len, ply)
 	local item = net.ReadFloat()
-	if not ply.darkRPPocket or not ply.darkRPPocket[item] then return end
+	if not ply.fprpPocket or not ply.fprpPocket[item] then return end
 	ply:dropPocketItem(item)
 end)
 
@@ -267,12 +267,12 @@ Hooks
 ---------------------------------------------------------------------------*/
 
 local function onAdded(ply, ent, serialized)
-	if not ent:IsValid() or not ent.DarkRPItem or not ent.Getowning_ent or not IsValid(ent:Getowning_ent()) then return end
+	if not ent:IsValid() or not ent.fprpItem or not ent.Getowning_ent or not IsValid(ent:Getowning_ent()) then return end
 
 	local ply = ent:Getowning_ent()
-	local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
+	local cmdname = string.gsub(ent.fprpItem.ent, " ", "_")
 
-	ply:addCustomEntity(ent.DarkRPItem)
+	ply:addCustomEntity(ent.fprpItem)
 end
 hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
 
@@ -280,12 +280,12 @@ local function canPocket(ply, item)
 	if not IsValid(item) then return false end
 	local class = item:GetClass()
 
-	if item.Removed then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if not item:CPPICanPickup(ply) then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if item.jailWall then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if GAMEMODE.Config.PocketBlacklist[class] then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if string.find(class, "func_") then return false, DarkRP.getPhrase("cannot_pocket_x") end
-	if item:IsRagdoll() then return false, DarkRP.getPhrase("cannot_pocket_x") end
+	if item.Removed then return false, fprp.getPhrase("cannot_pocket_x") end
+	if not item:CPPICanPickup(ply) then return false, fprp.getPhrase("cannot_pocket_x") end
+	if item.jailWall then return false, fprp.getPhrase("cannot_pocket_x") end
+	if GAMEMODE.Config.PocketBlacklist[class] then return false, fprp.getPhrase("cannot_pocket_x") end
+	if string.find(class, "func_") then return false, fprp.getPhrase("cannot_pocket_x") end
+	if item:IsRagdoll() then return false, fprp.getPhrase("cannot_pocket_x") end
 
 	local trace = ply:GetEyeTrace()
 	if ply:EyePos():Distance(trace.HitPos) > 150 then return false end
@@ -294,11 +294,11 @@ local function canPocket(ply, item)
 	if not phys:IsValid() then return false end
 
 	local mass = trace.Entity.RPOriginalMass and trace.Entity.RPOriginalMass or phys:GetMass()
-	if mass > 100 then return false, DarkRP.getPhrase("object_too_heavy") end
+	if mass > 100 then return false, fprp.getPhrase("object_too_heavy") end
 
 	local job = ply:Team()
 	local max = RPExtraTeams[job].maxpocket or GAMEMODE.Config.pocketitems
-	if table.Count(ply.darkRPPocket or {}) >= max then return false, DarkRP.getPhrase("pocket_full") end
+	if table.Count(ply.fprpPocket or {}) >= max then return false, fprp.getPhrase("pocket_full") end
 
 	return true
 end
@@ -307,7 +307,7 @@ hook.Add("canPocket", "defaultRestrictions", canPocket)
 
 -- Drop pocket items on death
 hook.Add("PlayerDeath", "DropPocketItems", function(ply)
-	if not GAMEMODE.Config.droppocketdeath or not ply.darkRPPocket then return end
+	if not GAMEMODE.Config.droppocketdeath or not ply.fprpPocket then return end
 	dropAllPocketItems(ply)
 end)
 

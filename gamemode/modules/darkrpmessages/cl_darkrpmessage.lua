@@ -3,7 +3,7 @@ local MotdMessage =
 
 
 ---------------------------------------------------------------------------
-			DarkRP Message of the day!
+			fprp Message of the day!
 ---------------------------------------------------------------------------
 ]]
 
@@ -19,8 +19,8 @@ local function receiveMOTD(html, len, headers, code)
 end
 
 local function showMOTD()
-	http.Fetch("https://raw.github.com/FPtje/DarkRPMotd/master/motd.txt", receiveMOTD, fn.Id)
+	http.Fetch("https://raw.github.com/FPtje/fprpMotd/master/motd.txt", receiveMOTD, fn.Id)
 end
 timer.Simple(5, showMOTD)
 
-concommand.Add("DarkRP_motd", showMOTD)
+concommand.Add("fprp_motd", showMOTD)

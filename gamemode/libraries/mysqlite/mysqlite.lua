@@ -327,14 +327,14 @@ end
 local function msOOConnect(host, username, password, database_name, database_port)
     databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
 
-    if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
+    if timer.Exists("fprp_check_mysql_status") then timer.Destroy("fprp_check_mysql_status") end
 
     databaseObject.onConnectionFailed = function(_, msg)
         error("Connection failed! " .. tostring(msg) ..  "\n")
     end
 
     databaseObject.onConnected = function()
-        timer.Create("darkrp_check_mysql_status", 60, 0, function()
+        timer.Create("fprp_check_mysql_status", 60, 0, function()
             if (databaseObject and databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED) then
                 connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
             end

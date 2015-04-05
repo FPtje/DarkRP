@@ -23,7 +23,7 @@ function PANEL:Init()
 	self.icon:SetTooltip()
 
 	self.title = vgui.Create("DLabel", self)
-	self.title:SetText(DarkRP.getPhrase("hitman"))
+	self.title:SetText(fprp.getPhrase("hitman"))
 
 	self.name = vgui.Create("DLabel", self)
 	self.price = vgui.Create("DLabel", self)
@@ -31,19 +31,19 @@ function PANEL:Init()
 	self.playerList = vgui.Create("DScrollPanel", self)
 
 	self.btnRequest = vgui.Create("HitmanMenuButton", self)
-	self.btnRequest:SetText(DarkRP.getPhrase("hitmenu_request"))
+	self.btnRequest:SetText(fprp.getPhrase("hitmenu_request"))
 	self.btnRequest.DoClick = function()
 		if IsValid(self:GetTarget()) then
-			RunConsoleCommand("darkrp", "requesthit", self:GetTarget():SteamID(), self:GetHitman():UserID())
+			RunConsoleCommand("fprp", "requesthit", self:GetTarget():SteamID(), self:GetHitman():UserID())
 			self:Remove()
 		end
 	end
 
 	self.btnCancel = vgui.Create("HitmanMenuButton", self)
-	self.btnCancel:SetText(DarkRP.getPhrase("cancel"))
+	self.btnCancel:SetText(fprp.getPhrase("cancel"))
 	self.btnCancel.DoClick = function() self:Remove() end
 
-	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	self:SetSkin(GAMEMODE.Config.fprpSkin)
 
 	self:InvalidateLayout()
 end
@@ -55,7 +55,7 @@ function PANEL:Think()
 	end
 
 	-- update the price (so the hitman can't scam)
-	self.price:SetText(DarkRP.getPhrase("priceTag", DarkRP.formatMoney(self:GetHitman():getHitPrice()), ""))
+	self.price:SetText(fprp.getPhrase("priceTag", fprp.formatMoney(self:GetHitman():getHitPrice()), ""))
 	self.price:SizeToContents()
 end
 
@@ -77,12 +77,12 @@ function PANEL:PerformLayout()
 	self.title:SizeToContents(true)
 
 	self.name:SizeToContents(true)
-	self.name:SetText(DarkRP.getPhrase("name", self:GetHitman():Nick()))
+	self.name:SetText(fprp.getPhrase("name", self:GetHitman():Nick()))
 	self.name:SetPos(20 + 128 + 20, 20 + self.title:GetTall())
 
 	self.price:SetFont("HUDNumber5")
 	self.price:SetColor(Color(255, 0, 0, 255))
-	self.price:SetText(DarkRP.getPhrase("priceTag", DarkRP.formatMoney(self:GetHitman():getHitPrice()), ""))
+	self.price:SetText(fprp.getPhrase("priceTag", fprp.formatMoney(self:GetHitman():getHitPrice()), ""))
 	self.price:SetPos(20 + 128 + 20, 20 + self.title:GetTall() + 20)
 	self.price:SizeToContents(true)
 
@@ -116,7 +116,7 @@ function PANEL:AddPlayerRows()
 	end)
 
 	for k, v in pairs(players) do
-		local canRequest = hook.Call("canRequestHit", DarkRP.hooks, self:GetHitman(), LocalPlayer(), v, self:GetHitman():getHitPrice())
+		local canRequest = hook.Call("canRequestHit", fprp.hooks, self:GetHitman(), LocalPlayer(), v, self:GetHitman():getHitPrice())
 		if not canRequest then continue end
 
 		local line = vgui.Create("HitmanMenuPlayerRow")
@@ -191,12 +191,12 @@ function PANEL:PerformLayout()
 	if not IsValid(ply) then self:Remove() return end
 
 	self.lblName:SetFont("UiBold")
-	self.lblName:SetText(DarkRP.deLocalise(ply:Nick()))
+	self.lblName:SetText(fprp.deLocalise(ply:Nick()))
 	self.lblName:SizeToContents()
 	self.lblName:SetPos(10, 1)
 
 	self.lblTeam:SetFont("UiBold")
-	self.lblTeam:SetText((ply.DarkRPVars and DarkRP.deLocalise(ply:getDarkRPVar("job") or "")) or team.GetName(ply:Team()))
+	self.lblTeam:SetText((ply.fprpVars and fprp.deLocalise(ply:getfprpVar("job") or "")) or team.GetName(ply:Team()))
 	self.lblTeam:SizeToContents()
 	self.lblTeam:SetPos(self:GetWide() / 2, 1)
 end
@@ -216,7 +216,7 @@ vgui.Register("HitmanMenuPlayerRow", PANEL, "Button")
 /*---------------------------------------------------------------------------
 Open the hit menu
 ---------------------------------------------------------------------------*/
-function DarkRP.openHitMenu(hitman)
+function fprp.openHitMenu(hitman)
 	local frame = vgui.Create("HitmanMenu")
 	frame:SetHitman(hitman)
 	frame:AddPlayerRows()

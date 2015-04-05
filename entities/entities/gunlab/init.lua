@@ -60,19 +60,19 @@ function ENT:Use(activator)
 	if self.Once then return end
 
 	if not activator:canAfford(self:SalePrice(activator)) then
-		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("gun")))
+		fprp.notify(activator, 1, 3, fprp.getPhrase("cant_afford", fprp.getPhrase("gun")))
 		return ""
 	end
 	local diff = self:SalePrice(activator) - self:SalePrice(owner)
 	if diff < 0 and not owner:canAfford(math.abs(diff)) then
-		DarkRP.notify(activator, 2, 3, DarkRP.getPhrase("owner_poor", DarkRP.getPhrase("gun_lab")))
+		fprp.notify(activator, 2, 3, fprp.getPhrase("owner_poor", fprp.getPhrase("gun_lab")))
 		return ""
 	end
 	self.sparking = true
 
 
 	activator:addMoney(-cash)
-	DarkRP.notify(activator, 0, 3, "You purchased a P228 for " .. DarkRP.formatMoney(cash) .. "!")
+	fprp.notify(activator, 0, 3, "You purchased a P228 for " .. fprp.formatMoney(cash) .. "!")
 
 	if IsValid(owner) and activator ~= owner then
 		local gain = 0
@@ -82,12 +82,12 @@ function ENT:Use(activator)
 			gain = math.floor(self:Getprice() - math.ceil(self:Getprice() * 0.90))
 		end
 		if gain == 0 then
-			DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(0) .. " " .. DarkRP.getPhrase("profit"), "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
+			fprp.notify(owner, 3, 3, fprp.getPhrase("you_received_x", fprp.formatMoney(0) .. " " .. fprp.getPhrase("profit"), "P228 (" .. fprp.getPhrase("gun_lab") .. ")"))
 		else
 			owner:addMoney(gain)
-			local word = DarkRP.getPhrase("profit")
-			if gain < 0 then word = DarkRP.getPhrase("loss") end
-			DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(math.abs(gain)) .. " " .. word, "P228 (" .. DarkRP.getPhrase("gun_lab") .. ")"))
+			local word = fprp.getPhrase("profit")
+			if gain < 0 then word = fprp.getPhrase("loss") end
+			fprp.notify(owner, 0, 3, fprp.getPhrase("you_received_x", fprp.formatMoney(math.abs(gain)) .. " " .. word, "P228 (" .. fprp.getPhrase("gun_lab") .. ")"))
 		end
 	end
 

@@ -11,7 +11,7 @@ function entity:EmitSound(sound, ...)
 end
 
 
-function DarkRP.getAvailableVehicles()
+function fprp.getAvailableVehicles()
 	local vehicles = list.Get("Vehicles")
 	for k, v in pairs(list.Get("SCarsList") or {}) do
 		vehicles[v.PrintName] = {
@@ -43,7 +43,7 @@ if CLIENT then
 	/*---------------------------------------------------------------------------
 	Generic InitPostEntity workarounds
 	---------------------------------------------------------------------------*/
-	hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
+	hook.Add("InitPostEntity", "fprp_Workarounds", function()
 		if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
 	end)
 
@@ -80,7 +80,7 @@ end
 /*---------------------------------------------------------------------------
 Generic InitPostEntity workarounds
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
+hook.Add("InitPostEntity", "fprp_Workarounds", function()
 	local commands = concommand.GetTable()
 	if commands["durgz_witty_sayings"] then
 		game.ConsoleCommand("durgz_witty_sayings 0\n") -- Deals with the cigarettes exploit. I'm fucking tired of them. I hate having to fix other people's mods, but this mod maker is retarded and refuses to update his mod.
@@ -187,7 +187,7 @@ That calculation is slow
 local plyMeta = FindMetaTable("Player")
 local oldUID = plyMeta.UniqueID
 function plyMeta:UniqueID()
-	if not self:IsValid() then DarkRP.error("Attempt to get UniqueID of non-existing player", 2) end
+	if not self:IsValid() then fprp.error("Attempt to get UniqueID of non-existing player", 2) end
 	self.UIDCache = self.UIDCache or oldUID(self)
 
 	return self.UIDCache

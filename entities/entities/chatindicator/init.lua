@@ -21,7 +21,7 @@ function ENT:Think()
 	self:SetPos(self.ply:GetPos() + Vector(0, 0, 85))
 end
 
-util.AddNetworkString("DarkRP_ToggleChat")
+util.AddNetworkString("fprp_ToggleChat")
 local function ToggleChatIndicator(len, ply)
 	if not IsValid(ply.ChatIndicator) then
 		ply.ChatIndicator = ents.Create("chatindicator")
@@ -34,7 +34,7 @@ local function ToggleChatIndicator(len, ply)
 		ply.ChatIndicator:Remove()
 	end
 end
-net.Receive("DarkRP_ToggleChat", ToggleChatIndicator)
+net.Receive("fprp_ToggleChat", ToggleChatIndicator)
 
 local function RemoveChatIndicator(ply)
 	if IsValid(ply.ChatIndicator) then

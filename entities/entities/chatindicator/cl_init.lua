@@ -13,7 +13,7 @@ function ENT:Draw()
 end
 
 local function ToggleChat()
-	net.Start("DarkRP_ToggleChat")
+	net.Start("fprp_ToggleChat")
 	net.SendToServer()
 end
 hook.Add("StartChat", "StartChatIndicator", ToggleChat)

@@ -1,4 +1,4 @@
-DarkRP.PLAYER.requestHit = DarkRP.stub{
+fprp.PLAYER.requestHit = fprp.stub{
 	name = "requestHit",
 	description = "Request a hit to a hitman.",
 	parameters = {
@@ -28,10 +28,10 @@ DarkRP.PLAYER.requestHit = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.placeHit = DarkRP.stub{
+fprp.PLAYER.placeHit = fprp.stub{
 	name = "placeHit",
 	description = "Place an actual hit.",
 	parameters = {
@@ -56,10 +56,10 @@ DarkRP.PLAYER.placeHit = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.setHitTarget = DarkRP.stub{
+fprp.PLAYER.setHitTarget = fprp.stub{
 	name = "setHitTarget",
 	description = "Set the target of a hit",
 	parameters = {
@@ -72,10 +72,10 @@ DarkRP.PLAYER.setHitTarget = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.setHitPrice = DarkRP.stub{
+fprp.PLAYER.setHitPrice = fprp.stub{
 	name = "setHitPrice",
 	description = "Set the price of a hit",
 	parameters = {
@@ -88,10 +88,10 @@ DarkRP.PLAYER.setHitPrice = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.setHitCustomer = DarkRP.stub{
+fprp.PLAYER.setHitCustomer = fprp.stub{
 	name = "setHitCustomer",
 	description = "Set the customer who pays for the hit.",
 	parameters = {
@@ -104,10 +104,10 @@ DarkRP.PLAYER.setHitCustomer = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getHitCustomer = DarkRP.stub{
+fprp.PLAYER.getHitCustomer = fprp.stub{
 	name = "getHitCustomer",
 	description = "Get the customer for the current hit",
 	parameters = {
@@ -119,10 +119,10 @@ DarkRP.PLAYER.getHitCustomer = DarkRP.stub{
 			type = "Player"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.abortHit = DarkRP.stub{
+fprp.PLAYER.abortHit = fprp.stub{
 	name = "abortHit",
 	description = "Abort a hit",
 	parameters = {
@@ -135,15 +135,15 @@ DarkRP.PLAYER.abortHit = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.finishHit = DarkRP.stub{
+fprp.PLAYER.finishHit = fprp.stub{
 	name = "finishHit",
 	description = "End a hit without a message",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }

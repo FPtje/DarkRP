@@ -14,12 +14,12 @@ function PANEL:setJob(job, closeFunc)
 		self:SetVisible(false)
 	elseif job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
 		self:SetVisible(true)
-		self:SetText(DarkRP.getPhrase("create_vote_for_job"))
-		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "darkrp", "vote" .. job.command)}
+		self:SetText(fprp.getPhrase("create_vote_for_job"))
+		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "fprp", "vote" .. job.command)}
 	else
 		self:SetVisible(true)
-		self:SetText(DarkRP.getPhrase("become_job"))
-		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "darkrp", job.command)}
+		self:SetText(fprp.getPhrase("become_job"))
+		self.DoClick = fn.Compose{closeFunc, fn.Partial(RunConsoleCommand, "fprp", job.command)}
 	end
 end
 
@@ -72,7 +72,7 @@ function PANEL:OnMouseReleased()
 	self:SetSelected(true)
 	self:SetDepressed(false)
 	self.hostPanel:onSelected(self)
-	DarkRP.setPreferredJobModel(self.job.team, self.strModel)
+	fprp.setPreferredJobModel(self.job.team, self.strModel)
 end
 
 function PANEL:updateInfo(job, model, host)
@@ -172,7 +172,7 @@ function PANEL:updateInfo(job)
 	self.iconList:Clear()
 	if not istable(job.model) then return end
 
-	local preferredModel = DarkRP.getPreferredJobModel(job.team)
+	local preferredModel = fprp.getPreferredJobModel(job.team)
 	for i, mdl in ipairs(job.model) do
 		local btn = vgui.Create("F4MenuChooseJobModelIcon", self.iconList)
 		btn:updateInfo(job, mdl, self)
@@ -278,7 +278,7 @@ local weaponString = fn.Compose{fn.Curry(fn.Flip(table.concat), 2)("\n"), fn.Cur
 function PANEL:updateInfo(job)
 	self.job = job
 
-	self.lblTitle:SetText(job.name and DarkRP.deLocalise(job.name) or (job.team and "" or "No jobs available"))
+	self.lblTitle:SetText(job.name and fprp.deLocalise(job.name) or (job.team and "" or "No jobs available"))
 	self.lblTitle:SizeToContents()
 
 	local weps
@@ -287,7 +287,7 @@ function PANEL:updateInfo(job)
 		weps = ""
 	else
 		weps = weaponString(job.weapons)
-		weps = weps ~= "" and weps or DarkRP.getPhrase("no_extra_weapons")
+		weps = weps ~= "" and weps or fprp.getPhrase("no_extra_weapons")
 	end
 
 	self.lblSweps:SetText(weps)
@@ -305,7 +305,7 @@ function PANEL:updateInfo(job)
 end
 
 function PANEL:PerformLayout()
-	local text = DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""):gsub('\t', ''), "Roboto Light", self:GetWide() - 43)
+	local text = fprp.textWrap(fprp.deLocalise(self.job.description or ""):gsub('\t', ''), "Roboto Light", self:GetWide() - 43)
 	surface.SetFont("Roboto Light")
 	local w, h = surface.GetTextSize(text)
 	self.BaseClass.PerformLayout(self)
@@ -355,7 +355,7 @@ function PANEL:Refresh()
 	for _, cat in ipairs(self.pnlLeft:GetItems()) do
 		for k,v in pairs(cat:GetItems()) do
 			if v:GetDisabled() then continue end
-			job = v.DarkRPItem
+			job = v.fprpItem
 			goto break2
 		end
 	end
@@ -364,15 +364,15 @@ function PANEL:Refresh()
 end
 
 function PANEL:fillData()
-	local categories = DarkRP.getCategories().jobs
+	local categories = fprp.getCategories().jobs
 
 	for _, cat in pairs(categories) do
 		local dCat = vgui.Create("F4MenuCategory", self)
 
 		dCat:SetButtonFactory(function(item, ui)
 			local pnl = vgui.Create("F4MenuJobButton", ui)
-			pnl:setDarkRPItem(item)
-			pnl.DoClick = fc{fp{self.pnlRight.updateInfo, self.pnlRight}, fp{fn.GetValue, "DarkRPItem", pnl}}
+			pnl:setfprpItem(item)
+			pnl.DoClick = fc{fp{self.pnlRight.updateInfo, self.pnlRight}, fp{fn.GetValue, "fprpItem", pnl}}
 
 			pnl:Refresh()
 			return pnl

@@ -9,11 +9,11 @@ hook.Add("PlayerSpawn", "Knockout", ResetKnockouts)
 
 local function stopSleep(ply)
 	if ply.Sleeping then
-		DarkRP.toggleSleep(ply, "force")
+		fprp.toggleSleep(ply, "force")
 	end
 end
 
-function DarkRP.toggleSleep(player, command)
+function fprp.toggleSleep(player, command)
 	if not player.SleepSound then
 		player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
 	end
@@ -23,7 +23,7 @@ function DarkRP.toggleSleep(player, command)
 		if (player.KnockoutTimer and player.KnockoutTimer + KnockoutTime < CurTime()) or command == "force" then
 			if (player.Sleeping and IsValid(player.SleepRagdoll)) then
 				local frozen = player:IsFrozen()
-				player.OldHunger = player:getDarkRPVar("Energy")
+				player.OldHunger = player:getfprpVar("Energy")
 				player.SleepSound:Stop()
 				local ragdoll = player.SleepRagdoll
 				local health = player:Health()
@@ -73,8 +73,8 @@ function DarkRP.toggleSleep(player, command)
 					player:arrest()
 				end
 				player.Sleeping = false
-				if player:getDarkRPVar("Energy") then
-					player:setSelfDarkRPVar("Energy", player.OldHunger)
+				if player:getfprpVar("Energy") then
+					player:setSelffprpVar("Energy", player.OldHunger)
 					player.OldHunger = nil
 				end
 
@@ -86,7 +86,7 @@ function DarkRP.toggleSleep(player, command)
 				if IsValid(player:GetObserverTarget()) then return "" end
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
 					if v:GetClass() == "func_door" then
-						DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
+						fprp.notify(player, 1, 4, fprp.getPhrase("unable", "sleep", "func_door exploit"))
 						return ""
 					end
 				end
@@ -143,20 +143,20 @@ function DarkRP.toggleSleep(player, command)
 					end
 				end)
 			else
-				DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", DarkRP.getPhrase("frozen")))
+				fprp.notify(player, 1, 4, fprp.getPhrase("unable", "/sleep", fprp.getPhrase("frozen")))
 			end
 		else
-			DarkRP.notify(player, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil((player.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep"))
+			fprp.notify(player, 1, 4, fprp.getPhrase("have_to_wait", math.ceil((player.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep"))
 		end
 		return ""
 	else
-		DarkRP.notify(player, 1, 4, DarkRP.getPhrase("must_be_alive_to_do_x", "/sleep"))
+		fprp.notify(player, 1, 4, fprp.getPhrase("must_be_alive_to_do_x", "/sleep"))
 		return ""
 	end
 end
-DarkRP.defineChatCommand("sleep", DarkRP.toggleSleep)
-DarkRP.defineChatCommand("wake", DarkRP.toggleSleep)
-DarkRP.defineChatCommand("wakeup", DarkRP.toggleSleep)
+fprp.defineChatCommand("sleep", fprp.toggleSleep)
+fprp.defineChatCommand("wake", fprp.toggleSleep)
+fprp.defineChatCommand("wakeup", fprp.toggleSleep)
 
 hook.Add("OnPlayerChangedTeam", "SleepMod", stopSleep)
 
@@ -176,7 +176,7 @@ local function DamageSleepers(ent, dmginfo)
 				end
 				v:SetHealth(v:Health() - amount)
 				if v:Health() <= 0 and v:Alive() then
-					DarkRP.toggleSleep(v, "force")
+					fprp.toggleSleep(v, "force")
 					 -- reapply damage to properly kill the player
 					 v:StripWeapons()
 					v:TakeDamageInfo(dmginfo)

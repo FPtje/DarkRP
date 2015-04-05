@@ -18,7 +18,7 @@ function ENT:Draw()
 
 		draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
 
-		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+		draw.DrawNonParsedSimpleText(fprp.getPhrase("laws_of_the_land"), "TargetID", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
 		local col = Color(255, 255, 255, 255)
 		local lastHeight = 0
@@ -31,7 +31,7 @@ function ENT:Draw()
 end
 
 local function addLaw(inLaw)
-	local law = DarkRP.textWrap(inLaw, "TargetID", 522)
+	local law = fprp.textWrap(inLaw, "TargetID", 522)
 
 	Laws[#Laws + 1] = law
 end
@@ -63,7 +63,7 @@ local function umResetLaws(um)
 end
 usermessage.Hook("DRP_ResetLaws", umResetLaws)
 
-function DarkRP.getLaws()
+function fprp.getLaws()
 	return Laws
 end
 

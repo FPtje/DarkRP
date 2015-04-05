@@ -58,10 +58,10 @@ end
 timer.Simple(0, ReloadConVars)
 
 local function HMHUD()
-	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Hungermod")
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "fprp_Hungermod")
 	if shouldDraw == false then return end
 
-	local energy = math.ceil(LocalPlayer():getDarkRPVar("Energy") or 0)
+	local energy = math.ceil(LocalPlayer():getfprpVar("Energy") or 0)
 
 	local x = 5
 	local y = ScrH() - 9
@@ -77,7 +77,7 @@ local function HMHUD()
 		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / 100), 7, ConVars.HungerForeground)
 		draw.DrawNonParsedSimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1)
 	else
-		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
+		draw.DrawNonParsedSimpleText(fprp.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
 	end
 
 	if FoodAteAlpha > -1 then
@@ -93,7 +93,7 @@ local function HMHUD()
 		FoodAteY = FoodAteY - 150 * FrameTime()
 	end
 end
-hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after DarkRP HUD is drawn in HUDPaint
+hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after fprp HUD is drawn in HUDPaint
 
 local function AteFoodIcon(msg)
 	FoodAteAlpha = 1

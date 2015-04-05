@@ -1,16 +1,16 @@
-DarkRP.ENTITY.drawOwnableInfo = DarkRP.stub{
+fprp.ENTITY.drawOwnableInfo = fprp.stub{
 	name = "drawOwnableInfo",
 	description = "Draw the ownability information on a door or vehicle.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "HUDDrawDoorData",
-	description = "Called when DarkRP is about to draw the door ownability information of a door or vehicle. Override this hook to ",
+	description = "Called when fprp is about to draw the door ownability information of a door or vehicle. Override this hook to ",
 	parameters = {
 		{
 			name = "ent",

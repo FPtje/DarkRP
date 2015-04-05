@@ -14,7 +14,7 @@ if CLIENT then
 	include("cl_menu.lua")
 end
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to lock\nRight click to unlock\nReload for door settings or animation menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -29,7 +29,7 @@ SWEP.UseHands = true
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 SWEP.Sound = "doors/door_latch3.wav"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
@@ -110,7 +110,7 @@ function SWEP:PrimaryAttack()
 		trace.Entity:keysLock() -- Lock the door immediately so it won't annoy people
 		lockUnlockAnimation(self.Owner, self.Sound)
 	elseif trace.Entity:IsVehicle() then
-		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+		fprp.notify(self.Owner, 1, 3, fprp.getPhrase("do_not_own_ent"))
 	else
 		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard2.wav")
 	end
@@ -129,7 +129,7 @@ function SWEP:SecondaryAttack()
 		trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
 		lockUnlockAnimation(self.Owner, self.Sound)
 	elseif trace.Entity:IsVehicle() then
-		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+		fprp.notify(self.Owner, 1, 3, fprp.getPhrase("do_not_own_ent"))
 	else
 		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard3.wav")
 	end
@@ -139,7 +139,7 @@ SWEP.OnceReload = false
 function SWEP:Reload()
 	local trace = self.Owner:GetEyeTrace()
 	if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
-		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
+		if CLIENT then RunConsoleCommand("_fprp_AnimationMenu") end
 		return
 	end
 	if SERVER then

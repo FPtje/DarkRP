@@ -4,19 +4,19 @@ Messages
 local function ccTell(ply, cmd, args)
 	if not args or not args[1] then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+			print(fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+			ply:PrintMessage(2, fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
 		end
 		return
 	end
 
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tell"))
+	if ply:EntIndex() ~= 0 and not ply:hasfprpPrivilege("rp_commands") then
+		ply:PrintMessage(2, fprp.getPhrase("need_admin", "rp_tell"))
 		return
 	end
 
-	local target = DarkRP.findPlayer(args[1])
+	local target = fprp.findPlayer(args[1])
 
 	if target then
 		local msg = ""
@@ -30,15 +30,15 @@ local function ccTell(ply, cmd, args)
 		umsg.End()
 
 		if ply:EntIndex() == 0 then
-			DarkRP.log("Console did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
+			fprp.log("Console did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
 		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
+			fprp.log(ply:Nick().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
+			print(fprp.getPhrase("could_not_find", tostring(args[1])))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+			ply:PrintMessage(2, fprp.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end
 end
@@ -47,15 +47,15 @@ concommand.Add("rp_tell", ccTell)
 local function ccTellAll(ply, cmd, args)
 	if not args or not args[1] then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+			print(fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+			ply:PrintMessage(2, fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
 		end
 		return
 	end
 
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tellall"))
+	if ply:EntIndex() ~= 0 and not ply:hasfprpPrivilege("rp_commands") then
+		ply:PrintMessage(2, fprp.getPhrase("need_admin", "rp_tellall"))
 		return
 	end
 
@@ -70,9 +70,9 @@ local function ccTellAll(ply, cmd, args)
 	umsg.End()
 
 	if ply:EntIndex() == 0 then
-		DarkRP.log("Console did rp_tellall \""..msg .. "\"", Color(30, 30, 30))
+		fprp.log("Console did rp_tellall \""..msg .. "\"", Color(30, 30, 30))
 	else
-		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") did rp_tellall \""..msg .. "\"", Color(30, 30, 30))
+		fprp.log(ply:Nick().." ("..ply:SteamID()..") did rp_tellall \""..msg .. "\"", Color(30, 30, 30))
 	end
 
 end

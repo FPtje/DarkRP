@@ -6,11 +6,11 @@ This is the english language file. The things on the left side of the equals sig
 The parts between the quotes are the parts you should translate. You can also copy this file and create a new language.
 
 = Warning =
-Sometimes when DarkRP is updated, new phrases are added.
+Sometimes when fprp is updated, new phrases are added.
 If you don't translate these phrases to your language, it will use the English sentence.
 To fix this, join your server, open your console and enter darkp_getphrases yourlanguage
 For English the command would be:
-	darkrp_getphrases "en"
+	fprp_getphrases "en"
 because "en" is the language code for English.
 
 You can copy the missing phrases to this file and translate them.
@@ -257,7 +257,7 @@ local my_language = {
 	gm_spawnvehicle = "The spawning of vehicles",
 	gm_spawnsent = "The spawning of scripted entities (SENTs)",
 	gm_spawnnpc = "The spawning of Non-Player Characters (NPCs)",
-	see_settings = "Please see the DarkRP settings.",
+	see_settings = "Please see the fprp settings.",
 	limit = "You have reached the %s limit!",
 	have_to_wait = "You need to wait another %d seconds before using %s!",
 	must_be_looking_at = "You need to be looking at a %s!",
@@ -340,7 +340,7 @@ local my_language = {
 	died_in_jail = "%s has died in jail!",
 
 	credits_for = "CREDITS FOR %s\n",
-	credits_see_console = "DarkRP credits printed to console.",
+	credits_see_console = "fprp credits printed to console.",
 
 	rp_getvehicles = "Available vehicles for custom vehicles:",
 
@@ -481,7 +481,7 @@ local my_language = {
 	-- Tab 1
 	give_money = "Give money to the player you're looking at",
 	drop_money = "Drop money",
-	change_name = "Change your DarkRP name",
+	change_name = "Change your fprp name",
 	go_to_sleep = "Go to sleep/wake up",
 	drop_weapon = "Drop current weapon",
 	buy_health = "Buy health(%s)",
@@ -536,4 +536,4 @@ local my_language = {
 -- If you want to know what your language code is, open GMod, select a language at the bottom right
 -- then enter gmod_language in console. It will show you the code.
 -- Make sure language code is a valid entry for the convar gmod_language.
-DarkRP.addLanguage("en", my_language)
+fprp.addLanguage("en", my_language)

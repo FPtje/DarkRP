@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------
-DarkRP hooks
+fprp hooks
 ---------------------------------------------------------------------------*/
 function GM:Initialize()
 	self.BaseClass:Initialize()
@@ -7,7 +7,7 @@ end
 
 function GM:playerBuyDoor(ply, ent)
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].hobo then
-		return false, DarkRP.getPhrase("door_hobo_unable")
+		return false, fprp.getPhrase("door_hobo_unable")
 	end
 
 	return true
@@ -47,7 +47,7 @@ function GM:playerGetSalary(ply, amount)
 
 end
 
-function GM:DarkRPVarChanged(ply, var, oldvar, newvalue)
+function GM:fprpVarChanged(ply, var, oldvar, newvalue)
 
 end
 
@@ -82,11 +82,11 @@ function GM:canDropWeapon(ply, weapon)
 end
 
 function GM:DatabaseInitialized()
-	DarkRP.initDatabase()
+	fprp.initDatabase()
 end
 
 function GM:canSeeLogMessage(ply, message, colour)
-	return ply:hasDarkRPPrivilege("rp_viewlog") or ply:IsAdmin()
+	return ply:hasfprpPrivilege("rp_viewlog") or ply:IsAdmin()
 end
 
 function GM:UpdatePlayerSpeed(ply)
@@ -132,10 +132,10 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if GAMEMODE.Config.proppaying then
 		if ply:canAfford(GAMEMODE.Config.propcost) then
-			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("deducted_money", DarkRP.formatMoney(GAMEMODE.Config.propcost)))
+			fprp.notify(ply, 0, 4, fprp.getPhrase("deducted_money", fprp.formatMoney(GAMEMODE.Config.propcost)))
 			ply:addMoney(-GAMEMODE.Config.propcost)
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_money", DarkRP.formatMoney(GAMEMODE.Config.propcost)))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("need_money", fprp.formatMoney(GAMEMODE.Config.propcost)))
 			SafeRemoveEntity(ent)
 			return false
 		end
@@ -147,13 +147,13 @@ local function checkAdminSpawn(ply, configVar, errorStr)
 	local config = GAMEMODE.Config[configVar]
 
 	if (config == true or config == 1) and ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_admin", DarkRP.getPhrase(errorStr) or errorStr))
+		fprp.notify(ply, 1, 5, fprp.getPhrase("need_admin", fprp.getPhrase(errorStr) or errorStr))
 		return false
 	elseif config == 2 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("need_sadmin", DarkRP.getPhrase(errorStr) or errorStr))
+		fprp.notify(ply, 1, 5, fprp.getPhrase("need_sadmin", fprp.getPhrase(errorStr) or errorStr))
 		return false
 	elseif config == 3 and ply:EntIndex() ~= 0 then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("disabled", DarkRP.getPhrase(errorStr) or errorStr, DarkRP.getPhrase("see_settings")))
+		fprp.notify(ply, 1, 5, fprp.getPhrase("disabled", fprp.getPhrase(errorStr) or errorStr, fprp.getPhrase("see_settings")))
 		return false
 	end
 
@@ -166,7 +166,7 @@ end
 
 function GM:PlayerSpawnedSENT(ply, ent)
 	self.BaseClass:PlayerSpawnedSENT(ply, ent)
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..ent:GetClass(), Color(255, 255, 0))
+	fprp.log(ply:Nick().." ("..ply:SteamID()..") spawned SENT "..ent:GetClass(), Color(255, 255, 0))
 end
 
 local function canSpawnWeapon(ply)
@@ -174,7 +174,7 @@ local function canSpawnWeapon(ply)
 	(GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
 		return true
 	end
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("cant_spawn_weapons"))
 
 	return false
 end
@@ -197,7 +197,7 @@ end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
 	self.BaseClass:PlayerSpawnedVehicle(ply, ent)
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..ent:GetClass(), Color(255, 255, 0))
+	fprp.log(ply:Nick().." ("..ply:SteamID()..") spawned Vehicle "..ent:GetClass(), Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
@@ -206,7 +206,7 @@ end
 
 function GM:PlayerSpawnedNPC(ply, ent)
 	self.BaseClass:PlayerSpawnedNPC(ply, ent)
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..ent:GetClass(), Color(255, 255, 0))
+	fprp.log(ply:Nick().." ("..ply:SteamID()..") spawned NPC "..ent:GetClass(), Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnRagdoll(ply, model)
@@ -229,7 +229,7 @@ function GM:EntityRemoved(ent)
 	end
 
 	local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID or 0)
-	if ent.DarkRPItem and IsValid(owner) then owner:removeCustomEntity(ent.DarkRPItem) end
+	if ent.fprpItem and IsValid(owner) then owner:removeCustomEntity(ent.fprpItem) end
 	if ent.isKeysOwnable and ent:isKeysOwnable() then ent:removeDoorData() end
 end
 
@@ -265,7 +265,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 	-- If we know by now who killed the NPC, pay them.
 	if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
 		ent:addMoney(GAMEMODE.Config.npckillpay)
-		DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", DarkRP.formatMoney(GAMEMODE.Config.npckillpay)))
+		fprp.notify(ent, 0, 4, fprp.getPhrase("npc_killpay", fprp.formatMoney(GAMEMODE.Config.npckillpay)))
 	end
 end
 
@@ -296,16 +296,16 @@ local function calcPlyCanHearPlayerVoice(listener)
 				(not dynv or IsInRoom(listener, talker))) -- Dynamic voice is on and players are in the same room
 	end
 end
-hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
-	timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
+hook.Add("PlayerInitialSpawn", "fprpCanHearVoice", function(ply)
+	timer.Create(ply:UserID() .. "fprpCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
 end)
-hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
+hook.Add("PlayerDisconnected", "fprpCanHearVoice", function(ply)
 	if not ply.DrpCanHear then return end
 	for k,v in pairs(player.GetAll()) do
 		if not v.DrpCanHear then continue end
 		v.DrpCanHear[ply] = nil
 	end
-	timer.Destroy(ply:UserID() .. "DarkRPCanHearPlayersVoice")
+	timer.Destroy(ply:UserID() .. "fprpCanHearPlayersVoice")
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
@@ -342,15 +342,15 @@ end
 
 function GM:CanPlayerSuicide(ply)
 	if ply.IsSleeping then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "suicide", ""))
 		return false
 	end
 	if ply:isArrested() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "suicide", ""))
 		return false
 	end
-	if GAMEMODE.Config.wantedsuicide and ply:getDarkRPVar("wanted") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+	if GAMEMODE.Config.wantedsuicide and ply:getfprpVar("wanted") then
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "suicide", ""))
 		return false
 	end
 
@@ -361,7 +361,7 @@ function GM:CanPlayerSuicide(ply)
 end
 
 function GM:CanDrive(ply, ent)
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("drive_disabled"))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("drive_disabled"))
 	return false -- Disabled until people can't minge with it anymore
 end
 
@@ -373,7 +373,7 @@ function GM:CanProperty(ply, property, ent)
 	if property == "persist" and ply:IsSuperAdmin() then
 		return true
 	end
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("property_disabled"))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("property_disabled"))
 	return false -- Disabled until antiminge measure is found
 end
 
@@ -414,9 +414,9 @@ function GM:PlayerDeath(ply, weapon, killer)
 		-- If the player died in jail, make sure they can't respawn until their jail sentance is over
 		ply.NextSpawnTime = CurTime() + math.ceil(GAMEMODE.Config.jailtimer - (CurTime() - ply.LastJailed)) + 1
 		for a, b in pairs(player.GetAll()) do
-			b:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
+			b:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("died_in_jail", ply:Nick()))
 		end
-		DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
+		fprp.notify(ply, 4, 4, fprp.getPhrase("dead_in_jail"))
 	else
 		-- Normal death, respawning.
 		ply.NextSpawnTime = CurTime() + math.Clamp(GAMEMODE.Config.respawntime, 0, 10)
@@ -426,17 +426,17 @@ function GM:PlayerDeath(ply, weapon, killer)
 	if GAMEMODE.Config.dropmoneyondeath then
 		local amount = GAMEMODE.Config.deathfee
 		if not ply:canAfford(GAMEMODE.Config.deathfee) then
-			amount = ply:getDarkRPVar("money")
+			amount = ply:getfprpVar("money")
 		end
 
 		if amount > 0 then
 			ply:addMoney(-amount)
-			DarkRP.createMoneyBag(ply:GetPos(), amount)
+			fprp.createMoneyBag(ply:GetPos(), amount)
 		end
 	end
 
 	if IsValid(ply) and (ply ~= killer or ply.Slayed) and not ply:isArrested() then
-		ply:setDarkRPVar("wanted", nil)
+		ply:setfprpVar("wanted", nil)
 		ply.DeathPos = nil
 		ply.Slayed = false
 	end
@@ -455,7 +455,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 		WeaponName = "suicide trick"
 	end
 
-	DarkRP.log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, Color(255, 190, 0))
+	fprp.log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, Color(255, 190, 0))
 end
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
@@ -463,7 +463,7 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 	if weapon.PlayerUse == false then return false end
 	if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
 
-	if GAMEMODE.Config.license and not ply:getDarkRPVar("HasGunlicense") and not ply:GetTable().RPLicenseSpawn then
+	if GAMEMODE.Config.license and not ply:getfprpVar("HasGunlicense") and not ply:GetTable().RPLicenseSpawn then
 		if GAMEMODE.NoLicense[string.lower(weapon:GetClass())] or not weapon:IsWeapon() then
 			return true
 		end
@@ -521,15 +521,15 @@ local function initPlayer(ply)
 	timer.Simple(5, function()
 		if not IsValid(ply) then return end
 
-		if GetGlobalBool("DarkRP_Lockdown") then
-			SetGlobalBool("DarkRP_Lockdown", true) -- so new players who join know there's a lockdown, is this bug still there?
+		if GetGlobalBool("fprp_Lockdown") then
+			SetGlobalBool("fprp_Lockdown", true) -- so new players who join know there's a lockdown, is this bug still there?
 		end
 	end)
 
 	ply:initiateTax()
 
 	ply:updateJob(team.GetName(GAMEMODE.DefaultTeam))
-	ply:setSelfDarkRPVar("salary", RPExtraTeams[GAMEMODE.DefaultTeam].salary or GAMEMODE.Config.normalsalary)
+	ply:setSelffprpVar("salary", RPExtraTeams[GAMEMODE.DefaultTeam].salary or GAMEMODE.Config.normalsalary)
 	ply.LastJob = nil -- so players don't have to wait to get a job after joining
 
 	ply.Ownedz = { }
@@ -550,8 +550,8 @@ end
 
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
-	ply.DarkRPVars = ply.DarkRPVars or {}
+	fprp.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
+	ply.fprpVars = ply.fprpVars or {}
 	ply:restorePlayerData()
 	initPlayer(ply)
 	ply.SID = ply:UserID()
@@ -565,14 +565,14 @@ function GM:PlayerInitialSpawn(ply)
 	end)
 
 	for k,v in pairs(ents.GetAll()) do
-		if IsValid(v) and v:GetTable() and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
+		if IsValid(v) and v:GetTable() and v.deleteSteamID == ply:SteamID() and v.fprpItem then
 			v.SID = ply.SID
 			if v.Setowning_ent then
 				v:Setowning_ent(ply)
 			end
 			v.deleteSteamID = nil
 			timer.Destroy("Remove"..v:EntIndex())
-			ply:addCustomEntity(v.DarkRPItem)
+			ply:addCustomEntity(v.fprpItem)
 
 			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
 		end
@@ -593,7 +593,7 @@ function GM:PlayerSelectSpawn(ply)
 		POS = ply:GetPos()
 	end
 
-	local CustomSpawnPos = DarkRP.retrieveTeamSpawnPos(ply:Team())
+	local CustomSpawnPos = fprp.retrieveTeamSpawnPos(ply:Team())
 	if GAMEMODE.Config.customspawns and not ply:isArrested() and CustomSpawnPos and next(CustomSpawnPos) ~= nil then
 		POS = CustomSpawnPos[math.random(1, #CustomSpawnPos)]
 	end
@@ -604,17 +604,17 @@ function GM:PlayerSelectSpawn(ply)
 	end
 
 	if ply:isArrested() then
-		POS = DarkRP.retrieveJailPos() or ply:GetTable().DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
+		POS = fprp.retrieveJailPos() or ply:GetTable().DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
 	end
 
 	-- Make sure the player doesn't get stuck in something
-	POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
+	POS = fprp.findEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
 
 	return spawn, POS
 end
 
 function GM:PlayerSpawn(ply)
-	player_manager.SetPlayerClass(ply, "player_DarkRP")
+	player_manager.SetPlayerClass(ply, "player_fprp")
 
 	ply:SetNoCollideWithTeammates(false)
 	ply:CrosshairEnable()
@@ -670,7 +670,7 @@ function GM:PlayerSpawn(ply)
 
 	ply:AllowFlashlight(true)
 
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") spawned")
+	fprp.log(ply:Nick().." ("..ply:SteamID()..") spawned")
 end
 
 local function selectDefaultWeapon(ply)
@@ -694,7 +694,7 @@ function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
 		if not found then agenda.text = nil end
 	end
 
-	ply:setSelfDarkRPVar("agenda", agenda and agenda.text or nil)
+	ply:setSelffprpVar("agenda", agenda and agenda.text or nil)
 end
 
 local function removelicense(ply)
@@ -741,7 +741,7 @@ function GM:PlayerLoadout(ply)
 		end
 	end
 
-	if ply:hasDarkRPPrivilege("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
+	if ply:hasfprpPrivilege("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
 		ply:Give("door_ram")
 		ply:Give("arrest_stick")
 		ply:Give("unarrest_stick")
@@ -779,7 +779,7 @@ function GM:PlayerDisconnected(ply)
 
 	for k, v in pairs(ents.GetAll()) do
 		local class = v:GetClass()
-		for _, customEnt in pairs(DarkRPEntities) do
+		for _, customEnt in pairs(fprpEntities) do
 			if class == customEnt.ent and v.SID == ply.SID then
 				removeDelayed(v, ply)
 				break
@@ -798,14 +798,14 @@ function GM:PlayerDisconnected(ply)
 		end
 	end
 
-	DarkRP.destroyVotesWithEnt(ply)
+	fprp.destroyVotesWithEnt(ply)
 
-	if isMayor and GetGlobalBool("DarkRP_LockDown") then -- Stop the lockdown
-		DarkRP.unLockdown(ply)
+	if isMayor and GetGlobalBool("fprp_LockDown") then -- Stop the lockdown
+		fprp.unLockdown(ply)
 	end
 
 	if isMayor and GAMEMODE.Config.shouldResetLaws then
-		DarkRP.resetLaws()
+		fprp.resetLaws()
 	end
 
 	if IsValid(ply.SleepRagdoll) then
@@ -813,7 +813,7 @@ function GM:PlayerDisconnected(ply)
 	end
 
 	ply:keysUnOwnAll()
-	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") disconnected", Color(0, 130, 255))
+	fprp.log(ply:Nick().." ("..ply:SteamID()..") disconnected", Color(0, 130, 255))
 
 	local agenda = ply:getAgendaTable()
 
@@ -822,7 +822,7 @@ function GM:PlayerDisconnected(ply)
 		agenda.text = nil
 		for k,v in pairs(player.GetAll()) do
 			if v:getAgendaTable() ~= agenda then continue end
-			v:setSelfDarkRPVar("agenda", agenda.text)
+			v:setSelffprpVar("agenda", agenda.text)
 		end
 	end
 
@@ -882,7 +882,7 @@ timer.Simple(0.1, function()
 	end
 end)
 
-function GM:loadCustomDarkRPItems()
+function GM:loadCustomfprpItems()
 	-- Error when the default team isn't set
 	if not GAMEMODE.DefaultTeam or not RPExtraTeams[GAMEMODE.DefaultTeam] then
 		local hints = {
@@ -893,7 +893,7 @@ function GM:loadCustomDarkRPItems()
 
 		-- Gotta be totally clear here
 		local stack = "\tjobs.lua, settings.lua, disabled_defaults.lua or any of your other custom files."
-		DarkRP.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/darkrp_customthings/jobs.lua", -1, stack)
+		fprp.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/fprp_customthings/jobs.lua", -1, stack)
 	end
 end
 

@@ -38,17 +38,17 @@ local function ShowLetter(msg)
 	frame:ShowCloseButton(false)
 
 	SignButton = vgui.Create("DButton", frame)
-	SignButton:SetText(DarkRP.getPhrase("sign_this_letter"))
+	SignButton:SetText(fprp.getPhrase("sign_this_letter"))
 	frame:SetPos(ScrW()-256, ScrH()-256)
 	SignButton:SetSize(256,256)
 	frame:SetSize(256,256)
-	SignButton:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	SignButton:SetSkin(GAMEMODE.Config.fprpSkin)
 	frame:SizeToContents()
 	frame:MakePopup()
 	frame:SetKeyBoardInputEnabled(false)
 
 	function SignButton:DoClick()
-		RunConsoleCommand("_DarkRP_SignLetter", Letter:EntIndex())
+		RunConsoleCommand("_fprp_SignLetter", Letter:EntIndex())
 		SignButton:SetDisabled(true)
 	end
 	SignButton:SetDisabled(IsValid(Letter:Getsigned()))
@@ -62,7 +62,7 @@ local function ShowLetter(msg)
 		local font = (LetterType == 1 and "AckBarWriting") or "Default"
 
 		draw.RoundedBox(2, ScrW() * .2, LetterY, ScrW() * .8 - (ScrW() * .2), ScrH(), Color(255, 255, 255, math.Clamp(LetterAlpha, 0, 200)))
-		draw.DrawNonParsedText(LetterMsg.."\n\n\n".. DarkRP.getPhrase("signed", (IsValid(Letter:Getsigned()) and Letter:Getsigned():Nick() or DarkRP.getPhrase("no_one"))), font, ScrW() * .25 + 20, LetterY + 80, Color(0, 0, 0, LetterAlpha), 0)
+		draw.DrawNonParsedText(LetterMsg.."\n\n\n".. fprp.getPhrase("signed", (IsValid(Letter:Getsigned()) and Letter:Getsigned():Nick() or fprp.getPhrase("no_one"))), font, ScrW() * .25 + 20, LetterY + 80, Color(0, 0, 0, LetterAlpha), 0)
 
 		if LocalPlayer():GetPos():Distance(LetterPos) > 100 then
 			LetterY = Lerp(0.1, LetterY, ScrH())

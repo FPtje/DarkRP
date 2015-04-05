@@ -13,7 +13,7 @@ function PANEL:Init()
 	self.history = {}
 	self.currentIndex = 0
 
-	self:AddFunction("darkrp", "urlLoaded", function(url)
+	self:AddFunction("fprp", "urlLoaded", function(url)
 		self:urlLoaded(url)
 	end)
 end
@@ -25,7 +25,7 @@ function PANEL:Think()
 		self.loaded = false
 	elseif not self.loaded and not self:IsLoading() then
 		self.loaded = true
-		self:QueueJavascript([[darkrp.urlLoaded(document.location.href)]])
+		self:QueueJavascript([[fprp.urlLoaded(document.location.href)]])
 	end
 end
 
@@ -103,7 +103,7 @@ function PANEL:SetHTML(html)
 	local oldUrlLoaded = self.HTML.urlLoaded
 	self.HTML.urlLoaded = function(panel, url)
 		if oldUrlLoaded then oldUrlLoaded(panel, url) end
-		self.AddressBar:SetText(DarkRP.deLocalise(url))
+		self.AddressBar:SetText(fprp.deLocalise(url))
 		self:FinishedLoading()
 	end
 end

@@ -1,31 +1,31 @@
 local Anims = {}
 
 -- Load animations after the languages for translation purposes
-hook.Add("loadCustomDarkRPItems", "loadAnimations", function()
-	Anims[ACT_GMOD_GESTURE_BOW] = DarkRP.getPhrase("bow")
-	Anims[ACT_GMOD_TAUNT_MUSCLE] = DarkRP.getPhrase("dance")
-	Anims[ACT_GMOD_GESTURE_BECON] = DarkRP.getPhrase("follow_me")
-	Anims[ACT_GMOD_TAUNT_LAUGH] = DarkRP.getPhrase("laugh")
-	Anims[ACT_GMOD_TAUNT_PERSISTENCE] = DarkRP.getPhrase("lion_pose")
-	Anims[ACT_GMOD_GESTURE_DISAGREE] = DarkRP.getPhrase("nonverbal_no")
-	Anims[ACT_GMOD_GESTURE_AGREE] = DarkRP.getPhrase("thumbs_up")
-	Anims[ACT_GMOD_GESTURE_WAVE] = DarkRP.getPhrase("wave")
+hook.Add("loadCustomfprpItems", "loadAnimations", function()
+	Anims[ACT_GMOD_GESTURE_BOW] = fprp.getPhrase("bow")
+	Anims[ACT_GMOD_TAUNT_MUSCLE] = fprp.getPhrase("dance")
+	Anims[ACT_GMOD_GESTURE_BECON] = fprp.getPhrase("follow_me")
+	Anims[ACT_GMOD_TAUNT_LAUGH] = fprp.getPhrase("laugh")
+	Anims[ACT_GMOD_TAUNT_PERSISTENCE] = fprp.getPhrase("lion_pose")
+	Anims[ACT_GMOD_GESTURE_DISAGREE] = fprp.getPhrase("nonverbal_no")
+	Anims[ACT_GMOD_GESTURE_AGREE] = fprp.getPhrase("thumbs_up")
+	Anims[ACT_GMOD_GESTURE_WAVE] = fprp.getPhrase("wave")
 end)
 
-function DarkRP.addPlayerGesture(anim, text)
-	if not anim then DarkRP.error("Argument #1 of DarkRP.addPlayerGesture (animation/gesture) does not exist.", 2) end
-	if not text then DarkRP.error("Argument #2 of DarkRP.addPlayerGesture (text) does not exist.", 2) end
+function fprp.addPlayerGesture(anim, text)
+	if not anim then fprp.error("Argument #1 of fprp.addPlayerGesture (animation/gesture) does not exist.", 2) end
+	if not text then fprp.error("Argument #2 of fprp.addPlayerGesture (text) does not exist.", 2) end
 
 	Anims[anim] = text
 end
 
-function DarkRP.removePlayerGesture(anim)
-	if not anim then DarkRP.error("Argument #1 of DarkRP.removePlayerGesture (animation/gesture) does not exist.", 2) end
+function fprp.removePlayerGesture(anim)
+	if not anim then fprp.error("Argument #1 of fprp.removePlayerGesture (animation/gesture) does not exist.", 2) end
 
 	Anims[anim] = nil
 end
 
-hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
+hook.Add("CalcMainActivity", "fprp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
 	-- Dropping weapons/money!
 	if ply.anim_DroppingItem then
 		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_DROP, true)
@@ -105,12 +105,12 @@ if SERVER then
 		local RP = RecipientFilter()
 		RP:AddAllPlayers()
 
-		umsg.Start("_DarkRP_CustomAnim", RP)
+		umsg.Start("_fprp_CustomAnim", RP)
 		umsg.Entity(ply)
 		umsg.Short(Gesture)
 		umsg.End()
 	end
-	concommand.Add("_DarkRP_DoAnimation", CustomAnim)
+	concommand.Add("_fprp_DoAnimation", CustomAnim)
 	return
 end
 
@@ -162,7 +162,7 @@ local function CustomAnimation(um)
 	if not IsValid(ply) then return end
 	ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
 end
-usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
+usermessage.Hook("_fprp_CustomAnim", CustomAnimation)
 
 local AnimFrame
 local function AnimationMenu()
@@ -179,7 +179,7 @@ local function AnimationMenu()
 	local Height = table.Count(Anims) * 55 + 32
 	AnimFrame:SetSize(130, Height)
 	AnimFrame:SetPos(ScrW()/2 + ScrW() * 0.1, ScrH()/2 - (Height/2))
-	AnimFrame:SetTitle(DarkRP.getPhrase("custom_animation"))
+	AnimFrame:SetTitle(fprp.getPhrase("custom_animation"))
 	AnimFrame:SetVisible(true)
 	AnimFrame:MakePopup()
 
@@ -198,9 +198,9 @@ local function AnimationMenu()
 		button:SetText(v)
 
 		button.DoClick = function()
-			RunConsoleCommand("_DarkRP_DoAnimation", k)
+			RunConsoleCommand("_fprp_DoAnimation", k)
 		end
 	end
-	AnimFrame:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	AnimFrame:SetSkin(GAMEMODE.Config.fprpSkin)
 end
-concommand.Add("_DarkRP_AnimationMenu", AnimationMenu)
+concommand.Add("_fprp_AnimationMenu", AnimationMenu)

@@ -1,4 +1,4 @@
-DarkRP.lockdown = DarkRP.stub{
+fprp.lockdown = fprp.stub{
 	name = "lockdown",
 	description = "Start a lockdown.",
 	parameters = {
@@ -16,10 +16,10 @@ DarkRP.lockdown = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.unLockdown = DarkRP.stub{
+fprp.unLockdown = fprp.stub{
 	name = "unLockdown",
 	description = "Stop the lockdown.",
 	parameters = {
@@ -37,10 +37,10 @@ DarkRP.unLockdown = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.PLAYER.requestWarrant = DarkRP.stub{
+fprp.PLAYER.requestWarrant = fprp.stub{
 	name = "requestWarrant",
 	description = "File a request for a search warrant.",
 	parameters = {
@@ -65,10 +65,10 @@ DarkRP.PLAYER.requestWarrant = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.warrant = DarkRP.stub{
+fprp.PLAYER.warrant = fprp.stub{
 	name = "warrant",
 	description = "Get a search warrant for this person.",
 	parameters = {
@@ -87,10 +87,10 @@ DarkRP.PLAYER.warrant = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.unWarrant = DarkRP.stub{
+fprp.PLAYER.unWarrant = fprp.stub{
 	name = "unWarrant",
 	description = "Remove the search warrant for this person.",
 	parameters = {
@@ -103,10 +103,10 @@ DarkRP.PLAYER.unWarrant = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.wanted = DarkRP.stub{
+fprp.PLAYER.wanted = fprp.stub{
 	name = "wanted",
 	description = "Make this person wanted by the police.",
 	parameters = {
@@ -125,10 +125,10 @@ DarkRP.PLAYER.wanted = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.unWanted = DarkRP.stub{
+fprp.PLAYER.unWanted = fprp.stub{
 	name = "unWanted",
 	description = "Clear the wanted status for this person.",
 	parameters = {
@@ -141,10 +141,10 @@ DarkRP.PLAYER.unWanted = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.arrest = DarkRP.stub{
+fprp.PLAYER.arrest = fprp.stub{
 	name = "arrest",
 	description = "Arrest a player.",
 	parameters = {
@@ -163,10 +163,10 @@ DarkRP.PLAYER.arrest = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.unArrest = DarkRP.stub{
+fprp.PLAYER.unArrest = fprp.stub{
 	name = "unArrest",
 	description = "Unarrest a player.",
 	parameters = {
@@ -179,10 +179,10 @@ DarkRP.PLAYER.unArrest = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerArrested",
 	description = "When a player is arrested.",
 	parameters = {
@@ -206,7 +206,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerUnArrested",
 	description = "When a player is unarrested.",
 	parameters = {
@@ -225,7 +225,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerWarranted",
 	description = "When a player is warranted.",
 	parameters = {
@@ -254,7 +254,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerUnWarranted",
 	description = "When a player is unwarranted.",
 	parameters = {
@@ -278,7 +278,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerWanted",
 	description = "When a player is wanted.",
 	parameters = {
@@ -307,7 +307,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerUnWanted",
 	description = "When a player is unwanted.",
 	parameters = {
@@ -331,7 +331,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "agendaUpdated",
 	description = "When the agenda is updated.",
 	parameters = {
@@ -360,7 +360,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
         name = "playerEnteredLottery",
         description = "When a player has entered the lottery.",
         parameters = {
@@ -374,7 +374,7 @@ DarkRP.hookStub{
         }
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
         name = "lotteryEnded",
         description = "When a lottery has ended.",
         parameters = {
@@ -399,7 +399,7 @@ DarkRP.hookStub{
 }
 
 
-DarkRP.hookStub{
+fprp.hookStub{
         name = "lotteryStarted",
         description = "When a lottery has started.",
         parameters = {

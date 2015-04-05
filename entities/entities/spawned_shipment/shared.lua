@@ -12,13 +12,13 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Entity", 1, "gunModel")
 end
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "splitshipment",
 	description = "Split the shipment you're looking at.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "makeshipment",
 	description = "Create a shipment from a dropped weapon.",
 	delay = 1.5

@@ -77,7 +77,7 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 	sheet.Tab = vgui.Create("F4MenuTab", self)
 	sheet.Tab:Setup(label, self, panel, material)
 	sheet.Tab:SetTooltip(Tooltip)
-	sheet.Tab:SetFont("DarkRPHUD2")
+	sheet.Tab:SetFont("fprpHUD2")
 
 	sheet.Panel = panel
 	sheet.Panel.tab = sheet.Tab
@@ -120,7 +120,7 @@ function PANEL:Think()
 	end
 end
 
-hook.Add("PlayerBindPress", "DarkRPF4Bind", function(ply, bind, pressed)
+hook.Add("PlayerBindPress", "fprpF4Bind", function(ply, bind, pressed)
 	if string.find(bind, "gm_showspare2", 1, true) then
 		F4Bind = input.KeyNameToNumber(input.LookupBinding(bind))
 	end
@@ -173,9 +173,9 @@ end
 
 
 function PANEL:generateTabs()
-	DarkRP.hooks.F4MenuTabs()
+	fprp.hooks.F4MenuTabs()
 	hook.Call("F4MenuTabs")
-	self:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	self:SetSkin(GAMEMODE.Config.fprpSkin)
 end
 
 derma.DefineControl("F4EditablePropertySheet", "", vgui.GetControlTable("DPropertySheet"), "EditablePanel")

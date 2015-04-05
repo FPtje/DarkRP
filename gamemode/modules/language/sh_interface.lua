@@ -1,4 +1,4 @@
-DarkRP.addLanguage = DarkRP.stub{
+fprp.addLanguage = fprp.stub{
 	name = "addLanguage",
 	description = "Create a language/translation.",
 	parameters = {
@@ -17,10 +17,10 @@ DarkRP.addLanguage = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.addPhrase = DarkRP.stub{
+fprp.addPhrase = fprp.stub{
 	name = "addPhrase",
 	description = "Add a phrase to the existing translation.",
 	parameters = {
@@ -45,10 +45,10 @@ DarkRP.addPhrase = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getPhrase = DarkRP.stub{
+fprp.getPhrase = fprp.stub{
 	name = "getPhrase",
 	description = "Get a phrase from the selected language.",
 	parameters = {
@@ -72,10 +72,10 @@ DarkRP.getPhrase = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getMissingPhrases = DarkRP.stub{
+fprp.getMissingPhrases = fprp.stub{
 	name = "getMissingPhrases",
 	description = "Get all the phrases a language is missing.",
 	parameters = {
@@ -93,12 +93,12 @@ DarkRP.getMissingPhrases = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.addChatCommandsLanguage = DarkRP.stub{
+fprp.addChatCommandsLanguage = fprp.stub{
 	name = "addChatCommandsLanguage",
-	description = "Add a translation table for chat command descriptions. See darkrpmod/lua/darkrp_language/chatcommands.lua for an example.",
+	description = "Add a translation table for chat command descriptions. See fprpmod/lua/fprp_language/chatcommands.lua for an example.",
 	parameters = {
 		{
 			name = "languageCode",
@@ -115,10 +115,10 @@ DarkRP.addChatCommandsLanguage = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getChatCommandDescription = DarkRP.stub{
+fprp.getChatCommandDescription = fprp.stub{
 	name = "getChatCommandDescription",
 	description = "Get the translated description of a chat command.",
 	parameters = {
@@ -136,5 +136,5 @@ DarkRP.getChatCommandDescription = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

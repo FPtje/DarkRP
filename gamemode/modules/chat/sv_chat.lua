@@ -1,4 +1,4 @@
-function DarkRP.defineChatCommand(cmd, callback)
+function fprp.defineChatCommand(cmd, callback)
 	cmd = string.lower(cmd)
 	local detour = function(ply, arg, ...)
 		local canChatCommand = gamemode.Call("canChatCommand", ply, cmd, arg, ...)
@@ -8,7 +8,7 @@ function DarkRP.defineChatCommand(cmd, callback)
 		return callback(ply, arg, ...)
 	end
 
-	local chatcommands = DarkRP.getChatCommands()
+	local chatcommands = fprp.getChatCommands()
 
 	chatcommands[cmd] = chatcommands[cmd] or {}
 	chatcommands[cmd].callback = detour
@@ -17,12 +17,12 @@ end
 
 
 local function RP_PlayerChat(ply, text, teamonly)
-	DarkRP.log(ply:Nick().." ("..ply:SteamID().."): "..text )
+	fprp.log(ply:Nick().." ("..ply:SteamID().."): "..text )
 	local callback = ""
 	local DoSayFunc
-	local groupSay = DarkRP.getChatCommand("g")
+	local groupSay = fprp.getChatCommand("g")
 	local tblCmd = fn.Compose{ -- Extract the chat command
-		DarkRP.getChatCommand,
+		fprp.getChatCommand,
 		string.lower,
 		fn.Curry(fn.Flip(string.sub), 2)(2), -- extract prefix
 		fn.Curry(fn.GetValue, 2)(1), -- Get the first word
@@ -59,25 +59,25 @@ local function RP_ActualDoSay(ply, text, callback)
 
 	if GAMEMODE.Config.alltalk then
 		for k,v in pairs(player.GetAll()) do
-			DarkRP.talkToPerson(v, col, callback..ply:Name(), col2, text, ply)
+			fprp.talkToPerson(v, col, callback..ply:Name(), col2, text, ply)
 		end
 	else
-		DarkRP.talkToRange(ply, callback..ply:Name(), text, 250)
+		fprp.talkToRange(ply, callback..ply:Name(), text, 250)
 	end
 	return ""
 end
 
 function GM:canChatCommand(ply, cmd, ...)
-	if not ply.DarkRPUnInitialized then return true end
+	if not ply.fprpUnInitialized then return true end
 
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_one"))
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("data_not_loaded_two"))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("data_not_loaded_one"))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("data_not_loaded_two"))
 
 	return false
 end
 
 GM.OldChatHooks = GM.OldChatHooks or {}
-function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
+function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFTER fprp's playersay has been run.
 	local dead = not ply:Alive()
 
 	local text2 = text
@@ -111,7 +111,7 @@ end
 
 local function ReplaceChatHooks()
 	if not hook.GetTable().PlayerSay then return end
-	for k,v in pairs(hook.GetTable().PlayerSay) do -- Remove all PlayerSay hooks, they all interfere with DarkRP's PlayerSay
+	for k,v in pairs(hook.GetTable().PlayerSay) do -- Remove all PlayerSay hooks, they all interfere with fprp's PlayerSay
 		GAMEMODE.OldChatHooks[k] = v
 		hook.Remove("PlayerSay", k)
 	end
@@ -131,7 +131,7 @@ local function ReplaceChatHooks()
 
 	-- give warnings for undeclared chat commands
 	local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
-	fn.ForEach(warning, DarkRP.getIncompleteChatCommands())
+	fn.ForEach(warning, fprp.getIncompleteChatCommands())
 end
 hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
@@ -140,7 +140,7 @@ local function ConCommand(ply, _, args)
 
 	local cmd = string.lower(args[1])
 	local arg = table.concat(args, ' ', 2)
-	local tbl = DarkRP.getChatCommand(cmd)
+	local tbl = fprp.getChatCommand(cmd)
 	local time = CurTime()
 
 	if not tbl then return end
@@ -155,4 +155,4 @@ local function ConCommand(ply, _, args)
 
 	tbl.callback(ply, arg)
 end
-concommand.Add("darkrp", ConCommand)
+concommand.Add("fprp", ConCommand)

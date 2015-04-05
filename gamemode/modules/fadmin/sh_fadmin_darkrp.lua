@@ -79,7 +79,7 @@ timer.Simple(0, function()
 	end
 end)
 
-hook.Add("InitPostEntity", "FAdmin_DarkRP_privs", function()
+hook.Add("InitPostEntity", "FAdmin_fprp_privs", function()
 	if not FAdmin or not FAdmin.StartHooks then return end
 	FAdmin.Access.AddPrivilege("rp_commands", 2)
 	FAdmin.Access.AddPrivilege("rp_doorManipulation", 3)

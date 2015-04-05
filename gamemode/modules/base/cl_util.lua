@@ -39,7 +39,7 @@ local function charWrap(text, pxWidth)
 	return text, total
 end
 
-function DarkRP.textWrap(text, font, pxWidth)
+function fprp.textWrap(text, font, pxWidth)
 	local total = 0
 
 	surface.SetFont(font)

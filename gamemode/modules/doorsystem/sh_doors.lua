@@ -29,13 +29,13 @@ function meta:doorIndex()
 	return self:CreatedByMap() and self:MapCreationID() or nil
 end
 
-function DarkRP.doorToEntIndex(num)
+function fprp.doorToEntIndex(num)
 	local ent = ents.GetMapCreatedEntity(num)
 
 	return IsValid(ent) and ent:EntIndex() or nil
 end
 
-function DarkRP.doorIndexToEnt(num)
+function fprp.doorIndexToEnt(num)
 	return ents.GetMapCreatedEntity(num) or NULL
 end
 
@@ -139,65 +139,65 @@ end
 /*---------------------------------------------------------------------------
 Commands
 ---------------------------------------------------------------------------*/
-local hasDoorPriv = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_doorManipulation")
-DarkRP.declareChatCommand{
+local hasDoorPriv = fn.Curry(fn.Flip(plyMeta.hasfprpPrivilege), 2)("rp_doorManipulation")
+fprp.declareChatCommand{
 	command = "toggleownable",
 	description = "Toggle ownability status on this door.",
 	delay = 1.5,
 	condition = hasDoorPriv
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "togglegroupownable",
 	description = "Set this door group ownable.",
 	delay = 1.5,
 	condition = hasDoorPriv
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "toggleteamownable",
 	description = "Toggle this door ownable by a given team.",
 	delay = 1.5,
 	condition = hasDoorPriv
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "toggleown",
 	description = "Own or unown the door you're looking at.",
 	delay = 0.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "unownalldoors",
 	description = "Sell all of your doors.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "title",
 	description = "Set the title of the door you're looking at.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "removeowner",
 	description = "Remove an owner from the door you're looking at.",
 	delay = 0.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "ro",
 	description = "Remove an owner from the door you're looking at.",
 	delay = 0.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "addowner",
 	description = "Invite someone to co-own the door you're looking at.",
 	delay = 0.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "ao",
 	description = "Invite someone to co-own the door you're looking at.",
 	delay = 0.5

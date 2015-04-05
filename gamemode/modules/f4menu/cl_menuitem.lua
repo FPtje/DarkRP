@@ -37,7 +37,7 @@ function PANEL:Paint(w, h)
 	draw.RoundedBox(4, x, y, w, h, disabled and darkgray or black) -- background
 
 	draw.RoundedBoxEx(4, h, h - 10 + y, w - h + x, 10,
-		self.DarkRPItem and self.DarkRPItem.buttonColor or not disabled and (self:GetBorderColor() or black) or darkgray,
+		self.fprpItem and self.fprpItem.buttonColor or not disabled and (self:GetBorderColor() or black) or darkgray,
 		false, false, false, true) -- the colored bar
 
 	draw.RoundedBoxEx(4, x, y, h, h, disabled and darkgray or gray, true, false, false, false) -- gray box for the model
@@ -54,8 +54,8 @@ function PANEL:SetTextRight(text)
 end
 
 -- For overriding
-function PANEL:setDarkRPItem(item)
-	self.DarkRPItem = item
+function PANEL:setfprpItem(item)
+	self.fprpItem = item
 end
 
 function PANEL:Refresh()
@@ -102,8 +102,8 @@ local function canGetJob(job)
 	return true
 end
 
-function PANEL:setDarkRPItem(job)
-	self.BaseClass.setDarkRPItem(self, job)
+function PANEL:setfprpItem(job)
+	self.BaseClass.setfprpItem(self, job)
 
 	local model = 	isfunction(job.PlayerSetModel) and job.PlayerSetModel(LocalPlayer()) or
 					istable(job.model) and job.model[1] or
@@ -121,20 +121,20 @@ end
 function PANEL:DoDoubleClick()
 	if self:GetDisabled() then return end
 
-	local job = self.DarkRPItem
+	local job = self.fprpItem
 	if job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
-		RunConsoleCommand("darkrp", "vote" .. job.command)
+		RunConsoleCommand("fprp", "vote" .. job.command)
 	else
-		RunConsoleCommand("darkrp", job.command)
+		RunConsoleCommand("fprp", job.command)
 	end
 
-	timer.Simple(1, function() DarkRP.getF4MenuPanel():Refresh() end)
+	timer.Simple(1, function() fprp.getF4MenuPanel():Refresh() end)
 end
 
 function PANEL:Refresh()
-	self:SetTextRight(string.format("%s/%s", team.NumPlayers(self.DarkRPItem.team), getMaxOfTeam(self.DarkRPItem)))
+	self:SetTextRight(string.format("%s/%s", team.NumPlayers(self.fprpItem.team), getMaxOfTeam(self.fprpItem)))
 
-	local canGet, important = canGetJob(self.DarkRPItem)
+	local canGet, important = canGetJob(self.fprpItem)
 	self:SetDisabled(not canGet, important)
 end
 
@@ -145,20 +145,20 @@ custom entity button
 ---------------------------------------------------------------------------*/
 PANEL = {}
 
-function PANEL:setDarkRPItem(item)
+function PANEL:setfprpItem(item)
 	local cost = item.getPrice and item.getPrice(LocalPlayer(), item.price) or item.price
 
-	self.BaseClass.setDarkRPItem(self, item)
+	self.BaseClass.setfprpItem(self, item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
 	self:SetText(item.label or item.name)
-	self:SetTextRight(DarkRP.formatMoney(cost))
+	self:SetTextRight(fprp.formatMoney(cost))
 end
 
 function PANEL:updatePrice(price)
 	if not price then return end
 
-	self:SetTextRight(DarkRP.formatMoney(price))
+	self:SetTextRight(fprp.formatMoney(price))
 end
 
 derma.DefineControl("F4MenuEntityButton", "", PANEL, "F4MenuItemButton")
@@ -168,22 +168,22 @@ Button for purchasing guns
 ---------------------------------------------------------------------------*/
 PANEL = {}
 
-function PANEL:setDarkRPItem(item)
+function PANEL:setfprpItem(item)
 	local cost = item.getPrice and item.getPrice(LocalPlayer(), item.pricesep) or item.pricesep
 
-	self.BaseClass.setDarkRPItem(self, item)
+	self.BaseClass.setfprpItem(self, item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
 	self:SetText(item.label or item.name)
-	self:SetTextRight(DarkRP.formatMoney(cost))
+	self:SetTextRight(fprp.formatMoney(cost))
 
-	self.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buy", self.DarkRPItem.name)
+	self.DoClick = fn.Partial(RunConsoleCommand, "fprp", "buy", self.fprpItem.name)
 end
 
 function PANEL:updatePrice(price)
 	if not price then return end
 
-	self:SetTextRight(DarkRP.formatMoney(price))
+	self:SetTextRight(fprp.formatMoney(price))
 end
 
 derma.DefineControl("F4MenuPistolButton", "", PANEL, "F4MenuItemButton")

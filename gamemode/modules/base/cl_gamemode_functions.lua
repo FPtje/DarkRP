@@ -66,4 +66,4 @@ local function OnChangedTeam(um)
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
 
-timer.Simple(0, function() GAMEMODE.ShowTeam = DarkRP.openKeysMenu end)
+timer.Simple(0, function() GAMEMODE.ShowTeam = fprp.openKeysMenu end)

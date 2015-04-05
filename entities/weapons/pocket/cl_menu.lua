@@ -6,15 +6,15 @@ local reload
 /*---------------------------------------------------------------------------
 Stubs
 ---------------------------------------------------------------------------*/
-DarkRP.stub{
+fprp.stub{
 	name = "openPocketMenu",
-	description = "Open the DarkRP pocket menu.",
+	description = "Open the fprp pocket menu.",
 	realm = "Client",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
 /*---------------------------------------------------------------------------
@@ -26,19 +26,19 @@ function meta:getPocketItems()
 	return pocket
 end
 
-function DarkRP.openPocketMenu()
+function fprp.openPocketMenu()
 	if frame and frame:IsValid() and frame:IsVisible() then return end
 	if LocalPlayer():GetActiveWeapon():GetClass() ~= "pocket" then return end
 	if not pocket then pocket = {} return end
 	if #pocket <= 0 then return end
 	frame = vgui.Create("DFrame")
 
-	frame:SetTitle(DarkRP.getPhrase("drop_item"))
+	frame:SetTitle(fprp.getPhrase("drop_item"))
 	frame:SetVisible(true)
 	frame:MakePopup()
 
 	reload()
-	frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	frame:SetSkin(GAMEMODE.Config.fprpSkin)
 end
 
 
@@ -67,7 +67,7 @@ function reload()
 		icon.DoClick = function(self)
 			icon:SetToolTip()
 
-			net.Start("DarkRP_spawnPocket")
+			net.Start("fprp_spawnPocket")
 				net.WriteFloat(k)
 			net.SendToServer()
 			pocket[k] = nil
@@ -95,4 +95,4 @@ local function retrievePocket()
 	pocket = net.ReadTable()
 	reload()
 end
-net.Receive("DarkRP_Pocket", retrievePocket)
+net.Receive("fprp_Pocket", retrievePocket)

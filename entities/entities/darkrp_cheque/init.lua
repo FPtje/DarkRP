@@ -26,14 +26,14 @@ function ENT:Use(activator, caller)
 	local amount = self:Getamount() or 0
 
 	if (IsValid(activator) and IsValid(recipient)) and activator == recipient then
-		owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("disconnected_player")
-		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_cheque", DarkRP.formatMoney(amount), "", owner))
+		owner = (IsValid(owner) and owner:Nick()) or fprp.getPhrase("disconnected_player")
+		fprp.notify(activator, 0, 4, fprp.getPhrase("found_cheque", fprp.formatMoney(amount), "", owner))
 		activator:addMoney(amount)
 		self:Remove()
 	elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then
-		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_details", recipient:Name()))
+		fprp.notify(activator, 0, 4, fprp.getPhrase("cheque_details", recipient:Name()))
 	elseif IsValid(owner) and owner == activator then
-		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_torn"))
+		fprp.notify(activator, 0, 4, fprp.getPhrase("cheque_torn"))
 		owner:addMoney(self:Getamount()) -- return the money on the cheque to the owner.
 		self:Remove()
 	elseif not IsValid(recipient) then self:Remove()
@@ -42,7 +42,7 @@ end
 
 function ENT:Touch(ent)
 	-- the .USED var is also used in other mods for the same purpose
-	if ent:GetClass() ~= "darkrp_cheque" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
+	if ent:GetClass() ~= "fprp_cheque" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
 	if ent.dt.owning_ent ~= self.dt.owning_ent then return end
 	if ent.dt.recipient ~= self.dt.recipient then return end
 

@@ -1,6 +1,6 @@
-util.AddNetworkString("DarkRP_UpdateDoorData")
-util.AddNetworkString("DarkRP_RemoveDoorData")
-util.AddNetworkString("DarkRP_AllDoorData")
+util.AddNetworkString("fprp_UpdateDoorData")
+util.AddNetworkString("fprp_RemoveDoorData")
+util.AddNetworkString("fprp_AllDoorData")
 
 /*---------------------------------------------------------------------------
 Interface functions
@@ -15,17 +15,17 @@ end
 
 function eMeta:setKeysNonOwnable(ownable)
 	self:getDoorData().nonOwnable = ownable
-	DarkRP.updateDoorData(self, "nonOwnable")
+	fprp.updateDoorData(self, "nonOwnable")
 end
 
 function eMeta:setKeysTitle(title)
 	self:getDoorData().title = title
-	DarkRP.updateDoorData(self, "title")
+	fprp.updateDoorData(self, "title")
 end
 
 function eMeta:setDoorGroup(group)
 	self:getDoorData().groupOwn = group
-	DarkRP.updateDoorData(self, "groupOwn")
+	fprp.updateDoorData(self, "groupOwn")
 end
 
 function eMeta:addKeysDoorTeam(t)
@@ -33,7 +33,7 @@ function eMeta:addKeysDoorTeam(t)
 	doorData.teamOwn = doorData.teamOwn or {}
 	doorData.teamOwn[t] = true
 
-	DarkRP.updateDoorData(self, "teamOwn")
+	fprp.updateDoorData(self, "teamOwn")
 end
 
 function eMeta:removeKeysDoorTeam(t)
@@ -45,14 +45,14 @@ function eMeta:removeKeysDoorTeam(t)
 		doorData.teamOwn = nil
 	end
 
-	DarkRP.updateDoorData(self, "teamOwn")
+	fprp.updateDoorData(self, "teamOwn")
 end
 
 function eMeta:removeAllKeysDoorTeams()
 	local doorData = self:getDoorData()
 	doorData.teamOwn = nil
 
-	DarkRP.updateDoorData(self, "teamOwn")
+	fprp.updateDoorData(self, "teamOwn")
 end
 
 function eMeta:addKeysAllowedToOwn(ply)
@@ -60,7 +60,7 @@ function eMeta:addKeysAllowedToOwn(ply)
 	doorData.allowedToOwn = doorData.allowedToOwn or {}
 	doorData.allowedToOwn[ply:UserID()] = true
 
-	DarkRP.updateDoorData(self, "allowedToOwn")
+	fprp.updateDoorData(self, "allowedToOwn")
 end
 
 function eMeta:removeKeysAllowedToOwn(ply)
@@ -72,14 +72,14 @@ function eMeta:removeKeysAllowedToOwn(ply)
 		doorData.allowedToOwn = nil
 	end
 
-	DarkRP.updateDoorData(self, "allowedToOwn")
+	fprp.updateDoorData(self, "allowedToOwn")
 end
 
 function eMeta:removeAllKeysAllowedToOwn()
 	local doorData = self:getDoorData()
 	doorData.allowedToOwn = nil
 
-	DarkRP.updateDoorData(self, "allowedToOwn")
+	fprp.updateDoorData(self, "allowedToOwn")
 end
 
 function eMeta:addKeysDoorOwner(ply)
@@ -87,7 +87,7 @@ function eMeta:addKeysDoorOwner(ply)
 	doorData.extraOwners = doorData.extraOwners or {}
 	doorData.extraOwners[ply:UserID()] = true
 
-	DarkRP.updateDoorData(self, "extraOwners")
+	fprp.updateDoorData(self, "extraOwners")
 
 	self:removeKeysAllowedToOwn(ply)
 end
@@ -101,18 +101,18 @@ function eMeta:removeKeysDoorOwner(ply)
 		doorData.extraOwners = nil
 	end
 
-	DarkRP.updateDoorData(self, "extraOwners")
+	fprp.updateDoorData(self, "extraOwners")
 end
 
 function eMeta:removeAllKeysExtraOwners()
 	local doorData = self:getDoorData()
 	doorData.extraOwners = nil
 
-	DarkRP.updateDoorData(self, "extraOwners")
+	fprp.updateDoorData(self, "extraOwners")
 end
 
 function eMeta:removeDoorData()
-	net.Start("DarkRP_RemoveDoorData")
+	net.Start("fprp_RemoveDoorData")
 		net.WriteUInt(self:EntIndex(), 32)
 	net.Send(player.GetAll())
 end
@@ -131,7 +131,7 @@ function plyMeta:sendDoorData()
 		res[v:EntIndex()] = v:getDoorData()
 	end
 
-	net.Start("DarkRP_AllDoorData")
+	net.Start("fprp_AllDoorData")
 		net.WriteTable(res)
 	net.Send(self)
 end
@@ -142,10 +142,10 @@ concommand.Add("_sendAllDoorData", function(ply)
 	ply:sendDoorData()
 end)
 
-function DarkRP.updateDoorData(door, member)
+function fprp.updateDoorData(door, member)
 	if not IsValid(door) or not door:getDoorData() then error("Calling updateDoorData on a door that has no data!") end
 
-	net.Start("DarkRP_UpdateDoorData")
+	net.Start("fprp_UpdateDoorData")
 		net.WriteUInt(door:EntIndex(), 32)
 		net.WriteString(member)
 		net.WriteType(door:getDoorData()[member])

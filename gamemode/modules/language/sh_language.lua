@@ -1,11 +1,11 @@
 local rp_languages = {}
 local selectedLanguage = GetConVarString("gmod_language") -- Switch language by setting gmod_language to another language
 
-function DarkRP.addLanguage(name, tbl)
+function fprp.addLanguage(name, tbl)
 	local old = rp_languages[name] or {}
 	rp_languages[name] = tbl
 
-	-- Merge the language with the translations added by DarkRP.addPhrase
+	-- Merge the language with the translations added by fprp.addPhrase
 	for k,v in pairs(old) do
 		if rp_languages[name][k] then continue end
 		rp_languages[name][k] = v
@@ -13,18 +13,18 @@ function DarkRP.addLanguage(name, tbl)
 	LANGUAGE = rp_languages[name] -- backwards compatibility
 end
 
-function DarkRP.addPhrase(lang, name, phrase)
+function fprp.addPhrase(lang, name, phrase)
 	rp_languages[lang] = rp_languages[lang]  or {}
 	rp_languages[lang][name] = phrase
 end
 
-function DarkRP.getPhrase(name, ...)
+function fprp.getPhrase(name, ...)
 	local langTable = rp_languages[selectedLanguage] or rp_languages.en
 
 	return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
 end
 
-function DarkRP.getMissingPhrases(lang)
+function fprp.getMissingPhrases(lang)
 	lang = lang or selectedLanguage
 	local res = {}
 	local format = "%s = \"%s\","
@@ -38,7 +38,7 @@ function DarkRP.getMissingPhrases(lang)
 end
 
 local function getMissingPhrases(ply, cmd, args)
-	if not args[1] then print("Please run the command with a language code e.g. darkrp_getphrases \"en\"") return end
+	if not args[1] then print("Please run the command with a language code e.g. fprp_getphrases \"en\"") return end
 	local lang = rp_languages[args[1]]
 	if not lang then print("This language does not exist! Make sure the casing is right.")
 		print("Available languages:")
@@ -46,29 +46,29 @@ local function getMissingPhrases(ply, cmd, args)
 		return
 	end
 
-	print(DarkRP.getMissingPhrases(args[1]))
+	print(fprp.getMissingPhrases(args[1]))
 end
-if CLIENT then concommand.Add("darkrp_getphrases", getMissingPhrases) end
+if CLIENT then concommand.Add("fprp_getphrases", getMissingPhrases) end
 
 /*---------------------------------------------------------------------------
 Chat command translating
 ---------------------------------------------------------------------------*/
 local chatCmdDescriptions = {}
-function DarkRP.addChatCommandsLanguage(lang, tbl)
+function fprp.addChatCommandsLanguage(lang, tbl)
 	chatCmdDescriptions[lang] = chatCmdDescriptions[lang] or {}
 
 	table.Merge(chatCmdDescriptions[lang], tbl)
 end
 
-function DarkRP.getChatCommandDescription(name)
-	local cmd = DarkRP.getChatCommand(name)
+function fprp.getChatCommandDescription(name)
+	local cmd = fprp.getChatCommand(name)
 	return chatCmdDescriptions[selectedLanguage] and chatCmdDescriptions[selectedLanguage][name] or
 		cmd and cmd.description or
 		nil
 end
 
 local function getMissingCmdTranslations()
-	local cmds = DarkRP.getSortedChatCommands()
+	local cmds = fprp.getSortedChatCommands()
 
 	-- No commands have been translated
 	if not chatCmdDescriptions[selectedLanguage] then return cmds end
@@ -104,4 +104,4 @@ local function printMissingChatTranslations()
 
 	MsgC(Color(0, 255, 0), "text copied to clipboard!\n")
 end
-if CLIENT then concommand.Add("darkrp_translateChatCommands", printMissingChatTranslations) end
+if CLIENT then concommand.Add("fprp_translateChatCommands", printMissingChatTranslations) end

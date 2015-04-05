@@ -6,8 +6,8 @@
 /*---------------------------------------------------------------------------
 Disabled defaults
 ---------------------------------------------------------------------------*/
-DarkRP.disabledDefaults = {}
-DarkRP.disabledDefaults["modules"] = {
+fprp.disabledDefaults = {}
+fprp.disabledDefaults["modules"] = {
 	["afk"]              = true,
 	["chatsounds"]       = false,
 	["events"]           = false,
@@ -19,32 +19,32 @@ DarkRP.disabledDefaults["modules"] = {
 	["sleep"]            = false,
 }
 
-DarkRP.disabledDefaults["agendas"]    		= {}
-DarkRP.disabledDefaults["ammo"]       		= {}
-DarkRP.disabledDefaults["demotegroups"]		= {}
-DarkRP.disabledDefaults["doorgroups"] 		= {}
-DarkRP.disabledDefaults["entities"]   		= {}
-DarkRP.disabledDefaults["food"]       		= {}
-DarkRP.disabledDefaults["groupchat"]  		= {}
-DarkRP.disabledDefaults["hitmen"]     		= {}
-DarkRP.disabledDefaults["jobs"]       		= {}
-DarkRP.disabledDefaults["shipments"]  		= {}
-DarkRP.disabledDefaults["vehicles"]   		= {}
+fprp.disabledDefaults["agendas"]    		= {}
+fprp.disabledDefaults["ammo"]       		= {}
+fprp.disabledDefaults["demotegroups"]		= {}
+fprp.disabledDefaults["doorgroups"] 		= {}
+fprp.disabledDefaults["entities"]   		= {}
+fprp.disabledDefaults["food"]       		= {}
+fprp.disabledDefaults["groupchat"]  		= {}
+fprp.disabledDefaults["hitmen"]     		= {}
+fprp.disabledDefaults["jobs"]       		= {}
+fprp.disabledDefaults["shipments"]  		= {}
+fprp.disabledDefaults["vehicles"]   		= {}
 
 -- The client cannot use simplerr.runLuaFile because of restrictions in GMod.
 local doInclude = CLIENT and include or fc{simplerr.wrapError, simplerr.wrapLog, simplerr.runFile}
 
-if file.Exists("darkrp_config/disabled_defaults.lua", "LUA") then
-	if SERVER then AddCSLuaFile("darkrp_config/disabled_defaults.lua") end
-	doInclude("darkrp_config/disabled_defaults.lua")
+if file.Exists("fprp_config/disabled_defaults.lua", "LUA") then
+	if SERVER then AddCSLuaFile("fprp_config/disabled_defaults.lua") end
+	doInclude("fprp_config/disabled_defaults.lua")
 end
 
 /*---------------------------------------------------------------------------
 Config
 ---------------------------------------------------------------------------*/
 local configFiles = {
-	"darkrp_config/settings.lua",
-	"darkrp_config/licenseweapons.lua",
+	"fprp_config/settings.lua",
+	"fprp_config/licenseweapons.lua",
 }
 
 for _, File in pairs(configFiles) do
@@ -53,27 +53,27 @@ for _, File in pairs(configFiles) do
 	if SERVER then AddCSLuaFile(File) end
 	doInclude(File)
 end
-if SERVER and file.Exists("darkrp_config/mysql.lua", "LUA") then doInclude("darkrp_config/mysql.lua") end
+if SERVER and file.Exists("fprp_config/mysql.lua", "LUA") then doInclude("fprp_config/mysql.lua") end
 
 /*---------------------------------------------------------------------------
 Modules
 ---------------------------------------------------------------------------*/
 local function loadModules()
-	local fol = "darkrp_modules/"
+	local fol = "fprp_modules/"
 
 	local files, folders = file.Find(fol .. "*", "LUA")
 
 	for _, folder in SortedPairs(folders, true) do
 		if folder == "." or folder == ".." or GAMEMODE.Config.DisabledCustomModules[folder] then continue end
-		-- Sound but incomplete way of detecting the error of putting addons in the darkrpmod folder
+		-- Sound but incomplete way of detecting the error of putting addons in the fprpmod folder
 		if file.Exists(fol .. folder .. "/addon.txt", "LUA") or file.Exists(fol .. folder .. "/addon.json", "LUA") then
-			DarkRP.errorNoHalt("Addon detected in the darkrp_modules folder.", 2, {
-				"This addon is not supposed to be in the darkrp_modules folder.",
+			fprp.errorNoHalt("Addon detected in the fprp_modules folder.", 2, {
+				"This addon is not supposed to be in the fprp_modules folder.",
 				"It is supposed to be in garrysmod/addons/ instead.",
-				"Whether a mod is to be installed in darkrp_modules or addons is the author's decision.",
+				"Whether a mod is to be installed in fprp_modules or addons is the author's decision.",
 				"Please read the readme of the addons you're installing next time."
 			},
-			"<darkrpmod addon>/lua/darkrp_modules/" .. folder, -1)
+			"<fprpmod addon>/lua/fprp_modules/" .. folder, -1)
 			continue
 		end
 
@@ -100,7 +100,7 @@ local function loadModules()
 end
 
 local function loadLanguages()
-	local fol = "darkrp_language/"
+	local fol = "fprp_language/"
 
 	local files, folders = file.Find(fol .. "*", "LUA")
 	for _, File in pairs(files) do
@@ -110,22 +110,22 @@ local function loadLanguages()
 end
 
 local customFiles = {
-	"darkrp_customthings/jobs.lua",
-	"darkrp_customthings/shipments.lua",
-	"darkrp_customthings/entities.lua",
-	"darkrp_customthings/vehicles.lua",
-	"darkrp_customthings/food.lua",
-	"darkrp_customthings/ammo.lua",
-	"darkrp_customthings/groupchats.lua",
-	"darkrp_customthings/categories.lua",
-	"darkrp_customthings/agendas.lua", -- has to be run after jobs.lua
-	"darkrp_customthings/doorgroups.lua", -- has to be run after jobs.lua
-	"darkrp_customthings/demotegroups.lua", -- has to be run after jobs.lua
+	"fprp_customthings/jobs.lua",
+	"fprp_customthings/shipments.lua",
+	"fprp_customthings/entities.lua",
+	"fprp_customthings/vehicles.lua",
+	"fprp_customthings/food.lua",
+	"fprp_customthings/ammo.lua",
+	"fprp_customthings/groupchats.lua",
+	"fprp_customthings/categories.lua",
+	"fprp_customthings/agendas.lua", -- has to be run after jobs.lua
+	"fprp_customthings/doorgroups.lua", -- has to be run after jobs.lua
+	"fprp_customthings/demotegroups.lua", -- has to be run after jobs.lua
 }
-local function loadCustomDarkRPItems()
+local function loadCustomfprpItems()
 	for _, File in pairs(customFiles) do
 		if not file.Exists(File, "LUA") then continue end
-		if File == "darkrp_customthings/food.lua" and DarkRP.disabledDefaults["modules"]["hungermod"] then continue end
+		if File == "fprp_customthings/food.lua" and fprp.disabledDefaults["modules"]["hungermod"] then continue end
 
 		if SERVER then AddCSLuaFile(File) end
 		doInclude(File)
@@ -133,12 +133,12 @@ local function loadCustomDarkRPItems()
 end
 
 
-function GM:DarkRPFinishedLoading()
+function GM:fprpFinishedLoading()
 	-- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
 	GAMEMODE = GAMEMODE or GM
 
 	loadLanguages()
 	loadModules()
-	loadCustomDarkRPItems()
-	hook.Run("loadCustomDarkRPItems", GAMEMODE)
+	loadCustomfprpItems()
+	hook.Run("loadCustomfprpItems", GAMEMODE)
 end
