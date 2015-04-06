@@ -17,6 +17,7 @@ AddCSLuaFile("config/config.lua")
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
+AddCSLuaFile("config/_MySQL.lua") -- Backup mysql info on clients
 
 AddCSLuaFile("cl_init.lua")
 
