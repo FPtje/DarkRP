@@ -7,5 +7,5 @@ function pMeta:canAfford(amount)
 end
 
 function entMeta:isshekelBag()
-	return self:GetClass() == "spawned_shekel" or self:GetClass() == GAMEMODE.Config.shekelClass
+	return self:GetClass() == "spawned_money" or self:GetClass() == GAMEMODE.Config.shekelClass
 end

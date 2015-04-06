@@ -127,7 +127,7 @@ fprp.createEntity("Drug lab", {
 })
 
 fprp.createEntity("shekel printer", {
-	ent = "shekel_printer",
+	ent = "money_printer",
 	model = "models/props_c17/consolebox01a.mdl",
 	price = 1000,
 	max = 2,

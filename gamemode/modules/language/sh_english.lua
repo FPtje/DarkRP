@@ -177,13 +177,13 @@ local my_language = {
 	gun = "gun",
 	microwave = "Microwave",
 	food = "Food",
-	shekel_printer = "shekel Printer",
+	money_printer = "shekel Printer",
 
 	sign_this_letter = "Sign this letter",
 	signed_yours = "Yours,",
 
-	shekel_printer_exploded = "Your shekel printer has exploded!",
-	shekel_printer_overheating = "Your shekel printer is overheating!",
+	money_printer_exploded = "Your shekel printer has exploded!",
+	money_printer_overheating = "Your shekel printer is overheating!",
 
 	contents = "Contents: ",
 	amount = "Amount: ",

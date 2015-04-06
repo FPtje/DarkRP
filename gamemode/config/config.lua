@@ -273,9 +273,9 @@ Other settings
 
 -- The classname of shekel packets. Use this to create your own shekel entity!
 -- Note: the shekel packet must support the "Setamount" method (or the amount DTVar)
-GM.Config.shekelClass = "spawned_shekel"
+GM.Config.shekelClass = "spawned_money"
 -- In case you do wish to keep the default shekel, but change the model, this option is the way to go:
-GM.Config.shekelModel = "models/props/cs_assault/shekel.mdl"
+GM.Config.shekelModel = "models/props/cs_assault/money.mdl"
 
 -- The skin fprp uses. Set to "default" to use the GMod default derma theme
 GM.Config.fprpSkin = "fprp"
@@ -393,7 +393,7 @@ GM.Config.PocketBlacklist = {
 	["env_"] = true,
 	["path_"] = true,
 	["prop_physics"] = true,
-	["shekel_printer"] = true,
+	["money_printer"] = true,
 	["gunlab"] = true,
 	["prop_dynamic"] = true,
 }

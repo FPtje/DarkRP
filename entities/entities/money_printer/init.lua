@@ -46,7 +46,7 @@ function ENT:Destruct()
 	effectdata:SetOrigin(vPoint)
 	effectdata:SetScale(1)
 	util.Effect("Explosion", effectdata)
-	fprp.notify(self:Getowning_ent(), 1, 4, fprp.getPhrase("shekel_printer_exploded"))
+	fprp.notify(self:Getowning_ent(), 1, 4, fprp.getPhrase("money_printer_exploded"))
 end
 
 util.AddNetworkString("remove_shekelprinter")
@@ -59,7 +59,7 @@ function ENT:BurstIntoFlames()
 	local stopBurst = hook.Run("shekelPrinterCatchFire", self)
 	if stopBurst == true then return end
 
-	fprp.notify(self:Getowning_ent(), 0, 4, fprp.getPhrase("shekel_printer_overheating"))
+	fprp.notify(self:Getowning_ent(), 0, 4, fprp.getPhrase("money_printer_overheating"))
 	self.burningup = true
 	local burntime = math.random(8, 18)
 	self:Ignite(burntime, 0)

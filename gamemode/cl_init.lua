@@ -6,7 +6,7 @@ hook.Run("fprpStartedLoading")
 
 GM.Version = "3.0"
 GM.Name = "fprp"
-GM.Author = "aStonedPenguin, LastPenguin, code_gs & more"
+GM.Author = "By FPtje Falco et al."
 
 DeriveGamemode("sandbox")
 local function LoadModules()

@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel(GAMEMODE.Config.shekelModel or "models/props/cs_assault/shekel.mdl")
+	self:SetModel(GAMEMODE.Config.shekelModel or "models/props/cs_assault/money.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -28,7 +28,7 @@ end
 
 function ENT:Touch(ent)
 	-- the .USED var is also used in other mods for the same purpose
-	if ent:GetClass() ~= "spawned_shekel" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
+	if ent:GetClass() ~= "spawned_money" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
 
 	-- Both hasMerged and USED are used by third party mods. Keep both in.
 	ent.USED = true

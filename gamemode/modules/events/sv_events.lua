@@ -157,10 +157,10 @@ local flammablePropsKV = { -- Class names as index
 	gunlab = true,
 	letter = true,
 	microwave = true,
-	shekel_printer = true,
+	money_printer = true,
 	spawned_shipment = true,
 	spawned_weapon = true,
-	spawned_shekel = true
+	spawned_money = true
 }
 
 local flammableProps = {} -- Numbers as index

@@ -13,7 +13,7 @@ function ENT:Draw()
 	owner = (IsValid(owner) and owner:Nick()) or fprp.getPhrase("unknown")
 
 	surface.SetFont("HUDNumber5")
-	local text = fprp.getPhrase("shekel_printer")
+	local text = fprp.getPhrase("money_printer")
 	local TextWidth = surface.GetTextSize(text)
 	local TextWidth2 = surface.GetTextSize(owner)
 
