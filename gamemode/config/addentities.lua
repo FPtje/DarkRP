@@ -134,6 +134,14 @@ fprp.createEntity("Money printer", {
 	cmd = "buymoneyprinter"
 })
 
+fprp.createEntity("Printer Mover", {
+	ent = "printer_mover",
+	model = "models/props_interiors/refrigerator01a.mdl",
+	price = 1000,
+	max = 2,
+	cmd = "buyprintermover"
+})
+
 fprp.createEntity("Gun lab", {
 	ent = "gunlab",
 	model = "models/props_c17/TrapPropeller_Engine.mdl",
