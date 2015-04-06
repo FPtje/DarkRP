@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.Author = "fprp Developers"
-	SWEP.PrintName = "Glock"
-	SWEP.Instructions = "Shoot with it"
+	SWEP.PrintName = "the cock glock"
+	SWEP.Instructions = "shoot a b0ss with it"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "c"
@@ -29,12 +29,12 @@ SWEP.Primary.Sound = Sound("Weapon_Glock.Single")
 SWEP.Primary.Recoil = 2
 SWEP.Primary.Unrecoil = 6
 SWEP.Primary.Damage = 10
-SWEP.Primary.NumShots = 1
+SWEP.Primary.NumShots = 10
 SWEP.Primary.Cone = 0.05
-SWEP.Primary.ClipSize = 20
-SWEP.Primary.Delay = 0.06
-SWEP.Primary.DefaultClip = 20
-SWEP.Primary.Automatic = false
+SWEP.Primary.ClipSize = 200
+SWEP.Primary.Delay = 0.01
+SWEP.Primary.DefaultClip = 200
+SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "pistol"
 
 SWEP.Secondary.ClipSize = -1
