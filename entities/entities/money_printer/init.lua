@@ -52,6 +52,7 @@ end
 util.AddNetworkString("remove_shekelprinter")
 net.Receive("remove_shekelprinter", function(len, ply)
 	local printerEntity = net.ReadEntity()
+	if !IsValid(printerEntity) then return end
 	printerEntity:Remove()
 end)
 
