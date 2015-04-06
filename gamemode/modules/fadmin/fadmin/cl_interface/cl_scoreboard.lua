@@ -39,9 +39,7 @@ function FAdmin.ScoreBoard.ChangeGmodLogo(new)
 end
 
 function FAdmin.ScoreBoard.Background()
-	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-
-	surface.SetDrawColor(0,0,0,255)
+	surface.SetDrawColor(255,255,255,255)
 	surface.SetMaterial(g_panel)
 	surface.DrawTexturedRect(FAdmin.ScoreBoard.X, FAdmin.ScoreBoard.Y, FAdmin.ScoreBoard.Width, FAdmin.ScoreBoard.Height)
 end
