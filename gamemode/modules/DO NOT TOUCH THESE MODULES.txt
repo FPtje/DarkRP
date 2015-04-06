@@ -1,4 +1,0 @@
-Do not add, edit or remove anything from this folder.
-
-Use the fprpMod addon instead
-https://github.com/FPtje/fprpModification
