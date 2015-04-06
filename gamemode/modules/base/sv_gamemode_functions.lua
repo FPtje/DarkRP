@@ -161,7 +161,7 @@ local function checkAdminSpawn(ply, configVar, errorStr)
 end
 
 function GM:PlayerSpawnSENT(ply, class)
-	return checkAdminSpawn(ply, "adminsents", "gm_spawnsent") and self.BaseClass:PlayerSpawnSENT(ply, class) and not ply:isArrested()
+	return true
 end
 
 function GM:PlayerSpawnedSENT(ply, ent)
@@ -180,11 +180,11 @@ local function canSpawnWeapon(ply)
 end
 
 function GM:PlayerSpawnSWEP(ply, class, info)
-	return canSpawnWeapon(ply) and self.BaseClass:PlayerSpawnSWEP(ply, class, info) and not ply:isArrested()
+	return true
 end
 
 function GM:PlayerGiveSWEP(ply, class, info)
-	return canSpawnWeapon(ply) and self.BaseClass:PlayerGiveSWEP(ply, class, info) and not ply:isArrested()
+	return true
 end
 
 function GM:PlayerSpawnEffect(ply, model)
@@ -192,7 +192,7 @@ function GM:PlayerSpawnEffect(ply, model)
 end
 
 function GM:PlayerSpawnVehicle(ply, model, class, info)
-	return checkAdminSpawn(ply, "adminvehicles", "gm_spawnvehicle") and self.BaseClass:PlayerSpawnVehicle(ply, model, class, info) and not ply:isArrested()
+	return true
 end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
