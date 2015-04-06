@@ -1,9 +1,5 @@
 AddCSLuaFile()
 
-if SERVER then
-	util.AddNetworkString("lockpick_time")
-end
-
 if CLIENT then
 	SWEP.PrintName = "Lock Pick"
 	SWEP.Slot = 5
@@ -41,7 +37,7 @@ SWEP.Secondary.ClipSize = -1        -- Size of a clip
 SWEP.Secondary.DefaultClip = -1     -- Default number of bullets in a clip
 SWEP.Secondary.Automatic = false        -- Automatic/Semi Auto
 SWEP.Secondary.Ammo = ""
-SWEP.LockPickTime = 30
+SWEP.LockPickCount = 30
 
 --[[-------------------------------------------------------
 Name: SWEP:Initialize()
@@ -51,36 +47,19 @@ function SWEP:Initialize()
 	self:SetHoldType("normal")
 end
 
-if CLIENT then
-	net.Receive("lockpick_time", function()
-		local wep = net.ReadEntity()
-		local ent = net.ReadEntity()
-		local time = net.ReadUInt(32)
-
-		wep.IsLockPicking = true
-		wep.LockPickEnt = ent
-		wep.StartPick = CurTime()
-		wep.LockPickTime = time
-		wep.EndPick = CurTime() + time
-
-		wep.Dots = wep.Dots or ""
-		timer.Create("LockPickDots", 0.5, 0, function()
-			if not IsValid(wep) then timer.Destroy("LockPickDots") return end
-			local len = string.len(wep.Dots)
-			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
-			wep.Dots = dots[len]
-		end)
-	end)
-end
 
 --[[-------------------------------------------------------
 Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
 ---------------------------------------------------------]]
 function SWEP:PrimaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + 2)
-	if self.IsLockPicking then return end
-
+	self.Weapon:SetNextPrimaryFire(CurTime() + 0.1)
+	if self:GetNWBool("IsLockPicking") then
+		if CLIENT then return end
+		self.LockPickCount = self.LockPickCount - 1
+		self:SetNWInt("LockPickCount",self.LockPickCount)
+		return
+	end
 	local trace = self.Owner:GetEyeTrace()
 	local ent = trace.Entity
 
@@ -89,7 +68,7 @@ function SWEP:PrimaryAttack()
 
 	if canLockpick == false then return end
 	if canLockpick ~= true and (
-			trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
+			trace.HitPos:Distance(self.Owner:GetShootPos()) > 5000 or
 			(not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
 			(not ent:isDoor() and not ent:IsVehicle() and not string.find(string.lower(ent:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not ent.isFadingDoor))
 		) then
@@ -108,18 +87,12 @@ function SWEP:PrimaryAttack()
 	-- Remove hooks when finished
 	hook.Add("onLockpickCompleted", self, fc{fp{hook.Remove, "PlayerDisconnected", self}, fp{hook.Remove, "PlayerDeath", self}})
 
-	self.IsLockPicking = true
-	self.LockPickEnt = ent
+	self:SetNWBool("IsLockPicking",true)
+	self:SetNWEntity("LockPickEnt",ent)
 	self.StartPick = CurTime()
-	self.LockPickTime = hook.Call("lockpickTime", nil, ply, ent) or math.Rand(10, 30)
-	net.Start("lockpick_time")
-		net.WriteEntity(self)
-		net.WriteEntity(ent)
-		net.WriteUInt(self.LockPickTime, 32) -- unknown so 32
-	net.Send(self.Owner)
-	self.EndPick = CurTime() + self.LockPickTime
-
-	timer.Create("LockPickSounds", 1, self.LockPickTime, function()
+	self.LockPickCount = hook.Call("lockpickCount", nil, ply, ent) or math.Round(math.Rand(50, 100));
+	self:SetNWInt("LockPickCount",self.LockPickCount)
+	timer.Create("LockPickSounds", 1, 100, function()
 		if not IsValid(self) then return end
 		local snd = {1,3,4}
 		self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
@@ -127,22 +100,20 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Holster()
-	self.IsLockPicking = false
-	self.LockPickEnt = nil
+	self:SetNWBool("IsLockPicking")
+	self:SetNWEntity("LockPickEnt")
 	if SERVER then timer.Destroy("LockPickSounds") end
-	if CLIENT then timer.Destroy("LockPickDots") end
 	return true
 end
 
 function SWEP:Succeed()
 	self:SetHoldType("normal")
 
-	local ent = self.LockPickEnt
-	self.IsLockPicking = false
-	self.LockPickEnt = nil
+	local ent = self:GetNWEntity("LockPickEnt")
+	self:SetNWBool("IsLockPicking")
+	self:SetNWEntity("LockPickEnt")
 
 	if SERVER then timer.Destroy("LockPickSounds") end
-	if CLIENT then timer.Destroy("LockPickDots") end
 
 	if not IsValid(ent) then return end
 
@@ -161,46 +132,40 @@ function SWEP:Succeed()
 end
 
 function SWEP:Fail()
-	self.IsLockPicking = false
+	self:SetNWBool("IsLockPicking")
 	self:SetHoldType("normal")
 
-	hook.Call("onLockpickCompleted", nil, self.Owner, false, self.LockPickEnt)
-	self.LockPickEnt = nil
+	hook.Call("onLockpickCompleted", nil, self.Owner, false, self:GetNWEntity("LockPickEnt"))
+	self:SetNWEntity("LockPickEnt")
 
 	if SERVER then timer.Destroy("LockPickSounds") end
 	if CLIENT then timer.Destroy("LockPickDots") end
 end
 
 function SWEP:Think()
-	if not self.IsLockPicking or not self.EndPick then return end
-
+	if not self:GetNWBool("IsLockPicking") then return end
 	local trace = self.Owner:GetEyeTrace()
-	if not IsValid(trace.Entity) or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
+	if not IsValid(trace.Entity) or trace.Entity ~= self:GetNWEntity("LockPickEnt") or trace.HitPos:Distance(self.Owner:GetShootPos()) > 5000 then
 		self:Fail()
-	elseif self.EndPick <= CurTime() then
+	elseif self:GetNWInt( "LockPickCount" ) <= 0 then
 		self:Succeed()
 	end
 end
-
+ 
 function SWEP:DrawHUD()
-	if not self.IsLockPicking or not self.EndPick then return end
-
-	self.Dots = self.Dots or ""
+	if not self:GetNWBool("IsLockPicking") then return end
+	local status = self:GetNWInt("LockPickCount")
 	local w = ScrW()
 	local h = ScrH()
 	local x,y,width,height = w/2-w/10, h/2-60, w/5, h/15
 	draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
-	local time = self.EndPick - self.StartPick
-	local curtime = CurTime() - self.StartPick
-	local status = math.Clamp(curtime/time, 0, 1)
-	local BarWidth = status * (width - 16)
+	local BarWidth = (width - 16) - (width/20)*status
 	local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
 	draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(255-(status*255), 0+(status*255), 0, 255))
-
-	draw.DrawNonParsedSimpleText(fprp.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
+	draw.DrawNonParsedSimpleText(fprp.getPhrase("picking_lock"), "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 end
-
+ 
 function SWEP:SecondaryAttack()
 	self:PrimaryAttack()
 end
@@ -262,8 +227,8 @@ fprp.hookStub{
 }
 
 fprp.hookStub{
-	name = "lockpickTime",
-	description = "The length of time, in seconds, it takes to lockpick an entity.",
+	name = "lockpickCount",
+	description = "The amount of times needed to click",
 	parameters = {
 		{
 			name = "ply",
@@ -278,8 +243,8 @@ fprp.hookStub{
 	},
 	returns = {
 		{
-			name = "time",
-			description = "Seconds in which it takes a player to lockpick an entity",
+			name = "",
+			description = "Count of times to open the door",
 			type = "number"
 		}
 	},
