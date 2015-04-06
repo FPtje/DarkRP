@@ -281,8 +281,8 @@ GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
 GM.Config.fprpSkin = "Default"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
-GM.Config.F1MenuHelpPage = "http://wiki.fprp.com/index.php/Main_Page"
-GM.Config.F1MenuHelpPageTitle = "Wiki page"
+GM.Config.SleekF1MenuHelpPage = "http://wiki.fprp.com/index.php/Main_Page"
+GM.Config.SleekF1MenuHelpPageTitle = "Wiki page"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {
