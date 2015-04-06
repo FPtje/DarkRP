@@ -5,9 +5,9 @@
     "version"   "2.6.1"
     "menusystem"	"1"
 
-    "author_name"   "FPtje Falco et al."
+    "author_name"   "aStonedPenguin, LastPenguin & code_gs"
     "author_email"  ""
-    "author_url"    "https://github.com/FPtje/fprp"
+    "author_url"    "https://github.com/aStonedPenguin/fprp"
 
     "icon"  ""
     "info"  ""
