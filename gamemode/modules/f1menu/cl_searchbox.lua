@@ -12,7 +12,7 @@ function PANEL:Init()
 	self.lblSearch = vgui.Create("DLabel", self)
 	self.lblSearch:SetFont("fprpHUD2")
 	self.lblSearch:SetColor(Color(200, 200, 200, 200))
-	self.lblSearch:SetText(fprp.getPhrase("F1Search"))
+	self.lblSearch:SetText(fprp.getPhrase("f1Search"))
 	self.lblSearch:SizeToContents()
 	self.lblSearch:SetPos(5)
 end
