@@ -84,8 +84,8 @@ local function BuyPistol(ply, args)
 	hook.Call("playerBoughtPistol", nil, ply, shipment, weapon, cost)
 
 	if IsValid(weapon) then
-		ply:addMoney(-cost)
-		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", args, fprp.formatMoney(cost)))
+		ply:addshekel(-cost)
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", args, fprp.formatshekel(cost)))
 	else
 		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/buy", args))
 	end
@@ -195,8 +195,8 @@ local function BuyShipment(ply, args)
 	hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], crate, price)
 
 	if IsValid(crate) then
-		ply:addMoney(-cost)
-		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", args, fprp.formatMoney(cost)))
+		ply:addshekel(-cost)
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", args, fprp.formatshekel(cost)))
 	else
 		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/buyshipment", arg))
 	end
@@ -269,8 +269,8 @@ local function BuyVehicle(ply, args)
 
 	local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
 
-	ply:addMoney(-cost)
-	fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", found.label or found.name, fprp.formatMoney(cost)))
+	ply:addshekel(-cost)
+	fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", found.label or found.name, fprp.formatshekel(cost)))
 
 	local trace = {}
 	trace.start = ply:EyePos()
@@ -385,8 +385,8 @@ local function BuyAmmo(ply, args)
 
 	local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
 
-	fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", found.name, fprp.formatMoney(cost)))
-	ply:addMoney(-cost)
+	fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", found.name, fprp.formatshekel(cost)))
+	ply:addshekel(-cost)
 
 	local trace = {}
 	trace.start = ply:EyePos()

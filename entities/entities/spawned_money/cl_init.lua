@@ -7,14 +7,14 @@ function ENT:Draw()
 	self:DrawModel()
 
 	-- Do not draw labels when a different model is used.
-	-- If you want a different model with labels, make your own money entity and use GM.Config.MoneyClass.
-	if self:GetModel() ~= "models/props/cs_assault/money.mdl" then return end
+	-- If you want a different model with labels, make your own shekel entity and use GM.Config.shekelClass.
+	if self:GetModel() ~= "models/props/cs_assault/shekel.mdl" then return end
 
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
 
 	surface.SetFont("ChatFont")
-	local text = fprp.formatMoney(self:Getamount())
+	local text = fprp.formatshekel(self:Getamount())
 	local TextWidth = surface.GetTextSize(text)
 
 	cam.Start3D2D(Pos + Ang:Up() * 0.9, Ang, 0.1)

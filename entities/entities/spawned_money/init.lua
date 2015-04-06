@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel(GAMEMODE.Config.moneyModel or "models/props/cs_assault/money.mdl")
+	self:SetModel(GAMEMODE.Config.shekelModel or "models/props/cs_assault/shekel.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -21,14 +21,14 @@ function ENT:Use(activator,caller)
 	if self.USED or self.hasMerged then return end
 	local amount = self:Getamount()
 
-	activator:addMoney(amount or 0)
-	fprp.notify(activator, 0, 4, fprp.getPhrase("found_money", fprp.formatMoney(self:Getamount())))
+	activator:addshekel(amount or 0)
+	fprp.notify(activator, 0, 4, fprp.getPhrase("found_shekel", fprp.formatshekel(self:Getamount())))
 	self:Remove()
 end
 
 function ENT:Touch(ent)
 	-- the .USED var is also used in other mods for the same purpose
-	if ent:GetClass() ~= "spawned_money" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
+	if ent:GetClass() ~= "spawned_shekel" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
 
 	-- Both hasMerged and USED are used by third party mods. Keep both in.
 	ent.USED = true
@@ -36,7 +36,7 @@ function ENT:Touch(ent)
 
 	ent:Remove()
 	self:Setamount(self:Getamount() + ent:Getamount())
-	if GAMEMODE.Config.moneyRemoveTime and  GAMEMODE.Config.moneyRemoveTime ~= 0 then
-		timer.Adjust("RemoveEnt"..self:EntIndex(), GAMEMODE.Config.moneyRemoveTime, 1, fn.Partial(SafeRemoveEntity, self))
+	if GAMEMODE.Config.shekelRemoveTime and  GAMEMODE.Config.shekelRemoveTime ~= 0 then
+		timer.Adjust("RemoveEnt"..self:EntIndex(), GAMEMODE.Config.shekelRemoveTime, 1, fn.Partial(SafeRemoveEntity, self))
 	end
 end

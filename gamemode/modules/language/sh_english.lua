@@ -34,10 +34,10 @@ local my_language = {
 	f1ChatCommandTitle = "Chat commands",
 	f1Search = "Search...",
 
-	-- Money things:
+	-- shekel things:
 	price = "Price: %s%d",
 	priceTag = "Price: %s",
-	reset_money = "%s has reset all players' money!",
+	reset_shekel = "%s has reset all players' shekel!",
 	has_given = "%s has given you %s",
 	you_gave = "You gave %s %s",
 	npc_killpay = "%s for killing an NPC!",
@@ -48,8 +48,8 @@ local my_language = {
 	deducted_x = "Deducted %s%d",
 	need_x = "Need %s%d",
 
-	deducted_money = "Deducted %s",
-	need_money = "Need %s",
+	deducted_shekel = "Deducted %s",
+	need_shekel = "Need %s",
 
 	payday_message = "Payday! You received %s!",
 	payday_unemployed = "You received no salary because you are unemployed!",
@@ -66,7 +66,7 @@ local my_language = {
 	signed = "Signed: %s",
 
 	found_cash = "You have found %s%d!", -- backwards compatibility
-	found_money = "You have found %s!",
+	found_shekel = "You have found %s!",
 
 	owner_poor = "The %s owner is too poor to subsidize this sale!",
 
@@ -177,13 +177,13 @@ local my_language = {
 	gun = "gun",
 	microwave = "Microwave",
 	food = "Food",
-	money_printer = "Money Printer",
+	shekel_printer = "shekel Printer",
 
 	sign_this_letter = "Sign this letter",
 	signed_yours = "Yours,",
 
-	money_printer_exploded = "Your money printer has exploded!",
-	money_printer_overheating = "Your money printer is overheating!",
+	shekel_printer_exploded = "Your shekel printer has exploded!",
+	shekel_printer_overheating = "Your shekel printer is overheating!",
 
 	contents = "Contents: ",
 	amount = "Amount: ",
@@ -361,13 +361,13 @@ local my_language = {
 	-- Backwards compatibility:
 	you_set_x_salary_to_y = "You set %s's salary to %s%d.",
 	x_set_your_salary_to_y = "%s set your salary to %s%d.",
-	you_set_x_money_to_y = "You set %s's money to %s%d.",
-	x_set_your_money_to_y = "%s set your money to %s%d.",
+	you_set_x_shekel_to_y = "You set %s's shekel to %s%d.",
+	x_set_your_shekel_to_y = "%s set your shekel to %s%d.",
 
 	you_set_x_salary = "You set %s's salary to %s.",
 	x_set_your_salary = "%s set your salary to %s.",
-	you_set_x_money = "You set %s's money to %s.",
-	x_set_your_money = "%s set your money to %s.",
+	you_set_x_shekel = "You set %s's shekel to %s.",
+	x_set_your_shekel = "%s set your shekel to %s.",
 	you_set_x_name = "You set %s's name to %s",
 	x_set_your_name = "%s set your name to %s",
 
@@ -479,8 +479,8 @@ local my_language = {
 	F4vehicles = "Vehicles",
 
 	-- Tab 1
-	give_money = "Give money to the player you're looking at",
-	drop_money = "Drop money",
+	give_shekel = "Give shekel to the player you're looking at",
+	drop_shekel = "Drop shekel",
 	change_name = "Change your fprp name",
 	go_to_sleep = "Go to sleep/wake up",
 	drop_weapon = "Drop current weapon",

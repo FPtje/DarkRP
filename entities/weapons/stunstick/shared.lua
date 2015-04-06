@@ -170,8 +170,8 @@ function SWEP:DoAttack(dmg)
 		self.Owner:EmitSound(self.Hit[math.random(1,#self.Hit)])
 		if FPP and FPP.plyCanTouchEnt(self.Owner, ent, "EntityDamage") then
 			if ent.SeizeReward and not ent.beenSeized and not ent.burningup and self.Owner:isCP() and ent.Getowning_ent and self.Owner ~= ent:Getowning_ent() then
-				self.Owner:addMoney(ent.SeizeReward)
-				fprp.notify(self.Owner, 1, 4, fprp.getPhrase("you_received_x", fprp.formatMoney(ent.SeizeReward), fprp.getPhrase("bonus_destroying_entity")))
+				self.Owner:addshekel(ent.SeizeReward)
+				fprp.notify(self.Owner, 1, 4, fprp.getPhrase("you_received_x", fprp.formatshekel(ent.SeizeReward), fprp.getPhrase("bonus_destroying_entity")))
 				ent.beenSeized = true
 			end
 			ent:TakeDamage(1000-dmg, self.Owner, self) -- for illegal entities

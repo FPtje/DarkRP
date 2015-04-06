@@ -1,4 +1,4 @@
--- RRPX Money Printer reworked for fprp by philxyz
+-- RRPX shekel Printer reworked for fprp by philxyz
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -16,7 +16,7 @@ function ENT:Initialize()
 
 	self.sparking = false
 	self.damage = 100
-	self.IsMoneyPrinter = true
+	self.IsshekelPrinter = true
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
 
 	self.sound = CreateSound(self, Sound("ambient/levels/labs/equipment_printer_loop1.wav"))
@@ -46,20 +46,20 @@ function ENT:Destruct()
 	effectdata:SetOrigin(vPoint)
 	effectdata:SetScale(1)
 	util.Effect("Explosion", effectdata)
-	fprp.notify(self:Getowning_ent(), 1, 4, fprp.getPhrase("money_printer_exploded"))
+	fprp.notify(self:Getowning_ent(), 1, 4, fprp.getPhrase("shekel_printer_exploded"))
 end
 
-util.AddNetworkString("remove_moneyprinter")
-net.Receive("remove_moneyprinter", function(len, ply)
+util.AddNetworkString("remove_shekelprinter")
+net.Receive("remove_shekelprinter", function(len, ply)
 	local printerEntity = net.ReadEntity()
 	printerEntity:Remove()
 end)
 
 function ENT:BurstIntoFlames()
-	local stopBurst = hook.Run("moneyPrinterCatchFire", self)
+	local stopBurst = hook.Run("shekelPrinterCatchFire", self)
 	if stopBurst == true then return end
 
-	fprp.notify(self:Getowning_ent(), 0, 4, fprp.getPhrase("money_printer_overheating"))
+	fprp.notify(self:Getowning_ent(), 0, 4, fprp.getPhrase("shekel_printer_overheating"))
 	self.burningup = true
 	local burntime = math.random(8, 18)
 	self:Ignite(burntime, 0)
@@ -71,7 +71,7 @@ function ENT:Fireball()
 	local dist = math.random(20, 280) -- Explosion radius
 	self:Destruct()
 	for k, v in pairs(ents.FindInSphere(self:GetPos(), dist)) do
-		if not v:IsPlayer() and not v:IsWeapon() and v:GetClass() ~= "predicted_viewmodel" and not v.IsMoneyPrinter then
+		if not v:IsPlayer() and not v:IsWeapon() and v:GetClass() ~= "predicted_viewmodel" and not v.IsshekelPrinter then
 			v:Ignite(math.random(5, 22), 0)
 		elseif v:IsPlayer() then
 			local distance = v:GetPos():Distance(self:GetPos())
@@ -87,18 +87,18 @@ PrintMore = function(ent)
 	ent.sparking = true
 	timer.Simple(3, function()
 		if not IsValid(ent) then return end
-		ent:CreateMoneybag()
+		ent:Createshekelbag()
 	end)
 end
 
-function ENT:CreateMoneybag()
+function ENT:Createshekelbag()
 	if not IsValid(self) or self:IsOnFire() then return end
 
-	local MoneyPos = self:GetPos()
+	local shekelPos = self:GetPos()
 
 	local amount = GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250
 
-	local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)
+	local prevent, hookAmount = hook.Run("shekelPrinterPrintshekel", self, amount)
 	if prevent == true then return end
 
 	amount = hookAmount or amount
@@ -113,8 +113,8 @@ function ENT:CreateMoneybag()
 		if math.random(1, overheatchance) == 3 then self:BurstIntoFlames() end
 	end
 
-	local moneybag = fprp.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
-	hook.Run("moneyPrinterPrinted", self, moneybag)
+	local shekelbag = fprp.createshekelBag(Vector(shekelPos.x + 15, shekelPos.y, shekelPos.z + 15), amount)
+	hook.Run("shekelPrinterPrinted", self, shekelbag)
 	self.sparking = false
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
 end

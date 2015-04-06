@@ -1,10 +1,10 @@
-fprp.PLAYER.addMoney = fprp.stub{
-	name = "addMoney",
-	description = "Give money to a player.",
+fprp.PLAYER.addshekel = fprp.stub{
+	name = "addshekel",
+	description = "Give shekel to a player.",
 	parameters = {
 		{
 			name = "amount",
-			description = "The amount of money to give to the player. A negative amount means you're substracting money.",
+			description = "The amount of shekel to give to the player. A negative amount means you're substracting shekel.",
 			type = "number",
 			optional = false
 		}
@@ -27,23 +27,23 @@ fprp.PLAYER.payDay = fprp.stub{
 
 fprp.payPlayer = fprp.stub{
 	name = "payPlayer",
-	description = "Make one player give money to the other player.",
+	description = "Make one player give shekel to the other player.",
 	parameters = {
 		{
 			name = "sender",
-			description = "The player who gives the money.",
+			description = "The player who gives the shekel.",
 			type = "Player",
 			optional = false
 		},
 		{
 			name = "receiver",
-			description = "The player who receives the money.",
+			description = "The player who receives the shekel.",
 			type = "Player",
 			optional = false
 		},
 		{
 			name = "amount",
-			description = "The amount of money.",
+			description = "The amount of shekel.",
 			type = "number",
 			optional = false
 		}
@@ -53,27 +53,27 @@ fprp.payPlayer = fprp.stub{
 	metatable = fprp
 }
 
-fprp.createMoneyBag = fprp.stub{
-	name = "createMoneyBag",
-	description = "Create a money bag.",
+fprp.createshekelBag = fprp.stub{
+	name = "createshekelBag",
+	description = "Create a shekel bag.",
 	parameters = {
 		{
 			name = "pos",
-			description = "The The position where the money bag is to be spawned.",
+			description = "The The position where the shekel bag is to be spawned.",
 			type = "Vector",
 			optional = false
 		},
 		{
 			name = "amount",
-			description = "The amount of money.",
+			description = "The amount of shekel.",
 			type = "number",
 			optional = false
 		}
 	},
 	returns = {
 		{
-			name = "moneybag",
-			description = "The money bag entity.",
+			name = "shekelbag",
+			description = "The shekel bag entity.",
 			type = "Entity"
 		}
 	},

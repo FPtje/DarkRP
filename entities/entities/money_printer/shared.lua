@@ -1,6 +1,6 @@
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "Money Printer"
+ENT.PrintName = "shekel Printer"
 ENT.Author = "Render Case and philxyz"
 ENT.Spawnable = false
 
@@ -10,19 +10,19 @@ function ENT:SetupDataTables()
 end
 
 fprp.hookStub{
-	name = "moneyPrinterCatchFire",
-	description = "Called when a money printer is about to catch fire.",
+	name = "shekelPrinterCatchFire",
+	description = "Called when a shekel printer is about to catch fire.",
 	parameters = {
 		{
-			name = "moneyprinter",
-			description = "The money printer that is about to catch fire",
+			name = "shekelprinter",
+			description = "The shekel printer that is about to catch fire",
 			type = "Entity"
 		}
 	},
 	returns = {
 		{
 			name = "prevent",
-			description = "Set to true to prevent the money printer from catching fire",
+			description = "Set to true to prevent the shekel printer from catching fire",
 			type = "boolean"
 		}
 	},
@@ -30,12 +30,12 @@ fprp.hookStub{
 }
 
 fprp.hookStub{
-	name = "moneyPrinterPrintMoney",
-	description = "Called when a money printer is about to print money.",
+	name = "shekelPrinterPrintshekel",
+	description = "Called when a shekel printer is about to print shekel.",
 	parameters = {
 		{
-			name = "moneyprinter",
-			description = "The money printer that is about to print money",
+			name = "shekelprinter",
+			description = "The shekel printer that is about to print shekel",
 			type = "Entity"
 		},
 		{
@@ -47,12 +47,12 @@ fprp.hookStub{
 	returns = {
 		{
 			name = "prevent",
-			description = "Set to true to prevent the money printer from printing the money.",
+			description = "Set to true to prevent the shekel printer from printing the shekel.",
 			type = "boolean"
 		},
 		{
 			name = "amount",
-			description = "Optionally override the amount of money that will be printed.",
+			description = "Optionally override the amount of shekel that will be printed.",
 			type = "number"
 		}
 	},
@@ -60,17 +60,17 @@ fprp.hookStub{
 }
 
 fprp.hookStub{
-	name = "moneyPrinterPrinted",
-	description = "Called after a money printer is has printed money.",
+	name = "shekelPrinterPrinted",
+	description = "Called after a shekel printer is has printed shekel.",
 	parameters = {
 		{
-			name = "moneyprinter",
-			description = "The money printer",
+			name = "shekelprinter",
+			description = "The shekel printer",
 			type = "Entity"
 		},
 		{
-			name = "moneybag",
-			description = "The moneybag produced by the printer.",
+			name = "shekelbag",
+			description = "The shekelbag produced by the printer.",
 			type = "Entity"
 		}
 	},

@@ -156,21 +156,21 @@ fprp.nickSortedPlayers = fprp.stub{
 }
 
 
-fprp.formatMoney = fprp.stub{
-	name = "formatMoney",
-	description = "Format a number as a money value. Includes currency symbol.",
+fprp.formatshekel = fprp.stub{
+	name = "formatshekel",
+	description = "Format a number as a shekel value. Includes currency symbol.",
 	parameters = {
 		{
 			name = "amount",
-			description = "The money to format, e.g. 100000.",
+			description = "The shekel to format, e.g. 100000.",
 			type = "number",
 			optional = false
 		}
 	},
 	returns = {
 		{
-			name = "money",
-			description = "The money as a nice string, e.g. \"$100,000\".",
+			name = "shekel",
+			description = "The shekel as a nice string, e.g. \"$100,000\".",
 			type = "string"
 		}
 	},

@@ -152,13 +152,13 @@ function PANEL:setfprpItem(item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
 	self:SetText(item.label or item.name)
-	self:SetTextRight(fprp.formatMoney(cost))
+	self:SetTextRight(fprp.formatshekel(cost))
 end
 
 function PANEL:updatePrice(price)
 	if not price then return end
 
-	self:SetTextRight(fprp.formatMoney(price))
+	self:SetTextRight(fprp.formatshekel(price))
 end
 
 derma.DefineControl("F4MenuEntityButton", "", PANEL, "F4MenuItemButton")
@@ -175,7 +175,7 @@ function PANEL:setfprpItem(item)
 	self:SetBorderColor(Color(140, 0, 0, 180))
 	self:SetModel(item.model)
 	self:SetText(item.label or item.name)
-	self:SetTextRight(fprp.formatMoney(cost))
+	self:SetTextRight(fprp.formatshekel(cost))
 
 	self.DoClick = fn.Partial(RunConsoleCommand, "fprp", "buy", self.fprpItem.name)
 end
@@ -183,7 +183,7 @@ end
 function PANEL:updatePrice(price)
 	if not price then return end
 
-	self:SetTextRight(fprp.formatMoney(price))
+	self:SetTextRight(fprp.formatshekel(price))
 end
 
 derma.DefineControl("F4MenuPistolButton", "", PANEL, "F4MenuItemButton")

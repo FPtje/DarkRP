@@ -158,7 +158,7 @@ local function LookPersonUp(ply, cmd, args)
 		ply:PrintMessage(2, fprp.getPhrase("kills", P:Frags()))
 		ply:PrintMessage(2, fprp.getPhrase("deaths", P:Deaths()))
 		if ply:IsAdmin() then
-			ply:PrintMessage(2, fprp.getPhrase("wallet", fprp.formatMoney(P:getfprpVar("money")), ""))
+			ply:PrintMessage(2, fprp.getPhrase("wallet", fprp.formatshekel(P:getfprpVar("shekel")), ""))
 		end
 	else
 		print(fprp.getPhrase("name", P:Nick()))
@@ -167,7 +167,7 @@ local function LookPersonUp(ply, cmd, args)
 		print(fprp.getPhrase("job", team.GetName(P:Team())))
 		print(fprp.getPhrase("kills", P:Frags()))
 		print(fprp.getPhrase("deaths", P:Deaths()))
-		print(fprp.getPhrase("wallet", fprp.formatMoney(P:getfprpVar("money")), ""))
+		print(fprp.getPhrase("wallet", fprp.formatshekel(P:getfprpVar("shekel")), ""))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)

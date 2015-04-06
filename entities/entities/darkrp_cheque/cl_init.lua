@@ -12,7 +12,7 @@ function ENT:Draw()
 	local recipient = (self:Getrecipient().Name and self:Getrecipient():Name()) or fprp.getPhrase("unknown")
 
 	surface.SetFont("ChatFont")
-	local text = fprp.getPhrase("cheque_pay", recipient) .. "\n" .. fprp.formatMoney(amount) .. "\n" .. fprp.getPhrase("signed", owner)
+	local text = fprp.getPhrase("cheque_pay", recipient) .. "\n" .. fprp.formatshekel(amount) .. "\n" .. fprp.getPhrase("signed", owner)
 	local TextWidth = surface.GetTextSize(text)
 
 	cam.Start3D2D(Pos + Ang:Up() * 0.9, Ang, 0.1)

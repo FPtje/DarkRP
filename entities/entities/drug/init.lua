@@ -81,8 +81,8 @@ function ENT:Use(activator,caller)
 			return false
 		end
 		fprp.payPlayer(activator, Owner, self:Getprice())
-		fprp.notify(activator, 0, 4, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("drugs")), fprp.formatMoney(self:Getprice()), ""))
-		fprp.notify(Owner, 0, 4, fprp.getPhrase("you_received_x", fprp.formatMoney(self:Getprice()), string.lower(fprp.getPhrase("drugs"))))
+		fprp.notify(activator, 0, 4, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("drugs")), fprp.formatshekel(self:Getprice()), ""))
+		fprp.notify(Owner, 0, 4, fprp.getPhrase("you_received_x", fprp.formatshekel(self:Getprice()), string.lower(fprp.getPhrase("drugs"))))
 	end
 	DrugPlayer(caller)
 	self.CanUse = false

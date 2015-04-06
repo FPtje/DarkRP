@@ -2,16 +2,23 @@ Error = function() end
 error = function() end
 ErrorNoHalt = function() end
 
-resource.AddFile("materials/fprp/inspiration.png")
-resource.AddFile("materials/fprp/hud.png")
 
+local downloads = {
+	'materials/fprp/inspiration.png',
+	'materials/fprp/hud.png',
+	'materials/fprp/panel_bg.png',
+	'materials/fprp/button.png',
+	'materials/fprp/close.png',
+}
+for k, v in ipairs(downloads) do
+	resource.AddFile(v)
+end
 
 hook.Run("fprpStartedLoading")
 
 GM.Version = "3.0"
 GM.Name = "fprp"
-GM.Author = "By FPtje Falco et al."
-
+GM.Author = "aStonedPenguin, LastPenguin, code_gs & more"
 
 DeriveGamemode("sandbox")
 

@@ -92,7 +92,7 @@ fprp.createPlayerData = fprp.stub{
 		},
 		{
 			name = "wallet",
-			description = "The amount of money the player has.",
+			description = "The amount of shekel the player has.",
 			type = "number",
 			optional = false
 		},
@@ -108,9 +108,9 @@ fprp.createPlayerData = fprp.stub{
 	metatable = fprp
 }
 
-fprp.storeMoney = fprp.stub{
-	name = "storeMoney",
-	description = "Internal function. Store a player's money in the database. Do not call this if you just want to set someone's money, the player will not see the change!",
+fprp.storeshekel = fprp.stub{
+	name = "storeshekel",
+	description = "Internal function. Store a player's shekel in the database. Do not call this if you just want to set someone's shekel, the player will not see the change!",
 	parameters = {
 		{
 			name = "ply",
@@ -815,7 +815,7 @@ fprp.hookStub{
 
 fprp.hookStub{
 	name = "playerBoughtCustomEntity",
-	description = "Called when a player bought an entity (like a money printer or a gun lab).",
+	description = "Called when a player bought an entity (like a shekel printer or a gun lab).",
 	parameters = {
 		{
 			name = "ply",
@@ -993,7 +993,7 @@ fprp.hookStub{
 		},
 		{
 			name = "amount",
-			description = "The amount of money given to the player.",
+			description = "The amount of shekel given to the player.",
 			type = "number"
 		}
 	},
@@ -1018,23 +1018,23 @@ fprp.hookStub{
 
 fprp.hookStub{
 	name = "playerWalletChanged",
-	description = "When a player receives money.",
+	description = "When a player receives shekel.",
 	parameters = {
 		{
 			name = "ply",
-			description = "The player who is getting money.",
+			description = "The player who is getting shekel.",
 			type = "Player"
 		},
 		{
 			name = "amount",
-			description = "The amount of money given to the player.",
+			description = "The amount of shekel given to the player.",
 			type = "number"
 		}
 	},
 	returns = {
 		{
 			name = "total",
-			description = "Override the total amount of money (optional).",
+			description = "Override the total amount of shekel (optional).",
 			type = "number"
 		}
 	}

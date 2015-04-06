@@ -71,8 +71,8 @@ GM.Config.decalcleaner 					= false
 GM.Config.disallowClientsideScripts		= false
 -- doorwarrants - Enable/disable Warrant requirement to enter property.
 GM.Config.doorwarrants 					= true
--- dropmoneyondeath - Enable/disable whether people drop money on death.
-GM.Config.dropmoneyondeath 				= false
+-- dropshekelondeath - Enable/disable whether people drop shekel on death.
+GM.Config.dropshekelondeath 				= false
 -- droppocketarrest - Enable/disable whether people drop the stuff in their pockets when they get arrested.
 GM.Config.droppocketarrest 				= false
 -- droppocketdeath - Enable/disable whether people drop the stuff in their pockets when they die.
@@ -155,7 +155,7 @@ GM.Config.wallettax 					= false
 GM.Config.wantedsuicide 				= false
 -- realisticfalldamage - Enable/Disable dynamic fall damage. Setting mp_falldamage to 1 will over-ride this.
 GM.Config.realisticfalldamage			= true
--- printeroverheat - Can the default money printer overheat on its own?
+-- printeroverheat - Can the default shekel printer overheat on its own?
 GM.Config.printeroverheat				= true
 -- weaponCheckerHideDefault - Hide default weapons when checking weapons
 GM.Config.weaponCheckerHideDefault		= true
@@ -180,7 +180,7 @@ GM.Config.babygodtime					= 5
 -- chatsoundsdelay - How long to wait before letting a player emit a sound from their chat again.
 -- Leave this on at least a few seconds to prevent people from spamming sounds. Set to 0 to disable.
 GM.Config.chatsoundsdelay				= 5
--- deathfee - the amount of money someone drops when dead.
+-- deathfee - the amount of shekel someone drops when dead.
 GM.Config.deathfee						= 30
 -- decaltimer - Sets the time to clear clientside decals. (seconds)
 GM.Config.decaltimer					= 120
@@ -210,16 +210,16 @@ GM.Config.maxvehicles					= 5
 GM.Config.microwavefoodcost				= 30
 -- minlotterycost - Minimum payment the mayor can set to join a lottery.
 GM.Config.minlotterycost				= 30
--- Money packets will get removed if they don't get picked up after a while. Set to 0 to disable
-GM.Config.moneyRemoveTime				= 600
--- mprintamount - Value of the money printed by the money printer.
+-- shekel packets will get removed if they don't get picked up after a while. Set to 0 to disable
+GM.Config.shekelRemoveTime				= 600
+-- mprintamount - Value of the shekel printed by the shekel printer.
 GM.Config.mprintamount					= 250
 -- normalsalary - Sets the starting salary for newly joined players.
 GM.Config.normalsalary					= 9999999999999999999
--- npckillpay - Sets the money given for each NPC kill.
+-- npckillpay - Sets the shekel given for each NPC kill.
 GM.Config.npckillpay					= 9999999999
 -- paydelay - Sets how long it takes before people get salary
-GM.Config.paydelay						= 5
+GM.Config.paydelay						= 100
 -- pocketitems - Sets the amount of objects the pocket can carry
 GM.Config.pocketitems					= 10
 -- pricecap - The maximum price of items (using /price)
@@ -246,8 +246,8 @@ GM.Config.ShipmentSpamTime				= 3
 GM.Config.shipmentspawntime				= 10
 -- startinghealth - the health when you spawn.
 GM.Config.startinghealth				= 100
--- startingmoney - your wallet when you join for the first time.
-GM.Config.startingmoney					= 99999999999
+-- startingshekel - your wallet when you join for the first time.
+GM.Config.startingshekel					= 99999999999
 -- vehiclecost - Sets the cost of a vehicle (To own it).
 GM.Config.vehiclecost					= 40
 -- wallettaxmax - Maximum percentage of tax to be paid.
@@ -271,14 +271,14 @@ GM.Config.printeroverheatchance			= 22
 Other settings
 ---------------------------------------------------------------------------]]
 
--- The classname of money packets. Use this to create your own money entity!
--- Note: the money packet must support the "Setamount" method (or the amount DTVar)
-GM.Config.MoneyClass = "spawned_money"
--- In case you do wish to keep the default money, but change the model, this option is the way to go:
-GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
+-- The classname of shekel packets. Use this to create your own shekel entity!
+-- Note: the shekel packet must support the "Setamount" method (or the amount DTVar)
+GM.Config.shekelClass = "spawned_shekel"
+-- In case you do wish to keep the default shekel, but change the model, this option is the way to go:
+GM.Config.shekelModel = "models/props/cs_assault/shekel.mdl"
 
 -- The skin fprp uses. Set to "default" to use the GMod default derma theme
-GM.Config.fprpSkin = "Default"
+GM.Config.fprpSkin = "fprp"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "http://wiki.fprp.com/index.php/Main_Page"
@@ -343,7 +343,7 @@ GM.Config.CategoryOverride = {
 	},
 	entities = {
 		["Drug lab"]							= "Other",
-		["Money printer"]						= "Other",
+		["shekel printer"]						= "Other",
 		["Gun lab"]								= "Other"
 
 	},
@@ -379,7 +379,7 @@ GM.Config.AdminWeapons = {
 GM.Config.DefaultLaws = {
 	"Do not attack other citizens except in self-defence.",
 	"Do not steal or break in to peoples homes.",
-	"Money printers/drugs are illegal."
+	"shekel printers/drugs are illegal."
 }
 
 GM.Config.PocketBlacklist = {
@@ -393,7 +393,7 @@ GM.Config.PocketBlacklist = {
 	["env_"] = true,
 	["path_"] = true,
 	["prop_physics"] = true,
-	["money_printer"] = true,
+	["shekel_printer"] = true,
 	["gunlab"] = true,
 	["prop_dynamic"] = true,
 }
@@ -432,7 +432,7 @@ GM.Config.allowedProperties = {
 F4 menu
 ---------------------------------------------------------------------------]]
 -- hide the items that you can't buy and the jobs you can't get (instead of graying them out)
--- this option hides items when you don't have enough money, when the maximum is reached for a job or any other reason
+-- this option hides items when you don't have enough shekel, when the maximum is reached for a job or any other reason
 GM.Config.hideNonBuyable = false
 
 -- Hide only the items that you have the wrong job for (or for which the customCheck says no)

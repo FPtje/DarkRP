@@ -325,8 +325,8 @@ fprp.hookStub{
 			type = "Player"
 		},
 		{
-			name = "GiveMoneyBack",
-			description = "The amount of money refunded to the player",
+			name = "GiveshekelBack",
+			description = "The amount of shekel refunded to the player",
 			type = "number"
 		}
 	},
@@ -657,7 +657,7 @@ fprp.hookStub{
 		},
 		{
 			name = "wallet",
-			description = "The amount of money the player had before the tax was applied.",
+			description = "The amount of shekel the player had before the tax was applied.",
 			type = "number"
 		}
 	},

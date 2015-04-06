@@ -157,10 +157,10 @@ local flammablePropsKV = { -- Class names as index
 	gunlab = true,
 	letter = true,
 	microwave = true,
-	money_printer = true,
+	shekel_printer = true,
 	spawned_shipment = true,
 	spawned_weapon = true,
-	spawned_money = true
+	spawned_shekel = true
 }
 
 local flammableProps = {} -- Numbers as index
@@ -175,7 +175,7 @@ end
 local function FireSpread(ent, chanceDiv)
 	if not ent:IsOnFire() then return end
 
-	if ent:isMoneyBag() then
+	if ent:isshekelBag() then
 		ent:Remove()
 	end
 

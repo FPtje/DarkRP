@@ -41,12 +41,9 @@ end
 function FAdmin.ScoreBoard.Background()
 	local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 
-	surface.SetDrawColor(0,0,0,200)
-	surface.DrawRect(FAdmin.ScoreBoard.X, FAdmin.ScoreBoard.Y, FAdmin.ScoreBoard.Width, FAdmin.ScoreBoard.Height)
-
-	surface.SetTexture(GmodLogo)
-	surface.SetDrawColor(255,255,255,GmodLogoColor.a)
-	surface.DrawTexturedRect(FAdmin.ScoreBoard.X - 20, FAdmin.ScoreBoard.Y, 128, 128)
+	surface.SetDrawColor(0,0,0,255)
+	surface.SetMaterial(g_panel)
+	surface.DrawTexturedRect(FAdmin.ScoreBoard.X, FAdmin.ScoreBoard.Y, FAdmin.ScoreBoard.Width, FAdmin.ScoreBoard.Height)
 end
 
 

@@ -1,10 +1,10 @@
 fprp.PLAYER.canAfford = fprp.stub{
 	name = "canAfford",
-	description = "Whether the player can afford the given amount of money",
+	description = "Whether the player can afford the given amount of shekel",
 	parameters = {
 		{
 			name = "amount",
-			description = "The amount of money",
+			description = "The amount of shekel",
 			type = "number",
 			optional = false
 		}
@@ -19,16 +19,16 @@ fprp.PLAYER.canAfford = fprp.stub{
 	metatable = fprp.PLAYER
 }
 
-fprp.ENTITY.isMoneyBag = fprp.stub{
-	name = "isMoneyBag",
-	description = "Whether this entity is a money bag",
+fprp.ENTITY.isshekelBag = fprp.stub{
+	name = "isshekelBag",
+	description = "Whether this entity is a shekel bag",
 	parameters = {
 
 	},
 	returns = {
 		{
 			name = "answer",
-			description = "Whether this entity is a money bag.",
+			description = "Whether this entity is a shekel bag.",
 			type = "boolean"
 		}
 	},

@@ -26,7 +26,7 @@ function fprp.removePlayerGesture(anim)
 end
 
 hook.Add("CalcMainActivity", "fprp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
-	-- Dropping weapons/money!
+	-- Dropping weapons/shekel!
 	if ply.anim_DroppingItem then
 		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_DROP, true)
 		ply.anim_DroppingItem = nil

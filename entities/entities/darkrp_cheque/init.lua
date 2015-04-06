@@ -27,14 +27,14 @@ function ENT:Use(activator, caller)
 
 	if (IsValid(activator) and IsValid(recipient)) and activator == recipient then
 		owner = (IsValid(owner) and owner:Nick()) or fprp.getPhrase("disconnected_player")
-		fprp.notify(activator, 0, 4, fprp.getPhrase("found_cheque", fprp.formatMoney(amount), "", owner))
-		activator:addMoney(amount)
+		fprp.notify(activator, 0, 4, fprp.getPhrase("found_cheque", fprp.formatshekel(amount), "", owner))
+		activator:addshekel(amount)
 		self:Remove()
 	elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then
 		fprp.notify(activator, 0, 4, fprp.getPhrase("cheque_details", recipient:Name()))
 	elseif IsValid(owner) and owner == activator then
 		fprp.notify(activator, 0, 4, fprp.getPhrase("cheque_torn"))
-		owner:addMoney(self:Getamount()) -- return the money on the cheque to the owner.
+		owner:addshekel(self:Getamount()) -- return the shekel on the cheque to the owner.
 		self:Remove()
 	elseif not IsValid(recipient) then self:Remove()
 	end

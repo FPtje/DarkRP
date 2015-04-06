@@ -410,7 +410,7 @@ fprp.hookStub{
                 },
                 {
                         name = "price",
-                        description = "The amount of money people have to pay to enter.",
+                        description = "The amount of shekel people have to pay to enter.",
                         type = "number"
                 }
         },

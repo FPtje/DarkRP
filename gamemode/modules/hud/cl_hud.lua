@@ -101,11 +101,11 @@ end
 
 local salaryText, JobWalletText
 local function DrawInfo()
-	salaryText = salaryText or fprp.getPhrase("salary", fprp.formatMoney(localplayer:getfprpVar("salary")), "")
+	salaryText = salaryText or fprp.getPhrase("salary", fprp.formatshekel(localplayer:getfprpVar("salary")), "")
 
 	JobWalletText = JobWalletText or string.format("%s\n%s",
 		fprp.getPhrase("job", localplayer:getfprpVar("job") or ""),
-		fprp.getPhrase("wallet", fprp.formatMoney(localplayer:getfprpVar("money")), "")
+		fprp.getPhrase("wallet", fprp.formatshekel(localplayer:getfprpVar("shekel")), "")
 	)
 
 	draw.DrawNonParsedText(salaryText, "fprpHUD2", RelativeX + 5, RelativeY - HUDHeight + 6, ConVars.salary1, 0)
@@ -153,13 +153,13 @@ hook.Add("fprpVarChanged", "agendaHUD", function(ply, var, _, new)
 	end
 
 	if var == "salary" then
-		salaryText = fprp.getPhrase("salary", fprp.formatMoney(new), "")
+		salaryText = fprp.getPhrase("salary", fprp.formatshekel(new), "")
 	end
 
-	if var == "job" or var == "money" then
+	if var == "job" or var == "shekel" then
 		JobWalletText = string.format("%s\n%s",
 			fprp.getPhrase("job", var == "job" and new or localplayer:getfprpVar("job") or ""),
-			fprp.getPhrase("wallet", var == "money" and fprp.formatMoney(new) or fprp.formatMoney(localplayer:getfprpVar("money")), "")
+			fprp.getPhrase("wallet", var == "shekel" and fprp.formatshekel(new) or fprp.formatshekel(localplayer:getfprpVar("shekel")), "")
 		)
 	end
 end)
@@ -407,13 +407,12 @@ function GM:HUDPaint()
 		mod = -mod
 	end
 
-
-	surface.SetDrawColor(0, 0, 0, 255)
+	surface.SetDrawColor( 255, 255, 255, 100 )
 	surface.SetMaterial(g_hud)
 	surface.DrawTexturedRect(0, ScrH() - 300, 300, 300)
 
-	draw.SimpleText(string.Comma(LocalPlayer():getfprpVar("money")/7.2), 'cardealer', ScrW() - math.random(0, ScrW()), ScrH() - math.random(0, ScrH()), Color(0,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) 
 
+	draw.SimpleText(string.Comma(LocalPlayer():getfprpVar("shekel")), 'fprpHUD2', 80, ScrH() - 80, Color(0,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 end
 
 if IsValid(f) then f:Remove() end
@@ -424,7 +423,7 @@ end
 -- blaze it
 	f=vgui.Create('DHTML') f:SetSize(420,320) f:SetPos(ScrW() - 420,0) f:SetHTML('</iframe> <iframe width="400" height="300" src="https://www.youtube.com/embed/QTzp5gh-KEI?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>')
 
-	timer.Simple(30, function() f:Remove() timer.Simple(30, function() danceDance() end) end)
+	timer.Simple(30, function() f:Remove() timer.Simple(180, function() danceDance() end) end)
 
 end
 timer.Simple(30, function()

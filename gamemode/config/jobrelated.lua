@@ -190,8 +190,8 @@ TEAM_HOBO = fprp.createJob("Hobo", {
 	model = "models/player/corpse1.mdl",
 	description = [[The lowest member of society. Everybody laughs at you.
 		You have no home.
-		Beg for your food and money
-		Sing for everyone who passes to get money
+		Beg for your food and shekel
+		Sing for everyone who passes to get shekel
 		Make your own wooden home somewhere in a corner or outside someone else's door]],
 	weapons = {"weapon_bugbait"},
 	command = "hobo",

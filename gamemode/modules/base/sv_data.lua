@@ -163,7 +163,7 @@ function fprp.initDatabase()
 						local Data = data[1]
 						v:setfprpVar("rpname", Data.rpname)
 						v:setSelffprpVar("salary", Data.salary)
-						v:setfprpVar("money", Data.wallet)
+						v:setfprpVar("shekel", Data.wallet)
 					end)
 				end
 			end
@@ -243,26 +243,26 @@ function fprp.createPlayerData(ply, name, wallet, salary)
 			wallet .. ");")
 end
 
-function fprp.storeMoney(ply, amount)
+function fprp.storeshekel(ply, amount)
 	if not IsValid(ply) then return end
 	if not isnumber(amount) or amount < 0 or amount >= 1/0 then return end
 
 	MySQLite.query([[UPDATE fprp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 end
 
-local function resetAllMoney(ply,cmd,args)
+local function resetAllshekel(ply,cmd,args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
-	MySQLite.query("UPDATE fprp_player SET wallet = "..GAMEMODE.Config.startingmoney.." ;")
+	MySQLite.query("UPDATE fprp_player SET wallet = "..GAMEMODE.Config.startingshekel.." ;")
 	for k,v in pairs(player.GetAll()) do
-		v:setfprpVar("money", GAMEMODE.Config.startingmoney)
+		v:setfprpVar("shekel", GAMEMODE.Config.startingshekel)
 	end
 	if ply:IsPlayer() then
-		fprp.notifyAll(0,4, fprp.getPhrase("reset_money", ply:Nick()))
+		fprp.notifyAll(0,4, fprp.getPhrase("reset_shekel", ply:Nick()))
 	else
-		fprp.notifyAll(0,4, fprp.getPhrase("reset_money", "Console"))
+		fprp.notifyAll(0,4, fprp.getPhrase("reset_shekel", "Console"))
 	end
 end
-concommand.Add("rp_resetallmoney", resetAllMoney)
+concommand.Add("rp_resetallshekel", resetAllshekel)
 
 function fprp.storeSalary(ply, amount)
 	ply:setSelffprpVar("salary", math.floor(amount))
@@ -304,10 +304,10 @@ function meta:restorePlayerData()
 		local info = data and data[1] or {}
 		if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
 
-		info.wallet = info.wallet or GAMEMODE.Config.startingmoney
+		info.wallet = info.wallet or GAMEMODE.Config.startingshekel
 		info.salary = info.salary or GAMEMODE.Config.normalsalary
 
-		self:setfprpVar("money", tonumber(info.wallet))
+		self:setfprpVar("shekel", tonumber(info.wallet))
 		self:setSelffprpVar("salary", tonumber(info.salary))
 
 		self:setfprpVar("rpname", info.rpname)
@@ -318,7 +318,7 @@ function meta:restorePlayerData()
 	end, function() -- Retrieving data failed, go on without it
 		self.fprpUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
 
-		self:setfprpVar("money", GAMEMODE.Config.startingmoney)
+		self:setfprpVar("shekel", GAMEMODE.Config.startingshekel)
 		self:setSelffprpVar("salary", GAMEMODE.Config.normalsalary)
 		self:setfprpVar("rpname", string.gsub(self:SteamName(), "\\\"", "\""))
 

@@ -87,8 +87,8 @@ function fprp.readNetfprpVarRemoval()
 	return id == 255 and net.ReadString() or fprpVarById[id].name
 end
 
--- The money is a double because it accepts higher values than Int and UInt, which are undefined for >32 bits
-fprp.registerfprpVar("money",         net.WriteDouble, net.ReadDouble)
+-- The shekel is a double because it accepts higher values than Int and UInt, which are undefined for >32 bits
+fprp.registerfprpVar("shekel",         net.WriteDouble, net.ReadDouble)
 fprp.registerfprpVar("salary",        fp{fn.Flip(net.WriteInt), 32}, fp{net.ReadInt, 32})
 fprp.registerfprpVar("rpname",        net.WriteString, net.ReadString)
 fprp.registerfprpVar("job",           net.WriteString, net.ReadString)

@@ -5,13 +5,13 @@ fprp.declareChatCommand{
 }
 
 fprp.declareChatCommand{
-	command = "dropmoney",
+	command = "dropshekel",
 	description = "Drop shekels on the floor.",
 	delay = 1.5
 }
 
 fprp.declareChatCommand{
-	command = "moneydrop",
+	command = "shekeldrop",
 	description = "Drop shekels on the floor.",
 	delay = 1.5
 }

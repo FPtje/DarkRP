@@ -132,10 +132,10 @@ function GM:PlayerSpawnedProp(ply, model, ent)
 
 	if GAMEMODE.Config.proppaying then
 		if ply:canAfford(GAMEMODE.Config.propcost) then
-			fprp.notify(ply, 0, 4, fprp.getPhrase("deducted_money", fprp.formatMoney(GAMEMODE.Config.propcost)))
-			ply:addMoney(-GAMEMODE.Config.propcost)
+			fprp.notify(ply, 0, 4, fprp.getPhrase("deducted_shekel", fprp.formatshekel(GAMEMODE.Config.propcost)))
+			ply:addshekel(-GAMEMODE.Config.propcost)
 		else
-			fprp.notify(ply, 1, 4, fprp.getPhrase("need_money", fprp.formatMoney(GAMEMODE.Config.propcost)))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("need_shekel", fprp.formatshekel(GAMEMODE.Config.propcost)))
 			SafeRemoveEntity(ent)
 			return false
 		end
@@ -264,8 +264,8 @@ function GM:OnNPCKilled(victim, ent, weapon)
 
 	-- If we know by now who killed the NPC, pay them.
 	if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
-		ent:addMoney(GAMEMODE.Config.npckillpay)
-		fprp.notify(ent, 0, 4, fprp.getPhrase("npc_killpay", fprp.formatMoney(GAMEMODE.Config.npckillpay)))
+		ent:addshekel(GAMEMODE.Config.npckillpay)
+		fprp.notify(ent, 0, 4, fprp.getPhrase("npc_killpay", fprp.formatshekel(GAMEMODE.Config.npckillpay)))
 	end
 end
 
@@ -423,15 +423,15 @@ function GM:PlayerDeath(ply, weapon, killer)
 	end
 	ply.DeathPos = ply:GetPos()
 
-	if GAMEMODE.Config.dropmoneyondeath then
+	if GAMEMODE.Config.dropshekelondeath then
 		local amount = GAMEMODE.Config.deathfee
 		if not ply:canAfford(GAMEMODE.Config.deathfee) then
-			amount = ply:getfprpVar("money")
+			amount = ply:getfprpVar("shekel")
 		end
 
 		if amount > 0 then
-			ply:addMoney(-amount)
-			fprp.createMoneyBag(ply:GetPos(), amount)
+			ply:addshekel(-amount)
+			fprp.createshekelBag(ply:GetPos(), amount)
 		end
 	end
 
@@ -646,7 +646,7 @@ function GM:PlayerSpawn(ply)
 		ply:GetActiveWeapon():Extinguish()
 	end
 
-	for k,v in pairs(ents.FindByClass("predicted_viewmodel")) do -- Money printer ignite fix
+	for k,v in pairs(ents.FindByClass("predicted_viewmodel")) do -- shekel printer ignite fix
 		v:Extinguish()
 	end
 

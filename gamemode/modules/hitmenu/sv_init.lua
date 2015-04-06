@@ -21,7 +21,7 @@ function plyMeta:requestHit(customer, target, price)
 		return false
 	end
 
-	fprp.createQuestion(fprp.getPhrase("accept_hit_request", customer:Nick(), target:Nick(), fprp.formatMoney(price)),
+	fprp.createQuestion(fprp.getPhrase("accept_hit_request", customer:Nick(), target:Nick(), fprp.formatshekel(price)),
 		"hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
 		self,
 		20,
@@ -128,7 +128,7 @@ fprp.defineChatCommand("hitprice", function(ply, args)
 	ply:setHitPrice(price)
 	price = ply:getHitPrice()
 
-	fprp.notify(ply, 2, 4, fprp.getPhrase("hit_price_set", fprp.formatMoney(price)))
+	fprp.notify(ply, 2, 4, fprp.getPhrase("hit_price_set", fprp.formatshekel(price)))
 
 	return ""
 end)
@@ -162,7 +162,7 @@ function fprp.hooks:onHitAccepted(hitman, target, customer)
 	fprp.notify(customer, 0, 8, fprp.getPhrase("hit_accepted"))
 	customer.lastHitAccepted = CurTime()
 
-	fprp.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. fprp.formatMoney(hits[hitman].price), Color(255, 0, 255))
+	fprp.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. fprp.formatshekel(hits[hitman].price), Color(255, 0, 255))
 end
 
 function fprp.hooks:onHitCompleted(hitman, target, customer)
@@ -176,7 +176,7 @@ function fprp.hooks:onHitCompleted(hitman, target, customer)
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-	fprp.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. fprp.formatMoney(hits[hitman].price),
+	fprp.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. fprp.formatshekel(hits[hitman].price),
 		Color(255, 0, 255))
 
 	target:setfprpVar("lastHitTime", CurTime())

@@ -585,7 +585,7 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		ply:addMoney(-cost)
+		ply:addshekel(-cost)
 
 		local trace = {}
 		trace.start = ply:EyePos()
@@ -603,7 +603,7 @@ local function addEntityCommands(tblEnt)
 
 		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, ent, cost)
 
-		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", tblEnt.name, fprp.formatMoney(cost), ""))
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", tblEnt.name, fprp.formatshekel(cost), ""))
 
 		ply:addCustomEntity(tblEnt)
 		return ""

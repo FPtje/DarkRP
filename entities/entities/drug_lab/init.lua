@@ -51,8 +51,8 @@ function ENT:Use(activator,caller)
 			timer.Simple(0.5, function() self.CanUse = true end)
 			return false
 		end
-		activator:addMoney(-productioncost)
-		fprp.notify(activator, 0, 4, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("drugs")), fprp.formatMoney(productioncost), ""))
+		activator:addshekel(-productioncost)
+		fprp.notify(activator, 0, 4, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("drugs")), fprp.formatshekel(productioncost), ""))
 		self.sparking = true
 		timer.Create(self:EntIndex() .. "drug", 1, 1, function() self:createDrug() end)
 	end

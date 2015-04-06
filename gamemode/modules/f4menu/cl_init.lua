@@ -79,7 +79,7 @@ function fprp.hooks.F4MenuTabs()
 end
 
 hook.Add("fprpVarChanged", "RefreshF4Menu", function(ply, varname)
-	if ply ~= LocalPlayer() or varname ~= "money" or not ValidPanel(f4Frame) or not f4Frame:IsVisible() then return end
+	if ply ~= LocalPlayer() or varname ~= "shekel" or not ValidPanel(f4Frame) or not f4Frame:IsVisible() then return end
 
 	f4Frame:InvalidateLayout()
 end)

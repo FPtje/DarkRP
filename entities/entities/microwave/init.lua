@@ -71,8 +71,8 @@ function ENT:Use(activator, caller)
 		local discounted = math.ceil(GAMEMODE.Config.microwavefoodcost * 0.82)
 		local cash = self:SalePrice(activator)
 
-		activator:addMoney(cash * -1)
-		fprp.notify(activator, 0, 3, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("food")), fprp.formatMoney(cash)))
+		activator:addshekel(cash * -1)
+		fprp.notify(activator, 0, 3, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("food")), fprp.formatshekel(cash)))
 
 		if activator ~= owner then
 			local gain = 0
@@ -82,12 +82,12 @@ function ENT:Use(activator, caller)
 				gain = math.floor(self:Getprice() - GAMEMODE.Config.microwavefoodcost)
 			end
 			if gain == 0 then
-				fprp.notify(owner, 3, 3, fprp.getPhrase("you_received_x", fprp.formatMoney(0) .. fprp.getPhrase("profit"), string.lower(fprp.getPhrase("food"))))
+				fprp.notify(owner, 3, 3, fprp.getPhrase("you_received_x", fprp.formatshekel(0) .. fprp.getPhrase("profit"), string.lower(fprp.getPhrase("food"))))
 			else
-				owner:addMoney(gain)
+				owner:addshekel(gain)
 				local word = fprp.getPhrase("profit")
 				if gain < 0 then word = fprp.getPhrase("loss") end
-				fprp.notify(owner, 0, 3, fprp.getPhrase("you_received_x", fprp.formatMoney(math.abs(gain)) .. word, string.lower(fprp.getPhrase("food"))))
+				fprp.notify(owner, 0, 3, fprp.getPhrase("you_received_x", fprp.formatshekel(math.abs(gain)) .. word, string.lower(fprp.getPhrase("food"))))
 			end
 		end
 		timer.Create(self:EntIndex() .. "food", 1, 1, function() self:createFood() end)

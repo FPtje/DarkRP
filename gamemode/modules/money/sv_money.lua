@@ -2,21 +2,21 @@
 functions
 ---------------------------------------------------------------------------*/
 local meta = FindMetaTable("Player")
-function meta:addMoney(amount)
+function meta:addshekel(amount)
 	if not amount then return false end
-	local total = self:getfprpVar("money") + math.floor(amount)
-	total = hook.Call("playerWalletChanged", GAMEMODE, self, amount, self:getfprpVar("money")) or total
+	local total = self:getfprpVar("shekel") + math.floor(amount)
+	total = hook.Call("playerWalletChanged", GAMEMODE, self, amount, self:getfprpVar("shekel")) or total
 
-	self:setfprpVar("money", total)
+	self:setfprpVar("shekel", total)
 
 	if self.fprpUnInitialized then return end
-	fprp.storeMoney(self, total)
+	fprp.storeshekel(self, total)
 end
 
 function fprp.payPlayer(ply1, ply2, amount)
 	if not IsValid(ply1) or not IsValid(ply2) then return end
-	ply1:addMoney(-amount)
-	ply2:addMoney(amount)
+	ply1:addshekel(-amount)
+	ply2:addshekel(amount)
 end
 
 function meta:payDay()
@@ -30,8 +30,8 @@ function meta:payDay()
 			if amount == 0 or not amount then
 				if not suppress then fprp.notify(self, 4, 4, message or fprp.getPhrase("payday_unemployed")) end
 			else
-				self:addMoney(amount)
-				if not suppress then fprp.notify(self, 4, 4, message or fprp.getPhrase("payday_message", fprp.formatMoney(amount))) end
+				self:addshekel(amount)
+				if not suppress then fprp.notify(self, 4, 4, message or fprp.getPhrase("payday_message", fprp.formatshekel(amount))) end
 			end
 		end)
 	else
@@ -39,22 +39,22 @@ function meta:payDay()
 	end
 end
 
-function fprp.createMoneyBag(pos, amount)
-	local moneybag = ents.Create(GAMEMODE.Config.MoneyClass)
-	moneybag:SetPos(pos)
-	moneybag:Setamount(math.Min(amount, 2147483647))
-	moneybag:Spawn()
-	moneybag:Activate()
-	if GAMEMODE.Config.moneyRemoveTime and  GAMEMODE.Config.moneyRemoveTime ~= 0 then
-		timer.Create("RemoveEnt"..moneybag:EntIndex(), GAMEMODE.Config.moneyRemoveTime, 1, fn.Partial(SafeRemoveEntity, moneybag))
+function fprp.createshekelBag(pos, amount)
+	local shekelbag = ents.Create(GAMEMODE.Config.shekelClass)
+	shekelbag:SetPos(pos)
+	shekelbag:Setamount(math.Min(amount, 2147483647))
+	shekelbag:Spawn()
+	shekelbag:Activate()
+	if GAMEMODE.Config.shekelRemoveTime and  GAMEMODE.Config.shekelRemoveTime ~= 0 then
+		timer.Create("RemoveEnt"..shekelbag:EntIndex(), GAMEMODE.Config.shekelRemoveTime, 1, fn.Partial(SafeRemoveEntity, shekelbag))
 	end
-	return moneybag
+	return shekelbag
 end
 
 /*---------------------------------------------------------------------------
 Commands
 ---------------------------------------------------------------------------*/
-local function GiveMoney(ply, args)
+local function Giveshekel(ply, args)
 	if args == "" then
 		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""))
 		return ""
@@ -99,9 +99,9 @@ local function GiveMoney(ply, args)
 					end
 					fprp.payPlayer(ply, trace2.Entity, amount)
 
-					fprp.notify(trace2.Entity, 0, 4, fprp.getPhrase("has_given", ply:Nick(), fprp.formatMoney(amount)))
-					fprp.notify(ply, 0, 4, fprp.getPhrase("you_gave", trace2.Entity:Nick(), fprp.formatMoney(amount)))
-					fprp.log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..fprp.formatMoney(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+					fprp.notify(trace2.Entity, 0, 4, fprp.getPhrase("has_given", ply:Nick(), fprp.formatshekel(amount)))
+					fprp.notify(ply, 0, 4, fprp.getPhrase("you_gave", trace2.Entity:Nick(), fprp.formatshekel(amount)))
+					fprp.log(ply:Nick().. " (" .. ply:SteamID() .. ") has given "..fprp.formatshekel(amount).. " to "..trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
 				end
 			else
 				fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/give", ""))
@@ -112,9 +112,9 @@ local function GiveMoney(ply, args)
 	end
 	return ""
 end
-fprp.defineChatCommand("give", GiveMoney, 0.2)
+fprp.defineChatCommand("give", Giveshekel, 0.2)
 
-local function DropMoney(ply, args)
+local function Dropshekel(ply, args)
 	if args == "" then
 		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""))
 		return ""
@@ -142,7 +142,7 @@ local function DropMoney(ply, args)
 		return ""
 	end
 
-	ply:addMoney(-amount)
+	ply:addshekel(-amount)
 	local RP = RecipientFilter()
 	RP:AddAllPlayers()
 
@@ -159,17 +159,17 @@ local function DropMoney(ply, args)
 			trace.filter = ply
 
 			local tr = util.TraceLine(trace)
-			fprp.createMoneyBag(tr.HitPos, amount)
-			fprp.log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped ".. fprp.formatMoney(amount))
+			fprp.createshekelBag(tr.HitPos, amount)
+			fprp.log(ply:Nick().. " (" .. ply:SteamID() .. ") has dropped ".. fprp.formatshekel(amount))
 		else
-			fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/dropmoney", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/dropshekel", ""))
 		end
 	end)
 
 	return ""
 end
-fprp.defineChatCommand("dropmoney", DropMoney, 0.3)
-fprp.defineChatCommand("moneydrop", DropMoney, 0.3)
+fprp.defineChatCommand("dropshekel", Dropshekel, 0.3)
+fprp.defineChatCommand("shekeldrop", Dropshekel, 0.3)
 
 local function CreateCheque(ply, args)
 	local argt = string.Explode(" ", args)
@@ -193,7 +193,7 @@ local function CreateCheque(ply, args)
 	end
 
 	if IsValid(ply) and IsValid(recipient) then
-		ply:addMoney(-amount)
+		ply:addshekel(-amount)
 	end
 
 	umsg.Start("anim_dropitem", RecipientFilter():AddAllPlayers())
@@ -225,7 +225,7 @@ end
 fprp.defineChatCommand("cheque", CreateCheque, 0.3)
 fprp.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
 
-local function ccSetMoney(ply, cmd, args)
+local function ccSetshekel(ply, cmd, args)
 	if not tonumber(args[2]) then
 		if ply:EntIndex() == 0 then
 			print(fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
@@ -235,7 +235,7 @@ local function ccSetMoney(ply, cmd, args)
 		return
 	end
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, fprp.getPhrase("need_sadmin", "rp_setmoney"))
+		ply:PrintMessage(2, fprp.getPhrase("need_sadmin", "rp_setshekel"))
 		return
 	end
 
@@ -249,26 +249,26 @@ local function ccSetMoney(ply, cmd, args)
 	local amount = math.floor(tonumber(args[2]))
 
 	if args[3] then
-		amount = args[3] == "-" and math.Max(0, target:getfprpVar("money") - amount) or target:getfprpVar("money") + amount
+		amount = args[3] == "-" and math.Max(0, target:getfprpVar("shekel") - amount) or target:getfprpVar("shekel") + amount
 	end
 
 	if target then
 		local nick = ""
-		fprp.storeMoney(target, amount)
-		target:setfprpVar("money", amount)
+		fprp.storeshekel(target, amount)
+		target:setfprpVar("shekel", amount)
 
 		if ply:EntIndex() == 0 then
-			print(fprp.getPhrase("you_set_x_money", target:Nick(), fprp.formatMoney(amount), ""))
+			print(fprp.getPhrase("you_set_x_shekel", target:Nick(), fprp.formatshekel(amount), ""))
 			nick = "Console"
 		else
-			ply:PrintMessage(2, fprp.getPhrase("you_set_x_money", target:Nick(), fprp.formatMoney(amount), ""))
+			ply:PrintMessage(2, fprp.getPhrase("you_set_x_shekel", target:Nick(), fprp.formatshekel(amount), ""))
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, fprp.getPhrase("x_set_your_money", nick, fprp.formatMoney(amount), ""))
+		target:PrintMessage(2, fprp.getPhrase("x_set_your_shekel", nick, fprp.formatshekel(amount), ""))
 		if ply:EntIndex() == 0 then
-			fprp.log("Console set " .. target:SteamName() .. "'s money to " .. fprp.formatMoney(amount), Color(30, 30, 30))
+			fprp.log("Console set " .. target:SteamName() .. "'s shekel to " .. fprp.formatshekel(amount), Color(30, 30, 30))
 		else
-			fprp.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s money to " ..  fprp.formatMoney(amount), Color(30, 30, 30))
+			fprp.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s shekel to " ..  fprp.formatshekel(amount), Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then
@@ -278,7 +278,7 @@ local function ccSetMoney(ply, cmd, args)
 		end
 	end
 end
-concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
+concommand.Add("rp_setshekel", ccSetshekel, function() return {"rp_setshekel   <ply>   <amount>   [+/-]"} end)
 
 local function ccSetSalary(ply, cmd, args)
 	if not tonumber(args[2]) then
@@ -322,17 +322,17 @@ local function ccSetSalary(ply, cmd, args)
 		target:setSelffprpVar("salary", amount)
 
 		if ply:EntIndex() == 0 then
-			print(fprp.getPhrase("you_set_x_salary", target:Nick(), fprp.formatMoney(amount), ""))
+			print(fprp.getPhrase("you_set_x_salary", target:Nick(), fprp.formatshekel(amount), ""))
 			nick = "Console"
 		else
-			ply:PrintMessage(2, fprp.getPhrase("you_set_x_salary", target:Nick(), fprp.formatMoney(amount), ""))
+			ply:PrintMessage(2, fprp.getPhrase("you_set_x_salary", target:Nick(), fprp.formatshekel(amount), ""))
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, fprp.getPhrase("x_set_your_salary", nick, fprp.formatMoney(amount), ""))
+		target:PrintMessage(2, fprp.getPhrase("x_set_your_salary", nick, fprp.formatshekel(amount), ""))
 		if ply:EntIndex() == 0 then
-			fprp.log("Console set " .. target:SteamName() .. "'s salary to " .. fprp.formatMoney(amount), Color(30, 30, 30))
+			fprp.log("Console set " .. target:SteamName() .. "'s salary to " .. fprp.formatshekel(amount), Color(30, 30, 30))
 		else
-			fprp.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s salary to " .. fprp.formatMoney(amount), Color(30, 30, 30))
+			fprp.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s salary to " .. fprp.formatshekel(amount), Color(30, 30, 30))
 		end
 	else
 		if ply:EntIndex() == 0 then

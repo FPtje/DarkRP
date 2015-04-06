@@ -126,12 +126,12 @@ fprp.createEntity("Drug lab", {
 	allowed = {TEAM_GANG, TEAM_MOB}
 })
 
-fprp.createEntity("Money printer", {
-	ent = "money_printer",
+fprp.createEntity("shekel printer", {
+	ent = "shekel_printer",
 	model = "models/props_c17/consolebox01a.mdl",
 	price = 1000,
 	max = 2,
-	cmd = "buymoneyprinter"
+	cmd = "buyshekelprinter"
 })
 
 fprp.createEntity("Printer Mover", {

@@ -23,14 +23,14 @@ function vector:isInSight(filter, ply)
 end
 
 /*---------------------------------------------------------------------------
-Turn a money amount into a pretty string
+Turn a shekel amount into a pretty string
 ---------------------------------------------------------------------------*/
 local function attachCurrency(str)
 	local config = GAMEMODE.Config
 	return config.currencyLeft and config.currency .. str or str .. config.currency
 end
 
-function fprp.formatMoney(n)
+function fprp.formatshekel(n)
 	if not n then return attachCurrency("0") end
 
 	if n >= 1e14 then return attachCurrency(tostring(n)) end

@@ -128,8 +128,8 @@ function pmeta:doPropertyTax()
 
 	if self:canAfford(tax) then
 		if tax ~= 0 then
-			self:addMoney(-tax)
-			fprp.notify(self, 0, 5, fprp.getPhrase("property_tax", fprp.formatMoney(tax)))
+			self:addshekel(-tax)
+			fprp.notify(self, 0, 5, fprp.getPhrase("property_tax", fprp.formatshekel(tax)))
 		end
 	else
 		fprp.notify(self, 1, 8, fprp.getPhrase("property_tax_cant_afford"))
@@ -149,24 +149,24 @@ function pmeta:initiateTax()
 		if not GAMEMODE.Config.wallettax then
 			return -- Don't remove the hook in case it's turned on afterwards.
 		end
-		local money = self:getfprpVar("money")
+		local shekel = self:getfprpVar("shekel")
 		local mintax = GAMEMODE.Config.wallettaxmin / 100
 		local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
-		local startMoney = GAMEMODE.Config.startingmoney
+		local startshekel = GAMEMODE.Config.startingshekel
 
 
-		if money < (startMoney * 2) then
+		if shekel < (startshekel * 2) then
 			return -- Don't tax players if they have less than twice the starting amount
 		end
 
-		-- Variate the taxes between twice the starting money ($1000 by default) and 200 - 2 times the starting money (100.000 by default)
-		local tax = (money - (startMoney * 2)) / (startMoney * 198)
+		-- Variate the taxes between twice the starting shekel ($1000 by default) and 200 - 2 times the starting shekel (100.000 by default)
+		local tax = (shekel - (startshekel * 2)) / (startshekel * 198)
 			  tax = math.Min(maxtax, mintax + (maxtax - mintax) * tax)
 
-		self:addMoney(-tax * money)
+		self:addshekel(-tax * shekel)
 		fprp.notify(self, 3, 7, fprp.getPhrase("taxday", math.Round(tax * 100, 3)))
 
-		hook.Call("onPaidTax", fprp.hooks, self, tax, money)
+		hook.Call("onPaidTax", fprp.hooks, self, tax, shekel)
 	end)
 end
 
@@ -343,12 +343,12 @@ local function OwnDoor(ply)
 
 			trace.Entity:keysUnOwn(ply)
 			trace.Entity:setKeysTitle(nil)
-			local GiveMoneyBack = math.floor(( hook.Call("get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity) * 0.666) + 0.5)
-			hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveMoneyBack)
-			ply:addMoney(GiveMoneyBack)
+			local GiveshekelBack = math.floor(( hook.Call("get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity) * 0.666) + 0.5)
+			hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveshekelBack)
+			ply:addshekel(GiveshekelBack)
 			local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
 			if not bSuppress then
-				fprp.notify(ply, 0, 4, fprp.getPhrase("door_sold",  fprp.formatMoney(GiveMoneyBack)))
+				fprp.notify(ply, 0, 4, fprp.getPhrase("door_sold",  fprp.formatshekel(GiveshekelBack)))
 			end
 
 		else
@@ -384,9 +384,9 @@ local function OwnDoor(ply)
 				return ""
 			end
 
-			ply:addMoney(-iCost)
+			ply:addshekel(-iCost)
 			if not bSuppress then
-				fprp.notify( ply, 0, 4, bVehicle and fprp.getPhrase("vehicle_bought", fprp.formatMoney(iCost), "") or fprp.getPhrase("door_bought", fprp.formatMoney(iCost), ""))
+				fprp.notify( ply, 0, 4, bVehicle and fprp.getPhrase("vehicle_bought", fprp.formatshekel(iCost), "") or fprp.getPhrase("door_bought", fprp.formatshekel(iCost), ""))
 			end
 
 			trace.Entity:keysOwn(ply)
@@ -408,12 +408,12 @@ local function UnOwnAll(ply, cmd, args)
 			v:Fire("unlock", "", 0)
 			v:keysUnOwn(ply)
 			local cost = (v:IsVehicle() and GAMEMODE.Config.vehiclecost or GAMEMODE.Config.doorcost) * 2/3 + 0.5
-			ply:addMoney(math.floor(cost))
+			ply:addshekel(math.floor(cost))
 			ply:GetTable().Ownedz[v:EntIndex()] = nil
 		end
 	end
 	ply:GetTable().OwnedNumz = 0
-	fprp.notify(ply, 2, 4, fprp.getPhrase("sold_x_doors", amount,fprp.formatMoney(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))))
+	fprp.notify(ply, 2, 4, fprp.getPhrase("sold_x_doors", amount,fprp.formatshekel(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))))
 	return ""
 end
 fprp.defineChatCommand("unownalldoors", UnOwnAll)

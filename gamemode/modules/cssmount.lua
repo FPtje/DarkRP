@@ -1,7 +1,7 @@
-if IsMounted("cstrike") and util.IsValidModel("models/props/cs_assault/money.mdl") then return end
+if IsMounted("cstrike") and util.IsValidModel("models/props/cs_assault/shekel.mdl") then return end
 local texts = {
 	"Counter Strike Source is not mounted!",
-	"Common symptoms: money and guns floating in the air",
+	"Common symptoms: shekel and guns floating in the air",
 	"You need to mount CSS",
 	"fprp will not work without it",
 	"Read these pages:",

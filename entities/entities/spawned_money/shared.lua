@@ -1,6 +1,6 @@
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "Spawned Money"
+ENT.PrintName = "Spawned shekel"
 ENT.Author = "FPtje"
 ENT.Spawnable = false
 

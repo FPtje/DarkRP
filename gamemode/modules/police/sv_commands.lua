@@ -59,8 +59,8 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 			return
 		end
 		table.insert(LotteryPeople, target)
-		target:addMoney(-LotteryAmount)
-		fprp.notify(target, 0,4, fprp.getPhrase("lottery_entered", fprp.formatMoney(LotteryAmount)))
+		target:addshekel(-LotteryAmount)
+		fprp.notify(target, 0,4, fprp.getPhrase("lottery_entered", fprp.formatshekel(LotteryAmount)))
 		hook.Run("playerEnteredLottery", target)
 	elseif answer ~= nil and not table.HasValue(LotteryPeople, target) then
 		fprp.notify(target, 1,4, fprp.getPhrase("lottery_not_entered", "You"))
@@ -77,8 +77,8 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 		end
 		local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
 		hook.Run("lotteryEnded", LotteryPeople, chosen, #LotteryPeople * LotteryAmount)
-		chosen:addMoney(#LotteryPeople * LotteryAmount)
-		fprp.notifyAll(0,10, fprp.getPhrase("lottery_won", chosen:Nick(), fprp.formatMoney(#LotteryPeople * LotteryAmount)))
+		chosen:addshekel(#LotteryPeople * LotteryAmount)
+		fprp.notifyAll(0,10, fprp.getPhrase("lottery_won", chosen:Nick(), fprp.formatshekel(#LotteryPeople * LotteryAmount)))
 	end
 end
 
@@ -117,7 +117,7 @@ local function DoLottery(ply, amount)
 	LotteryPeople = {}
 	for k,v in pairs(player.GetAll()) do
 		if v ~= ply then
-			fprp.createQuestion(fprp.getPhrase("lottery_has_started", fprp.formatMoney(LotteryAmount)), "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
+			fprp.createQuestion(fprp.getPhrase("lottery_has_started", fprp.formatshekel(LotteryAmount)), "lottery"..tostring(k), v, 30, EnterLottery, ply, v)
 		end
 	end
 	timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)

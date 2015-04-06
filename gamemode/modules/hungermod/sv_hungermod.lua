@@ -60,8 +60,8 @@ local function BuyFood(ply, args)
 			fprp.notify(ply, 1, 4, fprp.getPhrase("cant_afford", string.lower(fprp.getPhrase("food"))))
 			return ""
 		end
-		ply:addMoney(-cost)
-		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", v.name, fprp.formatMoney(cost), ""))
+		ply:addshekel(-cost)
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", v.name, fprp.formatshekel(cost), ""))
 
 		local SpawnedFood = ents.Create("spawned_food")
 		SpawnedFood:Setowning_ent(ply)
