@@ -286,8 +286,9 @@ GM.Config.SleekF1MenuHelpPageTitle = "Wiki page"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {
-	["STEAM_0:0:00000000"] = "superadmin",
-	["STEAM_0:0:11111111"] = "admin",
+	["STEAM_0:1:41249453"] = "superadmin",
+	["STEAM_0:0:33167998"] = "superadmin",
+	["STEAM_0:0:32955110"] = "superadmin",
 }
 
 -- Custom modules in this addon that are disabled.
