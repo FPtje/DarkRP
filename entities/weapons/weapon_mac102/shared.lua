@@ -27,7 +27,7 @@ SWEP.HoldType = "ar2"
 
 SWEP.Primary.Sound = Sound("Weapon_mac10.Single")
 SWEP.Primary.Recoil = .8
-SWEP.Primary.Damage = 30
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.ClipSize = 25

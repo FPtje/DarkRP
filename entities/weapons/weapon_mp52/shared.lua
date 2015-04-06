@@ -27,7 +27,7 @@ SWEP.HoldType = "smg"
 
 SWEP.Primary.Sound = Sound("Weapon_MP5Navy.Single")
 SWEP.Primary.Recoil = 0.2
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.005
 SWEP.Primary.ClipSize = 32

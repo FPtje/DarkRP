@@ -45,7 +45,7 @@ SWEP.HoldType = "normal"
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5
-SWEP.Primary.Damage = 40
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.Delay = 0.15
@@ -64,6 +64,7 @@ SWEP.LastPrimaryAttack = 0
 
 SWEP.FireMode = "semi"
 SWEP.MultiMode = false
+
 
 /*---------------------------------------------------------
 ---------------------------------------------------------*/

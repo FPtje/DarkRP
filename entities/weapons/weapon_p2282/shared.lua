@@ -27,7 +27,7 @@ SWEP.AutoSwitchFrom = false
 
 SWEP.Primary.Sound = Sound("Weapon_p228.Single")
 SWEP.Primary.Recoil = 0.8
-SWEP.Primary.Damage = 10
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.04
 SWEP.Primary.ClipSize = 12
