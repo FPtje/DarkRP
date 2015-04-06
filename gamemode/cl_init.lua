@@ -56,3 +56,5 @@ hook.Add("InitPostEntity", "InformTheCitizens", function()
 		chat.AddText(pink, "To enjoy a superior roleplay experience™, please purchase a package from http://cloudsixteen.com")
 	end)
 end)
+
+DarkRP = fprp
