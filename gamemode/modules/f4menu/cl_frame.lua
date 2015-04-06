@@ -35,7 +35,9 @@ function PANEL:ApplySchemeSettings()
 
 	DLabel.ApplySchemeSettings(self)
 end
-
+function PANEL:Paint( w, h )
+	derma.SkinHook( "Paint", "Frame", self, w, h )
+end
 derma.DefineControl("F4MenuTab", "", PANEL, "DTab")
 
 
@@ -178,5 +180,8 @@ function PANEL:generateTabs()
 	self:SetSkin(GAMEMODE.Config.fprpSkin)
 end
 
+function PANEL:Paint( w, h )
+	derma.SkinHook( "Paint", "Frame", self, w, h )
+end
 derma.DefineControl("F4EditablePropertySheet", "", vgui.GetControlTable("DPropertySheet"), "EditablePanel")
 derma.DefineControl("F4MenuFrame", "", PANEL, "F4EditablePropertySheet")

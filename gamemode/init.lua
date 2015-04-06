@@ -9,6 +9,7 @@ local downloads = {
 	'materials/fprp/panel_bg.png',
 	'materials/fprp/button.png',
 	'materials/fprp/close.png',
+	'materials/fprp/pug.png',
 }
 for k, v in ipairs(downloads) do
 	resource.AddFile(v)
@@ -18,7 +19,7 @@ hook.Run("fprpStartedLoading")
 
 GM.Version = "3.0"
 GM.Name = "fprp"
-GM.Author = "By FPtje Falco et al."
+GM.Author = "aStonedPenguin, LastPenguin, code_gs & more"
 
 
 DeriveGamemode("sandbox")

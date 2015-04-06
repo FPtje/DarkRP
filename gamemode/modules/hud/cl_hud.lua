@@ -393,6 +393,7 @@ local insx = 600
 local mod = 1
 
 g_hud = Material("materials/fprp/hud.png") -- make it global so its faster
+g_pug = Material("materials/fprp/pug.png")
 
 function GM:HUDPaint()
 	DrawHUD()
@@ -411,8 +412,13 @@ function GM:HUDPaint()
 	surface.SetMaterial(g_hud)
 	surface.DrawTexturedRect(0, ScrH() - 300, 300, 300)
 
-
 	draw.SimpleText(string.Comma(LocalPlayer():getfprpVar("shekel")), 'fprpHUD2', 80, ScrH() - 80, Color(0,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial(g_pug)
+	surface.DrawTexturedRect(5 + insx, ScrH() - 207, 249, 202)
+
 end
 
 if IsValid(f) then f:Remove() end
@@ -421,6 +427,7 @@ local function danceDance()
 	chat.AddText(Color(255,255,255), 'DANCE DANCE DANCE')
 end
 -- blaze it
+if IsValid(f) then f:Remove() end
 	f=vgui.Create('DHTML') f:SetSize(420,320) f:SetPos(ScrW() - 420,0) f:SetHTML('</iframe> <iframe width="400" height="300" src="https://www.youtube.com/embed/QTzp5gh-KEI?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>')
 
 	timer.Simple(30, function() f:Remove() timer.Simple(180, function() danceDance() end) end)
