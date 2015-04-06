@@ -30,7 +30,7 @@ end
 
 hook.Add("Think", "RemovalThink", function()
 	local trace = LocalPlayer():GetEyeTrace()
-	if(IsValid(trace.Entity)) then
+	if(IsValid(trace.Entity))  && trace.Entity:GetClass() == "money_printer" then	
 		net.Start("remove_shekelprinter")
 		net.WriteEntity(trace.Entity)
 		net.SendToServer()
