@@ -1,3 +1,5 @@
+resource.AddFile("materials/darkrp/inspiration.png")
+
 hook.Run("fprpStartedLoading")
 
 GM.Version = "3.0"

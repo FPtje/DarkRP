@@ -396,9 +396,21 @@ end
 /*---------------------------------------------------------------------------
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
+local inspiration = Material("materials/darkrp/inspiration.png")
+local insw, insh = 298, 600
+local insx = 600
+local mod = 1
+
 function GM:HUDPaint()
 	DrawHUD()
 	DrawEntityDisplay()
 
 	self.BaseClass:HUDPaint()
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial(inspiration)
+	surface.DrawTexturedRect(ScrW() - insw, ScrH() - insx, insw, insh)
+	insx = insx + (mod * 200 * FrameTime())
+	if (insx >= 600) or (insx <= 300) then
+		mod = -mod
+	end
 end
