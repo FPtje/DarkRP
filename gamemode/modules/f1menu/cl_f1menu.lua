@@ -8,25 +8,25 @@ local function searchChatCommand(str)
 	return fn.Compose{table.ClearKeys, fn.Curry(fn.Filter, 2)(condition)}(chatCommands)
 end
 
-local F1Menu
-function fprp.openF1Menu()
+local SLEEKF1MENU
+function fprp.openSLEEKF1MENU()
 	chatCommands = chatCommands or fprp.getSortedChatCommands()
 
-	F1Menu = F1Menu or vgui.Create("F1MenuPanel")
-	F1Menu:SetSkin(GAMEMODE.Config.fprpSkin)
-	F1Menu:setSearchAlgorithm(searchChatCommand)
-	F1Menu:refresh()
-	F1Menu:slideIn()
+	SLEEKF1MENU = SLEEKF1MENU or vgui.Create("SLEEKF1MENUPanel")
+	SLEEKF1MENU:SetSkin(GAMEMODE.Config.fprpSkin)
+	SLEEKF1MENU:setSearchAlgorithm(searchChatCommand)
+	SLEEKF1MENU:refresh()
+	SLEEKF1MENU:slideIn()
 end
 
-function fprp.closeF1Menu()
-	F1Menu:slideOut()
+function fprp.closeSLEEKF1MENU()
+	SLEEKF1MENU:slideOut()
 end
 
 function GM:ShowHelp()
-	if not F1Menu or not F1Menu.toggled then
-		fprp.openF1Menu()
+	if not SLEEKF1MENU or not SLEEKF1MENU.toggled then
+		fprp.openSLEEKF1MENU()
 	else
-		fprp.closeF1Menu()
+		fprp.closeSLEEKF1MENU()
 	end
 end
