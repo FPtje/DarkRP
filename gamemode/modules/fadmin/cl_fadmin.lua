@@ -1,3 +1,24 @@
+FAdmin = FAdmin or {}
+
+FAdmin.PlayerActions = FAdmin.PlayerActions or {}
+FAdmin.StartHooks = FAdmin.StartHooks or {}
+
+FAdmin = FAdmin or {}
+
+FAdmin.PlayerActions = FAdmin.PlayerActions or {}
+FAdmin.StartHooks = FAdmin.StartHooks or {}
+
+FAdmin = FAdmin or {}
+
+FAdmin.PlayerActions = FAdmin.PlayerActions or {}
+FAdmin.StartHooks = FAdmin.StartHooks or {}
+
+FAdmin = FAdmin or {}
+
+FAdmin.PlayerActions = FAdmin.PlayerActions or {}
+FAdmin.StartHooks = FAdmin.StartHooks or {}
+
+
 local function IncludeFolder(fol)
 	fol = string.lower(fol)
 
