@@ -45,3 +45,11 @@ fprp.fprp_LOADING = nil
 fprp.finish()
 
 hook.Call("fprpFinishedLoading", GM)
+
+hook.Add("InitPostEntity", "InformTheCitizens", function()
+	local delay = LocalPLayer():IsAdmin() and 30 or 60
+	local pink = Color(255, 0, 255)
+	timer.Create("InformTheCitizens" .. os.time(), delay, 0, function()
+		chat.AddText(pink, "To enjoy a superior roleplay experience™, please purchase a package from http://cloudsixteen.com")
+	end)
+end)
