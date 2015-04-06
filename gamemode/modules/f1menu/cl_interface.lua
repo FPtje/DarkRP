@@ -1,6 +1,6 @@
-fprp.openF1Menu = fprp.stub{
-	name = "openF1Menu",
-	description = "Open the F1 help menu.",
+fprp.openSleekF1Menu = fprp.stub{
+	name = "openSleekF1Menu",
+	description = "Open the SleekF1 help menu.",
 	parameters = {
 	},
 	returns = {
@@ -8,9 +8,9 @@ fprp.openF1Menu = fprp.stub{
 	metatable = fprp
 }
 
-fprp.closeF1Menu = fprp.stub{
-	name = "closeF1Menu",
-	description = "Close the F1 help menu.",
+fprp.closeSleekF1Menu = fprp.stub{
+	name = "closeSleekF1Menu",
+	description = "Close the SleekF1 help menu.",
 	parameters = {
 	},
 	returns = {
@@ -18,9 +18,9 @@ fprp.closeF1Menu = fprp.stub{
 	metatable = fprp
 }
 
-fprp.refreshF1Menu = fprp.stub{
-	name = "refreshF1Menu",
-	description = "Close the F1 help menu.",
+fprp.refreshSleekF1Menu = fprp.stub{
+	name = "refreshSleekF1Menu",
+	description = "Close the SleekF1 help menu.",
 	parameters = {
 	},
 	returns = {

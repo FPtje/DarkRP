@@ -1,15 +1,15 @@
-local PANEL = {}
+local SLEEKPANEL = {}
 
 local green = Color(0, 150, 0)
 local red = Color(160, 20, 20)
 
-function PANEL:Init()
+function SLEEKPANEL:Init()
 	self:SetFont("fprpHUD2")
 	self:SetColor(green)
 	self:DockMargin(0, 5, 0, 0)
 end
 
-function PANEL:setChatCommand(command)
+function SLEEKPANEL:setChatCommand(command)
 	self.chatCommand = command
 	local text = string.format("%s%s - %s", GAMEMODE.Config.chatCommandPrefix, command.command, fprp.getChatCommandDescription(command.command))
 	self:SetAutoStretchVertical(true)
@@ -24,7 +24,7 @@ The condition of chat command "%s" threw an error:
 
 If this is the command of a custom job, you probably did something wrong when making it.
 ]]
-function PANEL:refresh()
+function SLEEKPANEL:refresh()
 	local condition = self.chatCommand.condition
 	if not condition then
 		self:SetColor(green)
@@ -37,4 +37,4 @@ function PANEL:refresh()
 	self:SetColor(succeeded and not returnValue and red or green)
 end
 
-derma.DefineControl("F1ChatCommandLabel", "Chat command label", PANEL, "DLabel")
+derma.DefineControl("SleekF1ChatCommandLabel", "Sleek Chat command label", SLEEKPANEL, "DLabel")

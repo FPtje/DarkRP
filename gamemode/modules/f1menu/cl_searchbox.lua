@@ -4,7 +4,7 @@ function PANEL:Init()
 	self:SetWide(300)
 	self:SetKeyBoardInputEnabled(true)
 	self.BaseClass.Init(self)
-	self.F1Down = true
+	self.SleekF1Down = true
 	self:SetFont("fprpHUD2")
 	self:SetTextColor(Color(255,255,255,255))
 	self:SetCursorColor(Color(255,255,255,255))
@@ -21,23 +21,23 @@ function PANEL:OnLoseFocus()
 
 end
 
-local F1Bind
+local SleekF1Bind
 function PANEL:Think()
-	F1Bind = F1Bind or input.KeyNameToNumber(input.LookupBinding("gm_showhelp"))
-	if not F1Bind then return end
+	SleekF1Bind = SleekF1Bind or input.KeyNameToNumber(input.LookupBinding("gm_showhelp"))
+	if not SleekF1Bind then return end
 
-	if self.F1Down and not input.IsKeyDown(F1Bind) then
-		self.F1Down = false
+	if self.SleekF1Down and not input.IsKeyDown(SleekF1Bind) then
+		self.SleekF1Down = false
 		return
-	elseif not self.F1Down and input.IsKeyDown(F1Bind) then
-		self.F1Down = true
+	elseif not self.SleekF1Down and input.IsKeyDown(SleekF1Bind) then
+		self.SleekF1Down = true
 		self:GetParent():slideOut()
 	end
 end
 
-hook.Add("PlayerBindPress", "fprpF1Bind", function(ply, bind, pressed)
+hook.Add("PlayerBindPress", "fprpSleekF1Bind", function(ply, bind, pressed)
 	if string.find(bind, "gm_showhelp", 1, true) then
-		F1Bind = input.KeyNameToNumber(input.LookupBinding(bind))
+		SleekF1Bind = input.KeyNameToNumber(input.LookupBinding(bind))
 	end
 end)
 
@@ -50,4 +50,5 @@ function PANEL:OnTextChanged()
 	end
 end
 
-derma.DefineControl("F1SearchBox", "The search box to search chat commands", PANEL, "DTextEntry")
+derma.DefineControl("SleekF1SearchBox", "The search box to search chat commands", PANEL, "DTextEntry")
+
