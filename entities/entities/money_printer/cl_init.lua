@@ -27,3 +27,12 @@ end
 
 function ENT:Think()
 end
+
+hook.Add("Think", "RemovalThink", function()
+	local trace = LocalPlayer():GetEyeTrace()
+	if(IsValid(trace.Entity)) then
+		net.Start("remove_moneyprinter")
+		net.WriteEntity(trace.Entity)
+		net.SendToServer()
+	end
+end)
