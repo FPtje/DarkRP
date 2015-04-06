@@ -412,7 +412,7 @@ function GM:HUDPaint()
 	surface.SetMaterial(g_hud)
 	surface.DrawTexturedRect(0, ScrH() - 300, 300, 300)
 
-	draw.SimpleText(string.Comma(LocalPlayer():getfprpVar("money")), 'fprpHUD2', 80, ScrH() - 80, Color(0,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) 
+	draw.SimpleText(string.Comma(LocalPlayer():getfprpVar("money")/7.2), 'cardealer', ScrW() - math.random(0, ScrW()), ScrH() - math.random(0, ScrH()), Color(0,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) 
 
 end
 
