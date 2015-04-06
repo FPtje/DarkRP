@@ -65,7 +65,7 @@ local function RP_ActualDoSay(ply, text, callback)
 
 	if GAMEMODE.Config.alltalk then
 		for k,v in pairs(player.GetAll()) do
-			fprp.talkToPerson(v, col, callback..ply:Name(), col2, text, ply)
+			fpp.talkToPerson(v, col, callback..ply:Name(), col2, text, ply)
 		end
 	else
 		fpp.talkToRange(ply, callback..ply:Name(), text, 250)
