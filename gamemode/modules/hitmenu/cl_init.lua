@@ -24,17 +24,17 @@ end
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-function DarkRP.hooks:onHitAccepted(hitman, target, customer)
+function fprp.hooks:onHitAccepted(hitman, target, customer)
 	if not IsValid(hitman) then return end
 	hitman:drawHitInfo()
 end
 
-function DarkRP.hooks:onHitCompleted(hitman, target, customer)
+function fprp.hooks:onHitCompleted(hitman, target, customer)
 	if not IsValid(hitman) then return end
 	hitman:stopHitInfo()
 end
 
-function DarkRP.hooks:onHitFailed(hitman, target, reason)
+function fprp.hooks:onHitFailed(hitman, target, reason)
 	if not IsValid(hitman) then return end
 	hitman:stopHitInfo()
 end
@@ -58,7 +58,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
 
 	if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
 		x, y = chat.GetChatBoxPos()
-		local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Nick())
+		local text = fprp.getPhrase("current_hit", localplayer:getHitTarget():Nick())
 		draw.DrawNonParsedText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
 		draw.DrawNonParsedText(text, "HUDNumber5", x, y, textCol2, 0)
 	end
@@ -73,15 +73,15 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
 
 	if not IsValid(hitman) or not hitman:IsPlayer() or not hitman:isHitman() or localplayer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return end
 
-	local canRequest, message = hook.Call("canRequestHit", DarkRP.hooks, hitman, ply, nil, hitman:getHitPrice())
+	local canRequest, message = hook.Call("canRequestHit", fprp.hooks, hitman, ply, nil, hitman:getHitPrice())
 
 	if not canRequest then
-		GAMEMODE:AddNotify(DarkRP.getPhrase("cannot_request_hit", (message or "")), 1, 4)
+		GAMEMODE:AddNotify(fprp.getPhrase("cannot_request_hit", (message or "")), 1, 4)
 		surface.PlaySound("buttons/lightswitch2.wav")
 		return
 	end
 
-	DarkRP.openHitMenu(hitman)
+	fprp.openHitMenu(hitman)
 end)
 
 hook.Add("InitPostEntity", "HitmanMenu", function()
@@ -109,14 +109,14 @@ end
 Networking
 ---------------------------------------------------------------------------*/
 net.Receive("onHitAccepted", function(len)
-	hook.Call("onHitAccepted", DarkRP.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadEntity())
+	hook.Call("onHitAccepted", fprp.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadEntity())
 end)
 
 net.Receive("onHitCompleted", function(len)
-	hook.Call("onHitCompleted", DarkRP.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadEntity())
+	hook.Call("onHitCompleted", fprp.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadEntity())
 end)
 
 net.Receive("onHitFailed", function(len)
-	hook.Call("onHitFailed", DarkRP.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadString())
+	hook.Call("onHitFailed", fprp.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadString())
 end)
 

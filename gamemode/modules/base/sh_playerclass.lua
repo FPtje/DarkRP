@@ -1,6 +1,6 @@
 local PLAYER_CLASS = {}
 
-PLAYER_CLASS.DisplayName = "DarkRP Player Class"
+PLAYER_CLASS.DisplayName = "fprp Player Class"
 PLAYER_CLASS.TeammateNoCollide = false
 
 function PLAYER_CLASS:GetHandsModel()
@@ -23,4 +23,4 @@ function PLAYER_CLASS:Spawn()
 	self.Player:SetWeaponColor( Vector( col ) )
 end
 
-player_manager.RegisterClass("player_DarkRP", PLAYER_CLASS, "player_default")
+player_manager.RegisterClass("player_fprp", PLAYER_CLASS, "player_default")

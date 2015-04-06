@@ -17,7 +17,7 @@ SWEP.DrawCrosshair = true
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to pick up\nRight click to drop\nReload to open the menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -30,7 +30,7 @@ SWEP.WorldModel	= ""
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack()
 	local canPickup, message = hook.Call("canPocket", nil, self.Owner, ent)
 
 	if not canPickup then
-		if message then DarkRP.notify(self.Owner, 1, 4, message) end
+		if message then fprp.notify(self.Owner, 1, 4, message) end
 		return
 	end
 
@@ -85,7 +85,7 @@ function SWEP:SecondaryAttack()
 
 	local item = #self.Owner:getPocketItems()
 	if item <= 0 then
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
+		fprp.notify(self.Owner, 1, 4, fprp.getPhrase("pocket_no_items"))
 		return
 	end
 
@@ -95,11 +95,11 @@ end
 function SWEP:Reload()
 	if not CLIENT then return end
 
-	DarkRP.openPocketMenu()
+	fprp.openPocketMenu()
 end
 
 local meta = FindMetaTable("Player")
-DarkRP.stub{
+fprp.stub{
 	name = "getPocketItems",
 	description = "Get a player's pocket items.",
 	parameters = {

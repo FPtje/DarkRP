@@ -1,4 +1,4 @@
-DarkRP.PLAYER.isWanted = DarkRP.stub{
+fprp.PLAYER.isWanted = fprp.stub{
 	name = "isWanted",
 	description = "Whether this player is wanted",
 	parameters = {
@@ -10,10 +10,10 @@ DarkRP.PLAYER.isWanted = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getWantedReason = DarkRP.stub{
+fprp.PLAYER.getWantedReason = fprp.stub{
 	name = "getWantedReason",
 	description = "Get the reason why someone is wanted",
 	parameters = {
@@ -25,10 +25,10 @@ DarkRP.PLAYER.getWantedReason = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.isArrested = DarkRP.stub{
+fprp.PLAYER.isArrested = fprp.stub{
 	name = "isArrested",
 	description = "Whether this player is arrested",
 	parameters = {
@@ -40,10 +40,10 @@ DarkRP.PLAYER.isArrested = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.isCP = DarkRP.stub{
+fprp.PLAYER.isCP = fprp.stub{
 	name = "isCP",
 	description = "Whether this player is part of the police force (mayor, cp, chief).",
 	parameters = {
@@ -55,10 +55,10 @@ DarkRP.PLAYER.isCP = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.isMayor = DarkRP.stub{
+fprp.PLAYER.isMayor = fprp.stub{
 	name = "isMayor",
 	description = "Whether this player is a mayor.",
 	parameters = {
@@ -70,10 +70,10 @@ DarkRP.PLAYER.isMayor = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.isChief = DarkRP.stub{
+fprp.PLAYER.isChief = fprp.stub{
 	name = "isChief",
 	description = "Whether this player is a Chief.",
 	parameters = {
@@ -85,11 +85,11 @@ DarkRP.PLAYER.isChief = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canRequestWarrant",
 	description = "Whether someone can request a search warrant.",
 	parameters = {
@@ -123,7 +123,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canWanted",
 	description = "Whether someone can make a player wanted",
 	parameters = {
@@ -157,7 +157,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canUnwant",
 	description = "Whether someone can remove the wanted status from a player",
 	parameters = {

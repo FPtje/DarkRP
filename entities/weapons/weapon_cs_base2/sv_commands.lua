@@ -29,7 +29,7 @@ function meta:dropDRPWeapon(weapon)
 	ent.clip2 = weapon:Clip2()
 	ent.ammoadd = ammo
 
-	hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
+	hook.Call("onfprpWeaponDropped", nil, self, ent, weapon)
 
 	self:RemoveAmmo(ammo, weapon:GetPrimaryAmmoType())
 
@@ -41,13 +41,13 @@ end
 local function DropWeapon(ply)
 	local ent = ply:GetActiveWeapon()
 	if not IsValid(ent) or not ent:GetModel() or ent:GetModel() == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("cannot_drop_weapon"))
 		return ""
 	end
 
 	local canDrop = hook.Call("canDropWeapon", GAMEMODE, ply, ent)
 	if not canDrop then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("cannot_drop_weapon"))
 		return ""
 	end
 
@@ -66,11 +66,11 @@ local function DropWeapon(ply)
 	end)
 	return ""
 end
-DarkRP.defineChatCommand("drop", DropWeapon)
-DarkRP.defineChatCommand("dropweapon", DropWeapon)
-DarkRP.defineChatCommand("weapondrop", DropWeapon)
+fprp.defineChatCommand("drop", DropWeapon)
+fprp.defineChatCommand("dropweapon", DropWeapon)
+fprp.defineChatCommand("weapondrop", DropWeapon)
 
-DarkRP.stub{
+fprp.stub{
 	name = "dropDRPWeapon",
 	description = "Drop the weapon with animations.",
 	parameters = {
@@ -86,9 +86,9 @@ DarkRP.stub{
 	metatable = meta
 }
 
-DarkRP.hookStub{
-	name = "onDarkRPWeaponDropped",
-	description = "When a player drops a weapon. Use this hook (in combination with PlayerPickupDarkRPWeapon) to store extra information about a weapon. This hook cannot prevent weapon dropping. If you want to prevent weapon dropping, use canDropWeapon instead.",
+fprp.hookStub{
+	name = "onfprpWeaponDropped",
+	description = "When a player drops a weapon. Use this hook (in combination with PlayerPickupfprpWeapon) to store extra information about a weapon. This hook cannot prevent weapon dropping. If you want to prevent weapon dropping, use canDropWeapon instead.",
 	parameters = {
 		{
 			name = "ply",
@@ -111,8 +111,8 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
-	name = "PlayerPickupDarkRPWeapon",
+fprp.hookStub{
+	name = "PlayerPickupfprpWeapon",
 	description = "When a player picks up a spawned_weapon.",
 	parameters = {
 		{

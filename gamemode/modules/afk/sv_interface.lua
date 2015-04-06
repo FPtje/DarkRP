@@ -1,4 +1,4 @@
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerAFKDemoted",
 	description = "When a player is demoted for being AFK.",
 	parameters = {
@@ -32,7 +32,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerSetAFK",
 	description = "When a player is set to AFK or returns from AFK.",
 	parameters = {

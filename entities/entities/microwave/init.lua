@@ -54,16 +54,16 @@ function ENT:Use(activator, caller)
 	local owner = self:Getowning_ent()
 	self.user = activator
 	if not activator:canAfford(self:SalePrice(activator)) then
-		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("food"))))
+		fprp.notify(activator, 1, 3, fprp.getPhrase("cant_afford", string.lower(fprp.getPhrase("food"))))
 		return ""
 	end
 	local diff = (self:SalePrice(activator) - self:SalePrice(owner))
 	if diff < 0 and not owner:canAfford(math.abs(diff)) then
-		DarkRP.notify(activator, 2, 3, DarkRP.getPhrase("owner_poor", DarkRP.getPhrase("microwave")))
+		fprp.notify(activator, 2, 3, fprp.getPhrase("owner_poor", fprp.getPhrase("microwave")))
 		return ""
 	end
 	if activator.maxFoods and activator.maxFoods >= GAMEMODE.Config.maxfoods then
-		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("limit", string.lower(DarkRP.getPhrase("food"))))
+		fprp.notify(activator, 1, 3, fprp.getPhrase("limit", string.lower(fprp.getPhrase("food"))))
 	elseif not self.Once then
 		self.Once = true
 		self.sparking = true
@@ -72,7 +72,7 @@ function ENT:Use(activator, caller)
 		local cash = self:SalePrice(activator)
 
 		activator:addMoney(cash * -1)
-		DarkRP.notify(activator, 0, 3, DarkRP.getPhrase("you_bought", string.lower(DarkRP.getPhrase("food")), DarkRP.formatMoney(cash)))
+		fprp.notify(activator, 0, 3, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("food")), fprp.formatMoney(cash)))
 
 		if activator ~= owner then
 			local gain = 0
@@ -82,12 +82,12 @@ function ENT:Use(activator, caller)
 				gain = math.floor(self:Getprice() - GAMEMODE.Config.microwavefoodcost)
 			end
 			if gain == 0 then
-				DarkRP.notify(owner, 3, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(0) .. DarkRP.getPhrase("profit"), string.lower(DarkRP.getPhrase("food"))))
+				fprp.notify(owner, 3, 3, fprp.getPhrase("you_received_x", fprp.formatMoney(0) .. fprp.getPhrase("profit"), string.lower(fprp.getPhrase("food"))))
 			else
 				owner:addMoney(gain)
-				local word = DarkRP.getPhrase("profit")
-				if gain < 0 then word = DarkRP.getPhrase("loss") end
-				DarkRP.notify(owner, 0, 3, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(math.abs(gain)) .. word, string.lower(DarkRP.getPhrase("food"))))
+				local word = fprp.getPhrase("profit")
+				if gain < 0 then word = fprp.getPhrase("loss") end
+				fprp.notify(owner, 0, 3, fprp.getPhrase("you_received_x", fprp.formatMoney(math.abs(gain)) .. word, string.lower(fprp.getPhrase("food"))))
 			end
 		end
 		timer.Create(self:EntIndex() .. "food", 1, 1, function() self:createFood() end)

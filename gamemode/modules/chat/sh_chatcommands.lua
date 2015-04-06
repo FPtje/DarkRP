@@ -1,5 +1,5 @@
 local plyMeta = FindMetaTable("Player")
-DarkRP.chatCommands = DarkRP.chatCommands or {}
+fprp.chatCommands = fprp.chatCommands or {}
 
 local validChatCommand = {
 	command = isstring,
@@ -17,129 +17,129 @@ local checkChatCommand = function(tbl)
 	return true
 end
 
-function DarkRP.declareChatCommand(tbl)
+function fprp.declareChatCommand(tbl)
 	local valid, element = checkChatCommand(tbl)
 	if not valid then
-		DarkRP.error("Incorrect chat command! " .. element .. " is invalid!", 2)
+		fprp.error("Incorrect chat command! " .. element .. " is invalid!", 2)
 	end
 
 	tbl.command = string.lower(tbl.command)
-	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
+	fprp.chatCommands[tbl.command] = fprp.chatCommands[tbl.command] or tbl
 	for k, v in pairs(tbl) do
-		DarkRP.chatCommands[tbl.command][k] = v
+		fprp.chatCommands[tbl.command][k] = v
 	end
 end
 
-function DarkRP.removeChatCommand(command)
-	DarkRP.chatCommands[string.lower(command)] = nil
+function fprp.removeChatCommand(command)
+	fprp.chatCommands[string.lower(command)] = nil
 end
 
-function DarkRP.chatCommandAlias(command, ...)
+function fprp.chatCommandAlias(command, ...)
 	local name
 	for k, v in pairs{...} do
 		name = string.lower(v)
 
-		DarkRP.chatCommands[name] = table.Copy(DarkRP.chatCommands[command])
-		DarkRP.chatCommands[name].command = name
+		fprp.chatCommands[name] = table.Copy(fprp.chatCommands[command])
+		fprp.chatCommands[name].command = name
 	end
 end
 
-function DarkRP.getChatCommand(command)
-	return DarkRP.chatCommands[string.lower(command)]
+function fprp.getChatCommand(command)
+	return fprp.chatCommands[string.lower(command)]
 end
 
-function DarkRP.getChatCommands()
-	return DarkRP.chatCommands
+function fprp.getChatCommands()
+	return fprp.chatCommands
 end
 
-function DarkRP.getSortedChatCommands()
-	local tbl = fn.Compose{table.ClearKeys, table.Copy, DarkRP.getChatCommands}()
+function fprp.getSortedChatCommands()
+	local tbl = fn.Compose{table.ClearKeys, table.Copy, fprp.getChatCommands}()
 	table.SortByMember(tbl, "command", true)
 
 	return tbl
 end
 
 -- chat commands that have been defined, but not declared
-DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(DarkRP.chatCommands)
+fprp.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(fprp.chatCommands)
 
 /*---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------*/
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "pm",
 	description = "Send a private message to someone.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "w",
 	description = "Say something in whisper voice.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "y",
 	description = "Yell something out loud.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "me",
 	description = "Chat roleplay to say you're doing things that you can't show otherwise.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "/",
 	description = "Global server chat.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "a",
 	description = "Global server chat.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "ooc",
 	description = "Global server chat.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "advert",
 	description = "Advertise something to everyone in the server.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "broadcast",
 	description = "Broadcast something as a mayor.",
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "channel",
 	description = "Tune into a radio channel.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "radio",
 	description = "Say something through the radio.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "g",
 	description = "Group chat.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "credits",
-	description = "Send the DarkRP credits to someone.",
+	description = "Send the fprp credits to someone.",
 	delay = 1.5
 }

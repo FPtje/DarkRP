@@ -16,12 +16,12 @@ include("pp/server/ownability.lua")
 hook.Add("DatabaseInitialized", "FPPInit", FPP.Init)
 
 /*---------------------------------------------------------------------------
-DarkRP blocked entities
+fprp blocked entities
 ---------------------------------------------------------------------------*/
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
 FPP.AddDefaultBlocked(blockTypes, "chatindicator")
-FPP.AddDefaultBlocked(blockTypes, "darkrp_cheque")
+FPP.AddDefaultBlocked(blockTypes, "fprp_cheque")
 FPP.AddDefaultBlocked(blockTypes, "drug")
 FPP.AddDefaultBlocked(blockTypes, "drug_lab")
 FPP.AddDefaultBlocked(blockTypes, "fadmin_jail")
@@ -37,4 +37,4 @@ FPP.AddDefaultBlocked(blockTypes, "spawned_money")
 FPP.AddDefaultBlocked(blockTypes, "spawned_shipment")
 FPP.AddDefaultBlocked(blockTypes, "spawned_weapon")
 
-FPP.AddDefaultBlocked("Spawning1", "darkrp_laws")
+FPP.AddDefaultBlocked("Spawning1", "fprp_laws")

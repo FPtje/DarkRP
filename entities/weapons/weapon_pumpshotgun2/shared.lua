@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Pump Shotgun"
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "k"
@@ -14,7 +14,7 @@ SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_m3super90.mdl"

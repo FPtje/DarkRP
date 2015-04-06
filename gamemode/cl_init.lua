@@ -1,7 +1,7 @@
-hook.Run("DarkRPStartedLoading")
+hook.Run("fprpStartedLoading")
 
-GM.Version = "2.6.1"
-GM.Name = "DarkRP"
+GM.Version = "3.0"
+GM.Name = "fprp"
 GM.Author = "By FPtje Falco et al."
 
 DeriveGamemode("sandbox")
@@ -11,7 +11,7 @@ local function LoadModules()
 	local _, folders = file.Find(root.."*", "LUA")
 
 	for _, folder in SortedPairs(folders, true) do
-		if DarkRP.disabledDefaults["modules"][folder] then continue end
+		if fprp.disabledDefaults["modules"][folder] then continue end
 
 		for _, File in SortedPairs(file.Find(root .. folder .."/sh_*.lua", "LUA"), true) do
 			if File == "sh_interface.lua" then continue end
@@ -36,12 +36,20 @@ include("libraries/disjointset.lua")
 include("libraries/modificationloader.lua")
 LoadModules()
 
-DarkRP.DARKRP_LOADING = true
+fprp.fprp_LOADING = true
 include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
-DarkRP.DARKRP_LOADING = nil
+fprp.fprp_LOADING = nil
 
-DarkRP.finish()
+fprp.finish()
 
-hook.Call("DarkRPFinishedLoading", GM)
+hook.Call("fprpFinishedLoading", GM)
+
+hook.Add("InitPostEntity", "InformTheCitizens", function()
+	local delay = LocalPLayer():IsAdmin() and 30 or 60
+	local pink = Color(255, 0, 255)
+	timer.Create("InformTheCitizens" .. os.time(), delay, 0, function()
+		chat.AddText(pink, "To enjoy a superior roleplay experience™, please purchase a package from http://cloudsixteen.com")
+	end)
+end)

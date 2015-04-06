@@ -53,7 +53,7 @@ function ENT:onPlayerDisconnected(ply)
 	end
 end
 
-concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
+concommand.Add("_fprp_SignLetter", function(ply, cmd, args)
 	if not args[1] or ply:EntIndex() == 0 then return end
 	local letter = ents.GetByIndex(tonumber(args[1]))
 
@@ -61,12 +61,12 @@ concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
 end)
 
 local function removeLetters(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_removeletters"))
+	if ply:EntIndex() ~= 0 and not ply:hasfprpPrivilege("rp_commands") then
+		ply:PrintMessage(2, fprp.getPhrase("need_admin", "rp_removeletters"))
 		return
 	end
 
-	local target = DarkRP.findPlayer(args[1])
+	local target = fprp.findPlayer(args[1])
 
 	if target then
 		for k, v in pairs(ents.FindByClass("letter")) do
@@ -80,9 +80,9 @@ local function removeLetters(ply, cmd, args)
 	end
 
 	if ply:EntIndex() == 0 then
-		DarkRP.log("Console force-removed all letters", Color(30, 30, 30))
+		fprp.log("Console force-removed all letters", Color(30, 30, 30))
 	else
-		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed all letters", Color(30, 30, 30))
+		fprp.log(ply:Nick().." ("..ply:SteamID()..") force-removed all letters", Color(30, 30, 30))
 	end
 end
 concommand.Add("rp_removeletters", removeLetters)

@@ -67,7 +67,7 @@ local function createCategories(self, categories, itemClick, canBuy)
 
 		dCat:SetButtonFactory(function(item, ui)
 			local pnl = vgui.Create("F4MenuEntityButton", ui)
-			pnl:setDarkRPItem(item)
+			pnl:setfprpItem(item)
 			pnl.DoClick = fp{itemClick, item}
 
 			return pnl
@@ -75,7 +75,7 @@ local function createCategories(self, categories, itemClick, canBuy)
 
 		dCat:SetPerformLayout(function(contents)
 			for k,v in pairs(contents.Items) do
-				local canBuy, important, price = canBuy(v.DarkRPItem)
+				local canBuy, important, price = canBuy(v.fprpItem)
 				v:SetDisabled(not canBuy, important)
 				v:updatePrice(price)
 			end
@@ -109,13 +109,13 @@ local function canBuyEntity(item)
 end
 
 function PANEL:generateButtons()
-	local categories = DarkRP.getCategories().entities
+	local categories = fprp.getCategories().entities
 
-	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", item.cmd) end, canBuyEntity)
+	createCategories(self, categories, function(item) RunConsoleCommand("fprp", item.cmd) end, canBuyEntity)
 end
 
 function PANEL:shouldHide()
-	for k,v in pairs(DarkRPEntities) do
+	for k,v in pairs(fprpEntities) do
 		local canBuy, important = canBuyEntity(v)
 		if not self:isItemHidden(not canBuy, important) then return false end
 	end
@@ -148,9 +148,9 @@ local function canBuyShipment(ship)
 end
 
 function PANEL:generateButtons()
-	local categories = DarkRP.getCategories().shipments
+	local categories = fprp.getCategories().shipments
 
-	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyshipment", item.name) end, canBuyShipment)
+	createCategories(self, categories, function(item) RunConsoleCommand("fprp", "buyshipment", item.name) end, canBuyShipment)
 end
 
 function PANEL:shouldHide()
@@ -190,9 +190,9 @@ local function canBuyGun(ship)
 end
 
 function PANEL:generateButtons()
-	local categories = DarkRP.getCategories().weapons
+	local categories = fprp.getCategories().weapons
 
-	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buy", item.name) end, canBuyGun)
+	createCategories(self, categories, function(item) RunConsoleCommand("fprp", "buy", item.name) end, canBuyGun)
 end
 
 function PANEL:shouldHide()
@@ -231,9 +231,9 @@ local function canBuyAmmo(item)
 end
 
 function PANEL:generateButtons()
-	local categories = DarkRP.getCategories().ammo
+	local categories = fprp.getCategories().ammo
 
-	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyammo", item.id) end, canBuyAmmo)
+	createCategories(self, categories, function(item) RunConsoleCommand("fprp", "buyammo", item.id) end, canBuyAmmo)
 end
 
 function PANEL:shouldHide()
@@ -272,9 +272,9 @@ local function canBuyVehicle(item)
 end
 
 function PANEL:generateButtons()
-	local categories = DarkRP.getCategories().vehicles
+	local categories = fprp.getCategories().vehicles
 
-	createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyvehicle", item.name) end, canBuyVehicle)
+	createCategories(self, categories, function(item) RunConsoleCommand("fprp", "buyvehicle", item.name) end, canBuyVehicle)
 end
 
 derma.DefineControl("F4MenuVehicles", "", PANEL, "F4MenuEntitiesBase")

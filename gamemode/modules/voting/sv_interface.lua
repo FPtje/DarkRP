@@ -1,4 +1,4 @@
-DarkRP.createQuestion = DarkRP.stub{
+fprp.createQuestion = fprp.stub{
 	name = "createQuestion",
 	description = "Ask someone a question.",
 	parameters = {
@@ -53,10 +53,10 @@ DarkRP.createQuestion = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.destroyQuestion = DarkRP.stub{
+fprp.destroyQuestion = fprp.stub{
 	name = "destroyQuestion",
 	description = "Destroy a question by ID.",
 	parameters = {
@@ -69,10 +69,10 @@ DarkRP.destroyQuestion = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.destroyQuestionsWithEnt = DarkRP.stub{
+fprp.destroyQuestionsWithEnt = fprp.stub{
 	name = "destroyQuestionsWithEnt",
 	description = "Destroy all questions that have something to do with this ent.",
 	parameters = {
@@ -85,10 +85,10 @@ DarkRP.destroyQuestionsWithEnt = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createVote = DarkRP.stub{
+fprp.createVote = fprp.stub{
 	name = "createVote",
 	description = "Create a vote.",
 	parameters = {
@@ -148,10 +148,10 @@ DarkRP.createVote = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.destroyVotesWithEnt = DarkRP.stub{
+fprp.destroyVotesWithEnt = fprp.stub{
 	name = "destroyVotesWithEnt",
 	description = "Destroy all votes that have something to do with this ent.",
 	parameters = {
@@ -164,10 +164,10 @@ DarkRP.destroyVotesWithEnt = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.destroyLastVote = DarkRP.stub{
+fprp.destroyLastVote = fprp.stub{
 	name = "destroyLastVote",
 	description = "Destroy the last created vote.",
 	parameters = {
@@ -179,10 +179,10 @@ DarkRP.destroyLastVote = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "getVoteResults",
 	description = "Override the results of a vote.",
 	parameters = {

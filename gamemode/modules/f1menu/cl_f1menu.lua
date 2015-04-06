@@ -9,24 +9,24 @@ local function searchChatCommand(str)
 end
 
 local F1Menu
-function DarkRP.openF1Menu()
-	chatCommands = chatCommands or DarkRP.getSortedChatCommands()
+function fprp.openF1Menu()
+	chatCommands = chatCommands or fprp.getSortedChatCommands()
 
 	F1Menu = F1Menu or vgui.Create("F1MenuPanel")
-	F1Menu:SetSkin(GAMEMODE.Config.DarkRPSkin)
+	F1Menu:SetSkin(GAMEMODE.Config.fprpSkin)
 	F1Menu:setSearchAlgorithm(searchChatCommand)
 	F1Menu:refresh()
 	F1Menu:slideIn()
 end
 
-function DarkRP.closeF1Menu()
+function fprp.closeF1Menu()
 	F1Menu:slideOut()
 end
 
 function GM:ShowHelp()
 	if not F1Menu or not F1Menu.toggled then
-		DarkRP.openF1Menu()
+		fprp.openF1Menu()
 	else
-		DarkRP.closeF1Menu()
+		fprp.closeF1Menu()
 	end
 end

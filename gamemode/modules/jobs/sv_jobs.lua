@@ -6,17 +6,17 @@ function meta:changeTeam(t, force)
 	local prevTeam = self:Team()
 
 	if self:isArrested() and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
+		fprp.notify(self, 1, 4, fprp.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
 	if t ~= GAMEMODE.DefaultTeam and not self:changeAllowed(t) and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
+		fprp.notify(self, 1, 4, fprp.getPhrase("unable", team.GetName(t), "banned/demoted"))
 		return false
 	end
 
 	if self.LastJob and GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob) >= 0 and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
+		fprp.notify(self, 1, 4, fprp.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
 		return false
 	end
 
@@ -24,15 +24,15 @@ function meta:changeTeam(t, force)
 		self:teamBan()
 		self.IsBeingDemoted = false
 		self:changeTeam(GAMEMODE.DefaultTeam, true)
-		DarkRP.destroyVotesWithEnt(self)
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("tried_to_avoid_demotion"))
+		fprp.destroyVotesWithEnt(self)
+		fprp.notify(self, 1, 4, fprp.getPhrase("tried_to_avoid_demotion"))
 
 		return false
 	end
 
 
 	if prevTeam == t then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
+		fprp.notify(self, 1, 4, fprp.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
@@ -42,26 +42,26 @@ function meta:changeTeam(t, force)
 	if TEAM.customCheck and not TEAM.customCheck(self) and (not force or force and not GAMEMODE.Config.adminBypassJobRestrictions) then
 		local message = isfunction(TEAM.CustomCheckFailMsg) and TEAM.CustomCheckFailMsg(self, TEAM) or
 			TEAM.CustomCheckFailMsg or
-			DarkRP.getPhrase("unable", team.GetName(t), "")
-		DarkRP.notify(self, 1, 4, message)
+			fprp.getPhrase("unable", team.GetName(t), "")
+		fprp.notify(self, 1, 4, message)
 		return false
 	end
 
 	if not force then
 		if type(TEAM.NeedToChangeFrom) == "number" and prevTeam ~= TEAM.NeedToChangeFrom then
-			DarkRP.notify(self, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
+			fprp.notify(self, 1,4, fprp.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
 			return false
 		elseif type(TEAM.NeedToChangeFrom) == "table" and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
 			local teamnames = ""
 			for a,b in pairs(TEAM.NeedToChangeFrom) do teamnames = teamnames.." or "..team.GetName(b) end
-			DarkRP.notify(self, 1,4, string.format(string.sub(teamnames, 5), team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
+			fprp.notify(self, 1,4, string.format(string.sub(teamnames, 5), team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
 			return false
 		end
 		local max = TEAM.max
 		if max ~= 0 and -- No limit
 		(max >= 1 and team.NumPlayers(t) >= max or -- absolute maximum
 		max < 1 and (team.NumPlayers(t) + 1) / #player.GetAll() > max) then -- fractional limit (in percentages)
-			DarkRP.notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
+			fprp.notify(self, 1, 4,  fprp.getPhrase("team_limit_reached", TEAM.name))
 			return false
 		end
 	end
@@ -77,25 +77,25 @@ function meta:changeTeam(t, force)
 	if hookValue == false then return false end
 
 	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
-	if isMayor and GetGlobalBool("DarkRP_LockDown") then
-		DarkRP.unLockdown(self)
+	if isMayor and GetGlobalBool("fprp_LockDown") then
+		fprp.unLockdown(self)
 	end
 	self:updateJob(TEAM.name)
-	self:setSelfDarkRPVar("salary", TEAM.salary)
-	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
+	self:setSelffprpVar("salary", TEAM.salary)
+	fprp.notifyAll(0, 4, fprp.getPhrase("job_has_become", self:Nick(), TEAM.name))
 
 
-	if self:getDarkRPVar("HasGunlicense") and GAMEMODE.Config.revokeLicenseOnJobChange then
-		self:setDarkRPVar("HasGunlicense", nil)
+	if self:getfprpVar("HasGunlicense") and GAMEMODE.Config.revokeLicenseOnJobChange then
+		self:setfprpVar("HasGunlicense", nil)
 	end
 	if TEAM.hasLicense then
-		self:setDarkRPVar("HasGunlicense", true)
+		self:setfprpVar("HasGunlicense", true)
 	end
 
 	self.LastJob = CurTime()
 
 	if GAMEMODE.Config.removeclassitems then
-		for k, v in pairs(DarkRPEntities) do
+		for k, v in pairs(fprpEntities) do
 			if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
 			if not v.allowed then continue end
 			if type(v.allowed) == "table" and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
@@ -121,12 +121,12 @@ function meta:changeTeam(t, force)
 	end
 
 	if isMayor and GAMEMODE.Config.shouldResetLaws then
-		DarkRP.resetLaws()
+		fprp.resetLaws()
 	end
 
 	self:SetTeam(t)
 	hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
-	DarkRP.log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
+	fprp.log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
 	if self:InVehicle() then self:ExitVehicle() end
 	if GAMEMODE.Config.norespawn and self:Alive() then
 		self:StripWeapons()
@@ -152,7 +152,7 @@ function meta:changeTeam(t, force)
 end
 
 function meta:updateJob(job)
-	self:setDarkRPVar("job", job)
+	self:setfprpVar("job", job)
 	self.LastJob = CurTime()
 
 	timer.Create(self:UniqueID() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
@@ -165,7 +165,7 @@ function meta:teamUnBan(Team)
 	if not IsValid(self) then return end
 	self.bannedfrom = self.bannedfrom or {}
 
-	local group = DarkRP.getDemoteGroup(Team)
+	local group = fprp.getDemoteGroup(Team)
 	self.bannedfrom[group] = nil
 end
 
@@ -173,7 +173,7 @@ function meta:teamBan(t, time)
 	if not self.bannedfrom then self.bannedfrom = {} end
 	t = t or self:Team()
 
-	local group = DarkRP.getDemoteGroup(t)
+	local group = fprp.getDemoteGroup(t)
 	self.bannedfrom[group] = true
 
 	if time == 0 then return end
@@ -184,7 +184,7 @@ function meta:teamBan(t, time)
 end
 
 function meta:changeAllowed(t)
-	local group = DarkRP.getDemoteGroup(t)
+	local group = fprp.getDemoteGroup(t)
 	if not self.bannedfrom then return true end
 	if self.bannedfrom[group] then return false else return true end
 end
@@ -192,13 +192,13 @@ end
 
 function GM:canChangeJob(ply, args)
 	if ply:isArrested() then return false end
-	if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then return false, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), "/job") end
+	if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then return false, fprp.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), "/job") end
 	if not ply:Alive() then return false end
 
 	local len = string.len(args)
 
-	if len < 3 then return false, DarkRP.getPhrase("unable", "/job", ">2") end
-	if len > 25 then return false, DarkRP.getPhrase("unable", "/job", "<26") end
+	if len < 3 then return false, fprp.getPhrase("unable", "/job", ">2") end
+	if len > 25 then return false, fprp.getPhrase("unable", "/job", "<26") end
 
 	return true
 end
@@ -208,27 +208,27 @@ Commands
 ---------------------------------------------------------------------------*/
 local function ChangeJob(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""))
 		return ""
 	end
 
 	if not GAMEMODE.Config.customjobs then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/job", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("disabled", "/job", ""))
 		return ""
 	end
 
 	local canChangeJob, message, replace = gamemode.Call("canChangeJob", ply, args)
 	if canChangeJob == false then
-		DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "/job", ""))
+		fprp.notify(ply, 1, 4, message or fprp.getPhrase("unable", "/job", ""))
 		return ""
 	end
 
 	local job = replace or args
-	DarkRP.notifyAll(2, 4, DarkRP.getPhrase("job_has_become", ply:Nick(), job))
+	fprp.notifyAll(2, 4, fprp.getPhrase("job_has_become", ply:Nick(), job))
 	ply:updateJob(job)
 	return ""
 end
-DarkRP.defineChatCommand("job", ChangeJob)
+fprp.defineChatCommand("job", ChangeJob)
 
 local function FinishDemote(vote, choice)
 	local target = vote.target
@@ -246,16 +246,16 @@ local function FinishDemote(vote, choice)
 		end
 
 		hook.Call("onPlayerDemoted", nil, vote.info.source, target, vote.info.reason)
-		DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demoted", target:Nick()))
+		fprp.notifyAll(0, 4, fprp.getPhrase("demoted", target:Nick()))
 	else
-		DarkRP.notifyAll(1, 4, DarkRP.getPhrase("demoted_not", target:Nick()))
+		fprp.notifyAll(1, 4, fprp.getPhrase("demoted_not", target:Nick()))
 	end
 end
 
 local function Demote(ply, args)
 	local tableargs = string.Explode(" ", args)
 	if #tableargs == 1 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("vote_specify_reason"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("vote_specify_reason"))
 		return ""
 	end
 	local reason = ""
@@ -264,35 +264,35 @@ local function Demote(ply, args)
 	end
 	reason = string.sub(reason, 2)
 	if string.len(reason) > 99 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", "<100"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/demote", "<100"))
 		return ""
 	end
-	local p = DarkRP.findPlayer(tableargs[1])
+	local p = fprp.findPlayer(tableargs[1])
 	if p == ply then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_demote_self"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("cant_demote_self"))
 		return ""
 	end
 
 	local canDemote, message = hook.Call("canDemote", GAMEMODE, ply, p, reason)
 	if canDemote == false then
-		DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "demote", ""))
+		fprp.notify(ply, 1, 4, message or fprp.getPhrase("unable", "demote", ""))
 		return ""
 	end
 
 	if p then
 		if CurTime() - ply.LastVoteCop < 80 then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
 			return ""
 		end
 		if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/demote", ""))
 		else
-			DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " ..ply:Nick(),Color(255,0,0,255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
-			DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
-			DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
+			fprp.talkToPerson(p, team.GetColor(ply:Team()), fprp.getPhrase("demote") .. " " ..ply:Nick(),Color(255,0,0,255), fprp.getPhrase("i_want_to_demote_you", reason), p)
+			fprp.notifyAll(0, 4, fprp.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
+			fprp.log(fprp.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
 			p.IsBeingDemoted = true
 
-			DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
+			fprp.createVote(p:Nick() .. ":\n"..fprp.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
 			{
 				[p] = true,
 				[ply] = true
@@ -304,11 +304,11 @@ local function Demote(ply, args)
 		end
 		return ""
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 end
-DarkRP.defineChatCommand("demote", Demote)
+fprp.defineChatCommand("demote", Demote)
 
 local function ExecSwitchJob(answer, ent, ply, target)
 	ply.RequestedJobSwitch = nil
@@ -321,8 +321,8 @@ local function ExecSwitchJob(answer, ent, ply, target)
 		ply:changeTeam(Pteam, true) -- revert job change
 		return
 	end
-	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("job_switch"))
-	DarkRP.notify(target, 2, 4, DarkRP.getPhrase("job_switch"))
+	fprp.notify(ply, 2, 4, fprp.getPhrase("job_switch"))
+	fprp.notify(target, 2, 4, fprp.getPhrase("job_switch"))
 end
 
 local function SwitchJob(ply) --Idea by Godness.
@@ -339,42 +339,42 @@ local function SwitchJob(ply) --Idea by Godness.
 	if not team1 or not team2 then return "" end
 	if team1.customCheck and not team1.customCheck(eyetrace.Entity) or team2.customCheck and not team2.customCheck(ply) then
 		-- notify only the player trying to switch
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "switch jobs", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "switch jobs", ""))
 		return ""
 	end
 
 	ply.RequestedJobSwitch = true
-	DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_requested"))
+	fprp.createQuestion(fprp.getPhrase("job_switch_question", ply:Nick()), "switchjob"..tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+	fprp.notify(ply, 0, 4, fprp.getPhrase("job_switch_requested"))
 
 	return ""
 end
-DarkRP.defineChatCommand("switchjob", SwitchJob)
-DarkRP.defineChatCommand("switchjobs", SwitchJob)
-DarkRP.defineChatCommand("jobswitch", SwitchJob)
+fprp.defineChatCommand("switchjob", SwitchJob)
+fprp.defineChatCommand("switchjobs", SwitchJob)
+fprp.defineChatCommand("jobswitch", SwitchJob)
 
 
 local function DoTeamBan(ply, args, cmdargs)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
+	if ply:EntIndex() ~= 0 and not ply:hasfprpPrivilege("rp_commands") then
 		if cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "/teamban"))
+			ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("need_admin", "/teamban"))
 			return
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamban"))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/teamban"))
 			return ""
 		end
 	end
 
 	if not args or args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "arguments", ""))
 		return ""
 	end
 
 	if cmdargs and not cmdargs[2] then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("rp_teamban_hint"))
+			print(fprp.getPhrase("rp_teamban_hint"))
 		else
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("rp_teamban_hint"))
+			ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("rp_teamban_hint"))
 		end
 		return
 	end
@@ -383,16 +383,16 @@ local function DoTeamBan(ply, args, cmdargs)
 	local ent = args[1]
 	local Team = args[2]
 
-	local target = DarkRP.findPlayer(ent)
+	local target = fprp.findPlayer(ent)
 	if not target or not IsValid(target) then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", ent or ""))
+			print(fprp.getPhrase("could_not_find", ent or ""))
 			return
 		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", ent or ""))
+			ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("could_not_find", ent or ""))
 			return
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", ent or ""))
 			return ""
 		end
 	end
@@ -408,13 +408,13 @@ local function DoTeamBan(ply, args, cmdargs)
 
 	if not found then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", Team or ""))
+			print(fprp.getPhrase("could_not_find", Team or ""))
 			return
 		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", Team or ""))
+			ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("could_not_find", Team or ""))
 			return
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", Team or ""))
 			return ""
 		end
 	end
@@ -427,21 +427,21 @@ local function DoTeamBan(ply, args, cmdargs)
 	else
 		nick = ply:Nick()
 	end
-	DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
+	fprp.notifyAll(0, 5, fprp.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 
 	return ""
 end
-DarkRP.defineChatCommand("teamban", DoTeamBan)
+fprp.defineChatCommand("teamban", DoTeamBan)
 concommand.Add("rp_teamban", DoTeamBan)
 
 local function DoTeamUnBan(ply, args, cmdargs)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamunban"))
+	if ply:EntIndex() ~= 0 and not ply:hasfprpPrivilege("rp_commands") then
+		fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/teamunban"))
 		return ""
 	end
 
 	if not args or args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "arguments", ""))
 		return ""
 	end
 
@@ -450,9 +450,9 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	if cmdargs then
 		if not cmdargs[2] then
 			if ply:EntIndex() == 0 then
-				print(DarkRP.getPhrase("rp_teamunban_hint"))
+				print(fprp.getPhrase("rp_teamunban_hint"))
 			else
-				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("rp_teamunban_hint"))
+				ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("rp_teamunban_hint"))
 			end
 			return
 		end
@@ -464,16 +464,16 @@ local function DoTeamUnBan(ply, args, cmdargs)
 		Team = string.sub(args, a + 1)
 	end
 
-	local target = DarkRP.findPlayer(ent)
+	local target = fprp.findPlayer(ent)
 	if not target or not IsValid(target) then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", ent or ""))
+			print(fprp.getPhrase("could_not_find", ent or ""))
 			return
 		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", ent or ""))
+			ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("could_not_find", ent or ""))
 			return
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", ent or ""))
 			return ""
 		end
 	end
@@ -493,13 +493,13 @@ local function DoTeamUnBan(ply, args, cmdargs)
 
 	if not found then
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", Team or ""))
+			print(fprp.getPhrase("could_not_find", Team or ""))
 			return
 		elseif cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", Team or ""))
+			ply:PrintMessage(HUD_PRINTCONSOLE, fprp.getPhrase("could_not_find", Team or ""))
 			return
 		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", Team or ""))
 			return ""
 		end
 	end
@@ -512,9 +512,9 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	else
 		nick = ply:Nick()
 	end
-	DarkRP.notifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
+	fprp.notifyAll(1, 5, fprp.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 
 	return ""
 end
-DarkRP.defineChatCommand("teamunban", DoTeamUnBan)
+fprp.defineChatCommand("teamunban", DoTeamUnBan)
 concommand.Add("rp_teamunban", DoTeamUnBan)

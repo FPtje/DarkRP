@@ -72,7 +72,7 @@ local function MakeServerOptions()
 			end
 			local name = v.Name
 			if type(name) == "function" then name = name() end
-			ActionButton:SetText(DarkRP.deLocalise(name))
+			ActionButton:SetText(fprp.deLocalise(name))
 			ActionButton:SetBorderColor(v.color)
 			ActionButton:Dock(TOP)
 
@@ -164,7 +164,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 					EndText = v.name..":"..Spaces..Value
 				end
 			end
-			Text:SetText(DarkRP.deLocalise(EndText))
+			Text:SetText(fprp.deLocalise(EndText))
 			Text:SizeToContents()
 			Text:SetToolTip("Click to copy "..v.name.." to clipboard")
 			Text:SetMouseInputEnabled(true)

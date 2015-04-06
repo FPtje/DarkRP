@@ -10,7 +10,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to discipline\nRight click to kill\nReload to threaten"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -22,7 +22,7 @@ SWEP.AnimPrefix = "stunstick"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 
 SWEP.NextStrike = 0
 
@@ -171,7 +171,7 @@ function SWEP:DoAttack(dmg)
 		if FPP and FPP.plyCanTouchEnt(self.Owner, ent, "EntityDamage") then
 			if ent.SeizeReward and not ent.beenSeized and not ent.burningup and self.Owner:isCP() and ent.Getowning_ent and self.Owner ~= ent:Getowning_ent() then
 				self.Owner:addMoney(ent.SeizeReward)
-				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(ent.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
+				fprp.notify(self.Owner, 1, 4, fprp.getPhrase("you_received_x", fprp.formatMoney(ent.SeizeReward), fprp.getPhrase("bonus_destroying_entity")))
 				ent.beenSeized = true
 			end
 			ent:TakeDamage(1000-dmg, self.Owner, self) -- for illegal entities

@@ -22,7 +22,7 @@ function ENT:Use(activator,caller)
 	local amount = self:Getamount()
 
 	activator:addMoney(amount or 0)
-	DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_money", DarkRP.formatMoney(self:Getamount())))
+	fprp.notify(activator, 0, 4, fprp.getPhrase("found_money", fprp.formatMoney(self:Getamount())))
 	self:Remove()
 end
 

@@ -11,4 +11,4 @@ function PANEL:Init()
 	self:SetFont("F1MenuTitle")
 end
 
-derma.DefineControl("F1MenuTitleLabel", "DarkRP F1 menu title label", PANEL, "DLabel")
+derma.DefineControl("F1MenuTitleLabel", "fprp F1 menu title label", PANEL, "DLabel")

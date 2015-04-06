@@ -24,7 +24,7 @@ function Question:handleNewQuestion(response)
 	handleQuestionEnd(self.ID)
 end
 
-function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, toPly, ...)
+function fprp.createQuestion(question, quesid, ent, delay, callback, fromPly, toPly, ...)
 	local newques = { }
 	for k, v in pairs(Question) do newques[k] = v end
 
@@ -48,7 +48,7 @@ function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, 
 	timer.Create(quesid .. "timer", delay, 1, function() handleQuestionEnd(quesid) end)
 end
 
-function DarkRP.destroyQuestion(id)
+function fprp.destroyQuestion(id)
 	umsg.Start("KillQuestionVGUI", Questions[id].Ent)
 		umsg.String(Questions[id].ID)
 	umsg.End()
@@ -56,10 +56,10 @@ function DarkRP.destroyQuestion(id)
 	Questions[id] = nil
 end
 
-function DarkRP.destroyQuestionsWithEnt(ent)
+function fprp.destroyQuestionsWithEnt(ent)
 	for k, v in pairs(Questions) do
 		if v.Ent == ent then
-			DarkRP.destroyQuestion(v.ID)
+			fprp.destroyQuestion(v.ID)
 		end
 	end
 end

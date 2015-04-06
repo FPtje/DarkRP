@@ -1,6 +1,6 @@
-DarkRP.addPlayerGesture = DarkRP.stub{
+fprp.addPlayerGesture = fprp.stub{
     name = "addPlayerGesture",
-    description = "Add a player gesture to the DarkRP animations menu (the one that opens with the keys weapon.). Note: This function must be called BOTH serverside AND clientside!",
+    description = "Add a player gesture to the fprp animations menu (the one that opens with the keys weapon.). Note: This function must be called BOTH serverside AND clientside!",
     parameters = {
         {
             name = "anim",
@@ -17,12 +17,12 @@ DarkRP.addPlayerGesture = DarkRP.stub{
     },
     returns = {
     },
-    metatable = DarkRP
+    metatable = fprp
 }
 
-DarkRP.removePlayerGesture = DarkRP.stub{
+fprp.removePlayerGesture = fprp.stub{
     name = "removePlayerGesture",
-    description = "Removes a player gesture from the DarkRP animations menu (the one that opens with the keys weapon.). Note: This function must be called BOTH serverside AND clientside!",
+    description = "Removes a player gesture from the fprp animations menu (the one that opens with the keys weapon.). Note: This function must be called BOTH serverside AND clientside!",
     parameters = {
         {
             name = "anim",
@@ -33,5 +33,5 @@ DarkRP.removePlayerGesture = DarkRP.stub{
     },
     returns = {
     },
-    metatable = DarkRP
+    metatable = fprp
 }

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "P228"
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 1
 	SWEP.IconLetter = "y"
@@ -14,7 +14,7 @@ SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.HoldType = "pistol"
 

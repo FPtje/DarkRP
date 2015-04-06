@@ -6,7 +6,7 @@ local PANEL = {}
 function PANEL:Init()
     self:SetContentAlignment(4)
     self:SetTextInset(5, 0)
-    self:SetFont("DarkRPHUD2")
+    self:SetFont("fprpHUD2")
 end
 
 function PANEL:Paint(w, h)

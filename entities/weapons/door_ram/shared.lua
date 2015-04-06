@@ -11,7 +11,7 @@ end
 -- Variables that are used on both client and server
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles\nRight click to raise"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -28,7 +28,7 @@ SWEP.UseHands = true
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 
 SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
 
@@ -109,7 +109,7 @@ local function ramDoor(ply, trace, ent)
 
 	-- Do we have a warrant for this player?
 	if not allowed then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("warrant_required"))
+		fprp.notify(ply, 1, 5, fprp.getPhrase("warrant_required"))
 
 		return false
 	end
@@ -141,7 +141,7 @@ local function ramFadingDoor(ply, trace, ent)
 	local Owner = ent:CPPIGetOwner()
 
 	if not canRam(Owner) then
-		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("warrant_required"))
+		fprp.notify(ply, 1, 5, fprp.getPhrase("warrant_required"))
 		return false
 	end
 
@@ -161,7 +161,7 @@ local function ramProp(ply, trace, ent)
 	local Owner = ent:CPPIGetOwner()
 
 	if not canRam(Owner) then
-	    DarkRP.notify(ply, 1, 5, DarkRP.getPhrase(GAMEMODE.Config.copscanunweld and "warrant_required_unweld" or "warrant_required_unfreeze"))
+	    fprp.notify(ply, 1, 5, fprp.getPhrase(GAMEMODE.Config.copscanunweld and "warrant_required_unweld" or "warrant_required_unfreeze"))
 	    return false
 	end
 
@@ -255,7 +255,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 end
 
 if SERVER then
-	DarkRP.hookStub{
+	fprp.hookStub{
 		name = "canDoorRam",
 		description = "Called when a player attempts to ram something. Use this to override ram behaviour or to disallow ramming.",
 		parameters = {
@@ -284,7 +284,7 @@ if SERVER then
 		}
 	}
 
-	DarkRP.hookStub{
+	fprp.hookStub{
 		name = "onDoorRamUsed",
 		description = "Called when the door ram has been used.",
 		parameters = {

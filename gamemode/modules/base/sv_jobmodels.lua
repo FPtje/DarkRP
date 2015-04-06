@@ -1,11 +1,11 @@
-util.AddNetworkString("DarkRP_preferredjobmodels")
-util.AddNetworkString("DarkRP_preferredjobmodel")
+util.AddNetworkString("fprp_preferredjobmodels")
+util.AddNetworkString("fprp_preferredjobmodel")
 
 local preferredJobModels = {}
 local plyMeta = FindMetaTable("Player")
 
 local received = {}
-net.Receive("DarkRP_preferredjobmodels", function(len, ply)
+net.Receive("fprp_preferredjobmodels", function(len, ply)
 	preferredJobModels[ply] = {}
 
 	for i, job in ipairs(RPExtraTeams) do
@@ -21,7 +21,7 @@ net.Receive("DarkRP_preferredjobmodels", function(len, ply)
 	received[ply] = true
 end)
 
-net.Receive("DarkRP_preferredjobmodel", function(len, ply)
+net.Receive("fprp_preferredjobmodel", function(len, ply)
 	local teamNr = net.ReadUInt(8)
 	local model = net.ReadString()
 

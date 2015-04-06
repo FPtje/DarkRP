@@ -23,7 +23,7 @@ function meta:drawOwnableInfo()
 	if title then table.insert(doorInfo, title) end
 
 	if owned then
-		table.insert(doorInfo, DarkRP.getPhrase("keys_owned_by"))
+		table.insert(doorInfo, fprp.getPhrase("keys_owned_by"))
 	end
 
 	if playerOwned then
@@ -36,7 +36,7 @@ function meta:drawOwnableInfo()
 
 		local allowedCoOwn = self:getKeysAllowedToOwn()
 		if allowedCoOwn and not fn.Null(allowedCoOwn) then
-			table.insert(doorInfo, DarkRP.getPhrase("keys_other_allowed"))
+			table.insert(doorInfo, fprp.getPhrase("keys_other_allowed"))
 
 			for k,v in pairs(allowedCoOwn) do
 				local ent = Player(k)
@@ -53,11 +53,11 @@ function meta:drawOwnableInfo()
 			table.insert(doorInfo, RPExtraTeams[k].name)
 		end
 	elseif blocked and superadmin then
-		table.insert(doorInfo, DarkRP.getPhrase("keys_allow_ownership"))
+		table.insert(doorInfo, fprp.getPhrase("keys_allow_ownership"))
 	elseif not blocked then
-		table.insert(doorInfo, DarkRP.getPhrase("keys_unowned"))
+		table.insert(doorInfo, fprp.getPhrase("keys_unowned"))
 		if superadmin then
-			table.insert(doorInfo, DarkRP.getPhrase("keys_disallow_ownership"))
+			table.insert(doorInfo, fprp.getPhrase("keys_disallow_ownership"))
 		end
 	end
 
@@ -65,7 +65,7 @@ function meta:drawOwnableInfo()
 		for k,v in pairs(player.GetAll()) do
 			if v:GetVehicle() ~= self then continue end
 
-			table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
+			table.insert(doorInfo, fprp.getPhrase("driver", v:Nick()))
 			break
 		end
 	end
@@ -79,13 +79,13 @@ end
 /*---------------------------------------------------------------------------
 Door data
 ---------------------------------------------------------------------------*/
-DarkRP.doorData = DarkRP.doorData or {}
+fprp.doorData = fprp.doorData or {}
 
 /*---------------------------------------------------------------------------
 Interface functions
 ---------------------------------------------------------------------------*/
 function meta:getDoorData()
-	local doorData = DarkRP.doorData[self:EntIndex()] or {}
+	local doorData = fprp.doorData[self:EntIndex()] or {}
 
 	self.DoorData = doorData -- Backwards compatibility
 
@@ -103,9 +103,9 @@ local receivedDoorData = false
 local function retrieveAllDoorData(len)
 	receivedDoorData = true
 	local data = net.ReadTable()
-	DarkRP.doorData = data
+	fprp.doorData = data
 end
-net.Receive("DarkRP_AllDoorData", retrieveAllDoorData)
+net.Receive("fprp_AllDoorData", retrieveAllDoorData)
 hook.Add("InitPostEntity", "DoorData", fp{RunConsoleCommand, "_sendAllDoorData"})
 
 /*---------------------------------------------------------------------------
@@ -114,21 +114,21 @@ Update changed variables
 local function updateDoorData()
 	local door = net.ReadUInt(32)
 
-	DarkRP.doorData[door] = DarkRP.doorData[door] or {}
+	fprp.doorData[door] = fprp.doorData[door] or {}
 
 	local var = net.ReadString()
 	local valueType = net.ReadUInt(8)
 	local value = net.ReadType(valueType)
 
-	DarkRP.doorData[door][var] = value
+	fprp.doorData[door][var] = value
 end
-net.Receive("DarkRP_UpdateDoorData", updateDoorData)
+net.Receive("fprp_UpdateDoorData", updateDoorData)
 
 /*---------------------------------------------------------------------------
 Remove doordata of removed entity
 ---------------------------------------------------------------------------*/
 local function removeDoorData()
 	local door = net.ReadUInt(32)
-	DarkRP.doorData[door] = nil
+	fprp.doorData[door] = nil
 end
-net.Receive("DarkRP_RemoveDoorData", removeDoorData)
+net.Receive("fprp_RemoveDoorData", removeDoorData)

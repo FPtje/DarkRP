@@ -1,10 +1,10 @@
--- Skin for DarkRP gui's
+-- Skin for fprp gui's
 SKIN = {}
 
-SKIN.PrintName          = "DarkRP"
+SKIN.PrintName          = "fprp"
 SKIN.Author             = "FPtje Falco"
 SKIN.DermaVersion       = 1
-SKIN.GwenTexture		= Material("darkrp/darkrpderma.png")
+SKIN.GwenTexture		= Material("fprp/fprpderma.png")
 
 
 SKIN.tex = {}
@@ -237,4 +237,4 @@ SKIN.Colours.Category.LineAlt.Button			= GWEN.TextureColor( 4 + 8 * 25, 508 );
 SKIN.Colours.Category.LineAlt.Button_Hover		= GWEN.TextureColor( 4 + 8 * 24, 500 );
 SKIN.Colours.Category.LineAlt.Button_Selected	= GWEN.TextureColor( 4 + 8 * 25, 500 );
 
-derma.DefineSkin("DarkRP", "The official SKIN for DarkRP", SKIN)
+derma.DefineSkin("fprp", "The official SKIN for fprp", SKIN)

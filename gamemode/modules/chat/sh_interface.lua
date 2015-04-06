@@ -1,4 +1,4 @@
-DarkRP.declareChatCommand = DarkRP.stub{
+fprp.declareChatCommand = fprp.stub{
 	name = "declareChatCommand",
 	description = "Declare a chat command (describe it)",
 	parameters = {
@@ -11,10 +11,10 @@ DarkRP.declareChatCommand = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.removeChatCommand = DarkRP.stub{
+fprp.removeChatCommand = fprp.stub{
 	name = "removeChatCommand",
 	description = "Remove a chat command",
 	parameters = {
@@ -27,10 +27,10 @@ DarkRP.removeChatCommand = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.chatCommandAlias = DarkRP.stub{
+fprp.chatCommandAlias = fprp.stub{
 	name = "chatCommandAlias",
 	description = "Create an alias for a chat command",
 	parameters = {
@@ -49,10 +49,10 @@ DarkRP.chatCommandAlias = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getChatCommand = DarkRP.stub{
+fprp.getChatCommand = fprp.stub{
 	name = "getChatCommand",
 	description = "Get the information on a chat command.",
 	parameters = {
@@ -70,10 +70,10 @@ DarkRP.getChatCommand = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getChatCommands = DarkRP.stub{
+fprp.getChatCommands = fprp.stub{
 	name = "getChatCommands",
 	description = "Get every chat command.",
 	parameters = {
@@ -86,10 +86,10 @@ DarkRP.getChatCommands = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getSortedChatCommands = DarkRP.stub{
+fprp.getSortedChatCommands = fprp.stub{
 	name = "getSortedChatCommands",
 	description = "Get every chat command, sorted by their name.",
 	parameters = {
@@ -102,10 +102,10 @@ DarkRP.getSortedChatCommands = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getIncompleteChatCommands = DarkRP.stub{
+fprp.getIncompleteChatCommands = fprp.stub{
 	name = "getIncompleteChatCommands",
 	description = "chat commands that have been defined, but not declared. Information about these chat commands is missing.",
 	parameters = {
@@ -117,5 +117,5 @@ DarkRP.getIncompleteChatCommands = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

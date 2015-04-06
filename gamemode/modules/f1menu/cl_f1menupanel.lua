@@ -12,7 +12,7 @@ function PANEL:Init()
 	self.toggled = false
 
 	self.lblChatCommands = vgui.Create("F1MenuTitleLabel", self)
-	self.lblChatCommands:SetText(DarkRP.getPhrase("f1ChatCommandTitle"))
+	self.lblChatCommands:SetText(fprp.getPhrase("f1ChatCommandTitle"))
 
 	self.txtChatCommandSearch = vgui.Create("F1SearchBox", self)
 	self.txtChatCommandSearch.OnChange = fn.Curry(self.refresh, 2)(self)

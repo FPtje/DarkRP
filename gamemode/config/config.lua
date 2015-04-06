@@ -1,11 +1,11 @@
 --[[---------------------------------------------------------------------------
-DarkRP config settings
+fprp config settings
 ---------------------------------------------------------------------------
 
-This is the settings file of DarkRP. Every DarkRP setting is listed here.
+This is the settings file of fprp. Every fprp setting is listed here.
 
 Warning:
-If this file is missing settings (because of e.g. an update), DarkRP will assume default values for these settings.
+If this file is missing settings (because of e.g. an update), fprp will assume default values for these settings.
 You need not worry about updating this file. If a new setting is added you can manually add them to this file.
 ---------------------------------------------------------------------------]]
 
@@ -277,11 +277,11 @@ GM.Config.MoneyClass = "spawned_money"
 -- In case you do wish to keep the default money, but change the model, this option is the way to go:
 GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
 
--- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
-GM.Config.DarkRPSkin = "DarkRP"
+-- The skin fprp uses. Set to "default" to use the GMod default derma theme
+GM.Config.fprpSkin = "fprp"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
-GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
+GM.Config.F1MenuHelpPage = "http://wiki.fprp.com/index.php/Main_Page"
 GM.Config.F1MenuHelpPageTitle = "Wiki page"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
@@ -328,7 +328,7 @@ GM.Config.DefaultWeapons = {
 -- NOTE: categories are to be set in the "category" field of the custom jobs/shipments/entities/ammo/pistols/vehicles
 -- Use this only to override the categories of _default_ things.
 -- This will NOT work for your own custom stuff.
--- Make sure the category is created in the darkrp_customthings/categories.lua, otherwise it won't work!
+-- Make sure the category is created in the fprp_customthings/categories.lua, otherwise it won't work!
 GM.Config.CategoryOverride = {
 	jobs = {
 		["Citizen"] 							= "Citizens",

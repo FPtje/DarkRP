@@ -1,6 +1,6 @@
-DarkRP.getAvailableVehicles = DarkRP.stub{
+fprp.getAvailableVehicles = fprp.stub{
 	name = "getAvailableVehicles",
-	description = "Get the available vehicles that DarkRP supports.",
+	description = "Get the available vehicles that fprp supports.",
 	parameters = {
 	},
 	returns = {
@@ -10,5 +10,5 @@ DarkRP.getAvailableVehicles = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

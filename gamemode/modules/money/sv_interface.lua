@@ -1,4 +1,4 @@
-DarkRP.PLAYER.addMoney = DarkRP.stub{
+fprp.PLAYER.addMoney = fprp.stub{
 	name = "addMoney",
 	description = "Give money to a player.",
 	parameters = {
@@ -11,21 +11,21 @@ DarkRP.PLAYER.addMoney = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.payDay = DarkRP.stub{
+fprp.PLAYER.payDay = fprp.stub{
 	name = "payDay",
 	description = "Give a player their salary.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
 
-DarkRP.payPlayer = DarkRP.stub{
+fprp.payPlayer = fprp.stub{
 	name = "payPlayer",
 	description = "Make one player give money to the other player.",
 	parameters = {
@@ -50,10 +50,10 @@ DarkRP.payPlayer = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createMoneyBag = DarkRP.stub{
+fprp.createMoneyBag = fprp.stub{
 	name = "createMoneyBag",
 	description = "Create a money bag.",
 	parameters = {
@@ -77,5 +77,5 @@ DarkRP.createMoneyBag = DarkRP.stub{
 			type = "Entity"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

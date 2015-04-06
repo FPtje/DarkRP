@@ -14,8 +14,8 @@ Meteor storm
 local function StormStart()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
-			v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("meteor_approaching"))
-			v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("meteor_approaching"))
+			v:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("meteor_approaching"))
+			v:PrintMessage(HUD_PRINTTALK, fprp.getPhrase("meteor_approaching"))
 		end
 	end
 end
@@ -23,8 +23,8 @@ end
 local function StormEnd()
 	for k, v in pairs(player.GetAll()) do
 		if v:Alive() then
-			v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("meteor_passing"))
-			v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("meteor_passing"))
+			v:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("meteor_passing"))
+			v:PrintMessage(HUD_PRINTTALK, fprp.getPhrase("meteor_passing"))
 		end
 	end
 end
@@ -64,29 +64,29 @@ local function StartShower()
 end
 
 local function StartStorm(ply)
-	if ply:hasDarkRPPrivilege("rp_commands") then
+	if ply:hasfprpPrivilege("rp_commands") then
 		timer.Start("stormControl")
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
+		fprp.notify(ply, 0, 4, fprp.getPhrase("meteor_enabled"))
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/enablestorm"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/enablestorm"))
 	end
 	return ""
 end
-DarkRP.defineChatCommand("enablestorm", StartStorm)
+fprp.defineChatCommand("enablestorm", StartStorm)
 
 local function StopStorm(ply)
-	if ply:hasDarkRPPrivilege("rp_commands") then
+	if ply:hasfprpPrivilege("rp_commands") then
 		timer.Stop("stormControl")
 		stormOn = false
 		timer.Stop("start")
 		StormEnd()
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
+		fprp.notify(ply, 0, 4, fprp.getPhrase("meteor_disabled"))
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/disablestorm"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/disablestorm"))
 	end
 	return ""
 end
-DarkRP.defineChatCommand("disablestorm", StopStorm)
+fprp.defineChatCommand("disablestorm", StopStorm)
 
 timer.Create("start", 1, 0, StartShower)
 timer.Create("stormControl", 1, 0, ControlStorm)
@@ -110,10 +110,10 @@ local function TremorReport(mag)
 	local mag = table.remove(lastmagnitudes, 1)
 	if mag then
 		if mag < 6.5 then
-			DarkRP.notifyAll(0, 3, DarkRP.getPhrase("earthtremor_report", tostring(mag)))
+			fprp.notifyAll(0, 3, fprp.getPhrase("earthtremor_report", tostring(mag)))
 			return
 		end
-		DarkRP.notifyAll(0, 3, DarkRP.getPhrase("earthquake_report", tostring(mag)))
+		fprp.notifyAll(0, 3, fprp.getPhrase("earthquake_report", tostring(mag)))
 	end
 end
 

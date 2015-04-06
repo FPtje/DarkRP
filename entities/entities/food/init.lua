@@ -30,7 +30,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator,caller)
-	caller:setSelfDarkRPVar("Energy", math.Clamp((caller:getDarkRPVar("Energy") or 0) + 100, 0, 100))
+	caller:setSelffprpVar("Energy", math.Clamp((caller:getfprpVar("Energy") or 0) + 100, 0, 100))
 	umsg.Start("AteFoodIcon", caller)
 	umsg.End()
 

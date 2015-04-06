@@ -10,7 +10,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to arrest\nRight click to switch batons"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -22,7 +22,7 @@ SWEP.AnimPrefix = "stunstick"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 
 SWEP.NextStrike = 0
 
@@ -85,7 +85,7 @@ function SWEP:OnRemove()
 	end
 end
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canArrest",
 	description = "Whether someone can arrest another player.",
 	parameters = {
@@ -117,28 +117,28 @@ DarkRP.hookStub{
 
 local hookCanArrest = {canArrest = function(_, arrester, arrestee)
 	if IsValid(arrestee) and arrestee:IsPlayer() and arrestee:isCP() and not GAMEMODE.Config.cpcanarrestcp then
-		return false, DarkRP.getPhrase("cant_arrest_other_cp")
+		return false, fprp.getPhrase("cant_arrest_other_cp")
 	end
 
 	if arrestee:GetClass() == "prop_ragdoll" then
 		for k,v in pairs(player.GetAll()) do
 			if arrestee.OwnerINT and arrestee.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
-				DarkRP.toggleSleep(v, true)
+				fprp.toggleSleep(v, true)
 				return false, nil
 			end
 		end
 	end
 
 	if not GAMEMODE.Config.npcarrest and arrestee:IsNPC() then
-		return false, DarkRP.getPhrase("unable", "arrest", "NPC")
+		return false, fprp.getPhrase("unable", "arrest", "NPC")
 	end
 
-	if GAMEMODE.Config.needwantedforarrest and not arrestee:IsNPC() and not arrestee:getDarkRPVar("wanted") then
-		return false, DarkRP.getPhrase("must_be_wanted_for_arrest")
+	if GAMEMODE.Config.needwantedforarrest and not arrestee:IsNPC() and not arrestee:getfprpVar("wanted") then
+		return false, fprp.getPhrase("must_be_wanted_for_arrest")
 	end
 
 	if FAdmin and arrestee:IsPlayer() and arrestee:FAdmin_GetGlobal("fadmin_jailed") then
-		return false, DarkRP.getPhrase("cant_arrest_fadmin_jailed")
+		return false, fprp.getPhrase("cant_arrest_fadmin_jailed")
 	end
 
 	return true
@@ -198,28 +198,28 @@ function SWEP:PrimaryAttack()
 
 	local canArrest, message = hook.Call("canArrest", hookCanArrest, self.Owner, ent)
 	if not canArrest then
-		if message then DarkRP.notify(self.Owner, 1, 5, message) end
+		if message then fprp.notify(self.Owner, 1, 5, message) end
 		return
 	end
 
-	local jpc = DarkRP.jailPosCount()
+	local jpc = fprp.jailPosCount()
 
 	if not jpc or jpc == 0 then
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("cant_arrest_no_jail_pos"))
+		fprp.notify(self.Owner, 1, 4, fprp.getPhrase("cant_arrest_no_jail_pos"))
 	else
 		-- Send NPCs to Jail
 		if ent:IsNPC() then
-			ent:SetPos(DarkRP.retrieveJailPos())
+			ent:SetPos(fprp.retrieveJailPos())
 		else
 			if not ent.Babygod then
 				ent:arrest(nil, self.Owner)
-				DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self.Owner:Nick()))
+				fprp.notify(ent, 0, 20, fprp.getPhrase("youre_arrested_by", self.Owner:Nick()))
 
 				if self.Owner.SteamName then
-					DarkRP.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..ent:Nick(), Color(0, 255, 255))
+					fprp.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..ent:Nick(), Color(0, 255, 255))
 				end
 			else
-				DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("cant_arrest_spawning_players"))
+				fprp.notify(self.Owner, 1, 4, fprp.getPhrase("cant_arrest_spawning_players"))
 			end
 		end
 	end

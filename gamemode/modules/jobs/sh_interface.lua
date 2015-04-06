@@ -1,4 +1,4 @@
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "OnPlayerChangedTeam",
 	description = "When your team (job) is changed.",
 	parameters = {

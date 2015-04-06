@@ -55,7 +55,7 @@ function meta:keysOwn(ply)
 	if not self:isKeysOwned() and not self:isKeysOwnedBy(ply) then
 		local doorData = self:getDoorData()
 		doorData.owner = ply:UserID()
-		DarkRP.updateDoorData(self, "owner")
+		fprp.updateDoorData(self, "owner")
 	end
 
 	ply.OwnedNumz = ply.OwnedNumz or 0
@@ -78,7 +78,7 @@ function meta:keysUnOwn(ply)
 	if self:isMasterOwner(ply) then
 		local doorData = self:getDoorData()
 		doorData.owner = nil
-		DarkRP.updateDoorData(self, "owner")
+		fprp.updateDoorData(self, "owner")
 	else
 		self:removeKeysDoorOwner(ply)
 	end
@@ -129,10 +129,10 @@ function pmeta:doPropertyTax()
 	if self:canAfford(tax) then
 		if tax ~= 0 then
 			self:addMoney(-tax)
-			DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
+			fprp.notify(self, 0, 5, fprp.getPhrase("property_tax", fprp.formatMoney(tax)))
 		end
 	else
-		DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
+		fprp.notify(self, 1, 8, fprp.getPhrase("property_tax_cant_afford"))
 		self:keysUnOwnAll()
 	end
 end
@@ -149,7 +149,7 @@ function pmeta:initiateTax()
 		if not GAMEMODE.Config.wallettax then
 			return -- Don't remove the hook in case it's turned on afterwards.
 		end
-		local money = self:getDarkRPVar("money")
+		local money = self:getfprpVar("money")
 		local mintax = GAMEMODE.Config.wallettaxmin / 100
 		local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
 		local startMoney = GAMEMODE.Config.startingmoney
@@ -164,9 +164,9 @@ function pmeta:initiateTax()
 			  tax = math.Min(maxtax, mintax + (maxtax - mintax) * tax)
 
 		self:addMoney(-tax * money)
-		DarkRP.notify(self, 3, 7, DarkRP.getPhrase("taxday", math.Round(tax * 100, 3)))
+		fprp.notify(self, 3, 7, fprp.getPhrase("taxday", math.Round(tax * 100, 3)))
 
-		hook.Call("onPaidTax", DarkRP.hooks, self, tax, money)
+		hook.Call("onPaidTax", fprp.hooks, self, tax, money)
 	end)
 end
 
@@ -176,21 +176,21 @@ Commands
 local time = false
 local function SetDoorOwnable(ply)
 	if time then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", "0.1", "/toggleownable"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", "0.1", "/toggleownable"))
 		return ""
 	end
 	time = true
 	timer.Simple(0.1, function() time = false end)
 
-	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
+	if not ply:hasfprpPrivilege("rp_doorManipulation") then
+		fprp.notify(ply, 1, 4, fprp.getPhrase("no_privilege"))
 		return ""
 	end
 
 	local trace = ply:GetEyeTrace()
 	local ent = trace.Entity
 	if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 200 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 		return
 	end
 
@@ -205,18 +205,18 @@ local function SetDoorOwnable(ply)
 	ent:setKeysTitle(nil)
 
 	-- Save it for future map loads
-	DarkRP.storeDoorData(ent)
-	DarkRP.storeDoorGroup(ent, nil)
-	DarkRP.storeTeamDoorOwnability(ent)
+	fprp.storeDoorData(ent)
+	fprp.storeDoorGroup(ent, nil)
+	fprp.storeTeamDoorOwnability(ent)
 
 	return ""
 end
-DarkRP.defineChatCommand("toggleownable", SetDoorOwnable)
+fprp.defineChatCommand("toggleownable", SetDoorOwnable)
 
 local time3 = false
 local function SetDoorGroupOwnable(ply, arg)
 	if time3 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", "0.1", "/togglegroupownable"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", "0.1", "/togglegroupownable"))
 		return ""
 	end
 	time3 = true
@@ -224,19 +224,19 @@ local function SetDoorGroupOwnable(ply, arg)
 
 	local trace = ply:GetEyeTrace()
 
-	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
+	if not ply:hasfprpPrivilege("rp_doorManipulation") then
+		fprp.notify(ply, 1, 4, fprp.getPhrase("no_privilege"))
 		return ""
 	end
 
 	local ent = trace.Entity
 
 	if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 200 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 		return
 	end
 
-	if not RPExtraTeamDoors[arg] and arg ~= "" then DarkRP.notify(ply, 1, 10, DarkRP.getPhrase("door_group_doesnt_exist")) return "" end
+	if not RPExtraTeamDoors[arg] and arg ~= "" then fprp.notify(ply, 1, 10, fprp.getPhrase("door_group_doesnt_exist")) return "" end
 
 	ent:keysUnOwn()
 
@@ -246,19 +246,19 @@ local function SetDoorGroupOwnable(ply, arg)
 	ent:setDoorGroup(group)
 
 	-- Save it for future map loads
-	DarkRP.storeDoorGroup(ent, group)
-	DarkRP.storeTeamDoorOwnability(ent)
+	fprp.storeDoorGroup(ent, group)
+	fprp.storeTeamDoorOwnability(ent)
 
 
-	DarkRP.notify(ply, 0, 8, DarkRP.getPhrase("door_group_set"))
+	fprp.notify(ply, 0, 8, fprp.getPhrase("door_group_set"))
 	return ""
 end
-DarkRP.defineChatCommand("togglegroupownable", SetDoorGroupOwnable)
+fprp.defineChatCommand("togglegroupownable", SetDoorGroupOwnable)
 
 local time4 = false
 local function SetDoorTeamOwnable(ply, arg)
 	if time4 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", "0.1", "/toggleteamownable"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", "0.1", "/toggleteamownable"))
 		return ""
 	end
 	time4 = true
@@ -266,24 +266,24 @@ local function SetDoorTeamOwnable(ply, arg)
 	local trace = ply:GetEyeTrace()
 
 	local ent = trace.Entity
-	if not ply:hasDarkRPPrivilege("rp_doorManipulation") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_privilege"))
+	if not ply:hasfprpPrivilege("rp_doorManipulation") then
+		fprp.notify(ply, 1, 4, fprp.getPhrase("no_privilege"))
 		return ""
 	end
 
 	if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 200 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
 	arg = tonumber(arg)
-	if not RPExtraTeams[arg] and arg ~= nil then DarkRP.notify(ply, 1, 10, DarkRP.getPhrase("job_doesnt_exist")) return "" end
+	if not RPExtraTeams[arg] and arg ~= nil then fprp.notify(ply, 1, 10, fprp.getPhrase("job_doesnt_exist")) return "" end
 	if IsValid(ent:getDoorOwner()) then
 		ent:keysUnOwn(ent:getDoorOwner())
 	end
 
 	ent:setDoorGroup(nil)
-	DarkRP.storeDoorGroup(ent, nil)
+	fprp.storeDoorGroup(ent, nil)
 
 	local doorTeams = ent:getKeysDoorTeams()
 	if not doorTeams or not doorTeams[arg] then
@@ -292,18 +292,18 @@ local function SetDoorTeamOwnable(ply, arg)
 		ent:removeKeysDoorTeam(arg)
 	end
 
-	DarkRP.notify(ply, 0, 8, DarkRP.getPhrase("door_group_set"))
-	DarkRP.storeTeamDoorOwnability(ent)
+	fprp.notify(ply, 0, 8, fprp.getPhrase("door_group_set"))
+	fprp.storeTeamDoorOwnability(ent)
 
 	ent:keysUnOwn()
 	return ""
 end
-DarkRP.defineChatCommand("toggleteamownable", SetDoorTeamOwnable)
+fprp.defineChatCommand("toggleteamownable", SetDoorTeamOwnable)
 
 local time2 = false
 local function OwnDoor(ply)
 	if time2 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", "0.1", "/toggleown"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", "0.1", "/toggleown"))
 		return ""
 	end
 	time2 = true
@@ -315,12 +315,12 @@ local function OwnDoor(ply)
 		local Owner = trace.Entity:CPPIGetOwner()
 
 		if ply:isArrested() then
-			DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unown_arrested"))
+			fprp.notify(ply, 1, 5, fprp.getPhrase("door_unown_arrested"))
 			return ""
 		end
 
 		if trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or not fn.Null(trace.Entity:getKeysDoorTeams() or {}) then
-			DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unownable"))
+			fprp.notify(ply, 1, 5, fprp.getPhrase("door_unownable"))
 			return ""
 		end
 
@@ -329,7 +329,7 @@ local function OwnDoor(ply)
 
 			if bAllowed == false then
 				if strReason and strReason != "" then
-					DarkRP.notify(ply, 1, 4, strReason)
+					fprp.notify(ply, 1, 4, strReason)
 				end
 
 				return ""
@@ -348,25 +348,25 @@ local function OwnDoor(ply)
 			ply:addMoney(GiveMoneyBack)
 			local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
 			if not bSuppress then
-				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  DarkRP.formatMoney(GiveMoneyBack)))
+				fprp.notify(ply, 0, 4, fprp.getPhrase("door_sold",  fprp.formatMoney(GiveMoneyBack)))
 			end
 
 		else
 			if trace.Entity:isKeysOwned() and not trace.Entity:isKeysAllowedToOwn(ply) then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_already_owned"))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("door_already_owned"))
 				return ""
 			end
 
 			local iCost = hook.Call("get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door").."Cost", GAMEMODE, ply, trace.Entity);
 			if( !ply:canAfford( iCost ) ) then
-				DarkRP.notify( ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
+				fprp.notify( ply, 1, 4, trace.Entity:IsVehicle() and fprp.getPhrase("vehicle_cannot_afford") or fprp.getPhrase("door_cannot_afford"))
 				return "";
 			end
 
 			local bAllowed, strReason, bSuppress = hook.Call("playerBuy".. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
 			if bAllowed == false then
 				if strReason and strReason != "" then
-					DarkRP.notify(ply, 1, 4, strReason)
+					fprp.notify(ply, 1, 4, strReason)
 				end
 
 				return ""
@@ -375,18 +375,18 @@ local function OwnDoor(ply)
 			local bVehicle = trace.Entity:IsVehicle();
 
 			if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and Owner ~= ply then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", DarkRP.getPhrase("vehicle")))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("limit", fprp.getPhrase("vehicle")))
 				return ""
 			end
 
 			if not bVehicle and (ply.OwnedNumz or 0) >= GAMEMODE.Config.maxdoors then
-				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", DarkRP.getPhrase("door")))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("limit", fprp.getPhrase("door")))
 				return ""
 			end
 
 			ply:addMoney(-iCost)
 			if not bSuppress then
-				DarkRP.notify( ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", DarkRP.formatMoney(iCost), "") or DarkRP.getPhrase("door_bought", DarkRP.formatMoney(iCost), ""))
+				fprp.notify( ply, 0, 4, bVehicle and fprp.getPhrase("vehicle_bought", fprp.formatMoney(iCost), "") or fprp.getPhrase("door_bought", fprp.formatMoney(iCost), ""))
 			end
 
 			trace.Entity:keysOwn(ply)
@@ -395,10 +395,10 @@ local function OwnDoor(ply)
 
 		return ""
 	end
-	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+	fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 	return ""
 end
-DarkRP.defineChatCommand("toggleown", OwnDoor)
+fprp.defineChatCommand("toggleown", OwnDoor)
 
 local function UnOwnAll(ply, cmd, args)
 	local amount = 0
@@ -413,62 +413,62 @@ local function UnOwnAll(ply, cmd, args)
 		end
 	end
 	ply:GetTable().OwnedNumz = 0
-	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount,DarkRP.formatMoney(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))))
+	fprp.notify(ply, 2, 4, fprp.getPhrase("sold_x_doors", amount,fprp.formatMoney(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))))
 	return ""
 end
-DarkRP.defineChatCommand("unownalldoors", UnOwnAll)
+fprp.defineChatCommand("unownalldoors", UnOwnAll)
 
 
 local function SetDoorTitle(ply, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
 	if ply:IsSuperAdmin() then
 		if trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or not fn.Null(trace.Entity:getKeysDoorTeams() or {}) then
 			trace.Entity:setKeysTitle(args)
-			DarkRP.storeDoorData(trace.Entity)
+			fprp.storeDoorData(trace.Entity)
 			return ""
 		end
 	elseif trace.Entity:getKeysNonOwnable() then
-		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("need_admin", "/title"))
+		fprp.notify(ply, 1, 6, fprp.getPhrase("need_admin", "/title"))
 	end
 
 	if not trace.Entity:isKeysOwnedBy(ply) then
-		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("door_need_to_own", "/title"))
+		fprp.notify(ply, 1, 6, fprp.getPhrase("door_need_to_own", "/title"))
 		return ""
 	end
 	trace.Entity:setKeysTitle(args)
 
 	return ""
 end
-DarkRP.defineChatCommand("title", SetDoorTitle)
+fprp.defineChatCommand("title", SetDoorTitle)
 
 local function RemoveDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
-	local target = DarkRP.findPlayer(args)
+	local target = fprp.findPlayer(args)
 
 	if trace.Entity:getKeysNonOwnable() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("door_rem_owners_unownable"))
 		return ""
 	end
 
 	if not target then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 
 	if not trace.Entity:isKeysOwnedBy(ply) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("do_not_own_ent"))
 		return ""
 	end
 
@@ -486,36 +486,36 @@ local function RemoveDoorOwner(ply, args)
 
 	return ""
 end
-DarkRP.defineChatCommand("removeowner", RemoveDoorOwner)
-DarkRP.defineChatCommand("ro", RemoveDoorOwner)
+fprp.defineChatCommand("removeowner", RemoveDoorOwner)
+fprp.defineChatCommand("ro", RemoveDoorOwner)
 
 local function AddDoorOwner(ply, args)
 	local trace = ply:GetEyeTrace()
 
 	if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", fprp.getPhrase("door_or_vehicle")))
 		return ""
 	end
 
-	local target = DarkRP.findPlayer(args)
+	local target = fprp.findPlayer(args)
 
 	if trace.Entity:getKeysNonOwnable() then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("door_add_owners_unownable"))
 		return ""
 	end
 
 	if not target then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", tostring(args)))
 		return ""
 	end
 
 	if not trace.Entity:isKeysOwnedBy(ply) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("do_not_own_ent"))
 		return ""
 	end
 
 	if trace.Entity:isKeysOwnedBy(target) or trace.Entity:isKeysAllowedToOwn(target) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target:Nick()))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("rp_addowner_already_owns_door", target:Nick()))
 		return ""
 	end
 
@@ -527,6 +527,6 @@ local function AddDoorOwner(ply, args)
 
 	return ""
 end
-DarkRP.defineChatCommand("addowner", AddDoorOwner)
-DarkRP.defineChatCommand("ao", AddDoorOwner)
+fprp.defineChatCommand("addowner", AddDoorOwner)
+fprp.defineChatCommand("ao", AddDoorOwner)
 

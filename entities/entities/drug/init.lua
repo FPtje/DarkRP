@@ -80,9 +80,9 @@ function ENT:Use(activator,caller)
 		if not activator:canAfford(self:Getprice()) then
 			return false
 		end
-		DarkRP.payPlayer(activator, Owner, self:Getprice())
-		DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("you_bought", string.lower(DarkRP.getPhrase("drugs")), DarkRP.formatMoney(self:Getprice()), ""))
-		DarkRP.notify(Owner, 0, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(self:Getprice()), string.lower(DarkRP.getPhrase("drugs"))))
+		fprp.payPlayer(activator, Owner, self:Getprice())
+		fprp.notify(activator, 0, 4, fprp.getPhrase("you_bought", string.lower(fprp.getPhrase("drugs")), fprp.formatMoney(self:Getprice()), ""))
+		fprp.notify(Owner, 0, 4, fprp.getPhrase("you_received_x", fprp.formatMoney(self:Getprice()), string.lower(fprp.getPhrase("drugs"))))
 	end
 	DrugPlayer(caller)
 	self.CanUse = false

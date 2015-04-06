@@ -9,7 +9,7 @@ function ENT:Draw()
 
 	local Pos = self:GetPos()
 	local Ang = self:GetAngles()
-	local text = DarkRP.getPhrase("amount") .. self.dt.amount
+	local text = fprp.getPhrase("amount") .. self.dt.amount
 
 	surface.SetFont("HUDNumber5")
 	local TextWidth = surface.GetTextSize(text)
@@ -43,14 +43,14 @@ properties.Add("createShipment",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("darkrp", "makeshipment", ent:EntIndex())
+						RunConsoleCommand("fprp", "makeshipment", ent:EntIndex())
 					end
 })
 
 /*---------------------------------------------------------------------------
 Interface
 ---------------------------------------------------------------------------*/
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onDrawSpawnedWeapon",
 	description = "Draw spawned weapons.",
 	realm = "Client",

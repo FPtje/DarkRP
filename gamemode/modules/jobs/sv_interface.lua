@@ -1,4 +1,4 @@
-DarkRP.PLAYER.changeTeam = DarkRP.stub{
+fprp.PLAYER.changeTeam = fprp.stub{
 	name = "changeTeam",
 	description = "Change the team of a player.",
 	parameters = {
@@ -22,10 +22,10 @@ DarkRP.PLAYER.changeTeam = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.updateJob = DarkRP.stub{
+fprp.PLAYER.updateJob = fprp.stub{
 	name = "updateJob",
 	description = "Set the job name of a player (doesn't change the actual team).",
 	parameters = {
@@ -38,10 +38,10 @@ DarkRP.PLAYER.updateJob = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.teamUnBan = DarkRP.stub{
+fprp.PLAYER.teamUnBan = fprp.stub{
 	name = "teamUnBan",
 	description = "Unban someone from a team.",
 	parameters = {
@@ -55,10 +55,10 @@ DarkRP.PLAYER.teamUnBan = DarkRP.stub{
 	returns = {
 
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.teamBan = DarkRP.stub{
+fprp.PLAYER.teamBan = fprp.stub{
 	name = "teamBan",
 	description = "Ban someone from getting a certain job.",
 	parameters = {
@@ -77,10 +77,10 @@ DarkRP.PLAYER.teamBan = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.changeAllowed = DarkRP.stub{
+fprp.PLAYER.changeAllowed = fprp.stub{
 	name = "changeAllowed",
 	description = "Returns whether a player is allowed to get a certain job.",
 	parameters = {
@@ -98,10 +98,10 @@ DarkRP.PLAYER.changeAllowed = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canChangeJob",
 	description = "Whether a player can change their job. NOTE: This is only for the /job comand! The hook for changing to a pre-existing job is playerCanChangeTeam.",
 	parameters = {
@@ -135,7 +135,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerCanChangeTeam",
 	description = "Whether a player can change their team.",
 	parameters = {

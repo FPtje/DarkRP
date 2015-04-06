@@ -5,14 +5,14 @@ function PANEL:Init()
 	self:SetKeyBoardInputEnabled(true)
 	self.BaseClass.Init(self)
 	self.F1Down = true
-	self:SetFont("DarkRPHUD2")
+	self:SetFont("fprpHUD2")
 	self:SetTextColor(Color(255,255,255,255))
 	self:SetCursorColor(Color(255,255,255,255))
 
 	self.lblSearch = vgui.Create("DLabel", self)
-	self.lblSearch:SetFont("DarkRPHUD2")
+	self.lblSearch:SetFont("fprpHUD2")
 	self.lblSearch:SetColor(Color(200, 200, 200, 200))
-	self.lblSearch:SetText(DarkRP.getPhrase("f1Search"))
+	self.lblSearch:SetText(fprp.getPhrase("f1Search"))
 	self.lblSearch:SizeToContents()
 	self.lblSearch:SetPos(5)
 end
@@ -35,7 +35,7 @@ function PANEL:Think()
 	end
 end
 
-hook.Add("PlayerBindPress", "DarkRPF1Bind", function(ply, bind, pressed)
+hook.Add("PlayerBindPress", "fprpF1Bind", function(ply, bind, pressed)
 	if string.find(bind, "gm_showhelp", 1, true) then
 		F1Bind = input.KeyNameToNumber(input.LookupBinding(bind))
 	end

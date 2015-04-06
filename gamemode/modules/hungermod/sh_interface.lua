@@ -1,6 +1,6 @@
-DarkRP.createFood = DarkRP.stub{
+fprp.createFood = fprp.stub{
 	name = "createFood",
-	description = "Create food for DarkRP.",
+	description = "Create food for fprp.",
 	parameters = {
 		{
 			name = "name",
@@ -17,11 +17,11 @@ DarkRP.createFood = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddFoodItem = DarkRP.createFood
+AddFoodItem = fprp.createFood
 
-DarkRP.PLAYER.isCook = DarkRP.stub{
+fprp.PLAYER.isCook = fprp.stub{
 	name = "isCook",
 	description = "Whether this player is a cook. This function is only available if hungermod is enabled.",
 	parameters = {
@@ -33,5 +33,5 @@ DarkRP.PLAYER.isCook = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }

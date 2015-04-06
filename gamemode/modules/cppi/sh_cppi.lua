@@ -4,7 +4,7 @@ CPPI.CPPI_DEFER = 100100 --\100\100 = dd
 CPPI.CPPI_NOTIMPLEMENTED = 7080
 
 function CPPI:GetName()
-	return "DarkRP"
+	return "fprp"
 end
 
 function CPPI:GetVersion()

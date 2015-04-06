@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Mac10"
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "l"
@@ -14,7 +14,7 @@ SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_mac10.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_mac10.mdl"

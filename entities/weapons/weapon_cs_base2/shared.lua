@@ -32,7 +32,7 @@ end
 
 SWEP.Base = "weapon_base"
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = ""
@@ -70,7 +70,7 @@ SWEP.MultiMode = false
 function SWEP:Initialize()
 	if CLIENT and IsValid(self.Owner) then
 		local vm = self.Owner:GetViewModel()
-		self:ResetDarkRPBones(vm)
+		self:ResetfprpBones(vm)
 	end
 
 	self:SetHoldType("normal")
@@ -107,7 +107,7 @@ function SWEP:Holster()
 	if not IsValid(self.Owner) then return true end
 	if CLIENT then
 		local vm = self.Owner:GetViewModel()
-		self:ResetDarkRPBones(vm)
+		self:ResetfprpBones(vm)
 	else
 		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	end
@@ -120,7 +120,7 @@ function SWEP:OnRemove()
 
 	if CLIENT and IsValid(self.Owner) then
 		local vm = self.Owner:GetViewModel()
-		self:ResetDarkRPBones(vm)
+		self:ResetfprpBones(vm)
 	elseif SERVER and IsValid(self.LASTOWNER) then
 		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.LASTOWNER)
 	end
@@ -153,15 +153,15 @@ function SWEP:PrimaryAttack(partofburst)
 		if self.FireMode == "semi" then
 			self.FireMode = "burst"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
+			self.Owner:PrintMessage( HUD_PRINTCENTER, fprp.getPhrase("switched_burst"))
 		elseif self.FireMode == "burst" then
 			self.FireMode = "auto"
 			self.Primary.Automatic = true
-			self.Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
+			self.Owner:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("switched_fully_auto"))
 		elseif self.FireMode == "auto" then
 			self.FireMode = "semi"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
+			self.Owner:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("switched_semi_auto"))
 		end
 		self.Weapon:SetNextPrimaryFire(CurTime() + 0.5)
 		self.Weapon:SetNextSecondaryFire(CurTime() + 0.5)
@@ -450,14 +450,14 @@ end
 
 if CLIENT then
 	function SWEP:ViewModelDrawn(vm)
-		if self.DarkRPViewModelBoneManipulations and not self.Reloading then
-			self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
+		if self.fprpViewModelBoneManipulations and not self.Reloading then
+			self:UpdatefprpBones(vm, self.fprpViewModelBoneManipulations)
 		else
-			self:ResetDarkRPBones(vm)
+			self:ResetfprpBones(vm)
 		end
 	end
 
-	function SWEP:UpdateDarkRPBones(vm, manipulations)
+	function SWEP:UpdatefprpBones(vm, manipulations)
 		if not IsValid(vm) or not vm:GetBoneCount() then return end
 
 		-- Fill in missing bone names. Things fuck up when we workaround the scale bug and bones are missing.
@@ -502,7 +502,7 @@ if CLIENT then
 		end
 	end
 
-	function SWEP:ResetDarkRPBones(vm)
+	function SWEP:ResetfprpBones(vm)
 		if not IsValid(vm) or not vm:GetBoneCount() then return end
 		for i = 0, vm:GetBoneCount() - 1 do
 			vm:ManipulateBoneScale(i, Vector(1, 1, 1))
@@ -512,7 +512,7 @@ if CLIENT then
 	end
 end
 
-hook.Add("UpdatePlayerSpeed", "DarkRP_WeaponSpeed", function(ply)
+hook.Add("UpdatePlayerSpeed", "fprp_WeaponSpeed", function(ply)
 	local wep = ply:GetActiveWeapon()
 	if not IsValid(wep) or not wep.Ironsights then return end
 

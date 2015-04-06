@@ -1,22 +1,22 @@
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "rpname",
 	description = "Set your RP name",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "name",
 	description = "Set your RP name",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "nick",
 	description = "Set your RP name",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "buy",
 	description = "Buy a pistol",
 	delay = 1.5,
@@ -26,32 +26,32 @@ DarkRP.declareChatCommand{
 	}
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "buyshipment",
 	description = "Buy a shipment",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "buyvehicle",
 	description = "Buy a vehicle",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "buyammo",
 	description = "Purchase ammo",
 	delay = 1.5,
 	condition = fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noguns"), fn.Curry(fn.GetValue, 2)("Config"), gmod.GetGamemode}
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "price",
 	description = "Set the price of the microwave or gunlab you're looking at",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "setprice",
 	description = "Set the price of the microwave or gunlab you're looking at",
 	delay = 1.5

@@ -2,7 +2,7 @@ local function setScale(ply, scale)
 	ply:SetModelScale(scale, 0)
 
 	ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale))
-	umsg.Start("darkrp_playerscale")
+	umsg.Start("fprp_playerscale")
 		umsg.Entity(ply)
 		umsg.Float(scale)
 	umsg.End()

@@ -13,7 +13,7 @@ end)
 
 local hookCanEditLaws = {canEditLaws = function(_, ply, action, args)
 	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		return false, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. action)
+		return false, fprp.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. action)
 	end
 	return true
 end}
@@ -36,22 +36,22 @@ local function addLaw(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "addLaw", args)
 
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw", ""))
+		fprp.notify(ply, 1, 4, message ~= nil and message or fprp.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw", ""))
 		return ""
 	end
 
 	if not args or args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
 		return ""
 	end
 
 	if string.len(args) < 3 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("law_too_short"))
 		return ""
 	end
 
 	if #Laws >= 12 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("laws_full"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("laws_full"))
 		return ""
 	end
 
@@ -63,29 +63,29 @@ local function addLaw(ply, args)
 
 	hook.Run("addLaw", num, args)
 
-	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_added"))
+	fprp.notify(ply, 0, 2, fprp.getPhrase("law_added"))
 
 	return ""
 end
-DarkRP.defineChatCommand("addLaw", addLaw)
+fprp.defineChatCommand("addLaw", addLaw)
 
 local function removeLaw(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "removeLaw", args)
 
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw", ""))
+		fprp.notify(ply, 1, 4, message ~= nil and message or fprp.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw", ""))
 		return ""
 	end
 
 	local i = tonumber(args)
 
 	if not i or not Laws[i] then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
 		return ""
 	end
 
 	if FixedLaws[i] then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("default_law_change_denied"))
 		return ""
 	end
 
@@ -99,13 +99,13 @@ local function removeLaw(ply, args)
 
 	hook.Run("removeLaw", i, law)
 
-	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_removed"))
+	fprp.notify(ply, 0, 2, fprp.getPhrase("law_removed"))
 
 	return ""
 end
-DarkRP.defineChatCommand("removeLaw", removeLaw)
+fprp.defineChatCommand("removeLaw", removeLaw)
 
-function DarkRP.resetLaws()
+function fprp.resetLaws()
 	Laws = table.Copy(FixedLaws)
 
 	umsg.Start("DRP_ResetLaws")
@@ -116,31 +116,31 @@ local function resetLaws(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "resetLaws", args)
 
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws", ""))
+		fprp.notify(ply, 1, 4, message ~= nil and message or fprp.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws", ""))
 		return ""
 	end
 
 	hook.Run("resetLaws", ply)
 
-	DarkRP.resetLaws()
+	fprp.resetLaws()
 
-	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_reset"))
+	fprp.notify(ply, 0, 2, fprp.getPhrase("law_reset"))
 
 	return ""
 end
-DarkRP.defineChatCommand("resetLaws", resetLaws)
+fprp.defineChatCommand("resetLaws", resetLaws)
 
 local numlaws = 0
 local function placeLaws(ply, args)
 	local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "placeLaws", args)
 
 	if not canEdit then
-		DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws", ""))
+		fprp.notify(ply, 1, 4, message ~= nil and message or fprp.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws", ""))
 		return ""
 	end
 
 	if numlaws >= GAMEMODE.Config.maxlawboards then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placeLaws"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placeLaws"))
 		return ""
 	end
 
@@ -151,7 +151,7 @@ local function placeLaws(ply, args)
 
 	local tr = util.TraceLine(trace)
 
-	local ent = ents.Create("darkrp_laws")
+	local ent = ents.Create("fprp_laws")
 	ent:SetPos(tr.HitPos + Vector(0, 0, 100))
 
 	local ang = ply:GetAngles()
@@ -173,7 +173,7 @@ local function placeLaws(ply, args)
 
 	return ""
 end
-DarkRP.defineChatCommand("placeLaws", placeLaws)
+fprp.defineChatCommand("placeLaws", placeLaws)
 
 function ENT:OnRemove()
 	numlaws = numlaws - 1
@@ -189,6 +189,6 @@ hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
 	end
 end)
 
-function DarkRP.getLaws()
+function fprp.getLaws()
 	return Laws
 end

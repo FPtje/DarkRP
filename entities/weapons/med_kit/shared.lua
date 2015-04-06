@@ -3,7 +3,7 @@ if SERVER then
 end
 
 SWEP.PrintName = "Medic Kit"
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 SWEP.Description = "Heals the wounded."
@@ -13,7 +13,7 @@ SWEP.Instructions = "Left click to heal someone\nRight click to heal yourself"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 
 SWEP.ViewModel = "models/weapons/c_medkit.mdl"
 SWEP.WorldModel = "models/weapons/w_medkit.mdl"

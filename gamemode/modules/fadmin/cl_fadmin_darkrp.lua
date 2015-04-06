@@ -1,9 +1,9 @@
 if not FAdmin or not FAdmin.StartHooks then return end
-FAdmin.StartHooks["DarkRP"] = function()
-	-- DarkRP information:
+FAdmin.StartHooks["fprp"] = function()
+	-- fprp information:
 	FAdmin.ScoreBoard.Player:AddInformation("Steam name", function(ply) return ply:SteamName() end, true)
-	FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() then return DarkRP.formatMoney(ply:getDarkRPVar("money")) end end)
-	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply:getDarkRPVar("wanted") then return tostring(ply:getDarkRPVar("wantedReason") or "N/A") end end)
+	FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() then return fprp.formatMoney(ply:getfprpVar("money")) end end)
+	FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply:getfprpVar("wanted") then return tostring(ply:getfprpVar("wantedReason") or "N/A") end end)
 	FAdmin.ScoreBoard.Player:AddInformation("Community link", function(ply) return FAdmin.SteamToProfile(ply) end)
 	FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply)
 		if FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SeeAdmins") then
@@ -21,24 +21,24 @@ FAdmin.StartHooks["DarkRP"] = function()
 		function(ply) return LocalPlayer():isCP() end,
 		function(ply, button)
 			Derma_StringRequest("Warrant reason", "Enter the reason for the warrant", "", function(Reason)
-				RunConsoleCommand("darkrp", "warrant", ply:SteamID(), Reason)
+				RunConsoleCommand("fprp", "warrant", ply:SteamID(), Reason)
 			end)
 		end)
 
 	--wanted
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
-			return ((ply:getDarkRPVar("wanted") and "Unw") or "W") .. "anted"
+			return ((ply:getfprpVar("wanted") and "Unw") or "W") .. "anted"
 		end,
-		function(ply) return "FAdmin/icons/jail", ply:getDarkRPVar("wanted") and "FAdmin/icons/disable" end,
+		function(ply) return "FAdmin/icons/jail", ply:getfprpVar("wanted") and "FAdmin/icons/disable" end,
 		Color(0, 0, 200, 255),
 		function(ply) return LocalPlayer():isCP() end,
 		function(ply, button)
-			if not ply:getDarkRPVar("wanted")  then
+			if not ply:getfprpVar("wanted")  then
 				Derma_StringRequest("wanted reason", "Enter the reason to arrest this player", "", function(Reason)
-					RunConsoleCommand("darkrp", "wanted", ply:SteamID(), Reason)
+					RunConsoleCommand("fprp", "wanted", ply:SteamID(), Reason)
 				end)
 			else
-				RunConsoleCommand("darkrp", "unwanted", ply:UserID())
+				RunConsoleCommand("fprp", "unwanted", ply:UserID())
 			end
 		end)
 

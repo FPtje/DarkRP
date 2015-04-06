@@ -8,7 +8,7 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 end
 
-SWEP.Author = "DarkRP Developers"
+SWEP.Author = "fprp Developers"
 SWEP.Instructions = "Left click to weapon check\nRight click to confiscate weapons\nReload to give back the weapons"
 SWEP.Contact = ""
 SWEP.Purpose = ""
@@ -19,7 +19,7 @@ SWEP.AnimPrefix	 = "rpg"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
-SWEP.Category = "DarkRP (Utility)"
+SWEP.Category = "fprp (Utility)"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
@@ -86,7 +86,7 @@ function SWEP:PrimaryAttack()
 		local class = v:GetClass()
 
 		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
-			((trace.Entity:hasDarkRPPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
+			((trace.Entity:hasfprpPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
 			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
 			continue
 		end
@@ -98,9 +98,9 @@ function SWEP:PrimaryAttack()
 	result = table.concat(result, ", ")
 
 	if result == "" then
-		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
+		self.Owner:ChatPrint(fprp.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
 	else
-		self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
+		self.Owner:ChatPrint(fprp.getPhrase("persons_weapons", trace.Entity:Nick()))
 		if string.len(result) >= 126 then
 			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
@@ -151,7 +151,7 @@ function SWEP:Reload()
 	end
 
 	if not trace.Entity:GetTable().ConfiscatedWeapons then
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("no_weapons_confiscated", trace.Entity:Nick()))
+		fprp.notify(self.Owner, 1, 4, fprp.getPhrase("no_weapons_confiscated", trace.Entity:Nick()))
 		return
 	else
 		for k,v in pairs(trace.Entity.ConfiscatedWeapons) do
@@ -164,7 +164,7 @@ function SWEP:Reload()
 			wep:SetClip2(v[7])
 
 		end
-		DarkRP.notify(self.Owner, 2, 4, DarkRP.getPhrase("returned_persons_weapons", trace.Entity:Nick()))
+		fprp.notify(self.Owner, 2, 4, fprp.getPhrase("returned_persons_weapons", trace.Entity:Nick()))
 		trace.Entity:GetTable().ConfiscatedWeapons = nil
 	end
 end
@@ -190,7 +190,7 @@ function SWEP:Succeed()
 		local class = v:GetClass()
 
 		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
-			((trace.Entity:hasDarkRPPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
+			((trace.Entity:hasfprpPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
 			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
 			continue
 		end
@@ -224,12 +224,12 @@ function SWEP:Succeed()
 	end
 
 	if result == "" then
-		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
+		self.Owner:ChatPrint(fprp.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
 		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
 		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
 	else
 		self.Owner:EmitSound("ambient/energy/zap1.wav", 50, 100)
-		self.Owner:ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))
+		self.Owner:ChatPrint(fprp.getPhrase("confiscated_these_weapons"))
 		if string.len(result) >= 126 then
 			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
@@ -278,6 +278,6 @@ function SWEP:DrawHUD()
 		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
 		draw.RoundedBox(cornerRadius, x+8, y+8, BarWidth, height-16, Color(0, 0+(status*255), 255-(status*255), 255))
 
-		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
+		draw.DrawNonParsedSimpleText(fprp.getPhrase("checking_weapons")..self.Dots, "Trebuchet24", w/2, y + height/2, Color(255,255,255,255), 1, 1)
 	end
 end

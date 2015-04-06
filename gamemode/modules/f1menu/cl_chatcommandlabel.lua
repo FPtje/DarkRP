@@ -4,14 +4,14 @@ local green = Color(0, 150, 0)
 local red = Color(160, 20, 20)
 
 function PANEL:Init()
-	self:SetFont("DarkRPHUD2")
+	self:SetFont("fprpHUD2")
 	self:SetColor(green)
 	self:DockMargin(0, 5, 0, 0)
 end
 
 function PANEL:setChatCommand(command)
 	self.chatCommand = command
-	local text = string.format("%s%s - %s", GAMEMODE.Config.chatCommandPrefix, command.command, DarkRP.getChatCommandDescription(command.command))
+	local text = string.format("%s%s - %s", GAMEMODE.Config.chatCommandPrefix, command.command, fprp.getChatCommandDescription(command.command))
 	self:SetAutoStretchVertical(true)
 	self:SetWrap(true)
 	self:SetText(text)

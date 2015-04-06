@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("commands.lua")
 
-util.AddNetworkString("DarkRP_shipmentSpawn")
+util.AddNetworkString("fprp_shipmentSpawn")
 
 function ENT:Initialize()
 	self.Destructed = false
@@ -41,9 +41,9 @@ function ENT:Initialize()
 		self.PlayerUse = false
 		SafeRemoveEntity(self)
 		if not contents then
-			DarkRP.error("Shipment created with zero or fewer elements.", 2)
+			fprp.error("Shipment created with zero or fewer elements.", 2)
 		else
-			DarkRP.error(string.format("Some smartass thought they were clever by setting the 'amount' of shipment '%s' to 0.\nWhat the fuck do you expect the use of an empty shipment to be?", contents.name), 2)
+			fprp.error(string.format("Some smartass thought they were clever by setting the 'amount' of shipment '%s' to 0.\nWhat the fuck do you expect the use of an empty shipment to be?", contents.name), 2)
 		end
 	end
 end
@@ -51,7 +51,7 @@ end
 function ENT:StartSpawning()
 	self.locked = true
 	timer.Simple(0, function()
-		net.Start("DarkRP_shipmentSpawn")
+		net.Start("fprp_shipmentSpawn")
 			net.WriteEntity(self)
 		net.Broadcast()
 	end)

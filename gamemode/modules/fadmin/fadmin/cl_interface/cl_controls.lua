@@ -158,13 +158,13 @@ function PANEL:UpdatePlayerData()
 	if not self.Player then return end
 	if not self.Player:IsValid() then return end
 
-	self.lblName:SetText(DarkRP.deLocalise(self.Player:Nick()))
-	self.lblTeam:SetText((self.Player.DarkRPVars and DarkRP.deLocalise(self.Player:getDarkRPVar("job") or "")) or team.GetName(self.Player:Team()))
+	self.lblName:SetText(fprp.deLocalise(self.Player:Nick()))
+	self.lblTeam:SetText((self.Player.fprpVars and fprp.deLocalise(self.Player:getfprpVar("job") or "")) or team.GetName(self.Player:Team()))
 	self.lblTeam:SizeToContents()
 	self.lblFrags:SetText(self.Player:Frags())
 	self.lblDeaths:SetText(self.Player:Deaths())
 	self.lblPing:SetText(self.Player:Ping())
-	self.lblWanted:SetText(self.Player:isWanted() and DarkRP.getPhrase("Wanted_text") or "")
+	self.lblWanted:SetText(self.Player:isWanted() and fprp.getPhrase("Wanted_text") or "")
 end
 
 function PANEL:ApplySchemeSettings()

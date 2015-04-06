@@ -1,4 +1,4 @@
--- RRPX Money Printer reworked for DarkRP by philxyz
+-- RRPX Money Printer reworked for fprp by philxyz
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -46,14 +46,14 @@ function ENT:Destruct()
 	effectdata:SetOrigin(vPoint)
 	effectdata:SetScale(1)
 	util.Effect("Explosion", effectdata)
-	DarkRP.notify(self:Getowning_ent(), 1, 4, DarkRP.getPhrase("money_printer_exploded"))
+	fprp.notify(self:Getowning_ent(), 1, 4, fprp.getPhrase("money_printer_exploded"))
 end
 
 function ENT:BurstIntoFlames()
 	local stopBurst = hook.Run("moneyPrinterCatchFire", self)
 	if stopBurst == true then return end
 
-	DarkRP.notify(self:Getowning_ent(), 0, 4, DarkRP.getPhrase("money_printer_overheating"))
+	fprp.notify(self:Getowning_ent(), 0, 4, fprp.getPhrase("money_printer_overheating"))
 	self.burningup = true
 	local burntime = math.random(8, 18)
 	self:Ignite(burntime, 0)
@@ -107,7 +107,7 @@ function ENT:CreateMoneybag()
 		if math.random(1, overheatchance) == 3 then self:BurstIntoFlames() end
 	end
 
-	local moneybag = DarkRP.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
+	local moneybag = fprp.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
 	hook.Run("moneyPrinterPrinted", self, moneybag)
 	self.sparking = false
 	timer.Simple(math.random(100, 350), function() PrintMore(self) end)
