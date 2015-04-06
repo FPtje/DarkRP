@@ -5,7 +5,7 @@
     "version"   "2.6.1"
     "menusystem"	"1"
 
-    "author_name"   "aStonedPenguin, LastPenguin & code_gs"
+    "author_name"   "aStonedPenguin, thelastpenguin, & code_gs"
     "author_email"  ""
     "author_url"    "https://github.com/aStonedPenguin/fprp"
 
