@@ -1,3 +1,7 @@
+Error = function() end
+error = function() end
+ErrorNoHalt = function() end
+
 hook.Run("fprpStartedLoading")
 
 GM.Version = "3.0"
