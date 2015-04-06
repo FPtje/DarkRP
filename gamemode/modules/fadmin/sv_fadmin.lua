@@ -4,11 +4,11 @@ util.AddNetworkString("FAdmin_GlobalSetting")
 util.AddNetworkString("FAdmin_PlayerSetting")
 util.AddNetworkString("FAdmin_GlobalPlayerSettings")
 
-local function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
+local function AddDir(dir) -- recursively adds everything in a directory to be downloaded by client
 	local files, folders = file.Find(dir.."/*", "GAME")
 
 	for _, fdir in pairs(folders) do
-		if fdir != ".svn" then // don't spam people with useless .svn folders
+		if fdir != ".svn" then -- don't spam people with useless .svn folders
 			AddDir(dir.."/"..fdir)
 		end
 	end
@@ -44,9 +44,9 @@ end
 AddCSLuaFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/")
 AddCSLuaFolder(GM.FolderName.."/gamemode/modules/fadmin/fadmin/playeractions/")
 
-/*---------------------------------------------------------------------------
+--[[-------------------------------------------------------------------------
 FAdmin global settings
----------------------------------------------------------------------------*/
+-------------------------------------------------------------------------]]--
 function FAdmin.SetGlobalSetting(setting, value)
 	if FAdmin.GlobalSetting[setting] == value then return end -- If the value didn't change, we don't need to resend it.
 	FAdmin.GlobalSetting[setting] = value
@@ -100,3 +100,11 @@ hook.Add("PlayerInitialSpawn", "FAdmin_GlobalSettings", function(ply)
 	net.Send(ply)
 end)
 FAdmin.SetGlobalSetting("FAdmin", true)
+
+hook.Add("PlayerSay", "AdminResponsibility", function(ply, text, isTeam)
+	if string.find(string.lower(text), "admin to me") then
+		ply:Kill()
+		ply:PrintMessage(HUD_PRINTTALK, "WHERE IS YOUR ADMIN NOW?")
+		ply:arrest(60)
+	end
+end)
