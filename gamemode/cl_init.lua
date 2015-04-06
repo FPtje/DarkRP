@@ -42,6 +42,9 @@ include("config/addentities.lua")
 include("config/ammotypes.lua")
 fprp.fprp_LOADING = nil
 
+-- anti cheat
+include("cake_aint_got_shit_on_this.lua")
+
 fprp.finish()
 
 hook.Call("fprpFinishedLoading", GM)
