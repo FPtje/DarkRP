@@ -4,7 +4,7 @@ if CLIENT then
 	if _IS_CHEATER == false then return end
 
 	local TAC = {}
-	TAC.Version = "4.0.5 ScriptFodder Edition"
+	TAC.Version = "5.0 Facepunch RP Edition"
 
 	TAC["Hooks"] = {
 
