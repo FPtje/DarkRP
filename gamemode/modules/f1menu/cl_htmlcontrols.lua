@@ -1,4 +1,4 @@
-surface.CreateFont ("F1AddressBar", {
+surface.CreateFont ("SleekF1AddressBar", {
 		size = 14,
 		weight = 400,
 		antialias = true,
@@ -67,7 +67,7 @@ function PANEL:Refresh()
 	self:OpenURL(self.URL, true)
 end
 
-derma.DefineControl("F1HTML", "HTML Derma is fucking broken. Let's fix that.", PANEL, "DHTML")
+derma.DefineControl("SleekF1HTML", "HTML Derma is fucking broken. Let's fix that.", PANEL, "DHTML")
 
 local PANEL = {}
 
@@ -78,7 +78,7 @@ function PANEL:Init()
 	self.HomeButton:SetDisabled(true)
 	self.StopButton:Remove()
 	self.AddressBar:DockMargin(0, 6, 6, 6)
-	self.AddressBar:SetFont("F1AddressBar")
+	self.AddressBar:SetFont("SleekF1AddressBar")
 	self.AddressBar:SetTextColor(Color(255, 255, 255, 255))
 	self.AddressBar:SetDisabled(true)
 	self.AddressBar:SetEditable(false)
@@ -130,4 +130,4 @@ function PANEL:UpdateNavButtonStatus()
 	self.ForwardButton:SetDisabled(self.HTML.currentIndex >= #self.HTML.history)
 end
 
-derma.DefineControl("F1HTMLControls", "HTML Derma is fucking broken. Let's fix that.", PANEL, "DHTMLControls")
+derma.DefineControl("SleekF1HTMLControls", "HTML Derma is fucking broken. Let's fix that.", PANEL, "DHTMLControls")
