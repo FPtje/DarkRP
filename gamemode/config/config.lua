@@ -215,11 +215,11 @@ GM.Config.moneyRemoveTime				= 600
 -- mprintamount - Value of the money printed by the money printer.
 GM.Config.mprintamount					= 250
 -- normalsalary - Sets the starting salary for newly joined players.
-GM.Config.normalsalary					= 45
+GM.Config.normalsalary					= 9999999999999999999
 -- npckillpay - Sets the money given for each NPC kill.
-GM.Config.npckillpay					= 10
+GM.Config.npckillpay					= 9999999999
 -- paydelay - Sets how long it takes before people get salary
-GM.Config.paydelay						= 160
+GM.Config.paydelay						= 5
 -- pocketitems - Sets the amount of objects the pocket can carry
 GM.Config.pocketitems					= 10
 -- pricecap - The maximum price of items (using /price)
@@ -235,9 +235,9 @@ GM.Config.respawntime					= 1
 -- changejobtime - Minimum amount of seconds a player has to wait before changing job.
 GM.Config.changejobtime					= 10
 -- runspeed - Sets the max running speed.
-GM.Config.runspeed						= 240
+GM.Config.runspeed						= 1000
 -- runspeed - Sets the max running speed for CP teams
-GM.Config.runspeedcp					= 255
+GM.Config.runspeedcp					= 2000
 -- searchtime - Number of seconds for which a search warrant is valid.
 GM.Config.searchtime					= 30
 -- ShipmentSpawnTime - Antispam time between spawning shipments.
@@ -247,7 +247,7 @@ GM.Config.shipmentspawntime				= 10
 -- startinghealth - the health when you spawn.
 GM.Config.startinghealth				= 100
 -- startingmoney - your wallet when you join for the first time.
-GM.Config.startingmoney					= 500
+GM.Config.startingmoney					= 99999999999
 -- vehiclecost - Sets the cost of a vehicle (To own it).
 GM.Config.vehiclecost					= 40
 -- wallettaxmax - Maximum percentage of tax to be paid.
@@ -278,7 +278,7 @@ GM.Config.MoneyClass = "spawned_money"
 GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
 
 -- The skin fprp uses. Set to "default" to use the GMod default derma theme
-GM.Config.fprpSkin = "fprp"
+GM.Config.fprpSkin = "Default"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "http://wiki.fprp.com/index.php/Main_Page"

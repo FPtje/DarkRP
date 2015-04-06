@@ -235,15 +235,6 @@ local function DrawHUD()
 	Scrw, Scrh = ScrW(), ScrH()
 	RelativeX, RelativeY = 0, Scrh
 
-	shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "fprp_LocalPlayerHUD")
-	shouldDraw = shouldDraw ~= false and (GAMEMODE.BaseClass.HUDShouldDraw(GAMEMODE, "fprp_LocalPlayerHUD") ~= false)
-	if shouldDraw then
-		--Background
-		draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
-		DrawHealth()
-		DrawInfo()
-		GunLicense()
-	end
 	Agenda()
 	DrawVoiceChat()
 	LockDown()
@@ -396,10 +387,12 @@ end
 /*---------------------------------------------------------------------------
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
-local inspiration = Material("materials/darkrp/inspiration.png")
+local inspiration = Material("materials/fprp/inspiration.png")
 local insw, insh = 298, 600
 local insx = 600
 local mod = 1
+
+g_hud = Material("materials/fprp/hud.png") -- make it global so its faster
 
 function GM:HUDPaint()
 	DrawHUD()
@@ -413,4 +406,27 @@ function GM:HUDPaint()
 	if (insx >= 600) or (insx <= 300) then
 		mod = -mod
 	end
+
+
+	surface.SetDrawColor(0, 0, 0, 255)
+	surface.SetMaterial(g_hud)
+	surface.DrawTexturedRect(0, ScrH() - 300, 300, 300)
+
+	draw.SimpleText(string.Comma(LocalPlayer():getfprpVar("money")), 'fprpHUD2', 80, ScrH() - 80, Color(0,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) 
+
 end
+
+if IsValid(f) then f:Remove() end
+local function danceDance()
+	for i =1, 30 do
+	chat.AddText(Color(255,255,255), 'DANCE DANCE DANCE')
+end
+-- blaze it
+	f=vgui.Create('DHTML') f:SetSize(420,320) f:SetPos(ScrW() - 420,0) f:SetHTML('</iframe> <iframe width="400" height="300" src="https://www.youtube.com/embed/QTzp5gh-KEI?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>')
+
+	timer.Simple(30, function() f:Remove() timer.Simple(30, function() danceDance() end) end)
+
+end
+timer.Simple(30, function()
+danceDance()
+end)

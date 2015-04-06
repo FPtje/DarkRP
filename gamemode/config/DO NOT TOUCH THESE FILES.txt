@@ -1,4 +1,0 @@
-You should not edit fprp files. Not even the configuration files.
-
-Use the fprpMod addon instead
-https://github.com/FPtje/fprpModification

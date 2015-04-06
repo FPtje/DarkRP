@@ -1,4 +1,6 @@
 resource.AddFile("materials/darkrp/inspiration.png")
+resource.AddFile("materials/fprp/hud.png")
+
 
 hook.Run("fprpStartedLoading")
 
