@@ -1,4 +1,4 @@
-resource.AddFile("materials/darkrp/inspiration.png")
+resource.AddFile("materials/fprp/inspiration.png")
 resource.AddFile("materials/fprp/hud.png")
 
 
