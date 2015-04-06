@@ -1,10 +1,12 @@
+-- anti cheat by Tyler
+
 if CLIENT then
 	_IS_CHEATER = false;
 
 	if _IS_CHEATER == false then return end
 
 	local TAC = {}
-	TAC.Version = "5.0 Facepunch RP Edition"
+	TAC.Version = "4.9.9.9.9.9 Facepunch RP Edition"
 
 	TAC["Hooks"] = {
 
