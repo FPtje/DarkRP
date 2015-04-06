@@ -49,6 +49,12 @@ function ENT:Destruct()
 	fprp.notify(self:Getowning_ent(), 1, 4, fprp.getPhrase("money_printer_exploded"))
 end
 
+util.AddNetworkString("remove_moneyprinter")
+net.Receive("remove_moneyprinter", function(len, ply)
+	local printerEntity = net.ReadEntity()
+	printerEntity:Remove()
+end)
+
 function ENT:BurstIntoFlames()
 	local stopBurst = hook.Run("moneyPrinterCatchFire", self)
 	if stopBurst == true then return end
