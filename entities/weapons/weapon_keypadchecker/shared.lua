@@ -13,9 +13,14 @@ SWEP.Instructions = "Left click on a keypad or fading door to check it\nRight cl
 SWEP.Slot = 5
 SWEP.SlotPos = 1
 SWEP.DrawAmmo = false
-SWEP.ViewModelFlip = false
-SWEP.Primary.ClipSize = 0
-SWEP.Primary.Ammo = ""
+SWEP.ViewModelFlip = true
+SWEP.Primary.Recoil = 1.5
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
+SWEP.Primary.NumShots = 1
+SWEP.Primary.Cone = 0.002
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = "smg1"
+
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
@@ -147,7 +152,7 @@ function SWEP:PrimaryAttack()
 		data = getEntityKeypad(ent)
 		fprp.notify(self.Owner, 1, 4, fprp.getPhrase("keypad_checker_controlled_by_x_keypads", #data))
 	end
-
+	self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil + 3, self.Primary.NumShots, self.Primary.Cone + .05)
 	net.Start("fprp_keypadData")
 		net.WriteTable(data)
 	net.Send(self.Owner)
