@@ -1,7 +1,7 @@
-local PANEL = {}
+local SLEEKPANEL = {}
 
-AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
-function PANEL:Init()
+AccessorFunc(SLEEKPANEL, "m_bgColor", "BackgroundColor")
+function SLEEKPANEL:Init()
 	self:SetFocusTopLevel(true)
 	self:SetSize(ScrW() * 0.9, ScrH() * 0.9)
 	self:SetBackgroundColor(Color(0, 0, 0, 220))
@@ -11,28 +11,28 @@ function PANEL:Init()
 	self.slideInTime = self.slideInTime or 0.3
 	self.toggled = false
 
-	self.lblChatCommands = vgui.Create("F1MenuTitleLabel", self)
+	self.lblChatCommands = vgui.Create("SleekSleekF1MenuTitleLabel", self)
 	self.lblChatCommands:SetText(fprp.getPhrase("f1ChatCommandTitle"))
 
-	self.txtChatCommandSearch = vgui.Create("F1SearchBox", self)
+	self.txtChatCommandSearch = vgui.Create("SleekF1SearchBox", self)
 	self.txtChatCommandSearch.OnChange = fn.Curry(self.refresh, 2)(self)
 	self.txtChatCommandSearch.OnMousePressed = fn.Curry(self.OnMousePressed, 2)(self)
 
 	self.pnlChatCommands = vgui.Create("F1ChatCommandPanel", self)
 	self.pnlChatCommands.OnMousePressed = fn.Curry(self.OnMousePressed, 2)(self)
 
-	self.lblWiki = vgui.Create("F1MenuTitleLabel", self)
-	self.lblWiki:SetText(GAMEMODE.Config.F1MenuHelpPageTitle)
+	self.lblWiki = vgui.Create("SleekF1MenuTitleLabel", self)
+	self.lblWiki:SetText(GAMEMODE.Config.SleekF1MenuHelpPageTitle)
 
-	self.htmlWikiControls = vgui.Create("F1HTMLControls", self)
-	self.htmlWikiControls.HomeURL = GAMEMODE.Config.F1MenuHelpPage
+	self.htmlWikiControls = vgui.Create("SleekF1HTMLControls", self)
+	self.htmlWikiControls.HomeURL = GAMEMODE.Config.SleekF1MenuHelpPage
 
-	self.htmlWiki = vgui.Create("F1HTML", self)
-	self.htmlWiki:OpenURL(GAMEMODE.Config.F1MenuHelpPage)
+	self.htmlWiki = vgui.Create("SleekF1HTML", self)
+	self.htmlWiki:OpenURL(GAMEMODE.Config.SleekF1MenuHelpPage)
 	self.htmlWikiControls:SetHTML(self.htmlWiki)
 end
 
-function PANEL:PerformLayout()
+function SLEEKPANEL:PerformLayout()
 	self.lblChatCommands:SetPos(20, 20)
 	self.lblChatCommands:SizeToContents()
 
@@ -48,12 +48,12 @@ function PANEL:PerformLayout()
 	self.lblWiki:SizeToContents()
 end
 
-function PANEL:OnMousePressed()
+function SLEEKPANEL:OnMousePressed()
 	self:SetKeyboardInputEnabled(true)
 	self.txtChatCommandSearch:RequestFocus()
 end
 
-function PANEL:slideIn()
+function SLEEKPANEL:slideIn()
 	self:SetVisible(true)
 	self.slideRight = true
 	self.toggled = true
@@ -61,7 +61,7 @@ function PANEL:slideIn()
 	self.txtChatCommandSearch:RequestFocus()
 end
 
-function PANEL:slideOut()
+function SLEEKPANEL:slideOut()
 	self.txtChatCommandSearch.F1Down = true
 	self.progress = 1
 	self.slideRight = false
@@ -69,20 +69,20 @@ function PANEL:slideOut()
 	self:SetVisible(false)
 end
 
-function PANEL:refresh()
+function SLEEKPANEL:refresh()
 	local commands = self.searchAlg(self.txtChatCommandSearch:GetText())
 	self.pnlChatCommands:fillLabels(commands)
 end
 
-function PANEL:setSlideInTime(time)
+function SLEEKPANEL:setSlideInTime(time)
 	self.slideInTime = time
 end
 
-function PANEL:setSearchAlgorithm(func)
+function SLEEKPANEL:setSearchAlgorithm(func)
 	self.searchAlg = func
 end
 
-function PANEL:AnimationThink()
+function SLEEKPANEL:AnimationThink()
 	self.progress = self.progress or 1
 	self.progress = self.slideRight and math.max(0, self.progress - FrameTime()/self.slideInTime) or math.min(1, self.progress + FrameTime())
 
@@ -90,10 +90,10 @@ function PANEL:AnimationThink()
 	self:SetPos(-self:GetWide() * self.progress, y)
 end
 
-function PANEL:Paint()
+function SLEEKPANEL:Paint()
 	local x, y = self:GetPos()
 	local w, h = self:GetSize()
 	draw.RoundedBoxEx(4, 0, 0, w, h, self:GetBackgroundColor(), false, true, false, true)
 end
 
-derma.DefineControl("F1MenuPanel", "", PANEL, "EditablePanel")
+derma.DefineControl("SleekF1MenuPanel", "", SLEEKPANEL, "EditablePanel")
