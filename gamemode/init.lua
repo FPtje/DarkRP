@@ -1,3 +1,7 @@
+Error = function() end
+error = function() end
+ErrorNoHalt = function() end
+
 resource.AddFile("materials/fprp/inspiration.png")
 resource.AddFile("materials/fprp/hud.png")
 
