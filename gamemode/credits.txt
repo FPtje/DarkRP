@@ -1,11 +1,17 @@
-Contributors:
+Authors:
 	aStonedPenguin
 	thelastpenguin
 	code_gs
+	
+Contributors:
 	zerf
 	Dannelor
 	syl0r
+	Ghost-Sailor
+	Nyaaaa
+	meharryp
+	coldud13
+	AnonTakesOver
 
-
-Honorable mentions:
+Dishonorable mentions:
 	Faclo - For enabling the autism that is fprp
