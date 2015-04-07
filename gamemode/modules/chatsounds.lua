@@ -8,19 +8,19 @@
 local sounds = {}
 sounds[ "ammo" ] = { "vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav", "vo/npc/male01/ammo05.wav" }
 
-sounds[ "behind you" ] = { "vo/npc/male01/behindyou01.wav", "vo/npc/male01/behindyou02.wav" }
+sounds[ "behind you" ] = { "HL1/fvox/fourty.wav", "HL1/ambience/labdrone2.wav" }
 
-sounds[ "better reload" ] = { "vo/npc/male01/youdbetterreload01.wav" }
+sounds[ "better reload" ] = { "beams/beamstart5.wav" }
 
 sounds[ "bullshit" ] = { "vo/npc/male01/question26.wav" }
 
-sounds[ "cheese" ] = { "vo/npc/male01/question06.wav" }
+sounds[ "cheese" ] = { "HL1/fvox/evacuate_area.wav" }
 
 sounds[ "combine" ] = { "vo/npc/male01/combine01.wav", "vo/npc/male01/combine02.wav" }
 
 sounds[ "coming" ] = { "vo/npc/male01/squad_approach04.wav" }
 
-sounds[ "cops" ] = { "vo/npc/male01/civilprotection01.wav", "vo/npc/male01/civilprotection02.wav", "vo/npc/male01/cps01.wav", "vo/npc/male01/cps02.wav" }
+sounds[ "cops" ] = { "vo/ravenholm/monk_danger01.wav", "vo/ravenholm/monk_danger02.wav", "vo/ravenholm/monk_danger03.wav" }
 sounds[ "cp" ] = sounds[ "cops" ]
 sounds[ "cps" ] = sounds[ "cops" ]
 
@@ -60,32 +60,32 @@ sounds[ "gotta reload" ] = { "vo/npc/male01/gottareload01.wav" }
 
 sounds[ "gtfo" ] = sounds [ "get out" ]
 
-sounds[ "hacks" ] = { "vo/npc/male01/hacks01.wav",  "vo/npc/male01/hacks02.wav", "vo/npc/male01/thehacks01.wav", "vo/npc/male01/thehacks02.wav"}
+sounds[ "hacks" ] = { "npc/overwatch/radiovoice/two.wav",  "npc/overwatch/radiovoice/three.wav", "npc/overwatch/radiovoice/six.wav", "npc/overwatch/radiovoice/five.wav"}
 sounds[ "hax" ] = sounds [ "hacks" ]
 sounds[ "haxx" ] = sounds [ "hacks" ]
 
-sounds[ "help" ] = { "vo/npc/male01/help01.wav" }
+sounds[ "help" ] = { "npc/overwatch/radiovoice/restrict.wav" }
 
-sounds[ "here they come" ] = { "vo/npc/male01/heretheycome01.wav", "vo/npc/male01/incoming02.wav" }
+sounds[ "here they come" ] = { "weapons/underwater_explode3.wav", "weapons/underwater_explode4.wav" }
 
-sounds[ "hello" ] = { "vo/npc/male01/hi01.wav", "vo/npc/male01/hi02.wav" }
+sounds[ "hello" ] = { "npc/overwatch/radiovoice/die1.wav", "npc/overwatch/radiovoice/die2.wav", "npc/overwatch/radiovoice/die3.wav" }
 sounds[ "hey" ] = sounds[ "hello" ]
 sounds[ "hi" ] = sounds[ "hello" ]
 
 sounds[ "heads up" ] = { "vo/npc/male01/headsup01.wav", "vo/npc/male01/headsup02.wav" }
 
-sounds[ "he's dead" ] = { "vo/npc/male01/gordead_ques01.wav",  "vo/npc/male01/gordead_ques07.wav" }
+sounds[ "he's dead" ] = { "vo/ravenholm/madlaugh01.wav",  "vo/ravenholm/madlaugh02.wav" }
 sounds[ "he is dead" ] = sounds[ "he's dead" ]
 
-sounds[ "how about that" ] = { "vo/npc/male01/answer25.wav" }
+sounds[ "how about that" ] = { "vehicles/chopper_rotor2.wav" }
 
-sounds[ "i know" ] = { "vo/npc/male01/answer08.wav" }
+sounds[ "i know" ] = { "UI/buttonclick.wav" }
 
-sounds[ "ill stay here" ] = { "vo/npc/male01/illstayhere01.wav", "vo/npc/male01/holddownspot01.wav", "vo/npc/male01/holddownspot02.wav", "vo/npc/male01/imstickinghere01.wav",  "vo/npc/male01/littlecorner01.wav" }
+sounds[ "ill stay here" ] = { "vo/eli_lab/al_dad_scared01.wav", "vo/eli_lab/al_dad_scared02.wav" }
 sounds[ "i'll stay here" ] = sounds[ "ill stay here" ]
 sounds[ "i will stay here" ] = sounds[ "ill stay here" ]
 
-sounds[ "im busy" ] = { "vo/npc/male01/busy02.wav" }
+sounds[ "im busy" ] = { "ambient/alarms/train_horn2.wav" }
 sounds[ "i'm busy" ] = sounds[ "im busy" ]
 
 sounds[ "im with you" ] = { "vo/npc/male01/answer13.wav" }
@@ -206,11 +206,11 @@ sounds[ "what's the point" ] = sounds[ "whats the point" ]
 
 sounds[ "whoops" ] = sounds[ "oops" ]
 
-sounds[ "why go on" ] = { "vo/npc/male01/gordead_ans13.wav" }
+sounds[ "why go on" ] = { "ambient/alarms/alarm1.wav" }
 
 sounds[ "why telling me" ] = { "vo/npc/male01/answer24.wav" }
 
-sounds[ "yeah" ] = { "vo/npc/male01/yeah02.wav" }
+sounds[ "yeah" ] = { "ambient/alarms/klaxon1.wav" }
 sounds[ "yes" ] = sounds[ "yeah" ]
 
 sounds[ "you and me both" ] = { "vo/npc/male01/answer14.wav" }
