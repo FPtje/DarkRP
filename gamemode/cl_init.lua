@@ -81,3 +81,17 @@ end);
 
 DarkRP = fprp
 
+net.Receive('fprp_credits', function()
+	local falco=Material("materials/fprp/falco.png");
+	local f=vgui.Create('DFrame')
+	f:SetSize(ScrW() * 0.9, ScrH() * 0.9)
+	f:Center()
+	f:SetTitle('');
+	f:MakePopup()
+	f.Paint = function(s,w,h)
+		surface.SetDrawColor(255,255,255,255);
+		surface.SetMaterial(falco);
+		surface.DrawTexturedRect(0,0,w,h);
+	end
+	timer.Simple(6, function() if IsValid(f) then f:Remove() end end)
+end)
