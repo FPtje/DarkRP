@@ -1,9 +1,9 @@
-surface.CreateFont ("F1AddressBar", {
+surface.CreateFont("F1AddressBar", {
 		size = 14,
 		weight = 400,
 		antialias = true,
 		shadow = false,
-		font = "coolvetica"})
+		font = "Coolvetica"})
 
 local PANEL = {}
 
