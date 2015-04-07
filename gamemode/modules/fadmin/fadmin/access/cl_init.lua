@@ -35,7 +35,7 @@ end
 FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be executed first.
 	FAdmin.Commands.AddCommand("setaccess", nil, "<Player>", "<Group name>", "[new group based on (number)]", "[new group privileges]")
 
-	FAdmin.ScoreBoard.Player:AddActionButton("Set access", "FAdmin/icons/access", Color(255, 0, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Set access", "fadmin/icons/access", Color(155, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetAccess") or LocalPlayer():IsSuperAdmin() end, function(ply)
 		local menu = DermaMenu()
 
@@ -63,16 +63,16 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 		menu:Open()
 	end)
 
-	FAdmin.ScoreBoard.Server:AddPlayerAction("Edit groups", "FAdmin/icons/access", Color(0, 155, 0, 255), true, EditGroups)
+	FAdmin.ScoreBoard.Server:AddPlayerAction("Edit groups", "fadmin/icons/access", Color(0, 155, 0, 255), true, EditGroups)
 
 	-- Admin immunity
 	FAdmin.ScoreBoard.Server:AddServerSetting(function()
 			return (FAdmin.GlobalSetting.Immunity and "Disable" or "Enable").." Admin immunity"
 		end,
 		function()
-			return "FAdmin/icons/access", FAdmin.GlobalSetting.Immunity and "FAdmin/icons/disable"
+			return "fadmin/icons/access", FAdmin.GlobalSetting.Immunity and "fadmin/icons/disable"
 		end, Color(0, 0, 155, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetAccess") end, function(button)
-			button:SetImage2((not FAdmin.GlobalSetting.Immunity and "FAdmin/icons/disable") or "null")
+			button:SetImage2((not FAdmin.GlobalSetting.Immunity and "fadmin/icons/disable") or "null")
 			button:SetText((not FAdmin.GlobalSetting.Immunity and "Disable" or "Enable").." Admin immunity")
 			button:GetParent():InvalidateLayout()
 

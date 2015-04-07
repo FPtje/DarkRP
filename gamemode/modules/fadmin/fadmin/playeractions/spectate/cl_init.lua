@@ -21,7 +21,7 @@ FAdmin.StartHooks["zzSpectate"] = function()
 	end)
 
 	-- Spectate option in player menu
-	FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "FAdmin/icons/spectate", Color(0, 200, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Spectate") and ply ~= LocalPlayer() end, function(ply)
+	FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "fadmin/icons/spectate", Color(0, 200, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Spectate") and ply ~= LocalPlayer() end, function(ply)
 		if not IsValid(ply) then return end
 		RunConsoleCommand("_FAdmin", "Spectate", ply:UserID())
 	end)

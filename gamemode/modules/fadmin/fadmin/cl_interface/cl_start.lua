@@ -17,8 +17,8 @@ FAdmin.ScoreBoard.Main.Logo = "gui/gmod_logo"
 FAdmin.ScoreBoard.Player = FAdmin.ScoreBoard.Player or {}
 FAdmin.ScoreBoard.Player.Controls = FAdmin.ScoreBoard.Player.Controls or {}
 FAdmin.ScoreBoard.Player.Player = NULL
-FAdmin.ScoreBoard.Player.Logo = "FAdmin/back"
+FAdmin.ScoreBoard.Player.Logo = "fadmin/back"
 
 FAdmin.ScoreBoard.Server = FAdmin.ScoreBoard.Server or {}
 FAdmin.ScoreBoard.Server.Controls = FAdmin.ScoreBoard.Server.Controls or {}
-FAdmin.ScoreBoard.Server.Logo = "FAdmin/back"
+FAdmin.ScoreBoard.Server.Logo = "fadmin/back"

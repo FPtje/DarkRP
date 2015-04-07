@@ -6,7 +6,7 @@ FAdmin.StartHooks["Slay"] = function()
 		RunConsoleCommand("_FAdmin", "slay", ply:UserID())
 	end)
 
-	FAdmin.ScoreBoard.Player:AddActionButton("Slay", "FAdmin/icons/slay", Color(255, 130, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Slay", "fadmin/icons/slay", Color(255, 130, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Slay", ply) end,
 	function(ply)
 		local menu = DermaMenu()

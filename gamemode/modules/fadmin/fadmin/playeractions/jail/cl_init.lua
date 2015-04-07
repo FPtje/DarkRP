@@ -16,8 +16,8 @@ FAdmin.StartHooks["Jail"] = function()
 		return "Jail"
 	end,
 	function(ply)
-		if ply:FAdmin_GetGlobal("fadmin_jailed") then return "FAdmin/icons/jail", "FAdmin/icons/disable" end
-		return "FAdmin/icons/jail"
+		if ply:FAdmin_GetGlobal("fadmin_jailed") then return "fadmin/icons/jail", "fadmin/icons/disable" end
+		return "fadmin/icons/jail"
 	end,
 	Color(255, 130, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Jail", ply) end,
@@ -45,13 +45,13 @@ FAdmin.StartHooks["Jail"] = function()
 				function()
 					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k)
 					button:SetText("Unjail") button:GetParent():InvalidateLayout()
-					button:SetImage2("FAdmin/icons/disable")
+					button:SetImage2("fadmin/icons/disable")
 				end,
 				function(secs)
 					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k, secs)
 					button:SetText("Unjail")
 					button:GetParent():InvalidateLayout()
-					button:SetImage2("FAdmin/icons/disable")
+					button:SetImage2("fadmin/icons/disable")
 				end
 			)
 		end

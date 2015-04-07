@@ -8,8 +8,8 @@ FAdmin.StartHooks["Ragdoll"] = function()
 		return "Ragdoll"
 	end,
 	function(ply)
-		if ply:FAdmin_GetGlobal("fadmin_ragdolled") then return "FAdmin/icons/ragdoll", "FAdmin/icons/disable" end
-		return "FAdmin/icons/ragdoll"
+		if ply:FAdmin_GetGlobal("fadmin_ragdolled") then return "fadmin/icons/ragdoll", "fadmin/icons/disable" end
+		return "fadmin/icons/ragdoll"
 	end,
 	Color(255, 130, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ragdoll", ply) end,
@@ -41,13 +41,13 @@ FAdmin.StartHooks["Ragdoll"] = function()
 			FAdmin.PlayerActions.addTimeSubmenu(menu, v,
 				function()
 					RunConsoleCommand("_FAdmin", "Ragdoll", ply:UserID(), k)
-					button:SetImage2("FAdmin/icons/disable")
+					button:SetImage2("fadmin/icons/disable")
 					button:SetText("Unragdoll")
 					button:GetParent():InvalidateLayout()
 				end,
 				function(secs)
 					RunConsoleCommand("_FAdmin", "Ragdoll", ply:UserID(), k, secs)
-					button:SetImage2("FAdmin/icons/disable")
+					button:SetImage2("fadmin/icons/disable")
 					button:SetText("Unragdoll")
 					button:GetParent():InvalidateLayout()
 				end

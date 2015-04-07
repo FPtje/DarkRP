@@ -7,15 +7,15 @@ FAdmin.StartHooks["Freeze"] = function()
 		if ply:FAdmin_GetGlobal("FAdmin_frozen") then return "Unfreeze" end
 		return "Freeze"
 	end, function(ply)
-		if ply:FAdmin_GetGlobal("FAdmin_frozen") then return "FAdmin/icons/freeze", "FAdmin/icons/disable" end
-		return "FAdmin/icons/freeze"
+		if ply:FAdmin_GetGlobal("FAdmin_frozen") then return "fadmin/icons/freeze", "fadmin/icons/disable" end
+		return "fadmin/icons/freeze"
 	end, Color(255, 130, 0, 255),
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Freeze", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_frozen") then
 			FAdmin.PlayerActions.addTimeMenu(function(secs)
 				RunConsoleCommand("_FAdmin", "freeze", ply:UserID(), secs)
-				button:SetImage2("FAdmin/icons/disable")
+				button:SetImage2("fadmin/icons/disable")
 				button:SetText("Unfreeze")
 				button:GetParent():InvalidateLayout()
 			end)
