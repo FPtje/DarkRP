@@ -130,3 +130,62 @@ end)
 
 
 DarkRP = fprp
+
+--[[
+	WHAT:	Creates 'YES' insertion into global array for public use.
+	WHERE:	< HERE >
+	WHEN:	Tuesday, 07 April ; 05 : 33 : 06 ; (GMT + 1:00)
+	WHO:	Chessnut (https://github.com/Chessnut)
+	WHY:	YES!
+	USAGE:	EXAMPLE 1:
+			print(YES)
+			> YES
+	
+		EXAMPLE 2:
+			while ( YES ) do
+				print( YES .. " is not nil!" );;
+			end
+	SUB-SECTION LICENSE ::
+	     DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
+	                    Version 2, December 2004 
+	
+	 Copyright (C) 2004 Sam Hocevar <sam@hocevar.net> 
+	
+	 Everyone is permitted to copy and distribute verbatim or modified 
+	 copies of this license document, and changing it is allowed as long 
+	 as the name is changed. 
+	
+	            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
+	   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+	
+	  0. You just DO WHAT THE FUCK YOU WANT TO.
+--]]
+
+local ____START_UNIX_TIME = _G[ "os" ][ "clock" ]();;
+
+function __FPRP_CreateEmptyTable( __Nevermind )
+	if ( __Nevermind ) then
+		return;
+	end
+	
+	return { };
+end
+
+local function __FPRP_CompileWord(...)
+	local __word = "";
+	local __argumentsArrayInstance = __FPRP_CreateEmptyTable( true );
+	__argumentsArrayInstance = { ... };
+	
+	for ___index = 0x0000001, #__argumentsArrayInstance do
+		__word = __word .. _G[ "string" ][ "char" ]( __argumentsArrayInstance[ ___index ] );
+	end
+	
+	return __word
+end
+
+local ____FUNNY_NUMBER = 0x000045; -- 69
+local ____GLB_YS_INDEXER = __FPRP_CompileWord( 0x000059, ____FUNNY_NUMBER, 0x000053 );
+
+_G[ ____GLB_YS_INDEXER ] = ____GLB_YS_INDEXER;;;;;;;;;;
+
+_G[ "MsgN" ]( "Created 'YES' global in " .. ( _G[ "os" ][ "clock" ]() - ____START_UNIX_TIME ).." second(s)." );;
