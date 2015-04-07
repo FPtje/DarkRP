@@ -1,5 +1,6 @@
+AddCSLuaFile()
+
 if SERVER then
-	AddCSLuaFile("shared.lua")
 	AddCSLuaFile("cl_init.lua")
 
 	util.AddNetworkString("DarkRP_keypadData")
@@ -28,8 +29,6 @@ SWEP.IconLetter = ""
 
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.UseHands = true
-
-if not SERVER then return end
 
 /*
 	Gets which entities are controlled by which keyboard keys
@@ -133,33 +132,37 @@ end
 Send the info to the client
 ---------------------------------------------------------------------------*/
 function SWEP:PrimaryAttack()
-	local trace = self.Owner:GetEyeTrace()
+	self:SetNextPrimaryFire(CurTime() + 0.3)
+	if not SERVER then return end
+
+	local trace = self:GetOwner():GetEyeTrace()
 	local ent, class = trace.Entity, string.lower(trace.Entity:GetClass() or "")
 	local data
 
 	if class == "sent_keypad" then
 		data = get_sent_keypad_Info(ent)
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
+		DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
 	elseif class == "keypad" then
 		data = get_keypad_Info(ent)
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
+		DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("keypad_checker_controls_x_entities", #data / 2))
 	else
 		data = getEntityKeypad(ent)
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("keypad_checker_controlled_by_x_keypads", #data))
+		DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("keypad_checker_controlled_by_x_keypads", #data))
 	end
 
 	net.Start("DarkRP_keypadData")
 		net.WriteTable(data)
-	net.Send(self.Owner)
+	net.Send(self:GetOwner())
 end
 
 function SWEP:SecondaryAttack()
 end
 
+if not SERVER then return end
+
 /*---------------------------------------------------------------------------
 Registering numpad data
 ---------------------------------------------------------------------------*/
-if not SERVER then return end
 local oldNumpadUp = numpad.OnUp
 local oldNumpadDown = numpad.OnDown
 

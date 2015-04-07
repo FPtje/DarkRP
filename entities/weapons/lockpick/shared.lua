@@ -1,9 +1,5 @@
 AddCSLuaFile()
 
-if SERVER then
-	util.AddNetworkString("lockpick_time")
-end
-
 if CLIENT then
 	SWEP.PrintName = "Lock Pick"
 	SWEP.Slot = 5
@@ -41,7 +37,6 @@ SWEP.Secondary.ClipSize = -1        -- Size of a clip
 SWEP.Secondary.DefaultClip = -1     -- Default number of bullets in a clip
 SWEP.Secondary.Automatic = false        -- Automatic/Semi Auto
 SWEP.Secondary.Ammo = ""
-SWEP.LockPickTime = 30
 
 --[[-------------------------------------------------------
 Name: SWEP:Initialize()
@@ -51,26 +46,13 @@ function SWEP:Initialize()
 	self:SetHoldType("normal")
 end
 
-if CLIENT then
-	net.Receive("lockpick_time", function()
-		local wep = net.ReadEntity()
-		local ent = net.ReadEntity()
-		local time = net.ReadUInt(32)
-
-		wep.IsLockPicking = true
-		wep.LockPickEnt = ent
-		wep.StartPick = CurTime()
-		wep.LockPickTime = time
-		wep.EndPick = CurTime() + time
-
-		wep.Dots = wep.Dots or ""
-		timer.Create("LockPickDots", 0.5, 0, function()
-			if not IsValid(wep) then timer.Destroy("LockPickDots") return end
-			local len = string.len(wep.Dots)
-			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
-			wep.Dots = dots[len]
-		end)
-	end)
+function SWEP:SetupDataTables()
+	self:NetworkVar("Bool", 0, "IsLockpicking")
+	self:NetworkVar("Float", 0, "LockpickStartTime")
+	self:NetworkVar("Float", 1, "LockpickEndTime")
+	self:NetworkVar("Float", 2, "NextSoundTime")
+	self:NetworkVar("Int", 0, "TotalLockpicks")
+	self:NetworkVar("Entity", 0, "LockpickEnt")
 end
 
 --[[-------------------------------------------------------
@@ -78,18 +60,20 @@ Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
 ---------------------------------------------------------]]
 function SWEP:PrimaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + 2)
-	if self.IsLockPicking then return end
+	self:SetNextPrimaryFire(CurTime() + 2)
+	if self:GetIsLockpicking() then return end
 
-	local trace = self.Owner:GetEyeTrace()
+	self:GetOwner():LagCompensation(true)
+	local trace = self:GetOwner():GetEyeTrace()
+	self:GetOwner():LagCompensation(false)
 	local ent = trace.Entity
 
 	if not IsValid(ent) then return end
-	local canLockpick = hook.Call("canLockpick", nil, self.Owner, ent)
+	local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent)
 
 	if canLockpick == false then return end
 	if canLockpick ~= true and (
-			trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or
+			trace.HitPos:Distance(self:GetOwner():GetShootPos()) > 100 or
 			(not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
 			(not ent:isDoor() and not ent:IsVehicle() and not string.find(string.lower(ent:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not ent.isFadingDoor))
 		) then
@@ -98,61 +82,50 @@ function SWEP:PrimaryAttack()
 
 	self:SetHoldType("pistol")
 
-	if CLIENT then return end
+	self:SetIsLockpicking(true)
+	self:SetLockpickEnt(ent)
+	self:SetLockpickStartTime(CurTime())
+	local endDelta = hook.Call("lockpickTime", nil, ply, ent) or util.SharedRandom("DarkRP_Lockpick"..self:EntIndex().."_"..self:GetTotalLockpicks(), 10, 30)
+	self:SetLockpickEndTime(CurTime() + endDelta)
+	self:SetTotalLockpicks(self:GetTotalLockpicks() + 1)
 
-	local onFail = function(ply) if ply == self.Owner then hook.Call("onLockpickCompleted", nil, ply, false, ent) end end
+	if CLIENT then
+		self.Dots = ""
+		self.NextDotsTime = CurTime() + 0.5
+		return
+	end
+
+	local onFail = function(ply) if ply == self:GetOwner() then hook.Call("onLockpickCompleted", nil, ply, false, ent) end end
 
 	-- Lockpick fails when dying or disconnecting
 	hook.Add("PlayerDeath", self, fc{onFail, fn.Flip(fn.Const)})
 	hook.Add("PlayerDisconnected", self, fc{onFail, fn.Flip(fn.Const)})
 	-- Remove hooks when finished
 	hook.Add("onLockpickCompleted", self, fc{fp{hook.Remove, "PlayerDisconnected", self}, fp{hook.Remove, "PlayerDeath", self}})
-
-	self.IsLockPicking = true
-	self.LockPickEnt = ent
-	self.StartPick = CurTime()
-	self.LockPickTime = hook.Call("lockpickTime", nil, ply, ent) or math.Rand(10, 30)
-	net.Start("lockpick_time")
-		net.WriteEntity(self)
-		net.WriteEntity(ent)
-		net.WriteUInt(self.LockPickTime, 32) -- unknown so 32
-	net.Send(self.Owner)
-	self.EndPick = CurTime() + self.LockPickTime
-
-	timer.Create("LockPickSounds", 1, self.LockPickTime, function()
-		if not IsValid(self) then return end
-		local snd = {1,3,4}
-		self:EmitSound("weapons/357/357_reload".. tostring(snd[math.random(1, #snd)]) ..".wav", 50, 100)
-	end)
 end
 
 function SWEP:Holster()
-	self.IsLockPicking = false
-	self.LockPickEnt = nil
-	if SERVER then timer.Destroy("LockPickSounds") end
-	if CLIENT then timer.Destroy("LockPickDots") end
+	self:SetIsLockpicking(false)
+	self:SetLockpickEnt(nil)
 	return true
 end
 
 function SWEP:Succeed()
 	self:SetHoldType("normal")
 
-	local ent = self.LockPickEnt
-	self.IsLockPicking = false
-	self.LockPickEnt = nil
-
-	if SERVER then timer.Destroy("LockPickSounds") end
-	if CLIENT then timer.Destroy("LockPickDots") end
+	local ent = self:GetLockpickEnt()
+	self:SetIsLockpicking(false)
+	self:SetLockpickEnt(nil)
 
 	if not IsValid(ent) then return end
 
-	local override = hook.Call("onLockpickCompleted", nil, self.Owner, true, ent)
+	local override = hook.Call("onLockpickCompleted", nil, self:GetOwner(), true, ent)
 
 	if override then return end
 
 	if ent.isFadingDoor and ent.fadeActivate and not ent.fadeActive then
 		ent:fadeActivate()
-		timer.Simple(5, function() if IsValid(ent) and ent.fadeActive then ent:fadeDeactivate() end end)
+		if IsFirstTimePredicted() then timer.Simple(5, function() if IsValid(ent) and ent.fadeActive then ent:fadeDeactivate() end end) end
 	elseif ent.Fire then
 		ent:keysUnLock()
 		ent:Fire("open", "", .6)
@@ -161,29 +134,39 @@ function SWEP:Succeed()
 end
 
 function SWEP:Fail()
-	self.IsLockPicking = false
+	self:SetIsLockpicking(false)
 	self:SetHoldType("normal")
 
-	hook.Call("onLockpickCompleted", nil, self.Owner, false, self.LockPickEnt)
-	self.LockPickEnt = nil
-
-	if SERVER then timer.Destroy("LockPickSounds") end
-	if CLIENT then timer.Destroy("LockPickDots") end
+	hook.Call("onLockpickCompleted", nil, self:GetOwner(), false, self:GetLockpickEnt())
+	self:SetLockpickEnt(nil)
 end
 
 function SWEP:Think()
-	if not self.IsLockPicking or not self.EndPick then return end
+	if not self:GetIsLockpicking() or self:GetLockpickEndTime() == 0 then return end
 
-	local trace = self.Owner:GetEyeTrace()
-	if not IsValid(trace.Entity) or trace.Entity ~= self.LockPickEnt or trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 then
+	if CurTime() >= self:GetNextSoundTime() then
+		self:SetNextSoundTime(CurTime() + 1)
+		local snd = {1,3,4}
+		self:EmitSound("weapons/357/357_reload".. tostring(snd[math.Round(util.SharedRandom("DarkRP_LockpickSnd"..CurTime(), 1, #snd))]) ..".wav", 50, 100)
+	end
+	if CLIENT and self.NextDotsTime and CurTime() >= self.NextDotsTime then
+		self.NextDotsTime = CurTime() + 0.5
+		self.Dots = self.Dots or ""
+		local len = string.len(self.Dots)
+		local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
+		self.Dots = dots[len]
+	end
+
+	local trace = self:GetOwner():GetEyeTrace()
+	if not IsValid(trace.Entity) or trace.Entity ~= self:GetLockpickEnt() or trace.HitPos:Distance(self:GetOwner():GetShootPos()) > 100 then
 		self:Fail()
-	elseif self.EndPick <= CurTime() then
+	elseif self:GetLockpickEndTime() <= CurTime() then
 		self:Succeed()
 	end
 end
 
 function SWEP:DrawHUD()
-	if not self.IsLockPicking or not self.EndPick then return end
+	if not self:GetIsLockpicking() or self:GetLockpickEndTime() == 0 then return end
 
 	self.Dots = self.Dots or ""
 	local w = ScrW()
@@ -191,8 +174,8 @@ function SWEP:DrawHUD()
 	local x,y,width,height = w/2-w/10, h/2-60, w/5, h/15
 	draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
-	local time = self.EndPick - self.StartPick
-	local curtime = CurTime() - self.StartPick
+	local time = self:GetLockpickEndTime() - self:GetLockpickStartTime()
+	local curtime = CurTime() - self:GetLockpickStartTime()
 	local status = math.Clamp(curtime/time, 0, 1)
 	local BarWidth = status * (width - 16)
 	local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)
@@ -228,7 +211,7 @@ DarkRP.hookStub{
 			type = "boolean"
 		}
 	},
-	realm = "Server"
+	realm = "Shared"
 }
 
 DarkRP.hookStub{
@@ -283,5 +266,5 @@ DarkRP.hookStub{
 			type = "number"
 		}
 	},
-	realm = "Server"
+	realm = "Shared"
 }

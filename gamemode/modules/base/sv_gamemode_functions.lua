@@ -65,7 +65,7 @@ function GM:canDropWeapon(ply, weapon)
 	local team = ply:Team()
 
 	if not GAMEMODE.Config.dropspawnedweapons then
-	if RPExtraTeams[team] and RPExtraTeams[team].weapons and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
+		if RPExtraTeams[team] and RPExtraTeams[team].weapons and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
 	end
 
 	if self.Config.DisallowDrop[class] then return false end
@@ -87,16 +87,6 @@ end
 
 function GM:canSeeLogMessage(ply, message, colour)
 	return ply:hasDarkRPPrivilege("rp_viewlog") or ply:IsAdmin()
-end
-
-function GM:UpdatePlayerSpeed(ply)
-	if ply:isArrested() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	elseif ply:isCP() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
-	else
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	end
 end
 
 /*---------------------------------------------------------
@@ -914,11 +904,5 @@ end
 timer.Create("RP_DecalCleaner", GM.Config.decaltimer, 0, ClearDecals)
 
 function GM:PlayerSpray()
-
 	return not GAMEMODE.Config.allowsprays
-end
-
-function GM:PlayerNoClip(ply)
-	-- Default action for noclip is to disallow it
-	return false
 end

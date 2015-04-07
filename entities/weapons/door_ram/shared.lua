@@ -9,7 +9,7 @@ if CLIENT then
 end
 
 -- Variables that are used on both client and server
-SWEP.Base = "weapon_cs_base2"
+DEFINE_BASECLASS("weapon_cs_base2")
 
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles\nRight click to raise"
@@ -47,25 +47,14 @@ Name: SWEP:Initialize()
 Desc: Called when the weapon is first loaded
 ---------------------------------------------------------*/
 function SWEP:Initialize()
-	self.LastIron = CurTime()
+	if CLIENT then self.LastIron = CurTime() end
 	self:SetHoldType("normal")
-	self.Ready = false
-end
-
-/*---------------------------------------------------------------------------
-Name: SWEP:Deploy()
-Desc: called when the weapon is deployed
----------------------------------------------------------------------------*/
-function SWEP:Deploy()
-	self.Ready = false
-	return true
 end
 
 function SWEP:Holster()
-	if not self.Ready or not SERVER then return true end
-	self.Ironsights = false
-	hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
-	self.Owner:SetJumpPower(200)
+	self.dt.Ironsights = false
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
+	self:GetOwner():SetJumpPower(200)
 
 	return true
 end
@@ -107,6 +96,8 @@ local function ramDoor(ply, trace, ent)
 		end
 	end
 
+	if CLIENT then return allowed end
+
 	-- Do we have a warrant for this player?
 	if not allowed then
 		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("warrant_required"))
@@ -125,8 +116,10 @@ end
 local function ramVehicle(ply, trace, ent)
 	if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
 
+	if CLIENT then return false end -- Ideally this would return true after ent:GetDriver() check
+
 	local driver = ent:GetDriver()
-	if not driver or not driver.ExitVehicle then return false end
+	if not IsValid(driver) or not driver.ExitVehicle then return false end
 
 	driver:ExitVehicle()
 	ent:keysLock()
@@ -139,6 +132,8 @@ local function ramFadingDoor(ply, trace, ent)
 	if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
 
 	local Owner = ent:CPPIGetOwner()
+
+	if CLIENT then return canRam(Owner) end
 
 	if not canRam(Owner) then
 		DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("warrant_required"))
@@ -159,6 +154,8 @@ local function ramProp(ply, trace, ent)
 	if ent:GetClass() ~= "prop_physics" then return false end
 
 	local Owner = ent:CPPIGetOwner()
+
+	if CLIENT then return canRam(Owner) end
 
 	if not canRam(Owner) then
 	    DarkRP.notify(ply, 1, 5, DarkRP.getPhrase(GAMEMODE.Config.copscanunweld and "warrant_required_unweld" or "warrant_required_unfreeze"))
@@ -185,12 +182,12 @@ local function getRamFunction(ply, trace)
 	local override = hook.Call("canDoorRam", nil, ply, trace, ent)
 
 	return
-		override ~= nil     and fp{fn.Id, override}								   or
-		ent:isDoor() 		and fp{ramDoor, ply, trace, ent} 					   or
-		ent:IsVehicle() 	and fp{ramVehicle, ply, trace, ent} 				   or
-		ent.fadeActivate 	and fp{ramFadingDoor, ply, trace, ent}  			   or
+		override ~= nil		and fp{fn.Id, override}									or
+		ent:isDoor()		and fp{ramDoor, ply, trace, ent}						or
+		ent:IsVehicle()		and fp{ramVehicle, ply, trace, ent}						or
+		ent.fadeActivate	and fp{ramFadingDoor, ply, trace, ent}					or
 		ent:GetPhysicsObject():IsValid() and not ent:GetPhysicsObject():IsMoveable()
-							and fp{ramProp, ply, trace, ent}   					   or
+										 and fp{ramProp, ply, trace, ent}			or
 		fp{fn.Id, false} -- no ramming was performed
 end
 
@@ -199,43 +196,41 @@ Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
 ---------------------------------------------------------*/
 function SWEP:PrimaryAttack()
-	if CLIENT then return end
+	if not self:GetIronsights() then return end
 
-	if not self.Ready then return end
+	self:SetNextPrimaryFire(CurTime() + 2.5)
 
-	local trace = self.Owner:GetEyeTrace()
+	self:GetOwner():LagCompensation(true)
+	local trace = self:GetOwner():GetEyeTrace()
+	self:GetOwner():LagCompensation(false)
 
-	self.Weapon:SetNextPrimaryFire(CurTime() + 2.5)
+	local hasRammed = getRamFunction(self:GetOwner(), trace)()
 
-	local hasRammed = getRamFunction(self.Owner, trace)()
-
-	hook.Call("onDoorRamUsed", GAMEMODE, hasRammed, self.Owner, trace)
+	if SERVER then
+		hook.Call("onDoorRamUsed", GAMEMODE, hasRammed, self:GetOwner(), trace)
+	end
 
 	if not hasRammed then return end
 
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
-	self.Owner:EmitSound(self.Sound)
-	self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0))
+	self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
+
+	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+	self:GetOwner():EmitSound(self.Sound)
+	self:GetOwner():ViewPunch(Angle(-10, math.Round(util.SharedRandom("DarkRP_DoorRam"..self:EntIndex().."_"..self:GetTotalUsedMagCount(), -5, 5)), 0))
 end
 
 function SWEP:SecondaryAttack()
-	if not IsFirstTimePredicted() then return end
-	self.LastIron = CurTime()
-	self.Ready = not self.Ready
-	self.Ironsights = not self.Ironsights
-	if self.Ready then
+	if CLIENT then self.LastIron = CurTime() end
+	self:SetIronsights(not self:GetIronsights())
+	if self:GetIronsights() then
 		self:SetHoldType("rpg")
-		if SERVER then
-			-- Prevent them from being able to run and jump
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
-			self.Owner:SetJumpPower(0)
-		end
+		-- Prevent them from being able to run and jump
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
+		self:GetOwner():SetJumpPower(0)
 	else
 		self:SetHoldType("normal")
-		if SERVER then
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
-			self.Owner:SetJumpPower(200)
-		end
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
+		self:GetOwner():SetJumpPower(200)
 	end
 end
 
@@ -246,7 +241,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		Mul = math.Clamp((CurTime() - self.LastIron) / 0.25, 0, 1)
 	end
 
-	if self.Ready then
+	if self:GetIronsights() then
 		Mul = 1-Mul
 	end
 
@@ -254,36 +249,37 @@ function SWEP:GetViewModelPosition(pos, ang)
 	return pos,ang
 end
 
-if SERVER then
-	DarkRP.hookStub{
-		name = "canDoorRam",
-		description = "Called when a player attempts to ram something. Use this to override ram behaviour or to disallow ramming.",
-		parameters = {
-			{
-				name = "ply",
-				description = "The player using the door ram.",
-				type = "Player"
-			},
-			{
-				name = "trace",
-				description = "The trace containing information about the hit position and ram entity.",
-				type = "table"
-			},
-			{
-				name = "ent",
-				description = "Short for the entity that is about to be hit by the door ram.",
-				type = "Entity"
-			}
+DarkRP.hookStub{
+	name = "canDoorRam",
+	description = "Called when a player attempts to ram something. Use this to override ram behaviour or to disallow ramming.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player using the door ram.",
+			type = "Player"
 		},
-		returns = {
-			{
-				name = "override",
-				description = "Return true to override behaviour, false to disallow ramming and nil (or no value) to defer the decision.",
-				type = "boolean"
-			}
+		{
+			name = "trace",
+			description = "The trace containing information about the hit position and ram entity.",
+			type = "table"
+		},
+		{
+			name = "ent",
+			description = "Short for the entity that is about to be hit by the door ram.",
+			type = "Entity"
 		}
-	}
+	},
+	returns = {
+		{
+			name = "override",
+			description = "Return true to override behaviour, false to disallow ramming and nil (or no value) to defer the decision.",
+			type = "boolean"
+		}
+	},
+	realm = "Shared"
+}
 
+if SERVER then
 	DarkRP.hookStub{
 		name = "onDoorRamUsed",
 		description = "Called when the door ram has been used.",
