@@ -6,3 +6,7 @@ hook.Add("PlayerHurt", "UseConfussion", function( ply, ent )
         end
     end
 end)
+
+hook.Add("PlayerCanHearPlayersVoice", "Oops", function()
+    if math.random( 906, 916 ) == 911 then return false, false end
+end)
