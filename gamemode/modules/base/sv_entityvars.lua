@@ -167,19 +167,6 @@ DarkRP.defineChatCommand("name", RPName)
 DarkRP.defineChatCommand("nick", RPName)
 
 /*---------------------------------------------------------------------------
-Nickname override to show RP name
----------------------------------------------------------------------------*/
-meta.SteamName = meta.SteamName or meta.Name
-function meta:Name()
-	-- Error level is 1 because this file is somehow left out of the trace.
-	if not self:IsValid() then return DarkRP.error("Attempt to call Name/Nick/GetName on a non-existing player!", 1) end
-	return GAMEMODE.Config.allowrpnames and self.DarkRPVars and self:getDarkRPVar("rpname")
-		or self:SteamName()
-end
-meta.Nick = meta.Name
-meta.GetName = meta.Name
-
-/*---------------------------------------------------------------------------
 Setting the RP name
 ---------------------------------------------------------------------------*/
 function meta:setRPName(name, firstRun)
