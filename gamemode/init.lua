@@ -11,6 +11,7 @@ local downloads = {
 	'materials/fprp/close.png',
 	'materials/fprp/pug.png',
 	'materials/fprp/matt.png',
+	'materials/fprp/falco.png',
 }
 for k, v in ipairs(downloads) do
 	resource.AddFile(v);
