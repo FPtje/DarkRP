@@ -522,10 +522,7 @@ end
 hook.Add("CanTool", "FPP.Protect.CanTool", FPP.Protect.CanTool);
 
 function FPP.Protect.CanProperty(ply, property, ent)
-	-- Use Toolgun because I'm way too lazy to make a new type
-	local cantouch = FPP.plyCanTouchEnt(ply, ent, "Toolgun");
-
-	if not cantouch then return false end
+	return true
 end
 hook.Add("CanProperty", "FPP.Protect.CanProperty", FPP.Protect.CanProperty);
 
