@@ -26,8 +26,8 @@ SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
 SWEP.Primary.Sound = Sound("Weapon_Glock.Single");
-SWEP.Primary.Recoil = 2
-SWEP.Primary.Unrecoil = 6
+SWEP.Primary.Recoil = 0
+SWEP.Primary.Unrecoil = 0
 SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 10
 SWEP.Primary.Cone = 0.05
