@@ -7,38 +7,38 @@
 //=============================================================================//
 -- Edited for FAdmin by FPtje. Original credits to team Garry.
 
-language.Add("GameModeChoice", "Gamemode Choice")
+language.Add("GameModeChoice", "Gamemode Choice");
 local PANEL = {}
 
 /*---------------------------------------------------------
 
 ---------------------------------------------------------*/
 function PANEL:Init()
-	self:EnableVerticalScrollbar( true )
-	self:SetSpacing(10)
-	self:SetPadding(10)
+	self:EnableVerticalScrollbar( true );
+	self:SetSpacing(10);
+	self:SetPadding(10);
 end
 
 function PANEL:SetupSinglePlayer()
 
-	local GameModes = GetGamemodes()
+	local GameModes = GetGamemodes();
 
-	local GameModeSettings = vgui.Create("DForm", self )
-		GameModeSettings:SetName("#GameModeChoice")
+	local GameModeSettings = vgui.Create("DForm", self );
+		GameModeSettings:SetName("#GameModeChoice");
 
 		local MapListOptions = self
 		// Gamemode Override
-		local mc = GameModeSettings:ComboBox("Gamemode:", "sv_gamemodeoverride")
-		mc:AddChoice("")
+		local mc = GameModeSettings:ComboBox("Gamemode:", "sv_gamemodeoverride");
+		mc:AddChoice("");
 		for k, v in ipairs( GameModes ) do
-			mc:AddChoice( v.Name )
+			mc:AddChoice( v.Name );
 			function mc:OnSelect(index, value, data)
 				MapListOptions.Controller.CurrentGamemode = value
 			end
 		end
 
-		GameModeSettings:Help("If it's blank, it will changelevel to the current gamemode. If you enter a different gamemode, it will changelevel to that.")
+		GameModeSettings:Help("If it's blank, it will changelevel to the current gamemode. If you enter a different gamemode, it will changelevel to that.");
 
-	self:AddItem(GameModeSettings)
+	self:AddItem(GameModeSettings);
 end
 vgui.Register("FAdmin_MapListOptions", PANEL, "DPanelList")

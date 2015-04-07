@@ -4,54 +4,54 @@ Utility functions
 ---------------------------------------------------------------------------*/
 -----------------------------------------------------------------------------]]
 
-local vector = FindMetaTable("Vector")
-local meta = FindMetaTable("Player")
+local vector = FindMetaTable("Vector");
+local meta = FindMetaTable("Player");
 
 /*---------------------------------------------------------------------------
 Decides whether the vector could be seen by the player if they were to look at it
 ---------------------------------------------------------------------------*/
 function vector:isInSight(filter, ply)
-	ply = ply or LocalPlayer()
+	ply = ply or LocalPlayer();
 	local trace = {}
-	trace.start = ply:EyePos()
+	trace.start = ply:EyePos();
 	trace.endpos = self
 	trace.filter = filter
 	trace.mask = -1
-	local TheTrace = util.TraceLine(trace)
+	local TheTrace = util.TraceLine(trace);
 
 	return not TheTrace.Hit, TheTrace.HitPos
 end
 
 /*---------------------------------------------------------------------------
-Turn a money amount into a pretty string
+Turn a shekel amount into a pretty string
 ---------------------------------------------------------------------------*/
 local function attachCurrency(str)
 	local config = GAMEMODE.Config
 	return config.currencyLeft and config.currency .. str or str .. config.currency
 end
 
-function DarkRP.formatMoney(n)
+function fprp.formatshekel(n)
 	if not n then return attachCurrency("0") end
 
 	if n >= 1e14 then return attachCurrency(tostring(n)) end
 
-	n = tostring(n)
+	n = tostring(n);
 	local sep = sep or ","
 	local dp = string.find(n, "%.") or #n+1
 
 	for i=dp-4, 1, -3 do
-		n = n:sub(1, i) .. sep .. n:sub(i+1)
+		n = n:sub(1, i) .. sep .. n:sub(i+1);
 	end
 
-	return attachCurrency(n)
+	return attachCurrency(n);
 end
 
 /*---------------------------------------------------------------------------
 Find a player based on given information
 ---------------------------------------------------------------------------*/
-function DarkRP.findPlayer(info)
+function fprp.findPlayer(info)
 	if not info or info == "" then return nil end
-	local pls = player.GetAll()
+	local pls = player.GetAll();
 
 	for k = 1, #pls do -- Proven to be faster than pairs loop.
 		local v = pls[k]
@@ -78,9 +78,9 @@ end
 Find multiple players based on a string criterium
 Taken from FAdmin
 ---------------------------------------------------------------------------*/
-function DarkRP.findPlayers(info)
+function fprp.findPlayers(info)
 	if not info then return nil end
-	local pls = player.GetAll()
+	local pls = player.GetAll();
 	local found = {}
 	local players
 
@@ -98,7 +98,7 @@ function DarkRP.findPlayers(info)
 			if IsValid(Player(PlayerInfo)) and not found[Player(PlayerInfo)] then
 				found[Player(PlayerInfo)] = true
 				players = players or {}
-				table.insert(players, Player(PlayerInfo))
+				table.insert(players, Player(PlayerInfo));
 			end
 			continue
 		end
@@ -115,7 +115,7 @@ function DarkRP.findPlayers(info)
 			(v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
 				found[v] = true
 				players = players or {}
-				table.insert(players, v)
+				table.insert(players, v);
 			end
 		end
 	end
@@ -128,9 +128,9 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	hitDistance = hitDistance or 15
 	filter = filter or function(p) return p:IsPlayer() and p ~= self end
 
-	local shootPos = self:GetShootPos()
-	local entities = ents.FindInSphere(shootPos, searchDistance)
-	local aimvec = self:GetAimVector()
+	local shootPos = self:GetShootPos();
+	local entities = ents.FindInSphere(shootPos, searchDistance);
+	local aimvec = self:GetAimVector();
 	local eyeVector = shootPos + aimvec * searchDistance
 
 	local smallestDistance = math.huge
@@ -139,14 +139,14 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	for k, ent in pairs(entities) do
 		if not IsValid(ent) or filter(ent) == false then continue end
 
-		local center = ent:GetPos()
+		local center = ent:GetPos();
 
 		-- project the center vector on the aim vector
 		local projected = shootPos + (center - shootPos):Dot(aimvec) * aimvec
 
 		-- the point on the model that has the smallest distance to your line of sight
-		local nearestPoint = ent:NearestPoint(projected)
-		local distance = nearestPoint:Distance(projected)
+		local nearestPoint = ent:NearestPoint(projected);
+		local distance = nearestPoint:Distance(projected);
 
 		if distance < smallestDistance then
 			local trace = {
@@ -154,7 +154,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 				endpos = nearestPoint,
 				filter = {self, ent}
 			}
-			local traceLine = util.TraceLine(trace)
+			local traceLine = util.TraceLine(trace);
 			if traceLine.Hit then continue end
 
 			smallestDistance = distance
@@ -176,32 +176,32 @@ local function GetAvailableVehicles(ply)
 	if SERVER and IsValid(ply) and not ply:IsAdmin() then return end
 	local print = SERVER and ServerLog or Msg
 
-	print(DarkRP.getPhrase("rp_getvehicles") .. "\n")
-	for k,v in pairs(DarkRP.getAvailableVehicles()) do
-		print("\""..k.."\"" .. "\n")
+	print(fprp.getPhrase("rp_getvehicles") .. "\n");
+	for k,v in pairs(fprp.getAvailableVehicles()) do
+		print("\""..k.."\"" .. "\n");
 	end
 end
 if SERVER then
-	concommand.Add("rp_getvehicles_sv", GetAvailableVehicles)
+	concommand.Add("rp_getvehicles_sv", GetAvailableVehicles);
 else
-	concommand.Add("rp_getvehicles", GetAvailableVehicles)
+	concommand.Add("rp_getvehicles", GetAvailableVehicles);
 end
 
 /*---------------------------------------------------------------------------
-Whether a player has a DarkRP privilege
+Whether a player has a fprp privilege
 ---------------------------------------------------------------------------*/
-function meta:hasDarkRPPrivilege(priv)
+function meta:hasfprpPrivilege(priv)
 	if FAdmin then
-		return FAdmin.Access.PlayerHasPrivilege(self, priv)
+		return FAdmin.Access.PlayerHasPrivilege(self, priv);
 	end
-	return self:IsAdmin()
+	return self:IsAdmin();
 end
 
 /*---------------------------------------------------------------------------
 Convenience function to return the players sorted by name
 ---------------------------------------------------------------------------*/
-function DarkRP.nickSortedPlayers()
-	local plys = player.GetAll()
+function fprp.nickSortedPlayers()
+	local plys = player.GetAll();
 	table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
 	return plys
 end

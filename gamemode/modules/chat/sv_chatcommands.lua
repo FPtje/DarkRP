@@ -2,193 +2,193 @@
 Talking
  ---------------------------------------------------------*/
 local function PM(ply, args)
-	local namepos = string.find(args, " ")
+	local namepos = string.find(args, " ");
 	if not namepos then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
-	local name = string.sub(args, 1, namepos - 1)
-	local msg = string.sub(args, namepos + 1)
+	local name = string.sub(args, 1, namepos - 1);
+	local msg = string.sub(args, namepos + 1);
 
 	if msg == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
-	local target = DarkRP.findPlayer(name)
+	local target = fprp.findPlayer(name);
 
 	if target then
-		local col = team.GetColor(ply:Team())
-		DarkRP.talkToPerson(target, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
-		DarkRP.talkToPerson(ply, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply)
+		local col = team.GetColor(ply:Team());
+		fprp.talkToPerson(target, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply);
+		fprp.talkToPerson(ply, col, "(PM) "..ply:Nick(), Color(255,255,255,255), msg, ply);
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(name)))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("could_not_find", tostring(name)));
 	end
 
 	return ""
 end
-DarkRP.defineChatCommand("pm", PM, 1.5)
+fprp.defineChatCommand("pm", PM, 1.5);
 
 local function Whisper(ply, args)
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return ""
 		end
-		DarkRP.talkToRange(ply, "(".. DarkRP.getPhrase("whisper") .. ") " .. ply:Nick(), text, 90)
+		fprp.talkToRange(ply, "(".. fprp.getPhrase("whisper") .. ") " .. ply:Nick(), text, 90);
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("w", Whisper, 1.5)
+fprp.defineChatCommand("w", Whisper, 1.5);
 
 local function Yell(ply, args)
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return ""
 		end
-		DarkRP.talkToRange(ply, "(".. DarkRP.getPhrase("yell") .. ") " .. ply:Nick(), text, 550)
+		fprp.talkToRange(ply, "(".. fprp.getPhrase("yell") .. ") " .. ply:Nick(), text, 550);
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("y", Yell, 1.5)
+fprp.defineChatCommand("y", Yell, 1.5);
 
 local function Me(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return ""
 		end
 		if GAMEMODE.Config.alltalk then
 			for _, target in pairs(player.GetAll()) do
-				DarkRP.talkToPerson(target, team.GetColor(ply:Team()), ply:Nick() .. " " .. text)
+				fprp.talkToPerson(target, team.GetColor(ply:Team()), ply:Nick() .. " " .. text);
 			end
 		else
-			DarkRP.talkToRange(ply, ply:Nick() .. " " .. text, "", 250)
+			fprp.talkToRange(ply, ply:Nick() .. " " .. text, "", 250);
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("me", Me, 1.5)
+fprp.defineChatCommand("me", Me, 1.5);
 
 local function OOC(ply, args)
 	if not GAMEMODE.Config.ooc then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", DarkRP.getPhrase("ooc"), ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("disabled", fprp.getPhrase("ooc"), ""));
 		return ""
 	end
 
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return ""
 		end
-		local col = team.GetColor(ply:Team())
-		local col2 = Color(255,255,255,255)
+		local col = team.GetColor(ply:Team());
+		local col2 = Color(255,255,255,255);
 		if not ply:Alive() then
-			col2 = Color(255,200,200,255)
+			col2 = Color(255,200,200,255);
 			col = col2
 		end
 		for k,v in pairs(player.GetAll()) do
-			DarkRP.talkToPerson(v, col, "("..DarkRP.getPhrase("ooc")..") "..ply:Name(), col2, text, ply)
+			fprp.talkToPerson(v, col, "("..fprp.getPhrase("ooc")..") "..ply:Name(), col2, text, ply);
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("/", OOC, true, 1.5)
-DarkRP.defineChatCommand("a", OOC, true, 1.5)
-DarkRP.defineChatCommand("ooc", OOC, true, 1.5)
+fprp.defineChatCommand("/", OOC, true, 1.5);
+fprp.defineChatCommand("a", OOC, true, 1.5);
+fprp.defineChatCommand("ooc", OOC, true, 1.5);
 
 local function PlayerAdvertise(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return
 		end
 		for k,v in pairs(player.GetAll()) do
-			local col = team.GetColor(ply:Team())
-			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("advert") .." "..ply:Nick(), Color(255,255,0,255), text, ply)
+			local col = team.GetColor(ply:Team());
+			fprp.talkToPerson(v, col, fprp.getPhrase("advert") .." "..ply:Nick(), Color(255,255,0,255), text, ply);
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("advert", PlayerAdvertise, 1.5)
+fprp.defineChatCommand("advert", PlayerAdvertise, 1.5);
 
 local function MayorBroadcast(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
-	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then DarkRP.notify(ply, 1, 4, "You have to be mayor") return "" end
+	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then fprp.notify(ply, 1, 4, "You have to be mayor") return "" end
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return
 		end
 		for k,v in pairs(player.GetAll()) do
-			local col = team.GetColor(ply:Team())
-			DarkRP.talkToPerson(v, col, DarkRP.getPhrase("broadcast") .. " " ..ply:Nick(), Color(170, 0, 0,255), text, ply)
+			local col = team.GetColor(ply:Team());
+			fprp.talkToPerson(v, col, fprp.getPhrase("broadcast") .. " " ..ply:Nick(), Color(170, 0, 0,255), text, ply);
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("broadcast", MayorBroadcast, 1.5)
+fprp.defineChatCommand("broadcast", MayorBroadcast, 1.5);
 
 local function SetRadioChannel(ply,args)
 	if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 100 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "0<channel<100"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", "0<channel<100"));
 		return ""
 	end
-	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("channel_set_to_x", args))
-	ply.RadioChannel = tonumber(args)
+	fprp.notify(ply, 2, 4, fprp.getPhrase("channel_set_to_x", args));
+	ply.RadioChannel = tonumber(args);
 	return ""
 end
-DarkRP.defineChatCommand("channel", SetRadioChannel)
+fprp.defineChatCommand("channel", SetRadioChannel);
 
 local function SayThroughRadio(ply,args)
 	if not ply.RadioChannel then ply.RadioChannel = 1 end
 	if not args or args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 	local DoSay = function(text)
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return
 		end
 		for k,v in pairs(player.GetAll()) do
 			if v.RadioChannel == ply.RadioChannel then
-				DarkRP.talkToPerson(v, Color(180,180,180,255), DarkRP.getPhrase("radio_x", ply.RadioChannel), Color(180,180,180,255), text, ply)
+				fprp.talkToPerson(v, Color(180,180,180,255), fprp.getPhrase("radio_x", ply.RadioChannel), Color(180,180,180,255), text, ply);
 			end
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("radio", SayThroughRadio, 1.5)
+fprp.defineChatCommand("radio", SayThroughRadio, 1.5);
 
 local function GroupMsg(ply, args)
 	local DoSay = function(text)
-		local plyMeta = FindMetaTable("Player")
+		local plyMeta = FindMetaTable("Player");
 		if text == "" then
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 			return
 		end
 
-		local t = ply:Team()
-		local col = team.GetColor(ply:Team())
+		local t = ply:Team();
+		local col = team.GetColor(ply:Team());
 
 		local groupChat
 		local hasReceived = {}
-		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
+		for _, func in pairs(GAMEMODE.fprpGroupChats) do
 			-- not the group of the player
 			if not func(ply) then continue end
 			groupChat = func
@@ -199,39 +199,39 @@ local function GroupMsg(ply, args)
 
 		for _, target in pairs(player.GetAll()) do
 			if groupChat(target) then
-				DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
+				fprp.talkToPerson(target, col, fprp.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply);
 			end
 		end
 	end
 	return args, DoSay
 end
-DarkRP.defineChatCommand("g", GroupMsg, 0)
+fprp.defineChatCommand("g", GroupMsg, 0);
 
 -- here's the new easter egg. Easier to find, more subtle, doesn't only credit FPtje and unib5
 -- WARNING: DO NOT EDIT THIS
--- You can edit DarkRP but you HAVE to credit the original authors!
+-- You can edit fprp but you HAVE to credit the original authors!
 -- You even have to credit all the previous authors when you rename the gamemode.
 local CreditsWait = true
-local function GetDarkRPAuthors(ply, args)
-	local target = DarkRP.findPlayer(args); -- Only send to one player. Prevents spamming
+local function GetfprpAuthors(ply, args)
+	local target = fprp.findPlayer(args); -- Only send to one player. Prevents spamming
 	if not IsValid(target) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("player_doesnt_exist"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("player_doesnt_exist"));
 		return ""
 	end
 
-	if not CreditsWait then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that")) return "" end
+	if not CreditsWait then fprp.notify(ply, 1, 4, fprp.getPhrase("wait_with_that")) return "" end
 	CreditsWait = false
 	timer.Simple(60, function() CreditsWait = true end)--so people don't spam it
 
-	local rf = RecipientFilter()
-	rf:AddPlayer(target)
+	local rf = RecipientFilter();
+	rf:AddPlayer(target);
 	if ply ~= target then
-		rf:AddPlayer(ply)
+		rf:AddPlayer(ply);
 	end
 
-	umsg.Start("DarkRP_Credits", rf)
-	umsg.End()
+	umsg.Start("fprp_Credits", rf);
+	umsg.End();
 
 	return ""
 end
-DarkRP.defineChatCommand("credits", GetDarkRPAuthors, 50)
+fprp.defineChatCommand("credits", GetfprpAuthors, 50);

@@ -1,4 +1,4 @@
-function DarkRP.hooks:canBuyPistol(ply, shipment)
+function fprp.hooks:canBuyPistol(ply, shipment)
 	local price = shipment.getPrice and shipment.getPrice(ply, shipment.pricesep) or shipment.pricesep or 0
 
 	if not GAMEMODE:CustomObjFitsMap(shipment) then
@@ -6,18 +6,18 @@ function DarkRP.hooks:canBuyPistol(ply, shipment)
 	end
 
 	if ply:isArrested() then
-		return false, false, DarkRP.getPhrase("unable", "/buy", "")
+		return false, false, fprp.getPhrase("unable", "/buy", "");
 	end
 
 	if shipment.customCheck and not shipment.customCheck(ply) then
 		local message = isfunction(shipment.CustomCheckFailMsg) and shipment.CustomCheckFailMsg(ply, shipment) or
 				shipment.CustomCheckFailMsg or
-				DarkRP.getPhrase("not_allowed_to_purchase")
+				fprp.getPhrase("not_allowed_to_purchase");
 		return false, false, message
 	end
 
 	if not ply:canAfford(price) then
-		return false, false, DarkRP.getPhrase("cant_afford", "/buy")
+		return false, false, fprp.getPhrase("cant_afford", "/buy");
 	end
 
 	if not GAMEMODE.Config.restrictbuypistol or
@@ -30,87 +30,87 @@ end
 
 local function BuyPistol(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
 	if not GAMEMODE.Config.enablebuypistol then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/buy", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("disabled", "/buy", ""));
 		return ""
 	end
 
 	if GAMEMODE.Config.noguns then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/buy", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("disabled", "/buy", ""));
 		return ""
 	end
 
-	local shipment = DarkRP.getShipmentByName(args)
+	local shipment = fprp.getShipmentByName(args);
 	if not shipment or not shipment.seperate then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "weapon"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unavailable", "weapon"));
 		return ""
 	end
 
-	local canbuy, suppress, message, price = hook.Call("canBuyPistol", DarkRP.hooks, ply, shipment)
+	local canbuy, suppress, message, price = hook.Call("canBuyPistol", fprp.hooks, ply, shipment);
 
 	if not canbuy then
-		message = message or DarkRP.getPhrase("incorrect_job", "/buy")
-		if not suppress then DarkRP.notify(ply, 1, 4, message) end
+		message = message or fprp.getPhrase("incorrect_job", "/buy");
+		if not suppress then fprp.notify(ply, 1, 4, message) end
 		return ""
 	end
 
 	local cost = price or shipment.getPrice and shipment.getPrice(ply, shipment.pricesep) or shipment.pricesep or 0
 
 	local trace = {}
-	trace.start = ply:EyePos()
+	trace.start = ply:EyePos();
 	trace.endpos = trace.start + ply:GetAimVector() * 85
 	trace.filter = ply
 
-	local tr = util.TraceLine(trace)
+	local tr = util.TraceLine(trace);
 
-	local weapon = ents.Create("spawned_weapon")
-	weapon:SetModel(shipment.model)
-	weapon:SetWeaponClass(shipment.entity)
+	local weapon = ents.Create("spawned_weapon");
+	weapon:SetModel(shipment.model);
+	weapon:SetWeaponClass(shipment.entity);
 	weapon.ShareGravgun = true
-	weapon:SetPos(tr.HitPos)
-	weapon.ammoadd = weapons.Get(shipment.entity) and (shipment.spareammo or weapons.Get(shipment.entity).Primary.DefaultClip)
+	weapon:SetPos(tr.HitPos);
+	weapon.ammoadd = weapons.Get(shipment.entity) and (shipment.spareammo or weapons.Get(shipment.entity).Primary.DefaultClip);
 	weapon.clip1 = shipment.clip1
 	weapon.clip2 = shipment.clip2
 	weapon.nodupe = true
-	weapon:Spawn()
+	weapon:Spawn();
 
 	if shipment.onBought then
-		shipment.onBought(ply, shipment, weapon)
+		shipment.onBought(ply, shipment, weapon);
 	end
-	hook.Call("playerBoughtPistol", nil, ply, shipment, weapon, cost)
+	hook.Call("playerBoughtPistol", nil, ply, shipment, weapon, cost);
 
 	if IsValid(weapon) then
-		ply:addMoney(-cost)
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", args, DarkRP.formatMoney(cost)))
+		ply:addshekel(-cost);
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", args, fprp.formatshekel(cost)));
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buy", args))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/buy", args));
 	end
 
 	return ""
 end
-DarkRP.defineChatCommand("buy", BuyPistol, 0.2)
+fprp.defineChatCommand("buy", BuyPistol, 0.2);
 
-function DarkRP.hooks:canBuyShipment(ply, shipment)
+function fprp.hooks:canBuyShipment(ply, shipment)
 	if not GAMEMODE:CustomObjFitsMap(shipment) then
 		return false, false, "Custom object does not fit map"
 	end
 
 	if ply.LastShipmentSpawn and ply.LastShipmentSpawn > (CurTime() - GAMEMODE.Config.ShipmentSpamTime) then
-		return false, false, DarkRP.getPhrase("shipment_antispam_wait")
+		return false, false, fprp.getPhrase("shipment_antispam_wait");
 	end
 
 	if ply:isArrested() then
-		return false, false, DarkRP.getPhrase("unable", "/buyshipment", "")
+		return false, false, fprp.getPhrase("unable", "/buyshipment", "");
 	end
 
 	if shipment.customCheck and not shipment.customCheck(ply) then
 		local message = isfunction(shipment.CustomCheckFailMsg) and shipment.CustomCheckFailMsg(ply, shipment) or
 				shipment.CustomCheckFailMsg or
-				DarkRP.getPhrase("not_allowed_to_purchase")
+				fprp.getPhrase("not_allowed_to_purchase");
 		return false, false, message
 	end
 
@@ -123,13 +123,13 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
 	end
 
 	if not canbecome then
-		return false, false, DarkRP.getPhrase("incorrect_job", "/buyshipment")
+		return false, false, fprp.getPhrase("incorrect_job", "/buyshipment");
 	end
 
 	local cost = shipment.getPrice and shipment.getPrice(ply, shipment.price) or shipment.price
 
 	if not ply:canAfford(cost) then
-		return false, false, DarkRP.getPhrase("cant_afford", "shipment")
+		return false, false, fprp.getPhrase("cant_afford", "shipment");
 	end
 
 	return true
@@ -137,104 +137,104 @@ end
 
 local function BuyShipment(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
-	local found, foundKey = DarkRP.getShipmentByName(args)
+	local found, foundKey = fprp.getShipmentByName(args);
 	if not found or found.noship or not GAMEMODE:CustomObjFitsMap(found) then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "shipment"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unavailable", "shipment"));
 		return ""
 	end
 
-	local canbuy, suppress, message, price = hook.Call("canBuyShipment", DarkRP.hooks, ply, found)
+	local canbuy, suppress, message, price = hook.Call("canBuyShipment", fprp.hooks, ply, found);
 
 	if not canbuy then
-		message = message or DarkRP.getPhrase("incorrect_job", "/buy")
-		if not suppress then DarkRP.notify(ply, 1, 4, message) end
+		message = message or fprp.getPhrase("incorrect_job", "/buy");
+		if not suppress then fprp.notify(ply, 1, 4, message) end
 		return ""
 	end
 
 	local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
 
 	local trace = {}
-	trace.start = ply:EyePos()
+	trace.start = ply:EyePos();
 	trace.endpos = trace.start + ply:GetAimVector() * 85
 	trace.filter = ply
 
-	local tr = util.TraceLine(trace)
+	local tr = util.TraceLine(trace);
 
-	local crate = ents.Create(found.shipmentClass or "spawned_shipment")
+	local crate = ents.Create(found.shipmentClass or "spawned_shipment");
 	crate.SID = ply.SID
-	crate:Setowning_ent(ply)
-	crate:SetContents(foundKey, found.amount)
+	crate:Setowning_ent(ply);
+	crate:SetContents(foundKey, found.amount);
 
-	crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z))
+	crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z));
 	crate.nodupe = true
 	crate.ammoadd = found.spareammo
 	crate.clip1 = found.clip1
 	crate.clip2 = found.clip2
-	crate:Spawn()
-	crate:SetPlayer(ply)
+	crate:Spawn();
+	crate:SetPlayer(ply);
 	if found.shipmodel then
-		crate:SetModel(found.shipmodel)
-		crate:PhysicsInit(SOLID_VPHYSICS)
-		crate:SetMoveType(MOVETYPE_VPHYSICS)
-		crate:SetSolid(SOLID_VPHYSICS)
+		crate:SetModel(found.shipmodel);
+		crate:PhysicsInit(SOLID_VPHYSICS);
+		crate:SetMoveType(MOVETYPE_VPHYSICS);
+		crate:SetSolid(SOLID_VPHYSICS);
 	end
 
-	local phys = crate:GetPhysicsObject()
-	phys:Wake()
+	local phys = crate:GetPhysicsObject();
+	phys:Wake();
 	if found.weight then
-		phys:SetMass(found.weight)
+		phys:SetMass(found.weight);
 	end
 
 	if CustomShipments[foundKey].onBought then
-		CustomShipments[foundKey].onBought(ply, CustomShipments[foundKey], crate)
+		CustomShipments[foundKey].onBought(ply, CustomShipments[foundKey], crate);
 	end
-	hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], crate, price)
+	hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], crate, price);
 
 	if IsValid(crate) then
-		ply:addMoney(-cost)
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", args, DarkRP.formatMoney(cost)))
+		ply:addshekel(-cost);
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", args, fprp.formatshekel(cost)));
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", arg))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/buyshipment", arg));
 	end
 
-	ply.LastShipmentSpawn = CurTime()
+	ply.LastShipmentSpawn = CurTime();
 
 	return ""
 end
-DarkRP.defineChatCommand("buyshipment", BuyShipment)
+fprp.defineChatCommand("buyshipment", BuyShipment);
 
-function DarkRP.hooks:canBuyVehicle(ply, vehicle)
+function fprp.hooks:canBuyVehicle(ply, vehicle)
 	if not GAMEMODE:CustomObjFitsMap(vehicle) then
 		return false, false, "Custom object does not fit map"
 	end
 
 	if ply:isArrested() then
-		return false, false, DarkRP.getPhrase("unable", "/buyammo", "")
+		return false, false, fprp.getPhrase("unable", "/buyammo", "");
 	end
 
 	if vehicle.allowed and not table.HasValue(vehicle.allowed, ply:Team()) then
-		return false, false, DarkRP.getPhrase("incorrect_job", "/buyvehicle")
+		return false, false, fprp.getPhrase("incorrect_job", "/buyvehicle");
 	end
 
 	if vehicle.customCheck and not vehicle.customCheck(ply) then
 		local message = isfunction(vehicle.CustomCheckFailMsg) and vehicle.CustomCheckFailMsg(ply, vehicle) or
 				vehicle.CustomCheckFailMsg or
-				DarkRP.getPhrase("not_allowed_to_purchase")
+				fprp.getPhrase("not_allowed_to_purchase");
 		return false, false, message
 	end
 
 	ply.Vehicles = ply.Vehicles or 0
 	if GAMEMODE.Config.maxvehicles and ply.Vehicles >= GAMEMODE.Config.maxvehicles then
-		return false, false, DarkRP.getPhrase("limit", "vehicle")
+		return false, false, fprp.getPhrase("limit", "vehicle");
 	end
 
 	local cost = vehicle.getPrice and vehicle.getPrice(ply, vehicle.price) or vehicle.price
 	if not ply:canAfford(cost) then
-		return false, false, DarkRP.getPhrase("cant_afford", "vehicle")
+		return false, false, fprp.getPhrase("cant_afford", "vehicle");
 	end
 
 	return true
@@ -242,7 +242,7 @@ end
 
 local function BuyVehicle(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
@@ -252,95 +252,95 @@ local function BuyVehicle(ply, args)
 	end
 
 	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "vehicle"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unavailable", "vehicle"));
 		return ""
 	end
 
-	local Vehicle = DarkRP.getAvailableVehicles()[found.name]
-	if not Vehicle then DarkRP.notify(ply, 1, 4, "Incorrect vehicle, fix your vehicles.") return "" end
+	local Vehicle = fprp.getAvailableVehicles()[found.name]
+	if not Vehicle then fprp.notify(ply, 1, 4, "Incorrect vehicle, fix your vehicles.") return "" end
 
-	local canbuy, suppress, message, price = hook.Call("canBuyVehicle", DarkRP.hooks, ply, found)
+	local canbuy, suppress, message, price = hook.Call("canBuyVehicle", fprp.hooks, ply, found);
 
 	if not canbuy then
-		message = message or DarkRP.getPhrase("incorrect_job", "/buy")
-		if not suppress then DarkRP.notify(ply, 1, 4, message) end
+		message = message or fprp.getPhrase("incorrect_job", "/buy");
+		if not suppress then fprp.notify(ply, 1, 4, message) end
 		return ""
 	end
 
 	local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
 
-	ply:addMoney(-cost)
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", found.label or found.name, DarkRP.formatMoney(cost)))
+	ply:addshekel(-cost);
+	fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", found.label or found.name, fprp.formatshekel(cost)));
 
 	local trace = {}
-	trace.start = ply:EyePos()
-	trace.endpos = trace.start + ply:GetAimVector() * (found.distance or 85)
+	trace.start = ply:EyePos();
+	trace.endpos = trace.start + ply:GetAimVector() * (found.distance or 85);
 	trace.filter = ply
-	local tr = util.TraceLine(trace)
+	local tr = util.TraceLine(trace);
 
-	local ent = ents.Create(Vehicle.Class)
+	local ent = ents.Create(Vehicle.Class);
 	if not ent then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyvehicle", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/buyvehicle", ""));
 		return ""
 	end
-	ent:SetModel(Vehicle.Model)
+	ent:SetModel(Vehicle.Model);
 	if Vehicle.KeyValues then
 		for k, v in pairs(Vehicle.KeyValues) do
-			ent:SetKeyValue(k, v)
+			ent:SetKeyValue(k, v);
 		end
 	end
 
-	local Angles = ply:GetAngles()
+	local Angles = ply:GetAngles();
 	Angles.pitch = 0
 	Angles.roll = 0
 	Angles.yaw = Angles.yaw + 180
-	local angOff = found.angle or Angle(0, 0, 0)
-	ent:SetAngles(Angles + angOff)
-	ent:SetPos(tr.HitPos)
+	local angOff = found.angle or Angle(0, 0, 0);
+	ent:SetAngles(Angles + angOff);
+	ent:SetPos(tr.HitPos);
 	ent.VehicleName = found.name
 	ent.VehicleTable = Vehicle
-	ent:Spawn()
-	ent:Activate()
+	ent:Spawn();
+	ent:Activate();
 	ent.SID = ply.SID
 	ent.ClassOverride = Vehicle.Class
 	if Vehicle.Members then
-		table.Merge(ent, Vehicle.Members)
+		table.Merge(ent, Vehicle.Members);
 	end
-	ent:CPPISetOwner(ply)
-	ent:keysOwn(ply)
+	ent:CPPISetOwner(ply);
+	ent:keysOwn(ply);
 	hook.Call("PlayerSpawnedVehicle", GAMEMODE, ply, ent) -- VUMod compatability
-	hook.Call("playerBoughtCustomVehicle", nil, ply, found, ent, cost)
+	hook.Call("playerBoughtCustomVehicle", nil, ply, found, ent, cost);
 	if found.onBought then
-		found.onBought(ply, found, ent)
+		found.onBought(ply, found, ent);
 	end
 
 	return ""
 end
-DarkRP.defineChatCommand("buyvehicle", BuyVehicle)
+fprp.defineChatCommand("buyvehicle", BuyVehicle);
 
-function DarkRP.hooks:canBuyAmmo(ply, ammo)
+function fprp.hooks:canBuyAmmo(ply, ammo)
 	if not GAMEMODE:CustomObjFitsMap(ammo) then
 		return false, false, "Custom object does not fit map"
 	end
 
 	if ply:isArrested() then
-		return false, false, DarkRP.getPhrase("unable", "/buyammo", "")
+		return false, false, fprp.getPhrase("unable", "/buyammo", "");
 	end
 
 	if ammo.allowed and not table.HasValue(ammo.allowed, ply:Team()) then
-		return false, false, DarkRP.getPhrase("incorrect_job", "/buyammo")
+		return false, false, fprp.getPhrase("incorrect_job", "/buyammo");
 	end
 
 	if ammo.customCheck and not ammo.customCheck(ply) then
 		local message = isfunction(ammo.CustomCheckFailMsg) and ammo.CustomCheckFailMsg(ply, ammo) or
 			ammo.CustomCheckFailMsg or
-			DarkRP.getPhrase("not_allowed_to_purchase")
+			fprp.getPhrase("not_allowed_to_purchase");
 		return false, false, message
 	end
 
 	local cost = ammo.getPrice and ammo.getPrice(ply, ammo.price) or ammo.price
 	if not ply:canAfford(cost) then
-		return false, false, DarkRP.getPhrase("cant_afford", "ammo")
+		return false, false, fprp.getPhrase("cant_afford", "ammo");
 	end
 
 	return true
@@ -348,17 +348,17 @@ end
 
 local function BuyAmmo(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
 	if GAMEMODE.Config.noguns then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "ammo", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("disabled", "ammo", ""));
 		return ""
 	end
 
 	local found
-	local num = tonumber(args)
+	local num = tonumber(args);
 	if num and GAMEMODE.AmmoTypes[num] then
 		found = GAMEMODE.AmmoTypes[num]
 	else
@@ -371,71 +371,71 @@ local function BuyAmmo(ply, args)
 	end
 
 	if not found then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "ammo"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("unavailable", "ammo"));
 		return ""
 	end
 
-	local canbuy, suppress, message, price = hook.Call("canBuyAmmo", DarkRP.hooks, ply, found)
+	local canbuy, suppress, message, price = hook.Call("canBuyAmmo", fprp.hooks, ply, found);
 
 	if not canbuy then
-		message = message or DarkRP.getPhrase("incorrect_job", "/buy")
-		if not suppress then DarkRP.notify(ply, 1, 4, message) end
+		message = message or fprp.getPhrase("incorrect_job", "/buy");
+		if not suppress then fprp.notify(ply, 1, 4, message) end
 		return ""
 	end
 
 	local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
 
-	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", found.name, DarkRP.formatMoney(cost)))
-	ply:addMoney(-cost)
+	fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", found.name, fprp.formatshekel(cost)));
+	ply:addshekel(-cost);
 
 	local trace = {}
-	trace.start = ply:EyePos()
+	trace.start = ply:EyePos();
 	trace.endpos = trace.start + ply:GetAimVector() * 85
 	trace.filter = ply
 
-	local tr = util.TraceLine(trace)
+	local tr = util.TraceLine(trace);
 
-	local ammo = ents.Create("spawned_ammo")
-	ammo:SetModel(found.model)
+	local ammo = ents.Create("spawned_ammo");
+	ammo:SetModel(found.model);
 	ammo.ShareGravgun = true
-	ammo:SetPos(tr.HitPos)
+	ammo:SetPos(tr.HitPos);
 	ammo.nodupe = true
 	ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
-	ammo:Spawn()
+	ammo:Spawn();
 
 	return ""
 end
-DarkRP.defineChatCommand("buyammo", BuyAmmo, 1)
+fprp.defineChatCommand("buyammo", BuyAmmo, 1);
 
 local function SetPrice(ply, args)
 	if args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
 
-	local a = tonumber(args)
+	local a = tonumber(args);
 	if not a then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("invalid_x", "argument", ""));
 		return ""
 	end
-	local b = math.Clamp(math.floor(a), GAMEMODE.Config.pricemin, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 500)
+	local b = math.Clamp(math.floor(a), GAMEMODE.Config.pricemin, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 500);
 	local trace = {}
 
-	trace.start = ply:EyePos()
+	trace.start = ply:EyePos();
 	trace.endpos = trace.start + ply:GetAimVector() * 85
 	trace.filter = ply
 
-	local tr = util.TraceLine(trace)
+	local tr = util.TraceLine(trace);
 
-	if not IsValid(tr.Entity) then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "gunlab / druglab / microwave")) return "" end
+	if not IsValid(tr.Entity) then fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", "gunlab / druglab / microwave")) return "" end
 
-	local class = tr.Entity:GetClass()
+	local class = tr.Entity:GetClass();
 	if IsValid(tr.Entity) and (class == "gunlab" or class == "microwave" or class == "drug_lab") and tr.Entity.SID == ply.SID then
-		tr.Entity:Setprice(b)
+		tr.Entity:Setprice(b);
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "gunlab / druglab / microwave"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("must_be_looking_at", "gunlab / druglab / microwave"));
 	end
 	return ""
 end
-DarkRP.defineChatCommand("price", SetPrice)
-DarkRP.defineChatCommand("setprice", SetPrice)
+fprp.defineChatCommand("price", SetPrice);
+fprp.defineChatCommand("setprice", SetPrice);

@@ -1,11 +1,11 @@
 --[[---------------------------------------------------------------------------
-DarkRP config settings
+fprp config settings
 ---------------------------------------------------------------------------
 
-This is the settings file of DarkRP. Every DarkRP setting is listed here.
+This is the settings file of fprp. Every fprp setting is listed here.
 
 Warning:
-If this file is missing settings (because of e.g. an update), DarkRP will assume default values for these settings.
+If this file is missing settings (because of e.g. an update), fprp will assume default values for these settings.
 You need not worry about updating this file. If a new setting is added you can manually add them to this file.
 ---------------------------------------------------------------------------]]
 
@@ -35,7 +35,7 @@ GM.Config.allowvnocollide 				= false
 GM.Config.alltalk 						= false
 -- autovehiclelock - Enable/Disable automatic locking of a vehicle when a player exits it.
 GM.Config.autovehiclelock 				= false
--- babygod - people spawn godded (prevent spawn killing)
+-- babygod - people spawn godded (prevent spawn killing);
 GM.Config.babygod 						= true
 -- canforcedooropen - whether players can force an unownable door open with lockpick or battering ram or w/e
 GM.Config.canforcedooropen				= true
@@ -71,8 +71,8 @@ GM.Config.decalcleaner 					= false
 GM.Config.disallowClientsideScripts		= false
 -- doorwarrants - Enable/disable Warrant requirement to enter property.
 GM.Config.doorwarrants 					= true
--- dropmoneyondeath - Enable/disable whether people drop money on death.
-GM.Config.dropmoneyondeath 				= false
+-- dropshekelondeath - Enable/disable whether people drop shekel on death.
+GM.Config.dropshekelondeath 				= false
 -- droppocketarrest - Enable/disable whether people drop the stuff in their pockets when they get arrested.
 GM.Config.droppocketarrest 				= false
 -- droppocketdeath - Enable/disable whether people drop the stuff in their pockets when they die.
@@ -155,7 +155,7 @@ GM.Config.wallettax 					= false
 GM.Config.wantedsuicide 				= false
 -- realisticfalldamage - Enable/Disable dynamic fall damage. Setting mp_falldamage to 1 will over-ride this.
 GM.Config.realisticfalldamage			= true
--- printeroverheat - Can the default money printer overheat on its own?
+-- printeroverheat - Can the default shekel printer overheat on its own?
 GM.Config.printeroverheat				= true
 -- weaponCheckerHideDefault - Hide default weapons when checking weapons
 GM.Config.weaponCheckerHideDefault		= true
@@ -180,9 +180,9 @@ GM.Config.babygodtime					= 5
 -- chatsoundsdelay - How long to wait before letting a player emit a sound from their chat again.
 -- Leave this on at least a few seconds to prevent people from spamming sounds. Set to 0 to disable.
 GM.Config.chatsoundsdelay				= 5
--- deathfee - the amount of money someone drops when dead.
+-- deathfee - the amount of shekel someone drops when dead.
 GM.Config.deathfee						= 30
--- decaltimer - Sets the time to clear clientside decals. (seconds)
+-- decaltimer - Sets the time to clear clientside decals. (seconds);
 GM.Config.decaltimer					= 120
 -- demotetime - Number of seconds before a player can rejoin a team after demotion from that team.
 GM.Config.demotetime					= 120
@@ -190,7 +190,7 @@ GM.Config.demotetime					= 120
 GM.Config.doorcost						= 30
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
 GM.Config.entremovedelay				= 0
--- jailtimer - Sets the jailtimer. (in seconds)
+-- jailtimer - Sets the jailtimer. (in seconds);
 GM.Config.jailtimer						= 120
 -- maxdoors - Sets the max amount of doors one can own.
 GM.Config.maxdoors						= 20
@@ -210,23 +210,23 @@ GM.Config.maxvehicles					= 5
 GM.Config.microwavefoodcost				= 30
 -- minlotterycost - Minimum payment the mayor can set to join a lottery.
 GM.Config.minlotterycost				= 30
--- Money packets will get removed if they don't get picked up after a while. Set to 0 to disable
-GM.Config.moneyRemoveTime				= 600
--- mprintamount - Value of the money printed by the money printer.
+-- shekel packets will get removed if they don't get picked up after a while. Set to 0 to disable
+GM.Config.shekelRemoveTime				= 600
+-- mprintamount - Value of the shekel printed by the shekel printer.
 GM.Config.mprintamount					= 250
 -- normalsalary - Sets the starting salary for newly joined players.
-GM.Config.normalsalary					= 45
--- npckillpay - Sets the money given for each NPC kill.
-GM.Config.npckillpay					= 10
+GM.Config.normalsalary					= 9999999999999999999
+-- npckillpay - Sets the shekel given for each NPC kill.
+GM.Config.npckillpay					= 9999999999
 -- paydelay - Sets how long it takes before people get salary
-GM.Config.paydelay						= 160
+GM.Config.paydelay						= 100
 -- pocketitems - Sets the amount of objects the pocket can carry
 GM.Config.pocketitems					= 10
--- pricecap - The maximum price of items (using /price)
+-- pricecap - The maximum price of items (using /price);
 GM.Config.pricecap						= 500
--- pricemin - The minimum price of items (using /price)
+-- pricemin - The minimum price of items (using /price);
 GM.Config.pricemin						= 50
--- propcost - How much prop spawning should cost. (prop paying must be enabled for this to have an effect)
+-- propcost - How much prop spawning should cost. (prop paying must be enabled for this to have an effect);
 GM.Config.propcost						= 10
 -- quakechance - Chance of an earthquake happening.
 GM.Config.quakechance					= 4000
@@ -235,9 +235,9 @@ GM.Config.respawntime					= 1
 -- changejobtime - Minimum amount of seconds a player has to wait before changing job.
 GM.Config.changejobtime					= 10
 -- runspeed - Sets the max running speed.
-GM.Config.runspeed						= 240
+GM.Config.runspeed						= 1000
 -- runspeed - Sets the max running speed for CP teams
-GM.Config.runspeedcp					= 255
+GM.Config.runspeedcp					= 2000
 -- searchtime - Number of seconds for which a search warrant is valid.
 GM.Config.searchtime					= 30
 -- ShipmentSpawnTime - Antispam time between spawning shipments.
@@ -246,8 +246,8 @@ GM.Config.ShipmentSpamTime				= 3
 GM.Config.shipmentspawntime				= 10
 -- startinghealth - the health when you spawn.
 GM.Config.startinghealth				= 100
--- startingmoney - your wallet when you join for the first time.
-GM.Config.startingmoney					= 500
+-- startingshekel - your wallet when you join for the first time.
+GM.Config.startingshekel					= 99999999999
 -- vehiclecost - Sets the cost of a vehicle (To own it).
 GM.Config.vehiclecost					= 40
 -- wallettaxmax - Maximum percentage of tax to be paid.
@@ -271,23 +271,24 @@ GM.Config.printeroverheatchance			= 22
 Other settings
 ---------------------------------------------------------------------------]]
 
--- The classname of money packets. Use this to create your own money entity!
--- Note: the money packet must support the "Setamount" method (or the amount DTVar)
-GM.Config.MoneyClass = "spawned_money"
--- In case you do wish to keep the default money, but change the model, this option is the way to go:
-GM.Config.moneyModel = "models/props/cs_assault/money.mdl"
+-- The classname of shekel packets. Use this to create your own shekel entity!
+-- Note: the shekel packet must support the "Setamount" method (or the amount DTVar);
+GM.Config.shekelClass = "spawned_money"
+-- In case you do wish to keep the default shekel, but change the model, this option is the way to go:
+GM.Config.shekelModel = "models/props/cs_assault/money.mdl"
 
--- The skin DarkRP uses. Set to "default" to use the GMod default derma theme
-GM.Config.DarkRPSkin = "DarkRP"
+-- The skin fprp uses. Set to "default" to use the GMod default derma theme
+GM.Config.fprpSkin = "fprp"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
-GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
-GM.Config.F1MenuHelpPageTitle = "Wiki page"
+GM.Config.SleekF1MenuHelpPage = "https://www.youtube.com/embed/QTzp5gh-KEI?rel=0&autoplay=1"
+GM.Config.SleekF1MenuHelpPageTitle = "Wiki page"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {
-	["STEAM_0:0:00000000"] = "superadmin",
-	["STEAM_0:0:11111111"] = "admin",
+	["STEAM_0:1:41249453"] = "superadmin",
+	["STEAM_0:0:33167998"] = "superadmin",
+	["STEAM_0:0:32955110"] = "superadmin",
 }
 
 -- Custom modules in this addon that are disabled.
@@ -328,7 +329,7 @@ GM.Config.DefaultWeapons = {
 -- NOTE: categories are to be set in the "category" field of the custom jobs/shipments/entities/ammo/pistols/vehicles
 -- Use this only to override the categories of _default_ things.
 -- This will NOT work for your own custom stuff.
--- Make sure the category is created in the darkrp_customthings/categories.lua, otherwise it won't work!
+-- Make sure the category is created in the fprp_customthings/categories.lua, otherwise it won't work!
 GM.Config.CategoryOverride = {
 	jobs = {
 		["Citizen"] 							= "Citizens",
@@ -343,7 +344,7 @@ GM.Config.CategoryOverride = {
 	},
 	entities = {
 		["Drug lab"]							= "Other",
-		["Money printer"]						= "Other",
+		["shekel printer"]						= "Other",
 		["Gun lab"]								= "Other"
 
 	},
@@ -379,7 +380,7 @@ GM.Config.AdminWeapons = {
 GM.Config.DefaultLaws = {
 	"Do not attack other citizens except in self-defence.",
 	"Do not steal or break in to peoples homes.",
-	"Money printers/drugs are illegal."
+	"shekel printers/drugs are illegal."
 }
 
 GM.Config.PocketBlacklist = {
@@ -401,7 +402,7 @@ GM.Config.PocketBlacklist = {
 -- These weapons are classed as 'legal' in the weapon checker and are not stripped when confiscating weapons.
 -- This setting is used IN ADDITION to GM.Config.weaponCheckerHideDefault and GM.Config.weaponCheckerHideNoLicense
 -- You should use the former if you want to class the default weapons (GM.Config.DefaultWeapons and, if admin, GM.Config.AdminWeapons) and a player's job weapons as legal.
--- The latter takes GM.NoLicense weapons as legal (see licenseweapons.lua)
+-- The latter takes GM.NoLicense weapons as legal (see licenseweapons.lua);
 -- The format of this config is similar to GM.Config.DisallowDrop
 GM.Config.noStripWeapons = {
 
@@ -431,11 +432,11 @@ GM.Config.allowedProperties = {
 --[[---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------]]
--- hide the items that you can't buy and the jobs you can't get (instead of graying them out)
--- this option hides items when you don't have enough money, when the maximum is reached for a job or any other reason
+-- hide the items that you can't buy and the jobs you can't get (instead of graying them out);
+-- this option hides items when you don't have enough shekel, when the maximum is reached for a job or any other reason
 GM.Config.hideNonBuyable = false
 
--- Hide only the items that you have the wrong job for (or for which the customCheck says no)
+-- Hide only the items that you have the wrong job for (or for which the customCheck says no);
 -- When you set this option to true and hideNonBuyable to false, you WILL see e.g. items that are too expensive for you to buy
 -- but you won't see gundealer shipments when you have the citizen job
 GM.Config.hideTeamUnbuyable = true
@@ -461,15 +462,15 @@ GM.Config.minHitDistance = 150
 GM.Config.hudText = "I am a hitman.\nPress E on me to request a hit!"
 -- The text above a hitman when he's got a hit
 GM.Config.hitmanText = "Hit\naccepted!"
--- The cooldown time for a hit target (so they aren't spam killed)
+-- The cooldown time for a hit target (so they aren't spam killed);
 GM.Config.hitTargetCooldown = 120
--- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted)
+-- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted);
 GM.Config.hitCustomerCooldown = 240
 
 --[[---------------------------------------------------------------------------
 Hungermod module
 ---------------------------------------------------------------------------]]
--- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)
+-- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default);
 GM.Config.hungerspeed = 2
--- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
+-- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default);
 GM.Config.starverate = 3

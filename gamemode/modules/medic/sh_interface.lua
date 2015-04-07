@@ -1,4 +1,4 @@
-DarkRP.PLAYER.isMedic = DarkRP.stub{
+fprp.PLAYER.isMedic = fprp.stub{
 	name = "isMedic",
 	description = "Whether this player is a medic.",
 	parameters = {
@@ -10,5 +10,5 @@ DarkRP.PLAYER.isMedic = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }

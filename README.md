@@ -1,16 +1,25 @@
-https://github.com/FPtje/DarkRP/wiki/HOW-TO-REPORT-ISSUES
-======
-DO NOT ASK FOR HELP ON THE GITHUB! THE GITHUB IS FOR BUGS AND FEATURE REQUESTS ONLY! USE THE FORUM!
-http://forum.darkrp.com/
+# fprp
+fpRP, a completely serious roleplay gamemode for JBMod.
 
-READ THIS FOR MODIFYING DARKRP! VERY USEFUL WIKI!
-http://wiki.darkrp.com/index.php/Main_Page
+fprp is a community created open source rp gamemode.
 
-Please try to use the git protocol instead of SVN to get access to DarkRP. GitHub has a very nice program for it:
-http://windows.github.com/
+Pull ruqestes of any type are encouraged because as we know more fewatures makes rp better (especially backdoors)!
 
 
-If you really can't/don't want to use git, you can still use SVN.
+Authors:
+	aStonedPenguin
+	thelastpenguin
+	code_gs
 
-SVN link:
-https://github.com/FPtje/DarkRP/trunk
+Contributors:
+	zerf
+	Dannelor
+	syl0r
+	Ghost-Sailor
+	Nyaaaa
+	meharryp
+	coldud13
+	AnonTakesOver
+
+Dishonorable mentions:
+	Faclo - For enabling the autism that is fprp

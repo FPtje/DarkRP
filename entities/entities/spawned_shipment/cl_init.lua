@@ -1,140 +1,140 @@
-include("shared.lua")
+include("shared.lua");
 
-local matBallGlow = Material("models/props_combine/tpballglow")
+local matBallGlow = Material("models/props_combine/tpballglow");
 function ENT:Draw()
 	self.height = self.height or 0
 	self.colr = self.colr or 1
 	self.colg = self.colg or 0
-	self.StartTime = self.StartTime or CurTime()
+	self.StartTime = self.StartTime or CurTime();
 
 	if GAMEMODE.Config.shipmentspawntime > 0 and self.height < self:OBBMaxs().z then
-		self:drawSpawning()
+		self:drawSpawning();
 	else
-		self:DrawModel()
+		self:DrawModel();
 	end
 
-	self:drawFloatingGun()
-	self:drawInfo()
+	self:drawFloatingGun();
+	self:drawInfo();
 end
 
-net.Receive("DarkRP_shipmentSpawn", function()
-	local ent = net.ReadEntity()
+net.Receive("fprp_shipmentSpawn", function()
+	local ent = net.ReadEntity();
 	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" then return end
 
 	ent.height = 0
-	ent.StartTime = CurTime()
-end)
+	ent.StartTime = CurTime();
+end);
 
 function ENT:drawSpawning()
-	render.MaterialOverride(matBallGlow)
+	render.MaterialOverride(matBallGlow);
 
-	render.SetColorModulation(self.colr, self.colg, 0)
+	render.SetColorModulation(self.colr, self.colg, 0);
 
-	self:DrawModel()
+	self:DrawModel();
 
-	render.MaterialOverride()
-	self.colr = 1 - ((CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime)
+	render.MaterialOverride();
+	self.colr = 1 - ((CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime);
 	self.colg = (CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime
 
-	render.SetColorModulation(1, 1, 1)
+	render.SetColorModulation(1, 1, 1);
 
-	render.MaterialOverride()
+	render.MaterialOverride();
 
-	local normal = - self:GetAngles():Up()
-	local pos = self:LocalToWorld(Vector(0, 0, self:OBBMins().z + self.height))
-	local distance = normal:Dot(pos)
-	self.height = self:OBBMaxs().z * ((CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime)
-	render.EnableClipping(true)
+	local normal = - self:GetAngles():Up();
+	local pos = self:LocalToWorld(Vector(0, 0, self:OBBMins().z + self.height));
+	local distance = normal:Dot(pos);
+	self.height = self:OBBMaxs().z * ((CurTime() - self.StartTime) / GAMEMODE.Config.shipmentspawntime);
+	render.EnableClipping(true);
 	render.PushCustomClipPlane(normal, distance);
 
-	self:DrawModel()
+	self:DrawModel();
 
-	render.PopCustomClipPlane()
+	render.PopCustomClipPlane();
 end
 
 function ENT:drawFloatingGun()
 	local contents = CustomShipments[self:Getcontents() or ""]
 	if not contents or not IsValid(self:GetgunModel()) then return end
-	self:GetgunModel():SetNoDraw(true)
+	self:GetgunModel():SetNoDraw(true);
 
-	local pos = self:GetPos()
-	local ang = self:GetAngles()
+	local pos = self:GetPos();
+	local ang = self:GetAngles();
 
 	-- Position the gun
-	local gunPos = self:GetAngles():Up() * 40 + ang:Up() * (math.sin(CurTime() * 3) * 8)
-	self:GetgunModel():SetPos(pos + gunPos)
+	local gunPos = self:GetAngles():Up() * 40 + ang:Up() * (math.sin(CurTime() * 3) * 8);
+	self:GetgunModel():SetPos(pos + gunPos);
 
 
 	-- Make it dance
-	ang:RotateAroundAxis(ang:Up(), (CurTime() * 180) % 360)
-	self:GetgunModel():SetAngles(ang)
+	ang:RotateAroundAxis(ang:Up(), (CurTime() * 180) % 360);
+	self:GetgunModel():SetAngles(ang);
 
 	-- Draw the model
 	if self:Getgunspawn() < CurTime() - 2 then
-		self:GetgunModel():DrawModel()
+		self:GetgunModel():DrawModel();
 		return
 	elseif self:Getgunspawn() < CurTime() then -- Not when a gun just spawned
 		return
 	end
 
 	-- Draw the spawning effect
-	local delta = self:Getgunspawn() - CurTime()
-	local min, max = self:GetgunModel():OBBMins(), self:GetgunModel():OBBMaxs()
-	min, max = self:GetgunModel():LocalToWorld(min), self:GetgunModel():LocalToWorld(max)
+	local delta = self:Getgunspawn() - CurTime();
+	local min, max = self:GetgunModel():OBBMins(), self:GetgunModel():OBBMaxs();
+	min, max = self:GetgunModel():LocalToWorld(min), self:GetgunModel():LocalToWorld(max);
 
 	-- Draw the ghosted weapon
-	render.MaterialOverride(matBallGlow)
+	render.MaterialOverride(matBallGlow);
 	render.SetColorModulation(1 - delta, delta, 0) -- From red to green
-	self:GetgunModel():DrawModel()
-	render.MaterialOverride()
-	render.SetColorModulation(1, 1, 1)
+	self:GetgunModel():DrawModel();
+	render.MaterialOverride();
+	render.SetColorModulation(1, 1, 1);
 
 	-- Draw the cut-off weapon
-	render.EnableClipping(true)
+	render.EnableClipping(true);
 	-- The clipping plane only draws objects that face the plane
-	local normal = -self:GetgunModel():GetAngles():Forward()
+	local normal = -self:GetgunModel():GetAngles():Forward();
 	local cutPosition = LerpVector(delta, max, min) -- Where it cuts
 	local cutDistance = normal:Dot(cutPosition)-- Project the vector onto the normal to get the shortest distance between the plane and origin
 
 	-- Activate the plane
 	render.PushCustomClipPlane(normal, cutDistance);
 	-- Draw the partial model
-	self:GetgunModel():DrawModel()
+	self:GetgunModel():DrawModel();
 	-- Remove the plane
-	render.PopCustomClipPlane()
+	render.PopCustomClipPlane();
 
-	render.EnableClipping(false)
+	render.EnableClipping(false);
 end
 
 function ENT:drawInfo()
-	local Pos = self:GetPos()
-	local Ang = self:GetAngles()
+	local Pos = self:GetPos();
+	local Ang = self:GetAngles();
 
 	local content = self:Getcontents() or ""
 	local contents = CustomShipments[content]
 	if not contents then return end
 	contents = contents.name
 
-	surface.SetFont("HUDNumber5")
-	local text = DarkRP.getPhrase("contents")
-	local TextWidth = surface.GetTextSize(text)
-	local TextWidth2 = surface.GetTextSize(contents)
+	surface.SetFont("HUDNumber5");
+	local text = fprp.getPhrase("contents");
+	local TextWidth = surface.GetTextSize(text);
+	local TextWidth2 = surface.GetTextSize(contents);
 
-	cam.Start3D2D(Pos + Ang:Up() * 25, Ang, 0.2)
-		draw.WordBox(2, -TextWidth*0.5 + 5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
-		draw.WordBox(2, -TextWidth2*0.5 + 5, 18, contents, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
-	cam.End3D2D()
+	cam.Start3D2D(Pos + Ang:Up() * 25, Ang, 0.2);
+		draw.WordBox(2, -TextWidth*0.5 + 5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255));
+		draw.WordBox(2, -TextWidth2*0.5 + 5, 18, contents, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255));
+	cam.End3D2D();
 
-	Ang:RotateAroundAxis(Ang:Forward(), 90)
+	Ang:RotateAroundAxis(Ang:Forward(), 90);
 
-	text = DarkRP.getPhrase("amount")
-	TextWidth = surface.GetTextSize(text)
-	TextWidth2 = surface.GetTextSize(self:Getcount())
+	text = fprp.getPhrase("amount");
+	TextWidth = surface.GetTextSize(text);
+	TextWidth2 = surface.GetTextSize(self:Getcount());
 
-	cam.Start3D2D(Pos + Ang:Up() * 17, Ang, 0.14)
-		draw.WordBox(2, -TextWidth*0.5 + 5, -150, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
-		draw.WordBox(2, -TextWidth2*0.5 + 0, -102, self:Getcount(), "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
-	cam.End3D2D()
+	cam.Start3D2D(Pos + Ang:Up() * 17, Ang, 0.14);
+		draw.WordBox(2, -TextWidth*0.5 + 5, -150, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255));
+		draw.WordBox(2, -TextWidth2*0.5 + 0, -102, self:Getcount(), "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255));
+	cam.End3D2D();
 end
 
 /*---------------------------------------------------------------------------
@@ -153,6 +153,6 @@ properties.Add("splitShipment",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("darkrp", "splitshipment", ent:EntIndex())
+						RunConsoleCommand("fprp", "splitshipment", ent:EntIndex());
 					end
-})
+});

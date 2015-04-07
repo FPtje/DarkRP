@@ -1,29 +1,29 @@
-DarkRP.openF1Menu = DarkRP.stub{
-	name = "openF1Menu",
-	description = "Open the F1 help menu.",
+fprp.openSleekF1Menu = fprp.stub{
+	name = "openSleekF1Menu",
+	description = "Open the SleekF1 help menu.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.closeF1Menu = DarkRP.stub{
-	name = "closeF1Menu",
-	description = "Close the F1 help menu.",
+fprp.closeSleekF1Menu = fprp.stub{
+	name = "closeSleekF1Menu",
+	description = "Close the SleekF1 help menu.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.refreshF1Menu = DarkRP.stub{
-	name = "refreshF1Menu",
-	description = "Close the F1 help menu.",
+fprp.refreshSleekF1Menu = fprp.stub{
+	name = "refreshSleekF1Menu",
+	description = "Close the SleekF1 help menu.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

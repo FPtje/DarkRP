@@ -1,7 +1,7 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if CLIENT then
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Contact = ""
 	SWEP.Purpose = ""
 	SWEP.Instructions = ""
@@ -11,19 +11,19 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "w"
 
-	killicon.AddFont("weapon_m42", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+	killicon.AddFont("weapon_m42", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255));
 end
 
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.HoldType = "ar2"
-SWEP.DarkRPViewModelBoneManipulations = {
+SWEP.fprpViewModelBoneManipulations = {
 	["ValveBiped.Bip01_Spine4"]		= { scale = Vector(1, 1, 1),		pos = Vector(2, 0, 0),			angle = Angle(0, 0, 0) },
 	["ValveBiped.Bip01_L_Hand"]		= { scale = Vector(0.7, 0.7, 0.5),	pos = Vector(-0.6, -0.6, 0),	angle = Angle(17, -21, 0) },
 	["ValveBiped.Bip01_L_Finger0"]	= { scale = Vector(1, 1, 1.5),		pos = Vector(0, 0, 0),			angle = Angle(0, -2, 0) },
@@ -45,10 +45,10 @@ SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
-SWEP.Primary.Sound = Sound("Weapon_M4A1.Single")
+SWEP.Primary.Sound = Sound("Weapon_M4A1.Single");
 SWEP.Primary.Recoil = 1.25
 SWEP.Primary.Unrecoil = 8
-SWEP.Primary.Damage = 15
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone	 = 0.03
 SWEP.Primary.ClipSize = 30
@@ -63,9 +63,9 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
 -- Start of Firemode configuration
-SWEP.IronSightsPos = Vector(-8.09, -4.5, 0.56)
-SWEP.IronSightsAng = Vector(2.75, -3.97, -3.8)
-SWEP.IronSightsPosAfterShootingAdjustment = Vector(0.5, 0, 0)
-SWEP.IronSightsAngAfterShootingAdjustment = Vector(0, 1.65, 0)
+SWEP.IronSightsPos = Vector(-8.09, -4.5, 0.56);
+SWEP.IronSightsAng = Vector(2.75, -3.97, -3.8);
+SWEP.IronSightsPosAfterShootingAdjustment = Vector(0.5, 0, 0);
+SWEP.IronSightsAngAfterShootingAdjustment = Vector(0, 1.65, 0);
 
 SWEP.MultiMode = true

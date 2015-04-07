@@ -6,11 +6,11 @@ This is the english language file. The things on the left side of the equals sig
 The parts between the quotes are the parts you should translate. You can also copy this file and create a new language.
 
 = Warning =
-Sometimes when DarkRP is updated, new phrases are added.
+Sometimes when fprp is updated, new phrases are added.
 If you don't translate these phrases to your language, it will use the English sentence.
 To fix this, join your server, open your console and enter darkp_getphrases yourlanguage
 For English the command would be:
-	darkrp_getphrases "en"
+	fprp_getphrases "en"
 because "en" is the language code for English.
 
 You can copy the missing phrases to this file and translate them.
@@ -24,8 +24,8 @@ Make sure the convar gmod_language is set to your language code. You can do that
 
 local my_language = {
 	-- Admin things
-	need_admin = "You need admin privileges in order to be able to %s",
-	need_sadmin = "You need super admin privileges in order to be able to %s",
+	need_admin = "You need to buy admin in order to be able to %s",
+	need_sadmin = "You need suck off the owner in order to be able to %s",
 	no_privilege = "You don't have the right privileges to perform this action",
 	no_jail_pos = "No jail position",
 	invalid_x = "Invalid %s! %s",
@@ -34,10 +34,10 @@ local my_language = {
 	f1ChatCommandTitle = "Chat commands",
 	f1Search = "Search...",
 
-	-- Money things:
+	-- shekel things:
 	price = "Price: %s%d",
 	priceTag = "Price: %s",
-	reset_money = "%s has reset all players' money!",
+	reset_shekel = "%s has reset all players' shekel!",
 	has_given = "%s has given you %s",
 	you_gave = "You gave %s %s",
 	npc_killpay = "%s for killing an NPC!",
@@ -48,8 +48,8 @@ local my_language = {
 	deducted_x = "Deducted %s%d",
 	need_x = "Need %s%d",
 
-	deducted_money = "Deducted %s",
-	need_money = "Need %s",
+	deducted_shekel = "Deducted %s",
+	need_shekel = "Need %s",
 
 	payday_message = "Payday! You received %s!",
 	payday_unemployed = "You received no salary because you are unemployed!",
@@ -66,7 +66,7 @@ local my_language = {
 	signed = "Signed: %s",
 
 	found_cash = "You have found %s%d!", -- backwards compatibility
-	found_money = "You have found %s!",
+	found_shekel = "You have found %s!",
 
 	owner_poor = "The %s owner is too poor to subsidize this sale!",
 
@@ -113,12 +113,12 @@ local my_language = {
 	-- Players
 	health = "Health: %s",
 	job = "Job: %s",
-	salary = "Salary: %s%s",
+	salary = "Drug Money: %s%s",
 	wallet = "Wallet: %s%s",
 	weapon = "Weapon: %s",
 	kills = "Kills: %s",
-	deaths = "Deaths: %s",
-	rpname_changed = "%s changed their RPName to: %s",
+	deaths = "Kills: %s",
+	rpname_changed = "%s changed their RPName to: _%s",
 	disconnected_player = "Disconnected player",
 
 	-- Teams
@@ -177,13 +177,13 @@ local my_language = {
 	gun = "gun",
 	microwave = "Microwave",
 	food = "Food",
-	money_printer = "Money Printer",
+	money_printer = "shekel Printer",
 
 	sign_this_letter = "Sign this letter",
 	signed_yours = "Yours,",
 
-	money_printer_exploded = "Your money printer has exploded!",
-	money_printer_overheating = "Your money printer is overheating!",
+	money_printer_exploded = "Your shekel printer has exploded!",
+	money_printer_overheating = "Your shekel printer is overheating!",
 
 	contents = "Contents: ",
 	amount = "Amount: ",
@@ -257,7 +257,7 @@ local my_language = {
 	gm_spawnvehicle = "The spawning of vehicles",
 	gm_spawnsent = "The spawning of scripted entities (SENTs)",
 	gm_spawnnpc = "The spawning of Non-Player Characters (NPCs)",
-	see_settings = "Please see the DarkRP settings.",
+	see_settings = "Please see the fprp settings.",
 	limit = "You have reached the %s limit!",
 	have_to_wait = "You need to wait another %d seconds before using %s!",
 	must_be_looking_at = "You need to be looking at a %s!",
@@ -340,7 +340,7 @@ local my_language = {
 	died_in_jail = "%s has died in jail!",
 
 	credits_for = "CREDITS FOR %s\n",
-	credits_see_console = "DarkRP credits printed to console.",
+	credits_see_console = "fprp credits printed to console.",
 
 	rp_getvehicles = "Available vehicles for custom vehicles:",
 
@@ -361,13 +361,13 @@ local my_language = {
 	-- Backwards compatibility:
 	you_set_x_salary_to_y = "You set %s's salary to %s%d.",
 	x_set_your_salary_to_y = "%s set your salary to %s%d.",
-	you_set_x_money_to_y = "You set %s's money to %s%d.",
-	x_set_your_money_to_y = "%s set your money to %s%d.",
+	you_set_x_shekel_to_y = "You set %s's shekel to %s%d.",
+	x_set_your_shekel_to_y = "%s set your shekel to %s%d.",
 
 	you_set_x_salary = "You set %s's salary to %s.",
 	x_set_your_salary = "%s set your salary to %s.",
-	you_set_x_money = "You set %s's money to %s.",
-	x_set_your_money = "%s set your money to %s.",
+	you_set_x_shekel = "You set %s's shekel to %s.",
+	x_set_your_shekel = "%s set your shekel to %s.",
 	you_set_x_name = "You set %s's name to %s",
 	x_set_your_name = "%s set your name to %s",
 
@@ -400,7 +400,7 @@ local my_language = {
 	wave = "Wave",
 
 	-- Hungermod
-	starving = "Starving!",
+	starving = "not Starving!",
 
 	-- AFK
 	afk_mode = "AFK Mode",
@@ -421,7 +421,7 @@ local my_language = {
 	hitmenu_request = "Request",
 	player_not_hitman = "This player is not a hitman!",
 	distance_too_big = "Distance too big.",
-	hitman_no_suicide = "The hitman won't kill himself.",
+	hitman_no_suicide = "The hitman won't kill himself for that price.",
 	hitman_no_self_order = "A hitman cannot order a hit for himself.",
 	hitman_already_has_hit = "The hitman already has a hit ongoing.",
 	price_too_low = "Price too low!",
@@ -479,9 +479,9 @@ local my_language = {
 	F4vehicles = "Vehicles",
 
 	-- Tab 1
-	give_money = "Give money to the player you're looking at",
-	drop_money = "Drop money",
-	change_name = "Change your DarkRP name",
+	give_shekel = "Give shekel to the player you're looking at",
+	drop_shekel = "Drop shekel",
+	change_name = "Change your fprp name",
 	go_to_sleep = "Go to sleep/wake up",
 	drop_weapon = "Drop current weapon",
 	buy_health = "Buy health(%s)",
@@ -532,8 +532,8 @@ local my_language = {
 }
 
 -- The language code is usually (but not always) a two-letter code. The default language is "en".
--- Other examples are "nl" (Dutch), "de" (German)
+-- Other examples are "nl" (Dutch), "de" (German);
 -- If you want to know what your language code is, open GMod, select a language at the bottom right
 -- then enter gmod_language in console. It will show you the code.
 -- Make sure language code is a valid entry for the convar gmod_language.
-DarkRP.addLanguage("en", my_language)
+fprp.addLanguage("en", my_language);

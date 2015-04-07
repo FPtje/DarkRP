@@ -5,7 +5,7 @@ surface.CreateFont("TabLarge", {
 	weight = 700,
 	antialias = true,
 	shadow = false,
-	font = "Trebuchet MS"})
+	font = "Trebuchet MS"});
 
 local touchTypeNumbers = {
 	[1] = "Physgun",
@@ -19,7 +19,7 @@ hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool) -- Prevent clie
 	if IsValid(trace.Entity) and not FPP.canTouchEnt(trace.Entity, "Toolgun") then
 		return false
 	end
-end)
+end);
 
 hook.Add("PhysgunPickup", "FPP_CL_PhysgunPickup", function(ply, ent)
 	if not FPP.canTouchEnt(ent, "Physgun") then
@@ -37,14 +37,14 @@ local HUDNotes = {}
 function FPP.AddNotify( str, type )
 	local tab = {}
 	tab.text 	= str
-	tab.recv 	= SysTime()
+	tab.recv 	= SysTime();
 	tab.velx	= 0
 	tab.vely	= -5
-	surface.SetFont( "TabLarge" )
-	local w, h = surface.GetTextSize( str )
+	surface.SetFont( "TabLarge" );
+	local w, h = surface.GetTextSize( str );
 
-	tab.x		= ScrW() / 2 + w*0.5 + (ScrW()/20)
-	tab.y		= ScrH()
+	tab.x		= ScrW() / 2 + w*0.5 + (ScrW()/20);
+	tab.y		= ScrH();
 	tab.a		= 255
 
 	if type then
@@ -53,12 +53,12 @@ function FPP.AddNotify( str, type )
 		tab.type = false
 	end
 
-	table.insert( HUDNotes, tab )
+	table.insert( HUDNotes, tab );
 
 	HUDNote_c = HUDNote_c + 1
 	HUDNote_i = HUDNote_i + 1
 
-	LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 10, 100)
+	LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 10, 100);
 end
 
 usermessage.Hook("FPP_Notify", function(u) FPP.AddNotify(u:ReadString(), u:ReadBool()) end)
@@ -69,30 +69,30 @@ local function DrawNotice( self, k, v, i )
 	local x = v.x - 75 * H
 	local y = v.y - 20 * H - 2
 
-	surface.SetFont( "TabLarge" )
-	local w, h = surface.GetTextSize( v.text )
+	surface.SetFont( "TabLarge" );
+	local w, h = surface.GetTextSize( v.text );
 
 	w = w
 	h = h + 10
 
-	local col = Color(100, 30, 30, v.a*0.4)
+	local col = Color(100, 30, 30, v.a*0.4);
 	if v.type then	col = Color(30, 100, 30, v.a*0.4) end
-	draw.RoundedBox( 4, x - w - h + 16, y - 8, w + h, h, col )
+	draw.RoundedBox( 4, x - w - h + 16, y - 8, w + h, h, col );
 
 	// Draw Icon
 
-	surface.SetDrawColor( 255, 255, 255, v.a )
+	surface.SetDrawColor( 255, 255, 255, v.a );
 
-	draw.SimpleText(v.text, "TabLarge", x+1, y+1, Color(0,0,0,v.a*0.8), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x-1, y-1, Color(0,0,0,v.a*0.5), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x+1, y-1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x-1, y+1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT)
-	draw.SimpleText(v.text, "TabLarge", x, y, Color(255,255,255,v.a), TEXT_ALIGN_RIGHT)
+	draw.SimpleText(v.text, "TabLarge", x+1, y+1, Color(0,0,0,v.a*0.8), TEXT_ALIGN_RIGHT);
+	draw.SimpleText(v.text, "TabLarge", x-1, y-1, Color(0,0,0,v.a*0.5), TEXT_ALIGN_RIGHT);
+	draw.SimpleText(v.text, "TabLarge", x+1, y-1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT);
+	draw.SimpleText(v.text, "TabLarge", x-1, y+1, Color(0,0,0,v.a*0.6), TEXT_ALIGN_RIGHT);
+	draw.SimpleText(v.text, "TabLarge", x, y, Color(255,255,255,v.a), TEXT_ALIGN_RIGHT);
 
 	local ideal_y = ScrH() - (HUDNote_c - i) * h
-	local ideal_x = ScrW() / 2 + w*0.5 + (ScrW()/20)
+	local ideal_x = ScrW() / 2 + w*0.5 + (ScrW()/20);
 
-	local timeleft = 6 - (SysTime() - v.recv)
+	local timeleft = 6 - (SysTime() - v.recv);
 
 	// Cartoon style about to go thing
 	if ( timeleft < 0.8  ) then
@@ -119,8 +119,8 @@ local function DrawNotice( self, k, v, i )
 	if math.abs(dist) < 2 and math.abs(v.velx) < 0.1 then v.velx = 0 end
 
 	// Friction.. kind of FPS independant.
-	v.velx = v.velx * (0.95 - RealFrameTime() * 8)
-	v.vely = v.vely * (0.95 - RealFrameTime() * 8)
+	v.velx = v.velx * (0.95 - RealFrameTime() * 8);
+	v.vely = v.vely * (0.95 - RealFrameTime() * 8);
 end
 
 local weaponClassTouchTypes = {
@@ -135,7 +135,7 @@ local function HUDPaint()
 	for k, v in pairs(HUDNotes) do
 		if v ~= 0 then
 			i = i + 1
-			DrawNotice( self, k, v, i)
+			DrawNotice( self, k, v, i);
 		end
 	end
 
@@ -153,20 +153,20 @@ local function HUDPaint()
 	local LAEnt = LocalPlayer():GetEyeTraceNoCursor().Entity
 	if not IsValid(LAEnt) then return end
 
-	local weapon = LocalPlayer():GetActiveWeapon()
+	local weapon = LocalPlayer():GetActiveWeapon();
 	if not IsValid(weapon) then return end
-	local class = weapon:GetClass()
+	local class = weapon:GetClass();
 
 	local touchType = weaponClassTouchTypes[class] or "EntityDamage"
-	local reason = FPP.entGetTouchReason(LAEnt, touchType)
+	local reason = FPP.entGetTouchReason(LAEnt, touchType);
 	if not reason then return end
 
-	surface.SetFont("Default")
-	local w,h = surface.GetTextSize(reason)
-	local col = FPP.canTouchEnt(LAEnt, touchType) and Color(0,255,0,255) or Color(255,0,0,255)
+	surface.SetFont("Default");
+	local w,h = surface.GetTextSize(reason);
+	local col = FPP.canTouchEnt(LAEnt, touchType) and Color(0,255,0,255) or Color(255,0,0,255);
 
-	draw.RoundedBox(4, 0, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-	draw.DrawText(reason, "Default", 5, ScrH()/2 - h, col, 0)
-	surface.SetDrawColor(255,255,255,255)
+	draw.RoundedBox(4, 0, ScrH()/2 - h - 2, w + 10, 20, Color(0, 0, 0, 110));
+	draw.DrawText(reason, "Default", 5, ScrH()/2 - h, col, 0);
+	surface.SetDrawColor(255,255,255,255);
 end
-hook.Add("HUDPaint", "FPP_HUDPaint", HUDPaint)
+hook.Add("HUDPaint", "FPP_HUDPaint", HUDPaint);

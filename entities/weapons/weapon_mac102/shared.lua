@@ -1,20 +1,20 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if CLIENT then
 	SWEP.PrintName = "Mac10"
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "l"
 
-	killicon.AddFont("weapon_mac102", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+	killicon.AddFont("weapon_mac102", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255));
 end
 
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_mac10.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_mac10.mdl"
@@ -25,9 +25,9 @@ SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "ar2"
 
-SWEP.Primary.Sound = Sound("Weapon_mac10.Single")
+SWEP.Primary.Sound = Sound("Weapon_mac10.Single");
 SWEP.Primary.Recoil = .8
-SWEP.Primary.Damage = 30
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.ClipSize = 25
@@ -41,5 +41,5 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector(-9.08, -8, 2.6)
-SWEP.IronSightsAng = Vector(1.8, -7.06, -6.1)
+SWEP.IronSightsPos = Vector(-9.08, -8, 2.6);
+SWEP.IronSightsAng = Vector(1.8, -7.06, -6.1);

@@ -1,4 +1,4 @@
-DarkRP.addChatReceiver = DarkRP.stub{
+fprp.addChatReceiver = fprp.stub{
 	name = "addChatReceiver",
 	description = "Add a chat command with specific receivers",
 	parameters = {
@@ -22,10 +22,10 @@ DarkRP.addChatReceiver = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.removeChatReceiver = DarkRP.stub{
+fprp.removeChatReceiver = fprp.stub{
 	name = "removeChatReceiver",
 	description = "Remove a chat command receiver",
 	parameters = {
@@ -37,5 +37,5 @@ DarkRP.removeChatReceiver = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP
+	metatable = fprp
 }

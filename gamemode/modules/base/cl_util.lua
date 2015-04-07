@@ -1,22 +1,22 @@
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 
 /*---------------------------------------------------------------------------
 Show a black screen
 ---------------------------------------------------------------------------*/
 local function blackScreen(um)
-	local toggle = um:ReadBool()
+	local toggle = um:ReadBool();
 	if toggle then
-		local black = Color(0, 0, 0)
-		local w, h = ScrW(), ScrH()
+		local black = Color(0, 0, 0);
+		local w, h = ScrW(), ScrH();
 		hook.Add("HUDPaintBackground", "BlackScreen", function()
-			surface.SetDrawColor(black)
-			surface.DrawRect(0, 0, w, h)
-		end)
+			surface.SetDrawColor(black);
+			surface.DrawRect(0, 0, w, h);
+		end);
 	else
-		hook.Remove("HUDPaintBackground", "BlackScreen")
+		hook.Remove("HUDPaintBackground", "BlackScreen");
 	end
 end
-usermessage.Hook("blackScreen", blackScreen)
+usermessage.Hook("blackScreen", blackScreen);
 
 /*---------------------------------------------------------------------------
 Wrap strings to not become wider than the given amount of pixels
@@ -25,7 +25,7 @@ local function charWrap(text, pxWidth)
 	local total = 0
 
 	text = text:gsub(".", function(char)
-		total = total + surface.GetTextSize(char)
+		total = total + surface.GetTextSize(char);
 
 		-- Wrap around when the max width is reached
 		if total >= pxWidth then
@@ -34,30 +34,30 @@ local function charWrap(text, pxWidth)
 		end
 
 		return char
-	end)
+	end);
 
 	return text, total
 end
 
-function DarkRP.textWrap(text, font, pxWidth)
+function fprp.textWrap(text, font, pxWidth)
 	local total = 0
 
-	surface.SetFont(font)
+	surface.SetFont(font);
 
-	local spaceSize = surface.GetTextSize(' ')
+	local spaceSize = surface.GetTextSize(' ');
 	text = text:gsub("(%s?[%S]+)", function(word)
-			local char = string.sub(word, 1, 1)
+			local char = string.sub(word, 1, 1);
 			if char == "\n" or char == "\t" then
 				total = 0
 			end
 
-			local wordlen = surface.GetTextSize(word)
+			local wordlen = surface.GetTextSize(word);
 			total = total + wordlen
 
 
 			-- Wrap around when the max width is reached
 			if wordlen >= pxWidth then -- Split the word if the word is too big
-				local splitWord, splitPoint = charWrap(word, pxWidth)
+				local splitWord, splitPoint = charWrap(word, pxWidth);
 				total = splitPoint
 				return splitWord
 			elseif total < pxWidth then
@@ -67,12 +67,12 @@ function DarkRP.textWrap(text, font, pxWidth)
 			-- Split before the word
 			if char == ' ' then
 				total = wordlen - spaceSize
-				return '\n' .. string.sub(word, 2)
+				return '\n' .. string.sub(word, 2);
 			end
 
 			total = wordlen
 			return "\n" .. word
-		end)
+		end);
 
 	return text
 end
@@ -83,9 +83,9 @@ note: uses a heuristic
 ---------------------------------------------------------------------------*/
 function plyMeta:isInRoom()
 	local tracedata = {}
-	tracedata.start = LocalPlayer():GetShootPos()
-	tracedata.endpos = self:GetShootPos()
-	local trace = util.TraceLine(tracedata)
+	tracedata.start = LocalPlayer():GetShootPos();
+	tracedata.endpos = self:GetShootPos();
+	local trace = util.TraceLine(tracedata);
 
 	return not trace.HitWorld
 end

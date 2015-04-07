@@ -1,4 +1,0 @@
-Do not add, edit or remove anything from this folder.
-
-Use the DarkRPMod addon instead
-https://github.com/FPtje/DarkRPModification

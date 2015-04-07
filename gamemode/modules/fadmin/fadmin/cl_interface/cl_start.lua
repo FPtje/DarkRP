@@ -1,6 +1,6 @@
 FAdmin.ScoreBoard = FAdmin.ScoreBoard or {}
 
-local ScreenWidth, ScreenHeight = ScrW(), ScrH()
+local ScreenWidth, ScreenHeight = ScrW(), ScrH();
 
 FAdmin.ScoreBoard.X = ScreenWidth * 0.05
 FAdmin.ScoreBoard.Y = ScreenHeight * 0.025

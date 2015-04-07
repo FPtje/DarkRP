@@ -1,20 +1,20 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if CLIENT then
 	SWEP.PrintName = "Pump Shotgun"
-	SWEP.Author = "DarkRP Developers"
+	SWEP.Author = "fprp Developers"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "k"
 
-	killicon.AddFont("weapon_pumpshotgun2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+	killicon.AddFont("weapon_pumpshotgun2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255));
 end
 
 SWEP.Base = "weapon_cs_base2"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP (Weapon)"
+SWEP.Category = "fprp (Weapon)"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_m3super90.mdl"
@@ -25,9 +25,9 @@ SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "ar2"
 
-SWEP.Primary.Sound = Sound("Weapon_M3.Single")
+SWEP.Primary.Sound = Sound("Weapon_M3.Single");
 SWEP.Primary.Recoil = 1.5
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 8
 SWEP.Primary.Cone = 0.08
 SWEP.Primary.ClipSize = 8
@@ -41,8 +41,8 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector(-7.64, -8, 3.56)
-SWEP.IronSightsAng = Vector(-0.1, 0.02, 0)
+SWEP.IronSightsPos = Vector(-7.64, -8, 3.56);
+SWEP.IronSightsAng = Vector(-0.1, 0.02, 0);
 
 function SWEP:Reload()
 	-- Already reloading
@@ -51,12 +51,12 @@ function SWEP:Reload()
 	-- Start reloading if we can
 	if self.Weapon:Clip1() < self.Primary.ClipSize and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
 		self.Weapon.reloading = true
-		self.Weapon:SetVar("reloadtimer", CurTime() + 0.3)
-		self.Weapon:SendWeaponAnim(ACT_VM_RELOAD)
-		self:SetIronsights(false)
-		self:SetHoldType(self.HoldType)
-		self.Owner:SetAnimation(PLAYER_RELOAD)
-		self:SetHoldType("normal")
+		self.Weapon:SetVar("reloadtimer", CurTime() + 0.3);
+		self.Weapon:SendWeaponAnim(ACT_VM_RELOAD);
+		self:SetIronsights(false);
+		self:SetHoldType(self.HoldType);
+		self.Owner:SetAnimation(PLAYER_RELOAD);
+		self:SetHoldType("normal");
 	end
 end
 
@@ -70,31 +70,31 @@ function SWEP:Think()
 			end
 
 			if self.queueattack then
-				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
+				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH);
 				self.Weapon.reloading = false
 				self.Weapon.queueattack = false
 				timer.Simple(0.8, function()
 					if not IsValid(self) then return end
-					self:PrimaryAttack()
-				end)
+					self:PrimaryAttack();
+				end);
 				return
 			end
 
 			-- Next cycle
-			self.Weapon:SetVar("reloadtimer", CurTime() + 0.3)
-			self.Weapon:SendWeaponAnim(ACT_VM_RELOAD)
+			self.Weapon:SetVar("reloadtimer", CurTime() + 0.3);
+			self.Weapon:SendWeaponAnim(ACT_VM_RELOAD);
 
 			-- Add ammo
-			self.Owner:RemoveAmmo(1, self.Primary.Ammo, false)
-			self.Weapon:SetClip1(self.Weapon:Clip1() + 1)
+			self.Owner:RemoveAmmo(1, self.Primary.Ammo, false);
+			self.Weapon:SetClip1(self.Weapon:Clip1() + 1);
 
 			-- Finish filling, final pump
 			if self.Weapon:Clip1() >= self.Primary.ClipSize or self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then
-				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
+				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH);
 			end
 		end
 	end
-	self.BaseClass.Think(self)
+	self.BaseClass.Think(self);
 end
 
 function SWEP:PrimaryAttack()
@@ -105,5 +105,5 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	self.BaseClass.PrimaryAttack(self)
+	self.BaseClass.PrimaryAttack(self);
 end

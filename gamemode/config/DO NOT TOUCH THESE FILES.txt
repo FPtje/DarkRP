@@ -1,4 +1,0 @@
-You should not edit DarkRP files. Not even the configuration files.
-
-Use the DarkRPMod addon instead
-https://github.com/FPtje/DarkRPModification

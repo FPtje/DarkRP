@@ -8,4 +8,4 @@ hook.Add("CanTool", "FAdmin_jailed", function(ply) -- shared so it doesn't look 
 	if ply:FAdmin_GetGlobal("fadmin_jailed") then
 		return false
 	end
-end)
+end);

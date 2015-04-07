@@ -1,6 +1,6 @@
-DarkRP.log = DarkRP.stub{
+fprp.log = fprp.stub{
 	name = "log",
-	description = "Log a message in DarkRP",
+	description = "Log a message in fprp",
 	parameters = {
 		{
 			name = "message",
@@ -16,5 +16,5 @@ DarkRP.log = DarkRP.stub{
 		}
 	},
 	returns = {},
-	metatable = DarkRP
+	metatable = fprp
 }

@@ -1,105 +1,105 @@
-DarkRP.registerDarkRPVar = DarkRP.stub{
-	name = "registerDarkRPVar",
-	description = "Register a DarkRPVar by name. You should definitely register DarkRPVars. Registering DarkRPVars will make networking much more efficient.",
+fprp.registerfprpVar = fprp.stub{
+	name = "registerfprpVar",
+	description = "Register a fprpVar by name. You should definitely register fprpVars. Registering fprpVars will make networking much more efficient.",
 	parameters = {
 		{
 			name = "name",
-			description = "The name of the DarkRPVar.",
+			description = "The name of the fprpVar.",
 			type = "string",
 			optional = false
 		},
 		{
 			name = "writeFn",
-			description = "The function that writes a value for this DarkRPVar. Examples: net.WriteString, function(val) net.WriteUInt(val, 8) end.",
+			description = "The function that writes a value for this fprpVar. Examples: net.WriteString, function(val) net.WriteUInt(val, 8) end.",
 			type = "function",
 			optional = false
 		},
 		{
 			name = "readFn",
-			description = "The function that reads and returns a value for this DarkRPVar. Examples: net.ReadString, function() return net.ReadUInt(8) end.",
+			description = "The function that reads and returns a value for this fprpVar. Examples: net.ReadString, function() return net.ReadUInt(8) end.",
 			type = "function",
 			optional = false
 		}
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.writeNetDarkRPVar = DarkRP.stub{
-	name = "writeNetDarkRPVar",
-	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when sending DarkRPVar net messages. This function writes the net data for a specific DarkRPVar.",
+fprp.writeNetfprpVar = fprp.stub{
+	name = "writeNetfprpVar",
+	description = "Internal function. You probably shouldn't need this. fprp calls this function when sending fprpVar net messages. This function writes the net data for a specific fprpVar.",
 	parameters = {
 		{
 			name = "name",
-			description = "The name of the DarkRPVar.",
+			description = "The name of the fprpVar.",
 			type = "string",
 			optional = false
 		},
 		{
 			name = "value",
-			description = "The value of the DarkRPVar.",
+			description = "The value of the fprpVar.",
 			type = "any",
 			optional = false
 		}
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.writeNetDarkRPVarRemoval = DarkRP.stub{
-	name = "writeNetDarkRPVarRemoval",
-	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when sending DarkRPVar net messages. This function sets a DarkRPVar to nil.",
+fprp.writeNetfprpVarRemoval = fprp.stub{
+	name = "writeNetfprpVarRemoval",
+	description = "Internal function. You probably shouldn't need this. fprp calls this function when sending fprpVar net messages. This function sets a fprpVar to nil.",
 	parameters = {
 		{
 			name = "name",
-			description = "The name of the DarkRPVar.",
+			description = "The name of the fprpVar.",
 			type = "string",
 			optional = false
 		}
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.readNetDarkRPVar = DarkRP.stub{
-	name = "readNetDarkRPVar",
-	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when reading DarkRPVar net messages. This function reads the net data for a specific DarkRPVar.",
+fprp.readNetfprpVar = fprp.stub{
+	name = "readNetfprpVar",
+	description = "Internal function. You probably shouldn't need this. fprp calls this function when reading fprpVar net messages. This function reads the net data for a specific fprpVar.",
 	parameters = {
 	},
 	returns = {
 		{
 			name = "name",
-			description = "The name of the DarkRPVar.",
+			description = "The name of the fprpVar.",
 			type = "string"
 		},
 		{
 			name = "value",
-			description = "The value of the DarkRPVar.",
+			description = "The value of the fprpVar.",
 			type = "any"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.readNetDarkRPVarRemoval = DarkRP.stub{
-	name = "readNetDarkRPVarRemoval",
-	description = "Internal function. You probably shouldn't need this. DarkRP calls this function when reading DarkRPVar net messages. This function the removal of a DarkRPVar.",
+fprp.readNetfprpVarRemoval = fprp.stub{
+	name = "readNetfprpVarRemoval",
+	description = "Internal function. You probably shouldn't need this. fprp calls this function when reading fprpVar net messages. This function the removal of a fprpVar.",
 	parameters = {
 	},
 	returns = {
 		{
 			name = "name",
-			description = "The name of the DarkRPVar.",
+			description = "The name of the fprpVar.",
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.findPlayer = DarkRP.stub{
+fprp.findPlayer = fprp.stub{
 	name = "findPlayer",
 	description = "Find a single player based on vague information.",
 	parameters = {
@@ -117,10 +117,10 @@ DarkRP.findPlayer = DarkRP.stub{
 			type = "Player"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.findPlayers = DarkRP.stub{
+fprp.findPlayers = fprp.stub{
 	name = "findPlayers",
 	description = "Find a list of players based on vague information.",
 	parameters = {
@@ -138,10 +138,10 @@ DarkRP.findPlayers = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.nickSortedPlayers = DarkRP.stub{
+fprp.nickSortedPlayers = fprp.stub{
 	name = "nickSortedPlayers",
 	description = "A table of players sorted by RP name.",
 	parameters = {},
@@ -152,32 +152,32 @@ DarkRP.nickSortedPlayers = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
 
-DarkRP.formatMoney = DarkRP.stub{
-	name = "formatMoney",
-	description = "Format a number as a money value. Includes currency symbol.",
+fprp.formatshekel = fprp.stub{
+	name = "formatshekel",
+	description = "Format a number as a shekel value. Includes currency symbol.",
 	parameters = {
 		{
 			name = "amount",
-			description = "The money to format, e.g. 100000.",
+			description = "The shekel to format, e.g. 100000.",
 			type = "number",
 			optional = false
 		}
 	},
 	returns = {
 		{
-			name = "money",
-			description = "The money as a nice string, e.g. \"$100,000\".",
+			name = "shekel",
+			description = "The shekel as a nice string, e.g. \"$100,000\".",
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getJobByCommand = DarkRP.stub{
+fprp.getJobByCommand = fprp.stub{
 	name = "getJobByCommand",
 	description = "Get the job table and number from the command of the job.",
 	parameters = {
@@ -200,10 +200,10 @@ DarkRP.getJobByCommand = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.simplerrRun = DarkRP.stub{
+fprp.simplerrRun = fprp.stub{
 	name = "simplerrRun",
 	description = "Run a function with the given parameters and send any runtime errors to admins.",
 	parameters = {
@@ -227,10 +227,10 @@ DarkRP.simplerrRun = DarkRP.stub{
 			type = "vararg"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.error = DarkRP.stub{
+fprp.error = fprp.stub{
 	name = "error",
 	description = "Throw a simplerr formatted error. Also halts the stack, which means that statements after calling this function will not execute.",
 	parameters = {
@@ -242,7 +242,7 @@ DarkRP.error = DarkRP.stub{
 		},
 		{
 			name = "stack",
-			description = "From which point in the function call stack to report the error. 1 to include the function that called DarkRP.error, 2 to exclude it, etc. The default value is 1.",
+			description = "From which point in the function call stack to report the error. 1 to include the function that called fprp.error, 2 to exclude it, etc. The default value is 1.",
 			type = "number",
 			optional = true
 		},
@@ -278,12 +278,12 @@ DarkRP.error = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.errorNoHalt = DarkRP.stub{
+fprp.errorNoHalt = fprp.stub{
 	name = "errorNoHalt",
-	description = "Throw a simplerr formatted error. Unlike DarkRP.error, this does not halt the stack. This means that statements after calling this function will be executed like normal.",
+	description = "Throw a simplerr formatted error. Unlike fprp.error, this does not halt the stack. This means that statements after calling this function will be executed like normal.",
 	parameters = {
 		{
 			name = "message",
@@ -293,7 +293,7 @@ DarkRP.errorNoHalt = DarkRP.stub{
 		},
 		{
 			name = "stack",
-			description = "From which point in the function call stack to report the error. 1 to include the function that called DarkRP.error, 2 to exclude it, etc. The default value is 1.",
+			description = "From which point in the function call stack to report the error. 1 to include the function that called fprp.error, 2 to exclude it, etc. The default value is 1.",
 			type = "number",
 			optional = true
 		},
@@ -329,11 +329,11 @@ DarkRP.errorNoHalt = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
 -- This function is one of the few that's already defined before the stub is created
-DarkRP.stub{
+fprp.stub{
 	name = "SteamName",
 	description = "Retrieve a player's real (steam) name.",
 	parameters = {
@@ -346,10 +346,10 @@ DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getJobTable = DarkRP.stub{
+fprp.PLAYER.getJobTable = fprp.stub{
 	name = "getJobTable",
 	description = "Get the job table of a player.",
 	parameters = {
@@ -361,12 +361,12 @@ DarkRP.PLAYER.getJobTable = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
-	name = "getDarkRPVar",
-	description = "Get the value of a DarkRPVar, which is shared between server and client.",
+fprp.PLAYER.getfprpVar = fprp.stub{
+	name = "getfprpVar",
+	description = "Get the value of a fprpVar, which is shared between server and client.",
 	parameters = {
 		{
 			name = "var",
@@ -378,14 +378,14 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
 	returns = {
 		{
 			name = "value",
-			description = "The value of the DarkRP var.",
+			description = "The value of the fprp var.",
 			type = "any"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getAgenda = DarkRP.stub{
+fprp.PLAYER.getAgenda = fprp.stub{
 	name = "getAgenda",
 	description = "(Deprecated, use getAgendaTable) Get the agenda a player manages.",
 	parameters = {
@@ -397,10 +397,10 @@ DarkRP.PLAYER.getAgenda = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getAgendaTable = DarkRP.stub{
+fprp.PLAYER.getAgendaTable = fprp.stub{
 	name = "getAgendaTable",
 	description = "Get the agenda a player can see. Note: when a player is not the manager of an agenda, it returns the agenda of the manager.",
 	parameters = {
@@ -412,11 +412,11 @@ DarkRP.PLAYER.getAgendaTable = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.hasDarkRPPrivilege = DarkRP.stub{
-	name = "hasDarkRPPrivilege",
+fprp.PLAYER.hasfprpPrivilege = fprp.stub{
+	name = "hasfprpPrivilege",
 	description = "Whether the player has a certain privilege.",
 	parameters = {
 		{
@@ -433,10 +433,10 @@ DarkRP.PLAYER.hasDarkRPPrivilege = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getEyeSightHitEntity = DarkRP.stub{
+fprp.PLAYER.getEyeSightHitEntity = fprp.stub{
 	name = "getEyeSightHitEntity",
 	description = "Get the entity that is closest to a player's line of sight and its distance.",
 	parameters = {
@@ -471,10 +471,10 @@ DarkRP.PLAYER.getEyeSightHitEntity = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.VECTOR.isInSight = DarkRP.stub{
+fprp.VECTOR.isInSight = fprp.stub{
 	name = "isInSight",
 	description = "Decides whether the vector could be seen by the player if they were to look at it.",
 	parameters = {
@@ -503,15 +503,15 @@ DarkRP.VECTOR.isInSight = DarkRP.stub{
 			type = "Vector"
 		}
 	},
-	metatable = DarkRP.VECTOR
+	metatable = fprp.VECTOR
 }
 
 /*---------------------------------------------------------------------------
 Creating custom items
 ---------------------------------------------------------------------------*/
-DarkRP.createJob = DarkRP.stub{
+fprp.createJob = fprp.stub{
 	name = "createJob",
-	description = "Create a job for DarkRP.",
+	description = "Create a job for fprp.",
 	parameters = {
 		{
 			name = "name",
@@ -533,13 +533,13 @@ DarkRP.createJob = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddExtraTeam = DarkRP.createJob
+AddExtraTeam = fprp.createJob
 
-DarkRP.removeJob = DarkRP.stub{
+fprp.removeJob = fprp.stub{
 	name = "removeJob",
-	description = "Remove a job from DarkRP.",
+	description = "Remove a job from fprp.",
 	parameters = {
 		{
 			name = "i",
@@ -550,12 +550,12 @@ DarkRP.removeJob = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createEntityGroup = DarkRP.stub{
+fprp.createEntityGroup = fprp.stub{
 	name = "createEntityGroup",
-	description = "Create a entity group for DarkRP.",
+	description = "Create a entity group for fprp.",
 	parameters = {
 		{
 			name = "name",
@@ -572,13 +572,13 @@ DarkRP.createEntityGroup = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddDoorGroup = DarkRP.createEntityGroup
+AddDoorGroup = fprp.createEntityGroup
 
-DarkRP.createShipment = DarkRP.stub{
+fprp.createShipment = fprp.stub{
 	name = "createShipment",
-	description = "Create a shipment for DarkRP.",
+	description = "Create a shipment for fprp.",
 	parameters = {
 		{
 			name = "name",
@@ -595,13 +595,13 @@ DarkRP.createShipment = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddCustomShipment = DarkRP.createShipment
+AddCustomShipment = fprp.createShipment
 
-DarkRP.createVehicle = DarkRP.stub{
+fprp.createVehicle = fprp.stub{
 	name = "createVehicle",
-	description = "Create a vehicle for DarkRP.",
+	description = "Create a vehicle for fprp.",
 	parameters = {
 		{
 			name = "name",
@@ -618,13 +618,13 @@ DarkRP.createVehicle = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddCustomVehicle = DarkRP.createVehicle
+AddCustomVehicle = fprp.createVehicle
 
-DarkRP.createEntity = DarkRP.stub{
+fprp.createEntity = fprp.stub{
 	name = "createEntity",
-	description = "Create a entity for DarkRP.",
+	description = "Create a entity for fprp.",
 	parameters = {
 		{
 			name = "name",
@@ -641,11 +641,11 @@ DarkRP.createEntity = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddCustomVehicle = DarkRP.createEntity
+AddCustomVehicle = fprp.createEntity
 
-DarkRP.createAgenda = DarkRP.stub{
+fprp.createAgenda = fprp.stub{
 	name = "createAgenda",
 	description = "Create an agenda for groups of jobs to communicate.",
 	parameters = {
@@ -670,11 +670,11 @@ DarkRP.createAgenda = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-AddAgenda = DarkRP.createAgenda
+AddAgenda = fprp.createAgenda
 
-DarkRP.getAgendas = DarkRP.stub{
+fprp.getAgendas = fprp.stub{
 	name = "getAgendas",
 	description = "Get all agendas. Note: teams that share an agenda use the exact same agenda table. E.g. when you change the agenda of the CP, the agenda of the Chief will automatically be updated as well. Make sure this property is maintained when modifying the agenda table. Not maintaining that property will lead to players not seeing the right agenda text.",
 	parameters = {
@@ -687,10 +687,10 @@ DarkRP.getAgendas = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createGroupChat = DarkRP.stub{
+fprp.createGroupChat = fprp.stub{
 	name = "createGroupChat",
 	description = "Create a group chat.",
 	parameters = {
@@ -709,11 +709,11 @@ DarkRP.createGroupChat = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
-GM.AddGroupChat = DarkRP.createGroupChat
+GM.AddGroupChat = fprp.createGroupChat
 
-DarkRP.createAmmoType = DarkRP.stub{
+fprp.createAmmoType = fprp.stub{
 	name = "createAmmoType",
 	description = "Create an ammo type.",
 	parameters = {
@@ -732,10 +732,10 @@ DarkRP.createAmmoType = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createDemoteGroup = DarkRP.stub{
+fprp.createDemoteGroup = fprp.stub{
 	name = "createDemoteGroup",
 	description = "Create a demote group. When you get banned (demoted) from one of the jobs in this group, you will be banned from every job in this group.",
 	parameters = {
@@ -754,10 +754,10 @@ DarkRP.createDemoteGroup = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getDemoteGroup = DarkRP.stub{
+fprp.getDemoteGroup = fprp.stub{
 	name = "getDemoteGroup",
 	description = "Get the demote group of a team. Every team in the same group will return the same object.",
 	parameters = {
@@ -775,10 +775,10 @@ DarkRP.getDemoteGroup = DarkRP.stub{
 			type = "Disjoint-Set"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getDemoteGroups = DarkRP.stub{
+fprp.getDemoteGroups = fprp.stub{
 	name = "getDemoteGroups",
 	description = "Get all demote groups Every team in the same group will return the same object.",
 	parameters = {
@@ -791,10 +791,10 @@ DarkRP.getDemoteGroups = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.createCategory = DarkRP.stub{
+fprp.createCategory = fprp.stub{
     name = "createCategory",
     description = "Create a category for the F4 menu.",
     parameters = {
@@ -807,10 +807,10 @@ DarkRP.createCategory = DarkRP.stub{
     },
     returns = {
     },
-    metatable = DarkRP
+    metatable = fprp
 }
 
-DarkRP.addToCategory = DarkRP.stub{
+fprp.addToCategory = fprp.stub{
     name = "addToCategory",
     description = "Create a category for the F4 menu.",
     parameters = {
@@ -835,10 +835,10 @@ DarkRP.addToCategory = DarkRP.stub{
     },
     returns = {
     },
-    metatable = DarkRP
+    metatable = fprp
 }
 
-DarkRP.removeFromCategory = DarkRP.stub{
+fprp.removeFromCategory = fprp.stub{
     name = "removeFromCategory",
     description = "Create a category for the F4 menu.",
     parameters = {
@@ -857,10 +857,10 @@ DarkRP.removeFromCategory = DarkRP.stub{
     },
     returns = {
     },
-    metatable = DarkRP
+    metatable = fprp
 }
 
-DarkRP.getCategories = DarkRP.stub{
+fprp.getCategories = fprp.stub{
     name = "getCategories",
     description = "Get all categories for all F4 menu tabs.",
     parameters = {
@@ -872,16 +872,16 @@ DarkRP.getCategories = DarkRP.stub{
             type = "table"
         }
     },
-    metatable = DarkRP
+    metatable = fprp
 }
 
-DarkRP.hookStub{
-	name = "DarkRPVarChanged",
-	description = "Called when a DarkRPVar was changed.",
+fprp.hookStub{
+	name = "fprpVarChanged",
+	description = "Called when a fprpVar was changed.",
 	parameters = {
 		{
 			name = "ply",
-			description = "The player for whom the DarkRPVar changed.",
+			description = "The player for whom the fprpVar changed.",
 			type = "Player"
 		},
 		{
@@ -891,12 +891,12 @@ DarkRP.hookStub{
 		},
 		{
 			name = "oldValue",
-			description = "The old value of the DarkRPVar.",
+			description = "The old value of the fprpVar.",
 			type = "any"
 		},
 		{
 			name = "newvalue",
-			description = "The new value of the DarkRPVar.",
+			description = "The new value of the fprpVar.",
 			type = "any"
 		}
 	},
@@ -904,7 +904,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canBuyPistol",
 	description = "Whether a player can buy a pistol.",
 	parameters = {
@@ -943,7 +943,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canBuyShipment",
 	description = "Whether a player can buy a shipment.",
 	parameters = {
@@ -982,7 +982,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canBuyVehicle",
 	description = "Whether a player can buy a vehicle.",
 	parameters = {
@@ -1021,7 +1021,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canBuyAmmo",
 	description = "Whether a player can buy ammo.",
 	parameters = {
@@ -1060,7 +1060,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canBuyCustomEntity",
 	description = "Whether a player can a certain custom entity.",
 	parameters = {
@@ -1099,7 +1099,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onJobRemoved",
 	description = "Called when a job was removed.",
 	parameters = {
@@ -1118,27 +1118,27 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
-	name = "loadCustomDarkRPItems",
-	description = "Runs right after the scripts from the DarkRPMod are run. You can add custom jobs, entities, shipments and whatever in this hook.",
+fprp.hookStub{
+	name = "loadCustomfprpItems",
+	description = "Runs right after the scripts from the fprpMod are run. You can add custom jobs, entities, shipments and whatever in this hook.",
 	parameters = {
 	},
 	returns = {
 	}
 }
 
-DarkRP.hookStub{
-	name = "DarkRPStartedLoading",
-	description = "Runs at the very start of loading DarkRP. Not even sandbox has loaded here yet.",
+fprp.hookStub{
+	name = "fprpStartedLoading",
+	description = "Runs at the very start of loading fprp. Not even sandbox has loaded here yet.",
 	parameters = {
 	},
 	returns = {
 	}
 }
 
-DarkRP.hookStub{
-	name = "DarkRPFinishedLoading",
-	description = "Runs right after DarkRP itself has loaded. All DarkRPMod stuff (except for disabled_defaults) is loaded during this hook. NOTE! NO CUSTOM STUFF WILL BE AVAILABLE DURING THIS HOOK. USE `loadCustomDarkRPItems` INSTEAD IF YOU WANT THAT!",
+fprp.hookStub{
+	name = "fprpFinishedLoading",
+	description = "Runs right after fprp itself has loaded. All fprpMod stuff (except for disabled_defaults) is loaded during this hook. NOTE! NO CUSTOM STUFF WILL BE AVAILABLE DURING THIS HOOK. USE `loadCustomfprpItems` INSTEAD IF YOU WANT THAT!",
 	parameters = {
 	},
 	returns = {

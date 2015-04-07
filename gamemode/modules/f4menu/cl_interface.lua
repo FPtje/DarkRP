@@ -1,34 +1,34 @@
-DarkRP.openF4Menu = DarkRP.stub{
+fprp.openF4Menu = fprp.stub{
 	name = "openF4Menu",
 	description = "Open the F4 menu.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.closeF4Menu = DarkRP.stub{
+fprp.closeF4Menu = fprp.stub{
 	name = "closeF4Menu",
 	description = "Close the F4 menu if it's open.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.toggleF4Menu = DarkRP.stub{
+fprp.toggleF4Menu = fprp.stub{
 	name = "toggleF4Menu",
 	description = "Toggle the state of the F4 menu (open or closed).",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getF4MenuPanel = DarkRP.stub{
+fprp.getF4MenuPanel = fprp.stub{
 	name = "getF4MenuPanel",
 	description = "Get the F4 menu panel.",
 	parameters = {
@@ -41,10 +41,10 @@ DarkRP.getF4MenuPanel = DarkRP.stub{
 			optional = false
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.addF4MenuTab = DarkRP.stub{
+fprp.addF4MenuTab = fprp.stub{
 	name = "addF4MenuTab",
 	description = "Add a tab to the F4 menu.",
 	parameters = {
@@ -64,7 +64,7 @@ DarkRP.addF4MenuTab = DarkRP.stub{
 	returns = {
 		{
 			name = "index",
-			description = "The index of the tab in the menu. This is the number you use for the tab in DarkRP.switchTabOrder.",
+			description = "The index of the tab in the menu. This is the number you use for the tab in fprp.switchTabOrder.",
 			type = "number"
 		},
 		{
@@ -73,10 +73,10 @@ DarkRP.addF4MenuTab = DarkRP.stub{
 			type = "Panel"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.removeF4MenuTab = DarkRP.stub{
+fprp.removeF4MenuTab = fprp.stub{
 	name = "removeF4MenuTab",
 	description = "Remove a tab from the F4 menu by name.",
 	parameters = {
@@ -89,10 +89,10 @@ DarkRP.removeF4MenuTab = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.switchTabOrder = DarkRP.stub{
+fprp.switchTabOrder = fprp.stub{
 	name = "switchTabOrder",
 	description = "Switch the order of two tabs.",
 	parameters = {
@@ -111,10 +111,10 @@ DarkRP.switchTabOrder = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "F4MenuTabs",
 	description = "Called when tabs are generated. Add and remove tabs in this hook.",
 	parameters = {

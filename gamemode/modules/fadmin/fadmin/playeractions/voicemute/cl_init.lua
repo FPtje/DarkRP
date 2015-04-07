@@ -1,12 +1,12 @@
 hook.Add("PlayerBindPress", "FAdmin_voicemuted", function(ply, bind, pressed)
 	if ply:FAdmin_GetGlobal("FAdmin_voicemuted") and string.find(string.lower(bind), "voicerecord") then return true end
 	-- The voice muting is not done clientside, this is just so people know they can't talk
-end)
+end);
 
 FAdmin.StartHooks["Voicemute"] = function()
-	FAdmin.Access.AddPrivilege("Voicemute", 2)
-	FAdmin.Commands.AddCommand("Voicemute", nil, "<Player>")
-	FAdmin.Commands.AddCommand("UnVoicemute", nil, "<Player>")
+	FAdmin.Access.AddPrivilege("Voicemute", 2);
+	FAdmin.Commands.AddCommand("Voicemute", nil, "<Player>");
+	FAdmin.Commands.AddCommand("UnVoicemute", nil, "<Player>");
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
 			if ply:FAdmin_GetGlobal("FAdmin_voicemuted") then return "Unmute voice globally" end
@@ -23,19 +23,19 @@ FAdmin.StartHooks["Voicemute"] = function()
 	function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_voicemuted") then
 			FAdmin.PlayerActions.addTimeMenu(function(secs)
-				RunConsoleCommand("_FAdmin", "Voicemute", ply:UserID(), secs)
-				button:SetImage2("null")
-				button:SetText("Unmute voice globally")
-				button:GetParent():InvalidateLayout()
-			end)
+				RunConsoleCommand("_FAdmin", "Voicemute", ply:UserID(), secs);
+				button:SetImage2("null");
+				button:SetText("Unmute voice globally");
+				button:GetParent():InvalidateLayout();
+			end);
 		else
-			RunConsoleCommand("_FAdmin", "UnVoicemute", ply:UserID())
+			RunConsoleCommand("_FAdmin", "UnVoicemute", ply:UserID());
 		end
 
-		button:SetImage2("FAdmin/icons/disable")
-		button:SetText("Mute voice globally")
-		button:GetParent():InvalidateLayout()
-	end)
+		button:SetImage2("FAdmin/icons/disable");
+		button:SetText("Mute voice globally");
+		button:GetParent():InvalidateLayout();
+	end);
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
 		return ply.FAdminMuted and "Unmute voice" or "Mute voice"
@@ -49,18 +49,18 @@ FAdmin.StartHooks["Voicemute"] = function()
 	true,
 
 	function(ply, button)
-		ply:SetMuted(not ply.FAdminMuted)
+		ply:SetMuted(not ply.FAdminMuted);
 		ply.FAdminMuted = not ply.FAdminMuted
 
 		if ply.FAdminMuted then button:SetImage2("null") button:SetText("Unmute voice") button:GetParent():InvalidateLayout() return end
 
-		button:SetImage2("FAdmin/icons/disable")
-		button:SetText("Mute voice")
-		button:GetParent():InvalidateLayout()
-	end)
+		button:SetImage2("FAdmin/icons/disable");
+		button:SetText("Mute voice");
+		button:GetParent():InvalidateLayout();
+	end);
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Mute/Unmute", function(ply, Panel)
-		ply:SetMuted(not ply.FAdminMuted)
+		ply:SetMuted(not ply.FAdminMuted);
 		ply.FAdminMuted = not ply.FAdminMuted
-	end)
+	end);
 end

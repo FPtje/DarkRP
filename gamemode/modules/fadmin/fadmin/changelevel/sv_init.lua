@@ -5,16 +5,16 @@ local function ChangeLevel(ply, cmd, args)
 	local GameMode = args[2] and args[1]
 
 	if GameMode then
-		RunConsoleCommand("Changegamemode", map, GameMode)
+		RunConsoleCommand("Changegamemode", map, GameMode);
 	else
-		RunConsoleCommand("Changelevel", map)
+		RunConsoleCommand("Changelevel", map);
 	end
 
 	return true, map, GameMode
 end
 
 FAdmin.StartHooks["ChangeLevel"] = function()
-	FAdmin.Commands.AddCommand("changelevel", ChangeLevel)
+	FAdmin.Commands.AddCommand("changelevel", ChangeLevel);
 
-	FAdmin.Access.AddPrivilege("changelevel", 2)
+	FAdmin.Access.AddPrivilege("changelevel", 2);
 end

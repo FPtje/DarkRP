@@ -47,38 +47,38 @@ The responsibility for this error lies with (the authors of) one (or more) of th
 local synErrs = {
     {
         match = "'=' expected near '(.*)'",
-        text = "Right before the '%s', Lua expected to read an '='-sign, but it didn't.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "Did you simply forget the '='-sign?",
+            "Kill yourself",
             "Did you forget a comma?",
             "Is this supposed to be a local variable?"
         }
     },
     {
         match = "'.' expected [(]to close '([{[(])' at line ([0-9-]+)[)] near '(.*)'",
-        text = "There is an opening '%s' bracket at line %i, but this bracket is never closed or not closed in time. It was expected to be closed before the '%s' at line %i.",
+        text = "You fucked everything up. Well done",
         format = function(m, l) return m[1], m[2], m[3], l end,
         hints = {
-            "Did you forget a comma?",
+            "Kill yourself",
             "All open brackets ({, (, [) must have a matching closing bracket. Are you sure it's there?",
             "Brackets must be opened and closed in the right order. This will work: ({}), but this won't: ({)}."
         }
     },
     {
         match = "'end' expected [(]to close '(.*)' at line ([0-9-]+)[)] near '(.*)'",
-        text = "An '%s' was started on line %i, but it was never ended or not ended in time. It was expected to be ended before the '%s' at line %i",
+        text = "You fucked everything up. Well done",
         format = function(m, l) return m[1], m[2], m[3], l end,
         hints = {
-            "For every if/for/do/while/function there must be an 'end' that closes it."
+            "Kill yourself"
         }
     },
     {
         match = "unfinished string near '(.*)'",
-        text = "The string '%s' at line %i is opened, but not closed.",
+        text = "You fucked everything up. Well done",
         format = function(m, l) return m[1], l end,
         hints = {
-            "A string is a different word for literal text.",
+            "Kill yourself",
             "Strings must be in single or double quotation marks (e.g. 'example', \"example\")",
             "A third option for strings is for them to be in double square brackets.",
             "Whatever you use (quotations or square brackets), you must not forget that strings are enclosed within a pair of quotation marks/square brackets."
@@ -86,10 +86,10 @@ local synErrs = {
     },
     {
         match = "unfinished long string near '(.*)'",
-        text = "Lua expected to see the end of a multiline string somewhere before the '%s' at line %i.",
+        text = "You fucked everything up. Well done",
         format = function(m, l) return m[1], l end,
         hints = {
-            "A string is a different word for literal text.",
+            "Kill yourself",
             "Multiline strings are strings that span over multiple lines.",
             "Multiline strings must be enclosed by double square brackets.",
             "Whatever you use (quotations or square brackets), you must not forget that strings are enclosed within a pair of quotation marks/square brackets.",
@@ -98,10 +98,10 @@ local synErrs = {
     },
     {
         match = "unfinished long comment near '(.*)'",
-        text = "Lua expected to see the end of a multiline comment somewhere before the '%s' at line %i.",
+        text = "You fucked everything up. Well done",
         format = function(m, l) return m[1], l end,
         hints = {
-            "A comment is text ignored by Lua.",
+            "Kill yourself",
             "Multiline comments are ones that span multiple lines.",
             "Multiline comments must be enclosed by either /* and */ or double square brackets.",
             "Whatever you use (/**/ or square brackets), you must not forget that once you start a comment, you must end it.",
@@ -111,30 +111,30 @@ local synErrs = {
     -- Generic error messages
     {
         match = "function arguments expected near '(.*)'",
-        text = "A function is being called right before '%s', but its arguments are not given.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "Did you write 'something:otherthing'? Try changing it to 'something:otherthing()'"
+            "Kill yourself"
         }
     },
     {
         match = "unexpected symbol near '(.*)'",
-        text = "Right before the '%s', Lua encountered something it could not make sense of.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {"Did you forget something here? (Perhaps a closing bracket)", "Is it a typo?"}
     },
     {
         match = "'(.*)' expected near '(.*)'",
-        text = "Right before the '%s', Lua expected to read a '%s', but it didn't.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[2], m[1] end,
         hints = {"Did you forget a keyword?", "Did you forget a comma?"}
     },
     {
         match = "malformed number near '(.*)'",
-        text = "Lua attempted to read '%s' as a number, but failed to do so.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "Numbers starting with '0x' are hexidecimal.",
+            "Kill yourself",
             "Lua can get confused when doing '<number>..\"some text\"'. Try inserting a space between the number and the '..'."
         }
     },
@@ -145,202 +145,202 @@ local synErrs = {
 local runErrs = {
     {
         match = "table index is nil",
-        text = "A table is being indexed by something that does not exist (table index is nil).", -- Requires improvement
+        text = "You fucked everything up. Well done", -- Requires improvement
         format = function() end,
         hints = {
-            "The thing between square brackets does not exist (is nil)."
+            "Kill yourself"
         }
     },
     {
         match = "table index is NaN",
-        text = "A table is being indexed by something that is not really a number (table index is NaN).",
+        text = "You fucked everything up. Well done",
         format = function() end,
         hints = {
-            "Did you divide zero by zero thinking it would be funny?"
+            "Kill yourself"
         }
     },
     {
         match = "attempt to index global '(.*)' [(]a nil value[)]",
-        text = "'%s' is being indexed like it is a table, but in reality it does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to index global '(.*)' [(]a (.*) value[)]",
-        text = "'%s' is being indexed like it is a table, but in reality it is a %s value.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[2] end,
         hints = {
-            "You either have 'something.somethingElse' or 'something:somethingElse(more)'. The 'something' here is not a table."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to index a nil value",
-        text = "Something is being indexed like it is a table, but in reality does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function() end,
         hints = {
-            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to index a (.*) value",
-        text = "Something is being indexed like it is a table, but in reality it is a %s value.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You either have 'something.somethingElse', 'something[somethingElse]' or 'something:somethingElse(more)'. The 'something' here is not a table."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to call global '(.*)' [(]a nil value[)]",
-        text = "'%s' is being called like it is a function, but in reality does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You are doing something(<otherstuff>). The 'something' here does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to call a nil value",
-        text = "Something is being called like it is a function, but in reality it does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function() end,
         hints = {
-            "You are doing something(<otherstuff>). The 'something' here does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to call global '(.*)' [(]a (.*) value[)]",
-        text = "'%s' is being called like it is a function, but in reality it is a %s.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[2] end,
         hints = {
-            "You are doing something(<otherstuff>). The 'something' here is not a function."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to call a (.*) value",
-        text = "Something is being called like it is a function, but in reality it is a %s.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You are doing something(<otherstuff>). The 'something' here is not a function."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to call field '(.*)' [(]a nil value[)]",
-        text = "'%s' is being called like it is a function, but in reality it does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You are doing either stuff.something(<otherstuff>) or stuff:something(<otherstuff>). The 'something' here does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to call field '(.*)' [(]a (.*) value[)]",
-        text = "'%s' is being called like it is a function, but in reality it is a %s.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[2] end,
         hints = {
-            "You are doing either stuff.something(<otherstuff>) or stuff:something(<otherstuff>). The 'something' here is not a function."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to concatenate global '(.*)' [(]a nil value[)]",
-        text = "'%s' is being concatenated to something else, but '%s' does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[1] end,
         hints = {
-            "Concatenation looks like this: something .. otherThing. Either something or otherThing does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to concatenate global '(.*)' [(]a (.*) value[)]",
-        text = "'%s' is being concatenated to something else, but %s values cannot be concatenated.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[2] end,
         hints = {
-            "Concatenation looks like this: something .. otherThing. Either something or otherThing is neither string nor number."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to concatenate a nil value",
-        text = "Two (or more) things are being concatenated and one of them does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function() end,
         hints = {
-            "Concatenation looks like this: something .. otherThing. Either something or otherThing does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to concatenate a (.*) value",
-        text = "Two (or more) things are being concatenated and one of them is neither string nor number, but a %s.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "Concatenation looks like this: something .. otherThing. Either something or otherThing is neither string nor number."
+            "Kill yourself"
         }
     },
     {
         match = "stack overflow",
-        text = "The stack of function calls has overflowed",
+        text = "You fucked everything up. Well done",
         format = function() end,
         hints = {
-            "Most likely infinite recursion.",
+            "Kill yourself",
             "Do you have a function calling itself?"
         }
     },
     {
         match = "attempt to compare two (.*) values",
-        text = "A comparison is being made between two %s values. They cannot be compared.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "This error usually occurs when two incompatible things are being compared.",
+            "Kill yourself",
             "'comparison' in this context means one of <, >, <=, >= (smaller than, greater than, etc.)"
         }
     },
     {
         match = "attempt to compare (.*) with (.*)",
-        text = "A comparison is being made between a %s and a %s. This is not possible.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[2] end,
         hints = {
-            "This error usually occurs when two incompatible things are being compared.",
+            "Kill yourself",
             "'Comparison' in this context means one of <, >, <=, >= (smaller than, greater than, etc.)"
         }
     },
     {
         match = "attempt to perform arithmetic on a (.*) value",
-        text = "Arithmetic operations are being performed on a %s. This is not possible.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "'Arithmetic' in this context means adding, multiplying, dividing, etc."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to get length of global '(.*)' [(]a nil value[)]",
-        text = "The length of '%s' is requested as if it is a table, but in reality it does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You are doing #something. The 'something' here is does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to get length of global '(.*)' [(]a (.*) value[)]",
-        text = "The length of '%s' is requested as if it is a table, but in reality it is a %s.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1], m[2] end,
         hints = {
-            "You are doing #something. The 'something' here is not a table."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to get length of a nil value",
-        text = "The length of something is requested as if it is a table, but in reality it does not exist (is nil).",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You are doing #something. The 'something' here is does not exist."
+            "Kill yourself"
         }
     },
     {
         match = "attempt to get length of a (.*) value",
-        text = "The length of something is requested as if it is a table, but in reality it is a %s.",
+        text = "You fucked everything up. Well done",
         format = function(m) return m[1] end,
         hints = {
-            "You are doing #something. The 'something' here is not a table."
+            "Kill yourself"
         }
     },
 }
 
-module("simplerr")
+module("simplerr");
 
 -- Get a nicely formatted stack trace. Start is where to start numbering
 local function getStack(i, start)
@@ -350,13 +350,13 @@ local function getStack(i, start)
 
     -- Invariant: stack level (i + count) >= 2 and <= last stack item
     for count = 1, math.huge do -- user visible count
-        info = debug.getinfo(i + count, "Sln")
+        info = debug.getinfo(i + count, "Sln");
         if not info then break end
 
-        table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"))
+        table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"));
     end
 
-    return table.concat(stack, "\n")
+    return table.concat(stack, "\n");
 end
 
 -- Translate a runtime error to simplerr format.
@@ -364,15 +364,15 @@ end
 function runError(msg, stackNr, hints, path, line, stack)
     stackNr = stackNr or 1
     hints = hints or {"No hints, sorry."}
-    hints = "\t- " .. table.concat(hints, "\n\t- ")
+    hints = "\t- " .. table.concat(hints, "\n\t- ");
 
     if not path and not line then
-        local info = debug.getinfo(stackNr + 1, "Sln")
+        local info = debug.getinfo(stackNr + 1, "Sln");
         path = info.short_src
         line = info.currentline
     end
 
-    return false, string.format(runErrTranslation, path, line, msg, hints, stack or getStack(stackNr + 1))
+    return false, string.format(runErrTranslation, path, line, msg, hints, stack or getStack(stackNr + 1));
 end
 
 -- Translate the message of an error
@@ -385,25 +385,25 @@ local function translateMsg(msg, path, line, errs)
         if not string.find(msg, trans.match) then continue end
 
         -- translate <eof>
-        msg = string.Replace(msg, "<eof>", "end of the file")
+        msg = string.Replace(msg, "<eof>", "end of the file");
 
-        res = string.format(trans.text, trans.format({string.match(msg, trans.match)}, line, path))
+        res = string.format(trans.text, trans.format({string.match(msg, trans.match)}, line, path));
         hints = trans.hints
 
         break
     end
 
-    return res or msg, "\t- " .. table.concat(hints, "\n\t- ")
+    return res or msg, "\t- " .. table.concat(hints, "\n\t- ");
 end
 
 -- Translate an error into a language understandable by non-programmers
 local function translateError(path, err, translation, errs, stack)
     -- Using .* instead of path because path may be wrong when error is called
-    local line, msg = string.match(err, ".*:([0-9-]+): (.*)")
-    line = tonumber(line)
+    local line, msg = string.match(err, ".*:([0-9-]+): (.*)");
+    line = tonumber(line);
 
-    local msg, hints = translateMsg(msg, path, line, errs)
-    local res = string.format(translation, path, line, msg, hints, stack)
+    local msg, hints = translateMsg(msg, path, line, errs);
+    local res = string.format(translation, path, line, msg, hints, stack);
     return res
 end
 
@@ -414,22 +414,22 @@ function safeCall(f, ...)
 
     if succ then return unpack(res) end
 
-    local info = debug.getinfo(f)
+    local info = debug.getinfo(f);
     local path = info.short_src
 
     -- Investigate the stack. Not using path in match because calls to error can give a different path
-    local line = string.match(err, ".*:([0-9-]+)")
+    local line = string.match(err, ".*:([0-9-]+)");
     local stack = string.format("\t1. %s on line %s\n", path, line) .. getStack(2, 2) -- add called func to stack
 
     -- Line and source info aren't always in the error
     if not line then
         line = info.currentline
-        err = string.format("%s:%s: %s", path, line, err)
+        err = string.format("%s:%s: %s", path, line, err);
     end
 
     -- Skip translation if the error is already a simplerr error
     -- This prevents nested simplerr errors when runError is called by a file loaded by runFile
-    local mustTranslate = not string.find(err, "------- End of Simplerr error -------")
+    local mustTranslate = not string.find(err, "------- End of Simplerr error -------");
     return false, mustTranslate and translateError(path, err, runErrTranslation, runErrs, stack) or err
 end
 
@@ -439,19 +439,19 @@ end
 -- Clientside files sent by the server cannot be read using file.Read unless you're the host of a listen server
 function runFile(path)
     if not file.Exists(path, "LUA") then error(string.format("Could not run file '%s' (file not found)", path)) end
-    local contents = file.Read(path, "LUA")
+    local contents = file.Read(path, "LUA");
 
-    -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh)
+    -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh);
     if string.find(contents, "#NoSimplerr#") then include(path) return true end
 
     -- Catch syntax errors with CompileString
-    local err = CompileString(contents, path, false)
+    local err = CompileString(contents, path, false);
 
     -- No syntax errors, check for immediate runtime errors using CompileFile
     -- Using the function CompileString returned leads to relative path trouble
     if isfunction(err) then return safeCall(CompileFile(path), path) end
 
-    return false, translateError(path, err, synErrTranslation, synErrs)
+    return false, translateError(path, err, synErrTranslation, synErrs);
 end
 
 -- Error wrapper: decorator for runFile and safeCall that throws an error on failure.
@@ -459,7 +459,7 @@ end
 function wrapError(succ, err, ...)
     if succ then return succ, err, ... end
 
-    error(err)
+    error(err);
 end
 
 -- Hook wrapper: Calls a hook on error
@@ -476,10 +476,10 @@ function wrapLog(succ, err, ...)
 
     local data = {
         err = err,
-        time = os.time()
+        time = os.time();
     }
 
-    table.insert(log, data)
+    table.insert(log, data);
 
     return succ, err, ...
 end

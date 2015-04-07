@@ -1,28 +1,28 @@
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "give",
-	description = "Give money to the player you're looking at.",
+	description = "Give shekels to the player you're looking at.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
-	command = "dropmoney",
-	description = "Drop money on the floor.",
+fprp.declareChatCommand{
+	command = "dropshekel",
+	description = "Drop shekels on the floor.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
-	command = "moneydrop",
-	description = "Drop money on the floor.",
+fprp.declareChatCommand{
+	command = "shekeldrop",
+	description = "Drop shekels on the floor.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "cheque",
 	description = "Write a cheque for a specific person.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "check",
 	description = "Write a cheque for a specific person.",
 	delay = 1.5

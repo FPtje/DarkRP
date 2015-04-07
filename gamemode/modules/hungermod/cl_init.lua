@@ -31,21 +31,21 @@ surface.CreateFont("HungerPlus", {
 	weight = 500,
 	antialias = true,
 	shadow = false,
-	font = "ChatFont"})
+	font = "ChatFont"});
 
 local function ReloadConVars()
 	for name, Colour in pairs(ConVars) do
 		ConVars[name] = {}
 		for num, rgb in ipairs(Colour) do
 			local ConVarName = name..num
-			local CVar = GetConVar(ConVarName) or CreateClientConVar(ConVarName, rgb, true, false)
-			table.insert(ConVars[name], CVar:GetInt())
+			local CVar = GetConVar(ConVarName) or CreateClientConVar(ConVarName, rgb, true, false);
+			table.insert(ConVars[name], CVar:GetInt());
 
 			if not cvars.GetConVarCallbacks(ConVarName, false) then
 				cvars.AddChangeCallback(ConVarName, function() timer.Simple(0, ReloadConVars) end)
 			end
 		end
-		ConVars[name] = Color(unpack(ConVars[name]))
+		ConVars[name] = Color(unpack(ConVars[name]));
 	end
 
 	if HUDWidth == 0 then
@@ -53,31 +53,31 @@ local function ReloadConVars()
 		cvars.AddChangeCallback("HudW", function() timer.Simple(0, ReloadConVars) end)
 	end
 
-	HUDWidth = GetConVarNumber("HudW")
+	HUDWidth = GetConVarNumber("HudW");
 end
-timer.Simple(0, ReloadConVars)
+timer.Simple(0, ReloadConVars);
 
 local function HMHUD()
-	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Hungermod")
+	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "fprp_Hungermod");
 	if shouldDraw == false then return end
 
-	local energy = math.ceil(LocalPlayer():getDarkRPVar("Energy") or 0)
+	local energy = math.ceil(LocalPlayer():getfprpVar("Energy") or 0);
 
 	local x = 5
 	local y = ScrH() - 9
 
 	local cornerRadius = 4
 	if energy > 0 then
-		cornerRadius = math.Min(4, (HUDWidth-9)*(energy/100)/3*2 - (HUDWidth-9)*(energy/100)/3*2%2)
+		cornerRadius = math.Min(4, (HUDWidth-9)*(energy/100)/3*2 - (HUDWidth-9)*(energy/100)/3*2%2);
 	end
 
-	draw.RoundedBox(cornerRadius, x - 1, y - 1, HUDWidth - 8, 9, ConVars.HungerBackground)
+	draw.RoundedBox(cornerRadius, x - 1, y - 1, HUDWidth - 8, 9, ConVars.HungerBackground);
 
 	if energy > 0 then
-		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / 100), 7, ConVars.HungerForeground)
-		draw.DrawNonParsedSimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1)
+		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / 100), 7, ConVars.HungerForeground);
+		draw.DrawNonParsedSimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1);
 	else
-		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
+		draw.DrawNonParsedSimpleText(fprp.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1);
 	end
 
 	if FoodAteAlpha > -1 then
@@ -86,17 +86,17 @@ local function HMHUD()
 			mul = -.5
 		end
 
-		draw.DrawNonParsedSimpleText("++", "HungerPlus", 208, FoodAteY + 1, ColorAlpha(ConVars.FoodEatenBackground, FoodAteAlpha), 0)
-		draw.DrawNonParsedSimpleText("++", "HungerPlus", 207, FoodAteY, ColorAlpha(ConVars.FoodEatenForeground, FoodAteAlpha), 0)
+		draw.DrawNonParsedSimpleText("++", "HungerPlus", 208, FoodAteY + 1, ColorAlpha(ConVars.FoodEatenBackground, FoodAteAlpha), 0);
+		draw.DrawNonParsedSimpleText("++", "HungerPlus", 207, FoodAteY, ColorAlpha(ConVars.FoodEatenForeground, FoodAteAlpha), 0);
 
 		FoodAteAlpha = math.Clamp(FoodAteAlpha + 4 * FrameTime() * mul, -1, 1) --ColorAlpha works with 0-1 alpha
-		FoodAteY = FoodAteY - 150 * FrameTime()
+		FoodAteY = FoodAteY - 150 * FrameTime();
 	end
 end
-hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after DarkRP HUD is drawn in HUDPaint
+hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after fprp HUD is drawn in HUDPaint
 
 local function AteFoodIcon(msg)
 	FoodAteAlpha = 1
 	FoodAteY = ScrH() - 8
 end
-usermessage.Hook("AteFoodIcon", AteFoodIcon)
+usermessage.Hook("AteFoodIcon", AteFoodIcon);

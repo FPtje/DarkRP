@@ -1,4 +1,4 @@
-DarkRP.toggleSleep = DarkRP.stub{
+fprp.toggleSleep = fprp.stub{
 	name = "toggleSleep",
 	description = "Old function to toggle sleep. I'm not proud of it.",
 	parameters = {
@@ -22,5 +22,5 @@ DarkRP.toggleSleep = DarkRP.stub{
 			type = "string"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

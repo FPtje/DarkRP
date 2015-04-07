@@ -1,4 +1,4 @@
-DarkRP.storeJailPos = DarkRP.stub{
+fprp.storeJailPos = fprp.stub{
 	name = "storeJailPos",
 	description = "Store a jailposition from a player's location.",
 	parameters = {
@@ -17,12 +17,12 @@ DarkRP.storeJailPos = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.setJailPos = DarkRP.stub{
+fprp.setJailPos = fprp.stub{
 	name = "setJailPos",
-	description = "Remove all jail positions in this map and create a new one. To add a jailpos without removing previous ones use DarkRP.addJailPos. This jail position will be saved in the database.",
+	description = "Remove all jail positions in this map and create a new one. To add a jailpos without removing previous ones use fprp.addJailPos. This jail position will be saved in the database.",
 	parameters = {
 		{
 			name = "pos",
@@ -33,10 +33,10 @@ DarkRP.setJailPos = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.addJailPos = DarkRP.stub{
+fprp.addJailPos = fprp.stub{
 	name = "addJailPos",
 	description = "Add a jail position to the map. This jail position will be saved in the database.",
 	parameters = {
@@ -49,10 +49,10 @@ DarkRP.addJailPos = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.retrieveJailPos = DarkRP.stub{
+fprp.retrieveJailPos = fprp.stub{
 	name = "retrieveJailPos",
 	description = "Retrieve a jail position.",
 	parameters = {
@@ -70,10 +70,10 @@ DarkRP.retrieveJailPos = DarkRP.stub{
 			type = "Vector"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.jailPosCount = DarkRP.stub{
+fprp.jailPosCount = fprp.stub{
 	name = "jailPosCount",
 	description = "The amount of jail positions in the current map.",
 	parameters = {
@@ -85,10 +85,10 @@ DarkRP.jailPosCount = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.storeTeamSpawnPos = DarkRP.stub{
+fprp.storeTeamSpawnPos = fprp.stub{
 	name = "storeTeamSpawnPos",
 	description = "Store a spawn position of a job in the database (replaces all other spawn positions).",
 	parameters = {
@@ -108,10 +108,10 @@ DarkRP.storeTeamSpawnPos = DarkRP.stub{
 	returns = {
 
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.addTeamSpawnPos = DarkRP.stub{
+fprp.addTeamSpawnPos = fprp.stub{
 	name = "addTeamSpawnPos",
 	description = "Add a spawn position to the database. The position will not replace other spawn positions.",
 	parameters = {
@@ -131,10 +131,10 @@ DarkRP.addTeamSpawnPos = DarkRP.stub{
 	returns = {
 
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.removeTeamSpawnPos = DarkRP.stub{
+fprp.removeTeamSpawnPos = fprp.stub{
 	name = "removeTeamSpawnPos",
 	description = "Remove a single spawn position.",
 	parameters = {
@@ -153,10 +153,10 @@ DarkRP.removeTeamSpawnPos = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.retrieveTeamSpawnPos = DarkRP.stub{
+fprp.retrieveTeamSpawnPos = fprp.stub{
 	name = "retrieveTeamSpawnPos",
 	description = "Retrieve a random spawn position for a job.",
 	parameters = {
@@ -174,5 +174,5 @@ DarkRP.retrieveTeamSpawnPos = DarkRP.stub{
 			type = "Vector"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }

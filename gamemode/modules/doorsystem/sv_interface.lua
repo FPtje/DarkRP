@@ -1,25 +1,25 @@
 
-DarkRP.ENTITY.keysLock = DarkRP.stub{
+fprp.ENTITY.keysLock = fprp.stub{
 	name = "keysLock",
 	description = "Lock this door or vehicle.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.keysUnLock = DarkRP.stub{
+fprp.ENTITY.keysUnLock = fprp.stub{
 	name = "keysUnLock",
 	description = "Unlock this door or vehicle.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.addKeysAllowedToOwn = DarkRP.stub{
+fprp.ENTITY.addKeysAllowedToOwn = fprp.stub{
 	name = "addKeysAllowedToOwn",
 	description = "Make this player allowed to co-own the door or vehicle.",
 	parameters = {
@@ -32,10 +32,10 @@ DarkRP.ENTITY.addKeysAllowedToOwn = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.addKeysDoorOwner = DarkRP.stub{
+fprp.ENTITY.addKeysDoorOwner = fprp.stub{
 	name = "addKeysDoorOwner",
 	description = "Make this player a co-owner of the door.",
 	parameters = {
@@ -48,10 +48,10 @@ DarkRP.ENTITY.addKeysDoorOwner = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.removeKeysDoorOwner = DarkRP.stub{
+fprp.ENTITY.removeKeysDoorOwner = fprp.stub{
 	name = "removeKeysDoorOwner",
 	description = "Remove this player as co-owner",
 	parameters = {
@@ -64,10 +64,10 @@ DarkRP.ENTITY.removeKeysDoorOwner = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.keysOwn = DarkRP.stub{
+fprp.ENTITY.keysOwn = fprp.stub{
 	name = "keysOwn",
 	description = "Make the player the master owner of the door",
 	parameters = {
@@ -80,10 +80,10 @@ DarkRP.ENTITY.keysOwn = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.keysUnOwn = DarkRP.stub{
+fprp.ENTITY.keysUnOwn = fprp.stub{
 	name = "keysUnOwn",
 	description = "Make this player unown the door/vehicle.",
 	parameters = {
@@ -96,10 +96,10 @@ DarkRP.ENTITY.keysUnOwn = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.setKeysNonOwnable = DarkRP.stub{
+fprp.ENTITY.setKeysNonOwnable = fprp.stub{
 	name = "setKeysNonOwnable",
 	description = "Set whether this door or vehicle is ownable or not.",
 	parameters = {
@@ -112,10 +112,10 @@ DarkRP.ENTITY.setKeysNonOwnable = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.setKeysTitle = DarkRP.stub{
+fprp.ENTITY.setKeysTitle = fprp.stub{
 	name = "setKeysTitle",
 	description = "Set the title of a door or vehicle.",
 	parameters = {
@@ -128,10 +128,10 @@ DarkRP.ENTITY.setKeysTitle = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.setDoorGroup = DarkRP.stub{
+fprp.ENTITY.setDoorGroup = fprp.stub{
 	name = "setDoorGroup",
 	description = "Set the door group of a door.",
 	parameters = {
@@ -144,10 +144,10 @@ DarkRP.ENTITY.setDoorGroup = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.addKeysDoorTeam = DarkRP.stub{
+fprp.ENTITY.addKeysDoorTeam = fprp.stub{
 	name = "addKeysDoorTeam",
 	description = "Allow a team to lock/unlock a door..",
 	parameters = {
@@ -160,10 +160,10 @@ DarkRP.ENTITY.addKeysDoorTeam = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.removeKeysDoorTeam = DarkRP.stub{
+fprp.ENTITY.removeKeysDoorTeam = fprp.stub{
 	name = "removeKeysDoorTeam",
 	description = "Disallow a team from locking/unlocking a door.",
 	parameters = {
@@ -176,40 +176,40 @@ DarkRP.ENTITY.removeKeysDoorTeam = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.removeAllKeysDoorTeams = DarkRP.stub{
+fprp.ENTITY.removeAllKeysDoorTeams = fprp.stub{
 	name = "removeAllKeysDoorTeams",
 	description = "Disallow all teams from locking/unlocking a door.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.removeAllKeysExtraOwners = DarkRP.stub{
+fprp.ENTITY.removeAllKeysExtraOwners = fprp.stub{
 	name = "removeAllKeysExtraOwners",
 	description = "Remove all co-owners from a door.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.removeAllKeysAllowedToOwn = DarkRP.stub{
+fprp.ENTITY.removeAllKeysAllowedToOwn = fprp.stub{
 	name = "removeAllKeysAllowedToOwn",
 	description = "Disallow all people from owning the door.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.removeKeysAllowedToOwn = DarkRP.stub{
+fprp.ENTITY.removeKeysAllowedToOwn = fprp.stub{
 	name = "removeKeysAllowedToOwn",
 	description = "Remove a player from being allowed to co-own a door.",
 	parameters = {
@@ -222,10 +222,10 @@ DarkRP.ENTITY.removeKeysAllowedToOwn = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.ENTITY.isLocked = DarkRP.stub{
+fprp.ENTITY.isLocked = fprp.stub{
 	name = "isLocked",
 	description = "Whether this door/vehicle is locked.",
 	parameters = {
@@ -237,50 +237,50 @@ DarkRP.ENTITY.isLocked = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.ENTITY
+	metatable = fprp.ENTITY
 }
 
-DarkRP.PLAYER.keysUnOwnAll = DarkRP.stub{
+fprp.PLAYER.keysUnOwnAll = fprp.stub{
 	name = "keysUnOwnAll",
 	description = "Unown every door and vehicle owned by this player.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.sendDoorData = DarkRP.stub{
+fprp.PLAYER.sendDoorData = fprp.stub{
 	name = "sendDoorData",
 	description = "Internal function. Sends all door data to a player.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.doPropertyTax = DarkRP.stub{
+fprp.PLAYER.doPropertyTax = fprp.stub{
 	name = "doPropertyTax",
 	description = "Tax a player based on the amount of doors and vehicles they have.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.initiateTax = DarkRP.stub{
+fprp.PLAYER.initiateTax = fprp.stub{
 	name = "initiateTax",
 	description = "Internal function, starts the timer that taxes the player every once in a while.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onKeysLocked",
 	description = "Called when a door or vehicle was locked.",
 	parameters = {
@@ -295,7 +295,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onKeysUnlocked",
 	description = "Called when a door or vehicle was unlocked.",
 	parameters = {
@@ -310,7 +310,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerKeysSold",
 	description = "When a player sold a door or vehicle.",
 	parameters = {
@@ -325,8 +325,8 @@ DarkRP.hookStub{
 			type = "Player"
 		},
 		{
-			name = "GiveMoneyBack",
-			description = "The amount of money refunded to the player",
+			name = "GiveshekelBack",
+			description = "The amount of shekel refunded to the player",
 			type = "number"
 		}
 	},
@@ -335,7 +335,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "hideSellDoorMessage",
 	description = "Whether to hide the door/vehicle sold notification",
 	parameters = {
@@ -359,7 +359,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "getDoorCost",
 	description = "Get the cost of a door.",
 	parameters = {
@@ -383,7 +383,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "getVehicleCost",
 	description = "Get the cost of a vehicle.",
 	parameters = {
@@ -407,7 +407,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBuyDoor",
 	description = "When a player purchases a door.",
 	parameters = {
@@ -441,7 +441,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerSellDoor",
 	description = "When a player is about to sell a door.",
 	parameters = {
@@ -470,7 +470,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onAllowedToOwnAdded",
 	description = "When a player adds a co-owner to a door.",
 	parameters = {
@@ -499,7 +499,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onAllowedToOwnRemoved",
 	description = "When a player removes a co-owner to a door.",
 	parameters = {
@@ -528,7 +528,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBuyVehicle",
 	description = "When a player purchases a vehicle.",
 	parameters = {
@@ -562,7 +562,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerSellVehicle",
 	description = "When a player is about to sell a vehicle.",
 	parameters = {
@@ -591,7 +591,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBoughtDoor",
 	description = "Called when a player has purchased a door.",
 	parameters = {
@@ -616,7 +616,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "playerBoughtVehicle",
 	description = "Called when a player has purchased a vehicle.",
 	parameters = {
@@ -641,7 +641,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onPaidTax",
 	description = "Called when a player has paid tax.",
 	parameters = {
@@ -657,7 +657,7 @@ DarkRP.hookStub{
 		},
 		{
 			name = "wallet",
-			description = "The amount of money the player had before the tax was applied.",
+			description = "The amount of shekel the player had before the tax was applied.",
 			type = "number"
 		}
 	},

@@ -1,39 +1,39 @@
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "DarkRP Laws"
+ENT.PrintName = "fprp Laws"
 ENT.Instructions = "Use /addlaws to add a custom law, /removelaw <num> to remove a law."
 ENT.Author = "Drakehawke"
 
 ENT.Spawnable = false
 
-local plyMeta = FindMetaTable("Player")
-DarkRP.declareChatCommand{
+local plyMeta = FindMetaTable("Player");
+fprp.declareChatCommand{
 	command = "addlaw",
 	description = "Add a law to the laws board.",
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "removelaw",
 	description = "Remove a law from the laws board.",
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "placelaws",
 	description = "Place a laws board.",
 	delay = 1.5
 }
 
-DarkRP.declareChatCommand{
+fprp.declareChatCommand{
 	command = "resetlaws",
 	description = "Reset all laws.",
 	delay = 1.5
 }
 
-DarkRP.getLaws = DarkRP.stub{
+fprp.getLaws = fprp.stub{
 	name = "getLaws",
 	description = "Get the table of all current laws.",
 	parameters = {
@@ -45,22 +45,22 @@ DarkRP.getLaws = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP,
+	metatable = fprp,
 	realm = "Shared"
 }
 
-DarkRP.resetLaws = DarkRP.stub{
+fprp.resetLaws = fprp.stub{
 	name = "resetLaws",
 	description = "Reset to default laws.",
 	parameters = {
 	},
 	returns = {
 	},
-	metatable = DarkRP,
+	metatable = fprp,
 	realm = "Server"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "addLaw",
 	description = "Called when a law is added.",
 	parameters = {
@@ -80,7 +80,7 @@ DarkRP.hookStub{
 	realm = "Shared"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "removeLaw",
 	description = "Called when a law is removed.",
 	parameters = {
@@ -100,7 +100,7 @@ DarkRP.hookStub{
 	realm = "Shared"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "resetLaws",
 	description = "Called when laws are reset.",
 	parameters = {
@@ -115,7 +115,7 @@ DarkRP.hookStub{
 	realm = "Shared"
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canEditLaws",
 	description = "Whether someone can edit laws.",
 	parameters = {

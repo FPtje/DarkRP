@@ -1,4 +1,4 @@
-DarkRP.PLAYER.isHitman = DarkRP.stub{
+fprp.PLAYER.isHitman = fprp.stub{
 	name = "isHitman",
 	description = "Whether this player is a hitman.",
 	parameters = {
@@ -10,10 +10,10 @@ DarkRP.PLAYER.isHitman = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.hasHit = DarkRP.stub{
+fprp.PLAYER.hasHit = fprp.stub{
 	name = "hasHit",
 	description = "Whether this hitman has a hit.",
 	parameters = {
@@ -25,10 +25,10 @@ DarkRP.PLAYER.hasHit = DarkRP.stub{
 			type = "boolean"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getHitTarget = DarkRP.stub{
+fprp.PLAYER.getHitTarget = fprp.stub{
 	name = "getHitTarget",
 	description = "Get the target of a hitman.",
 	parameters = {
@@ -40,10 +40,10 @@ DarkRP.PLAYER.getHitTarget = DarkRP.stub{
 			type = "Player"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.PLAYER.getHitPrice = DarkRP.stub{
+fprp.PLAYER.getHitPrice = fprp.stub{
 	name = "getHitPrice",
 	description = "Get the price the hitman demands for his work.",
 	parameters = {
@@ -55,10 +55,10 @@ DarkRP.PLAYER.getHitPrice = DarkRP.stub{
 			type = "number"
 		}
 	},
-	metatable = DarkRP.PLAYER
+	metatable = fprp.PLAYER
 }
 
-DarkRP.addHitmanTeam = DarkRP.stub{
+fprp.addHitmanTeam = fprp.stub{
 	name = "addHitmanTeam",
 	description = "Make this team a hitman.",
 	parameters = {
@@ -71,10 +71,10 @@ DarkRP.addHitmanTeam = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.getHitmanTeams = DarkRP.stub{
+fprp.getHitmanTeams = fprp.stub{
 	name = "getHitmanTeams",
 	description = "Get all the hitman teams.",
 	parameters = {
@@ -86,10 +86,10 @@ DarkRP.getHitmanTeams = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canRequestHit",
 	description = "Whether someone can request a hit.",
 	parameters = {
@@ -133,7 +133,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onHitAccepted",
 	description = "When a hitman accepts a hit.",
 	parameters = {
@@ -158,7 +158,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onHitCompleted",
 	description = "When a hitman finishes a hit.",
 	parameters = {
@@ -183,7 +183,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onHitFailed",
 	description = "When a hit fails for some reason.",
 	parameters = {

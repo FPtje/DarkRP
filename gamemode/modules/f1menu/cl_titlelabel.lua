@@ -1,14 +1,14 @@
-surface.CreateFont("F1MenuTitle", {
+surface.CreateFont("SleekF1MenuTitle", {
 		size = 50,
 		weight = 500,
 		antialias = true,
 		shadow = false,
-		font = "coolvetica"})
+		font = "coolvetica"});
 
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetFont("F1MenuTitle")
+	self:SetFont("SleekF1MenuTitle");
 end
 
-derma.DefineControl("F1MenuTitleLabel", "DarkRP F1 menu title label", PANEL, "DLabel")
+derma.DefineControl("SleekF1MenuTitleLabel", "fprp SleekF1 menu title label", PANEL, "DLabel");

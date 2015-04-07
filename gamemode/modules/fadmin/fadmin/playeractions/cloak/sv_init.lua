@@ -6,22 +6,22 @@ local function Cloak(ply, cmd, args)
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Cloak", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_cloaked") then
-			target:FAdmin_SetGlobal("FAdmin_cloaked", true)
-			target:SetNoDraw(true)
+			target:FAdmin_SetGlobal("FAdmin_cloaked", true);
+			target:SetNoDraw(true);
 			for k, v in pairs(target:GetWeapons()) do
-				v:SetNoDraw(true)
+				v:SetNoDraw(true);
 			end
 
 			for k,v in pairs(ents.FindByClass("physgun_beam")) do
 				if v:GetParent() == target then
-					v:SetNoDraw(true)
+					v:SetNoDraw(true);
 				end
 			end
 
-			hook.Add("Think", "FAdmin_Cloak", CloakThink)
+			hook.Add("Think", "FAdmin_Cloak", CloakThink);
 		end
 	end
-	FAdmin.Messages.ActionMessage(ply, targets, "You have cloaked %s", "You were cloaked by %s", "Cloaked %s")
+	FAdmin.Messages.ActionMessage(ply, targets, "You have cloaked %s", "You were cloaked by %s", "Cloaked %s");
 
 	return true, targets
 end
@@ -32,17 +32,17 @@ local function UnCloak(ply, cmd, args)
 	for _, target in pairs(targets) do
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Cloak", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) and target:FAdmin_GetGlobal("FAdmin_cloaked") then
-			target:FAdmin_SetGlobal("FAdmin_cloaked", false)
+			target:FAdmin_SetGlobal("FAdmin_cloaked", false);
 
-			target:SetNoDraw(false)
+			target:SetNoDraw(false);
 
 			for k, v in pairs(target:GetWeapons()) do
-				v:SetNoDraw(false)
+				v:SetNoDraw(false);
 			end
 
 			for k,v in pairs(ents.FindByClass("physgun_beam")) do
 				if v:GetParent() == target then
-					v:SetNoDraw(false)
+					v:SetNoDraw(false);
 				end
 			end
 
@@ -58,29 +58,29 @@ local function UnCloak(ply, cmd, args)
 			if RemoveThink then hook.Remove("Think", "FAdmin_Cloak") end
 		end
 	end
-	FAdmin.Messages.ActionMessage(ply, targets, "You have uncloaked %s", "You were uncloaked by %s", "Uncloaked %s")
+	FAdmin.Messages.ActionMessage(ply, targets, "You have uncloaked %s", "You were uncloaked by %s", "Uncloaked %s");
 
 	return true, targets
 end
 
 FAdmin.StartHooks["Cloak"] = function()
-	FAdmin.Commands.AddCommand("Cloak", Cloak)
-	FAdmin.Commands.AddCommand("Uncloak", UnCloak)
+	FAdmin.Commands.AddCommand("Cloak", Cloak);
+	FAdmin.Commands.AddCommand("Uncloak", UnCloak);
 
-	FAdmin.Access.AddPrivilege("Cloak", 2)
+	FAdmin.Access.AddPrivilege("Cloak", 2);
 end
 
 function CloakThink()
 	for k,v in pairs(player.GetAll()) do
-		local ActiveWeapon = v:GetActiveWeapon()
+		local ActiveWeapon = v:GetActiveWeapon();
 		if v:FAdmin_GetGlobal("FAdmin_cloaked") and IsValid(ActiveWeapon) and ActiveWeapon ~= v.FAdmin_CloakWeapon then
 			v.FAdmin_CloakWeapon = ActiveWeapon
-			ActiveWeapon:SetNoDraw(true)
+			ActiveWeapon:SetNoDraw(true);
 
 			if ActiveWeapon:GetClass() == "weapon_physgun" then
 				for a,b in pairs(ents.FindByClass("physgun_beam")) do
 					if b:GetParent() == v then
-						b:SetNoDraw(true)
+						b:SetNoDraw(true);
 					end
 				end
 			end

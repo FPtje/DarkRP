@@ -1,5 +1,5 @@
 -- This module will make voice sounds play when certain words are typed in the chat
--- You can add/remove sounds as you wish using DarkRP.setChatSound, just follow the format used here
+-- You can add/remove sounds as you wish using fprp.setChatSound, just follow the format used here
 -- To disable them completely, set GM.Config.chatsounds to false
 -- TODO: Add female sounds & detect gender of model, and use combine sounds for CPs
 
@@ -219,7 +219,7 @@ sounds[ "you never know" ] = { "vo/npc/male01/answer22.wav" }
 
 sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "canChatSound",
 	description = "Whether a chat sound can be played.",
 	parameters = {
@@ -248,7 +248,7 @@ DarkRP.hookStub{
 	}
 }
 
-DarkRP.hookStub{
+fprp.hookStub{
 	name = "onChatSound",
 	description = "When a chat sound is played.",
 	parameters = {
@@ -274,23 +274,23 @@ DarkRP.hookStub{
 
 local function CheckChat(ply, text)
 	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
-	local prefix = string.sub(text, 0, 1)
+	local prefix = string.sub(text, 0, 1);
 	if prefix == "/" or prefix == "!" or prefix == "@" then return end -- should cover most chat commands for various mods/addons
 	for k, v in pairs(sounds) do
-		local res1, res2 = string.find(string.lower(text), k)
+		local res1, res2 = string.find(string.lower(text), k);
 		if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
-			local canChatSound = hook.Call("canChatSound", nil, ply, k, text)
+			local canChatSound = hook.Call("canChatSound", nil, ply, k, text);
 			if canChatSound == false then return end
-			ply:EmitSound(table.Random(v), 80, 100)
+			ply:EmitSound(table.Random(v), 80, 100);
 			ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
-			hook.Call("onChatSound", nil, ply, k, text)
+			hook.Call("onChatSound", nil, ply, k, text);
 			break
 		end
 	end
 end
-hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
+hook.Add("PostPlayerSay", "ChatSounds", CheckChat);
 
-DarkRP.getChatSound = DarkRP.stub{
+fprp.getChatSound = fprp.stub{
 	name = "getChatSound",
 	description = "Get a chat sound (play a noise when someone says something) associated with the given phrase.",
 	parameters = {
@@ -308,14 +308,14 @@ DarkRP.getChatSound = DarkRP.stub{
 			type = "table"
 		}
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-function DarkRP.getChatSound(text)
+function fprp.getChatSound(text)
 	return sounds[string.lower(text or "")]
 end
 
-DarkRP.setChatSound = DarkRP.stub{
+fprp.setChatSound = fprp.stub{
 	name = "setChatSound",
 	description = "Set a chat sound (play a noise when someone says something)",
 	parameters = {
@@ -334,9 +334,9 @@ DarkRP.setChatSound = DarkRP.stub{
 	},
 	returns = {
 	},
-	metatable = DarkRP
+	metatable = fprp
 }
 
-function DarkRP.setChatSound(text, sndTable)
+function fprp.setChatSound(text, sndTable)
 	sounds[string.lower(text or "")] = sndTable
 end

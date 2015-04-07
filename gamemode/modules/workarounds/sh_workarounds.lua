@@ -3,16 +3,16 @@
 Sound crash glitch
 ---------------------------------------------------------------------------*/
 
-local entity = FindMetaTable("Entity")
+local entity = FindMetaTable("Entity");
 local EmitSound = entity.EmitSound
 function entity:EmitSound(sound, ...)
 	if string.find(sound, "??", 0, true) then return end
-	return EmitSound(self, sound, ...)
+	return EmitSound(self, sound, ...);
 end
 
 
-function DarkRP.getAvailableVehicles()
-	local vehicles = list.Get("Vehicles")
+function fprp.getAvailableVehicles()
+	local vehicles = list.Get("Vehicles");
 	for k, v in pairs(list.Get("SCarsList") or {}) do
 		vehicles[v.PrintName] = {
 			Name = v.PrintName,
@@ -34,7 +34,7 @@ if system.IsWindows() then
 	function os.date(format, time)
 		if format then format = string.gsub(format, "%%[^aAbBcdHIjmMpSUwWxXyYz]", replace) end
 
-		return osdate(format, time)
+		return osdate(format, time);
 	end
 end
 
@@ -43,23 +43,23 @@ if CLIENT then
 	/*---------------------------------------------------------------------------
 	Generic InitPostEntity workarounds
 	---------------------------------------------------------------------------*/
-	hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
+	hook.Add("InitPostEntity", "fprp_Workarounds", function()
 		if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
-	end)
+	end);
 
 	local camstart3D = cam.Start3D
 	local camend3D = cam.End3D
 	local cam3DStarted = 0
 	function cam.Start3D(a,b,c,d,e,f,g,h,i,j)
 		cam3DStarted = cam3DStarted + 1
-		return camstart3D(a,b,c,d,e,f,g,h,i,j)
+		return camstart3D(a,b,c,d,e,f,g,h,i,j);
 	end
 
 	-- cam.End3D should not crash a player when 3D hasn't been started
 	function cam.End3D()
 		if not cam3DStarted or cam3DStarted <= 0 then return end
 		cam3DStarted = cam3DStarted - 1
-		return camend3D()
+		return camend3D();
 	end
 
 	return
@@ -70,29 +70,29 @@ SetPos crash
 ---------------------------------------------------------------------------*/
 local oldSetPos = entity.SetPos
 function entity:SetPos(vec)
-	vec.x = math.Clamp(vec.x, -99999997952, 99999997952)
-	vec.y = math.Clamp(vec.y, -99999997952, 99999997952)
-	vec.z = math.Clamp(vec.z, -99999997952, 99999997952)
+	vec.x = math.Clamp(vec.x, -99999997952, 99999997952);
+	vec.y = math.Clamp(vec.y, -99999997952, 99999997952);
+	vec.z = math.Clamp(vec.z, -99999997952, 99999997952);
 
-	return oldSetPos(self, vec)
+	return oldSetPos(self, vec);
 end
 
 /*---------------------------------------------------------------------------
 Generic InitPostEntity workarounds
 ---------------------------------------------------------------------------*/
-hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
-	local commands = concommand.GetTable()
+hook.Add("InitPostEntity", "fprp_Workarounds", function()
+	local commands = concommand.GetTable();
 	if commands["durgz_witty_sayings"] then
 		game.ConsoleCommand("durgz_witty_sayings 0\n") -- Deals with the cigarettes exploit. I'm fucking tired of them. I hate having to fix other people's mods, but this mod maker is retarded and refuses to update his mod.
 	end
 
-	-- Remove ULX /me command. (the /me command is the only thing this hook does)
-	hook.Remove("PlayerSay", "ULXMeCheck")
+	-- Remove ULX /me command. (the /me command is the only thing this hook does);
+	hook.Remove("PlayerSay", "ULXMeCheck");
 
 	-- why can people even save multiplayer games?
 	-- Lag exploit
 	if SERVER and not game.SinglePlayer() then
-		concommand.Remove("gm_save")
+		concommand.Remove("gm_save");
 	end
 
 	-- Fuck up URS.
@@ -101,28 +101,28 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 	local ursthing = URSCheck
 	if ursthing then
 		URSCheck = function(...)
-			local res = ursthing(...)
+			local res = ursthing(...);
 			if res == true then
-				ErrorNoHalt("Fucking up URS' spawn check. Please call Aaron113 a lazy ass in this issue: https://github.com/Aaron113/URS/issues/11\n")
+				ErrorNoHalt("Fucking up URS' spawn check. Please call Aaron113 a lazy ass in this issue: https://github.com/Aaron113/URS/issues/11\n");
 				return
 			end
 			return res
 		end
 	end
-end)
+end);
 
 /*---------------------------------------------------------------------------
-Anti map spawn kill (like in rp_downtown_v4c)
+Anti map spawn kill (like in rp_downtown_v4c);
 this is the only way I could find.
 ---------------------------------------------------------------------------*/
 hook.Add("PlayerSpawn", "AntiMapKill", function(ply)
 	timer.Simple(0, function()
 		if IsValid(ply) and not ply:Alive() then
-			ply:Spawn()
-			ply:AddDeaths(-1)
+			ply:Spawn();
+			ply:AddDeaths(-1);
 		end
-	end)
-end)
+	end);
+end);
 
 /*---------------------------------------------------------------------------
 Wire field generator exploit
@@ -135,11 +135,11 @@ hook.Add("OnEntityCreated", "DRP_WireFieldGenerator", function(ent)
 				if value ~= nil and iname == "Distance" then
 					value=math.Min(value, 400);
 				end
-				TriggerInput(self, iname, value)
+				TriggerInput(self, iname, value);
 			end
 		end
-	end)
-end)
+	end);
+end);
 
 /*---------------------------------------------------------------------------
 Door tool is shitty
@@ -151,19 +151,19 @@ hook.Add("InitPostEntity", "FixDoorTool", function()
 		function makedoor(ply, trace, ang, model, open, close, autoclose, closetime, class, hardware, ...)
 			if class ~= "prop_dynamic" and class ~= "prop_door_rotating" then return end
 
-			oldFunc(ply, trace, ang, model, open, close, autoclose, closetime, class, hardware, ...)
+			oldFunc(ply, trace, ang, model, open, close, autoclose, closetime, class, hardware, ...);
 		end
 	end
-end)
+end);
 
 /*---------------------------------------------------------------------------
 Anti crash exploit
 ---------------------------------------------------------------------------*/
 hook.Add("PropBreak", "drp_AntiExploit", function(attacker, ent)
 	if IsValid(ent) and ent:GetPhysicsObject():IsValid() then
-		constraint.RemoveAll(ent)
+		constraint.RemoveAll(ent);
 	end
-end)
+end);
 
 local allowedDoors = {
 	["prop_dynamic"] = true,
@@ -174,21 +174,21 @@ local allowedDoors = {
 hook.Add("CanTool", "DoorExploit", function(ply, trace, tool)
 	if not IsValid(ply:GetActiveWeapon()) or not ply:GetActiveWeapon().GetToolObject or not ply:GetActiveWeapon():GetToolObject() then return end
 
-	local tool = ply:GetActiveWeapon():GetToolObject()
+	local tool = ply:GetActiveWeapon():GetToolObject();
 	if not allowedDoors[string.lower(tool:GetClientInfo("door_class") or "")] then
 		return false
 	end
-end)
+end);
 
 /*---------------------------------------------------------------------------
 ply:UniqueID calculates the CRC of "gm_"..ply:SteamID().."_gm"
 That calculation is slow
 ---------------------------------------------------------------------------*/
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 local oldUID = plyMeta.UniqueID
 function plyMeta:UniqueID()
-	if not self:IsValid() then DarkRP.error("Attempt to get UniqueID of non-existing player", 2) end
-	self.UIDCache = self.UIDCache or oldUID(self)
+	if not self:IsValid() then fprp.error("Attempt to get UniqueID of non-existing player", 2) end
+	self.UIDCache = self.UIDCache or oldUID(self);
 
 	return self.UIDCache
 end

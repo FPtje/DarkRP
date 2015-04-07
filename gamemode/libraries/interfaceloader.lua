@@ -1,6 +1,6 @@
-module("DarkRP", package.seeall)
+module("fprp", package.seeall);
 
-MetaName = "DarkRP"
+MetaName = "fprp"
 
 -- Variables that maintain the existing stubs and hooks
 local stubs = {}
@@ -48,7 +48,7 @@ local stubLayout = {
 	description = isstring,
 	parameters = isparameters, -- the parameters of a method
 	returns = isreturns, -- the return values of a method
-	metatable = istable -- DarkRP, Player, Entity, Vector, ...
+	metatable = istable -- fprp, Player, Entity, Vector, ...
 }
 
 local hookLayout = {
@@ -91,10 +91,10 @@ When a stub is called, the calling of the method is delayed
 ---------------------------------------------------------------------------*/
 local function notImplemented(name, args, thisFunc)
 	if stubs[name] and stubs[name].metatable[name] ~= thisFunc then -- when calling the not implemented function after the function was implemented
-		return stubs[name].metatable[name](unpack(args))
+		return stubs[name].metatable[name](unpack(args));
 	end
 	delayedCalls[name] = delayedCalls[name] or {}
-	table.insert(delayedCalls[name], args)
+	table.insert(delayedCalls[name], args);
 
 	return nil -- no return value because the method is not implemented
 end
@@ -103,16 +103,16 @@ end
 Generate a stub
 ---------------------------------------------------------------------------*/
 function stub(tbl)
-	local isStub, field = checkStub(tbl, stubLayout)
+	local isStub, field = checkStub(tbl, stubLayout);
 	if not isStub then
-		error("Invalid DarkRP method stub! Field \"" .. field .. "\" is invalid!", 2)
+		error("Invalid fprp method stub! Field \"" .. field .. "\" is invalid!", 2);
 	end
 
 	tbl.realm = tbl.realm or realm
 	stubs[tbl.name] = tbl
 
 	local function retNotImpl(...)
-		return notImplemented(tbl.name, {...}, retNotImpl)
+		return notImplemented(tbl.name, {...}, retNotImpl);
 	end
 
 	return retNotImpl
@@ -122,9 +122,9 @@ end
 Generate a hook stub
 ---------------------------------------------------------------------------*/
 function hookStub(tbl)
-	local isStub, field = checkStub(tbl, hookLayout)
+	local isStub, field = checkStub(tbl, hookLayout);
 	if not isStub then
-		error("Invalid DarkRP hook! Field \"" .. field .. "\" is invalid!", 2)
+		error("Invalid fprp hook! Field \"" .. field .. "\" is invalid!", 2);
 	end
 
 	tbl.realm = tbl.realm or realm
@@ -135,14 +135,14 @@ end
 Retrieve the stubs
 ---------------------------------------------------------------------------*/
 function getStubs()
-	return table.Copy(stubs)
+	return table.Copy(stubs);
 end
 
 /*---------------------------------------------------------------------------
 Retrieve the hooks
 ---------------------------------------------------------------------------*/
 function getHooks()
-	return table.Copy(hookStubs)
+	return table.Copy(hookStubs);
 end
 
 /*---------------------------------------------------------------------------
@@ -154,7 +154,7 @@ function finish()
 		if not stubs[name] then ErrorNoHalt("Calling non-existing stub \"" .. name .. "\"") continue end
 
 		for _, args in pairs(log) do
-			stubs[name].metatable[name](unpack(args))
+			stubs[name].metatable[name](unpack(args));
 		end
 	end
 
@@ -167,39 +167,39 @@ Load the interface files
 local function loadInterfaces()
 	local root = GM.FolderName .. "/gamemode/modules"
 
-	local _, folders = file.Find(root.."/*", "LUA")
+	local _, folders = file.Find(root.."/*", "LUA");
 
-	ENTITY = FindMetaTable("Entity")
-	PLAYER = FindMetaTable("Player")
-	VECTOR = FindMetaTable("Vector")
+	ENTITY = FindMetaTable("Entity");
+	PLAYER = FindMetaTable("Player");
+	VECTOR = FindMetaTable("Vector");
 
 	for _, folder in SortedPairs(folders, true) do
-		local interfacefile = string.format("%s/%s/%s_interface.lua", root, folder, "%s")
-		local client = string.format(interfacefile, "cl")
-		local shared = string.format(interfacefile, "sh")
-		local server = string.format(interfacefile, "sv")
+		local interfacefile = string.format("%s/%s/%s_interface.lua", root, folder, "%s");
+		local client = string.format(interfacefile, "cl");
+		local shared = string.format(interfacefile, "sh");
+		local server = string.format(interfacefile, "sv");
 
 		if file.Exists(shared, "LUA") then
 			if SERVER then AddCSLuaFile(shared) end
 			realm = "Shared"
-			include(shared)
+			include(shared);
 		end
 
 		if SERVER and file.Exists(client, "LUA") then
-			AddCSLuaFile(client)
+			AddCSLuaFile(client);
 		end
 
 		if SERVER and file.Exists(server, "LUA") then
 			realm = "Server"
-			include(server)
+			include(server);
 		end
 
 		if CLIENT and file.Exists(client, "LUA") then
 			realm = "Client"
-			include(client)
+			include(client);
 		end
 	end
 
 	ENTITY, PLAYER, VECTOR = nil, nil, nil
 end
-loadInterfaces()
+loadInterfaces();
