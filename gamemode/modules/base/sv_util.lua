@@ -64,16 +64,14 @@ function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
 		net.WriteUInt(col1.b, 8)
 		net.WriteString(text1)
 
-		if sender then
-			net.WriteEntity(sender)
-		end
+		sender = sender or Entity(0)
+		net.WriteEntity(sender)
 
-		if col2 and text2 then
-			net.WriteUInt(col2.r, 8)
-			net.WriteUInt(col2.g, 8)
-			net.WriteUInt(col2.b, 8)
-			net.WriteString(text2)
-		end
+		col2 = col2 or Color(0, 0, 0)
+		net.WriteUInt(col2.r, 8)
+		net.WriteUInt(col2.g, 8)
+		net.WriteUInt(col2.b, 8)
+		net.WriteString(text2 or "")
 	net.Send(receiver)
 end
 
