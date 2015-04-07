@@ -83,7 +83,7 @@ end
 function SKIN:PaintButton(self, w, h)
 	surface.SetDrawColor(255,255,255,255)
 	surface.SetMaterial(g_button)
-	surface.DrawTexturedRect(0, 0, 20, 20)
+	surface.DrawTexturedRect(0, 0, w, h)
 end
 
 
