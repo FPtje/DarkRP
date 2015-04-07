@@ -274,21 +274,21 @@ fprp.hookStub{
 
 local function CheckChat(ply, text)
 	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
-	local prefix = string.sub(text, 0, 1)
+	local prefix = string.sub(text, 0, 1);
 	if prefix == "/" or prefix == "!" or prefix == "@" then return end -- should cover most chat commands for various mods/addons
 	for k, v in pairs(sounds) do
-		local res1, res2 = string.find(string.lower(text), k)
+		local res1, res2 = string.find(string.lower(text), k);
 		if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
-			local canChatSound = hook.Call("canChatSound", nil, ply, k, text)
+			local canChatSound = hook.Call("canChatSound", nil, ply, k, text);
 			if canChatSound == false then return end
-			ply:EmitSound(table.Random(v), 80, 100)
+			ply:EmitSound(table.Random(v), 80, 100);
 			ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
-			hook.Call("onChatSound", nil, ply, k, text)
+			hook.Call("onChatSound", nil, ply, k, text);
 			break
 		end
 	end
 end
-hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
+hook.Add("PostPlayerSay", "ChatSounds", CheckChat);
 
 fprp.getChatSound = fprp.stub{
 	name = "getChatSound",

@@ -1,4 +1,4 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if CLIENT then
 	SWEP.PrintName = "Slow down gun"
@@ -35,18 +35,18 @@ SWEP.Primary.Sound = "ambient/alarms/siren.wav"
 
 
 function SWEP:Precache() 
-	util.PrecacheSound(self.Primtery.Sound)
+	util.PrecacheSound(self.Primtery.Sound);
 end
 
 function SWEP:Think()
 	if CLIENT || !IsValid(self.Owner) then return end
-	local head = self.Owner:LookupBone("ValveBiped.Bip01_Head1")
+	local head = self.Owner:LookupBone("ValveBiped.Bip01_Head1");
 	if self.Owner:KeyDown(IN_ATTACK) then
-			self:EmitSound(Sound(self.Primary.Sound))
-			game.SetTimeScale(0.1)
-			self.Owner:ManipulateBoneScale( head, Vector(5,5,5) )
+			self:EmitSound(Sound(self.Primary.Sound));
+			game.SetTimeScale(0.1);
+			self.Owner:ManipulateBoneScale( head, Vector(5,5,5) );
 	elseif self.Owner:KeyReleased(IN_ATTACK) then
-		game.SetTimeScale(1)
-		self.Owner:ManipulateBoneScale( head, Vector(1,1,1) )
+		game.SetTimeScale(1);
+		self.Owner:ManipulateBoneScale( head, Vector(1,1,1) );
 	end
 end

@@ -8,7 +8,7 @@ fprp.createShipment("Desert eagle", {
 	noship = true,
 	allowed = {TEAM_GUN},
 	category = "Pistols",
-})
+});
 
 fprp.createShipment("Fiveseven", {
 	model = "models/weapons/w_pist_fiveseven.mdl",
@@ -20,7 +20,7 @@ fprp.createShipment("Fiveseven", {
 	noship = true,
 	allowed = {TEAM_GUN},
 	category = "Pistols",
-})
+});
 
 fprp.createShipment("Glock", {
 	model = "models/weapons/w_pist_glock18.mdl",
@@ -32,7 +32,7 @@ fprp.createShipment("Glock", {
 	noship = true,
 	allowed = {TEAM_GUN},
 	category = "Pistols",
-})
+});
 
 fprp.createShipment("P228", {
 	model = "models/weapons/w_pist_p228.mdl",
@@ -44,7 +44,7 @@ fprp.createShipment("P228", {
 	noship = true,
 	allowed = {TEAM_GUN},
 	category = "Pistols",
-})
+});
 
 fprp.createShipment("AK47", {
 	model = "models/weapons/w_rif_ak47.mdl",
@@ -56,7 +56,7 @@ fprp.createShipment("AK47", {
 	noship = false,
 	allowed = {TEAM_GUN},
 	category = "Rifles",
-})
+});
 
 fprp.createShipment("MP5", {
 	model = "models/weapons/w_smg_mp5.mdl",
@@ -68,7 +68,7 @@ fprp.createShipment("MP5", {
 	noship = false,
 	allowed = {TEAM_GUN},
 	category = "Rifles",
-})
+});
 
 fprp.createShipment("M4", {
 	model = "models/weapons/w_rif_m4a1.mdl",
@@ -80,7 +80,7 @@ fprp.createShipment("M4", {
 	noship = false,
 	allowed = {TEAM_GUN},
 	category = "Rifles",
-})
+});
 
 fprp.createShipment("Mac 10", {
 	model = "models/weapons/w_smg_mac10.mdl",
@@ -91,7 +91,7 @@ fprp.createShipment("Mac 10", {
 	pricesep = nil,
 	noship = false,
 	allowed = {TEAM_GUN}
-})
+});
 
 fprp.createShipment("Pump shotgun", {
 	model = "models/weapons/w_shot_m3super90.mdl",
@@ -103,7 +103,7 @@ fprp.createShipment("Pump shotgun", {
 	noship = false,
 	allowed = {TEAM_GUN},
 	category = "Shotguns",
-})
+});
 
 fprp.createShipment("Sniper rifle", {
 	model = "models/weapons/w_snip_g3sg1.mdl",
@@ -115,7 +115,7 @@ fprp.createShipment("Sniper rifle", {
 	noship = false,
 	allowed = {TEAM_GUN},
 	category = "Snipers",
-})
+});
 
 fprp.createEntity("Drug lab", {
 	ent = "drug_lab",
@@ -124,7 +124,7 @@ fprp.createEntity("Drug lab", {
 	max = 3,
 	cmd = "buydruglab",
 	allowed = {TEAM_GANG, TEAM_MOB}
-})
+});
 
 fprp.createEntity("shekel printer", {
 	ent = "money_printer",
@@ -132,7 +132,7 @@ fprp.createEntity("shekel printer", {
 	price = 1000,
 	max = 2,
 	cmd = "buyshekelprinter"
-})
+});
 
 fprp.createEntity("Printer Mover", {
 	ent = "printer_mover",
@@ -140,7 +140,7 @@ fprp.createEntity("Printer Mover", {
 	price = 1000,
 	max = 2,
 	cmd = "buyprintermover"
-})
+});
 
 fprp.createEntity("Gun lab", {
 	ent = "gunlab",
@@ -149,7 +149,7 @@ fprp.createEntity("Gun lab", {
 	max = 1,
 	cmd = "buygunlab",
 	allowed = TEAM_GUN
-})
+});
 
 if not fprp.disabledDefaults["modules"]["hungermod"] then
 	fprp.createEntity("Microwave", {
@@ -159,7 +159,7 @@ if not fprp.disabledDefaults["modules"]["hungermod"] then
 		max = 1,
 		cmd = "buymicrowave",
 		allowed = TEAM_COOK
-	})
+	});
 end
 
 fprp.createCategory{

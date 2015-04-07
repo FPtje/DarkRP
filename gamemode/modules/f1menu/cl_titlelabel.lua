@@ -3,12 +3,12 @@ surface.CreateFont("SleekF1MenuTitle", {
 		weight = 500,
 		antialias = true,
 		shadow = false,
-		font = "coolvetica"})
+		font = "coolvetica"});
 
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetFont("SleekF1MenuTitle")
+	self:SetFont("SleekF1MenuTitle");
 end
 
-derma.DefineControl("SleekF1MenuTitleLabel", "fprp SleekF1 menu title label", PANEL, "DLabel")
+derma.DefineControl("SleekF1MenuTitleLabel", "fprp SleekF1 menu title label", PANEL, "DLabel");

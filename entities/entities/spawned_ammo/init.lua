@@ -1,12 +1,12 @@
-AddCSLuaFile("shared.lua")
+AddCSLuaFile("shared.lua");
 
-include("shared.lua")
+include("shared.lua");
 
 function ENT:Initialize()
-	self.BaseClass.Initialize(self)
+	self.BaseClass.Initialize(self);
 end
 
 function ENT:Use(activator, caller)
-	activator:GiveAmmo(self.amountGiven, self.ammoType)
-	self:Remove()
+	activator:GiveAmmo(self.amountGiven, self.ammoType);
+	self:Remove();
 end

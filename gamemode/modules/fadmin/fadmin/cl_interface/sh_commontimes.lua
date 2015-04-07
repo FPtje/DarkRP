@@ -10,20 +10,20 @@ FAdmin.PlayerActions.commonTimes[300] = "5 minutes"
 FAdmin.PlayerActions.commonTimes[600] = "10 minutes"
 
 function FAdmin.PlayerActions.addTimeSubmenu(menu, submenuText, submenuClick, submenuItemClick)
-	local SubMenu = menu:AddSubMenu(submenuText, submenuClick)
+	local SubMenu = menu:AddSubMenu(submenuText, submenuClick);
 
-	local Padding = vgui.Create("DPanel")
-	Padding:SetPaintBackgroundEnabled(false)
-	Padding:SetSize(1,5)
-	SubMenu:AddPanel(Padding)
+	local Padding = vgui.Create("DPanel");
+	Padding:SetPaintBackgroundEnabled(false);
+	Padding:SetSize(1,5);
+	SubMenu:AddPanel(Padding);
 
-	local SubMenuTitle = vgui.Create("DLabel")
-	SubMenuTitle:SetText("  Time:\n")
-	SubMenuTitle:SetFont("UiBold")
-	SubMenuTitle:SizeToContents()
-	SubMenuTitle:SetTextColor(color_black)
+	local SubMenuTitle = vgui.Create("DLabel");
+	SubMenuTitle:SetText("  Time:\n");
+	SubMenuTitle:SetFont("UiBold");
+	SubMenuTitle:SizeToContents();
+	SubMenuTitle:SetTextColor(color_black);
 
-	SubMenu:AddPanel(SubMenuTitle)
+	SubMenu:AddPanel(SubMenuTitle);
 
 	for secs, Time in SortedPairs(FAdmin.PlayerActions.commonTimes) do
 		SubMenu:AddOption(Time, function() submenuItemClick(secs) end)
@@ -31,23 +31,23 @@ function FAdmin.PlayerActions.addTimeSubmenu(menu, submenuText, submenuClick, su
 end
 
 function FAdmin.PlayerActions.addTimeMenu(ItemClick)
-	local menu = DermaMenu()
+	local menu = DermaMenu();
 
-	local Padding = vgui.Create("DPanel")
-	Padding:SetPaintBackgroundEnabled(false)
-	Padding:SetSize(1,5)
-	menu:AddPanel(Padding)
+	local Padding = vgui.Create("DPanel");
+	Padding:SetPaintBackgroundEnabled(false);
+	Padding:SetSize(1,5);
+	menu:AddPanel(Padding);
 
-	local Title = vgui.Create("DLabel")
-	Title:SetText("  Time:\n")
-	Title:SetFont("UiBold")
-	Title:SizeToContents()
-	Title:SetTextColor(color_black)
+	local Title = vgui.Create("DLabel");
+	Title:SetText("  Time:\n");
+	Title:SetFont("UiBold");
+	Title:SizeToContents();
+	Title:SetTextColor(color_black);
 
-	menu:AddPanel(Title)
+	menu:AddPanel(Title);
 
 	for secs, Time in SortedPairs(FAdmin.PlayerActions.commonTimes) do
 		menu:AddOption(Time, function() ItemClick(secs) end)
 	end
-	menu:Open()
+	menu:Open();
 end

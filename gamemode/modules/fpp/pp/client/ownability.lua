@@ -26,17 +26,17 @@ local reasons = {
 
 local function receiveTouchData(len)
 	repeat
-		local entIndex = net.ReadUInt(32)
-		local ownerIndex = net.ReadUInt(32)
-		local touchability = net.ReadUInt(5)
-		local reasons = net.ReadUInt(20)
+		local entIndex = net.ReadUInt(32);
+		local ownerIndex = net.ReadUInt(32);
+		local touchability = net.ReadUInt(5);
+		local reasons = net.ReadUInt(20);
 
 		FPP.entOwners[entIndex] = ownerIndex
 		FPP.entTouchability[entIndex] = touchability
 		FPP.entTouchReasons[entIndex] = reasons
 	until net.ReadBit() == 1
 end
-net.Receive("FPP_TouchabilityData", receiveTouchData)
+net.Receive("FPP_TouchabilityData", receiveTouchData);
 
 function FPP.entGetOwner(ent)
 	local idx = FPP.entOwners[ent:EntIndex()]
@@ -72,9 +72,9 @@ function FPP.entGetTouchReason(ent, touchType)
 	end
 
 	local maxReasonValue = 15
-	local reasonNr = bit.band(idx, bit.lshift(maxReasonValue, reasonSize * touchTypeMultiplier[touchType]))
+	local reasonNr = bit.band(idx, bit.lshift(maxReasonValue, reasonSize * touchTypeMultiplier[touchType]));
 	local reason = reasons[reasonNr]
-	local owner = ent:CPPIGetOwner()
+	local owner = ent:CPPIGetOwner();
 
 	if reasonNr == 1 then -- convert owner to the actual player
 		return not isnumber(owner) and IsValid(owner) and owner:Nick() or "Unknown player"

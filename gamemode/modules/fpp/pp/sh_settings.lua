@@ -90,6 +90,6 @@ FPP.Settings.FPP_BLOCKMODELSETTINGS1 = {
 
 for Protection, Settings in pairs(FPP.Settings) do
 	for Option, value in pairs(Settings) do
-		CreateConVar("_"..Protection.."_"..Option, value, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+		CreateConVar("_"..Protection.."_"..Option, value, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE});
 	end
 end

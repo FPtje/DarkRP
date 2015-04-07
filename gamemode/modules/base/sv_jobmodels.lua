@@ -1,8 +1,8 @@
-util.AddNetworkString("fprp_preferredjobmodels")
-util.AddNetworkString("fprp_preferredjobmodel")
+util.AddNetworkString("fprp_preferredjobmodels");
+util.AddNetworkString("fprp_preferredjobmodel");
 
 local preferredJobModels = {}
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 
 local received = {}
 net.Receive("fprp_preferredjobmodels", function(len, ply)
@@ -11,25 +11,25 @@ net.Receive("fprp_preferredjobmodels", function(len, ply)
 	for i, job in ipairs(RPExtraTeams) do
 		if net.ReadBit() == 0 then continue end
 
-		preferredJobModels[ply][i] = net.ReadString()
+		preferredJobModels[ply][i] = net.ReadString();
 	end
 
 	if not received[ply] and preferredJobModels[ply][ply:Team()] then
-		GAMEMODE:PlayerSetModel(ply)
+		GAMEMODE:PlayerSetModel(ply);
 	end
 
 	received[ply] = true
-end)
+end);
 
 net.Receive("fprp_preferredjobmodel", function(len, ply)
-	local teamNr = net.ReadUInt(8)
-	local model = net.ReadString()
+	local teamNr = net.ReadUInt(8);
+	local model = net.ReadString();
 
 	if not RPExtraTeams[teamNr] then return end
 
 	preferredJobModels[ply] = preferredJobModels[ply] or {}
 	preferredJobModels[ply][teamNr] = model
-end)
+end);
 
 function plyMeta:getPreferredModel(TeamNr)
 	preferredJobModels[self] = preferredJobModels[self] or {}

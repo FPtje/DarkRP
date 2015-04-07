@@ -1,15 +1,15 @@
 FAdmin.StartHooks["Jail"] = function()
-	FAdmin.Access.AddPrivilege("Jail", 2)
-	FAdmin.Commands.AddCommand("Jail", nil, "<Player>", "[Small/Normal/Big]", "[Time]")
-	FAdmin.Commands.AddCommand("UnJail", nil, "<Player>")
+	FAdmin.Access.AddPrivilege("Jail", 2);
+	FAdmin.Commands.AddCommand("Jail", nil, "<Player>", "[Small/Normal/Big]", "[Time]");
+	FAdmin.Commands.AddCommand("UnJail", nil, "<Player>");
 
 	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Jail/Unjail", function(ply)
 		if ply:FAdmin_GetGlobal("fadmin_jailed") then
-			RunConsoleCommand("_FAdmin", "unjail", ply:UserID())
+			RunConsoleCommand("_FAdmin", "unjail", ply:UserID());
 		else
-			RunConsoleCommand("_FAdmin", "jail", ply:UserID())
+			RunConsoleCommand("_FAdmin", "jail", ply:UserID());
 		end
-	end)
+	end);
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
 		if ply:FAdmin_GetGlobal("fadmin_jailed") then return "Unjail" end
@@ -24,38 +24,38 @@ FAdmin.StartHooks["Jail"] = function()
 	function(ply, button)
 		if ply:FAdmin_GetGlobal("fadmin_jailed") then RunConsoleCommand("_FAdmin", "unjail", ply:UserID()) button:SetImage2("null") button:SetText("Jail") button:GetParent():InvalidateLayout() return end
 
-		local menu = DermaMenu()
+		local menu = DermaMenu();
 
-		local Padding = vgui.Create("DPanel")
-		Padding:SetPaintBackgroundEnabled(false)
-		Padding:SetSize(1,5)
-		menu:AddPanel(Padding)
+		local Padding = vgui.Create("DPanel");
+		Padding:SetPaintBackgroundEnabled(false);
+		Padding:SetSize(1,5);
+		menu:AddPanel(Padding);
 
-		local Title = vgui.Create("DLabel")
-		Title:SetText("  Jail Type:\n")
-		Title:SetFont("UiBold")
-		Title:SizeToContents()
-		Title:SetTextColor(color_black)
+		local Title = vgui.Create("DLabel");
+		Title:SetText("  Jail Type:\n");
+		Title:SetFont("UiBold");
+		Title:SizeToContents();
+		Title:SetTextColor(color_black);
 
-		menu:AddPanel(Title)
+		menu:AddPanel(Title);
 
 		for k,v in pairs(FAdmin.PlayerActions.JailTypes) do
 			if v == "Unjail" then continue end
 			FAdmin.PlayerActions.addTimeSubmenu(menu, v .. " jail",
 				function()
-					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k)
-					button:SetText("Unjail") button:GetParent():InvalidateLayout()
-					button:SetImage2("FAdmin/icons/disable")
+					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k);
+					button:SetText("Unjail") button:GetParent():InvalidateLayout();
+					button:SetImage2("FAdmin/icons/disable");
 				end,
 				function(secs)
-					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k, secs)
-					button:SetText("Unjail")
-					button:GetParent():InvalidateLayout()
-					button:SetImage2("FAdmin/icons/disable")
+					RunConsoleCommand("_FAdmin", "Jail", ply:UserID(), k, secs);
+					button:SetText("Unjail");
+					button:GetParent():InvalidateLayout();
+					button:SetImage2("FAdmin/icons/disable");
 				end
-			)
+			);
 		end
 
-		menu:Open()
-	end)
+		menu:Open();
+	end);
 end

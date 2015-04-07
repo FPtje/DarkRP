@@ -1,4 +1,4 @@
-local meta = FindMetaTable("Player")
+local meta = FindMetaTable("Player");
 function meta:dropDRPWeapon(weapon)
 	if GAMEMODE.Config.restrictdrop then
 		local found = false
@@ -12,63 +12,63 @@ function meta:dropDRPWeapon(weapon)
 		if not found then return end
 	end
 
-	local ammo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
+	local ammo = self:GetAmmoCount(weapon:GetPrimaryAmmoType());
 	self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
 
-	local ent = ents.Create("spawned_weapon")
-	local model = (weapon:GetModel() == "models/weapons/v_physcannon.mdl" and "models/weapons/w_physics.mdl") or weapon:GetModel()
+	local ent = ents.Create("spawned_weapon");
+	local model = (weapon:GetModel() == "models/weapons/v_physcannon.mdl" and "models/weapons/w_physics.mdl") or weapon:GetModel();
 	model = util.IsValidModel(model) and model or "models/weapons/w_rif_ak47.mdl"
 
 	ent.ShareGravgun = true
-	ent:SetPos(self:GetShootPos() + self:GetAimVector() * 30)
-	ent:SetModel(model)
-	ent:SetSkin(weapon:GetSkin())
-	ent:SetWeaponClass(weapon:GetClass())
+	ent:SetPos(self:GetShootPos() + self:GetAimVector() * 30);
+	ent:SetModel(model);
+	ent:SetSkin(weapon:GetSkin());
+	ent:SetWeaponClass(weapon:GetClass());
 	ent.nodupe = true
-	ent.clip1 = weapon:Clip1()
-	ent.clip2 = weapon:Clip2()
+	ent.clip1 = weapon:Clip1();
+	ent.clip2 = weapon:Clip2();
 	ent.ammoadd = ammo
 
-	hook.Call("onfprpWeaponDropped", nil, self, ent, weapon)
+	hook.Call("onfprpWeaponDropped", nil, self, ent, weapon);
 
-	self:RemoveAmmo(ammo, weapon:GetPrimaryAmmoType())
+	self:RemoveAmmo(ammo, weapon:GetPrimaryAmmoType());
 
-	ent:Spawn()
+	ent:Spawn();
 
-	weapon:Remove()
+	weapon:Remove();
 end
 
 local function DropWeapon(ply)
-	local ent = ply:GetActiveWeapon()
+	local ent = ply:GetActiveWeapon();
 	if not IsValid(ent) or not ent:GetModel() or ent:GetModel() == "" then
-		fprp.notify(ply, 1, 4, fprp.getPhrase("cannot_drop_weapon"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("cannot_drop_weapon"));
 		return ""
 	end
 
-	local canDrop = hook.Call("canDropWeapon", GAMEMODE, ply, ent)
+	local canDrop = hook.Call("canDropWeapon", GAMEMODE, ply, ent);
 	if not canDrop then
-		fprp.notify(ply, 1, 4, fprp.getPhrase("cannot_drop_weapon"))
+		fprp.notify(ply, 1, 4, fprp.getPhrase("cannot_drop_weapon"));
 		return ""
 	end
 
-	local RP = RecipientFilter()
-	RP:AddAllPlayers()
+	local RP = RecipientFilter();
+	RP:AddAllPlayers();
 
-	umsg.Start("anim_dropitem", RP)
-		umsg.Entity(ply)
-	umsg.End()
+	umsg.Start("anim_dropitem", RP);
+		umsg.Entity(ply);
+	umsg.End();
 	ply.anim_DroppingItem = true
 
 	timer.Simple(1, function()
 		if IsValid(ply) and IsValid(ent) and ent:GetModel() and ent:GetModel() ~= "" then
-			ply:dropDRPWeapon(ent)
+			ply:dropDRPWeapon(ent);
 		end
-	end)
+	end);
 	return ""
 end
-fprp.defineChatCommand("drop", DropWeapon)
-fprp.defineChatCommand("dropweapon", DropWeapon)
-fprp.defineChatCommand("weapondrop", DropWeapon)
+fprp.defineChatCommand("drop", DropWeapon);
+fprp.defineChatCommand("dropweapon", DropWeapon);
+fprp.defineChatCommand("weapondrop", DropWeapon);
 
 fprp.stub{
 	name = "dropDRPWeapon",

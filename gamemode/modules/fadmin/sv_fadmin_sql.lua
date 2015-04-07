@@ -4,15 +4,15 @@ Create the tables used for banning
 hook.Add("DatabaseInitialized", "FAdmin_CreateMySQLTables", function()
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdminBans(SteamID VARCHAR(25) NOT NULL PRIMARY KEY, Nick VARCHAR(40), BanDate DATETIME, UnbanDate DATETIME, Reason VARCHAR(100), AdminName VARCHAR(40), Admin_steam VARCHAR(25));", function()
 
-		hook.Call("FAdmin_RetrieveBans", nil)
-	end)
-end)
+		hook.Call("FAdmin_RetrieveBans", nil);
+	end);
+end);
 
 /*---------------------------------------------------------------------------
 Store a ban in the MySQL tables
 ---------------------------------------------------------------------------*/
 hook.Add("FAdmin_StoreBan", "MySQLBans", function(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
-	local steam = MySQLite.SQLStr(SteamID)
+	local steam = MySQLite.SQLStr(SteamID);
 	local nick = Nick and MySQLite.SQLStr(Nick) or "NULL"
 	local bandate = MySQLite.isMySQL() and "NOW()" or "datetime('now')"
 	local reason = Reason and MySQLite.SQLStr(Reason) or "NULL"
@@ -26,17 +26,17 @@ hook.Add("FAdmin_StoreBan", "MySQLBans", function(SteamID, Nick, Duration, Reaso
 		duration = Duration == 0 and "NULL" or "datetime('now', '+".. tonumber(Duration or 60) .. " minutes')"
 	end
 
-	MySQLite.query("REPLACE INTO FAdminBans VALUES(".. steam .. ", ".. nick .. ", " .. bandate .. ", " .. duration .. ", ".. reason .. ", ".. admin .. ", ".. adminsteam .. ");")
+	MySQLite.query("REPLACE INTO FAdminBans VALUES(".. steam .. ", ".. nick .. ", " .. bandate .. ", " .. duration .. ", ".. reason .. ", ".. admin .. ", ".. adminsteam .. ");");
 
 	return true
-end)
+end);
 
 /*---------------------------------------------------------------------------
 Unban someone
 ---------------------------------------------------------------------------*/
 hook.Add("FAdmin_UnBan", "FAdmin_MySQLUnban", function(ply, steamID)
-	MySQLite.query("DELETE FROM FAdminBans WHERE steamID = ".. MySQLite.SQLStr(steamID))
-end)
+	MySQLite.query("DELETE FROM FAdminBans WHERE steamID = ".. MySQLite.SQLStr(steamID));
+end);
 
 /*---------------------------------------------------------------------------
 Retrieve the bans from the MySQL server and put them into effect
@@ -58,7 +58,7 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
 
 		for k, v in pairs(data) do
 			if tonumber(v.SteamID) or not v.SteamID then continue end
-			local duration = (not v.duration or v.duration == "NULL") and 0 or (os.time() + v.duration)
+			local duration = (not v.duration or v.duration == "NULL") and 0 or (os.time() + v.duration);
 
 			FAdmin.BANS[string.upper(v.SteamID)] = {
 				time = duration,
@@ -68,7 +68,7 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
 				adminsteam = v.Admin_steam
 			}
 
-			game.ConsoleCommand("banid ".. duration * 60 .." " .. v.SteamID.. " kick\n")
+			game.ConsoleCommand("banid ".. duration * 60 .." " .. v.SteamID.. " kick\n");
 		end
-	end)
+	end);
 end)

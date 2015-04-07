@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
 Disjoint-set forest implementation
-Inspired by the book Introduction To Algorithms (third edition)
+Inspired by the book Introduction To Algorithms (third edition);
 
 by FPtje Atheos
 
@@ -13,7 +13,7 @@ local string = string
 local table = table
 local tostring = tostring
 
-module("disjoint")
+module("disjoint");
 
 local metatable
 
@@ -24,7 +24,7 @@ function MakeSet(x, parent)
 	set.rank   = 0
 	set.parent = parent or set
 
-	setmetatable(set, metatable)
+	setmetatable(set, metatable);
 
 	return set
 end
@@ -49,7 +49,7 @@ end
 
 -- Apply the union operation between two sets.
 function Union(x, y)
-	return Link(FindSet(x), FindSet(y))
+	return Link(FindSet(x), FindSet(y));
 end
 
 function FindSet(x)
@@ -61,7 +61,7 @@ function FindSet(x)
 		parent = parent.parent
 
 		listParents = listParents or {}
-		table.insert(listParents, parent)
+		table.insert(listParents, parent);
 	end
 
 	-- Path compression, update all parents to refer to the top parent
@@ -83,7 +83,7 @@ end
 
 metatable = {
 	__tostring = function(self)
-		return string.format("Disjoint-Set [value: %s][Rank: %s][Parent: %s]", tostring(self.value), self.rank, tostring(self.parent.value))
+		return string.format("Disjoint-Set [value: %s][Rank: %s][Parent: %s]", tostring(self.value), self.rank, tostring(self.parent.value));
 	end,
 	__metatable = true, -- restrict access to metatable
 	__add = Union

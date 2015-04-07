@@ -1,5 +1,5 @@
-local pMeta = FindMetaTable("Player")
-local entMeta = FindMetaTable("Entity")
+local pMeta = FindMetaTable("Player");
+local entMeta = FindMetaTable("Entity");
 
 function pMeta:canAfford(amount)
 	if not amount or self.fprpUnInitialized then return false end

@@ -6,7 +6,7 @@ TOOL.ConfigName         = ""
 function TOOL:RightClick(trace)
 	if not IsValid(trace.Entity) or CLIENT then return true end
 
-	local ply = self:GetOwner()
+	local ply = self:GetOwner();
 
 	trace.Entity.SharePhysgun1 = nil
 	trace.Entity.ShareGravgun1 = nil
@@ -21,7 +21,7 @@ end
 function TOOL:LeftClick(trace)
 	if not IsValid(trace.Entity) or CLIENT then return true end
 
-	local ply = self:GetOwner()
+	local ply = self:GetOwner();
 
 	local Physgun = trace.Entity.SharePhysgun1 or false
 	local GravGun = trace.Entity.ShareGravgun1 or false
@@ -30,25 +30,25 @@ function TOOL:LeftClick(trace)
 	local Toolgun = trace.Entity.ShareToolgun1 or false
 
 	-- This big usermessage will be too big if you select 63 players, since that will not happen I can't be arsed to solve it
-	umsg.Start("FPP_ShareSettings", ply)
-		umsg.Entity(trace.Entity)
-		umsg.Bool(Physgun)
-		umsg.Bool(GravGun)
-		umsg.Bool(PlayerUse)
-		umsg.Bool(Damage)
-		umsg.Bool(Toolgun)
+	umsg.Start("FPP_ShareSettings", ply);
+		umsg.Entity(trace.Entity);
+		umsg.Bool(Physgun);
+		umsg.Bool(GravGun);
+		umsg.Bool(PlayerUse);
+		umsg.Bool(Damage);
+		umsg.Bool(Toolgun);
 		if trace.Entity.AllowedPlayers then
-			umsg.Long(#trace.Entity.AllowedPlayers)
+			umsg.Long(#trace.Entity.AllowedPlayers);
 			for k,v in pairs(trace.Entity.AllowedPlayers) do
-				umsg.Entity(v)
+				umsg.Entity(v);
 			end
 		end
-	umsg.End()
+	umsg.End();
 	return true
 end
 
 if CLIENT then
-	language.Add( "Tool.shareprops.name", "Share tool" )
-	language.Add( "Tool.shareprops.desc", "Change sharing settings per prop" )
-	language.Add( "Tool.shareprops.0", "Left click: shares a prop. Right click unshares a prop")
+	language.Add( "Tool.shareprops.name", "Share tool" );
+	language.Add( "Tool.shareprops.desc", "Change sharing settings per prop" );
+	language.Add( "Tool.shareprops.0", "Left click: shares a prop. Right click unshares a prop");
 end

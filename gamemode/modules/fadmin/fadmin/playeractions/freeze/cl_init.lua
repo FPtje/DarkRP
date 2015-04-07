@@ -1,7 +1,7 @@
 FAdmin.StartHooks["Freeze"] = function()
-	FAdmin.Access.AddPrivilege("Freeze", 2)
-	FAdmin.Commands.AddCommand("freeze", nil, "<Player>")
-	FAdmin.Commands.AddCommand("unfreeze", nil, "<Player>")
+	FAdmin.Access.AddPrivilege("Freeze", 2);
+	FAdmin.Commands.AddCommand("freeze", nil, "<Player>");
+	FAdmin.Commands.AddCommand("unfreeze", nil, "<Player>");
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
 		if ply:FAdmin_GetGlobal("FAdmin_frozen") then return "Unfreeze" end
@@ -14,17 +14,17 @@ FAdmin.StartHooks["Freeze"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Freeze", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_frozen") then
 			FAdmin.PlayerActions.addTimeMenu(function(secs)
-				RunConsoleCommand("_FAdmin", "freeze", ply:UserID(), secs)
-				button:SetImage2("FAdmin/icons/disable")
-				button:SetText("Unfreeze")
-				button:GetParent():InvalidateLayout()
-			end)
+				RunConsoleCommand("_FAdmin", "freeze", ply:UserID(), secs);
+				button:SetImage2("FAdmin/icons/disable");
+				button:SetText("Unfreeze");
+				button:GetParent():InvalidateLayout();
+			end);
 		else
-			RunConsoleCommand("_FAdmin", "unfreeze", ply:UserID())
+			RunConsoleCommand("_FAdmin", "unfreeze", ply:UserID());
 		end
 
-		button:SetImage2("null")
-		button:SetText("Freeze")
-		button:GetParent():InvalidateLayout()
-	end)
+		button:SetImage2("null");
+		button:SetText("Freeze");
+		button:GetParent():InvalidateLayout();
+	end);
 end

@@ -1,4 +1,4 @@
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 fprp.chatCommands = fprp.chatCommands or {}
 
 local validChatCommand = {
@@ -18,12 +18,12 @@ local checkChatCommand = function(tbl)
 end
 
 function fprp.declareChatCommand(tbl)
-	local valid, element = checkChatCommand(tbl)
+	local valid, element = checkChatCommand(tbl);
 	if not valid then
-		fprp.error("Incorrect chat command! " .. element .. " is invalid!", 2)
+		fprp.error("Incorrect chat command! " .. element .. " is invalid!", 2);
 	end
 
-	tbl.command = string.lower(tbl.command)
+	tbl.command = string.lower(tbl.command);
 	fprp.chatCommands[tbl.command] = fprp.chatCommands[tbl.command] or tbl
 	for k, v in pairs(tbl) do
 		fprp.chatCommands[tbl.command][k] = v
@@ -37,9 +37,9 @@ end
 function fprp.chatCommandAlias(command, ...)
 	local name
 	for k, v in pairs{...} do
-		name = string.lower(v)
+		name = string.lower(v);
 
-		fprp.chatCommands[name] = table.Copy(fprp.chatCommands[command])
+		fprp.chatCommands[name] = table.Copy(fprp.chatCommands[command]);
 		fprp.chatCommands[name].command = name
 	end
 end
@@ -53,14 +53,14 @@ function fprp.getChatCommands()
 end
 
 function fprp.getSortedChatCommands()
-	local tbl = fn.Compose{table.ClearKeys, table.Copy, fprp.getChatCommands}()
-	table.SortByMember(tbl, "command", true)
+	local tbl = fn.Compose{table.ClearKeys, table.Copy, fprp.getChatCommands}();
+	table.SortByMember(tbl, "command", true);
 
 	return tbl
 end
 
 -- chat commands that have been defined, but not declared
-fprp.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(fprp.chatCommands)
+fprp.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(fprp.chatCommands);
 
 /*---------------------------------------------------------------------------
 Chat commands

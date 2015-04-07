@@ -35,7 +35,7 @@ GM.Config.allowvnocollide 				= false
 GM.Config.alltalk 						= false
 -- autovehiclelock - Enable/Disable automatic locking of a vehicle when a player exits it.
 GM.Config.autovehiclelock 				= false
--- babygod - people spawn godded (prevent spawn killing)
+-- babygod - people spawn godded (prevent spawn killing);
 GM.Config.babygod 						= true
 -- canforcedooropen - whether players can force an unownable door open with lockpick or battering ram or w/e
 GM.Config.canforcedooropen				= true
@@ -182,7 +182,7 @@ GM.Config.babygodtime					= 5
 GM.Config.chatsoundsdelay				= 5
 -- deathfee - the amount of shekel someone drops when dead.
 GM.Config.deathfee						= 30
--- decaltimer - Sets the time to clear clientside decals. (seconds)
+-- decaltimer - Sets the time to clear clientside decals. (seconds);
 GM.Config.decaltimer					= 120
 -- demotetime - Number of seconds before a player can rejoin a team after demotion from that team.
 GM.Config.demotetime					= 120
@@ -190,7 +190,7 @@ GM.Config.demotetime					= 120
 GM.Config.doorcost						= 30
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
 GM.Config.entremovedelay				= 0
--- jailtimer - Sets the jailtimer. (in seconds)
+-- jailtimer - Sets the jailtimer. (in seconds);
 GM.Config.jailtimer						= 120
 -- maxdoors - Sets the max amount of doors one can own.
 GM.Config.maxdoors						= 20
@@ -222,11 +222,11 @@ GM.Config.npckillpay					= 9999999999
 GM.Config.paydelay						= 100
 -- pocketitems - Sets the amount of objects the pocket can carry
 GM.Config.pocketitems					= 10
--- pricecap - The maximum price of items (using /price)
+-- pricecap - The maximum price of items (using /price);
 GM.Config.pricecap						= 500
--- pricemin - The minimum price of items (using /price)
+-- pricemin - The minimum price of items (using /price);
 GM.Config.pricemin						= 50
--- propcost - How much prop spawning should cost. (prop paying must be enabled for this to have an effect)
+-- propcost - How much prop spawning should cost. (prop paying must be enabled for this to have an effect);
 GM.Config.propcost						= 10
 -- quakechance - Chance of an earthquake happening.
 GM.Config.quakechance					= 4000
@@ -272,7 +272,7 @@ Other settings
 ---------------------------------------------------------------------------]]
 
 -- The classname of shekel packets. Use this to create your own shekel entity!
--- Note: the shekel packet must support the "Setamount" method (or the amount DTVar)
+-- Note: the shekel packet must support the "Setamount" method (or the amount DTVar);
 GM.Config.shekelClass = "spawned_money"
 -- In case you do wish to keep the default shekel, but change the model, this option is the way to go:
 GM.Config.shekelModel = "models/props/cs_assault/money.mdl"
@@ -281,7 +281,7 @@ GM.Config.shekelModel = "models/props/cs_assault/money.mdl"
 GM.Config.fprpSkin = "fprp"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
-GM.Config.SleekF1MenuHelpPage = "http://wiki.fprp.com/index.php/Main_Page"
+GM.Config.SleekF1MenuHelpPage = "https://www.youtube.com/embed/QTzp5gh-KEI?rel=0&autoplay=1"
 GM.Config.SleekF1MenuHelpPageTitle = "Wiki page"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
@@ -402,7 +402,7 @@ GM.Config.PocketBlacklist = {
 -- These weapons are classed as 'legal' in the weapon checker and are not stripped when confiscating weapons.
 -- This setting is used IN ADDITION to GM.Config.weaponCheckerHideDefault and GM.Config.weaponCheckerHideNoLicense
 -- You should use the former if you want to class the default weapons (GM.Config.DefaultWeapons and, if admin, GM.Config.AdminWeapons) and a player's job weapons as legal.
--- The latter takes GM.NoLicense weapons as legal (see licenseweapons.lua)
+-- The latter takes GM.NoLicense weapons as legal (see licenseweapons.lua);
 -- The format of this config is similar to GM.Config.DisallowDrop
 GM.Config.noStripWeapons = {
 
@@ -432,11 +432,11 @@ GM.Config.allowedProperties = {
 --[[---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------]]
--- hide the items that you can't buy and the jobs you can't get (instead of graying them out)
+-- hide the items that you can't buy and the jobs you can't get (instead of graying them out);
 -- this option hides items when you don't have enough shekel, when the maximum is reached for a job or any other reason
 GM.Config.hideNonBuyable = false
 
--- Hide only the items that you have the wrong job for (or for which the customCheck says no)
+-- Hide only the items that you have the wrong job for (or for which the customCheck says no);
 -- When you set this option to true and hideNonBuyable to false, you WILL see e.g. items that are too expensive for you to buy
 -- but you won't see gundealer shipments when you have the citizen job
 GM.Config.hideTeamUnbuyable = true
@@ -462,15 +462,15 @@ GM.Config.minHitDistance = 150
 GM.Config.hudText = "I am a hitman.\nPress E on me to request a hit!"
 -- The text above a hitman when he's got a hit
 GM.Config.hitmanText = "Hit\naccepted!"
--- The cooldown time for a hit target (so they aren't spam killed)
+-- The cooldown time for a hit target (so they aren't spam killed);
 GM.Config.hitTargetCooldown = 120
--- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted)
+-- How long a customer has to wait to be able to buy another hit (from the moment the hit is accepted);
 GM.Config.hitCustomerCooldown = 240
 
 --[[---------------------------------------------------------------------------
 Hungermod module
 ---------------------------------------------------------------------------]]
--- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default)
+-- hungerspeed <Amount> - Set the rate at which players will become hungry (2 is the default);
 GM.Config.hungerspeed = 2
--- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
+-- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default);
 GM.Config.starverate = 3

@@ -1,4 +1,4 @@
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 local hitmanTeams = {}
 
 function plyMeta:isHitman()
@@ -10,7 +10,7 @@ function plyMeta:hasHit()
 end
 
 function plyMeta:getHitTarget()
-	return self:getfprpVar("hitTarget")
+	return self:getfprpVar("hitTarget");
 end
 
 function plyMeta:getHitPrice()
@@ -42,15 +42,15 @@ end
 
 hook.Add("onJobRemoved", "hitmenuUpdate", function(i, job)
 	hitmanTeams[i] = nil
-end)
+end);
 
 /*---------------------------------------------------------------------------
 fprpVars
 ---------------------------------------------------------------------------*/
-fprp.registerfprpVar("hasHit", net.WriteBit, fn.Compose{tobool, net.ReadBit})
-fprp.registerfprpVar("hitTarget", net.WriteEntity, net.ReadEntity)
-fprp.registerfprpVar("hitPrice", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
-fprp.registerfprpVar("lastHitTime", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
+fprp.registerfprpVar("hasHit", net.WriteBit, fn.Compose{tobool, net.ReadBit});
+fprp.registerfprpVar("hitTarget", net.WriteEntity, net.ReadEntity);
+fprp.registerfprpVar("hitPrice", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32));
+fprp.registerfprpVar("lastHitTime", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32));
 
 /*---------------------------------------------------------------------------
 Chat commands

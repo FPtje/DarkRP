@@ -36,7 +36,7 @@ local doInclude = CLIENT and include or fc{simplerr.wrapError, simplerr.wrapLog,
 
 if file.Exists("fprp_config/disabled_defaults.lua", "LUA") then
 	if SERVER then AddCSLuaFile("fprp_config/disabled_defaults.lua") end
-	doInclude("fprp_config/disabled_defaults.lua")
+	doInclude("fprp_config/disabled_defaults.lua");
 end
 
 /*---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ for _, File in pairs(configFiles) do
 	if not file.Exists(File, "LUA") then continue end
 
 	if SERVER then AddCSLuaFile(File) end
-	doInclude(File)
+	doInclude(File);
 end
 if SERVER and file.Exists("fprp_config/mysql.lua", "LUA") then doInclude("fprp_config/mysql.lua") end
 
@@ -61,7 +61,7 @@ Modules
 local function loadModules()
 	local fol = "fprp_modules/"
 
-	local files, folders = file.Find(fol .. "*", "LUA")
+	local files, folders = file.Find(fol .. "*", "LUA");
 
 	for _, folder in SortedPairs(folders, true) do
 		if folder == "." or folder == ".." or GAMEMODE.Config.DisabledCustomModules[folder] then continue end
@@ -73,7 +73,7 @@ local function loadModules()
 				"Whether a mod is to be installed in fprp_modules or addons is the author's decision.",
 				"Please read the readme of the addons you're installing next time."
 			},
-			"<fprpmod addon>/lua/fprp_modules/" .. folder, -1)
+			"<fprpmod addon>/lua/fprp_modules/" .. folder, -1);
 			continue
 		end
 
@@ -81,19 +81,19 @@ local function loadModules()
 			if SERVER then AddCSLuaFile(fol..folder .. "/" ..File) end
 
 			if File == "sh_interface.lua" then continue end
-			doInclude(fol.. folder .. "/" ..File)
+			doInclude(fol.. folder .. "/" ..File);
 		end
 
 		if SERVER then
 			for _, File in SortedPairs(file.Find(fol .. folder .."/sv_*.lua", "LUA"), true) do
 				if File == "sv_interface.lua" then continue end
-				doInclude(fol.. folder .. "/" ..File)
+				doInclude(fol.. folder .. "/" ..File);
 			end
 		end
 
 		for _, File in SortedPairs(file.Find(fol .. folder .."/cl_*.lua", "LUA"), true) do
 			if File == "cl_interface.lua" then continue end
-			if SERVER then AddCSLuaFile(fol.. folder .. "/" ..File)
+			if SERVER then AddCSLuaFile(fol.. folder .. "/" ..File);
 			else doInclude(fol.. folder .. "/" ..File)  end
 		end
 	end
@@ -102,10 +102,10 @@ end
 local function loadLanguages()
 	local fol = "fprp_language/"
 
-	local files, folders = file.Find(fol .. "*", "LUA")
+	local files, folders = file.Find(fol .. "*", "LUA");
 	for _, File in pairs(files) do
 		if SERVER then AddCSLuaFile(fol .. File) end
-		doInclude(fol .. File)
+		doInclude(fol .. File);
 	end
 end
 
@@ -128,7 +128,7 @@ local function loadCustomfprpItems()
 		if File == "fprp_customthings/food.lua" and fprp.disabledDefaults["modules"]["hungermod"] then continue end
 
 		if SERVER then AddCSLuaFile(File) end
-		doInclude(File)
+		doInclude(File);
 	end
 end
 
@@ -137,8 +137,8 @@ function GM:fprpFinishedLoading()
 	-- GAMEMODE gets set after the last statement in the gamemode files is run. That is not the case in this hook
 	GAMEMODE = GAMEMODE or GM
 
-	loadLanguages()
-	loadModules()
-	loadCustomfprpItems()
-	hook.Run("loadCustomfprpItems", GAMEMODE)
+	loadLanguages();
+	loadModules();
+	loadCustomfprpItems();
+	hook.Run("loadCustomfprpItems", GAMEMODE);
 end

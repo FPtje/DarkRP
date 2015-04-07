@@ -19,14 +19,14 @@ end
 
 -- Unknown values have unknown types and unknown identifiers, so this is sent inefficiently
 local function writeUnknown(name, value)
-	net.WriteUInt(UNKNOWN_fprpVAR, 8)
-	net.WriteString(name)
-	net.WriteType(value)
+	net.WriteUInt(UNKNOWN_fprpVAR, 8);
+	net.WriteString(name);
+	net.WriteType(value);
 end
 
 -- Read the value of a fprpVar that was not registered
 local function readUnknown()
-	return net.ReadString(), net.ReadType(net.ReadUInt(8))
+	return net.ReadString(), net.ReadType(net.ReadUInt(8));
 end
 
 local warningsShown = {}
@@ -37,63 +37,63 @@ local function warnRegistration(name)
 	ErrorNoHalt(string.format([[Warning! fprpVar '%s' wasn't registered!
  		Please contact the author of the fprp Addon to fix this.
  		Until this is fixed you don't need to worry about anything. Everything will keep working.
- 		It's just that registering fprpVars would make fprp faster.]], name))
+ 		It's just that registering fprpVars would make fprp faster.]], name));
 
-	debug.Trace()
+	debug.Trace();
 end
 
 function fprp.writeNetfprpVar(name, value)
 	local fprpVar = fprpVars[name]
 	if not fprpVar then
-		warnRegistration(name)
+		warnRegistration(name);
 
-		return writeUnknown(name, value)
+		return writeUnknown(name, value);
 	end
 
-	net.WriteUInt(fprpVar.id, fprp_ID_BITS)
-	return fprpVar.writeFn(value)
+	net.WriteUInt(fprpVar.id, fprp_ID_BITS);
+	return fprpVar.writeFn(value);
 end
 
 function fprp.writeNetfprpVarRemoval(name)
 	local fprpVar = fprpVars[name]
 	if not fprpVar then
-		warnRegistration(name)
+		warnRegistration(name);
 
-		net.WriteUInt(UNKNOWN_fprpVAR, 8)
-		net.WriteString(name)
+		net.WriteUInt(UNKNOWN_fprpVAR, 8);
+		net.WriteString(name);
 		return
 	end
 
-	net.WriteUInt(fprpVar.id, fprp_ID_BITS)
+	net.WriteUInt(fprpVar.id, fprp_ID_BITS);
 end
 
 function fprp.readNetfprpVar()
-	local fprpVarId = net.ReadUInt(fprp_ID_BITS)
+	local fprpVarId = net.ReadUInt(fprp_ID_BITS);
 	local fprpVar = fprpVarById[fprpVarId]
 
 	if fprpVarId == UNKNOWN_fprpVAR then
-		local name, value = readUnknown()
+		local name, value = readUnknown();
 
 		return name, value
 	end
 
-	local val = fprpVar.readFn(value)
+	local val = fprpVar.readFn(value);
 
 	return fprpVar.name, val
 end
 
 function fprp.readNetfprpVarRemoval()
-	local id = net.ReadUInt(fprp_ID_BITS)
+	local id = net.ReadUInt(fprp_ID_BITS);
 	return id == 255 and net.ReadString() or fprpVarById[id].name
 end
 
 -- The shekel is a double because it accepts higher values than Int and UInt, which are undefined for >32 bits
-fprp.registerfprpVar("shekel",         net.WriteDouble, net.ReadDouble)
-fprp.registerfprpVar("salary",        fp{fn.Flip(net.WriteInt), 32}, fp{net.ReadInt, 32})
-fprp.registerfprpVar("rpname",        net.WriteString, net.ReadString)
-fprp.registerfprpVar("job",           net.WriteString, net.ReadString)
-fprp.registerfprpVar("HasGunlicense", net.WriteBit, fc{tobool, net.ReadBit})
-fprp.registerfprpVar("Arrested",      net.WriteBit, fc{tobool, net.ReadBit})
-fprp.registerfprpVar("wanted",        net.WriteBit, fc{tobool, net.ReadBit})
-fprp.registerfprpVar("wantedReason",  net.WriteString, net.ReadString)
-fprp.registerfprpVar("agenda",        net.WriteString, net.ReadString)
+fprp.registerfprpVar("shekel",         net.WriteDouble, net.ReadDouble);
+fprp.registerfprpVar("salary",        fp{fn.Flip(net.WriteInt), 32}, fp{net.ReadInt, 32});
+fprp.registerfprpVar("rpname",        net.WriteString, net.ReadString);
+fprp.registerfprpVar("job",           net.WriteString, net.ReadString);
+fprp.registerfprpVar("HasGunlicense", net.WriteBit, fc{tobool, net.ReadBit});
+fprp.registerfprpVar("Arrested",      net.WriteBit, fc{tobool, net.ReadBit});
+fprp.registerfprpVar("wanted",        net.WriteBit, fc{tobool, net.ReadBit});
+fprp.registerfprpVar("wantedReason",  net.WriteString, net.ReadString);
+fprp.registerfprpVar("agenda",        net.WriteString, net.ReadString);

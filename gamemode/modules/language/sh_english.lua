@@ -532,8 +532,8 @@ local my_language = {
 }
 
 -- The language code is usually (but not always) a two-letter code. The default language is "en".
--- Other examples are "nl" (Dutch), "de" (German)
+-- Other examples are "nl" (Dutch), "de" (German);
 -- If you want to know what your language code is, open GMod, select a language at the bottom right
 -- then enter gmod_language in console. It will show you the code.
 -- Make sure language code is a valid entry for the convar gmod_language.
-fprp.addLanguage("en", my_language)
+fprp.addLanguage("en", my_language);

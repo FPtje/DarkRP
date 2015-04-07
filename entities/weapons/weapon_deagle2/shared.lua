@@ -1,4 +1,4 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if CLIENT then
 	SWEP.PrintName = "Deagle"
@@ -7,7 +7,7 @@ if CLIENT then
 	SWEP.SlotPos = 1
 	SWEP.IconLetter = "f"
 
-	killicon.AddFont("weapon_deagle2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+	killicon.AddFont("weapon_deagle2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255));
 end
 
 SWEP.Base = "weapon_cs_base2"
@@ -25,7 +25,7 @@ SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "pistol"
 
-SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
+SWEP.Primary.Sound = Sound("Weapon_Deagle.Single");
 SWEP.Primary.Recoil = 1.1
 SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
@@ -41,6 +41,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector(-6.35, -7.5, 2.02)
-SWEP.IronSightsAng = Vector(0.51, 0, 0)
+SWEP.IronSightsPos = Vector(-6.35, -7.5, 2.02);
+SWEP.IronSightsAng = Vector(0.51, 0, 0);
 
