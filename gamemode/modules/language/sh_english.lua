@@ -24,8 +24,8 @@ Make sure the convar gmod_language is set to your language code. You can do that
 
 local my_language = {
 	-- Admin things
-	need_admin = "You need admin privileges in order to be able to %s",
-	need_sadmin = "You need super admin privileges in order to be able to %s",
+	need_admin = "You need to buy admin in order to be able to %s",
+	need_sadmin = "You need suck off the owner in order to be able to %s",
 	no_privilege = "You don't have the right privileges to perform this action",
 	no_jail_pos = "No jail position",
 	invalid_x = "Invalid %s! %s",
@@ -113,12 +113,12 @@ local my_language = {
 	-- Players
 	health = "Health: %s",
 	job = "Job: %s",
-	salary = "Salary: %s%s",
+	salary = "Drug Money: %s%s",
 	wallet = "Wallet: %s%s",
 	weapon = "Weapon: %s",
 	kills = "Kills: %s",
-	deaths = "Deaths: %s",
-	rpname_changed = "%s changed their RPName to: %s",
+	deaths = "Kills: %s",
+	rpname_changed = "%s changed their RPName to: _%s",
 	disconnected_player = "Disconnected player",
 
 	-- Teams
@@ -400,7 +400,7 @@ local my_language = {
 	wave = "Wave",
 
 	-- Hungermod
-	starving = "Starving!",
+	starving = "not Starving!",
 
 	-- AFK
 	afk_mode = "AFK Mode",
@@ -421,7 +421,7 @@ local my_language = {
 	hitmenu_request = "Request",
 	player_not_hitman = "This player is not a hitman!",
 	distance_too_big = "Distance too big.",
-	hitman_no_suicide = "The hitman won't kill himself.",
+	hitman_no_suicide = "The hitman won't kill himself for that price.",
 	hitman_no_self_order = "A hitman cannot order a hit for himself.",
 	hitman_already_has_hit = "The hitman already has a hit ongoing.",
 	price_too_low = "Price too low!",
