@@ -13,14 +13,14 @@ local PANEL = {}
 ---------------------------------------------------------*/
 function PANEL:Init()
 
-	self:SetMouseInputEnabled( true )
-	self:SetKeyboardInputEnabled( true )
+	self:SetMouseInputEnabled( true );
+	self:SetKeyboardInputEnabled( true );
 
-	self:SetDeleteOnClose( false )
+	self:SetDeleteOnClose( false );
 
-	self:SetTitle("Change level")
+	self:SetTitle("Change level");
 
-	self:CreateControls()
+	self:CreateControls();
 
 end
 
@@ -30,19 +30,19 @@ end
 ---------------------------------------------------------*/
 function PANEL:CreateControls()
 
-	self.StartGame = vgui.Create("FAdmin_StartGame", self )
-	self.MapSheet = vgui.Create("DPropertySheet", self )
+	self.StartGame = vgui.Create("FAdmin_StartGame", self );
+	self.MapSheet = vgui.Create("DPropertySheet", self );
 
-	self.MapIcons = vgui.Create("MapListIcons")
-	self.MapIcons:SetController( self.StartGame )
-	self.MapIcons:Setup()
+	self.MapIcons = vgui.Create("MapListIcons");
+	self.MapIcons:SetController( self.StartGame );
+	self.MapIcons:Setup();
 
-	local Options = vgui.Create("FAdmin_MapListOptions", self )
+	local Options = vgui.Create("FAdmin_MapListOptions", self );
 	Options.Controller = self.StartGame
-	Options:SetupSinglePlayer()
+	Options:SetupSinglePlayer();
 
-	self.MapSheet:AddSheet("Icons", self.MapIcons, "icon16/application_view_tile.png")
-	self.MapSheet:AddSheet("Options", Options, "icon16/application_view_detail.png")
+	self.MapSheet:AddSheet("Icons", self.MapIcons, "icon16/application_view_tile.png");
+	self.MapSheet:AddSheet("Options", Options, "icon16/application_view_detail.png");
 
 end
 
@@ -51,22 +51,22 @@ end
 ---------------------------------------------------------*/
 function PANEL:PerformLayout()
 
-	self:SetSize( 450, ScrH() * 0.8 )
+	self:SetSize( 450, ScrH() * 0.8 );
 
-	self.MapSheet:SetPos( 8, 25 )
-	self.MapSheet:SetSize( self:GetWide() - 16, self:GetTall() - 25 - 8 - 60 - 8 )
-	self.MapSheet:InvalidateLayout()
+	self.MapSheet:SetPos( 8, 25 );
+	self.MapSheet:SetSize( self:GetWide() - 16, self:GetTall() - 25 - 8 - 60 - 8 );
+	self.MapSheet:InvalidateLayout();
 
-	self.StartGame:SetPos( 8, self:GetTall() - 60 - 8 )
-	self.StartGame:SetSize( self:GetWide() - 16, 60 )
+	self.StartGame:SetPos( 8, self:GetTall() - 60 - 8 );
+	self.StartGame:SetSize( self:GetWide() - 16, 60 );
 
-	self.BaseClass.PerformLayout( self )
+	self.BaseClass.PerformLayout( self );
 
 end
 
 function PANEL:RebuildFavourites()
 
-	self.MapIcons:RebuildFavourites()
+	self.MapIcons:RebuildFavourites();
 
 end
 

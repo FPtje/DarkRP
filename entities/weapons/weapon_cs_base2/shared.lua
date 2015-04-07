@@ -1,8 +1,8 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if SERVER then
-	include("sv_commands.lua")
-	include("sh_commands.lua")
+	include("sv_commands.lua");
+	include("sh_commands.lua");
 	SWEP.Weight = 5
 	SWEP.AutoSwitchTo = false
 	SWEP.AutoSwitchFrom = false
@@ -21,13 +21,13 @@ if CLIENT then
 		weight = 500,
 		antialias = true,
 		shadow = true,
-		font = "csd"})
+		font = "csd"});
 	surface.CreateFont("CSSelectIcons", {
 		size = ScreenScale(60),
 		weight = 500,
 		antialias = true,
 		shadow = true,
-		font = "csd"})
+		font = "csd"});
 end
 
 SWEP.Base = "weapon_base"
@@ -43,7 +43,7 @@ SWEP.UseHands = true
 
 SWEP.HoldType = "normal"
 
-SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
+SWEP.Primary.Sound = Sound("Weapon_AK47.Single");
 SWEP.Primary.Recoil = 1.5
 SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
@@ -70,15 +70,15 @@ SWEP.MultiMode = false
 ---------------------------------------------------------*/
 function SWEP:Initialize()
 	if CLIENT and IsValid(self.Owner) then
-		local vm = self.Owner:GetViewModel()
-		self:ResetfprpBones(vm)
+		local vm = self.Owner:GetViewModel();
+		self:ResetfprpBones(vm);
 	end
 
-	self:SetHoldType("normal")
+	self:SetHoldType("normal");
 	if SERVER then
-		self:SetNPCMinBurst(30)
-		self:SetNPCMaxBurst(30)
-		self:SetNPCFireRate(0.01)
+		self:SetNPCMinBurst(30);
+		self:SetNPCMaxBurst(30);
+		self:SetNPCFireRate(0.01);
 	end
 
 	self.Ironsights = false
@@ -92,11 +92,11 @@ end
 Deploy
 ---------------------------------------------------------*/
 function SWEP:Deploy()
-	self:SetHoldType("normal")
+	self:SetHoldType("normal");
 
 	self.LASTOWNER = self.Owner
 
-	self:SetIronsights(self:GetIronsights())
+	self:SetIronsights(self:GetIronsights());
 
 	return true
 end
@@ -107,10 +107,10 @@ function SWEP:Holster()
 
 	if not IsValid(self.Owner) then return true end
 	if CLIENT then
-		local vm = self.Owner:GetViewModel()
-		self:ResetfprpBones(vm)
+		local vm = self.Owner:GetViewModel();
+		self:ResetfprpBones(vm);
 	else
-		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 	end
 
 	return true
@@ -120,10 +120,10 @@ function SWEP:OnRemove()
 	self.Ironsights = false
 
 	if CLIENT and IsValid(self.Owner) then
-		local vm = self.Owner:GetViewModel()
-		self:ResetfprpBones(vm)
+		local vm = self.Owner:GetViewModel();
+		self:ResetfprpBones(vm);
 	elseif SERVER and IsValid(self.LASTOWNER) then
-		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.LASTOWNER)
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.LASTOWNER);
 	end
 end
 
@@ -133,15 +133,15 @@ Reload does nothing
 function SWEP:Reload()
 	if not self.Weapon:DefaultReload(ACT_VM_RELOAD) then return end
 	self.Reloading = true
-	self:SetIronsights(false)
-	self:SetHoldType(self.HoldType)
-	self.Owner:SetAnimation(PLAYER_RELOAD)
+	self:SetIronsights(false);
+	self:SetHoldType(self.HoldType);
+	self.Owner:SetAnimation(PLAYER_RELOAD);
 	timer.Simple(2, function()
 		if not IsValid(self) then return end
 		self.Reloading = false
-		self:SetHoldType("normal")
+		self:SetHoldType("normal");
 		self.hasShot = false
-	end)
+	end);
 end
 
 /*---------------------------------------------------------
@@ -154,65 +154,65 @@ function SWEP:PrimaryAttack(partofburst)
 		if self.FireMode == "semi" then
 			self.FireMode = "burst"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, fprp.getPhrase("switched_burst"))
+			self.Owner:PrintMessage( HUD_PRINTCENTER, fprp.getPhrase("switched_burst"));
 		elseif self.FireMode == "burst" then
 			self.FireMode = "auto"
 			self.Primary.Automatic = true
-			self.Owner:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("switched_fully_auto"))
+			self.Owner:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("switched_fully_auto"));
 		elseif self.FireMode == "auto" then
 			self.FireMode = "semi"
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("switched_semi_auto"))
+			self.Owner:PrintMessage(HUD_PRINTCENTER, fprp.getPhrase("switched_semi_auto"));
 		end
-		self.Weapon:SetNextPrimaryFire(CurTime() + 0.5)
-		self.Weapon:SetNextSecondaryFire(CurTime() + 0.5)
+		self.Weapon:SetNextPrimaryFire(CurTime() + 0.5);
+		self.Weapon:SetNextSecondaryFire(CurTime() + 0.5);
 		return
 	end
 
 	if self:GetHoldType() == "normal" and not GAMEMODE.Config.ironshoot then
-		self:SetHoldType(self.HoldType)
+		self:SetHoldType(self.HoldType);
 	end
 
 	if self.FireMode ~= "burst" then
-		self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+		self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay);
 	end
 
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+	self.Weapon:SetNextSecondaryFire(CurTime() + self.Primary.Delay);
 
 	if self:Clip1() <= 0 then
-		self:EmitSound("weapons/clipempty_rifle.wav")
-		self:SetNextPrimaryFire(CurTime() + 2)
+		self:EmitSound("weapons/clipempty_rifle.wav");
+		self:SetNextPrimaryFire(CurTime() + 2);
 		return
 	end
 
 	if not self:CanPrimaryAttack() then self:SetIronsights(false) return end
 	if not self.Ironsights and GAMEMODE.Config.ironshoot then return end
 	-- Play shoot sound
-	self.Weapon:EmitSound(self.Primary.Sound)
+	self.Weapon:EmitSound(self.Primary.Sound);
 
 	-- Shoot the bullet
-	self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil + 3, self.Primary.NumShots, self.Primary.Cone + .05)
+	self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil + 3, self.Primary.NumShots, self.Primary.Cone + .05);
 
 	if self.FireMode == "burst" and not partofburst then
 		timer.Simple(0.1, function() self:PrimaryAttack(true) end)
 		timer.Simple(0.2, function() self:PrimaryAttack(true) end)
 
-		self.LastNonBurst = CurTime()
+		self.LastNonBurst = CurTime();
 	end
 
 	-- Remove 1 bullet from our clip
-	self:TakePrimaryAmmo(1)
+	self:TakePrimaryAmmo(1);
 
 	if self.Owner:IsNPC() then return end
 
 	-- Punch the player's view
-	self.Owner:ViewPunch(Angle(math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0))
+	self.Owner:ViewPunch(Angle(math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0));
 
-	self.LastPrimaryAttack = CurTime()
+	self.LastPrimaryAttack = CurTime();
 end
 
 /*---------------------------------------------------------
-Name: SWEP:PrimaryAttack()
+Name: SWEP:PrimaryAttack();
 Desc: +attack1 has been pressed
 ---------------------------------------------------------*/
 function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
@@ -229,7 +229,7 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 	bullet.Force = 5        -- Amount of force to give to phys objects
 	bullet.Damage = dmg
 
-	self.Owner:FireBullets(bullet)
+	self.Owner:FireBullets(bullet);
 	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)      -- View model animation
 	self.Owner:MuzzleFlash()        -- Crappy muzzle light
 	self.Owner:SetAnimation(PLAYER_ATTACK1)       -- 3rd Person Animation
@@ -238,9 +238,9 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 
 	// CUSTOM RECOIL!
 	if (game.SinglePlayer() and SERVER) or (not game.SinglePlayer() and CLIENT and IsFirstTimePredicted()) then
-		local eyeang = self.Owner:EyeAngles()
+		local eyeang = self.Owner:EyeAngles();
 		eyeang.pitch = eyeang.pitch - recoil
-		self.Owner:SetEyeAngles(eyeang)
+		self.Owner:SetEyeAngles(eyeang);
 	end
 
 	-- Part of workaround, different viewmodel position if shots have been fired
@@ -254,15 +254,15 @@ This is to make sure that the entities haven't been removed
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 	local iconletters = {"x", "w", "b", "k", "u", "f", "d", "l", "z", "c", "n"}
 	if self.IconLetter and table.HasValue(iconletters, self.IconLetter) then
-		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2, y + tall*0.2, Color(255, 210, 0, 255), TEXT_ALIGN_CENTER)
+		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2, y + tall*0.2, Color(255, 210, 0, 255), TEXT_ALIGN_CENTER);
 
 		-- try to fool them into thinking they're playing a Tony Hawks game
-		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-14, 14), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER)
-		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-9, 9), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER)
+		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-14, 14), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER);
+		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-9, 9), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER);
 	else
 		// Set us up the texture
-		surface.SetDrawColor(255, 255, 255, alpha)
-		surface.SetTexture(self.WepSelectIcon)
+		surface.SetDrawColor(255, 255, 255, alpha);
+		surface.SetTexture(self.WepSelectIcon);
 
 		// Lets get a sin wave to make it bounce
 		local fsin = 0
@@ -277,10 +277,10 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 		wide = wide - 20
 
 		// Draw that motherfucker
-		surface.DrawTexturedRect(x + (fsin), y - (fsin), wide-fsin*2 , (wide / 2) + (fsin))
+		surface.DrawTexturedRect(x + (fsin), y - (fsin), wide-fsin*2 , (wide / 2) + (fsin));
 
 		// Draw weapon info box
-		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
+		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha);
 	end
 end
 
@@ -299,7 +299,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	if bIron ~= self.bLastIron then
 		self.bLastIron = bIron
-		self.fIronTime = CurTime()
+		self.fIronTime = CurTime();
 
 		if bIron then
 			self.SwayScale 	= 0.3
@@ -314,7 +314,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	pos = pos + ang:Forward() * -5
 	if GAMEMODE.Config.ironshoot then
-		ang:RotateAroundAxis(ang:Right(), -15)
+		ang:RotateAroundAxis(ang:Right(), -15);
 	end
 
 	if not bIron and fIronTime < CurTime() - IRONSIGHT_TIME then
@@ -324,7 +324,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 	local Mul = 1.0
 
 	if fIronTime > CurTime() - IRONSIGHT_TIME then
-		Mul = math.Clamp((CurTime() - fIronTime) / IRONSIGHT_TIME, 0, 1)
+		Mul = math.Clamp((CurTime() - fIronTime) / IRONSIGHT_TIME, 0, 1);
 
 		if not bIron then Mul = 1 - Mul end
 	end
@@ -333,20 +333,20 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	if self.IronSightsAng then
 		ang = ang * 1
-		ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAng.x * Mul)
-		ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAng.y * Mul)
-		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * Mul)
+		ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAng.x * Mul);
+		ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAng.y * Mul);
+		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * Mul);
 	end
 
 	if GAMEMODE.Config.ironshoot then
-		ang:RotateAroundAxis(ang:Right(), Mul * 15)
+		ang:RotateAroundAxis(ang:Right(), Mul * 15);
 	else
-		ang:RotateAroundAxis(ang:Right(), Mul)
+		ang:RotateAroundAxis(ang:Right(), Mul);
 	end
 
-	local Right 	= ang:Right()
-	local Up 		= ang:Up()
-	local Forward 	= ang:Forward()
+	local Right 	= ang:Right();
+	local Up 		= ang:Up();
+	local Forward 	= ang:Forward();
 
 	pos = pos + Offset.x * Right * Mul
 	pos = pos + Offset.y * Forward * Mul
@@ -354,16 +354,16 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	if not self.hasShot then
 		if self.IronSightsAngAfterShootingAdjustment then
-			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x * Mul)
-			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y * Mul)
-			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z * Mul)
+			ang:RotateAroundAxis(ang:Right(), 	self.IronSightsAngAfterShootingAdjustment.x * Mul);
+			ang:RotateAroundAxis(ang:Up(), 		self.IronSightsAngAfterShootingAdjustment.y * Mul);
+			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z * Mul);
 		end
 
 		if self.IronSightsPosAfterShootingAdjustment then
 			Offset = self.IronSightsPosAfterShootingAdjustment
-			Right = ang:Right()
-			Up = ang:Up()
-			Forward = ang:Forward()
+			Right = ang:Right();
+			Up = ang:Up();
+			Forward = ang:Forward();
 
 			pos = pos + Offset.x * Right * Mul
 			pos = pos + Offset.y * Forward * Mul
@@ -381,18 +381,18 @@ SetIronsights
 
 function SWEP:SetIronsights(b)
 	if game.SinglePlayer() and SERVER then -- Make ironsights work on SP
-		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b))
+		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b));
 	end
 	self.Ironsights = b
 	if b then
-		self:SetHoldType(self.HoldType)
+		self:SetHoldType(self.HoldType);
 		if SERVER and IsValid(self.Owner) then
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 		end
 	else
-		self:SetHoldType("normal")
+		self:SetHoldType("normal");
 		if SERVER and IsValid(self.Owner) then
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 		end
 	end
 end
@@ -410,7 +410,7 @@ function SWEP:SecondaryAttack()
 
 	if self.NextSecondaryAttack > CurTime() or self.reloading then return end
 
-	self:SetIronsights(not self.Ironsights)
+	self:SetIronsights(not self.Ironsights);
 	self.NextSecondaryAttack = CurTime() + 0.3
 end
 
@@ -424,37 +424,37 @@ function SWEP:OnRestore()
 end
 
 function SWEP:OnDrop()
-	self.PrimaryClipLeft = self:Clip1()
-	self.SecondaryClipLeft = self:Clip2()
+	self.PrimaryClipLeft = self:Clip1();
+	self.SecondaryClipLeft = self:Clip2();
 
 	if not self.LASTOWNER then return end
-	self.PrimaryAmmoLeft = self.LASTOWNER:GetAmmoCount(self:GetPrimaryAmmoType())
-	self.SecondaryAmmoLeft = self.LASTOWNER:GetAmmoCount(self:GetSecondaryAmmoType())
-	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
+	self.PrimaryAmmoLeft = self.LASTOWNER:GetAmmoCount(self:GetPrimaryAmmoType());
+	self.SecondaryAmmoLeft = self.LASTOWNER:GetAmmoCount(self:GetSecondaryAmmoType());
+	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS);
 end
 
 function SWEP:Equip(NewOwner)
 	if self.PrimaryClipLeft and self.SecondaryClipLeft and self.PrimaryAmmoLeft and self.SecondaryAmmoLeft then
-		NewOwner:SetAmmo(self.PrimaryAmmoLeft, self:GetPrimaryAmmoType())
-		NewOwner:SetAmmo(self.SecondaryAmmoLeft, self:GetSecondaryAmmoType())
+		NewOwner:SetAmmo(self.PrimaryAmmoLeft, self:GetPrimaryAmmoType());
+		NewOwner:SetAmmo(self.SecondaryAmmoLeft, self:GetSecondaryAmmoType());
 
-		self:SetClip1(self.PrimaryClipLeft)
-		self:SetClip2(self.SecondaryClipLeft)
+		self:SetClip1(self.PrimaryClipLeft);
+		self:SetClip2(self.SecondaryClipLeft);
 	end
 end
 
 function SWEP:Think()
 	if self.Primary.ClipSize ~= -1 and not self.Reloading and not self.Ironsights and self.LastPrimaryAttack + 1 < CurTime() and self:GetHoldType() == self.HoldType then
-		self:SetHoldType("normal")
+		self:SetHoldType("normal");
 	end
 end
 
 if CLIENT then
 	function SWEP:ViewModelDrawn(vm)
 		if self.fprpViewModelBoneManipulations and not self.Reloading then
-			self:UpdatefprpBones(vm, self.fprpViewModelBoneManipulations)
+			self:UpdatefprpBones(vm, self.fprpViewModelBoneManipulations);
 		else
-			self:ResetfprpBones(vm)
+			self:ResetfprpBones(vm);
 		end
 	end
 
@@ -464,41 +464,41 @@ if CLIENT then
 		-- Fill in missing bone names. Things fuck up when we workaround the scale bug and bones are missing.
 		local bones = {}
 		for i = 0, vm:GetBoneCount() - 1 do
-			local bonename = vm:GetBoneName(i)
+			local bonename = vm:GetBoneName(i);
 			if manipulations[bonename] then
 				bones[bonename] = manipulations[bonename]
 			else
 				bones[bonename] = {
 					scale = Vector(1,1,1),
 					pos = Vector(0,0,0),
-					angle = Angle(0,0,0)
+					angle = Angle(0,0,0);
 				}
 			end
 		end
 
 		for k, v in pairs(bones) do
-			local bone = vm:LookupBone(k)
+			local bone = vm:LookupBone(k);
 			if not bone then continue end
 
 			-- Bone scaling seems to be buggy. Workaround.
-			local scale = Vector(v.scale.x, v.scale.y, v.scale.z)
-			local ms = Vector(1,1,1)
-			local cur = vm:GetBoneParent(bone)
+			local scale = Vector(v.scale.x, v.scale.y, v.scale.z);
+			local ms = Vector(1,1,1);
+			local cur = vm:GetBoneParent(bone);
 			while cur >= 0 do
 				local pscale = bones[vm:GetBoneName(cur)].scale
 				ms = ms * pscale
-				cur = vm:GetBoneParent(cur)
+				cur = vm:GetBoneParent(cur);
 			end
 			scale = scale * ms
 
 			if vm:GetManipulateBoneScale(bone) ~= scale then
-				vm:ManipulateBoneScale(bone, scale)
+				vm:ManipulateBoneScale(bone, scale);
 			end
 			if vm:GetManipulateBonePosition(bone) ~= v.pos then
-				vm:ManipulateBonePosition(bone, v.pos)
+				vm:ManipulateBonePosition(bone, v.pos);
 			end
 			if vm:GetManipulateBoneAngles(bone) ~= v.angle then
-				vm:ManipulateBoneAngles(bone, v.angle)
+				vm:ManipulateBoneAngles(bone, v.angle);
 			end
 		end
 	end
@@ -506,18 +506,18 @@ if CLIENT then
 	function SWEP:ResetfprpBones(vm)
 		if not IsValid(vm) or not vm:GetBoneCount() then return end
 		for i = 0, vm:GetBoneCount() - 1 do
-			vm:ManipulateBoneScale(i, Vector(1, 1, 1))
-			vm:ManipulateBoneAngles(i, Angle(0, 0, 0))
-			vm:ManipulateBonePosition(i, Vector(0, 0, 0))
+			vm:ManipulateBoneScale(i, Vector(1, 1, 1));
+			vm:ManipulateBoneAngles(i, Angle(0, 0, 0));
+			vm:ManipulateBonePosition(i, Vector(0, 0, 0));
 		end
 	end
 end
 
 hook.Add("UpdatePlayerSpeed", "fprp_WeaponSpeed", function(ply)
-	local wep = ply:GetActiveWeapon()
+	local wep = ply:GetActiveWeapon();
 	if not IsValid(wep) or not wep.Ironsights then return end
 
-	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
+	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3);
 
 	return true
-end)
+end);

@@ -1,7 +1,7 @@
 FAdmin.StartHooks["Chatmute"] = function()
-	FAdmin.Access.AddPrivilege("Chatmute", 2)
-	FAdmin.Commands.AddCommand("Chatmute", nil, "<Player>")
-	FAdmin.Commands.AddCommand("UnChatmute", nil, "<Player>")
+	FAdmin.Access.AddPrivilege("Chatmute", 2);
+	FAdmin.Commands.AddCommand("Chatmute", nil, "<Player>");
+	FAdmin.Commands.AddCommand("UnChatmute", nil, "<Player>");
 
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
 		if ply:FAdmin_GetGlobal("FAdmin_chatmuted") then return "Unmute chat" end
@@ -14,17 +14,17 @@ FAdmin.StartHooks["Chatmute"] = function()
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Chatmute", ply) end, function(ply, button)
 		if not ply:FAdmin_GetGlobal("FAdmin_chatmuted") then
 			FAdmin.PlayerActions.addTimeMenu(function(secs)
-				RunConsoleCommand("_FAdmin", "chatmute", ply:UserID(), secs)
-				button:SetImage2("null")
-				button:SetText("Unmute chat")
-				button:GetParent():InvalidateLayout()
-			end)
+				RunConsoleCommand("_FAdmin", "chatmute", ply:UserID(), secs);
+				button:SetImage2("null");
+				button:SetText("Unmute chat");
+				button:GetParent():InvalidateLayout();
+			end);
 		else
-			RunConsoleCommand("_FAdmin", "UnChatmute", ply:UserID())
+			RunConsoleCommand("_FAdmin", "UnChatmute", ply:UserID());
 		end
 
-		button:SetImage2("FAdmin/icons/disable")
-		button:SetText("Mute chat")
-		button:GetParent():InvalidateLayout()
-	end)
+		button:SetImage2("FAdmin/icons/disable");
+		button:SetText("Mute chat");
+		button:GetParent():InvalidateLayout();
+	end);
 end

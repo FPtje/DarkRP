@@ -4,11 +4,11 @@ function GM:ShowSpare1()
 	GUIToggled = not GUIToggled
 
 	if GUIToggled then
-		gui.SetMousePos(mouseX, mouseY)
+		gui.SetMousePos(mouseX, mouseY);
 	else
-		mouseX, mouseY = gui.MousePos()
+		mouseX, mouseY = gui.MousePos();
 	end
-	gui.EnableScreenClicker(GUIToggled)
+	gui.EnableScreenClicker(GUIToggled);
 end
 
 function GM:PlayerStartVoice(ply)
@@ -16,7 +16,7 @@ function GM:PlayerStartVoice(ply)
 		ply.DRPIsTalking = true
 		return -- Not the original rectangle for yourself! ugh!
 	end
-	self.BaseClass:PlayerStartVoice(ply)
+	self.BaseClass:PlayerStartVoice(ply);
 end
 
 function GM:PlayerEndVoice(ply)
@@ -25,7 +25,7 @@ function GM:PlayerEndVoice(ply)
 		return
 	end
 
-	self.BaseClass:PlayerEndVoice(ply)
+	self.BaseClass:PlayerEndVoice(ply);
 end
 
 function GM:OnPlayerChat()
@@ -39,11 +39,11 @@ local FKeyBinds = {
 }
 
 function GM:PlayerBindPress(ply, bind, pressed)
-	self.BaseClass:PlayerBindPress(ply, bind, pressed)
+	self.BaseClass:PlayerBindPress(ply, bind, pressed);
 
-	local bnd = string.match(string.lower(bind), "gm_[a-z]+[12]?")
+	local bnd = string.match(string.lower(bind), "gm_[a-z]+[12]?");
 	if bnd and FKeyBinds[bnd] then
-		hook.Call(FKeyBinds[bnd], GAMEMODE)
+		hook.Call(FKeyBinds[bnd], GAMEMODE);
 	end
 end
 
@@ -53,17 +53,17 @@ function GM:PlayerNoClip(ply)
 end
 
 function GM:InitPostEntity()
-	hook.Call("teamChanged", GAMEMODE, GAMEMODE.DefaultTeam, GAMEMODE.DefaultTeam)
+	hook.Call("teamChanged", GAMEMODE, GAMEMODE.DefaultTeam, GAMEMODE.DefaultTeam);
 end
 
 function GM:teamChanged(before, after)
 end
 
 local function OnChangedTeam(um)
-	local oldTeam, newTeam = um:ReadShort(), um:ReadShort()
+	local oldTeam, newTeam = um:ReadShort(), um:ReadShort();
 	hook.Call("teamChanged", GAMEMODE, oldTeam, newTeam) -- backwards compatibility
-	hook.Call("OnPlayerChangedTeam", GAMEMODE, LocalPlayer(), oldTeam, newTeam)
+	hook.Call("OnPlayerChangedTeam", GAMEMODE, LocalPlayer(), oldTeam, newTeam);
 end
-usermessage.Hook("OnChangedTeam", OnChangedTeam)
+usermessage.Hook("OnChangedTeam", OnChangedTeam);
 
 timer.Simple(0, function() GAMEMODE.ShowTeam = fprp.openKeysMenu end)

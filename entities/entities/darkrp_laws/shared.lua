@@ -6,7 +6,7 @@ ENT.Author = "Drakehawke"
 
 ENT.Spawnable = false
 
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 fprp.declareChatCommand{
 	command = "addlaw",
 	description = "Add a law to the laws board.",

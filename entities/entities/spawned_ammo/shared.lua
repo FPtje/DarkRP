@@ -5,5 +5,5 @@ ENT.Author = "FPtje"
 ENT.Spawnable = false
 
 function ENT:SetupDataTables()
-	self.BaseClass.SetupDataTables(self)
+	self.BaseClass.SetupDataTables(self);
 end

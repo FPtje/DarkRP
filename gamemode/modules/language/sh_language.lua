@@ -31,22 +31,22 @@ function fprp.getMissingPhrases(lang)
 
 	for k,v in pairs(rp_languages.en) do
 		if rp_languages[lang][k] then continue end
-		table.insert(res, string.format(format, k, v))
+		table.insert(res, string.format(format, k, v));
 	end
 
-	return #res == 0 and "No language strings missing!" or table.concat(res, "\n")
+	return #res == 0 and "No language strings missing!" or table.concat(res, "\n");
 end
 
 local function getMissingPhrases(ply, cmd, args)
 	if not args[1] then print("Please run the command with a language code e.g. fprp_getphrases \"en\"") return end
 	local lang = rp_languages[args[1]]
-	if not lang then print("This language does not exist! Make sure the casing is right.")
-		print("Available languages:")
+	if not lang then print("This language does not exist! Make sure the casing is right.");
+		print("Available languages:");
 		for k,v in pairs(rp_languages) do print(k) end
 		return
 	end
 
-	print(fprp.getMissingPhrases(args[1]))
+	print(fprp.getMissingPhrases(args[1]));
 end
 if CLIENT then concommand.Add("fprp_getphrases", getMissingPhrases) end
 
@@ -57,18 +57,18 @@ local chatCmdDescriptions = {}
 function fprp.addChatCommandsLanguage(lang, tbl)
 	chatCmdDescriptions[lang] = chatCmdDescriptions[lang] or {}
 
-	table.Merge(chatCmdDescriptions[lang], tbl)
+	table.Merge(chatCmdDescriptions[lang], tbl);
 end
 
 function fprp.getChatCommandDescription(name)
-	local cmd = fprp.getChatCommand(name)
+	local cmd = fprp.getChatCommand(name);
 	return chatCmdDescriptions[selectedLanguage] and chatCmdDescriptions[selectedLanguage][name] or
 		cmd and cmd.description or
 		nil
 end
 
 local function getMissingCmdTranslations()
-	local cmds = fprp.getSortedChatCommands()
+	local cmds = fprp.getSortedChatCommands();
 
 	-- No commands have been translated
 	if not chatCmdDescriptions[selectedLanguage] then return cmds end
@@ -81,27 +81,27 @@ local function getMissingCmdTranslations()
 		end
 	end
 
-	cmds = table.ClearKeys(cmds)
+	cmds = table.ClearKeys(cmds);
 
 	return cmds
 end
 
 local function printMissingChatTranslations()
-	local cmds = getMissingCmdTranslations()
+	local cmds = getMissingCmdTranslations();
 	local text = {}
 
 	local maxCmdLength = 0
 	for k,v in pairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
 
 	for k,v in pairs(cmds) do
-		text[k] = string.format('["%s"]%s=\t"%s",', v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description)
+		text[k] = string.format('["%s"]%s=\t"%s",', v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description);
 	end
 
-	MsgC(Color(0, 255, 0), string.format("%s untranslated chat command descriptions!\n", #cmds))
+	MsgC(Color(0, 255, 0), string.format("%s untranslated chat command descriptions!\n", #cmds));
 
-	text = table.concat(text, "\n\t")
-	SetClipboardText(text)
+	text = table.concat(text, "\n\t");
+	SetClipboardText(text);
 
-	MsgC(Color(0, 255, 0), "text copied to clipboard!\n")
+	MsgC(Color(0, 255, 0), "text copied to clipboard!\n");
 end
 if CLIENT then concommand.Add("fprp_translateChatCommands", printMissingChatTranslations) end

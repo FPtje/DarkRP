@@ -6,7 +6,7 @@ Join the ULX steam community!
 :siren:Be sure you download ULib as well, as ULX depends on it.
 :siren:If you happen to find any bugs, we'd appreciate your assistance in reporting them to us at http://ulyssesmod.net/bugs/.
 
-(We'll love you forever if you donate! We need to eat too :))
+(We'll love you forever if you donate! We need to eat too :));
 [/release]
 
 [release]What is ULX?
@@ -46,7 +46,7 @@ Utilities!
 */
 function FAdmin.FindPlayer(info)
 	if not info then return nil end
-	local pls = player.GetAll()
+	local pls = player.GetAll();
 	local found = {}
 
 	if string.lower(info) == "*" or string.lower(info) == "<all>" then return pls end
@@ -87,13 +87,13 @@ function FAdmin.FindPlayer(info)
 	local empty = true
 	for k, v in pairs(found or {}) do
 		empty = false
-		table.insert(players, k)
+		table.insert(players, k);
 	end
 	return not empty and players or nil
 end
 
 function FAdmin.SteamToProfile(ply) -- Thanks decodaman
-	return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
+	return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT");
 end
 
 /*
@@ -111,21 +111,21 @@ FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
 timer.Simple(0, function()
 	for k,v in pairs(FAdmin.StartHooks) do if type(k) ~= "string" then FAdmin.StartHooks[k] = nil end end
 	for k,v in SortedPairs(FAdmin.StartHooks) do
-		v()
+		v();
 	end
-end)
+end);
 
 hook.Add("InitPostEntity", "FAdmin_fprp_privs", function()
 	if not FAdmin or not FAdmin.StartHooks then return end
-	FAdmin.Access.AddPrivilege("rp_commands", 2)
-	FAdmin.Access.AddPrivilege("rp_doorManipulation", 3)
-	FAdmin.Access.AddPrivilege("rp_tool", 2)
-	FAdmin.Access.AddPrivilege("rp_phys", 2)
-	FAdmin.Access.AddPrivilege("rp_prop", 2)
-	FAdmin.Access.AddPrivilege("rp_viewlog", 2)
+	FAdmin.Access.AddPrivilege("rp_commands", 2);
+	FAdmin.Access.AddPrivilege("rp_doorManipulation", 3);
+	FAdmin.Access.AddPrivilege("rp_tool", 2);
+	FAdmin.Access.AddPrivilege("rp_phys", 2);
+	FAdmin.Access.AddPrivilege("rp_prop", 2);
+	FAdmin.Access.AddPrivilege("rp_viewlog", 2);
 	for k,v in pairs(RPExtraTeams) do
 		if v.vote then
 			FAdmin.Access.AddPrivilege("rp_"..v.command, (v.admin or 0) + 2) -- Add privileges for the teams that are voted for
 		end
 	end
-end)
+end);

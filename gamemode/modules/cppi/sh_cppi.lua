@@ -19,12 +19,12 @@ function CPPI:GetNameFromUID(uid)
 	return CPPI.CPPI_NOTIMPLEMENTED
 end
 
-local PLAYER = FindMetaTable("Player")
+local PLAYER = FindMetaTable("Player");
 function PLAYER:CPPIGetFriends()
 	return CPPI.CPPI_NOTIMPLEMENTED
 end
 
-local ENTITY = FindMetaTable("Entity")
+local ENTITY = FindMetaTable("Entity");
 function ENTITY:CPPIGetOwner()
 	return NULL, CPPI.CPPI_NOTIMPLEMENTED
 end

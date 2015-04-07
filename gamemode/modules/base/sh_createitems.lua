@@ -1,4 +1,4 @@
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 -- automatically block players from doing certain things with their fprp entities
 local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
@@ -6,14 +6,14 @@ local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 -- Allows f to override err and hints by simply returning them
 local ass = function(f, err, hints) return function(...)
 	local res = {f(...)}
-	table.insert(res, err)
-	table.insert(res, hints)
+	table.insert(res, err);
+	table.insert(res, hints);
 
-	return unpack(res)
+	return unpack(res);
 end end
 
 -- Returns whether a value is nil
-local isnil = fn.Curry(fn.Eq, 2)(nil)
+local isnil = fn.Curry(fn.Eq, 2)(nil);
 -- Optional value, when filled in it must meet the conditions
 local optional = function(...) return fn.FOr{isnil, ...} end
 -- Check the correctness of a model
@@ -56,7 +56,7 @@ local unique = function(name, kind, hash)
 end
 
 local uniqueJob = function(v, tbl)
-	local job = fprp.getJobByCommand(v)
+	local job = fprp.getJobByCommand(v);
 	if job then return false, "This job does not have a unique command.", {"There must be some other job that has the same command."} end
 	return true
 end
@@ -178,7 +178,7 @@ local validAgenda = {
 			"Is there a job here that doesn't exist (anymore)?",
 			"Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
 			[[Like so: fprp.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
-		})
+		});
 }
 
 local validCategory = {
@@ -198,7 +198,7 @@ local function checkValid(tbl, requiredItems, oEnv) -- Allow override environmen
 	for k,v in pairs(requiredItems) do
 		local correct, err, hints = tbl[v] ~= nil
 		if isfunction(v) then correct, err, hints = v(tbl[k], tbl, oEnv or env) end
-		err = err or string.format("Element '%s' is corrupt!", k)
+		err = err or string.format("Element '%s' is corrupt!", k);
 		if not correct then return correct, err, hints end
 	end
 
@@ -271,7 +271,7 @@ local function declareTeamCommands(CTeam)
 								fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(0), plyMeta.IsAdmin},
 								fn.FAnd{fn.Curry(fn.Eq, 3)(CTeam.admin)(1), plyMeta.IsSuperAdmin}
 							}
-						)()
+						)();
 					}
 				},
 				fn.Compose{fn.Not, plyMeta.isArrested},
@@ -339,65 +339,65 @@ local function addTeamCommands(CTeam, max)
 	if CTeam.vote or CTeam.RequiresVote then
 		fprp.defineChatCommand("vote"..CTeam.command, function(ply)
 			if CTeam.RequiresVote and not CTeam.RequiresVote(ply, k) then
-				fprp.notify(ply, 1,4, fprp.getPhrase("job_doesnt_require_vote_currently"))
+				fprp.notify(ply, 1,4, fprp.getPhrase("job_doesnt_require_vote_currently"));
 				return ""
 			end
 
 			if CTeam.canStartVote and not CTeam.canStartVote(ply) then
 				local reason = isfunction(CTeam.canStartVoteReason) and CTeam.canStartVoteReason(ply, CTeam) or CTeam.canStartVoteReason or ""
-				fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/vote"..CTeam.command, reason))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/vote"..CTeam.command, reason));
 				return ""
 			end
 
 			if CTeam.admin == 1 and not ply:IsAdmin() then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/".."vote"..CTeam.command))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/".."vote"..CTeam.command));
 				return ""
 			elseif CTeam.admin > 1 and not ply:IsSuperAdmin() then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("need_sadmin", "/".."vote"..CTeam.command))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("need_sadmin", "/".."vote"..CTeam.command));
 				return ""
 			end
 
 			if type(CTeam.NeedToChangeFrom) == "number" and ply:Team() ~= CTeam.NeedToChangeFrom then
-				fprp.notify(ply, 1,4, fprp.getPhrase("need_to_be_before", team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
+				fprp.notify(ply, 1,4, fprp.getPhrase("need_to_be_before", team.GetName(CTeam.NeedToChangeFrom), CTeam.name));
 				return ""
 			elseif type(CTeam.NeedToChangeFrom) == "table" and not table.HasValue(CTeam.NeedToChangeFrom, ply:Team()) then
 				local teamnames = ""
 				for a,b in pairs(CTeam.NeedToChangeFrom) do teamnames = teamnames.." or "..team.GetName(b) end
-				fprp.notify(ply, 1,4, fprp.getPhrase("need_to_be_before", string.sub(teamnames, 5), CTeam.name))
+				fprp.notify(ply, 1,4, fprp.getPhrase("need_to_be_before", string.sub(teamnames, 5), CTeam.name));
 				return ""
 			end
 
 			if CTeam.customCheck and not CTeam.customCheck(ply) then
 				local message = isfunction(CTeam.CustomCheckFailMsg) and CTeam.CustomCheckFailMsg(ply, CTeam) or
 					CTeam.CustomCheckFailMsg or
-					fprp.getPhrase("unable", team.GetName(t), "")
-				fprp.notify(ply, 1, 4, message)
+					fprp.getPhrase("unable", team.GetName(t), "");
+				fprp.notify(ply, 1, 4, message);
 				return ""
 			end
 			if not ply:changeAllowed(k) then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/vote"..CTeam.command, fprp.getPhrase("banned_or_demoted")))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("unable", "/vote"..CTeam.command, fprp.getPhrase("banned_or_demoted")));
 				return ""
 			end
 			if ply:Team() == k then
-				fprp.notify(ply, 1, 4,  fprp.getPhrase("unable", CTeam.command, ""))
+				fprp.notify(ply, 1, 4,  fprp.getPhrase("unable", CTeam.command, ""));
 				return ""
 			end
 			local max = CTeam.max
 			if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(k) >= max) or (max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > max)) then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("team_limit_reached", CTeam.name))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("team_limit_reached", CTeam.name));
 				return ""
 			end
 			if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), GAMEMODE.Config.chatCommandPrefix..CTeam.command));
 				return ""
 			end
 			if #player.GetAll() == 1 then
-				fprp.notify(ply, 0, 4, fprp.getPhrase("vote_alone"))
-				ply:changeTeam(k)
+				fprp.notify(ply, 0, 4, fprp.getPhrase("vote_alone"));
+				ply:changeTeam(k);
 				return ""
 			end
 			if CurTime() - ply:GetTable().LastVoteCop < 80 then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), GAMEMODE.Config.chatCommandPrefix..CTeam.command));
 				return ""
 			end
 			fprp.createVote(fprp.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
@@ -405,18 +405,18 @@ local function addTeamCommands(CTeam, max)
 
 				if not IsValid(ply) then return end
 				if choice >= 0 then
-					ply:changeTeam(k)
+					ply:changeTeam(k);
 				else
-					fprp.notifyAll(1, 4, fprp.getPhrase("has_not_been_made_team", ply:Nick(), CTeam.name))
+					fprp.notifyAll(1, 4, fprp.getPhrase("has_not_been_made_team", ply:Nick(), CTeam.name));
 				end
-			end, nil, nil, {targetTeam = k})
-			ply:GetTable().LastVoteCop = CurTime()
+			end, nil, nil, {targetTeam = k});
+			ply:GetTable().LastVoteCop = CurTime();
 			return ""
-		end)
+		end);
 
 		fprp.defineChatCommand(CTeam.command, function(ply)
 			if ply:hasfprpPrivilege("rp_"..CTeam.command) then
-				ply:changeTeam(k)
+				ply:changeTeam(k);
 				return ""
 			end
 
@@ -424,7 +424,7 @@ local function addTeamCommands(CTeam, max)
 			if a > 0 and not ply:IsAdmin()
 			or a > 1 and not ply:IsSuperAdmin()
 			then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", CTeam.name))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", CTeam.name));
 				return ""
 			end
 
@@ -434,77 +434,77 @@ local function addTeamCommands(CTeam, max)
 				or a == 2)
 			or CTeam.RequiresVote and CTeam.RequiresVote(ply, k)
 			then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("need_to_make_vote", CTeam.name))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("need_to_make_vote", CTeam.name));
 				return ""
 			end
 
-			ply:changeTeam(k)
+			ply:changeTeam(k);
 			return ""
-		end)
+		end);
 	else
 		fprp.defineChatCommand(CTeam.command, function(ply)
 			if CTeam.admin == 1 and not ply:IsAdmin() then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/"..CTeam.command))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("need_admin", "/"..CTeam.command));
 				return ""
 			end
 			if CTeam.admin > 1 and not ply:IsSuperAdmin() then
-				fprp.notify(ply, 1, 4, fprp.getPhrase("need_sadmin", "/"..CTeam.command))
+				fprp.notify(ply, 1, 4, fprp.getPhrase("need_sadmin", "/"..CTeam.command));
 				return ""
 			end
-			ply:changeTeam(k)
+			ply:changeTeam(k);
 			return ""
-		end)
+		end);
 	end
 
 	concommand.Add("rp_"..CTeam.command, function(ply, cmd, args)
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			ply:PrintMessage(2, fprp.getPhrase("need_admin", cmd))
+			ply:PrintMessage(2, fprp.getPhrase("need_admin", cmd));
 			return
 		end
 
 		if CTeam.admin > 1 and not ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-			ply:PrintMessage(2, fprp.getPhrase("need_sadmin", cmd))
+			ply:PrintMessage(2, fprp.getPhrase("need_sadmin", cmd));
 			return
 		end
 
 		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-				ply:PrintMessage(2, fprp.getPhrase("need_sadmin", cmd))
+				ply:PrintMessage(2, fprp.getPhrase("need_sadmin", cmd));
 				return
 			elseif CTeam.admin > 1 and ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-				ply:PrintMessage(2, fprp.getPhrase("need_to_make_vote", CTeam.name))
+				ply:PrintMessage(2, fprp.getPhrase("need_to_make_vote", CTeam.name));
 				return
 			end
 		end
 
 		if not args or not args[1] then
 			if ply:EntIndex() == 0 then
-				print(fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
+				print(fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""));
 			else
-				ply:PrintMessage(2, fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""))
+				ply:PrintMessage(2, fprp.getPhrase("invalid_x", fprp.getPhrase("arguments"), ""));
 			end
 			return
 		end
 
-		local target = fprp.findPlayer(args[1])
+		local target = fprp.findPlayer(args[1]);
 
 		if (target) then
-			target:changeTeam(k, true)
+			target:changeTeam(k, true);
 			local nick
 			if (ply:EntIndex() ~= 0) then
-				nick = ply:Nick()
+				nick = ply:Nick();
 			else
 				nick = "Console"
 			end
-			target:PrintMessage(2, fprp.getPhrase("x_made_you_a_y", nick, CTeam.name))
+			target:PrintMessage(2, fprp.getPhrase("x_made_you_a_y", nick, CTeam.name));
 		else
 			if (ply:EntIndex() == 0) then
-				print(fprp.getPhrase("could_not_find", tostring(args[1])))
+				print(fprp.getPhrase("could_not_find", tostring(args[1])));
 			else
-				ply:PrintMessage(2, fprp.getPhrase("could_not_find", tostring(args[1])))
+				ply:PrintMessage(2, fprp.getPhrase("could_not_find", tostring(args[1])));
 			end
 		end
-	end)
+	end);
 end
 
 local function addEntityCommands(tblEnt)
@@ -525,7 +525,7 @@ local function addEntityCommands(tblEnt)
 				tblEnt.customCheck,
 				fn.Curry(fn.Const, 2)(true)
 			)(),
-			fn.Curry(fn.Flip(plyMeta.canAfford), 2)(tblEnt.price)
+			fn.Curry(fn.Flip(plyMeta.canAfford), 2)(tblEnt.price);
 		}
 	}
 	if CLIENT then return end
@@ -533,19 +533,19 @@ local function addEntityCommands(tblEnt)
 	-- Default spawning function of an entity
 	-- used if tblEnt.spawn is not defined
 	local function defaultSpawn(ply, tr, tblEnt)
-		local ent = ents.Create(tblEnt.ent)
+		local ent = ents.Create(tblEnt.ent);
 		if not ent:IsValid() then error("Entity '"..tblEnt.ent.."' does not exist or is not valid.") end
 		ent.dt = ent.dt or {}
 		ent.dt.owning_ent = ply
 		if ent.Setowning_ent then ent:Setowning_ent(ply) end
-		ent:SetPos(tr.HitPos)
-		-- These must be set before :Spawn()
+		ent:SetPos(tr.HitPos);
+		-- These must be set before :Spawn();
 		ent.SID = ply.SID
 		ent.allowed = tblEnt.allowed
 		ent.fprpItem = tblEnt
-		ent:Spawn()
+		ent:Spawn();
 
-		local phys = ent:GetPhysicsObject()
+		local phys = ent:GetPhysicsObject();
 		if phys:IsValid() then phys:Wake() end
 
 		return ent
@@ -554,29 +554,29 @@ local function addEntityCommands(tblEnt)
 	local function buythis(ply, args)
 		if ply:isArrested() then return "" end
 		if type(tblEnt.allowed) == "table" and not table.HasValue(tblEnt.allowed, ply:Team()) then
-			fprp.notify(ply, 1, 4, fprp.getPhrase("incorrect_job", tblEnt.cmd))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("incorrect_job", tblEnt.cmd));
 			return ""
 		end
 
 		if tblEnt.customCheck and not tblEnt.customCheck(ply) then
 			local message = isfunction(tblEnt.CustomCheckFailMsg) and tblEnt.CustomCheckFailMsg(ply, tblEnt) or
 				tblEnt.CustomCheckFailMsg or
-				fprp.getPhrase("not_allowed_to_purchase")
-			fprp.notify(ply, 1, 4, message)
+				fprp.getPhrase("not_allowed_to_purchase");
+			fprp.notify(ply, 1, 4, message);
 			return ""
 		end
 
 		if ply:customEntityLimitReached(tblEnt) then
-			fprp.notify(ply, 1, 4, fprp.getPhrase("limit", tblEnt.cmd))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("limit", tblEnt.cmd));
 			return ""
 		end
 
-		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt)
+		local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, tblEnt);
 
 		local cost = price or tblEnt.getPrice and tblEnt.getPrice(ply, tblEnt.price) or tblEnt.price
 
 		if not ply:canAfford(cost) then
-			fprp.notify(ply, 1, 4, fprp.getPhrase("cant_afford", tblEnt.cmd))
+			fprp.notify(ply, 1, 4, fprp.getPhrase("cant_afford", tblEnt.cmd));
 			return ""
 		end
 
@@ -585,30 +585,30 @@ local function addEntityCommands(tblEnt)
 			return ""
 		end
 
-		ply:addshekel(-cost)
+		ply:addshekel(-cost);
 
 		local trace = {}
-		trace.start = ply:EyePos()
+		trace.start = ply:EyePos();
 		trace.endpos = trace.start + ply:GetAimVector() * 85
 		trace.filter = ply
 
-		local tr = util.TraceLine(trace)
+		local tr = util.TraceLine(trace);
 
-		local ent = (tblEnt.spawn or defaultSpawn)(ply, tr, tblEnt)
+		local ent = (tblEnt.spawn or defaultSpawn)(ply, tr, tblEnt);
 		ent.onlyremover = true
 		-- Repeat these properties to alleviate work in tblEnt.spawn:
 		ent.SID = ply.SID
 		ent.allowed = tblEnt.allowed
 		ent.fprpItem = tblEnt
 
-		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, ent, cost)
+		hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, ent, cost);
 
-		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", tblEnt.name, fprp.formatshekel(cost), ""))
+		fprp.notify(ply, 0, 4, fprp.getPhrase("you_bought", tblEnt.name, fprp.formatshekel(cost), ""));
 
-		ply:addCustomEntity(tblEnt)
+		ply:addCustomEntity(tblEnt);
 		return ""
 	end
-	fprp.defineChatCommand(tblEnt.cmd, buythis)
+	fprp.defineChatCommand(tblEnt.cmd, buythis);
 end
 
 RPExtraTeams = {}
@@ -620,7 +620,7 @@ end
 plyMeta.getJobTable = fn.FOr{fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}, fn.Curry(fn.Id, 2)({})}
 local jobCount = 0
 function fprp.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
-	local tableSyntaxUsed = not IsColor(colorOrTable)
+	local tableSyntaxUsed = not IsColor(colorOrTable);
 
 	local CustomTeam = tableSyntaxUsed and colorOrTable or
 		{color = colorOrTable, model = model, description = Description, weapons = Weapons, command = command,
@@ -633,13 +633,13 @@ function fprp.createJob(Name, colorOrTable, model, Description, Weapons, command
 	-- Disabled job
 	if fprp.fprp_LOADING and fprp.disabledDefaults["jobs"][CustomTeam.command] then return end
 
-	local valid, err, hints = checkValid(CustomTeam, requiredTeamItems)
+	local valid, err, hints = checkValid(CustomTeam, requiredTeamItems);
 	if not valid then fprp.error(string.format("Corrupt team: %s!\n%s", CustomTeam.name or "", err), 3, hints) end
 
 	jobCount = jobCount + 1
 	CustomTeam.team = jobCount
 
-	CustomTeam.salary = math.floor(CustomTeam.salary)
+	CustomTeam.salary = math.floor(CustomTeam.salary);
 
 	CustomTeam.customCheck           = CustomTeam.customCheck           and fp{fprp.simplerrRun, CustomTeam.customCheck}
 	CustomTeam.CustomCheckFailMsg = isfunction(CustomTeam.CustomCheckFailMsg) and fp{fprp.simplerrRun, CustomTeam.CustomCheckFailMsg} or CustomTeam.CustomCheckFailMsg
@@ -656,21 +656,21 @@ function fprp.createJob(Name, colorOrTable, model, Description, Weapons, command
 	CustomTeam.ShowSpare2            = CustomTeam.ShowSpare2            and fp{fprp.simplerrRun, CustomTeam.ShowSpare2}
 	CustomTeam.canStartVote          = CustomTeam.canStartVote          and fp{fprp.simplerrRun, CustomTeam.canStartVote}
 
-	jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
-	fprp.addToCategory(CustomTeam, "jobs", CustomTeam.category)
-	team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
+	jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam);
+	fprp.addToCategory(CustomTeam, "jobs", CustomTeam.category);
+	team.SetUp(#RPExtraTeams, Name, CustomTeam.color);
 	local Team = #RPExtraTeams
 
 	timer.Simple(0, function()
-		declareTeamCommands(CustomTeam)
-		addTeamCommands(CustomTeam, CustomTeam.max)
-	end)
+		declareTeamCommands(CustomTeam);
+		addTeamCommands(CustomTeam, CustomTeam.max);
+	end);
 
 	// Precache model here. Not right before the job change is done
 	if type(CustomTeam.model) == "table" then
 		for k,v in pairs(CustomTeam.model) do util.PrecacheModel(v) end
 	else
-		util.PrecacheModel(CustomTeam.model)
+		util.PrecacheModel(CustomTeam.model);
 	end
 	return Team
 end
@@ -681,8 +681,8 @@ function fprp.removeJob(i)
 	RPExtraTeams[i] = nil
 	jobByCmd[job.command] = nil
 	jobCount = jobCount - 1
-	fprp.removeFromCategory(job, "jobs")
-	hook.Run("onJobRemoved", i, job)
+	fprp.removeFromCategory(job, "jobs");
+	hook.Run("onJobRemoved", i, job);
 	if CLIENT and ValidPanel(fprp.getF4MenuPanel()) then fprp.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
 end
 
@@ -697,7 +697,7 @@ CustomVehicles = {}
 CustomShipments = {}
 local shipByName = {}
 fprp.getShipmentByName = function(name)
-	name = string.lower(name or "")
+	name = string.lower(name or "");
 
 	if not shipByName[name] then return nil, nil end
 	return CustomShipments[shipByName[name]], shipByName[name]
@@ -709,11 +709,11 @@ function fprp.createShipment(name, model, entity, price, Amount_of_guns_in_one_s
 	local AllowedClasses = classes or {}
 	if not classes then
 		for k,v in pairs(team.GetAllTeams()) do
-			table.insert(AllowedClasses, k)
+			table.insert(AllowedClasses, k);
 		end
 	end
 
-	local price = tonumber(price)
+	local price = tonumber(price);
 	local shipmentmodel = shipmodel or "models/Items/item_item_crate.mdl"
 
 	local customShipment = tableSyntaxUsed and model or
@@ -730,7 +730,7 @@ function fprp.createShipment(name, model, entity, price, Amount_of_guns_in_one_s
 
 	if fprp.fprp_LOADING and fprp.disabledDefaults["shipments"][customShipment.name] then return end
 
-	local valid, err, hints = checkValid(customShipment, validShipment)
+	local valid, err, hints = checkValid(customShipment, validShipment);
 	if not valid then fprp.error(string.format("Corrupt shipment: %s!\n%s", name or "", err), 3, hints) end
 
 	customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
@@ -740,8 +740,8 @@ function fprp.createShipment(name, model, entity, price, Amount_of_guns_in_one_s
 	if not customShipment.noship then fprp.addToCategory(customShipment, "shipments", customShipment.category) end
 	if customShipment.seperate then fprp.addToCategory(customShipment, "weapons", customShipment.category) end
 
-	shipByName[string.lower(name or "")] = table.insert(CustomShipments, customShipment)
-	util.PrecacheModel(customShipment.model)
+	shipByName[string.lower(name or "")] = table.insert(CustomShipments, customShipment);
+	util.PrecacheModel(customShipment.model);
 end
 AddCustomShipment = fprp.createShipment
 
@@ -758,7 +758,7 @@ function fprp.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it,
 		if string.lower(k) == string.lower(vehicle.name) then found = true break end
 	end
 
-	local valid, err, hints = checkValid(vehicle, validVehicle)
+	local valid, err, hints = checkValid(vehicle, validVehicle);
 	if not valid then fprp.error(string.format("Corrupt vehicle: %s!\n%s", vehicle.name or "", err), 3, hints) end
 
 	if not found then fprp.error("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.", 3) end
@@ -766,8 +766,8 @@ function fprp.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it,
 	CustomVehicles.customCheck = CustomVehicles.customCheck and fp{fprp.simplerrRun, CustomVehicles.customCheck}
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{fprp.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
-	table.insert(CustomVehicles, vehicle)
-	fprp.addToCategory(vehicle, "vehicles", vehicle.category)
+	table.insert(CustomVehicles, vehicle);
+	fprp.addToCategory(vehicle, "vehicles", vehicle.category);
 end
 AddCustomVehicle = fprp.createVehicle
 
@@ -777,7 +777,7 @@ Decides whether a custom job or shipmet or whatever can be used in a certain map
 function GM:CustomObjFitsMap(obj)
 	if not obj or not obj.maps then return true end
 
-	local map = string.lower(game.GetMap())
+	local map = string.lower(game.GetMap());
 	for k,v in pairs(obj.maps) do
 		if string.lower(v) == map then return true end
 	end
@@ -800,7 +800,7 @@ function fprp.createEntity(name, entity, model, price, max, command, classes, Cu
 		tblEnt.allowed = {tblEnt.allowed}
 	end
 
-	local valid, err, hints = checkValid(tblEnt, validEntity)
+	local valid, err, hints = checkValid(tblEnt, validEntity);
 	if not valid then fprp.error(string.format("Corrupt entity: %s!\n%s", name or "", err), 3, hints) end
 
 	tblEnt.customCheck = tblEnt.customCheck and fp{fprp.simplerrRun, tblEnt.customCheck}
@@ -810,11 +810,11 @@ function fprp.createEntity(name, entity, model, price, max, command, classes, Cu
 	tblEnt.spawn       = tblEnt.spawn       and fp{fprp.simplerrRun, tblEnt.spawn}
 
 	-- if SERVER and FPP then
-	-- 	FPP.AddDefaultBlocked(blockTypes, tblEnt.ent)
+	-- 	FPP.AddDefaultBlocked(blockTypes, tblEnt.ent);
 	-- end
 
-	table.insert(fprpEntities, tblEnt)
-	fprp.addToCategory(tblEnt, "entities", tblEnt.category)
+	table.insert(fprpEntities, tblEnt);
+	fprp.addToCategory(tblEnt, "entities", tblEnt.category);
 	timer.Simple(0, function() addEntityCommands(tblEnt) end)
 end
 AddEntity = fprp.createEntity
@@ -839,7 +839,7 @@ function fprp.createAgenda(Title, Manager, Listeners)
 	local agenda = {Manager = Manager, Title = Title, Listeners = Listeners, ManagersByKey = {}}
 	agenda.default = fprp.fprp_LOADING
 
-	local valid, err, hints = checkValid(agenda, validAgenda)
+	local valid, err, hints = checkValid(agenda, validAgenda);
 	if not valid then fprp.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
 
 	for k,v in pairs(Listeners) do
@@ -855,8 +855,8 @@ function fprp.createAgenda(Title, Manager, Listeners)
 	if SERVER then
 		timer.Simple(0, function()
 			-- Run after scripts have loaded
-			agenda.text = hook.Run("agendaUpdated", nil, agenda, "")
-		end)
+			agenda.text = hook.Run("agendaUpdated", nil, agenda, "");
+		end);
 	end
 end
 AddAgenda = fprp.createAgenda
@@ -872,7 +872,7 @@ function fprp.createGroupChat(funcOrTeam, ...)
 	end
 	-- People can enter either functions or a list of teams as parameter(s)
 	if type(funcOrTeam) == "function" then
-		table.insert(gm.fprpGroupChats, fp{fprp.simplerrRun, funcOrTeam})
+		table.insert(gm.fprpGroupChats, fp{fprp.simplerrRun, funcOrTeam});
 	else
 		local teams = {funcOrTeam, ...}
 		table.insert(gm.fprpGroupChats, function(ply) return table.HasValue(teams, ply:Team()) end)
@@ -899,9 +899,9 @@ function fprp.createAmmoType(ammoType, name, model, price, amountGiven, customCh
 
 	ammo.customCheck = ammo.customCheck and fp{fprp.simplerrRun, ammo.customCheck}
 	ammo.CustomCheckFailMsg = isfunction(ammo.CustomCheckFailMsg) and fp{fprp.simplerrRun, ammo.CustomCheckFailMsg} or ammo.CustomCheckFailMsg
-	ammo.id = table.insert(gm.AmmoTypes, ammo)
+	ammo.id = table.insert(gm.AmmoTypes, ammo);
 
-	fprp.addToCategory(ammo, "ammo", ammo.category)
+	fprp.addToCategory(ammo, "ammo", ammo.category);
 end
 GM.AddAmmoType = function(GM, ...) fprp.createAmmoType(...) end
 
@@ -910,7 +910,7 @@ function fprp.createDemoteGroup(name, tbl)
 	if fprp.fprp_LOADING and fprp.disabledDefaults["demotegroups"][name] then return end
 	if not tbl or not tbl[1] then error("No members in the demote group!") end
 
-	local set = demoteGroups[tbl[1]] or disjoint.MakeSet(tbl[1])
+	local set = demoteGroups[tbl[1]] or disjoint.MakeSet(tbl[1]);
 	set.name = name
 	for i = 2, #tbl do
 		set = (demoteGroups[tbl[i]] or disjoint.MakeSet(tbl[i])) + set
@@ -928,8 +928,8 @@ function fprp.createDemoteGroup(name, tbl)
 end
 
 function fprp.getDemoteGroup(teamNr)
-	demoteGroups[teamNr] = demoteGroups[teamNr] or disjoint.MakeSet(teamNr)
-	return disjoint.FindSet(demoteGroups[teamNr])
+	demoteGroups[teamNr] = demoteGroups[teamNr] or disjoint.MakeSet(teamNr);
+	return disjoint.FindSet(demoteGroups[teamNr]);
 end
 
 fprp.getDemoteGroups = fp{fn.Id, demoteGroups}
@@ -952,13 +952,13 @@ local categoryOrder = function(a, b)
 	return aso < bso or aso == bso and a.name < b.name
 end
 function fprp.createCategory(tbl)
-	local valid, err, hints = checkValid(tbl, validCategory)
+	local valid, err, hints = checkValid(tbl, validCategory);
 	if not valid then fprp.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
 	tbl.members = {}
 
 	local destination = categories[tbl.categorises]
 
-	local i = table.insert(destination, tbl)
+	local i = table.insert(destination, tbl);
 	while i > 1 do
 		if categoryOrder(destination[i - 1], tbl) then break end
 		destination[i - 1], destination[i] = destination[i], destination[i - 1]
@@ -977,7 +977,7 @@ function fprp.addToCategory(item, kind, cat)
 	local cats = categories[kind]
 	for _, c in ipairs(cats) do
 		if c.name ~= cat then continue end
-		table.insert(c.members, item)
+		table.insert(c.members, item);
 		local i = #c.members
 		while i > 1 do
 			if categoryOrder(c.members[i - 1], item) then break end
@@ -993,7 +993,7 @@ function fprp.addToCategory(item, kind, cat)
 		"The category name is case sensitive!",
 		"Categories must be created before fprp finished loading.",
 		"When you have a shipment that can also have its weapon sold separately, you need two categories: one for shipments and one for weapons.",
-	})
+	});
 end
 
 function fprp.removeFromCategory(item, kind)
@@ -1005,7 +1005,7 @@ function fprp.removeFromCategory(item, kind)
 		if v.name ~= item.category then continue end
 		for k, mem in pairs(v.members) do
 			if mem ~= item then continue end
-			table.remove(v.members, k)
+			table.remove(v.members, k);
 			break
 		end
 		break
@@ -1026,11 +1026,11 @@ local function mergeCategories(customs, catKind, path)
 				"Make sure the category is created with fprp.createCategory.",
 				"The category name is case sensitive!",
 				"Categories must be created before fprp finished loading."
-			}, path, -1, path)
+			}, path, -1, path);
 		end
 
 		cat.members = cat.members or {}
-		table.insert(cat.members, v)
+		table.insert(cat.members, v);
 	end
 
 	-- Sort category members
@@ -1038,15 +1038,15 @@ local function mergeCategories(customs, catKind, path)
 end
 
 hook.Add("loadCustomfprpItems", "mergeCategories", function()
-	local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments)
-	local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments)
+	local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments);
+	local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments);
 
-	mergeCategories(RPExtraTeams, "jobs", "your jobs")
-	mergeCategories(fprpEntities, "entities", "your custom entities")
-	mergeCategories(shipments, "shipments", "your custom shipments")
-	mergeCategories(guns, "weapons", "your custom weapons")
-	mergeCategories(CustomVehicles, "vehicles", "your custom vehicles")
-	mergeCategories(GAMEMODE.AmmoTypes, "ammo", "your custom ammo")
+	mergeCategories(RPExtraTeams, "jobs", "your jobs");
+	mergeCategories(fprpEntities, "entities", "your custom entities");
+	mergeCategories(shipments, "shipments", "your custom shipments");
+	mergeCategories(guns, "weapons", "your custom weapons");
+	mergeCategories(CustomVehicles, "vehicles", "your custom vehicles");
+	mergeCategories(GAMEMODE.AmmoTypes, "ammo", "your custom ammo");
 
 	categoriesMerged = true
-end)
+end);

@@ -1,4 +1,4 @@
-AddCSLuaFile()
+AddCSLuaFile();
 
 if CLIENT then
 	SWEP.PrintName = "MP5"
@@ -7,7 +7,7 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "x"
 
-	killicon.AddFont("weapon_mp52", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+	killicon.AddFont("weapon_mp52", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255));
 end
 
 SWEP.Base = "weapon_cs_base2"
@@ -25,7 +25,7 @@ SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "smg"
 
-SWEP.Primary.Sound = Sound("Weapon_MP5Navy.Single")
+SWEP.Primary.Sound = Sound("Weapon_MP5Navy.Single");
 SWEP.Primary.Recoil = 0.2
 SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
 SWEP.Primary.NumShots = 1
@@ -41,5 +41,5 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.IronSightsPos = Vector(-5.3, -7, 2.1)
-SWEP.IronSightsAng = Vector(0.9, 0.1, 0)
+SWEP.IronSightsPos = Vector(-5.3, -7, 2.1);
+SWEP.IronSightsAng = Vector(0.9, 0.1, 0);

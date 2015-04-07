@@ -1,4 +1,4 @@
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 
 fprp.declareChatCommand{
 	command = "job",
@@ -39,12 +39,12 @@ fprp.declareChatCommand{
 	command = "teamban",
 	description = "Ban someone from getting a certain job",
 	delay = 1.5,
-	condition = fn.Curry(fn.Flip(plyMeta.hasfprpPrivilege), 2)("rp_commands")
+	condition = fn.Curry(fn.Flip(plyMeta.hasfprpPrivilege), 2)("rp_commands");
 }
 
 fprp.declareChatCommand{
 	command = "teamunban",
 	description = "Undo a teamban",
 	delay = 1.5,
-	condition = fn.Curry(fn.Flip(plyMeta.hasfprpPrivilege), 2)("rp_commands")
+	condition = fn.Curry(fn.Flip(plyMeta.hasfprpPrivilege), 2)("rp_commands");
 }

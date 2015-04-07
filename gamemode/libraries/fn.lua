@@ -12,7 +12,7 @@ Function currying
 
 	Example:
 	DebugPrint = fp{print, "[DEBUG]"}
-	DebugPrint("TEST")
+	DebugPrint("TEST");
 	> [DEBUG] TEST
 ---------------------------------------------------------------------------*/
 function fp(tbl)
@@ -21,12 +21,12 @@ function fp(tbl)
 	return function(...)
 		local fnArgs = {}
 		local arg = {...}
-		local tblN = table.maxn(tbl)
+		local tblN = table.maxn(tbl);
 
 		for i = 2, tblN do fnArgs[i - 1] = tbl[i] end
 		for i = 1, table.maxn(arg) do fnArgs[tblN + i - 1] = arg[i] end
 
-		return func(unpack(fnArgs, 1, table.maxn(fnArgs)))
+		return func(unpack(fnArgs, 1, table.maxn(fnArgs)));
 	end
 end
 
@@ -41,7 +41,7 @@ local _G = _G
 local fp = fp
 
 
-module("fn")
+module("fn");
 
 /*---------------------------------------------------------------------------
 Parameter manipulation
@@ -51,7 +51,7 @@ Id = function(...) return ... end
 Flip = function(f)
 	if not f then error("not a function") end
 	return function(b, a, ...)
-		return f(a, b, ...)
+		return f(a, b, ...);
 	end
 end
 
@@ -61,7 +61,7 @@ ReverseArgs = function(...)
    --reverse args by building a function to do it, similar to the unpack() example
    local function reverse_h(acc, v, ...)
 	  if select('#', ...) == 0 then
-		 return v, acc()
+		 return v, acc();
 	  else
 		 return reverse_h(function () return v, acc() end, ...)
 	  end
@@ -81,7 +81,7 @@ Compose = function(funcs)
 		for i = #funcs, 1, -1 do
 			res = {funcs[i](unpack(res))}
 		end
-		return unpack(res)
+		return unpack(res);
 	end
 end
 
@@ -95,7 +95,7 @@ Curry = function(func, num_args)
 	local function curry_h(argtrace, n)
 		if n == 0 then
 			-- reverse argument list and call function
-			return func(ReverseArgs(argtrace()))
+			return func(ReverseArgs(argtrace()));
 		else
 			-- "push" argument (by building a wrapper function) and decrement n
 			return function(x)
@@ -116,7 +116,7 @@ end
 Partial = function(func, ...)
 	local args = {...}
 	return function(...)
-		return func(unpack(table.Add( args, {...})))
+		return func(unpack(table.Add( args, {...})));
 	end
 end
 
@@ -127,7 +127,7 @@ Until = function(cmp, fn, val)
 	if cmp(val) then
 		return val
 	end
-	return Until(cmp, fn, fn(val))
+	return Until(cmp, fn, fn(val));
 end
 
 Seq = function(f, x) f(x) return x end
@@ -197,13 +197,13 @@ List operations
 ---------------------------------------------------------------------------*/
 Map = function(f, xs)
 	for k, v in pairs(xs) do
-		xs[k] = f(v)
+		xs[k] = f(v);
 	end
 	return xs
 end
 
 Append = function(xs, ys)
-	return table.Add(xs, ys)
+	return table.Add(xs, ys);
 end
 
 Filter = function(f, xs)
@@ -216,21 +216,21 @@ end
 
 ForEach = function(f, xs)
 	for k,v in pairs(xs) do
-		local val = f(k, v)
+		local val = f(k, v);
 		if val ~= nil then return val end
 	end
 end
 
 Head = function(xs)
-	return table.GetFirstValue(xs)
+	return table.GetFirstValue(xs);
 end
 
 Last = function(xs)
-	return xs[#xs] or table.GetLastValue(xs)
+	return xs[#xs] or table.GetLastValue(xs);
 end
 
 Tail = function(xs)
-	table.remove(xs, 1)
+	table.remove(xs, 1);
 	return xs
 end
 
@@ -271,7 +271,7 @@ Folds
 ---------------------------------------------------------------------------*/
 Foldr = function(func, val, xs)
 	for i = #xs, 1, -1 do
-		val = func(xs[i], val)
+		val = func(xs[i], val);
 	end
 
 	return val
@@ -279,7 +279,7 @@ end
 
 Foldl = function(func, val, xs)
 	for k, v in ipairs(xs) do
-		val = func(val, v)
+		val = func(val, v);
 	end
 
 	return val

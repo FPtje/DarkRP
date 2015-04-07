@@ -1,21 +1,21 @@
 local function setScale(ply, scale)
-	ply:SetModelScale(scale, 0)
+	ply:SetModelScale(scale, 0);
 
-	ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale))
-	umsg.Start("fprp_playerscale")
-		umsg.Entity(ply)
-		umsg.Float(scale)
-	umsg.End()
+	ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale));
+	umsg.Start("fprp_playerscale");
+		umsg.Entity(ply);
+		umsg.Float(scale);
+	umsg.End();
 end
 
 local function onLoadout(ply)
 	if not RPExtraTeams[ply:Team()] or not tonumber(RPExtraTeams[ply:Team()].modelScale) then
-		setScale(ply, 1)
+		setScale(ply, 1);
 		return
 	end
 
-	local modelScale = tonumber(RPExtraTeams[ply:Team()].modelScale)
+	local modelScale = tonumber(RPExtraTeams[ply:Team()].modelScale);
 
-	setScale(ply, modelScale)
+	setScale(ply, modelScale);
 end
-hook.Add("PlayerLoadout", "playerScale", onLoadout)
+hook.Add("PlayerLoadout", "playerScale", onLoadout);

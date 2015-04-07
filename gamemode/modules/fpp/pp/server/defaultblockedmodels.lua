@@ -58,9 +58,9 @@ local defaultblocked = {
 
 -- Add to SQLite database
 function FPP.AddDefaultBlockedModels()
-	MySQLite.begin()
+	MySQLite.begin();
 	for k,v in pairs(defaultblocked) do
-		MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. MySQLite.SQLStr(v) .. ");")
+		MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. MySQLite.SQLStr(v) .. ");");
 	end
-	MySQLite.commit()
+	MySQLite.commit();
 end

@@ -8,38 +8,38 @@ end
 Add a message to chat
 ---------------------------------------------------------------------------*/
 local function AddToChat(bits)
-	local col1 = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
+	local col1 = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8));
 
-	local prefixText = net.ReadString()
-	local ply = net.ReadEntity()
-	ply = IsValid(ply) and ply or LocalPlayer()
+	local prefixText = net.ReadString();
+	local ply = net.ReadEntity();
+	ply = IsValid(ply) and ply or LocalPlayer();
 
 	if prefixText == "" or not prefixText then
-		prefixText = ply:Nick()
-		prefixText = prefixText ~= "" and prefixText or ply:SteamName()
+		prefixText = ply:Nick();
+		prefixText = prefixText ~= "" and prefixText or ply:SteamName();
 	end
 
-	local col2 = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
+	local col2 = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8));
 
-	local text = net.ReadString()
+	local text = net.ReadString();
 	local shouldShow
 	if text and text ~= "" then
 		if IsValid(ply) then
-			shouldShow = hook.Call("OnPlayerChat", GAMEMODE, ply, text, false, not ply:Alive(), prefixText, col1, col2)
+			shouldShow = hook.Call("OnPlayerChat", GAMEMODE, ply, text, false, not ply:Alive(), prefixText, col1, col2);
 		end
 
 		if shouldShow ~= true then
-			chat.AddNonParsedText(col1, prefixText, col2, ": "..text)
+			chat.AddNonParsedText(col1, prefixText, col2, ": "..text);
 		end
 	else
-		shouldShow = hook.Call("ChatText", GAMEMODE, "0", prefixText, prefixText, "none")
+		shouldShow = hook.Call("ChatText", GAMEMODE, "0", prefixText, prefixText, "none");
 		if shouldShow ~= true then
-			chat.AddNonParsedText(col1, prefixText)
+			chat.AddNonParsedText(col1, prefixText);
 		end
 	end
-	chat.PlaySound()
+	chat.PlaySound();
 end
-net.Receive("fprp_Chat", AddToChat)
+net.Receive("fprp_Chat", AddToChat);
 
 /*---------------------------------------------------------------------------
 Credits
@@ -60,28 +60,28 @@ Picwizdan
 Sibre
 [GNC] Matt
 PhilXYZ
-Chromebolt A.K.A. Unib5 (STEAM_0:1:19045957)
+Chromebolt A.K.A. Unib5 (STEAM_0:1:19045957);
 
 In 2008, Unib5 was administrator on a fprp server called EuroRP, owned by Jiggu. FPtje frequently joined this server to prop kill en masse. While Jiggu loved watching the chaos unfold, Unib5 hated it and banned FPtje on sight. Since Jiggu kept unbanning FPtje, Unib5 felt powerless. In an attempt to stop FPtje, Unib5 put FPtje's favourite prop killing props (the locker and the sawblade) in the default blacklist of fprp in an update. This in turn enraged FPtje, as he swore to make an update in secret that would suddenly pop up and overthrow the established version. As a result, fprp 2.3.1 was released in December 2008. After a bit of a fight, FPtje became the official updater of fprp.
 
 Current developer:
-	Falco A.K.A. FPtje Atheos (STEAM_0:0:8944068)
+	Falco A.K.A. FPtje Atheos (STEAM_0:0:8944068);
 
-People who have contributed (ordered by commits, with at least two commits)
+People who have contributed (ordered by commits, with at least two commits);
 	Bo98
-	Drakehawke (STEAM_0:0:22342869) (64 commits on old SVN)
+	Drakehawke (STEAM_0:0:22342869) (64 commits on old SVN);
 	FiG-Scorn
 	Noiwex
 	KoZ
-	Eusion (STEAM_0:0:20450406) (3 commits on old SVN)
+	Eusion (STEAM_0:0:20450406) (3 commits on old SVN);
 	Gangleider
 	MattWalton12
 	TypicalRookie
 ]]
 
 local function credits(um)
-	chat.AddNonParsedText(Color(255,0,0,255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255,0,0,255), "] ", Color(255, 255, 255, 255), fprp.getPhrase("credits_see_console"))
+	chat.AddNonParsedText(Color(255,0,0,255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255,0,0,255), "] ", Color(255, 255, 255, 255), fprp.getPhrase("credits_see_console"));
 
-	MsgC(Color(255,0,0,255), fprp.getPhrase("credits_for", GAMEMODE.Name), Color(255,255,255,255), creds)
+	MsgC(Color(255,0,0,255), fprp.getPhrase("credits_for", GAMEMODE.Name), Color(255,255,255,255), creds);
 end
-usermessage.Hook("fprp_Credits", credits)
+usermessage.Hook("fprp_Credits", credits);

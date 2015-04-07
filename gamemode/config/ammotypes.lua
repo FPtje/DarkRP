@@ -11,7 +11,7 @@ fprp.createAmmoType("ammoType", {
     price = 1234,
     amountGiven = 5678,
     customCheck = function(ply) return ply:IsAdmin() end
-})
+});
 
 ammoType: The name of the ammo that Garry's mod recognizes
 	If you open your SWEP's shared.lua, you can find the ammo name next to
@@ -41,7 +41,7 @@ fprp.createAmmoType("pistol", {
 	model = "models/Items/BoxSRounds.mdl",
 	price = 30,
 	amountGiven = 24
-})
+});
 
 -- Buckshot ammo, used by the shotguns
 fprp.createAmmoType("buckshot", {
@@ -49,7 +49,7 @@ fprp.createAmmoType("buckshot", {
 	model = "models/Items/BoxBuckshot.mdl",
 	price = 50,
 	amountGiven = 8
-})
+});
 
 -- Rifle ammo, usually used by assault rifles
 fprp.createAmmoType("smg1", {
@@ -57,7 +57,7 @@ fprp.createAmmoType("smg1", {
 	model = "models/Items/BoxMRounds.mdl",
 	price = 80,
 	amountGiven = 30
-})
+});
 
 fprp.createCategory{
     name = "Other",

@@ -1,6 +1,6 @@
 FPP = FPP or {}
-local plyMeta = FindMetaTable("Player")
-local entMeta = FindMetaTable("Entity")
+local plyMeta = FindMetaTable("Player");
+local entMeta = FindMetaTable("Entity");
 
 /*---------------------------------------------------------------------------
 Entity data explanation.
@@ -62,7 +62,7 @@ local function getPlySetting(ply, settingName)
 end
 
 local function getSetting(touchType)
-	return touchType.."1", string.upper("FPP_"..touchType.."1")
+	return touchType.."1", string.upper("FPP_"..touchType.."1");
 end
 
 local constraints = { -- These little buggers think they're not constraints, but they are
@@ -83,11 +83,11 @@ local function calculateCanTouchForType(ply, ent, touchType)
 	if not IsValid(ent) then return false, 0 end
 
 	local isAdmin = ply.FPPIsAdmin or ply:IsAdmin() -- small optimisation
-	local class = ent:GetClass()
-	local owner = ent:CPPIGetOwner()
-	local setting, tablename = getSetting(touchType)
+	local class = ent:GetClass();
+	local owner = ent:CPPIGetOwner();
+	local setting, tablename = getSetting(touchType);
 	local FPPSettings = FPP.Settings[tablename]
-	local noTouchOtherPlayerProps = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
+	local noTouchOtherPlayerProps = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps");
 
 	-- hard white list
 	if hardWhiteListed[class] then return true, reasonNumbers.world end
@@ -98,13 +98,13 @@ local function calculateCanTouchForType(ply, ent, touchType)
 	end
 
 	-- blocked entity
-	local whitelist = tobool(FPPSettings.iswhitelist)
+	local whitelist = tobool(FPPSettings.iswhitelist);
 	local isInList = FPP.Blocked[setting][string.lower(class)] or false
 
 	local isBlocked = whitelist ~= isInList -- XOR
-	local adminsCanTouchBlocked = tobool(FPPSettings.admincanblocked)
-	local playersCanBlocked = tobool(FPPSettings.canblocked)
-	local noTouchBlocked = getPlySetting(ply, "FPP_PrivateSettings_BlockedProps")
+	local adminsCanTouchBlocked = tobool(FPPSettings.admincanblocked);
+	local playersCanBlocked = tobool(FPPSettings.canblocked);
+	local noTouchBlocked = getPlySetting(ply, "FPP_PrivateSettings_BlockedProps");
 
 	if isBlocked and not noTouchBlocked and (playersCanBlocked or isAdmin and adminsCanTouchBlocked) then
 
@@ -123,9 +123,9 @@ local function calculateCanTouchForType(ply, ent, touchType)
 	if IsValid(owner) and owner.Buddies and owner.Buddies[ply] and owner.Buddies[ply][touchType] then return not noTouchOtherPlayerProps, reasonNumbers.buddy end
 
 	-- World prop
-	local adminWorldProps = tobool(FPPSettings.adminworldprops)
-	local peopleWorldProps = tobool(FPPSettings.worldprops)
-	local restrictWorld = getPlySetting(ply, "FPP_PrivateSettings_WorldProps")
+	local adminWorldProps = tobool(FPPSettings.adminworldprops);
+	local peopleWorldProps = tobool(FPPSettings.worldprops);
+	local restrictWorld = getPlySetting(ply, "FPP_PrivateSettings_WorldProps");
 	if owner == nil then
 
 		return not restrictWorld and (peopleWorldProps or (isAdmin and adminWorldProps)), reasonNumbers.world
@@ -137,7 +137,7 @@ local function calculateCanTouchForType(ply, ent, touchType)
 	end
 
 	-- Someone else's prop
-	local adminProps = tobool(FPPSettings.adminall)
+	local adminProps = tobool(FPPSettings.adminall);
 	return isAdmin and adminProps and not noTouchOtherPlayerProps, reasonNumbers.owner
 end
 
@@ -157,12 +157,12 @@ function FPP.calculateCanTouch(ply, ent)
 	local i = 0
 
 	for Bit, touchType in pairs(touchTypeNumbers) do
-		local canTouchType, why = calculateCanTouchForType(ply, ent, touchType)
+		local canTouchType, why = calculateCanTouchForType(ply, ent, touchType);
 		if canTouchType then
-			canTouch = bit.bor(canTouch, Bit)
+			canTouch = bit.bor(canTouch, Bit);
 		end
 
-		reasons = bit.bor(reasons, bit.lshift(why, i * reasonSize))
+		reasons = bit.bor(reasons, bit.lshift(why, i * reasonSize));
 
 		i = i + 1
 	end
@@ -177,7 +177,7 @@ function FPP.calculateCanTouch(ply, ent)
 	return changed
 end
 
--- try not to call this with both player.GetAll() and ents.GetAll()
+-- try not to call this with both player.GetAll() and ents.GetAll();
 function FPP.recalculateCanTouch(players, entities)
 	for k,v in pairs(entities) do
 		if not IsValid(v) then entities[k] = nil continue end
@@ -189,20 +189,20 @@ function FPP.recalculateCanTouch(players, entities)
 	for _, ply in pairs(players) do
 		if not IsValid(ply) then continue end
 		-- optimisations
-		ply.FPPIsAdmin = ply:IsAdmin()
-		ply.FPP_PrivateSettings_OtherPlayerProps = ply:GetInfo("FPP_PrivateSettings_OtherPlayerProps")
-		ply.cl_pickupplayers = ply:GetInfo("cl_pickupplayers")
-		ply.FPP_PrivateSettings_BlockedProps = ply:GetInfo("FPP_PrivateSettings_BlockedProps")
-		ply.FPP_PrivateSettings_OwnProps = ply:GetInfo("FPP_PrivateSettings_OwnProps")
-		ply.FPP_PrivateSettings_WorldProps = ply:GetInfo("FPP_PrivateSettings_WorldProps")
+		ply.FPPIsAdmin = ply:IsAdmin();
+		ply.FPP_PrivateSettings_OtherPlayerProps = ply:GetInfo("FPP_PrivateSettings_OtherPlayerProps");
+		ply.cl_pickupplayers = ply:GetInfo("cl_pickupplayers");
+		ply.FPP_PrivateSettings_BlockedProps = ply:GetInfo("FPP_PrivateSettings_BlockedProps");
+		ply.FPP_PrivateSettings_OwnProps = ply:GetInfo("FPP_PrivateSettings_OwnProps");
+		ply.FPP_PrivateSettings_WorldProps = ply:GetInfo("FPP_PrivateSettings_WorldProps");
 		local changed = {}
 
 		for _, ent in pairs(entities) do
-			local hasChanged = FPP.calculateCanTouch(ply, ent)
+			local hasChanged = FPP.calculateCanTouch(ply, ent);
 			if hasChanged then table.insert(changed, ent) end
 		end
 
-		FPP.plySendTouchData(ply, changed)
+		FPP.plySendTouchData(ply, changed);
 
 		-- end optimisations
 		ply.FPP_PrivateSettings_OtherPlayerProps = nil
@@ -224,7 +224,7 @@ function FPP.plyCanTouchEnt(ply, ent, touchType)
 	local canTouch = ent.FPPCanTouch[ply]
 	-- if an entity is constrained, return the least of the rights
 	if ent.FPPRestrictConstraint and ent.FPPRestrictConstraint[ply] then
-		canTouch = bit.band(ent.FPPRestrictConstraint[ply], ent.FPPCanTouch[ply])
+		canTouch = bit.band(ent.FPPRestrictConstraint[ply], ent.FPPCanTouch[ply]);
 	end
 
 	-- return the answer for every touch type if parameter is empty
@@ -242,13 +242,13 @@ end
 /*---------------------------------------------------------------------------
 Networking
 ---------------------------------------------------------------------------*/
-util.AddNetworkString("FPP_TouchabilityData")
+util.AddNetworkString("FPP_TouchabilityData");
 local function netWriteEntData(ply, ent)
 	-- EntIndex for when it's out of the PVS of the player
-	net.WriteUInt(ent:EntIndex(), 32)
+	net.WriteUInt(ent:EntIndex(), 32);
 
-	local owner = ent:CPPIGetOwner()
-	net.WriteUInt(IsValid(owner) and owner:EntIndex() or -1, 32)
+	local owner = ent:CPPIGetOwner();
+	net.WriteUInt(IsValid(owner) and owner:EntIndex() or -1, 32);
 	net.WriteUInt(ent.FPPRestrictConstraint and ent.FPPRestrictConstraint[ply] or ent.FPPCanTouch[ply], 5) -- touchability information
 	net.WriteUInt(ent.FPPConstraintReasons and ent.FPPConstraintReasons[ply] or ent.FPPCanTouchWhy[ply], 20) -- reasons
 end
@@ -257,36 +257,36 @@ function FPP.plySendTouchData(ply, ents)
 	local count = #ents
 
 	if count == 0 then return end
-	net.Start("FPP_TouchabilityData")
+	net.Start("FPP_TouchabilityData");
 		for i = 1, count do
-			netWriteEntData(ply, ents[i])
-			net.WriteBit(i == count)
+			netWriteEntData(ply, ents[i]);
+			net.WriteBit(i == count);
 		end
-	net.Send(ply)
+	net.Send(ply);
 end
 
 /*---------------------------------------------------------------------------
 Events that trigger recalculation
 ---------------------------------------------------------------------------*/
 local function handleConstraintCreation(ent)
-	local ent1, ent2 = ent:GetConstrainedEntities()
+	local ent1, ent2 = ent:GetConstrainedEntities();
 	ent1, ent2 = ent1 or ent.Ent1, ent2 or ent.Ent2
 
 	if not ent1 or not ent2 or not ent1.FPPCanTouch or not ent2.FPPCanTouch then return end
 	local reason = 0
 	local i = 0
 	for Bit, touchType in pairs(touchTypeNumbers) do
-		reason = bit.bor(reason, bit.lshift(reasonNumbers.constrained, i * reasonSize))
+		reason = bit.bor(reason, bit.lshift(reasonNumbers.constrained, i * reasonSize));
 		i = i + 1
 	end
 
 	for _, ply in pairs(player.GetAll()) do
-		local touch1, touch2 = FPP.plyCanTouchEnt(ply, ent1), FPP.plyCanTouchEnt(ply, ent2)
+		local touch1, touch2 = FPP.plyCanTouchEnt(ply, ent1), FPP.plyCanTouchEnt(ply, ent2);
 
 		-- The constrained entities have the same touching rights.
 		if touch1 == touch2 then continue end
 
-		local restrictedAccess = bit.band(touch1, touch2)
+		local restrictedAccess = bit.band(touch1, touch2);
 
 		local send = {}
 		for _, e in pairs(constraint.GetAllConstrainedEntities(ent1) or {}) do
@@ -298,10 +298,10 @@ local function handleConstraintCreation(ent)
 			e.FPPRestrictConstraint[ply] = restrictedAccess
 			e.FPPConstraintReasons[ply] = reason
 
-			table.insert(send, e)
+			table.insert(send, e);
 		end
 
-		FPP.plySendTouchData(ply, send)
+		FPP.plySendTouchData(ply, send);
 	end
 
 end
@@ -316,7 +316,7 @@ local function onEntitiesCreated(ents)
 		if not IsValid(ent) then continue end
 
 		if isConstraint(ent) then
-			handleConstraintCreation(ent)
+			handleConstraintCreation(ent);
 			continue
 		end
 
@@ -326,13 +326,13 @@ local function onEntitiesCreated(ents)
 		end
 
 		for _, ply in pairs(player.GetAll()) do
-			FPP.calculateCanTouch(ply, ent)
+			FPP.calculateCanTouch(ply, ent);
 		end
-		table.insert(send, ent)
+		table.insert(send, ent);
 	end
 
 	for _, ply in pairs(player.GetAll()) do
-		FPP.plySendTouchData(ply, send)
+		FPP.plySendTouchData(ply, send);
 	end
 end
 
@@ -341,16 +341,16 @@ end
 -- of one message per player per frame
 local entQueue = {}
 local timerFunc = function()
-	onEntitiesCreated(entQueue)
+	onEntitiesCreated(entQueue);
 	entQueue = {}
-	timer.Destroy("FPP_OnEntityCreatedTimer")
+	timer.Destroy("FPP_OnEntityCreatedTimer");
 end
 hook.Add("OnEntityCreated", "FPP_EntityCreated", function(ent)
-	table.insert(entQueue, ent)
+	table.insert(entQueue, ent);
 
 	if timer.Exists("FPP_OnEntityCreatedTimer") then return end
-	timer.Create("FPP_OnEntityCreatedTimer", 0, 1, timerFunc)
-end)
+	timer.Create("FPP_OnEntityCreatedTimer", 0, 1, timerFunc);
+end);
 
 
 /*---------------------------------------------------------------------------
@@ -358,7 +358,7 @@ On entity removed
 ---------------------------------------------------------------------------*/
 -- Recalculates touchability information for constrained entities
 -- Note: Assumes normal touchability information is up to date!
--- Update constraints, O(players * (entities + constraints))
+-- Update constraints, O(players * (entities + constraints));
 function FPP.RecalculateConstrainedEntities(players, entities)
 	for i, ent in pairs(entities) do
 		if not IsValid(ent) then entities[i] = nil continue end
@@ -408,7 +408,7 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 				-- The entity doesn't necessarily have CanTouch data at this point
 				value.FPPCanTouch = value.FPPCanTouch or {}
 				value.FPPCanTouch[ply] = value.FPPCanTouch[ply] or 0
-				FPP_CanTouch = bit.band(FPP_CanTouch or 0, value.FPPCanTouch[ply])
+				FPP_CanTouch = bit.band(FPP_CanTouch or 0, value.FPPCanTouch[ply]);
 			end
 
 			-- now update the ents to the client
@@ -416,10 +416,10 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 			for e, b in pairs(black) do
 				if FPP.plyCanTouchEnt(ply, e) ~= FPP_CanTouch then
 					e.FPPRestrictConstraint[ply] = e.FPPCanTouch[ply] ~= FPP_CanTouch and FPP_CanTouch or nil
-					table.insert(updated, e)
+					table.insert(updated, e);
 				end
 			end
-			FPP.plySendTouchData(ply, updated)
+			FPP.plySendTouchData(ply, updated);
 
 			-- reset BFS information for next BFS round
 			black = {}
@@ -432,12 +432,12 @@ local entMem = {}
 local function constraintRemovedTimer(ent1, ent2, constrainedEnts)
 	if not IsValid(ent1) and not IsValid(ent2) or not constrainedEnts then return end
 
-	FPP.RecalculateConstrainedEntities(player.GetAll(), constrainedEnts)
+	FPP.RecalculateConstrainedEntities(player.GetAll(), constrainedEnts);
 	entMem = {}
 end
 
 local function handleConstraintRemoved(ent)
-	local ent1, ent2 = ent:GetConstrainedEntities()
+	local ent1, ent2 = ent:GetConstrainedEntities();
 	ent1, ent2 = ent1 or ent.Ent1, ent2 or ent.Ent2
 
 	if not IsValid(ent1) or not IsValid(ent2) then return end
@@ -447,7 +447,7 @@ local function handleConstraintRemoved(ent)
 	entMem[ent2] = true
 
 	-- the constraint is still there, so this includes ent2's constraints
-	local constrainedEnts = constraint.GetAllConstrainedEntities(ent1)
+	local constrainedEnts = constraint.GetAllConstrainedEntities(ent1);
 
 	timer.Create("FPP_ConstraintRemovedTimer", 0, 1, function() constraintRemovedTimer(ent1, ent2, constrainedEnts) end)
 end
@@ -456,7 +456,7 @@ local function onEntityRemoved(ent)
 	if isConstraint(ent) then handleConstraintRemoved(ent) end
 end
 
-hook.Add("EntityRemoved", "FPP_OnEntityRemoved", onEntityRemoved)
+hook.Add("EntityRemoved", "FPP_OnEntityRemoved", onEntityRemoved);
 
 /*---------------------------------------------------------------------------
 Player disconnected
@@ -465,13 +465,13 @@ local function playerDisconnected(ply)
 	local ownedEnts = {}
 	for _, ent in pairs(ents.GetAll()) do
 		if ent:CPPIGetOwner() == ply then
-			table.insert(ownedEnts, ent)
+			table.insert(ownedEnts, ent);
 		end
 	end
 
 	timer.Simple(0, function() FPP.recalculateCanTouch(player.GetAll(), ownedEnts) end)
 end
-hook.Add("PlayerDisconnected", "FPP_PlayerDisconnected", playerDisconnected)
+hook.Add("PlayerDisconnected", "FPP_PlayerDisconnected", playerDisconnected);
 
 /*---------------------------------------------------------------------------
 Usergroup changed
@@ -481,28 +481,28 @@ local function userGroupRecalculate(ply)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 
 	timer.Simple(0, function()
-		FPP.recalculateCanTouch({ply}, ents.GetAll())
-	end)
+		FPP.recalculateCanTouch({ply}, ents.GetAll());
+	end);
 end
 
 function plyMeta:SetUserGroup(group)
-	userGroupRecalculate(self)
+	userGroupRecalculate(self);
 
-	return setUserGroup(self, group)
+	return setUserGroup(self, group);
 end
 
 local oldSetNWString = entMeta.SetNWString
 function entMeta:SetNWString(str, val)
 	if str ~= "usergroup" then return oldSetNWString(self, str, val) end
 
-	userGroupRecalculate(self)
-	return oldSetNWString(self, str, val)
+	userGroupRecalculate(self);
+	return oldSetNWString(self, str, val);
 end
 
 local oldSetNetworkedString = entMeta.SetNetworkedString
 function entMeta:SetNetworkedString(str, val)
 	if str ~= "usergroup" then return oldSetNetworkedString(self, str, val) end
 
-	userGroupRecalculate(self)
-	return oldSetNetworkedString(self, str, val)
+	userGroupRecalculate(self);
+	return oldSetNetworkedString(self, str, val);
 end

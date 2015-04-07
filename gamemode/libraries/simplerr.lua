@@ -340,7 +340,7 @@ local runErrs = {
     },
 }
 
-module("simplerr")
+module("simplerr");
 
 -- Get a nicely formatted stack trace. Start is where to start numbering
 local function getStack(i, start)
@@ -350,13 +350,13 @@ local function getStack(i, start)
 
     -- Invariant: stack level (i + count) >= 2 and <= last stack item
     for count = 1, math.huge do -- user visible count
-        info = debug.getinfo(i + count, "Sln")
+        info = debug.getinfo(i + count, "Sln");
         if not info then break end
 
-        table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"))
+        table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"));
     end
 
-    return table.concat(stack, "\n")
+    return table.concat(stack, "\n");
 end
 
 -- Translate a runtime error to simplerr format.
@@ -364,15 +364,15 @@ end
 function runError(msg, stackNr, hints, path, line, stack)
     stackNr = stackNr or 1
     hints = hints or {"No hints, sorry."}
-    hints = "\t- " .. table.concat(hints, "\n\t- ")
+    hints = "\t- " .. table.concat(hints, "\n\t- ");
 
     if not path and not line then
-        local info = debug.getinfo(stackNr + 1, "Sln")
+        local info = debug.getinfo(stackNr + 1, "Sln");
         path = info.short_src
         line = info.currentline
     end
 
-    return false, string.format(runErrTranslation, path, line, msg, hints, stack or getStack(stackNr + 1))
+    return false, string.format(runErrTranslation, path, line, msg, hints, stack or getStack(stackNr + 1));
 end
 
 -- Translate the message of an error
@@ -385,25 +385,25 @@ local function translateMsg(msg, path, line, errs)
         if not string.find(msg, trans.match) then continue end
 
         -- translate <eof>
-        msg = string.Replace(msg, "<eof>", "end of the file")
+        msg = string.Replace(msg, "<eof>", "end of the file");
 
-        res = string.format(trans.text, trans.format({string.match(msg, trans.match)}, line, path))
+        res = string.format(trans.text, trans.format({string.match(msg, trans.match)}, line, path));
         hints = trans.hints
 
         break
     end
 
-    return res or msg, "\t- " .. table.concat(hints, "\n\t- ")
+    return res or msg, "\t- " .. table.concat(hints, "\n\t- ");
 end
 
 -- Translate an error into a language understandable by non-programmers
 local function translateError(path, err, translation, errs, stack)
     -- Using .* instead of path because path may be wrong when error is called
-    local line, msg = string.match(err, ".*:([0-9-]+): (.*)")
-    line = tonumber(line)
+    local line, msg = string.match(err, ".*:([0-9-]+): (.*)");
+    line = tonumber(line);
 
-    local msg, hints = translateMsg(msg, path, line, errs)
-    local res = string.format(translation, path, line, msg, hints, stack)
+    local msg, hints = translateMsg(msg, path, line, errs);
+    local res = string.format(translation, path, line, msg, hints, stack);
     return res
 end
 
@@ -414,22 +414,22 @@ function safeCall(f, ...)
 
     if succ then return unpack(res) end
 
-    local info = debug.getinfo(f)
+    local info = debug.getinfo(f);
     local path = info.short_src
 
     -- Investigate the stack. Not using path in match because calls to error can give a different path
-    local line = string.match(err, ".*:([0-9-]+)")
+    local line = string.match(err, ".*:([0-9-]+)");
     local stack = string.format("\t1. %s on line %s\n", path, line) .. getStack(2, 2) -- add called func to stack
 
     -- Line and source info aren't always in the error
     if not line then
         line = info.currentline
-        err = string.format("%s:%s: %s", path, line, err)
+        err = string.format("%s:%s: %s", path, line, err);
     end
 
     -- Skip translation if the error is already a simplerr error
     -- This prevents nested simplerr errors when runError is called by a file loaded by runFile
-    local mustTranslate = not string.find(err, "------- End of Simplerr error -------")
+    local mustTranslate = not string.find(err, "------- End of Simplerr error -------");
     return false, mustTranslate and translateError(path, err, runErrTranslation, runErrs, stack) or err
 end
 
@@ -439,19 +439,19 @@ end
 -- Clientside files sent by the server cannot be read using file.Read unless you're the host of a listen server
 function runFile(path)
     if not file.Exists(path, "LUA") then error(string.format("Could not run file '%s' (file not found)", path)) end
-    local contents = file.Read(path, "LUA")
+    local contents = file.Read(path, "LUA");
 
-    -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh)
+    -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh);
     if string.find(contents, "#NoSimplerr#") then include(path) return true end
 
     -- Catch syntax errors with CompileString
-    local err = CompileString(contents, path, false)
+    local err = CompileString(contents, path, false);
 
     -- No syntax errors, check for immediate runtime errors using CompileFile
     -- Using the function CompileString returned leads to relative path trouble
     if isfunction(err) then return safeCall(CompileFile(path), path) end
 
-    return false, translateError(path, err, synErrTranslation, synErrs)
+    return false, translateError(path, err, synErrTranslation, synErrs);
 end
 
 -- Error wrapper: decorator for runFile and safeCall that throws an error on failure.
@@ -459,7 +459,7 @@ end
 function wrapError(succ, err, ...)
     if succ then return succ, err, ... end
 
-    error(err)
+    error(err);
 end
 
 -- Hook wrapper: Calls a hook on error
@@ -476,10 +476,10 @@ function wrapLog(succ, err, ...)
 
     local data = {
         err = err,
-        time = os.time()
+        time = os.time();
     }
 
-    table.insert(log, data)
+    table.insert(log, data);
 
     return succ, err, ...
 end

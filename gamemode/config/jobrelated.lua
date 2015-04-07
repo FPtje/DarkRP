@@ -33,7 +33,7 @@ TEAM_CITIZEN = fprp.createJob("Citizen", {
 	hasLicense = false,
 	candemote = false,
 	category = "Citizens",
-})
+});
 
 TEAM_POLICE = fprp.createJob("Civil Protection", {
 	color = Color(25, 25, 170, 255),
@@ -56,7 +56,7 @@ TEAM_POLICE = fprp.createJob("Civil Protection", {
 		["pistol"] = 60,
 	},
 	category = "Civil Protection",
-})
+});
 
 TEAM_GANG = fprp.createJob("Gangster", {
 	color = Color(75, 75, 75, 255),
@@ -86,7 +86,7 @@ TEAM_GANG = fprp.createJob("Gangster", {
 	vote = false,
 	hasLicense = false,
 	category = "Gangsters",
-})
+});
 
 TEAM_MOB = fprp.createJob("Mob boss", {
 	color = Color(25, 25, 25, 255),
@@ -103,7 +103,7 @@ TEAM_MOB = fprp.createJob("Mob boss", {
 	vote = false,
 	hasLicense = false,
 	category = "Gangsters",
-})
+});
 
 TEAM_GUN = fprp.createJob("Gun Dealer", {
 	color = Color(255, 140, 0, 255),
@@ -118,7 +118,7 @@ TEAM_GUN = fprp.createJob("Gun Dealer", {
 	vote = false,
 	hasLicense = false,
 	category = "Citizens",
-})
+});
 
 TEAM_MEDIC = fprp.createJob("Medic", {
 	color = Color(47, 79, 79, 255),
@@ -136,7 +136,7 @@ TEAM_MEDIC = fprp.createJob("Medic", {
 	hasLicense = false,
 	medic = true,
 	category = "Citizens",
-})
+});
 
 TEAM_CHIEF = fprp.createJob("Civil Protection Chief", {
 	color = Color(20, 20, 255, 255),
@@ -161,7 +161,7 @@ TEAM_CHIEF = fprp.createJob("Civil Protection Chief", {
 		["pistol"] = 60,
 	},
 	category = "Civil Protection",
-})
+});
 
 TEAM_MAYOR = fprp.createJob("Mayor", {
 	color = Color(150, 20, 20, 255),
@@ -183,7 +183,7 @@ TEAM_MAYOR = fprp.createJob("Mayor", {
 	hasLicense = false,
 	mayor = true,
 	category = "Civil Protection",
-})
+});
 
 TEAM_HOBO = fprp.createJob("Hobo", {
 	color = Color(80, 45, 0, 255),
@@ -203,7 +203,7 @@ TEAM_HOBO = fprp.createJob("Hobo", {
 	candemote = false,
 	hobo = true,
 	category = "Citizens",
-})
+});
 
 if not fprp.disabledDefaults["modules"]["hungermod"] then
 	TEAM_COOK = fprp.createJob("Cook", {
@@ -220,7 +220,7 @@ if not fprp.disabledDefaults["modules"]["hungermod"] then
 		vote = false,
 		hasLicense = false,
 		cook = true
-	})
+	});
 end
 
 -- Compatibility for when default teams are disabled
@@ -239,26 +239,26 @@ TEAM_HOBO    = TEAM_HOBO     or -1
 --------------------------------------------------------
 HOW TO MAKE A DOOR GROUP
 --------------------------------------------------------
-AddDoorGroup("NAME OF THE GROUP HERE, you see this when looking at a door", Team1, Team2, team3, team4, etc.)
+AddDoorGroup("NAME OF THE GROUP HERE, you see this when looking at a door", Team1, Team2, team3, team4, etc.);
 
 
 The default door groups, can also be used as examples:
 */
-AddDoorGroup("Cops and Mayor only", TEAM_CHIEF, TEAM_POLICE, TEAM_MAYOR)
-AddDoorGroup("Gundealer only", TEAM_GUN)
+AddDoorGroup("Cops and Mayor only", TEAM_CHIEF, TEAM_POLICE, TEAM_MAYOR);
+AddDoorGroup("Gundealer only", TEAM_GUN);
 
 
 /*
 --------------------------------------------------------
 HOW TO MAKE AN AGENDA
 --------------------------------------------------------
-fprp.createAgenda(Title of the agenda, Manager (who edits it), Listeners (the ones who just see and follow the agenda))
-It's possible to have multiple managers. In that case you have to put all the managers in '{}' (see Police agenda)
+fprp.createAgenda(Title of the agenda, Manager (who edits it), Listeners (the ones who just see and follow the agenda));
+It's possible to have multiple managers. In that case you have to put all the managers in '{}' (see Police agenda);
 
 The default agendas, can also be used as examples:
 */
-fprp.createAgenda("Gangster's agenda", TEAM_MOB, {TEAM_GANG})
-fprp.createAgenda("Police agenda", {TEAM_MAYOR, TEAM_CHIEF}, {TEAM_POLICE})
+fprp.createAgenda("Gangster's agenda", TEAM_MOB, {TEAM_GANG});
+fprp.createAgenda("Police agenda", {TEAM_MAYOR, TEAM_CHIEF}, {TEAM_POLICE});
 
 
 /*
@@ -266,7 +266,7 @@ fprp.createAgenda("Police agenda", {TEAM_MAYOR, TEAM_CHIEF}, {TEAM_POLICE})
 HOW TO MAKE A GROUP CHAT
 ---------------------------------------------------------------------------
 Pick one!
-GAMEMODE:AddGroupChat(List of team variables separated by comma)
+GAMEMODE:AddGroupChat(List of team variables separated by comma);
 
 or
 
@@ -275,7 +275,7 @@ This one is for people who know how to script Lua.
 
 */
 GAMEMODE:AddGroupChat(function(ply) return ply:isCP() end)
-GAMEMODE:AddGroupChat(TEAM_MOB, TEAM_GANG)
+GAMEMODE:AddGroupChat(TEAM_MOB, TEAM_GANG);
 
 /*---------------------------------------------------------------------------
 Define which team joining players spawn into and what team you change to if demoted
@@ -295,13 +295,13 @@ GAMEMODE.CivilProtection = {
 /*---------------------------------------------------------------------------
 Enable hitman goodies on this team
 ---------------------------------------------------------------------------*/
-fprp.addHitmanTeam(TEAM_MOB)
+fprp.addHitmanTeam(TEAM_MOB);
 
 /*---------------------------------------------------------------------------
 Default demote groups
 ---------------------------------------------------------------------------*/
-fprp.createDemoteGroup("Cops", {TEAM_POLICE, TEAM_CHIEF})
-fprp.createDemoteGroup("Gangsters", {TEAM_GANG, TEAM_MOB})
+fprp.createDemoteGroup("Cops", {TEAM_POLICE, TEAM_CHIEF});
+fprp.createDemoteGroup("Gangsters", {TEAM_GANG, TEAM_MOB});
 
 /*---------------------------------------------------------------------------
 Default categories

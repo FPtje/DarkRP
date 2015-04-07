@@ -6,7 +6,7 @@
         - No need to modify code when switching between SQLite and MySQL
         - Queued queries: execute a bunch of queries in order an run the callback when all queries are done
 
-    License: LGPL V2.1 (read here: https://www.gnu.org/licenses/lgpl-2.1.html)
+    License: LGPL V2.1 (read here: https://www.gnu.org/licenses/lgpl-2.1.html);
 
     Supported MySQL modules:
     - MySQLOO
@@ -26,15 +26,15 @@
                 EnableMySQL      :: Bool - set to true to use MySQL, false for SQLite
                 Host             :: String - database hostname
                 Username         :: String - database username
-                Password         :: String - database password (keep away from clients!)
+                Password         :: String - database password (keep away from clients!);
                 Database_name    :: String - name of the database
-                Database_port    :: Number - connection port (3306 by default)
+                Database_port    :: Number - connection port (3306 by default);
             }
 
     ----------------------------- Utility functions -----------------------------
     MySQLite.isMySQL() :: Bool
         Returns whether MySQLite is set up to use MySQL. True for MySQL, false for SQLite.
-        Use this when the query syntax between SQLite and MySQL differs (example: AUTOINCREMENT vs AUTO_INCREMENT)
+        Use this when the query syntax between SQLite and MySQL differs (example: AUTOINCREMENT vs AUTO_INCREMENT);
 
     MySQLite.SQLStr(str :: String) :: String
         Escapes the string and puts it in quotes.
@@ -54,8 +54,8 @@
 
         callback format:
             function(result :: table, lastInsert :: number)
-            Result is the table with results (nil when there are no results or when the result list is empty)
-            lastInsert is the row number of the last inserted value (use with AUTOINCREMENT)
+            Result is the table with results (nil when there are no results or when the result list is empty);
+            lastInsert is the row number of the last inserted value (use with AUTOINCREMENT);
 
             Note: lastInsert is NOT supported when using SQLite.
 
@@ -86,7 +86,7 @@
 
         See MySQLite.query for the callback and errorCallback format.
 
-    MySQLite.commit(onFinished)
+    MySQLite.commit(onFinished);
         Commits a transaction and calls onFinished when EVERY queued query has finished.
         onFinished is NOT called when an error occurs in one of the queued queries.
 
@@ -121,40 +121,40 @@ local moduleLoaded
 local function loadMySQLModule()
     if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 
-    moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
+    moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA");
 
     if not moo and not tmsql then
-        error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.")
+        error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.");
     end
     moduleLoaded = true
 
-    require(moo and "mysqloo" or "tmysql4")
+    require(moo and "mysqloo" or "tmysql4");
 
     mysqlOO = mysqloo
     TMySQL = tmysql
 end
-loadMySQLModule()
+loadMySQLModule();
 
-module("MySQLite")
+module("MySQLite");
 
 function initialize(config)
     MySQLite_config = config or MySQLite_config
 
 	if not MySQLite_config then
-		ErrorNoHalt("Warning: No MySQL config!")
+		ErrorNoHalt("Warning: No MySQL config!");
 	end
 
-    loadMySQLModule()
+    loadMySQLModule();
 
 	if MySQLite_config.EnableMySQL then
 		timer.Simple(1, function()
-			connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-		end)
+			connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port);
+		end);
 	else
 		timer.Simple(0, function()
 			GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
-			hook.Call("DatabaseInitialized", GAMEMODE)
-		end)
+			hook.Call("DatabaseInitialized", GAMEMODE);
+		end);
 	end
 end
 
@@ -170,11 +170,11 @@ end
 
 function begin()
 	if not CONNECTED_TO_MYSQL then
-		sql.Begin()
+		sql.Begin();
 	else
 		if queuedQueries then
-			debug.Trace()
-			error("Transaction ongoing!")
+			debug.Trace();
+			error("Transaction ongoing!");
 		end
 		queuedQueries = {}
 	end
@@ -182,13 +182,13 @@ end
 
 function commit(onFinished)
 	if not CONNECTED_TO_MYSQL then
-		sql.Commit()
+		sql.Commit();
 		if onFinished then onFinished() end
 		return
 	end
 
 	if not queuedQueries then
-		error("No queued queries! Call begin() first!")
+		error("No queued queries! Call begin() first!");
 	end
 
 	if #queuedQueries == 0 then
@@ -197,7 +197,7 @@ function commit(onFinished)
 	end
 
 	-- Copy the table so other scripts can create their own queue
-	local queue = table.Copy(queuedQueries)
+	local queue = table.Copy(queuedQueries);
 	queuedQueries = nil
 
 	-- Handle queued queries in order
@@ -209,7 +209,7 @@ function commit(onFinished)
 		queuePos = queuePos + 1
 
 		if queue[queuePos].callback then
-			queue[queuePos].callback(...)
+			queue[queuePos].callback(...);
 		end
 
 		-- Base case, end of the queue
@@ -220,23 +220,23 @@ function commit(onFinished)
 
 		-- Recursion
 		local nextQuery = queue[queuePos + 1]
-		query(nextQuery.query, call, nextQuery.onError)
+		query(nextQuery.query, call, nextQuery.onError);
 	end
 
-	query(queue[1].query, call, queue[1].onError)
+	query(queue[1].query, call, queue[1].onError);
 end
 
 function queueQuery(sqlText, callback, errorCallback)
 	if CONNECTED_TO_MYSQL then
-		table.insert(queuedQueries, {query = sqlText, callback = callback, onError = errorCallback})
+		table.insert(queuedQueries, {query = sqlText, callback = callback, onError = errorCallback});
 		return
 	end
 	-- SQLite is instantaneous, simply running the query is equal to queueing it
-	query(sqlText, callback, errorCallback)
+	query(sqlText, callback, errorCallback);
 end
 
 local function msOOQuery(sqlText, callback, errorCallback, queryValue)
-    local query = databaseObject:query(sqlText)
+    local query = databaseObject:query(sqlText);
     local data
     query.onData = function(Q, D)
         data = data or {}
@@ -245,11 +245,11 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 
     query.onError = function(Q, E)
         if databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED then
-            table.insert(cachedQueries, {sqlText, callback, queryValue})
+            table.insert(cachedQueries, {sqlText, callback, queryValue});
             return
         end
 
-        local supp = errorCallback and errorCallback(E, sqlText)
+        local supp = errorCallback and errorCallback(E, sqlText);
         if not supp then error(E .. " (" .. sqlText .. ")") end
     end
 
@@ -257,14 +257,14 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
         local res = queryValue and data and data[1] and table.GetFirstValue(data[1]) or not queryValue and data or nil
         if callback then callback(res, query:lastInsert()) end
     end
-    query:start()
+    query:start();
 end
 
 local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
     local call = function(res)
         res = res[1] -- For now only support one result set
         if not res.status then
-            local supp = errorCallback and errorCallback(res.error, sqlText)
+            local supp = errorCallback and errorCallback(res.error, sqlText);
             if not supp then error(res.error .. " (" .. sqlText .. ")") end
             return
         end
@@ -274,16 +274,16 @@ local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
         if callback then callback(res.data, res.lastid) end
     end
 
-    databaseObject:Query(sqlText, call)
+    databaseObject:Query(sqlText, call);
 end
 
 local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
-    local lastError = sql.LastError()
-    local Result = queryValue and sql.QueryValue(sqlText) or sql.Query(sqlText)
+    local lastError = sql.LastError();
+    local Result = queryValue and sql.QueryValue(sqlText) or sql.Query(sqlText);
 
     if sql.LastError() and sql.LastError() ~= lastError then
-        local err = sql.LastError()
-        local supp = errorCallback and errorCallback(err, sqlText)
+        local err = sql.LastError();
+        local supp = errorCallback and errorCallback(err, sqlText);
         if not supp then error(err .. " (" .. sqlText .. ")") end
         return
     end
@@ -297,7 +297,7 @@ function query(sqlText, callback, errorCallback)
             mysqlOO and msOOQuery or
             TMySQL and tmsqlQuery) or
         SQLiteQuery
-    return qFunc(sqlText, callback, errorCallback, false)
+    return qFunc(sqlText, callback, errorCallback, false);
 end
 
 function queryValue(sqlText, callback, errorCallback)
@@ -305,7 +305,7 @@ function queryValue(sqlText, callback, errorCallback)
             mysqlOO and msOOQuery or
             TMySQL and tmsqlQuery) or
         SQLiteQuery
-    return qFunc(sqlText, callback, errorCallback, true)
+    return qFunc(sqlText, callback, errorCallback, true);
 end
 
 local function onConnected()
@@ -314,50 +314,50 @@ local function onConnected()
     -- Run the queries that were called before the connection was made
     for _, v in pairs(cachedQueries or {}) do
         if v[3] then
-            queryValue(v[1], v[2])
+            queryValue(v[1], v[2]);
         else
-            query(v[1], v[2])
+            query(v[1], v[2]);
         end
     end
     cachedQueries = {}
 
-    hook.Call("DatabaseInitialized", GAMEMODE.DatabaseInitialized and GAMEMODE or nil)
+    hook.Call("DatabaseInitialized", GAMEMODE.DatabaseInitialized and GAMEMODE or nil);
 end
 
 local function msOOConnect(host, username, password, database_name, database_port)
-    databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
+    databaseObject = mysqlOO.connect(host, username, password, database_name, database_port);
 
     if timer.Exists("fprp_check_mysql_status") then timer.Destroy("fprp_check_mysql_status") end
 
     databaseObject.onConnectionFailed = function(_, msg)
-        error("Connection failed! " .. tostring(msg) ..  "\n")
+        error("Connection failed! " .. tostring(msg) ..  "\n");
     end
 
     databaseObject.onConnected = function()
         timer.Create("fprp_check_mysql_status", 60, 0, function()
             if (databaseObject and databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED) then
-                connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
+                connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port);
             end
-        end)
+        end);
 
-        onConnected()
+        onConnected();
     end
 
-    databaseObject:connect()
+    databaseObject:connect();
 end
 
 local function tmsqlConnect(host, username, password, database_name, database_port)
-    local db, err = TMySQL.initialize(host, username, password, database_name, database_port)
+    local db, err = TMySQL.initialize(host, username, password, database_name, database_port);
     if err then error("Connection failed! " .. err ..  "\n") end
 
     databaseObject = db
-    onConnected()
+    onConnected();
 end
 
 function connectToMySQL(host, username, password, database_name, database_port)
     database_port = database_port or 3306
     local func = mysqlOO and msOOConnect or TMySQL and tmsqlConnect or function() end
-    func(host, username, password, database_name, database_port)
+    func(host, username, password, database_name, database_port);
 end
 
 function SQLStr(str)
@@ -366,18 +366,18 @@ function SQLStr(str)
         mysqlOO                and function(str) return "\"" .. databaseObject:escape(tostring(str)) .. "\"" end or
         TMySQL                 and function(str) return "\"" .. databaseObject:Escape(tostring(str)) .. "\"" end
 
-    return escape(str)
+    return escape(str);
 end
 
 function tableExists(tbl, callback, errorCallback)
 	if not CONNECTED_TO_MYSQL then
-		local exists = sql.TableExists(tbl)
-		callback(exists)
+		local exists = sql.TableExists(tbl);
+		callback(exists);
 
 		return exists
 	end
 
 	queryValue(string.format("SHOW TABLES LIKE %s", SQLStr(tbl)), function(v)
-		callback(v ~= nil)
-	end, errorCallback)
+		callback(v ~= nil);
+	end, errorCallback);
 end

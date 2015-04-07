@@ -1,23 +1,23 @@
-local plyMeta = FindMetaTable("Player")
+local plyMeta = FindMetaTable("Player");
 
 /*---------------------------------------------------------------------------
 Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:isArrested()
-	return self:getfprpVar("Arrested")
+	return self:getfprpVar("Arrested");
 end
 
 function plyMeta:isWanted()
-	return self:getfprpVar("wanted")
+	return self:getfprpVar("wanted");
 end
 
 function plyMeta:getWantedReason()
-	return self:getfprpVar("wantedReason")
+	return self:getfprpVar("wantedReason");
 end
 
 function plyMeta:isCP()
 	if not IsValid(self) then return false end
-	local Team = self:Team()
+	local Team = self:Team();
 	return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team]
 end
 
