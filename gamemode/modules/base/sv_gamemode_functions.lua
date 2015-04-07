@@ -365,18 +365,6 @@ function GM:CanDrive(ply, ent)
 	return false -- Disabled until people can't minge with it anymore
 end
 
-function GM:CanProperty(ply, property, ent)
-	if self.Config.allowedProperties[property] and ent:CPPICanTool(ply, "remover") then
-		return true
-	end
-
-	if property == "persist" and ply:IsSuperAdmin() then
-		return true
-	end
-	fprp.notify(ply, 1, 4, fprp.getPhrase("property_disabled"));
-	return false -- Disabled until antiminge measure is found
-end
-
 function GM:PlayerShouldTaunt(ply, actid)
 	return false
 end
