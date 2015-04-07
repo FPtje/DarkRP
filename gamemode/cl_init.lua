@@ -61,4 +61,23 @@ hook.Add("InitPostEntity", "InformTheCitizens", function()
 	end)
 end)
 
+net.Receive('fprp_cough', function()
+	local matt=Material("materials/fprp/matt.png")
+	local f=vgui.Create('DFrame')
+	f:SetPos(ScrW()/2 - 125,-250)
+	f:SetSize(250,250)
+	f:SetTitle('')
+	f:MoveTo(ScrW()/2 - 125, 0, 0.3, 0, 1)
+	f.Paint = function(s,w,h)
+		surface.SetDrawColor(255,255,255,255)
+		surface.SetMaterial(matt)
+		surface.DrawTexturedRect(0,0,w,h)
+	end
+	f:ShowCloseButton(false)
+	f.btnMinim:SetVisible(false)
+	f.btnMaxim:SetVisible(false)
+	timer.Simple(6, function() f:Remove() end)
+end)
+
 DarkRP = fprp
+

