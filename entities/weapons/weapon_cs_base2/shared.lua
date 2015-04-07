@@ -263,8 +263,7 @@ Checks the objects before any action is taken
 This is to make sure that the entities haven't been removed
 ---------------------------------------------------------*/
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
-	local iconletters = {"x", "w", "b", "k", "u", "f", "d", "l", "z", "c", "n"}
-	if self.IconLetter and table.HasValue(iconletters, self.IconLetter) then
+	if self.IconLetter and string.find(self.IconLetter, "^[0-9a-wA-Z]$") then
 		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2, y + tall*0.2, Color(255, 210, 0, 255), TEXT_ALIGN_CENTER)
 
 		-- try to fool them into thinking they're playing a Tony Hawks game
