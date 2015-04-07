@@ -7,19 +7,25 @@ Pull ruqestes of any type are encouraged because as we know more fewatures makes
 
 
 Authors:
-	aStonedPenguin
-	thelastpenguin
-	code_gs
+* aStonedPenguin
+* thelastpenguin
+* code_gs
 
 Contributors:
-	zerf
-	Dannelor
-	syl0r
-	Ghost-Sailor
-	Nyaaaa
-	meharryp
-	coldud13
-	AnonTakesOver
+* zerf
+* Dannelor
+* syl0r
+* Ghost-Sailor
+* Nyaaaa
+* meharryp
+* coldud13
+* AnonTakesOver
+* Authorjames
+* Exho
+* MattJeanes
+* Pengu1nZ
+* Chessnut
 
 Dishonorable mentions:
-	Faclo - For enabling the autism that is fprp
+* Faclo - For enabling the autism that is fprp
+* MIT - For enabling Falco to enable the autism that is fprp
