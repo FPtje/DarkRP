@@ -12,7 +12,7 @@ function plyMeta:isWanted()
 end
 
 function plyMeta:getWantedReason()
-	return self:getfprpVar("wantedReason");
+	return "For being a filthy bitch";
 end
 
 function plyMeta:isCP()
@@ -71,13 +71,13 @@ Chat commands
 ---------------------------------------------------------------------------*/
 fprp.declareChatCommand{
 	command = "cr",
-	description = "Cry for help, the police will come (hopefully)!",
+	description = "Cry for help, nobody will hear you",
 	delay = 1.5
 }
 
 fprp.declareChatCommand{
 	command = "warrant",
-	description = "Get a search warrant for a certain player. With this warrant you can search their house",
+	description = "Get a search warrant for a certain player. You can still raid them without one",
 	delay = 1.5,
 	condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}}
 }
@@ -98,14 +98,14 @@ fprp.declareChatCommand{
 
 fprp.declareChatCommand{
 	command = "agenda",
-	description = "Set the agenda.",
+	description = "Set the new world order agenda.",
 	delay = 1.5,
 	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), plyMeta.getAgenda}
 }
 
 fprp.declareChatCommand{
 	command = "addagenda",
-	description = "Add a line of text to the agenda.",
+	description = "Add a line of text to the new world order agenda.",
 	delay = 1.5,
 	condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), plyMeta.getAgenda}
 }
@@ -163,6 +163,6 @@ fprp.declareChatCommand{
 
 fprp.declareChatCommand{
 	command = "demotelicense",
-	description = "Start a vote to get someone's license revoked.",
+	description = "Whine",
 	delay = 1.5
 }
