@@ -8,7 +8,7 @@ Pull ruqestes of any type are encouraged because as we know more fewatures makes
 
 Authors:
 * aStonedPenguin
-* thelastpenguin
+* LastPenguin
 * code_gs
 
 Contributors:
