@@ -293,16 +293,12 @@ DarkRP.defineChatCommand("givelicense", GiveLicense)
 
 local function rp_GiveLicense(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_givelicense"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", "rp_givelicense"))
 		return
 	end
 
 	if not args or not args[1] then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
@@ -322,35 +318,23 @@ local function rp_GiveLicense(ply, cmd, args)
 
 		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
 		if ply ~= target then
-			if ply:EntIndex() == 0 then
-				print(DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-			else
-				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-			end
+			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
 		end
 		DarkRP.log(nick.." ("..steamID..") force-gave "..target:Nick().." a gun license", Color(30, 30, 30))
 	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 end
 concommand.Add("rp_givelicense", rp_GiveLicense)
 
 local function rp_RevokeLicense(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", "rp_revokelicense"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", "rp_revokelicense"))
 		return
 	end
 
 	if not args or not args[1] then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
@@ -370,19 +354,11 @@ local function rp_RevokeLicense(ply, cmd, args)
 
 		DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
 		if ply ~= target then
-			if ply:EntIndex() == 0 then
-				print(DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
-			else
-				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-			end
+			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
 		end
 		DarkRP.log(nick.." ("..steamID..") force-removed "..target:Nick().."'s gun license", Color(30, 30, 30))
 	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 end
 concommand.Add("rp_revokelicense", rp_RevokeLicense)

@@ -21,6 +21,14 @@ function DarkRP.printMessageAll(msgtype, msg)
 	end
 end
 
+function DarkRP.printConsoleMessage(ply, msg)
+	if ply:EntIndex() == 0 then
+		print(msg)
+	else
+		ply:PrintMessage(HUD_PRINTCONSOLE, msg)
+	end
+end
+
 util.AddNetworkString("DarkRP_Chat")
 
 function DarkRP.talkToRange(ply, PlayerName, Message, size)
@@ -134,40 +142,22 @@ end
 
 local function LookPersonUp(ply, cmd, args)
 	if not args[1] then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", "argument", ""))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", "argument", ""))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", "argument", ""))
 		return
 	end
 	local P = DarkRP.findPlayer(args[1])
 	if not IsValid(P) then
-		if ply:EntIndex() ~= 0 then
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		return
 	end
-	if ply:EntIndex() ~= 0 then
-		ply:PrintMessage(2, DarkRP.getPhrase("name", P:Nick()))
-		ply:PrintMessage(2, "Steam ".. DarkRP.getPhrase("name", P:SteamName()))
-		ply:PrintMessage(2, "Steam ID: "..P:SteamID())
-		ply:PrintMessage(2, DarkRP.getPhrase("job", team.GetName(P:Team())))
-		ply:PrintMessage(2, DarkRP.getPhrase("kills", P:Frags()))
-		ply:PrintMessage(2, DarkRP.getPhrase("deaths", P:Deaths()))
-		if ply:IsAdmin() then
-			ply:PrintMessage(2, DarkRP.getPhrase("wallet", DarkRP.formatMoney(P:getDarkRPVar("money")), ""))
-		end
-	else
-		print(DarkRP.getPhrase("name", P:Nick()))
-		print("Steam ".. DarkRP.getPhrase("name", P:SteamName()))
-		print("Steam ID: "..P:SteamID())
-		print(DarkRP.getPhrase("job", team.GetName(P:Team())))
-		print(DarkRP.getPhrase("kills", P:Frags()))
-		print(DarkRP.getPhrase("deaths", P:Deaths()))
-		print(DarkRP.getPhrase("wallet", DarkRP.formatMoney(P:getDarkRPVar("money")), ""))
+	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("name", P:Nick()))
+	DarkRP.printConsoleMessage(ply, "Steam ".. DarkRP.getPhrase("name", P:SteamName()))
+	DarkRP.printConsoleMessage(ply, "Steam ID: "..P:SteamID())
+	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("job", team.GetName(P:Team())))
+	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("kills", P:Frags()))
+	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("deaths", P:Deaths()))
+	if ply:EntIndex() == 0 or ply:IsAdmin() then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("wallet", DarkRP.formatMoney(P:getDarkRPVar("money")), ""))
 	end
 end
 concommand.Add("rp_lookup", LookPersonUp)

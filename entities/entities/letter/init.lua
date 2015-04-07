@@ -62,7 +62,7 @@ end)
 
 local function removeLetters(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_removeletters"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_removeletters"))
 		return
 	end
 

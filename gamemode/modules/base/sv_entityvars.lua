@@ -102,16 +102,12 @@ Admin DarkRPVar commands
 ---------------------------------------------------------------------------*/
 local function setRPName(ply, cmd, args)
 	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
-		else
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
 		return
 	end
 
 	if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_setname"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_setname"))
 		return
 	end
 
@@ -123,25 +119,22 @@ local function setRPName(ply, cmd, args)
 		DarkRP.storeRPName(target, args[2])
 		target:setDarkRPVar("rpname", args[2])
 
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("you_set_x_name", oldname, args[2]))
+
+		local nick = ""
 		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("you_set_x_name", oldname, args[2]))
 			nick = "Console"
 		else
-			ply:PrintMessage(2, DarkRP.getPhrase("you_set_x_name", oldname, args[2]))
 			nick = ply:Nick()
 		end
-		target:PrintMessage(2, DarkRP.getPhrase("x_set_your_name", nick, args[2]))
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_name", nick, args[2]))
 		if ply:EntIndex() == 0 then
 			DarkRP.log("Console set " .. target:SteamName() .. "'s name to " .. args[2], Color(30, 30, 30))
 		else
 			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s name to " .. args[2], Color(30, 30, 30))
 		end
 	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 end
 concommand.Add("rp_setname", setRPName)
@@ -153,7 +146,7 @@ local function RPName(ply, args)
 	end
 
 	if not GAMEMODE.Config.allowrpnames then
-		DarkRP.notify(ply, 1, 6,  DarkRP.getPhrase("disabled", "RPname", ""))
+		DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("disabled", "RPname", ""))
 		return ""
 	end
 

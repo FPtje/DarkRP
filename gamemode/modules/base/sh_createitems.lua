@@ -458,31 +458,27 @@ local function addTeamCommands(CTeam, max)
 
 	concommand.Add("rp_"..CTeam.command, function(ply, cmd, args)
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", cmd))
 			return
 		end
 
 		if CTeam.admin > 1 and not ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-			ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", cmd))
 			return
 		end
 
 		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-				ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", cmd))
 				return
 			elseif CTeam.admin > 1 and ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-				ply:PrintMessage(2, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
 				return
 			end
 		end
 
 		if not args or not args[1] then
-			if ply:EntIndex() == 0 then
-				print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-			else
-				ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-			end
+			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 			return
 		end
 
@@ -496,13 +492,9 @@ local function addTeamCommands(CTeam, max)
 			else
 				nick = "Console"
 			end
-			target:PrintMessage(2, DarkRP.getPhrase("x_made_you_a_y", nick, CTeam.name))
+			DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_made_you_a_y", nick, CTeam.name))
 		else
-			if (ply:EntIndex() == 0) then
-				print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-			else
-				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-			end
+			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end)
 end
