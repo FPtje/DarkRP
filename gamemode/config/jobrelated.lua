@@ -266,16 +266,17 @@ DarkRP.createAgenda("Police agenda", {TEAM_MAYOR, TEAM_CHIEF}, {TEAM_POLICE})
 HOW TO MAKE A GROUP CHAT
 ---------------------------------------------------------------------------
 Pick one!
-GAMEMODE:AddGroupChat(List of team variables separated by comma)
+DarkRP.createGroupChat(List of team variables separated by comma)
 
 or
 
-GAMEMODE:AddGroupChat(a function with ply as argument that returns whether a random player is in one chat group)
+DarkRP.createGroupChat(a function with ply as argument that returns whether a random player is in one chat group)
 This one is for people who know how to script Lua.
 
 */
-GAMEMODE:AddGroupChat(function(ply) return ply:isCP() end)
-GAMEMODE:AddGroupChat(TEAM_MOB, TEAM_GANG)
+DarkRP.createGroupChat(function(ply) return ply:isCP() end)
+DarkRP.createGroupChat(TEAM_MOB, TEAM_GANG)
+DarkRP.createGroupChat(function(listener, ply) return not ply or ply:Team() == listener:Team() end)
 
 /*---------------------------------------------------------------------------
 Define which team joining players spawn into and what team you change to if demoted
