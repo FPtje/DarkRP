@@ -447,6 +447,11 @@ function runFile(path)
     -- Catch syntax errors with CompileString
     local err = CompileString(contents, path, false)
 
+	-- CompileString returns the following string whenever a file is empty: Invalid script - or too short.
+	--		It also prints: Not running script <path> - it's too short.
+	-- If so, do nothing.
+	if err == "Invalid script - or too short." then return true end	
+	
     -- No syntax errors, check for immediate runtime errors using CompileFile
     -- Using the function CompileString returned leads to relative path trouble
     if isfunction(err) then return safeCall(CompileFile(path), path) end
