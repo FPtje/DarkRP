@@ -211,27 +211,15 @@ fprp.defineChatCommand("g", GroupMsg, 0);
 -- WARNING: DO NOT EDIT THIS
 -- You can edit fprp but you HAVE to credit the original authors!
 -- You even have to credit all the previous authors when you rename the gamemode.
-local CreditsWait = true
+
+-- you're not my mom fuck you
+
+util.AddNetworkString('fprp_credits')
+
 local function GetfprpAuthors(ply, args)
-	local target = fprp.findPlayer(args); -- Only send to one player. Prevents spamming
-	if not IsValid(target) then
-		fprp.notify(ply, 1, 4, fprp.getPhrase("player_doesnt_exist"));
-		return ""
-	end
-
-	if not CreditsWait then fprp.notify(ply, 1, 4, fprp.getPhrase("wait_with_that")) return "" end
-	CreditsWait = false
-	timer.Simple(60, function() CreditsWait = true end)--so people don't spam it
-
-	local rf = RecipientFilter();
-	rf:AddPlayer(target);
-	if ply ~= target then
-		rf:AddPlayer(ply);
-	end
-
-	umsg.Start("fprp_Credits", rf);
-	umsg.End();
-
+	net.Start('fprp_credits')
+	net.Broadcast()
 	return ""
 end
 fprp.defineChatCommand("credits", GetfprpAuthors, 50);
+

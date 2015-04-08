@@ -59,6 +59,32 @@ hook.Add("InitPostEntity", "InformTheCitizens", function()
 	timer.Create("InformTheCitizens" .. os.time(), delay, 0, function()
 		chat.AddText(pink, "To enjoy a superior roleplay experience™, please purchase a package from http://cloudsixteen.com");
 	end);
+
+
+	-- motd
+	local f=vgui.Create('DFrame');
+	f:SetSize(ScrW() * .7,ScrH()*.7);
+	f:SetTitle('MoTD');
+	f:Center()
+	f:MakePopup()
+
+	local h =vgui.Create('DHTML',f)
+	h:SetPos(10, 50)
+	h:SetSize(f:GetWide() - 20, f:GetTall() - 60)
+	h:SetHTML([[
+		<html>
+			<body bgcolor=#dbdbdb>
+				<div style="text-align: center;">
+					1. Don't break the fucking server.<br>
+					2. Don't break the fucking server.<br>
+					3. Don't break the fucking server.<br>
+					4. Don't break the fucking server.<br><br>
+
+					5. Make pull requests @ https://github.com/aStonedPenguin/fprp/<br>
+				</div>
+			</body>
+		</html>
+	]])
 end);
 
 net.Receive('fprp_cough', function()
@@ -81,3 +107,17 @@ end);
 
 DarkRP = fprp
 
+net.Receive('fprp_credits', function()
+	local falco=Material("materials/fprp/falco.png");
+	local f=vgui.Create('DFrame')
+	f:SetSize(ScrW() * 0.9, ScrH() * 0.9)
+	f:Center()
+	f:SetTitle('');
+	f:MakePopup()
+	f.Paint = function(s,w,h)
+		surface.SetDrawColor(255,255,255,255);
+		surface.SetMaterial(falco);
+		surface.DrawTexturedRect(0,0,w,h);
+	end
+	timer.Simple(6, function() if IsValid(f) then f:Remove() end end)
+end)
