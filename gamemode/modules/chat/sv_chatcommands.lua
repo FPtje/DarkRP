@@ -218,7 +218,7 @@ util.AddNetworkString('fprp_credits')
 
 local function GetfprpAuthors(ply, args)
 	net.Start('fprp_credits')
-	net.Broadcast()
+	net.Send(ply)
 	return ""
 end
 fprp.defineChatCommand("credits", GetfprpAuthors, 50);
