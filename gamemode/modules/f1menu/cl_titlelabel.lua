@@ -3,7 +3,7 @@ surface.CreateFont("F1MenuTitle", {
 		weight = 500,
 		antialias = true,
 		shadow = false,
-		font = "coolvetica"})
+		font = "Coolvetica"})
 
 local PANEL = {}
 

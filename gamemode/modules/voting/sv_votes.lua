@@ -2,7 +2,10 @@ local Vote = {}
 local Votes = {}
 
 local function ccDoVote(ply, cmd, args)
-	if ply:EntIndex() == 0 then return end
+	if ply:EntIndex() == 0 then
+		print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
+		return
+	end
 
 	local vote = Votes[tonumber(args[1] or 0)]
 
@@ -139,7 +142,7 @@ end
 
 local function CancelVote(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_cancelvote"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_cancelvote"))
 		return
 	end
 
@@ -151,11 +154,7 @@ local function CancelVote(ply, cmd, args)
 			print(DarkRP.getPhrase("x_cancelled_vote", "Console"))
 		end
 	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("cant_cancel_vote"))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("cant_cancel_vote"))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("cant_cancel_vote"))
 	end
 end
 concommand.Add("rp_cancelvote", CancelVote)

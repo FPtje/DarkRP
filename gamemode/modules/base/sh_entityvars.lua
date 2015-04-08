@@ -97,3 +97,16 @@ DarkRP.registerDarkRPVar("Arrested",      net.WriteBit, fc{tobool, net.ReadBit})
 DarkRP.registerDarkRPVar("wanted",        net.WriteBit, fc{tobool, net.ReadBit})
 DarkRP.registerDarkRPVar("wantedReason",  net.WriteString, net.ReadString)
 DarkRP.registerDarkRPVar("agenda",        net.WriteString, net.ReadString)
+
+/*---------------------------------------------------------------------------
+RP name override
+---------------------------------------------------------------------------*/
+local pmeta = FindMetaTable("Player")
+pmeta.SteamName = pmeta.SteamName or pmeta.Name
+function pmeta:Name()
+	if not self:IsValid() then DarkRP.error("Attempt to call Name/Nick/GetName on a non-existing player!", SERVER and 1 or 2) end
+	return GAMEMODE.Config.allowrpnames and self:getDarkRPVar("rpname")
+		or self:SteamName()
+end
+pmeta.GetName = pmeta.Name
+pmeta.Nick = pmeta.Name

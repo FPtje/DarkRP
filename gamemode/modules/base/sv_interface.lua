@@ -327,6 +327,28 @@ DarkRP.printMessageAll = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.printConsoleMessage = DarkRP.stub{
+	name = "printConsoleMessage",
+	description = "Prints a message to a given player's console. This function also handles server consoles too (EntIndex = 0).",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player to send the console message to.",
+			type = "Player",
+			optional = false
+		},
+		{
+			name = "msg",
+			description = "The actual message.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
 DarkRP.talkToRange = DarkRP.stub{
 	name = "talkToRange",
 	description = "Send a chat message to people close to a player.",
