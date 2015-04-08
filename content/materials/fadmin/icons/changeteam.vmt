@@ -1,7 +1,8 @@
 "UnlitGeneric"
 {
-	"$basetexture"		"FAdmin/icons/changeteam"
-	"$ignorez"		1
-	"$vertexcolor" 		1
-	"$vertexalpha" 		1
+	"$basetexture"		"fadmin/icons/changeteam"
+	"$ignorez"			1
+	"$vertexcolor"		1
+	"$vertexalpha"		1
+	"$nolod"			1
 }

@@ -8,19 +8,19 @@ FAdmin.StartHooks["zz_Teleport"] = function()
 	FAdmin.Commands.AddCommand("goto", nil, "<Player>")
 
 
-	FAdmin.ScoreBoard.Player:AddActionButton("Teleport", "FAdmin/icons/Teleport", Color(0, 200, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Teleport", "fadmin/icons/teleport", Color(0, 200, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Teleport") end,
 	function(ply, button)
 		RunConsoleCommand("_FAdmin", "Teleport", ply:UserID())
 	end)
 
-	FAdmin.ScoreBoard.Player:AddActionButton("Goto", "FAdmin/icons/Teleport", Color(0, 200, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Goto", "fadmin/icons/teleport", Color(0, 200, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Teleport") and ply ~= LocalPlayer() end,
 	function(ply, button)
 		RunConsoleCommand("_FAdmin", "goto", ply:UserID())
 	end)
 
-	FAdmin.ScoreBoard.Player:AddActionButton("Bring", "FAdmin/icons/Teleport", Color(0, 200, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Bring", "fadmin/icons/teleport", Color(0, 200, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Teleport") and ply ~= LocalPlayer() end,
 	function(ply, button)
 		local menu = DermaMenu()

@@ -2,7 +2,7 @@ FAdmin.StartHooks["zzSetTeam"] = function()
 	FAdmin.Access.AddPrivilege("SetTeam", 2)
 	FAdmin.Commands.AddCommand("SetTeam", nil, "<Player>", "<Team>")
 
-	FAdmin.ScoreBoard.Player:AddActionButton("Set team", "FAdmin/icons/changeteam", Color(0, 200, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Set team", "fadmin/icons/changeteam", Color(0, 200, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetTeam", ply) end, function(ply, button)
 		local menu = DermaMenu()
 

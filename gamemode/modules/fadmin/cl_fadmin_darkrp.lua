@@ -17,7 +17,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 	end)
 
 	-- Warrant
-	FAdmin.ScoreBoard.Player:AddActionButton("Warrant", "FAdmin/icons/Message",	Color(0, 0, 200, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Warrant", "fadmin/icons/message",	Color(0, 0, 200, 255),
 		function(ply) return LocalPlayer():isCP() end,
 		function(ply, button)
 			Derma_StringRequest("Warrant reason", "Enter the reason for the warrant", "", function(Reason)
@@ -29,7 +29,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 	FAdmin.ScoreBoard.Player:AddActionButton(function(ply)
 			return ((ply:getDarkRPVar("wanted") and "Unw") or "W") .. "anted"
 		end,
-		function(ply) return "FAdmin/icons/jail", ply:getDarkRPVar("wanted") and "FAdmin/icons/disable" end,
+		function(ply) return "fadmin/icons/jail", ply:getDarkRPVar("wanted") and "fadmin/icons/disable" end,
 		Color(0, 0, 200, 255),
 		function(ply) return LocalPlayer():isCP() end,
 		function(ply, button)
@@ -69,7 +69,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		end
 		menu:Open()
 	end
-	FAdmin.ScoreBoard.Player:AddActionButton("Ban from job", "FAdmin/icons/changeteam", Color(200, 0, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Ban from job", "fadmin/icons/changeteam", Color(200, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamban)
 
 	local function teamunban(ply, button)
@@ -94,6 +94,6 @@ FAdmin.StartHooks["DarkRP"] = function()
 		end
 		menu:Open()
 	end
-	FAdmin.ScoreBoard.Player:AddActionButton("Unban from job", function() return "FAdmin/icons/changeteam", "FAdmin/icons/disable" end, Color(200, 0, 0, 255),
+	FAdmin.ScoreBoard.Player:AddActionButton("Unban from job", function() return "fadmin/icons/changeteam", "fadmin/icons/disable" end, Color(200, 0, 0, 255),
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamunban)
 end
