@@ -254,7 +254,7 @@ DarkRP.notify = DarkRP.stub{
 			optional = false
 		},
 		{
-			name = "MsgType",
+			name = "msgType",
 			description = "The type of the message.",
 			type = "number",
 			optional = false
@@ -648,20 +648,6 @@ DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
 		}
 	},
 	metatable = DarkRP.PLAYER
-}
-
-DarkRP.hookStub{
-	name = "UpdatePlayerSpeed",
-	description = "Change a player's walking and running speed.",
-	parameters = {
-		{
-			name = "ply",
-			description = "The player for whom the speed changes.",
-			type = "Player"
-		}
-	},
-	returns = {
-	}
 }
 
 DarkRP.hookStub{

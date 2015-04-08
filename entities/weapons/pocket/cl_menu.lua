@@ -46,7 +46,7 @@ end
 UI
 ---------------------------------------------------------------------------*/
 function reload()
-	if not ValidPanel(frame) or not frame:IsVisible() then return end
+	if not IsValid(frame) or not frame:IsVisible() then return end
 	if not pocket or next(pocket) == nil then frame:Close() return end
 
 	local itemCount = table.Count(pocket)

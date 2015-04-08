@@ -58,38 +58,38 @@ end
 function SWEP:Holster()
 	if not SERVER then return true end
 
-	self.Owner:DrawViewModel(true)
-	self.Owner:DrawWorldModel(true)
+	self:GetOwner():DrawViewModel(true)
+	self:GetOwner():DrawWorldModel(true)
 
 	return true
 end
 
 function SWEP:PrimaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
+	self:SetNextPrimaryFire(CurTime() + 0.2)
 
 	if not SERVER then return end
 
-	local ent = self.Owner:GetEyeTrace().Entity
-	local canPickup, message = hook.Call("canPocket", nil, self.Owner, ent)
+	local ent = self:GetOwner():GetEyeTrace().Entity
+	local canPickup, message = hook.Call("canPocket", nil, self:GetOwner(), ent)
 
 	if not canPickup then
-		if message then DarkRP.notify(self.Owner, 1, 4, message) end
+		if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
 		return
 	end
 
-	self.Owner:addPocketItem(ent)
+	self:GetOwner():addPocketItem(ent)
 end
 
 function SWEP:SecondaryAttack()
 	if not SERVER then return end
 
-	local item = #self.Owner:getPocketItems()
+	local item = #self:GetOwner():getPocketItems()
 	if item <= 0 then
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
+		DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("pocket_no_items"))
 		return
 	end
 
-	self.Owner:dropPocketItem(item)
+	self:GetOwner():dropPocketItem(item)
 end
 
 function SWEP:Reload()

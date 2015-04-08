@@ -21,13 +21,15 @@ if CLIENT then
 		weight = 500,
 		antialias = true,
 		shadow = true,
-		font = "csd"})
+		font = "csd"
+	})
 	surface.CreateFont("CSSelectIcons", {
 		size = ScreenScale(60),
 		weight = 500,
 		antialias = true,
 		shadow = true,
-		font = "csd"})
+		font = "csd"
+	})
 end
 
 SWEP.Base = "weapon_base"
@@ -60,16 +62,13 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.LastPrimaryAttack = 0
-
-SWEP.FireMode = "semi"
 SWEP.MultiMode = false
 
 /*---------------------------------------------------------
 ---------------------------------------------------------*/
 function SWEP:Initialize()
-	if CLIENT and IsValid(self.Owner) then
-		local vm = self.Owner:GetViewModel()
+	if CLIENT and IsValid(self:GetOwner()) then
+		local vm = self:GetOwner():GetViewModel()
 		self:ResetDarkRPBones(vm)
 	end
 
@@ -80,11 +79,23 @@ function SWEP:Initialize()
 		self:SetNPCFireRate(0.01)
 	end
 
-	self.Ironsights = false
+	self.dt.Ironsights = false
+	self.dt.TotalUsedMagCount = 0
+	self.dt.FireMode = self.Primary.Automatic and "auto" or "semi"
+end
 
-	if self.Primary.Automatic then
-		self.FireMode = "auto"
-	end
+function SWEP:SetupDataTables()
+	self:NetworkVar("Bool", 0, "Ironsights")
+	self:NetworkVar("Bool", 1, "Reloading")
+	self:NetworkVar("Float", 0, "LastPrimaryAttack")
+	self:NetworkVar("Float", 1, "ReloadEndTime")
+	self:NetworkVar("Float", 2, "BurstTime")
+	self:NetworkVar("Float", 3, "LastNonBurst")
+	self:NetworkVar("Int", 0, "BurstBulletNum")
+	self:NetworkVar("Int", 1, "TotalUsedMagCount")
+	self:NetworkVar("String", 0, "FireMode")
+	self:NetworkVar("Entity", 0, "LastOwner")
+	self:NetworkVarNotify("Ironsights", fc{self.IronsightsChanged, fp{fn.Id, self}, fp{select, 4}})
 end
 
 /*---------------------------------------------------------
@@ -93,36 +104,40 @@ Deploy
 function SWEP:Deploy()
 	self:SetHoldType("normal")
 
-	self.LASTOWNER = self.Owner
-
-	self:SetIronsights(self:GetIronsights())
+	self:IronsightsChanged(self:GetIronsights())
 
 	return true
 end
 
-function SWEP:Holster()
-	self.Ironsights = false
-	self.hasShot = false -- We do this here because SWEP:Deploy is currently unreliable clientside
+function SWEP:OwnerChanged()
+	if IsValid(self:GetOwner()) then self:SetLastOwner(self:GetOwner()) end
+end
 
-	if not IsValid(self.Owner) then return true end
+function SWEP:Holster()
+	self.dt.Ironsights = false
+	if CLIENT then self.hasShot = false end
+
+	if not IsValid(self:GetOwner()) then return true end
 	if CLIENT then
-		local vm = self.Owner:GetViewModel()
+		local vm = self:GetOwner():GetViewModel()
 		self:ResetDarkRPBones(vm)
-	else
-		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
 	end
+
+	hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
 
 	return true
 end
 
 function SWEP:OnRemove()
-	self.Ironsights = false
+	self.dt.Ironsights = false
 
-	if CLIENT and IsValid(self.Owner) then
-		local vm = self.Owner:GetViewModel()
+	if CLIENT and IsValid(self:GetOwner()) then
+		local vm = self:GetOwner():GetViewModel()
 		self:ResetDarkRPBones(vm)
-	elseif SERVER and IsValid(self.LASTOWNER) then
-		hook.Call("UpdatePlayerSpeed", GAMEMODE, self.LASTOWNER)
+	end
+
+	if IsValid(self:GetLastOwner()) then
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetLastOwner())
 	end
 end
 
@@ -130,41 +145,39 @@ end
 Reload does nothing
 ---------------------------------------------------------*/
 function SWEP:Reload()
-	if not self.Weapon:DefaultReload(ACT_VM_RELOAD) then return end
-	self.Reloading = true
+	if not self:DefaultReload(ACT_VM_RELOAD) then return end
+	self:SetReloading(true)
 	self:SetIronsights(false)
 	self:SetHoldType(self.HoldType)
-	self.Owner:SetAnimation(PLAYER_RELOAD)
-	timer.Simple(2, function()
-		if not IsValid(self) then return end
-		self.Reloading = false
-		self:SetHoldType("normal")
-		self.hasShot = false
-	end)
+	self:GetOwner():SetAnimation(PLAYER_RELOAD)
+	self:SetReloadEndTime(CurTime() + 2)
+	self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
 end
 
 /*---------------------------------------------------------
 PrimaryAttack
 ---------------------------------------------------------*/
-function SWEP:PrimaryAttack(partofburst)
-	if not partofburst and (self.LastNonBurst or 0) > CurTime() - 0.6 then return end
+function SWEP:PrimaryAttack()
+	self.Primary.Automatic = (self:GetFireMode() == "auto")
 
-	if self.Weapon.MultiMode and self.Owner:KeyDown(IN_USE) then
-		if self.FireMode == "semi" then
-			self.FireMode = "burst"
+	if self:GetBurstBulletNum() == 0 and (self:GetLastNonBurst() or 0) > CurTime() - 0.6 then return end
+
+	if self.MultiMode and self:GetOwner():KeyDown(IN_USE) then
+		if self:GetFireMode() == "semi" then
+			self:SetFireMode("burst")
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage( HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
-		elseif self.FireMode == "burst" then
-			self.FireMode = "auto"
+			self:GetOwner():PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
+		elseif self:GetFireMode() == "burst" then
+			self:SetFireMode("auto")
 			self.Primary.Automatic = true
-			self.Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
-		elseif self.FireMode == "auto" then
-			self.FireMode = "semi"
+			self:GetOwner():PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
+		elseif self:GetFireMode() == "auto" then
+			self:SetFireMode("semi")
 			self.Primary.Automatic = false
-			self.Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
+			self:GetOwner():PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
 		end
-		self.Weapon:SetNextPrimaryFire(CurTime() + 0.5)
-		self.Weapon:SetNextSecondaryFire(CurTime() + 0.5)
+		self:SetNextPrimaryFire(CurTime() + 0.5)
+		self:SetNextSecondaryFire(CurTime() + 0.5)
 		return
 	end
 
@@ -172,11 +185,11 @@ function SWEP:PrimaryAttack(partofburst)
 		self:SetHoldType(self.HoldType)
 	end
 
-	if self.FireMode ~= "burst" then
-		self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	if self:GetFireMode() ~= "burst" then
+		self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	end
 
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
 
 	if self:Clip1() <= 0 then
 		self:EmitSound("weapons/clipempty_rifle.wav")
@@ -185,29 +198,35 @@ function SWEP:PrimaryAttack(partofburst)
 	end
 
 	if not self:CanPrimaryAttack() then self:SetIronsights(false) return end
-	if not self.Ironsights and GAMEMODE.Config.ironshoot then return end
+	if not self:GetIronsights() and GAMEMODE.Config.ironshoot then return end
 	-- Play shoot sound
-	self.Weapon:EmitSound(self.Primary.Sound)
+	self:EmitSound(self.Primary.Sound)
 
 	-- Shoot the bullet
 	self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil + 3, self.Primary.NumShots, self.Primary.Cone + .05)
 
-	if self.FireMode == "burst" and not partofburst then
-		timer.Simple(0.1, function() self:PrimaryAttack(true) end)
-		timer.Simple(0.2, function() self:PrimaryAttack(true) end)
-
-		self.LastNonBurst = CurTime()
+	if self:GetFireMode() == "burst" then
+		self:SetBurstBulletNum(self:GetBurstBulletNum() + 1)
+		if self:GetBurstBulletNum() == 1 then
+			self:SetLastNonBurst(CurTime())
+		end
+		if self:GetBurstBulletNum() == 3 then
+			self:SetBurstTime(0)
+			self:SetBurstBulletNum(0)
+		else
+			self:SetBurstTime(CurTime() + 0.1)
+		end
 	end
 
 	-- Remove 1 bullet from our clip
 	self:TakePrimaryAmmo(1)
 
-	if self.Owner:IsNPC() then return end
+	self:SetLastPrimaryAttack(CurTime())
+
+	if self:GetOwner():IsNPC() then return end
 
 	-- Punch the player's view
-	self.Owner:ViewPunch(Angle(math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0))
-
-	self.LastPrimaryAttack = CurTime()
+	self:GetOwner():ViewPunch(Angle(util.SharedRandom("DarkRP_CSBase"..self:EntIndex().."Mag"..self:GetTotalUsedMagCount().."p"..self:Clip1(), -1.2, -1.1) * self.Primary.Recoil, util.SharedRandom("DarkRP_CSBase"..self:EntIndex().."Mag"..self:GetTotalUsedMagCount().."y"..self:Clip1(), -1.1, 1.1) * self.Primary.Recoil, 0))
 end
 
 /*---------------------------------------------------------
@@ -215,35 +234,28 @@ Name: SWEP:PrimaryAttack()
 Desc: +attack1 has been pressed
 ---------------------------------------------------------*/
 function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
-	if not IsValid(self.Owner) then return end
+	if not IsValid(self:GetOwner()) then return end
 	numbul = numbul or 1
 	cone = cone or 0.01
 
 	local bullet = {}
 	bullet.Num = numbul or 1
-	bullet.Src = self.Owner:GetShootPos()       -- Source
-	bullet.Dir = self.Owner:GetAimVector()      -- Dir of bullet
-	bullet.Spread = Vector(cone, cone, 0)     -- Aim Cone
-	bullet.Tracer = 4       -- Show a tracer on every x bullets
-	bullet.Force = 5        -- Amount of force to give to phys objects
+	bullet.Src = self:GetOwner():GetShootPos()	-- Source
+	bullet.Dir = (self:GetOwner():GetAimVector():Angle() + self:GetOwner():GetViewPunchAngles()):Forward() -- Dir of bullet
+	bullet.Spread = Vector(cone, cone, 0)		-- Aim Cone
+	bullet.Tracer = 4							-- Show a tracer on every x bullets
+	bullet.Force = 5							-- Amount of force to give tolju phys objects
 	bullet.Damage = dmg
 
-	self.Owner:FireBullets(bullet)
-	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)      -- View model animation
-	self.Owner:MuzzleFlash()        -- Crappy muzzle light
-	self.Owner:SetAnimation(PLAYER_ATTACK1)       -- 3rd Person Animation
+	self:GetOwner():FireBullets(bullet)
+	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)      -- View model animation
+	self:GetOwner():MuzzleFlash()        -- Crappy muzzle light
+	self:GetOwner():SetAnimation(PLAYER_ATTACK1)       -- 3rd Person Animation
 
-	if self.Owner:IsNPC() then return end
-
-	// CUSTOM RECOIL!
-	if (game.SinglePlayer() and SERVER) or (not game.SinglePlayer() and CLIENT and IsFirstTimePredicted()) then
-		local eyeang = self.Owner:EyeAngles()
-		eyeang.pitch = eyeang.pitch - recoil
-		self.Owner:SetEyeAngles(eyeang)
-	end
+	if self:GetOwner():IsNPC() then return end
 
 	-- Part of workaround, different viewmodel position if shots have been fired
-	self.hasShot = true
+	if CLIENT then self.hasShot = true end
 end
 
 /*---------------------------------------------------------
@@ -251,34 +263,33 @@ Checks the objects before any action is taken
 This is to make sure that the entities haven't been removed
 ---------------------------------------------------------*/
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
-	local iconletters = {"x", "w", "b", "k", "u", "f", "d", "l", "z", "c", "n"}
-	if self.IconLetter and table.HasValue(iconletters, self.IconLetter) then
+	if self.IconLetter and string.find(self.IconLetter, "^[0-9a-wA-Z]$") then
 		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2, y + tall*0.2, Color(255, 210, 0, 255), TEXT_ALIGN_CENTER)
 
 		-- try to fool them into thinking they're playing a Tony Hawks game
 		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-14, 14), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER)
 		draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-9, 9), Color(255, 210, 0, math.Rand(10, 120)), TEXT_ALIGN_CENTER)
 	else
-		// Set us up the texture
+		-- Set us up the texture
 		surface.SetDrawColor(255, 255, 255, alpha)
 		surface.SetTexture(self.WepSelectIcon)
 
-		// Lets get a sin wave to make it bounce
+		-- Lets get a sin wave to make it bounce
 		local fsin = 0
 
 		if self.BounceWeaponIcon then
 			fsin = math.sin(CurTime() * 10) * 5
 		end
 
-		// Borders
+		-- Borders
 		y = y + 10
 		x = x + 10
 		wide = wide - 20
 
-		// Draw that motherfucker
+		-- Draw that motherfucker
 		surface.DrawTexturedRect(x + (fsin), y - (fsin), wide-fsin*2 , (wide / 2) + (fsin))
 
-		// Draw weapon info box
+		-- Draw weapon info box
 		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
 	end
 end
@@ -294,7 +305,7 @@ Desc: Allows you to re-position the view model
 function SWEP:GetViewModelPosition(pos, ang)
 	if not self.IronSightsPos then return pos, ang end
 
-	local bIron = self.Ironsights
+	local bIron = self:GetIronsights()
 
 	if bIron ~= self.bLastIron then
 		self.bLastIron = bIron
@@ -375,42 +386,28 @@ end
 
 
 /*---------------------------------------------------------
-SetIronsights
+IronsightsChanged
 ---------------------------------------------------------*/
 
-function SWEP:SetIronsights(b)
-	if game.SinglePlayer() and SERVER then -- Make ironsights work on SP
-		self.Owner:SendLua("LocalPlayer():GetActiveWeapon().Ironsights = "..tostring(b))
-	end
-	self.Ironsights = b
-	if b then
-		self:SetHoldType(self.HoldType)
-		if SERVER and IsValid(self.Owner) then
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
-		end
-	else
-		self:SetHoldType("normal")
-		if SERVER and IsValid(self.Owner) then
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner)
-		end
+function SWEP:IronsightsChanged(b)
+	self:SetHoldType(b and self.HoldType or "normal")
+	self.dt.Ironsights = b -- for UpdatePlayerSpeed
+	if IsValid(self:GetOwner()) then
+		hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
 	end
 end
 
-function SWEP:GetIronsights()
-	return self.Ironsights
-end
-
-SWEP.NextSecondaryAttack = 0
 /*---------------------------------------------------------
 SecondaryAttack
 ---------------------------------------------------------*/
 function SWEP:SecondaryAttack()
 	if not self.IronSightsPos then return end
 
-	if self.NextSecondaryAttack > CurTime() or self.reloading then return end
+	if self:GetReloading() then return end
 
-	self:SetIronsights(not self.Ironsights)
-	self.NextSecondaryAttack = CurTime() + 0.3
+	self:SetIronsights(not self:GetIronsights())
+
+	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
 /*---------------------------------------------------------
@@ -418,17 +415,17 @@ onRestore
 	Loaded a saved game
 ---------------------------------------------------------*/
 function SWEP:OnRestore()
-	self.NextSecondaryAttack = 0
-	self.Ironsights = false
+	self:SetNextSecondaryFire(0)
+	self.dt.Ironsights = false
 end
 
 function SWEP:OnDrop()
 	self.PrimaryClipLeft = self:Clip1()
 	self.SecondaryClipLeft = self:Clip2()
 
-	if not self.LASTOWNER then return end
-	self.PrimaryAmmoLeft = self.LASTOWNER:GetAmmoCount(self:GetPrimaryAmmoType())
-	self.SecondaryAmmoLeft = self.LASTOWNER:GetAmmoCount(self:GetSecondaryAmmoType())
+	if not IsValid(self:GetLastOwner()) then return end
+	self.PrimaryAmmoLeft = self:GetLastOwner():GetAmmoCount(self:GetPrimaryAmmoType())
+	self.SecondaryAmmoLeft = self:GetLastOwner():GetAmmoCount(self:GetSecondaryAmmoType())
 	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 end
 
@@ -443,14 +440,23 @@ function SWEP:Equip(NewOwner)
 end
 
 function SWEP:Think()
-	if self.Primary.ClipSize ~= -1 and not self.Reloading and not self.Ironsights and self.LastPrimaryAttack + 1 < CurTime() and self:GetHoldType() == self.HoldType then
+	if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType then
 		self:SetHoldType("normal")
+	end
+	if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
+		self:SetReloadEndTime(0)
+		self:SetReloading(false)
+		self:SetHoldType("normal")
+		if CLIENT then self.hasShot = false end
+	end
+	if self:GetBurstTime() ~= 0 and CurTime() >= self:GetBurstTime() then
+		self:PrimaryAttack()
 	end
 end
 
 if CLIENT then
 	function SWEP:ViewModelDrawn(vm)
-		if self.DarkRPViewModelBoneManipulations and not self.Reloading then
+		if self.DarkRPViewModelBoneManipulations and not self:GetReloading() then
 			self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
 		else
 			self:ResetDarkRPBones(vm)
@@ -514,7 +520,7 @@ end
 
 hook.Add("UpdatePlayerSpeed", "DarkRP_WeaponSpeed", function(ply)
 	local wep = ply:GetActiveWeapon()
-	if not IsValid(wep) or not wep.Ironsights then return end
+	if not IsValid(wep) or not wep.GetIronsights or not wep:GetIronsights() then return end
 
 	GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
 

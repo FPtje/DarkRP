@@ -26,7 +26,7 @@ SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "pistol"
 
 SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
-SWEP.Primary.Recoil = 1.1
+SWEP.Primary.Recoil = 5.1
 SWEP.Primary.Damage = 25
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.01

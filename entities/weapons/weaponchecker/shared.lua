@@ -34,24 +34,12 @@ function SWEP:Initialize()
 	self:SetHoldType("normal")
 end
 
-if CLIENT then
-	usermessage.Hook("weaponcheck_time", function(um)
-		local wep = um:ReadEntity()
-		local time = um:ReadLong()
-
-		wep.IsWeaponChecking = true
-		wep.StartCheck = CurTime()
-		wep.WeaponCheckTime = time
-		wep.EndCheck = CurTime() + time
-
-		wep.Dots = wep.Dots or ""
-		timer.Create("WeaponCheckDots", 0.5, 0, function()
-			if not wep:IsValid() then timer.Destroy("WeaponCheckDots") return end
-			local len = string.len(wep.Dots)
-			local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
-			wep.Dots = dots[len]
-		end)
-	end)
+function SWEP:SetupDataTables()
+	self:NetworkVar("Bool", 0, "IsWeaponChecking")
+	self:NetworkVar("Float", 0, "StartCheckTime")
+	self:NetworkVar("Float", 1, "EndCheckTime")
+	self:NetworkVar("Float", 2, "NextSoundTime")
+	self:NetworkVar("Int", 0, "TotalWeaponChecks")
 end
 
 function SWEP:Deploy()
@@ -64,94 +52,98 @@ function SWEP:PreDrawViewModel(vm)
 	return true
 end
 
-function SWEP:PrimaryAttack()
-	if not IsFirstTimePredicted() or self.IsWeaponChecking then return end
-	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
-
-	local trace = self.Owner:GetEyeTrace()
-
-	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
-		return
-	end
-
-	if SERVER then
-		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
-		return
-	end
-
-	local result = {}
-	for k,v in pairs(trace.Entity:GetWeapons()) do
+function SWEP:GetStrippableWeapons(ent, callback)
+	for k,v in pairs(ent:GetWeapons()) do
 		if not v:IsValid() then continue end
 		local class = v:GetClass()
 
 		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
-			((trace.Entity:hasDarkRPPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
-			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
+			((ent:hasDarkRPPrivilege("rp_tool") or ent:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
+			ent:getJobTable() and ent:getJobTable().weapons and table.HasValue(ent:getJobTable().weapons, class)) then
 			continue
 		end
 
 		if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
 
-		table.insert(result, v:GetPrintName() and language.GetPhrase(v:GetPrintName()) or v:GetClass())
+		callback(v)
 	end
+end
+
+function SWEP:PrimaryAttack()
+	if self:GetIsWeaponChecking() then return end
+	self:SetNextPrimaryFire(CurTime() + 0.3)
+
+	self:GetOwner():LagCompensation(true)
+	local trace = self:GetOwner():GetEyeTrace()
+	self:GetOwner():LagCompensation(false)
+
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self:GetOwner():GetPos()) > 100 then
+		return
+	end
+
+	self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+	self:SetNextSoundTime(CurTime() + 0.3)
+
+	if SERVER or not IsFirstTimePredicted() then return end
+
+	local result = {}
+	self:GetStrippableWeapons(trace.Entity, function(wep)
+		table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
+	end)
 	result = table.concat(result, ", ")
 
 	if result == "" then
-		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
+		self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
 	else
-		self.Owner:ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
+		self:GetOwner():ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
 		if string.len(result) >= 126 then
 			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
-				self.Owner:ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
+				self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
 			end
 		else
-			self.Owner:ChatPrint(result)
+			self:GetOwner():ChatPrint(result)
 		end
 	end
 end
 
 function SWEP:SecondaryAttack()
-	if CLIENT or self.IsWeaponChecking then return end
-	self.Weapon:SetNextSecondaryFire(CurTime() + 0.2)
+	if self:GetIsWeaponChecking() then return end
+	self:SetNextSecondaryFire(CurTime() + 0.3)
 
-	local trace = self.Owner:GetEyeTrace()
+	self:GetOwner():LagCompensation(true)
+	local trace = self:GetOwner():GetEyeTrace()
+	self:GetOwner():LagCompensation(false)
 
-	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self:GetOwner():GetPos()) > 100 then
 		return
 	end
 
-	if SERVER then
-		self.IsWeaponChecking = true
-		self.StartCheck = CurTime()
-		self.WeaponCheckTime = math.Rand(5, 10)
-		umsg.Start("weaponcheck_time", self.Owner)
-			umsg.Entity(self)
-			umsg.Long(self.WeaponCheckTime)
-		umsg.End()
-		self.EndCheck = CurTime() + self.WeaponCheckTime
+	self:SetIsWeaponChecking(true)
+	self:SetStartCheckTime(CurTime())
+	self:SetEndCheckTime(CurTime() + util.SharedRandom("DarkRP_WeaponChecker"..self:EntIndex().."_"..self:GetTotalWeaponChecks(), 5, 10))
+	self:SetTotalWeaponChecks(self:GetTotalWeaponChecks() + 1)
 
-		timer.Create("WeaponCheckSounds", 0.5, self.WeaponCheckTime * 2, function()
-			if not IsValid(self) then return end
-			self:EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
-		end)
+	self:SetNextSoundTime(CurTime() + 0.5)
+
+	if CLIENT then
+		self.Dots = ""
+		self.NextDotsTime = CurTime() + 0.5
 	end
 end
 
-SWEP.OnceReload = true
 function SWEP:Reload()
-	if CLIENT or not self.Weapon.OnceReload then return end
-	self.Weapon.OnceReload = false
-	timer.Simple(1, function() self.Weapon.OnceReload = true end)
-	local trace = self.Owner:GetEyeTrace()
+	if CLIENT or CurTime() < (self.NextReloadTime or 0) then return end
+	self.NextReloadTime = CurTime() + 1
 
-	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self.Owner:GetPos()) > 100 then
+	local trace = self:GetOwner():GetEyeTrace()
+
+	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self:GetOwner():GetPos()) > 100 then
 		return
 	end
 
-	if not trace.Entity:GetTable().ConfiscatedWeapons then
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("no_weapons_confiscated", trace.Entity:Nick()))
+	if not trace.Entity.ConfiscatedWeapons then
+		DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("no_weapons_confiscated", trace.Entity:Nick()))
 		return
 	else
 		for k,v in pairs(trace.Entity.ConfiscatedWeapons) do
@@ -164,53 +156,41 @@ function SWEP:Reload()
 			wep:SetClip2(v[7])
 
 		end
-		DarkRP.notify(self.Owner, 2, 4, DarkRP.getPhrase("returned_persons_weapons", trace.Entity:Nick()))
-		trace.Entity:GetTable().ConfiscatedWeapons = nil
+		DarkRP.notify(self:GetOwner(), 2, 4, DarkRP.getPhrase("returned_persons_weapons", trace.Entity:Nick()))
+		trace.Entity.ConfiscatedWeapons = nil
 	end
 end
 
 function SWEP:Holster()
-	self.IsWeaponChecking = false
-	if SERVER then timer.Destroy("WeaponCheckSounds") end
-	if CLIENT then timer.Destroy("WeaponCheckDots") end
+	self:SetIsWeaponChecking(false)
+	self:SetNextSoundTime(0)
 	return true
 end
 
 function SWEP:Succeed()
-	if not IsValid(self.Owner) then return end
-	self.IsWeaponChecking = false
+	if not IsValid(self:GetOwner()) then return end
+	self:SetIsWeaponChecking(false)
 
 	if CLIENT then return end
 	local result = {}
 	local stripped = {}
-	local trace = self.Owner:GetEyeTrace()
+	local trace = self:GetOwner():GetEyeTrace()
 	if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() then return end
-	for k,v in pairs(trace.Entity:GetWeapons()) do
-		if not v:IsValid() then continue end
-		local class = v:GetClass()
-
-		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
-			((trace.Entity:hasDarkRPPrivilege("rp_tool") or trace.Entity:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
-			trace.Entity:getJobTable() and trace.Entity:getJobTable().weapons and table.HasValue(trace.Entity:getJobTable().weapons, class)) then
-			continue
-		end
-
-		if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
-
-		trace.Entity:StripWeapon(class)
-		table.insert(result, class)
-		table.insert(stripped, {class, trace.Entity:GetAmmoCount(v:GetPrimaryAmmoType()),
-		v:GetPrimaryAmmoType(), trace.Entity:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
-		v:Clip1(), v:Clip2()})
-	end
+	self:GetStrippableWeapons(trace.Entity, function(wep)
+		trace.Entity:StripWeapon(wep:GetClass())
+		table.insert(result, wep:GetClass())
+		table.insert(stripped, {wep:GetClass(), trace.Entity:GetAmmoCount(wep:GetPrimaryAmmoType()),
+		wep:GetPrimaryAmmoType(), trace.Entity:GetAmmoCount(wep:GetSecondaryAmmoType()), wep:GetSecondaryAmmoType(),
+		wep:Clip1(), wep:Clip2()})
+	end)
 	result = table.concat(result, ", ")
 
-	if not trace.Entity:GetTable().ConfiscatedWeapons then
-		trace.Entity:GetTable().ConfiscatedWeapons = stripped
+	if not trace.Entity.ConfiscatedWeapons then
+		if next(stripped) ~= nil then trace.Entity.ConfiscatedWeapons = stripped end
 	else
 		for k,v in pairs(stripped) do
 			local found = false
-			for a,b in pairs(trace.Entity:GetTable().ConfiscatedWeapons) do
+			for a,b in pairs(trace.Entity.ConfiscatedWeapons) do
 				if b[1] == v[1] then
 					found = true
 					break
@@ -218,61 +198,76 @@ function SWEP:Succeed()
 			end
 
 			if not found then
-				table.insert(trace.Entity:GetTable().ConfiscatedWeapons, v)
+				table.insert(trace.Entity.ConfiscatedWeapons, v)
 			end
 		end
 	end
 
 	if result == "" then
-		self.Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
-		self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
-		timer.Simple(0.3, function() self.Owner:EmitSound("npc/combine_soldier/gear5.wav", 50, 100) end)
+		self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
+		self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+		self:SetNextSoundTime(CurTime() + 0.3)
 	else
-		self.Owner:EmitSound("ambient/energy/zap1.wav", 50, 100)
-		self.Owner:ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))
+		self:EmitSound("ambient/energy/zap1.wav", 50, 100)
+		self:GetOwner():ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))
 		if string.len(result) >= 126 then
 			local amount = math.ceil(string.len(result) / 126)
 			for i = 1, amount, 1 do
-				self.Owner:ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
+				self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
 			end
 		else
-			self.Owner:ChatPrint(result)
+			self:GetOwner():ChatPrint(result)
 		end
+		self:SetNextSoundTime(0)
 	end
 end
 
 function SWEP:Fail()
-	self.IsWeaponChecking = false
+	self:SetIsWeaponChecking(false)
 	self:SetHoldType("normal")
-	if SERVER then timer.Destroy("WeaponCheckSounds") end
-	if CLIENT then timer.Destroy("WeaponCheckDots") end
+	self:SetNextSoundTime(0)
 end
 
 function SWEP:Think()
-	if self.IsWeaponChecking and self.EndCheck then
-		local trace = self.Owner:GetEyeTrace()
-		if not IsValid(trace.Entity) then
+	if self:GetIsWeaponChecking() and self:GetEndCheckTime() ~= 0 then
+		self:GetOwner():LagCompensation(true)
+		local trace = self:GetOwner():GetEyeTrace()
+		self:GetOwner():LagCompensation(false)
+		if not IsValid(trace.Entity) or trace.HitPos:Distance(self:GetOwner():GetShootPos()) > 100 or not trace.Entity:IsPlayer() then
 			self:Fail()
 		end
-		if trace.HitPos:Distance(self.Owner:GetShootPos()) > 100 or not trace.Entity:IsPlayer() then
-			self:Fail()
-		end
-		if self.EndCheck <= CurTime() then
+		if self:GetEndCheckTime() <= CurTime() then
 			self:Succeed()
 		end
+	end
+	if self:GetNextSoundTime() ~= 0 and CurTime() >= self:GetNextSoundTime() then
+		if self:GetIsWeaponChecking() then
+			self:SetNextSoundTime(CurTime() + 0.5)
+			self:EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
+		else
+			self:SetNextSoundTime(0)
+			self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+		end
+	end
+	if CLIENT and self.NextDotsTime and CurTime() >= self.NextDotsTime then
+		self.NextDotsTime = CurTime() + 0.5
+		self.Dots = self.Dots or ""
+		local len = string.len(self.Dots)
+		local dots = {[0]=".", [1]="..", [2]="...", [3]=""}
+		self.Dots = dots[len]
 	end
 end
 
 function SWEP:DrawHUD()
-	if self.IsWeaponChecking and self.EndCheck then
+	if self:GetIsWeaponChecking() and self:GetEndCheckTime() ~= 0 then
 		self.Dots = self.Dots or ""
 		local w = ScrW()
 		local h = ScrH()
 		local x,y,width,height = w/2-w/10, h/2, w/5, h/15
 		draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
 
-		local time = self.EndCheck - self.StartCheck
-		local curtime = CurTime() - self.StartCheck
+		local time = self:GetEndCheckTime() - self:GetStartCheckTime()
+		local curtime = CurTime() - self:GetStartCheckTime()
 		local status = math.Clamp(curtime/time, 0, 1)
 		local BarWidth = status * (width - 16)
 		local cornerRadius = math.Min(8, BarWidth/3*2 - BarWidth/3*2%2)

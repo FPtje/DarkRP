@@ -14,7 +14,7 @@ if CLIENT then
 	killicon.AddFont("ls_sniper", "CSKillIcons", SWEP.IconLetter, Color(200, 200, 200, 255))
 end
 
-SWEP.Base = "weapon_cs_base2"
+DEFINE_BASECLASS("weapon_cs_base2")
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -40,53 +40,54 @@ SWEP.Primary.Ammo = "smg1"
 SWEP.IronSightsPos = Vector(0, 0, 0) -- this is just to make it disappear so it doesn't show up whilst scoped
 
 /*---------------------------------------------------------------------------
+SetupDataTables
+---------------------------------------------------------------------------*/
+function SWEP:SetupDataTables()
+	BaseClass.SetupDataTables(self)
+	-- Int 0 = BurstBulletNum
+	-- Int 1 = TotalUsedMagCount
+	self:NetworkVar("Int", 2, "ScopeLevel")
+end
+
+/*---------------------------------------------------------------------------
 Reload
 ---------------------------------------------------------------------------*/
 function SWEP:Reload()
-	if not IsValid(self.Owner) then return end
-	if SERVER then
-		self.Owner:SetFOV(0, 0)
-	end
+	if not IsValid(self:GetOwner()) then return end
 
-	self.ScopeLevel = 0
+	self:GetOwner():SetFOV(0, 0)
 
-	return self.BaseClass.Reload(self)
+	self:SetScopeLevel(0)
+
+	return BaseClass.Reload(self)
 end
 
 /*---------------------------------------------------------
 SecondaryAttack
 ---------------------------------------------------------*/
 local zoomFOV = {0, 0, 25, 5}
-SWEP.NextSecondaryAttack = 0
 function SWEP:SecondaryAttack()
-	if not IsValid(self.Owner) then return end
+	if not IsValid(self:GetOwner()) then return end
 	if not self.IronSightsPos then return end
 
-	if self.NextSecondaryAttack > CurTime() then return end
+	self:SetNextSecondaryFire(CurTime() + 0.1)
 
-	self.NextSecondaryAttack = CurTime() + 0.1
+	self:SetScopeLevel((self:GetScopeLevel() + 1) % 4)
+	self:SetIronsights(self:GetScopeLevel() > 0)
 
-	self.ScopeLevel = self.ScopeLevel or 0
-	self.ScopeLevel = (self.ScopeLevel + 1) % 4
-	self:SetIronsights(self.ScopeLevel > 0)
-	self:SetHoldType(self.ScopeLevel > 0 and self.HoldType or "normal")
-
-	if CLIENT then return end
-
-	self.Owner:SetFOV(zoomFOV[self.ScopeLevel + 1], 0)
+	self:GetOwner():SetFOV(zoomFOV[self:GetScopeLevel() + 1], 0)
 end
 
 /*---------------------------------------------------------------------------
 Holster the weapon
 ---------------------------------------------------------------------------*/
 function SWEP:Holster()
-	if not IsValid(self.Owner) then return end
-	if SERVER then
-		self.Owner:SetFOV(0, 0)
-	end
+	if not IsValid(self:GetOwner()) then return end
 
-	self.ScopeLevel = 0
+	self:GetOwner():SetFOV(0, 0)
+
+	self:SetScopeLevel(0)
 	self:SetIronsights(false)
 
-	return self.BaseClass.Holster(self)
+	return BaseClass.Holster(self)
 end
