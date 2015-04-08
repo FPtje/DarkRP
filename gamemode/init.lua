@@ -2,19 +2,9 @@ Error = function() end
 error = function() end
 ErrorNoHalt = function() end
 
-
-local downloads = {
-	'materials/fprp/inspiration.png',
-	'materials/fprp/hud.png',
-	'materials/fprp/panel_bg.png',
-	'materials/fprp/button.png',
-	'materials/fprp/close.png',
-	'materials/fprp/pug.png',
-	'materials/fprp/matt.png',
-	'materials/fprp/falco.png',
-}
-for k, v in ipairs(downloads) do
-	resource.AddFile(v);
+local dur = "materials/fprp/"
+for _,v in pairs(file.Find(dur.."*","GAME")) do
+	resource.AddFile(dur..v);
 end
 
 hook.Run("fprpStartedLoading");
