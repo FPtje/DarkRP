@@ -428,11 +428,31 @@ local function danceDance()
 end
 -- blaze it
 if IsValid(f) then f:Remove() end
+if IsValid(ff) then ff:Remove() end
 	f=vgui.Create('DHTML') f:SetSize(420,320) f:SetPos(ScrW() - 420,0) f:SetHTML('</iframe> <iframe width="400" height="300" src="https://www.youtube.com/embed/QTzp5gh-KEI?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
 
-	timer.Simple(30, function() f:Remove() timer.Simple(180, function() danceDance() end) end)
+	timer.Simple(30, function() f:Remove() timer.Simple(300, function() danceDance() end) end)
+
+end
+timer.Simple(120, function()
+danceDance();
+end);
+
+
+if IsValid(ff) then ff:Remove() end
+local function danceDance2()
+	for i =1, 30 do
+	chat.AddText(Color(255,255,255), 'AYY LMAO');
+end
+-- blaze it
+if IsValid(ff) then ff:Remove() end
+if IsValid(f) then f:Remove() end
+	ff=vgui.Create('DHTML') ff:SetSize(420,320) ff:SetPos(0,0) ff:SetHTML('</iframe> <iframe width="400" height="300" src="https://www.youtube.com/embed/huFYl8-Omws?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+
+	timer.Simple(120, function() ff:Remove() timer.Simple(300, function() danceDance2() end) end)
 
 end
 timer.Simple(30, function()
-danceDance();
+danceDance2();
 end);
+
