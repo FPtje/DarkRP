@@ -13,6 +13,7 @@ sounds[ "behind you" ] = { "vo/npc/male01/behindyou01.wav", "vo/npc/male01/behin
 sounds[ "better reload" ] = { "vo/npc/male01/youdbetterreload01.wav" }
 
 sounds[ "bullshit" ] = { "vo/npc/male01/question26.wav" }
+sounds[ "bull shit"] = sounds[ "bullshit" ]
 
 sounds[ "cheese" ] = { "vo/npc/male01/question06.wav" }
 
@@ -103,6 +104,7 @@ sounds[ "it is okay" ] = { "vo/npc/male01/answer02.wav" }
 sounds[ "it's okay" ] = sounds[ "it is okay" ]
 
 sounds[ "kay" ] = { "vo/npc/male01/ok01.wav", "vo/npc/male01/ok02.wav" }
+sounds[ "kk" ] = sounds[ "kay" ]
 
 sounds[ "lead the way" ] = { "vo/npc/male01/leadtheway01.wav", "vo/npc/male01/leadtheway02.wav" }
 sounds[ "lead on" ] = sounds[ "lead the way" ]
@@ -159,6 +161,7 @@ sounds[ "stop that" ] = sounds[ "cut it" ]
 sounds[ "stop looking at me" ] = { "vo/npc/male01/vquestion01.wav" }
 
 sounds[ "sorry" ] = { "vo/npc/male01/sorry01.wav", "vo/npc/male01/sorry02.wav", "vo/npc/male01/sorry03.wav" }
+sounds[ "sry" ] = sounds[ "sorry" ]
 
 sounds[ "take cover" ] = { "vo/npc/male01/takecover02.wav" }
 
