@@ -35,7 +35,6 @@ end
 
 function DarkRP.setJailPos(pos)
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
-	local strPos = string.Explode(" ", tostring(pos))
 
 	jailPos = {pos}
 
@@ -44,7 +43,7 @@ function DarkRP.setJailPos(pos)
 
 	print("new setjailpos")
 	remQuery = string.format(remQuery, map)
-	insQuery = string.format(insQuery, map, strPos[1], strPos[2], strPos[3])
+	insQuery = string.format(insQuery, map, tostring( pos.x ), tostring( pos.y ), tostring( pos.z ) )
 
 	MySQLite.begin()
 	MySQLite.queueQuery(remQuery)
@@ -56,12 +55,11 @@ end
 
 function DarkRP.addJailPos(pos)
 	local map = MySQLite.SQLStr(string.lower(game.GetMap()))
-	local strPos = string.Explode(" ", tostring(pos))
 
 	table.insert(jailPos, pos)
 
 	local insQuery = "INSERT INTO darkrp_position(map, type, x, y, z) VALUES(%s, 'J', %s, %s, %s);"
-	insQuery = string.format(insQuery, map, strPos[1], strPos[2], strPos[3])
+	insQuery = string.format(insQuery, map, tostring( pos.x ), tostring( pos.y ), tostring( pos.z ) )
 
 	MySQLite.query(insQuery)
 
