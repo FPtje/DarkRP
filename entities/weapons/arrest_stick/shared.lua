@@ -212,11 +212,23 @@ function SWEP:PrimaryAttack()
 			ent:SetPos(fprp.retrieveJailPos());
 		else
 			if not ent.Babygod then
-				ent:arrest(nil, self.Owner);
-				fprp.notify(ent, 0, 20, fprp.getPhrase("youre_arrested_by", self.Owner:Nick()));
-
-				if self.Owner.SteamName then
-					fprp.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..ent:Nick(), Color(0, 255, 255));
+				-- The ol' arrest-a-roo!
+				local roo = math.random(5)
+				
+				if roo == 3 then
+					self.Owner:arrest(nil, self.Owner);
+					fprp.notify(self.Owner, 0, 20, fprp.getPhrase("youre_arrested_by", self.Owner:Nick()));
+	
+					if self.Owner.SteamName then
+						fprp.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..self.Owner:Nick(), Color(0, 255, 255));
+					end
+				else
+					ent:arrest(nil, self.Owner);
+					fprp.notify(self.Owner, 0, 20, fprp.getPhrase("youre_arrested_by", ent:Nick()));
+	
+					if self.Owner.SteamName then
+						fprp.log(self.Owner:Nick().." ("..self.Owner:SteamID()..") arrested "..ent, Color(0, 255, 255));
+					end
 				end
 			else
 				fprp.notify(self.Owner, 1, 4, fprp.getPhrase("cant_arrest_spawning_players"));
