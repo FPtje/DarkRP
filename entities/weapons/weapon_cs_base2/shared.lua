@@ -244,7 +244,7 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
 	bullet.Dir = (self:GetOwner():GetAimVector():Angle() + self:GetOwner():GetViewPunchAngles()):Forward() -- Dir of bullet
 	bullet.Spread = Vector(cone, cone, 0)		-- Aim Cone
 	bullet.Tracer = 4							-- Show a tracer on every x bullets
-	bullet.Force = 5							-- Amount of force to give tolju phys objects
+	bullet.Force = 5							-- Amount of force to give to phys objects
 	bullet.Damage = dmg
 
 	self:GetOwner():FireBullets(bullet)
