@@ -5,7 +5,6 @@ local function SetSpawnPos(ply, args)
 	end
 
 	local pos = ply:GetPos()
-	local tablePos = { pos.x, pos.y, pos.z }
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -16,7 +15,7 @@ local function SetSpawnPos(ply, args)
 	end
 
 	if t then
-		DarkRP.storeTeamSpawnPos(t, tablePos)
+		DarkRP.storeTeamSpawnPos(t, {pos.x, pos.y, pos.z})
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
@@ -32,7 +31,6 @@ local function AddSpawnPos(ply, args)
 	end
 
 	local pos = ply:GetPos()
-	local tablePos = { pos.x, pos.y, pos.z } 
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -43,7 +41,7 @@ local function AddSpawnPos(ply, args)
 	end
 
 	if t then
-		DarkRP.addTeamSpawnPos(t, tablePos)
+		DarkRP.addTeamSpawnPos(t, {pos.x, pos.y, pos.z})
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
