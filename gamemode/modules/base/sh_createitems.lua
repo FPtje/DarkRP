@@ -943,18 +943,30 @@ local categoryOrder = function(a, b)
 	local bso = b.sortOrder or 100
 	return aso < bso or aso == bso and a.name < b.name
 end
+
+local function insertCategory(destination, tbl)
+	table.insert(destination, tbl)
+	local i = #destination
+
+	while i > 1 do
+		if categoryOrder(destination[i - 1], tbl) then break end
+		destination[i - 1], destination[i] = destination[i], destination[i - 1]
+		i = i - 1
+	end
+end
+
 function DarkRP.createCategory(tbl)
 	local valid, err, hints = checkValid(tbl, validCategory)
 	if not valid then DarkRP.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
 	tbl.members = {}
 
 	local destination = categories[tbl.categorises]
+	insertCategory(destination, tbl)
 
-	local i = table.insert(destination, tbl)
-	while i > 1 do
-		if categoryOrder(destination[i - 1], tbl) then break end
-		destination[i - 1], destination[i] = destination[i], destination[i - 1]
-		i = i - 1
+	-- Too many people made the mistake of not creating a category for weapons as well as shipments
+	-- when having shipments that can also be sold separately.
+	if tbl.categorises == "shipments" then
+		insertCategory(categories.weapons, table.Copy(tbl))
 	end
 end
 
@@ -969,14 +981,8 @@ function DarkRP.addToCategory(item, kind, cat)
 	local cats = categories[kind]
 	for _, c in ipairs(cats) do
 		if c.name ~= cat then continue end
-		table.insert(c.members, item)
-		local i = #c.members
-		while i > 1 do
-			if categoryOrder(c.members[i - 1], item) then break end
-			c.members[i - 1], c.members[i] = c.members[i], c.members[i - 1]
-			i = i - 1
-		end
 
+		insertCategory(c.members, item)
 		return
 	end
 
@@ -984,7 +990,6 @@ function DarkRP.addToCategory(item, kind, cat)
 		"Make sure the category is created with DarkRP.createCategory.",
 		"The category name is case sensitive!",
 		"Categories must be created before DarkRP finished loading.",
-		"When you have a shipment that can also have its weapon sold separately, you need two categories: one for shipments and one for weapons.",
 	})
 end
 
