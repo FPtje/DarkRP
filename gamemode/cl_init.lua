@@ -121,9 +121,3 @@ net.Receive('fprp_credits', function()
 	end
 	timer.Simple(6, function() if IsValid(f) then f:Remove() end end)
 end)
-
-
--- this is an important bit of code, it lets the user know that they have changed weapon
-function GM:PlayerSwitchWeapon()
-	surface.PlaySound( "doors/handle_pushbar_open1.wav" )
-end
