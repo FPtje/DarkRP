@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.PrintName			= "Chair Thrower"			
 SWEP.Author			= "(your name)"
 SWEP.Instructions		= "Left mouse to fire a chair!"
