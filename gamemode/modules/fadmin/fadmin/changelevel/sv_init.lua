@@ -8,10 +8,9 @@ local function ChangeLevel(ply, cmd, args)
 
 	if GameMode then
 		RunConsoleCommand("gamemode", GameMode)
-		RunConsoleCommand("changelevel", map)
-	else
-		RunConsoleCommand("changelevel", map)
 	end
+	
+	RunConsoleCommand("changelevel", map)
 
 	return true, map, GameMode
 end
