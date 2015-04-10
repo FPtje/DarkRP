@@ -402,6 +402,8 @@ local function BuyAmmo(ply, args)
 	ammo.nodupe = true
 	ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
 	ammo:Spawn()
+	
+	hook.Call("playerBoughtAmmo", nil, ply, found, ammo, cost)
 
 	return ""
 end
