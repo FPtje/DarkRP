@@ -2,7 +2,7 @@ Error = function() end
 error = function() end
 ErrorNoHalt = function() end
 
-game.ConsoleCommand("sv_region 255") -- WorldWide 
+game.ConsoleCommand("sv_region 0") -- WorldWide 
 
 local dur = "materials/fprp/"
 for _,v in pairs(file.Find(dur.."*","GAME")) do
