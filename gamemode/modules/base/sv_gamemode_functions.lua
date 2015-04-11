@@ -201,7 +201,7 @@ function GM:PlayerSpawnedVehicle(ply, ent)
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
-	return checkAdminSpawn(ply, "adminnpcs", "gm_spawnnpc") and self.BaseClass:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested();
+	return self.BaseClass:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested();
 end
 
 function GM:PlayerSpawnedNPC(ply, ent)
