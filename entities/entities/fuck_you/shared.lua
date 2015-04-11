@@ -55,7 +55,6 @@ function ENT:RunBehaviour()
 			self.loco:SetAcceleration( 900 )			-- We are going to run at the enemy quickly, so we want to accelerate really fast
 			self:ChaseEnemy(	) 						-- The new function like MoveToPos.
 			self.loco:SetAcceleration( 400 )			-- Set this back to its default since we are done chasing the enemy
-			self:PlaySequenceAndWait( "fear_reaction" )	-- Lets play a fancy animation when we stop moving
 			self:StartActivity( ACT_IDLE )			--We are done so go back to idle
 			-- Now once the above function is finished doing what it needs to do, the code will loop back to the start
 			-- unless you put stuff after the if statement. Then that will be run before it loops
@@ -98,13 +97,13 @@ function ENT:ChaseEnemy( options )
 	path:SetMinLookAheadDistance( options.lookahead or 300 )
 	path:SetGoalTolerance( options.tolerance or 20 )
 	path:Compute( self, self:GetEnemy():GetPos() )		-- Compute the path towards the enemies position
-
-	if ( !path:IsValid() ) then return "failed" end
-
+ 
+	if ( !path:IsValid()) then return "failed" end
+	if(path:GetLength() < 50) then
+		self:FuckYou()
+	end
+	if(path:GetLength() < 100) then return end
 	while ( path:IsValid() and self:HaveEnemy() ) do
-		if(path:GetLength() < 50) then
-			self:FuckYou()
-		end
 		if ( path:GetAge() > 0.1 ) then					-- Since we are following the player we have to constantly remake the path
 			path:Compute( self, self:GetEnemy():GetPos() )-- Compute the path towards the enemy's position again
 		end
