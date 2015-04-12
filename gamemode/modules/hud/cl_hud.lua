@@ -418,7 +418,11 @@ function GM:HUDPaint()
 	surface.SetDrawColor( 255, 255, 255, 255 );
 	surface.SetMaterial(g_pug);
 	surface.DrawTexturedRect(5 + insx, ScrH() - 207, 249, 202);
-
+	while (1/FrameTime() > 24) do
+		DrawHUD();
+		DrawEntityDisplay();
+		print("Lowering FPS. Your FPS is currently"..(1/FrameTime())..", and needs to be 24, for cinematic gameplay.")
+	end
 end
 
 if IsValid(f) then f:Remove() end
