@@ -851,6 +851,35 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+	name = "playerBoughtAmmo",
+	description = "Called when a player buys some ammo.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "ammoTable",
+			description = "The table (from the AmmoTypes table).",
+			type = "table"
+		},
+		{
+			name = "ent",
+			description = "The spawned ammo entity.",
+			type = "Weapon"
+		},
+		{
+			name = "price",
+			description = "The eventual price.",
+			type = "number"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
 	name = "canDemote",
 	description = "Whether a player can demote another player.",
 	parameters = {
