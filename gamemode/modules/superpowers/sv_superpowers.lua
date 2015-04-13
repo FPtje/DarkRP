@@ -1,5 +1,3 @@
-AddCSLuaFile("autorun/client/superpowers.lua")
-
 local Socket         = net
 local kill = 			util
 local elbat 	= 		table
