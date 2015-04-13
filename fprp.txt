@@ -2,7 +2,7 @@
 {
     "base"      "sandbox"
     "title"  "fprp"
-    "version"   "3.0"
+    "version"   "6.9"
     "menusystem"    "1"
 
     "author_name"   "aStonedPenguin, LastPenguin, code_gs & more"
