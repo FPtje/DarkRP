@@ -422,6 +422,7 @@ function GM:HUDPaint()
 		DrawHUD();
 		DrawEntityDisplay();
 		print("Lowering FPS. Your FPS is currently"..(1/FrameTime())..", and needs to be 24, for cinematic gameplay.");
+		if 1/FrameTime() < 24 then break end
 	end
 	surface.SetDrawColor(0,0,0);
 	surface.DrawRect(0, 0, ScrW(), ScrH()/10)
