@@ -7,9 +7,10 @@ function ENT:Draw()
 	local Pos = self:GetPos();
 	local Ang = self:GetAngles();
 
-	local amount = self:Getamount();
+	local amount = self:Getamount() + (self:Getamount() * 0.69); --Lets people feel richer... 
 	local owner = (IsValid(self:Getowning_ent()) and self:Getowning_ent().Name and self:Getowning_ent():Name()) or fprp.getPhrase("unknown");
 	local recipient = (self:Getrecipient().Name and self:Getrecipient():Name()) or fprp.getPhrase("unknown");
+		
 
 	surface.SetFont("ChatFont");
 	local text = fprp.getPhrase("cheque_pay", recipient) .. "\n" .. fprp.formatshekel(amount) .. "\n" .. fprp.getPhrase("signed", owner);
