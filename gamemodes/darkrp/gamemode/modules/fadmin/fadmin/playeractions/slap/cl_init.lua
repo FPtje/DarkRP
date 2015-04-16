@@ -11,7 +11,7 @@ FAdmin.StartHooks["Slap"] = function()
 	end)
 
 	-- Slap option in player menu
-	FAdmin.ScoreBoard.Player:AddActionButton("Slap", "FAdmin/icons/slap", Color(255, 130, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Slap", ply) end, function(ply)
+	FAdmin.ScoreBoard.Player:AddActionButton("Slap", "fadmin/icons/slap", Color(255, 130, 0, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Slap", ply) end, function(ply)
 		local menu = DermaMenu()
 
 		local Padding = vgui.Create("DPanel")

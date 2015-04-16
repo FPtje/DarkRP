@@ -46,8 +46,8 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	if CLIENT or not IsValid(self.Owner) then return true end
-	self.Owner:DrawWorldModel(false)
+	if CLIENT or not IsValid(self:GetOwner()) then return true end
+	self:GetOwner():DrawWorldModel(false)
 	return true
 end
 
@@ -98,52 +98,51 @@ local function doKnock(ply, sound)
 end
 
 function SWEP:PrimaryAttack()
-	local trace = self.Owner:GetEyeTrace()
+	local trace = self:GetOwner():GetEyeTrace()
 
-	if not lookingAtLockable(self.Owner, trace.Entity) then return end
+	if not lookingAtLockable(self:GetOwner(), trace.Entity) then return end
 
-	self.Weapon:SetNextPrimaryFire(CurTime() + 0.3)
+	self:SetNextPrimaryFire(CurTime() + 0.3)
 
 	if CLIENT then return end
 
-	if self.Owner:canKeysLock(trace.Entity) then
+	if self:GetOwner():canKeysLock(trace.Entity) then
 		trace.Entity:keysLock() -- Lock the door immediately so it won't annoy people
-		lockUnlockAnimation(self.Owner, self.Sound)
+		lockUnlockAnimation(self:GetOwner(), self.Sound)
 	elseif trace.Entity:IsVehicle() then
-		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+		DarkRP.notify(self:GetOwner(), 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 	else
-		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard2.wav")
+		doKnock(self:GetOwner(), "physics/wood/wood_crate_impact_hard2.wav")
 	end
 end
 
 function SWEP:SecondaryAttack()
-	local trace = self.Owner:GetEyeTrace()
+	local trace = self:GetOwner():GetEyeTrace()
 
-	if not lookingAtLockable(self.Owner, trace.Entity) then return end
+	if not lookingAtLockable(self:GetOwner(), trace.Entity) then return end
 
-	self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
+	self:SetNextSecondaryFire(CurTime() + 0.3)
 
 	if CLIENT then return end
 
-	if self.Owner:canKeysUnlock(trace.Entity) then
+	if self:GetOwner():canKeysUnlock(trace.Entity) then
 		trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
-		lockUnlockAnimation(self.Owner, self.Sound)
+		lockUnlockAnimation(self:GetOwner(), self.Sound)
 	elseif trace.Entity:IsVehicle() then
-		DarkRP.notify(self.Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+		DarkRP.notify(self:GetOwner(), 1, 3, DarkRP.getPhrase("do_not_own_ent"))
 	else
-		doKnock(self.Owner, "physics/wood/wood_crate_impact_hard3.wav")
+		doKnock(self:GetOwner(), "physics/wood/wood_crate_impact_hard3.wav")
 	end
 end
 
-SWEP.OnceReload = false
 function SWEP:Reload()
-	local trace = self.Owner:GetEyeTrace()
+	local trace = self:GetOwner():GetEyeTrace()
 	if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
 		if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
 		return
 	end
 	if SERVER then
-		umsg.Start("KeysMenu", self.Owner)
+		umsg.Start("KeysMenu", self:GetOwner())
 		umsg.End()
 	end
 end

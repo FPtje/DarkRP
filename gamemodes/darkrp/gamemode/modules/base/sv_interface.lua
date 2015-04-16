@@ -254,7 +254,7 @@ DarkRP.notify = DarkRP.stub{
 			optional = false
 		},
 		{
-			name = "MsgType",
+			name = "msgType",
 			description = "The type of the message.",
 			type = "number",
 			optional = false
@@ -317,6 +317,28 @@ DarkRP.printMessageAll = DarkRP.stub{
 		},
 		{
 			name = "message",
+			description = "The actual message.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.printConsoleMessage = DarkRP.stub{
+	name = "printConsoleMessage",
+	description = "Prints a message to a given player's console. This function also handles server consoles too (EntIndex = 0).",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player to send the console message to.",
+			type = "Player",
+			optional = false
+		},
+		{
+			name = "msg",
 			description = "The actual message.",
 			type = "string",
 			optional = false
@@ -651,20 +673,6 @@ DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
 }
 
 DarkRP.hookStub{
-	name = "UpdatePlayerSpeed",
-	description = "Change a player's walking and running speed.",
-	parameters = {
-		{
-			name = "ply",
-			description = "The player for whom the speed changes.",
-			type = "Player"
-		}
-	},
-	returns = {
-	}
-}
-
-DarkRP.hookStub{
 	name = "DarkRPDBInitialized",
 	description = "Called when DarkRP is done initializing the database.",
 	parameters = {
@@ -831,6 +839,35 @@ DarkRP.hookStub{
 			name = "ent",
 			description = "The spawned vehicle.",
 			type = "Entity"
+		},
+		{
+			name = "price",
+			description = "The eventual price.",
+			type = "number"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "playerBoughtAmmo",
+	description = "Called when a player buys some ammo.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player.",
+			type = "Player"
+		},
+		{
+			name = "ammoTable",
+			description = "The table (from the AmmoTypes table).",
+			type = "table"
+		},
+		{
+			name = "ent",
+			description = "The spawned ammo entity.",
+			type = "Weapon"
 		},
 		{
 			name = "price",

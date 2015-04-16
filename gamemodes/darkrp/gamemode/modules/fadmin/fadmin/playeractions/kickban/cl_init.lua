@@ -207,7 +207,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 
 
 	-- Kick button
-	FAdmin.ScoreBoard.Player:AddActionButton("Kick", "FAdmin/icons/kick", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Kick", ply) end, function(ply)
+	FAdmin.ScoreBoard.Player:AddActionButton("Kick", "fadmin/icons/kick", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Kick", ply) end, function(ply)
 		if not IsValid(ply) then return end
 		local UserID = ply:UserID()
 		local NICK = ply:Nick()
@@ -288,7 +288,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 	end)
 
 	-- Ban button
-	FAdmin.ScoreBoard.Player:AddActionButton("Ban", "FAdmin/icons/Ban", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ban", ply) end, function(ply)
+	FAdmin.ScoreBoard.Player:AddActionButton("Ban", "fadmin/icons/ban", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ban", ply) end, function(ply)
 		local SteamID = ply:SteamID()
 		local NICK = ply:Nick()
 
@@ -296,7 +296,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		showBanWindow(SteamID, NICK)
 	end)
 
-	FAdmin.ScoreBoard.Server:AddPlayerAction("Unban", function() return "FAdmin/icons/Ban", "FAdmin/icons/disable" end, Color(0, 155, 0, 255), true, function(button)
+	FAdmin.ScoreBoard.Server:AddPlayerAction("Unban", function() return "fadmin/icons/ban", "fadmin/icons/disable" end, Color(0, 155, 0, 255), true, function(button)
 		local selectedLine
 
 		local Frame = vgui.Create("DFrame")

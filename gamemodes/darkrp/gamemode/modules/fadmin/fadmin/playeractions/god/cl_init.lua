@@ -7,8 +7,8 @@ FAdmin.StartHooks["God"] = function()
 		if ply:FAdmin_GetGlobal("FAdmin_godded") then return "Ungod" end
 		return "God"
 	end, function(ply)
-		if ply:FAdmin_GetGlobal("FAdmin_godded") then return "FAdmin/icons/god", "FAdmin/icons/disable" end
-		return "FAdmin/icons/god"
+		if ply:FAdmin_GetGlobal("FAdmin_godded") then return "fadmin/icons/god", "fadmin/icons/disable" end
+		return "fadmin/icons/god"
 	end, Color(255, 130, 0, 255),
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "God") end, function(ply, button)
@@ -18,7 +18,7 @@ FAdmin.StartHooks["God"] = function()
 			RunConsoleCommand("_FAdmin", "ungod", ply:UserID())
 		end
 
-		if not ply:FAdmin_GetGlobal("FAdmin_godded") then button:SetImage2("FAdmin/icons/disable") button:SetText("Ungod") button:GetParent():InvalidateLayout() return end
+		if not ply:FAdmin_GetGlobal("FAdmin_godded") then button:SetImage2("fadmin/icons/disable") button:SetText("Ungod") button:GetParent():InvalidateLayout() return end
 		button:SetImage2("null")
 		button:SetText("God")
 		button:GetParent():InvalidateLayout()

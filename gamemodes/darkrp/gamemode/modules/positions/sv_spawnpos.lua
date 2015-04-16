@@ -4,7 +4,7 @@ local function SetSpawnPos(ply, args)
 		return ""
 	end
 
-	local pos = string.Explode(" ", tostring(ply:GetPos()))
+	local pos = ply:GetPos()
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -15,7 +15,7 @@ local function SetSpawnPos(ply, args)
 	end
 
 	if t then
-		DarkRP.storeTeamSpawnPos(t, pos)
+		DarkRP.storeTeamSpawnPos(t, {pos.x, pos.y, pos.z})
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
@@ -30,7 +30,7 @@ local function AddSpawnPos(ply, args)
 		return ""
 	end
 
-	local pos = string.Explode(" ", tostring(ply:GetPos()))
+	local pos = ply:GetPos()
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -41,7 +41,7 @@ local function AddSpawnPos(ply, args)
 	end
 
 	if t then
-		DarkRP.addTeamSpawnPos(t, pos)
+		DarkRP.addTeamSpawnPos(t, {pos.x, pos.y, pos.z})
 	else
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end

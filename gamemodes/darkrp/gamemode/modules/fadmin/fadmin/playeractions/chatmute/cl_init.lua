@@ -7,8 +7,8 @@ FAdmin.StartHooks["Chatmute"] = function()
 		if ply:FAdmin_GetGlobal("FAdmin_chatmuted") then return "Unmute chat" end
 		return "Mute chat"
 	end, function(ply)
-		if ply:FAdmin_GetGlobal("FAdmin_chatmuted") then return "FAdmin/icons/chatmute" end
-		return "FAdmin/icons/chatmute", "FAdmin/icons/disable"
+		if ply:FAdmin_GetGlobal("FAdmin_chatmuted") then return "fadmin/icons/chatmute" end
+		return "fadmin/icons/chatmute", "fadmin/icons/disable"
 	end, Color(255, 130, 0, 255),
 
 	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Chatmute", ply) end, function(ply, button)
@@ -23,7 +23,7 @@ FAdmin.StartHooks["Chatmute"] = function()
 			RunConsoleCommand("_FAdmin", "UnChatmute", ply:UserID())
 		end
 
-		button:SetImage2("FAdmin/icons/disable")
+		button:SetImage2("fadmin/icons/disable")
 		button:SetText("Mute chat")
 		button:GetParent():InvalidateLayout()
 	end)

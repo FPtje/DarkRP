@@ -458,31 +458,27 @@ local function addTeamCommands(CTeam, max)
 
 	concommand.Add("rp_"..CTeam.command, function(ply, cmd, args)
 		if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-			ply:PrintMessage(2, DarkRP.getPhrase("need_admin", cmd))
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", cmd))
 			return
 		end
 
 		if CTeam.admin > 1 and not ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-			ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
+			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", cmd))
 			return
 		end
 
 		if CTeam.vote then
 			if CTeam.admin >= 1 and ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-				ply:PrintMessage(2, DarkRP.getPhrase("need_sadmin", cmd))
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", cmd))
 				return
 			elseif CTeam.admin > 1 and ply:IsSuperAdmin() and ply:EntIndex() ~= 0 then
-				ply:PrintMessage(2, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
+				ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
 				return
 			end
 		end
 
 		if not args or not args[1] then
-			if ply:EntIndex() == 0 then
-				print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-			else
-				ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-			end
+			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 			return
 		end
 
@@ -496,13 +492,9 @@ local function addTeamCommands(CTeam, max)
 			else
 				nick = "Console"
 			end
-			target:PrintMessage(2, DarkRP.getPhrase("x_made_you_a_y", nick, CTeam.name))
+			DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_made_you_a_y", nick, CTeam.name))
 		else
-			if (ply:EntIndex() == 0) then
-				print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-			else
-				ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-			end
+			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 		end
 	end)
 end
@@ -951,18 +943,30 @@ local categoryOrder = function(a, b)
 	local bso = b.sortOrder or 100
 	return aso < bso or aso == bso and a.name < b.name
 end
+
+local function insertCategory(destination, tbl)
+	table.insert(destination, tbl)
+	local i = #destination
+
+	while i > 1 do
+		if categoryOrder(destination[i - 1], tbl) then break end
+		destination[i - 1], destination[i] = destination[i], destination[i - 1]
+		i = i - 1
+	end
+end
+
 function DarkRP.createCategory(tbl)
 	local valid, err, hints = checkValid(tbl, validCategory)
 	if not valid then DarkRP.error(string.format("Corrupt category: %s!\n%s", tbl.name or "", err), 2, hints) end
 	tbl.members = {}
 
 	local destination = categories[tbl.categorises]
+	insertCategory(destination, tbl)
 
-	local i = table.insert(destination, tbl)
-	while i > 1 do
-		if categoryOrder(destination[i - 1], tbl) then break end
-		destination[i - 1], destination[i] = destination[i], destination[i - 1]
-		i = i - 1
+	-- Too many people made the mistake of not creating a category for weapons as well as shipments
+	-- when having shipments that can also be sold separately.
+	if tbl.categorises == "shipments" then
+		insertCategory(categories.weapons, table.Copy(tbl))
 	end
 end
 
@@ -977,14 +981,8 @@ function DarkRP.addToCategory(item, kind, cat)
 	local cats = categories[kind]
 	for _, c in ipairs(cats) do
 		if c.name ~= cat then continue end
-		table.insert(c.members, item)
-		local i = #c.members
-		while i > 1 do
-			if categoryOrder(c.members[i - 1], item) then break end
-			c.members[i - 1], c.members[i] = c.members[i], c.members[i - 1]
-			i = i - 1
-		end
 
+		insertCategory(c.members, item)
 		return
 	end
 
@@ -992,7 +990,6 @@ function DarkRP.addToCategory(item, kind, cat)
 		"Make sure the category is created with DarkRP.createCategory.",
 		"The category name is case sensitive!",
 		"Categories must be created before DarkRP finished loading.",
-		"When you have a shipment that can also have its weapon sold separately, you need two categories: one for shipments and one for weapons.",
 	})
 end
 

@@ -25,6 +25,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
 	end
 
 	local ChatBoxPosX, ChatBoxPosY = chat.GetChatBoxPos()
+	local ChatBoxWidth = chat.GetChatBoxSize() -- Don't need height
 	local DidMakeShorter = false
 	table.sort(Options)
 	local i = 1
@@ -51,7 +52,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
 		targets = table.concat(players, ", ")
 	end
 
-	local xPos = (ChatBoxPosX == 12 and 412) or (ChatBoxPosX == 22 and 745) or (ChatBoxPosX == 21 and 741) or 526
+	local xPos = ChatBoxPosX + ChatBoxWidth + 2
 	hook.Add("HUDPaint", "FAdmin_Chat_autocomplete", function()
 		local i = 0
 		for option, args in pairs(Options) do

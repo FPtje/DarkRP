@@ -65,7 +65,7 @@ function GM:canDropWeapon(ply, weapon)
 	local team = ply:Team()
 
 	if not GAMEMODE.Config.dropspawnedweapons then
-	if RPExtraTeams[team] and RPExtraTeams[team].weapons and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
+		if RPExtraTeams[team] and RPExtraTeams[team].weapons and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
 	end
 
 	if self.Config.DisallowDrop[class] then return false end
@@ -87,16 +87,6 @@ end
 
 function GM:canSeeLogMessage(ply, message, colour)
 	return ply:hasDarkRPPrivilege("rp_viewlog") or ply:IsAdmin()
-end
-
-function GM:UpdatePlayerSpeed(ply)
-	if ply:isArrested() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-	elseif ply:isCP() then
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
-	else
-		GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
-	end
 end
 
 /*---------------------------------------------------------
@@ -413,9 +403,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 	if ply:isArrested() and not GAMEMODE.Config.respawninjail  then
 		-- If the player died in jail, make sure they can't respawn until their jail sentance is over
 		ply.NextSpawnTime = CurTime() + math.ceil(GAMEMODE.Config.jailtimer - (CurTime() - ply.LastJailed)) + 1
-		for a, b in pairs(player.GetAll()) do
-			b:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
-		end
+		DarkRP.printMessageAll(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
 		DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
 	else
 		-- Normal death, respawning.
@@ -914,11 +902,5 @@ end
 timer.Create("RP_DecalCleaner", GM.Config.decaltimer, 0, ClearDecals)
 
 function GM:PlayerSpray()
-
 	return not GAMEMODE.Config.allowsprays
-end
-
-function GM:PlayerNoClip(ply)
-	-- Default action for noclip is to disallow it
-	return false
 end

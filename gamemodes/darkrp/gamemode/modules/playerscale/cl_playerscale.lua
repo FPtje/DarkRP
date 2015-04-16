@@ -4,6 +4,6 @@ local function doScale(um)
 
 	if not IsValid(ply) then return end
 	ply:SetModelScale(scale, 1)
-	ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 64 * scale))
+	ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale))
 end
 usermessage.Hook("darkrp_playerscale", doScale)

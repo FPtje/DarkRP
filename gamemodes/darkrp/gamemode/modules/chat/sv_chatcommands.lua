@@ -195,10 +195,10 @@ local function GroupMsg(ply, args)
 			break
 		end
 
-		groupChat = groupChat or fc{fp{fn.Eq, ply:Team()}, plyMeta.Team} -- Either in group chat or in the same team
+		if not groupChat then return "" end
 
 		for _, target in pairs(player.GetAll()) do
-			if groupChat(target) then
+			if groupChat(target, ply) then
 				DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
 			end
 		end

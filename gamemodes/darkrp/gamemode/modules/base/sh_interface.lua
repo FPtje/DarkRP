@@ -506,6 +506,20 @@ DarkRP.VECTOR.isInSight = DarkRP.stub{
 	metatable = DarkRP.VECTOR
 }
 
+DarkRP.hookStub{
+	name = "UpdatePlayerSpeed",
+	description = "Change a player's walking and running speed.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player for whom the speed changes.",
+			type = "Player"
+		}
+	},
+	returns = {
+	}
+}
+
 /*---------------------------------------------------------------------------
 Creating custom items
 ---------------------------------------------------------------------------*/

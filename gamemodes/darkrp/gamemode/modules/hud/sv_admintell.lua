@@ -3,16 +3,12 @@ Messages
 ---------------------------------------------------------------------------*/
 local function ccTell(ply, cmd, args)
 	if not args or not args[1] then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tell"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_tell"))
 		return
 	end
 
@@ -35,27 +31,19 @@ local function ccTell(ply, cmd, args)
 			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
 		end
 	else
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 end
 concommand.Add("rp_tell", ccTell)
 
 local function ccTellAll(ply, cmd, args)
 	if not args or not args[1] then
-		if ply:EntIndex() == 0 then
-			print(DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		else
-			ply:PrintMessage(2, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		end
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
 	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(2, DarkRP.getPhrase("need_admin", "rp_tellall"))
+		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_tellall"))
 		return
 	end
 

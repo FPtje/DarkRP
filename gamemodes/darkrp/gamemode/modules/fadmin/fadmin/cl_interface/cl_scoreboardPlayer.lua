@@ -64,7 +64,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			local Text = vgui.Create("DLabel")
 			Text:Dock(LEFT)
 			Text:SetFont("TabLarge")
-			Text:SetText(v.name .. ":  ".. Value)
+			Text:SetText(v.name .. ": ".. Value)
 			Text:SizeToContents()
 			Text:SetColor(Color(200,200,200,200))
 			Text:SetToolTip("Click to copy "..v.name.." to clipboard")
@@ -84,7 +84,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 				end
 				Value = v.func(FAdmin.ScoreBoard.Player.Player)
 				if not Value or Value == "" then Value = "N/A" end
-				Text:SetText(v.name .. ":  "..Value)
+				Text:SetText(v.name .. ": "..Value)
 			end)
 
 			if (#FAdmin.ScoreBoard.Player.Controls.InfoPanel1:GetChildren()*17 + 17) <= FAdmin.ScoreBoard.Player.Controls.InfoPanel1:GetTall() and not v.NewPanel then

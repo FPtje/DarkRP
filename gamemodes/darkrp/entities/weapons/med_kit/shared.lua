@@ -33,21 +33,19 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Delay = 0.3
 SWEP.Secondary.Ammo = "none"
 
-
 function SWEP:PrimaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-
-	if not SERVER then return end
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
 	local found
 	local lastDot = -1 -- the opposite of what you're looking at
-	local aimVec = self.Owner:GetAimVector()
+	self:GetOwner():LagCompensation(true)
+	local aimVec = self:GetOwner():GetAimVector()
 
 	for k,v in pairs(player.GetAll()) do
 		local maxhealth = v:GetMaxHealth() or 100
-		if v == self.Owner or v:GetShootPos():Distance(self.Owner:GetShootPos()) > 85 or v:Health() >= maxhealth or not v:Alive() then continue end
+		if v == self:GetOwner() or v:GetShootPos():Distance(self:GetOwner():GetShootPos()) > 85 or v:Health() >= maxhealth or not v:Alive() then continue end
 
-		local direction = v:GetShootPos() - self.Owner:GetShootPos()
+		local direction = v:GetShootPos() - self:GetOwner():GetShootPos()
 		direction:Normalize()
 		local dot = direction:Dot(aimVec)
 
@@ -57,21 +55,20 @@ function SWEP:PrimaryAttack()
 			found = v
 		end
 	end
+	self:GetOwner():LagCompensation(false)
 
 	if found then
 		found:SetHealth(found:Health() + 1)
-		self.Owner:EmitSound("hl1/fvox/boop.wav", 150, found:Health())
+		self:EmitSound("hl1/fvox/boop.wav", 150, found:Health(), 1, CHAN_AUTO)
 	end
 end
 
 function SWEP:SecondaryAttack()
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-	if not SERVER then return end
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	local maxhealth = self.Owner:GetMaxHealth() or 100
-	if self.Owner:Health() < maxhealth then
-		self.Owner:SetHealth(self.Owner:Health() + 1)
-		self.Owner:EmitSound("hl1/fvox/boop.wav", 150, self.Owner:Health())
+	local maxhealth = self:GetOwner():GetMaxHealth() or 100
+	if self:GetOwner():Health() < maxhealth then
+		self:GetOwner():SetHealth(self:GetOwner():Health() + 1)
+		self:EmitSound("hl1/fvox/boop.wav", 150, self:GetOwner():Health(), 1, CHAN_AUTO)
 	end
 end
-
