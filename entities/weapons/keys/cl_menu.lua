@@ -1,22 +1,3 @@
-DarkRP.hookStub{
-	name = "HUDDrawKeyMenu",
-	description = "Called when the key menu is drawn.",
-	parameters = {
-		{
-			name = "ent",
-			description = "The door entity.",
-			type = "Entity"
-		},
-		{
-			name = "Frame",
-			description = "The key menu frame.",
-			type = "table" -- I ASSUME ITS A TABLE ?
-		}
-	},
-	returns = {
-	}
-}
-
 local function AddButtonToFrame(Frame)
 	Frame:SetTall(Frame:GetTall() + 110)
 
@@ -94,6 +75,25 @@ DarkRP.stub{
 	realm = "Client",
 	returns = {},
 	metatable = DarkRP
+}
+
+DarkRP.hookStub{
+	name = "HUDDrawKeyMenu",
+	description = "Called when the key menu is drawn.",
+	parameters = {
+		{
+			name = "ent",
+			description = "The door entity.",
+			type = "Entity"
+		},
+		{
+			name = "Frame",
+			description = "The key menu frame.",
+			type = "Panel"
+		}
+	},
+	returns = {
+	}
 }
 
 local KeyFrameVisible = false
