@@ -85,7 +85,6 @@ local function AdminMenuAdditions(Frame, ent, entType)
 			menu:Open()
 		end
 	end
-	hook.Call("HUDDrawKeyMenu", nil, ent, Frame)
 end
 
 DarkRP.stub{
@@ -218,6 +217,7 @@ function DarkRP.openKeysMenu(um)
 	else
 		Frame:Close()
 	end
+	hook.Call("HUDDrawKeyMenu", nil, ent, Frame)
 
 	Frame:Center()
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
