@@ -7,11 +7,11 @@ GM.Author = "By FPtje Falco et al."
 
 DeriveGamemode("sandbox")
 
-AddCSLuaFile("libraries/simplerr.lua")
+AddCSLuaFile("libraries/simplerr/simplerr.lua")
 AddCSLuaFile("libraries/interfaceloader.lua")
 AddCSLuaFile("libraries/modificationloader.lua")
 AddCSLuaFile("libraries/disjointset.lua")
-AddCSLuaFile("libraries/fn.lua")
+AddCSLuaFile("libraries/gmodfunctional/fn.lua")
 
 AddCSLuaFile("config/config.lua")
 AddCSLuaFile("config/addentities.lua")
@@ -29,8 +29,8 @@ include("config/_MySQL.lua")
 include("config/config.lua")
 include("config/licenseweapons.lua")
 
-include("libraries/fn.lua")
-include("libraries/simplerr.lua")
+include("libraries/gmodfunctional/fn.lua")
+include("libraries/simplerr/simplerr.lua")
 include("libraries/modificationloader.lua")
 include("libraries/mysqlite/mysqlite.lua")
 include("libraries/disjointset.lua")

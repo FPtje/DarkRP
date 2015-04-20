@@ -28,8 +28,8 @@ GM.Config = {} -- config table
 GM.NoLicense = GM.NoLicense or {}
 
 include("config/config.lua")
-include("libraries/simplerr.lua")
-include("libraries/fn.lua")
+include("libraries/simplerr/simplerr.lua")
+include("libraries/gmodfunctional/fn.lua")
 include("libraries/interfaceloader.lua")
 include("libraries/disjointset.lua")
 
