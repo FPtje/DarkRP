@@ -11,7 +11,7 @@ local function AdminMenuAdditions(Frame, ent, entType)
 	local DisableOwnage = AddButtonToFrame(Frame)
 	DisableOwnage:SetText(DarkRP.getPhrase(ent:getKeysNonOwnable() and "allow_ownership" or "disallow_ownership"))
 	DisableOwnage.DoClick = function() Frame:Close() RunConsoleCommand("darkrp", "toggleownable") end
-	
+
 	if ent:getKeysNonOwnable() and entType then
 		local DoorTitle = AddButtonToFrame(Frame)
 		DoorTitle:SetText(DarkRP.getPhrase("set_x_title", entType))
@@ -78,8 +78,8 @@ DarkRP.stub{
 }
 
 DarkRP.hookStub{
-	name = "HUDDrawKeyMenu",
-	description = "Called when the key menu is drawn.",
+	name = "onKeysMenuOpened",
+	description = "Called when the keys menu is opened.",
 	parameters = {
 		{
 			name = "ent",
@@ -88,7 +88,7 @@ DarkRP.hookStub{
 		},
 		{
 			name = "Frame",
-			description = "The key menu frame.",
+			description = "The keys menu frame.",
 			type = "Panel"
 		}
 	},
@@ -217,7 +217,7 @@ function DarkRP.openKeysMenu(um)
 	else
 		Frame:Close()
 	end
-	hook.Call("HUDDrawKeyMenu", nil, ent, Frame)
+	hook.Call("onKeysMenuOpened", nil, ent, Frame)
 
 	Frame:Center()
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
