@@ -63,7 +63,7 @@ function SWEP:Deploy()
 	BaseClass.Deploy(self)
 	if SERVER then
 		self:HookStartCommand()
-		self:CallOnClient("HookStartCommand")
+		if not game.SinglePlayer() then self:CallOnClient("HookStartCommand") end
 		self:SetColor(self.StickColor)
 		self:SetMaterial("models/shiny")
 	end
@@ -81,6 +81,7 @@ function SWEP:PreDrawViewModel()
 end
 
 function SWEP:ResetStick(force)
+	if game.SinglePlayer() then force = true end
 	if not IsValid(self:GetOwner()) or (not force and (not IsValid(self:GetOwner():GetActiveWeapon()) or self:GetOwner():GetActiveWeapon():GetClass() ~= self:GetClass())) then return end
 	if SERVER then
 		self:SetColor(Color(255, 255, 255))
