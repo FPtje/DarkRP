@@ -1,0 +1,6 @@
+[submodule "gamemode/libraries/simplerr"]
+	path = gamemode/libraries/simplerr
+	url = https://github.com/FPtje/simplerr
+[submodule "gamemode/libraries/gmodfunctional"]
+	path = gamemode/libraries/gmodfunctional
+	url = https://github.com/FPtje/GModFunctional
