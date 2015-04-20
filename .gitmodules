@@ -7,6 +7,3 @@
 [submodule "gamemode/libraries/mysqlite"]
 	path = gamemode/libraries/mysqlite
 	url = https://github.com/FPtje/MySQLite
-[submodule "gamemode/modules/fpp/fpp"]
-	path = gamemode/modules/fpp/fpp
-	url = https://github.com/FPtje/Falcos-Prop-protection
