@@ -88,7 +88,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:StartCommand(ply, usrcmd)
-	if not IsValid(self) then return end
+	if not IsValid(self) or not IsValid(self:GetOwner()) then return end
+	if not IsValid(self:GetOwner():GetActiveWeapon()) or self:GetOwner():GetActiveWeapon():EntIndex() ~= self:EntIndex() then return end
 	if usrcmd:KeyDown(IN_ATTACK2) then
 		if not self.Switched and self:GetOwner():HasWeapon("arrest_stick") then
 			usrcmd:SelectWeapon(self:GetOwner():GetWeapon("arrest_stick"))
