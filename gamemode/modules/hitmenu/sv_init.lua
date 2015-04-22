@@ -13,7 +13,7 @@ util.AddNetworkString("onHitFailed")
 Interface functions
 ---------------------------------------------------------------------------*/
 function plyMeta:requestHit(customer, target, price)
-	local canRequest, msg, cost = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
+	local canRequest, msg, cost = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price, reason)
 	price = cost or price
 
 	if canRequest == false then
@@ -28,7 +28,8 @@ function plyMeta:requestHit(customer, target, price)
 		questionCallback,
 		customer,
 		target,
-		price
+		price,
+                reason
 	)
 
 	DarkRP.notify(customer, 1, 4, DarkRP.getPhrase("hit_requested"))
@@ -36,7 +37,7 @@ function plyMeta:requestHit(customer, target, price)
 	return true
 end
 
-function plyMeta:placeHit(customer, target, price)
+function plyMeta:placeHit(customer, target, price, reason)
 	if hits[self] then DarkRP.error("This person has an active hit!", 2) end
 
 	if not customer:canAfford(price) then
@@ -49,6 +50,7 @@ function plyMeta:placeHit(customer, target, price)
 
 	self:setHitCustomer(customer)
 	self:setHitTarget(target)
+        self:setHitReason(reason)
 
 	DarkRP.payPlayer(customer, self, price)
 
@@ -93,7 +95,7 @@ function plyMeta:finishHit()
 	hits[self] = nil
 end
 
-function questionCallback(answer, hitman, customer, target, price)
+function questionCallback(answer, hitman, customer, target, price, reason)
 	if not IsValid(customer) then return end
 	if not IsValid(hitman) or not hitman:isHitman() then return end
 
@@ -107,6 +109,11 @@ function questionCallback(answer, hitman, customer, target, price)
 		return
 	end
 
+        if not tobool(reason) then
+                DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("no_hit_reason"))
+                return
+        end
+
 	if not tobool(answer) then
 		DarkRP.notify(customer, 1, 4, DarkRP.getPhrase("hit_declined"))
 		return
@@ -116,7 +123,7 @@ function questionCallback(answer, hitman, customer, target, price)
 
 	DarkRP.notify(hitman, 1, 4, DarkRP.getPhrase("hit_accepted"))
 
-	hitman:placeHit(customer, target, price)
+	hitman:placeHit(customer, target, price, reason)
 end
 
 /*---------------------------------------------------------------------------
@@ -152,31 +159,33 @@ end)
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
-function DarkRP.hooks:onHitAccepted(hitman, target, customer)
+function DarkRP.hooks:onHitAccepted(hitman, target, customer, reason)
 	net.Start("onHitAccepted")
 		net.WriteEntity(hitman)
 		net.WriteEntity(target)
 		net.WriteEntity(customer)
+                net.WriteEntity(reason)
 	net.Broadcast()
 
 	DarkRP.notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
 	customer.lastHitAccepted = CurTime()
 
-	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price), Color(255, 0, 255))
+	DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price).. " for reason " nil, Color(255, 0, 255))
 end
 
-function DarkRP.hooks:onHitCompleted(hitman, target, customer)
+function DarkRP.hooks:onHitCompleted(hitman, target, customer, reason)
 	net.Start("onHitCompleted")
 		net.WriteEntity(hitman)
 		net.WriteEntity(target)
 		net.WriteEntity(customer)
+                net.WriteEntity(reason)
 	net.Broadcast()
 
 	DarkRP.notifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Nick()))
 
 	local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price),
+	DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price) .. ", for reason " .. nil,
 		Color(255, 0, 255))
 
 	target:setDarkRPVar("lastHitTime", CurTime())
