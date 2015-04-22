@@ -77,6 +77,25 @@ DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.hookStub{
+	name = "onKeysMenuOpened",
+	description = "Called when the keys menu is opened.",
+	parameters = {
+		{
+			name = "ent",
+			description = "The door entity.",
+			type = "Entity"
+		},
+		{
+			name = "Frame",
+			description = "The keys menu frame.",
+			type = "Panel"
+		}
+	},
+	returns = {
+	}
+}
+
 local KeyFrameVisible = false
 function DarkRP.openKeysMenu(um)
 	if KeyFrameVisible then return end
@@ -198,6 +217,7 @@ function DarkRP.openKeysMenu(um)
 	else
 		Frame:Close()
 	end
+	hook.Call("onKeysMenuOpened", nil, ent, Frame)
 
 	Frame:Center()
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
