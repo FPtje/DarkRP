@@ -58,6 +58,21 @@ DarkRP.PLAYER.getHitPrice = DarkRP.stub{
 	metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.getHitReason = DarkRP.stub{
+	name = "getHitReason",
+	description = "Get the reason why the hit was placed",
+	parameters = {
+	},
+	returns = {
+		{
+			name = "answer",
+			description = "The hit reason",
+			type = "string"
+		}
+	},
+	metatable = DarkRP.PLAYER
+}
+
 DarkRP.addHitmanTeam = DarkRP.stub{
 	name = "addHitmanTeam",
 	description = "Make this team a hitman.",
@@ -112,7 +127,12 @@ DarkRP.hookStub{
 			name = "price",
 			description = "The agreed upon price.",
 			type = "number"
-		}
+		},
+                {
+		        name = "reason",
+		        description = "The reason for the hit.",
+		        type = "Player"
+		},
 	},
 	returns = {
 		{
