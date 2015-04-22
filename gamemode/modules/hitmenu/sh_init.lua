@@ -17,6 +17,10 @@ function plyMeta:getHitPrice()
 	return self:getDarkRPVar("hitPrice") or GAMEMODE.Config.minHitPrice
 end
 
+function plyMeta:getHitReason()
+	return self:getDarkRPVar("hitReason")
+end
+
 function DarkRP.addHitmanTeam(job)
 	if not job or not RPExtraTeams[job] then return end
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["hitmen"][RPExtraTeams[job].command] then return end
@@ -26,7 +30,8 @@ end
 
 DarkRP.getHitmanTeams = fp{fn.Id, hitmanTeams}
 
-function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
+function DarkRP.hooks:canRequestHit(hitman, customer, target, price, reason)
+        if not reason or string.len(reason) == 0 then return false, DarkRP.getPhrase("hitman_specify_reason") end
 	if not hitman:isHitman() then return false, DarkRP.getPhrase("player_not_hitman") end
 	if customer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return false, DarkRP.getPhrase("distance_too_big") end
 	if hitman == target then return false, DarkRP.getPhrase("hitman_no_suicide") end
@@ -49,6 +54,7 @@ DarkRPVars
 ---------------------------------------------------------------------------*/
 DarkRP.registerDarkRPVar("hasHit", net.WriteBit, fn.Compose{tobool, net.ReadBit})
 DarkRP.registerDarkRPVar("hitTarget", net.WriteEntity, net.ReadEntity)
+DarkRP.registerDarkRPVar("hitReason", net.WriteEntity, net.ReadEntity)
 DarkRP.registerDarkRPVar("hitPrice", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
 DarkRP.registerDarkRPVar("lastHitTime", fn.Curry(fn.Flip(net.WriteInt), 2)(32), fn.Partial(net.ReadInt, 32))
 
