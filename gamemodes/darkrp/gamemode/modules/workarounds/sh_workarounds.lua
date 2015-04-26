@@ -47,7 +47,6 @@ if CLIENT then
 		if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
 
 		-- Fuck up APAnti
-		show(net.Receivers)
 		net.Receivers.sblockgmspawn = nil
 		hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
 	end)
