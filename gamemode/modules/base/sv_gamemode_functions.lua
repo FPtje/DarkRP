@@ -651,6 +651,7 @@ function GM:PlayerSpawn(ply)
 	local _, pos = self:PlayerSelectSpawn(ply)
 	ply:SetPos(pos)
 	ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
+	ply:SetMaxHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
 
 	if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSpawn then
 		RPExtraTeams[ply:Team()].PlayerSpawn(ply)
