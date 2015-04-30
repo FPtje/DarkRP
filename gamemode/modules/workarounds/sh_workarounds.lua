@@ -45,10 +45,6 @@ if CLIENT then
 	---------------------------------------------------------------------------*/
 	hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 		if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
-
-		-- Fuck up APAnti
-		net.Receivers.sblockgmspawn = nil
-		hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
 	end)
 
 	local camstart3D = cam.Start3D
@@ -126,15 +122,6 @@ hook.Add("PlayerSpawn", "AntiMapKill", function(ply)
 			ply:AddDeaths(-1)
 		end
 	end)
-end)
-
-
-/*---------------------------------------------------------------------------
-Fuck up APAnti. These hooks send unnecessary net messages.
----------------------------------------------------------------------------*/
-timer.Simple(3, function()
-	hook.Remove("Move", "_APA.Settings.AllowGMSpawn")
-	hook.Remove("PlayerSpawnObject", "_APA.Settings.AllowGMSpawn")
 end)
 
 /*---------------------------------------------------------------------------
