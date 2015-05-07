@@ -15,7 +15,7 @@ net.Receive("DarkRP_preferredjobmodels", function(len, ply)
 	end
 
 	if not received[ply] and preferredJobModels[ply][ply:Team()] then
-		GAMEMODE:PlayerSetModel(ply)
+		gamemode.Call("PlayerSetModel", ply)
 	end
 
 	received[ply] = true
