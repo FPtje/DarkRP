@@ -1,8 +1,8 @@
 AddCSLuaFile();
 
 if CLIENT then
-	SWEP.Author = "fprp Developers"
-	SWEP.PrintName = "the cock glock"
+	SWEP.Author = "fprp shitposters"
+	SWEP.PrintName = "the cock glock stock shot"
 	SWEP.Instructions = "shoot a b0ss with it"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
@@ -29,7 +29,7 @@ SWEP.Primary.Sound = Sound("Weapon_Glock.Single");
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Unrecoil = 0
 SWEP.Primary.Damage = math.huge // Damage wasn't good enough for the mlgness
-SWEP.Primary.NumShots = 10
+SWEP.Primary.NumShots = math.huge // mlg shotgun now
 SWEP.Primary.Cone = 0.05
 SWEP.Primary.ClipSize = 200
 SWEP.Primary.Delay = 0.01
