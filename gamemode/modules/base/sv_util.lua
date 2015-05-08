@@ -1,18 +1,15 @@
+util.AddNetworkString("DarkRP_Notify")
+
 function DarkRP.notify(ply, msgtype, len, msg)
-	if not IsValid(ply) then return end
-	umsg.Start("_Notify", ply)
-		umsg.String(msg)
-		umsg.Short(msgtype)
-		umsg.Long(len)
-	umsg.End()
+	net.Start("DarkRP_Notify")
+		net.WriteUInt(msgtype, 4)
+		net.WriteUInt(len, 32)
+		net.WriteString(msg)
+	net.Send(ply)
 end
 
 function DarkRP.notifyAll(msgtype, len, msg)
-	umsg.Start("_Notify")
-		umsg.String(msg)
-		umsg.Short(msgtype)
-		umsg.Long(len)
-	umsg.End()
+	DarkRP.notify(player.GetAll(), msgtype, len, msg)
 end
 
 function DarkRP.printMessageAll(msgtype, msg)

@@ -362,15 +362,16 @@ end
 /*---------------------------------------------------------------------------
 Display notifications
 ---------------------------------------------------------------------------*/
-local function DisplayNotify(msg)
-	local txt = msg:ReadString()
-	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
+local function DisplayNotify(len)
+	local msgtype, time, txt = net.ReadUInt(4), net.ReadUInt(32), net.ReadString()
+
+	GAMEMODE:AddNotify(txt, msgtype, time)
 	surface.PlaySound("buttons/lightswitch2.wav")
 
 	-- Log to client console
-	print(txt)
+	MsgC(Color(255, 20, 20, 255), "[DarkRP] ", Color(200, 200, 200, 255), txt, "\n")
 end
-usermessage.Hook("_Notify", DisplayNotify)
+net.Receive("DarkRP_Notify", DisplayNotify)
 
 /*---------------------------------------------------------------------------
 Remove some elements from the HUD in favour of the DarkRP HUD
