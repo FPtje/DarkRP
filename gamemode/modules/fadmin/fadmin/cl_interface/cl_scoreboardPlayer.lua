@@ -16,10 +16,9 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(184, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPlayer(ply, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetVisible(true)
-
-	if FAdmin.ScoreBoard.Player.Controls.AvatarLarge and FAdmin.ScoreBoard.Player.Controls.AvatarLarge:IsValid() and FAdmin.ScoreBoard.Player.Controls.AvatarLarge.Player == ply then
-		FAdmin.ScoreBoard.Player.Controls.AvatarLarge:SetVisible(true)
-	end
+	
+	
+	
 
 	FAdmin.ScoreBoard.Player.InfoPanels = FAdmin.ScoreBoard.Player.InfoPanels or {}
 	for k,v in pairs(FAdmin.ScoreBoard.Player.InfoPanels) do
