@@ -11,6 +11,26 @@ FPP = FPP or {}
 FPP.Groups = {}
 FPP.GroupMembers = {}
 
+net.Receive("FPP_Settings_Update", function()
+	local skipK, skipS, value = net.ReadUInt(8), net.ReadUInt(8), net.ReadDouble()
+	local K, S = 0, 0
+
+	FPP.ForAllSettings(function(k, s)
+		K = K + 1
+		if K ~= skipK then return true end
+		K, S = K - 1, S + 1
+		if S ~= skipS then return end
+
+		FPP.Settings[k][s] = value
+	end)
+end)
+
+net.Receive("FPP_Settings", function()
+	FPP.ForAllSettings(function(k, s, v)
+		FPP.Settings[k][s] = net.ReadDouble()
+	end)
+end)
+
 function FPP.AdminMenu(Panel)
 	AdminPanel = Panel
 	AdminPanel:SetSize(100, 400)
@@ -55,7 +75,7 @@ function FPP.AdminMenu(Panel)
 		local box = plist:Add("DCheckBoxLabel")
 		box:SetText(label)
 		box:SetDark(true)
-		box:SetValue(tobool(GetConVarNumber("_"..command[1].."_"..command[2])))
+		box:SetValue(tobool(FPP.Settings[command[1]][command[2]]))
 		box.Button.Toggle = function()
 			if not superadmin then return end--Hehe now you can't click it anymore non-admin!
 			if box.Button:GetChecked() == nil or not box.Button:GetChecked() then
@@ -133,12 +153,12 @@ function FPP.AdminMenu(Panel)
 		sldr:SetDecimals(decimals)
 		sldr:SetText(text)
 		sldr:SetDark(true)
-		sldr:SetValue(GetConVarNumber("_"..command[1].."_"..command[2]))
+		sldr:SetValue(FPP.Settings[command[1]][command[2]])
 		function sldr.Slider:OnMouseReleased()
 			self:SetDragging( false )
 			self:MouseCapture( false )
 			if not superadmin then
-				sldr:SetValue(GetConVarNumber("_"..command[1].."_"..command[2]))
+				sldr:SetValue(FPP.Settings[command[1]][command[2]])
 				return
 			end
 			RunConsoleCommand("FPP_Setting", command[1], command[2], sldr:GetValue())
@@ -278,7 +298,7 @@ function FPP.AdminMenu(Panel)
 		frame:SetVisible(true)
 		frame:SetSize(math.Min(1280, ScrW() - 100), math.Min(720, ScrH() - 100))
 		frame:Center()
-		frame:SetTitle(((tobool(GetConVarNumber("_FPP_BLOCKMODELSETTINGS1_iswhitelist")) and "Allowed") or "Blocked") .. " models list")
+		frame:SetTitle(((tobool(FPP.Settings.BLOCKMODELSETTINGS1.iswhitelist) and "Allowed") or "Blocked") .. " models list")
 		function frame:Close()
 			ShowBlockedModels = nil
 			self:Remove()

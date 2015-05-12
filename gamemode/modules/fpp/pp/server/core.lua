@@ -463,7 +463,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 		end
 	end
 
-	local ent = ENT or trace.Entity
+	local ent = IsEntity(ENT) and ENT or trace.Entity
 
 	if IsEntity(ent) and type(ent.CanTool) == "function" and ent:GetClass() ~= "gmod_cameraprop" then
 		local val = ent:CanTool(ply, trace, tool, ENT)
