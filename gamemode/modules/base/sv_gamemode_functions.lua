@@ -536,6 +536,10 @@ local function initPlayer(ply)
 	end
 end
 
+
+local DisconnectList = {}
+
+
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
@@ -551,18 +555,30 @@ function GM:PlayerInitialSpawn(ply)
 			ply:SetUserGroup(group)
 		end
 	end)
+	
 
-	for k,v in pairs(ents.GetAll()) do
-		if IsValid(v) and v:GetTable() and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
-			v.SID = ply.SID
-			if v.Setowning_ent then
-				v:Setowning_ent(ply)
+	if GAMEMODE.Config.entremovedelay>0 then
+	
+		if not DisconnectList then DisconnectList = {} end
+		local cid = ply:SteamID64()
+
+		if DisconnectList[cid] then
+			for k,v in pairs(ents.GetAll()) do
+				if IsValid(v) and v:GetTable() and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
+					v.SID = ply.SID
+					if v.Setowning_ent then
+						v:Setowning_ent(ply)
+					end
+					v.deleteSteamID = nil
+					timer.Destroy("Remove"..v:EntIndex())
+					ply:addCustomEntity(v.DarkRPItem)
+
+					if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
+				end
 			end
-			v.deleteSteamID = nil
-			timer.Destroy("Remove"..v:EntIndex())
-			ply:addCustomEntity(v.DarkRPItem)
 
-			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
+			timer.Destroy("RemLeave"..cid)
+			DisconnectList[cid] = nil
 		end
 	end
 end
@@ -748,23 +764,47 @@ local function removeDelayed(ent, ply)
 	local removedelay = GAMEMODE.Config.entremovedelay
 
 	ent.deleteSteamID = ply:SteamID()
-	timer.Create("Remove"..ent:EntIndex(), removedelay, 1, function()
-		for _, pl in pairs(player.GetAll()) do
-			if IsValid(pl) and IsValid(ent) and pl:SteamID() == ent.deleteSteamID then
-				ent.SID = pl.SID
-				ent.deleteSteamID = nil
-				return
-			end
-		end
 
+	if removedelay>0 then	
+
+		timer.Create("Remove"..ent:EntIndex(), removedelay, 1, function()
+	
+				for _, pl in pairs(player.GetAll()) do
+					if IsValid(pl) and IsValid(ent) and pl:SteamID() == ent.deleteSteamID then
+						ent.SID = pl.SID
+						ent.deleteSteamID = nil
+						return
+					end
+				end
+	
+			SafeRemoveEntity(ent)
+		end)
+
+	else
 		SafeRemoveEntity(ent)
+	end
+	
+end
+
+local function PlLeave(cid)
+	if not DisconnectList then DisconnectList = {} end
+
+	DisconnectList[cid] = true
+
+	local removedelay = GAMEMODE.Config.entremovedelay
+
+	timer.Create("RemLeave"..cid, removedelay, 1, function()
+		DisconnectList[cid] = nil
 	end)
+
 end
 
 function GM:PlayerDisconnected(ply)
 	self.BaseClass:PlayerDisconnected(ply)
 	timer.Destroy(ply:SteamID() .. "jobtimer")
 	timer.Destroy(ply:SteamID() .. "propertytax")
+
+	PlLeave(ply:SteamID64())
 
 	for k, v in pairs(ents.GetAll()) do
 		local class = v:GetClass()
