@@ -1,3 +1,6 @@
+-- Maintains entities that are to be removed after disconnect
+local queuedForRemoval = {}
+
 /*---------------------------------------------------------------------------
 DarkRP hooks
 ---------------------------------------------------------------------------*/
@@ -536,6 +539,27 @@ local function initPlayer(ply)
 	end
 end
 
+local function restoreReconnectedEnts(ply)
+	local sid = ply:SteamID64()
+	if not queuedForRemoval[sid] then return end
+
+	timer.Destroy("DarkRP_removeDisconnected_" .. sid)
+
+	for _, e in pairs(queuedForRemoval[sid]) do
+		if not IsValid(e) then continue end
+
+		e.SID = ply.SID
+
+		if e.Setowning_ent then
+			e:Setowning_ent(ply)
+		end
+
+		ply:addCustomEntity(e.DarkRPItem)
+	end
+
+	queuedForRemoval[sid] = nil
+end
+
 function GM:PlayerInitialSpawn(ply)
 	self.BaseClass:PlayerInitialSpawn(ply)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID()..") has joined the game", Color(0, 130, 255))
@@ -552,19 +576,7 @@ function GM:PlayerInitialSpawn(ply)
 		end
 	end)
 
-	for k,v in pairs(ents.GetAll()) do
-		if IsValid(v) and v:GetTable() and v.deleteSteamID == ply:SteamID() and v.DarkRPItem then
-			v.SID = ply.SID
-			if v.Setowning_ent then
-				v:Setowning_ent(ply)
-			end
-			v.deleteSteamID = nil
-			timer.Destroy("Remove"..v:EntIndex())
-			ply:addCustomEntity(v.DarkRPItem)
-
-			if v.dt and v.Setowning_ent then v:Setowning_ent(ply) end
-		end
-	end
+	restoreReconnectedEnts(ply)
 end
 
 function GM:PlayerSelectSpawn(ply)
@@ -744,21 +756,52 @@ end
 /*---------------------------------------------------------------------------
 Remove with a delay if the player doesn't rejoin before the timer has run out
 ---------------------------------------------------------------------------*/
-local function removeDelayed(ent, ply)
+local function removeDelayed(entList, ply)
 	local removedelay = GAMEMODE.Config.entremovedelay
 
-	ent.deleteSteamID = ply:SteamID()
-	timer.Create("Remove"..ent:EntIndex(), removedelay, 1, function()
-		for _, pl in pairs(player.GetAll()) do
-			if IsValid(pl) and IsValid(ent) and pl:SteamID() == ent.deleteSteamID then
-				ent.SID = pl.SID
-				ent.deleteSteamID = nil
-				return
-			end
+	if removedelay <= 0 then
+		for _, e in pairs(entList) do
+			SafeRemoveEntity(e)
 		end
 
-		SafeRemoveEntity(ent)
+		return
+	end
+
+	local sid = ply:SteamID64()
+	queuedForRemoval[sid] = entList
+
+	timer.Create("DarkRP_removeDisconnected_" .. sid, removedelay, 1, function()
+		for _, e in pairs(queuedForRemoval[sid] or {}) do
+			SafeRemoveEntity(e)
+		end
+
+		queuedForRemoval[sid] = nil
 	end)
+end
+
+-- Collect entities that are to be removed
+local function collectRemoveEntities(ply)
+	local collect = {}
+	-- Get the classes of entities to remove
+	local remClasses = {}
+	for _, customEnt in pairs(DarkRPEntities) do
+		remClasses[string.lower(customEnt.ent)] = true
+	end
+
+	for k, v in pairs(ents.GetAll()) do
+		if v.SID ~= ply.SID or not v:IsVehicle() and not remClasses[string.lower(v:GetClass())] then continue end
+
+		table.insert(collect, v)
+	end
+
+	if not ply:isMayor() then return collect end
+
+	for _, ent in pairs(ply.lawboards or {}) do
+		if not IsValid(ent) then continue end
+		table.insert(collect, ent)
+	end
+
+	return collect
 end
 
 function GM:PlayerDisconnected(ply)
@@ -766,26 +809,10 @@ function GM:PlayerDisconnected(ply)
 	timer.Destroy(ply:SteamID() .. "jobtimer")
 	timer.Destroy(ply:SteamID() .. "propertytax")
 
-	for k, v in pairs(ents.GetAll()) do
-		local class = v:GetClass()
-		for _, customEnt in pairs(DarkRPEntities) do
-			if class == customEnt.ent and v.SID == ply.SID then
-				removeDelayed(v, ply)
-				break
-			end
-		end
-		if v:IsVehicle() and v.SID == ply.SID then
-			removeDelayed(v, ply)
-		end
-	end
+	local isMayor = ply:isMayor()
 
-	if ply:isMayor() then
-		for _, ent in pairs(ply.lawboards or {}) do
-			if IsValid(ent) then
-				removeDelayed(ent, ply)
-			end
-		end
-	end
+	local remList = collectRemoveEntities(ply)
+	removeDelayed(remList, ply)
 
 	DarkRP.destroyVotesWithEnt(ply)
 
