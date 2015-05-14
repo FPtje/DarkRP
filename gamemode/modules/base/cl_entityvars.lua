@@ -58,6 +58,8 @@ Initialize the DarkRPVars at the start of the game
 local function InitializeDarkRPVars(len)
 	local plyCount = net.ReadUInt(8)
 
+	if ( !DarkRPVar ) then return end
+
 	for i = 1, plyCount, 1 do
 		local userID = net.ReadUInt(16)
 		local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
