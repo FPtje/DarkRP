@@ -1,11 +1,11 @@
-local DarkRPVars = {}
+g_DarkRPVars = g_DarkRPVars or {}
 
 /*---------------------------------------------------------------------------
 interface functions
 ---------------------------------------------------------------------------*/
 local pmeta = FindMetaTable("Player")
 function pmeta:getDarkRPVar(var)
-	local vars = DarkRPVars[self:UserID()]
+	local vars = g_DarkRPVars[self:UserID()]
 	return vars and vars[var] or nil
 end
 
@@ -14,14 +14,14 @@ Retrieve the information of a player var
 ---------------------------------------------------------------------------*/
 local function RetrievePlayerVar(userID, var, value)
 	local ply = Player(userID)
-	DarkRPVars[userID] = DarkRPVars[userID] or {}
+	g_DarkRPVars[userID] = g_DarkRPVars[userID] or {}
 
-	hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID][var], value)
-	DarkRPVars[userID][var] = value
+	hook.Call("DarkRPVarChanged", nil, ply, var, g_DarkRPVars[userID][var], value)
+	g_DarkRPVars[userID][var] = value
 
 	-- Backwards compatibility
 	if IsValid(ply) then
-		ply.DarkRPVars = DarkRPVars[userID]
+		ply.g_DarkRPVars = g_DarkRPVars[userID]
 	end
 end
 
@@ -42,7 +42,7 @@ Retrieve the message to remove a DarkRPVar
 ---------------------------------------------------------------------------*/
 local function doRetrieveRemoval()
 	local userID = net.ReadUInt(16)
-	local vars = DarkRPVars[userID] or {}
+	local vars = g_DarkRPVars[userID] or {}
 	local var = DarkRP.readNetDarkRPVarRemoval()
 	local ply = Player(userID)
 
@@ -58,6 +58,8 @@ Initialize the DarkRPVars at the start of the game
 local function InitializeDarkRPVars(len)
 	local plyCount = net.ReadUInt(8)
 
+	if ( !DarkRPVar ) then return end
+	
 	for i = 1, plyCount, 1 do
 		local userID = net.ReadUInt(16)
 		local varCount = net.ReadUInt(DarkRP.DARKRP_ID_BITS + 2)
@@ -73,7 +75,7 @@ timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
 	local userID = net.ReadUInt(16)
-	DarkRPVars[userID] = nil
+	g_DarkRPVars[userID] = nil
 end)
 
 /*---------------------------------------------------------------------------
