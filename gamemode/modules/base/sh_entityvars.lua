@@ -34,12 +34,10 @@ local function warnRegistration(name)
 	if warningsShown[name] then return end
 	warningsShown[name] = true
 
-	ErrorNoHalt(string.format([[Warning! DarkRPVar '%s' wasn't registered!
+	DarkRP.errorNoHalt(string.format([[Warning! DarkRPVar '%s' wasn't registered!
  		Please contact the author of the DarkRP Addon to fix this.
  		Until this is fixed you don't need to worry about anything. Everything will keep working.
- 		It's just that registering DarkRPVars would make DarkRP faster.]], name))
-
-	debug.Trace()
+ 		It's just that registering DarkRPVars would make DarkRP faster.]], name), 4)
 end
 
 function DarkRP.writeNetDarkRPVar(name, value)
