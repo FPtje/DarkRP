@@ -1,5 +1,5 @@
 local plyMeta = FindMetaTable("Player")
-DarkRP.chatCommands = DarkRP.chatCommands or {}
+local chatCommands = chatCommands or {}
 
 local validChatCommand = {
 	command = isstring,
@@ -24,14 +24,14 @@ function DarkRP.declareChatCommand(tbl)
 	end
 
 	tbl.command = string.lower(tbl.command)
-	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
+	chatCommands[tbl.command] = chatCommands[tbl.command] or tbl
 	for k, v in pairs(tbl) do
-		DarkRP.chatCommands[tbl.command][k] = v
+		chatCommands[tbl.command][k] = v
 	end
 end
 
 function DarkRP.removeChatCommand(command)
-	DarkRP.chatCommands[string.lower(command)] = nil
+	chatCommands[string.lower(command)] = nil
 end
 
 function DarkRP.chatCommandAlias(command, ...)
@@ -39,28 +39,28 @@ function DarkRP.chatCommandAlias(command, ...)
 	for k, v in pairs{...} do
 		name = string.lower(v)
 
-		DarkRP.chatCommands[name] = table.Copy(DarkRP.chatCommands[command])
-		DarkRP.chatCommands[name].command = name
+		chatCommands[name] = table.Copy(chatCommands[command])
+		chatCommands[name].command = name
 	end
 end
 
 function DarkRP.getChatCommand(command)
-	return DarkRP.chatCommands[string.lower(command)]
+	return chatCommands[string.lower(command)]
 end
 
 function DarkRP.getChatCommands()
-	return DarkRP.chatCommands
+	return chatCommands
 end
 
 function DarkRP.getSortedChatCommands()
-	local tbl = fn.Compose{table.ClearKeys, table.Copy, DarkRP.getChatCommands}()
+	local tbl = fn.Compose{table.ClearKeys, table.Copy, chatCommands}()
 	table.SortByMember(tbl, "command", true)
 
 	return tbl
 end
 
 -- chat commands that have been defined, but not declared
-DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(DarkRP.chatCommands)
+DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(chatCommands)
 
 /*---------------------------------------------------------------------------
 Chat commands
