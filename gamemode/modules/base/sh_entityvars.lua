@@ -69,7 +69,7 @@ function DarkRP.readNetDarkRPVar()
 	local DarkRPVarId = net.ReadUInt(DARKRP_ID_BITS)
 	local DarkRPVar = DarkRPVarById[DarkRPVarId]
 
-	if DarkRPVarId == UNKNOWN_DARKRPVAR then
+	if DarkRPVarId == UNKNOWN_DARKRPVAR or !DarkRPVar then
 		local name, value = readUnknown()
 
 		return name, value
