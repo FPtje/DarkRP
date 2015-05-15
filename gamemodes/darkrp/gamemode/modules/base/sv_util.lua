@@ -1,5 +1,4 @@
 function DarkRP.notify(ply, msgtype, len, msg)
-	if not IsValid(ply) then return end
 	umsg.Start("_Notify", ply)
 		umsg.String(msg)
 		umsg.Short(msgtype)

@@ -87,9 +87,11 @@ FPP.Settings.FPP_BLOCKMODELSETTINGS1 = {
 	iswhitelist = 0
 }
 
-
-for Protection, Settings in pairs(FPP.Settings) do
-	for Option, value in pairs(Settings) do
-		CreateConVar("_"..Protection.."_"..Option, value, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+function FPP.ForAllSettings(fn)
+	-- Loop in sorted pairs for deterministic order
+	for kind, sets in SortedPairs(FPP.Settings) do
+		for setting, val in SortedPairs(sets) do
+			if fn(kind, setting, val) then break end
+		end
 	end
 end
