@@ -30,8 +30,8 @@ function meta:payDay()
 			if amount == 0 or not amount then
 				if not suppress then fprp.notify(self, 4, 4, message or fprp.getPhrase("payday_unemployed")) end
 			else
-				self:addshekel(amount);
-				if not suppress then fprp.notify(self, 4, 4, message or fprp.getPhrase("payday_message", fprp.formatshekel(amount))) end
+				self:addshekel(-amount);
+				if not suppress then fprp.notify(self, 4, 4, message or fprp.getPhrase("payday_message", fprp.formatshekel(-amount))) end
 			end
 		end);
 	else
