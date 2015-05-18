@@ -38,7 +38,7 @@ local function SetAFK(ply)
 		ply:Spawn()
 		ply:UnLock()
 
-		ply:SetHealth(ply.lastHealth or 100)
+		ply:SetHealth(ply.lastHealth and ply.lastHealth > 0 and ply.lastHealth or 100)
 		ply.lastHealth = nil
 	end
 	ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
