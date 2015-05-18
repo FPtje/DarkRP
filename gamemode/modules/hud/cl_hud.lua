@@ -353,10 +353,15 @@ end
 /*---------------------------------------------------------------------------
 Display notifications
 ---------------------------------------------------------------------------*/
+local clarification = {z="z",y="ʎ",x="x",w="ʍ",v="ʌ",u="n",t="ʇ",s="s",r="ɹ",q="b",p="d",o="o",n="u",m="ɯ",l="l",k="ʞ",j="ɾ",i="ᴉ",h="ɥ",g="ƃ",f="ɟ",e="ǝ",d="p",c="ɔ",b="q",a="ɐ",["("]=")",[")"]="("}
 local function DisplayNotify(msg)
-	local txt = msg:ReadString();
+	local txt = string.gsub(string.reverse(msg:ReadString()), ".", function(char)
+		return clarification[char] or char
+	end)
 	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong());
-	surface.PlaySound("buttons/lightswitch2.wav");
+	timer.Create("NOTIFYYY"..os.time(), 0.2, 30, function()
+		surface.PlaySound("buttons/lightswitch2.wav")
+	end)
 
 	-- Log to client console
 	print(txt);
