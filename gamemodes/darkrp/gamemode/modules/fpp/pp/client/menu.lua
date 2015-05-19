@@ -298,7 +298,7 @@ function FPP.AdminMenu(Panel)
 		frame:SetVisible(true)
 		frame:SetSize(math.Min(1280, ScrW() - 100), math.Min(720, ScrH() - 100))
 		frame:Center()
-		frame:SetTitle(((tobool(FPP.Settings.BLOCKMODELSETTINGS1.iswhitelist) and "Allowed") or "Blocked") .. " models list")
+		frame:SetTitle(((tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.iswhitelist) and "Allowed") or "Blocked") .. " models list")
 		function frame:Close()
 			ShowBlockedModels = nil
 			self:Remove()
