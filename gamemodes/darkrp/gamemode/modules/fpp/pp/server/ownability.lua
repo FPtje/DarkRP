@@ -142,10 +142,29 @@ local function calculateCanTouchForType(ply, ent, touchType)
 end
 
 local blockedEnts = {
-	["env_sprite"] = true,
-	["ambient_generic"] = true,
 	["ai_network"] = true,
+	["ambient_generic"] = true,
+	["beam"] = true,
+	["bodyque"] = true,
+	["env_soundscape"] = true,
+	["env_sprite"] = true,
+	["env_sun"] = true,
+	["env_tonemap_controller"] = true,
+	["func_useableladder"] = true,
+	["info_ladder_dismount"] = true,
+	["info_player_start"] = true,
+	["info_player_terrorist"] = true,
+	["light_environment"] = true,
+	["light_spot"] = true,
+	["physgun_beam"] = true,
 	["player_manager"] = true,
+	["point_spotlight"] = true,
+	["predicted_viewmodel"] = true,
+	["scene_manager"] = true,
+	["shadow_control"] = true,
+	["soundent"] = true,
+	["spotlight_end"] = true,
+	["water_lod_control"] = true,
 	["gmod_gamerules"] = true,
 	["bodyqueue"] = true,
 	["phys_bone_follower"] = true,
@@ -182,7 +201,6 @@ function FPP.recalculateCanTouch(players, entities)
 	for k,v in pairs(entities) do
 		if not IsValid(v) then entities[k] = nil continue end
 		if v:GetSolid() == 0 or v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
-		if not v:GetPhysicsObject():IsValid() then entities[k] = nil continue end
 		if blockedEnts[v:GetClass()] then entities[k] = nil continue end
 	end
 
@@ -363,7 +381,6 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 	for i, ent in pairs(entities) do
 		if not IsValid(ent) then entities[i] = nil continue end
 		if ent:GetSolid() == 0 or ent:IsEFlagSet(EFL_SERVER_ONLY) then entities[i] = nil continue end
-		if not ent:GetPhysicsObject():IsValid() then entities[i] = nil continue end
 		if blockedEnts[ent:GetClass()] then entities[i] = nil continue end
 
 		ent.FPPRestrictConstraint = ent.FPPRestrictConstraint or {}
