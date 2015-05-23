@@ -7,6 +7,9 @@ surface.CreateFont("F1AddressBar", {
 
 local PANEL = {}
 
+-- Remove any Javascript warnings
+function PANEL:ConsoleMessage() end
+
 function PANEL:Init()
 	self.BaseClass.Init(self)
 
