@@ -300,6 +300,7 @@ local function RetrieveBlocked()
 			FPP.Blocked.Physgun1 = {
 				["func_breakable_surf"] = true,
 				["func_brush"] = true,
+				["func_button"] = true,
 				["func_door"] = true,
 				["prop_door_rotating"] = true,
 				["func_door_rotating"] = true
@@ -318,6 +319,7 @@ local function RetrieveBlocked()
 			FPP.Blocked.Gravgun1 = {["func_breakable_surf"] = true, ["vehicle_"] = true}
 			FPP.Blocked.Toolgun1 = {
 				["func_breakable_surf"] = true,
+				["func_button"] = true,
 				["player"] = true,
 				["func_door"] = true,
 				["prop_door_rotating"] = true,
