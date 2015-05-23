@@ -14,13 +14,18 @@ function PANEL:Rebuild()
 	local lHeight, rHeight = 0, 0
 	local height = 0
 	local k = 0
+	local lastVisible = 0
+	for i, item in pairs(self.Items) do
+		if item:IsVisible() then lastVisible = i end
+	end
+
 	for i, item in pairs(self.Items) do
 		if not item:IsVisible() then continue end
 		k = k + 1
 		local goRight = k % 2 == 0
 
 		-- Make last item stretch if it's the first and last
-		if k == #self.Items and k == 1 then
+		if k == lastVisible and k == 1 then
 			item:SetWide(self:GetWide())
 			item:SetPos(0, lHeight)
 			lHeight = lHeight + item:GetTall() + 2
@@ -62,7 +67,6 @@ derma.DefineControl("F4MenuEntitiesBase", "", PANEL, "DPanelList")
 -- Create categories for an entity tab
 local function createCategories(self, categories, itemClick, canBuy)
 	for _, cat in pairs(categories) do
-		if #cat.members == 0 or isfunction(cat.canSee) and not cat.canSee(LocalPlayer()) then continue end
 		local dCat = vgui.Create("F4MenuCategory", self)
 
 		dCat:SetButtonFactory(function(item, ui)
