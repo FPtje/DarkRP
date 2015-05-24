@@ -314,12 +314,31 @@ local function ExecSwitchJob(answer, ent, ply, target)
 	if not tobool(answer) then return end
 	local Pteam = ply:Team()
 	local Tteam = target:Team()
-
-	if not ply:changeTeam(Tteam) then return end
-	if not target:changeTeam(Pteam) then
-		ply:changeTeam(Pteam, true) -- revert job change
-		return
+	
+	if Pteam==Tteam then return end
+	
+	if ply.bannedfrom then
+		
+		if ply.bannedfrom[DarkRP.getDemoteGroup(Tteam)] then
+			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", team.GetName(Tteam), ""))
+			return
+		end
+		
 	end
+
+	if target.bannedfrom then
+		
+		if target.bannedfrom[DarkRP.getDemoteGroup(Pteam)] then
+			DarkRP.notify(target, 1, 4, DarkRP.getPhrase("unable", team.GetName(Pteam), ""))
+			return
+		end
+		
+	end
+	
+	//swap
+	ply:changeTeam(Tteam,true)
+	target:changeTeam(Pteam,true)
+
 	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("job_switch"))
 	DarkRP.notify(target, 2, 4, DarkRP.getPhrase("job_switch"))
 end
