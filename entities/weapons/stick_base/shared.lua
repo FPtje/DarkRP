@@ -37,6 +37,13 @@ SWEP.Secondary.Ammo = ""
 
 function SWEP:Initialize()
 	self:SetHoldType("normal")
+
+	if SERVER then return end
+
+	CreateMaterial("darkrp/"..self:GetClass(), "VertexLitGeneric", {
+		["$basetexture"] = "models/debug/debugwhite",
+		["$model"] = 1
+	}):SetVector("$color2", self.StickColor:ToVector())
 end
 
 function SWEP:SetupDataTables()
@@ -64,8 +71,7 @@ function SWEP:Deploy()
 	if SERVER then
 		self:HookStartCommand()
 		if not game.SinglePlayer() then self:CallOnClient("HookStartCommand") end
-		self:SetColor(self.StickColor)
-		self:SetMaterial("models/shiny")
+		self:SetMaterial("!darkrp/"..self:GetClass())
 	end
 	local vm = self:GetOwner():GetViewModel()
 	if not IsValid(vm) then return true end
@@ -76,22 +82,21 @@ end
 
 function SWEP:PreDrawViewModel(vm)
 	if not IsValid(vm) then return end
-	local colVec = self.StickColor:ToVector()
-	render.SetColorModulation(colVec.x, colVec.y, colVec.z)
-	vm:SetMaterial("models/shiny")
+	for i = 9, 15 do
+		vm:SetSubMaterial(i, "!darkrp/"..self:GetClass())
+	end
 end
 
 function SWEP:ViewModelDrawn(vm)
 	if not IsValid(vm) then return end
-	vm:SetMaterial("")
+	vm:SetSubMaterial() -- clear sub-materials
 end
 
 function SWEP:ResetStick(force)
 	if game.SinglePlayer() then force = true end
 	if not IsValid(self:GetOwner()) or (not force and (not IsValid(self:GetOwner():GetActiveWeapon()) or self:GetOwner():GetActiveWeapon():GetClass() ~= self:GetClass())) then return end
 	if SERVER then
-		self:SetColor(Color(255, 255, 255))
-		self:SetMaterial("")
+		self:SetMaterial() -- clear material
 	end
 	self:SetSeqIdling(false)
 	self:SetSeqIdleTime(0)
