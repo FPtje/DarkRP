@@ -74,10 +74,16 @@ function SWEP:Deploy()
 	return true
 end
 
-function SWEP:PreDrawViewModel()
-	if SERVER or not IsValid(self:GetOwner()) or not IsValid(self:GetOwner():GetViewModel()) then return end
-	self:GetOwner():GetViewModel():SetColor(self.StickColor)
-	self:GetOwner():GetViewModel():SetMaterial("models/shiny")
+function SWEP:PreDrawViewModel(vm)
+	if not IsValid(vm) then return end
+	local colVec = self.StickColor:ToVector()
+	render.SetColorModulation(colVec.x, colVec.y, colVec.z)
+	vm:SetMaterial("models/shiny")
+end
+
+function SWEP:ViewModelDrawn(vm)
+	if not IsValid(vm) then return end
+	vm:SetMaterial("")
 end
 
 function SWEP:ResetStick(force)
@@ -86,9 +92,6 @@ function SWEP:ResetStick(force)
 	if SERVER then
 		self:SetColor(Color(255, 255, 255))
 		self:SetMaterial("")
-	elseif IsValid(self:GetOwner()) and IsValid(self:GetOwner():GetViewModel()) then
-		self:GetOwner():GetViewModel():SetColor(Color(255, 255, 255))
-		self:GetOwner():GetViewModel():SetMaterial("")
 	end
 	self:SetSeqIdling(false)
 	self:SetSeqIdleTime(0)
