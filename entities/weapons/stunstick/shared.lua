@@ -29,6 +29,13 @@ function SWEP:Initialize()
 		Sound("weapons/stunstick/stunstick_fleshhit1.wav"),
 		Sound("weapons/stunstick/stunstick_fleshhit2.wav")
 	}
+
+	if SERVER then return end
+
+	CreateMaterial("darkrp/stunstick_beam", "UnlitGeneric", {
+		["$basetexture"] = "sprites/lgtning",
+		["$additive"] = 1
+	})
 end
 
 function SWEP:SetupDataTables()
@@ -42,10 +49,41 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 6, "LastReload")
 end
 
+function SWEP:Think()
+	BaseClass.Think(self)
+	if self.WaitingForEffect and self:GetSeqIdleTime() ~= 0 and CurTime() >= self:GetSeqIdleTime() - 0.35 then
+		self.WaitingForEffect = false
+
+		local effectData = EffectData()
+		effectData:SetOrigin(self:GetOwner():GetShootPos() + (self:GetOwner():EyeAngles():Forward() * 45))
+		effectData:SetNormal(self:GetOwner():EyeAngles():Forward())
+		util.Effect("StunstickImpact", effectData)
+	end
+end
+
 function SWEP:DoFlash(ply)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 
 	ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
+end
+
+function SWEP:PostDrawViewModel(vm)
+	if self:GetSeqIdleTime() ~= 0 then
+		local size = 12 - (math.Clamp((CurTime() - self:GetSeqIdleTime()) * 1.25, 0, 1) * 12)
+		local attachment = vm:GetAttachment(1)
+		local pos = attachment.Pos
+		cam.Start3D(EyePos(), EyeAngles())
+			render.SetMaterial(Material("effects/stunstick"))
+			render.DrawSprite(pos, size, size, Color(180, 180, 180))
+			for i = 1, 3 do
+				local randVec = VectorRand() * 3
+				local offset = (attachment.Ang:Forward() * randVec.x) + (attachment.Ang:Right() * randVec.y) + (attachment.Ang:Up() * randVec.z)
+				render.SetMaterial(Material("!darkrp/stunstick_beam"))
+				render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, Color(180, 180, 180))
+				pos = pos + offset
+			end
+		cam.End3D()
+	end
 end
 
 local entMeta = FindMetaTable("Entity")
@@ -63,6 +101,8 @@ function SWEP:DoAttack(dmg)
 		self:GetOwner():EmitSound(self.Hit[math.random(1,#self.Hit)])
 		return
 	end
+
+	self.WaitingForEffect = true
 
 	local ent = self:GetOwner():getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self:GetOwner()}, fc{IsValid, entMeta.GetPhysicsObject}})
 
