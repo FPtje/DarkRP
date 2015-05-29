@@ -42,6 +42,10 @@ function SWEP:Initialize()
 
 	CreateMaterial("darkrp/"..self:GetClass(), "VertexLitGeneric", {
 		["$basetexture"] = "models/debug/debugwhite",
+		["$surfaceprop"] = "metal",
+		["$envmap"] = "env_cubemap",
+		["$envmaptint"] = "[ .5 .5 .5 ]",
+		["$selfillum"] = 0,
 		["$model"] = 1
 	}):SetVector("$color2", self.StickColor:ToVector())
 end
