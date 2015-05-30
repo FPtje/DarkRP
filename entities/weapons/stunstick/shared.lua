@@ -10,7 +10,7 @@ end
 
 DEFINE_BASECLASS("stick_base")
 
-SWEP.Instructions = "Left click to discipline\nRight click to kill\nReload to threaten"
+SWEP.Instructions = "Left click to discipline\nRight click to kill\nHold reload to threaten"
 
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
@@ -87,7 +87,7 @@ end
 
 function SWEP:DrawWorldModel()
 	self:DrawModel()
-	if CurTime() <= self:GetLastReload() + 1 then
+	if CurTime() <= self:GetLastReload() + 0.1 then
 		local attachment = self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
 		local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
 		cam.Start3D(EyePos(), EyeAngles())
@@ -157,7 +157,7 @@ end
 
 function SWEP:Reload()
 	self:SetHoldType("melee")
-	self:SetHoldTypeChangeTime(CurTime() + 1)
+	self:SetHoldTypeChangeTime(CurTime() + 0.1)
 
 	if self:GetLastReload() + 0.1 > CurTime() then self:SetLastReload(CurTime()) return end
 	self:SetLastReload(CurTime())
