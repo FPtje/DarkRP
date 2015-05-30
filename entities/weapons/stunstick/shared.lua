@@ -51,8 +51,8 @@ end
 
 function SWEP:Think()
 	BaseClass.Think(self)
-	if self.WaitingForEffect and self:GetSeqIdleTime() ~= 0 and CurTime() >= self:GetSeqIdleTime() - 0.35 then
-		self.WaitingForEffect = false
+	if self.WaitingForAttackEffect and self:GetSeqIdleTime() ~= 0 and CurTime() >= self:GetSeqIdleTime() - 0.35 then
+		self.WaitingForAttackEffect = false
 
 		local effectData = EffectData()
 		effectData:SetOrigin(self:GetOwner():GetShootPos() + (self:GetOwner():EyeAngles():Forward() * 45))
@@ -68,13 +68,12 @@ function SWEP:DoFlash(ply)
 end
 
 function SWEP:PostDrawViewModel(vm)
-	if self:GetSeqIdleTime() ~= 0 then
-		local size = 12 - (math.Clamp((CurTime() - self:GetSeqIdleTime()) * 1.25, 0, 1) * 12)
+	if self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1 then
 		local attachment = vm:GetAttachment(1)
 		local pos = attachment.Pos
 		cam.Start3D(EyePos(), EyeAngles())
 			render.SetMaterial(Material("effects/stunstick"))
-			render.DrawSprite(pos, size, size, Color(180, 180, 180))
+			render.DrawSprite(pos, 12, 12, Color(180, 180, 180))
 			for i = 1, 3 do
 				local randVec = VectorRand() * 3
 				local offset = (attachment.Ang:Forward() * randVec.x) + (attachment.Ang:Right() * randVec.y) + (attachment.Ang:Up() * randVec.z)
@@ -82,6 +81,18 @@ function SWEP:PostDrawViewModel(vm)
 				render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, Color(180, 180, 180))
 				pos = pos + offset
 			end
+		cam.End3D()
+	end
+end
+
+function SWEP:DrawWorldModel()
+	self:DrawModel()
+	if CurTime() <= self:GetLastReload() + 1 then
+		local attachment = self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
+		local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
+		cam.Start3D(EyePos(), EyeAngles())
+			render.SetMaterial(Material("sprites/light_glow02_add"))
+			render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
 		cam.End3D()
 	end
 end
@@ -102,7 +113,7 @@ function SWEP:DoAttack(dmg)
 		return
 	end
 
-	self.WaitingForEffect = true
+	self.WaitingForAttackEffect = true
 
 	local ent = self:GetOwner():getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self:GetOwner()}, fc{IsValid, entMeta.GetPhysicsObject}})
 
