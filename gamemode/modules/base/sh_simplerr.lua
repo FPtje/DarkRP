@@ -66,7 +66,7 @@ hook.Add("onSimplerrError", "DarkRP_Simplerr", annoyAdmins)
 
 -- Annoy joining admin with errors
 local function annoyAdmin(ply)
-    if not ply:IsAdmin() then return end
+    if not IsValid(ply) or not ply:IsAdmin() then return end
     local errs = table.Copy(simplerr.getLog())
     if #errs == 0 then return end
 
