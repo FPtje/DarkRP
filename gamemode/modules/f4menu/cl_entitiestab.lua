@@ -5,7 +5,7 @@ local PANEL = {}
 
 function PANEL:Init()
 	self:EnableVerticalScrollbar()
-	self:generateButtons()
+	timer.Simple(0, function() if ValidPanel(self) then self:generateButtons() end end)
 end
 
 function PANEL:Rebuild()
