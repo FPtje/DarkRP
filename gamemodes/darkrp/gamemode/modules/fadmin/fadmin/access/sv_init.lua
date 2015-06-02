@@ -114,6 +114,7 @@ end
 local function AddGroup(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 	local admin = tonumber(args[2])
+	if not args[1] or not admin then FAdmin.Messages.SendMessage(ply, 5, "Incorrect arguments!") return false end
 	local privs = {}
 	for priv, am in SortedPairs(FAdmin.Access.Privileges) do
 		if am <= admin + 1 then privs[priv] = true end
@@ -167,7 +168,7 @@ function FAdmin.Access.SendGroups(ply)
 
 	net.Start("FADMIN_SendGroups")
 		net.WriteTable(FAdmin.Access.Groups)
-	net.Send(ply)
+	net.Send(IsValid(ply) and ply or player.GetAll())
 end
 
 -- FAdmin SetAccess <player> <groupname> [new_groupadmin, new_groupprivs]
