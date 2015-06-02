@@ -167,7 +167,7 @@ function FAdmin.Access.SendGroups(ply)
 
 	net.Start("FADMIN_SendGroups")
 		net.WriteTable(FAdmin.Access.Groups)
-	net.Send(ply)
+	net.Send(IsValid(ply) and ply or player.GetAll())
 end
 
 -- FAdmin SetAccess <player> <groupname> [new_groupadmin, new_groupprivs]
