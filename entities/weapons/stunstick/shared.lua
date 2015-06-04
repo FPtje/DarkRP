@@ -86,15 +86,17 @@ function SWEP:PostDrawViewModel(vm)
 end
 
 function SWEP:DrawWorldModel()
-	self:DrawModel()
-	if CurTime() <= self:GetLastReload() + 0.1 then
-		local attachment = self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
-		local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
-		cam.Start3D(EyePos(), EyeAngles())
-			render.SetMaterial(Material("sprites/light_glow02_add"))
-			render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
-		cam.End3D()
-	end
+    self:DrawModel()
+    if CurTime() <= self:GetLastReload() + 0.1 then
+        local attachment = self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
+        if attachment != nil then
+            local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
+            cam.Start3D(EyePos(), EyeAngles())
+                render.SetMaterial(Material("sprites/light_glow02_add"))
+                render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
+            cam.End3D()
+        end
+    end
 end
 
 local entMeta = FindMetaTable("Entity")
