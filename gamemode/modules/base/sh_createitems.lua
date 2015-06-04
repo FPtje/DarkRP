@@ -698,26 +698,27 @@ end
 function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_seperately, price_seperately, noshipment, classes, shipmodel, CustomCheck)
 	local tableSyntaxUsed = type(model) == "table"
 
-	local AllowedClasses = classes or {}
-	if not classes then
-		for k,v in pairs(team.GetAllTeams()) do
-			table.insert(AllowedClasses, k)
-		end
-	end
-
 	local price = tonumber(price)
 	local shipmentmodel = shipmodel or "models/Items/item_item_crate.mdl"
 
 	local customShipment = tableSyntaxUsed and model or
 		{model = model, entity = entity, price = price, amount = Amount_of_guns_in_one_shipment,
-		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = AllowedClasses,
+		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = classes,
 		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
 
 	if customShipment.separate ~= nil then
 		customShipment.seperate = customShipment.separate
 	end
+	
+	if customShipment.allowed == nil then
+		customShipment.allowed = {}
+		for k,v in pairs(team.GetAllTeams()) do
+			table.insert(customShipment.allowed, k)
+		end
+	end
+	
 	customShipment.name = name
-	customShipment.allowed = customShipment.allowed or {}
+	customShipment.allowed = customShipment.allowed
 	customShipment.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
