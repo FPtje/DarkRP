@@ -88,7 +88,9 @@ end
 
 function SWEP:DrawWorldModelTranslucent()
 	if CurTime() <= self:GetLastReload() + 0.1 then
-		local bonePos, boneAng = self:GetOwner():GetBonePosition(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand"))
+		local bone = self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand")
+		if not bone then self:DrawModel() return end
+		local bonePos, boneAng = self:GetOwner():GetBonePosition(bone)
 		if bonePos then
 			local pos = bonePos + (boneAng:Up() * -16) + (boneAng:Right() * 3) + (boneAng:Forward() * 6.5)
 			render.SetMaterial(Material("sprites/light_glow02_add"))
