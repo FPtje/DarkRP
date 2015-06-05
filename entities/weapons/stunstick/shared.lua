@@ -4,9 +4,9 @@ if CLIENT then
 	SWEP.PrintName = "Stun Stick"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 5
-	SWEP.RenderGroup = RENDERGROUP_BOTH
 
 	killicon.AddAlias("stunstick", "weapon_stunstick")
+	SWEP.RenderGroup = RENDERGROUP_BOTH
 end
 
 DEFINE_BASECLASS("stick_base")
@@ -88,11 +88,20 @@ end
 
 function SWEP:DrawWorldModelTranslucent()
 	if CurTime() <= self:GetLastReload() + 0.1 then
-		local bonePos, boneAng = self:GetOwner():GetBonePosition(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand"))
+		local bone = self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand")
+		local bonePos, boneAng
+		if bone then bonePos, boneAng = self:GetOwner():GetBonePosition(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand")) end
+		local attachment = self:GetOwner():LookupAttachment("anim_attachment_rh") and self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
 		if bonePos then
 			local pos = bonePos + (boneAng:Up() * -16) + (boneAng:Right() * 3) + (boneAng:Forward() * 6.5)
 			render.SetMaterial(Material("sprites/light_glow02_add"))
 			render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
+		elseif attachment then 
+			local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
+			cam.Start3D(EyePos(), EyeAngles())
+				render.SetMaterial(Material("sprites/light_glow02_add"))
+				render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
+			cam.End3D()
 		end
 	end
 	self:DrawModel()
