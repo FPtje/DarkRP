@@ -88,12 +88,19 @@ end
 function SWEP:DrawWorldModel()
 	self:DrawModel()
 	if CurTime() <= self:GetLastReload() + 0.1 then
-		local attachment = self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
-		local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
-		cam.Start3D(EyePos(), EyeAngles())
+		local bonePos, boneAng = self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand") and self:GetOwner():GetBonePosition(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand")) 
+		local attachment = self:GetOwner():LookupAttachment("anim_attachment_rh") and self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_rh"))
+		if bonePos then
+			local pos = bonePos + (boneAng:Up() * -16) + (boneAng:Right() * 3) + (boneAng:Forward() * 6.5)
 			render.SetMaterial(Material("sprites/light_glow02_add"))
 			render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
-		cam.End3D()
+		elseif attachment then 
+			local pos = attachment.Pos + (attachment.Ang:Up() * 16) + (attachment.Ang:Right() * -3) + attachment.Ang:Forward() * 4
+			cam.Start3D(EyePos(), EyeAngles())
+				render.SetMaterial(Material("sprites/light_glow02_add"))
+				render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
+			cam.End3D()
+		end
 	end
 end
 
