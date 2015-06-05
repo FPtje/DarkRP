@@ -6,6 +6,7 @@ if CLIENT then
 	SWEP.SlotPos = 5
 
 	killicon.AddAlias("stunstick", "weapon_stunstick")
+	SWEP.RenderGroup = RENDERGROUP_BOTH
 end
 
 DEFINE_BASECLASS("stick_base")
