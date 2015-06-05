@@ -86,7 +86,7 @@ function SWEP:PostDrawViewModel(vm)
 	end
 end
 
-function SWEP:DrawWorldModel()
+function SWEP:DrawWorldModelTranslucent()
 	self:DrawModel()
 	if CurTime() <= self:GetLastReload() + 0.1 then
 		local bone = self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand")
