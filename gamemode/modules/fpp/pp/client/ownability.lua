@@ -72,7 +72,13 @@ function FPP.entGetTouchReason(ent, touchType)
 	end
 
 	local maxReasonValue = 15
-	local reasonNr = bit.band(idx, bit.lshift(maxReasonValue, reasonSize * touchTypeMultiplier[touchType]))
+	-- 1111 shifted to the right touch type
+	local touchTypeMask = bit.lshift(maxReasonValue, reasonSize * touchTypeMultiplier[touchType])
+	-- Extract reason for touch type from reason number
+	local touchTypeReason = bit.band(idx, touchTypeMask)
+	-- Shift it back to the right
+	local reasonNr = bit.rshift(touchTypeReason, reasonSize * touchTypeMultiplier[touchType])
+
 	local reason = reasons[reasonNr]
 	local owner = ent:CPPIGetOwner()
 
