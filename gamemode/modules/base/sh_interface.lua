@@ -1316,7 +1316,7 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "onEntityRemoved",
-	description = "Called when a entity was removed.",
+	description = "Called when a buyable entity was removed.",
 	parameters = {
 		{
 			name = "num",
@@ -1335,7 +1335,7 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "onGroupChatRemoved",
-	description = "Called when a job groupchat removed.",
+	description = "Called when a groupchat was removed.",
 	parameters = {
 		{
 			name = "num",
@@ -1373,7 +1373,7 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "onEntityGroupRemoved",
-	description = "Called when a job was entitygroup.",
+	description = "Called when an entity group was removed.",
 	parameters = {
 		{
 			name = "name",
@@ -1392,7 +1392,7 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
 	name = "onAgendaRemoved",
-	description = "Called when a agenda was removed.",
+	description = "Called when an agenda was removed.",
 	parameters = {
 		{
 			name = "name",
