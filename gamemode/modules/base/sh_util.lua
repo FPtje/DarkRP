@@ -131,7 +131,6 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 	local shootPos = self:GetShootPos()
 	local entities = ents.FindInSphere(shootPos, searchDistance)
 	local aimvec = self:GetAimVector()
-	local eyeVector = shootPos + aimvec * searchDistance
 
 	local smallestDistance = math.huge
 	local foundEnt
@@ -143,6 +142,8 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 
 		-- project the center vector on the aim vector
 		local projected = shootPos + (center - shootPos):Dot(aimvec) * aimvec
+
+		if aimvec:Dot((projected - shootPos):GetNormalized()) < 0 then continue end
 
 		-- the point on the model that has the smallest distance to your line of sight
 		local nearestPoint = ent:NearestPoint(projected)
