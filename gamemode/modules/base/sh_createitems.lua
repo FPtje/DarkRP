@@ -910,6 +910,8 @@ GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
 
 DarkRP.removeGroupChat = fp{removeCustomItem, GM.DarkRPGroupChats, nil, "onGroupChatRemoved", false}
 
+DarkRP.getGroupChats = fp{fn.Id, GM.DarkRPGroupChats}
+
 GM.AmmoTypes = {}
 
 function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, customCheck)

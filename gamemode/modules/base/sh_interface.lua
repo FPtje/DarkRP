@@ -920,6 +920,22 @@ DarkRP.getDemoteGroup = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.getGroupChats = DarkRP.stub{
+	name = "getGroupChats",
+	description = "Get all group chats.",
+	parameters = {
+
+	},
+	returns = {
+		{
+			name = "set",
+			description = "Table with functions that decide who can hear who.",
+			type = "table"
+		}
+	},
+	metatable = DarkRP
+}
+
 DarkRP.getDemoteGroups = DarkRP.stub{
 	name = "getDemoteGroups",
 	description = "Get all demote groups Every team in the same group will return the same object.",
