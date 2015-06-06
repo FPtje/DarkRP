@@ -567,6 +567,134 @@ DarkRP.removeJob = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.removeShipment = DarkRP.stub{
+	name = "removeShipment",
+	description = "Remove a shipment from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "i",
+			description = "The index of the item.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeVehicle = DarkRP.stub{
+	name = "removeVehicle",
+	description = "Remove a vehicle from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "i",
+			description = "The index of the item.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeEntity = DarkRP.stub{
+	name = "removeEntity",
+	description = "Remove an entity from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "i",
+			description = "The index of the item.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeGroupChat = DarkRP.stub{
+	name = "removeGroupChat",
+	description = "Remove a groupchat from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "i",
+			description = "The index of the item.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeAmmoType = DarkRP.stub{
+	name = "removeAmmoType",
+	description = "Remove an ammotype from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "i",
+			description = "The index of the item.",
+			type = "number",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeEntityGroup = DarkRP.stub{
+	name = "removeEntityGroup",
+	description = "Remove an entitygroup from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the item.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeAgenda = DarkRP.stub{
+	name = "removeAgenda",
+	description = "Remove a agenda from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the item.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
+DarkRP.removeDemoteGroup = DarkRP.stub{
+	name = "removeDemoteGroup",
+	description = "Remove an demotegroup from DarkRP. NOTE: Must be called from BOTH server AND client to properly get it removed!",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of the item.",
+			type = "string",
+			optional = false
+		}
+	},
+	returns = {
+	},
+	metatable = DarkRP
+}
+
 DarkRP.createEntityGroup = DarkRP.stub{
 	name = "createEntityGroup",
 	description = "Create a entity group for DarkRP.",
@@ -1125,6 +1253,158 @@ DarkRP.hookStub{
 		{
 			name = "jobbtable",
 			description = "The table containing all the job info.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onShipmentRemoved",
+	description = "Called when a shipment was removed.",
+	parameters = {
+		{
+			name = "num",
+			description = "The index of this item.",
+			type = "number"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onVehicleRemoved",
+	description = "Called when a vehicle was removed.",
+	parameters = {
+		{
+			name = "num",
+			description = "The index of this item.",
+			type = "number"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onEntityRemoved",
+	description = "Called when a entity was removed.",
+	parameters = {
+		{
+			name = "num",
+			description = "The index of this item.",
+			type = "number"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onGroupChatRemoved",
+	description = "Called when a job groupchat removed.",
+	parameters = {
+		{
+			name = "num",
+			description = "The index of this item.",
+			type = "number"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onAmmoTypeRemoved",
+	description = "Called when a ammotype was removed.",
+	parameters = {
+		{
+			name = "num",
+			description = "The index of this item.",
+			type = "number"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onEntityGroupRemoved",
+	description = "Called when a job was entitygroup.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of this item.",
+			type = "string"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onAgendaRemoved",
+	description = "Called when a agenda was removed.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of this item.",
+			type = "string"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
+			type = "table"
+		}
+	},
+	returns = {
+	}
+}
+
+DarkRP.hookStub{
+	name = "onDemoteGroupRemoved",
+	description = "Called when a job was demotegroup.",
+	parameters = {
+		{
+			name = "name",
+			description = "The name of this item.",
+			type = "string"
+		},
+		{
+			name = "itemTable",
+			description = "The table containing all the info about this item.",
 			type = "table"
 		}
 	},
