@@ -154,8 +154,7 @@ local function HUDPaint()
 	if not IsValid(LAEnt) then return end
 
 	local weapon = LocalPlayer():GetActiveWeapon()
-	if not IsValid(weapon) then return end
-	local class = weapon:GetClass()
+	local class = IsValid(weapon) and weapon:GetClass() or ""
 
 	local touchType = weaponClassTouchTypes[class] or "EntityDamage"
 	local reason = FPP.entGetTouchReason(LAEnt, touchType)

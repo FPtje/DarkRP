@@ -20,6 +20,14 @@ function DarkRP.createFood(name, mdl, energy, price)
 end
 AddFoodItem = DarkRP.createFood
 
+DarkRP.getFoodItems = fp{fn.Id, FoodItems}
+
+function DarkRP.removeFoodItem(i)
+	local food = FoodItems[i]
+	FoodItems[i] = nil
+	hook.Run("onFoodItemRemoved", i, food)
+end
+
 local plyMeta = FindMetaTable("Player")
 plyMeta.isCook = fn.Compose{fn.Curry(fn.GetValue, 2)("cook"), plyMeta.getJobTable}
 

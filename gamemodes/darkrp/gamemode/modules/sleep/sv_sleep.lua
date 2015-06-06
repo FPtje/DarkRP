@@ -36,7 +36,7 @@ function DarkRP.toggleSleep(player, command)
 					model = "models/player/corpse1.mdl"
 				end
 				player:SetModel(model)
-				player:SetAngles(Angle(0, ragdoll:GetPhysicsObjectNum(10):GetAngles().Yaw, 0))
+				player:SetAngles(Angle(0, ragdoll:GetPhysicsObjectNum(10) and ragdoll:GetPhysicsObjectNum(10):GetAngles().Yaw or 0, 0))
 				player:UnSpectate()
 				player:StripWeapons()
 				ragdoll:Remove()

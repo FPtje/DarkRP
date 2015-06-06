@@ -668,22 +668,33 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 end
 AddExtraTeam = DarkRP.createJob
 
+local function removeCustomItem(tbl, category, hookName, reloadF4, i)
+	local item = tbl[i]
+	tbl[i] = nil
+	if category then DarkRP.removeFromCategory(item, category) end
+	if istable(item) and (item.command or item.cmd) then DarkRP.removeChatCommand(item.command or item.cmd) end
+	hook.Run(hookName, i, item)
+	if CLIENT and reloadF4 and ValidPanel(DarkRP.getF4MenuPanel()) then DarkRP.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
+end
+
 function DarkRP.removeJob(i)
 	local job = RPExtraTeams[i]
-	RPExtraTeams[i] = nil
 	jobByCmd[job.command] = nil
 	jobCount = jobCount - 1
-	DarkRP.removeFromCategory(job, "jobs")
-	hook.Run("onJobRemoved", i, job)
-	if CLIENT and ValidPanel(DarkRP.getF4MenuPanel()) then DarkRP.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
+
+	DarkRP.removeChatCommand("vote" .. job.command)
+	removeCustomItem(RPExtraTeams, "jobs", "onJobRemoved", true, i)
 end
 
 RPExtraTeamDoors = {}
 function DarkRP.createEntityGroup(name, ...)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["doorgroups"][name] then return end
 	RPExtraTeamDoors[name] = {...}
+	RPExtraTeamDoors[name].name = name
 end
 AddDoorGroup = DarkRP.createEntityGroup
+
+DarkRP.removeEntityGroup = fp{removeCustomItem, RPExtraTeamDoors, nil, "onEntityGroupRemoved", false}
 
 CustomVehicles = {}
 CustomShipments = {}
@@ -698,26 +709,26 @@ end
 function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_seperately, price_seperately, noshipment, classes, shipmodel, CustomCheck)
 	local tableSyntaxUsed = type(model) == "table"
 
-	local AllowedClasses = classes or {}
-	if not classes then
-		for k,v in pairs(team.GetAllTeams()) do
-			table.insert(AllowedClasses, k)
-		end
-	end
-
 	local price = tonumber(price)
 	local shipmentmodel = shipmodel or "models/Items/item_item_crate.mdl"
 
 	local customShipment = tableSyntaxUsed and model or
 		{model = model, entity = entity, price = price, amount = Amount_of_guns_in_one_shipment,
-		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = AllowedClasses,
+		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = classes,
 		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
 
 	if customShipment.separate ~= nil then
 		customShipment.seperate = customShipment.separate
 	end
+
+	if customShipment.allowed == nil then
+		customShipment.allowed = {}
+		for k,v in pairs(team.GetAllTeams()) do
+			table.insert(customShipment.allowed, k)
+		end
+	end
+
 	customShipment.name = name
-	customShipment.allowed = customShipment.allowed or {}
 	customShipment.default = DarkRP.DARKRP_LOADING
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
@@ -736,6 +747,12 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	util.PrecacheModel(customShipment.model)
 end
 AddCustomShipment = DarkRP.createShipment
+
+function DarkRP.removeShipment(i)
+	local ship = CustomShipments[i]
+	shipByName[ship.name] = nil
+	removeCustomItem(CustomShipments, "shipments", "onShipmentRemoved", true, i)
+end
 
 function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_it, customcheck)
 	local vehicle = istable(Name_of_vehicle) and Name_of_vehicle or
@@ -762,6 +779,8 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
 	DarkRP.addToCategory(vehicle, "vehicles", vehicle.category)
 end
 AddCustomVehicle = DarkRP.createVehicle
+
+DarkRP.removeVehicle = fp{removeCustomItem, CustomVehicles, "vehicles", "onVehicleRemoved", true}
 
 /*---------------------------------------------------------------------------
 Decides whether a custom job or shipmet or whatever can be used in a certain map
@@ -811,6 +830,8 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 end
 AddEntity = DarkRP.createEntity
 
+DarkRP.removeEntity = fp{removeCustomItem, DarkRPEntities, "entities", "onEntityRemoved", true}
+
 -- here for backwards compatibility
 DarkRPAgendas = {}
 
@@ -853,6 +874,21 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
 end
 AddAgenda = DarkRP.createAgenda
 
+function DarkRP.removeAgenda(title)
+	local agenda
+	for k,v in pairs(agendas) do
+		if v.Title == title then
+			agenda = v
+			agendas[k] = nil
+		end
+	end
+
+	for k,v in pairs(DarkRPAgendas) do
+		if v.Title == title then agendas[k] = nil end
+	end
+	hook.Run("onAgendaRemoved", title, agenda)
+end
+
 GM.DarkRPGroupChats = {}
 local groupChatNumber = 0
 function DarkRP.createGroupChat(funcOrTeam, ...)
@@ -871,6 +907,10 @@ function DarkRP.createGroupChat(funcOrTeam, ...)
 	end
 end
 GM.AddGroupChat = function(GM, ...) DarkRP.createGroupChat(...) end
+
+DarkRP.removeGroupChat = fp{removeCustomItem, GM.DarkRPGroupChats, nil, "onGroupChatRemoved", false}
+
+DarkRP.getGroupChats = fp{fn.Id, GM.DarkRPGroupChats}
 
 GM.AmmoTypes = {}
 
@@ -897,6 +937,8 @@ function DarkRP.createAmmoType(ammoType, name, model, price, amountGiven, custom
 end
 GM.AddAmmoType = function(GM, ...) DarkRP.createAmmoType(...) end
 
+DarkRP.removeAmmoType = fp{removeCustomItem, GM.AmmoTypes, "ammo", "onAmmoTypeRemoved", true}
+
 local demoteGroups = {}
 function DarkRP.createDemoteGroup(name, tbl)
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["demotegroups"][name] then return end
@@ -917,6 +959,18 @@ function DarkRP.createDemoteGroup(name, tbl)
 			demoteGroups[teamNr] = set
 		end
 	end
+end
+
+function DarkRP.removeDemoteGroup(name)
+	local foundSet
+	for k,v in pairs(demoteGroups) do
+		local set = disjoint.FindSet(v)
+		if set.name == name then
+			foundSet = set
+			demoteGroups[k] = nil
+		end
+	end
+	hook.Run("onDemoteGroupRemoved", name, foundSet)
 end
 
 function DarkRP.getDemoteGroup(teamNr)
