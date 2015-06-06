@@ -33,31 +33,17 @@ local oneOf = function(f) return fp{table.HasValue, f} end
 local nonempty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and f(tbl) end end
 
 -- A value must be unique amongst all `kind`. Uses optional `hash` function to create custom hashes in the internal table
-local unique = function(name, kind, hash)
-	return function(v, tbl, env)
-		env[name] = env[name] or {}
-		local hval = hash and hash(v) or v -- hashed value
-		local uEnv = env[name] -- Either specific to `kind` or global
-
-		if kind then
-			env[name][kind] = env[name][kind] or {}
-			uEnv = env[name][kind]
-		end
-
-		if uEnv[hval] then
-			return false,
-				string.format("This %s does not have a unique value for '%s'.", kind or "thing", name),
-				{string.format("There must be some other %s that has the value '%s' for '%s'.", kind or "thing", tostring(v), name)}
-		end
-
-		uEnv[hval] = true
-		return true
+local uniqueEntity = function(cmd, tbl)
+	for k, v in pairs(DarkRPEntities) do
+		if v.cmd ~= cmd then continue end
+		return false, "This entity does not have a unique command.", {"There must be some other end that has the same thing for 'cmd'.", "Fix this by changing the 'cmd' field of your entity to something else."}
 	end
+	return true
 end
 
 local uniqueJob = function(v, tbl)
 	local job = DarkRP.getJobByCommand(v)
-	if job then return false, "This job does not have a unique command.", {"There must be some other job that has the same command."} end
+	if job then return false, "This job does not have a unique command.", {"There must be some other job that has the same command.", "Fix this by changing the 'command' of your job to something else."} end
 	return true
 end
 
@@ -158,7 +144,7 @@ local validEntity = {
 	model = ass(checkModel, "The model of the entity must be a valid model.", {"This error could happens when the model does not exist on the server.", "Are you sure the model path is right?", "Is the model from an addon that is not properly installed?"}),
 	price = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	max   = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getMax) end, "The max must be an existing number or (for advanced users) the getMax field must be a function."),
-	cmd   = ass(fn.FAnd{isstring, unique("cmd", "entity")}, "The cmd must be a valid string."),
+	cmd   = ass(fn.FAnd{isstring, uniqueEntity}, "The cmd must be a valid string."),
 	name  = ass(isstring, "The name must be a valid string."),
 
 	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
