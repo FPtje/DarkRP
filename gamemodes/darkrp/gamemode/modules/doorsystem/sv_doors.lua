@@ -83,8 +83,8 @@ function meta:keysUnOwn(ply)
 		self:removeKeysDoorOwner(ply)
 	end
 
-	ply:GetTable().Ownedz[self:EntIndex()] = nil
-	ply:GetTable().OwnedNumz = math.Clamp(ply:GetTable().OwnedNumz - 1, 0, math.huge)
+	ply.Ownedz[self:EntIndex()] = nil
+	ply.OwnedNumz = math.Clamp((ply:GetTable().OwnedNumz or 1) - 1, 0, math.huge)
 end
 
 function pmeta:keysUnOwnAll()
@@ -412,7 +412,7 @@ local function UnOwnAll(ply, cmd, args)
 			ply:GetTable().Ownedz[v:EntIndex()] = nil
 		end
 	end
-	ply:GetTable().OwnedNumz = 0
+	ply.OwnedNumz = 0
 	DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount,DarkRP.formatMoney(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666)+0.5)))))
 	return ""
 end
