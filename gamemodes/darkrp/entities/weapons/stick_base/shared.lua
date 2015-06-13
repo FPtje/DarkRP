@@ -63,20 +63,9 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 5, "HoldTypeChangeTime")
 end
 
-function SWEP:StartCommand()
-end
-
-function SWEP:HookStartCommand()
-	hook.Add("StartCommand", "DarkRP_"..self:GetClass().."_StartCommand", fp{self.StartCommand, self})
-end
-
 function SWEP:Deploy()
 	BaseClass.Deploy(self)
-	if SERVER then
-		self:HookStartCommand()
-		if not game.SinglePlayer() then self:CallOnClient("HookStartCommand") end
-		self:SetMaterial("!darkrp/"..self:GetClass())
-	end
+	if SERVER then self:SetMaterial("!darkrp/"..self:GetClass()) end
 	local vm = self:GetOwner():GetViewModel()
 	if not IsValid(vm) then return true end
 	self:PreDrawViewModel()
@@ -105,7 +94,6 @@ function SWEP:ResetStick(force)
 	self:SetSeqIdling(false)
 	self:SetSeqIdleTime(0)
 	self:SetHoldTypeChangeTime(0)
-	hook.Remove("StartCommand", "DarkRP_"..self:GetClass().."_StartCommand")
 end
 
 function SWEP:Holster()
