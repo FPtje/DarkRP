@@ -97,7 +97,7 @@ DarkRP.hookStub{
 }
 
 local KeyFrameVisible = false
-function DarkRP.openKeysMenu(um)
+function DarkRP.openKeysMenu()
 	if KeyFrameVisible then return end
 
 	local ent = LocalPlayer():GetEyeTrace().Entity
@@ -222,4 +222,4 @@ function DarkRP.openKeysMenu(um)
 	Frame:Center()
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-usermessage.Hook("KeysMenu", DarkRP.openKeysMenu)
+net.Receive("KeysMenu", DarkRP.openKeysMenu)

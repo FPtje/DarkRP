@@ -390,7 +390,9 @@ function GM:PlayerDeath(ply, weapon, killer)
 	end
 
 	if GAMEMODE.Config.deathblack then
-		SendUserMessage("blackScreen", ply, true)
+		net.Start("blackScreen")
+			net.WriteBool(true)
+		net.Send(ply)
 	end
 
 	if weapon:IsVehicle() and weapon:GetDriver():IsPlayer() then killer = weapon:GetDriver() end
@@ -621,7 +623,9 @@ function GM:PlayerSpawn(ply)
 	ply:UnSpectate()
 
 	-- Kill any colormod
-	SendUserMessage("blackScreen", ply, false)
+	net.Start("blackScreen")
+		net.WriteBool(false)
+	net.Send(ply)
 
 	if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
 		timer.Destroy(ply:EntIndex() .. "babygod")

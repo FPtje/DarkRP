@@ -1,18 +1,18 @@
 local function AdminLog(message, colour)
-	local RF = RecipientFilter()
+	local players = {}
 	for k,v in pairs(player.GetAll()) do
 		local canHear = hook.Call("canSeeLogMessage", GAMEMODE, v, message, colour)
 
 		if canHear then
-			RF:AddPlayer(v)
+			table.insert(players, v)
 		end
 	end
-	umsg.Start("DRPLogMsg", RF)
-		umsg.Short(colour.r)
-		umsg.Short(colour.g)
-		umsg.Short(colour.b) -- Alpha is not needed
-		umsg.String(message)
-	umsg.End()
+	net.Start("DRPLogMsg")
+		net.WriteUInt(colour.r, 16)
+		net.WriteUInt(colour.g, 16)
+		net.WriteUInt(colour.b, 16)
+		net.WriteString(message)
+	net.Send(players)
 end
 
 local DarkRPFile

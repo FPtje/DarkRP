@@ -29,17 +29,16 @@ end
 
 function ENT:Use(ply)
 	if not ply:KeyDown(IN_ATTACK) then
-		umsg.Start("ShowLetter", ply)
-			umsg.Entity(self)
-			umsg.Short(self.type)
-			umsg.Vector(self:GetPos())
-			local numParts = self.numPts
-			umsg.Short(numParts)
-			for a,b in pairs(self.Parts) do umsg.String(b) end
-		umsg.End()
+		net.Start("ShowLetter")
+			net.WriteEntity(self)
+			net.WriteUInt(self.type, 16)
+			net.WriteVector(self:GetPos())
+			net.WriteUInt(self.numPts, 16)
+			for a,b in pairs(self.Parts) do net.WriteString(b) end
+		net.Send(ply)
 	else
-		umsg.Start("KillLetter", ply)
-		umsg.End()
+		net.Start("KillLetter")
+		net.Send(ply)
 	end
 end
 

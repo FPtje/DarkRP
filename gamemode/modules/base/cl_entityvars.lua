@@ -27,7 +27,7 @@ end
 
 /*---------------------------------------------------------------------------
 Retrieve a player var.
-Read the usermessage and attempt to set the DarkRP var
+Read the net message and attempt to set the DarkRP var
 ---------------------------------------------------------------------------*/
 local function doRetrieve()
 	local userID = net.ReadUInt(16)

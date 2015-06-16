@@ -19,18 +19,22 @@ local function Kick(ply, cmd, args)
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Kick", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!")  return false end
 		if IsValid(target) then
 			if stage == "start" then
-				SendUserMessage("FAdmin_kick_start", target) -- Tell him he's getting kicked
+				net.Start("FAdmin_kick_start") -- Tell him he's getting kicked
+				net.Send(target)
 				target:Lock() -- Make sure he can't remove the hook clientside and keep minging.
 				target:KillSilent()
 			elseif stage == "cancel" then
-				SendUserMessage("FAdmin_kick_cancel", target) -- No I changed my mind, you can stay
+				net.Start("FAdmin_kick_start")-- No I changed my mind, you can stay
+				net.Send(target)
 				target:UnLock()
 				target:Spawn()
 				ply.FAdminKickReason = nil
 			elseif stage == "update" then -- Update reason text
 				if not args[3] then return false end
 				ply.FAdminKickReason = args[3]
-				SendUserMessage("FAdmin_kick_update", target, args[3])
+				net.Start("FAdmin_kick_update") 
+					net.WriteString(args[3])
+				net.Send(target)
 			else//if stage == "execute" or stage == "" then--execute or no stage = kick instantly
 				local name = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
 
@@ -134,14 +138,16 @@ local function Ban(ply, cmd, args)
 			return false
 		end
 		if stage == "start" and type(target) ~= "string" and IsValid(target) then
-			SendUserMessage("FAdmin_ban_start", target) -- Tell him he's getting banned
+			net.Start("FAdmin_ban_start") -- Tell him he's getting banned
+			net.Send(target)
 			target:Lock() -- Make sure he can't remove the hook clientside and keep minging.
 			target:KillSilent()
 			table.insert(StartBannedUsers, target:SteamID())
 
 		elseif stage == "cancel" then
 			if type(target) ~= "string" and IsValid(target) then
-				SendUserMessage("FAdmin_ban_cancel", target) -- No I changed my mind, you can stay
+				net.Start("FAdmin_ban_cancel") -- No I changed my mind, you can stay
+				net.Send(target)
 				target:UnLock()
 				target:Spawn()
 				for k,v in pairs(StartBannedUsers) do
@@ -159,10 +165,10 @@ local function Ban(ply, cmd, args)
 		elseif stage == "update" then -- Update reason text
 			if not args[4] or type(target) == "string" or not IsValid(target) then return false end
 			ply.FAdminKickReason = args[4]
-			umsg.Start("FAdmin_ban_update", target)
-				umsg.Long(tonumber(args[3]))
-				umsg.String(tostring(args[4]))
-			umsg.End()
+			net.Start("FAdmin_ban_update")
+				net.WriteUInt(tonumber(args[3]), 32)
+				net.WriteString(tostring(args[4]))
+			net.Send(target)
 		else
 			local time, Reason = tonumber(args[2]) or 0, (Reason ~= "" and Reason) or args[3] or ""
 			if stage == "execute" then

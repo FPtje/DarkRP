@@ -12,10 +12,10 @@ local function Spectate(ply, cmd, args)
 
 	ply:ExitVehicle()
 
-	umsg.Start("FAdminSpectate", ply)
-		umsg.Bool(target == nil) -- Is the player roaming?
-		umsg.Entity(ply.FAdminSpectatingEnt)
-	umsg.End()
+	net.Start("FAdminSpectate")
+		net.WriteBool(target == nil) -- Is the player roaming?
+		net.WriteEntity(ply.FAdminSpectatingEnt)
+	net.Send(ply)
 
 	hook.Add("PlayerSay", ply, OnPlayerSay)
 

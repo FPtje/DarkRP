@@ -24,18 +24,18 @@ function FPP.Notify(ply, text, bool)
 		ServerLog(text)
 		return
 	end
-	umsg.Start("FPP_Notify", ply)
-		umsg.String(text)
-		umsg.Bool(bool)
-	umsg.End()
+	net.Start("FPP_Notify")
+		net.WriteString(text)
+		net.WriteBool(bool)
+	net.Send(ply)
 	ply:PrintMessage(HUD_PRINTCONSOLE, text)
 end
 
 function FPP.NotifyAll(text, bool)
-	umsg.Start("FPP_Notify")
-		umsg.String(text)
-		umsg.Bool(bool)
-	umsg.End()
+	net.Start("FPP_Notify")
+		net.WriteString(text)
+		net.WriteBool(bool)
+	net.Broadcast()
 	for _,ply in pairs(player.GetAll()) do
 		ply:PrintMessage(HUD_PRINTCONSOLE, text)
 	end
@@ -640,48 +640,48 @@ concommand.Add("FPP_SendGroupMembers", SendGroupMemberData)
 local function SendBlocked(ply, cmd, args)
 	if not args[1] or not FPP.Blocked[args[1]] then return end
 
-	ply.FPPUmsg1 = ply.FPPUmsg1 or {}
-	ply.FPPUmsg1[args[1]] = ply.FPPUmsg1[args[1]] or 0
-	if ply.FPPUmsg1[args[1]] > CurTime() - 5 then return end
-	ply.FPPUmsg1[args[1]] = CurTime()
+	ply.FPPNmsg1 = ply.FPPNmsg1 or {}
+	ply.FPPNmsg1[args[1]] = ply.FPPNmsg1[args[1]] or 0
+	if ply.FPPNmsg1[args[1]] > CurTime() - 5 then return end
+	ply.FPPNmsg1[args[1]] = CurTime()
 
 	for k,v in pairs(FPP.Blocked[args[1]]) do
-		umsg.Start("FPP_blockedlist", ply)
-			umsg.String(args[1])
-			umsg.String(k)
-		umsg.End()
+		net.Start("FPP_blockedlist")
+			net.WriteString(args[1])
+			net.WriteString(k)
+		net.Send(ply)
 	end
 end
 concommand.Add("FPP_sendblocked", SendBlocked)
 
 local function SendBlockedModels(ply, cmd, args)
-	ply.FPPUmsg2 = ply.FPPUmsg2 or 0
-	if ply.FPPUmsg2 > CurTime() - 10 then return end
-	ply.FPPUmsg2 = CurTime()
+	ply.FPPNmsg2 = ply.FPPNmsg2 or 0
+	if ply.FPPNmsg2 > CurTime() - 10 then return end
+	ply.FPPNmsg2 = CurTime()
 
 	local i = 0
 	for k,v in pairs(FPP.BlockedModels) do
 		timer.Simple(i*0.01, function()
-			umsg.Start("FPP_BlockedModel", ply)
-				umsg.String(k)
-			umsg.End()
+			net.Start("FPP_BlockedModel")
+				net.WriteString(k)
+			net.Send(ply)
 		end)
 	end
 end
 concommand.Add("FPP_sendblockedmodels", SendBlockedModels)
 
 local function SendRestrictedTools(ply, cmd, args)
-	ply.FPPUmsg3 = ply.FPPUmsg3 or 0
-	if ply.FPPUmsg3 > CurTime() - 5 then return end
-	ply.FPPUmsg3 = CurTime()
+	ply.FPPNmsg3 = ply.FPPNmsg3 or 0
+	if ply.FPPNmsg3 > CurTime() - 5 then return end
+	ply.FPPNmsg3 = CurTime()
 
 	if not args[1] then return end
-	umsg.Start("FPP_RestrictedToolList", ply)
-		umsg.String(args[1])
+	net.Start("FPP_RestrictedToolList")
+		net.WriteString(args[1])
 		if FPP.RestrictedTools[args[1]] and FPP.RestrictedTools[args[1]].admin then
-			umsg.Long(FPP.RestrictedTools[args[1]].admin)
+			net.WriteUInt(FPP.RestrictedTools[args[1]].admin, 32)
 		else
-			umsg.Long(0)
+			net.WriteUInt(0, 32)
 		end
 
 		local teamrestrict = "nil"
@@ -689,9 +689,9 @@ local function SendRestrictedTools(ply, cmd, args)
 			teamrestrict = table.concat(FPP.RestrictedTools[args[1]]["team"], ";")
 		end
 		if teamrestrict == "" then teamrestrict = "nil" end
-		umsg.String(teamrestrict)
+		net.WriteString(teamrestrict)
 
-	umsg.End()
+	net.Send(ply)
 end
 concommand.Add("FPP_SendRestrictTool", SendRestrictedTools)
 

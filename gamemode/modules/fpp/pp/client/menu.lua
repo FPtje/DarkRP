@@ -602,8 +602,8 @@ function FPP.AdminMenu(Panel)
 	AdminPanel:Dock(FILL)
 end
 
-RetrieveBlockedModels = function(um)
-	local model = um:ReadString()
+RetrieveBlockedModels = function()
+	local model = net.ReadString()
 	if not ShowBlockedModels then return end
 
 	local Icon = vgui.Create("SpawnIcon", ShowBlockedModels.pan)
@@ -620,19 +620,16 @@ RetrieveBlockedModels = function(um)
 	end
 	ShowBlockedModels.pan:AddItem(Icon)
 end
-usermessage.Hook("FPP_BlockedModel", RetrieveBlockedModels)
+net.Receive("FPP_BlockedModel", RetrieveBlockedModels)
 
-RetrieveRestrictedTool = function(um)
-	local tool, admin, Teams = um, 0, {}--Settings when it's not a usermessage
-	if type(um) ~= "table" then
-		tool = um:ReadString()
-		admin = um:ReadLong()
-		Teams = um:ReadString()
-		if Teams ~= "nil" then
-			Teams = string.Explode(";", Teams)
-		else
-			Teams = {}
-		end
+RetrieveRestrictedTool = function()
+	local tool = net.ReadString()
+	local admin = net.ReadUInt(32)
+	local Teams = net.ReadString()
+	if Teams ~= "nil" then
+		Teams = string.Explode(";", Teams)
+	else
+		Teams = {}
 	end
 
 	local frame = vgui.Create("DFrame")
@@ -802,7 +799,7 @@ RetrieveRestrictedTool = function(um)
 	end
 
 end
-usermessage.Hook("FPP_RestrictedToolList", RetrieveRestrictedTool)
+net.Receive("FPP_RestrictedToolList", RetrieveRestrictedTool)
 
 EditGroupTools = function(groupname)
 	if not FPP.Groups[groupname] then return end
@@ -899,16 +896,16 @@ EditGroupTools = function(groupname)
 	end
 end
 
-local function retrieveblocked(um)
-	local Type = string.lower(um:ReadString())
+local function retrieveblocked()
+	local Type = string.lower(net.ReadString())
 	if not BlockedLists[Type] then return end
-	local text = um:ReadString()
+	local text = net.ReadString()
 	local line = BlockedLists[Type]:AddLine(text)
 	line.text = text
 	BlockedLists[Type]:SetTall(18 + #BlockedLists[Type]:GetLines() * 17)
 	//BlockedLists[Type]:GetParent():GetParent():GetParent():GetParent():InvalidateLayout()
 end
-usermessage.Hook("FPP_blockedlist", retrieveblocked)
+net.Receive("FPP_blockedlist", retrieveblocked)
 
 local BuddiesPanel
 function FPP.BuddiesMenu(Panel)
@@ -1095,13 +1092,13 @@ local function UpdateMenus()
 end
 hook.Add("SpawnMenuOpen", "FPPMenus", UpdateMenus)
 
-function FPP.SharedMenu(um)
-	local ent = um:ReadEntity()
+function FPP.SharedMenu()
+	local ent = net.ReadEntity()
 	if not IsValid(ent) then frame:Close() return end
 	local frame = vgui.Create("DFrame")
 	frame:SetTitle("Share "..ent:GetClass())
 	frame:MakePopup()
-	frame:SetVisible( true )
+	frame:SetVisible(true)
 
 	local count = 1.5
 	local row = 1
@@ -1135,18 +1132,18 @@ function FPP.SharedMenu(um)
 		end
 		box:SizeToContents()
 	end
-	AddChk("Physgun", "SharePhysgun1", um:ReadBool())
-	AddChk("Gravgun", "ShareGravgun1", um:ReadBool())
-	AddChk("Use", "SharePlayerUse1", um:ReadBool())
-	AddChk("Damage", "ShareEntityDamage1", um:ReadBool())
-	AddChk("Toolgun", "ShareToolgun1", um:ReadBool())
+	AddChk("Physgun", "SharePhysgun1", net.ReadBool())
+	AddChk("Gravgun", "ShareGravgun1", net.ReadBool())
+	AddChk("Use", "SharePlayerUse1", net.ReadBool())
+	AddChk("Damage", "ShareEntityDamage1", net.ReadBool())
+	AddChk("Toolgun", "ShareToolgun1", net.ReadBool())
 
-	local long = um:ReadLong()
+	local long = net.ReadUInt(32)
 	local SharedWith = {}
 
 	if long > 0 then
 		for i=1, long do
-			table.insert(SharedWith, um:ReadEntity())
+			table.insert(SharedWith, net.ReadEntity())
 		end
 	end
 
@@ -1169,7 +1166,7 @@ function FPP.SharedMenu(um)
 	frame:SetSize(math.Min(math.Max(165 + (row - 1) * 165, 165), ScrW()), height)
 	frame:Center()
 end
-usermessage.Hook("FPP_ShareSettings", FPP.SharedMenu)
+net.Receive("FPP_ShareSettings", FPP.SharedMenu)
 
 properties.Add("addFPPBlocked",
 {
