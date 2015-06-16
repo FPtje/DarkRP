@@ -32,8 +32,8 @@ end
 function ENT:Think()
 end
 
-local function drugEffects(um)
-	local toggle = um:ReadBool()
+local function drugEffects()
+	local toggle = net.ReadBool()
 
 	if toggle then
 		hook.Add("RenderScreenspaceEffects", "drugged", function()
@@ -45,4 +45,4 @@ local function drugEffects(um)
 		hook.Remove("RenderScreenspaceEffects", "drugged")
 	end
 end
-usermessage.Hook("DrugEffects", drugEffects)
+net.Receive("DrugEffects", drugEffects)

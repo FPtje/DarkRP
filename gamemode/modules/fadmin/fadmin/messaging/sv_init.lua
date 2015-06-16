@@ -5,28 +5,28 @@ function FAdmin.Messages.SendMessage(ply, MsgType, text)
 		return
 	end
 
-	umsg.Start("FAdmin_SendMessage", ply)
-		umsg.Short(MsgType)
-		umsg.String(text)
-	umsg.End()
+	net.Start("FAdmin_SendMessage")
+		net.WriteUInt(MsgType, 16)
+		net.WriteString(text)
+	net.Send(ply)
 	ply:PrintMessage(HUD_PRINTCONSOLE, text)
 end
 
 function FAdmin.Messages.SendMessageAll(text, MsgType)
 	FAdmin.Log("FAdmin message to everyone: "..text)
-	umsg.Start("FAdmin_SendMessage")
-		umsg.Short(MsgType)
-		umsg.String(text)
-	umsg.End()
+	net.Start("FAdmin_SendMessage")
+		net.WriteUInt(MsgType, 16)
+		net.WriteString(text)
+	net.Broadcast()
 	for _,ply in pairs(player.GetAll()) do
 		ply:PrintMessage(HUD_PRINTCONSOLE, text)
 	end
 end
 
 function FAdmin.Messages.ConsoleNotify(ply, message)
-	umsg.Start("FAdmin_ConsoleMessage", ply)
-		umsg.String(message)
-	umsg.End()
+	net.Start("FAdmin_ConsoleMessage")
+		net.WriteString(message)
+	net.Send(ply)
 end
 
 function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarget, LogMSG)

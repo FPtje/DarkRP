@@ -21,9 +21,9 @@ local function ccTell(ply, cmd, args)
 			msg = msg .. args[n] .. " "
 		end
 
-		umsg.Start("AdminTell", target)
-			umsg.String(msg)
-		umsg.End()
+		net.Start("AdminTell")
+			net.WriteString(msg)
+		net.Send(target)
 
 		if ply:EntIndex() == 0 then
 			DarkRP.log("Console did rp_tell \""..msg .. "\" on "..target:SteamName(), Color(30, 30, 30))
@@ -53,9 +53,9 @@ local function ccTellAll(ply, cmd, args)
 		msg = msg .. args[n] .. " "
 	end
 
-	umsg.Start("AdminTell")
-		umsg.String(msg)
-	umsg.End()
+	net.Start("AdminTell")
+		net.WriteString(msg)
+	net.Broadcast()
 
 	if ply:EntIndex() == 0 then
 		DarkRP.log("Console did rp_tellall \""..msg .. "\"", Color(30, 30, 30))

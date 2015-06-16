@@ -80,12 +80,9 @@ local function GiveMoney(ply, args)
 			return ""
 		end
 
-		local RP = RecipientFilter()
-		RP:AddAllPlayers()
-
-		umsg.Start("anim_giveitem", RP)
-			umsg.Entity(ply)
-		umsg.End()
+		net.Start("anim_giveitem")
+			net.WriteEntity(ply)
+		net.Broadcast()
 		ply.anim_GivingItem = true
 
 		timer.Simple(1.2, function()
@@ -143,12 +140,10 @@ local function DropMoney(ply, args)
 	end
 
 	ply:addMoney(-amount)
-	local RP = RecipientFilter()
-	RP:AddAllPlayers()
 
-	umsg.Start("anim_dropitem", RP)
-		umsg.Entity(ply)
-	umsg.End()
+	net.Start("anim_dropitem")
+		net.WriteEntity(ply)
+	net.Broadcast()
 	ply.anim_DroppingItem = true
 
 	timer.Simple(1, function()
@@ -196,9 +191,9 @@ local function CreateCheque(ply, args)
 		ply:addMoney(-amount)
 	end
 
-	umsg.Start("anim_dropitem", RecipientFilter():AddAllPlayers())
-		umsg.Entity(ply)
-	umsg.End()
+	net.Start("anim_dropitem")
+		net.WriteEntity(ply)
+	net.Broadcast()
 	ply.anim_DroppingItem = true
 
 	timer.Simple(1, function()

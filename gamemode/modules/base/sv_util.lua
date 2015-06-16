@@ -1,17 +1,17 @@
 function DarkRP.notify(ply, msgtype, len, msg)
-	umsg.Start("_Notify", ply)
-		umsg.String(msg)
-		umsg.Short(msgtype)
-		umsg.Long(len)
-	umsg.End()
+	net.Start("_Notify")
+		net.WriteString(msg)
+		net.WriteUInt(msgtype, 16)
+		net.WriteUInt(len, 32)
+	net.Send(ply)
 end
 
 function DarkRP.notifyAll(msgtype, len, msg)
-	umsg.Start("_Notify")
-		umsg.String(msg)
-		umsg.Short(msgtype)
-		umsg.Long(len)
-	umsg.End()
+	net.Start("_Notify")
+		net.WriteString(msg)
+		net.WriteUInt(msgtype, 16)
+		net.WriteUInt(len, 32)
+	net.Broadcast()
 end
 
 function DarkRP.printMessageAll(msgtype, msg)

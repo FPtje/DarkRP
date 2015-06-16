@@ -29,21 +29,21 @@ function TOOL:LeftClick(trace)
 	local Damage = trace.Entity.ShareEntityDamage1 or false
 	local Toolgun = trace.Entity.ShareToolgun1 or false
 
-	-- This big usermessage will be too big if you select 63 players, since that will not happen I can't be arsed to solve it
-	umsg.Start("FPP_ShareSettings", ply)
-		umsg.Entity(trace.Entity)
-		umsg.Bool(Physgun)
-		umsg.Bool(GravGun)
-		umsg.Bool(PlayerUse)
-		umsg.Bool(Damage)
-		umsg.Bool(Toolgun)
+	-- Test size with netmessages
+	net.Start("FPP_ShareSettings")
+		net.WriteEntity(trace.Entity)
+		net.WriteBool(Physgun)
+		net.WriteBool(GravGun)
+		net.WriteBool(PlayerUse)
+		net.WriteBool(Damage)
+		net.WriteBool(Toolgun)
 		if trace.Entity.AllowedPlayers then
-			umsg.Long(#trace.Entity.AllowedPlayers)
+			net.WriteUInt(#trace.Entity.AllowedPlayers, 32)
 			for k,v in pairs(trace.Entity.AllowedPlayers) do
-				umsg.Entity(v)
+				net.WriteEntity(v)
 			end
 		end
-	umsg.End()
+	net.Send(ply)
 	return true
 end
 

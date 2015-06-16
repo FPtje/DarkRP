@@ -67,7 +67,9 @@ function DarkRP.toggleSleep(player, command)
 					player:Lock()
 				end
 
-				SendUserMessage("blackScreen", player, false)
+				net.Start("blackScreen")
+					net.WriteBool(false)
+				net.Send(player)
 
 				if command == true then
 					player:arrest()
@@ -125,7 +127,9 @@ function DarkRP.toggleSleep(player, command)
 				--Make sure noone can pick it up:
 				ragdoll:CPPISetOwner(player)
 
-				SendUserMessage("blackScreen", player, true)
+				net.Start("blackScreen")
+					net.WriteBool(true)
+				net.Send(player)
 
 				player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
 				player.SleepSound:PlayEx(0.10, 100)

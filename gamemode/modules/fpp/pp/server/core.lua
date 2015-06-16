@@ -571,15 +571,16 @@ hook.Add("PlayerDisconnected", "FPP.PlayerDisconnect", FPP.PlayerDisconnect)
 
 -- PlayerInitialspawn, the props he had left before will now be theirs again
 function FPP.PlayerInitialSpawn(ply)
-	local RP = RecipientFilter()
 
 	timer.Simple(5, function()
 		if not IsValid(ply) then return end
-		RP:AddAllPlayers()
-		RP:RemovePlayer(ply)
-		umsg.Start("FPP_CheckBuddy", RP)--Message everyone that a new player has joined
-			umsg.Entity(ply)
-		umsg.End()
+
+		local all = player.GetAll()
+		table.RemoveByValue(all, ply)
+
+		net.Start("FPP_CheckBuddy", RP)--Message everyone that a new player has joined
+			net.WriteEntity(ply)
+		net.Send(all)
 	end)
 
 	local entities = {}
@@ -592,10 +593,10 @@ function FPP.PlayerInitialSpawn(ply)
 		end
 	end
 
-	local plys = {}
-	for k,v in pairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
+	local players = player.GetAll()
+	table.RemoveByValue(players, ply)
 
-	FPP.recalculateCanTouch(plys, entities)
+	FPP.recalculateCanTouch(players, entities)
 	timer.Simple(0, function() -- wait until the player's usergroup is initialized
 		if not IsValid(ply) then return end
 		FPP.recalculateCanTouch({ply}, ents.GetAll())

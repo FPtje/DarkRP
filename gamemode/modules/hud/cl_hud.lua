@@ -192,9 +192,9 @@ end
 
 local Arrested = function() end
 
-usermessage.Hook("GotArrested", function(msg)
+net.Receive("GotArrested", function()
 	local StartArrested = CurTime()
-	local ArrestedUntil = msg:ReadFloat()
+	local ArrestedUntil = net.ReadFloat()
 
 	Arrested = function()
 		if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
@@ -207,9 +207,9 @@ end)
 
 local AdminTell = function() end
 
-usermessage.Hook("AdminTell", function(msg)
+net.Receive("AdminTell", function()
 	timer.Destroy("DarkRP_AdminTell")
-	local Message = msg:ReadString()
+	local Message = net.ReadString()
 
 	AdminTell = function()
 		draw.RoundedBox(4, 10, 10, Scrw - 20, 110, colors.darkblack)
@@ -226,7 +226,7 @@ end)
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------*/
 local function DrawHUD()
-	localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
+	localplayer = IsValid(localplayer) and localplayer or LocalPlayer()
 	if not IsValid(localplayer) then return end
 
 	local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
@@ -362,15 +362,15 @@ end
 /*---------------------------------------------------------------------------
 Display notifications
 ---------------------------------------------------------------------------*/
-local function DisplayNotify(msg)
-	local txt = msg:ReadString()
-	GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
+local function DisplayNotify()
+	local txt = net.ReadString()
+	GAMEMODE:AddNotify(txt, net.ReadUInt(16), net.ReadUInt(32))
 	surface.PlaySound("buttons/lightswitch2.wav")
 
 	-- Log to client console
 	MsgC(Color(255, 20, 20, 255), "[DarkRP] ", Color(200, 200, 200, 255), txt, "\n")
 end
-usermessage.Hook("_Notify", DisplayNotify)
+net.Receive("_Notify", DisplayNotify)
 
 /*---------------------------------------------------------------------------
 Remove some elements from the HUD in favour of the DarkRP HUD

@@ -223,14 +223,13 @@ local function GetDarkRPAuthors(ply, args)
 	CreditsWait = false
 	timer.Simple(60, function() CreditsWait = true end)--so people don't spam it
 
-	local rf = RecipientFilter()
-	rf:AddPlayer(target)
+	local players = {target}
 	if ply ~= target then
-		rf:AddPlayer(ply)
+		table.insert(players, nil, ply)
 	end
 
-	umsg.Start("DarkRP_Credits", rf)
-	umsg.End()
+	net.Start("DarkRP_Credits")
+	net.Send(players)
 
 	return ""
 end

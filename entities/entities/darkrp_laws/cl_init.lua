@@ -36,15 +36,15 @@ local function addLaw(inLaw)
 	Laws[#Laws + 1] = law
 end
 
-local function umAddLaw(um)
-	local law = um:ReadString()
+local function netAddLaw()
+	local law = net.ReadString()
 	timer.Simple(0, fn.Curry(addLaw, 2)(law))
 	hook.Run("addLaw", #Laws + 1, law)
 end
-usermessage.Hook("DRP_AddLaw", umAddLaw)
+net.Receive("DRP_AddLaw", netAddLaw)
 
-local function umRemoveLaw(um)
-	local i = um:ReadShort()
+local function netRemoveLaw()
+	local i = net.ReadUInt(16)
 
 	hook.Run("removeLaw", i, Laws[i])
 
@@ -54,14 +54,14 @@ local function umRemoveLaw(um)
 	end
 	Laws[i] = nil
 end
-usermessage.Hook("DRP_RemoveLaw", umRemoveLaw)
+net.Receive("DRP_RemoveLaw", netRemoveLaw)
 
-local function umResetLaws(um)
+local function netResetLaws()
 	Laws = {}
 	fn.Foldl(function(val,v) addLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
 	hook.Run("resetLaws")
 end
-usermessage.Hook("DRP_ResetLaws", umResetLaws)
+net.Receive("DRP_ResetLaws", netResetLaws)
 
 function DarkRP.getLaws()
 	return Laws

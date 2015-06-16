@@ -312,9 +312,9 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
 		if IsValid(ply) then ply:unArrest() end
 		arrestedPlayers[steamID] = nil
 	end)
-	umsg.Start("GotArrested", ply)
-		umsg.Float(time)
-	umsg.End()
+	net.Start("GotArrested")
+		net.WriteFloat(time)
+	net.Send(ply)
 end
 
 function DarkRP.hooks:playerUnArrested(ply, actor)

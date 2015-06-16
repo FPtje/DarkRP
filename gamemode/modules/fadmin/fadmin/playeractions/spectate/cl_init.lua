@@ -259,9 +259,9 @@ end
 specEnt
 Spectate a player
 ---------------------------------------------------------------------------*/
-local function startSpectate(um)
-	isRoaming = um:ReadBool()
-	specEnt = um:ReadEntity()
+local function startSpectate()
+	isRoaming = net.ReadBool()
+	specEnt = net.ReadEntity()
 
 	if isRoaming then
 		startFreeRoam()
@@ -282,7 +282,7 @@ local function startSpectate(um)
 		RunConsoleCommand("_FAdmin_SpectatePosUpdate", roamPos.x, roamPos.y, roamPos.z)
 	end)
 end
-usermessage.Hook("FAdminSpectate", startSpectate)
+net.Receive("FAdminSpectate", startSpectate)
 
 /*---------------------------------------------------------------------------
 stopSpectating
