@@ -45,26 +45,38 @@ FAdmin.StartHooks["Noclip"] = function()
 	FAdmin.Commands.AddCommand("SetNoclip", SetNoclip)
 end
 
-hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
-	if not tobool(GetConVarNumber("sbox_noclip")) and
-	((FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") and not ply:FAdmin_GetGlobal("FADmin_DisableNoclip")) or ply:FAdmin_GetGlobal("FADmin_CanNoclip")) then
-		-- If Other hooks explicitly say the user can't noclip, then disallow him the noclip unless FAdmin explicitly says the user can Noclip.
-		if not ply:FAdmin_GetGlobal("FADmin_CanNoclip") then
-			for k, v in pairs(hook.GetTable().PlayerNoClip) do
-				if k ~= "FAdmin_noclip" then
-					local Val = v(ply)
-					if Val == false then return false end
-				end
-			end
-		end
-		if not ply.FADmin_HasGotNoclipMessage then
-			FAdmin.Messages.SendMessage(ply, 4, "Noclip allowed")
-			ply.FADmin_HasGotNoclipMessage = true
-		end
+local function sendNoclipMessage(ply)
+	if ply.FADmin_HasGotNoclipMessage then return end
 
-		return true
-	elseif ply:FAdmin_GetGlobal("FADmin_DisableNoclip") then
+	FAdmin.Messages.SendMessage(ply, 4, "Noclip allowed")
+	ply.FADmin_HasGotNoclipMessage = true
+end
+
+hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
+	if ply:FAdmin_GetGlobal("FADmin_DisableNoclip") then
 		FAdmin.Messages.SendMessage(ply, 5, "Noclip disallowed!")
 		return false
 	end
+
+	-- No further judgement when sbox_noclip is on
+	if tobool(GetConVarNumber("sbox_noclip")) then return end
+
+	if ply:FAdmin_GetGlobal("FADmin_CanNoclip") then
+		sendNoclipMessage(ply)
+
+		return true
+	end
+
+	-- Has privilege
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") then return end
+
+	-- Disallow if other hooks say no
+	for k, v in pairs(hook.GetTable().PlayerNoClip) do
+		if k == "FAdmin_noclip" then continue end
+		if v(ply) == false then return false end
+	end
+
+	sendNoclipMessage(ply)
+
+	return true
 end)
