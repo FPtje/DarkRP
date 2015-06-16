@@ -51,6 +51,10 @@ end
 
 ENT.Once = false
 function ENT:Use(activator, caller)
+	-- The microwave cannot be used by non-players (e.g. wire user)
+	-- The player must be known for the microwave to work.
+	if not activator:IsPlayer() then return end
+
 	local owner = self:Getowning_ent()
 	self.user = activator
 	if not activator:canAfford(self:SalePrice(activator)) then
