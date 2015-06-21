@@ -10,7 +10,7 @@ end
 
 DarkRP.hookStub{
 	name = "onPlayerPickedUpMoney",
-	description = "Called when a player picks up money.",
+	description = "Called when a player picked up money.",
 	parameters = {
 		{
 			name = "player",
