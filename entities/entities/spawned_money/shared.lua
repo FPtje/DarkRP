@@ -9,7 +9,7 @@ function ENT:SetupDataTables()
 end
 
 DarkRP.hookStub{
-	name = "onPlayerPickedUpMoney",
+	name = "playerPickedUpMoney",
 	description = "Called when a player picked up money.",
 	parameters = {
 		{

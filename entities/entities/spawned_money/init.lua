@@ -21,7 +21,7 @@ function ENT:Use(activator,caller)
 	if self.USED or self.hasMerged then return end
 	local amount = self:Getamount()
 
-	hook.Call("onPlayerPickedUpMoney", nil, activator, amount or 0)
+	hook.Call("playerPickedUpMoney", nil, activator, amount or 0)
 
 	activator:addMoney(amount or 0)
 	DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_money", DarkRP.formatMoney(self:Getamount())))
