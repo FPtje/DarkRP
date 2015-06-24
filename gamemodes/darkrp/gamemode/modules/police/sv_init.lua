@@ -52,6 +52,7 @@ function plyMeta:wanted(actor, reason)
 	self:setDarkRPVar("wanted", true)
 	self:setDarkRPVar("wantedReason", reason)
 
+
 	timer.Create(self:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function()
 		if not IsValid(self) then return end
 		self:unWanted()
@@ -67,6 +68,8 @@ function plyMeta:wanted(actor, reason)
 		ply:PrintMessage(HUD_PRINTCENTER, centerMessage)
 		ply:PrintMessage(HUD_PRINTCONSOLE, printMessage)
 	end
+
+	DarkRP.log(string.Replace(printMessage, "\n", " "), Color(0, 150, 255))
 end
 
 function plyMeta:unWanted(actor)
@@ -80,6 +83,8 @@ function plyMeta:unWanted(actor)
 
 	local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
 		DarkRP.getPhrase("wanted_expired", self:Nick())
+
+	DarkRP.log(string.Replace(expiredMessage, "\n", " "), Color(0, 150, 255))
 
 	for _, ply in pairs(player.GetAll()) do
 		ply:PrintMessage(HUD_PRINTCENTER, expiredMessage)
@@ -292,7 +297,6 @@ Hooks
 ---------------------------------------------------------------------------*/
 function DarkRP.hooks:playerArrested(ply, time, arrester)
 	if ply:isWanted() then ply:unWanted(arrester) end
-	ply:unWarrant(arrester)
 	ply:setDarkRPVar("HasGunlicense", nil)
 
 	-- UpdatePlayerSpeed won't work here as the "Arrested" DarkRPVar is set AFTER this hook
