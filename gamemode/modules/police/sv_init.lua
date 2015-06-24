@@ -297,7 +297,6 @@ Hooks
 ---------------------------------------------------------------------------*/
 function DarkRP.hooks:playerArrested(ply, time, arrester)
 	if ply:isWanted() then ply:unWanted(arrester) end
-	ply:unWarrant(arrester)
 	ply:setDarkRPVar("HasGunlicense", nil)
 
 	-- UpdatePlayerSpeed won't work here as the "Arrested" DarkRPVar is set AFTER this hook
