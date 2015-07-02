@@ -41,8 +41,8 @@ DarkRP.stub{
 	parameters = {
 		{
 			name = "item",
-			description = "The entity to remove from pocket.",
-			type = "string",
+			description = "The index of the entity to remove from pocket.",
+			type = "number",
 			optional = false
 		}
 	},
