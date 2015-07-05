@@ -206,6 +206,8 @@ function meta:addCustomEntity(entTable)
 end
 
 function meta:removeCustomEntity(entTable)
+	if not entTable.cmd then return end
+
 	maxEntities[self] = maxEntities[self] or {}
 	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
 	maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] - 1
