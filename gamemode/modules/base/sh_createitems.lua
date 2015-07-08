@@ -985,6 +985,15 @@ local categoryOrder = function(a, b)
 end
 
 local function insertCategory(destination, tbl)
+	-- Override existing category of applicable
+	for k, cat in pairs(destination) do
+		if cat.name ~= tbl.name then continue end
+
+		destination[k] = tbl
+		tbl.members = cat.members
+		return
+	end
+
 	table.insert(destination, tbl)
 	local i = #destination
 
