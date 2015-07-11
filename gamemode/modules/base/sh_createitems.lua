@@ -1035,7 +1035,7 @@ function DarkRP.addToCategory(item, kind, cat)
 		return
 	end
 
-	DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], item.name, cat), 2, {
+	DarkRP.errorNoHalt(string.format([[The category of "%s" ("%s") does not exist!]], item.name, cat), 2, {
 		"Make sure the category is created with DarkRP.createCategory.",
 		"The category name is case sensitive!",
 		"Categories must be created before DarkRP finished loading.",
@@ -1068,11 +1068,12 @@ local function mergeCategories(customs, catKind, path)
 		local catName = v.default and GAMEMODE.Config.CategoryOverride[catKind][v.name] or v.category or "Other"
 		local cat = catByName[catName]
 		if not cat then
-			DarkRP.error(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 1, {
+			DarkRP.errorNoHalt(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 1, {
 				"Make sure the category is created with DarkRP.createCategory.",
 				"The category name is case sensitive!",
 				"Categories must be created before DarkRP finished loading."
 			}, path, -1, path)
+			cat = catByName.Other
 		end
 
 		cat.members = cat.members or {}
