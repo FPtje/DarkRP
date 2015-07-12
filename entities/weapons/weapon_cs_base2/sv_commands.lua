@@ -103,7 +103,7 @@ DarkRP.hookStub{
 		{
 			name = "original_weapon",
 			description = "The original weapon from which the spawned_weapon is made.",
-			type = "Player"
+			type = "Weapon"
 		}
 	},
 	returns = {
@@ -128,7 +128,7 @@ DarkRP.hookStub{
 		{
 			name = "real_weapon",
 			description = "The actual weapon that will be used by the player.",
-			type = "Player"
+			type = "Weapon"
 		}
 	},
 	returns = {
