@@ -93,7 +93,8 @@ DarkRP.hookStub{
 		}
 	},
 	returns = {
-	}
+	},
+	realm = "Client"
 }
 
 local KeyFrameVisible = false

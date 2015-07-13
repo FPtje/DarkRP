@@ -1066,6 +1066,11 @@ DarkRP.hookStub{
 			name = "amount",
 			description = "The amount of money given to the player.",
 			type = "number"
+		},
+		{
+			name = "wallet",
+			description = "How much money the player had before receiving the money.",
+			type = "number"
 		}
 	},
 	returns = {
