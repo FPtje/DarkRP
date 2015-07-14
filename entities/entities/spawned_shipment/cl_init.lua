@@ -19,7 +19,7 @@ end
 
 net.Receive("DarkRP_shipmentSpawn", function()
 	local ent = net.ReadEntity()
-	if not IsValid(ent) or ent:GetClass() ~= "spawned_shipment" then return end
+	if not IsValid(ent) or not ent.IsSpawnedShipment then return end
 
 	ent.height = 0
 	ent.StartTime = CurTime()
@@ -148,7 +148,7 @@ properties.Add("splitShipment",
 
 	Filter		=	function(self, ent, ply)
 						if not IsValid(ent) then return false end
-						return ent:GetClass() == "spawned_shipment"
+						return ent.IsSpawnedShipment
 					end,
 
 	Action		=	function(self, ent)

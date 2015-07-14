@@ -176,7 +176,7 @@ end
 
 function ENT:Touch(ent)
 	-- the .USED var is also used in other mods for the same purpose
-	if ent:GetClass() ~= "spawned_shipment" or
+	if not ent.IsSpawnedShipment or
 		self:Getcontents() ~= ent:Getcontents() or
 		self.locked or ent.locked or
 		self.USED or ent.USED or
