@@ -28,7 +28,7 @@ function ENT:Use(activator,caller)
 	self:Remove()
 end
 
-function ENT:Touch(ent)
+function ENT:StartTouch(ent)
 	-- the .USED var is also used in other mods for the same purpose
 	if ent:GetClass() ~= "spawned_money" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
 
