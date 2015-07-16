@@ -121,6 +121,12 @@ DarkRP.PLAYER.wanted = DarkRP.stub{
 			description = "The reason for the wanted status.",
 			type = "string",
 			optional = false
+		},
+		{
+			name = "time",
+			description = "The time in seconds for which the player should be wanted.",
+			type = "number",
+			optional = true
 		}
 	},
 	returns = {
