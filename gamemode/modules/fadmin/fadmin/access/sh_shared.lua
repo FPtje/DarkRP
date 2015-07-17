@@ -67,9 +67,10 @@ end
 
 local oldplyIsSuperAdmin = PLAYER.IsSuperAdmin
 function PLAYER:IsSuperAdmin(...)
+	local isListenServerHost = not game.IsDedicated() and self:EntIndex() == 1 -- because ply:IsListenServerHost doesn't work clientside
 	local usergroup = self:GetUserGroup()
 	if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsSuperAdmin(self, ...) or game.SinglePlayer() end
-	if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 2/*2 = superadmin*/) or (self.IsListenServerHost and self:IsListenServerHost()) then
+	if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 2/*2 = superadmin*/) or isListenServerHost then
 		return true
 	end
 	if CLIENT and tonumber(self:FAdmin_GetGlobal("FAdmin_admin")) and self:FAdmin_GetGlobal("FAdmin_admin") >= 2 then return true end
