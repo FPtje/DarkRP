@@ -137,28 +137,30 @@ loadMySQLModule()
 
 module("MySQLite")
 
+
 function initialize(config)
     MySQLite_config = config or MySQLite_config
 
-	if not MySQLite_config then
-		ErrorNoHalt("Warning: No MySQL config!")
-	end
+    if not MySQLite_config then
+        ErrorNoHalt("Warning: No MySQL config!")
+    end
 
     loadMySQLModule()
 
-	if MySQLite_config.EnableMySQL then
-		timer.Simple(1, function()
-			connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-		end)
-	else
-		timer.Simple(0, function()
-			GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
-			hook.Call("DatabaseInitialized", GAMEMODE)
-		end)
-	end
+    if MySQLite_config.EnableMySQL then
+        timer.Simple(1, function()
+            connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
+        end)
+    else
+        timer.Simple(0, function()
+            GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
+            hook.Call("DatabaseInitialized", GAMEMODE)
+        end)
+    end
 end
 
 local CONNECTED_TO_MYSQL = false
+local msOOConnect
 databaseObject = nil
 
 local queuedQueries
@@ -246,6 +248,9 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
     query.onError = function(Q, E)
         if databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED then
             table.insert(cachedQueries, {sqlText, callback, queryValue})
+
+            -- Immediately try reconnecting
+            msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
             return
         end
 
@@ -312,7 +317,8 @@ local function onConnected()
     CONNECTED_TO_MYSQL = true
 
     -- Run the queries that were called before the connection was made
-    for _, v in pairs(cachedQueries or {}) do
+    for k, v in pairs(cachedQueries or {}) do
+        cachedQueries[k] = nil
         if v[3] then
             queryValue(v[1], v[2])
         else
@@ -324,24 +330,19 @@ local function onConnected()
     hook.Call("DatabaseInitialized", GAMEMODE.DatabaseInitialized and GAMEMODE or nil)
 end
 
-local function msOOConnect(host, username, password, database_name, database_port)
+msOOConnect = function(host, username, password, database_name, database_port)
     databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
 
     if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
 
     databaseObject.onConnectionFailed = function(_, msg)
-        error("Connection failed! " .. tostring(msg) ..  "\n")
-    end
-
-    databaseObject.onConnected = function()
-        timer.Create("darkrp_check_mysql_status", 60, 0, function()
-            if (databaseObject and databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED) then
-                connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-            end
+        timer.Simple(5, function()
+            msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
         end)
-
-        onConnected()
+        error("Connection failed! " .. tostring(msg) ..  "\nTrying again in 5 seconds.")
     end
+
+    databaseObject.onConnected = onConnected
 
     databaseObject:connect()
 end

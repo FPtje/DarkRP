@@ -46,14 +46,14 @@ function plyMeta:requestWarrant(suspect, actor, reason)
 	DarkRP.createQuestion(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
-function plyMeta:wanted(actor, reason)
+function plyMeta:wanted(actor, reason, time)
 	local suppressMsg = hook.Call("playerWanted", DarkRP.hooks, self, actor, reason)
 
 	self:setDarkRPVar("wanted", true)
 	self:setDarkRPVar("wantedReason", reason)
 
 
-	timer.Create(self:UniqueID() .. " wantedtimer", GAMEMODE.Config.wantedtime, 1, function()
+	timer.Create(self:UniqueID() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
 		if not IsValid(self) then return end
 		self:unWanted()
 	end)

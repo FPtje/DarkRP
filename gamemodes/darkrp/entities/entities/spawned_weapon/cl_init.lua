@@ -38,7 +38,7 @@ properties.Add("createShipment",
 
 	Filter		=	function(self, ent, ply)
 						if not IsValid(ent) then return false end
-						return ent:GetClass() == "spawned_weapon"
+						return ent.IsSpawnedWeapon
 					end,
 
 	Action		=	function(self, ent)

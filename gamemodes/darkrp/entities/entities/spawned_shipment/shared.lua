@@ -3,6 +3,7 @@ ENT.Base = "base_gmodentity"
 ENT.PrintName = "Shipment"
 ENT.Author = "philxyz"
 ENT.Spawnable = false
+ENT.IsSpawnedShipment = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Int",0,"contents")
