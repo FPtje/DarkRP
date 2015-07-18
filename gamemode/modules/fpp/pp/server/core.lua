@@ -560,9 +560,8 @@ function FPP.PlayerDisconnect(ply)
 			end
 		end
 		for k,v in pairs(ents.GetAll()) do
-			if IsValid(v) and v.FPPOwnerID == SteamID then
-				v:Remove()
-			end
+			if not IsValid(v) or v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
+			v:Remove()
 		end
 		FPP.DisconnectedPlayers[SteamID] = nil -- Player out of the Disconnect table
 	end)
