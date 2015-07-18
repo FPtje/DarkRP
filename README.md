@@ -12,5 +12,5 @@ http://windows.github.com/
 
 If you really can't/don't want to use git, you can still use SVN.
 
-SVN link:
-https://github.com/FPtje/DarkRP/trunk
+Download the DarkRPMod!
+https://github.com/FPtje/darkrpmodification
