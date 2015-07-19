@@ -14,7 +14,7 @@ RP_MySQLConfig.Password = "password" -- This is the Password to log in on the My
 									-- Make sure you know who to trust. Make sure it's in quotation marks (" ")
 RP_MySQLConfig.Database_name = "DarkRP" -- This is the name of the Database on the MySQL server. Contact the MySQL server host to find out what this is
 RP_MySQLConfig.Database_port = 3306 -- This is the port of the MySQL server. Again, contact the MySQL server host if you don't know this.
-
+RP_MySQLConfig.Preferred_module = "mysqloo" -- Preferred module, case sensitive, must be either "mysqloo" or "tmysql4". Only applies when both are installed.
 
 --[[
 MANUAL!
