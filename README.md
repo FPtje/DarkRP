@@ -7,10 +7,10 @@ Pull ruqestes of any type are encouraged because as we know more fewatures makes
 
 
 Authors:
-* Willox
-* aStonedPenguin
-* LastPenguin
-* code_gs
+* Big Server Man Wollox
+* Big Server Man aStonedPenguin
+* Small Server Man LastPenguin
+* Super No Server Man code_gs
 
 Contributors:
 * zerf
