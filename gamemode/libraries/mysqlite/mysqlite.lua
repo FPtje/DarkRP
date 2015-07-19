@@ -29,6 +29,7 @@
                 Password         :: String - database password (keep away from clients!)
                 Database_name    :: String - name of the database
                 Database_port    :: Number - connection port (3306 by default)
+                Preferred_module :: String - Preferred module, case sensitive, must be either "mysqloo" or "tmysql4"
             }
 
     ----------------------------- Utility functions -----------------------------
@@ -128,7 +129,10 @@ local function loadMySQLModule()
     end
     moduleLoaded = true
 
-    require(moo and "mysqloo" or "tmysql4")
+    require(moo and tmsql and MySQLite_config.Preferred_module or
+            moo and "mysqloo"                                  or
+            "tmysql4")
+
 
     mysqlOO = mysqloo
     TMySQL = tmysql
