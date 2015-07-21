@@ -104,10 +104,13 @@ hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn") -- Remove Garry's usergroup
 
 local oldSetUsergroup = plyMeta.SetUserGroup
 function plyMeta:SetUserGroup(group, ...)
-	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(self:SteamID())..", " .. MySQLite.SQLStr(group)..");")
-
 	return oldSetUsergroup(self, group, ...)
 end
+
+-- Update the database only when an end users indicates that a player's usergroup is to be changed.
+hook.Add("CAMI.PlayerUsergroupChanged", "FAdmin", function(ply, old, new, source)
+	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(ply:SteamID()) .. ", " .. MySQLite.SQLStr(new) .. ");")
+end)
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
@@ -120,10 +123,16 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
 
 	for _, target in pairs(targets) do
 		if IsValid(target) then
+			-- An end user changed the usergroup. Register with CAMI
+			CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), "superadmin", "FAdmin")
+
 			FAdmin.Access.PlayerSetGroup(target, "superadmin")
+
+			-- TODO: Remove this when ULX implements CAMI ;)
 			if ULib and ULib.ucl and ULib.ucl.groups and ULib.ucl.groups["superadmin"] then --Add to ULX
 				ULib.ucl.addUser(target:SteamID(), nil, nil, "superadmin")
 			end
+
 			FAdmin.Messages.SendMessage(ply, 2, "User set to superadmin!")
 		end
 	end
@@ -228,10 +237,13 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
 	end
 
 	for _, target in pairs(targets) do
-		if IsValid(target) then
-			FAdmin.Access.PlayerSetGroup(target, args[2])
-			FAdmin.Messages.SendMessage(ply, 4, "User access set!")
-		end
+		if not IsValid(target) then continue end
+
+		-- An end user changed the usergroup. Register with CAMI
+		CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), args[2], "FAdmin")
+
+		FAdmin.Access.PlayerSetGroup(target, args[2])
+		FAdmin.Messages.SendMessage(ply, 4, "User access set!")
 	end
 	return true, targets, args[2]
 end
