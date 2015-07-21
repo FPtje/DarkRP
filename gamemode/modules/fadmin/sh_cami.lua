@@ -67,16 +67,25 @@ CAMI.RegisterUsergroup
 	Registers a usergroup with CAMI.
 
 	Parameters:
-		usergroup: CAMI_USERGROUP (see CAMI_USERGROUP structure)
+		usergroup
+			CAMI_USERGROUP
+			(see CAMI_USERGROUP structure)
+		source
+			any
+			Identifier for your own admin mod. Can be anything.
+			Use this to make sure CAMI.RegisterUsergroup function and the
+			CAMI.OnUsergroupRegistered hook don't cause an infinite loop
+
+
 
 	Return value:
 		CAMI_USERGROUP
 			The usergroup given as argument.
 ]]
-function CAMI.RegisterUsergroup(usergroup)
+function CAMI.RegisterUsergroup(usergroup, source)
 	usergroups[usergroup.Name] = usergroup
 
-	hook.Call("CAMI.OnUsergroupRegistered", nil, usergroup)
+	hook.Call("CAMI.OnUsergroupRegistered", nil, usergroup, source)
 	return usergroup
 end
 
@@ -109,18 +118,23 @@ CAMI.UnregisterUsergroup
 		usergroupName
 			string
 			The name of the usergroup.
+		source
+			any
+			Identifier for your own admin mod. Can be anything.
+			Use this to make sure CAMI.UnregisterUsergroup function and the
+			CAMI.OnUsergroupUnregistered hook don't cause an infinite loop
 
 	Return value:
 		bool
 			Whether the unregistering succeeded.
 ]]
-function CAMI.UnregisterUsergroup(usergroupName)
+function CAMI.UnregisterUsergroup(usergroupName, source)
 	if not usergroups[usergroupName] then return false end
 
 	local usergroup = usergroups[usergroupName]
 	usergroups[usergroupName] = nil
 
-	hook.Call("CAMI.OnUsergroupUnregistered", nil, usergroup)
+	hook.Call("CAMI.OnUsergroupUnregistered", nil, usergroup, source)
 
 	return true
 end
