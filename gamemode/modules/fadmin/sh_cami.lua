@@ -183,6 +183,36 @@ function CAMI.UsergroupInherits(usergroupName1, usergroupName2)
 end
 
 --[[
+CAMI.InheritanceRoot
+	All usergroups must eventually inherit either user, admin or superadmin.
+	Regardless of what inheritance mechism an admin may or may not have, this
+	always applies.
+
+	This method always returns either user, admin or superadmin, based on what
+	usergroups eventually inherit.
+
+	Parameters:
+		usergroupName
+			string
+			The name of the usergroup of which the root of inheritance is
+			requested
+
+	Return value:
+		string
+			The name of the root usergroup (either user, admin or superadmin)
+]]
+function CAMI.InheritanceRoot(usergroupName)
+	if not usergroups[usergroupName] then return end
+
+	local inherits = usergroups[usergroupName].Inherits
+	while inherits ~= usergroups[usergroupName].Inherits do
+		usergroupName = usergroups[usergroupName].Inherits
+	end
+
+	return usergroupName
+end
+
+--[[
 CAMI.RegisterPrivilege
 	Registers a privilege with CAMI.
 	Note: do NOT register all your admin mod's privileges with this function!
