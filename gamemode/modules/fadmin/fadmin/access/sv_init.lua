@@ -36,12 +36,32 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 				if v.immunity and v.immunity ~= "NULL" then
 					FAdmin.Access.Groups[v.NAME].immunity = tonumber(v.immunity)
 				end
+
+				if CAMI.GetUsergroup(v.NAME) then continue end
+
+				CAMI.RegisterUsergroup({
+					Name = v.NAME,
+					Inherits = FAdmin.Access.ADMIN[v.ADMIN_ACCESS]
+				}, "FAdmin")
 			end
 
 			-- Send groups to early joiners and listen server hosts
 			for k,v in pairs(player.GetAll()) do
 				FAdmin.Access.SendGroups(v)
 			end
+
+			-- See if there are any CAMI usergroups that FAdmin doesn't know about yet.
+			-- FAdmin doesn't start listening immediately because the database might not have initialised.
+			-- Besides, other admin mods might add usergroups before FAdmin's Lua files are even run
+			for k,v in pairs(CAMI.GetUsergroups()) do
+				if FAdmin.Access.Groups[v.Name] then continue end
+
+				FAdmin.Access.OnUsergroupRegistered(v)
+			end
+
+			-- Start listening for CAMI usergroup registrations.
+			hook.Add("CAMI.OnUsergroupRegistered", "FAdmin", FAdmin.Access.OnUsergroupRegistered)
+			hook.Add("CAMI.OnUsergroupUnregistered", "FAdmin", FAdmin.Access.OnUsergroupUnregistered)
 		end)
 
 		local function createGroups(privs)

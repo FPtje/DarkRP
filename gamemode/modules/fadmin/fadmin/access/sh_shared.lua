@@ -2,7 +2,7 @@ CreateConVar("_FAdmin_immunity", 1, {FCVAR_GAMEDLL, FCVAR_REPLICATED, FCVAR_ARCH
 
 FAdmin.Access = FAdmin.Access or {}
 FAdmin.Access.ADMIN = {"user", "admin", "superadmin"}
-FAdmin.Access.ADMIN[0] = "noaccess"
+FAdmin.Access.ADMIN[0] = "user"
 
 FAdmin.Access.Groups = FAdmin.Access.Groups or {}
 FAdmin.Access.Privileges = FAdmin.Access.Privileges or {}
@@ -12,10 +12,10 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 
 	-- Register custom usergroups with CAMI
 	if name ~= "user" and name ~= "admin" and name ~= "superadmin" then
-		CAMI.RegisterUsergroup{
+		CAMI.RegisterUsergroup({
 			Name = name,
 			Inherits = FAdmin.Access.ADMIN[admin_access]
-		}
+		}, "FAdmin")
 	end
 
 	if not SERVER then return end
@@ -41,21 +41,42 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
 	end
 end
 
-function FAdmin.Access.RemoveGroup(ply, cmd, args)
-	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
-	if not args[1] then return false end
+function FAdmin.Access.OnUsergroupRegistered(usergroup, source)
+	-- Don't re-add usergroups coming from FAdmin itself
+	if source == "FAdmin" then return end
 
-	if not FAdmin.Access.Groups[args[1]] or table.HasValue({"superadmin", "admin", "user", "noaccess"}, string.lower(args[1])) then return true, args[1] end
+	local inheritRoot = CAMI.InheritanceRoot(usergroup.Inherits)
+	local admin_access = table.KeyFromValue(FAdmin.Access.ADMIN, inheritRoot)
 
-	CAMI.UnregisterUsergroup(args[1])
+	-- Add groups registered to CAMI to FAdmin. Assume privileges from either the usergroup it inherits or its inheritance root.
+	-- Immunity is unknown and can be set by the user later. FAdmin immunity only applies to FAdmin anyway.
+	FAdmin.Access.AddGroup(usergroup.Name, admin_access, FAdmin.Access.Groups[usergroup.Inherits] or FAdmin.Access.Groups[inheritRoot] or {}, nil, true)
+end
 
-	MySQLite.query("DELETE FROM FADMIN_GROUPS WHERE NAME = ".. MySQLite.SQLStr(args[1])..";")
-	FAdmin.Access.Groups[args[1]] = nil
-	FAdmin.Messages.SendMessage(ply, 4, "Group succesfully removed")
+
+function FAdmin.Access.OnUsergroupUnregistered(usergroup, source)
+	if table.HasValue({"superadmin", "admin", "user", "noaccess"}, usergroup.Name) then return end
+
+	FAdmin.Access.Groups[usergroup.Name] = nil
+
+	if not SERVER then return end
+
+	MySQLite.query("DELETE FROM FADMIN_GROUPS WHERE NAME = ".. MySQLite.SQLStr(usergroup.Name)..";")
 
 	for k,v in pairs(player.GetAll()) do
 		FAdmin.Access.SendGroups(v)
 	end
+end
+
+function FAdmin.Access.RemoveGroup(ply, cmd, args)
+	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+	if not args[1] then return false end
+
+	if not FAdmin.Access.Groups[args[1]] or table.HasValue({"superadmin", "admin", "user"}, string.lower(args[1])) then return true, args[1] end
+
+	CAMI.UnregisterUsergroup(args[1], "FAdmin")
+
+	FAdmin.Messages.SendMessage(ply, 4, "Group succesfully removed")
 end
 
 local PLAYER = FindMetaTable("Player")
