@@ -67,6 +67,17 @@ function Vote:getFilter()
 	return filter
 end
 
+function DarkRP.hooks:canStartVote(newvote)
+	if #player.GetAll() <= table.Count(newvote.exclude) then
+		local ply = istable(newvote.info) and isentity(newvote.info.source) and newvote.info.source or target
+		if ply:IsPlayer() then
+			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
+		end
+		return false, true
+	end
+	return true
+end
+
 function DarkRP.createVote(question, voteType, target, time, callback, excludeVoters, fail, extraInfo)
 	excludeVoters = excludeVoters or {[target] = true}
 
@@ -87,14 +98,26 @@ function DarkRP.createVote(question, voteType, target, time, callback, excludeVo
 	newvote.yea = 0
 	newvote.nay = 0
 
-	if #player.GetAll() <= table.Count(excludeVoters) then
-		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("vote_alone"))
-		newvote:callback(1)
+	local ply = istable(extraInfo) and isentity(extraInfo.source) and extraInfo.source or target
+
+	local canStart, callSuccess, message = hook.Call("canStartVote", DarkRP.hooks, newvote)
+	print(canStart, callSuccess, message, "n")
+	if not canStart then
+		if callSuccess then
+			newvote:callback(1)
+		else
+			if ply:IsPlayer() then
+				DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", DarkRP.getPhrase("create_vote_for_job"), ""))
+			end
+			newvote:fail()
+		end
 		return
 	end
 
-	if target:IsPlayer() then
-		DarkRP.notify(target, 1, 4, DarkRP.getPhrase("vote_started"))
+	hook.Call("onVoteStarted", nil, newvote)
+
+	if ply:IsPlayer() then
+		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_started"))
 	end
 
 	umsg.Start("DoVote", newvote:getFilter())

@@ -377,12 +377,7 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
 				return ""
 			end
-			if #player.GetAll() == 1 then
-				DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
-				ply:changeTeam(k)
-				return ""
-			end
-			if CurTime() - ply:GetTable().LastVoteCop < 80 then
+			if CurTime() - ply.LastVoteCop < 80 then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
 				return ""
 			end
@@ -396,7 +391,7 @@ local function addTeamCommands(CTeam, max)
 					DarkRP.notifyAll(1, 4, DarkRP.getPhrase("has_not_been_made_team", ply:Nick(), CTeam.name))
 				end
 			end, nil, nil, {targetTeam = k})
-			ply:GetTable().LastVoteCop = CurTime()
+			ply.LastVoteCop = CurTime()
 			return ""
 		end)
 

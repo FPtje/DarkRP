@@ -287,11 +287,8 @@ local function Demote(ply, args)
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
 		else
 			DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " ..ply:Nick(),Color(255,0,0,255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
-			DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
-			DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
-			p.IsBeingDemoted = true
 
-			DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
+			local voteInfo = DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote,
 			{
 				[p] = true,
 				[ply] = true
@@ -299,7 +296,14 @@ local function Demote(ply, args)
 				if not IsValid(vote.target) then return end
 				vote.target.IsBeingDemoted = nil
 			end, {source = ply, reason = reason})
-			ply:GetTable().LastVoteCop = CurTime()
+
+			if voteInfo then
+				-- Vote has started
+				DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
+				DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
+				p.IsBeingDemoted = true
+			end
+			ply.LastVoteCop = CurTime()
 		end
 		return ""
 	else
