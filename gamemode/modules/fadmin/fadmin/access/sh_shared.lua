@@ -204,7 +204,7 @@ hook.Add("CAMI.SteamIDHasAccess", "FAdmin", function(actorSteam, privilegeName, 
 		MySQLite.SQLStr(targetSteam),
 		MySQLite.SQLStr(actorSteam),
 		MySQLite.SQLStr(privilegeName)
-	), function(res) show(res) callback(res and res[1] and tobool(res[1].res) or false) end)
+	), function(res) callback(res and res[1] and tobool(res[1].res) or false) end)
 
 	return true
 end)
