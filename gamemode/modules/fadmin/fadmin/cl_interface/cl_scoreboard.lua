@@ -108,6 +108,7 @@ function FAdmin.ScoreBoard.ShowScoreBoard()
 
 	gui.EnableScreenClicker(true)
 	hook.Add("HUDPaint", "FAdmin_ScoreBoard", FAdmin.ScoreBoard.DrawScoreBoard)
+	hook.Call("FAdmin_ShowFAdminMenu")
 	return true
 end
 concommand.Add("+FAdmin_menu", FAdmin.ScoreBoard.ShowScoreBoard)

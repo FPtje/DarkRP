@@ -175,6 +175,18 @@ local function specBinds(ply, bind, pressed)
 end
 
 /*---------------------------------------------------------------------------
+Scoreboardshow
+Set to main view when roaming, open on a player when spectating
+---------------------------------------------------------------------------*/
+local function fadminmenushow()
+	if isRoaming then
+		FAdmin.ScoreBoard.ChangeView("Main")
+	elseif IsValid(specEnt) and specEnt:IsPlayer() then
+		FAdmin.ScoreBoard.ChangeView("Player", specEnt)
+	end
+end
+
+/*---------------------------------------------------------------------------
 Spectate think
 Free roaming position updates
 ---------------------------------------------------------------------------*/
@@ -275,6 +287,7 @@ local function startSpectate(um)
 	hook.Add("ShouldDrawLocalPlayer", "FAdminSpectate", function() return isRoaming or thirdperson end)
 	hook.Add("Think", "FAdminSpectate", specThink)
 	hook.Add("HUDPaint", "FAdminSpectate", drawHelp)
+	hook.Add("FAdmin_ShowFAdminMenu", "FAdminSpectate", fadminmenushow)
 
 	timer.Create("FAdminSpectatePosUpdate", 0.5, 0, function()
 		if not isRoaming then return end
@@ -294,6 +307,7 @@ stopSpectating = function()
 	hook.Remove("ShouldDrawLocalPlayer", "FAdminSpectate")
 	hook.Remove("Think", "FAdminSpectate")
 	hook.Remove("HUDPaint", "FAdminSpectate")
+	hook.Remove("FAdmin_ShowFAdminMenu", "FAdminSpectate")
 
 	timer.Destroy("FAdminSpectatePosUpdate")
 
