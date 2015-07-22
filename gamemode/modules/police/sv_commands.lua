@@ -391,25 +391,27 @@ local function VoteRemoveLicense(ply, args)
 	end
 	local p = DarkRP.findPlayer(tableargs[1])
 	if p then
-		if CurTime() - ply:GetTable().LastVoteCop < 80 then
+		if CurTime() - ply.LastVoteCop < 80 then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demotelicense"))
 			return ""
 		end
 		if ply:getDarkRPVar("HasGunlicense") then
 			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demotelicense", ""))
 		else
-			DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_remove_vote_text", ply:Nick(), p:Nick()))
-			DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("gunlicense_remove_vote_text2", reason), "removegunlicense", p, 20,  FinishRevokeLicense,
+			local voteInfo = DarkRP.createVote(p:Nick() .. ":\n"..DarkRP.getPhrase("gunlicense_remove_vote_text2", reason), "removegunlicense", p, 20, FinishRevokeLicense,
 			{
 				[p] = true,
 				[ply] = true
-			})
-			ply:GetTable().LastVoteCop = CurTime()
-			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_started"))
+			}, nil, nil, {source = ply})
+			if voteInfo then
+				-- Vote has started
+				DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_remove_vote_text", ply:Nick(), p:Nick()))
+			end
+			ply.LastVoteCop = CurTime()
 		end
 		return ""
 	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(tableargs[1])))
 		return ""
 	end
 end

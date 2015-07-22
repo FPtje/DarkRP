@@ -136,7 +136,7 @@ DarkRP.createVote = DarkRP.stub{
 		},
 		{
 			name = "...",
-			description = "Any other information.",
+			description = "Any other information.\n\nIf the vote involves multiple parties (i.e. the target of the vote and person who started it are different) you should provide a table with the \"source\" field set to the player who intiated the vote. This ensures the notifications about the vote are sent to the correct player.",
 			type = "any",
 			optional = true
 		}
@@ -144,7 +144,7 @@ DarkRP.createVote = DarkRP.stub{
 	returns = {
 		{
 			name = "vote",
-			description = "All the vote information.",
+			description = "All the vote information. Returns nil if the vote did not start because the canStartVote hook blocked it.",
 			type = "table"
 		}
 	},
@@ -208,5 +208,48 @@ DarkRP.hookStub{
 			description = "The result of the vote. Return 1 for win, -1 for lose, 0 for undecided.",
 			type = "number"
 		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "canStartVote",
+	description = "Whether the vote can be started or not.",
+	parameters = {
+		{
+			name = "vote",
+			description = "A table that contains information about the vote.",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "canStartVote",
+			description = "Whether the vote can be started or not.",
+			type = "boolean"
+		},
+		{
+			name = "callSuccess",
+			description = "True if the callback for a successful vote should be called, false if the callback for a failed vote should be called. Only works when canStartVote is false.",
+			type = "boolean"
+		},
+		{
+			name = "message",
+			description = "The message to show when the vote cannot be started. Only works when callSuccess is false.",
+			type = "string"
+		}
+	}
+}
+
+DarkRP.hookStub{
+	name = "onVoteStarted",
+	description = "Called when a vote has been started.",
+	parameters = {
+		{
+			name = "vote",
+			description = "A table that contains information about the vote.",
+			type = "table"
+		}
+	},
+	returns = {
 	}
 }
