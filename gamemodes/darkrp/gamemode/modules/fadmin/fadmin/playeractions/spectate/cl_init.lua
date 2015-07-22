@@ -164,14 +164,26 @@ local function specBinds(ply, bind, pressed)
 
 		return true
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
-		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
-		if not key or key == "use" then return end
+		local key = string.lower(string.match(bind, "+([a-z A-Z 0-9]+)") or "")
+		if not key or key == "use" or key == "showscores" then return end
 
 		keysDown[key:upper()] = pressed
 
 		return true
 	end
 	-- Do not return otherwise, spectating admins should be able to move to avoid getting detected
+end
+
+/*---------------------------------------------------------------------------
+Scoreboardshow
+Set to main view when roaming, open on a player when spectating
+---------------------------------------------------------------------------*/
+local function fadminmenushow()
+	if isRoaming then
+		FAdmin.ScoreBoard.ChangeView("Main")
+	elseif IsValid(specEnt) and specEnt:IsPlayer() then
+		FAdmin.ScoreBoard.ChangeView("Player", specEnt)
+	end
 end
 
 /*---------------------------------------------------------------------------
@@ -200,10 +212,10 @@ local function specThink()
 		direction = direction + aimVec:Angle():Right()
 	end
 
-	if ply:KeyDown(IN_SPEED) then
-		roamSpeed = 1700
-	elseif keysDown["WALK"] then
-		roamSpeed = 400
+	if keysDown["SPEED"] then
+		roamSpeed = 2500
+	elseif keysDown["WALK"] or keysDown["DUCK"] then
+		roamSpeed = 300
 	end
 
 	direction:Normalize()
@@ -215,7 +227,7 @@ end
 /*---------------------------------------------------------------------------
 Draw help on the screen
 ---------------------------------------------------------------------------*/
-local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(0, 0, 60, 120)
+local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(20, 20, 20, 120)
 local red = Color(255, 0, 0, 255)
 local function drawHelp()
 	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
@@ -227,6 +239,8 @@ local function drawHelp()
 	end
 	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
 	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, ScrH() / 2 + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, ScrH() / 2 + 100, "\twill open their page!", "UiBold", uiBackground, uiForeground)
 
 	if not isRoaming then return end
 
@@ -275,6 +289,7 @@ local function startSpectate(um)
 	hook.Add("ShouldDrawLocalPlayer", "FAdminSpectate", function() return isRoaming or thirdperson end)
 	hook.Add("Think", "FAdminSpectate", specThink)
 	hook.Add("HUDPaint", "FAdminSpectate", drawHelp)
+	hook.Add("FAdmin_ShowFAdminMenu", "FAdminSpectate", fadminmenushow)
 
 	timer.Create("FAdminSpectatePosUpdate", 0.5, 0, function()
 		if not isRoaming then return end
@@ -294,6 +309,7 @@ stopSpectating = function()
 	hook.Remove("ShouldDrawLocalPlayer", "FAdminSpectate")
 	hook.Remove("Think", "FAdminSpectate")
 	hook.Remove("HUDPaint", "FAdminSpectate")
+	hook.Remove("FAdmin_ShowFAdminMenu", "FAdminSpectate")
 
 	timer.Destroy("FAdminSpectatePosUpdate")
 

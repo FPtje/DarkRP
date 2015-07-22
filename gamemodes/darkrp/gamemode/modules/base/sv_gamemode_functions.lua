@@ -683,21 +683,6 @@ local function selectDefaultWeapon(ply)
 	end
 end
 
-function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
-	local agenda = ply:getAgendaTable()
-
-	-- Remove agenda text when last manager left
-	if agenda and agenda.ManagersByKey[oldTeam] then
-		local found = false
-		for man, _ in pairs(agenda.ManagersByKey) do
-			if team.NumPlayers(man) > 0 then found = true break end
-		end
-		if not found then agenda.text = nil end
-	end
-
-	ply:setSelfDarkRPVar("agenda", agenda and agenda.text or nil)
-end
-
 local function removelicense(ply)
 	if not IsValid(ply) then return end
 	ply:GetTable().RPLicenseSpawn = false

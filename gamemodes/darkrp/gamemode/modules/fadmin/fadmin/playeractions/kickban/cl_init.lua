@@ -204,6 +204,10 @@ FAdmin.StartHooks["CL_KickBan"] = function()
 		RunConsoleCommand("_FAdmin", "kick", ply:UserID(), "Quick kick")
 		if ValidPanel(Panel) then Panel:Remove() end
 	end)
+	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Ban", function(ply, Panel)
+		showBanWindow(ply:SteamID(), ply:Nick())
+		if ValidPanel(Panel) then Panel:Remove() end
+	end)
 
 
 	-- Kick button

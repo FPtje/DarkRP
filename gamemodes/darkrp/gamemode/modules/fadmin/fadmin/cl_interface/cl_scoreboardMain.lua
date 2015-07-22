@@ -102,3 +102,7 @@ end
 function FAdmin.ScoreBoard.Main.AddPlayerRightClick(Name, func)
 	FAdmin.PlayerIcon.RightClickOptions[Name] = func
 end
+
+FAdmin.StartHooks["CopySteamID"] = function()
+	FAdmin.ScoreBoard.Main.AddPlayerRightClick("Copy SteamID", function(ply) SetClipboardText(ply:SteamID()) end)
+end
