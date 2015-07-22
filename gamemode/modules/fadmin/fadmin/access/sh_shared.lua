@@ -171,6 +171,44 @@ hook.Add("CAMI.PlayerHasAccess", "FAdmin", function(actor, privilegeName, callba
 	return true
 end)
 
+hook.Add("CAMI.SteamIDHasAccess", "FAdmin", function(actorSteam, privilegeName, callback, targetSteam, extraInfo)
+	-- The client just doesn't know
+	if CLIENT then return end
+
+	if not targetSteam or extraInfo and extraInfo.IgnoreImmunity then
+		MySQLite.query(string.format(
+			[[SELECT COUNT(*) AS c
+			FROM FAdmin_PlayerGroup l
+			JOIN FADMIN_PRIVILEGES r ON l.groupname = r.NAME
+			WHERE l.steamid = %s AND r.PRIVILEGE = %s]],
+			MySQLite.SQLStr(actorSteam),
+			MySQLite.SQLStr(privilegeName)
+		), function(res) callback(tonumber(res[1].c) > 0) end)
+
+		return true
+	end
+
+	MySQLite.query(string.format(
+		[[SELECT c AND i AS res
+		FROM (SELECT li.immunity >= ri.immunity AS i
+			  FROM FAdmin_PlayerGroup lg
+			  JOIN FAdmin_Immunity li ON lg.groupname = li.groupname
+			  JOIN FAdmin_PlayerGroup rg
+			  JOIN FAdmin_Immunity ri ON rg.groupname = ri.groupname
+			  WHERE lg.steamid = %s AND rg.steamid = %s)
+		JOIN (SELECT COUNT(*) AS c
+			FROM FAdmin_PlayerGroup l
+			JOIN FADMIN_PRIVILEGES r ON l.groupname = r.NAME
+			WHERE l.steamid = %s AND r.PRIVILEGE = %s)]],
+		MySQLite.SQLStr(actorSteam),
+		MySQLite.SQLStr(targetSteam),
+		MySQLite.SQLStr(actorSteam),
+		MySQLite.SQLStr(privilegeName)
+	), function(res) show(res) callback(res and res[1] and tobool(res[1].res) or false) end)
+
+	return true
+end)
+
 FAdmin.StartHooks["AccessFunctions"] = function()
 	FAdmin.Access.AddPrivilege("SetAccess", 3) -- AddPrivilege is shared, run on both client and server
 	FAdmin.Access.AddPrivilege("SeeAdmins", 1)
