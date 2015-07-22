@@ -342,7 +342,7 @@ CAMI.PlayerHasAccess
 ]]
 -- Default access handler
 local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
-	function(actorPly, privilegeName, callback, _, extraInfoTbl)
+	function(_, actorPly, privilegeName, callback, _, extraInfoTbl)
 		if not IsValid(actorPly) then return callback(false, "Fallback.") end
 
 		local priv = privileges[privilegeName]
@@ -357,17 +357,17 @@ local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 
 		if not priv then return callback(fallback, "Fallback.") end
 
-		return CAMI.UsergroupInherits(actorPly:GetUserGroup(), priv.MinAccess)
+		callback(CAMI.UsergroupInherits(actorPly:GetUserGroup(), priv.MinAccess), "Fallback.")
 	end,
 	["CAMI.SteamIDHasAccess"] =
-	function(_, _, callback)
-		return callback(false, "No information available.")
+	function(_, _, _, callback)
+		callback(false, "No information available.")
 	end
 }
 function CAMI.PlayerHasAccess(actorPly, privilegeName, callback, targetPly,
 extraInfoTbl)
 	hook.Call("CAMI.PlayerHasAccess", defaultAccessHandler, actorPly,
-		privilegeName, targetPly, extraInfoTbl)
+		privilegeName, callback, targetPly, extraInfoTbl)
 end
 
 --[[
