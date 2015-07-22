@@ -227,7 +227,7 @@ end
 /*---------------------------------------------------------------------------
 Draw help on the screen
 ---------------------------------------------------------------------------*/
-local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(0, 0, 60, 120)
+local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(20, 20, 20, 120)
 local red = Color(255, 0, 0, 255)
 local function drawHelp()
 	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
@@ -239,6 +239,8 @@ local function drawHelp()
 	end
 	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
 	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, ScrH() / 2 + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, ScrH() / 2 + 100, "\twill open their page!", "UiBold", uiBackground, uiForeground)
 
 	if not isRoaming then return end
 
