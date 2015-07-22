@@ -101,7 +101,6 @@ function DarkRP.createVote(question, voteType, target, time, callback, excludeVo
 	local ply = istable(extraInfo) and isentity(extraInfo.source) and extraInfo.source or target
 
 	local canStart, callSuccess, message = hook.Call("canStartVote", DarkRP.hooks, newvote)
-	print(canStart, callSuccess, message, "n")
 	if not canStart then
 		if callSuccess then
 			newvote:callback(1)
