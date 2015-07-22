@@ -164,8 +164,8 @@ local function specBinds(ply, bind, pressed)
 
 		return true
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
-		local key = string.match(bind, "+([a-z A-Z 0-9]+)")
-		if not key or key == "use" then return end
+		local key = string.lower(string.match(bind, "+([a-z A-Z 0-9]+)"))
+		if not key or key == "use" or key == "showscores" then return end
 
 		keysDown[key:upper()] = pressed
 
