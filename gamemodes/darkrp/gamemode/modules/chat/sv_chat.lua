@@ -5,7 +5,11 @@ function DarkRP.defineChatCommand(cmd, callback)
 		if not canChatCommand then
 			return ""
 		end
-		return callback(ply, arg, ...)
+		ret = {callback(ply, arg, ...)}
+		local overrideTxt, overrideDoSayFunc = hook.Run("onChatCommand", ply, cmd, arg, ret, ...)
+
+		if overrideTxt then return overrideTxt, overrideDoSayFunc end
+		return unpack(ret)
 	end
 
 	local chatcommands = DarkRP.getChatCommands()

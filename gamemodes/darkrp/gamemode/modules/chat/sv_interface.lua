@@ -77,3 +77,42 @@ DarkRP.hookStub{
 		},
 	}
 }
+
+DarkRP.hookStub{
+	name = "onChatCommand",
+	description = "Called after a player has run any chat command or uses the DarkRP console command. Note: the chat command has already been run. Use canChatCommand if you want to stop chat commands from being run.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who spoke.",
+			type = "Player"
+		},
+		{
+			name = "command",
+			description = "The thing they said.",
+			type = "string"
+		},
+		{
+			name = "arguments",
+			description = "The arguments of the chat command, given as one string.",
+			type = "string"
+		},
+		{
+			name = "return",
+			description = "The return value of the chat command function. Should contain a chat text override and/or a say function. See the return values of this hook for a description",
+			type = "table"
+		}
+	},
+	returns = {
+		{
+			name = "overrideText",
+			description = "Overrides the text a chat command will put in everyone's chat box. Return nil to not change behaviour.",
+			type = "string"
+		},
+		{
+			name = "overrideSayFunc",
+			description = "Say functions handle what needs to be said to whom. The say function for PMs for example make sure only the sender and receiver see the message. You can override this behaviour by returning a different say function in this hook. Return nil to not change behaviour.",
+			type = "function"
+		},
+	}
+}
