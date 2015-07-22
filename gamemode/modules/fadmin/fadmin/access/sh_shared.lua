@@ -121,7 +121,7 @@ hook.Add("CAMI.OnPrivilegeUnregistered", "FAdmin", function(privilege)
 	FAdmin.Access.Privileges[privilege.Name] = nil
 end)
 
-function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
+function FAdmin.Access.PlayerHasPrivilege(ply, priv, target, ignoreImmunity)
 	-- This is the server console
 	if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end
 	-- Privilege does not exist
@@ -135,6 +135,7 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 	end
 
 	if FAdmin.GlobalSetting.Immunity and
+		not ignoreImmunity and
 		not isstring(target) and IsValid(target) and target ~= ply and
 		FAdmin.Access.Groups[Usergroup] and	FAdmin.Access.Groups[target:GetUserGroup()] and
 		FAdmin.Access.Groups[Usergroup].immunity and FAdmin.Access.Groups[target:GetUserGroup()].immunity and
@@ -142,9 +143,8 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 		return false
 	end
 
-	if not FAdmin.Access.Groups[Usergroup] then
-		return ply:IsAdmin() -- solution until CAMI exists
-	end
+	-- Defer answer when usergroup is unknown
+	if not FAdmin.Access.Groups[Usergroup] then return end
 
 	if FAdmin.Access.Groups[Usergroup].PRIVS[priv] then
 		return true
@@ -154,6 +154,22 @@ function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 
 	return false
 end
+
+hook.Add("CAMI.PlayerHasAccess", "FAdmin", function(actor, privilegeName, callback, target, extraInfo)
+	-- FAdmin doesn't know. Defer answer.
+	if not FAdmin.Access.Privileges[privilegeName] then return end
+
+	local res = FAdmin.Access.PlayerHasPrivilege(actor, privilegeName, target, extraInfo and extraInfo.IgnoreImmunity)
+
+	-- Defer again
+	if res == nil then return end
+
+	-- Publish the answer
+	callback(res, "FAdmin")
+
+	-- FAdmin knows the answer. Prevent other hooks from running.
+	return true
+end)
 
 FAdmin.StartHooks["AccessFunctions"] = function()
 	FAdmin.Access.AddPrivilege("SetAccess", 3) -- AddPrivilege is shared, run on both client and server
