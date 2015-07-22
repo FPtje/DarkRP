@@ -164,7 +164,7 @@ local function specBinds(ply, bind, pressed)
 
 		return true
 	elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
-		local key = string.lower(string.match(bind, "+([a-z A-Z 0-9]+)"))
+		local key = string.lower(string.match(bind, "+([a-z A-Z 0-9]+)") or "")
 		if not key or key == "use" or key == "showscores" then return end
 
 		keysDown[key:upper()] = pressed
@@ -212,10 +212,10 @@ local function specThink()
 		direction = direction + aimVec:Angle():Right()
 	end
 
-	if ply:KeyDown(IN_SPEED) then
-		roamSpeed = 1700
-	elseif keysDown["WALK"] then
-		roamSpeed = 400
+	if keysDown["SPEED"] then
+		roamSpeed = 2500
+	elseif keysDown["WALK"] or keysDown["DUCK"] then
+		roamSpeed = 300
 	end
 
 	direction:Normalize()
