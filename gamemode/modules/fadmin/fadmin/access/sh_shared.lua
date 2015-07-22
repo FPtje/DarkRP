@@ -113,6 +113,14 @@ function FAdmin.Access.AddPrivilege(Name, admin_access)
 	FAdmin.Access.Privileges[Name] = admin_access
 end
 
+hook.Add("CAMI.OnPrivilegeRegistered", "FAdmin", function(privilege)
+	FAdmin.Access.AddPrivilege(privilege.Name, table.KeyFromValue(FAdmin.Access.ADMIN, privilege.MinAccess))
+end)
+
+hook.Add("CAMI.OnPrivilegeUnregistered", "FAdmin", function(privilege)
+	FAdmin.Access.Privileges[privilege.Name] = nil
+end)
+
 function FAdmin.Access.PlayerHasPrivilege(ply, priv, target)
 	-- This is the server console
 	if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end
