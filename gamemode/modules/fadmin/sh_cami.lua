@@ -407,10 +407,10 @@ CAMI.SteamIDHasAccess
 		None, the answer is given in the callback function in order to allow
 		for the admin mod to perform e.g. a database lookup.
 ]]
-function CAMI.SteamIDHasAccess(actorSteam, privilegeName, targetSteam,
-extraInfoTbl)
+function CAMI.SteamIDHasAccess(actorSteam, privilegeName, callback,
+targetSteam, extraInfoTbl)
 	hook.Call("CAMI.SteamIDHasAccess", defaultAccessHandler, actorSteam,
-		privilegeName, targetSteam, extraInfoTbl)
+		privilegeName, callback, targetSteam, extraInfoTbl)
 end
 
 --[[
