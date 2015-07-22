@@ -189,17 +189,17 @@ hook.Add("CAMI.SteamIDHasAccess", "FAdmin", function(actorSteam, privilegeName, 
 	end
 
 	MySQLite.query(string.format(
-		[[SELECT c AND i AS res
+		[[SELECT ll.i AND rr.c AS res
 		FROM (SELECT li.immunity >= ri.immunity AS i
 			  FROM FAdmin_PlayerGroup lg
 			  JOIN FAdmin_Immunity li ON lg.groupname = li.groupname
 			  JOIN FAdmin_PlayerGroup rg
 			  JOIN FAdmin_Immunity ri ON rg.groupname = ri.groupname
-			  WHERE lg.steamid = %s AND rg.steamid = %s)
+			  WHERE lg.steamid = %s AND rg.steamid = %s) AS ll
 		JOIN (SELECT COUNT(*) AS c
 			FROM FAdmin_PlayerGroup l
 			JOIN FADMIN_PRIVILEGES r ON l.groupname = r.NAME
-			WHERE l.steamid = %s AND r.PRIVILEGE = %s)]],
+			WHERE l.steamid = %s AND r.PRIVILEGE = %s) AS rr]],
 		MySQLite.SQLStr(actorSteam),
 		MySQLite.SQLStr(targetSteam),
 		MySQLite.SQLStr(actorSteam),
