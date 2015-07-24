@@ -70,7 +70,7 @@ end
 function DarkRP.hooks:canStartVote(newvote)
 	if #player.GetAll() <= table.Count(newvote.exclude) then
 		local ply = istable(newvote.info) and isentity(newvote.info.source) and newvote.info.source or target
-		if ply:IsPlayer() then
+		if ply and ply:IsPlayer() then
 			DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
 		end
 		return false, true
