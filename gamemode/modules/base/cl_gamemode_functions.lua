@@ -45,6 +45,8 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	if bnd and FKeyBinds[bnd] then
 		hook.Call(FKeyBinds[bnd], GAMEMODE)
 	end
+
+	if not self.Config.deadvoice and not ply:Alive() and string.find(string.lower(bind), "voicerecord") then return true end
 end
 
 function GM:InitPostEntity()
