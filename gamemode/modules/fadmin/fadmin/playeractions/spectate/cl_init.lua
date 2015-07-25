@@ -242,15 +242,31 @@ local function drawHelp()
 	draw.WordBox(2, 10, ScrH() / 2 + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
 	draw.WordBox(2, 10, ScrH() / 2 + 100, "\twill open their page!", "UiBold", uiBackground, uiForeground)
 
+
+	local target = findNearestPlayer()
+	for _, ply in pairs(player.GetAll()) do
+		if not isRoaming and ply == specEnt then continue end
+
+		local pos = ply:GetShootPos():ToScreen()
+		if not pos.visible then continue end
+
+		local x, y = pos.x, pos.y
+
+		draw.RoundedBox(2, x, y, 16, 16, team.GetColor(ply:Team()))
+		draw.WordBox(2, x, y - 66, ply:Nick(), "UiBold", uiBackground, uiForeground)
+		draw.WordBox(2, x, y - 46, "Health: " .. ply:Health(), "UiBold", uiBackground, uiForeground)
+		draw.WordBox(2, x, y - 26, ply:GetUserGroup(), "UiBold", uiBackground, uiForeground)
+
+		if ply == target then
+			draw.WordBox(2, x, y - 86, "Left click to spectate!", "UiBold", uiBackground, uiForeground)
+		end
+	end
+
 	if not isRoaming then return end
 
-	local ply = findNearestPlayer()
-	if not IsValid(ply) then return end
-
-	local mins, maxs = ply:LocalToWorld(ply:OBBMins()):ToScreen(), ply:LocalToWorld(ply:OBBMaxs()):ToScreen()
-	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 46, ply:Nick(), "UiBold", uiBackground, uiForeground)
-	draw.WordBox(2, math.min(mins.x, maxs.x), maxs.y - 26, "Left click to spectate!", "UiBold", uiBackground, uiForeground)
-	draw.RoundedBox(8, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, Color(255, 0, 0, 255))
+	if not IsValid(target) then return end
+	local mins, maxs = target:LocalToWorld(target:OBBMins()):ToScreen(), target:LocalToWorld(target:OBBMaxs()):ToScreen()
+	draw.RoundedBox(12, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, Color(255, 0, 0, 255))
 end
 
 /*---------------------------------------------------------------------------
