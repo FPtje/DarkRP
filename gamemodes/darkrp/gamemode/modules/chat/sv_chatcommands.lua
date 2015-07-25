@@ -186,20 +186,24 @@ local function GroupMsg(ply, args)
 		local t = ply:Team()
 		local col = team.GetColor(ply:Team())
 
-		local groupChat
+		local groupChats = {}
 		local hasReceived = {}
 		for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
 			-- not the group of the player
 			if not func(ply) then continue end
-			groupChat = func
-			break
+
+			table.insert(groupChats, func)
 		end
 
-		if not groupChat then return "" end
+		if #groupChats == 0 then return "" end
 
 		for _, target in pairs(player.GetAll()) do
-			if groupChat(target, ply) then
+			-- The target is in any of the group chats
+			for k, func in pairs(groupChats) do
+				if not func(target, ply) then continue end
+
 				DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
+				break
 			end
 		end
 	end

@@ -63,6 +63,8 @@ GM.Config.deathblack 					= false
 GM.Config.showdeaths 					= true
 -- deadtalk - Enable/disable whether people talk and use commands while dead
 GM.Config.deadtalk 						= true
+-- deadvoice - Enable/disable whether people talk through the microphone while dead
+GM.Config.deadvoice						= true
 -- deathpov - Enable/disable whether people see their death in first person view
 GM.Config.deathpov 						= false
 -- decalcleaner - Enable/Disable clearing ever players decals.
@@ -190,6 +192,8 @@ GM.Config.demotetime					= 120
 GM.Config.doorcost						= 30
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
 GM.Config.entremovedelay				= 0
+-- gunlabweapon - The weapon that the gunlab spawns
+GM.Config.gunlabweapon 					= "weapon_p2282"
 -- jailtimer - Sets the jailtimer. (in seconds)
 GM.Config.jailtimer						= 120
 -- maxdoors - Sets the max amount of doors one can own.

@@ -302,6 +302,8 @@ hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
+	if not self.Config.deadvoice and not talker:Alive() then return false end
+
 	local canHear = listener.DrpCanHear and listener.DrpCanHear[talker]
 	return canHear, threed
 end
