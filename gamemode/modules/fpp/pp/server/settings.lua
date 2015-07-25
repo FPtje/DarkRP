@@ -283,6 +283,67 @@ local function RetrieveSettings()
 	end)
 end
 
+local defaultBlocked = {
+	Physgun1 = {
+				["func_breakable_surf"] = true,
+				["func_brush"] = true,
+				["func_button"] = true,
+				["func_door"] = true,
+				["prop_door_rotating"] = true,
+				["func_door_rotating"] = true
+			},
+	Spawning1 = {
+					["func_breakable_surf"] = true,
+					["player"] = true,
+					["func_door"] = true,
+					["prop_door_rotating"] = true,
+					["func_door_rotating"] = true,
+					["ent_explosivegrenade"] = true,
+					["ent_mad_grenade"] = true,
+					["ent_flashgrenade"] = true,
+					["gmod_wire_field_device"] = true
+				},
+	Gravgun1 = {["func_breakable_surf"] = true, ["vehicle_"] = true},
+	Toolgun1 = {
+				["func_breakable_surf"] = true,
+				["func_button"] = true,
+				["player"] = true,
+				["func_door"] = true,
+				["prop_door_rotating"] = true,
+				["func_door_rotating"] = true
+			},
+	PlayerUse1 = {},
+	EntityDamage1 = {}
+}
+
+-- Fills the FPP blocked table with default things that are to be blocked
+function FPP.FillDefaultBlocked()
+	local count = 0
+	MySQLite.begin()
+
+	-- All values that are to be inserted
+	local allValues = {}
+
+	for k,v in pairs(defaultBlocked) do
+		for a,b in pairs(v) do
+			FPP.Blocked[k][a] = true
+			count = count + 1
+
+			if not MySQLite.isMySQL() then
+				MySQLite.query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(a) .. ");")
+			else
+				table.insert(allValues, string.format("(%i, %s, %s)", count, sql.SQLStr(k), sql.SQLStr(a)))
+			end
+		end
+	end
+
+	-- Run it all in a single query if using MySQL.
+	if MySQLite.isMySQL() then
+		MySQLite.query(string.format("INSERT IGNORE INTO FPP_BLOCKED1 VALUES %s", table.concat(allValues, ",")))
+	end
+	MySQLite.commit()
+end
+
 local function RetrieveBlocked()
 	MySQLite.query("SELECT * FROM FPP_BLOCKED1;", function(data)
 		if type(data) == "table" then
@@ -295,66 +356,28 @@ local function RetrieveBlocked()
 				FPP.Blocked[v.var][string.lower(v.setting)] = true
 			end
 		else
-			data = MySQLite.query("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var TEXT NOT NULL, setting TEXT NOT NULL, PRIMARY KEY(id));")
-
-			FPP.Blocked.Physgun1 = {
-				["func_breakable_surf"] = true,
-				["func_brush"] = true,
-				["func_button"] = true,
-				["func_door"] = true,
-				["prop_door_rotating"] = true,
-				["func_door_rotating"] = true
-			}
-			FPP.Blocked.Spawning1 = {
-				["func_breakable_surf"] = true,
-				["player"] = true,
-				["func_door"] = true,
-				["prop_door_rotating"] = true,
-				["func_door_rotating"] = true,
-				["ent_explosivegrenade"] = true,
-				["ent_mad_grenade"] = true,
-				["ent_flashgrenade"] = true,
-				["gmod_wire_field_device"] = true
-			}
-			FPP.Blocked.Gravgun1 = {["func_breakable_surf"] = true, ["vehicle_"] = true}
-			FPP.Blocked.Toolgun1 = {
-				["func_breakable_surf"] = true,
-				["func_button"] = true,
-				["player"] = true,
-				["func_door"] = true,
-				["prop_door_rotating"] = true,
-				["func_door_rotating"] = true
-			}
-			FPP.Blocked.PlayerUse1 = {}
-			FPP.Blocked.EntityDamage1 = {}
-
-			local count = 0
-			MySQLite.begin()
-			for k,v in pairs(FPP.Blocked) do
-				for a,b in pairs(v) do
-					count = count + 1
-					MySQLite.query("REPLACE INTO FPP_BLOCKED1 VALUES(".. count ..", " .. sql.SQLStr(k) .. ", " .. sql.SQLStr(a) .. ");")
-				end
-			end
-			MySQLite.commit()
+			-- Give third party addons 5 seconds to add default blocked items
+			timer.Simple(5, FPP.FillDefaultBlocked)
 		end
 	end)
 end
 
 /*---------------------------------------------------------------------------
 Default blocked entities
-Don't save them in the database, but always block them.
+Only save in the database on first start
 ---------------------------------------------------------------------------*/
 function FPP.AddDefaultBlocked(types, classname)
 	classname = string.lower(classname)
 
 	if type(types) == "string" then
-		FPP.Blocked[types][classname] = true
+		defaultBlocked[types] = defaultBlocked[types] or {}
+		defaultBlocked[types][classname] = true
 		return
 	end
 
 	for k,v in pairs(types) do
-		FPP.Blocked[v][classname] = true
+		defaultBlocked[v] = defaultBlocked[v] or {}
+		defaultBlocked[v][classname] = true
 	end
 end
 
@@ -844,7 +867,7 @@ concommand.Add("_FPP_RefreshPrivatePlayerSettings", refreshPrivatePlayerSettings
 /*---------------------------------------------------------------------------
 Load all FPP settings
 ---------------------------------------------------------------------------*/
-function FPP.Init()
+function FPP.Init(callback)
 	MySQLite.begin()
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var VARCHAR(40) NOT NULL, setting VARCHAR(100) NOT NULL, PRIMARY KEY(id));")
 		MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_PHYSGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
@@ -877,6 +900,9 @@ function FPP.Init()
 		RetrieveRestrictedTools()
 		RetrieveGroups()
 		RetrieveSettings()
+
+		-- Callback when FPP is done creating the tables
+		if callback then callback() end
 	end)
 end
 
