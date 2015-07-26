@@ -186,12 +186,66 @@ local function fadminmenushow()
 	end
 end
 
+
+/*---------------------------------------------------------------------------
+RenderScreenspaceEffects
+Draws the lines from players' eyes to where they are looking
+---------------------------------------------------------------------------*/
+local LineMat = Material("cable/new_cable_lit")
+local linesToDraw = {}
+local function lookingLines()
+	local linesToDraw = linesToDraw
+	if not linesToDraw[0] then return end
+
+	render.SetMaterial(LineMat)
+
+	cam.Start3D(view.origin, view.angles)
+		for i = 0, #linesToDraw, 3 do
+			render.DrawBeam(linesToDraw[i], linesToDraw[i + 1], 4, 0.01, 10, linesToDraw[i + 2])
+		end
+	cam.End3D()
+end
+
+/*---------------------------------------------------------------------------
+gunpos
+Gets the position of a player's gun
+---------------------------------------------------------------------------*/
+local function gunpos(ply)
+	local wep = ply:GetActiveWeapon()
+	if not IsValid(wep) then return ply:EyePos() end
+	local att = wep:GetAttachment(1)
+	if not att then return ply:EyePos() end
+	return att.Pos
+end
+
 /*---------------------------------------------------------------------------
 Spectate think
 Free roaming position updates
 ---------------------------------------------------------------------------*/
 local function specThink()
 	local ply = LocalPlayer()
+
+	-- Update linesToDraw
+	local pls = player.GetAll()
+	local lastPly = 0
+	local skip = 0
+	for i = 0, #pls - 1 do
+		local p = pls[i + 1]
+		if not isRoaming and p == specEnt and not thirdperson then skip = skip + 3 continue end
+
+		local tr = p:GetEyeTrace()
+		local sp = gunpos(p)
+
+		local pos = i * 3 - skip
+
+		linesToDraw[pos] = tr.HitPos
+		linesToDraw[pos + 1] = sp
+		linesToDraw[pos + 2] = team.GetColor(p:Team())
+		lastPly = i
+	end
+
+	-- Remove entries from linesToDraw that don't match with a player anymore
+	for i = #linesToDraw, lastPly * 3 + 3, -1 do linesToDraw[i] = nil end
 
 	if not isRoaming or keysDown["USE"] then return end
 
@@ -230,21 +284,24 @@ Draw help on the screen
 local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(20, 20, 20, 120)
 local red = Color(255, 0, 0, 255)
 local function drawHelp()
-	draw.WordBox(2, 10, ScrH() / 2, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
+	local scrHalfH = math.floor(ScrH() / 2)
+	draw.WordBox(2, 10, scrHalfH, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
 
 	if isRoaming then
-		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: quickly move forwards", "UiBold", uiBackground, uiForeground)
+		draw.WordBox(2, 10, scrHalfH + 20, "Right click: quickly move forwards", "UiBold", uiBackground, uiForeground)
 	else
-		draw.WordBox(2, 10, ScrH() / 2 + 20, "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
+		draw.WordBox(2, 10, scrHalfH + 20, "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
 	end
-	draw.WordBox(2, 10, ScrH() / 2 + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
-	draw.WordBox(2, 10, ScrH() / 2 + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
-	draw.WordBox(2, 10, ScrH() / 2 + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
-	draw.WordBox(2, 10, ScrH() / 2 + 100, "\twill open their page!", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, scrHalfH + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, scrHalfH + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, scrHalfH + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
+	draw.WordBox(2, 10, scrHalfH + 100, "\twill open their page!", "UiBold", uiBackground, uiForeground)
 
 
 	local target = findNearestPlayer()
-	for _, ply in pairs(player.GetAll()) do
+	local pls = player.GetAll()
+	for i = 1, #pls do
+		local ply = pls[i]
 		if not isRoaming and ply == specEnt then continue end
 
 		local pos = ply:GetShootPos():ToScreen()
@@ -266,7 +323,7 @@ local function drawHelp()
 
 	if not IsValid(target) then return end
 	local mins, maxs = target:LocalToWorld(target:OBBMins()):ToScreen(), target:LocalToWorld(target:OBBMaxs()):ToScreen()
-	draw.RoundedBox(12, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, Color(255, 0, 0, 255))
+	draw.RoundedBox(12, mins.x, mins.y, maxs.x - mins.x, maxs.y - mins.y, red)
 end
 
 /*---------------------------------------------------------------------------
@@ -306,6 +363,7 @@ local function startSpectate(um)
 	hook.Add("Think", "FAdminSpectate", specThink)
 	hook.Add("HUDPaint", "FAdminSpectate", drawHelp)
 	hook.Add("FAdmin_ShowFAdminMenu", "FAdminSpectate", fadminmenushow)
+	hook.Add("RenderScreenspaceEffects", "FAdminSpectate", lookingLines)
 
 	timer.Create("FAdminSpectatePosUpdate", 0.5, 0, function()
 		if not isRoaming then return end
@@ -326,6 +384,7 @@ stopSpectating = function()
 	hook.Remove("Think", "FAdminSpectate")
 	hook.Remove("HUDPaint", "FAdminSpectate")
 	hook.Remove("FAdmin_ShowFAdminMenu", "FAdminSpectate")
+	hook.Remove("RenderScreenspaceEffects", "FAdminSpectate")
 
 	timer.Destroy("FAdminSpectatePosUpdate")
 
