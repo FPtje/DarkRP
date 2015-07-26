@@ -251,7 +251,7 @@ local function specThink()
 
 	local roamSpeed = 1000
 	local aimVec = ply:GetAimVector()
-	local direction = Vector(0)
+	local direction
 	local frametime = RealFrameTime()
 
 	if keysDown["FORWARD"] then
@@ -261,9 +261,11 @@ local function specThink()
 	end
 
 	if keysDown["MOVELEFT"] then
-		direction = direction - aimVec:Angle():Right()
+		local right = aimVec:Angle():Right()
+		direction = direction and (direction - right):GetNormalized() or -right
 	elseif keysDown["MOVERIGHT"] then
-		direction = direction + aimVec:Angle():Right()
+		local right = aimVec:Angle():Right()
+		direction = direction and (direction + right):GetNormalized() or right
 	end
 
 	if keysDown["SPEED"] then
@@ -272,7 +274,7 @@ local function specThink()
 		roamSpeed = 300
 	end
 
-	direction:Normalize()
+	if not direction then return end
 
 	roamVelocity = direction * roamSpeed
 	roamPos = roamPos + roamVelocity * frametime
@@ -286,12 +288,7 @@ local red = Color(255, 0, 0, 255)
 local function drawHelp()
 	local scrHalfH = math.floor(ScrH() / 2)
 	draw.WordBox(2, 10, scrHalfH, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
-
-	if isRoaming then
-		draw.WordBox(2, 10, scrHalfH + 20, "Right click: quickly move forwards", "UiBold", uiBackground, uiForeground)
-	else
-		draw.WordBox(2, 10, scrHalfH + 20, "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
-	end
+	draw.WordBox(2, 10, scrHalfH + 20, isRoaming and "Right click: quickly move forwards" or "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
 	draw.WordBox(2, 10, scrHalfH + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
 	draw.WordBox(2, 10, scrHalfH + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
 	draw.WordBox(2, 10, scrHalfH + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
