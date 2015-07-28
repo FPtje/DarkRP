@@ -400,7 +400,6 @@ GM.Config.PocketBlacklist = {
 	["money_printer"] = true,
 	["gunlab"] = true,
 	["prop_dynamic"] = true,
-	["spawned_money"] = true,
 	["prop_vehicle_prisoner_pod"] = true,
 	["keypad_wire"] = true,
 	["gmod_button"] = true,
