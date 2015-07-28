@@ -151,11 +151,13 @@ local function ConCommand(ply, _, args)
 
 	ply.DrpCommandDelays = ply.DrpCommandDelays or {}
 
-	if tbl.delay and ply.DrpCommandDelays[cmd] and ply.DrpCommandDelays[cmd] > time - tbl.delay then
-		return
-	end
+	if IsValid(ply) then -- Server console isn't valid
+		if tbl.delay and ply.DrpCommandDelays[cmd] and ply.DrpCommandDelays[cmd] > time - tbl.delay then
+			return
+		end
 
-	ply.DrpCommandDelays[cmd] = time
+		ply.DrpCommandDelays[cmd] = time
+	end
 
 	tbl.callback(ply, arg)
 end
