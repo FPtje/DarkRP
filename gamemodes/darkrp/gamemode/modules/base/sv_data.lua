@@ -97,6 +97,19 @@ function DarkRP.initDatabase()
 			)
 		]])
 
+		MySQLite.queueQuery([[
+			CREATE TABLE IF NOT EXISTS darkrp_dbversion(version INTEGER NOT NULL PRIMARY KEY)
+		]])
+
+		-- Load the last DBVersion into DarkRP.DBVersion, to allow checks to see whether migration is needed.
+		MySQLite.queueQuery([[
+			SELECT MAX(version) AS version FROM darkrp_dbversion
+		]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 0 end)
+
+		MySQLite.queueQuery([[
+			REPLACE INTO darkrp_dbversion VALUES(20150725)
+		]])
+
 		-- SQlite doesn't really handle foreign keys strictly, neither does MySQL by default
 		-- So to keep the DB clean, here's a manual partial foreign key enforcement
 		-- For now it's deletion only, since updating of the common attribute doesn't happen.

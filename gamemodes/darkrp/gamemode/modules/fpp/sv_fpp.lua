@@ -13,8 +13,6 @@ include("pp/server/antispam.lua")
 include("pp/server/defaultblockedmodels.lua")
 include("pp/server/ownability.lua")
 
-hook.Add("DatabaseInitialized", "FPPInit", FPP.Init)
-
 /*---------------------------------------------------------------------------
 DarkRP blocked entities
 ---------------------------------------------------------------------------*/
@@ -38,3 +36,23 @@ FPP.AddDefaultBlocked(blockTypes, "spawned_shipment")
 FPP.AddDefaultBlocked(blockTypes, "spawned_weapon")
 
 FPP.AddDefaultBlocked("Spawning1", "darkrp_laws")
+
+hook.Add("DarkRPDBInitialized", "FPPInit", function()
+	FPP.Init()
+
+	-- Migrate database.
+	-- Previous versions of the database don't store the default blocked.
+	-- Store them now
+	if not DarkRP.DBVersion or DarkRP.DBVersion < 20150725 then
+		timer.Simple(6, function()
+			-- Add all blocked things to default blocked. That way, FillDefaultBlocked will re-add everything
+			for typ, v in pairs(FPP.Blocked) do
+				for class, _ in pairs(v) do
+					FPP.AddDefaultBlocked(typ, class)
+				end
+			end
+
+			MySQLite.query("DELETE FROM FPP_BLOCKED1", FPP.FillDefaultBlocked)
+		end)
+	end
+end)

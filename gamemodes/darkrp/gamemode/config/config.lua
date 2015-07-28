@@ -400,6 +400,16 @@ GM.Config.PocketBlacklist = {
 	["money_printer"] = true,
 	["gunlab"] = true,
 	["prop_dynamic"] = true,
+	["prop_vehicle_prisoner_pod"] = true,
+	["keypad_wire"] = true,
+	["gmod_button"] = true,
+	["gmod_rtcameraprop"] = true,
+	["gmod_cameraprop"] = true,
+	["gmod_dynamite"] = true,
+	["gmod_thruster"] = true,
+	["gmod_light"] = true,
+	["gmod_lamp"] = true,
+	["gmod_emitter"] = true,
 }
 
 -- These weapons are classed as 'legal' in the weapon checker and are not stripped when confiscating weapons.
