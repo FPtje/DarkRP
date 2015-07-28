@@ -19,6 +19,7 @@ end
 
 function ENT:Use(activator,caller)
 	if self.USED or self.hasMerged then return end
+	self.USED = true
 	local amount = self:Getamount()
 
 	hook.Call("playerPickedUpMoney", nil, activator, amount or 0)
