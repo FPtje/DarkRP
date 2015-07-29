@@ -74,6 +74,7 @@ FPP.Settings.FPP_GLOBALSETTINGS1 = {
 FPP.Settings.FPP_ANTISPAM1 = {
 	toggle = 1,
 	antispawninprop = 0,
+	bigpropantispam = 1,
 	bigpropsize = 5.85,
 	bigpropwait = 1.5,
 	smallpropdowngradecount = 3,

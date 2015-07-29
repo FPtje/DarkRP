@@ -50,7 +50,7 @@ function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
 
 	local class = ent:GetClass()
 	-- I power by ten because the volume of a prop can vary between 65 and like a few billion
-	if phys:GetVolume() and phys:GetVolume() > math.pow(10, FPP.Settings.FPP_ANTISPAM1.bigpropsize) and not string.find(class, "constraint") and not string.find(class, "hinge")
+	if tobool(FPP.Settings.FPP_ANTISPAM1.bigpropantispam) and phys:GetVolume() and phys:GetVolume() > math.pow(10, FPP.Settings.FPP_ANTISPAM1.bigpropsize) and not string.find(class, "constraint") and not string.find(class, "hinge")
 	and not string.find(class, "magnet") and not string.find(class, "collision") and not blacklist[class] then
 		if not IsDuplicate then
 			ply.FPPAntispamBigProp = (ply.FPPAntispamBigProp or 0) + 1

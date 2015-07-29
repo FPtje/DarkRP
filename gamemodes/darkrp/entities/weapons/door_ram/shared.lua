@@ -221,6 +221,7 @@ end
 
 function SWEP:SecondaryAttack()
 	if CLIENT then self.LastIron = CurTime() end
+	self:SetNextSecondaryFire(CurTime() + 0.30)
 	self:SetIronsights(not self:GetIronsights())
 	if self:GetIronsights() then
 		self:SetHoldType("rpg")
