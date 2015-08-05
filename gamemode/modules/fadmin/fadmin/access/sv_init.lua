@@ -218,9 +218,14 @@ end
 
 --hooks and stuff
 
-hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
+function FAdmin.Access.PlayerSpawn(ply,retry)
 	MySQLite.queryValue("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = " .. MySQLite.SQLStr(ply:SteamID())..";", function(Group)
-		if not Group then return end
+		if !Group or Group == "user" then 
+			if retry then return end
+			timer.Create(ply:SteamID().."_fadminaccessretry",3,1,function() FAdmin.Access.PlayerSpawn(ply,true) end)
+			return 
+		end
+		if !Group then return end
 		ply:SetUserGroup(Group)
 
 		if FAdmin.Access.Groups[Group] then
@@ -228,7 +233,9 @@ hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
 		end
 	end)
 	FAdmin.Access.SendGroups(ply)
-end)
+end
+
+hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess",FAdmin.Access.PlayerSpawn)
 
 local function toggleImmunity(ply, cmd, args)
 	-- SetAccess privilege because they can handle immunity settings
