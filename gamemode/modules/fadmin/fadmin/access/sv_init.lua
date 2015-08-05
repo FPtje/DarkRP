@@ -225,6 +225,7 @@ function FAdmin.Access.PlayerSpawn(ply,retry)
 			timer.Create(ply:SteamID().."_fadminaccessretry",3,1,function() FAdmin.Access.PlayerSpawn(ply,true) end)
 			return 
 		end
+		if !Group then return end
 		ply:SetUserGroup(Group)
 
 		if FAdmin.Access.Groups[Group] then
