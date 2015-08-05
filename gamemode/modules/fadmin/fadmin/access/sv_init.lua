@@ -219,7 +219,6 @@ end
 --hooks and stuff
 
 function FAdmin.Access.PlayerSpawn(ply,retry)
-	local retry = retry or false
 	MySQLite.queryValue("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = " .. MySQLite.SQLStr(ply:SteamID())..";", function(Group)
 		if !Group or Group == "user" then 
 			if retry then return end
