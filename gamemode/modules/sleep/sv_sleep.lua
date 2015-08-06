@@ -159,6 +159,7 @@ DarkRP.defineChatCommand("wake", DarkRP.toggleSleep)
 DarkRP.defineChatCommand("wakeup", DarkRP.toggleSleep)
 
 hook.Add("OnPlayerChangedTeam", "SleepMod", stopSleep)
+hook.Add("PlayerDisconnected", "SleepMod", stopSleep)
 
 
 local function DamageSleepers(ent, dmginfo)
