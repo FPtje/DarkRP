@@ -95,7 +95,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	hook.Call("lockpickStarted", nil, self:GetOwner(), ent)
+	hook.Call("lockpickStarted", nil, self:GetOwner(), ent, trace)
 
 	local onFail = function(ply) if ply == self:GetOwner() then hook.Call("onLockpickCompleted", nil, ply, false, ent) end end
 
