@@ -69,7 +69,7 @@ function SWEP:PrimaryAttack()
 	local ent = trace.Entity
 
 	if not IsValid(ent) then return end
-	local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent)
+	local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent, trace)
 
 	if canLockpick == false then return end
 	if canLockpick ~= true and (
@@ -85,9 +85,14 @@ function SWEP:PrimaryAttack()
 	self:SetIsLockpicking(true)
 	self:SetLockpickEnt(ent)
 	self:SetLockpickStartTime(CurTime())
-	local endDelta = hook.Call("lockpickTime", nil, ply, ent) or util.SharedRandom("DarkRP_Lockpick"..self:EntIndex().."_"..self:GetTotalLockpicks(), 10, 30)
+	local endDelta = hook.Call("lockpickTime", nil, self:GetOwner(), ent) or util.SharedRandom("DarkRP_Lockpick"..self:EntIndex().."_"..self:GetTotalLockpicks(), 10, 30)
 	self:SetLockpickEndTime(CurTime() + endDelta)
 	self:SetTotalLockpicks(self:GetTotalLockpicks() + 1)
+
+
+	if IsFirstTimePredicted() then
+		hook.Call("lockpickStarted", nil, self:GetOwner(), ent, trace)
+	end
 
 	if CLIENT then
 		self.Dots = ""
@@ -203,6 +208,11 @@ DarkRP.hookStub{
 			description = "The entity being lockpicked.",
 			type = "Entity"
 		},
+		{
+			name = "trace",
+			description = "The trace result.",
+			type = "table"
+		}
 	},
 	returns = {
 		{
@@ -211,6 +221,30 @@ DarkRP.hookStub{
 			type = "boolean"
 		}
 	},
+	realm = "Shared"
+}
+
+DarkRP.hookStub{
+	name = "lockpickStarted",
+	description = "Called when a player is about to pick a lock.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player that is about to pick a lock.",
+			type = "Player"
+		},
+		{
+			name = "ent",
+			description = "The entity being lockpicked.",
+			type = "Entity"
+		},
+		{
+			name = "trace",
+			description = "The trace result.",
+			type = "table"
+		}
+	},
+	returns = {},
 	realm = "Shared"
 }
 

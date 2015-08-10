@@ -60,6 +60,7 @@ local defaultblocked = {
 function FPP.AddDefaultBlockedModels()
 	MySQLite.begin()
 	for k,v in pairs(defaultblocked) do
+		FPP.BlockedModels[v] = true
 		MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. MySQLite.SQLStr(v) .. ");")
 	end
 	MySQLite.commit()
