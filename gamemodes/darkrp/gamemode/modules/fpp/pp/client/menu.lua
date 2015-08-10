@@ -1202,6 +1202,6 @@ properties.Add("removeFPPBlocked",
 
 	Action		=	function(self, ent)
 						if not IsValid(ent) then return end
-						RunConsoleCommand("FPP_RemoveBlockedModel", ent:GetModel())
+						RunConsoleCommand("FPP_RemoveBlockedModel", ent:GetModel(), ent:EntIndex())
 					end
 })

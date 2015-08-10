@@ -161,30 +161,31 @@ local function AddBlocked(ply, cmd, args)
 end
 concommand.Add("FPP_AddBlocked", AddBlocked)
 
+-- Models can differ between server and client. Famous example being:
+-- models/props_phx/cannonball_solid.mdl <-- serverside
+-- models/props_phx/cannonball.mdl       <-- clientside
+-- Similar problems occur with effects
+local function getIntendedBlockedModels(model, ent)
+	model = string.Replace(string.lower(model), "\\", "/")
+
+	if not IsValid(ent) then return {model} end
+	if ent:GetClass() == "prop_effect" then return {ent.AttachedEntity:GetModel()} end
+	if model ~= ent:GetModel() then return {model, ent:GetModel()} end
+	return {model}
+end
+
 local function AddBlockedModel(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 
-	local model = string.lower(args[1])
-	model = string.Replace(model, "\\", "/")
+	local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
-	-- Models can differ between server and client. Famous example being:
-	-- models/props_phx/cannonball_solid.mdl <-- serverside
-	-- models/props_phx/cannonball.mdl       <-- clientside
-	-- Add both models
-	local serverModel = tonumber(args[2]) and IsValid(Entity(args[2])) and string.lower(Entity(args[2]):GetModel())
-	if serverModel and serverModel ~= model and not FPP.BlockedModels[serverModel] then
-			FPP.BlockedModels[serverModel] = true
-			MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(serverModel)..");")
-			FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. serverModel .. " to the blocked models black/whitelist", true)
+	for k, model in pairs(models) do
+		if FPP.BlockedModels[model] then FPP.Notify(ply, string.format([["%s" is already in the black/whitelist]], model), false) continue end
+		FPP.BlockedModels[model] = true
+		MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(model)..");")
+		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. model .. " to the blocked models black/whitelist", true)
 	end
-
-	if FPP.BlockedModels[model] then FPP.Notify(ply, "This model is already in the black/whitelist", false) return end
-
-	FPP.BlockedModels[model] = true
-	MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES("..sql.SQLStr(model)..");")
-
-	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. model .. " to the blocked models black/whitelist", true)
 end
 concommand.Add("FPP_AddBlockedModel", AddBlockedModel)
 
@@ -203,15 +204,14 @@ concommand.Add("FPP_RemoveBlocked", RemoveBlocked)
 local function RemoveBlockedModel(ply, cmd, args)
 	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
-	local model = string.lower(args[1])
+	local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
-	model = string.lower(model or "")
-	model = string.Replace(model, "\\", "/")
+	for k, model in pairs(models) do
+		FPP.BlockedModels[model] = nil
 
-	FPP.BlockedModels[model] = nil
-
-	MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = "..sql.SQLStr(model)..";")
-	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. model .. " from the blocked models black/whitelist", false)
+		MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = "..sql.SQLStr(model)..";")
+		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. model .. " from the blocked models black/whitelist", false)
+	end
 end
 concommand.Add("FPP_RemoveBlockedModel", RemoveBlockedModel)
 
