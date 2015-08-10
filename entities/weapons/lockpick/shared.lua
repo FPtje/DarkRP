@@ -89,13 +89,16 @@ function SWEP:PrimaryAttack()
 	self:SetLockpickEndTime(CurTime() + endDelta)
 	self:SetTotalLockpicks(self:GetTotalLockpicks() + 1)
 
+
+	if IsFirstTimePredicted() then
+		hook.Call("lockpickStarted", nil, self:GetOwner(), ent, trace)
+	end
+
 	if CLIENT then
 		self.Dots = ""
 		self.NextDotsTime = CurTime() + 0.5
 		return
 	end
-
-	hook.Call("lockpickStarted", nil, self:GetOwner(), ent, trace)
 
 	local onFail = function(ply) if ply == self:GetOwner() then hook.Call("onLockpickCompleted", nil, ply, false, ent) end end
 
