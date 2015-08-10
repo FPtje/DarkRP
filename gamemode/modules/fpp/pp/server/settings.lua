@@ -857,6 +857,16 @@ local function resetAllSetting(ply)
 end
 concommand.Add("FPP_ResetAllSettings", resetAllSetting)
 
+local function resetBlockedModels(ply)
+	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
+
+	FPP.BlockedModels = {}
+
+	MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1", FPP.AddDefaultBlockedModels)
+	FPP.Notify(ply, "Settings successfully reset.", true)
+end
+concommand.Add("FPP_ResetBlockedModels", resetBlockedModels)
+
 local function refreshPrivatePlayerSettings(ply)
 	timer.Destroy("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())
 
