@@ -711,6 +711,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 
 	customShipment.name = name
 	customShipment.default = DarkRP.DARKRP_LOADING
+	customShipment.shipmodel = customShipment.shipmodel or shipmentmodel
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
