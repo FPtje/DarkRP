@@ -30,15 +30,17 @@ local function isBlocked(model)
 end
 
 /*---------------------------------------------------------------------------
-Prevents spawning a prop when its model is blocked
+Prevents spawning a prop or effect when its model is blocked
 ---------------------------------------------------------------------------*/
-hook.Add("PlayerSpawnProp", "FPP_SpawnProp", function(ply, model)
+local function propSpawn(ply, model)
 	local blocked, msg = isBlocked(model)
 	if blocked then
 		FPP.Notify(ply, msg, false)
 		return false
 	end
-end)
+end
+hook.Add("PlayerSpawnProp", "FPP_SpawnProp", propSpawn)
+hook.Add("PlayerSpawnEffect", "FPP_SpawnEffect", propSpawn)
 
 --------------------------------------------------------------------------------------
 --Helper function to get a setting from a player
