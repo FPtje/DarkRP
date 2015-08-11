@@ -17,6 +17,8 @@ function ENT:Initialize()
 end
 
 function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+
 	self.damage = self.damage - dmg:GetDamage()
 	if self.damage <= 0 and not self.Destructed then
 		self.Destructed = true

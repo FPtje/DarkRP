@@ -18,6 +18,15 @@ function ENT:Initialize()
 	hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end
 
+function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+
+	local typ = dmg:GetDamageType()
+	if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
+
+	self:Remove()
+end
+
 function ENT:OnRemove()
 	local ply = self:Getowning_ent()
 	if not IsValid(ply) then return end

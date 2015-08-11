@@ -30,6 +30,8 @@ function ENT:Use(activator,caller)
 end
 
 function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+
 	local typ = dmg:GetDamageType()
 	if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
 
