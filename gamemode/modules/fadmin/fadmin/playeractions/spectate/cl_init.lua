@@ -182,6 +182,7 @@ local function fadminmenushow()
 	if isRoaming then
 		FAdmin.ScoreBoard.ChangeView("Main")
 	elseif IsValid(specEnt) and specEnt:IsPlayer() then
+		FAdmin.ScoreBoard.ChangeView("Main")
 		FAdmin.ScoreBoard.ChangeView("Player", specEnt)
 	end
 end
