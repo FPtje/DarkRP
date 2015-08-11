@@ -61,6 +61,7 @@ function ENT:StartSpawning()
 end
 
 function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
 	if not self.locked then
 		self.damage = self.damage - dmg:GetDamage()
 		if self.damage <= 0 then
