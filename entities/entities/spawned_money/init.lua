@@ -29,6 +29,15 @@ function ENT:Use(activator,caller)
 	self:Remove()
 end
 
+function ENT:OnTakeDamage(dmg)
+	local typ = dmg:GetDamageType()
+	if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
+
+	self.USED = true
+	self.hasMerged = true
+	self:Remove()
+end
+
 function ENT:StartTouch(ent)
 	-- the .USED var is also used in other mods for the same purpose
 	if ent:GetClass() ~= "spawned_money" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
