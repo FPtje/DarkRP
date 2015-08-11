@@ -102,6 +102,9 @@ function ENT:SpawnItem()
 	local pos = self:GetPos()
 	if count <= 1 then self:Remove() end
 	local contents = self:Getcontents()
+
+	if CustomShipments[contents] and CustomShipments[contents].spawn then return CustomShipments[contents].spawn(self, CustomShipments[contents]) end
+
 	local weapon = ents.Create("spawned_weapon")
 
 	local weaponAng = self:GetAngles()
