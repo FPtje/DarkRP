@@ -10,3 +10,7 @@ function ENT:Use(activator, caller)
 	activator:GiveAmmo(self.amountGiven, self.ammoType)
 	self:Remove()
 end
+
+function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+end
