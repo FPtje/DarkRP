@@ -18,7 +18,8 @@ end
 
 function ENT:OnTakeDamage(dmg)
 	self.damage = self.damage - dmg:GetDamage()
-	if (self.damage <= 0) then
+	if self.damage <= 0 and not self.Destructed then
+		self.Destructed = true
 		self:Destruct()
 		self:Remove()
 	end
@@ -26,6 +27,8 @@ end
 
 function ENT:Destruct()
 	local vPoint = self:GetPos()
+
+	util.BlastDamage(self, self, vPoint, 200, 200)
 	local effectdata = EffectData()
 	effectdata:SetStart(vPoint)
 	effectdata:SetOrigin(vPoint)
