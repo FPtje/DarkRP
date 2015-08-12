@@ -61,6 +61,7 @@ function ENT:StartSpawning()
 end
 
 function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
 	if not self.locked then
 		self.damage = self.damage - dmg:GetDamage()
 		if self.damage <= 0 then
@@ -102,6 +103,9 @@ function ENT:SpawnItem()
 	local pos = self:GetPos()
 	if count <= 1 then self:Remove() end
 	local contents = self:Getcontents()
+
+	if CustomShipments[contents] and CustomShipments[contents].spawn then return CustomShipments[contents].spawn(self, CustomShipments[contents]) end
+
 	local weapon = ents.Create("spawned_weapon")
 
 	local weaponAng = self:GetAngles()

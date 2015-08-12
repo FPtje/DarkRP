@@ -118,6 +118,7 @@ local validShipment = {
 	shipmentClass      = ass(optional(isstring), "The shipmentClass must be a string."),
 	onBought           = ass(optional(isfunction), "The onBought must be a function."),
 	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
+	spawn              = ass(optional(isfunction), "The spawn must be a function."),
 }
 
 -- Template for correct vehicle
@@ -154,6 +155,7 @@ local validEntity = {
 	customCheck        = ass(optional(isfunction), "The customCheck must be a function."),
 	CustomCheckFailMsg = ass(optional(isstring, isfunction), "The CustomCheckFailMsg must be either a string or a function."),
 	getPrice           = ass(optional(isfunction), "The getPrice must be a function."),
+	spawn              = ass(optional(isfunction), "The spawn must be a function."),
 }
 
 local validAgenda = {
@@ -712,6 +714,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	customShipment.name = name
 	customShipment.default = DarkRP.DARKRP_LOADING
 	customShipment.shipmodel = customShipment.shipmodel or shipmentmodel
+	customShipment.spawn = customShipment.spawn and fp{DarkRP.simplerrRun, customShipment.spawn}
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 

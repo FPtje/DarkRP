@@ -36,6 +36,10 @@ function ENT:DecreaseAmount()
 	end
 end
 
+function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+end
+
 function ENT:Use(activator, caller)
 	if type(self.PlayerUse) == "function" then
 		local val = self:PlayerUse(activator, caller)

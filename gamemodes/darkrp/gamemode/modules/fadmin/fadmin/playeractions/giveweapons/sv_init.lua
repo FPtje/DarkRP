@@ -51,5 +51,5 @@ FAdmin.StartHooks["GiveWeapons"] = function()
 	FAdmin.Commands.AddCommand("giveweapon", GiveWeapon)
 	FAdmin.Commands.AddCommand("giveammo", GiveAmmo)
 
-	FAdmin.Access.AddPrivilege("giveweapon", 2)
+	FAdmin.Access.AddPrivilege("giveweapon", 3)
 end

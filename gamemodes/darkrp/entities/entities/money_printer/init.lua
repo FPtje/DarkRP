@@ -25,6 +25,8 @@ function ENT:Initialize()
 end
 
 function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+
 	if self.burningup then return end
 
 	self.damage = (self.damage or 100) - dmg:GetDamage()

@@ -54,6 +54,17 @@ function ENT:Touch(ent)
 	self:Setamount(self:Getamount() + ent:Getamount())
 end
 
+function ENT:OnTakeDamage(dmg)
+	self:TakePhysicsDamage(dmg)
+
+	local typ = dmg:GetDamageType()
+	if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
+
+	self.USED = true
+	self.hasMerged = true
+	self:Remove()
+end
+
 function ENT:onPlayerDisconnected(ply)
 	if self.dt.owning_ent == ply or self.dt.recipient == ply then
 		self:Remove()

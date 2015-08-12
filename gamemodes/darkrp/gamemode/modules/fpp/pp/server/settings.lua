@@ -48,6 +48,8 @@ local function getSettingsChangedEntities(settingsType, setting)
 	local blockedString = string.sub(settingsType, 5, 5) .. string.lower(string.sub(settingsType, 6))
 
 	blockedString = blockedString == "Playeruse1" and "PlayerUse1" or blockedString -- dirty hack for stupid naming system.
+	blockedString = blockedString == "Entitydamage1" and "EntityDamage1" or blockedString -- dirty hack for stupid naming system.
+
 	if setting == "adminall" then
 		for k,v in pairs(ents.GetAll()) do
 			local owner = v:CPPIGetOwner()
