@@ -176,12 +176,6 @@ local function BuyShipment(ply, args)
 	crate.clip2 = found.clip2
 	crate:Spawn()
 	crate:SetPlayer(ply)
-	if found.shipmodel then
-		crate:SetModel(found.shipmodel)
-		crate:PhysicsInit(SOLID_VPHYSICS)
-		crate:SetMoveType(MOVETYPE_VPHYSICS)
-		crate:SetSolid(SOLID_VPHYSICS)
-	end
 
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
@@ -402,7 +396,7 @@ local function BuyAmmo(ply, args)
 	ammo.nodupe = true
 	ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
 	ammo:Spawn()
-	
+
 	hook.Call("playerBoughtAmmo", nil, ply, found, ammo, cost)
 
 	return ""

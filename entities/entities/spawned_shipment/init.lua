@@ -7,8 +7,10 @@ include("commands.lua")
 util.AddNetworkString("DarkRP_shipmentSpawn")
 
 function ENT:Initialize()
+	local contents = CustomShipments[self:Getcontents() or ""]
+
 	self.Destructed = false
-	self:SetModel("models/Items/item_item_crate.mdl")
+	self:SetModel(contents and contents.shipmodel or "models/Items/item_item_crate.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -18,8 +20,6 @@ function ENT:Initialize()
 	self.ShareGravgun = true
 	local phys = self:GetPhysicsObject()
 	phys:Wake()
-
-	local contents = CustomShipments[self:Getcontents() or ""]
 
 	-- Create a serverside gun model
 	-- it's required serverside to be able to get OBB information clientside

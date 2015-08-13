@@ -40,10 +40,6 @@ local function createShipment(ply, args)
 	crate.nodupe = true
 	crate:SetContents(shipID, ent.dt.amount)
 	crate:Spawn()
-	crate:SetModel(CustomShipments[shipID].shipmodel)
-	crate:PhysicsInit(SOLID_VPHYSICS)
-	crate:SetMoveType(MOVETYPE_VPHYSICS)
-	crate:SetSolid(SOLID_VPHYSICS)
 	crate:SetPlayer(ply)
 	crate.clip1 = ent.clip1
 	crate.clip2 = ent.clip2
@@ -100,10 +96,6 @@ local function splitShipment(ply, args)
 	crate.ammoadd = ent.ammoadd
 
 	crate:Spawn()
-	crate:SetModel(CustomShipments[ent:Getcontents()].shipmodel)
-	crate:PhysicsInit(SOLID_VPHYSICS)
-	crate:SetMoveType(MOVETYPE_VPHYSICS)
-	crate:SetSolid(SOLID_VPHYSICS)
 
 	local phys = crate:GetPhysicsObject()
 	phys:Wake()
