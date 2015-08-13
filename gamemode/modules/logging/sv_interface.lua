@@ -15,7 +15,7 @@ DarkRP.log = DarkRP.stub{
 			optional = true
 		},
 		{
-			name = "writeToFile",
+			name = "noFileSave",
 			description = "Whether to write the log to a file or not.",
 			type = "boolean",
 			optional = true
