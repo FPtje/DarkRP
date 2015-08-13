@@ -16,11 +16,11 @@ local function AdminLog(message, colour)
 end
 
 local DarkRPFile
-function DarkRP.log(text, colour)
+function DarkRP.log(text, colour, writeToFile)
 	if colour then
 		AdminLog(text, colour)
 	end
-	if not GAMEMODE.Config.logging or not text then return end
+	if not GAMEMODE.Config.logging or not text or not writeToFile then return end
 	if not DarkRPFile then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("darkrp_logs", "DATA") then
 			file.CreateDir("darkrp_logs")

@@ -10,8 +10,14 @@ DarkRP.log = DarkRP.stub{
 		},
 		{
 			name = "colour",
-			description = "The color of the message in the admin's console. Admins won't see the message if this is not defined",
+			description = "The color of the message in the admin's console. Admins won't see the message if this is not defined.",
 			type = "Color",
+			optional = true
+		},
+		{
+			name = "writeToFile",
+			description = "Whether to write the log to a file or not.",
+			type = "boolean",
 			optional = true
 		}
 	},
