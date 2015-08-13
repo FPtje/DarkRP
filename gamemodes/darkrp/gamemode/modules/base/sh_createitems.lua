@@ -379,6 +379,8 @@ local function addTeamCommands(CTeam, max)
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(10 - (CurTime() - ply.LastJob)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
 				return ""
 			end
+
+			ply.LastVoteCop = ply.LastVoteCop or -80
 			if CurTime() - ply.LastVoteCop < 80 then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), GAMEMODE.Config.chatCommandPrefix..CTeam.command))
 				return ""

@@ -121,6 +121,7 @@ function SWEP:DoAttack(dmg)
 	local ent = self:GetOwner():getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self:GetOwner()}, fc{IsValid, entMeta.GetPhysicsObject}})
 
 	if not IsValid(ent) then return end
+	if ent:IsPlayer() and not ent:Alive() then return end
 
 	if not ent:isDoor() then
 		ent:SetVelocity((ent:GetPos() - self:GetOwner():GetPos()) * 7)

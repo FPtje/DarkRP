@@ -136,6 +136,7 @@ function SWEP:PrimaryAttack()
 	if not SERVER then return end
 
 	local trace = self:GetOwner():GetEyeTrace()
+	if not IsValid(trace.Entity) then return end
 	local ent, class = trace.Entity, string.lower(trace.Entity:GetClass() or "")
 	local data
 
