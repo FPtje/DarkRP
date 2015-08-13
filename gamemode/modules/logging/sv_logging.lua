@@ -17,12 +17,12 @@ end
 
 local DarkRPFile
 function DarkRP.log(text, colour, noFileSave)
-	if not text then return end
-
 	if colour then
 		AdminLog(text, colour)
 	end
+
 	if not GAMEMODE.Config.logging or noFileSave then return end
+
 	if not DarkRPFile then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("darkrp_logs", "DATA") then
 			file.CreateDir("darkrp_logs")
