@@ -70,7 +70,7 @@ function SWEP:PrimaryAttack()
 	if not SERVER then return end
 
 	local ent = self:GetOwner():GetEyeTrace().Entity
-	local canPickup, message = hook.Call("canPocket", nil, self:GetOwner(), ent)
+	local canPickup, message = hook.Call("canPocket", GAMEMODE, self:GetOwner(), ent)
 
 	if not canPickup then
 		if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
