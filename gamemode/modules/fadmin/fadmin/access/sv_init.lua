@@ -96,14 +96,15 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 	if type(ply) ~= "string" and IsValid(ply) then
 		ply:SetUserGroup(group)
 	end
-
-	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(SteamID)..", " .. MySQLite.SQLStr(group)..");")
 end
 
 hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn") -- Remove Garry's usergroup setter.
 
 local oldSetUsergroup = plyMeta.SetUserGroup
 function plyMeta:SetUserGroup(group, ...)
+	-- TODO: Move this call to the function above when the main admin mods have implemented CAMI
+	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(self:SteamID()) .. ", " .. MySQLite.SQLStr(group) .. ");")
+
 	return oldSetUsergroup(self, group, ...)
 end
 
