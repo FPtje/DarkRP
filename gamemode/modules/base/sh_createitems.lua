@@ -716,13 +716,13 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	customShipment.name = name
 	customShipment.default = DarkRP.DARKRP_LOADING
 	customShipment.shipmodel = customShipment.shipmodel or shipmentmodel
-	customShipment.spawn = customShipment.spawn and fp{DarkRP.simplerrRun, customShipment.spawn}
 
 	if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
 	local valid, err, hints = checkValid(customShipment, validShipment)
 	if not valid then DarkRP.error(string.format("Corrupt shipment: %s!\n%s", name or "", err), 3, hints) end
 
+	customShipment.spawn = customShipment.spawn and fp{DarkRP.simplerrRun, customShipment.spawn}
 	customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
 	customShipment.customCheck = customShipment.customCheck   and fp{DarkRP.simplerrRun, customShipment.customCheck}
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
