@@ -276,7 +276,7 @@ local function onAdded(ply, ent, serialized)
 end
 hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
 
-local function canPocket(ply, item)
+function GAMEMODE:canPocket(ply, item)
 	if not IsValid(item) then return false end
 	local class = item:GetClass()
 
@@ -302,7 +302,6 @@ local function canPocket(ply, item)
 
 	return true
 end
-hook.Add("canPocket", "defaultRestrictions", canPocket)
 
 
 -- Drop pocket items on death
