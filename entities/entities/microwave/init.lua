@@ -61,6 +61,12 @@ function ENT:Use(activator, caller)
 	if not activator:IsPlayer() then return end
 
 	local owner = self:Getowning_ent()
+
+	if not IsValid(owner) then
+		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("disabled", "microwave", DarkRP.getPhrase("disconnected_player"))))
+		return
+	end
+
 	self.user = activator
 	if not activator:canAfford(self:SalePrice(activator)) then
 		DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("food"))))
