@@ -85,6 +85,7 @@ local function Jail(ply, cmd, args)
 						if not IsValid(target) then return end
 						if not target:FAdmin_GetGlobal("fadmin_jailed") then return end
 
+						timer.Destroy("FAdmin_jail_watch"..target:UserID())
 						target:FAdmin_SetGlobal("fadmin_jailed", false)
 
 						for k,v in pairs(target.FAdminJailProps) do
