@@ -160,6 +160,12 @@ DarkRP.hookStub{
 			name = "canChange",
 			description = "Whether the player can change their team.",
 			type = "boolean"
-		}
+		},
+		{
+			name = "reason",
+			description = "The reason why the player cannot change their team.",
+			type = "string",
+			optional = true
+		},
 	}
 }
