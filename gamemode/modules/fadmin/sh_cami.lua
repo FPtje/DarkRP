@@ -41,9 +41,9 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150704
+local version = 20150817
 
-if CAMI and CAMI.Version > version then return end
+if CAMI and CAMI.Version >= version then return end
 
 CAMI = CAMI or {}
 CAMI.Version = version
@@ -344,20 +344,23 @@ CAMI.PlayerHasAccess
 local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 	function(_, actorPly, privilegeName, callback, _, extraInfoTbl)
 		if not IsValid(actorPly) then return callback(false, "Fallback.") end
+		-- The server always has access in the fallback
+		if actorPly:EntIndex() == 0 then return callback(true, "Fallback.") end
 
 		local priv = privileges[privilegeName]
 
-		local fallback =
-			(not extraInfoTbl or not extraInfoTbl.Fallback) and
-				actorPly:IsAdmin() or
+		local fallback = extraInfoTbl and (
+			not extraInfoTbl.Fallback and actorPly:IsAdmin() or
 			extraInfoTbl.Fallback == "user" and true or
 			extraInfoTbl.Fallback == "admin" and actorPly:IsAdmin() or
-			extraInfoTbl.Fallback == "superadmin" and actorPly:IsSuperAdmin()
+			extraInfoTbl.Fallback == "superadmin" and actorPly:IsSuperAdmin())
 
 
 		if not priv then return callback(fallback, "Fallback.") end
 
-		callback(CAMI.UsergroupInherits(actorPly:GetUserGroup(), priv.MinAccess), "Fallback.")
+		local usergroup = actorPly:GetUserGroup()
+		local inherits = CAMI.UsergroupInherits(usergroup, priv.MinAccess)
+		callback(inherits, "Fallback.")
 	end,
 	["CAMI.SteamIDHasAccess"] =
 	function(_, _, _, callback)
