@@ -116,6 +116,10 @@ hook.Add("CAMI.OnPrivilegeRegistered", "FAdmin", function(privilege)
 	FAdmin.Access.AddPrivilege(privilege.Name, table.KeyFromValue(FAdmin.Access.ADMIN, privilege.MinAccess))
 end)
 
+for _, camipriv in pairs(CAMI.GetPrivileges()) do
+	FAdmin.Access.AddPrivilege(camipriv.Name, table.KeyFromValue(FAdmin.Access.ADMIN, camipriv.MinAccess))
+end
+
 hook.Add("CAMI.OnPrivilegeUnregistered", "FAdmin", function(privilege)
 	FAdmin.Access.Privileges[privilege.Name] = nil
 end)
