@@ -10,6 +10,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FADMIN_GROUPS(NAME VARCHAR(40) NOT NULL PRIMARY KEY, ADMIN_ACCESS INTEGER NOT NULL);")
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_PlayerGroup(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
 	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_Immunity(groupname VARCHAR(40) NOT NULL, immunity INTEGER NOT NULL, PRIMARY KEY(groupname));")
+	MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_CAMIPrivileges(privname VARCHAR(255) NOT NULL PRIMARY KEY);")
 	MySQLite.query([[CREATE TABLE IF NOT EXISTS FADMIN_PRIVILEGES(
 		NAME VARCHAR(40),
 		PRIVILEGE VARCHAR(100),
@@ -62,6 +63,8 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 			-- Start listening for CAMI usergroup registrations.
 			hook.Add("CAMI.OnUsergroupRegistered", "FAdmin", FAdmin.Access.OnUsergroupRegistered)
 			hook.Add("CAMI.OnUsergroupUnregistered", "FAdmin", FAdmin.Access.OnUsergroupUnregistered)
+
+			FAdmin.Access.RegisterCAMIPrivileges()
 		end)
 
 		local function createGroups(privs)
@@ -87,6 +90,49 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 		end)
 	end)
 end)
+
+-- Assign a privilege to its respective usergroups when they are seen for the first time
+function FAdmin.Access.RegisterCAMIPrivilege(priv)
+	-- Privileges haven't been loaded yet or has already been seen
+	if not FAdmin.CAMIPrivs or FAdmin.CAMIPrivs[priv.Name] then return end
+
+	FAdmin.CAMIPrivs[priv.Name] = true
+
+	for groupName, groupdata in pairs(FAdmin.Access.Groups) do
+		if FAdmin.Access.Privileges[priv.Name] - 1 > groupdata.ADMIN then continue end
+		groupdata.PRIVS[priv.Name] = true
+
+		MySQLite.query(string.format([[REPLACE INTO FADMIN_PRIVILEGES VALUES(%s, %s);]], MySQLite.SQLStr(groupName), MySQLite.SQLStr(priv.Name)))
+	end
+
+	MySQLite.query(string.format([[REPLACE INTO FAdmin_CAMIPrivileges VALUES(%s);]], MySQLite.SQLStr(priv.Name)))
+end
+
+-- Assign privileges to their respective usergroups when they are seen for the first time
+function FAdmin.Access.RegisterCAMIPrivileges()
+	MySQLite.query([[SELECT privname FROM FAdmin_CAMIPrivileges]], function(data)
+		FAdmin.CAMIPrivs = {}
+
+		for _, row in pairs(data or {}) do
+			FAdmin.CAMIPrivs[row.privname] = true
+		end
+
+
+		for privName, _ in pairs(CAMI.GetPrivileges()) do
+			if FAdmin.CAMIPrivs[privName] then continue end
+			FAdmin.CAMIPrivs[privName] = true
+
+			for groupName, groupdata in pairs(FAdmin.Access.Groups) do
+				if FAdmin.Access.Privileges[privName] - 1 > groupdata.ADMIN then continue end
+				groupdata.PRIVS[privName] = true
+
+				MySQLite.query(string.format([[REPLACE INTO FADMIN_PRIVILEGES VALUES(%s, %s);]], MySQLite.SQLStr(groupName), MySQLite.SQLStr(privName)))
+			end
+
+			MySQLite.query(string.format([[REPLACE INTO FAdmin_CAMIPrivileges VALUES(%s);]], MySQLite.SQLStr(privName)))
+		end
+	end)
+end
 
 function FAdmin.Access.PlayerSetGroup(ply, group)
 	if not FAdmin.Access.Groups[group] then return end
