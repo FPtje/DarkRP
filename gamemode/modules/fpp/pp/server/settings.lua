@@ -125,8 +125,17 @@ local function updateFPPSetting(kind, setting, value)
 	net.Broadcast()
 end
 
+local function runIfAccess(priv, f)
+	return function(ply, cmd, args)
+		CAMI.PlayerHasAccess(ply, priv, function(allowed, _)
+			if allowed then return f(ply, cmd, args) end
+
+			FPP.Notify(ply, string.format("You need the '%s' privilege in order to be able to use this command", priv), false)
+		end)
+	end
+end
+
 local function FPP_SetSetting(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[3] or not FPP.Settings[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	if not FPP.Settings[args[1]][args[2]] then FPP.Notify(ply, "Argument invalid",false) return end
 
@@ -146,10 +155,9 @@ local function FPP_SetSetting(ply, cmd, args)
 	if not plys or not entities or #plys == 0 or #entities == 0 then return end
 	FPP.recalculateCanTouch(plys, entities)
 end
-concommand.Add("FPP_setting", FPP_SetSetting)
+concommand.Add("FPP_setting", runIfAccess("FPP_Settings", FPP_SetSetting))
 
 local function AddBlocked(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	args[2] = string.lower(args[2])
 	if FPP.Blocked[args[1]][args[2]] then return end
@@ -161,7 +169,7 @@ local function AddBlocked(ply, cmd, args)
 
 	FPP.recalculateCanTouch(player.GetAll(), ents.FindByClass(args[2]))
 end
-concommand.Add("FPP_AddBlocked", AddBlocked)
+concommand.Add("FPP_AddBlocked", runIfAccess("FPP_Settings", AddBlocked))
 
 -- Models can differ between server and client. Famous example being:
 -- models/props_phx/cannonball_solid.mdl <-- serverside
@@ -177,7 +185,6 @@ local function getIntendedBlockedModels(model, ent)
 end
 
 local function AddBlockedModel(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 
 	local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
@@ -189,10 +196,9 @@ local function AddBlockedModel(ply, cmd, args)
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " added ".. model .. " to the blocked models black/whitelist", true)
 	end
 end
-concommand.Add("FPP_AddBlockedModel", AddBlockedModel)
+concommand.Add("FPP_AddBlockedModel", runIfAccess("FPP_Settings", AddBlockedModel))
 
 local function RemoveBlocked(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 
 	FPP.Blocked[args[1]][args[2]] = nil
@@ -201,10 +207,9 @@ local function RemoveBlocked(ply, cmd, args)
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. args[2] .. " from the "..args[1] .. " black/whitelist", false)
 	FPP.recalculateCanTouch(player.GetAll(), ents.FindByClass(args[2]))
 end
-concommand.Add("FPP_RemoveBlocked", RemoveBlocked)
+concommand.Add("FPP_RemoveBlocked", runIfAccess("FPP_Settings", RemoveBlocked))
 
 local function RemoveBlockedModel(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
 	local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
@@ -215,7 +220,7 @@ local function RemoveBlockedModel(ply, cmd, args)
 		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " removed ".. model .. " from the blocked models black/whitelist", false)
 	end
 end
-concommand.Add("FPP_RemoveBlockedModel", RemoveBlockedModel)
+concommand.Add("FPP_RemoveBlockedModel", runIfAccess("FPP_Settings", RemoveBlockedModel))
 
 local allowedShares = {
 	SharePhysgun1 = true,
@@ -489,7 +494,6 @@ end
 hook.Add("PlayerInitialSpawn", "FPP_SendSettings", SendSettings)
 
 local function AddGroup(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = name, optional: 2 = allowdefault
 	local name = string.lower(args[1])
 	local allowdefault = tonumber(args[2]) or 1
@@ -506,7 +510,7 @@ local function AddGroup(ply, cmd, args)
 	MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(allowdefault)..");")
 	FPP.Notify(ply, "Group added successfully", true)
 end
-concommand.Add("FPP_AddGroup", AddGroup)
+concommand.Add("FPP_AddGroup", runIfAccess("FPP_Settings", AddGroup))
 
 hook.Add("InitPostEntity", "FPP_Load_FAdmin", function()
 	if FAdmin then
@@ -517,7 +521,6 @@ hook.Add("InitPostEntity", "FPP_Load_FAdmin", function()
 end)
 
 local function RemoveGroup(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[1] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = name
 	local name = string.lower(args[1])
 
@@ -542,10 +545,9 @@ local function RemoveGroup(ply, cmd, args)
 	end
 	FPP.Notify(ply, "Group removed successfully", true)
 end
-concommand.Add("FPP_RemoveGroup", RemoveGroup)
+concommand.Add("FPP_RemoveGroup", runIfAccess("FPP_Settings", RemoveGroup))
 
 local function GroupChangeAllowDefault(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = groupname, 2 = new value 1/0
 
 	local name = string.lower(args[1])
@@ -560,10 +562,9 @@ local function GroupChangeAllowDefault(ply, cmd, args)
 	MySQLite.query("UPDATE FPP_GROUPS3 SET allowdefault = "..sql.SQLStr(newval).." WHERE groupname = "..sql.SQLStr(name)..";")
 	FPP.Notify(ply, "Group status changed successfully", true)
 end
-concommand.Add("FPP_ChangeGroupStatus", GroupChangeAllowDefault)
+concommand.Add("FPP_ChangeGroupStatus", runIfAccess("FPP_Settings", GroupChangeAllowDefault))
 
 local function GroupAddTool(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = groupname, 2 = tool
 
 	local name = args[1]
@@ -586,10 +587,9 @@ local function GroupAddTool(ply, cmd, args)
 	MySQLite.query("REPLACE INTO FPP_GROUPTOOL VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(tool)..");")
 	FPP.Notify(ply, "Tool added successfully", true)
 end
-concommand.Add("FPP_AddGroupTool", GroupAddTool)
+concommand.Add("FPP_AddGroupTool", runIfAccess("FPP_Settings", GroupAddTool))
 
 local function GroupRemoveTool(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = groupname, 2 = tool
 
 	local name = args[1]
@@ -615,10 +615,9 @@ local function GroupRemoveTool(ply, cmd, args)
 
 	FPP.Notify(ply, "Tool removed successfully", true)
 end
-concommand.Add("FPP_RemoveGroupTool", GroupRemoveTool)
+concommand.Add("FPP_RemoveGroupTool", runIfAccess("FPP_Settings", GroupRemoveTool))
 
 local function PlayerSetGroup(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = player, 2 = group
 
 	local name = args[1]
@@ -641,26 +640,21 @@ local function PlayerSetGroup(ply, cmd, args)
 
 	FPP.Notify(ply, "Player group successfully set", true)
 end
-concommand.Add("FPP_SetPlayerGroup", PlayerSetGroup)
+concommand.Add("FPP_SetPlayerGroup", runIfAccess("FPP_Settings", PlayerSetGroup))
 
 local function SendGroupData(ply, cmd, args)
-	-- Need superadmin so clients can't spam this on server
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
 	net.Start("FPP_Groups")
 		net.WriteTable(FPP.Groups)
 	net.Send(ply)
 end
-concommand.Add("FPP_SendGroups", SendGroupData)
+concommand.Add("FPP_SendGroups", runIfAccess("FPP_Settings", SendGroupData))
 
 local function SendGroupMemberData(ply, cmd, args)
-	-- Need superadmin so clients can't spam this on server
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You need superadmin privileges in order to be able to use this command", false) return end
-
 	net.Start("FPP_GroupMembers")
 		net.WriteTable(FPP.GroupMembers)
 	net.Send(ply)
 end
-concommand.Add("FPP_SendGroupMembers", SendGroupMemberData)
+concommand.Add("FPP_SendGroupMembers", runIfAccess("FPP_Settings", SendGroupMemberData))
 
 local function SendBlocked(ply, cmd, args)
 	if not args[1] or not FPP.Blocked[args[1]] then return end
@@ -747,7 +741,6 @@ end
 concommand.Add("FPP_SetBuddy", SetBuddy)
 
 local function CleanupDisconnected(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsAdmin() then FPP.Notify(ply, "You can't clean up", false) return end
 	if not args[1] then FPP.Notify(ply, "Invalid argument", false) return end
 	if args[1] == "disconnected" then
 		for k,v in pairs(ents.GetAll()) do
@@ -771,10 +764,9 @@ local function CleanupDisconnected(ply, cmd, args)
 	end
 	FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed "..Player(args[1]):Nick().. "'s entities", true)
 end
-concommand.Add("FPP_Cleanup", CleanupDisconnected)
+concommand.Add("FPP_Cleanup", runIfAccess("FPP_Cleanup", CleanupDisconnected))
 
 local function SetToolRestrict(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then FPP.Notify(ply, "You can't set tool restrictions", false) return end
 	if not args[3] then FPP.Notify(ply, "Invalid argument(s)", false) return end--FPP_restricttool <toolname> <type(admin/team)> <toggle(1/0)>
 	local toolname = args[1]
 	local RestrictWho = tonumber(args[2]) or args[2]-- "team" or "admin"
@@ -810,10 +802,9 @@ local function SetToolRestrict(ply, cmd, args)
 		end
 	end
 end
-concommand.Add("FPP_restricttool", SetToolRestrict)
+concommand.Add("FPP_restricttool", runIfAccess("FPP_Settings", SetToolRestrict))
 
 local function RestrictToolPerson(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
 	if not args[3] then FPP.Notify(ply, "Invalid argument(s)", false) return end--FPP_restricttoolperson <toolname> <userid> <disallow, allow, remove(0,1,2)>
 
 	local toolname = args[1]
@@ -834,11 +825,9 @@ local function RestrictToolPerson(ply, cmd, args)
 	end
 	FPP.Notify(ply, "Tool restrictions set successfully", true)
 end
-concommand.Add("FPP_restricttoolplayer", RestrictToolPerson)
+concommand.Add("FPP_restricttoolplayer", runIfAccess("FPP_Settings", RestrictToolPerson))
 
 local function resetAllSetting(ply)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
-
 	MySQLite.begin()
 	MySQLite.queueQuery("DELETE FROM FPP_PHYSGUN1")
 	MySQLite.queueQuery("DELETE FROM FPP_GRAVGUN1")
@@ -857,17 +846,15 @@ local function resetAllSetting(ply)
 		FPP.Notify(ply, "Settings successfully reset.", true)
 	end)
 end
-concommand.Add("FPP_ResetAllSettings", resetAllSetting)
+concommand.Add("FPP_ResetAllSettings", runIfAccess("FPP_Settings", resetAllSetting))
 
 local function resetBlockedModels(ply)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
-
 	FPP.BlockedModels = {}
 
 	MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1", FPP.AddDefaultBlockedModels)
 	FPP.Notify(ply, "Settings successfully reset.", true)
 end
-concommand.Add("FPP_ResetBlockedModels", resetBlockedModels)
+concommand.Add("FPP_ResetBlockedModels", runIfAccess("FPP_Settings", resetBlockedModels))
 
 local function refreshPrivatePlayerSettings(ply)
 	timer.Destroy("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())

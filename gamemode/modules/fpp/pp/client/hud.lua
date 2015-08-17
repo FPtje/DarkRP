@@ -58,6 +58,7 @@ function FPP.AddNotify( str, type )
 	HUDNote_c = HUDNote_c + 1
 	HUDNote_i = HUDNote_i + 1
 
+	if not IsValid(LocalPlayer()) then return end -- I honestly got this error
 	LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 10, 100)
 end
 
