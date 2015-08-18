@@ -337,7 +337,7 @@ end
 msOOConnect = function(host, username, password, database_name, database_port)
     databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
 
-    if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
+    if timer.Exists("darkrp_check_mysql_status") then timer.Remove("darkrp_check_mysql_status") end
 
     databaseObject.onConnectionFailed = function(_, msg)
         timer.Simple(5, function()

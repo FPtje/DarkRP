@@ -361,7 +361,7 @@ local entQueue = {}
 local timerFunc = function()
 	onEntitiesCreated(entQueue)
 	entQueue = {}
-	timer.Destroy("FPP_OnEntityCreatedTimer")
+	timer.Remove("FPP_OnEntityCreatedTimer")
 end
 hook.Add("OnEntityCreated", "FPP_EntityCreated", function(ent)
 	table.insert(entQueue, ent)

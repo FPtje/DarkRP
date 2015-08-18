@@ -298,7 +298,7 @@ hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
 		if not v.DrpCanHear then continue end
 		v.DrpCanHear[ply] = nil
 	end
-	timer.Destroy(ply:UserID() .. "DarkRPCanHearPlayersVoice")
+	timer.Remove(ply:UserID() .. "DarkRPCanHearPlayersVoice")
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
@@ -545,7 +545,7 @@ local function restoreReconnectedEnts(ply)
 	local sid = ply:SteamID64()
 	if not queuedForRemoval[sid] then return end
 
-	timer.Destroy("DarkRP_removeDisconnected_" .. sid)
+	timer.Remove("DarkRP_removeDisconnected_" .. sid)
 
 	for _, e in pairs(queuedForRemoval[sid]) do
 		if not IsValid(e) then continue end
@@ -626,7 +626,7 @@ function GM:PlayerSpawn(ply)
 	SendUserMessage("blackScreen", ply, false)
 
 	if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
-		timer.Destroy(ply:EntIndex() .. "babygod")
+		timer.Remove(ply:EntIndex() .. "babygod")
 
 		ply.Babygod = true
 		ply:GodEnable()
@@ -793,8 +793,8 @@ end
 
 function GM:PlayerDisconnected(ply)
 	self.BaseClass:PlayerDisconnected(ply)
-	timer.Destroy(ply:SteamID() .. "jobtimer")
-	timer.Destroy(ply:SteamID() .. "propertytax")
+	timer.Remove(ply:SteamID() .. "jobtimer")
+	timer.Remove(ply:SteamID() .. "propertytax")
 
 	local isMayor = ply:isMayor()
 

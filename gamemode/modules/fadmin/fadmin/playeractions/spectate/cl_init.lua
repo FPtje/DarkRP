@@ -384,7 +384,7 @@ stopSpectating = function()
 	hook.Remove("FAdmin_ShowFAdminMenu", "FAdminSpectate")
 	hook.Remove("RenderScreenspaceEffects", "FAdminSpectate")
 
-	timer.Destroy("FAdminSpectatePosUpdate")
+	timer.Remove("FAdminSpectatePosUpdate")
 
 	if IsValid(specEnt) then
 		specEnt:SetNoDraw(false)

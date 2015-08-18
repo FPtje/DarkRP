@@ -77,7 +77,7 @@ function plyMeta:unWanted(actor)
 	self:setDarkRPVar("wanted", nil)
 	self:setDarkRPVar("wantedReason", nil)
 
-	timer.Destroy(self:UniqueID() .. " wantedtimer")
+	timer.Remove(self:UniqueID() .. " wantedtimer")
 
 	if suppressMsg then return end
 
@@ -334,7 +334,7 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 		timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
 	end
 
-	timer.Destroy(ply:UniqueID() .. "jailtimer")
+	timer.Remove(ply:UniqueID() .. "jailtimer")
 	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
 end
 

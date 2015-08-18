@@ -28,8 +28,8 @@ local function Jail(ply, cmd, args)
 				end
 
 				target.FAdminJailProps = nil
-				timer.Destroy("FAdmin_jail"..target:UserID())
-				timer.Destroy("FAdmin_jail_watch"..target:UserID())
+				timer.Remove("FAdmin_jail"..target:UserID())
+				timer.Remove("FAdmin_jail_watch"..target:UserID())
 				target:FAdmin_SetGlobal("fadmin_jailed", false)
 
 			elseif JailType == "small" then
@@ -85,7 +85,7 @@ local function Jail(ply, cmd, args)
 						if not IsValid(target) then return end
 						if not target:FAdmin_GetGlobal("fadmin_jailed") then return end
 
-						timer.Destroy("FAdmin_jail_watch"..target:UserID())
+						timer.Remove("FAdmin_jail_watch"..target:UserID())
 						target:FAdmin_SetGlobal("fadmin_jailed", false)
 
 						for k,v in pairs(target.FAdminJailProps) do
@@ -102,7 +102,7 @@ local function Jail(ply, cmd, args)
 				jailDistance = jailDistance * jailDistance
 				local userid = target:UserID()
 				timer.Create("FAdmin_jail_watch"..target:UserID(), 1, 0, function()
-					if not IsValid(target) then timer.Destroy("FAdmin_jail_watch"..userid) return end
+					if not IsValid(target) then timer.Remove("FAdmin_jail_watch"..userid) return end
 
 					if target:GetPos():DistToSqr(target.FAdminJailPos) > jailDistance then
 						target:SetPos(target.FAdminJailPos)

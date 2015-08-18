@@ -44,7 +44,7 @@ function Vote:handleEnd()
 	umsg.End()
 
 	Votes[self.id] = nil
-	timer.Destroy(self.id .. "DarkRPVote")
+	timer.Remove(self.id .. "DarkRPVote")
 
 	self:callback(win)
 end
@@ -134,7 +134,7 @@ function DarkRP.destroyVotesWithEnt(ent)
 	for k, v in pairs(Votes) do
 		if v.target ~= ent then continue end
 
-		timer.Destroy(v.id .. "DarkRPVote")
+		timer.Remove(v.id .. "DarkRPVote")
 		umsg.Start("KillVoteVGUI", v:getFilter())
 			umsg.Short(v.id)
 		umsg.End()
@@ -150,7 +150,7 @@ function DarkRP.destroyLastVote()
 
 	if not lastVote then return false end
 
-	timer.Destroy(lastVote.id .. "DarkRPVote")
+	timer.Remove(lastVote.id .. "DarkRPVote")
 	umsg.Start("KillVoteVGUI", lastVote:getFilter())
 		umsg.Short(lastVote.id)
 	umsg.End()

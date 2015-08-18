@@ -87,5 +87,5 @@ timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
 		return
 	end
 
-	timer.Destroy("DarkRPCheckifitcamethrough")
+	timer.Remove("DarkRPCheckifitcamethrough")
 end)

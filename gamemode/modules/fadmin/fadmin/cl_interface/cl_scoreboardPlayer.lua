@@ -77,7 +77,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 
 			timer.Create("FAdmin_Scoreboard_text_update_"..v.name, 1, 0, function()
 				if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) or not ValidPanel(Text) then
-					timer.Destroy("FAdmin_Scoreboard_text_update_"..v.name)
+					timer.Remove("FAdmin_Scoreboard_text_update_"..v.name)
 					if FAdmin.ScoreBoard.Visible and (not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player)) then FAdmin.ScoreBoard.ChangeView("Main") end
 					return
 				end

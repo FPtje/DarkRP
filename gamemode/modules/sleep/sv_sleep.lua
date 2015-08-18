@@ -81,7 +81,7 @@ function DarkRP.toggleSleep(player, command)
 				if player:isArrested() then
 					GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
 				end
-				timer.Destroy(timerName)
+				timer.Remove(timerName)
 			elseif not player:IsFrozen() then
 				if IsValid(player:GetObserverTarget()) then return "" end
 				for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
@@ -132,7 +132,7 @@ function DarkRP.toggleSleep(player, command)
 				player.Sleeping = true
 
 				timer.Create(timerName, 0.3, 0, function()
-					if not IsValid(player) then timer.Destroy(timerName) return end
+					if not IsValid(player) then timer.Remove(timerName) return end
 
 					if player:GetObserverTarget() ~= ragdoll then
 						if IsValid(ragdoll) then

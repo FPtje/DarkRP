@@ -97,7 +97,7 @@ end
 
 function ENT:SpawnItem()
 	if not IsValid(self) then return end
-	timer.Destroy(self:EntIndex() .. "crate")
+	timer.Remove(self:EntIndex() .. "crate")
 	self.sparking = false
 	local count = self:Getcount()
 	local pos = self:GetPos()
