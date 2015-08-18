@@ -73,8 +73,13 @@ function meta:changeTeam(t, force)
 		end
 	end
 
-	local hookValue = hook.Call("playerCanChangeTeam", nil, self, t, force)
-	if hookValue == false then return false end
+	local hookValue, reason = hook.Call("playerCanChangeTeam", nil, self, t, force)
+	if hookValue == false then
+		if reason then
+			DarkRP.notify(self, 1, 4, reason)
+		end
+		return false
+	end
 
 	local isMayor = RPExtraTeams[prevTeam] and RPExtraTeams[prevTeam].mayor
 	if isMayor and GetGlobalBool("DarkRP_LockDown") then
