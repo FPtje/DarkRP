@@ -129,7 +129,7 @@ local wait_lockdown = false
 
 local function WaitLock()
 	wait_lockdown = false
-	timer.Destroy("spamlock")
+	timer.Remove("spamlock")
 end
 
 function DarkRP.lockdown(ply)

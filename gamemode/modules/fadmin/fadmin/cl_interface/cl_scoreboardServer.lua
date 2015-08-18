@@ -179,7 +179,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 
 		timer.Create("FAdmin_Scoreboard_text_update_"..v.name, 1, 0, function()
 			if not ValidPanel(Text) then
-				timer.Destroy("FAdmin_Scoreboard_text_update_"..v.name)
+				timer.Remove("FAdmin_Scoreboard_text_update_"..v.name)
 				FAdmin.ScoreBoard.ChangeView("Main")
 				return
 			end

@@ -208,7 +208,7 @@ end)
 local AdminTell = function() end
 
 usermessage.Hook("AdminTell", function(msg)
-	timer.Destroy("DarkRP_AdminTell")
+	timer.Remove("DarkRP_AdminTell")
 	local Message = msg:ReadString()
 
 	AdminTell = function()

@@ -870,7 +870,7 @@ end
 concommand.Add("FPP_ResetBlockedModels", resetBlockedModels)
 
 local function refreshPrivatePlayerSettings(ply)
-	timer.Destroy("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())
+	timer.Remove("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())
 
 	timer.Create("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex(), 4, 1, function() FPP.recalculateCanTouch({ply}, ents.GetAll()) end)
 end

@@ -142,7 +142,7 @@ function pmeta:initiateTax()
 	local uniqueid = self:UniqueID() -- so we can destroy the timer if the player leaves
 	timer.Create("rp_tax_"..uniqueid, taxtime or 600, 0, function()
 		if not IsValid(self) then
-			timer.Destroy("rp_tax_"..uniqueid)
+			timer.Remove("rp_tax_"..uniqueid)
 			return
 		end
 

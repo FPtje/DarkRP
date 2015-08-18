@@ -138,5 +138,5 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-	timer.Destroy(self:EntIndex().."food")
+	timer.Remove(self:EntIndex().."food")
 end

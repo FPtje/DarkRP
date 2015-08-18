@@ -89,7 +89,7 @@ local function Ragdoll(ply, cmd, args)
 		if not FAdmin.Access.PlayerHasPrivilege(ply, "Ragdoll", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 		if IsValid(target) then
 			if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" and target:FAdmin_GetGlobal("fadmin_ragdolled") then
-				timer.Destroy(target:SteamID() .. "FAdminRagdoll")
+				timer.Remove(target:SteamID() .. "FAdminRagdoll")
 				target:FAdmin_SetGlobal("fadmin_ragdolled", false)
 				target:UnSpectate()
 				target:Spawn()
