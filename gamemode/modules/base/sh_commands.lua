@@ -56,3 +56,9 @@ DarkRP.declareChatCommand{
 	description = "Set the price of the microwave or gunlab you're looking at",
 	delay = 1.5
 }
+
+DarkRP.declareChatCommand{
+	command = "forcerpname",
+	description = "Forcefully change a player's RP name",
+	delay = 0.5
+}

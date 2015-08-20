@@ -153,8 +153,11 @@ local function LookPersonUp(ply, cmd, args)
 	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("job", team.GetName(P:Team())))
 	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("kills", P:Frags()))
 	DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("deaths", P:Deaths()))
-	if ply:EntIndex() == 0 or ply:IsAdmin() then
+
+	CAMI.PlayerHasAccess(ply, "DarkRP_AdminCommands", function(access)
+		if not access then return end
+
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("wallet", DarkRP.formatMoney(P:getDarkRPVar("money")), ""))
-	end
+	end)
 end
 concommand.Add("rp_lookup", LookPersonUp)

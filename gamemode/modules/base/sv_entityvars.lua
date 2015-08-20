@@ -100,44 +100,42 @@ end)
 /*---------------------------------------------------------------------------
 Admin DarkRPVar commands
 ---------------------------------------------------------------------------*/
-local function setRPName(ply, cmd, args)
+local function setRPName(ply, arg)
+	local args = string.Explode(" ", arg)
+
 	if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
 		return
 	end
 
-	if ply:EntIndex() ~= 0 and not ply:IsAdmin() then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_setname"))
-		return
-	end
+	local name = table.concat(args, " ", 2)
 
 	local target = DarkRP.findPlayer(args[1])
 
 	if target then
 		local oldname = target:Nick()
 		local nick = ""
-		DarkRP.storeRPName(target, args[2])
-		target:setDarkRPVar("rpname", args[2])
+		DarkRP.storeRPName(target, name)
+		target:setDarkRPVar("rpname", name)
 
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("you_set_x_name", oldname, args[2]))
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("you_set_x_name", oldname, name))
 
-		local nick = ""
 		if ply:EntIndex() == 0 then
 			nick = "Console"
 		else
 			nick = ply:Nick()
 		end
-		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_name", nick, args[2]))
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_name", nick, name))
 		if ply:EntIndex() == 0 then
-			DarkRP.log("Console set " .. target:SteamName() .. "'s name to " .. args[2], Color(30, 30, 30))
+			DarkRP.log("Console set " .. target:SteamName() .. "'s name to " .. name, Color(30, 30, 30))
 		else
-			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s name to " .. args[2], Color(30, 30, 30))
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s name to " .. name, Color(30, 30, 30))
 		end
 	else
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 end
-concommand.Add("rp_setname", setRPName)
+DarkRP.definePrivilegedChatCommand("forcerpname", "DarkRP_AdminCommands", setRPName)
 
 local function RPName(ply, args)
 	if ply.LastNameChange and ply.LastNameChange > (CurTime() - 5) then
