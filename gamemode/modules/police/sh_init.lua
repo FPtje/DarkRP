@@ -75,7 +75,7 @@ DarkRP.declareChatCommand{
 
 DarkRP.declareChatCommand{
 	command = "warrant",
-	description = "Get a search warrant for a certain player. With this warrant you can search their house",
+	description = "Get a search warrant for a certain player. With this warrant you can search their house.",
 	delay = 1.5,
 	condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}}
 }
@@ -111,28 +111,28 @@ DarkRP.declareChatCommand{
 local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
 DarkRP.declareChatCommand{
 	command = "lottery",
-	description = "Start a lottery",
+	description = "Start a lottery.",
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{
 	command = "lockdown",
-	description = "Start a lockdown. Everyone will have to stay inside",
+	description = "Start a lockdown. Everyone will have to stay inside.",
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{
 	command = "unlockdown",
-	description = "Stop a lockdown",
+	description = "Stop a lockdown.",
 	delay = 1.5,
 	condition = plyMeta.isMayor
 }
 
 DarkRP.declareChatCommand{
 	command = "arrest",
-	description = "Forcefully arrest a player",
+	description = "Forcefully arrest a player.",
 	delay = 0.5
 }
 
@@ -174,5 +174,17 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "demotelicense",
 	description = "Start a vote to get someone's license revoked.",
+	delay = 1.5
+}
+
+DarkRP.declareChatCommand{
+	command = "setlicense",
+	description = "Forcefully give a player a license.",
+	delay = 1.5
+}
+
+DarkRP.declareChatCommand{
+	command = "unsetlicense",
+	description = "Forcefully revoke a player's license.",
 	delay = 1.5
 }

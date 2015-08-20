@@ -67,4 +67,9 @@ hook.Add("loadCustomDarkRPItems", "CAMI privs", function()
 		Name = "DarkRP_SetMoney",
 		MinAccess = "superadmin"
 	}
+
+	CAMI.RegisterPrivilege{
+		Name = "DarkRP_SetLicense",
+		MinAccess = "superadmin"
+	}
 end)

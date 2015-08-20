@@ -289,77 +289,69 @@ local function GiveLicense(ply)
 end
 DarkRP.defineChatCommand("givelicense", GiveLicense)
 
-local function rp_GiveLicense(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", "rp_givelicense"))
-		return
-	end
-
-	if not args or not args[1] then
+local function rp_GiveLicense(ply, arg)
+	if not arg then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
-	local target = DarkRP.findPlayer(args[1])
+	local target = DarkRP.findPlayer(arg)
 
-	if target then
-		target:setDarkRPVar("HasGunlicense", true)
-
-		local nick, steamID
-		if ply:EntIndex() ~= 0 then
-			nick = ply:Nick()
-			steamID = ply:SteamID()
-		else
-			nick = "Console"
-			steamID = "Console"
-		end
-
-		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-		if ply ~= target then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
-		end
-		DarkRP.log(nick.." ("..steamID..") force-gave "..target:Nick().." a gun license", Color(30, 30, 30))
-	else
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-	end
-end
-concommand.Add("rp_givelicense", rp_GiveLicense)
-
-local function rp_RevokeLicense(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", "rp_revokelicense"))
+	if not target then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(arg)))
 		return
 	end
 
-	if not args or not args[1] then
+	target:setDarkRPVar("HasGunlicense", true)
+
+	local nick, steamID
+	if ply:EntIndex() ~= 0 then
+		nick = ply:Nick()
+		steamID = ply:SteamID()
+	else
+		nick = "Console"
+		steamID = "Console"
+	end
+
+	DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+	if ply ~= target then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+	end
+	DarkRP.log(nick .. " (" .. steamID .. ") force-gave " .. target:Nick() .. " a gun license", Color(30, 30, 30))
+end
+DarkRP.definePrivilegedChatCommand("setlicense", "DarkRP_SetLicense", rp_GiveLicense)
+
+local function rp_RevokeLicense(ply, arg)
+	if not arg then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
 
-	local target = DarkRP.findPlayer(args[1])
+	local target = DarkRP.findPlayer(arg)
 
-	if target then
-		target:setDarkRPVar("HasGunlicense", nil)
-
-		local nick, steamID
-		if ply:EntIndex() ~= 0 then
-			nick = ply:Nick()
-			steamID = ply:SteamID()
-		else
-			nick = "Console"
-			steamID = "Console"
-		end
-
-		DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
-		if ply ~= target then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
-		end
-		DarkRP.log(nick.." ("..steamID..") force-removed "..target:Nick().."'s gun license", Color(30, 30, 30))
-	else
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+	if not target then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(arg)))
+		return
 	end
+
+	target:setDarkRPVar("HasGunlicense", nil)
+
+	local nick, steamID
+	if ply:EntIndex() ~= 0 then
+		nick = ply:Nick()
+		steamID = ply:SteamID()
+	else
+		nick = "Console"
+		steamID = "Console"
+	end
+
+	DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
+	if ply ~= target then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
+	end
+	DarkRP.log(nick .. " (" .. steamID .. ") force-removed " .. target:Nick() .. "'s gun license", Color(30, 30, 30))
 end
-concommand.Add("rp_revokelicense", rp_RevokeLicense)
+DarkRP.definePrivilegedChatCommand("unsetlicense", "DarkRP_SetLicense", rp_RevokeLicense)
 
 local function FinishRevokeLicense(vote, win)
 	if choice == 1 then
