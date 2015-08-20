@@ -47,4 +47,14 @@ hook.Add("loadCustomDarkRPItems", "CAMI privs", function()
 		Name = "DarkRP_GetAdminWeapons",
 		MinAccess = "admin"
 	}
+
+	CAMI.RegisterPrivilege{
+		Name = "DarkRP_SetDoorOwner",
+		MinAccess = "admin"
+	}
+
+	CAMI.RegisterPrivilege{
+		Name = "DarkRP_ChangeDoorSettings",
+		MinAccess = "superadmin"
+	}
 end)

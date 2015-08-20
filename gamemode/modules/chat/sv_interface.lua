@@ -19,6 +19,33 @@ DarkRP.defineChatCommand = DarkRP.stub{
 	metatable = DarkRP
 }
 
+DarkRP.definePrivilegedChatCommand = DarkRP.stub{
+	name = "definePrivilegedChatCommand",
+	description = "Create a chat command that calls the function if the player has the right CAMI privilege. Will automatically notify the user when they don't have access. Note that chat command functions registered with this function can NOT override the chat that will appear after the command has been executed.",
+	parameters = {
+		{
+			name = "chat command",
+			description = "The registered chat command",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "privilege",
+			description = "The name of the CAMI privilege",
+			type = "string",
+			optional = false
+		},
+		{
+			name = "callback",
+			description = "The function that is called when the chat command is executed",
+			type = "function",
+			optional = false
+		}
+	},
+	returns = {},
+	metatable = DarkRP
+}
+
 DarkRP.hookStub{
 	name = "PostPlayerSay",
 	description = "Called after a player has said something.",

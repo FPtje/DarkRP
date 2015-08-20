@@ -1,3 +1,11 @@
+local function registerCommandDefinition(cmd, callback)
+	local chatcommands = DarkRP.getChatCommands()
+
+	chatcommands[cmd] = chatcommands[cmd] or {}
+	chatcommands[cmd].callback = callback
+	chatcommands[cmd].command = chatcommands[cmd].command or cmd
+end
+
 function DarkRP.defineChatCommand(cmd, callback)
 	cmd = string.lower(cmd)
 	local detour = function(ply, arg, ...)
@@ -5,20 +13,43 @@ function DarkRP.defineChatCommand(cmd, callback)
 		if not canChatCommand then
 			return ""
 		end
-		ret = {callback(ply, arg, ...)}
+
+		local ret = {callback(ply, arg, ...)}
 		local overrideTxt, overrideDoSayFunc = hook.Run("onChatCommand", ply, cmd, arg, ret, ...)
 
 		if overrideTxt then return overrideTxt, overrideDoSayFunc end
 		return unpack(ret)
 	end
 
-	local chatcommands = DarkRP.getChatCommands()
-
-	chatcommands[cmd] = chatcommands[cmd] or {}
-	chatcommands[cmd].callback = detour
-	chatcommands[cmd].command = chatcommands[cmd].command or cmd
+	registerCommandDefinition(cmd, detour)
 end
 
+function DarkRP.definePrivilegedChatCommand(cmd, priv, callback, extraInfoTbl)
+	cmd = string.lower(cmd)
+
+	local function onCAMIResult(ply, arg, hasAccess, reason)
+		if hasAccess then return callback(ply, arg) end
+
+		local notify = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
+		notify(DarkRP.getPhrase("no_privilege"))
+	end
+
+	local function callbackdetour(ply, arg, ...)
+		local canChatCommand = gamemode.Call("canChatCommand", ply, cmd, arg)
+		if not canChatCommand then
+			return ""
+		end
+
+		CAMI.PlayerHasAccess(ply, priv, fp{onCAMIResult, ply, arg}, nil, extraInfoTbl)
+
+		local overrideTxt, overrideDoSayFunc = hook.Run("onChatCommand", ply, cmd, arg, {""})
+
+		if overrideTxt then return overrideTxt, overrideDoSayFunc end
+		return ""
+	end
+
+	registerCommandDefinition(cmd, callbackdetour)
+end
 
 local function RP_PlayerChat(ply, text, teamonly)
 	DarkRP.log(ply:Nick().." ("..ply:SteamID().."): "..text )

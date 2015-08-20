@@ -4,68 +4,17 @@ local function AddButtonToFrame(Frame)
 	local button = vgui.Create("DButton", Frame)
 	button:SetPos(10, Frame:GetTall() - 110)
 	button:SetSize(180, 100)
+
+	Frame.buttonCount = (Frame.buttonCount or 0) + 1
+	Frame.lastButton = button
 	return button
 end
 
-local function AdminMenuAdditions(Frame, ent, entType)
-	local DisableOwnage = AddButtonToFrame(Frame)
-	DisableOwnage:SetText(DarkRP.getPhrase(ent:getKeysNonOwnable() and "allow_ownership" or "disallow_ownership"))
-	DisableOwnage.DoClick = function() Frame:Close() RunConsoleCommand("darkrp", "toggleownable") end
+local function AdminMenuAdditions(Frame, ent, entType, doorSettingsAccess)
+	if not doorSettingsAccess then return end
 
-	if ent:getKeysNonOwnable() and entType then
-		local DoorTitle = AddButtonToFrame(Frame)
-		DoorTitle:SetText(DarkRP.getPhrase("set_x_title", entType))
-		DoorTitle.DoClick = function()
-			Derma_StringRequest(DarkRP.getPhrase("set_x_title", entType), DarkRP.getPhrase("set_x_title_long", entType), "", function(text)
-				RunConsoleCommand("darkrp", "title", text)
-				if ValidPanel(Frame) then
-					Frame:Close()
-				end
-			end,
-			function() end, DarkRP.getPhrase("ok"), DarkRP.getPhrase("cancel"))
-		end
-	else
-		local EditDoorGroups = AddButtonToFrame(Frame)
-		EditDoorGroups:SetText(DarkRP.getPhrase("edit_door_group"))
-		EditDoorGroups.DoClick = function()
-			local menu = DermaMenu()
-			local groups = menu:AddSubMenu(DarkRP.getPhrase("door_groups"))
-			local teams = menu:AddSubMenu(DarkRP.getPhrase("jobs"))
-			local add = teams:AddSubMenu(DarkRP.getPhrase("add"))
-			local remove = teams:AddSubMenu(DarkRP.getPhrase("remove"))
 
-			menu:AddOption(DarkRP.getPhrase("none"), function() RunConsoleCommand("darkrp", "togglegroupownable") Frame:Close() end)
-			for k,v in pairs(RPExtraTeamDoors) do
-				groups:AddOption(k, function()
-					RunConsoleCommand("darkrp", "togglegroupownable", k)
-					if ValidPanel(Frame) then
-						Frame:Close()
-					end
-				end)
-			end
 
-			local doorTeams = ent:getKeysDoorTeams()
-			for k,v in pairs(RPExtraTeams) do
-				if not doorTeams or not doorTeams[k] then
-					add:AddOption(v.name, function()
-						RunConsoleCommand("darkrp", "toggleteamownable", k)
-						if ValidPanel(Frame) then
-							Frame:Close()
-						end
-					end)
-				else
-					remove:AddOption(v.name, function()
-						RunConsoleCommand("darkrp", "toggleteamownable", k)
-						if ValidPanel(Frame) then
-							Frame:Close()
-						end
-					end)
-				end
-			end
-
-			menu:Open()
-		end
-	end
 end
 
 DarkRP.stub{
@@ -98,7 +47,8 @@ DarkRP.hookStub{
 }
 
 local KeyFrameVisible = false
-function DarkRP.openKeysMenu(um)
+
+local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
 	if KeyFrameVisible then return end
 
 	local ent = LocalPlayer():GetEyeTrace().Entity
@@ -132,6 +82,10 @@ function DarkRP.openKeysMenu(um)
 		self:SetVisible(false)
 		self:Remove()
 	end
+
+	-- All the buttons
+
+
 
 	if ent:isKeysOwnedBy(LocalPlayer()) then
 		local Owndoor = AddButtonToFrame(Frame)
@@ -175,52 +129,83 @@ function DarkRP.openKeysMenu(um)
 		if not ent:isMasterOwner(LocalPlayer()) then
 			RemoveOwner:SetDisabled(true)
 		end
+	end
 
+	if doorSettingsAccess then
+		local DisableOwnage = AddButtonToFrame(Frame)
+		DisableOwnage:SetText(DarkRP.getPhrase(ent:getKeysNonOwnable() and "allow_ownership" or "disallow_ownership"))
+		DisableOwnage.DoClick = function() Frame:Close() RunConsoleCommand("darkrp", "toggleownable") end
+	end
+
+	if doorSettingsAccess and (ent:isKeysOwned() or ent:getKeysNonOwnable() or ent:getKeysDoorGroup() or hasTeams) or ent:isKeysOwnedBy(LocalPlayer()) then
 		local DoorTitle = AddButtonToFrame(Frame)
 		DoorTitle:SetText(DarkRP.getPhrase("set_x_title", entType))
 		DoorTitle.DoClick = function()
 			Derma_StringRequest(DarkRP.getPhrase("set_x_title", entType), DarkRP.getPhrase("set_x_title_long", entType), "", function(text)
 				RunConsoleCommand("darkrp", "title", text)
-				if ValidPanel(Frame) then
+				if IsValid(Frame) then
 					Frame:Close()
 				end
 			end,
 			function() end, DarkRP.getPhrase("ok"), DarkRP.getPhrase("cancel"))
 		end
-	elseif not ent:isKeysOwnedBy(LocalPlayer()) and not ent:isKeysOwned() and not ent:getKeysNonOwnable() and not ent:getKeysDoorGroup() and not ent:getKeysDoorTeams() then
-		if LocalPlayer():hasDarkRPPrivilege("rp_doorManipulation") then
-			local Owndoor = AddButtonToFrame(Frame)
-			Owndoor:SetText(DarkRP.getPhrase("buy_x", entType))
-			Owndoor.DoClick = function() RunConsoleCommand("darkrp", "toggleown") Frame:Close() end
-
-			AdminMenuAdditions(Frame, ent, entType)
-		else
-			RunConsoleCommand("darkrp", "toggleown")
-			Frame:Close()
-			KeyFrameVisible = true
-			timer.Simple(0.3, function() KeyFrameVisible = false end)
-		end
-	elseif not ent:isKeysOwnedBy(LocalPlayer()) and ent:isKeysAllowedToOwn(LocalPlayer()) then
-		if LocalPlayer():hasDarkRPPrivilege("rp_doorManipulation") then
-			local Owndoor = AddButtonToFrame(Frame)
-			Owndoor:SetText(DarkRP.getPhrase("coown_x", entType))
-			Owndoor.DoClick = function() RunConsoleCommand("darkrp", "toggleown") Frame:Close() end
-
-			AdminMenuAdditions(Frame, ent, entType)
-		else
-			RunConsoleCommand("darkrp", "toggleown")
-			Frame:Close()
-			KeyFrameVisible = true
-			timer.Simple(0.3, function() KeyFrameVisible = false end)
-		end
-	elseif LocalPlayer():hasDarkRPPrivilege("rp_doorManipulation") then
-		AdminMenuAdditions(Frame, ent, entType)
-	else
-		Frame:Close()
 	end
+
+	if not ent:isKeysOwned() and not ent:getKeysNonOwnable() and not ent:getKeysDoorGroup() and not ent:getKeysDoorTeams() or not ent:isKeysOwnedBy(LocalPlayer()) and ent:isKeysAllowedToOwn(LocalPlayer()) then
+		local Owndoor = AddButtonToFrame(Frame)
+		Owndoor:SetText(DarkRP.getPhrase("buy_x", entType))
+		Owndoor.DoClick = function() RunConsoleCommand("darkrp", "toggleown") Frame:Close() end
+	end
+
+	if doorSettingsAccess then
+		local EditDoorGroups = AddButtonToFrame(Frame)
+		EditDoorGroups:SetText(DarkRP.getPhrase("edit_door_group"))
+		EditDoorGroups.DoClick = function()
+			local menu = DermaMenu()
+			local groups = menu:AddSubMenu(DarkRP.getPhrase("door_groups"))
+			local teams = menu:AddSubMenu(DarkRP.getPhrase("jobs"))
+			local add = teams:AddSubMenu(DarkRP.getPhrase("add"))
+			local remove = teams:AddSubMenu(DarkRP.getPhrase("remove"))
+
+			menu:AddOption(DarkRP.getPhrase("none"), function() RunConsoleCommand("darkrp", "togglegroupownable") Frame:Close() end)
+			for k,v in pairs(RPExtraTeamDoors) do
+				groups:AddOption(k, function()
+					RunConsoleCommand("darkrp", "togglegroupownable", k)
+					Frame:Close()
+				end)
+			end
+
+			local doorTeams = ent:getKeysDoorTeams()
+			for k,v in pairs(RPExtraTeams) do
+				local which = (not doorTeams or not doorTeams[k]) and add or remove
+				which:AddOption(v.name, function()
+					RunConsoleCommand("darkrp", "toggleteamownable", k)
+					Frame:Close()
+				end)
+			end
+
+			menu:Open()
+		end
+	end
+
+	if Frame.buttonCount == 1 then
+		Frame.lastButton:DoClick()
+	elseif Frame.buttonCount == 0 or not Frame.buttonCount then
+		Frame:Close()
+		KeyFrameVisible = true
+		timer.Simple(0.3, function() KeyFrameVisible = false end)
+	end
+
+
 	hook.Call("onKeysMenuOpened", nil, ent, Frame)
 
 	Frame:Center()
 	Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
+end
+
+function DarkRP.openKeysMenu(um)
+	CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_SetDoorOwner", function(setDoorOwnerAccess)
+		CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_ChangeDoorSettings", fp{openMenu, setDoorOwnerAccess})
+	end)
 end
 usermessage.Hook("KeysMenu", DarkRP.openKeysMenu)
