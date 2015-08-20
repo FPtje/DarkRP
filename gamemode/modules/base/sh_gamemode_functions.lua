@@ -36,3 +36,10 @@ function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
 
 	ply:setSelfDarkRPVar("agenda", agenda and agenda.text or nil)
 end
+
+hook.Add("loadCustomDarkRPItems", "CAMI privs", function()
+	CAMI.RegisterPrivilege{
+		Name = "DarkRP_SeeEvents",
+		MinAccess = "admin"
+	}
+end)

@@ -89,7 +89,7 @@ function GM:DatabaseInitialized()
 end
 
 function GM:canSeeLogMessage(ply, message, colour)
-	return ply:hasDarkRPPrivilege("rp_viewlog") or ply:IsAdmin()
+	return true
 end
 
 /*---------------------------------------------------------

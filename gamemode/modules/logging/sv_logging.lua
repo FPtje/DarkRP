@@ -1,12 +1,13 @@
-local function AdminLog(message, colour)
+local function AdminLog(message, colour, allowedPlys)
 	local RF = RecipientFilter()
-	for k,v in pairs(player.GetAll()) do
+	for k,v in pairs(allowedPlys) do
 		local canHear = hook.Call("canSeeLogMessage", GAMEMODE, v, message, colour)
 
 		if canHear then
 			RF:AddPlayer(v)
 		end
 	end
+
 	umsg.Start("DRPLogMsg", RF)
 		umsg.Short(colour.r)
 		umsg.Short(colour.g)
@@ -18,7 +19,7 @@ end
 local DarkRPFile
 function DarkRP.log(text, colour, noFileSave)
 	if colour then
-		AdminLog(text, colour)
+		CAMI.GetPlayersWithAccess("DarkRP_SeeEvents", fp{AdminLog, text, colour})
 	end
 
 	if not GAMEMODE.Config.logging or noFileSave then return end
@@ -27,9 +28,10 @@ function DarkRP.log(text, colour, noFileSave)
 		if not file.IsDir("darkrp_logs", "DATA") then
 			file.CreateDir("darkrp_logs")
 		end
-		DarkRPFile = "darkrp_logs/"..os.date("%m_%d_%Y %I_%M %p")..".txt"
-		file.Write(DarkRPFile, os.date().. "\t".. text)
+
+		DarkRPFile = "darkrp_logs/"..os.date("%m_%d_%Y %I_%M %p") .. ".txt"
+		file.Write(DarkRPFile, os.date() .. "\t" .. text)
 		return
 	end
-	file.Append(DarkRPFile, "\n"..os.date().. "\t"..(text or ""))
+	file.Append(DarkRPFile, "\n" .. os.date() .. "\t" .. (text or ""))
 end
