@@ -91,19 +91,19 @@ local function Bring(ply, cmd, args)
 		timer.Simple(0, function()
 			local tracedata = {}
 			tracedata.start = BringTo:GetShootPos()
-			tracedata.endpos = tracedata.start + BringTo:GetAimVector()*50
+			tracedata.endpos = tracedata.start + BringTo:GetAimVector() * 50
 			tracedata.filter = BringTo
 
 			local trace = util.TraceLine(tracedata)
 			if trace.HitPos:Distance(BringTo:GetShootPos()) < 45 then
-				tracedata.endpos = tracedata.start - BringTo:GetAimVector()*50
+				tracedata.endpos = tracedata.start - BringTo:GetAimVector() * 50
 				trace = util.TraceLine(tracedata)
 			end
 
 			target:SetPos(DarkRP.findEmptyPos(BringTo:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
 
 			zapEffect(target)
-			FAdmin.Log(string.format("FAdmin: %s (%s) brought %s (%s) to %s", ply:Nick(), ply:SteamID(), target:Name(), target:SteamID(), BringTo:Nick()))
+			FAdmin.Log(string.format("FAdmin: %s (%s) brought %s (%s) to %s", ply:EntIndex() == 0 and "Console" or ply:Nick(), ply:SteamID(), target:Name(), target:SteamID(), BringTo:Nick()))
 
 			if PHYSGUN then timer.Simple(0.5, function() target:Give("weapon_physgun") target:SelectWeapon("weapon_physgun") end) end
 		end)
