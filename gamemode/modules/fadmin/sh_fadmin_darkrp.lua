@@ -84,8 +84,6 @@ hook.Add("InitPostEntity", "FAdmin_DarkRP_privs", function()
 	FAdmin.Access.AddPrivilege("rp_commands", 2)
 	FAdmin.Access.AddPrivilege("rp_doorManipulation", 3)
 	FAdmin.Access.AddPrivilege("rp_tool", 2)
-	FAdmin.Access.AddPrivilege("rp_phys", 2)
-	FAdmin.Access.AddPrivilege("rp_prop", 2)
 	FAdmin.Access.AddPrivilege("rp_viewlog", 2)
 	for k,v in pairs(RPExtraTeams) do
 		if v.vote then

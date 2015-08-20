@@ -97,10 +97,12 @@ end
  ---------------------------------------------------------*/
 
 function GM:PlayerSpawnProp(ply, model)
-	-- If prop spawning is enabled or the user has admin or prop privileges
-	local allowed = ((GAMEMODE.Config.propspawning or (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_prop")) or ply:IsAdmin()) and true) or false
+	-- No prop spawning means no prop spawning.
+	local allowed = GAMEMODE.Config.propspawning
 
+	if not allowed then return false end
 	if ply:isArrested() then return false end
+
 	model = string.gsub(tostring(model), "\\", "/")
 	model = string.gsub(tostring(model), "//", "/")
 
@@ -108,7 +110,6 @@ function GM:PlayerSpawnProp(ply, model)
 		RPExtraTeams[ply:Team()].PlayerSpawnProp(ply, model)
 	end
 
-	if not allowed then return false end
 
 	return self.BaseClass:PlayerSpawnProp(ply, model)
 end
