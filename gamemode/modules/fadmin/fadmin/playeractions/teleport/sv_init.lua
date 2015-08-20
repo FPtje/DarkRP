@@ -78,35 +78,35 @@ local function Bring(ply, cmd, args)
 	end
 
 	for _, target in pairs(targets) do
-		if IsValid(target) and target ~= ply then
-			target:ExitVehicle()
-			if not target:Alive() then target:Spawn() end
-			local PHYSGUN = false
-			if IsValid(target:GetActiveWeapon()) and target:GetActiveWeapon():GetClass() == "weapon_physgun" and target:KeyDown(IN_ATTACK) then
-				target:ConCommand("-attack")--release the stuff he's holding :)
-				target:GetActiveWeapon():Remove()
-				PHYSGUN = true
-			end
-			timer.Simple(0, function()
-				local tracedata = {}
-				tracedata.start = BringTo:GetShootPos()
-				tracedata.endpos = tracedata.start + BringTo:GetAimVector()*50
-				tracedata.filter = BringTo
+		if not IsValid(target) and target == ply then continue end
 
-				local trace = util.TraceLine(tracedata)
-				if trace.HitPos:Distance(BringTo:GetShootPos()) < 45 then
-					tracedata.endpos = tracedata.start - BringTo:GetAimVector()*50
-					trace = util.TraceLine(tracedata)
-				end
-
-				target:SetPos(DarkRP.findEmptyPos(BringTo:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
-
-				zapEffect(target)
-				FAdmin.Log(string.format("FAdmin: %s (%s) brought %s (%s) to %s", ply:Nick(), ply:SteamID(), target:Name(), target:SteamID(), BringTo:Nick()))
-
-				if PHYSGUN then timer.Simple(0.5, function() target:Give("weapon_physgun") target:SelectWeapon("weapon_physgun") end) end
-			end)
+		target:ExitVehicle()
+		if not target:Alive() then target:Spawn() end
+		local PHYSGUN = false
+		if IsValid(target:GetActiveWeapon()) and target:GetActiveWeapon():GetClass() == "weapon_physgun" and target:KeyDown(IN_ATTACK) then
+			target:ConCommand("-attack") --release the stuff he's holding :)
+			target:GetActiveWeapon():Remove()
+			PHYSGUN = true
 		end
+		timer.Simple(0, function()
+			local tracedata = {}
+			tracedata.start = BringTo:GetShootPos()
+			tracedata.endpos = tracedata.start + BringTo:GetAimVector()*50
+			tracedata.filter = BringTo
+
+			local trace = util.TraceLine(tracedata)
+			if trace.HitPos:Distance(BringTo:GetShootPos()) < 45 then
+				tracedata.endpos = tracedata.start - BringTo:GetAimVector()*50
+				trace = util.TraceLine(tracedata)
+			end
+
+			target:SetPos(DarkRP.findEmptyPos(BringTo:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
+
+			zapEffect(target)
+			FAdmin.Log(string.format("FAdmin: %s (%s) brought %s (%s) to %s", ply:Nick(), ply:SteamID(), target:Name(), target:SteamID(), BringTo:Nick()))
+
+			if PHYSGUN then timer.Simple(0.5, function() target:Give("weapon_physgun") target:SelectWeapon("weapon_physgun") end) end
+		end)
 	end
 
 	return true, targets, BringTo
