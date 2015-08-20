@@ -38,13 +38,11 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
 	command = "teamban",
 	description = "Ban someone from getting a certain job",
-	delay = 1.5,
-	condition = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_commands")
+	delay = 1.5
 }
 
 DarkRP.declareChatCommand{
 	command = "teamunban",
 	description = "Undo a teamban",
-	delay = 1.5,
-	condition = fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_commands")
+	delay = 1.5
 }

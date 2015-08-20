@@ -64,29 +64,19 @@ local function StartShower()
 end
 
 local function StartStorm(ply)
-	if ply:hasDarkRPPrivilege("rp_commands") then
-		timer.Start("stormControl")
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
-	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/enablestorm"))
-	end
-	return ""
+	timer.Start("stormControl")
+	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_enabled"))
 end
-DarkRP.defineChatCommand("enablestorm", StartStorm)
+DarkRP.definePrivilegedChatCommand("enablestorm", "DarkRP_AdminCommands", StartStorm)
 
 local function StopStorm(ply)
-	if ply:hasDarkRPPrivilege("rp_commands") then
-		timer.Stop("stormControl")
-		stormOn = false
-		timer.Stop("start")
-		StormEnd()
-		DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
-	else
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/disablestorm"))
-	end
-	return ""
+	timer.Stop("stormControl")
+	stormOn = false
+	timer.Stop("start")
+	StormEnd()
+	DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("meteor_disabled"))
 end
-DarkRP.defineChatCommand("disablestorm", StopStorm)
+DarkRP.definePrivilegedChatCommand("disablestorm", "DarkRP_AdminCommands", StopStorm)
 
 timer.Create("start", 1, 0, StartShower)
 timer.Create("stormControl", 1, 0, ControlStorm)

@@ -130,6 +130,18 @@ DarkRP.declareChatCommand{
 	condition = plyMeta.isMayor
 }
 
+DarkRP.declareChatCommand{
+	command = "arrest",
+	description = "Forcefully arrest a player",
+	delay = 0.5
+}
+
+DarkRP.declareChatCommand{
+	command = "unarrest",
+	description = "Forcefully unarrest a player.",
+	delay = 0.5
+}
+
 local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isMayor), player.GetAll}
 local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isChief), player.GetAll}
 

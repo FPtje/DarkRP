@@ -69,13 +69,8 @@ concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
 	letter:SignLetter(ply)
 end)
 
-local function removeLetters(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_removeletters"))
-		return
-	end
-
-	local target = DarkRP.findPlayer(args[1])
+local function removeLetters(ply, args)
+	local target = DarkRP.findPlayer(args)
 
 	if target then
 		for k, v in pairs(ents.FindByClass("letter")) do
@@ -91,7 +86,9 @@ local function removeLetters(ply, cmd, args)
 	if ply:EntIndex() == 0 then
 		DarkRP.log("Console force-removed all letters", Color(30, 30, 30))
 	else
-		DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-removed all letters", Color(30, 30, 30))
+		DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-removed all letters", Color(30, 30, 30))
 	end
+
+	DarkRP.notify(ply, 0, 4, "All letters removed")
 end
-concommand.Add("rp_removeletters", removeLetters)
+DarkRP.definePrivilegedChatCommand("removeletters", "DarkRP_AdminCommands", removeLetters)

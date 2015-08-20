@@ -70,7 +70,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 		menu:Open()
 	end
 	FAdmin.ScoreBoard.Player:AddActionButton("Ban from job", "fadmin/icons/changeteam", Color(200, 0, 0, 255),
-	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamban)
+	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "DarkRP_AdminCommands", ply) end, teamban)
 
 	local function teamunban(ply, button)
 		local menu = DermaMenu()
@@ -95,5 +95,5 @@ FAdmin.StartHooks["DarkRP"] = function()
 		menu:Open()
 	end
 	FAdmin.ScoreBoard.Player:AddActionButton("Unban from job", function() return "fadmin/icons/changeteam", "fadmin/icons/disable" end, Color(200, 0, 0, 255),
-	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "rp_commands", ply) end, teamunban)
+	function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "DarkRP_AdminCommands", ply) end, teamunban)
 end

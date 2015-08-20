@@ -362,40 +362,20 @@ DarkRP.defineChatCommand("switchjobs", SwitchJob)
 DarkRP.defineChatCommand("jobswitch", SwitchJob)
 
 
-local function DoTeamBan(ply, args, cmdargs)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		if cmdargs then
-			ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "/teamban"))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamban"))
-			return ""
-		end
-	end
-
+local function DoTeamBan(ply, args)
 	if not args or args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
-		return ""
-	end
-
-	if cmdargs and not cmdargs[2] then
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("rp_teamban_hint"))
 		return
 	end
 
-	args = cmdargs or string.Explode(" ", args)
+	args = string.Explode(" ", args)
 	local ent = args[1]
 	local Team = args[2]
 
 	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
-		if cmdargs then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", ent or ""))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
-			return ""
-		end
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
+		return
 	end
 
 	local found = false
@@ -408,13 +388,8 @@ local function DoTeamBan(ply, args, cmdargs)
 	end
 
 	if not found then
-		if cmdargs then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", Team or ""))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
-			return ""
-		end
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
+		return
 	end
 
 	target:teamBan(tonumber(Team), tonumber(args[3] or 0))
@@ -427,46 +402,26 @@ local function DoTeamBan(ply, args, cmdargs)
 	end
 	DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 
-	return ""
+	return
 end
-DarkRP.defineChatCommand("teamban", DoTeamBan)
-concommand.Add("rp_teamban", DoTeamBan)
+DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
-local function DoTeamUnBan(ply, args, cmdargs)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", "/teamunban"))
-		return ""
-	end
-
+local function DoTeamUnBan(ply, args)
 	if not args or args == "" then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
-		return ""
+		return
 	end
 
 	local ent = args
 	local Team = args
-	if cmdargs then
-		if not cmdargs[2] then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("rp_teamunban_hint"))
-			return
-		end
-		ent = cmdargs[1]
-		Team = cmdargs[2]
-	else
-		local a,b = string.find(args, " ")
-		ent = string.sub(args, 1, a - 1)
-		Team = string.sub(args, a + 1)
-	end
+	local a,b = string.find(args, " ")
+	ent = string.sub(args, 1, a - 1)
+	Team = string.sub(args, a + 1)
 
 	local target = DarkRP.findPlayer(ent)
 	if not target or not IsValid(target) then
-		if cmdargs then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", ent or ""))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
-			return ""
-		end
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
+		return
 	end
 
 	local found = false
@@ -483,13 +438,8 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	end
 
 	if not found then
-		if cmdargs then
-			DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", Team or ""))
-			return
-		else
-			DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
-			return ""
-		end
+		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", Team or ""))
+		return
 	end
 
 	target:teamUnBan(tonumber(Team))
@@ -502,7 +452,6 @@ local function DoTeamUnBan(ply, args, cmdargs)
 	end
 	DarkRP.notifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 
-	return ""
+	return
 end
-DarkRP.defineChatCommand("teamunban", DoTeamUnBan)
-concommand.Add("rp_teamunban", DoTeamUnBan)
+DarkRP.definePrivilegedChatCommand("teamunban", "DarkRP_AdminCommands", DoTeamUnBan)

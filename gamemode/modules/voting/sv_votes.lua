@@ -162,12 +162,7 @@ function DarkRP.destroyLastVote()
 	return true
 end
 
-local function CancelVote(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_cancelvote"))
-		return
-	end
-
+local function CancelVote(ply)
 	local result = DarkRP.destroyLastVote()
 
 	if result then
@@ -179,4 +174,4 @@ local function CancelVote(ply, cmd, args)
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("cant_cancel_vote"))
 	end
 end
-concommand.Add("rp_cancelvote", CancelVote)
+DarkRP.definePrivilegedChatCommand("forcecancelvote", "DarkRP_AdminCommands", CancelVote)

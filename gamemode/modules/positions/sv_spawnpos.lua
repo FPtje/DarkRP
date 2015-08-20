@@ -1,9 +1,4 @@
 local function SetSpawnPos(ply, args)
-	if not ply:hasDarkRPPrivilege("rp_commands") then
-		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "setspawn"))
-		return ""
-	end
-
 	local pos = ply:GetPos()
 	local t
 
@@ -20,16 +15,11 @@ local function SetSpawnPos(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 
-	return ""
+	return
 end
-DarkRP.defineChatCommand("setspawn", SetSpawnPos)
+DarkRP.definePrivilegedChatCommand("setspawn", "DarkRP_AdminCommands", SetSpawnPos)
 
 local function AddSpawnPos(ply, args)
-	if not ply:hasDarkRPPrivilege("rp_commands") then
-		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "addspawn"))
-		return ""
-	end
-
 	local pos = ply:GetPos()
 	local t
 
@@ -46,16 +36,11 @@ local function AddSpawnPos(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 
-	return ""
+	return
 end
-DarkRP.defineChatCommand("addspawn", AddSpawnPos)
+DarkRP.definePrivilegedChatCommand("addspawn", "DarkRP_AdminCommands", AddSpawnPos)
 
 local function RemoveSpawnPos(ply, args)
-	if not ply:hasDarkRPPrivilege("rp_commands") then
-		DarkRP.notify(ply, 1, 2, DarkRP.getPhrase("need_admin", "remove spawn"))
-		return ""
-	end
-
 	local t
 
 	for k,v in pairs(RPExtraTeams) do
@@ -72,6 +57,6 @@ local function RemoveSpawnPos(ply, args)
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
 	end
 
-	return ""
+	return
 end
-DarkRP.defineChatCommand("removespawn", RemoveSpawnPos)
+DarkRP.definePrivilegedChatCommand("removespawn", "DarkRP_AdminCommands", RemoveSpawnPos)

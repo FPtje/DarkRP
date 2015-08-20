@@ -208,13 +208,10 @@ DarkRP.defineChatCommand("unwanted", unwantedCommand)
 /*---------------------------------------------------------------------------
 Admin commands
 ---------------------------------------------------------------------------*/
-local function ccArrest(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_arrest"))
-		return
-	end
+local function ccArrest(ply, arg)
+	local args = string.Explode(" ", arg)
 
-	if not args or not args[1] then
+	if not args[1] then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
 	end
@@ -227,7 +224,7 @@ local function ccArrest(ply, cmd, args)
 	local targets = DarkRP.findPlayers(args[1])
 
 	if not targets then
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", args[1]))
 		return
 	end
 
@@ -242,17 +239,14 @@ local function ccArrest(ply, cmd, args)
 		if ply:EntIndex() == 0 then
 			DarkRP.log("Console force-arrested "..target:SteamName(), Color(0, 255, 255))
 		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-arrested "..target:SteamName(), Color(0, 255, 255))
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-arrested " .. target:SteamName(), Color(0, 255, 255))
 		end
 	end
 end
-concommand.Add("rp_arrest", ccArrest)
+DarkRP.definePrivilegedChatCommand("arrest", "DarkRP_AdminCommands", ccArrest)
 
-local function ccUnarrest(ply, cmd, args)
-	if ply:EntIndex() ~= 0 and not ply:hasDarkRPPrivilege("rp_commands") then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_admin", "rp_unarrest"))
-		return
-	end
+local function ccUnarrest(ply, arg)
+	local args = string.Explode(" ", arg)
 
 	if not args or not args[1] then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
@@ -262,7 +256,7 @@ local function ccUnarrest(ply, cmd, args)
 	local targets = DarkRP.findPlayers(args[1])
 
 	if not targets then
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", args[1]))
 		return
 	end
 
@@ -273,11 +267,11 @@ local function ccUnarrest(ply, cmd, args)
 		if ply:EntIndex() == 0 then
 			DarkRP.log("Console force-unarrested "..target:SteamName(), Color(0, 255, 255))
 		else
-			DarkRP.log(ply:Nick().." ("..ply:SteamID()..") force-unarrested "..target:SteamName(), Color(0, 255, 255))
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unarrested " .. target:SteamName(), Color(0, 255, 255))
 		end
 	end
 end
-concommand.Add("rp_unarrest", ccUnarrest)
+DarkRP.definePrivilegedChatCommand("unarrest", "DarkRP_AdminCommands", ccUnarrest)
 
 /*---------------------------------------------------------------------------
 Callback functions
