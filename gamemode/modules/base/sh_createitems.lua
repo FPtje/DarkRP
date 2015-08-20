@@ -245,7 +245,6 @@ local function declareTeamCommands(CTeam)
 			delay = 1.5,
 			condition = fn.FAnd {
 				fn.FOr {
-					fn.Curry(fn.Flip(plyMeta.hasDarkRPPrivilege), 2)("rp_"..CTeam.command),
 					fn.FAnd {
 						fn.FOr {
 							fn.Curry(fn.Lte, 3)(CTeam.admin)(0),
@@ -399,10 +398,10 @@ local function addTeamCommands(CTeam, max)
 			return ""
 		end)
 
-		DarkRP.defineChatCommand(CTeam.command, function(ply)
-			if ply:hasDarkRPPrivilege("rp_"..CTeam.command) then
+		local function onJobCommand(ply, hasPriv)
+			if hasPriv then
 				ply:changeTeam(k)
-				return ""
+				return
 			end
 
 			local a = CTeam.admin
@@ -410,7 +409,7 @@ local function addTeamCommands(CTeam, max)
 			or a > 1 and not ply:IsSuperAdmin()
 			then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_admin", CTeam.name))
-				return ""
+				return
 			end
 
 			if not CTeam.RequiresVote and
@@ -420,10 +419,14 @@ local function addTeamCommands(CTeam, max)
 			or CTeam.RequiresVote and CTeam.RequiresVote(ply, k)
 			then
 				DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_to_make_vote", CTeam.name))
-				return ""
+				return
 			end
 
 			ply:changeTeam(k)
+			return
+		end
+		DarkRP.defineChatCommand(CTeam.command, function(ply)
+			CAMI.PlayerHasAccess(ply, "DarkRP_GetJob_"..CTeam.command, fp{onJobCommand, ply})
 			return ""
 		end)
 	else

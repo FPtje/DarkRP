@@ -72,4 +72,14 @@ hook.Add("loadCustomDarkRPItems", "CAMI privs", function()
 		Name = "DarkRP_SetLicense",
 		MinAccess = "superadmin"
 	}
+
+	for k,v in pairs(RPExtraTeams) do
+		if not v.vote or v.admin and v.admin > 1 then continue end
+
+		local toAdmin = {[0] = "admin", [1] = "superadmin"}
+		CAMI.RegisterPrivilege{
+			Name = "DarkRP_GetJob_" .. v.command,
+			MinAccess = toAdmin[v.admin or 0]-- Add privileges for the teams that are voted for
+		}
+	end
 end)
