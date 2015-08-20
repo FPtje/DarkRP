@@ -1,6 +1,6 @@
 hook.Run("DarkRPStartedLoading")
 
-GM.Version = "2.6.1"
+GM.Version = "2.6.2 beta"
 GM.Name = "DarkRP"
 GM.Author = "By FPtje Falco et al."
 
