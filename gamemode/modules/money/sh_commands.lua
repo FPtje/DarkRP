@@ -27,3 +27,21 @@ DarkRP.declareChatCommand{
 	description = "Write a cheque for a specific person.",
 	delay = 1.5
 }
+
+DarkRP.declareChatCommand{
+	command = "setmoney",
+	description = "Set a player's wallet value.",
+	delay = 0.5
+}
+
+DarkRP.declareChatCommand{
+	command = "addmoney",
+	description = "Add money to a player's wallet.",
+	delay = 0.5
+}
+
+DarkRP.declareChatCommand{
+	command = "setsalary",
+	description = "Set a player's salary.",
+	delay = 0.5
+}

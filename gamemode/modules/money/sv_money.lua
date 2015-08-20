@@ -225,13 +225,11 @@ end
 DarkRP.defineChatCommand("cheque", CreateCheque, 0.3)
 DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
 
-local function ccSetMoney(ply, cmd, args)
+local function ccSetMoney(ply, arg)
+	local args = string.Explode(" ", arg)
+
 	if not tonumber(args[2]) then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		return
-	end
-	if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then
-		ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("need_sadmin", "rp_setmoney"))
 		return
 	end
 
@@ -244,23 +242,13 @@ local function ccSetMoney(ply, cmd, args)
 
 	local amount = math.floor(tonumber(args[2]))
 
-	if args[3] then
-		amount = args[3] == "-" and math.Max(0, target:getDarkRPVar("money") - amount) or target:getDarkRPVar("money") + amount
-	end
-
 	if target then
 		DarkRP.storeMoney(target, amount)
 		target:setDarkRPVar("money", amount)
 
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("you_set_x_money", target:Nick(), DarkRP.formatMoney(amount), ""))
 
-		local nick = ""
-		if ply:EntIndex() == 0 then
-			nick = "Console"
-		else
-			nick = ply:Nick()
-		end
-		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", nick, DarkRP.formatMoney(amount), ""))
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(amount), ""))
 		if ply:EntIndex() == 0 then
 			DarkRP.log("Console set " .. target:SteamName() .. "'s money to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
 		else
@@ -270,9 +258,45 @@ local function ccSetMoney(ply, cmd, args)
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
 	end
 end
-concommand.Add("rp_setmoney", ccSetMoney, function() return {"rp_setmoney   <ply>   <amount>   [+/-]"} end)
+DarkRP.definePrivilegedChatCommand("setmoney", "DarkRP_SetMoney", ccSetMoney)
 
-local function ccSetSalary(ply, cmd, args)
+local function ccAddMoney(ply, arg)
+	local args = string.Explode(" ", arg)
+
+	if not tonumber(args[2]) then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+		return
+	end
+
+	local target = DarkRP.findPlayer(args[1])
+
+	if not target then
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+		return
+	end
+
+	local amount = math.floor(tonumber(args[2]))
+
+	if target then
+		target:addMoney(amount)
+
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("you_gave", target:Nick(), DarkRP.formatMoney(amount)))
+
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(target:getDarkRPVar("money")), ""))
+		if ply:EntIndex() == 0 then
+			DarkRP.log("Console added " .. DarkRP.formatMoney(amount) .. " to " .. target:SteamName() .. "'s wallet", Color(30, 30, 30))
+		else
+			DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") added " .. DarkRP.formatMoney(amount) .. " to " .. target:SteamName() .. "'s wallet", Color(30, 30, 30))
+		end
+	else
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+	end
+end
+DarkRP.definePrivilegedChatCommand("addmoney", "DarkRP_SetMoney", ccAddMoney)
+
+local function ccSetSalary(ply, arg)
+	local args = string.Explode(" ", arg)
+
 	if not tonumber(args[2]) then
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
 		return
@@ -285,7 +309,7 @@ local function ccSetSalary(ply, cmd, args)
 	local amount = math.floor(tonumber(args[2]))
 
 	if amount < 0 or amount > 150 then
-		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), tostring(args[2]).." (0-150)"))
+		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), tostring(args[2]) .. " (0-150)"))
 		return
 	end
 
@@ -297,13 +321,7 @@ local function ccSetSalary(ply, cmd, args)
 
 		DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("you_set_x_salary", target:Nick(), DarkRP.formatMoney(amount), ""))
 
-		local nick = ""
-		if ply:EntIndex() == 0 then
-			nick = "Console"
-		else
-			nick = ply:Nick()
-		end
-		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_salary", nick, DarkRP.formatMoney(amount), ""))
+		DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_salary", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(amount), ""))
 		if ply:EntIndex() == 0 then
 			DarkRP.log("Console set " .. target:SteamName() .. "'s salary to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
 		else
@@ -314,4 +332,4 @@ local function ccSetSalary(ply, cmd, args)
 		return
 	end
 end
-concommand.Add("rp_setsalary", ccSetSalary)
+DarkRP.definePrivilegedChatCommand("setsalary", "DarkRP_SetMoney", ccSetSalary)
