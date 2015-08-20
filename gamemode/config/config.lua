@@ -125,7 +125,7 @@ GM.Config.ooc 							= true
 GM.Config.propertytax 					= false
 -- proppaying - Whether or not players should pay for spawning props.
 GM.Config.proppaying 					= false
--- propspawning - Enable/disable props spawning for non-admins.
+-- propspawning - Enable/disable props spawning. Applies to admins too.
 GM.Config.propspawning 					= true
 -- removeclassitems - Enable/disable shipments/microwaves/etc. removal when someone changes team.
 GM.Config.removeclassitems 				= true
