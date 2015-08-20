@@ -53,20 +53,22 @@ function SWEP:PreDrawViewModel(vm)
 end
 
 function SWEP:GetStrippableWeapons(ent, callback)
-	for k,v in pairs(ent:GetWeapons()) do
-		if not v:IsValid() then continue end
-		local class = v:GetClass()
+	CAMI.PlayerHasAccess(ent, "DarkRP_GetAdminWeapons", function(access)
+		for k,v in pairs(ent:GetWeapons()) do
+			if not v:IsValid() then continue end
+			local class = v:GetClass()
 
-		if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
-			((ent:hasDarkRPPrivilege("rp_tool") or ent:IsAdmin()) and table.HasValue(GAMEMODE.Config.AdminWeapons, class)) or
-			ent:getJobTable() and ent:getJobTable().weapons and table.HasValue(ent:getJobTable().weapons, class)) then
-			continue
+			if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
+				access and table.HasValue(GAMEMODE.Config.AdminWeapons, class) or
+				ent:getJobTable() and ent:getJobTable().weapons and table.HasValue(ent:getJobTable().weapons, class)) then
+				continue
+			end
+
+			if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
+
+			callback(v)
 		end
-
-		if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
-
-		callback(v)
-	end
+	end)
 end
 
 function SWEP:PrimaryAttack()

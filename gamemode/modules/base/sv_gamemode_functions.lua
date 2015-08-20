@@ -724,19 +724,21 @@ function GM:PlayerLoadout(ply)
 		ply:Give(v)
 	end
 
-	if (FAdmin and FAdmin.Access.PlayerHasPrivilege(ply, "rp_tool")) or ply:IsAdmin() then
+	CAMI.PlayerHasAccess(ply, "DarkRP_GetAdminWeapons", function(access)
+		if not access or not IsValid(ply) then return end
+
 		for k,v in pairs(GAMEMODE.Config.AdminWeapons) do
 			ply:Give(v)
 		end
-	end
 
-	if ply:hasDarkRPPrivilege("rp_commands") and GAMEMODE.Config.AdminsCopWeapons then
+		if not GAMEMODE.Config.AdminsCopWeapons then return end
+
 		ply:Give("door_ram")
 		ply:Give("arrest_stick")
 		ply:Give("unarrest_stick")
 		ply:Give("stunstick")
 		ply:Give("weaponchecker")
-	end
+	end)
 
 	selectDefaultWeapon(ply)
 end
