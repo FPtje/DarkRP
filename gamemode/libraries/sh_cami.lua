@@ -41,7 +41,7 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150817
+local version = 20150820
 
 if CAMI and CAMI.Version >= version then return end
 
@@ -53,14 +53,14 @@ usergroups
 	Contains the registered CAMI_USERGROUP usergroup structures.
 	Indexed by usergroup name.
 ]]
-local usergroups = {}
+local usergroups = CAMI.GetUsergroups and CAMI.GetUsergroups() or {}
 
 --[[
 privileges
 	Contains the registered CAMI_PRIVILEGE privilege structures.
 	Indexed by privilege name.
 ]]
-local privileges = {}
+local privileges = CAMI.GetPrivileges and CAMI.GetPrivileges() or {}
 
 --[[
 CAMI.RegisterUsergroup
@@ -304,6 +304,8 @@ end
 --[[
 CAMI.PlayerHasAccess
 	Queries whether a certain player has the right to perform a certain action.
+	Note: this function does NOT return an immediate result!
+	The result is in the callback!
 
 	Parameters:
 		actorPly
@@ -374,10 +376,67 @@ extraInfoTbl)
 end
 
 --[[
+CAMI.GetPlayersWithAccess
+	Finds the list of currently joined players who have the right to perform a
+	certain action.
+	NOTE: this function will NOT return an immediate result!
+	The result is in the callback!
+
+	Parameters:
+		privilegeName
+			string
+			The name of the privilege.
+		callback
+			function(players)
+			This function will be called with the list of players with access.
+		targetPly
+			Optional.
+			The player on which the privilege is executed.
+		extraInfoTbl
+			Optional.
+			Table containing extra information.
+			Officially supported members:
+				Fallback
+					string
+					Either of user/admin/superadmin. When no admin mod replies,
+					the decision is based on the admin status of the user.
+					Defaults to admin if not given.
+				IgnoreImmunity
+					bool
+					Ignore any immunity mechanisms an admin mod might have.
+				CommandArguments
+					table
+					Extra arguments that were given to the privilege command.
+]]
+function CAMI.GetPlayersWithAccess(privilegeName, callback, targetPly,
+extraInfoTbl)
+	local allowedPlys = {}
+	local allPlys = player.GetAll()
+	local countdown = #allPlys
+
+	local function onResult(ply, hasAccess, _)
+		countdown = countdown - 1
+
+		if hasAccess then table.insert(allowedPlys, ply) end
+		if countdown == 0 then callback(allowedPlys) end
+	end
+
+	for _, ply in pairs(allPlys) do
+		CAMI.PlayerHasAccess(ply, privilegeName,
+			function(...) onResult(ply, ...) end,
+			targetPly, extraInfoTbl)
+	end
+end
+
+--[[
 CAMI.SteamIDHasAccess
 	Queries whether a player with a steam ID has the right to perform a certain
-	action. Note that the player does not need to be in the server for this to
+	action.
+	Note: the player does not need to be in the server for this to
 	work.
+
+	Note: this function does NOT return an immediate result!
+	The result is in the callback!
 
 	Parameters:
 		actorSteam
