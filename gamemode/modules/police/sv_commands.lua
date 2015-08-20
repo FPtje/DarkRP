@@ -154,8 +154,7 @@ function DarkRP.lockdown(ply)
 
 	return ""
 end
-concommand.Add("rp_lockdown", function(ply) DarkRP.lockdown(ply) end)
-DarkRP.defineChatCommand("lockdown", function(ply) DarkRP.lockdown(ply) end)
+DarkRP.defineChatCommand("lockdown", DarkRP.lockdown)
 
 function DarkRP.unLockdown(ply)
 	local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
@@ -182,8 +181,7 @@ function DarkRP.unLockdown(ply)
 
 	return ""
 end
-concommand.Add("rp_unlockdown", function(ply) DarkRP.unLockdown(ply) end)
-DarkRP.defineChatCommand("unlockdown", function(ply) DarkRP.unLockdown(ply) end)
+DarkRP.defineChatCommand("unlockdown", DarkRP.unLockdown)
 
 /*---------------------------------------------------------
  License
