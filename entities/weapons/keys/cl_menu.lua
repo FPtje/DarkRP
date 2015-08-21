@@ -10,13 +10,6 @@ local function AddButtonToFrame(Frame)
 	return button
 end
 
-local function AdminMenuAdditions(Frame, ent, entType, doorSettingsAccess)
-	if not doorSettingsAccess then return end
-
-
-
-end
-
 DarkRP.stub{
 	name = "openKeysMenu",
 	description = "Open the keys/F2 menu.",
@@ -62,8 +55,8 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
 	Frame:MakePopup()
 
 	function Frame:Think()
-		local ent = LocalPlayer():GetEyeTrace().Entity
-		if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
+		local LAEnt = LocalPlayer():GetEyeTrace().Entity
+		if not IsValid(LAEnt) or not LAEnt:isKeysOwnable() or LAEnt:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
 			self:Close()
 		end
 		if not self.Dragging then return end
