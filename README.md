@@ -1,5 +1,12 @@
-https://github.com/FPtje/DarkRP/wiki/HOW-TO-REPORT-ISSUES
-======
+# DarkRP 2.6.2 is in beta!
+Try at your own risk, I changed a lot in the backend, changed a lot of console commands to be both chat commands and concommands. There's a **high risk** of it being buggy! If 2.6.2 is broken for you, please go to the releases tab and download the last revision of 2.6.1.
+
+Please report issues
+
+BUT
+
+# [CLICK HERE BEFORE REPORTING ISSUES](https://github.com/FPtje/DarkRP/wiki/HOW-TO-REPORT-ISSUES)
+
 DO NOT ASK FOR HELP ON THE GITHUB! THE GITHUB IS FOR BUGS AND FEATURE REQUESTS ONLY! USE THE FORUM!
 http://forum.darkrp.com/
 
