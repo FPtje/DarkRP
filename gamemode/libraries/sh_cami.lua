@@ -41,7 +41,7 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150820
+local version = 20150822
 
 if CAMI and CAMI.Version >= version then return end
 
@@ -345,9 +345,8 @@ CAMI.PlayerHasAccess
 -- Default access handler
 local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 	function(_, actorPly, privilegeName, callback, _, extraInfoTbl)
-		if not IsValid(actorPly) then return callback(false, "Fallback.") end
 		-- The server always has access in the fallback
-		if actorPly:EntIndex() == 0 then return callback(true, "Fallback.") end
+		if not IsValid(actorPly) then return callback(true, "Fallback.") end
 
 		local priv = privileges[privilegeName]
 
@@ -498,5 +497,5 @@ CAMI.SignalUserGroupChanged
 			Identifier for your own admin mod. Can be anything.
 ]]
 function CAMI.SignalUserGroupChanged(ply, old, new, source)
-	hook.Call("CAMI.PlayerUsergroupChanged", nil, ply, old, new)
+	hook.Call("CAMI.PlayerUsergroupChanged", nil, ply, old, new, source)
 end
