@@ -34,11 +34,13 @@ function meta:keysOwn(ply)
 
 	local Owner = self:CPPIGetOwner()
 
- 	-- Increase vehicle count
+	-- Increase vehicle count
 	if self:IsVehicle() then
 		if IsValid(ply) then
 			ply.Vehicles = ply.Vehicles or 0
 			ply.Vehicles = ply.Vehicles + 1
+
+			self.SID = ply.SID
 		end
 
 		-- Decrease vehicle count of the original owner
