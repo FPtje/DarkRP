@@ -41,7 +41,7 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150822
+local version = 20150823
 
 if CAMI and CAMI.Version >= version then return end
 
@@ -498,4 +498,30 @@ CAMI.SignalUserGroupChanged
 ]]
 function CAMI.SignalUserGroupChanged(ply, old, new, source)
 	hook.Call("CAMI.PlayerUsergroupChanged", nil, ply, old, new, source)
+end
+
+--[[
+CAMI.SignalSteamIDUserGroupChanged
+	Signify that your admin mod has changed the usergroup of a disconnected
+	player. This communicates to other admin mods what it thinks the usergroup
+	of a player should be.
+
+	Listen to the hook to receive the usergroup changes of other admin mods.
+
+	Parameters:
+		ply
+			string
+			The steam ID of the player for which the usergroup is changed
+		old
+			string
+			The previous usergroup of the player.
+		new
+			string
+			The new usergroup of the player.
+		source
+			any
+			Identifier for your own admin mod. Can be anything.
+]]
+function CAMI.SignalSteamIDUserGroupChanged(steamId, old, new, source)
+	hook.Call("CAMI.SteamIDUsergroupChanged", nil, steamId, old, new, source)
 end
