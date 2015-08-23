@@ -53,7 +53,20 @@ usergroups
 	Contains the registered CAMI_USERGROUP usergroup structures.
 	Indexed by usergroup name.
 ]]
-local usergroups = CAMI.GetUsergroups and CAMI.GetUsergroups() or {}
+local usergroups = CAMI.GetUsergroups and CAMI.GetUsergroups() or {
+	user = {
+		Name = "user",
+		Inherits = "user"
+	},
+	admin = {
+		Name = "admin",
+		Inherits = "user"
+	},
+	superadmin = {
+		Name = "superadmin",
+		Inherits = "admin"
+	}
+}
 
 --[[
 privileges
@@ -88,24 +101,6 @@ function CAMI.RegisterUsergroup(usergroup, source)
 	hook.Call("CAMI.OnUsergroupRegistered", nil, usergroup, source)
 	return usergroup
 end
-
--- Default user usergroup
-CAMI.RegisterUsergroup{
-	Name = "user",
-	Inherits = "user"
-}
-
--- Default admin usergroup
-CAMI.RegisterUsergroup{
-	Name = "admin",
-	Inherits = "user"
-}
-
--- Default superadmin usergroup
-CAMI.RegisterUsergroup{
-	Name = "superadmin",
-	Inherits = "admin"
-}
 
 --[[
 CAMI.UnregisterUsergroup
