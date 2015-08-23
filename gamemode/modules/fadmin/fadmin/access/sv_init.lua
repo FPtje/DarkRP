@@ -159,6 +159,10 @@ hook.Add("CAMI.PlayerUsergroupChanged", "FAdmin", function(ply, old, new, source
 	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(ply:SteamID()) .. ", " .. MySQLite.SQLStr(new) .. ");")
 end)
 
+hook.Add("CAMI.SteamIDUsergroupChanged", "FAdmin", function(steamId, old, new, source)
+	MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(steamId) .. ", " .. MySQLite.SQLStr(new) .. ");")
+end)
+
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
@@ -276,6 +280,10 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
 			groupname = args[6]
 		end
 		FAdmin.Access.PlayerSetGroup(target, groupname)
+
+		MySQLite.queryValue(string.format("SELECT groupname FROM FAdmin_PlayerGroup WHERE steamid = %s", MySQLite.SQLStr(target)), function(val)
+			CAMI.SignalSteamIDUserGroupChanged(target, val or "user", groupname, "FAdmin")
+		end)
 		FAdmin.Messages.SendMessage(ply, 4, "User access set!")
 		return true, target, groupname
 	elseif not targets then
