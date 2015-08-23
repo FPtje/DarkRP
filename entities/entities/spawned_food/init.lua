@@ -17,7 +17,14 @@ function ENT:OnTakeDamage(dmg)
 	self:Remove()
 end
 
-function ENT:Use(activator,caller)
+function ENT:Use(activator, caller)
+	local override = self.foodItem.onEaten and self.foodItem.onEaten(self, activator, self.foodItem)
+
+	if override then
+		self:Remove()
+		return
+	end
+
 	activator:setSelfDarkRPVar("Energy", math.Clamp((activator:getDarkRPVar("Energy") or 100) + (self:GetTable().FoodEnergy or 1), 0, 100))
 	umsg.Start("AteFoodIcon", activator)
 	umsg.End()

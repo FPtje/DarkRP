@@ -1,5 +1,5 @@
-local checkModel = function(model) return model ~= nil and (CLIENT or util.IsValidModel(model)) end
-local validFood = {"name", model = checkModel, "energy", "price"}
+local isnil = fn.Curry(fn.Eq, 2)(nil)
+local validFood = {"name", model = isstring, "energy", "price", onEaten = fn.FOr{isnil, isfunction}}
 
 FoodItems = {}
 function DarkRP.createFood(name, mdl, energy, price)

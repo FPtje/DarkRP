@@ -70,9 +70,13 @@ local function BuyFood(ply, args)
 		SpawnedFood.onlyremover = true
 		SpawnedFood.SID = ply.SID
 		SpawnedFood:SetModel(v.model)
+
+		-- for backwards compatibility
 		SpawnedFood.FoodName = v.name
 		SpawnedFood.FoodEnergy = v.energy
 		SpawnedFood.FoodPrice = v.price
+
+		SpawnedFood.foodItem = v
 		SpawnedFood:Spawn()
 		return ""
 	end
