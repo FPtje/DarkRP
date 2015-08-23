@@ -13,6 +13,12 @@ DarkRP.PLAYER.changeTeam = DarkRP.stub{
 			description = "Force the change (ignore restrictions that players usually have to get the job).",
 			type = "boolean",
 			optional = true
+		},
+		{
+			name = "suppressNotification",
+			description = "Suppress any notifications.",
+			type = "boolean",
+			optional = true
 		}
 	},
 	returns = {

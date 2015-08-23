@@ -2,21 +2,23 @@
 Functions
 ---------------------------------------------------------------------------*/
 local meta = FindMetaTable("Player")
-function meta:changeTeam(t, force)
+function meta:changeTeam(t, force, suppressNotification)
 	local prevTeam = self:Team()
+	local notify = suppressNotification and fn.Id or DarkRP.notify
+	local notifyAll = suppressNotification and fn.Id or DarkRP.notifyAll
 
 	if self:isArrested() and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
+		notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
 	if t ~= GAMEMODE.DefaultTeam and not self:changeAllowed(t) and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
+		notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
 		return false
 	end
 
 	if self.LastJob and GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob) >= 0 and not force then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
+		notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
 		return false
 	end
 
@@ -25,14 +27,14 @@ function meta:changeTeam(t, force)
 		self.IsBeingDemoted = false
 		self:changeTeam(GAMEMODE.DefaultTeam, true)
 		DarkRP.destroyVotesWithEnt(self)
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("tried_to_avoid_demotion"))
+		notify(self, 1, 4, DarkRP.getPhrase("tried_to_avoid_demotion"))
 
 		return false
 	end
 
 
 	if prevTeam == t then
-		DarkRP.notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
+		notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), ""))
 		return false
 	end
 
@@ -43,25 +45,27 @@ function meta:changeTeam(t, force)
 		local message = isfunction(TEAM.CustomCheckFailMsg) and TEAM.CustomCheckFailMsg(self, TEAM) or
 			TEAM.CustomCheckFailMsg or
 			DarkRP.getPhrase("unable", team.GetName(t), "")
-		DarkRP.notify(self, 1, 4, message)
+		notify(self, 1, 4, message)
 		return false
 	end
 
 	if not force then
 		if type(TEAM.NeedToChangeFrom) == "number" and prevTeam ~= TEAM.NeedToChangeFrom then
-			DarkRP.notify(self, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
+			notify(self, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
 			return false
 		elseif type(TEAM.NeedToChangeFrom) == "table" and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
 			local teamnames = ""
-			for a,b in pairs(TEAM.NeedToChangeFrom) do teamnames = teamnames.." or "..team.GetName(b) end
-			DarkRP.notify(self, 1,4, string.format(string.sub(teamnames, 5), team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
+			for a, b in pairs(TEAM.NeedToChangeFrom) do
+				teamnames = teamnames .. " or " .. team.GetName(b)
+			end
+			notify(self, 1,4, string.format(string.sub(teamnames, 5), team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
 			return false
 		end
 		local max = TEAM.max
 		if max ~= 0 and -- No limit
 		(max >= 1 and team.NumPlayers(t) >= max or -- absolute maximum
 		max < 1 and (team.NumPlayers(t) + 1) / #player.GetAll() > max) then -- fractional limit (in percentages)
-			DarkRP.notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
+			notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
 			return false
 		end
 	end
@@ -76,7 +80,7 @@ function meta:changeTeam(t, force)
 	local hookValue, reason = hook.Call("playerCanChangeTeam", nil, self, t, force)
 	if hookValue == false then
 		if reason then
-			DarkRP.notify(self, 1, 4, reason)
+			notify(self, 1, 4, reason)
 		end
 		return false
 	end
@@ -87,7 +91,7 @@ function meta:changeTeam(t, force)
 	end
 	self:updateJob(TEAM.name)
 	self:setSelfDarkRPVar("salary", TEAM.salary)
-	DarkRP.notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
+	notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
 
 
 	if self:getDarkRPVar("HasGunlicense") and GAMEMODE.Config.revokeLicenseOnJobChange then
@@ -131,7 +135,7 @@ function meta:changeTeam(t, force)
 
 	self:SetTeam(t)
 	hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
-	DarkRP.log(self:Nick().." ("..self:SteamID()..") changed to "..team.GetName(t), nil, Color(100, 0, 255))
+	DarkRP.log(self:Nick() .. " (" .. self:SteamID() .. ") changed to " .. team.GetName(t), nil, Color(100, 0, 255))
 	if self:InVehicle() then self:ExitVehicle() end
 	if GAMEMODE.Config.norespawn and self:Alive() then
 		self:StripWeapons()
