@@ -450,3 +450,11 @@ function setUpGroupDoors()
 		end
 	end)
 end
+
+hook.Add("PostCleanupMap","DarkRP.hooks",function()
+	timer.Simple(0.3,function() --Hahahhah, Gmod
+		setUpNonOwnableDoors()
+		setUpTeamOwnableDoors()
+		setUpGroupDoors()
+	end)
+end)
