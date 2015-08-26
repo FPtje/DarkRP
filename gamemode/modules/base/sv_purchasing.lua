@@ -45,7 +45,7 @@ local function BuyPistol(ply, args)
 	end
 
 	local shipment = DarkRP.getShipmentByName(args)
-	if not shipment or not shipment.seperate then
+	if not shipment or not shipment.separate then
 		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "weapon"))
 		return ""
 	end
