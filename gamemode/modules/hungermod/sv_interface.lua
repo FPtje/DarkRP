@@ -17,3 +17,32 @@ DarkRP.PLAYER.hungerUpdate = DarkRP.stub{
 	},
 	metatable = DarkRP.PLAYER
 }
+
+DarkRP.hookStub{
+	name = "playerBoughtFood",
+	description = "When a player boughts food.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who bought food.",
+			type = "Player"
+		},
+		{
+			name = "food",
+			description = "Food table.",
+			type = "table"
+		},
+		{
+			name = "spawnedfood",
+			description = "Entity of spawned food.",
+			type = "entity"
+		},
+		{
+			name = "cost",
+			description = "How mush player paid.",
+			type = "entity"
+		}
+	},
+	returns = {
+	}
+}
