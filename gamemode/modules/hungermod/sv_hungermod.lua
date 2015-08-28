@@ -4,15 +4,12 @@ end
 hook.Add("PlayerSpawn", "HMPlayerSpawn", HMPlayerSpawn)
 
 local function HMThink()
-	if not GAMEMODE.Config.hungerspeed then return end
-
 	for k, v in pairs(player.GetAll()) do
-		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > 10) then
-			v:hungerUpdate()
-		end
+		if not v:Alive() then continue end
+		v:hungerUpdate()
 	end
 end
-hook.Add("Think", "HMThink", HMThink)
+timer.Create("HMThink", 10, 0, HMThink)
 
 local function HMPlayerInitialSpawn(ply)
 	ply:newHungerData()
