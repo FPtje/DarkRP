@@ -356,5 +356,5 @@ FAdmin.StartHooks["Access"] = function() --Run all functions that depend on othe
 	FAdmin.Commands.AddCommand("immunity", toggleImmunity)
 	FAdmin.Commands.AddCommand("SetImmunity", setImmunity)
 
-	FAdmin.SetGlobalSetting("Immunity", (GetConVar("_FAdmin_immunity"):GetBool()) or false)
+	FAdmin.SetGlobalSetting("Immunity", GetConVar("_FAdmin_immunity"):GetBool() or false)
 end
