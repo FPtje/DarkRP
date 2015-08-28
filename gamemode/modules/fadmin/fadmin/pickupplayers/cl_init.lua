@@ -3,7 +3,7 @@ CreateConVar("PlayersCanPickUpPlayers", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_E
 
 FAdmin.StartHooks["PickUpPlayers"] = function()
 	FAdmin.Access.AddPrivilege("PickUpPlayers", 2)
-	FAdmin.ScoreBoard.Server:AddPlayerAction(function() return GetConVar("AdminsCanPickUpPlayers"):GetBool() and "Disable" or "Enable").." Admin>Player pickup" end,
+	FAdmin.ScoreBoard.Server:AddPlayerAction(function() return (GetConVar("AdminsCanPickUpPlayers"):GetBool() and "Disable" or "Enable").." Admin>Player pickup" end,
 	function() return "fadmin/icons/pickup", GetConVar("AdminsCanPickUpPlayers"):GetBool() and "fadmin/icons/disable" end, Color(0, 155, 0, 255), true, function(button)
 		button:SetImage2((not GetConVar("AdminsCanPickUpPlayers"):GetBool() and "fadmin/icons/disable") or "null")
 		button:SetText((not GetConVar("AdminsCanPickUpPlayers"):GetBool() and "Disable" or "Enable").." Admin>Player pickup")
