@@ -24,7 +24,7 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 			Text:SetTextColor(color_white)
 
 			local TextEntry = vgui.Create("DTextEntry", InnerPanel)
-			TextEntry:SetText(GetConVarString("_FAdmin_MOTDPage"))
+			TextEntry:SetText(GetConVar("_FAdmin_MOTDPage"):GetString())
 			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "motdpage", TextEntry:GetValue()) end
 			function TextEntry:OnFocusChanged(changed)
 				self:RequestFocus()

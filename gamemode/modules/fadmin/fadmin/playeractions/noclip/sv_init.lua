@@ -59,7 +59,7 @@ hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
 	end
 
 	-- No further judgement when sbox_noclip is on
-	if tobool(GetConVarNumber("sbox_noclip")) then return end
+	if GetConVar("sbox_noclip"):GetBool() then return end
 
 	if ply:FAdmin_GetGlobal("FADmin_CanNoclip") then
 		sendNoclipMessage(ply)

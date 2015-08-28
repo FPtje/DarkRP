@@ -1,4 +1,4 @@
-local TextColor = Color(GetConVarNumber("Healthforeground1"), GetConVarNumber("Healthforeground2"), GetConVarNumber("Healthforeground3"), GetConVarNumber("Healthforeground4"))
+local TextColor = Color(GetConVar("Healthforeground1"):GetFloat(), GetConVar("Healthforeground2"):GetFloat(), GetConVar("Healthforeground3"):GetFloat(), GetConVar("Healthforeground4"):GetFloat())
 local function AFKHUDPaint()
 	if not LocalPlayer():getDarkRPVar("AFK") then return end
 
