@@ -16,7 +16,7 @@ end
 local LogFile
 function FAdmin.Log(text, preventServerLog)
 	if not text or text == "" then return end
-	if !GetConVar("FAdmin_logging"):GetBool() then return end
+	if not GetConVar("FAdmin_logging"):GetBool() then return end
 	if not preventServerLog then ServerLog(text .. "\n") end
 	if not LogFile then -- The log file of this session, if it's not there then make it!
 		if not file.IsDir("fadmin_logs", "DATA") then
