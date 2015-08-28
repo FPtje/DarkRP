@@ -21,7 +21,7 @@ local function SetLimits()
 			left:SetValue(GetConVar(v.name):GetFloat())
 
 			function left:OnValueChanged(val)
-				if val == GetConVar(v.name):GetFloat() then --???
+				if val == GetConVar(v.name):GetInt() then
 					return
 				end
 				RunConsoleCommand("_FAdmin", "ServerSetting", v.name, val)
