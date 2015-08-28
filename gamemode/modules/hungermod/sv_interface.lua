@@ -40,7 +40,7 @@ DarkRP.hookStub{
 		{
 			name = "cost",
 			description = "How mush player paid.",
-			type = "entity"
+			type = "number"
 		}
 	},
 	returns = {
