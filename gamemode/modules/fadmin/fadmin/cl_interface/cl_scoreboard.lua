@@ -1,4 +1,4 @@
-CreateClientConVar("FAdmin_OverrideScoreboard", 0, true, false) -- Set if it's a scoreboard or not
+local OverrideScoreboard = CreateClientConVar("FAdmin_OverrideScoreboard", 0, true, false) -- Set if it's a scoreboard or not
 
 function FAdmin.ScoreBoard.ChangeView(newView, ...)
 	if FAdmin.ScoreBoard.CurrentView == newView then return end
@@ -114,7 +114,7 @@ end
 concommand.Add("+FAdmin_menu", FAdmin.ScoreBoard.ShowScoreBoard)
 
 hook.Add("ScoreboardShow", "FAdmin_scoreboard", function()
-	if FAdmin.GlobalSetting.FAdmin or GetConVar("FAdmin_OverrideScoreboard"):GetBool() then -- Don't show scoreboard when FAdmin is not installed on server
+	if FAdmin.GlobalSetting.FAdmin or OverrideScoreboard:GetBool() then -- Don't show scoreboard when FAdmin is not installed on server
 		return FAdmin.ScoreBoard.ShowScoreBoard()
 	end
 end)
@@ -139,7 +139,7 @@ end
 concommand.Add("-FAdmin_menu", FAdmin.ScoreBoard.HideScoreBoard)
 
 hook.Add("ScoreboardHide", "FAdmin_scoreboard", function()
-	if FAdmin.GlobalSetting.FAdmin or GetConVar("FAdmin_OverrideScoreboard"):GetBool() then -- Don't show scoreboard when FAdmin is not installed on server
+	if FAdmin.GlobalSetting.FAdmin or OverrideScoreboard:GetBool() then -- Don't show scoreboard when FAdmin is not installed on server
 		return FAdmin.ScoreBoard.HideScoreBoard()
 	end
 end)

@@ -12,7 +12,7 @@ local function WorldToScreen(vWorldPos,vPos,vScale,aRot)
 end
 
 function ENT:LoadPage()
-	local Page = GetConVar("_FAdmin_MOTDPage"):GetString()
+	local Page = self.MOTDPage:GetString()
 	if string.lower(Page) == "data/fadmin/motd.txt" or string.lower(Page) == "default" then
 		self.HTML:SetHTML(defaultHTML)
 	elseif string.lower(string.sub(Page, -4)) == ".txt" and string.lower(string.sub(Page, 1, 5)) == "data/" then -- If it's a text file somewhere in data...
@@ -24,6 +24,7 @@ function ENT:LoadPage()
 end
 
 function ENT:Initialize()
+	self.MOTDPage = GetConVar("_FAdmin_MOTDPage")
 	self.Disabled = true
 	self.LastDrawn = CurTime()
 	self.HTML = self.HTMLControl or vgui.Create("HTML")
@@ -35,7 +36,7 @@ function ENT:Initialize()
 	self:LoadPage()
 
 	self.HTML:SetVisible(false)
-	self.HTML:SetKeyBoardInputEnabled(false)
+	self.HTML:SetKeyboardInputEnabled(false)
 	timer.Simple(0, function() -- Fix areas of the FAdmin scoreboard coming unclickable
 		self.HTML:SetPaintedManually(true)
 	end)
@@ -109,14 +110,14 @@ function ENT:Draw()
 			end
 		elseif not self.HTMLMat then
 			self.HTML:SetVisible(true)
-			self.HTML:SetKeyBoardInputEnabled(true)
+			self.HTML:SetKeyboardInputEnabled(true)
 			self.HTML:SetPaintedManually(false)
 			self.HTML:UpdateHTMLTexture()
 
 			timer.Simple(0, function() -- Fix HTML material
 				self.HTML:SetPaintedManually(true)
 				self.HTML:SetVisible(false)
-				self.HTML:SetKeyBoardInputEnabled(false)
+				self.HTML:SetKeyboardInputEnabled(false)
 			end)
 
 		else
@@ -146,14 +147,14 @@ function ENT:Draw()
 			self.HTMLCloseButton:SetVisible(true)
 			self.HTML:SetVisible(true)
 			self.HTML:RequestFocus()
-			self.HTML:SetKeyBoardInputEnabled(true)
+			self.HTML:SetKeyboardInputEnabled(true)
 			self.HTML:MakePopup()
 
 			function self.HTMLCloseButton.DoClick() -- Revert to drawing on the prop
 				self.HTML:SetPos(-512, -256)
 				self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
 				self.HTML:SetPaintedManually(true)
-				self.HTML:SetKeyBoardInputEnabled(false)
+				self.HTML:SetKeyboardInputEnabled(false)
 				self.HTML:SetVisible(false)
 				gui.EnableScreenClicker(false)
 				self.HTMLCloseButton:Remove()

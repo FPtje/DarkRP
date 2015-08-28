@@ -128,7 +128,7 @@ function PANEL:AddPlayerRows()
 		line.DoClick = function()
 			self:SetTarget(line:GetPlayer())
 
-			if ValidPanel(self:GetSelected()) then
+			if IsValid(self:GetSelected()) then
 				self:GetSelected():SetSelected(false)
 			end
 

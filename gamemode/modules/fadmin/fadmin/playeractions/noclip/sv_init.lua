@@ -1,3 +1,5 @@
+local sbox_noclip = GetConVar("sbox_noclip")
+
 local function SetNoclip(ply, cmd, args)
 	if not FAdmin.Access.PlayerHasPrivilege(ply, "SetNoclip") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 	if not args[1] then return false end
@@ -59,7 +61,7 @@ hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
 	end
 
 	-- No further judgement when sbox_noclip is on
-	if GetConVar("sbox_noclip"):GetBool() then return end
+	if sbox_noclip:GetBool() then return end
 
 	if ply:FAdmin_GetGlobal("FADmin_CanNoclip") then
 		sendNoclipMessage(ply)

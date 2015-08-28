@@ -13,7 +13,6 @@ local function KillLetter(msg)
 end
 usermessage.Hook("KillLetter", KillLetter)
 
-
 local function ShowLetter(msg)
 	if frame then
 		frame:Remove()
@@ -45,7 +44,7 @@ local function ShowLetter(msg)
 	SignButton:SetSkin(GAMEMODE.Config.DarkRPSkin)
 	frame:SizeToContents()
 	frame:MakePopup()
-	frame:SetKeyBoardInputEnabled(false)
+	frame:SetKeyboardInputEnabled(false)
 
 	function SignButton:DoClick()
 		RunConsoleCommand("_DarkRP_SignLetter", Letter:EntIndex())

@@ -1,4 +1,4 @@
-CreateConVar("_FAdmin_MOTDPage", "default", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_SERVER_CAN_EXECUTE})
+local MOTDPage = CreateConVar("_FAdmin_MOTDPage", "default", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_SERVER_CAN_EXECUTE})
 
 if CLIENT then -- I can't be bothered to make a cl_init when there's a shared file with just one line in it.
 	FAdmin.StartHooks["MOTD"] = function()
@@ -24,7 +24,7 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
 			Text:SetTextColor(color_white)
 
 			local TextEntry = vgui.Create("DTextEntry", InnerPanel)
-			TextEntry:SetText(GetConVar("_FAdmin_MOTDPage"):GetString())
+			TextEntry:SetText(MOTDPage:GetString())
 			TextEntry.OnEnter = function() Window:Close() RunConsoleCommand("_FAdmin", "motdpage", TextEntry:GetValue()) end
 			function TextEntry:OnFocusChanged(changed)
 				self:RequestFocus()

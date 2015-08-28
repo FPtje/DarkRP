@@ -105,13 +105,13 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 
 	FAdmin.ScoreBoard.Server.InfoPanels = FAdmin.ScoreBoard.Server.InfoPanels or {}
 	for k,v in pairs(FAdmin.ScoreBoard.Server.InfoPanels) do
-		if ValidPanel(v) then
+		if IsValid(v) then
 			v:Remove()
 			FAdmin.ScoreBoard.Server.InfoPanels[k] = nil
 		end
 	end
 
-	if ValidPanel(FAdmin.ScoreBoard.Server.Controls.InfoPanel) then
+	if IsValid(FAdmin.ScoreBoard.Server.Controls.InfoPanel) then
 		FAdmin.ScoreBoard.Server.Controls.InfoPanel:Remove()
 	end
 	FAdmin.ScoreBoard.Server.Controls.InfoPanel = vgui.Create("FAdminPanelList")
@@ -178,7 +178,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		end
 
 		timer.Create("FAdmin_Scoreboard_text_update_"..v.name, 1, 0, function()
-			if not ValidPanel(Text) then
+			if not IsValid(Text) then
 				timer.Remove("FAdmin_Scoreboard_text_update_"..v.name)
 				FAdmin.ScoreBoard.ChangeView("Main")
 				return
@@ -206,6 +206,6 @@ FAdmin.ScoreBoard.Server:AddInformation("Hostname", GetHostName)
 FAdmin.ScoreBoard.Server:AddInformation("Gamemode", function() return GAMEMODE.Name end)
 FAdmin.ScoreBoard.Server:AddInformation("Author", function() return GAMEMODE.Author end)
 FAdmin.ScoreBoard.Server:AddInformation("Map", game.GetMap)
-FAdmin.ScoreBoard.Server:AddInformation("Players", function() return #player.GetAll().."/"..GetConVar("maxplayers"):GetString() end)
+FAdmin.ScoreBoard.Server:AddInformation("Players", function() return #player.GetAll().."/"..game.MaxPlayers() end)
 FAdmin.ScoreBoard.Server:AddInformation("Ping", function() return LocalPlayer():Ping() end)
 
