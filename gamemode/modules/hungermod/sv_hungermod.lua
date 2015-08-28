@@ -10,8 +10,10 @@ local function HMThink()
 	local time = GAMEMODE.Config.hungertimer or 10
 
 	for k, v in pairs(player.GetAll()) do
-		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > time) then
+		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > time) and !GAMEMODE.Config.hungerexcludes[v:Team()] then
 			v:hungerUpdate()
+		elseif !GAMEMODE.Config.hungerexcludes[v:Team()] then
+			v.LastHungerUpdate = CurTime() --We ignore this player
 		end
 	end
 end

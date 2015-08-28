@@ -491,3 +491,10 @@ GM.Config.starverate = 3
 GM.Config.hungertimer = 10
 -- maxhunger <Amount> - Maximum amount of hunger for each player
 GM.Config.maxhunger = 100
+--hungerexcludes <Table> - Jobs what would be ignored by  hungermod
+--[[For example
+	GM.Config.hungerexcludes = {TEAM_POLICE} --Will ignore players what are Civil Protection
+	GM.Config.hungerexcludes = {TEAM_POLICE,TEAM_GUN} --Will ignore players what are Civil Protection and Gun Dealers
+]]
+GM.Config.hungerexcludes = {}
+
