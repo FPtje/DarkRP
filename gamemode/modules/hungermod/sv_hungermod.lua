@@ -83,6 +83,8 @@ local function BuyFood(ply, args)
 
 		SpawnedFood.foodItem = v
 		SpawnedFood:Spawn()
+		
+		hook.Call("playerBoughtFood",nil,ply,v,SpawnedFood,cost)
 		return ""
 	end
 	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
