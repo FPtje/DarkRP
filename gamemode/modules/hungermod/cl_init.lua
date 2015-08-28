@@ -53,7 +53,7 @@ local function ReloadConVars()
 		cvars.AddChangeCallback("HudW", function() timer.Simple(0, ReloadConVars) end)
 	end
 
-	HUDWidth = GetConVarNumber("HudW")
+	HUDWidth = GetConVar("HudW"):GetFloat()
 end
 timer.Simple(0, ReloadConVars)
 

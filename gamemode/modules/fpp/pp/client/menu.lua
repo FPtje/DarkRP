@@ -1076,7 +1076,7 @@ function FPP.PrivateSettings(Panel)
 	for k,v in pairs(PrivateSettings) do
 		local box = vgui.Create("DCheckBoxLabel")
 		box:SetText("I don't want to "..k)
-		box:SetValue(tobool(GetConVarNumber("FPP_PrivateSettings_"..v)))
+		box:SetValue(GetConVar("FPP_PrivateSettings_"..v):GetBool())
 		box:SetDark(true)
 
 		box.Button.Toggle = function(self)

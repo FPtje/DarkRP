@@ -12,7 +12,7 @@ local function WorldToScreen(vWorldPos,vPos,vScale,aRot)
 end
 
 function ENT:LoadPage()
-	local Page = GetConVarString("_FAdmin_MOTDPage")
+	local Page = GetConVar("_FAdmin_MOTDPage"):GetString()
 	if string.lower(Page) == "data/fadmin/motd.txt" or string.lower(Page) == "default" then
 		self.HTML:SetHTML(defaultHTML)
 	elseif string.lower(string.sub(Page, -4)) == ".txt" and string.lower(string.sub(Page, 1, 5)) == "data/" then -- If it's a text file somewhere in data...

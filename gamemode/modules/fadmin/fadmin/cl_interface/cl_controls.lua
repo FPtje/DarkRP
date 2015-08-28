@@ -75,7 +75,7 @@ PANEL = {}
 
 CreateClientConVar("FAdmin_PlayerRowSize", 30, true, false)
 function PANEL:Init()
-	self.Size = GetConVarNumber("FAdmin_PlayerRowSize")
+	self.Size = GetConVar("FAdmin_PlayerRowSize"):GetFloat()
 
 	self.lblName 	= vgui.Create("DLabel", self)
 	self.lblFrags 	= vgui.Create("DLabel", self)
@@ -107,7 +107,7 @@ end
 function PANEL:Paint()
 	if not IsValid(self.Player) then return end
 
-	self.Size = GetConVarNumber("FAdmin_PlayerRowSize")
+	self.Size = GetConVar("FAdmin_PlayerRowSize"):GetFloat()
 	self.imgAvatar:SetSize(self.Size - 4, self.Size - 4)
 
 	local color = Color(100, 150, 245, 255)
