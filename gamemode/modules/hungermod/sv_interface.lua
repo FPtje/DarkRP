@@ -20,7 +20,7 @@ DarkRP.PLAYER.hungerUpdate = DarkRP.stub{
 
 DarkRP.hookStub{
 	name = "playerBoughtFood",
-	description = "When a player boughts food.",
+	description = "Called when a player bought food.",
 	parameters = {
 		{
 			name = "ply",
