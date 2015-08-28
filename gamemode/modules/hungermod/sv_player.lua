@@ -10,6 +10,10 @@ function meta:hungerUpdate()
 	if not GAMEMODE.Config.hungerspeed then return end
 
 	local energy = self:getDarkRPVar("Energy")
+	local override = hook.Call("hungerUpdate", nil, self, energy)
+
+	if override then return end
+
 	self:setSelfDarkRPVar("Energy", energy and math.Clamp(energy - GAMEMODE.Config.hungerspeed, 0, 100) or 100)
 
 	if self:getDarkRPVar("Energy") == 0 then

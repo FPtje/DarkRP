@@ -46,3 +46,27 @@ DarkRP.hookStub{
 	returns = {
 	}
 }
+
+DarkRP.hookStub{
+	name = "hungerUpdate",
+	description = "Called every 10 seconds for every player when hungermod is on. This updates the player's hunger level.",
+	parameters = {
+		{
+			name = "ply",
+			description = "The player who might be slightly more hungery.",
+			type = "Player"
+		},
+		{
+			name = "energy",
+			description = "The energy the player has left.",
+			type = "number"
+		}
+	},
+	returns = {
+		{
+			name = "override",
+			description = "Override the default behaviour of substracting some and killing the player when starving.",
+			type = "boolean"
+		}
+	}
+}
