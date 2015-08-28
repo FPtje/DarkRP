@@ -99,8 +99,8 @@ local validShipment = {
 	entity   = ass(isstring, "The entity of the shipment must be a string."),
 	price    = ass(function(v, tbl) return isnumber(v) or isfunction(tbl.getPrice) end, "The price must be an existing number or (for advanced users) the getPrice field must be a function."),
 	amount   = ass(fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The amount must be a number greater than zero."),
-	seperate = ass(optional(isbool), "the seperate field must be either true or false.", {"It's spelled as 'seperate' because of a really old mistake."}),
-	pricesep = ass(function(v, tbl) return not tbl.seperate or isnumber(v) and v >= 0 end, "The pricesep must be a number greater than or equal to zero."),
+	separate = ass(optional(isbool), "the separate field must be either true or false."),
+	pricesep = ass(function(v, tbl) return not tbl.separate or isnumber(v) and v >= 0 end, "The pricesep must be a number greater than or equal to zero."),
 	allowed  = ass(optional(tableOf(isnumber), isnumber), "The allowed field must be either an existing team or a table of existing teams", {"Is there a job here that doesn't exist (anymore)?"}),
 
 	category           = ass(optional(isstring), "The category must be the name of an existing category!"),
@@ -694,20 +694,22 @@ DarkRP.getShipmentByName = function(name)
 	return CustomShipments[shipByName[name]], shipByName[name]
 end
 
-function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_seperately, price_seperately, noshipment, classes, shipmodel, CustomCheck)
+function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_separately, price_separately, noshipment, classes, shipmodel, CustomCheck)
 	local tableSyntaxUsed = type(model) == "table"
 
-	local price = tonumber(price)
+	price = tonumber(price)
 	local shipmentmodel = shipmodel or "models/Items/item_item_crate.mdl"
 
 	local customShipment = tableSyntaxUsed and model or
 		{model = model, entity = entity, price = price, amount = Amount_of_guns_in_one_shipment,
-		seperate = Sold_seperately, pricesep = price_seperately, noship = noshipment, allowed = classes,
+		seperate = Sold_separately, pricesep = price_separately, noship = noshipment, allowed = classes,
 		shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
 
+	-- The pains of backwards compatibility when dealing with ancient spelling errors...
 	if customShipment.separate ~= nil then
 		customShipment.seperate = customShipment.separate
 	end
+	customShipment.separate = customShipment.seperate
 
 	if customShipment.allowed == nil then
 		customShipment.allowed = {}
@@ -731,7 +733,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 	CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
 
 	if not customShipment.noship then DarkRP.addToCategory(customShipment, "shipments", customShipment.category) end
-	if customShipment.seperate then DarkRP.addToCategory(customShipment, "weapons", customShipment.category) end
+	if customShipment.separate then DarkRP.addToCategory(customShipment, "weapons", customShipment.category) end
 
 	shipByName[string.lower(name or "")] = table.insert(CustomShipments, customShipment)
 	util.PrecacheModel(customShipment.model)
@@ -1090,7 +1092,7 @@ end
 
 hook.Add("loadCustomDarkRPItems", "mergeCategories", function()
 	local shipments = fn.Filter(fc{fn.Not, fp{fn.GetValue, "noship"}}, CustomShipments)
-	local guns = fn.Filter(fp{fn.GetValue, "seperate"}, CustomShipments)
+	local guns = fn.Filter(fp{fn.GetValue, "separate"}, CustomShipments)
 
 	mergeCategories(RPExtraTeams, "jobs", "your jobs")
 	mergeCategories(DarkRPEntities, "entities", "your custom entities")

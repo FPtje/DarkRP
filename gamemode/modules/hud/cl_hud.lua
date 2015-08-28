@@ -76,7 +76,7 @@ ReloadConVars()
 
 local Scrw, Scrh, RelativeX, RelativeY
 /*---------------------------------------------------------------------------
-HUD Seperate Elements
+HUD separate Elements
 ---------------------------------------------------------------------------*/
 local Health = 0
 local function DrawHealth()

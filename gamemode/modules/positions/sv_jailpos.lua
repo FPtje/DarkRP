@@ -3,7 +3,7 @@ local function storeJail(ply, add, hasAccess)
 
 	-- Admin or Chief can set the Jail Position
 	if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or hasAccess then
-		DarkRP.storeJailPos(ply)
+		DarkRP.storeJailPos(ply, add)
 	else
 		local str = DarkRP.getPhrase("admin_only")
 		if GAMEMODE.Config.chiefjailpos then
@@ -19,6 +19,7 @@ local function JailPos(ply)
 	return ""
 end
 DarkRP.defineChatCommand("jailpos", JailPos)
+DarkRP.defineChatCommand("setjailpos", JailPos)
 
 local function AddJailPos(ply)
 	CAMI.PlayerHasAccess(ply, "DarkRP_AdminCommands", fp{storeJail, ply, true})

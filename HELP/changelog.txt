@@ -149,7 +149,7 @@ DarkRP 2.4.1
 [CHANGE] People now can't use wanted as an ESP, you will only see someone is wanted if he is in your sight. This way it won't be abused to find players.
 [CHANGE] People now drop everything in pocket when they die.
 [CHANGE] Medic gun world model to package, so it doesn't look like he's about to blow you up
-[CHANGE] Moneybags now have their own seperate entity
+[CHANGE] Moneybags now have their own separate entity
 [REMOVE] Simple Prop protection. You have served us well, goodbye.
 [REMOVE] RunConsoleCommand override
 

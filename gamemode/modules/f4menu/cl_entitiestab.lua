@@ -200,7 +200,7 @@ function PANEL:generateButtons()
 end
 
 function PANEL:shouldHide()
-	local shipments = fn.Filter(fn.Curry(fn.GetValue, 2)("seperate"), CustomShipments)
+	local shipments = fn.Filter(fn.Curry(fn.GetValue, 2)("separate"), CustomShipments)
 
 	for k,v in pairs(shipments) do
 		local canBuy, important = canBuyGun(v)
