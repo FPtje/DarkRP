@@ -30,7 +30,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator,caller)
-	local override = self.foodItem and self.foodItem.onEaten and self.foodItem.onEaten(self, activator, self.foodItem) or isfunction(self.onEaten) and self.onEaten(self, activator, self.foodItem)
+	local override = isfunction(self.onEaten) and self.onEaten(self, activator, self.foodItem)
 
 	if override then
 		SafeRemoveEntity(self)
