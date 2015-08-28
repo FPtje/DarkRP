@@ -35,12 +35,12 @@ DarkRP.hookStub{
 		{
 			name = "spawnedfood",
 			description = "Entity of spawned food.",
-			type = "entity"
+			type = "Entity"
 		},
 		{
 			name = "cost",
-			description = "How mush player paid.",
-			type = "entity"
+			description = "How much player paid.",
+			type = "number"
 		}
 	},
 	returns = {
