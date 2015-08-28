@@ -1,27 +1,34 @@
+
 local function HMPlayerSpawn(ply)
-	ply:setSelfDarkRPVar("Energy", 100)
+	ply:setSelfDarkRPVar("Energy", GAMEMODE.Config.maxhunger)
+	ply.LastHungerUpdate = CurTime()
 end
 hook.Add("PlayerSpawn", "HMPlayerSpawn", HMPlayerSpawn)
 
 local function HMThink()
-	if not GAMEMODE.Config.hungerspeed then return end
+	if !GAMEMODE.Config.hungerspeed then return end
+	local time = GAMEMODE.Config.hungertimer or 10
 
 	for k, v in pairs(player.GetAll()) do
-		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > 10) then
+		if v:Alive() and (not v.LastHungerUpdate or CurTime() - v.LastHungerUpdate > time) and not GAMEMODE.Config.hungerexcludes[v:Team()] then
 			v:hungerUpdate()
+		elseif GAMEMODE.Config.hungerexcludes[v:Team()] then
+			v.LastHungerUpdate = CurTime() --We ignore this player
 		end
 	end
 end
-hook.Add("Think", "HMThink", HMThink)
+timer.Create("HMThink",1,0,HMThink) --Optimization
 
+--[[ --PlayerSpawn calls on initial spawn
 local function HMPlayerInitialSpawn(ply)
 	ply:newHungerData()
 end
 hook.Add("PlayerInitialSpawn", "HMPlayerInitialSpawn", HMPlayerInitialSpawn)
+]]
 
 timer.Simple(0, function()
 	for k, v in pairs(player.GetAll()) do
-		if v:getDarkRPVar("Energy") ~= nil then continue end
+		if v:getDarkRPVar("Energy") then continue end
 		v:newHungerData()
 	end
 end)
@@ -78,6 +85,8 @@ local function BuyFood(ply, args)
 
 		SpawnedFood.foodItem = v
 		SpawnedFood:Spawn()
+		
+		hook.Call("playerBoughtFood",nil,ply,v,SpawnedFood,cost)
 		return ""
 	end
 	DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))

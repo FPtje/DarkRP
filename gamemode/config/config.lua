@@ -487,3 +487,14 @@ Hungermod module
 GM.Config.hungerspeed = 2
 -- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default)
 GM.Config.starverate = 3
+-- hungerspeed <Amount> - How fast will be update hunger for each player (timer) (10 is default)
+GM.Config.hungertimer = 10
+-- maxhunger <Amount> - Maximum amount of hunger for each player
+GM.Config.maxhunger = 100
+--hungerexcludes <Table> - Jobs what would be ignored by  hungermod
+--[[For example
+	GM.Config.hungerexcludes = {TEAM_POLICE} --Will ignore players what are Civil Protection
+	GM.Config.hungerexcludes = {TEAM_POLICE,TEAM_GUN} --Will ignore players what are Civil Protection and Gun Dealers
+]]
+GM.Config.hungerexcludes = {}
+
