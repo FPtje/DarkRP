@@ -3,6 +3,7 @@ ENT.Base = "base_gmodentity"
 ENT.PrintName = "Microwave"
 ENT.Author = "Pcwizdan"
 ENT.Spawnable = false
+ENT.CanPrice = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Int",0,"price")
