@@ -14,20 +14,20 @@ function ENT:Initialize()
 end
 
 function ENT:OnTakeDamage(dmg)
-	self:Remove()
+	SafeRemoveEntity(self)
 end
 
 function ENT:Use(activator, caller)
 	local override = self.foodItem.onEaten and self.foodItem.onEaten(self, activator, self.foodItem)
 
 	if override then
-		self:Remove()
+		SafeRemoveEntity(self)
 		return
 	end
 
-	activator:setSelfDarkRPVar("Energy", math.Clamp((activator:getDarkRPVar("Energy") or 100) + (self:GetTable().FoodEnergy or 1), 0, 100))
+	activator:setSelfDarkRPVar("Energy", math.Clamp((activator:getDarkRPVar("Energy") or 100) + (self.FoodEnergy or 1), 0, GAMEMODE.Config.maxhunger))
 	umsg.Start("AteFoodIcon", activator)
 	umsg.End()
-	self:Remove()
-	activator:EmitSound("vo/sandwicheat09.wav", 100, 100)
+	activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
+	SafeRemoveEntity(self)
 end

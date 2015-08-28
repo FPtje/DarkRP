@@ -68,13 +68,13 @@ local function HMHUD()
 
 	local cornerRadius = 4
 	if energy > 0 then
-		cornerRadius = math.Min(4, (HUDWidth-9)*(energy/100)/3*2 - (HUDWidth-9)*(energy/100)/3*2%2)
+		cornerRadius = math.Min(4, (HUDWidth-9)*(energy/GAMEMODE.Config.maxhunger)/3*2 - (HUDWidth-9)*(energy/GAMEMODE.Config.maxhunger)/3*2%2)
 	end
 
 	draw.RoundedBox(cornerRadius, x - 1, y - 1, HUDWidth - 8, 9, ConVars.HungerBackground)
 
 	if energy > 0 then
-		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / 100), 7, ConVars.HungerForeground)
+		draw.RoundedBox(cornerRadius, x, y, (HUDWidth - 9) * (energy / GAMEMODE.Config.maxhunger), 7, ConVars.HungerForeground)
 		draw.DrawNonParsedSimpleText(energy .. "%", "DefaultSmall", HUDWidth / 2, y - 3, ConVars.HungerPercentageText, 1)
 	else
 		draw.DrawNonParsedSimpleText(DarkRP.getPhrase("starving"), "ChatFont", HUDWidth / 2, y - 5, ConVars.StarvingText, 1)
@@ -82,7 +82,7 @@ local function HMHUD()
 
 	if FoodAteAlpha > -1 then
 		local mul = 1
-		if FoodAteY <= ScrH() - 100 then
+		if FoodAteY <= ScrH() - 100 then --??? What is dis, Falco?
 			mul = -.5
 		end
 

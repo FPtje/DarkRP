@@ -25,16 +25,24 @@ function ENT:OnTakeDamage(dmg)
 		effectdata:SetScale(2)
 		effectdata:SetRadius(3)
 		util.Effect("Sparks", effectdata)
-		self:Remove()
+		SafeRemoveEntity(self)
 	end
 end
 
 function ENT:Use(activator,caller)
-	caller:setSelfDarkRPVar("Energy", math.Clamp((caller:getDarkRPVar("Energy") or 0) + 100, 0, 100))
+	local override = self.foodItem.onEaten and self.foodItem.onEaten(self, activator, self.foodItem)
+
+	if override then
+		SafeRemoveEntity(self)
+		return
+	end
+	
+	caller:setSelfDarkRPVar("Energy", GAMEMODE.Config.maxhunger)
 	umsg.Start("AteFoodIcon", caller)
 	umsg.End()
 
-	self:Remove()
+	activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
+	SafeRemoveEntity(self)
 end
 
 function ENT:OnRemove()
