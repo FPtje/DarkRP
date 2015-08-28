@@ -148,7 +148,7 @@ local function FPP_SetSetting(ply, cmd, args)
 			MySQLite.query("UPDATE ".. args[1] .. " SET setting = " .. args[3] .. " WHERE var = " .. sql.SQLStr(args[2]) .. ";")
 		end
 
-		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " set ".. string.lower(string.gsub(args[1], "FPP_", "")) .. " "..args[2].." to " .. tostring(args[3]), tobool(tonumber(args[3])))
+		FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console").. " set ".. string.lower(string.gsub(args[1], "FPP_", "")) .. " "..args[2].." to " .. tostring(args[3]), util.tobool(tonumber(args[3])))
 	end)
 
 	local plys, entities = getSettingsChangedEntities(args[1], args[2])
@@ -243,10 +243,10 @@ local function ShareProp(ply, cmd, args)
 			FPP.Notify(ply, "Argument(s) invalid", false)
 			return
 		end
-		ent[args[2]] = tobool(args[3])
+		ent[args[2]] = util.tobool(args[3])
 	else -- This is for sharing prop per player
 		local target = Player(tonumber(args[2]))
-		local toggle = tobool(args[3])
+		local toggle = util.tobool(args[3])
 		if not ent.AllowedPlayers and toggle then -- Make the table if it isn't there
 			ent.AllowedPlayers = {target}
 		else
@@ -468,7 +468,7 @@ local function RetrieveGroups()
 		for k,v in pairs(data) do
 			FPP.Groups[v.groupname] = {}
 			FPP.Groups[v.groupname].tools = {}
-			FPP.Groups[v.groupname].allowdefault = tobool(v.allowdefault)
+			FPP.Groups[v.groupname].allowdefault = util.tobool(v.allowdefault)
 		end
 
 		MySQLite.query("SELECT * FROM FPP_GROUPTOOL;", function(data)
@@ -504,7 +504,7 @@ local function AddGroup(ply, cmd, args)
 	end
 
 	FPP.Groups[name] = {}
-	FPP.Groups[name].allowdefault = tobool(allowdefault)
+	FPP.Groups[name].allowdefault = util.tobool(allowdefault)
 	FPP.Groups[name].tools = {}
 
 	MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES("..sql.SQLStr(name)..", "..sql.SQLStr(allowdefault)..");")
@@ -558,7 +558,7 @@ local function GroupChangeAllowDefault(ply, cmd, args)
 		return
 	end
 
-	FPP.Groups[name].allowdefault = tobool(newval)
+	FPP.Groups[name].allowdefault = util.tobool(newval)
 	MySQLite.query("UPDATE FPP_GROUPS3 SET allowdefault = "..sql.SQLStr(newval).." WHERE groupname = "..sql.SQLStr(name)..";")
 	FPP.Notify(ply, "Group status changed successfully", true)
 end
@@ -722,7 +722,7 @@ local function SetBuddy(ply, cmd, args)
 
 	ply.Buddies = ply.Buddies or {}
 	for k,v in pairs(args) do args[k] = tonumber(v) end
-	ply.Buddies[buddy] = {Physgun = tobool(args[2]), Gravgun = tobool(args[3]), Toolgun = tobool(args[4]), PlayerUse = tobool(args[5]), EntityDamage = tobool(args[6])}
+	ply.Buddies[buddy] = {Physgun = util.tobool(args[2]), Gravgun = util.tobool(args[3]), Toolgun = util.tobool(args[4]), PlayerUse = util.tobool(args[5]), EntityDamage = util.tobool(args[6])}
 
 	local CPPIBuddies = {}
 	for k,v in pairs(ply.Buddies) do if table.HasValue(v, true) then table.insert(CPPIBuddies, k) end end
@@ -857,7 +857,7 @@ end
 concommand.Add("FPP_ResetBlockedModels", runIfAccess("FPP_Settings", resetBlockedModels))
 
 local function refreshPrivatePlayerSettings(ply)
-	timer.Remove("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())
+	timer.Destroy("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex())
 
 	timer.Create("FPP_RefreshPrivatePlayerSettings" .. ply:EntIndex(), 4, 1, function() FPP.recalculateCanTouch({ply}, ents.GetAll()) end)
 end
