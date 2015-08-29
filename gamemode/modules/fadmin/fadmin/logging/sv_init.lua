@@ -18,7 +18,7 @@ end
 local LogFile
 function FAdmin.Log(text, preventServerLog)
     if not text or text == "" then return end
-    if not logging:GetBool() then return end
+    if not logging or not logging:GetBool() then return end
 
     if not preventServerLog then
         ServerLog(text .. "\n")
