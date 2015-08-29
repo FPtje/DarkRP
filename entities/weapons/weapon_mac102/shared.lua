@@ -1,13 +1,13 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Mac10"
-	SWEP.Author = "DarkRP Developers"
-	SWEP.Slot = 2
-	SWEP.SlotPos = 0
-	SWEP.IconLetter = "l"
+    SWEP.PrintName = "Mac10"
+    SWEP.Author = "DarkRP Developers"
+    SWEP.Slot = 2
+    SWEP.SlotPos = 0
+    SWEP.IconLetter = "l"
 
-	killicon.AddFont("weapon_mac102", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+    killicon.AddFont("weapon_mac102", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"

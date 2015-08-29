@@ -1,5 +1,5 @@
 if SERVER then
-	AddCSLuaFile("shared.lua")
+    AddCSLuaFile("shared.lua")
 end
 
 SWEP.PrintName = "Medic Kit"
@@ -34,41 +34,41 @@ SWEP.Secondary.Delay = 0.3
 SWEP.Secondary.Ammo = "none"
 
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	local found
-	local lastDot = -1 -- the opposite of what you're looking at
-	self:GetOwner():LagCompensation(true)
-	local aimVec = self:GetOwner():GetAimVector()
+    local found
+    local lastDot = -1 -- the opposite of what you're looking at
+    self:GetOwner():LagCompensation(true)
+    local aimVec = self:GetOwner():GetAimVector()
 
-	for k,v in pairs(player.GetAll()) do
-		local maxhealth = v:GetMaxHealth() or 100
-		if v == self:GetOwner() or v:GetShootPos():Distance(self:GetOwner():GetShootPos()) > 85 or v:Health() >= maxhealth or not v:Alive() then continue end
+    for k,v in pairs(player.GetAll()) do
+        local maxhealth = v:GetMaxHealth() or 100
+        if v == self:GetOwner() or v:GetShootPos():Distance(self:GetOwner():GetShootPos()) > 85 or v:Health() >= maxhealth or not v:Alive() then continue end
 
-		local direction = v:GetShootPos() - self:GetOwner():GetShootPos()
-		direction:Normalize()
-		local dot = direction:Dot(aimVec)
+        local direction = v:GetShootPos() - self:GetOwner():GetShootPos()
+        direction:Normalize()
+        local dot = direction:Dot(aimVec)
 
-		-- Looking more in the direction of this player
-		if dot > lastDot then
-			lastDot = dot
-			found = v
-		end
-	end
-	self:GetOwner():LagCompensation(false)
+        -- Looking more in the direction of this player
+        if dot > lastDot then
+            lastDot = dot
+            found = v
+        end
+    end
+    self:GetOwner():LagCompensation(false)
 
-	if found then
-		found:SetHealth(found:Health() + 1)
-		self:EmitSound("hl1/fvox/boop.wav", 150, found:Health() / found:GetMaxHealth() * 100, 1, CHAN_AUTO)
-	end
+    if found then
+        found:SetHealth(found:Health() + 1)
+        self:EmitSound("hl1/fvox/boop.wav", 150, found:Health() / found:GetMaxHealth() * 100, 1, CHAN_AUTO)
+    end
 end
 
 function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-	local ply = self:GetOwner()
-	local maxhealth = self:GetOwner():GetMaxHealth() or 100
-	if ply:Health() < maxhealth then
-		ply:SetHealth(ply:Health() + 1)
-		self:EmitSound("hl1/fvox/boop.wav", 150, ply:Health() / ply:GetMaxHealth() * 100, 1, CHAN_AUTO)
-	end
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+    local ply = self:GetOwner()
+    local maxhealth = self:GetOwner():GetMaxHealth() or 100
+    if ply:Health() < maxhealth then
+        ply:SetHealth(ply:Health() + 1)
+        self:EmitSound("hl1/fvox/boop.wav", 150, ply:Health() / ply:GetMaxHealth() * 100, 1, CHAN_AUTO)
+    end
 end

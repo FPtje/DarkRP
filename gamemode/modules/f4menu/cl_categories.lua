@@ -26,7 +26,7 @@ derma.DefineControl("F4MenuCategoryHeader", "", PANEL, "DCategoryHeader")
 /*---------------------------------------------------------------------------
 Contents of category headers
 ---------------------------------------------------------------------------*/
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
     self:EnableVerticalScrollbar()
@@ -61,7 +61,7 @@ derma.DefineControl("F4MenuCategoryContents", "", PANEL, "DPanelList")
 /*---------------------------------------------------------------------------
 Category panel
 ---------------------------------------------------------------------------*/
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
     if self.Header then self.Header:Remove() end
@@ -73,7 +73,7 @@ function PANEL:Init()
     self:SetMouseInputEnabled(true)
     self:SetAnimTime(0.2)
     self.animSlide = Derma_Anim("Anim", self, self.AnimSlide)
-    self:SetDrawBackground(false)
+    self:SetPaintBackgroundEnabled(false)
     self:DockMargin(0, 0, 0, 10)
     self:DockPadding(0, 0, 0, 10)
 

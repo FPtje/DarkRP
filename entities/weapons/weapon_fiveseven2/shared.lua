@@ -1,13 +1,13 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "FiveSeven"
-	SWEP.Author = "DarkRP Developers"
-	SWEP.Slot = 1
-	SWEP.SlotPos = 1
-	SWEP.IconLetter = "u"
+    SWEP.PrintName = "FiveSeven"
+    SWEP.Author = "DarkRP Developers"
+    SWEP.Slot = 1
+    SWEP.SlotPos = 1
+    SWEP.IconLetter = "u"
 
-	killicon.AddFont("weapon_fiveseven2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+    killicon.AddFont("weapon_fiveseven2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"
