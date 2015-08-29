@@ -1,11 +1,11 @@
-CreateConVar("AdminsCanPickUpPlayers", 1, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-CreateConVar("PlayersCanPickUpPlayers", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+local AdminsCanPickUpPlayers = CreateConVar("AdminsCanPickUpPlayers", 1, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+local PlayersCanPickUpPlayers = CreateConVar("PlayersCanPickUpPlayers", 0, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
 
 hook.Add("PhysgunPickup", "FAdmin_PickUpPlayers", function(ply, ent)
 	if not IsValid(ent) or not ent:IsPlayer() then return end
 
-	if GetConVar("PlayersCanPickUpPlayers"):GetBool() or
-	GetConVar("AdminsCanPickUpPlayers"):GetBool() and FAdmin.Access.PlayerHasPrivilege(ply, "PickUpPlayers", ent) and tobool(ply:GetInfo("cl_pickupplayers")) then
+	if PlayersCanPickUpPlayers:GetBool() or AdminsCanPickUpPlayers:GetBool() and
+		FAdmin.Access.PlayerHasPrivilege(ply, "PickUpPlayers", ent) and tobool(ply:GetInfo("cl_pickupplayers")) then
 		ent:SetMoveType(MOVETYPE_NONE)
 		ent:Freeze(true)
 		return true

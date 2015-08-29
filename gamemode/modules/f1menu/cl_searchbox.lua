@@ -2,7 +2,7 @@ local PANEL = {}
 
 function PANEL:Init()
 	self:SetWide(300)
-	self:SetKeyBoardInputEnabled(true)
+	self:SetKeyboardInputEnabled(true)
 	self.BaseClass.Init(self)
 	self.F1Down = true
 	self:SetFont("DarkRPHUD2")

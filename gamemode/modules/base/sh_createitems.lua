@@ -662,7 +662,7 @@ local function removeCustomItem(tbl, category, hookName, reloadF4, i)
 	if category then DarkRP.removeFromCategory(item, category) end
 	if istable(item) and (item.command or item.cmd) then DarkRP.removeChatCommand(item.command or item.cmd) end
 	hook.Run(hookName, i, item)
-	if CLIENT and reloadF4 and ValidPanel(DarkRP.getF4MenuPanel()) then DarkRP.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
+	if CLIENT and reloadF4 and IsValid(DarkRP.getF4MenuPanel()) then DarkRP.getF4MenuPanel():Remove() end -- Rebuild entire F4 menu frame
 end
 
 function DarkRP.removeJob(i)

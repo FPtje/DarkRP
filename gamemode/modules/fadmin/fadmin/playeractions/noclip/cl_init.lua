@@ -1,6 +1,8 @@
+local sbox_noclip = GetConVar("sbox_noclip")
+
 local function EnableDisableNoclip(ply)
 	return ply:FAdmin_GetGlobal("FADmin_CanNoclip") or
-		((FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") or GetConVar("sbox_noclip"):GetBool())
+		((FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") or sbox_noclip:GetBool())
 			and not ply:FAdmin_GetGlobal("FADmin_DisableNoclip"))
 end
 

@@ -117,7 +117,7 @@ function PANEL:Fill()
 end
 
 function PANEL:Refresh()
-    if ValidPanel(self.Contents) then self.Contents:Refresh() end
+    if IsValid(self.Contents) then self.Contents:Refresh() end
 
     if not self.category then return end
     local canSee = #self.category.members == 0 or isfunction(self.category.canSee) and not self.category.canSee(LocalPlayer())

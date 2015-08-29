@@ -1,4 +1,5 @@
 FAdmin.MOTD = {}
+local MOTDPage
 
 sql.Query([[CREATE TABLE IF NOT EXISTS FADMIN_MOTD(
 	'map' TEXT NOT NULL PRIMARY KEY,
@@ -65,7 +66,7 @@ end
 
 function FAdmin.MOTD.SetMOTDPage(ply, cmd, args)
 	if not args[1] then
-		FAdmin.Messages.SendMessage(ply, 4, "MOTD is set to: " .. GetConVar("_FAdmin_MOTDPage"):GetString())
+		FAdmin.Messages.SendMessage(ply, 4, "MOTD is set to: " .. MOTDPage:GetString())
 		return false
 	end
 	if ply:EntIndex() ~= 0 and (not ply.IsSuperAdmin or not ply:IsSuperAdmin()) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
@@ -84,12 +85,13 @@ local function CreateMOTD(ply)
 end
 
 FAdmin.StartHooks["MOTD"] = function()
+	MOTDPage = GetConVar("_FAdmin_MOTDPage")
 	FAdmin.Commands.AddCommand("MOTDPage", FAdmin.MOTD.SetMOTDPage)
 	FAdmin.Commands.AddCommand("CreateMOTD", CreateMOTD)
 end
 
 hook.Add("PlayerInitialSpawn", "SendMOTDSite", function()
-	local Site = GetConVar("_FAdmin_MOTDPage"):GetString()
+	local Site = MOTDPage:GetString()
 	RunConsoleCommand("_FAdmin_MOTDPage", ".")
 	timer.Simple(0.5, function() RunConsoleCommand("_FAdmin_MOTDPage", Site) end)
 end)

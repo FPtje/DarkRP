@@ -34,23 +34,24 @@ end
 FAdmin.StartHooks["ServerSettings"] = function()
 	FAdmin.Access.AddPrivilege("ServerSetting", 2)
 
-
-	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (GetConVar("sbox_godmode"):GetBool() and "Disable" or "Enable").." global god mode" end,
-	function() return "fadmin/icons/god", GetConVar("sbox_godmode"):GetBool() and "fadmin/icons/disable" end,
+	local sbox_godmode = GetConVar("sbox_godmode")
+	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (sbox_godmode:GetBool() and "Disable" or "Enable").." global god mode" end,
+	function() return "fadmin/icons/god", sbox_godmode:GetBool() and "fadmin/icons/disable" end,
 	Color(0, 0, 155, 255), true, function(button)
-		local val = GetConVar("sbox_godmode"):GetBool()
+		local val = sbox_godmode:GetBool()
 
 		button:SetImage2((not val and "fadmin/icons/disable") or "null")
 		button:SetText((not val and "Disable" or "Enable").." global god mode")
 		button:GetParent():InvalidateLayout()
 
-		RunConsoleCommand("_FAdmin", "ServerSetting", "sbox_godmode", (GetConVar("sbox_godmode"):GetBool() and 0) or 1)
+		RunConsoleCommand("_FAdmin", "ServerSetting", "sbox_godmode", val and 0 or 1)
 	end)
 
-	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (GetConVar("sbox_playershurtplayers"):GetBool() and "Disable" or "Enable").." player vs player damage" end,
-	function() return "fadmin/icons/weapon", GetConVar("sbox_playershurtplayers"):GetBool() and "fadmin/icons/disable" end,
+	local sbox_playershurtplayers = GetConVar("sbox_playershurtplayers")
+	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (sbox_playershurtplayers:GetBool() and "Disable" or "Enable").." player vs player damage" end,
+	function() return "fadmin/icons/weapon", sbox_playershurtplayers:GetBool() and "fadmin/icons/disable" end,
 	Color(0, 0, 155, 255), true, function(button)
-		local val = GetConVar("sbox_playershurtplayers"):GetBool()
+		local val = sbox_playershurtplayers:GetBool()
 
 		button:SetImage2(not val and "fadmin/icons/disable" or "null")
 		button:SetText((not val and "Disable" or "Enable").." player vs player damage")
@@ -59,10 +60,11 @@ FAdmin.StartHooks["ServerSettings"] = function()
 		RunConsoleCommand("_FAdmin", "ServerSetting", "sbox_playershurtplayers", val and 0 or 1)
 	end)
 
-	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (GetConVar("sbox_noclip"):GetBool() and "Disable" or "Enable").." global noclip" end,
-	function() return "fadmin/icons/noclip", GetConVar("sbox_noclip"):GetBool() and "fadmin/icons/disable" end,
+	local sbox_noclip = GetConVar("sbox_noclip")
+	FAdmin.ScoreBoard.Server:AddServerSetting(function() return (sbox_noclip:GetBool() and "Disable" or "Enable").." global noclip" end,
+	function() return "fadmin/icons/noclip", sbox_noclip:GetBool() and "fadmin/icons/disable" end,
 	Color(0, 0, 155, 255), true, function(button)
-		local val = GetConVar("sbox_noclip"):GetBool()
+		local val = sbox_noclip:GetBool()
 
 		button:SetImage2(not val and "fadmin/icons/disable" or "null")
 		button:SetText((not val and "Disable" or "Enable").." global noclip")

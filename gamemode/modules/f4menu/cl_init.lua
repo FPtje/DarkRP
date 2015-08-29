@@ -4,7 +4,7 @@ local f4Frame
 Interface functions
 ---------------------------------------------------------------------------*/
 function DarkRP.openF4Menu()
-	if ValidPanel(f4Frame) then
+	if IsValid(f4Frame) then
 		f4Frame:Show()
 		f4Frame:InvalidateLayout()
 	else
@@ -20,7 +20,7 @@ function DarkRP.closeF4Menu()
 end
 
 function DarkRP.toggleF4Menu()
-	if not ValidPanel(f4Frame) or not f4Frame:IsVisible() then
+	if not IsValid(f4Frame) or not f4Frame:IsVisible() then
 		DarkRP.openF4Menu()
 	else
 		DarkRP.closeF4Menu()
@@ -79,7 +79,7 @@ function DarkRP.hooks.F4MenuTabs()
 end
 
 hook.Add("DarkRPVarChanged", "RefreshF4Menu", function(ply, varname)
-	if ply ~= LocalPlayer() or varname ~= "money" or not ValidPanel(f4Frame) or not f4Frame:IsVisible() then return end
+	if ply ~= LocalPlayer() or varname ~= "money" or not IsValid(f4Frame) or not f4Frame:IsVisible() then return end
 
 	f4Frame:InvalidateLayout()
 end)

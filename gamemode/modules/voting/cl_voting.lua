@@ -211,7 +211,7 @@ local function DoVoteAnswerQuestion(ply, cmd, args)
 	if tonumber(args[1]) == 1 or string.lower(args[1]) == "yes" or string.lower(args[1]) == "true" then vote = 1 end
 
 	for k,v in pairs(VoteVGUI) do
-		if ValidPanel(v) then
+		if IsValid(v) then
 			local ID = string.sub(k, 1, -5)
 			VoteVGUI[k]:Close()
 			RunConsoleCommand("vote", ID, vote)
@@ -220,7 +220,7 @@ local function DoVoteAnswerQuestion(ply, cmd, args)
 	end
 
 	for k,v in pairs(QuestionVGUI) do
-		if ValidPanel(v) then
+		if IsValid(v) then
 			local ID = string.sub(k, 1, -5)
 			QuestionVGUI[k]:Close()
 			RunConsoleCommand("ans", ID, vote)

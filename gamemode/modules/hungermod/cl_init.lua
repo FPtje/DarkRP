@@ -8,7 +8,6 @@ local Color = Color
 local ColorAlpha = ColorAlpha
 local CreateClientConVar = CreateClientConVar
 local GetConVar = GetConVar
-local GetConVarNumber = GetConVarNumber
 local ipairs = ipairs
 local pairs = pairs
 local unpack = unpack
@@ -53,7 +52,7 @@ local function ReloadConVars()
 		cvars.AddChangeCallback("HudW", function() timer.Simple(0, ReloadConVars) end)
 	end
 
-	HUDWidth = GetConVar("HudW"):GetFloat()
+	HUDWidth = GetConVar("HudW"):GetInt()
 end
 timer.Simple(0, ReloadConVars)
 

@@ -16,19 +16,16 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetSize(184, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPlayer(ply, 184)
 	FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetVisible(true)
-	
-	
-	
 
 	FAdmin.ScoreBoard.Player.InfoPanels = FAdmin.ScoreBoard.Player.InfoPanels or {}
 	for k,v in pairs(FAdmin.ScoreBoard.Player.InfoPanels) do
-		if ValidPanel(v) then
+		if IsValid(v) then
 			v:Remove()
 			FAdmin.ScoreBoard.Player.InfoPanels[k] = nil
 		end
 	end
 
-	if ValidPanel(FAdmin.ScoreBoard.Player.Controls.InfoPanel1) then
+	if IsValid(FAdmin.ScoreBoard.Player.Controls.InfoPanel1) then
 		FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Remove()
 	end
 
@@ -76,7 +73,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			end
 
 			timer.Create("FAdmin_Scoreboard_text_update_"..v.name, 1, 0, function()
-				if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) or not ValidPanel(Text) then
+				if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) or not IsValid(Text) then
 					timer.Remove("FAdmin_Scoreboard_text_update_"..v.name)
 					if FAdmin.ScoreBoard.Visible and (not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player)) then FAdmin.ScoreBoard.ChangeView("Main") end
 					return
