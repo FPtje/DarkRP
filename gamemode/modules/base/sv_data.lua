@@ -397,6 +397,7 @@ end
 function setUpTeamOwnableDoors()
     MySQLite.query("SELECT idx, job FROM darkrp_doorjobs WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
         if not r then return end
+        local map = string.lower(game.GetMap())
 
         for _, row in pairs(r) do
             row.idx = tonumber(row.idx)
