@@ -381,7 +381,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
     local weapon = ply:GetActiveWeapon()
     local canDrop = hook.Call("canDropWeapon", self, ply, weapon)
 
-    if GAMEMODE.Config.dropweapondeath and IsValid(weapon) and canDrop then
+    if (GAMEMODE.Config.dropweapondeath or ply.dropWeaponOnDeath) and IsValid(weapon) and canDrop then
         ply:dropDRPWeapon(weapon)
     end
     self.BaseClass:DoPlayerDeath(ply, attacker, dmginfo, ...)
@@ -508,6 +508,8 @@ function GM:PlayerSetModel(ply)
         ply:SetModel(ply:getPreferredModel(teamNr) or modelname)
     end
 
+    self.BaseClass:PlayerSetModel(ply)
+
     ply:SetupHands()
 end
 
@@ -617,9 +619,6 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 function GM:PlayerSpawn(ply)
-    player_manager.SetPlayerClass(ply, "player_DarkRP")
-
-    ply:SetNoCollideWithTeammates(false)
     ply:CrosshairEnable()
     ply:UnSpectate()
 
@@ -658,64 +657,54 @@ function GM:PlayerSpawn(ply)
         ply:changeTeam(GAMEMODE.DefaultTeam, true)
     end
 
-    -- Skip sandbox PlayerSpawn and call base PlayerSpawn directly
-    self.BaseClass.BaseClass:PlayerSpawn(ply)
+    local jobTable = ply:getJobTable()
 
-    hook.Call("UpdatePlayerSpeed", self, ply)
+    player_manager.SetPlayerClass(ply, jobTable.playerClass or "player_darkrp")
+
+    ply:applyPlayerClassVars(true)
+
+    player_manager.RunClass(ply, "Spawn")
+
+    hook.Call("PlayerLoadout", self, ply)
+    hook.Call("PlayerSetModel", self, ply)
 
     local _, pos = self:PlayerSelectSpawn(ply)
     ply:SetPos(pos)
-    ply:SetHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
-    ply:SetMaxHealth(tonumber(GAMEMODE.Config.startinghealth) or 100)
 
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSpawn then
-        RPExtraTeams[ply:Team()].PlayerSpawn(ply)
+    if jobTable.PlayerSpawn then
+        jobTable.PlayerSpawn(ply)
     end
-
-    ply:AllowFlashlight(true)
 
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned")
 end
 
-local function selectDefaultWeapon(ply)
-    -- Switch to prefered weapon if they have it
-    local cl_defaultweapon = ply:GetInfo("cl_defaultweapon")
-
-    if ply:HasWeapon(cl_defaultweapon) then
-        ply:SelectWeapon(cl_defaultweapon)
-    end
-end
-
-local function removelicense(ply)
-    if not IsValid(ply) then return end
-    ply:GetTable().RPLicenseSpawn = false
-end
-
 function GM:PlayerLoadout(ply)
+    self.BaseClass:PlayerLoadout(ply)
+
     if ply:isArrested() then return end
 
-    player_manager.RunClass(ply, "Spawn")
+    ply.RPLicenseSpawn = true
+    timer.Simple(1, function()
+        if not IsValid(ply) then return end
+        ply.RPLicenseSpawn = false
+    end)
 
-    ply:GetTable().RPLicenseSpawn = true
-    timer.Simple(1, function() removelicense(ply) end)
+    local jobTable = ply:getJobTable()
 
-    local Team = ply:Team() or 1
-
-    if not RPExtraTeams[Team] then return end
-    for k,v in pairs(RPExtraTeams[Team].weapons or {}) do
+    for k,v in pairs(jobTable.weapons or {}) do
         ply:Give(v)
     end
 
-    if RPExtraTeams[ply:Team()].PlayerLoadout then
-        local val = RPExtraTeams[ply:Team()].PlayerLoadout(ply)
+    if jobTable.PlayerLoadout then
+        local val = jobTable.PlayerLoadout(ply)
         if val == true then
-            selectDefaultWeapon(ply)
+            ply:SwitchToDefaultWeapon()
             return
         end
     end
 
-    if RPExtraTeams[ply:Team()].ammo then
-        for k, v in pairs(RPExtraTeams[ply:Team()].ammo) do
+    if jobTable.ammo then
+        for k, v in pairs(jobTable.ammo) do
             ply:SetAmmo(v, k)
         end
     end
@@ -740,7 +729,7 @@ function GM:PlayerLoadout(ply)
         ply:Give("weaponchecker")
     end)
 
-    selectDefaultWeapon(ply)
+    ply:SwitchToDefaultWeapon()
 end
 
 /*---------------------------------------------------------------------------

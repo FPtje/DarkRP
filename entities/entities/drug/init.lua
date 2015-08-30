@@ -10,8 +10,6 @@ local function UnDrugPlayer(ply)
     timer.Remove(IDSteam .. "DruggedHealth")
 
     SendUserMessage("DrugEffects", ply, false)
-
-    ply:SetJumpPower(190)
 end
 
 hook.Add("PlayerDeath", "UndrugPlayers", function(ply) if ply.isDrugged then UnDrugPlayer(ply) end end)
@@ -21,7 +19,6 @@ local function DrugPlayer(ply)
 
     SendUserMessage("DrugEffects", ply, true)
 
-    ply:SetJumpPower(300)
     ply.isDrugged = true
 
     local IDSteam = ply:UniqueID()

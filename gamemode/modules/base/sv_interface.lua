@@ -501,6 +501,21 @@ DarkRP.findEmptyPos = DarkRP.stub{
     metatable = DarkRP
 }
 
+DarkRP.PLAYER.applyPlayerClassVars = DarkRP.stub{
+    name = "applyPlayerClassVars",
+    description = "Applies all variables in a player's associated GMod player class to the player.",
+    parameters = {
+        {
+            name = "applyHealth",
+            description = "Whether the player's health should be set to the starting health.",
+            type = "boolean",
+            optional = true
+        }
+    },
+    returns = {},
+    metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.removeDarkRPVar = DarkRP.stub{
     name = "removeDarkRPVar",
     description = "Remove a shared variable. Exactly the same as ply:setDarkRPVar(nil).",
@@ -1080,4 +1095,17 @@ DarkRP.hookStub{
             type = "number"
         }
     }
+}
+
+DarkRP.hookStub{
+    name = "playerClassVarsApplied",
+    description = "When a player has had GMod player class variables applied to them through ply:applyPlayerClassVars().",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player in question.",
+            type = "Player"
+        }
+    },
+    returns = {}
 }

@@ -14,4 +14,10 @@ hook.Add("Move", "DruggedPlayer", function(ply, mv)
 
     mv:SetMaxSpeed(mv:GetMaxSpeed() * 2)
     mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * 2)
+
+    if ply:IsOnGround() and mv:KeyPressed(IN_JUMP) then
+        local vec = mv:GetVelocity()
+        vec.z = 100 -- Adds on to the jump power
+        mv:SetVelocity(vec)
+    end
 end)

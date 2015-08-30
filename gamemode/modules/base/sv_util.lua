@@ -137,6 +137,34 @@ function DarkRP.findEmptyPos(pos, ignore, distance, step, area)
     return pos
 end
 
+local meta = FindMetaTable("Player")
+function meta:applyPlayerClassVars(applyHealth)
+    local playerClass = baseclass.Get(player_manager.GetPlayerClass(self))
+
+    self:SetWalkSpeed(playerClass.WalkSpeed >= 0 and playerClass.WalkSpeed or GAMEMODE.Config.walkspeed)
+    self:SetRunSpeed(playerClass.RunSpeed >= 0 and playerClass.RunSpeed or (self:isCP() and GAMEMODE.Config.runspeedcp or GAMEMODE.Config.runspeed))
+
+    hook.Call("UpdatePlayerSpeed", GAMEMODE, self) -- Backwards compatitibly, do not use
+
+    self:SetCrouchedWalkSpeed(playerClass.CrouchedWalkSpeed)
+    self:SetDuckSpeed(playerClass.DuckSpeed)
+    self:SetUnDuckSpeed(playerClass.UnDuckSpeed)
+    self:SetJumpPower(playerClass.JumpPower)
+    self:AllowFlashlight(playerClass.CanUseFlashlight)
+
+    self:SetMaxHealth(playerClass.MaxHealth >= 0 and playerClass.MaxHealth or (tonumber(GAMEMODE.Config.startinghealth) or 100))
+    if applyHealth then
+        self:SetHealth(playerClass.StartHealth >= 0 and playerClass.StartHealth or (tonumber(GAMEMODE.Config.startinghealth) or 100))
+    end
+    self:SetArmor(playerClass.StartArmor)
+
+    self.dropWeaponOnDeath = playerClass.DropWeaponOnDie
+    self:SetNoCollideWithTeammates(playerClass.TeammateNoCollide)
+    self:SetAvoidPlayers(playerClass.AvoidPlayers)
+
+    hook.Call("playerClassVarsApplied", nil, self)
+end
+
 local function LookPersonUp(ply, cmd, args)
     if not args[1] then
         DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", "argument", ""))
