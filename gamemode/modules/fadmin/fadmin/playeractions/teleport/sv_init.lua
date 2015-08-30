@@ -82,7 +82,7 @@ local function Bring(ply, cmd, args)
     end
 
     for _, target in pairs(targets) do
-        if not IsValid(target) and target == ply then continue end
+        if not IsValid(target) or target == ply then continue end
 
         target:ExitVehicle()
         if not target:Alive() then target:Spawn() end
