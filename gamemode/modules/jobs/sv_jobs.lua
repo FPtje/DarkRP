@@ -412,16 +412,15 @@ end
 DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
 local function DoTeamUnBan(ply, args)
-    if not args or args == "" then
+    local a,b = string.find(args, " ")
+
+    if not a or a == #args then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
         return
     end
 
-    local ent = args
-    local Team = args
-    local a,b = string.find(args, " ")
-    ent = string.sub(args, 1, a - 1)
-    Team = string.sub(args, a + 1)
+    local ent = string.sub(args, 1, a - 1)
+    local Team = string.sub(args, a + 1)
 
     local target = DarkRP.findPlayer(ent)
     if not target or not IsValid(target) then
