@@ -230,9 +230,6 @@ end)
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------*/
 local function DrawHUD()
-    localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
-    if not IsValid(localplayer) then return end
-
     local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
     if shouldDraw == false then return end
 
@@ -401,6 +398,9 @@ end
 Actual HUDPaint hook
 ---------------------------------------------------------------------------*/
 function GM:HUDPaint()
+    localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
+    if not IsValid(localplayer) then return end
+
     DrawHUD()
     DrawEntityDisplay()
 
