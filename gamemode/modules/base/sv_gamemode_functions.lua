@@ -9,7 +9,7 @@ function GM:Initialize()
 end
 
 function GM:playerBuyDoor(ply, ent)
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].hobo then
+    if ply:getJobTable().hobo then
         return false, DarkRP.getPhrase("door_hobo_unable")
     end
 
@@ -65,10 +65,10 @@ end
 function GM:canDropWeapon(ply, weapon)
     if not IsValid(weapon) then return false end
     local class = string.lower(weapon:GetClass())
-    local team = ply:Team()
 
     if not GAMEMODE.Config.dropspawnedweapons then
-        if RPExtraTeams[team] and RPExtraTeams[team].weapons and table.HasValue(RPExtraTeams[team].weapons, class) then return false end
+        local jobTable = ply:getJobTable()
+        if jobTable.weapons and table.HasValue(jobTable.weapons, class) then return false end
     end
 
     if self.Config.DisallowDrop[class] then return false end
@@ -106,10 +106,10 @@ function GM:PlayerSpawnProp(ply, model)
     model = string.gsub(tostring(model), "\\", "/")
     model = string.gsub(tostring(model), "//", "/")
 
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSpawnProp then
-        RPExtraTeams[ply:Team()].PlayerSpawnProp(ply, model)
+    local jobTable = ply:getJobTable()
+    if jobTable.PlayerSpawnProp then
+        jobTable.PlayerSpawnProp(ply, model)
     end
-
 
     return self.BaseClass:PlayerSpawnProp(ply, model)
 end
@@ -228,14 +228,16 @@ function GM:EntityRemoved(ent)
 end
 
 function GM:ShowSpare1(ply)
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare1 then
-        return RPExtraTeams[ply:Team()].ShowSpare1(ply)
+    local jobTable = ply:getJobTable()
+    if jobTable.ShowSpare1 then
+        return jobTable.ShowSpare1(ply)
     end
 end
 
 function GM:ShowSpare2(ply)
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].ShowSpare2 then
-        return RPExtraTeams[ply:Team()].ShowSpare2(ply)
+    local jobTable = ply:getJobTable()
+    if jobTable.ShowSpare2 then
+        return jobTable.ShowSpare2(ply)
     end
 end
 
@@ -350,8 +352,9 @@ function GM:CanPlayerSuicide(ply)
         return false
     end
 
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].CanPlayerSuicide then
-        return RPExtraTeams[ply:Team()].CanPlayerSuicide(ply)
+    local jobTable = ply:getJobTable()
+    if jobTable.CanPlayerSuicide then
+        return jobTable.CanPlayerSuicide(ply)
     end
     return true
 end
@@ -388,8 +391,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
 end
 
 function GM:PlayerDeath(ply, weapon, killer)
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDeath then
-        RPExtraTeams[ply:Team()].PlayerDeath(ply, weapon, killer)
+    local jobTable = ply:getJobTable()
+    if jobTable.PlayerDeath then
+        jobTable.PlayerDeath(ply, weapon, killer)
     end
 
     if GAMEMODE.Config.deathblack then
@@ -464,29 +468,27 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
         return false
     end
 
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerCanPickupWeapon then
-        RPExtraTeams[ply:Team()].PlayerCanPickupWeapon(ply, weapon)
+    local jobTable = ply:getJobTable()
+    if jobTable.PlayerCanPickupWeapon then
+        jobTable.PlayerCanPickupWeapon(ply, weapon)
     end
     return true
 end
 
 function GM:PlayerSetModel(ply)
-    local teamNr = ply:Team()
-    if RPExtraTeams[teamNr] and RPExtraTeams[teamNr].PlayerSetModel then
-        local model = RPExtraTeams[teamNr].PlayerSetModel(ply)
+    local jobTable = ply:getJobTable()
+    if jobTable.PlayerSetModel then
+        local model = jobTable.PlayerSetModel(ply)
         if model then ply:SetModel(model) return end
     end
 
     local EndModel = ""
     if GAMEMODE.Config.enforceplayermodel then
-        local TEAM = RPExtraTeams[teamNr]
-        if not TEAM then return end
-
-        if istable(TEAM.model) then
-            local ChosenModel = string.lower(ply:getPreferredModel(teamNr) or "")
+        if istable(jobTable.model) then
+            local ChosenModel = string.lower(ply:getPreferredModel(ply:Team()) or "")
 
             local found
-            for _,Models in pairs(TEAM.model) do
+            for _,Models in pairs(jobTable.model) do
                 if ChosenModel == string.lower(Models) then
                     EndModel = Models
                     found = true
@@ -495,17 +497,17 @@ function GM:PlayerSetModel(ply)
             end
 
             if not found then
-                EndModel = TEAM.model[math.random(#TEAM.model)]
+                EndModel = jobTable.model[math.random(#jobTable.model)]
             end
         else
-            EndModel = TEAM.model
+            EndModel = jobTable.model
         end
 
         ply:SetModel(EndModel)
     else
         local cl_playermodel = ply:GetInfo("cl_playermodel")
         local modelname = player_manager.TranslatePlayerModel(cl_playermodel)
-        ply:SetModel(ply:getPreferredModel(teamNr) or modelname)
+        ply:SetModel(ply:getPreferredModel(ply:Team()) or modelname)
     end
 
     ply:SetupHands()
@@ -585,8 +587,9 @@ end
 function GM:PlayerSelectSpawn(ply)
     local spawn = self.BaseClass:PlayerSelectSpawn(ply)
 
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerSelectSpawn then
-        RPExtraTeams[ply:Team()].PlayerSelectSpawn(ply, spawn)
+    local jobTable = ply:getJobTable()
+    if jobTable.PlayerSelectSpawn then
+        jobTable.PlayerSelectSpawn(ply, spawn)
     end
 
     local POS
@@ -832,8 +835,9 @@ function GM:PlayerDisconnected(ply)
         end
     end
 
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].PlayerDisconnected then
-        RPExtraTeams[ply:Team()].PlayerDisconnected(ply)
+    local jobTable = ply:getJobTable()
+    if jobTable.PlayerDisconnected then
+        jobTable.PlayerDisconnected(ply)
     end
 end
 

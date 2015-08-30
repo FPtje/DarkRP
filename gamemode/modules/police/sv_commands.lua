@@ -83,7 +83,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
 end
 
 local function DoLottery(ply, amount)
-    if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
+    if not ply:isMayor() then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/lottery"))
         return ""
     end
@@ -139,7 +139,7 @@ function DarkRP.lockdown(ply)
         return ""
     end
 
-    if ply:EntIndex() ~= 0 and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
+    if ply:EntIndex() ~= 0 and not ply:isMayor() then
         show(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
         return ""
     end
@@ -168,7 +168,7 @@ function DarkRP.unLockdown(ply)
         return ""
     end
 
-    if ply:EntIndex() ~= 0 and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
+    if ply:EntIndex() ~= 0 and not ply:isMayor() then
         show(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
         return ""
     end
@@ -208,7 +208,7 @@ local function RequestLicense(ply)
     local ischief-- then if there's a chief
     local iscop-- and then if there's a cop to ask
     for k,v in pairs(player.GetAll()) do
-        if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].mayor and not v:getDarkRPVar("AFK") then
+        if v:isMayor() and not v:getDarkRPVar("AFK") then
             ismayor = true
             break
         end
@@ -216,7 +216,7 @@ local function RequestLicense(ply)
 
     if not ismayor then
         for k,v in pairs(player.GetAll()) do
-            if RPExtraTeams[v:Team()] and RPExtraTeams[v:Team()].chief and not v:getDarkRPVar("AFK") then
+            if v:isChief() and not v:getDarkRPVar("AFK") then
                 ischief = true
                 break
             end
@@ -242,10 +242,10 @@ local function RequestLicense(ply)
         return ""
     end
 
-    if ismayor and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].mayor) then
+    if ismayor and not LookingAt:isMayor() then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "mayor"))
         return ""
-    elseif ischief and (not RPExtraTeams[LookingAt:Team()] or not RPExtraTeams[LookingAt:Team()].chief) then
+    elseif ischief and not LookingAt:isChief() then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
         return ""
     elseif iscop and not LookingAt:isCP() then
