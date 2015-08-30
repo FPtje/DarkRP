@@ -110,6 +110,11 @@ Fuck up APAnti. These hooks send unnecessary net messages.
 timer.Simple(3, function()
     hook.Remove("Move", "_APA.Settings.AllowGMSpawn")
     hook.Remove("PlayerSpawnObject", "_APA.Settings.AllowGMSpawn")
+    -- Malicious addons that kicks players this one person doesn't like.
+    if Skid then
+        Skid.Check = fn.Id
+        hook.Remove("CheckPassword", "Skid.CheckPassword")
+    end
 end)
 
 /*---------------------------------------------------------------------------
