@@ -871,8 +871,8 @@ function GM:InitPostEntity()
     game.ConsoleCommand("sv_sticktoground 0\n")
     game.ConsoleCommand("sv_airaccelerate 1000\n")
     -- sv_alltalk must be 0
-    -- Note, everyone will STILL hear everyone UNLESS rp_voiceradius is 1!!!
-    -- This will fix the rp_voiceradius not working
+    -- Note, everyone will STILL hear everyone UNLESS GM.Config.voiceradius is set to true
+    -- This will fix the GM.Config.voiceradius not working
     game.ConsoleCommand("sv_alltalk 0\n")
 
     if GAMEMODE.Config.unlockdoorsonstart then
