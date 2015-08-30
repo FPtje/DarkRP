@@ -62,7 +62,6 @@ local function BuyFood(ply, args)
 
         local SpawnedFood = ents.Create("spawned_food")
         SpawnedFood:Setowning_ent(ply)
-        SpawnedFood.ShareGravgun = true
         SpawnedFood:SetPos(tr.HitPos)
         SpawnedFood.onlyremover = true
         SpawnedFood.SID = ply.SID

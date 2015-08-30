@@ -11,10 +11,9 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 
     local phys = self:GetPhysicsObject()
-    self.nodupe = true
-    self.ShareGravgun = true
-
     phys:Wake()
+
+    self.nodupe = true
 
     hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end

@@ -12,7 +12,6 @@ function ENT:Initialize()
 
     local phys = self:GetPhysicsObject()
     self.nodupe = true
-    self.ShareGravgun = true
 
     phys:Wake()
 end

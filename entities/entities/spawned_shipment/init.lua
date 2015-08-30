@@ -17,7 +17,6 @@ function ENT:Initialize()
 
     self:StartSpawning()
     self.damage = 100
-    self.ShareGravgun = true
     local phys = self:GetPhysicsObject()
     phys:Wake()
 
@@ -126,7 +125,6 @@ function ENT:SpawnItem()
     weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
     weapon.clip1 = self.clip1
     weapon.clip2 = self.clip2
-    weapon.ShareGravgun = true
     weapon:SetPos(self:GetPos() + weaponPos)
     weapon:SetAngles(weaponAng)
     weapon.nodupe = true
@@ -168,7 +166,6 @@ function ENT:Destruct()
     local weapon = ents.Create("spawned_weapon")
     weapon:SetModel(model)
     weapon:SetWeaponClass(class)
-    weapon.ShareGravgun = true
     weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
     weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
     weapon.nodupe = true
