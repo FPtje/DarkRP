@@ -63,6 +63,7 @@ local function ccAddOwner(ply, args)
         else
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target))
         end
+        return
     end
     trace.Entity:keysOwn(target)
 
