@@ -4,11 +4,6 @@ Messages
 local function ccTell(ply, arg)
     local args = string.Explode(" ", arg)
 
-    if not args or not args[1] then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     local target = DarkRP.findPlayer(args[1])
 
     if target then
@@ -28,17 +23,12 @@ local function ccTell(ply, arg)
             DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") did admintell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
         end
     else
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args[1])))
     end
 end
 DarkRP.definePrivilegedChatCommand("admintell", "DarkRP_AdminCommands", ccTell)
 
 local function ccTellAll(ply, args)
-    if not args then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     umsg.Start("AdminTell")
         umsg.String(args)
     umsg.End()

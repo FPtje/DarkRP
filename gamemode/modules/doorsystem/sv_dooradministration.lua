@@ -19,15 +19,10 @@ end
 DarkRP.definePrivilegedChatCommand("forceunown", "DarkRP_SetDoorOwner", ccDoorUnOwn)
 
 local function unownAll(ply, args)
-    if not args or not args then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     local target = DarkRP.findPlayer(args)
 
     if not IsValid(target) then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", args))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args))
         return
     end
     target:keysUnOwnAll()
@@ -58,7 +53,7 @@ local function ccAddOwner(ply, args)
     local target = DarkRP.findPlayer(args)
 
     if not target then
-        ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", args))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args))
         return
     end
 
@@ -66,7 +61,7 @@ local function ccAddOwner(ply, args)
         if not trace.Entity:isKeysOwnedBy(target) and not trace.Entity:isKeysAllowedToOwn(target) then
             trace.Entity:addKeysAllowedToOwn(target)
         else
-            ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("rp_addowner_already_owns_door", target))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target))
         end
     end
     trace.Entity:keysOwn(target)
@@ -92,7 +87,7 @@ local function ccRemoveOwner(ply, args)
     local target = DarkRP.findPlayer(args)
 
     if not target then
-        ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("could_not_find", args))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args))
         return
     end
 
@@ -124,7 +119,7 @@ local function ccLock(ply, args)
         return
     end
 
-    ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("locked"))
+    DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("locked"))
 
     trace.Entity:keysLock()
 
@@ -154,7 +149,7 @@ local function ccUnLock(ply, args)
         return
     end
 
-    ply:PrintMessage(HUD_PRINTCONSOLE, DarkRP.getPhrase("unlocked"))
+    DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("unlocked"))
     trace.Entity:keysUnLock()
 
     if not trace.Entity:CreatedByMap() then return end
@@ -164,8 +159,8 @@ local function ccUnLock(ply, args)
         MySQLite.SQLStr(trace.Entity:getKeysTitle() or ""),
         trace.Entity:getKeysNonOwnable() and 1 or 0
         ))
-    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unlocked a door with forcelock (unlocked door is saved)", Color(30, 30, 30))
 
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unlocked a door with forcelock (unlocked door is saved)", Color(30, 30, 30))
     DarkRP.notify(ply, 0, 4, "Forcefully unlocked")
 end
 DarkRP.definePrivilegedChatCommand("forceunlock", "DarkRP_ChangeDoorSettings", ccUnLock)

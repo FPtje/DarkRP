@@ -211,20 +211,15 @@ Admin commands
 local function ccArrest(ply, arg)
     local args = string.Explode(" ", arg)
 
-    if not args[1] then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     if DarkRP.jailPosCount() == 0 then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("no_jail_pos"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_jail_pos"))
         return
     end
 
     local targets = DarkRP.findPlayers(args[1])
 
     if not targets then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", args[1]))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args[1]))
         return
     end
 
@@ -248,15 +243,10 @@ DarkRP.definePrivilegedChatCommand("arrest", "DarkRP_AdminCommands", ccArrest)
 local function ccUnarrest(ply, arg)
     local args = string.Explode(" ", arg)
 
-    if not args or not args[1] then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     local targets = DarkRP.findPlayers(args[1])
 
     if not targets then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", args[1]))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args[1]))
         return
     end
 

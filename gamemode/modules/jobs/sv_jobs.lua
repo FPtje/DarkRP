@@ -369,14 +369,15 @@ DarkRP.defineChatCommand("jobswitch", SwitchJob)
 
 
 local function DoTeamBan(ply, args)
-    if not args or args == "" then
+    args = string.Explode(" ", args)
+
+    local ent = args[1]
+    local Team = args[2]
+
+    if not Team then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
         return
     end
-
-    args = string.Explode(" ", args)
-    local ent = args[1]
-    local Team = args[2]
 
     local target = DarkRP.findPlayer(ent)
     if not target or not IsValid(target) then
@@ -407,8 +408,6 @@ local function DoTeamBan(ply, args)
         nick = ply:Nick()
     end
     DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
-
-    return
 end
 DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
@@ -456,8 +455,6 @@ local function DoTeamUnBan(ply, args)
     else
         nick = ply:Nick()
     end
-    DarkRP.notifyAll(1, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
-
-    return
+    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 end
 DarkRP.definePrivilegedChatCommand("teamunban", "DarkRP_AdminCommands", DoTeamUnBan)

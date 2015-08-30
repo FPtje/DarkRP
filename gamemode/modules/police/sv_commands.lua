@@ -78,7 +78,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
         local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
         hook.Run("lotteryEnded", LotteryPeople, chosen, #LotteryPeople * LotteryAmount)
         chosen:addMoney(#LotteryPeople * LotteryAmount)
-        DarkRP.notifyAll(0,10, DarkRP.getPhrase("lottery_won", chosen:Nick(), DarkRP.formatMoney(#LotteryPeople * LotteryAmount)))
+        DarkRP.notifyAll(0, 10, DarkRP.getPhrase("lottery_won", chosen:Nick(), DarkRP.formatMoney(#LotteryPeople * LotteryAmount)))
     end
 end
 
@@ -290,15 +290,10 @@ end
 DarkRP.defineChatCommand("givelicense", GiveLicense)
 
 local function rp_GiveLicense(ply, arg)
-    if not arg then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     local target = DarkRP.findPlayer(arg)
 
     if not target then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(arg)))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(arg)))
         return
     end
 
@@ -315,22 +310,17 @@ local function rp_GiveLicense(ply, arg)
 
     DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
     if ply ~= target then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
+        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
     end
     DarkRP.log(nick .. " (" .. steamID .. ") force-gave " .. target:Nick() .. " a gun license", Color(30, 30, 30))
 end
 DarkRP.definePrivilegedChatCommand("setlicense", "DarkRP_SetLicense", rp_GiveLicense)
 
 local function rp_RevokeLicense(ply, arg)
-    if not arg then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
     local target = DarkRP.findPlayer(arg)
 
     if not target then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(arg)))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(arg)))
         return
     end
 
@@ -347,7 +337,7 @@ local function rp_RevokeLicense(ply, arg)
 
     DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
     if ply ~= target then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
     end
     DarkRP.log(nick .. " (" .. steamID .. ") force-removed " .. target:Nick() .. "'s gun license", Color(30, 30, 30))
 end

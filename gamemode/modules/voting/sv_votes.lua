@@ -171,7 +171,7 @@ local function CancelVote(ply)
             print(DarkRP.getPhrase("x_cancelled_vote", "Console"))
         end
     else
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("cant_cancel_vote"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_cancel_vote"))
     end
 end
 DarkRP.definePrivilegedChatCommand("forcecancelvote", "DarkRP_AdminCommands", CancelVote)

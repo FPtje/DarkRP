@@ -446,7 +446,6 @@ local function addTeamCommands(CTeam, max)
             end
 
             ply:changeTeam(k)
-            return
         end
         DarkRP.defineChatCommand(CTeam.command, function(ply)
             CAMI.PlayerHasAccess(ply, "DarkRP_GetJob_" .. CTeam.command, fp{onJobCommand, ply})
