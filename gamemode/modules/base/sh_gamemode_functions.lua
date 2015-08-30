@@ -1,11 +1,8 @@
-function GM:UpdatePlayerSpeed(ply)
+function GM:SetupMove(ply, mv, cmd)
     if ply:isArrested() then
-        GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
-    elseif ply:isCP() then
-        GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeedcp)
-    else
-        GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed, GAMEMODE.Config.runspeed)
+        mv:SetMaxClientSpeed(self.Config.arrestspeed)
     end
+    return self.BaseClass:SetupMove(ply, mv, cmd)
 end
 
 function GM:StartCommand(ply, usrcmd)

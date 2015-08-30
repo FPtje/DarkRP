@@ -123,8 +123,6 @@ function SWEP:Holster()
         self:ResetDarkRPBones(vm)
     end
 
-    hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
-
     return true
 end
 
@@ -134,10 +132,6 @@ function SWEP:OnRemove()
     if CLIENT and IsValid(self:GetOwner()) then
         local vm = self:GetOwner():GetViewModel()
         self:ResetDarkRPBones(vm)
-    end
-
-    if IsValid(self:GetLastOwner()) then
-        hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetLastOwner())
     end
 end
 
@@ -391,10 +385,6 @@ IronsightsChanged
 
 function SWEP:IronsightsChanged(b)
     self:SetHoldType(b and self.HoldType or "normal")
-    self.dt.Ironsights = b -- for UpdatePlayerSpeed
-    if IsValid(self:GetOwner()) then
-        hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
-    end
 end
 
 /*---------------------------------------------------------
@@ -518,11 +508,9 @@ if CLIENT then
     end
 end
 
-hook.Add("UpdatePlayerSpeed", "DarkRP_WeaponSpeed", function(ply)
+hook.Add("SetupMove", "DarkRP_WeaponSpeed", function(ply, mv)
     local wep = ply:GetActiveWeapon()
     if not IsValid(wep) or not wep.GetIronsights or not wep:GetIronsights() then return end
 
-    GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed / 3, GAMEMODE.Config.runspeed / 3)
-
-    return true
+    mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() / 3)
 end)

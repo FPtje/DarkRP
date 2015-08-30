@@ -508,7 +508,7 @@ DarkRP.VECTOR.isInSight = DarkRP.stub{
 
 DarkRP.hookStub{
     name = "UpdatePlayerSpeed",
-    description = "Change a player's walking and running speed.",
+    description = "THIS HOOK IS DEPRECATED: Use GMod's SetupMove and Move hooks instead.\nChange a player's walking and running speed.",
     parameters = {
         {
             name = "ply",

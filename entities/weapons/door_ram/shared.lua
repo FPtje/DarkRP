@@ -53,7 +53,6 @@ end
 
 function SWEP:Holster()
     self.dt.Ironsights = false
-    hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
     self:GetOwner():SetJumpPower(200)
 
     return true
@@ -226,11 +225,9 @@ function SWEP:SecondaryAttack()
     if self:GetIronsights() then
         self:SetHoldType("rpg")
         -- Prevent them from being able to run and jump
-        hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
         self:GetOwner():SetJumpPower(0)
     else
         self:SetHoldType("normal")
-        hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
         self:GetOwner():SetJumpPower(200)
     end
 end

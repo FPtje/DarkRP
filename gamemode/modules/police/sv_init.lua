@@ -293,8 +293,6 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isWanted() then ply:unWanted(arrester) end
     ply:setDarkRPVar("HasGunlicense", nil)
 
-    -- UpdatePlayerSpeed won't work here as the "Arrested" DarkRPVar is set AFTER this hook
-    GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
     ply:StripWeapons()
 
     if ply:isArrested() then return end -- hasn't been arrested before
@@ -320,8 +318,6 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
         DarkRP.toggleSleep(ply, "force")
     end
 
-    -- "Arrested" DarkRPVar is set to false BEFORE this hook however, so it is safe here.
-    hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
     gamemode.Call("PlayerLoadout", ply)
     if GAMEMODE.Config.telefromjail then
         local ent, pos = GAMEMODE:PlayerSelectSpawn(ply)

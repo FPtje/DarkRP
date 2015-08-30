@@ -35,6 +35,8 @@ end
 local function drugEffects(um)
     local toggle = um:ReadBool()
 
+    LocalPlayer().isDrugged = toggle
+
     if toggle then
         hook.Add("RenderScreenspaceEffects", "drugged", function()
             DrawSharpen(-1, 2)
