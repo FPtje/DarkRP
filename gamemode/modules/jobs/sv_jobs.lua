@@ -142,8 +142,8 @@ function meta:changeTeam(t, force, suppressNotification)
         local vPoint = self:GetShootPos() + Vector(0,0,50)
         local effectdata = EffectData()
         effectdata:SetEntity(self)
-        effectdata:SetStart( vPoint ) -- Not sure if we need a start and origin (endpoint) for this effect, but whatever
-        effectdata:SetOrigin( vPoint )
+        effectdata:SetStart(vPoint) -- Not sure if we need a start and origin (endpoint) for this effect, but whatever
+        effectdata:SetOrigin(vPoint)
         effectdata:SetScale(1)
         util.Effect("entity_remove", effectdata)
         hook.Call("UpdatePlayerSpeed", GAMEMODE, self)

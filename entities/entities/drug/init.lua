@@ -53,9 +53,10 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
-    self.CanUse = true
-    local phys = self:GetPhysicsObject()
 
+    self.CanUse = true
+
+    local phys = self:GetPhysicsObject()
     phys:Wake()
 
     self.damage = 10
@@ -68,7 +69,7 @@ function ENT:OnTakeDamage(dmg)
 
     self.damage = self.damage - dmg:GetDamage()
 
-    if (self.damage <= 0) then
+    if self.damage <= 0 then
         local effectdata = EffectData()
         effectdata:SetOrigin(self:GetPos())
         effectdata:SetMagnitude(2)
@@ -80,14 +81,12 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator,caller)
-    if not self.CanUse then return false end
+    if not self.CanUse then return end
     local Owner = self:Getowning_ent()
     if not IsValid(Owner) then return end
 
     if activator ~= Owner then
-        if not activator:canAfford(self:Getprice()) then
-            return false
-        end
+        if not activator:canAfford(self:Getprice()) then return end
         DarkRP.payPlayer(activator, Owner, self:Getprice())
         DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("you_bought", string.lower(DarkRP.getPhrase("drugs")), DarkRP.formatMoney(self:Getprice()), ""))
         DarkRP.notify(Owner, 0, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(self:Getprice()), string.lower(DarkRP.getPhrase("drugs"))))

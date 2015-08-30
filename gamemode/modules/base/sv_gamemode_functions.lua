@@ -439,14 +439,10 @@ function GM:PlayerDeath(ply, weapon, killer)
         ply.Slayed = false
     end
 
-    ply:GetTable().ConfiscatedWeapons = nil
+    ply.ConfiscatedWeapons = nil
 
     local KillerName = (killer:IsPlayer() and killer:Nick()) or tostring(killer)
-
     local WeaponName = IsValid(weapon) and ((weapon:IsPlayer() and IsValid(weapon:GetActiveWeapon()) and weapon:GetActiveWeapon():GetClass()) or weapon:GetClass()) or "unknown"
-    if IsValid(weapon) and weapon:GetClass() == "prop_physics" then
-        WeaponName = weapon:GetClass()
-    end
 
     if killer == ply then
         KillerName = "Himself"
@@ -461,7 +457,7 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
     if weapon.PlayerUse == false then return false end
     if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
 
-    if GAMEMODE.Config.license and not ply:getDarkRPVar("HasGunlicense") and not ply:GetTable().RPLicenseSpawn then
+    if GAMEMODE.Config.license and not ply:getDarkRPVar("HasGunlicense") and not ply.RPLicenseSpawn then
         if GAMEMODE.NoLicense[string.lower(weapon:GetClass())] or not weapon:IsWeapon() then
             return true
         end
@@ -528,7 +524,7 @@ local function initPlayer(ply)
     ply:setSelfDarkRPVar("salary", RPExtraTeams[GAMEMODE.DefaultTeam].salary or GAMEMODE.Config.normalsalary)
     ply.LastJob = nil -- so players don't have to wait to get a job after joining
 
-    ply.Ownedz = { }
+    ply.Ownedz = {}
 
     ply.LastLetterMade = CurTime() - 61
     ply.LastVoteCop = CurTime() - 61
@@ -605,12 +601,12 @@ function GM:PlayerSelectSpawn(ply)
     end
 
     -- Spawn where died in certain cases
-    if GAMEMODE.Config.strictsuicide and ply:GetTable().DeathPos then
-        POS = ply:GetTable().DeathPos
+    if GAMEMODE.Config.strictsuicide and ply.DeathPos then
+        POS = ply.DeathPos
     end
 
     if ply:isArrested() then
-        POS = DarkRP.retrieveJailPos() or ply:GetTable().DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
+        POS = DarkRP.retrieveJailPos() or ply.DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
     end
 
     -- Make sure the player doesn't get stuck in something
