@@ -759,7 +759,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
     customShipment.spawn = customShipment.spawn and fp{DarkRP.simplerrRun, customShipment.spawn}
     customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
     customShipment.customCheck = customShipment.customCheck   and fp{DarkRP.simplerrRun, customShipment.customCheck}
-    CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
+    customShipment.CustomCheckFailMsg = isfunction(customShipment.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, customShipment.CustomCheckFailMsg} or customShipment.CustomCheckFailMsg
 
     if not customShipment.noship then DarkRP.addToCategory(customShipment, "shipments", customShipment.category) end
     if customShipment.separate then DarkRP.addToCategory(customShipment, "weapons", customShipment.category) end
@@ -793,8 +793,8 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
 
     if not found then DarkRP.error("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.", 3) end
 
-    CustomVehicles.customCheck = CustomVehicles.customCheck and fp{DarkRP.simplerrRun, CustomVehicles.customCheck}
-    CustomVehicles.CustomCheckFailMsg = isfunction(CustomVehicles.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, CustomVehicles.CustomCheckFailMsg} or CustomVehicles.CustomCheckFailMsg
+    vehicle.customCheck = vehicle.customCheck and fp{DarkRP.simplerrRun, vehicle.customCheck}
+    vehicle.CustomCheckFailMsg = isfunction(vehicle.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, vehicle.CustomCheckFailMsg} or vehicle.CustomCheckFailMsg
 
     table.insert(CustomVehicles, vehicle)
     DarkRP.addToCategory(vehicle, "vehicles", vehicle.category)
