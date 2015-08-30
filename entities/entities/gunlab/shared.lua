@@ -1,11 +1,9 @@
-ENT.Type = "anim"
-ENT.Base = "base_gmodentity"
+ENT.Base = "lab_base"
 ENT.PrintName = "Gun Lab"
-ENT.Author = "Pcwizdan"
-ENT.Spawnable = false
-ENT.CanSetPrice = true
 
-function ENT:SetupDataTables()
-    self:NetworkVar("Int", 0, "price")
-    self:NetworkVar("Entity", 1, "owning_ent")
+function ENT:initVars()
+    self.model = "models/props_c17/TrapPropeller_Engine.mdl"
+    self.initialPrice = 200
+    self.labPhrase = DarkRP.getPhrase("gun_lab")
+    self.itemPhrase = DarkRP.getPhrase("gun")
 end
