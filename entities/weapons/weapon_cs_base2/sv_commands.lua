@@ -19,7 +19,6 @@ function meta:dropDRPWeapon(weapon)
     local model = (weapon:GetModel() == "models/weapons/v_physcannon.mdl" and "models/weapons/w_physics.mdl") or weapon:GetModel()
     model = util.IsValidModel(model) and model or "models/weapons/w_rif_ak47.mdl"
 
-    ent.ShareGravgun = true
     ent:SetPos(self:GetShootPos() + self:GetAimVector() * 30)
     ent:SetModel(model)
     ent:SetSkin(weapon:GetSkin())

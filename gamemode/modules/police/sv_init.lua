@@ -52,7 +52,6 @@ function plyMeta:wanted(actor, reason, time)
     self:setDarkRPVar("wanted", true)
     self:setDarkRPVar("wantedReason", reason)
 
-
     timer.Create(self:UniqueID() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
         if not IsValid(self) then return end
         self:unWanted()

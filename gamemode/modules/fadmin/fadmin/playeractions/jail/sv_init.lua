@@ -80,8 +80,7 @@ local function Jail(ply, cmd, args)
             end
 
             if JailTime ~= 0 then
-
-               timer.Create("FAdmin_jail" .. target:UserID(), JailTime, 1, function()
+                timer.Create("FAdmin_jail" .. target:UserID(), JailTime, 1, function()
                     if not IsValid(target) then return end
                     if not target:FAdmin_GetGlobal("fadmin_jailed") then return end
                     timer.Remove("FAdmin_jail_watch" .. target:UserID())

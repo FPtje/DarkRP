@@ -78,8 +78,6 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
 
     -- All the buttons
 
-
-
     if ent:isKeysOwnedBy(LocalPlayer()) then
         local Owndoor = AddButtonToFrame(Frame)
         Owndoor:SetText(DarkRP.getPhrase("sell_x", entType))

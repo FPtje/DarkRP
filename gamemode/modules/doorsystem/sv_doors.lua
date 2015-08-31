@@ -5,7 +5,7 @@ local pmeta = FindMetaTable("Player")
 Functions
 ---------------------------------------------------------------------------*/
 
-function meta:isLocked( )
+function meta:isLocked()
     local save = self:GetSaveTable()
     return save and ((self:isDoor() and save.m_bLocked) or (self:IsVehicle() and save.VehicleLocked))
 end
@@ -86,7 +86,7 @@ function meta:keysUnOwn(ply)
     end
 
     ply.Ownedz[self:EntIndex()] = nil
-    ply.OwnedNumz = math.Clamp((ply:GetTable().OwnedNumz or 1) - 1, 0, math.huge)
+    ply.OwnedNumz = math.Clamp((ply.OwnedNumz or 1) - 1, 0, math.huge)
 end
 
 function pmeta:keysUnOwnAll()
@@ -96,7 +96,7 @@ function pmeta:keysUnOwnAll()
         end
     end
 
-    if self:GetTable().Ownedz then
+    if self.Ownedz then
         for k, v in pairs(self.Ownedz) do
             if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
             v:keysUnOwn(self)
@@ -268,13 +268,13 @@ DarkRP.definePrivilegedChatCommand("toggleteamownable", "DarkRP_ChangeDoorSettin
 local function OwnDoor(ply)
     local team = ply:Team()
     local trace = ply:GetEyeTrace()
-    local Owner = trace.Entity:CPPIGetOwner()
 
     if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 200 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
 
+    local Owner = trace.Entity:CPPIGetOwner()
 
     if ply:isArrested() then
         DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unown_arrested"))
@@ -305,12 +305,12 @@ local function OwnDoor(ply)
 
         trace.Entity:keysUnOwn(ply)
         trace.Entity:setKeysTitle(nil)
-        local GiveMoneyBack = math.floor(( hook.Call("get" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity) * 0.666) + 0.5)
+        local GiveMoneyBack = math.floor((hook.Call("get" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity) * 0.666) + 0.5)
         hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveMoneyBack)
         ply:addMoney(GiveMoneyBack)
         local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
         if not bSuppress then
-            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold",  DarkRP.formatMoney(GiveMoneyBack)))
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold", DarkRP.formatMoney(GiveMoneyBack)))
         end
 
     else
@@ -321,8 +321,8 @@ local function OwnDoor(ply)
 
         local iCost = hook.Call("get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity)
         if not ply:canAfford(iCost) then
-            DarkRP.notify( ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
-            return "";
+            DarkRP.notify(ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
+            return ""
         end
 
         local bAllowed, strReason, bSuppress = hook.Call("playerBuy".. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
@@ -348,7 +348,7 @@ local function OwnDoor(ply)
 
         ply:addMoney(-iCost)
         if not bSuppress then
-            DarkRP.notify( ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", DarkRP.formatMoney(iCost), "") or DarkRP.getPhrase("door_bought", DarkRP.formatMoney(iCost), ""))
+            DarkRP.notify(ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", DarkRP.formatMoney(iCost), "") or DarkRP.getPhrase("door_bought", DarkRP.formatMoney(iCost), ""))
         end
 
         trace.Entity:keysOwn(ply)
@@ -368,7 +368,7 @@ local function UnOwnAll(ply, cmd, args)
             v:keysUnOwn(ply)
             local cost = (v:IsVehicle() and GAMEMODE.Config.vehiclecost or GAMEMODE.Config.doorcost) * 2 / 3 + 0.5
             ply:addMoney(math.floor(cost))
-            ply:GetTable().Ownedz[v:EntIndex()] = nil
+            ply.Ownedz[v:EntIndex()] = nil
         end
     end
     ply.OwnedNumz = 0

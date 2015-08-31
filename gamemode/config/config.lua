@@ -374,7 +374,7 @@ GM.Config.CategoryOverride = {
     },
 }
 
--- The list of weapons admins spawn with, in addition to the default weapons, a job's weapons and GM.Config.AdminCopWeapons
+-- The list of weapons admins spawn with, in addition to the default weapons, a job's weapons and GM.Config.AdminsCopWeapons
 GM.Config.AdminWeapons = {
     "weapon_keypadchecker"
 }

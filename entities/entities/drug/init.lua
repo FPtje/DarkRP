@@ -25,7 +25,6 @@ local function DrugPlayer(ply)
 
     if not timer.Exists(IDSteam .. "DruggedHealth") then
         ply:SetHealth(ply:Health() + 100)
-        local i = 0
 
         timer.Create(IDSteam .. "DruggedHealth", 60 / (100 + 5), 100 + 5, function()
             if not IsValid(ply) then return end
@@ -35,9 +34,7 @@ local function DrugPlayer(ply)
                 ply:Kill()
             end
 
-            i = i + 1
-
-            if i == 105 then
+            if timer.RepsLeft(IDSteam .. "DruggedHealth") == 0 then
                 UnDrugPlayer(ply)
             end
         end)
@@ -49,9 +46,10 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
-    self.CanUse = true
-    local phys = self:GetPhysicsObject()
 
+    self.CanUse = true
+
+    local phys = self:GetPhysicsObject()
     phys:Wake()
 
     self.damage = 10
@@ -64,7 +62,7 @@ function ENT:OnTakeDamage(dmg)
 
     self.damage = self.damage - dmg:GetDamage()
 
-    if (self.damage <= 0) then
+    if self.damage <= 0 then
         local effectdata = EffectData()
         effectdata:SetOrigin(self:GetPos())
         effectdata:SetMagnitude(2)
@@ -76,14 +74,12 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator,caller)
-    if not self.CanUse then return false end
+    if not self.CanUse then return end
     local Owner = self:Getowning_ent()
     if not IsValid(Owner) then return end
 
     if activator ~= Owner then
-        if not activator:canAfford(self:Getprice()) then
-            return false
-        end
+        if not activator:canAfford(self:Getprice()) then return end
         DarkRP.payPlayer(activator, Owner, self:Getprice())
         DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("you_bought", string.lower(DarkRP.getPhrase("drugs")), DarkRP.formatMoney(self:Getprice()), ""))
         DarkRP.notify(Owner, 0, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(self:Getprice()), string.lower(DarkRP.getPhrase("drugs"))))

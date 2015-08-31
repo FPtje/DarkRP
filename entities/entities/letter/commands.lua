@@ -33,7 +33,6 @@ local function MakeLetter(ply, args, type)
     local letter = ents.Create("letter")
     letter:SetModel("models/props_c17/paper01.mdl")
     letter:Setowning_ent(ply)
-    letter.ShareGravgun = true
     letter:SetPos(trace.HitPos)
     letter.nodupe = true
     letter:Spawn()
