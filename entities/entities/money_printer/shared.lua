@@ -1,8 +1,21 @@
+--Static Vars
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 ENT.PrintName = "Money Printer"
-ENT.Author = "Render Case and philxyz"
+ENT.Author = "DarkRP Developers"
 ENT.Spawnable = false
+ENT.sparking = false
+ENT.IsMoneyPrinter = true
+
+--Vars
+ENT.MoneyCount = GAMEMODE.Config.mprintamount
+ENT.OverheatChance = GAMEMODE.Config.printeroverheatchance
+ENT.model = "models/props_c17/consolebox01a.mdl"
+ENT.damage = 100
+ENT.DisplayName = ""
+ENT.MinTimer = 100
+ENT.MaxTimer = 350
+ENT.SeizeReward = GAMEMODE.Config.printerreward
 
 function ENT:SetupDataTables()
     self:NetworkVar("Int", 0, "price")
