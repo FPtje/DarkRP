@@ -27,7 +27,7 @@ DarkRP.hookStub{
         {
             name = "colour",
             description = "The colour of the printed log.",
-            type = "boolean"
+            type = "Color"
         }
     },
     returns = {}
