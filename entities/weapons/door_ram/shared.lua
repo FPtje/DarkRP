@@ -53,8 +53,6 @@ end
 
 function SWEP:Holster()
     self.dt.Ironsights = false
-    hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
-    self:GetOwner():SetJumpPower(200)
 
     return true
 end
@@ -225,13 +223,8 @@ function SWEP:SecondaryAttack()
     self:SetIronsights(not self:GetIronsights())
     if self:GetIronsights() then
         self:SetHoldType("rpg")
-        -- Prevent them from being able to run and jump
-        hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
-        self:GetOwner():SetJumpPower(0)
     else
         self:SetHoldType("normal")
-        hook.Call("UpdatePlayerSpeed", GAMEMODE, self:GetOwner())
-        self:GetOwner():SetJumpPower(200)
     end
 end
 
@@ -306,3 +299,10 @@ if SERVER then
         }
     }
 end
+
+hook.Add("SetupMove", "DarkRP_DoorRamJump", function(ply, mv)
+    local wep = ply:GetActiveWeapon()
+    if not IsValid(wep) or not wep.GetIronsights or not wep:GetIronsights() or wep:GetClass() ~= "door_ram" then return end
+
+    mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
+end)

@@ -10,11 +10,6 @@ local function UnDrugPlayer(ply)
     timer.Remove(IDSteam .. "DruggedHealth")
 
     SendUserMessage("DrugEffects", ply, false)
-
-    ply:SetJumpPower(190)
-    hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
-
-    hook.Remove("PlayerDeath", ply)
 end
 
 hook.Add("PlayerDeath", "UndrugPlayers", function(ply) if ply.isDrugged then UnDrugPlayer(ply) end end)
@@ -24,9 +19,7 @@ local function DrugPlayer(ply)
 
     SendUserMessage("DrugEffects", ply, true)
 
-    ply:SetJumpPower(300)
     ply.isDrugged = true
-    hook.Call("UpdatePlayerSpeed", GAMEMODE, ply)
 
     local IDSteam = ply:UniqueID()
 
@@ -105,10 +98,3 @@ function ENT:OnRemove()
     if not IsValid(ply) then return end
     ply.maxDrugs = ply.maxDrugs - 1
 end
-
-hook.Add("UpdatePlayerSpeed", "DruggedPlayer", function(ply)
-    if not ply.isDrugged then return end
-    GAMEMODE:SetPlayerSpeed(ply, GAMEMODE.Config.walkspeed * 2, GAMEMODE.Config.runspeed * 2)
-
-    return true -- Prevent the gamemode setting the runspeed
-end)

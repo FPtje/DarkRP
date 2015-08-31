@@ -78,6 +78,7 @@ local requiredTeamItems = {
     medic                 = ass(optional(isbool), "The medic value must be either true or false."),
     cook                  = ass(optional(isbool), "The cook value must be either true or false."),
     hobo                  = ass(optional(isbool), "The hobo value must be either true or false."),
+    playerClass           = ass(optional(isstring), "The playerClass must be a valid string."),
     CanPlayerSuicide      = ass(optional(isfunction), "The CanPlayerSuicide must be a function."),
     PlayerCanPickupWeapon = ass(optional(isfunction), "The PlayerCanPickupWeapon must be a function."),
     PlayerDeath           = ass(optional(isfunction), "The PlayerDeath must be a function."),
