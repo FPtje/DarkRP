@@ -8,14 +8,14 @@ ENT.sparking = false
 ENT.IsMoneyPrinter = true
 
 --Define for avoid errors
-self.MoneyCount = 250
-self.OverheatChance = 22
-self.model = "models/props_c17/consolebox01a.mdl"
-self.damage = 100
-self.DisplayName = ""
-self.MinTimer = 100
-self.MaxTimer = 350
-self.SeizeReward = 950
+ENT.MoneyCount = 250
+ENT.OverheatChance = 22
+ENT.model = "models/props_c17/consolebox01a.mdl"
+ENT.damage = 100
+ENT.DisplayName = ""
+ENT.MinTimer = 100
+ENT.MaxTimer = 350
+ENT.SeizeReward = 950
 
 
 function ENT:SetupDataTables()
