@@ -14,8 +14,6 @@ local function SetSpawnPos(ply, args)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
     end
-
-    return
 end
 DarkRP.definePrivilegedChatCommand("setspawn", "DarkRP_AdminCommands", SetSpawnPos)
 
@@ -35,8 +33,6 @@ local function AddSpawnPos(ply, args)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
     end
-
-    return
 end
 DarkRP.definePrivilegedChatCommand("addspawn", "DarkRP_AdminCommands", AddSpawnPos)
 
@@ -56,7 +52,5 @@ local function RemoveSpawnPos(ply, args)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
     end
-
-    return
 end
 DarkRP.definePrivilegedChatCommand("removespawn", "DarkRP_AdminCommands", RemoveSpawnPos)

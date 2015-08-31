@@ -1,4 +1,9 @@
 function DarkRP.notify(ply, msgtype, len, msg)
+    if not IsValid(ply) then
+        -- Dedicated erver console
+        print(msg)
+    end
+
     umsg.Start("_Notify", ply)
         umsg.String(msg)
         umsg.Short(msgtype)
