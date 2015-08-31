@@ -43,7 +43,7 @@ function ENT:Initialize()
 
     timer.Simple(math.random(self.MinTimer, self.MaxTimer), function() PrintMore(self) end)
     self:StartSound()
-	self:initVars()
+    self:initVars()
     self:PostInit()
 end
 
