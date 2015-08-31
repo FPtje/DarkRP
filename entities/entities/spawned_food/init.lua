@@ -8,8 +8,8 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
-    local phys = self:GetPhysicsObject()
 
+    local phys = self:GetPhysicsObject()
     phys:Wake()
 end
 
@@ -29,5 +29,5 @@ function ENT:Use(activator, caller)
     umsg.Start("AteFoodIcon", activator)
     umsg.End()
     self:Remove()
-    activator:EmitSound("vo/sandwicheat09.wav", 100, 100)
+    activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
 end
