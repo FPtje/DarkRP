@@ -34,8 +34,11 @@ function DarkRP.formatMoney(n)
     if not n then return attachCurrency("0") end
 
     if n >= 1e14 then return attachCurrency(tostring(n)) end
+    if n <= -1e14 then return "-" .. attachCurrency(tostring(math.abs(n))) end
 
-    n = tostring(n)
+    local negative = n < 0
+
+    n = tostring(math.abs(n))
     local sep = sep or ","
     local dp = string.find(n, "%.") or #n + 1
 
@@ -43,7 +46,7 @@ function DarkRP.formatMoney(n)
         n = n:sub(1, i) .. sep .. n:sub(i + 1)
     end
 
-    return attachCurrency(n)
+    return (negative and "-" or "") .. attachCurrency(n)
 end
 
 /*---------------------------------------------------------------------------
