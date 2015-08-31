@@ -14,6 +14,7 @@ local delayedCalls = {}
 
 local returnsLayout, isreturns
 local parameterLayout, isparameters
+local isdeprecated
 local checkStub
 
 local hookLayout
@@ -39,12 +40,17 @@ isparameters = function(tbl)
     return true
 end
 
+isdeprecated = function(val)
+    return val == nil or isstring(val)
+end
+
 /*---------------------------------------------------------------------------
 The layouts of stubs
 ---------------------------------------------------------------------------*/
 local stubLayout = {
     name = isstring,
     description = isstring,
+    deprecated = isdeprecated,
     parameters = isparameters, -- the parameters of a method
     returns = isreturns, -- the return values of a method
     metatable = istable -- DarkRP, Player, Entity, Vector, ...
@@ -53,6 +59,7 @@ local stubLayout = {
 hookLayout = {
     name = isstring,
     description = isstring,
+    deprecated = isdeprecated,
     parameters = isreturns, -- doesn't have the 'optional' field
     returns = isreturns,
 }

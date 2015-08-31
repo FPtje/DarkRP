@@ -387,7 +387,8 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
 
 DarkRP.PLAYER.getAgenda = DarkRP.stub{
     name = "getAgenda",
-    description = "(Deprecated, use getAgendaTable) Get the agenda a player manages.",
+    description = "Get the agenda a player manages.",
+    deprecated = "Use ply:getAgendaTable() instad.",
     parameters = {
     },
     returns = {
@@ -508,7 +509,8 @@ DarkRP.VECTOR.isInSight = DarkRP.stub{
 
 DarkRP.hookStub{
     name = "UpdatePlayerSpeed",
-    description = "THIS HOOK IS DEPRECATED: Use GMod's SetupMove and Move hooks instead.\nChange a player's walking and running speed.",
+    description = "Change a player's walking and running speed.",
+    deprecated = "Use GMod's SetupMove and Move hooks instead.",
     parameters = {
         {
             name = "ply",

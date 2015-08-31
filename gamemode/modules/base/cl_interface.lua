@@ -103,6 +103,7 @@ DarkRP.getPreferredJobModel = DarkRP.stub{
 DarkRP.hookStub{
     name = "teamChanged",
     description = "When your team is changed.",
+    deprecated = "Use the OnPlayerChangedTeam hook instead.",
     parameters = {
         {
             name = "before",
