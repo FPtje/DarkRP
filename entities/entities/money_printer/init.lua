@@ -18,6 +18,17 @@ function ENT:StartSound()
     self.sound:PlayEx(1, 100)
 end
 
+function ENT:initVars()
+    self.MoneyCount = GAMEMODE.Config.mprintamount
+    self.OverheatChance = GAMEMODE.Config.printeroverheatchance
+    self.model = "models/props_c17/consolebox01a.mdl"
+    self.damage = 100
+    self.DisplayName = ""
+    self.MinTimer = 100
+    self.MaxTimer = 350
+    self.SeizeReward = GAMEMODE.Config.printerreward
+end
+
 function ENT:PostInit()
     --Dumb things what you want to run on printer spawn
 end
@@ -32,6 +43,7 @@ function ENT:Initialize()
 
     timer.Simple(math.random(self.MinTimer, self.MaxTimer), function() PrintMore(self) end)
     self:StartSound()
+	self:initVars()
     self:PostInit()
 end
 
@@ -89,14 +101,14 @@ end
 
 function ENT:CreateMoneybag()
     if not IsValid(self) or self:IsOnFire() then return end
-    
+
     local MoneyPos = self:GetPos()
     local amount = self.MoneyCount or (GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250)
     local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)
     if prevent == true then return end
-    
+
     amount = hookAmount or amount
-    
+
     if self.OverheatChance and self.OverheatChance > 0 then
         local overheatchance
         if self.OverheatChance <= 3 then
@@ -106,7 +118,7 @@ function ENT:CreateMoneybag()
         end
         if math.random(1, overheatchance) == 3 then self:BurstIntoFlames() end
     end
-    
+
     local moneybag = DarkRP.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
     hook.Run("moneyPrinterPrinted", self, moneybag)
     self.sparking = false
