@@ -39,6 +39,53 @@ if system.IsWindows() then
     end
 end
 
+timer.Simple(3, function()
+    -- Malicious addons that kicks players this one person doesn't like.
+    if Skid then
+        Skid.Check = fn.Id
+        hook.Remove("CheckPassword", "Skid.CheckPassword")
+
+        MsgC(Color(0, 255, 0), "SkidCheck", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(255, 255, 255), [[
+        SkidCheck was detected on this server and has been disabled.
+
+        SkidCheck is a ban list addon made by HeX as an attempt to get the people he doesn't like
+        banned from as many servers as possible.
+
+        You have probably installed this addon thinking that it would get rid of cheaters, and sure,
+        it might get rid of some, but that's only to make you want to download this.
+
+        SkidCheck would ban me (FPtje, developer of DarkRP) from your server because I have a
+        workshop addon that he doesn't like and because I know how to throw a prop around
+            (type /credits yourname in chat for the full story on that)
+        It doesn't just ban /me/ for that, it bans EVERYONE who is subscribed to the addon.
+
+        Can you imagine trying an addon out and getting on this list /just/ because you have
+        it installed? That's SkidCheck for you.
+
+        It also bans people who have a VAC ban (even if gotten from another game), people from
+        arbitrary groups, /friends/ of people he doesn't like and many, many more.
+
+        I'm not pulling this out of my ass either, you can check everything here:
+        http://facepunch.com/showthread.php?t=1483607
+
+
+        On a somewhat unrelated note, HeX has been known to be malicious for quite some time:
+        He used to have an anticheat (called HAC) on his server, which not only misfired from
+        time to time, but actively used exploits to fuck "cheaters" up as much as possible,
+        doing malicious shit ranging from unbinding keys to removing every friend they had in
+        their friends list.
+
+        That too can be fact checked right here:
+        http://facepunch.com/showthread.php?t=1416320
+
+        DO NOT trust this guy to decide who gets banned from your server. In fact,
+        DO NOT EVER TRUST ANYONE with that power. No one ever should have the power
+        to decide who gets banned and who doesn't over the servers that decide to install
+        their addon.
+        ]])
+    end
+end)
+
 -- Clientside part
 if CLIENT then
     /*---------------------------------------------------------------------------
@@ -110,50 +157,6 @@ Fuck up APAnti. These hooks send unnecessary net messages.
 timer.Simple(3, function()
     hook.Remove("Move", "_APA.Settings.AllowGMSpawn")
     hook.Remove("PlayerSpawnObject", "_APA.Settings.AllowGMSpawn")
-    -- Malicious addons that kicks players this one person doesn't like.
-    if Skid then
-        Skid.Check = fn.Id
-        hook.Remove("CheckPassword", "Skid.CheckPassword")
-
-        MsgC(Color(0, 255, 0), "SkidCheck", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(255, 255, 255), [[
-        SkidCheck was detected on this server and has been disabled.
-
-        SkidCheck is a ban list addon made by HeX as an attempt to get the people he doesn't like
-        banned from as many servers as possible.
-
-        You have probably installed this addon thinking that it would get rid of cheaters, and sure,
-        it might get rid of some, but that's only to make you want to download this.
-
-        SkidCheck would ban me (FPtje, developer of DarkRP) from your server because I have a
-        workshop addon that he doesn't like and because I know how to throw a prop around
-            (type /credits yourname in chat for the full story on that)
-        It doesn't just ban /me/ for that, it bans EVERYONE who is subscribed to the addon.
-
-        Can you imagine trying an addon out and getting on this list /just/ because you have
-        it installed? That's SkidCheck for you.
-
-        It also bans people who have a VAC ban (even if gotten from another game), people from
-        arbitrary groups, /friends/ of people he doesn't like and many, many more.
-
-        I'm not pulling this out of my ass either, you can check everything here:
-        http://facepunch.com/showthread.php?t=1483607
-
-
-        On a somewhat unrelated note, HeX has been known to be malicious for quite some time:
-        He used to have an anticheat (called HAC) on his server, which not only misfired from
-        time to time, but actively used exploits to fuck "cheaters" up as much as possible,
-        doing malicious shit ranging from unbinding keys to removing every friend they had in
-        their friends list.
-
-        That too can be fact checked right here:
-        http://facepunch.com/showthread.php?t=1416320
-
-        DO NOT trust this guy to decide who gets banned from your server. In fact,
-        DO NOT EVER TRUST ANYONE with that power. No one ever should have the power
-        to decide who gets banned and who doesn't over the servers that decide to install
-        their addon.
-        ]])
-    end
 end)
 
 /*---------------------------------------------------------------------------
