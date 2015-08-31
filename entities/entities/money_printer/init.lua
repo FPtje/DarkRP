@@ -131,7 +131,7 @@ function ENT:Think()
         self:Remove()
         return
     end
-    if not IsValid(self.sound) then self:StartSound() end
+    self:StartSound()
     if not self.sparking then return end
 
     local effectdata = EffectData()
@@ -143,7 +143,7 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-    if IsValid(self.sound) then
+    if self.sound then
         self.sound:Stop()
     end
 end
