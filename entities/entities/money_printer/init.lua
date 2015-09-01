@@ -18,17 +18,6 @@ function ENT:StartSound()
     self.sound:PlayEx(1, 100)
 end
 
-function ENT:initVars()
-    self.MoneyCount = GAMEMODE.Config.mprintamount
-    self.OverheatChance = GAMEMODE.Config.printeroverheatchance
-    self.model = "models/props_c17/consolebox01a.mdl"
-    self.damage = 100
-    self.DisplayName = ""
-    self.MinTimer = 100
-    self.MaxTimer = 350
-    self.SeizeReward = GAMEMODE.Config.printerreward
-end
-
 function ENT:PostInit()
     --Dumb things what you want to run on printer spawn
 end

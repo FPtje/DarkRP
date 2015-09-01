@@ -17,6 +17,16 @@ ENT.MinTimer = 100
 ENT.MaxTimer = 350
 ENT.SeizeReward = 950
 
+function ENT:initVars()
+    self.MoneyCount = GAMEMODE.Config.mprintamount
+    self.OverheatChance = GAMEMODE.Config.printeroverheatchance
+    self.model = "models/props_c17/consolebox01a.mdl"
+    self.damage = 100
+    self.DisplayName = ""
+    self.MinTimer = 100
+    self.MaxTimer = 350
+    self.SeizeReward = GAMEMODE.Config.printerreward
+end
 
 function ENT:SetupDataTables()
     self:NetworkVar("Int", 0, "price")
