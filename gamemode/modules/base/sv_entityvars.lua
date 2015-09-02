@@ -138,6 +138,17 @@ local function setRPName(ply, arg)
 end
 DarkRP.definePrivilegedChatCommand("forcerpname", "DarkRP_AdminCommands", setRPName)
 
+local function freerpname(ply, args)
+    local name = args ~= "" and args or IsValid(ply) and ply:Nick() or ""
+
+    MySQLite.query(("UPDATE darkrp_player SET rpname = NULL WHERE rpname = %s"):format(MySQLite.SQLStr(name)))
+
+    local nick = IsValid(ply) and ply:Nick() or "Console"
+    DarkRP.log(("%s has freed the rp name '%s'"):format(nick, name), Color(30, 30, 30))
+    DarkRP.notify(ply, 0, 4, ("'%s' has been freed"):format(name))
+end
+DarkRP.definePrivilegedChatCommand("freerpname", "DarkRP_AdminCommands", freerpname)
+
 local function RPName(ply, args)
     if ply.LastNameChange and ply.LastNameChange > (CurTime() - 5) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
