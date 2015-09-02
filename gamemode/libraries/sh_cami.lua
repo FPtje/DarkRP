@@ -41,7 +41,7 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150823.1
+local version = 20150902
 
 if CAMI and CAMI.Version >= version then return end
 
@@ -183,7 +183,7 @@ function CAMI.UsergroupInherits(usergroupName1, usergroupName2)
 		usergroupName1 = usergroups[usergroupName1] and
 						 usergroups[usergroupName1].Inherits or
 						 usergroupName1
-	until usergroups[usergroupName1] and
+	until not usergroups[usergroupName1] or
 		  usergroups[usergroupName1].Inherits == usergroupName1
 
 	-- One can only be sure the usergroup inherits from user if the
