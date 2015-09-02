@@ -41,7 +41,7 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150902
+local version = 20150902.1
 
 if CAMI and CAMI.Version >= version then return end
 
@@ -354,9 +354,11 @@ local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 
 		if not priv then return callback(fallback, "Fallback.") end
 
-		local usergroup = actorPly:GetUserGroup()
-		local inherits = CAMI.UsergroupInherits(usergroup, priv.MinAccess)
-		callback(inherits, "Fallback.")
+		callback(
+			priv.MinAccess == "user" or
+			priv.MinAccess == "admin" and actorPly:IsAdmin() or
+			priv.MinAccess == "superadmin" and actorPly:IsSuperAdmin()
+			, "Fallback.")
 	end,
 	["CAMI.SteamIDHasAccess"] =
 	function(_, _, _, callback)
