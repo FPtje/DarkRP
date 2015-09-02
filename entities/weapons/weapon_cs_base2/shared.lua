@@ -64,6 +64,8 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.MultiMode = false
 
+SWEP.DarkRPBased = true
+
 /*---------------------------------------------------------
 ---------------------------------------------------------*/
 function SWEP:Initialize()
@@ -510,7 +512,7 @@ end
 
 hook.Add("SetupMove", "DarkRP_WeaponSpeed", function(ply, mv)
     local wep = ply:GetActiveWeapon()
-    if not IsValid(wep) or not wep.GetIronsights or not wep:GetIronsights() then return end
+    if not IsValid(wep) or not wep.DarkRPBased or not wep.GetIronsights or not wep:GetIronsights() then return end
 
     mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() / 3)
 end)
