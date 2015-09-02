@@ -1,27 +1,39 @@
--- RRPX Money Printer reworked for DarkRP by philxyz
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
-ENT.SeizeReward = 950
+local function PrintMore(ent)
+    if not IsValid(ent) then return end
 
-local PrintMore
+    ent.sparking = true
+    timer.Simple(3, function()
+        if not IsValid(ent) then return end
+        ent:CreateMoneybag()
+    end)
+end
+
+function ENT:StartSound()
+    self.sound = CreateSound(self, Sound("ambient/levels/labs/equipment_printer_loop1.wav"))
+    self.sound:SetSoundLevel(52)
+    self.sound:PlayEx(1, 100)
+end
+
+function ENT:PostInit()
+    --Dumb things what you want to run on printer spawn
+end
+
 function ENT:Initialize()
-    self:SetModel("models/props_c17/consolebox01a.mdl")
+    self:SetModel(self.model)
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     local phys = self:GetPhysicsObject()
     phys:Wake()
 
-    self.sparking = false
-    self.damage = 100
-    self.IsMoneyPrinter = true
-    timer.Simple(math.random(100, 350), function() PrintMore(self) end)
-
-    self.sound = CreateSound(self, Sound("ambient/levels/labs/equipment_printer_loop1.wav"))
-    self.sound:SetSoundLevel(52)
-    self.sound:PlayEx(1, 100)
+    timer.Simple(math.random(self.MinTimer, self.MaxTimer), function() PrintMore(self) end)
+    self:StartSound()
+    self:initVars()
+    self:PostInit()
 end
 
 function ENT:OnTakeDamage(dmg)
@@ -48,14 +60,13 @@ function ENT:Destruct()
     effectdata:SetOrigin(vPoint)
     effectdata:SetScale(1)
     util.Effect("Explosion", effectdata)
-    DarkRP.notify(self:Getowning_ent(), 1, 4, DarkRP.getPhrase("money_printer_exploded"))
+    if IsValid(self:Getowning_ent()) then DarkRP.notify(self:Getowning_ent(), 1, 4, DarkRP.getPhrase("money_printer_exploded")) end
 end
 
 function ENT:BurstIntoFlames()
-    local stopBurst = hook.Run("moneyPrinterCatchFire", self)
-    if stopBurst == true then return end
+    if hook.Run("moneyPrinterCatchFire", self) == true then return end
 
-    DarkRP.notify(self:Getowning_ent(), 0, 4, DarkRP.getPhrase("money_printer_overheating"))
+    if IsValid(self:Getowning_ent()) then DarkRP.notify(self:Getowning_ent(), 0, 4, DarkRP.getPhrase("money_printer_overheating")) end
     self.burningup = true
     local burntime = math.random(8, 18)
     self:Ignite(burntime, 0)
@@ -77,34 +88,22 @@ function ENT:Fireball()
     self:Remove()
 end
 
-PrintMore = function(ent)
-    if not IsValid(ent) then return end
-
-    ent.sparking = true
-    timer.Simple(3, function()
-        if not IsValid(ent) then return end
-        ent:CreateMoneybag()
-    end)
-end
-
 function ENT:CreateMoneybag()
     if not IsValid(self) or self:IsOnFire() then return end
 
     local MoneyPos = self:GetPos()
-
-    local amount = GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250
-
+    local amount = self.MoneyCount or (GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250)
     local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)
     if prevent == true then return end
 
     amount = hookAmount or amount
 
-    if GAMEMODE.Config.printeroverheat then
+    if self.OverheatChance and self.OverheatChance > 0 then
         local overheatchance
-        if GAMEMODE.Config.printeroverheatchance <= 3 then
+        if self.OverheatChance <= 3 then
             overheatchance = 22
         else
-            overheatchance = GAMEMODE.Config.printeroverheatchance or 22
+            overheatchance = self.OverheatChance or 22
         end
         if math.random(1, overheatchance) == 3 then self:BurstIntoFlames() end
     end
@@ -112,17 +111,16 @@ function ENT:CreateMoneybag()
     local moneybag = DarkRP.createMoneyBag(Vector(MoneyPos.x + 15, MoneyPos.y, MoneyPos.z + 15), amount)
     hook.Run("moneyPrinterPrinted", self, moneybag)
     self.sparking = false
-    timer.Simple(math.random(100, 350), function() PrintMore(self) end)
+    timer.Simple(math.random(self.MinTimer, self.MaxTimer), function() PrintMore(self) end)
 end
 
 function ENT:Think()
-
     if self:WaterLevel() > 0 then
         self:Destruct()
         self:Remove()
         return
     end
-
+    self:StartSound()
     if not self.sparking then return end
 
     local effectdata = EffectData()

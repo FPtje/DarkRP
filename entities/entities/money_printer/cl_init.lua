@@ -1,6 +1,10 @@
 include("shared.lua")
 
 function ENT:Initialize()
+    if not self.DisplayName or self.DisplayName == "" then
+        self.DisplayName = DarkRP.getPhrase("money_printer")
+    end
+	self:initVars()
 end
 
 function ENT:Draw()
@@ -13,7 +17,7 @@ function ENT:Draw()
     owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("unknown")
 
     surface.SetFont("HUDNumber5")
-    local text = DarkRP.getPhrase("money_printer")
+    local text = self.DisplayName
     local TextWidth = surface.GetTextSize(text)
     local TextWidth2 = surface.GetTextSize(owner)
 
