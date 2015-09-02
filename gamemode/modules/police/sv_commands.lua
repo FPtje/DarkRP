@@ -139,7 +139,7 @@ function DarkRP.lockdown(ply)
     end
 
     for k,v in pairs(player.GetAll()) do
-        v:ConCommand("play npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav\n")
+        v:ConCommand("play GM.Config.lockdownsound\n")
     end
 
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
