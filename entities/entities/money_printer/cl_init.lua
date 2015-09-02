@@ -1,10 +1,10 @@
 include("shared.lua")
 
 function ENT:Initialize()
+    self:initVars()
     if not self.DisplayName or self.DisplayName == "" then
         self.DisplayName = DarkRP.getPhrase("money_printer")
     end
-	self:initVars()
 end
 
 function ENT:Draw()
