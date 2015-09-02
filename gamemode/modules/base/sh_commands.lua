@@ -62,3 +62,9 @@ DarkRP.declareChatCommand{
     description = "Forcefully change a player's RP name",
     delay = 0.5
 }
+
+DarkRP.declareChatCommand{
+    command = "freerpname",
+    description = "Free an rp name from the database so a player can use it",
+    delay = 1.5
+}
