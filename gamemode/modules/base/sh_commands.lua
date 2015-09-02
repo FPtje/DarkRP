@@ -65,6 +65,6 @@ DarkRP.declareChatCommand{
 
 DarkRP.declareChatCommand{
     command = "freerpname",
-    description = "Remove an rp name from the database so a player can use it",
+    description = "Remove a RP name from the database so a player can use it",
     delay = 1.5
 }
