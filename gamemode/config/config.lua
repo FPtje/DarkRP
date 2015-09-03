@@ -129,6 +129,8 @@ GM.Config.proppaying                    = false
 GM.Config.propspawning                  = true
 -- removeclassitems - Enable/disable shipments/microwaves/etc. removal when someone changes team.
 GM.Config.removeclassitems              = true
+-- removeondisconnect - Enable/disable shipments/microwaves/etc. removal when someone disconnects.
+GM.Config.removeondisconnect            = true
 -- respawninjail - Enable/disable whether people can respawn in jail when they die
 GM.Config.respawninjail                 = true
 -- restrictallteams - Enable/disable Players can only be citizen until an admin allows them.

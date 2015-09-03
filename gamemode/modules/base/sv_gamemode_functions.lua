@@ -759,6 +759,8 @@ end
 
 -- Collect entities that are to be removed
 local function collectRemoveEntities(ply)
+    if not GAMEMODE.Config.removeondisconnect then return {} end
+
     local collect = {}
     -- Get the classes of entities to remove
     local remClasses = {}
