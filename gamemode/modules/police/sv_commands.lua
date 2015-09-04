@@ -139,7 +139,7 @@ function DarkRP.lockdown(ply)
     end
 
     for k,v in pairs(player.GetAll()) do
-        v:ConCommand("play " .. GM.Config.lockdownsound .. "\n")
+        v:ConCommand("play " .. GAMEMODE.Config.lockdownsound .. "\n")
     end
 
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
