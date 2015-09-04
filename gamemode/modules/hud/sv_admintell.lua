@@ -18,7 +18,7 @@ local function ccTell(ply, arg)
         umsg.End()
 
         if ply:EntIndex() == 0 then
-            DarkRP.log("Console did rp_tell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
+            DarkRP.log("Console did admintell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
         else
             DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") did admintell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
         end
@@ -36,7 +36,7 @@ local function ccTellAll(ply, args)
     if ply:EntIndex() == 0 then
         DarkRP.log("Console did admintellall \"" .. args .. "\"", Color(30, 30, 30))
     else
-        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") did rp_tellall \"" .. args .. "\"", Color(30, 30, 30))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") did admintellall \"" .. args .. "\"", Color(30, 30, 30))
     end
 
 end
