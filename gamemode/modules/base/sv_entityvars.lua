@@ -210,6 +210,8 @@ Maximum entity values
 ---------------------------------------------------------------------------*/
 local maxEntities = {}
 function meta:addCustomEntity(entTable)
+    if not entTable then return end
+
     maxEntities[self] = maxEntities[self] or {}
     maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
     maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] + 1
