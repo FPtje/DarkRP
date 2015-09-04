@@ -125,12 +125,6 @@ local function DoLottery(ply, amount)
 end
 DarkRP.defineChatCommand("lottery", DoLottery, 1)
 
-local wait_lockdown = false
-
-local function WaitLock()
-    wait_lockdown = false
-    timer.Remove("spamlock")
-end
 
 function DarkRP.lockdown(ply)
     local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
@@ -145,7 +139,7 @@ function DarkRP.lockdown(ply)
     end
 
     for k,v in pairs(player.GetAll()) do
-        v:ConCommand("play npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav\n")
+        v:ConCommand("play " .. GM.Config.lockdownsound .. "\n")
     end
 
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
@@ -163,10 +157,6 @@ function DarkRP.unLockdown(ply)
         show(DarkRP.getPhrase("unable", "/unlockdown", DarkRP.getPhrase("lockdown_ended")))
         return ""
     end
-    if wait_lockdown then
-        show(DarkRP.getPhrase("wait_with_that"))
-        return ""
-    end
 
     if ply:EntIndex() ~= 0 and not ply:isMayor() then
         show(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
@@ -175,9 +165,7 @@ function DarkRP.unLockdown(ply)
 
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
-    wait_lockdown = true
     SetGlobalBool("DarkRP_LockDown", false)
-    timer.Create("spamlock", 20, 1, WaitLock)
 
     return ""
 end
