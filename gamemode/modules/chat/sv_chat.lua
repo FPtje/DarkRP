@@ -64,14 +64,14 @@ local function RP_PlayerChat(ply, text, teamonly)
         fn.Curry(string.Explode, 2)(' ') -- split by spaces
     }(text)
 
-    ply.DrpCommandDelays = ply.DrpCommandDelays or {}
-    if tblCmd.delay and ply.DrpCommandDelays[tblCmd.command] and ply.DrpCommandDelays[tblCmd.command] > CurTime() - tblCmd.delay then
-        return ""
-    end
-
-    ply.DrpCommandDelays[tblCmd.command] = CurTime()
-
     if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
+        ply.DrpCommandDelays = ply.DrpCommandDelays or {}
+        if tblCmd.delay and ply.DrpCommandDelays[tblCmd.command] and ply.DrpCommandDelays[tblCmd.command] > CurTime() - tblCmd.delay then
+            return ""
+        end
+
+        ply.DrpCommandDelays[tblCmd.command] = CurTime()
+
         callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
         if callback == "" then
             return "", "", DoSayFunc
