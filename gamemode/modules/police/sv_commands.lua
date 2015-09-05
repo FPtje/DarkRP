@@ -157,6 +157,11 @@ function DarkRP.lockdown(ply)
         return ""
     end
 
+    if not GAMEMODE.Config.lockdown then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/lockdown", ""))
+        return ""
+    end
+
     if not cando_lockdown then
         show(DarkRP.getPhrase("wait_with_that"))
         return ""
