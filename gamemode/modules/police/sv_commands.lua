@@ -138,6 +138,11 @@ function DarkRP.lockdown(ply)
         return ""
     end
 
+    if not GAMEMODE.Config.lockdown then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "lockdown", ""))
+        return ""
+    end
+
     for k,v in pairs(player.GetAll()) do
         v:ConCommand("play " .. GAMEMODE.Config.lockdownsound .. "\n")
     end
