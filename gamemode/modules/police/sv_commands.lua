@@ -125,7 +125,7 @@ local function DoLottery(ply, amount)
 end
 DarkRP.defineChatCommand("lottery", DoLottery, 1)
 
-cando_lockdown = true
+local cando_lockdown = true
 
 local function WaitLock()
     cando_lockdown = true
