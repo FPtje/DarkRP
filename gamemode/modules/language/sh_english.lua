@@ -317,6 +317,7 @@ local my_language = {
     tried_to_avoid_demotion = "You tried to escape demotion. You failed and have been demoted.", -- naughty boy!
     lockdown_started = "The mayor has initiated a Lockdown, please return to your homes!",
     lockdown_ended = "The lockdown has ended",
+    lockdown_autoended = "The lockdown has ended automatically.",
     gunlicense_requested = "%s has requested %s a gun license",
     gunlicense_granted = "%s has granted %s a gun license",
     gunlicense_denied = "%s has denied %s a gun license",
