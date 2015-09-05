@@ -108,7 +108,7 @@ GM.Config.logging                       = true
 -- lottery - Enable/disable creating lotteries for mayors
 GM.Config.lottery                       = true
 -- lockdown - Enable/Disable initiating lockdowns for mayors.
-GM.Config.lockdown                      = false
+GM.Config.lockdown                      = true
 -- lockdownMaxDuration - Whether you want the lockdown to end automatically after a certain amount of time (the amount of time can be configured below).
 GM.Config.lockdownMaxDuration           = true
 -- preventLockdownSpam - Whether the Mayor needs to wait a certain amount of time before initiating another lockdown (the amount of time can be configured below).
