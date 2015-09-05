@@ -107,6 +107,12 @@ GM.Config.lockpickfading                = true
 GM.Config.logging                       = true
 -- lottery - Enable/disable creating lotteries for mayors
 GM.Config.lottery                       = true
+-- lockdown - Enable/Disable initiating lockdowns for mayors.
+GM.Config.lockdown                      = true
+-- lockdownMaxDuration - Whether you want the lockdown to end automatically after a certain amount of time (the amount of time can be configured below).
+GM.Config.lockdownMaxDuration           = true
+-- preventLockdownSpam - Whether the Mayor needs to wait a certain amount of time before initiating another lockdown (the amount of time can be configured below).
+GM.Config.preventLockdownSpam           = true
 -- showname - Whether or not to display a player's name above their head in-game.
 GM.Config.showname                      = true
 -- showname - Whether or not to display a player's health above their head in-game.
@@ -274,6 +280,10 @@ GM.Config.falldamageamount              = 10
 GM.Config.printeroverheatchance         = 22
 -- printerreward - Reward for destroying money printer
 GM.Config.printerreward           = 950
+-- lockdownMaxDurationTime - How long before the lockdown ends automatically (requires lockdownMaxDuration to be enabled above).
+GM.Config.lockdownMaxDurationTime       = 600
+-- lockdownSpamTimer - How long the Mayor has to wait before making another lockdown (requires preventLockdownSpam to be enabled above).
+GM.Config.lockdownSpamTimer             = 120
 
 --[[---------------------------------------------------------------------------
 Other settings

@@ -125,6 +125,25 @@ local function DoLottery(ply, amount)
 end
 DarkRP.defineChatCommand("lottery", DoLottery, 1)
 
+local cando_lockdown = true
+
+local function WaitLock()
+    cando_lockdown = true
+end
+
+local function endLockdownOnTimer()
+    if GetGlobalBool("DarkRP_LockDown") then
+        DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_autoended"))
+        DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_autoended"))
+    end
+
+    if GAMEMODE.Config.preventLockdownSpam then
+        cando_lockdown = false
+        timer.Create("spamlock", GAMEMODE.Config.lockdownSpamTimer, 1, WaitLock)
+    end
+
+    SetGlobalBool("DarkRP_LockDown", false)
+end
 
 function DarkRP.lockdown(ply)
     local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
@@ -138,6 +157,16 @@ function DarkRP.lockdown(ply)
         return ""
     end
 
+    if not GAMEMODE.Config.lockdown then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/lockdown", ""))
+        return ""
+    end
+
+    if not cando_lockdown then
+        show(DarkRP.getPhrase("wait_with_that"))
+        return ""
+    end
+
     for k,v in pairs(player.GetAll()) do
         v:ConCommand("play " .. GAMEMODE.Config.lockdownsound .. "\n")
     end
@@ -145,6 +174,10 @@ function DarkRP.lockdown(ply)
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
     SetGlobalBool("DarkRP_LockDown", true)
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
+
+    if GAMEMODE.Config.lockdownMaxDuration then
+        timer.Create("lockdownDurationTimer", GAMEMODE.Config.lockdownMaxDurationTime, 1, endLockdownOnTimer)
+    end
 
     return ""
 end
@@ -166,6 +199,11 @@ function DarkRP.unLockdown(ply)
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
     SetGlobalBool("DarkRP_LockDown", false)
+
+    if GAMEMODE.Config.preventLockdownSpam then
+        cando_lockdown = false
+        timer.Create("spamlock", GAMEMODE.Config.lockdownSpamTimer, 1, WaitLock)
+    end
 
     return ""
 end
