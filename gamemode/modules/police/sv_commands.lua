@@ -126,6 +126,7 @@ end
 DarkRP.defineChatCommand("lottery", DoLottery, 1)
 
 
+local lastLockdown = -math.huge
 function DarkRP.lockdown(ply)
     local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
     if GetGlobalBool("DarkRP_LockDown") then
@@ -139,11 +140,16 @@ function DarkRP.lockdown(ply)
     end
 
     if not GAMEMODE.Config.lockdown then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "lockdown", ""))
+        show(ply, 1, 4, DarkRP.getPhrase("disabled", "lockdown", ""))
         return ""
     end
 
-    for k,v in pairs(player.GetAll()) do
+    if lastLockdown > CurTime() - GAMEMODE.Config.lockdowndelay then
+        show(DarkRP.getPhrase("wait_with_that"))
+        return ""
+    end
+
+    for _, v in pairs(player.GetAll()) do
         v:ConCommand("play " .. GAMEMODE.Config.lockdownsound .. "\n")
     end
 
@@ -171,6 +177,8 @@ function DarkRP.unLockdown(ply)
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_ended"))
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_ended"))
     SetGlobalBool("DarkRP_LockDown", false)
+
+    lastLockdown = CurTime()
 
     return ""
 end
