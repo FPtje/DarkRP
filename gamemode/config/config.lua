@@ -298,13 +298,13 @@ GM.Config.F1MenuHelpPageTitle = "Wiki page"
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {
     ["STEAM_0:0:00000000"] = "superadmin",
-    ["STEAM_0:0:11111111"] = "admin"
+    ["STEAM_0:0:11111111"] = "admin",
 }
 
 -- Custom modules in this addon that are disabled.
 GM.Config.DisabledCustomModules = {
        ["hudreplacement"] = false,
-       ["extraf4tab"] = false
+       ["extraf4tab"] = false,
 }
 
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped.
@@ -322,7 +322,7 @@ GM.Config.DisallowDrop = {
     ["weapon_keypadchecker"] = true,
     ["weapon_physcannon"] = true,
     ["weapon_physgun"] = true,
-    ["weaponchecker"] = true
+    ["weaponchecker"] = true,
 }
 
 -- The list of weapons people spawn with.
@@ -332,7 +332,7 @@ GM.Config.DefaultWeapons = {
     "gmod_camera",
     "gmod_tool",
     "pocket",
-    "weapon_physgun"
+    "weapon_physgun",
 }
 
 -- Override categories.
@@ -350,12 +350,12 @@ GM.Config.CategoryOverride = {
         ["Gangster"]                            = "Gangsters",
         ["Mob boss"]                            = "Gangsters",
         ["Civil Protection Chief"]              = "Civil Protection",
-        ["Mayor"]                               = "Civil Protection"
+        ["Mayor"]                               = "Civil Protection",
     },
     entities = {
         ["Drug lab"]                            = "Other",
         ["Money printer"]                       = "Other",
-        ["Gun lab"]                             = "Other"
+        ["Gun lab"]                             = "Other",
 
     },
     shipments = {
@@ -364,33 +364,33 @@ GM.Config.CategoryOverride = {
         ["M4"]                                  = "Rifles",
         ["Mac 10"]                              = "Other",
         ["Pump shotgun"]                        = "Shotguns",
-        ["Sniper rifle"]                        = "Snipers"
+        ["Sniper rifle"]                        = "Snipers",
 
     },
     weapons = {
         ["Desert eagle"]                        = "Pistols",
         ["Fiveseven"]                           = "Pistols",
         ["Glock"]                               = "Pistols",
-        ["P228"]                                = "Pistols"
+        ["P228"]                                = "Pistols",
     },
     vehicles = {}, -- There are no default vehicles.
     ammo = {
         ["Pistol ammo"]                         = "Other",
         ["Shotgun ammo"]                        = "Other",
-        ["Rifle ammo"]                          = "Other"
+        ["Rifle ammo"]                          = "Other",
     },
 }
 
 -- The list of weapons admins spawn with, in addition to the default weapons, a job's weapons and GM.Config.AdminsCopWeapons.
 GM.Config.AdminWeapons = {
-    "weapon_keypadchecker"
+    "weapon_keypadchecker",
 }
 
 -- These are the default laws, they're unchangeable in-game.
 GM.Config.DefaultLaws = {
     "Do not attack other citizens except in self-defence.",
     "Do not steal or break into people's homes.",
-    "Money printers/drugs are illegal."
+    "Money printers/drugs are illegal.",
 }
 
 GM.Config.PocketBlacklist = {
@@ -416,7 +416,7 @@ GM.Config.PocketBlacklist = {
     ["gmod_thruster"] = true,
     ["gmod_light"] = true,
     ["gmod_lamp"] = true,
-    ["gmod_emitter"] = true
+    ["gmod_emitter"] = true,
 }
 
 -- These weapons are classed as 'legal' in the weapon checker and are not stripped when confiscating weapons.
@@ -434,7 +434,7 @@ GM.Config.noStripWeapons = {
 GM.Config.preventClassItemRemoval = {
     ["gunlab"] = false,
     ["microwave"] = false,
-    ["spawned_shipment"] = false
+    ["spawned_shipment"] = false,
 }
 
 -- Properties set to true are allowed to be used. Values set to false or are missing from this list are blocked.
@@ -446,7 +446,7 @@ GM.Config.allowedProperties = {
     gravity = true,
     collision = true,
     skin = true,
-    bodygroups = true
+    bodygroups = true,
 }
 
 --[[---------------------------------------------------------------------------
