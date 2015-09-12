@@ -58,14 +58,14 @@ FAdmin.StartHooks["DarkRP"] = function()
         Title:SetTextColor(color_black)
         menu:AddPanel(Title)
 
-        local command = "rp_teamban"
+        local command = "teamban"
         local uid = ply:UserID()
         for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
             local submenu = menu:AddSubMenu(v.name)
-            submenu:AddOption("2 minutes",     function() RunConsoleCommand(command, uid, k, 120)  end)
-            submenu:AddOption("Half an hour",  function() RunConsoleCommand(command, uid, k, 1800) end)
-            submenu:AddOption("An hour",       function() RunConsoleCommand(command, uid, k, 3600) end)
-            submenu:AddOption("Until restart", function() RunConsoleCommand(command, uid, k, 0)    end)
+            submenu:AddOption("2 minutes",     function() RunConsoleCommand("darkrp", command, uid, k, 120)  end)
+            submenu:AddOption("Half an hour",  function() RunConsoleCommand("darkrp", command, uid, k, 1800) end)
+            submenu:AddOption("An hour",       function() RunConsoleCommand("darkrp", command, uid, k, 3600) end)
+            submenu:AddOption("Until restart", function() RunConsoleCommand("darkrp", command, uid, k, 0)    end)
         end
         menu:Open()
     end
@@ -87,10 +87,10 @@ FAdmin.StartHooks["DarkRP"] = function()
         Title:SetTextColor(color_black)
         menu:AddPanel(Title)
 
-        local command = "rp_teamunban"
+        local command = "teamunban"
         local uid = ply:UserID()
         for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
-            menu:AddOption(v.name, function() RunConsoleCommand(command, uid, k) end)
+            menu:AddOption(v.name, function() RunConsoleCommand("darkrp", command, uid, k) end)
         end
         menu:Open()
     end
