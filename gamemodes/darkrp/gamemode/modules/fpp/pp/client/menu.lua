@@ -31,7 +31,22 @@ net.Receive("FPP_Settings", function()
 	end)
 end)
 
+local canEditSettings = false
+local canCleanup = false
+
+local function updatePrivs()
+	CAMI.PlayerHasAccess(LocalPlayer(), "FPP_Settings", function(b, _)
+		canEditSettings = b
+	end)
+
+	CAMI.PlayerHasAccess(LocalPlayer(), "FPP_Cleanup", function(b, _)
+		canCleanup = b
+	end)
+end
+timer.Simple(0, updatePrivs) -- Update privs after admin mods have loaded
+
 function FPP.AdminMenu(Panel)
+	updatePrivs()
 	AdminPanel = Panel
 	AdminPanel:SetSize(100, 400)
 	AdminPanel:Clear(true)
@@ -39,9 +54,7 @@ function FPP.AdminMenu(Panel)
 	AdminPanel.contents = AdminPanel.contents or vgui.Create("DListLayout")
 	AdminPanel.contents:Clear()
 
-	local superadmin = LocalPlayer():IsSuperAdmin()
-	local admin = LocalPlayer():IsAdmin()
-	if not superadmin then
+	if not canEditSettings then
 		AdminPanel.contents:Add(Label("You are not a superadmin\nThe changes you make will not have any effect."))
 		local AmAdmin = AdminPanel.contents:Add("DButton")
 		AmAdmin:SetText("Unlock buttons anyway")
@@ -50,7 +63,7 @@ function FPP.AdminMenu(Panel)
 		function AmAdmin:DoClick()
 			AmAdmin:SetText("Buttons unlocked")
 			AmAdmin:SetToolTip("The changes you make now DO have effect unless you're really not an admin")
-			superadmin = true
+			canEditSettings = true
 		end
 	end
 
@@ -77,7 +90,7 @@ function FPP.AdminMenu(Panel)
 		box:SetDark(true)
 		box:SetValue(tobool(FPP.Settings[command[1]][command[2]]))
 		box.Button.Toggle = function()
-			if not superadmin then return end--Hehe now you can't click it anymore non-admin!
+			if not canEditSettings then return end--Hehe now you can't click it anymore non-admin!
 			if box.Button:GetChecked() == nil or not box.Button:GetChecked() then
 				box.Button:SetValue( true )
 			else
@@ -104,7 +117,7 @@ function FPP.AdminMenu(Panel)
 
 		local RemoveSelected = pan:Add("DButton")
 		RemoveSelected:SetText("Remove Selected items from the list")
-		RemoveSelected:SetDisabled(not superadmin)
+		RemoveSelected:SetDisabled(not canEditSettings)
 		RemoveSelected.DoClick = function()
 			for k,v in pairs(lview.Lines) do
 				if v:IsLineSelected() then
@@ -120,7 +133,7 @@ function FPP.AdminMenu(Panel)
 
 		local AddLA = pan:Add("DButton")
 		AddLA:SetText("Add the entity you're looking at")
-		AddLA:SetDisabled(not superadmin)
+		AddLA:SetDisabled(not canEditSettings)
 		AddLA.DoClick = function()
 			local ent = LocalPlayer():GetEyeTraceNoCursor().Entity
 			if not IsValid(ent) then return end
@@ -137,7 +150,7 @@ function FPP.AdminMenu(Panel)
 
 		local AddManual = pan:Add("DButton")
 		AddManual:SetText("Add entity manually")
-		AddManual:SetDisabled(not superadmin)
+		AddManual:SetDisabled(not canEditSettings)
 		AddManual.DoClick = function()
 			Derma_StringRequest("Enter entity manually", "Enter the classname of the entity you would like to add.", nil,
 			function(a)
@@ -157,7 +170,7 @@ function FPP.AdminMenu(Panel)
 		function sldr.Slider:OnMouseReleased()
 			self:SetDragging( false )
 			self:MouseCapture( false )
-			if not superadmin then
+			if not canEditSettings then
 				sldr:SetValue(FPP.Settings[command[1]][command[2]])
 				return
 			end
@@ -179,7 +192,7 @@ function FPP.AdminMenu(Panel)
 	local delnow = general:Add("DButton")
 	delnow:SetText("Delete disconnected players' entities")
 	delnow:SetConsoleCommand("FPP_cleanup", "disconnected")
-	delnow:SetDisabled(not admin)
+	delnow:SetDisabled(not canCleanup)
 
 	local other = general:Add(Label("\nDelete player's entities:"))
 	other:SizeToContents()
@@ -191,7 +204,7 @@ function FPP.AdminMenu(Panel)
 		local rm = general:Add("DButton")
 		rm:SetText(v:Nick())
 		rm:SetConsoleCommand("FPP_Cleanup", v:UserID())
-		rm:SetDisabled(not admin)
+		rm:SetDisabled(not canCleanup)
 	end
 	if not areplayers then
 		local nope = general:Add(Label("<No players available>"))
@@ -415,7 +428,7 @@ function FPP.AdminMenu(Panel)
 	local StartEditMultiTool = ToolRestrict:Add("DButton")
 	StartEditMultiTool:SetText("Edit multiple tools")
 	StartEditMultiTool:SetToolTip("Start editing the tools in above list!")
-	StartEditMultiTool:SetDisabled(not superadmin)
+	StartEditMultiTool:SetDisabled(not canEditSettings)
 	StartEditMultiTool.DoClick = function()
 		local lines = FPP.multirestricttoollist:GetLines()
 		local EditTable = {}

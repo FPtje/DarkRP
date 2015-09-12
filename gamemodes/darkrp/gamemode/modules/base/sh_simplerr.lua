@@ -29,7 +29,7 @@ if CLIENT then
         local count = net.ReadUInt(16)
 
         local one = count == 1
-        chat.AddText(Color(255, 0, 0), string.format("There %s %i Lua problem%s!", one and "is" or "are", count, one and '' or 's'))
+        chat.AddText(Color(255, 0, 0), string.format("There %s %i Lua problem%s!", one and "is" or "are", count, one and "" or 's'))
         chat.AddText(Color(255, 255, 255), "\tPlease check your console for more information!")
 
         for i = 1, count do
@@ -50,7 +50,7 @@ local function sendErrors(plys, errs)
     local count = #errs
     local one = count == 1
 
-    DarkRP.notify(plys, 1, 120, string.format("There %s %i Lua problem%s!\nPlease check your console for more information!", one and "is" or "are", count, one and '' or 's'))
+    DarkRP.notify(plys, 1, 120, string.format("There %s %i Lua problem%s!\nPlease check your console for more information!", one and "is" or "are", count, one and "" or 's'))
     net.Start("DarkRP_simplerrError")
         net.WriteUInt(#errs, 16)
         fn.ForEach(fn.Flip(net.WriteString), errs)

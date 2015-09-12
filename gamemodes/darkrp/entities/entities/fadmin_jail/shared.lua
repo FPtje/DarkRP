@@ -5,9 +5,9 @@ ENT.Author = "FPtje"
 ENT.Spawnable = false
 
 function ENT:CanTool()
-	return false
+    return false
 end
 
 function ENT:PhysgunPickup(ply)
-	return false
+    return false
 end

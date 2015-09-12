@@ -41,9 +41,9 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150704
+local version = 20150902.1
 
-if CAMI and CAMI.Version > version then return end
+if CAMI and CAMI.Version >= version then return end
 
 CAMI = CAMI or {}
 CAMI.Version = version
@@ -53,14 +53,27 @@ usergroups
 	Contains the registered CAMI_USERGROUP usergroup structures.
 	Indexed by usergroup name.
 ]]
-local usergroups = {}
+local usergroups = CAMI.GetUsergroups and CAMI.GetUsergroups() or {
+	user = {
+		Name = "user",
+		Inherits = "user"
+	},
+	admin = {
+		Name = "admin",
+		Inherits = "user"
+	},
+	superadmin = {
+		Name = "superadmin",
+		Inherits = "admin"
+	}
+}
 
 --[[
 privileges
 	Contains the registered CAMI_PRIVILEGE privilege structures.
 	Indexed by privilege name.
 ]]
-local privileges = {}
+local privileges = CAMI.GetPrivileges and CAMI.GetPrivileges() or {}
 
 --[[
 CAMI.RegisterUsergroup
@@ -88,24 +101,6 @@ function CAMI.RegisterUsergroup(usergroup, source)
 	hook.Call("CAMI.OnUsergroupRegistered", nil, usergroup, source)
 	return usergroup
 end
-
--- Default user usergroup
-CAMI.RegisterUsergroup{
-	Name = "user",
-	Inherits = "user"
-}
-
--- Default admin usergroup
-CAMI.RegisterUsergroup{
-	Name = "admin",
-	Inherits = "user"
-}
-
--- Default superadmin usergroup
-CAMI.RegisterUsergroup{
-	Name = "superadmin",
-	Inherits = "admin"
-}
 
 --[[
 CAMI.UnregisterUsergroup
@@ -188,7 +183,7 @@ function CAMI.UsergroupInherits(usergroupName1, usergroupName2)
 		usergroupName1 = usergroups[usergroupName1] and
 						 usergroups[usergroupName1].Inherits or
 						 usergroupName1
-	until usergroups[usergroupName1] and
+	until not usergroups[usergroupName1] or
 		  usergroups[usergroupName1].Inherits == usergroupName1
 
 	-- One can only be sure the usergroup inherits from user if the
@@ -304,6 +299,8 @@ end
 --[[
 CAMI.PlayerHasAccess
 	Queries whether a certain player has the right to perform a certain action.
+	Note: this function does NOT return an immediate result!
+	The result is in the callback!
 
 	Parameters:
 		actorPly
@@ -343,21 +340,25 @@ CAMI.PlayerHasAccess
 -- Default access handler
 local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 	function(_, actorPly, privilegeName, callback, _, extraInfoTbl)
-		if not IsValid(actorPly) then return callback(false, "Fallback.") end
+		-- The server always has access in the fallback
+		if not IsValid(actorPly) then return callback(true, "Fallback.") end
 
 		local priv = privileges[privilegeName]
 
-		local fallback =
-			(not extraInfoTbl or not extraInfoTbl.Fallback) and
-				actorPly:IsAdmin() or
+		local fallback = extraInfoTbl and (
+			not extraInfoTbl.Fallback and actorPly:IsAdmin() or
 			extraInfoTbl.Fallback == "user" and true or
 			extraInfoTbl.Fallback == "admin" and actorPly:IsAdmin() or
-			extraInfoTbl.Fallback == "superadmin" and actorPly:IsSuperAdmin()
+			extraInfoTbl.Fallback == "superadmin" and actorPly:IsSuperAdmin())
 
 
 		if not priv then return callback(fallback, "Fallback.") end
 
-		callback(CAMI.UsergroupInherits(actorPly:GetUserGroup(), priv.MinAccess), "Fallback.")
+		callback(
+			priv.MinAccess == "user" or
+			priv.MinAccess == "admin" and actorPly:IsAdmin() or
+			priv.MinAccess == "superadmin" and actorPly:IsSuperAdmin()
+			, "Fallback.")
 	end,
 	["CAMI.SteamIDHasAccess"] =
 	function(_, _, _, callback)
@@ -371,10 +372,67 @@ extraInfoTbl)
 end
 
 --[[
+CAMI.GetPlayersWithAccess
+	Finds the list of currently joined players who have the right to perform a
+	certain action.
+	NOTE: this function will NOT return an immediate result!
+	The result is in the callback!
+
+	Parameters:
+		privilegeName
+			string
+			The name of the privilege.
+		callback
+			function(players)
+			This function will be called with the list of players with access.
+		targetPly
+			Optional.
+			The player on which the privilege is executed.
+		extraInfoTbl
+			Optional.
+			Table containing extra information.
+			Officially supported members:
+				Fallback
+					string
+					Either of user/admin/superadmin. When no admin mod replies,
+					the decision is based on the admin status of the user.
+					Defaults to admin if not given.
+				IgnoreImmunity
+					bool
+					Ignore any immunity mechanisms an admin mod might have.
+				CommandArguments
+					table
+					Extra arguments that were given to the privilege command.
+]]
+function CAMI.GetPlayersWithAccess(privilegeName, callback, targetPly,
+extraInfoTbl)
+	local allowedPlys = {}
+	local allPlys = player.GetAll()
+	local countdown = #allPlys
+
+	local function onResult(ply, hasAccess, _)
+		countdown = countdown - 1
+
+		if hasAccess then table.insert(allowedPlys, ply) end
+		if countdown == 0 then callback(allowedPlys) end
+	end
+
+	for _, ply in pairs(allPlys) do
+		CAMI.PlayerHasAccess(ply, privilegeName,
+			function(...) onResult(ply, ...) end,
+			targetPly, extraInfoTbl)
+	end
+end
+
+--[[
 CAMI.SteamIDHasAccess
 	Queries whether a player with a steam ID has the right to perform a certain
-	action. Note that the player does not need to be in the server for this to
+	action.
+	Note: the player does not need to be in the server for this to
 	work.
+
+	Note: this function does NOT return an immediate result!
+	The result is in the callback!
 
 	Parameters:
 		actorSteam
@@ -436,5 +494,31 @@ CAMI.SignalUserGroupChanged
 			Identifier for your own admin mod. Can be anything.
 ]]
 function CAMI.SignalUserGroupChanged(ply, old, new, source)
-	hook.Call("CAMI.PlayerUsergroupChanged", nil, ply, old, new)
+	hook.Call("CAMI.PlayerUsergroupChanged", nil, ply, old, new, source)
+end
+
+--[[
+CAMI.SignalSteamIDUserGroupChanged
+	Signify that your admin mod has changed the usergroup of a disconnected
+	player. This communicates to other admin mods what it thinks the usergroup
+	of a player should be.
+
+	Listen to the hook to receive the usergroup changes of other admin mods.
+
+	Parameters:
+		ply
+			string
+			The steam ID of the player for which the usergroup is changed
+		old
+			string
+			The previous usergroup of the player.
+		new
+			string
+			The new usergroup of the player.
+		source
+			any
+			Identifier for your own admin mod. Can be anything.
+]]
+function CAMI.SignalSteamIDUserGroupChanged(steamId, old, new, source)
+	hook.Call("CAMI.SteamIDUsergroupChanged", nil, steamId, old, new, source)
 end

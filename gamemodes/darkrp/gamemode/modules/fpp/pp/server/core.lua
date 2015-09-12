@@ -39,8 +39,10 @@ local function propSpawn(ply, model)
 		return false
 	end
 end
-hook.Add("PlayerSpawnProp", "FPP_SpawnProp", propSpawn)
+hook.Add("PlayerSpawnObject", "FPP_SpawnEffect", propSpawn) -- prevents precaching
+hook.Add("PlayerSpawnProp", "FPP_SpawnProp", propSpawn) -- PlayerSpawnObject isn't always called
 hook.Add("PlayerSpawnEffect", "FPP_SpawnEffect", propSpawn)
+hook.Add("PlayerSpawnRagdoll", "FPP_SpawnEffect", propSpawn)
 
 --------------------------------------------------------------------------------------
 --Helper function to get a setting from a player
