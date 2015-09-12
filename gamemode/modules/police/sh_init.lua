@@ -108,7 +108,6 @@ DarkRP.declareChatCommand{
     condition = fn.Compose{fn.Not, fn.Curry(fn.Eq, 2)(nil), plyMeta.getAgenda}
 }
 
-local getJobTable = fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}
 DarkRP.declareChatCommand{
     command = "lottery",
     description = "Start a lottery.",
