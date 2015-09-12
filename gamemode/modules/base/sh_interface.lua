@@ -388,7 +388,7 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
 DarkRP.PLAYER.getAgenda = DarkRP.stub{
     name = "getAgenda",
     description = "Get the agenda a player manages.",
-    deprecated = "Use ply:getAgendaTable() instad.",
+    deprecated = "Use ply:getAgendaTable() instead.",
     parameters = {
     },
     returns = {
