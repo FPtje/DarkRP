@@ -262,7 +262,7 @@ local function FinishDemote(vote, choice)
 end
 
 local function Demote(ply, args)
-    local tableargs = string.Explode(" ", args)
+    local tableargs = DarkRP.explodeArg(args)
     if #tableargs == 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("vote_specify_reason"))
         return ""
@@ -370,7 +370,7 @@ DarkRP.defineChatCommand("jobswitch", SwitchJob)
 
 
 local function DoTeamBan(ply, args)
-    args = string.Explode(" ", args)
+    args = DarkRP.explodeArg(args)
 
     local ent = args[1]
     local Team = args[2]

@@ -134,7 +134,7 @@ DarkRP.defineChatCommand("hitprice", function(ply, args)
 end)
 
 DarkRP.defineChatCommand("requesthit", function(ply, args)
-    args = string.Explode(' ', args)
+    args = DarkRP.explodeArg(args)
     local target = DarkRP.findPlayer(args[1])
     local traceEnt = ply:GetEyeTrace().Entity
     local hitman = IsValid(traceEnt) and traceEnt:IsPlayer() and traceEnt or Player(tonumber(args[2] or -1) or -1)
