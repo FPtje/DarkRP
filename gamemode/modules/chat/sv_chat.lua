@@ -180,6 +180,13 @@ hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 local function ConCommand(ply, _, args)
     if not args[1] then return end
 
+    -- Put quotes around the args that have spaces in them
+    for i, a in pairs(args) do
+        if string.find(a, " ") then
+            args[i] = '"' .. a .. '"'
+        end
+    end
+
     local cmd = string.lower(args[1])
     local arg = table.concat(args, ' ', 2)
     local tbl = DarkRP.getChatCommand(cmd)
