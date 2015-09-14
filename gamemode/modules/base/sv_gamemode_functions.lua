@@ -822,6 +822,9 @@ function GM:PlayerDisconnected(ply)
         end
     end
 
+    DarkRP.destroyQuestionsWithEnt(ply)
+    DarkRP.destroyVotesWithEnt(ply)
+
     local jobTable = ply:getJobTable()
     if jobTable.PlayerDisconnected then
         jobTable.PlayerDisconnected(ply)
