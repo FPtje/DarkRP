@@ -794,6 +794,7 @@ function GM:PlayerDisconnected(ply)
     local remList = collectRemoveEntities(ply)
     removeDelayed(remList, ply)
 
+    DarkRP.destroyQuestionsWithEnt(ply)
     DarkRP.destroyVotesWithEnt(ply)
 
     if isMayor and GetGlobalBool("DarkRP_LockDown") then -- Stop the lockdown
@@ -821,9 +822,6 @@ function GM:PlayerDisconnected(ply)
             v:setSelfDarkRPVar("agenda", agenda.text)
         end
     end
-
-    DarkRP.destroyQuestionsWithEnt(ply)
-    DarkRP.destroyVotesWithEnt(ply)
 
     local jobTable = ply:getJobTable()
     if jobTable.PlayerDisconnected then
