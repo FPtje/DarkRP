@@ -155,6 +155,27 @@ DarkRP.nickSortedPlayers = DarkRP.stub{
     metatable = DarkRP
 }
 
+DarkRP.explodeArg = DarkRP.stub{
+    name = "explodeArg",
+    description = "String arguments exploded into a table. It accounts for substrings in quotes, which makes it more intelligent than string.Explode",
+    parameters = {
+        {
+            name = "arg",
+            description = "The full string of the argument",
+            type = "string",
+            optional = false
+        },
+    },
+    returns = {
+        {
+            name = "args",
+            description = "The table of arguments",
+            type = "table"
+        }
+    },
+    metatable = DarkRP
+}
+
 
 DarkRP.formatMoney = DarkRP.stub{
     name = "formatMoney",

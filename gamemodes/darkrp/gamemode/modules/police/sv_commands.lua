@@ -356,7 +356,7 @@ local function FinishRevokeLicense(vote, win)
 end
 
 local function VoteRemoveLicense(ply, args)
-    local tableargs = string.Explode(" ", args)
+    local tableargs = DarkRP.explodeArg(args)
     if #tableargs == 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("vote_specify_reason"))
         return ""

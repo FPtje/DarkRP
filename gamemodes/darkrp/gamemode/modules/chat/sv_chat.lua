@@ -181,7 +181,7 @@ local function ConCommand(ply, _, args)
     if not args[1] then return end
 
     local cmd = string.lower(args[1])
-    local arg = table.concat(args, ' ', 2)
+    local arg = table.concat(fn.Map(function(x) return '"' .. x .. '"' end, args), ' ', 2)
     local tbl = DarkRP.getChatCommand(cmd)
     local time = CurTime()
 

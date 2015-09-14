@@ -211,3 +211,37 @@ function DarkRP.nickSortedPlayers()
     table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
     return plys
 end
+
+/*---------------------------------------------------------------------------
+Convert a string to a table of arguments
+---------------------------------------------------------------------------*/
+local bitlshift, stringgmatch, stringsub, tableinsert = bit.lshift, string.gmatch, string.sub, table.insert
+function DarkRP.explodeArg(arg)
+    local args = {}
+
+    local from, to, diff = 1, 0, 0
+    local inQuotes, wasQuotes = false, false
+
+    for c in stringgmatch(arg, '.') do
+        to = to + 1
+
+        if c == '"' then
+            inQuotes = not inQuotes
+            wasQuotes = true
+
+            continue
+        end
+
+        if c == ' ' and not inQuotes then
+            diff = wasQuotes and 1 or 0
+            wasQuotes = false
+            tableinsert(args, stringsub(arg, from + diff, to - 1 - diff))
+            from = to + 1
+        end
+    end
+    diff = wasQuotes and 1 or 0
+
+    if from ~= to + 1 then tableinsert(args, stringsub(arg, from + diff, to + 1 - bitlshift(diff, 1))) end
+
+    return args
+end
