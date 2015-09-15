@@ -33,7 +33,6 @@ local function BuyPistol(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-    args = DarkRP.explodeArg(args)[1]
 
     if not GAMEMODE.Config.enablebuypistol then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "/buy", ""))
@@ -141,8 +140,6 @@ local function BuyShipment(ply, args)
         return ""
     end
 
-    args = DarkRP.explodeArg(args)[1]
-
     local found, foundKey = DarkRP.getShipmentByName(args)
     if not found or found.noship or not GAMEMODE:CustomObjFitsMap(found) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "shipment"))
@@ -241,8 +238,6 @@ local function BuyVehicle(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-
-    args = DarkRP.explodeArg(args)[1]
 
     local found = false
     for k,v in pairs(CustomVehicles) do
@@ -349,8 +344,6 @@ local function BuyAmmo(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-
-    args = DarkRP.explodeArg(args)[1]
 
     if GAMEMODE.Config.noguns then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "ammo", ""))
