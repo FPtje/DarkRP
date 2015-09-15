@@ -5,7 +5,8 @@ local validChatCommand = {
     command = isstring,
     description = isstring,
     condition = fn.FOr{fn.Curry(fn.Eq, 2)(nil), isfunction},
-    delay = isnumber
+    delay = isnumber,
+    tableArgs = fn.FOr{fn.Curry(fn.Eq, 2)(nil), isbool},
 }
 
 local checkChatCommand = function(tbl)
