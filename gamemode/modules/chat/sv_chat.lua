@@ -65,6 +65,9 @@ local function RP_PlayerChat(ply, text, teamonly)
     }(text)
 
     if string.sub(text, 1, 1) == GAMEMODE.Config.chatCommandPrefix and tblCmd then
+        local args = string.sub(text, string.len(tblCmd.command) + 3, string.len(text))
+        args = tblCmd.tableArgs and DarkRP.explodeArg(args) or args
+
         ply.DrpCommandDelays = ply.DrpCommandDelays or {}
         if tblCmd.delay and ply.DrpCommandDelays[tblCmd.command] and ply.DrpCommandDelays[tblCmd.command] > CurTime() - tblCmd.delay then
             return ""
@@ -72,7 +75,7 @@ local function RP_PlayerChat(ply, text, teamonly)
 
         ply.DrpCommandDelays[tblCmd.command] = CurTime()
 
-        callback, DoSayFunc = tblCmd.callback(ply, string.sub(text, string.len(tblCmd.command) + 3, string.len(text)))
+        callback, DoSayFunc = tblCmd.callback(ply, args)
         if callback == "" then
             return "", "", DoSayFunc
         end
@@ -179,10 +182,11 @@ hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
 local function ConCommand(ply, _, args)
     if not args[1] then return end
-
     local cmd = string.lower(args[1])
-    local arg = table.concat(args, ' ', 2)
     local tbl = DarkRP.getChatCommand(cmd)
+
+    table.remove(args, 1) -- Remove subcommand
+    local arg = tbl.tableArgs and args or table.concat(args, ' ')
     local time = CurTime()
 
     if not tbl then return end
