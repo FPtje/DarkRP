@@ -373,7 +373,7 @@ local keyValueActions = {
     ["DarkRPNonOwnable"] = function(ent, val) ent:setKeysNonOwnable(tobool(val)) end,
     ["DarkRPTitle"]      = function(ent, val) ent:setKeysTitle(val) end,
     ["DarkRPDoorGroup"]  = function(ent, val) if RPExtraTeamDoors[val] then ent:setDoorGroup(val) end end,
-    ["DarkRPCanLockpick"] = function(ent, val) ent.DarkRPCanLockpick = val end
+    ["DarkRPCanLockpick"] = function(ent, val) ent.DarkRPCanLockpick = tobool(val) end
 }
 
 local function onKeyValue(ent, key, value)
