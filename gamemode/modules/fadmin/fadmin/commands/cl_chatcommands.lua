@@ -80,12 +80,14 @@ hook.Add("FinishChat", "FAdmin_Chat_autocomplete", function() hook.Remove("HUDPa
 local i = 1
 hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
     if not FAdmin.GlobalSetting.FAdmin then return end
-    if #Options > 0 and not string.find(text, " ") then
-        return string.sub(Options[1], 1, string.find(Options[1], " "))
-    elseif #Options > 0 and string.find(text, " ") then
-        i = i + 1
-        if i > #player.GetAll() then i = 1 end
+	for command, _ in pairs(Options) do
+		if string.find(text, " ") == nil then
+			return string.sub(command, 1, string.find(command, " "))
+		elseif string.find(text, " ") then
+			i = i + 1
+			if i > #player.GetAll() then i = 1 end
 
-        return string.sub(Options[1], 1, string.find(Options[1], " ")) .. string.sub(player.GetAll()[i]:Nick(), 1, string.find(player.GetAll()[i]:Nick(), " "))
-    end
+			return string.sub(command, 1, string.find(command, " ")).." "..string.sub(player.GetAll()[i]:Nick(), 1, string.find(player.GetAll()[i]:Nick(), " "))
+		end
+	end
 end)
