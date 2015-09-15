@@ -172,7 +172,7 @@ DarkRP.defineChatCommand("dropmoney", DropMoney, 0.3)
 DarkRP.defineChatCommand("moneydrop", DropMoney, 0.3)
 
 local function CreateCheque(ply, args)
-    local argt = DarkRP.explodeArg(args)
+    local argt = string.Explode(" ", args)
     local recipient = DarkRP.findPlayer(argt[1])
     local amount = tonumber(argt[2]) or 0
 
@@ -226,7 +226,7 @@ DarkRP.defineChatCommand("cheque", CreateCheque, 0.3)
 DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
 
 local function ccSetMoney(ply, arg)
-    local args = DarkRP.explodeArg(arg)
+    local args = string.Explode(" ", arg)
 
     if not tonumber(args[2]) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
@@ -261,7 +261,7 @@ end
 DarkRP.definePrivilegedChatCommand("setmoney", "DarkRP_SetMoney", ccSetMoney)
 
 local function ccAddMoney(ply, arg)
-    local args = DarkRP.explodeArg(arg)
+    local args = string.Explode(" ", arg)
 
     if not tonumber(args[2]) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
@@ -295,7 +295,7 @@ end
 DarkRP.definePrivilegedChatCommand("addmoney", "DarkRP_SetMoney", ccAddMoney)
 
 local function ccSetSalary(ply, arg)
-    local args = DarkRP.explodeArg(arg)
+    local args = string.Explode(" ", arg)
 
     if not tonumber(args[2]) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
