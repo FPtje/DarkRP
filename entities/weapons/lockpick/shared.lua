@@ -68,7 +68,7 @@ function SWEP:PrimaryAttack()
     self:GetOwner():LagCompensation(false)
     local ent = trace.Entity
 
-    if not IsValid(ent) then return end
+    if not IsValid(ent) or ent.DarkRPCanLockpick == false then return end
     local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent, trace)
 
     if canLockpick == false then return end
