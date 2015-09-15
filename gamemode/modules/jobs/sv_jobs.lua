@@ -262,21 +262,17 @@ local function FinishDemote(vote, choice)
 end
 
 local function Demote(ply, args)
-    local tableargs = string.Explode(" ", args)
-    if #tableargs == 1 then
+    if #args == 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("vote_specify_reason"))
         return ""
     end
-    local reason = ""
-    for i = 2, #tableargs, 1 do
-        reason = reason .. " " .. tableargs[i]
-    end
-    reason = string.sub(reason, 2)
+    local reason = table.concat(args, ' ', 2)
+
     if string.len(reason) > 99 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", "<100"))
         return ""
     end
-    local p = DarkRP.findPlayer(tableargs[1])
+    local p = DarkRP.findPlayer(args[1])
     if p == ply then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_demote_self"))
         return ""
@@ -288,40 +284,41 @@ local function Demote(ply, args)
         return ""
     end
 
-    if p then
-        if CurTime() - ply.LastVoteCop < 80 then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
-            return ""
-        end
-        if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
-        else
-            DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Nick(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
-
-            local voteInfo = DarkRP.createVote(p:Nick() .. ":\n" .. DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote, {
-                [p] = true,
-                [ply] = true
-            }, function(vote)
-                if not IsValid(vote.target) then return end
-                vote.target.IsBeingDemoted = nil
-            end, {
-                source = ply,
-                reason = reason
-            })
-
-            if voteInfo then
-                -- Vote has started
-                DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
-                DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
-                p.IsBeingDemoted = true
-            end
-            ply.LastVoteCop = CurTime()
-        end
-        return ""
-    else
+    if not p then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
         return ""
     end
+
+    if CurTime() - ply.LastVoteCop < 80 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demote"))
+        return ""
+    end
+
+    if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
+    else
+        DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Nick(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
+
+        local voteInfo = DarkRP.createVote(p:Nick() .. ":\n" .. DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote, {
+            [p] = true,
+            [ply] = true
+        }, function(vote)
+            if not IsValid(vote.target) then return end
+            vote.target.IsBeingDemoted = nil
+        end, {
+            source = ply,
+            reason = reason
+        })
+
+        if voteInfo then
+            -- Vote has started
+            DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
+            DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
+            p.IsBeingDemoted = true
+        end
+        ply.LastVoteCop = CurTime()
+    end
+    return ""
 end
 DarkRP.defineChatCommand("demote", Demote)
 
@@ -370,8 +367,6 @@ DarkRP.defineChatCommand("jobswitch", SwitchJob)
 
 
 local function DoTeamBan(ply, args)
-    args = string.Explode(" ", args)
-
     local ent = args[1]
     local Team = args[2]
 
@@ -413,15 +408,13 @@ end
 DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
 local function DoTeamUnBan(ply, args)
-    local a,b = string.find(args, " ")
-
-    if not a or a == #args then
+    if #args < 2 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
         return
     end
 
-    local ent = string.sub(args, 1, a - 1)
-    local Team = string.sub(args, a + 1)
+    local ent = args[1]
+    local Team = args[2]
 
     local target = DarkRP.findPlayer(ent)
     if not target or not IsValid(target) then

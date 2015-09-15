@@ -11,7 +11,8 @@ DarkRP.declareChatCommand{
     command = "demote",
     description = "Demote a player from their job",
     delay = 1.5,
-    condition = fn.Compose{fn.Curry(fn.Flip(fn.Gt), 2)(1), fn.Length, player.GetAll}
+    condition = fn.Compose{fn.Curry(fn.Flip(fn.Gt), 2)(1), fn.Length, player.GetAll},
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
@@ -38,11 +39,13 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "teamban",
     description = "Ban someone from getting a certain job",
-    delay = 1.5
+    delay = 1.5,
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
     command = "teamunban",
     description = "Undo a teamban",
-    delay = 1.5
+    delay = 1.5,
+    tableArgs = true
 }

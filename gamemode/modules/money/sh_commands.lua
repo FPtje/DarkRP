@@ -19,13 +19,15 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "cheque",
     description = "Write a cheque for a specific person.",
-    delay = 1.5
+    delay = 1.5,
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
     command = "check",
     description = "Write a cheque for a specific person.",
-    delay = 1.5
+    delay = 1.5,
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
