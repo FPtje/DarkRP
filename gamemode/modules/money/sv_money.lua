@@ -225,9 +225,7 @@ end
 DarkRP.defineChatCommand("cheque", CreateCheque, 0.3)
 DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
 
-local function ccSetMoney(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccSetMoney(ply, args)
     if not tonumber(args[2]) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
@@ -260,9 +258,7 @@ local function ccSetMoney(ply, arg)
 end
 DarkRP.definePrivilegedChatCommand("setmoney", "DarkRP_SetMoney", ccSetMoney)
 
-local function ccAddMoney(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccAddMoney(ply, args)
     if not tonumber(args[2]) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
@@ -294,9 +290,7 @@ local function ccAddMoney(ply, arg)
 end
 DarkRP.definePrivilegedChatCommand("addmoney", "DarkRP_SetMoney", ccAddMoney)
 
-local function ccSetSalary(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccSetSalary(ply, args)
     if not tonumber(args[2]) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
