@@ -9,6 +9,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
+    self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
     local phys = self:GetPhysicsObject()
     self.nodupe = true
