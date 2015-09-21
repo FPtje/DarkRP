@@ -172,9 +172,8 @@ DarkRP.defineChatCommand("dropmoney", DropMoney, 0.3)
 DarkRP.defineChatCommand("moneydrop", DropMoney, 0.3)
 
 local function CreateCheque(ply, args)
-    local argt = string.Explode(" ", args)
-    local recipient = DarkRP.findPlayer(argt[1])
-    local amount = tonumber(argt[2]) or 0
+    local recipient = DarkRP.findPlayer(args[1])
+    local amount = tonumber(args[2]) or 0
 
     if not recipient then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "recipient (1)"))

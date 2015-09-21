@@ -77,14 +77,16 @@ DarkRP.declareChatCommand{
     command = "warrant",
     description = "Get a search warrant for a certain player. With this warrant you can search their house.",
     delay = 1.5,
-    condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}}
+    condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}},
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
     command = "wanted",
     description = "Make a player wanted. This is needed to get them arrested.",
     delay = 1.5,
-    condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}}
+    condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}},
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
@@ -132,7 +134,8 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "arrest",
     description = "Forcefully arrest a player.",
-    delay = 0.5
+    delay = 0.5,
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{
@@ -173,7 +176,8 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "demotelicense",
     description = "Start a vote to get someone's license revoked.",
-    delay = 1.5
+    delay = 1.5,
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{

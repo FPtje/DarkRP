@@ -64,5 +64,6 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
 
     local haspriv = fn.Partial(fn.Flip(FAdmin.Access.PlayerHasPrivilege), "SeeAdmins")
     local plys = fn.Filter(haspriv, player.GetAll())
+    if #plys == 0 then return end
     FAdmin.Messages.ConsoleNotify(plys, action)
 end

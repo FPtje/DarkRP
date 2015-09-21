@@ -139,9 +139,8 @@ end
 DarkRP.defineChatCommand("cr", CombineRequest, 1.5)
 
 local function warrantCommand(ply, args)
-    local expl = string.Explode(" ", args or "")
-    local target = DarkRP.findPlayer(expl[1])
-    local reason = table.concat(expl, " ", 2)
+    local target = DarkRP.findPlayer(args[1])
+    local reason = table.concat(args, " ", 2)
 
     local canRequest, message = hook.Call("canRequestWarrant", DarkRP.hooks, target, ply, reason)
     if not canRequest then
@@ -173,9 +172,8 @@ end
 DarkRP.defineChatCommand("warrant", warrantCommand)
 
 local function wantedCommand(ply, args)
-    local expl = string.Explode(" ", args or "")
-    local target = DarkRP.findPlayer(expl[1])
-    local reason = table.concat(expl, " ", 2)
+    local target = DarkRP.findPlayer(args[1])
+    local reason = table.concat(args, " ", 2)
 
     local canWanted, message = hook.Call("canWanted", DarkRP.hooks, target, ply, reason)
     if not canWanted then
@@ -207,9 +205,7 @@ DarkRP.defineChatCommand("unwanted", unwantedCommand)
 /*---------------------------------------------------------------------------
 Admin commands
 ---------------------------------------------------------------------------*/
-local function ccArrest(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccArrest(ply, args)
     if DarkRP.jailPosCount() == 0 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_jail_pos"))
         return

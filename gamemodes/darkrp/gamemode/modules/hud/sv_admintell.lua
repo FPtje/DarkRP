@@ -1,9 +1,7 @@
 /*---------------------------------------------------------------------------
 Messages
 ---------------------------------------------------------------------------*/
-local function ccTell(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccTell(ply, args)
     local target = DarkRP.findPlayer(args[1])
 
     if target then

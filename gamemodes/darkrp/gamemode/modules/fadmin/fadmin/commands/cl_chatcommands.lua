@@ -77,15 +77,22 @@ end)
 
 hook.Add("FinishChat", "FAdmin_Chat_autocomplete", function() hook.Remove("HUDPaint", "FAdmin_Chat_autocomplete") end)
 
-local i = 1
+local plyIndex = 1
+
 hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
     if not FAdmin.GlobalSetting.FAdmin then return end
-    if #Options > 0 and not string.find(text, " ") then
-        return string.sub(Options[1], 1, string.find(Options[1], " "))
-    elseif #Options > 0 and string.find(text, " ") then
-        i = i + 1
-        if i > #player.GetAll() then i = 1 end
 
-        return string.sub(Options[1], 1, string.find(Options[1], " ")) .. string.sub(player.GetAll()[i]:Nick(), 1, string.find(player.GetAll()[i]:Nick(), " "))
+    for command, _ in pairs(Options) do
+        if string.find(text, " ") == nil then
+            return string.sub(command, 1, string.find(command, " "))
+        elseif string.find(text, " ") then
+            plyIndex = plyIndex + 1
+
+            if plyIndex > #player.GetAll() then
+                plyIndex = 1
+            end
+
+            return string.sub(command, 1, string.find(command, " ")) .. " " .. string.sub(player.GetAll()[plyIndex]:Nick(), 1, string.find(player.GetAll()[plyIndex]:Nick(), " "))
+        end
     end
 end)

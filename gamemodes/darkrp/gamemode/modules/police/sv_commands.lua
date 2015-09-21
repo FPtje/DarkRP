@@ -356,21 +356,20 @@ local function FinishRevokeLicense(vote, win)
 end
 
 local function VoteRemoveLicense(ply, args)
-    local tableargs = string.Explode(" ", args)
-    if #tableargs == 1 then
+    if #args == 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("vote_specify_reason"))
         return ""
     end
     local reason = ""
-    for i = 2, #tableargs, 1 do
-        reason = reason .. " " .. tableargs[i]
+    for i = 2, #args, 1 do
+        reason = reason .. " " .. args[i]
     end
     reason = string.sub(reason, 2)
     if string.len(reason) > 22 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demotelicense", "<23"))
         return ""
     end
-    local p = DarkRP.findPlayer(tableargs[1])
+    local p = DarkRP.findPlayer(args[1])
     if p then
         if CurTime() - ply.LastVoteCop < 80 then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(80 - (CurTime() - ply:GetTable().LastVoteCop)), "/demotelicense"))
@@ -394,7 +393,7 @@ local function VoteRemoveLicense(ply, args)
         end
         return ""
     else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(tableargs[1])))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args[1])))
         return ""
     end
 end
