@@ -17,6 +17,8 @@ local function Jail(ply, cmd, args)
         local jailDistance = 50
         if not IsValid(target) then continue end
 
+        ply:ExitVehicle()
+
         local JailProps = {}
         if JailType == "unjail" or string.lower(cmd) == "unjail" then
             if target.FAdminJailProps then
