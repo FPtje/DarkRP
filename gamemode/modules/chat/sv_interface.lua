@@ -47,6 +47,40 @@ DarkRP.definePrivilegedChatCommand = DarkRP.stub{
 }
 
 DarkRP.hookStub{
+    name = "onPlayerSay",
+    description = "Called right before a players message is shown in chat.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who spoke.",
+            type = "Player"
+        },
+        {
+            name = "command",
+            description = "They command they used or an empty string if no command is used.",
+            type = "string"
+        },
+        {
+            name = "text",
+            description = "The thing they said.",
+            type = "string"
+        },
+        {
+            name = "teamonly",
+            description = "Whether they said it to their team only.",
+            type = "boolean"
+        }
+    },
+    returns = {
+        {
+            name = "overrideText",
+            description = "Overrides the message that will be put in everyone's chat box. Return nil to not change behaviour.",
+            type = "string"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "PostPlayerSay",
     description = "Called after a player has said something.",
     parameters = {
