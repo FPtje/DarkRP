@@ -150,14 +150,14 @@ hook.Add("PlayerSpawnObject", "FAdmin_jailed", function(ply)
     end
 end)
 
-hook.Add("CanPlayerEnterVehicle","FAdmin_jailed",function(ply)
+hook.Add("CanPlayerEnterVehicle", "FAdmin_jailed", function(ply)
     if ply:FAdmin_GetGlobal("fadmin_jailed") then
         return false
     end
 end)
 
 --Kill stupid addons that does not call CanPlayerEnterVehicle (like Sit Anywhere script)
-hook.Add("PlayerEnteredVehicle","FAdmin_jailed",function(ply) 
+hook.Add("PlayerEnteredVehicle", "FAdmin_jailed", function(ply) 
     if ply:FAdmin_GetGlobal("fadmin_jailed") then
         ply:ExitVehicle()
     end
