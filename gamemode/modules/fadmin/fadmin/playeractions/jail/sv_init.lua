@@ -14,8 +14,8 @@ local function Jail(ply, cmd, args)
 
     for _, target in pairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
-        local jailDistance = 50
         if not IsValid(target) then continue end
+        local jailDistance = 50
 
         ply:ExitVehicle()
 
@@ -147,5 +147,18 @@ end)
 hook.Add("PlayerSpawnObject", "FAdmin_jailed", function(ply)
     if ply:FAdmin_GetGlobal("fadmin_jailed") then
         return false
+    end
+end)
+
+hook.Add("CanPlayerEnterVehicle", "FAdmin_jailed", function(ply)
+    if ply:FAdmin_GetGlobal("fadmin_jailed") then
+        return false
+    end
+end)
+
+--Kill stupid addons that does not call CanPlayerEnterVehicle (like Sit Anywhere script)
+hook.Add("PlayerEnteredVehicle", "FAdmin_jailed", function(ply) 
+    if ply:FAdmin_GetGlobal("fadmin_jailed") then
+        ply:ExitVehicle()
     end
 end)
