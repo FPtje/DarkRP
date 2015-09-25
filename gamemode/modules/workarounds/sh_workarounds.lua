@@ -238,8 +238,8 @@ local deprecated = {
     {command = "rp_givelicense",        alternative = "setlicense"              },
     {command = "rp_unlockdown",         alternative = "unlockdown"              },
     {command = "rp_lockdown",           alternative = "lockdown"                },
-    {command = "rp_unarrest",           alternative = "forceunarrest"           },
-    {command = "rp_arrest",             alternative = "forcearrest"             },
+    {command = "rp_unarrest",           alternative = "unarrest"                },
+    {command = "rp_arrest",             alternative = "arrest"                  },
     {command = "rp_cancelvote",         alternative = "forcecancelvote"         },
 }
 
