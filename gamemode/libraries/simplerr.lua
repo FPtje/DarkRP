@@ -350,7 +350,7 @@ local function getStack(i, start)
 
     -- Invariant: stack level (i + count) >= 2 and <= last stack item
     for count = 1, math.huge do -- user visible count
-        info = debug.getinfo(i + count, "Sln")
+        local info = debug.getinfo(i + count, "Sln")
         if not info then break end
 
         table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"))
