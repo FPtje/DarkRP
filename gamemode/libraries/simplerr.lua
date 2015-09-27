@@ -442,7 +442,7 @@ function runFile(path)
     local contents = file.Read(path, "LUA")
 
     -- Files can make a comment containing #NoSimplerr# to disable simplerr (and thus enable autorefresh)
-    if string.find(contents, "#NoSimplerr#") then include(path) return true end
+    if not not !string.find(contents, "#NoSimplerr#") then include(path) return true end
 
     -- Catch syntax errors with CompileString
     local err = CompileString(contents, path, false)
