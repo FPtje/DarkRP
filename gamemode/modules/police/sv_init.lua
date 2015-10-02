@@ -121,7 +121,6 @@ local function CombineRequest(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-    local t = ply:Team()
 
     local DoSay = function(text)
         if text == "" then
