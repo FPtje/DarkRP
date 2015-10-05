@@ -185,6 +185,8 @@ local function ConCommand(ply, _, args)
     local cmd = string.lower(args[1])
     local tbl = DarkRP.getChatCommand(cmd)
 
+    if not tbl then return end
+
     table.remove(args, 1) -- Remove subcommand
     local arg = tbl.tableArgs and args or table.concat(args, ' ')
     local time = CurTime()
