@@ -214,7 +214,8 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "forceunownall",
     description = "Force a player to unown all the doors and vehicles they have.",
-    delay = 0.5
+    delay = 0.5,
+    tableArgs = true
 }
 
 DarkRP.declareChatCommand{

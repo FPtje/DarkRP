@@ -234,9 +234,7 @@ local function ccArrest(ply, args)
 end
 DarkRP.definePrivilegedChatCommand("arrest", "DarkRP_AdminCommands", ccArrest)
 
-local function ccUnarrest(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccUnarrest(ply, args)
     local targets = DarkRP.findPlayers(args[1])
 
     if not targets then

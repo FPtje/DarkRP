@@ -19,7 +19,7 @@ end
 DarkRP.definePrivilegedChatCommand("forceunown", "DarkRP_SetDoorOwner", ccDoorUnOwn)
 
 local function unownAll(ply, args)
-    local target = DarkRP.findPlayer(args)
+    local target = DarkRP.findPlayer(args[1])
 
     if not IsValid(target) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args))
