@@ -65,7 +65,7 @@ end
 concommand.Add("_DarkRP_SignLetter", function(ply, cmd, args)
     if not args[1] or ply:EntIndex() == 0 then return end
     local letter = ents.GetByIndex(tonumber(args[1]))
-
+    if letter:GetClass() != "letter" then return end
     letter:SignLetter(ply)
 end)
 
