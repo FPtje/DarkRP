@@ -117,6 +117,7 @@ function SWEP:PrimaryAttack()
         else
             if not ent.Babygod then
                 ent:arrest(nil, self:GetOwner())
+                player:AddMoney(100)
                 DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self:GetOwner():Nick()))
 
                 if self:GetOwner().SteamName then
