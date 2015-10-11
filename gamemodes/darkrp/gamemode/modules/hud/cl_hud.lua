@@ -339,7 +339,7 @@ local function DrawEntityDisplay()
             local unitPos = pos:GetNormalized()
             if unitPos:Dot(aimVec) > 0.95 then
                 local trace = util.QuickTrace(shootPos, pos, localplayer)
-                if trace.Hit and trace.Entity ~= ply then return end
+                if trace.Hit and trace.Entity ~= ply then break end
                 ply:drawPlayerInfo()
             end
         end
