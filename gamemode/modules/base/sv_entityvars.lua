@@ -110,8 +110,18 @@ local function setRPName(ply, args)
 
     local target = DarkRP.findPlayer(args[1])
 
-    if target then
-        local oldname = target:Nick()
+    if not target then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args[1]))
+        return
+    end
+
+    local oldname = target:Nick()
+
+    DarkRP.retrieveRPNames(name, function(taken)
+        if taken then
+            DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("unable", "RPname", DarkRP.getPhrase("already_taken")))
+            return
+        end
 
         DarkRP.storeRPName(target, name)
         target:setDarkRPVar("rpname", name)
@@ -130,9 +140,7 @@ local function setRPName(ply, args)
         else
             DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s name to " .. name, Color(30, 30, 30))
         end
-    else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args[1]))
-    end
+    end)
 end
 DarkRP.definePrivilegedChatCommand("forcerpname", "DarkRP_AdminCommands", setRPName)
 
@@ -158,7 +166,7 @@ local function RPName(ply, args)
         return ""
     end
 
-    args = args:find"^%s*$" and '' or args:match'^%s*(.*%S)'
+    args = args:find"^%s*$" and '' or args:match"^%s*(.*%S)"
 
     local canChangeName, reason = hook.Call("CanChangeRPName", GAMEMODE, ply, args)
     if canChangeName == false then
