@@ -228,8 +228,7 @@ function DarkRP.storeRPName(ply, name)
     hook.Call("onPlayerChangedName", nil, ply, ply:getDarkRPVar("rpname"), name)
     ply:setDarkRPVar("rpname", name)
 
-    MySQLite.query([[DELETE FROM darkrp_player WHERE rpname = ]] .. MySQLite.SQLStr(name) .. ";", -- delete any other people with the same name
-        fp{MySQLite.query, [[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";", fn.Id, fn.Id})
+    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
 function DarkRP.retrieveRPNames(name, callback)
