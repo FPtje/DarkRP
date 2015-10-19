@@ -122,7 +122,7 @@ local moduleLoaded
 local function loadMySQLModule()
     if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 
-    moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
+    local moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
 
     if not moo and not tmsql then
         error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.")
