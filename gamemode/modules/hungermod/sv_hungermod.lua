@@ -16,6 +16,16 @@ local function HMPlayerInitialSpawn(ply)
 end
 hook.Add("PlayerInitialSpawn", "HMPlayerInitialSpawn", HMPlayerInitialSpawn)
 
+local function HMAFKHook(ply, afk)
+    if afk then
+        ply.preAFKHunger = ply:getDarkRPVar("Energy")
+    else
+        ply:setDarkRPVar("Energy", ply.preAFKHunger or 100)
+        ply.preAFKHunger = nil
+    end
+end
+hook.Add("playerSetAFK", "Hungermod", HMAFKHook)
+
 timer.Simple(0, function()
     for k, v in pairs(player.GetAll()) do
         if v:getDarkRPVar("Energy") ~= nil then continue end

@@ -67,6 +67,7 @@ FPP.Settings.FPP_ENTITYDAMAGE1 = {
 	checkconstrained = 0,
 	iswhitelist = 0}
 FPP.Settings.FPP_GLOBALSETTINGS1 = {
+	freezedisconnected = 0,
 	cleanupdisconnected = 1,
 	cleanupdisconnectedtime = 120,
 	cleanupadmin = 1,

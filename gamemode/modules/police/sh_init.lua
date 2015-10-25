@@ -141,7 +141,8 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "unarrest",
     description = "Forcefully unarrest a player.",
-    delay = 0.5
+    delay = 0.5,
+    tableArgs = true
 }
 
 local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isMayor), player.GetAll}

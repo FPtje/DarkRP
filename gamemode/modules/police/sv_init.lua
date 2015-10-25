@@ -121,7 +121,6 @@ local function CombineRequest(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-    local t = ply:Team()
 
     local DoSay = function(text)
         if text == "" then
@@ -235,9 +234,7 @@ local function ccArrest(ply, args)
 end
 DarkRP.definePrivilegedChatCommand("arrest", "DarkRP_AdminCommands", ccArrest)
 
-local function ccUnarrest(ply, arg)
-    local args = string.Explode(" ", arg)
-
+local function ccUnarrest(ply, args)
     local targets = DarkRP.findPlayers(args[1])
 
     if not targets then
@@ -316,6 +313,8 @@ end
 hook.Add("PlayerInitialSpawn", "Arrested", function(ply)
     if not arrestedPlayers[ply:SteamID()] then return end
     local time = GAMEMODE.Config.jailtimer
-    ply:arrest(time)
+    -- Delay the actual arrest by a single frame to allow
+    -- the player to initialise
+    timer.Simple(0, fp{ply.arrest, ply, time})
     DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("jail_punishment", time))
 end)
