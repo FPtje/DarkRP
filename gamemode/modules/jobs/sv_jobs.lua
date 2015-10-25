@@ -185,6 +185,10 @@ function meta:teamBan(t, time)
 
     local group = DarkRP.getDemoteGroup(t)
     self.bannedfrom[group] = true
+    
+	if self:Team()==t then
+		self:changeTeam(GAMEMODE.DefaultTeam,true)
+	end
 
     if time == 0 then return end
     timer.Simple(time or GAMEMODE.Config.demotetime, function()
