@@ -249,9 +249,9 @@ DarkRP.notify = DarkRP.stub{
     parameters = {
         {
             name = "ply",
-            description = "The receiver of the message.",
-            type = "Player",
-            optional = false
+            description = "The receiver(s) of the message.",
+            type = "Player, table",
+            optional = true
         },
         {
             name = "msgType",

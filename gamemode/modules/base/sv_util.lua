@@ -1,8 +1,12 @@
 function DarkRP.notify(ply, msgtype, len, msg)
-    if not IsValid(ply) then
-        -- Dedicated erver console
-        print(msg)
-        return
+    if not istable(ply) then
+        if not IsValid(ply) then
+            -- Dedicated server console
+            print(msg)
+            return
+        end
+
+        ply = {ply}
     end
 
     umsg.Start("_Notify", ply)
