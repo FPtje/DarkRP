@@ -1,11 +1,20 @@
 function DarkRP.notify(ply, msgtype, len, msg)
-    if not IsValid(ply) then
-        -- Dedicated erver console
-        print(msg)
-        return
+    if not istable(ply) then
+        if not IsValid(ply) then
+            -- Dedicated server console
+            print(msg)
+            return
+        end
+
+        ply = {ply}
     end
 
-    umsg.Start("_Notify", ply)
+    local rcp = RecipientFilter()
+    for k, v in pairs(ply) do
+        rcp:AddPlayer(v)
+    end
+
+    umsg.Start("_Notify", rcp)
         umsg.String(msg)
         umsg.Short(msgtype)
         umsg.Long(len)
