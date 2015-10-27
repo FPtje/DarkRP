@@ -9,7 +9,12 @@ function DarkRP.notify(ply, msgtype, len, msg)
         ply = {ply}
     end
 
-    umsg.Start("_Notify", ply)
+    local rcp = RecipientFilter()
+    for k, v in pairs(ply) do
+        rcp:AddPlayer(v)
+    end
+
+    umsg.Start("_Notify", rcp)
         umsg.String(msg)
         umsg.Short(msgtype)
         umsg.Long(len)
