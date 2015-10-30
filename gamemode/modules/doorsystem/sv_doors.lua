@@ -5,6 +5,20 @@ local pmeta = FindMetaTable("Player")
 Functions
 ---------------------------------------------------------------------------*/
 
+function meta:doorIndex()
+    return self:CreatedByMap() and self:MapCreationID() or nil
+end
+
+function DarkRP.doorToEntIndex(num)
+    local ent = ents.GetMapCreatedEntity(num)
+
+    return IsValid(ent) and ent:EntIndex() or nil
+end
+
+function DarkRP.doorIndexToEnt(num)
+    return ents.GetMapCreatedEntity(num) or NULL
+end
+
 function meta:isLocked()
     local save = self:GetSaveTable()
     return save and ((self:isDoor() and save.m_bLocked) or (self:IsVehicle() and save.VehicleLocked))

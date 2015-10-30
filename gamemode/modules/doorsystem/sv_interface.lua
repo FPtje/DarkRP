@@ -1,3 +1,59 @@
+DarkRP.doorToEntIndex = DarkRP.stub{
+    name = "doorToEntIndex",
+    description = "Get an ENT index from a door index.",
+    parameters = {
+        {
+            name = "index",
+            description = "The door index",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "index",
+            description = "The ENT index",
+            type = "number",
+        }
+    },
+    metatable = DarkRP
+}
+
+DarkRP.doorIndexToEnt = DarkRP.stub{
+    name = "doorIndexToEnt",
+    description = "Get the entity of a door index (inverse of ent:doorIndexToEnt()). Note: the door MUST have been created by the map!",
+    parameters = {
+        {
+            name = "index",
+            description = "The door index",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "door",
+            description = "The door entity",
+            type = "Entity",
+        }
+    },
+    metatable = DarkRP
+}
+
+DarkRP.ENTITY.doorIndex = DarkRP.stub{
+    name = "doorIndex",
+    description = "Get the door index of a door. Use this to store door information in the database.",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "index",
+            description = "The door index.",
+            type = "number"
+        }
+    },
+    metatable = DarkRP.ENTITY
+}
 
 DarkRP.ENTITY.keysLock = DarkRP.stub{
     name = "keysLock",
