@@ -721,3 +721,56 @@ DarkRP.hookStub{
 
     }
 }
+
+DarkRP.hookStub{
+    name = "canPropertyTax",
+    description = "Called right before a player's property is taxed. This hook differs from onPropertyTax in that onPropertyTax is called AFTER the taxing. With this hook, one can influence the taxing process.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player whose property will be taxed.",
+            type = "Player"
+        },
+        {
+            name = "tax",
+            description = "The amount of money that will be taxed (unless overridden by this hook).",
+            type = "number"
+        }
+    },
+    returns = {
+        {
+            name = "shouldTax",
+            description = "Return false here to prevent the doors from being taxed.",
+            type = "boolean"
+        },
+        {
+            name = "taxOverride",
+            description = "Override the tax amount.",
+            type = "number"
+        }
+    }
+}
+
+DarkRP.hookStub{
+    name = "onPropertyTax",
+    description = "Called right AFTER a player's property is taxed. Please use canPropertyTax if you want to influence the taxing process.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player whose property has been taxed.",
+            type = "Player"
+        },
+        {
+            name = "tax",
+            description = "The amount of money that has been taxed.",
+            type = "number"
+        },
+        {
+            name = "couldAfford",
+            description = "Whether the player was able to afford the tax.",
+            type = "boolean"
+        }
+    },
+    returns = {
+    }
+}

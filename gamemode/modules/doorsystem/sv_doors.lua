@@ -145,7 +145,15 @@ function pmeta:doPropertyTax()
     local price = 10
     local tax = price * numowned + math.random(-5, 5)
 
-    if self:canAfford(tax) then
+    local shouldTax, taxOverride = hook.Run("canPropertyTax", self, tax)
+
+    if shouldTax == false then return end
+
+    tax = taxOverride or tax
+
+    local canAfford = self:canAfford(tax)
+
+    if canAfford then
         if tax ~= 0 then
             self:addMoney(-tax)
             DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
@@ -154,6 +162,8 @@ function pmeta:doPropertyTax()
         DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
         self:keysUnOwnAll()
     end
+
+    hook.Run("onPropertyTax", self, tax, canAfford)
 end
 
 function pmeta:initiateTax()
