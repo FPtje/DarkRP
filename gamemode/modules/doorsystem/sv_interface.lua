@@ -698,6 +698,35 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "canTax",
+    description = "Called before a player pays taxes. This hook differs from onPaidTax in that this hook can prevent the taxing and change the tax amount.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who was taxed.",
+            type = "Player"
+        },
+        {
+            name = "tax",
+            description = "The amount of money that is about to be taxed from the player.",
+            type = "number"
+        }
+    },
+    returns = {
+        {
+            name = "shouldTax",
+            description = "Whether the player is to be taxed. Return false here to prevent the player from being taxed.",
+            type = "boolean"
+        },
+        {
+            name = "tax",
+            description = "Overrides the amount of money that is taxed.",
+            type = "number"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "onPaidTax",
     description = "Called when a player has paid tax.",
     parameters = {

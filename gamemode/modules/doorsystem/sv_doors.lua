@@ -179,25 +179,36 @@ function pmeta:initiateTax()
         if not GAMEMODE.Config.wallettax then
             return -- Don't remove the hook in case it's turned on afterwards.
         end
+
         local money = self:getDarkRPVar("money")
         local mintax = GAMEMODE.Config.wallettaxmin / 100
         local maxtax = GAMEMODE.Config.wallettaxmax / 100 -- convert to decimals for percentage calculations
         local startMoney = GAMEMODE.Config.startingmoney
 
 
-        if money < (startMoney * 2) then
-            return -- Don't tax players if they have less than twice the starting amount
-        end
-
         -- Variate the taxes between twice the starting money ($1000 by default) and 200 - 2 times the starting money (100.000 by default)
         local tax = (money - (startMoney * 2)) / (startMoney * 198)
-              tax = math.Min(maxtax, mintax + (maxtax - mintax) * tax)
+        tax = math.Min(maxtax, mintax + (maxtax - mintax) * tax)
 
-        self:addMoney(-tax * money)
-        DarkRP.notify(self, 3, 7, DarkRP.getPhrase("taxday", math.Round(tax * 100, 3)))
+        local taxAmount = tax * money
+
+        local shouldTax, amount = hook.Run("canTax", self, taxAmount)
+
+        if shouldTax == false then return end
+
+        taxAmount = amount or taxAmount
+        taxAmount = math.Max(0, taxAmount)
+
+        self:addMoney(-taxAmount)
+        DarkRP.notify(self, 3, 7, DarkRP.getPhrase("taxday", math.Round(taxAmount / money * 100, 3)))
 
         hook.Call("onPaidTax", DarkRP.hooks, self, tax, money)
     end)
+end
+
+function GM:canTax(ply)
+    -- Don't tax players if they have less than twice the starting amount
+    if ply:getDarkRPVar("money") < (GAMEMODE.Config.startingmoney * 2) then return false end
 end
 
 /*---------------------------------------------------------------------------
