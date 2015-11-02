@@ -17,6 +17,7 @@ SWEP.DrawAmmo = false
 SWEP.ViewModelFlip = false
 SWEP.Primary.ClipSize = 0
 SWEP.Primary.Ammo = ""
+SWEP.Secondary.Ammo = ""
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true

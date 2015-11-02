@@ -1,3 +1,59 @@
+DarkRP.doorToEntIndex = DarkRP.stub{
+    name = "doorToEntIndex",
+    description = "Get an ENT index from a door index.",
+    parameters = {
+        {
+            name = "index",
+            description = "The door index",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "index",
+            description = "The ENT index",
+            type = "number",
+        }
+    },
+    metatable = DarkRP
+}
+
+DarkRP.doorIndexToEnt = DarkRP.stub{
+    name = "doorIndexToEnt",
+    description = "Get the entity of a door index (inverse of ent:doorIndexToEnt()). Note: the door MUST have been created by the map!",
+    parameters = {
+        {
+            name = "index",
+            description = "The door index",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "door",
+            description = "The door entity",
+            type = "Entity",
+        }
+    },
+    metatable = DarkRP
+}
+
+DarkRP.ENTITY.doorIndex = DarkRP.stub{
+    name = "doorIndex",
+    description = "Get the door index of a door. Use this to store door information in the database.",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "index",
+            description = "The door index.",
+            type = "number"
+        }
+    },
+    metatable = DarkRP.ENTITY
+}
 
 DarkRP.ENTITY.keysLock = DarkRP.stub{
     name = "keysLock",
@@ -642,6 +698,35 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "canTax",
+    description = "Called before a player pays taxes. This hook differs from onPaidTax in that this hook can prevent the taxing and change the tax amount.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who was taxed.",
+            type = "Player"
+        },
+        {
+            name = "tax",
+            description = "The amount of money that is about to be taxed from the player.",
+            type = "number"
+        }
+    },
+    returns = {
+        {
+            name = "shouldTax",
+            description = "Whether the player is to be taxed. Return false here to prevent the player from being taxed.",
+            type = "boolean"
+        },
+        {
+            name = "tax",
+            description = "Overrides the amount of money that is taxed.",
+            type = "number"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "onPaidTax",
     description = "Called when a player has paid tax.",
     parameters = {
@@ -663,5 +748,58 @@ DarkRP.hookStub{
     },
     returns = {
 
+    }
+}
+
+DarkRP.hookStub{
+    name = "canPropertyTax",
+    description = "Called right before a player's property is taxed. This hook differs from onPropertyTax in that onPropertyTax is called AFTER the taxing. With this hook, one can influence the taxing process.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player whose property will be taxed.",
+            type = "Player"
+        },
+        {
+            name = "tax",
+            description = "The amount of money that will be taxed (unless overridden by this hook).",
+            type = "number"
+        }
+    },
+    returns = {
+        {
+            name = "shouldTax",
+            description = "Return false here to prevent the doors from being taxed.",
+            type = "boolean"
+        },
+        {
+            name = "taxOverride",
+            description = "Override the tax amount.",
+            type = "number"
+        }
+    }
+}
+
+DarkRP.hookStub{
+    name = "onPropertyTax",
+    description = "Called right AFTER a player's property is taxed. Please use canPropertyTax if you want to influence the taxing process.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player whose property has been taxed.",
+            type = "Player"
+        },
+        {
+            name = "tax",
+            description = "The amount of money that has been taxed.",
+            type = "number"
+        },
+        {
+            name = "couldAfford",
+            description = "Whether the player was able to afford the tax.",
+            type = "boolean"
+        }
+    },
+    returns = {
     }
 }
