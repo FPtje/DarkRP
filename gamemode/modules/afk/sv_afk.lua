@@ -92,3 +92,12 @@ local function BlockAFKTeamChange(ply, t, force)
     end
 end
 hook.Add("playerCanChangeTeam", "AFKCanChangeTeam", BlockAFKTeamChange)
+
+-- For when a player's team is changed by force
+hook.Add("OnPlayerChangedTeam", "AFKCanChangeTeam", function(ply)
+    if not ply:getDarkRPVar("AFK") then return end
+
+    ply.OldSalary = ply:getDarkRPVar("salary")
+    ply.OldJob = nil
+    ply:setSelfDarkRPVar("salary", 0)
+end)
