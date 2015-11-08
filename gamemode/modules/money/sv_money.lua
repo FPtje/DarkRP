@@ -126,8 +126,8 @@ local function DropMoney(ply, args)
     end
     local amount = math.floor(tonumber(args))
 
-    if amount <= 1 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">1"))
+    if amount < 1 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">0"))
         return ""
     end
 
