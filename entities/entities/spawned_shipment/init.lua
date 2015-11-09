@@ -74,7 +74,7 @@ function ENT:SetContents(s, c)
     self:Setcount(c)
 end
 
-function ENT:Use()
+function ENT:Use(activator, caller)
     if self.IsPocketed then return end
     if type(self.PlayerUse) == "function" then
         local val = self:PlayerUse(activator, caller)

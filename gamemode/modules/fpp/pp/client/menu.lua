@@ -345,8 +345,8 @@ function FPP.AdminMenu(Panel)
 
     local _, ToolRestrict = MakeOption("Tool restriction") --spawnmenu.GetTools()
 
-    FPP.DtreeToolRestrict = ToolRestrict:Add(FPP.DtreeToolRestrict or "DTree")
-    FPP.multirestricttoollist = ToolRestrict:Add(FPP.multirestricttoollist or "DListView")
+    FPP.DtreeToolRestrict = ToolRestrict:Add(IsValid(FPP.DtreeToolRestrict) and FPP.DtreeToolRestrict or "DTree")
+    FPP.multirestricttoollist = ToolRestrict:Add(IsValid(FPP.multirestricttoollist) and FPP.multirestricttoollist or "DListView")
     FPP.DtreeToolRestrict:SetVisible(true)
     FPP.DtreeToolRestrict:SetSize(0, 300)
 
@@ -1100,10 +1100,10 @@ end
 hook.Add("PopulateToolMenu", "FPPMenus", makeMenus)
 
 local function UpdateMenus()
-    if AdminPanel then
+    if IsValid(AdminPanel) then
         FPP.AdminMenu(AdminPanel)
     end
-    if BuddiesPanel then
+    if IsValid(BuddiesPanel) then
         FPP.BuddiesMenu(BuddiesPanel)
     end
 end

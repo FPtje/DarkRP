@@ -49,3 +49,14 @@ local function onUnlocked(ent)
     end
 end
 hook.Add("onKeysUnlocked", "PassengerModCompatibility", onUnlocked)
+
+local function ejectOnRam(success, ply, trace)
+    if not success or not IsValid(trace.Entity) or not trace.Entity:IsVehicle() then return end
+    if not trace.Entity.VehicleTable or not trace.Entity.VehicleTable.Passengers then return end
+
+    for k, v in pairs(trace.Entity.VehicleTable.Passengers) do
+        local passenger = v:GetDriver()
+        if IsValid(passenger) then passenger:ExitVehicle() end
+    end
+end
+hook.Add("onDoorRamUsed", "PassengerModCompatibility", ejectOnRam)
