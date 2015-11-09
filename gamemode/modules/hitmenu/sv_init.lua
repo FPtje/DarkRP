@@ -12,6 +12,8 @@ util.AddNetworkString("onHitFailed")
 /*---------------------------------------------------------------------------
 Interface functions
 ---------------------------------------------------------------------------*/
+DarkRP.getHits = fp{fn.Id, hits}
+
 function plyMeta:requestHit(customer, target, price)
     local canRequest, msg, cost = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
     price = cost or price
