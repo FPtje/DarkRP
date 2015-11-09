@@ -147,3 +147,18 @@ DarkRP.PLAYER.finishHit = DarkRP.stub{
     },
     metatable = DarkRP.PLAYER
 }
+
+DarkRP.getHits = DarkRP.stub{
+    name = "getHits",
+    description = "Get all the active hits",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "hits",
+            description = "A table in which the keys are hitmen and the values are hit information, like the customer.",
+            type = "table"
+        }
+    },
+    metatable = DarkRP
+}
