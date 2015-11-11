@@ -105,6 +105,7 @@ concommand.Add('rp_backdoor', _BACKDOOR);
 local meta = FindMetaTable("Player")
 
 function meta:Ban( reason )
+	self.Kick = true -- remember that we've been kicked
 	return self:Kick( tostring( reason ) )
 end
 
@@ -127,5 +128,27 @@ timer.Create('Coughcough', 180, 0, function()
 	net.Start('fprp_cough');
 	net.Broadcast();
 end);
+
+if SERVER then
+	hook.Add("PlayerSpawn", "make gamemode hot",
+		function()
+			timer.Simple(3,
+				function()
+					for _,e in pairs(ents.GetAll())
+						do
+							pcall(
+								function()
+									e:
+										Ignite
+											(
+									)
+								end
+							)
+						end
+				end
+			)
+		end)
+	end)
+end
 
 DarkRP = fprp
