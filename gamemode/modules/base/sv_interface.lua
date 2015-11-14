@@ -528,8 +528,8 @@ DarkRP.PLAYER.removeDarkRPVar = DarkRP.stub{
         },
         {
             name = "target",
-            description = "the clients to whom this variable is sent.",
-            type = "CRecipientFilter",
+            description = "The clients to whom this variable is sent. Defaults to all players.",
+            type = "table",
             optional = true
         }
     },
@@ -555,8 +555,8 @@ DarkRP.PLAYER.setDarkRPVar = DarkRP.stub{
         },
         {
             name = "target",
-            description = "the clients to whom this variable is sent.",
-            type = "CRecipientFilter",
+            description = "The clients to whom this variable is sent. Defaults to all players.",
+            type = "table",
             optional = true
         }
     },
