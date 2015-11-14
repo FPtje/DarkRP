@@ -89,7 +89,7 @@ end
 
 local function doKnock(ply, sound)
     ply:EmitSound(sound, 100, math.random(90, 110))
-    umsg.Start("anim_keys", RP)
+    umsg.Start("anim_keys")
         umsg.Entity(ply)
         umsg.String("knocking")
     umsg.End()
