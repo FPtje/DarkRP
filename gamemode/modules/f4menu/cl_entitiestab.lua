@@ -79,7 +79,7 @@ local function createCategories(self, categories, itemClick, canBuy)
 
         dCat:SetPerformLayout(function(contents)
             for k,v in pairs(contents.Items) do
-                local can, important, price = canBuy(v.DarkRPItem)
+                local can, important, _, price = canBuy(v.DarkRPItem)
                 v:SetDisabled(not can, important)
                 v:updatePrice(price)
             end
@@ -103,13 +103,13 @@ local function canBuyEntity(item)
 
     local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, item)
     local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
-    if not ply:canAfford(cost) then return false, false, cost end
+    if not ply:canAfford(cost) then return false, false, message, cost end
 
     if canbuy == false then
-        return false, suppress, cost
+        return false, suppress, message, cost
     end
 
-    return true, nil, cost
+    return true, nil, message, cost
 end
 
 function PANEL:generateButtons()
@@ -142,13 +142,13 @@ local function canBuyShipment(ship)
     local canbuy, suppress, message, price = hook.Call("canBuyShipment", nil, ply, ship)
     local cost = price or ship.getPrice and ship.getPrice(ply, ship.price) or ship.price
 
-    if not ply:canAfford(cost) then return false, false, cost end
+    if not ply:canAfford(cost) then return false, false, message, cost end
 
     if canbuy == false then
-        return false, suppress, cost
+        return false, suppress, message, cost
     end
 
-    return true, nil, cost
+    return true, nil, message, cost
 end
 
 function PANEL:generateButtons()
@@ -184,13 +184,13 @@ local function canBuyGun(ship)
     local canbuy, suppress, message, price = hook.Call("canBuyPistol", nil, ply, ship)
     local cost = price or ship.getPrice and ship.getPrice(ply, ship.pricesep) or ship.pricesep
 
-    if not ply:canAfford(cost) then return false, false, cost end
+    if not ply:canAfford(cost) then return false, false, message, cost end
 
     if canbuy == false then
-        return false, suppress, cost
+        return false, suppress, message, cost
     end
 
-    return true, nil, cost
+    return true, nil, message, cost
 end
 
 function PANEL:generateButtons()
@@ -225,13 +225,13 @@ local function canBuyAmmo(item)
 
     local canbuy, suppress, message, price = hook.Call("canBuyAmmo", nil, ply, item)
     local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
-    if not ply:canAfford(cost) then return false, false, cost end
+    if not ply:canAfford(cost) then return false, false, message, cost end
 
     if canbuy == false then
-        return false, suppress, price
+        return false, suppress, message, price
     end
 
-    return true, nil, price
+    return true, nil, message, price
 end
 
 function PANEL:generateButtons()
@@ -266,13 +266,13 @@ local function canBuyVehicle(item)
 
     cost = price or cost
 
-    if not ply:canAfford(cost) then return false, false, cost end
+    if not ply:canAfford(cost) then return false, false, message, cost end
 
     if canbuy == false then
-        return false, suppress, cost
+        return false, suppress, message, cost
     end
 
-    return true, nil, cost
+    return true, nil, message, cost
 end
 
 function PANEL:generateButtons()
