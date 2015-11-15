@@ -307,7 +307,7 @@ end
 function PANEL:PerformLayout()
     local text = DarkRP.textWrap(DarkRP.deLocalise(self.job.description or ""):gsub('\t', ''), "Roboto Light", self:GetWide() - 43)
     surface.SetFont("Roboto Light")
-    local w, h = surface.GetTextSize(text)
+    local _, h = surface.GetTextSize(text)
     self.BaseClass.PerformLayout(self)
 
     self.innerPanel:SetPos(3, 3)

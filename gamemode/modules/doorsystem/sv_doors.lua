@@ -304,7 +304,6 @@ end
 DarkRP.definePrivilegedChatCommand("toggleteamownable", "DarkRP_ChangeDoorSettings", SetDoorTeamOwnable)
 
 local function OwnDoor(ply)
-    local team = ply:Team()
     local trace = ply:GetEyeTrace()
 
     if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 200 then
@@ -357,13 +356,13 @@ local function OwnDoor(ply)
             return ""
         end
 
-        local iCost = hook.Call("get".. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity)
+        local iCost = hook.Call("get" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity)
         if not ply:canAfford(iCost) then
             DarkRP.notify(ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
             return ""
         end
 
-        local bAllowed, strReason, bSuppress = hook.Call("playerBuy".. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
+        local bAllowed, strReason, bSuppress = hook.Call("playerBuy" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
         if bAllowed == false then
             if strReason and strReason ~= "" then
                 DarkRP.notify(ply, 1, 4, strReason)

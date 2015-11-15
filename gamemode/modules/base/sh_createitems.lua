@@ -1,6 +1,4 @@
 local plyMeta = FindMetaTable("Player")
--- automatically block players from doing certain things with their DarkRP entities
-local blockTypes = {"Physgun1", "Spawning1", "Toolgun1"}
 
 -- Assert function, asserts a property and returns the error if false.
 -- Allows f to override err and hints by simply returning them

@@ -10,7 +10,6 @@ local setUpNonOwnableDoors,
  Database initialize
  ---------------------------------------------------------*/
 function DarkRP.initDatabase()
-    local map = MySQLite.SQLStr(string.lower(game.GetMap()))
     MySQLite.begin()
         -- Gotta love the difference between SQLite and MySQL
         local AUTOINCREMENT = MySQLite.isMySQL() and "AUTO_INCREMENT" or "AUTOINCREMENT"
@@ -126,11 +125,11 @@ function DarkRP.initDatabase()
                     end
                 end
 
-                MySQLite.query("SHOW PRIVILEGES", function(data)
-                    if not data then return end
+                MySQLite.query("SHOW PRIVILEGES", function(privs)
+                    if not privs then return end
 
                     local found;
-                    for k,v in pairs(data) do
+                    for k,v in pairs(privs) do
                         if v.Privilege == "Trigger" then
                             found = true
                             break;

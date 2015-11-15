@@ -177,17 +177,14 @@ DarkRP.defineChatCommand("radio", SayThroughRadio, 1.5)
 
 local function GroupMsg(ply, args)
     local DoSay = function(text)
-        local plyMeta = FindMetaTable("Player")
         if text == "" then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return
         end
 
-        local t = ply:Team()
         local col = team.GetColor(ply:Team())
 
         local groupChats = {}
-        local hasReceived = {}
         for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
             -- not the group of the player
             if not func(ply) then continue end

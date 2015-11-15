@@ -99,9 +99,7 @@ Networking
 /*---------------------------------------------------------------------------
 Retrieve all the data for all doors
 ---------------------------------------------------------------------------*/
-local receivedDoorData = false
 local function retrieveAllDoorData(len)
-    receivedDoorData = true
     local data = net.ReadTable()
     DarkRP.doorData = data
 end

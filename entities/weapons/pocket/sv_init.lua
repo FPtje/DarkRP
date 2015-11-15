@@ -270,7 +270,6 @@ local function onAdded(ply, ent, serialized)
     if not ent:IsValid() or not ent.DarkRPItem or not ent.Getowning_ent or not IsValid(ent:Getowning_ent()) then return end
 
     ply = ent:Getowning_ent()
-    local cmdname = string.gsub(ent.DarkRPItem.ent, " ", "_")
 
     ply:addCustomEntity(ent.DarkRPItem)
 end

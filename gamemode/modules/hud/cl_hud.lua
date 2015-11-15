@@ -86,11 +86,11 @@ local function DrawHealth()
     local myHealth = localplayer:Health()
     Health = math.min(maxHealth, (Health == myHealth and Health) or Lerp(0.1, Health, myHealth))
 
-    local DrawHealth = math.Min(Health / maxHealth, 1)
-    local rounded = math.Round(3 * DrawHealth)
+    local healthRatio = math.Min(Health / maxHealth, 1)
+    local rounded = math.Round(3 * healthRatio)
     local Border = math.Min(6, rounded * rounded)
     draw.RoundedBox(Border, RelativeX + 4, RelativeY - 30, HUDWidth - 8, 20, ConVars.Healthbackground)
-    draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * DrawHealth, 18, ConVars.Healthforeground)
+    draw.RoundedBox(Border, RelativeX + 5, RelativeY - 29, (HUDWidth - 9) * healthRatio, 18, ConVars.Healthforeground)
 
     draw.DrawNonParsedText(math.Max(0, math.Round(myHealth)), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8) / 2, RelativeY - 32, ConVars.HealthText, 1)
 
@@ -114,7 +114,7 @@ local function DrawInfo()
     draw.DrawNonParsedText(salaryText, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + 5, ConVars.salary2, 0)
 
     surface.SetFont("DarkRPHUD2")
-    local w, h = surface.GetTextSize(salaryText)
+    local _, h = surface.GetTextSize(salaryText)
 
     draw.DrawNonParsedText(JobWalletText, "DarkRPHUD2", RelativeX + 5, RelativeY - HUDHeight + h + 6, ConVars.Job1, 0)
     draw.DrawNonParsedText(JobWalletText, "DarkRPHUD2", RelativeX + 4, RelativeY - HUDHeight + h + 5, ConVars.Job2, 0)
@@ -169,7 +169,7 @@ end)
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
 local function DrawVoiceChat()
     if localplayer.DRPIsTalking then
-        local chbxX, chboxY = chat.GetChatBoxPos()
+        local _, chboxY = chat.GetChatBoxPos()
 
         local Rotating = math.sin(CurTime() * 3)
         local backwards = 0
