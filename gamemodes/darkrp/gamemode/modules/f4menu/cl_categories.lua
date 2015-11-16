@@ -96,9 +96,9 @@ function PANEL:SetCategory(cat)
 end
 
 function PANEL:SetPerformLayout(f)
-    self.Contents.PerformLayout = function(self)
-        f(self)
-        self.BaseClass.PerformLayout(self)
+    self.Contents.PerformLayout = function()
+        f(self.Contents)
+        self.Contents.BaseClass.PerformLayout(self.Contents)
     end
 end
 

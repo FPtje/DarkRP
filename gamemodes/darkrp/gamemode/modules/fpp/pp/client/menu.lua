@@ -42,7 +42,7 @@ local function updatePrivs()
         canCleanup = b
     end)
 end
-timer.Simple(0, updatePrivs) -- Update privs after admin mods have loaded
+hook.Add("InitPostEntity", "FPP_Menu", updatePrivs)
 
 function FPP.AdminMenu(Panel)
     updatePrivs()

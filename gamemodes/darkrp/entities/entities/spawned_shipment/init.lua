@@ -99,7 +99,6 @@ function ENT:SpawnItem()
     timer.Remove(self:EntIndex() .. "crate")
     self.sparking = false
     local count = self:Getcount()
-    local pos = self:GetPos()
     if count <= 1 then self:Remove() end
     local contents = self:Getcontents()
 

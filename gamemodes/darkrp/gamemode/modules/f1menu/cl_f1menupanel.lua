@@ -86,12 +86,11 @@ function PANEL:AnimationThink()
     self.progress = self.progress or 1
     self.progress = self.slideRight and math.max(0, self.progress - FrameTime() / self.slideInTime) or math.min(1, self.progress + FrameTime())
 
-    local x, y = self:GetPos()
+    local _, y = self:GetPos()
     self:SetPos(-self:GetWide() * self.progress, y)
 end
 
 function PANEL:Paint()
-    local x, y = self:GetPos()
     local w, h = self:GetSize()
     draw.RoundedBoxEx(4, 0, 0, w, h, self:GetBackgroundColor(), false, true, false, true)
 end
