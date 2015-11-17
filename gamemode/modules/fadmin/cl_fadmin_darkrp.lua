@@ -1,8 +1,8 @@
 if not FAdmin or not FAdmin.StartHooks then return end
 FAdmin.StartHooks["DarkRP"] = function()
     -- DarkRP information:
-    FAdmin.ScoreBoard.Player:AddInformation("Steam name", function(ply) return ply:SteamName() end, true)
     FAdmin.ScoreBoard.Player:AddInformation("Money", function(ply) if LocalPlayer():IsAdmin() then return DarkRP.formatMoney(ply:getDarkRPVar("money")) end end)
+    FAdmin.ScoreBoard.Player:AddInformation("Steam name", function(ply) return ply:SteamName() end)
     FAdmin.ScoreBoard.Player:AddInformation("Wanted", function(ply) if ply:getDarkRPVar("wanted") then return tostring(ply:getDarkRPVar("wantedReason") or "N/A") end end)
     FAdmin.ScoreBoard.Player:AddInformation("Community link", function(ply) return FAdmin.SteamToProfile(ply) end)
     FAdmin.ScoreBoard.Player:AddInformation("Rank", function(ply)
