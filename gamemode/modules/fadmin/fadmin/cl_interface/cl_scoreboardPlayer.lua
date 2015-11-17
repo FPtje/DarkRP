@@ -2,14 +2,12 @@ FAdmin.ScoreBoard.Player.Information = {}
 FAdmin.ScoreBoard.Player.ActionButtons = {}
 
 function FAdmin.ScoreBoard.Player.Show(ply)
-    local OldPly = FAdmin.ScoreBoard.Player.Player
     ply = ply or FAdmin.ScoreBoard.Player.Player
     FAdmin.ScoreBoard.Player.Player = ply
 
     if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) then FAdmin.ScoreBoard.ChangeView("Main") return end
 
-    local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-    local SteamID = ply:SteamID()
+    local _, ScreenHeight = ScrW(), ScrH()
 
     FAdmin.ScoreBoard.Player.Controls.AvatarBackground = vgui.Create("AvatarImage")
     FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100)
