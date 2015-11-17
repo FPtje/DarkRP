@@ -49,9 +49,7 @@ end
 /*---------------------------------------------------------------------------
 Get the CalcView table
 ---------------------------------------------------------------------------*/
-local view = {
-    vm_origin = Vector(0, 0, -13000)
-}
+local view = {}
 local function getCalcView()
     if not isRoaming then
         if thirdperson then
@@ -63,12 +61,14 @@ local function getCalcView()
         end
 
         roamPos = view.origin
+        view.drawviewer = false
 
         return view
     end
 
     view.origin = roamPos
     view.angles = LocalPlayer():EyeAngles()
+    view.drawviewer = true
 
     return view
 end
@@ -105,7 +105,6 @@ local function findNearestPlayer()
 
         local pos = ply:GetShootPos()
         local dot = (pos - roamPos):GetNormalized():Dot(aimvec)
-        local distance = pos:Distance(roamPos)
 
         -- Discard players you're not looking at
         if dot < 0.97 then continue end
