@@ -139,3 +139,12 @@ local function playerSay(talker, message)
     end
 end
 hook.Add("PlayerSay", "FSpectate", playerSay)
+
+-- ULX' !spectate command conflicts with mine
+-- The concommand "ulx spectate" should still work.
+local function fixULXIncompat()
+    if ULib then
+        ULib.removeSayCommand("!spectate")
+    end
+end
+hook.Add("InitPostEntity", "FSpectate", fixULXIncompat)
