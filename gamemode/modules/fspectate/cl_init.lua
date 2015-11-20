@@ -354,7 +354,7 @@ Spectate a player
 local function startSpectate(um)
     isRoaming = net.ReadBool()
     specEnt = net.ReadEntity()
-    specEnt = IsValid(specEnt) and specEnt:IsPlayer() or nil
+    specEnt = IsValid(specEnt) and specEnt:IsPlayer() and specEnt or nil
 
     if isRoaming then
         startFreeRoam()
