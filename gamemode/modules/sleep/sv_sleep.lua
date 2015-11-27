@@ -42,8 +42,10 @@ function DarkRP.toggleSleep(player, command)
         player.SleepSound:Stop()
         local ragdoll = player.SleepRagdoll
         local health = player:Health()
+        local armor = player:Armor()
         player:Spawn()
         player:SetHealth(health)
+        player:SetArmor(armor)
         player:SetPos(ragdoll:GetPos())
         local model = ragdoll:GetModel()
         -- TEMPORARY WORKAROUND
