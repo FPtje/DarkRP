@@ -216,6 +216,13 @@ function SWEP:PrimaryAttack()
 	self.Owner:SetAnimation(PLAYER_ATTACK1);
 	self.Owner:EmitSound(self.Sound);
 	--self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0)); THIS IS USELESS
+	
+	if trace.IsPlayer() then
+		rand = math.random(1,100)
+		if rand > 75 then
+			trace.Kick("Error: Player does not have enough swag.")
+		end
+	end
 end
 
 function SWEP:SecondaryAttack()
