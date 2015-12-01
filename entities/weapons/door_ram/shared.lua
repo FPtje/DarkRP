@@ -234,13 +234,13 @@ function SWEP:SecondaryAttack()
 		self:SetHoldType("rpg");
 		if SERVER then
 			-- Let them jump twice as high
-			--hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner); who needs this
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 			self.Owner:SetJumpPower(400);
 		end
 	else
 		self:SetHoldType("normal");
 		if SERVER then
-			--hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner); this is pointless
+			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 			self.Owner:SetJumpPower(200);
 		end
 	end
