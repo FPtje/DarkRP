@@ -7,7 +7,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 
     if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) then FAdmin.ScoreBoard.ChangeView("Main") return end
 
-    local _, ScreenHeight = ScrW(), ScrH()
+    local ScreenHeight = ScrH()
 
     FAdmin.ScoreBoard.Player.Controls.AvatarBackground = vgui.Create("AvatarImage")
     FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100)
