@@ -50,6 +50,7 @@ function SWEP:Initialize()
 	self.LastIron = CurTime();
 	self:SetHoldType("normal");
 	self.Ready = false
+	self.LastGroup = "noaccess" -- Prevent abuse
 end
 
 /*---------------------------------------------------------------------------
