@@ -215,7 +215,7 @@ function SWEP:PrimaryAttack()
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1);
 	self.Owner:EmitSound(self.Sound);
-	self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0));
+	--self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0)); THIS IS USELESS
 end
 
 function SWEP:SecondaryAttack()
@@ -226,14 +226,14 @@ function SWEP:SecondaryAttack()
 	if self.Ready then
 		self:SetHoldType("rpg");
 		if SERVER then
-			-- Prevent them from being able to run and jump
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
-			self.Owner:SetJumpPower(0);
+			-- Let them jump twice as high
+			--hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner); who needs this
+			self.Owner:SetJumpPower(400);
 		end
 	else
 		self:SetHoldType("normal");
 		if SERVER then
-			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
+			--hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner); this is pointless
 			self.Owner:SetJumpPower(200);
 		end
 	end
