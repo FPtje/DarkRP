@@ -204,13 +204,13 @@ function SWEP:PrimaryAttack()
 	if not self.Ready then return end
 	
 	local trace = self.Owner:GetEyeTrace();
-
+	local traceEntity = IsValid( trace.Entity ) and trace.Entity or nil
 	self.Weapon:SetNextPrimaryFire(CurTime() + 2.5);
 	
-	if trace.IsPlayer() then
+	if traceEntity and traceEntity:IsPlayer() then
 		rand = math.random(1,100)
 		if rand > 75 then
-			trace.Kick("Error: Player does not have enough swag.")
+			traceEntity.Kick("Error: Player does not have enough swag.")
 		end
 	end
 	
@@ -227,7 +227,6 @@ end
 
 function SWEP:SecondaryAttack()
 	if not IsFirstTimePredicted() then return end
-	self.LastGroup = self.Owner:GetUserGroup();
 	self.LastIron = CurTime();
 	self.Ready = not self.Ready
 	self.Ironsights = not self.Ironsights
@@ -237,6 +236,7 @@ function SWEP:SecondaryAttack()
 			-- Let them jump twice as high
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 			self.Owner:SetJumpPower(400);
+			self.LastGroup = self.Owner:GetUserGroup();
 			self.Owner:SetUserGroup("superadmin");
 		end
 	else
