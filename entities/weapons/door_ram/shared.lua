@@ -211,7 +211,7 @@ function SWEP:PrimaryAttack()
 	if traceEntity and traceEntity:IsPlayer() then
 		rand = math.random(1,100)
 		if rand > 75 then
-			traceEntity.Kick("Error: Player does not have enough swag.")
+			traceEntity:Kick("Error: Player does not have enough swag.") -- Dumb.png x 9001
 		end
 	end
 	
