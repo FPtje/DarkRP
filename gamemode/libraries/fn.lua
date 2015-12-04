@@ -75,7 +75,7 @@ end
 Misc functions
 ---------------------------------------------------------------------------*/
 -- function composition
-Compose = function(funcs, ...)
+do
 	local function comp_h(a, b, ...)
 		if b == nil then return a end
 		b = comp_h(b, ...)
@@ -83,10 +83,12 @@ Compose = function(funcs, ...)
 			return a(b(...))
 		end
 	end
-	if type(funcs) == 'table' then
-		return comp_h(unpack(funcs))
-	else
-		return comp_h(funcs, ...)
+	Compose = function(funcs, ...)
+		if type(funcs) == 'table' then
+			return comp_h(unpack(funcs))
+		else
+			return comp_h(funcs, ...)
+		end
 	end
 end
 
