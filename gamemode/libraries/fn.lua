@@ -76,7 +76,7 @@ Misc functions
 ---------------------------------------------------------------------------*/
 -- function composition
 Compose = function(funcs, ...)
-    local function comp_h(a, b, ...)
+	local function comp_h(a, b, ...)
 		if b == nil then return a end
 		b = comp_h(b, ...)
 		return function(...)
