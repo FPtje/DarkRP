@@ -1,5 +1,6 @@
 function DarkRP.hooks:canBuyPistol(ply, shipment)
     local price = shipment.getPrice and shipment.getPrice(ply, shipment.pricesep) or shipment.pricesep or 0
+    price = hook.Call("pistolPrice", nil, ply, shipment, price) or price
 
     if not GAMEMODE:CustomObjFitsMap(shipment) then
         return false, false, "Custom object does not fit map"
@@ -59,6 +60,7 @@ local function BuyPistol(ply, args)
     end
 
     local cost = price or shipment.getPrice and shipment.getPrice(ply, shipment.pricesep) or shipment.pricesep or 0
+    cost = hook.Call("pistolPrice", nil, ply, shipment, cost) or cost
 
     local trace = {}
     trace.start = ply:EyePos()
@@ -126,6 +128,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     end
 
     local cost = shipment.getPrice and shipment.getPrice(ply, shipment.price) or shipment.price
+    cost = hook.Call("shipmentPrice", nil, ply, shipment, cost) or cost
 
     if not ply:canAfford(cost) then
         return false, false, DarkRP.getPhrase("cant_afford", "shipment")
@@ -155,6 +158,7 @@ local function BuyShipment(ply, args)
     end
 
     local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
+    cost = hook.Call("shipmentPrice", nil, ply, found, cost) or cost
 
     local trace = {}
     trace.start = ply:EyePos()
@@ -226,6 +230,8 @@ function DarkRP.hooks:canBuyVehicle(ply, vehicle)
     end
 
     local cost = vehicle.getPrice and vehicle.getPrice(ply, vehicle.price) or vehicle.price
+    cost = hook.Call("vehiclePrice", nil, ply, vehicle, cost) or cost
+
     if not ply:canAfford(cost) then
         return false, false, DarkRP.getPhrase("cant_afford", "vehicle")
     end
@@ -261,6 +267,7 @@ local function BuyVehicle(ply, args)
     end
 
     local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
+    cost = hook.Call("vehiclePrice", nil, ply, vehicle, cost) or cost
 
     ply:addMoney(-cost)
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", found.label or found.name, DarkRP.formatMoney(cost)))
@@ -332,6 +339,8 @@ function DarkRP.hooks:canBuyAmmo(ply, ammo)
     end
 
     local cost = ammo.getPrice and ammo.getPrice(ply, ammo.price) or ammo.price
+    cost = hook.Call("ammoPrice", nil, ply, ammo, cost) or cost
+
     if not ply:canAfford(cost) then
         return false, false, DarkRP.getPhrase("cant_afford", "ammo")
     end
@@ -377,6 +386,7 @@ local function BuyAmmo(ply, args)
     end
 
     local cost = price or found.getPrice and found.getPrice(ply, found.price) or found.price
+    cost = hook.Call("ammoPrice", nil, ply, found, cost) or cost
 
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", found.name, DarkRP.formatMoney(cost)))
     ply:addMoney(-cost)
