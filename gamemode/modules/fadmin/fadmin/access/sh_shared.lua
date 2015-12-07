@@ -46,7 +46,7 @@ function FAdmin.Access.OnUsergroupRegistered(usergroup, source)
     if source == "FAdmin" then return end
 
     local inheritRoot = CAMI.InheritanceRoot(usergroup.Inherits)
-    local admin_access = table.KeyFromValue(FAdmin.Access.ADMIN, inheritRoot)
+    local admin_access = table.KeyFromValue(FAdmin.Access.ADMIN, inheritRoot) or 1
 
     -- Add groups registered to CAMI to FAdmin. Assume privileges from either the usergroup it inherits or its inheritance root.
     -- Immunity is unknown and can be set by the user later. FAdmin immunity only applies to FAdmin anyway.
