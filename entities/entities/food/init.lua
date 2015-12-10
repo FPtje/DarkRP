@@ -29,12 +29,13 @@ function ENT:OnTakeDamage(dmg)
     end
 end
 
-function ENT:Use(activator,caller)
+function ENT:Use(activator, caller)
     caller:setSelfDarkRPVar("Energy", math.Clamp((caller:getDarkRPVar("Energy") or 0) + 100, 0, 100))
     umsg.Start("AteFoodIcon", caller)
     umsg.End()
 
     self:Remove()
+    activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
 end
 
 function ENT:OnRemove()
