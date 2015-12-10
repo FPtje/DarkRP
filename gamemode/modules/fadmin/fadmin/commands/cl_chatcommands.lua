@@ -1,11 +1,13 @@
-local prefix = "/"
+local convar
 
 local Options = {}
 local targets
 hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     if not FAdmin.GlobalSetting.FAdmin then return end
-    if string.sub(text, 1, 1) ~= prefix then targets = nil return end
     Options = {}
+    convar = convar or GetConVar("FAdmin_commandprefix")
+    local prefix = convar and convar:GetString() or "/"
+    if string.sub(text, 1, 1) ~= prefix then targets = nil return end
 
     local TExplode = string.Explode(" ", string.sub(text, 2))
     if not TExplode[1] then return end
@@ -19,7 +21,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     for k,v in pairs(FAdmin.Commands.List) do
         if string.find(string.lower(k), Command, 1, true) ~= 1 then continue end
 
-        Options["/" .. k] = table.Copy(v.ExtraArgs)
+        Options[prefix .. k] = table.Copy(v.ExtraArgs)
 
         optionsCount = optionsCount + 1
     end
@@ -96,3 +98,10 @@ hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
         end
     end
 end)
+
+FAdmin.StartHooks["Chatcommands"] = function()
+    FAdmin.ScoreBoard.Server:AddServerSetting("Set FAdmin's chat command prefix", "fadmin/icons/message", Color(0, 0, 155, 255), true, function()
+        convar = convar or GetConVar("FAdmin_commandprefix")
+        Derma_StringRequest("Set chat command prefix", "Make sure it's only one character!", convar and convar:GetString() or "/", fp{RunConsoleCommand, "_Fadmin", "CommandPrefix"})
+    end)
+end

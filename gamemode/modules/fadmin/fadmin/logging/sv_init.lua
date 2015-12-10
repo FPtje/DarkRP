@@ -10,6 +10,8 @@ FAdmin.StartHooks["Logging"] = function()
 
         RunConsoleCommand("FAdmin_logging", args[1])
 
+        FAdmin.SaveSetting("FAdmin_logging", args[1])
+
         return true, OnOff
     end)
     logging = GetConVar("FAdmin_logging")
