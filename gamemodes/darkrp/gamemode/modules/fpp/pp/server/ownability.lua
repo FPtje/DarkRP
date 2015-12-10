@@ -422,6 +422,7 @@ function FPP.RecalculateConstrainedEntities(players, entities)
             local updated = {}
             for e, b in pairs(black) do
                 if FPP.plyCanTouchEnt(ply, e) ~= FPP_CanTouch then
+                    e.FPPRestrictConstraint = e.FPPRestrictConstraint or {}
                     e.FPPRestrictConstraint[ply] = e.FPPCanTouch[ply] ~= FPP_CanTouch and FPP_CanTouch or nil
                     table.insert(updated, e)
                 end

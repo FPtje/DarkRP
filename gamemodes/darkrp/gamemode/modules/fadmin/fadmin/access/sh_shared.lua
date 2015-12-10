@@ -46,11 +46,12 @@ function FAdmin.Access.OnUsergroupRegistered(usergroup, source)
     if source == "FAdmin" then return end
 
     local inheritRoot = CAMI.InheritanceRoot(usergroup.Inherits)
-    local admin_access = table.KeyFromValue(FAdmin.Access.ADMIN, inheritRoot)
+    local admin_access = table.KeyFromValue(FAdmin.Access.ADMIN, inheritRoot) or 1
 
     -- Add groups registered to CAMI to FAdmin. Assume privileges from either the usergroup it inherits or its inheritance root.
     -- Immunity is unknown and can be set by the user later. FAdmin immunity only applies to FAdmin anyway.
-    FAdmin.Access.AddGroup(usergroup.Name, admin_access, FAdmin.Access.Groups[usergroup.Inherits] or FAdmin.Access.Groups[inheritRoot] or {}, nil, true)
+    local parent = FAdmin.Access.Groups[usergroup.Inherits] or FAdmin.Access.Groups[inheritRoot] or {}
+    FAdmin.Access.AddGroup(usergroup.Name, admin_access, parent.PRIVS or {}, parent.immunity or 10, true)
 end
 
 
@@ -222,7 +223,6 @@ FAdmin.StartHooks["AccessFunctions"] = function()
     FAdmin.Access.AddPrivilege("SeeAdmins", 1)
     FAdmin.Commands.AddCommand("RemoveGroup", FAdmin.Access.RemoveGroup)
 
-    local printPlyGroup = function(ply) print(ply:Nick(), "\t|\t", ply:GetUserGroup()) end
     FAdmin.Commands.AddCommand("Admins", function(ply)
         if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return false end
         for k,v in pairs(player.GetAll()) do

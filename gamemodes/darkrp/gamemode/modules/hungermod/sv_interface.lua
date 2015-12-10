@@ -70,3 +70,17 @@ DarkRP.hookStub{
         }
     }
 }
+
+DarkRP.hookStub{
+    name = "playerStarved",
+    description = "Called when a player dies of starvation.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who died of starvation.",
+            type = "Player"
+        }
+    },
+    returns = {
+    }
+}

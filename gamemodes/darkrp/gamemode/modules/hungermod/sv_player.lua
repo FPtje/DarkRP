@@ -21,6 +21,7 @@ function meta:hungerUpdate()
         if self:Health() <= 0 then
             self.Slayed = true
             self:Kill()
+            hook.Call("playerStarved", nil, self)
         end
     end
 end

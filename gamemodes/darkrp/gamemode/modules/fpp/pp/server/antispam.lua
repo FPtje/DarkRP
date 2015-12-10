@@ -139,7 +139,6 @@ local function e2AntiMinge()
 
         local ent = args[2][1](self, args[2]) -- Assumption: args[2][1] is a function
         if not IsValid(ent) or ent:CPPIGetOwner() ~= self.player then return end
-        if not IsValid(ent) then return applyForce(self, args, ...) end
 
         -- No check for whether the entity has already been no collided with players
         -- because while it would help performance,
