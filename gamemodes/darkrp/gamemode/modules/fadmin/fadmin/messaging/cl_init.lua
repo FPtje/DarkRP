@@ -18,8 +18,6 @@ function FAdmin.Messages.AddMessage( MsgType, Message )
     if not MsgTypeNames[MsgType] then return end
     tab.col = FAdmin.Messages.MsgTypes[MsgTypeNames[MsgType]].COLOR
 
-    tab.MsgType = Material(FAdmin.Messages.MsgTypes[MsgTypeNames[MsgType]].TEXTURE or "")
-
     table.insert( HUDNotes, tab )
 
     HUDNote_c = HUDNote_c + 1
@@ -37,15 +35,13 @@ local function DrawNotice(k, v, i)
     local y = v.y - 27
     surface.SetFont("GModNotify")
     local w, h = surface.GetTextSize(v.text)
-    w = w + 16
     h = h + 16
     local col = v.col
-    local mat = v.MsgType
-    draw.RoundedBox(4, x - w - h + 8, y - 8, w + h, h, col)
+
+    draw.RoundedBox(4, x - w - h + 24, y - 8, w + h - 16, h, col)
     -- Draw Icon
     surface.SetDrawColor(255, 255, 255, v.a)
-    surface.SetMaterial(mat)
-    surface.DrawTexturedRect(x - w - h + 16, y - 4, h - 8, h - 8)
+
     draw.DrawNonParsedSimpleText(v.text, "GModNotify", x + 1, y + 1, Color(0, 0, 0, v.a * 0.8), TEXT_ALIGN_RIGHT)
     draw.DrawNonParsedSimpleText(v.text, "GModNotify", x - 1, y - 1, Color(0, 0, 0, v.a * 0.5), TEXT_ALIGN_RIGHT)
     draw.DrawNonParsedSimpleText(v.text, "GModNotify", x + 1, y - 1, Color(0, 0, 0, v.a * 0.6), TEXT_ALIGN_RIGHT)
@@ -87,7 +83,6 @@ local function DrawNotice(k, v, i)
     v.vely = v.vely * (0.95 - RealFrameTime() * 8)
 end
 
-local comingAroundAgain = 0
 local function HUDPaint()
     if not HUDNotes then return end
     local i = 0

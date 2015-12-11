@@ -123,18 +123,19 @@ local function playerSay(talker, message)
         if ply == talker or not ply.FSpectating then continue end
 
         -- the person is saying it close to where you are roaming
-        if talker.FSpectatePos and ply:GetShootPos():Distance(talker.FSpectatePos) <= 400 and
+        if ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 400 and
             ply:GetShootPos():Distance(talker:GetShootPos()) > 250 then -- Make sure you don't get it twice
 
-            DarkRP.talkToPerson(talker, team.GetColor(ply:Team()), ply:Nick(), Color(255, 255, 255, 255), message, ply)
+            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
             return
         end
 
         -- The person you're spectating or someone near the person you're spectating is saying it
-        if IsValid(talker.FSpectatingEnt) and
-            ply:GetShootPos():Distance(talker.FSpectatingEnt:GetShootPos()) <= 300 and
-            ply:GetShootPos():Distance(talker:GetShootPos()) > 250 then
-            DarkRP.talkToPerson(talker, team.GetColor(ply:Team()), ply:Nick(), Color(255, 255, 255, 255), message, ply)
+        if IsValid(ply.FSpectatingEnt) and
+            talker:GetShootPos():Distance(ply.FSpectatingEnt:GetShootPos()) <= 300 and
+            talker:GetShootPos():Distance(ply:GetShootPos()) > 250 then
+
+            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
         end
     end
 end

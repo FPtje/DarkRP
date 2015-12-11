@@ -1,3 +1,5 @@
+CreateConVar("FAdmin_commandprefix", "/", {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+
 FAdmin.Commands = {}
 FAdmin.Commands.List = {}
 
