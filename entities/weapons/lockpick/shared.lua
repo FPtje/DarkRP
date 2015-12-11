@@ -14,6 +14,7 @@ SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left or right click to pick a lock"
 SWEP.Contact = ""
 SWEP.Purpose = ""
+SWEP.IsDarkRPLockpick = true
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false

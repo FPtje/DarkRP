@@ -10,6 +10,7 @@ SWEP.Description = "Heals the wounded."
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = "Left click to heal someone\nRight click to heal yourself"
+SWEP.IsDarkRPMedKit = true
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true

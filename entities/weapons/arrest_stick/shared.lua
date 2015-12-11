@@ -9,6 +9,7 @@ end
 DEFINE_BASECLASS("stick_base")
 
 SWEP.Instructions = "Left click to arrest\nRight click to switch batons"
+SWEP.IsDarkRPArrestStick = true
 
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
