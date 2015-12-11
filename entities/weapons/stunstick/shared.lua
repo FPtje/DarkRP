@@ -12,6 +12,7 @@ end
 DEFINE_BASECLASS("stick_base")
 
 SWEP.Instructions = "Left click to discipline\nRight click to kill\nHold reload to threaten"
+SWEP.IsDarkRPStunstick = true
 
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"

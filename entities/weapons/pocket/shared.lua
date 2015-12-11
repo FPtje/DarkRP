@@ -21,6 +21,8 @@ SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to pick up\nRight click to drop\nReload to open the menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""
+SWEP.IsDarkRPPocket = true
+
 SWEP.IconLetter = ""
 
 SWEP.ViewModelFOV = 62
