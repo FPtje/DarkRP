@@ -73,6 +73,20 @@ server = function() return SERVER end
 -- Optional value, when filled in it must meet the conditions
 optional = function(...) return fn.FOr{isnil, ...} end
 
+-- Default value, implies optional. Only works in combination with assertTable
+-- example: assertTable{test = tc.assert(default(3, isnumber))}
+-- example: assertTable{test = tc.assert(default(3))}
+default = function(def, f)
+    return function(val)
+        if val == nil then
+            -- second return value is the default value. Expects parent function to actually change the value
+            return true, def
+        end
+        -- Return in if statement rather than "return f and f(val) or true" to allow multiple return values
+        if f then return f(val) else return true end
+    end
+end
+
 -- A table of which each element must meet condition f
 -- i.e. "this must be a table of xxx"
 -- example: tc.tableOf(isnumber) demands that the table contains only numbers
@@ -116,9 +130,16 @@ function assertTable(schema)
             local correct, err, hints = tbl[v] ~= nil
             if isfunction(v) then correct, err, hints = v(tbl[k], tbl) end
 
-            err = err or string.format("Element '%s' is corrupt!", k)
 
-            if not correct then return correct, err, hints end
+            if not correct then
+                err = err or string.format("Element '%s' is corrupt!", k)
+                return correct, err, hints
+            end
+
+            -- Update the value
+            if correct and err ~= nil then
+                tbl[k] = err
+            end
         end
 
         return true
@@ -243,6 +264,32 @@ function unitTests()
     }
     checkCorrect(orSchema({num = 1}))
     checkCorrect(orSchema({str = "string!"}))
+
+    --[[
+    Default value with a check
+    ]]
+    local withDefaultSchema = tc.assertTable{
+        value = default(10, isnumber)
+    }
+    checkCorrect(withDefaultSchema({value = 30}))
+    checkIncorrect(withDefaultSchema({value = "string"}))
+
+    local empty = {}
+    checkCorrect(withDefaultSchema(empty))
+    if empty.value ~= 10 then
+        print("Default did NOT set the value to 10!")
+    else
+        print("Default test OK!")
+    end
+
+    --[[
+    Default value with no checks
+    ]]
+    local withDefaultNoCheck = tc.assertTable{
+        value = default(10)
+    }
+    checkCorrect(withDefaultNoCheck({}))
+    checkCorrect(withDefaultNoCheck({value = "string"}))
 
     print("finished")
 end
