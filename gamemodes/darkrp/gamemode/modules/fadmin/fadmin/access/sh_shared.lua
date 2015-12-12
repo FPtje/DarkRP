@@ -219,6 +219,16 @@ hook.Add("CAMI.SteamIDHasAccess", "FAdmin", function(actorSteam, privilegeName, 
 end)
 
 FAdmin.StartHooks["AccessFunctions"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "setaccess",
+        hasTarget = true,
+        message = {"instigator", " set the usergroup of ", "targets", " to ", "extraInfo.1"},
+        receivers = "everyone",
+        writeExtraInfo = net.WriteString,
+        readExtraInfo = function() return {net.ReadString()} end,
+        extraInfoColors = {Color(255, 102, 0)}
+    }
+
     FAdmin.Access.AddPrivilege("SetAccess", 3) -- AddPrivilege is shared, run on both client and server
     FAdmin.Access.AddPrivilege("SeeAdmins", 1)
     FAdmin.Commands.AddCommand("RemoveGroup", FAdmin.Access.RemoveGroup)

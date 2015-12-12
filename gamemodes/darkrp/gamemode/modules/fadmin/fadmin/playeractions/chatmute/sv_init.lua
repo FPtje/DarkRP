@@ -8,7 +8,6 @@ local function MuteChat(ply, cmd, args)
     end
 
     local time = tonumber(args[2] or 0)
-    local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
 
     for _, target in pairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Chatmute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
@@ -23,7 +22,8 @@ local function MuteChat(ply, cmd, args)
             end)
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "You have chat muted %s " .. timeText, "Your chat was muted by %s " .. timeText, "Chat muted %s " .. timeText)
+
+    FAdmin.Messages.FireNotification("chatmute", ply, targets, time)
 
     return true, targets, time
 end
@@ -43,12 +43,25 @@ local function UnMuteChat(ply, cmd, args)
             target:FAdmin_SetGlobal("FAdmin_chatmuted", false)
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "You have chat unmuted %s", "Your chat was unmuted by %s", "Chat unmuted %s")
+    FAdmin.Messages.FireNotification("chatunmute", ply, targets)
 
     return true, targets
 end
 
 FAdmin.StartHooks["Chatmute"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "chatmute",
+        hasTarget = true,
+        receivers = "involved",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "chatunmute",
+        hasTarget = true,
+        receivers = "involved",
+    }
+
     FAdmin.Commands.AddCommand("Chatmute", MuteChat)
     FAdmin.Commands.AddCommand("UnChatmute", UnMuteChat)
 

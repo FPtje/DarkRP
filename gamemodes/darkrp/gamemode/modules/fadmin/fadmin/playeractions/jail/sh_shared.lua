@@ -9,3 +9,24 @@ hook.Add("CanTool", "FAdmin_jailed", function(ply) -- shared so it doesn't look 
         return false
     end
 end)
+
+FAdmin.StartHooks["Jailing"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "jail",
+        hasTarget = true,
+        message = {"instigator", " jailed ", "targets", " ", "extraInfo.1"},
+        receivers = "admins",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        readExtraInfo = function()
+            local time = net.ReadUInt(16)
+            return {time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))}
+        end
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "unjail",
+        hasTarget = true,
+        message = {"instigator", " unjailed ", "targets"},
+        receivers = "admins",
+    }
+end

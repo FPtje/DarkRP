@@ -175,8 +175,10 @@ local function showNotification(notification, instigator, targets, extraInfo)
         if modMessage[text] then modMessage[text](res, instigator, targets) continue end
 
         if string.sub(text, 1, 10) == "extraInfo." then
-            table.insert(res, white)
-            table.insert(res, extraInfo[tonumber(string.sub(text, 11))])
+            local id = tonumber(string.sub(text, 11))
+
+            table.insert(res, notification.extraInfoColors and notification.extraInfoColors[id] or white)
+            table.insert(res, extraInfo[id])
             continue
         end
 
@@ -192,11 +194,13 @@ local function receiveNotification()
     local notification = FAdmin.Notifications[id]
     local instigator = net.ReadEntity()
 
-    local targetCount = net.ReadUInt(8)
     local targets = {}
 
-    for i = 1, targetCount do
-        table.insert(targets, net.ReadEntity())
+    if notification.hasTarget then
+        local targetCount = net.ReadUInt(8)
+        for i = 1, targetCount do
+            table.insert(targets, net.ReadEntity())
+        end
     end
 
     local extraInfo = notification.readExtraInfo and notification.readExtraInfo()

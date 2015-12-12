@@ -8,7 +8,6 @@ local function Freeze(ply, cmd, args)
     end
 
     local time = tonumber(args[2]) or 0
-    local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
 
     for _, target in pairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Freeze", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
@@ -25,7 +24,7 @@ local function Freeze(ply, cmd, args)
             end)
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "You have frozen %s " .. timeText, "You were frozen by %s " .. timeText, "Froze %s " .. timeText)
+    FAdmin.Messages.FireNotification("freeze", ply, targets, time)
 
     return true, targets, time
 end
@@ -46,12 +45,26 @@ local function Unfreeze(ply, cmd, args)
             target:UnLock()
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "You have unfrozen %s", "You were unfrozen by %s", "Unfroze %s")
+
+    FAdmin.Messages.FireNotification("unfreeze", ply, targets)
 
     return true, targets
 end
 
 FAdmin.StartHooks["Freeze"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "freeze",
+        hasTarget = true,
+        receivers = "admins",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "unfreeze",
+        hasTarget = true,
+        receivers = "admins"
+    }
+
     FAdmin.Commands.AddCommand("freeze", Freeze)
     FAdmin.Commands.AddCommand("unfreeze", Unfreeze)
 

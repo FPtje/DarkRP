@@ -12,12 +12,18 @@ local function StripWeapons(ply, cmd, args)
         end
     end
 
-    FAdmin.Messages.ActionMessage(ply, targets, "Stripped the weapons of %s", "Your weapons were stripped by %s", "Stripped the weapons of %s")
+    FAdmin.Messages.FireNotification("stripweapons", ply, targets)
 
     return true, targets
 end
 
 FAdmin.StartHooks["StripWeapons"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "stripweapons",
+        hasTarget = true,
+        receivers = "involved",
+    }
+
     FAdmin.Commands.AddCommand("StripWeapons", StripWeapons)
     FAdmin.Commands.AddCommand("Strip", StripWeapons)
 

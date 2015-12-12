@@ -275,9 +275,9 @@ local function Ragdoll(ply, cmd, args)
         end
     end
     if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" then
-        FAdmin.Messages.ActionMessage(ply, targets, "Unragdolled %s", "You were unragdolled by %s", "Unragdolled %s")
+        FAdmin.Messages.FireNotification("unragdoll", ply, targets)
     else
-        FAdmin.Messages.ActionMessage(ply, targets, "Ragdolled %s " .. timeText, "You were ragdolled by %s " .. timeText, "Ragdolled %s " .. timeText)
+        FAdmin.Messages.FireNotification("ragdoll", ply, targets, time)
     end
 
     return true, targets, RagdollType, time

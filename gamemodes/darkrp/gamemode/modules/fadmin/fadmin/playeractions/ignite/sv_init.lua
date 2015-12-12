@@ -18,7 +18,7 @@ local function Ignite(ply, cmd, args)
             end)
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "Ignited %s", "You were ignited by %s", "Ignited %s")
+    FAdmin.Messages.FireNotification("ignite", ply, targets, time)
 
     return true, targets
 end
@@ -38,13 +38,27 @@ local function UnIgnite(ply, cmd, args)
             target:FAdmin_SetGlobal("FAdmin_ignited", false)
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "Ignited %s", "You were extinguished by %s", "Extinguished %s")
 
+    FAdmin.Messages.FireNotification("unignite", ply, targets)
     return true, targets
 end
 
 
 FAdmin.StartHooks["Ignite"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "ignite",
+        hasTarget = true,
+        receivers = "admins",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "unignite",
+        hasTarget = true,
+        message = {"instigator", " unignited ", "targets"},
+        receivers = "admins",
+    }
+
     FAdmin.Commands.AddCommand("Ignite", Ignite)
     FAdmin.Commands.AddCommand("Unignite", UnIgnite)
 

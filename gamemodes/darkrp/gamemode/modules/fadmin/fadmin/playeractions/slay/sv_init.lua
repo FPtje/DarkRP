@@ -39,7 +39,9 @@ local function Slay(ply, cmd, args)
             end
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "Slayed %s", "You were slayed by %s", "Slayed %s")
+
+    FAdmin.Messages.FireNotification("slay", ply, targets)
+
     return true, targets, SlayType
 end
 

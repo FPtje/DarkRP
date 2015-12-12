@@ -1,4 +1,24 @@
 FAdmin.StartHooks["Chatmute"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "chatmute",
+        hasTarget = true,
+        message = {"instigator", " chat muted ", "targets", " ", "extraInfo.1"},
+        receivers = "involved",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        readExtraInfo = function()
+            local time = net.ReadUInt(16)
+
+            return {time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))}
+        end
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "chatunmute",
+        hasTarget = true,
+        message = {"instigator", " chat unmuted ", "targets"},
+        receivers = "involved",
+    }
+
     FAdmin.Access.AddPrivilege("Chatmute", 2)
     FAdmin.Commands.AddCommand("Chatmute", nil, "<Player>")
     FAdmin.Commands.AddCommand("UnChatmute", nil, "<Player>")

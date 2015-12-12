@@ -7,6 +7,18 @@ local function EnableDisableNoclip(ply)
 end
 
 FAdmin.StartHooks["zz_Noclip"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "noclipenable",
+        hasTarget = true,
+        message = {"instigator", " enabled noclip for ", "targets"},
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "noclipdisable",
+        hasTarget = true,
+        message = {"instigator", " disabled noclip for ", "targets"},
+    }
+
     FAdmin.Access.AddPrivilege("Noclip", 2)
     FAdmin.Access.AddPrivilege("SetNoclip", 2)
 

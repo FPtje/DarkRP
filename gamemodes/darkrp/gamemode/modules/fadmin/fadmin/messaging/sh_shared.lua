@@ -20,6 +20,8 @@ local validNotification = tc.assertTable{
 
     writeExtraInfo = tc.assert(tc.optional(isfunction), "writeExtraInfo must be a function"),
     readExtraInfo = tc.assert(tc.optional(isfunction), "writeExtraInfo must be a function"),
+
+    extraInfoColors = tc.assert(tc.optional(tc.tableOf(tc.assertTable{r,g,b})), "extraInfoColors must be a table of colours!")
 }
 
 
