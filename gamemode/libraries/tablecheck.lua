@@ -64,6 +64,12 @@ weapon                 = FindMetaTable("Weapon")
 -- Returns whether a value is nil
 isnil = fn.Curry(fn.Eq, 2)(nil)
 
+-- Returns true on the client
+client = function() return CLIENT end
+
+-- returns true on the server
+server = function() return SERVER end
+
 -- Optional value, when filled in it must meet the conditions
 optional = function(...) return fn.FOr{isnil, ...} end
 
