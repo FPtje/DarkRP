@@ -158,7 +158,7 @@ local function insertTargets(res, _, targets)
         return
     end
 
-    table.insert(res, table.concat(targets, ", ", 1, #targets - 1) .. " and " .. targets[#targets]:Nick())
+    table.insert(res, table.concat(targets, ", ", 1, #targets - 1) .. " and " .. targets[#targets])
 end
 
 local modMessage = {
