@@ -111,3 +111,83 @@ local function ConsoleMessage(um)
     MsgC(Color(255, 0, 0, 255), "(FAdmin) ", Color(200, 0, 200, 255), um:ReadString() .. "\n")
 end
 usermessage.Hook("FAdmin_ConsoleMessage", ConsoleMessage)
+
+
+local red = Color(255, 0, 0)
+local white = Color(190, 190, 190)
+local brown = Color(102, 51, 0)
+local blue = Color(102, 0, 255)
+
+-- Inserts the instigator into a notification message
+local function insertInstigator(res, instigator, _)
+    table.insert(res, brown)
+    local instNick = not IsValid(instigator) and "unknown" or instigator:EntIndex() == 0 and "Console" or instigator:Nick()
+    table.insert(res, instNick)
+end
+
+-- Inserts the targets into the notification message
+local function insertTargets(res, _, targets)
+    table.insert(res, blue)
+
+    if not istable(targets) then
+        local tNick = not IsValid(targets) and "unknown" or targets:EntIndex() == 0 and "Console" or targets:Nick()
+        table.insert(res, tNick)
+
+        return
+    end
+
+    if #targets == #player.GetAll() then
+        table.insert(res, "everyone")
+
+        return
+    end
+
+    if #targets == 0 then
+        table.insert(res, "no one")
+
+        return
+    end
+
+    targets = fn.Map(FindMetaTable("Player").Nick, targets)
+
+    if #targets == 1 then
+        table.insert(res, targets[1])
+
+        return
+    end
+
+    table.insert(res, table.concat(targets, ", ", 1, #targets - 1) .. " and " .. targets[#targets]:Nick())
+end
+
+local modMessage = {
+    instigator = insertInstigator,
+    you = function(res) table.insert(res, brown) table.insert(res, "you") end,
+    targets = insertTargets,
+}
+local function showNotification(notification, instigator, targets)
+    local res = {red, "[", white, "FAdmin", red, "] "}
+
+    for _, text in pairs(notification.message) do
+        if modMessage[text] then modMessage[text](res, instigator, targets) continue end
+        table.insert(res, white)
+        table.insert(res, text)
+    end
+
+    chat.AddText(unpack(res))
+end
+
+local function receiveNotification()
+    local id = net.ReadUInt(16)
+    local notification = FAdmin.Notifications[id]
+    local instigator = net.ReadEntity()
+
+    local targetCount = net.ReadUInt(8)
+    local targets = {}
+
+    for i = 1, targetCount do
+        table.insert(targets, net.ReadEntity())
+    end
+
+    showNotification(notification, instigator, targets)
+end
+net.Receive("FAdmin_Notification", receiveNotification)
