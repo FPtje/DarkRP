@@ -1,3 +1,5 @@
+local showChat = CreateClientConVar("FAdmin_ShowChatNotifications", 1, true, false)
+
 local HUDNote_c = 0
 local HUDNote_i = 1
 local HUDNotes = {}
@@ -148,7 +150,7 @@ local function insertTargets(res, _, targets)
         return
     end
 
-    targets = fn.Map(FindMetaTable("Player").Nick, targets)
+    targets = fn.Map(fn.FOr{fn.FAnd{fp{fn.Eq, LocalPlayer()}, fp{fn.Id, "you"}}, FindMetaTable("Player").Nick}, targets)
 
     if #targets == 1 then
         table.insert(res, targets[1])
@@ -165,6 +167,8 @@ local modMessage = {
     targets = insertTargets,
 }
 local function showNotification(notification, instigator, targets)
+    if not showChat:GetBool() then return end
+
     local res = {red, "[", white, "FAdmin", red, "] "}
 
     for _, text in pairs(notification.message) do
