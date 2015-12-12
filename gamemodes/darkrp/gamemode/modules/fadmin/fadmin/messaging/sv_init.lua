@@ -78,7 +78,7 @@ local receiversToPlayers = {
     targets = function(_, t) return t end,
     involved = function(i, t) local res = table.Copy(istable(t) and t or {t}) table.insert(res, i) return res end
 }
-function FAdmin.Messages.FireNotification(name, instigator, targets)
+function FAdmin.Messages.FireNotification(name, instigator, targets, extraInfo)
     local notId = FAdmin.NotificationNames[name]
 
     if not notId then
@@ -89,7 +89,7 @@ function FAdmin.Messages.FireNotification(name, instigator, targets)
     local receivers = receiversToPlayers[notification.receivers]
     receivers = receivers and receivers(instigator, targets) or notification.receivers(instigator, targets)
 
-    local targetCount = not IsValid(targets) and 0 or istable(targets) and #targets or 1
+    local targetCount = istable(targets) and #targets or not IsValid(targets) and 0 or 1
 
     net.Start("FAdmin_Notification")
         net.WriteUInt(notId, 16)
@@ -108,5 +108,6 @@ function FAdmin.Messages.FireNotification(name, instigator, targets)
             end
         end
 
+        if notification.writeExtraInfo then notification.writeExtraInfo(extraInfo) end
     net.Send(receivers)
 end

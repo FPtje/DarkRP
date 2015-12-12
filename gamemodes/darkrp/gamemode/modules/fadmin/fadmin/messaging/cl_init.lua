@@ -1,3 +1,5 @@
+local showChat = CreateClientConVar("FAdmin_ShowChatNotifications", 1, true, false)
+
 local HUDNote_c = 0
 local HUDNote_i = 1
 local HUDNotes = {}
@@ -148,7 +150,7 @@ local function insertTargets(res, _, targets)
         return
     end
 
-    targets = fn.Map(FindMetaTable("Player").Nick, targets)
+    targets = fn.Map(fn.FOr{fn.FAnd{fp{fn.Eq, LocalPlayer()}, fp{fn.Id, "you"}}, FindMetaTable("Player").Nick}, targets)
 
     if #targets == 1 then
         table.insert(res, targets[1])
@@ -156,7 +158,7 @@ local function insertTargets(res, _, targets)
         return
     end
 
-    table.insert(res, table.concat(targets, ", ", 1, #targets - 1) .. " and " .. targets[#targets]:Nick())
+    table.insert(res, table.concat(targets, ", ", 1, #targets - 1) .. " and " .. targets[#targets])
 end
 
 local modMessage = {
@@ -164,11 +166,20 @@ local modMessage = {
     you = function(res) table.insert(res, brown) table.insert(res, "you") end,
     targets = insertTargets,
 }
-local function showNotification(notification, instigator, targets)
+local function showNotification(notification, instigator, targets, extraInfo)
+    if not showChat:GetBool() then return end
+
     local res = {red, "[", white, "FAdmin", red, "] "}
 
     for _, text in pairs(notification.message) do
         if modMessage[text] then modMessage[text](res, instigator, targets) continue end
+
+        if string.sub(text, 1, 10) == "extraInfo." then
+            table.insert(res, white)
+            table.insert(res, extraInfo[tonumber(string.sub(text, 11))])
+            continue
+        end
+
         table.insert(res, white)
         table.insert(res, text)
     end
@@ -188,6 +199,8 @@ local function receiveNotification()
         table.insert(targets, net.ReadEntity())
     end
 
-    showNotification(notification, instigator, targets)
+    local extraInfo = notification.readExtraInfo and notification.readExtraInfo()
+
+    showNotification(notification, instigator, targets, extraInfo)
 end
 net.Receive("FAdmin_Notification", receiveNotification)
