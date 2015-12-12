@@ -8,7 +8,6 @@ local function MuteVoice(ply, cmd, args)
     end
 
     local time = tonumber(args[2]) or 0
-    local timeText = time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))
 
     for _, target in pairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Voicemute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
@@ -24,7 +23,7 @@ local function MuteVoice(ply, cmd, args)
         end
     end
 
-    FAdmin.Messages.FireNotification("voicemute", ply, targets)
+    FAdmin.Messages.FireNotification("voicemute", ply, targets, time)
 
     return true, targets, time
 end
@@ -55,6 +54,7 @@ FAdmin.StartHooks["VoiceMute"] = function()
         name = "voicemute",
         hasTarget = true,
         receivers = "involved",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
     }
 
     FAdmin.Messages.RegisterNotification{

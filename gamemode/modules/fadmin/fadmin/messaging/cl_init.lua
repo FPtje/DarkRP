@@ -166,13 +166,20 @@ local modMessage = {
     you = function(res) table.insert(res, brown) table.insert(res, "you") end,
     targets = insertTargets,
 }
-local function showNotification(notification, instigator, targets)
+local function showNotification(notification, instigator, targets, extraInfo)
     if not showChat:GetBool() then return end
 
     local res = {red, "[", white, "FAdmin", red, "] "}
 
     for _, text in pairs(notification.message) do
         if modMessage[text] then modMessage[text](res, instigator, targets) continue end
+
+        if string.sub(text, 1, 10) == "extraInfo." then
+            table.insert(res, white)
+            table.insert(res, extraInfo[tonumber(string.sub(text, 11))])
+            continue
+        end
+
         table.insert(res, white)
         table.insert(res, text)
     end
@@ -192,6 +199,8 @@ local function receiveNotification()
         table.insert(targets, net.ReadEntity())
     end
 
-    showNotification(notification, instigator, targets)
+    local extraInfo = notification.readExtraInfo and notification.readExtraInfo()
+
+    showNotification(notification, instigator, targets, extraInfo)
 end
 net.Receive("FAdmin_Notification", receiveNotification)
