@@ -139,7 +139,7 @@ local function Goto(ply, cmd, args)
     return true, target
 end
 
-FAdmin.StartHooks["Teleport"] = function()
+FAdmin.StartHooks["zz_Teleport"] = function()
     FAdmin.Access.AddPrivilege("Teleport", 2)
 
     FAdmin.Messages.RegisterNotification{

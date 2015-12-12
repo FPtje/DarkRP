@@ -15,7 +15,6 @@ local function MuteVoice(ply, cmd, args)
         if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_voicemuted") then
             target:FAdmin_SetGlobal("FAdmin_voicemuted", true)
 
-            FAdmin.Messages.ActionMessage(ply, target, "Voice muted %s " .. timeText, "Your voice was muted by %s " .. timeText, "Muted the voice of %s " .. timeText)
             if time == 0 then continue end
 
             timer.Simple(time, function()
@@ -24,6 +23,8 @@ local function MuteVoice(ply, cmd, args)
             end)
         end
     end
+
+    FAdmin.Messages.FireNotification("voicemute", ply, targets)
 
     return true, targets, time
 end
@@ -41,15 +42,27 @@ local function UnMuteVoice(ply, cmd, args)
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Voicemute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if IsValid(target) and target:FAdmin_GetGlobal("FAdmin_voicemuted") then
             target:FAdmin_SetGlobal("FAdmin_voicemuted", false)
-
-            FAdmin.Messages.ActionMessage(ply, target, "You have voice unmuted %s", "Your voice was unmuted by %s", "Unmuted the voice of %s")
         end
     end
+
+    FAdmin.Messages.FireNotification("voiceunmute", ply, targets)
 
     return true, targets
 end
 
 FAdmin.StartHooks["VoiceMute"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "voicemute",
+        hasTarget = true,
+        receivers = "involved",
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "voiceunmute",
+        hasTarget = true,
+        receivers = "involved",
+    }
+
     FAdmin.Commands.AddCommand("Voicemute", MuteVoice)
     FAdmin.Commands.AddCommand("UnVoicemute", UnMuteVoice)
 

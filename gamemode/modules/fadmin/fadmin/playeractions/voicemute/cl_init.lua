@@ -3,7 +3,19 @@ hook.Add("PlayerBindPress", "FAdmin_voicemuted", function(ply, bind, pressed)
     -- The voice muting is not done clientside, this is just so people know they can't talk
 end)
 
-FAdmin.StartHooks["Voicemute"] = function()
+FAdmin.StartHooks["VoiceMute"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "voicemute",
+        hasTarget = true,
+        message = {"instigator", " muted ", "targets"}
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "voiceunmute",
+        hasTarget = true,
+        message = {"instigator", " unmuted ", "targets"}
+    }
+
     FAdmin.Access.AddPrivilege("Voicemute", 2)
     FAdmin.Commands.AddCommand("Voicemute", nil, "<Player>")
     FAdmin.Commands.AddCommand("UnVoicemute", nil, "<Player>")
