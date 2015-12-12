@@ -13,7 +13,7 @@ local function God(ply, cmd, args)
             target:GodEnable()
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "Godded %s", "You were godded by %s", "Godded %s")
+    FAdmin.Messages.FireNotification("god", ply, targets)
 
     return true, targets
 end
@@ -33,12 +33,26 @@ local function Ungod(ply, cmd, args)
             target:GodDisable()
         end
     end
-    FAdmin.Messages.ActionMessage(ply, targets, "Ungodded %s", "You were ungodded by %s", "Ungodded %s")
+    FAdmin.Messages.FireNotification("ungod", ply, targets)
 
     return true, targets
 end
 
 FAdmin.StartHooks["God"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "god",
+        hasTarget = true,
+        message = {"instigator", " enabled godmode for ", "targets"},
+        receivers = "everyone",
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "ungod",
+        hasTarget = true,
+        message = {"instigator", " disabled godmode for ", "targets"},
+        receivers = "everyone",
+    }
+
     FAdmin.Commands.AddCommand("God", God)
     FAdmin.Commands.AddCommand("Ungod", Ungod)
 

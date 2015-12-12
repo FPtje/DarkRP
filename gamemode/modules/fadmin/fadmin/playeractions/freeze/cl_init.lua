@@ -1,4 +1,22 @@
 FAdmin.StartHooks["Freeze"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "freeze",
+        hasTarget = true,
+        message = {"instigator", " froze ", "targets", " ", "extraInfo.1"},
+        readExtraInfo = function()
+            local time = net.ReadUInt(16)
+
+            return {time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))}
+        end
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "unfreeze",
+        hasTarget = true,
+        message = {"instigator", " unfroze ", "targets"},
+    }
+
+
     FAdmin.Access.AddPrivilege("Freeze", 2)
     FAdmin.Commands.AddCommand("freeze", nil, "<Player>")
     FAdmin.Commands.AddCommand("unfreeze", nil, "<Player>")

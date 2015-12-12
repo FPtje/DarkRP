@@ -35,7 +35,9 @@ local function SetTeam(ply, cmd, args)
                     SetTeam(target, k, true)
                 end
             end
-            FAdmin.Messages.ActionMessage(ply, targets, "You have set the team of %s", "Your team was set to " .. v.Name .. " by %s", "Set the team of %s")
+
+            FAdmin.Messages.FireNotification("setteam", ply, targets, k)
+
             break
         end
     end
@@ -43,7 +45,14 @@ local function SetTeam(ply, cmd, args)
     return true, targets
 end
 
-FAdmin.StartHooks["SetTeam"] = function()
+FAdmin.StartHooks["zzSetTeam"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "setteam",
+        hasTarget = true,
+        receivers = "everyone",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+    }
+
     FAdmin.Commands.AddCommand("SetTeam", SetTeam)
 
     FAdmin.Access.AddPrivilege("SetTeam", 2)

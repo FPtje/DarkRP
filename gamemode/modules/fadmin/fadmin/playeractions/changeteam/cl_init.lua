@@ -1,4 +1,14 @@
 FAdmin.StartHooks["zzSetTeam"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "setteam",
+        hasTarget = true,
+        message = {"instigator", " set the team of ", "targets", " to ", "extraInfo.1"},
+        readExtraInfo = function()
+            return {team.GetName(net.ReadUInt(16))}
+        end,
+        extraInfoColors = {Color(255, 102, 0)}
+    }
+
     FAdmin.Access.AddPrivilege("SetTeam", 2)
     FAdmin.Commands.AddCommand("SetTeam", nil, "<Player>", "<Team>")
 

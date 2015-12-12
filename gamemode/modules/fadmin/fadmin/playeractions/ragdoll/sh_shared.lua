@@ -13,8 +13,13 @@ FAdmin.StartHooks["Ragdolling"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "ragdoll",
         hasTarget = true,
-        message = {"instigator", " ragdolled ", "targets"},
+        message = {"instigator", " ragdolled ", "targets", " ", "extraInfo.1"},
         receivers = "admins",
+        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        readExtraInfo = function()
+            local time = net.ReadUInt(16)
+            return {time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))}
+        end
     }
 
     FAdmin.Messages.RegisterNotification{

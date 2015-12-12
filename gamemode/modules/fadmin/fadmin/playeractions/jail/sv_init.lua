@@ -116,10 +116,11 @@ local function Jail(ply, cmd, args)
             if JailTime == 0 then time = "indefinitely" end
         end
     end
+
     if JailType == "unjail" or string.lower(cmd) == "unjail" then
-        FAdmin.Messages.ActionMessage(ply, targets, "Unjailed %s", "You were unjailed by %s", "Unjailed %s")
+        FAdmin.Messages.FireNotification("unjail", ply, targets)
     else
-        FAdmin.Messages.ActionMessage(ply, targets, "Jailed %s in a " .. JailType .. " jail " .. time, "You were jailed " .. time .. " by %s", "Jailed %s for " .. time)
+        FAdmin.Messages.FireNotification("jail", ply, targets, JailTime)
     end
 
     return true, targets, JailType, time
@@ -157,7 +158,7 @@ hook.Add("CanPlayerEnterVehicle", "FAdmin_jailed", function(ply)
 end)
 
 --Kill stupid addons that does not call CanPlayerEnterVehicle (like Sit Anywhere script)
-hook.Add("PlayerEnteredVehicle", "FAdmin_jailed", function(ply) 
+hook.Add("PlayerEnteredVehicle", "FAdmin_jailed", function(ply)
     if ply:FAdmin_GetGlobal("fadmin_jailed") then
         ply:ExitVehicle()
     end

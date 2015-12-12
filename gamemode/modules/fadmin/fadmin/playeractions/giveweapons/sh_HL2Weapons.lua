@@ -29,3 +29,29 @@ FAdmin.AmmoTypes = {
     Grenade = 3,
     slam = 1
 }
+
+FAdmin.StartHooks["GivingWeapons"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "giveweapon",
+        hasTarget = true,
+        message = {"instigator", " gave ", "extraInfo.1", " to ", "targets"},
+        receivers = "everyone",
+        writeExtraInfo = net.WriteString,
+        readExtraInfo = function()
+            return {net.ReadString()}
+        end,
+        extraInfoColors = {Color(255, 102, 0)}
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "giveammo",
+        hasTarget = true,
+        message = {"instigator", " gave ", "extraInfo.1", " ", "extraInfo.2", " ammo to ", "targets"},
+        receivers = "everyone",
+        writeExtraInfo = function(info) net.WriteUInt(info.amount, 32) net.WriteString(info.ammo) end,
+        readExtraInfo = function()
+            return {tostring(net.ReadUInt(32)), net.ReadString()}
+        end,
+        extraInfoColors = {Color(255, 102, 0), Color(255, 102, 153)}
+    }
+end

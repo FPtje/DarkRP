@@ -1,4 +1,18 @@
 FAdmin.StartHooks["God"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "god",
+        hasTarget = true,
+        message = {"instigator", " enabled godmode for ", "targets"},
+        receivers = "everyone",
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "ungod",
+        hasTarget = true,
+        message = {"instigator", " disabled godmode for ", "targets"},
+        receivers = "everyone",
+    }
+
     FAdmin.Access.AddPrivilege("God", 2)
     FAdmin.Commands.AddCommand("god", nil, "<Player>")
     FAdmin.Commands.AddCommand("ungod", nil, "<Player>")

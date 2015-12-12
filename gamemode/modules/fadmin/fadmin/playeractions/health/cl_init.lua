@@ -1,4 +1,11 @@
 FAdmin.StartHooks["Health"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "sethealth",
+        hasTarget = true,
+        message = {"instigator", " set the health of ", "targets", " to ", "extraInfo.1"},
+        readExtraInfo = function() return {tostring(net.ReadUInt(16))} end
+    }
+
     FAdmin.Access.AddPrivilege("SetHealth", 2)
     FAdmin.Commands.AddCommand("hp", nil, "<Player>", "<health>")
     FAdmin.Commands.AddCommand("SetHealth", nil, "[Player]", "<health>")
