@@ -113,6 +113,8 @@ local function Bring(ply, cmd, args)
         end)
     end
 
+    FAdmin.Messages.FireNotification("bring", ply, targets)
+
     return true, targets, BringTo
 end
 
@@ -142,6 +144,12 @@ FAdmin.StartHooks["Teleport"] = function()
 
     FAdmin.Messages.RegisterNotification{
         name = "goto",
+        hasTarget = true,
+        receivers = "admins",
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "bring",
         hasTarget = true,
         receivers = "admins",
     }
