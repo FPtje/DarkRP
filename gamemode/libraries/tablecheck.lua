@@ -78,7 +78,6 @@ end end
 
 -- Checks whether a value is amongst a given set of values
 -- exapmle: tc.oneOf{"jobs", "entities", "shipments", "weapons", "vehicles", "ammo"}
--- Note: you must make your own istable check.
 oneOf = function(f) return fp{table.HasValue, f} end
 
 -- A table that is nonempty, also useful for wrapping around tableOf
