@@ -132,11 +132,19 @@ local function Goto(ply, cmd, args)
     zapEffect(ply)
     FAdmin.Log(string.format("FAdmin: %s (%s) went to %s",ply:Nick(), ply:SteamID(), target:Name()))
 
+    FAdmin.Messages.FireNotification("goto", ply, target)
+
     return true, target
 end
 
 FAdmin.StartHooks["Teleport"] = function()
     FAdmin.Access.AddPrivilege("Teleport", 2)
+
+    FAdmin.Messages.RegisterNotification{
+        name = "goto",
+        hasTarget = true,
+        receivers = "admins",
+    }
 
     FAdmin.Commands.AddCommand("Teleport", Teleport)
     FAdmin.Commands.AddCommand("TP", Teleport)

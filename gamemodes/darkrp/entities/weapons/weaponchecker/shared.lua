@@ -12,6 +12,7 @@ SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to weapon check\nRight click to confiscate weapons\nReload to give back the weapons"
 SWEP.Contact = ""
 SWEP.Purpose = ""
+SWEP.IsDarkRPWeaponChecker = true
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false

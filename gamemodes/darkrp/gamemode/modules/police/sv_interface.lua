@@ -218,12 +218,12 @@ DarkRP.hookStub{
     parameters = {
         {
             name = "criminal",
-            description = "The arrested criminal.",
+            description = "The unarrested criminal.",
             type = "Player"
         },
         {
             name = "actor",
-            description = "The person who arrested the criminal.",
+            description = "The person who unarrested the criminal.",
             type = "Player"
         }
     },
