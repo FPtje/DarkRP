@@ -187,6 +187,8 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
             FAdmin.Messages.SendMessage(ply, 2, "User set to superadmin!")
         end
     end
+
+    FAdmin.Messages.FireNotification("setaccess", ply, targets, "superadmin")
     return true, targets, "superadmin"
 end
 
@@ -298,8 +300,10 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
         CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), args[2], "FAdmin")
 
         FAdmin.Access.PlayerSetGroup(target, args[2])
-        FAdmin.Messages.SendMessage(ply, 4, "User access set!")
     end
+
+    FAdmin.Messages.SendMessage(ply, 4, "User access set!")
+    FAdmin.Messages.FireNotification("setaccess", ply, targets, args[2])
     return true, targets, args[2]
 end
 
