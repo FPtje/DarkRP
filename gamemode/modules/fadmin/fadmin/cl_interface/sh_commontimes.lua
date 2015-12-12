@@ -2,7 +2,7 @@
 Common times for several punishment actions
 ---------------------------------------------------------------------------*/
 FAdmin.PlayerActions.commonTimes = {}
-FAdmin.PlayerActions.commonTimes[0] = "Indefinitely"
+FAdmin.PlayerActions.commonTimes[0] = "indefinitely"
 FAdmin.PlayerActions.commonTimes[10] = "10 seconds"
 FAdmin.PlayerActions.commonTimes[30] = "30 seconds"
 FAdmin.PlayerActions.commonTimes[60] = "1 minute"
