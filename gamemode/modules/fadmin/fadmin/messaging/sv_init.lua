@@ -89,7 +89,7 @@ function FAdmin.Messages.FireNotification(name, instigator, targets)
     local receivers = receiversToPlayers[notification.receivers]
     receivers = receivers and receivers(instigator, targets) or notification.receivers(instigator, targets)
 
-    local targetCount = not IsValid(targets) and 0 or istable(targets) and #targets or 1
+    local targetCount = istable(targets) and #targets or not IsValid(targets) and 0 or 1
 
     net.Start("FAdmin_Notification")
         net.WriteUInt(notId, 16)
