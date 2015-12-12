@@ -32,15 +32,27 @@ local function SetNoclip(ply, cmd, args)
         end
     end
     if Toggle then
-        FAdmin.Messages.ActionMessage(ply, targets, "You have enabled noclip for %s", "%s has enabled noclip for you", "Enabled noclip for %s")
+        FAdmin.Messages.FireNotification("noclipenable", ply, targets)
     else
-        FAdmin.Messages.ActionMessage(ply, targets, "You have disabled noclip for %s", "%s has disabled noclip for you", "Disabled noclip for %s")
+        FAdmin.Messages.FireNotification("noclipdisable", ply, targets)
     end
 
     return true, targets, Toggle
 end
 
-FAdmin.StartHooks["Noclip"] = function()
+FAdmin.StartHooks["zz_Noclip"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "noclipenable",
+        hasTarget = true,
+        receivers = "involved",
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "noclipdisable",
+        hasTarget = true,
+        receivers = "involved",
+    }
+
     FAdmin.Access.AddPrivilege("Noclip", 2)
     FAdmin.Access.AddPrivilege("SetNoclip", 2)
 

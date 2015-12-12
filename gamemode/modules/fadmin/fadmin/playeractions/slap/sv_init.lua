@@ -44,16 +44,18 @@ local function Slap(ply, cmd, args)
         end
     end
 
-    if not Repetitions or Repetitions == 1 then
-        FAdmin.Messages.ActionMessage(ply, targets, "Slapped %s once with " .. Amount .. " damage", "You are being slapped once with " .. Amount .. " damage by %s", "Slapped %s once with " .. Amount .. " damage")
-    else
-        FAdmin.Messages.ActionMessage(ply, targets, "Slapping %s " .. Repetitions .. " times with " .. Amount .. " damage", "You are being slapped " .. Repetitions .. " times with " .. Amount .. " damage by %s", "Slapped %s " .. Repetitions .. " times with " .. Amount .. " damage")
-    end
+    FAdmin.Messages.FireNotification("slap", ply, targets)
 
     return true, targets, Amount, Repetitions
 end
 
 FAdmin.StartHooks["Slap"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "slap",
+        hasTarget = true,
+        receivers = "admins",
+    }
+
     FAdmin.Commands.AddCommand("Slap", Slap)
 
     FAdmin.Access.AddPrivilege("Slap", 2)

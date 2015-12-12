@@ -8,3 +8,19 @@ FAdmin.PlayerActions.RagdollTypes = {
     [3] = "Hang",
     [4] = "Unragdoll"
 }
+
+FAdmin.StartHooks["Ragdolling"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "ragdoll",
+        hasTarget = true,
+        message = {"instigator", " ragdolled ", "targets"},
+        receivers = "admins",
+    }
+
+    FAdmin.Messages.RegisterNotification{
+        name = "unragdoll",
+        hasTarget = true,
+        message = {"instigator", " unragdolled ", "targets"},
+        receivers = "admins",
+    }
+end

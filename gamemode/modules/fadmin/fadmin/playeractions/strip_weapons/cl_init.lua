@@ -1,4 +1,10 @@
 FAdmin.StartHooks["StripWeapons"] = function()
+    FAdmin.Messages.RegisterNotification{
+        name = "stripweapons",
+        hasTarget = true,
+        message = {"instigator", " stripped the weapons of ", "targets"},
+    }
+
     FAdmin.Access.AddPrivilege("StripWeapons", 2)
     FAdmin.Commands.AddCommand("StripWeapons", nil, "<Player>")
     FAdmin.Commands.AddCommand("Strip", nil, "<Player>")

@@ -192,11 +192,13 @@ local function receiveNotification()
     local notification = FAdmin.Notifications[id]
     local instigator = net.ReadEntity()
 
-    local targetCount = net.ReadUInt(8)
     local targets = {}
 
-    for i = 1, targetCount do
-        table.insert(targets, net.ReadEntity())
+    if notification.hasTarget then
+        local targetCount = net.ReadUInt(8)
+        for i = 1, targetCount do
+            table.insert(targets, net.ReadEntity())
+        end
     end
 
     local extraInfo = notification.readExtraInfo and notification.readExtraInfo()
