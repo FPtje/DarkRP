@@ -80,7 +80,7 @@ default = function(def, f)
     return function(val)
         if val == nil then
             -- second return value is the default value. Expects parent function to actually change the value
-            return true, nil, nil, def
+            return true, nil, nil, true, def
         end
         -- Return in if statement rather than "return f and f(val) or true" to allow multiple return values
         if f then return f(val) else return true end
@@ -128,7 +128,7 @@ function assertTable(schema)
 
         for k, v in pairs(schema or {}) do
             local correct, err, hints = tbl[v] ~= nil
-            if isfunction(v) then correct, err, hints, replace = v(tbl[k], tbl) end
+            if isfunction(v) then correct, err, hints, replace, replaceWith = v(tbl[k], tbl) end
 
 
             if not correct then
@@ -137,8 +137,8 @@ function assertTable(schema)
             end
 
             -- Update the value
-            if correct and replace ~= nil then
-                tbl[k] = replace
+            if correct and replace == true and replaceWith then
+                tbl[k] = replaceWith
             end
         end
 
