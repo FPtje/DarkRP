@@ -70,7 +70,8 @@ FAdmin.StartHooks["kickbanning"] = function()
             end
 
             return {table.concat(targets, ", "), net.ReadString()}
-        end
+        end,
+        extraInfoColors = {Color(102, 0, 255), Color(255, 102, 0)}
     }
 
     FAdmin.Messages.RegisterNotification{
@@ -82,6 +83,11 @@ FAdmin.StartHooks["kickbanning"] = function()
             net.WriteUInt(#info.targets, 8)
             -- Manually send targets, because they might be gone from the client when kicked
             for _, target in pairs(info.targets) do
+                if isstring(target) then
+                    net.WriteString("Unknown (" .. target .. ")")
+                    continue
+                end
+
                 if not IsValid(target) then
                     net.WriteString("Unknown")
                     continue
@@ -104,7 +110,9 @@ FAdmin.StartHooks["kickbanning"] = function()
             end
 
             return {table.concat(targets, ", "), FAdmin.PlayerActions.ConvertBanTime(net.ReadUInt(32)), net.ReadString()}
-        end
+        end,
+
+        extraInfoColors = {Color(102, 0, 255), Color(255, 102, 0), Color(255, 102, 0)}
     }
 
     FAdmin.Messages.RegisterNotification{
@@ -119,6 +127,8 @@ FAdmin.StartHooks["kickbanning"] = function()
 
         readExtraInfo = function()
             return {net.ReadString(), net.ReadString()}
-        end
+        end,
+
+        extraInfoColors = {Color(102, 0, 255), Color(255, 102, 0)}
     }
 end

@@ -175,8 +175,10 @@ local function showNotification(notification, instigator, targets, extraInfo)
         if modMessage[text] then modMessage[text](res, instigator, targets) continue end
 
         if string.sub(text, 1, 10) == "extraInfo." then
-            table.insert(res, white)
-            table.insert(res, extraInfo[tonumber(string.sub(text, 11))])
+            local id = tonumber(string.sub(text, 11))
+
+            table.insert(res, notification.extraInfoColors and notification.extraInfoColors[id] or white)
+            table.insert(res, extraInfo[id])
             continue
         end
 
