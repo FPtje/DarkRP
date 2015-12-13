@@ -167,8 +167,6 @@ local modMessage = {
     targets = insertTargets,
 }
 local function showNotification(notification, instigator, targets, extraInfo)
-    if not showChat:GetBool() then return end
-
     local res = {red, "[", white, "FAdmin", red, "] "}
 
     for _, text in pairs(notification.message) do
@@ -186,7 +184,12 @@ local function showNotification(notification, instigator, targets, extraInfo)
         table.insert(res, text)
     end
 
-    chat.AddText(unpack(res))
+    if showChat:GetBool() then
+        chat.AddText(unpack(res))
+    else
+        MsgC(unpack(res))
+        Msg("\n")
+    end
 end
 
 local function receiveNotification()
