@@ -74,8 +74,10 @@ server = function() return SERVER end
 optional = function(...) return fn.FOr{isnil, ...} end
 
 -- Default value, implies optional. Only works in combination with assertTable
--- example: assertTable{test = tc.assert(default(3, isnumber))}
--- example: assertTable{test = tc.assert(default(3))}
+-- Note that the tc.assert is to be the second parameter of default.
+--      tc.assert(default(x)) does NOT work, default(x, tc.assert(...)) does.
+-- example: assertTable{test = default(3, tc.assert(isnumber, "must be a number"))}
+-- example: assertTable{test = default(3)}
 default = function(def, f)
     return function(val)
         if val == nil then
