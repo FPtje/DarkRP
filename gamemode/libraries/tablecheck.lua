@@ -293,5 +293,26 @@ function unitTests()
     checkCorrect(withDefaultNoCheck({}))
     checkCorrect(withDefaultNoCheck({value = "string"}))
 
+    --[[
+    Creating your own checker function that returns an error message
+    When both the function and the tc.assert define error messages, there's a conflict
+    ]]
+    local function customCheck(val)
+        return false, "function error message", {"function hint"}
+    end
+
+    local customCheckSchema = tc.assertTable{
+        value = tc.assert(customCheck, "conflicting error message", {"conflicting hint"})
+    }
+    checkIncorrect(customCheckSchema{value = 1})
+    checkIncorrect(customCheckSchema{})
+
+    _, err, hints = customCheckSchema{value = 2}
+    if err ~= "function error message" or hints[1] ~= "function hint" then
+        print("Wrong conflict solution", err, hints[1])
+    else
+        print("Conflict solution OK!")
+    end
+
     print("finished")
 end
