@@ -53,14 +53,14 @@ FAdmin.StartHooks["VoiceMute"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "voicemute",
         hasTarget = true,
-        receivers = "involved",
+        receivers = "involved+admins",
         writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "voiceunmute",
         hasTarget = true,
-        receivers = "involved",
+        receivers = "involved+admins",
     }
 
     FAdmin.Commands.AddCommand("Voicemute", MuteVoice)

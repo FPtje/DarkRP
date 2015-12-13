@@ -22,7 +22,7 @@ local validNotification = tc.assertTable{
     hasTarget = tc.assert(tc.optional(isbool), "hasTarget must either be true, false or nil!"),
 
     -- Receivers - optional on the client
-    receivers = tc.assert(fn.FOr{tc.client, isfunction, tc.oneOf{"everyone", "admins", "superadmins", "self", "targets", "involved"}}, "receivers must either be a function returning a list of players or one of 'admins', 'superadmins', 'everyone', 'self', 'targets', 'involved'"),
+    receivers = tc.assert(fn.FOr{tc.client, isfunction, tc.oneOf{"everyone", "admins", "superadmins", "self", "targets", "involved", "involved+admins", "involved+superadmins"}}, "receivers must either be a function returning a list of players or one of 'admins', 'superadmins', 'everyone', 'self', 'targets', 'involved', 'involved+admins', 'involved+superadmins'"),
     message = tc.assert(fn.FOr{tc.server, tc.tableOf(isstring)}, "The message field must be a table of strings! with special strings 'targets', 'you', 'instigator', 'extraInfo.#', with # a number."),
 
     -- The message type when chat notifications are disabled. NOTIFY by default
