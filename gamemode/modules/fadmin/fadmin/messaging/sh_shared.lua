@@ -1,11 +1,11 @@
 FAdmin.Messages = {}
 
 FAdmin.Messages.MsgTypes = {
-    ERROR = {COLOR = Color(255,180,0,80)},
-    NOTIFY = {COLOR = Color(255,255,0,80)},
-    QUESTION = {COLOR = Color(0,0,255,80)},
-    GOOD = {COLOR = Color(0,255,0,80)},
-    BAD = {COLOR = Color(255,0,0,80)}
+    ERROR = {TEXTURE = "icon16/exclamation.png", COLOR = Color(255,180,0,80)},
+    NOTIFY = {TEXTURE = "vgui/notices/error", COLOR = Color(255,255,0,80)},
+    QUESTION = {TEXTURE = "vgui/notices/hint", COLOR = Color(0,0,255,80)},
+    GOOD = {TEXTURE = "icon16/tick.png", COLOR = Color(0,255,0,80)},
+    BAD = {TEXTURE = "icon16/cross.png", COLOR = Color(255,0,0,80)}
 }
 FAdmin.Messages.MsgTypesByName = {
     ERROR = 1,
