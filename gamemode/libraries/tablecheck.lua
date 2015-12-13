@@ -269,7 +269,7 @@ function unitTests()
     Default value with a check
     ]]
     local withDefaultSchema = tc.assertTable{
-        value = default(10, isnumber)
+        value = default(10, tc.assert(isnumber, "must be a number!"))
     }
     checkCorrect(withDefaultSchema({value = 30}))
     checkIncorrect(withDefaultSchema({value = "string"}))

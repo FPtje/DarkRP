@@ -18,6 +18,8 @@ local validNotification = tc.assertTable{
     receivers = tc.assert(fn.FOr{tc.client, isfunction, tc.oneOf{"everyone", "admins", "superadmins", "self", "targets", "involved"}}, "receivers must either be a function returning a list of players or one of 'admins', 'superadmins', 'everyone', 'self', 'targets', 'involved'"),
     message = tc.assert(fn.FOr{tc.server, tc.tableOf(isstring)}, "The message field must be a table of strings! with special strings 'targets', 'you', 'instigator', 'extraInfo.#', with # a number."),
 
+    msgType = tc.default("NOTIFY", tc.assert(tc.oneOf{"ERROR", "NOTIFY", "QUESTION", "GOOD", "BAD"}, "msgType must be one of 'ERROR', 'NOTIFY', 'QUESTION', 'GOOD', 'BAD'")),
+
     writeExtraInfo = tc.assert(tc.optional(isfunction), "writeExtraInfo must be a function"),
     readExtraInfo = tc.assert(tc.optional(isfunction), "writeExtraInfo must be a function"),
 
