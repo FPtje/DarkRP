@@ -138,7 +138,7 @@ local function insertTargets(res, _, targets)
         return
     end
 
-    if #targets == #player.GetAll() then
+    if #targets == #player.GetAll() and #targets ~= 1 then
         table.insert(res, "everyone")
 
         return
