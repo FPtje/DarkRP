@@ -5,7 +5,7 @@ local HUDNote_i = 1
 local HUDNotes = {}
 
 --Notify ripped off the Sandbox notify, changed to my likings
-function FAdmin.Messages.AddMessage( MsgType, Message )
+function FAdmin.Messages.AddMessage(MsgType, Message)
     local tab = {}
     tab.text    = Message
     tab.recv    = SysTime()
@@ -187,6 +187,11 @@ local function showNotification(notification, instigator, targets, extraInfo)
     if showChat:GetBool() then
         chat.AddText(unpack(res))
     else
+        local msgTbl = {}
+        for i = 8, #res, 2 do table.insert(msgTbl, res[i]) end
+
+        FAdmin.Messages.AddMessage(FAdmin.Messages.MsgTypesByName[notification.msgType], table.concat(msgTbl, ""))
+
         MsgC(unpack(res))
         Msg("\n")
     end

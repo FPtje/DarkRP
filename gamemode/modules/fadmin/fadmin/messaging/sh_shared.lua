@@ -1,11 +1,18 @@
 FAdmin.Messages = {}
 
 FAdmin.Messages.MsgTypes = {
---[[ 1 --]] ERROR = {COLOR = Color(255,180,0,80)},
---[[ 2 --]] NOTIFY = {COLOR = Color(255,255,0,80)},
---[[ 3 --]] QUESTION = {COLOR = Color(0,0,255,80)},
---[[ 4 --]] GOOD = {COLOR = Color(0,255,0,80)},
---[[ 5 --]] BAD = {COLOR = Color(255,0,0,80)}
+    ERROR = {COLOR = Color(255,180,0,80)},
+    NOTIFY = {COLOR = Color(255,255,0,80)},
+    QUESTION = {COLOR = Color(0,0,255,80)},
+    GOOD = {COLOR = Color(0,255,0,80)},
+    BAD = {COLOR = Color(255,0,0,80)}
+}
+FAdmin.Messages.MsgTypesByName = {
+    ERROR = 1,
+    NOTIFY = 2,
+    QUESTION = 3,
+    GOOD = 4,
+    BAD = 5,
 }
 
 FAdmin.Notifications = {}
@@ -18,6 +25,7 @@ local validNotification = tc.assertTable{
     receivers = tc.assert(fn.FOr{tc.client, isfunction, tc.oneOf{"everyone", "admins", "superadmins", "self", "targets", "involved"}}, "receivers must either be a function returning a list of players or one of 'admins', 'superadmins', 'everyone', 'self', 'targets', 'involved'"),
     message = tc.assert(fn.FOr{tc.server, tc.tableOf(isstring)}, "The message field must be a table of strings! with special strings 'targets', 'you', 'instigator', 'extraInfo.#', with # a number."),
 
+    -- The message type when chat notifications are disabled. NOTIFY by default
     msgType = tc.default("NOTIFY", tc.assert(tc.oneOf{"ERROR", "NOTIFY", "QUESTION", "GOOD", "BAD"}, "msgType must be one of 'ERROR', 'NOTIFY', 'QUESTION', 'GOOD', 'BAD'")),
 
     writeExtraInfo = tc.assert(tc.optional(isfunction), "writeExtraInfo must be a function"),
