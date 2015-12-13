@@ -27,7 +27,7 @@ FAdmin.StartHooks["Health"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "sethealth",
         hasTarget = true,
-        receivers = "involved",
+        receivers = "everyone",
         writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
     }
 

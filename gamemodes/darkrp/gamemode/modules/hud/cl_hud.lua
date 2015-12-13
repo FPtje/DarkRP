@@ -237,7 +237,7 @@ local function DrawHUD()
     RelativeX, RelativeY = 0, Scrh
 
     shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
-    shouldDraw = shouldDraw ~= false and (GAMEMODE.BaseClass.HUDShouldDraw(GAMEMODE, "DarkRP_LocalPlayerHUD") ~= false)
+    shouldDraw = shouldDraw ~= false and (GAMEMODE.Sandbox.HUDShouldDraw(GAMEMODE, "DarkRP_LocalPlayerHUD") ~= false)
     if shouldDraw then
         --Background
         draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
@@ -357,7 +357,7 @@ Drawing death notices
 ---------------------------------------------------------------------------*/
 function GM:DrawDeathNotice(x, y)
     if not GAMEMODE.Config.showdeaths then return end
-    self.BaseClass:DrawDeathNotice(x, y)
+    self.Sandbox:DrawDeathNotice(x, y)
 end
 
 /*---------------------------------------------------------------------------
@@ -404,5 +404,5 @@ function GM:HUDPaint()
     DrawHUD()
     DrawEntityDisplay()
 
-    self.BaseClass:HUDPaint()
+    self.Sandbox:HUDPaint()
 end

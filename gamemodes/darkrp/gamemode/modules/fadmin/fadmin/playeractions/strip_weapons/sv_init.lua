@@ -21,7 +21,7 @@ FAdmin.StartHooks["StripWeapons"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "stripweapons",
         hasTarget = true,
-        receivers = "involved",
+        receivers = "involved+admins",
     }
 
     FAdmin.Commands.AddCommand("StripWeapons", StripWeapons)

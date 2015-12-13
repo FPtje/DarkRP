@@ -9,6 +9,6 @@ FAdmin.StartHooks["Slaying"] = function()
         name = "slay",
         hasTarget = true,
         message = {"instigator", " slayed ", "targets"},
-        receivers = "admins",
+        receivers = "involved+admins",
     }
 end

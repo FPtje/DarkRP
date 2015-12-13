@@ -74,8 +74,10 @@ server = function() return SERVER end
 optional = function(...) return fn.FOr{isnil, ...} end
 
 -- Default value, implies optional. Only works in combination with assertTable
--- example: assertTable{test = tc.assert(default(3, isnumber))}
--- example: assertTable{test = tc.assert(default(3))}
+-- Note that the tc.assert is to be the second parameter of default.
+--      tc.assert(default(x)) does NOT work, default(x, tc.assert(...)) does.
+-- example: assertTable{test = default(3, tc.assert(isnumber, "must be a number"))}
+-- example: assertTable{test = default(3)}
 default = function(def, f)
     return function(val)
         if val == nil then
@@ -269,7 +271,7 @@ function unitTests()
     Default value with a check
     ]]
     local withDefaultSchema = tc.assertTable{
-        value = default(10, isnumber)
+        value = default(10, tc.assert(isnumber, "must be a number!"))
     }
     checkCorrect(withDefaultSchema({value = 30}))
     checkIncorrect(withDefaultSchema({value = "string"}))
@@ -290,6 +292,27 @@ function unitTests()
     }
     checkCorrect(withDefaultNoCheck({}))
     checkCorrect(withDefaultNoCheck({value = "string"}))
+
+    --[[
+    Creating your own checker function that returns an error message
+    When both the function and the tc.assert define error messages, there's a conflict
+    ]]
+    local function customCheck(val)
+        return false, "function error message", {"function hint"}
+    end
+
+    local customCheckSchema = tc.assertTable{
+        value = tc.assert(customCheck, "conflicting error message", {"conflicting hint"})
+    }
+    checkIncorrect(customCheckSchema{value = 1})
+    checkIncorrect(customCheckSchema{})
+
+    _, err, hints = customCheckSchema{value = 2}
+    if err ~= "function error message" or hints[1] ~= "function hint" then
+        print("Wrong conflict solution", err, hints[1])
+    else
+        print("Conflict solution OK!")
+    end
 
     print("finished")
 end

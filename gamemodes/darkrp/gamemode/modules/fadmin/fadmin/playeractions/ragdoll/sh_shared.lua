@@ -14,7 +14,7 @@ FAdmin.StartHooks["Ragdolling"] = function()
         name = "ragdoll",
         hasTarget = true,
         message = {"instigator", " ragdolled ", "targets", " ", "extraInfo.1"},
-        receivers = "admins",
+        receivers = "involved+admins",
         writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
         readExtraInfo = function()
             local time = net.ReadUInt(16)
@@ -23,7 +23,7 @@ FAdmin.StartHooks["Ragdolling"] = function()
     }
 
     FAdmin.Messages.RegisterNotification{
-        name = "unragdoll",
+        name = "involved+admins",
         hasTarget = true,
         message = {"instigator", " unragdolled ", "targets"},
         receivers = "admins",

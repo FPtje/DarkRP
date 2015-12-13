@@ -76,7 +76,9 @@ local receiversToPlayers = {
     superadmins = function() return fn.Filter(tc.player.IsSuperAdmin, player.GetAll()) end,
     self = fn.Id,
     targets = function(_, t) return t end,
-    involved = function(i, t) local res = table.Copy(istable(t) and t or {t}) table.insert(res, i) return res end
+    involved = function(i, t) local res = table.Copy(istable(t) and t or {t}) table.insert(res, i) return res end,
+    ["involved+admins"] = function(i, t) return table.Add(receiversToPlayers.admins(i, t), receiversToPlayers.involved(i, t)) end,
+    ["involved+superadmins"] = function(i, t) return table.Add(receiversToPlayers.superadmins(i, t), receiversToPlayers.involved(i, t)) end,
 }
 function FAdmin.Messages.FireNotification(name, instigator, targets, extraInfo)
     local notId = FAdmin.NotificationNames[name]

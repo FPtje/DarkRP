@@ -55,14 +55,14 @@ FAdmin.StartHooks["Freeze"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "freeze",
         hasTarget = true,
-        receivers = "admins",
+        receivers = "involved+admins",
         writeExtraInfo = function(info) net.WriteUInt(info, 16) end
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "unfreeze",
         hasTarget = true,
-        receivers = "admins"
+        receivers = "involved+admins"
     }
 
     FAdmin.Commands.AddCommand("freeze", Freeze)

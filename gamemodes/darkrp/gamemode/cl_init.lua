@@ -5,6 +5,10 @@ GM.Name = "DarkRP"
 GM.Author = "By FPtje Falco et al."
 
 DeriveGamemode("sandbox")
+DEFINE_BASECLASS("gamemode_sandbox")
+GM.Sandbox = BaseClass
+
+
 local function LoadModules()
     local root = GM.FolderName .. "/gamemode/modules/"
     local _, folders = file.Find(root .. "*", "LUA")
