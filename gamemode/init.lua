@@ -4,8 +4,11 @@ GM.Version = "2.6.2"
 GM.Name = "DarkRP"
 GM.Author = "By FPtje Falco et al."
 
-
 DeriveGamemode("sandbox")
+DEFINE_BASECLASS("gamemode_sandbox")
+
+GM.Sandbox = BaseClass
+
 
 AddCSLuaFile("libraries/sh_cami.lua")
 AddCSLuaFile("libraries/simplerr.lua")
