@@ -1,9 +1,13 @@
-local prefix = "/"
-local convar
+local convar = CreateConVar("FAdmin_commandprefix", "/", {FCVAR_SERVER_CAN_EXECUTE})
+
+SetGlobalString("FAdmin_commandprefix", convar:GetString())
+
+cvars.AddChangeCallback("FAdmin_commandprefix", function()
+    SetGlobalString("FAdmin_commandprefix", convar:GetString())
+end)
 
 hook.Add("PlayerSay", "FAdminChatCommands", function(ply, text, Team, dead)
-    convar = convar or GetConVar("FAdmin_commandprefix")
-    prefix = convar and convar:GetString() or prefix
+    local prefix = convar:GetString()
 
     if string.sub(text, 1, 1) ~= prefix then return end
 
