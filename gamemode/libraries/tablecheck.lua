@@ -61,8 +61,50 @@ vehicle                = FindMetaTable("Vehicle")
 vmatrix                = FindMetaTable("VMatrix")
 weapon                 = FindMetaTable("Weapon")
 
+-- Assert function, asserts a property and returns the error if false.
+-- Allows f to override err and hints by simply returning them
+assert = function(f, err, hints) return function(...)
+    local res = {f(...)}
+    table.insert(res, err)
+    table.insert(res, hints)
+
+    return unpack(res)
+end end
+
+--[[ Validates a table against a schema
+Capable of nesting
+--]]
+function assertTable(schema)
+    return function(tbl)
+        if not istable(tbl) then
+            return false, "Not a table!"
+        end
+
+        for k, v in pairs(schema or {}) do
+            local correct, err, hints = tbl[v] ~= nil
+            if isfunction(v) then correct, err, hints, replace, replaceWith = v(tbl[k], tbl) end
+
+
+            if not correct then
+                err = err or string.format("Element '%s' is corrupt!", k)
+                return correct, err, hints
+            end
+
+            -- Update the value
+            if correct and replace == true and replaceWith then
+                tbl[k] = replaceWith
+            end
+        end
+
+        return true
+    end
+end
+
 -- Returns whether a value is nil
 isnil = fn.Curry(fn.Eq, 2)(nil)
+
+-- Returns whether a value is a color
+iscolor = IsColor
 
 -- Returns true on the client
 client = function() return CLIENT end
@@ -108,45 +150,6 @@ oneOf = function(f) return fp{table.HasValue, f} end
 nonEmpty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl)) end end
 
 
-
--- Assert function, asserts a property and returns the error if false.
--- Allows f to override err and hints by simply returning them
-assert = function(f, err, hints) return function(...)
-    local res = {f(...)}
-    table.insert(res, err)
-    table.insert(res, hints)
-
-    return unpack(res)
-end end
-
---[[ Validates a table against a schema
-Capable of nesting
---]]
-function assertTable(schema)
-    return function(tbl)
-        if not istable(tbl) then
-            return false, "Not a table!"
-        end
-
-        for k, v in pairs(schema or {}) do
-            local correct, err, hints = tbl[v] ~= nil
-            if isfunction(v) then correct, err, hints, replace, replaceWith = v(tbl[k], tbl) end
-
-
-            if not correct then
-                err = err or string.format("Element '%s' is corrupt!", k)
-                return correct, err, hints
-            end
-
-            -- Update the value
-            if correct and replace == true and replaceWith then
-                tbl[k] = replaceWith
-            end
-        end
-
-        return true
-    end
-end
 
 -- Test cases. Also serve as nice examples
 function unitTests()

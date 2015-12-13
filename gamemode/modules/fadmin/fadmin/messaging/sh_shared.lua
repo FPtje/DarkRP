@@ -72,7 +72,7 @@ local validNotification = tc.assertTable{
     -- When using extra information, this table contains the colours of the extraInfo messages
     extraInfoColors =
         tc.assert(
-            tc.optional(tc.tableOf(tc.assertTable{r,g,b})),
+            tc.optional(tc.tableOf(tc.iscolor)),
             "extraInfoColors must be a table of colours!"
         )
 }
