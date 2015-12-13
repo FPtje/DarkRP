@@ -53,7 +53,7 @@ FAdmin.StartHooks["Slap"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "slap",
         hasTarget = true,
-        receivers = "admins",
+        receivers = "involved+admins",
     }
 
     FAdmin.Commands.AddCommand("Slap", Slap)

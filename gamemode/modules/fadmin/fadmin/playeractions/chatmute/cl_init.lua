@@ -3,8 +3,6 @@ FAdmin.StartHooks["Chatmute"] = function()
         name = "chatmute",
         hasTarget = true,
         message = {"instigator", " chat muted ", "targets", " ", "extraInfo.1"},
-        receivers = "involved",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
         readExtraInfo = function()
             local time = net.ReadUInt(16)
 
@@ -16,7 +14,6 @@ FAdmin.StartHooks["Chatmute"] = function()
         name = "chatunmute",
         hasTarget = true,
         message = {"instigator", " chat unmuted ", "targets"},
-        receivers = "involved",
     }
 
     FAdmin.Access.AddPrivilege("Chatmute", 2)

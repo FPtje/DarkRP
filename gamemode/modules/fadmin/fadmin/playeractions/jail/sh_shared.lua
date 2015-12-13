@@ -15,7 +15,7 @@ FAdmin.StartHooks["Jailing"] = function()
         name = "jail",
         hasTarget = true,
         message = {"instigator", " jailed ", "targets", " ", "extraInfo.1"},
-        receivers = "admins",
+        receivers = "involved+admins",
         writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
         readExtraInfo = function()
             local time = net.ReadUInt(16)
@@ -27,6 +27,6 @@ FAdmin.StartHooks["Jailing"] = function()
         name = "unjail",
         hasTarget = true,
         message = {"instigator", " unjailed ", "targets"},
-        receivers = "admins",
+        receivers = "involved+admins",
     }
 end

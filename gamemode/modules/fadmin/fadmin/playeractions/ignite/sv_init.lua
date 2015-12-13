@@ -48,7 +48,7 @@ FAdmin.StartHooks["Ignite"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "ignite",
         hasTarget = true,
-        receivers = "admins",
+        receivers = "involved+admins",
         writeExtraInfo = function(info) net.WriteUInt(info, 16) end
     }
 
@@ -56,7 +56,7 @@ FAdmin.StartHooks["Ignite"] = function()
         name = "unignite",
         hasTarget = true,
         message = {"instigator", " unignited ", "targets"},
-        receivers = "admins",
+        receivers = "involved+admins",
     }
 
     FAdmin.Commands.AddCommand("Ignite", Ignite)
