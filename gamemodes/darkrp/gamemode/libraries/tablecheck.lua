@@ -61,54 +61,6 @@ vehicle                = FindMetaTable("Vehicle")
 vmatrix                = FindMetaTable("VMatrix")
 weapon                 = FindMetaTable("Weapon")
 
--- Returns whether a value is nil
-isnil = fn.Curry(fn.Eq, 2)(nil)
-
--- Returns true on the client
-client = function() return CLIENT end
-
--- returns true on the server
-server = function() return SERVER end
-
--- Optional value, when filled in it must meet the conditions
-optional = function(...) return fn.FOr{isnil, ...} end
-
--- Default value, implies optional. Only works in combination with assertTable
--- Note that the tc.assert is to be the second parameter of default.
---      tc.assert(default(x)) does NOT work, default(x, tc.assert(...)) does.
--- example: assertTable{test = default(3, tc.assert(isnumber, "must be a number"))}
--- example: assertTable{test = default(3)}
-default = function(def, f)
-    return function(val)
-        if val == nil then
-            -- second return value is the default value. Expects parent function to actually change the value
-            return true, nil, nil, true, def
-        end
-        -- Return in if statement rather than "return f and f(val) or true" to allow multiple return values
-        if f then return f(val) else return true end
-    end
-end
-
--- A table of which each element must meet condition f
--- i.e. "this must be a table of xxx"
--- example: tc.tableOf(isnumber) demands that the table contains only numbers
-tableOf = function(f) return function(tbl)
-    if not istable(tbl) then return false end
-    for k,v in pairs(tbl) do if not f(v) then return false end end
-    return true
-end end
-
--- Checks whether a value is amongst a given set of values
--- exapmle: tc.oneOf{"jobs", "entities", "shipments", "weapons", "vehicles", "ammo"}
-oneOf = function(f) return fp{table.HasValue, f} end
-
--- A table that is nonempty, also useful for wrapping around tableOf
--- example: nonempty(tableOf(isnumber))
--- example: nonempty() -- just checks that the table is non-empty
-nonempty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl)) end end
-
-
-
 -- Assert function, asserts a property and returns the error if false.
 -- Allows f to override err and hints by simply returning them
 assert = function(f, err, hints) return function(...)
@@ -147,6 +99,57 @@ function assertTable(schema)
         return true
     end
 end
+
+-- Returns whether a value is nil
+isnil = fn.Curry(fn.Eq, 2)(nil)
+
+-- Returns whether a value is a color
+iscolor = IsColor
+
+-- Returns true on the client
+client = function() return CLIENT end
+
+-- returns true on the server
+server = function() return SERVER end
+
+-- Optional value, when filled in it must meet the conditions
+optional = function(...) return fn.FOr{isnil, ...} end
+
+-- Default value, implies optional. Only works in combination with assertTable
+-- Note that the tc.assert is to be the second parameter of default.
+--      tc.assert(default(x)) does NOT work, default(x, tc.assert(...)) does.
+-- example: tcassertTable{test = default(3, tc.assert(isnumber, "must be a number"))}
+-- example: tcassertTable{test = default(3)}
+default = function(def, f)
+    return function(val)
+        if val == nil then
+            -- second return value is the default value. Expects parent function to actually change the value
+            return true, nil, nil, true, def
+        end
+        -- Return in if statement rather than "return f and f(val) or true" to allow multiple return values
+        if f then return f(val) else return true end
+    end
+end
+
+-- A table of which each element must meet condition f
+-- i.e. "this must be a table of xxx"
+-- example: tc.tableOf(isnumber) demands that the table contains only numbers
+tableOf = function(f) return function(tbl)
+    if not istable(tbl) then return false end
+    for k,v in pairs(tbl) do if not f(v) then return false end end
+    return true
+end end
+
+-- Checks whether a value is amongst a given set of values
+-- exapmle: tc.oneOf{"jobs", "entities", "shipments", "weapons", "vehicles", "ammo"}
+oneOf = function(f) return fp{table.HasValue, f} end
+
+-- A table that is non-empty, also useful for wrapping around tableOf
+-- example: tc.nonEmpty(tc.tableOf(isnumber))
+-- example: tc.nonEmpty() -- just checks that the table is non-empty
+nonEmpty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl)) end end
+
+
 
 -- Test cases. Also serve as nice examples
 function unitTests()
@@ -196,23 +199,23 @@ function unitTests()
         name        = tc.assert(isstring, "The name must be a string!"),
         id          = tc.assert(isnumber, "The id must be a number!"),
         gender      = tc.assert(tc.oneOf{"male", "female", "carp"}, "Gender missing or not recognised!", {"Perhaps you are a carp?"}),
-        nilthing    = tc.assert(isnil, "nilthing must be nil"),
-        nonempty    = tc.assert(nonempty(tableOf(isnumber)), "nonempty not table of numbers"),
-        optnum      = tc.assert(optional(isnumber), "optnum given, but not a number"),
+        nilthing    = tc.assert(tc.isnil, "nilthing must be nil"),
+        nonEmpty    = tc.assert(tc.nonEmpty(tc.tableOf(isnumber)), "nonEmpty not table of numbers"),
+        optnum      = tc.assert(tc.optional(isnumber), "optnum given, but not a number"),
         strnum      = tc.assert(fn.FOr{isstring, isnumber}, "strnum must either be a string or a number"),
     }
 
-    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonempty = {1,2,3}, strnum = "str"}))
+    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"}))
 
     -- Counterexamples, should throw errors
     local badTables = {
         {},
-        {name = 1, id = 3, gender = "carp", nonempty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = "3", gender = "carp", nonempty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "other", nonempty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "carp", nonempty = {}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "carp", nonempty = {1,2,3}, strnum = {}},
-        {name = "Dick", id = 3, gender = "carp", nonempty = {1,2,3}, strnum = "str", optnum = "nope"},
+        {name = 1, id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
+        {name = "Dick", id = "3", gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
+        {name = "Dick", id = 3, gender = "other", nonEmpty = {1,2,3}, strnum = "str"},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {}, strnum = "str"},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = {}},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", optnum = "nope"},
     }
 
     for _, tbl in pairs(badTables) do
@@ -271,7 +274,7 @@ function unitTests()
     Default value with a check
     ]]
     local withDefaultSchema = tc.assertTable{
-        value = default(10, tc.assert(isnumber, "must be a number!"))
+        value = tc.default(10, tc.assert(isnumber, "must be a number!"))
     }
     checkCorrect(withDefaultSchema({value = 30}))
     checkIncorrect(withDefaultSchema({value = "string"}))
@@ -288,7 +291,7 @@ function unitTests()
     Default value with no checks
     ]]
     local withDefaultNoCheck = tc.assertTable{
-        value = default(10)
+        value = tc.default(10)
     }
     checkCorrect(withDefaultNoCheck({}))
     checkCorrect(withDefaultNoCheck({value = "string"}))

@@ -70,7 +70,8 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
     FAdmin.Messages.ConsoleNotify(plys, action)
 end
 
-local receiversToPlayers = {
+local receiversToPlayers -- allows usage of variable inside
+receiversToPlayers = {
     everyone = player.GetAll,
     admins = function() return fn.Filter(tc.player.IsAdmin, player.GetAll()) end,
     superadmins = function() return fn.Filter(tc.player.IsSuperAdmin, player.GetAll()) end,
