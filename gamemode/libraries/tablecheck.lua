@@ -149,7 +149,11 @@ oneOf = function(f) return fp{table.HasValue, f} end
 -- example: tc.nonEmpty() -- just checks that the table is non-empty
 nonEmpty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl)) end end
 
+-- Number check: minimum
+min = function(n) return fn.FAnd{isnumber, fp{fn.Lte, n}} end
 
+-- Number check: maximum
+max = function(n) return fn.FAnd{isnumber, fp{fn.Gte, n}} end
 
 -- Test cases. Also serve as nice examples
 function unitTests()
@@ -203,19 +207,23 @@ function unitTests()
         nonEmpty    = tc.assert(tc.nonEmpty(tc.tableOf(isnumber)), "nonEmpty not table of numbers"),
         optnum      = tc.assert(tc.optional(isnumber), "optnum given, but not a number"),
         strnum      = tc.assert(fn.FOr{isstring, isnumber}, "strnum must either be a string or a number"),
+        minmax      = tc.assert(fn.FAnd{tc.min(5), tc.max(10)}),
     }
 
-    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"}))
+    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 5}))
 
     -- Counterexamples, should throw errors
     local badTables = {
         {},
-        {name = 1, id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = "3", gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "other", nonEmpty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "carp", nonEmpty = {}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = {}},
-        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", optnum = "nope"},
+        {name = 1, id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7},
+        {name = "Dick", id = "3", gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7},
+        {name = "Dick", id = 3, gender = "other", nonEmpty = {1,2,3}, strnum = "str", minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {}, strnum = "str", minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = {}, minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", optnum = "nope", minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 4},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 11},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
     }
 
     for _, tbl in pairs(badTables) do
