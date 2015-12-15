@@ -237,7 +237,7 @@ local function DrawHUD()
     RelativeX, RelativeY = 0, Scrh
 
     shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
-    shouldDraw = shouldDraw ~= false and (GAMEMODE.Sandbox.HUDShouldDraw(GAMEMODE, "DarkRP_LocalPlayerHUD") ~= false)
+    shouldDraw = shouldDraw ~= false
     if shouldDraw then
         --Background
         draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
@@ -383,7 +383,7 @@ function GM:HUDShouldDraw(name)
         (HelpToggled and name == "CHudChat") then
             return false
     else
-        return true
+        return self.Sandbox:HUDShouldDraw(name)
     end
 end
 
