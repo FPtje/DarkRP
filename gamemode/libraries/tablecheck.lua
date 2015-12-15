@@ -155,6 +155,13 @@ min = function(n) return fn.FAnd{isnumber, fp{fn.Lte, n}} end
 -- Number check: maximum
 max = function(n) return fn.FAnd{isnumber, fp{fn.Gte, n}} end
 
+-- Number check: positive
+positive = min(0)
+
+-- Number check: negative
+negative = max(0)
+
+
 -- Whether the input matches regex
 -- Note: uses string.match, so it doesn't support full regex.
 -- May also allow numbers, since string.match also accepts numbers.
@@ -165,6 +172,7 @@ end end
 
 -- Requires that the value only contains alphanumeric characters
 alphanum = regex("^[a-zA-Z0-9]+$")
+
 
 -- Test cases. Also serve as nice examples
 function unitTests()
