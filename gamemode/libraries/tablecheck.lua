@@ -227,11 +227,12 @@ function unitTests()
         optnum      = tc.assert(tc.optional(isnumber), "optnum given, but not a number"),
         strnum      = tc.assert(fn.FOr{isstring, isnumber}, "strnum must either be a string or a number"),
         minmax      = tc.assert(fn.FAnd{tc.min(5), tc.max(10)}),
-        regx        = tc.assert(optional(tc.regex("[a-z]+"))),
-        letters     = tc.assert(optional(tc.alphanum)),
+        pos         = tc.assert(tc.optional(tc.positive)),
+        regx        = tc.assert(tc.optional(tc.regex("[a-z]+"))),
+        letters     = tc.assert(tc.optional(tc.alphanum)),
     }
 
-    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 5, regx = "asdf", letters = "asdfj"}))
+    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 5, regx = "asdf", letters = "asdfj", pos = 3}))
 
     -- Counterexamples, should throw errors
     local badTables = {
@@ -247,6 +248,7 @@ function unitTests()
         {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
         {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7, regx = "666"},
         {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7, regx = "asdf", letters = ">:D"},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7, regx = "asdf", letters = ">:D", pos = -1},
     }
 
     for _, tbl in pairs(badTables) do
