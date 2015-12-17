@@ -786,8 +786,8 @@ end
 
 function GM:PlayerDisconnected(ply)
     self.Sandbox:PlayerDisconnected(ply)
-    timer.Remove(ply:SteamID() .. "jobtimer")
-    timer.Remove(ply:SteamID() .. "propertytax")
+    timer.Remove(ply:UniqueID() .. "jobtimer")
+    timer.Remove(ply:UniqueID() .. "propertytax")
 
     local isMayor = ply:isMayor()
 
