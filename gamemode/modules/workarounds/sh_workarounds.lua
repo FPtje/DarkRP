@@ -207,7 +207,7 @@ local allowedDoors = {
 }
 
 hook.Add("CanTool", "DoorExploit", function(ply, trace, tool)
-    if not IsValid(ply:GetActiveWeapon()) or not ply:GetActiveWeapon().GetToolObject or not ply:GetActiveWeapon():GetToolObject() then return end
+    if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ply:GetActiveWeapon()) or not ply:GetActiveWeapon().GetToolObject or not ply:GetActiveWeapon():GetToolObject() then return end
 
     tool = ply:GetActiveWeapon():GetToolObject()
     if not allowedDoors[string.lower(tool:GetClientInfo("door_class") or "")] then
