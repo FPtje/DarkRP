@@ -23,9 +23,9 @@ FAdmin.StartHooks["Ragdolling"] = function()
     }
 
     FAdmin.Messages.RegisterNotification{
-        name = "involved+admins",
+        name = "unragdoll",
         hasTarget = true,
         message = {"instigator", " unragdolled ", "targets"},
-        receivers = "admins",
+        receivers = "involved+admins",
     }
 end
