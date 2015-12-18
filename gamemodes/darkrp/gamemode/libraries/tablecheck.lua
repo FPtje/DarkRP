@@ -149,6 +149,29 @@ oneOf = function(f) return fp{table.HasValue, f} end
 -- example: tc.nonEmpty() -- just checks that the table is non-empty
 nonEmpty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl)) end end
 
+-- Number check: minimum
+min = function(n) return fn.FAnd{isnumber, fp{fn.Lte, n}} end
+
+-- Number check: maximum
+max = function(n) return fn.FAnd{isnumber, fp{fn.Gte, n}} end
+
+-- Number check: positive
+positive = min(0)
+
+-- Number check: negative
+negative = max(0)
+
+
+-- Whether the input matches regex
+-- Note: uses string.match, so it doesn't support full regex.
+-- May also allow numbers, since string.match also accepts numbers.
+-- Note, also matches on substrings. Use ^pattern$ for a full match.
+regex = function(pattern, startpos) return function(val)
+    return (isstring(val) or isnumber(val)) and tobool(string.match(val, pattern, startpos))
+end end
+
+-- Requires that the value only contains alphanumeric characters
+alphanum = regex("^[a-zA-Z0-9]+$")
 
 
 -- Test cases. Also serve as nice examples
@@ -203,19 +226,29 @@ function unitTests()
         nonEmpty    = tc.assert(tc.nonEmpty(tc.tableOf(isnumber)), "nonEmpty not table of numbers"),
         optnum      = tc.assert(tc.optional(isnumber), "optnum given, but not a number"),
         strnum      = tc.assert(fn.FOr{isstring, isnumber}, "strnum must either be a string or a number"),
+        minmax      = tc.assert(fn.FAnd{tc.min(5), tc.max(10)}),
+        pos         = tc.assert(tc.optional(tc.positive)),
+        regx        = tc.assert(tc.optional(tc.regex("[a-z]+"))),
+        letters     = tc.assert(tc.optional(tc.alphanum)),
     }
 
-    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"}))
+    checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 5, regx = "asdf", letters = "asdfj", pos = 3}))
 
     -- Counterexamples, should throw errors
     local badTables = {
         {},
-        {name = 1, id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = "3", gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "other", nonEmpty = {1,2,3}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "carp", nonEmpty = {}, strnum = "str"},
-        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = {}},
-        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", optnum = "nope"},
+        {name = 1, id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7},
+        {name = "Dick", id = "3", gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7},
+        {name = "Dick", id = 3, gender = "other", nonEmpty = {1,2,3}, strnum = "str", minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {}, strnum = "str", minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = {}, minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", optnum = "nope", minmax = 7},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 4},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 11},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str"},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7, regx = "666"},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7, regx = "asdf", letters = ">:D"},
+        {name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 7, regx = "asdf", letters = ">:D", pos = -1},
     }
 
     for _, tbl in pairs(badTables) do
