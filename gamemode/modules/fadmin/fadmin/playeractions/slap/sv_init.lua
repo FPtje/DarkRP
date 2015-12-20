@@ -54,6 +54,7 @@ FAdmin.StartHooks["Slap"] = function()
         name = "slap",
         hasTarget = true,
         receivers = "involved+admins",
+        message = {"instigator", " slapped ", "targets"},
     }
 
     FAdmin.Commands.AddCommand("Slap", Slap)

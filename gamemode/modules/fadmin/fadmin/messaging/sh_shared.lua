@@ -42,7 +42,7 @@ local validNotification = tc.assertTable{
     -- A table containing the message in parts. There are special strings
     message =
         tc.assert(
-            fn.FOr{tc.server, tc.tableOf(isstring)},
+            tc.tableOf(isstring),
             "The message field must be a table of strings! with special strings 'targets', 'you', 'instigator', 'extraInfo.#', with # a number."
         ),
 
@@ -84,7 +84,7 @@ function FAdmin.Messages.RegisterNotification(tbl)
     local correct, err = validNotification(tbl)
 
     if not correct then
-        error(string.format("Incorrect notification format!\n\n%s", err), 2)
+        error(string.format("Incorrect notification format for notification '%s'!\n\n%s", istable(tbl) and tbl.name or "unknown", err), 2)
     end
 
     local key = table.insert(FAdmin.Notifications, tbl)

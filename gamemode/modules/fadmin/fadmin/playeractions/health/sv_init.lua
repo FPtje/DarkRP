@@ -29,6 +29,7 @@ FAdmin.StartHooks["Health"] = function()
         hasTarget = true,
         receivers = "everyone",
         writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
+        message = {"instigator", " set the health of ", "targets", " to ", "extraInfo.1"},
     }
 
     FAdmin.Commands.AddCommand("SetHealth", SetHealth)

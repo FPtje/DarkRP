@@ -54,12 +54,14 @@ FAdmin.StartHooks["Chatmute"] = function()
         hasTarget = true,
         receivers = "involved+admins",
         writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
+        message = {"instigator", " chat muted ", "targets", " ", "extraInfo.1"},
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "chatunmute",
         hasTarget = true,
         receivers = "involved+admins",
+        message = {"instigator", " chat unmuted ", "targets"},
     }
 
     FAdmin.Commands.AddCommand("Chatmute", MuteChat)
