@@ -2,7 +2,7 @@ FAdmin.StartHooks["Ignite"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "ignite",
         hasTarget = true,
-        message = {"instigator", " ignited ", "targets", "extraInfo.1"},
+        message = {"instigator", " ignited ", "targets", " ", "extraInfo.1"},
         readExtraInfo = function()
             local time = net.ReadUInt(16)
             return {time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))}
