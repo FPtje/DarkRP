@@ -18,13 +18,9 @@ FAdmin.StartHooks["Logging"] = function()
 end
 
 local LogFile
-function FAdmin.Log(text, preventServerLog)
+function FAdmin.Log(text)
     if not text or text == "" then return end
     if not logging or not logging:GetBool() then return end
-
-    if not preventServerLog then
-        ServerLog(text .. "\n")
-    end
 
     if not LogFile then
         -- The log file of this session, if it's not there then make it!
@@ -143,7 +139,7 @@ end)
 
 hook.Add("PlayerSay", "FAdmin_Log", function(ply, text, teamonly, dead)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") [" .. (dead and "dead, " or "") .. ((not teamonly and "team only") or "all") .. "] " .. (text and text or ""), true)
+    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") [" .. (dead and "dead, " or "") .. ((not teamonly and "team only") or "all") .. "] " .. (text and text or ""))
 end)
 
 hook.Add("PlayerSpawn", "FAdmin_Log", function(ply)
