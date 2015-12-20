@@ -15,6 +15,34 @@ FAdmin.Messages.MsgTypesByName = {
     BAD = 5,
 }
 
+function FAdmin.PlayerName(ply)
+    if CLIENT and ply == LocalPlayer() then return "you" end
+
+    return not IsValid(ply) and "unknown" or ply:EntIndex() == 0 and "Console" or ply:Nick()
+end
+
+function FAdmin.TargetsToString(targets)
+    if not istable(targets) then
+        return FAdmin.PlayerName(targets)
+    end
+
+    if #targets == 0 then
+        return "no one"
+    end
+
+    if #targets == #player.GetAll() and #targets ~= 1 then
+        return "everyone"
+    end
+
+    local names = fn.Map(FAdmin.PlayerName, targets)
+
+    if #names == 1 then
+        return names[1]
+    end
+
+    return table.concat(names, ", ", 1, #names - 1) .. " and " .. names[#names]
+end
+
 FAdmin.Notifications = {}
 
 local validNotification = tc.assertTable{
@@ -42,7 +70,7 @@ local validNotification = tc.assertTable{
     -- A table containing the message in parts. There are special strings
     message =
         tc.assert(
-            fn.FOr{tc.server, tc.tableOf(isstring)},
+            tc.tableOf(isstring),
             "The message field must be a table of strings! with special strings 'targets', 'you', 'instigator', 'extraInfo.#', with # a number."
         ),
 
@@ -74,7 +102,16 @@ local validNotification = tc.assertTable{
         tc.assert(
             tc.optional(tc.tableOf(tc.iscolor)),
             "extraInfoColors must be a table of colours!"
-        )
+        ),
+
+    -- Whether the notification is to be logged to console
+    logging =
+        tc.default(true,
+            tc.assert(
+                isbool,
+                "logging must be a boolean!"
+            )
+        ),
 }
 
 
@@ -84,7 +121,7 @@ function FAdmin.Messages.RegisterNotification(tbl)
     local correct, err = validNotification(tbl)
 
     if not correct then
-        error(string.format("Incorrect notification format!\n\n%s", err), 2)
+        error(string.format("Incorrect notification format for notification '%s'!\n\n%s", istable(tbl) and tbl.name or "unknown", err), 2)
     end
 
     local key = table.insert(FAdmin.Notifications, tbl)

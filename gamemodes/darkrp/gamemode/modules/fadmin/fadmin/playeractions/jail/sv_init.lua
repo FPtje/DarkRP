@@ -120,7 +120,7 @@ local function Jail(ply, cmd, args)
     if JailType == "unjail" or string.lower(cmd) == "unjail" then
         FAdmin.Messages.FireNotification("unjail", ply, targets)
     else
-        FAdmin.Messages.FireNotification("jail", ply, targets, JailTime)
+        FAdmin.Messages.FireNotification("jail", ply, targets, {JailTime})
     end
 
     return true, targets, JailType, time

@@ -23,7 +23,7 @@ local function MuteChat(ply, cmd, args)
         end
     end
 
-    FAdmin.Messages.FireNotification("chatmute", ply, targets, time)
+    FAdmin.Messages.FireNotification("chatmute", ply, targets, {time})
 
     return true, targets, time
 end
@@ -53,13 +53,15 @@ FAdmin.StartHooks["Chatmute"] = function()
         name = "chatmute",
         hasTarget = true,
         receivers = "involved+admins",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
+        message = {"instigator", " chat muted ", "targets", " ", "extraInfo.1"},
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "chatunmute",
         hasTarget = true,
         receivers = "involved+admins",
+        message = {"instigator", " chat unmuted ", "targets"},
     }
 
     FAdmin.Commands.AddCommand("Chatmute", MuteChat)

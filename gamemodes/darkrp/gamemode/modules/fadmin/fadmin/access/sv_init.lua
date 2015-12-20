@@ -188,7 +188,7 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
         end
     end
 
-    FAdmin.Messages.FireNotification("setaccess", ply, targets, "superadmin")
+    FAdmin.Messages.FireNotification("setaccess", ply, targets, {"superadmin"})
     return true, targets, "superadmin"
 end
 
@@ -303,7 +303,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
     end
 
     FAdmin.Messages.SendMessage(ply, 4, "User access set!")
-    FAdmin.Messages.FireNotification("setaccess", ply, targets, args[2])
+    FAdmin.Messages.FireNotification("setaccess", ply, targets, {args[2]})
     return true, targets, args[2]
 end
 

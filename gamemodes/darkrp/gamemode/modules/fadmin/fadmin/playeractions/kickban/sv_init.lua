@@ -44,7 +44,7 @@ local function Kick(ply, cmd, args)
     end
 
     if stage ~= "start" and stage ~= "cancel" and stage ~= "update" then
-        FAdmin.Messages.FireNotification("kick", ply, nil, {targets = targets, reason = Reason})
+        FAdmin.Messages.FireNotification("kick", ply, nil, {targets, Reason})
     end
 
     return true, targets, stage, Reason
@@ -207,7 +207,7 @@ local function Ban(ply, cmd, args)
     end
 
     if stage ~= "start" and stage ~= "cancel" and stage ~= "update" then
-        FAdmin.Messages.FireNotification("ban", ply, nil, {targets = targets, time = time, reason = Reason})
+        FAdmin.Messages.FireNotification("ban", ply, nil, {targets, time, Reason})
     end
 
     return true, targets, stage, Reason
@@ -238,7 +238,7 @@ local function UnBan(ply, cmd, args)
     end
 
     game.ConsoleCommand("removeid " .. SteamID .. "\n")
-    FAdmin.Messages.FireNotification("unban", ply, nil, {nick = nick, SteamID = SteamID})
+    FAdmin.Messages.FireNotification("unban", ply, nil, {nick, SteamID})
 
     return true, SteamID
 end

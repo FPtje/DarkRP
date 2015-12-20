@@ -45,12 +45,14 @@ FAdmin.StartHooks["zz_Noclip"] = function()
         name = "noclipenable",
         hasTarget = true,
         receivers = "involved",
+        message = {"instigator", " enabled noclip for ", "targets"},
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "noclipdisable",
         hasTarget = true,
         receivers = "involved",
+        message = {"instigator", " disabled noclip for ", "targets"},
     }
 
     FAdmin.Access.AddPrivilege("Noclip", 2)

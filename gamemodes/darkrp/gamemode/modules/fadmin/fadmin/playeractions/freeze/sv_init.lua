@@ -24,7 +24,7 @@ local function Freeze(ply, cmd, args)
             end)
         end
     end
-    FAdmin.Messages.FireNotification("freeze", ply, targets, time)
+    FAdmin.Messages.FireNotification("freeze", ply, targets, {time})
 
     return true, targets, time
 end
@@ -56,13 +56,15 @@ FAdmin.StartHooks["Freeze"] = function()
         name = "freeze",
         hasTarget = true,
         receivers = "involved+admins",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end
+        writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
+        message = {"instigator", " froze ", "targets", " ", "extraInfo.1"},
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "unfreeze",
         hasTarget = true,
-        receivers = "involved+admins"
+        receivers = "involved+admins",
+        message = {"instigator", " unfroze ", "targets"},
     }
 
     FAdmin.Commands.AddCommand("freeze", Freeze)

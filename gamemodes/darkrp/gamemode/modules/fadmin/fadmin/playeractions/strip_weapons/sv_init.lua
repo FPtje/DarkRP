@@ -22,6 +22,7 @@ FAdmin.StartHooks["StripWeapons"] = function()
         name = "stripweapons",
         hasTarget = true,
         receivers = "involved+admins",
+        message = {"instigator", " stripped the weapons of ", "targets"},
     }
 
     FAdmin.Commands.AddCommand("StripWeapons", StripWeapons)

@@ -23,7 +23,7 @@ local function MuteVoice(ply, cmd, args)
         end
     end
 
-    FAdmin.Messages.FireNotification("voicemute", ply, targets, time)
+    FAdmin.Messages.FireNotification("voicemute", ply, targets, {time})
 
     return true, targets, time
 end
@@ -54,13 +54,15 @@ FAdmin.StartHooks["VoiceMute"] = function()
         name = "voicemute",
         hasTarget = true,
         receivers = "involved+admins",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
+        message = {"instigator", " voice muted ", "targets", " ", "extraInfo.1"},
     }
 
     FAdmin.Messages.RegisterNotification{
         name = "voiceunmute",
         hasTarget = true,
         receivers = "involved+admins",
+        message = {"instigator", " voice unmuted ", "targets"},
     }
 
     FAdmin.Commands.AddCommand("Voicemute", MuteVoice)

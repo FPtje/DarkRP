@@ -18,7 +18,7 @@ local function SetHealth(ply, cmd, args)
         end
     end
 
-    FAdmin.Messages.FireNotification("sethealth", ply, targets, Health)
+    FAdmin.Messages.FireNotification("sethealth", ply, targets, {Health})
 
     return true, targets, Health
 end
@@ -28,7 +28,8 @@ FAdmin.StartHooks["Health"] = function()
         name = "sethealth",
         hasTarget = true,
         receivers = "everyone",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
+        message = {"instigator", " set the health of ", "targets", " to ", "extraInfo.1"},
     }
 
     FAdmin.Commands.AddCommand("SetHealth", SetHealth)

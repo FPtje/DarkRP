@@ -47,9 +47,9 @@ FAdmin.StartHooks["kickbanning"] = function()
         message = {"instigator", " kicked ", "extraInfo.1", " (", "extraInfo.2", ")"},
         receivers = "everyone",
         writeExtraInfo = function(info)
-            net.WriteUInt(#info.targets, 8)
+            net.WriteUInt(#info[1], 8)
             -- Manually send targets, because they might be gone from the client when kicked
-            for _, target in pairs(info.targets) do
+            for _, target in pairs(info[1]) do
                 if not IsValid(target) then
                     net.WriteString("Unknown")
                     continue
@@ -58,7 +58,7 @@ FAdmin.StartHooks["kickbanning"] = function()
                 net.WriteString(target:Nick())
             end
 
-            net.WriteString(info.reason)
+            net.WriteString(info[2])
         end,
 
         readExtraInfo = function()
@@ -80,9 +80,9 @@ FAdmin.StartHooks["kickbanning"] = function()
         message = {"instigator", " banned ", "extraInfo.1", " for ", "extraInfo.2", " (", "extraInfo.3", ")"},
         receivers = "everyone",
         writeExtraInfo = function(info)
-            net.WriteUInt(#info.targets, 8)
+            net.WriteUInt(#info[1], 8)
             -- Manually send targets, because they might be gone from the client when kicked
-            for _, target in pairs(info.targets) do
+            for _, target in pairs(info[1]) do
                 if isstring(target) then
                     net.WriteString("Unknown (" .. target .. ")")
                     continue
@@ -96,9 +96,9 @@ FAdmin.StartHooks["kickbanning"] = function()
                 net.WriteString(target:Nick())
             end
 
-            net.WriteUInt(info.time, 32)
+            net.WriteUInt(info[2], 32)
 
-            net.WriteString(info.reason)
+            net.WriteString(info[3])
         end,
 
         readExtraInfo = function()
@@ -121,8 +121,8 @@ FAdmin.StartHooks["kickbanning"] = function()
         message = {"instigator", " unbanned ", "extraInfo.1", " (", "extraInfo.2", ")"},
         receivers = "everyone",
         writeExtraInfo = function(info)
-            net.WriteString(info.nick)
-            net.WriteString(info.SteamID)
+            net.WriteString(info[1])
+            net.WriteString(info[2])
         end,
 
         readExtraInfo = function()

@@ -70,6 +70,23 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
     FAdmin.Messages.ConsoleNotify(plys, action)
 end
 
+
+local function logNotification(notification, instigator, targets, extraInfo)
+    local msgs = table.Copy(notification.message)
+
+    local function replace(val)
+        if val == "instigator" then return FAdmin.PlayerName(instigator) end
+        if val == "targets" then return FAdmin.TargetsToString(targets) end
+        if string.sub(val, 1, 10) == "extraInfo." then return tostring(extraInfo[tonumber(string.sub(val, 11))]) end
+
+        return val
+    end
+
+    fn.Map(replace, msgs)
+
+    FAdmin.Log(table.concat(msgs))
+end
+
 local receiversToPlayers -- allows usage of variable inside
 receiversToPlayers = {
     everyone = player.GetAll,
@@ -113,4 +130,8 @@ function FAdmin.Messages.FireNotification(name, instigator, targets, extraInfo)
 
         if notification.writeExtraInfo then notification.writeExtraInfo(extraInfo) end
     net.Send(receivers)
+
+    if notification.logging then
+        logNotification(notification, instigator, targets, extraInfo)
+    end
 end

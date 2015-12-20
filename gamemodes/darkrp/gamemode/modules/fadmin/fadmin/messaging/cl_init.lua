@@ -123,42 +123,13 @@ local blue = Color(102, 0, 255)
 -- Inserts the instigator into a notification message
 local function insertInstigator(res, instigator, _)
     table.insert(res, brown)
-    local instNick = not IsValid(instigator) and "unknown" or instigator:EntIndex() == 0 and "Console" or instigator:Nick()
-    table.insert(res, instNick)
+    table.insert(res, FAdmin.PlayerName(instigator))
 end
 
 -- Inserts the targets into the notification message
 local function insertTargets(res, _, targets)
     table.insert(res, blue)
-
-    if not istable(targets) then
-        local tNick = not IsValid(targets) and "unknown" or targets:EntIndex() == 0 and "Console" or targets:Nick()
-        table.insert(res, tNick)
-
-        return
-    end
-
-    if #targets == #player.GetAll() and #targets ~= 1 then
-        table.insert(res, "everyone")
-
-        return
-    end
-
-    if #targets == 0 then
-        table.insert(res, "no one")
-
-        return
-    end
-
-    targets = fn.Map(fn.FOr{fn.FAnd{fp{fn.Eq, LocalPlayer()}, fp{fn.Id, "you"}}, FindMetaTable("Player").Nick}, targets)
-
-    if #targets == 1 then
-        table.insert(res, targets[1])
-
-        return
-    end
-
-    table.insert(res, table.concat(targets, ", ", 1, #targets - 1) .. " and " .. targets[#targets])
+    table.insert(res, FAdmin.TargetsToString(targets))
 end
 
 local modMessage = {
