@@ -15,6 +15,34 @@ FAdmin.Messages.MsgTypesByName = {
     BAD = 5,
 }
 
+function FAdmin.PlayerName(ply)
+    if CLIENT and ply == LocalPlayer() then return "you" end
+
+    return not IsValid(ply) and "unknown" or ply:EntIndex() == 0 and "Console" or ply:Nick()
+end
+
+function FAdmin.TargetsToString(targets)
+    if not istable(targets) then
+        return FAdmin.PlayerName(targets)
+    end
+
+    if #targets == 0 then
+        return "no one"
+    end
+
+    if #targets == #player.GetAll() and #targets ~= 1 then
+        return "everyone"
+    end
+
+    local names = fn.Map(FAdmin.PlayerName, targets)
+
+    if #names == 1 then
+        return names[1]
+    end
+
+    return table.concat(names, ", ", 1, #names - 1) .. " and " .. names[#names]
+end
+
 FAdmin.Notifications = {}
 
 local validNotification = tc.assertTable{
@@ -74,7 +102,16 @@ local validNotification = tc.assertTable{
         tc.assert(
             tc.optional(tc.tableOf(tc.iscolor)),
             "extraInfoColors must be a table of colours!"
-        )
+        ),
+
+    -- Whether the notification is to be logged to console
+    logging =
+        tc.default(true,
+            tc.assert(
+                isbool,
+                "logging must be a boolean!"
+            )
+        ),
 }
 
 
