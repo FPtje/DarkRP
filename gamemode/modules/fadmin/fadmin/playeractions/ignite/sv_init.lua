@@ -18,7 +18,7 @@ local function Ignite(ply, cmd, args)
             end)
         end
     end
-    FAdmin.Messages.FireNotification("ignite", ply, targets, time)
+    FAdmin.Messages.FireNotification("ignite", ply, targets, {time})
 
     return true, targets
 end
@@ -49,7 +49,7 @@ FAdmin.StartHooks["Ignite"] = function()
         name = "ignite",
         hasTarget = true,
         receivers = "involved+admins",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end
+        writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end
     }
 
     FAdmin.Messages.RegisterNotification{

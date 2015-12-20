@@ -15,7 +15,7 @@ FAdmin.StartHooks["Ragdolling"] = function()
         hasTarget = true,
         message = {"instigator", " ragdolled ", "targets", " ", "extraInfo.1"},
         receivers = "involved+admins",
-        writeExtraInfo = function(info) net.WriteUInt(info, 16) end,
+        writeExtraInfo = function(info) net.WriteUInt(info[1], 16) end,
         readExtraInfo = function()
             local time = net.ReadUInt(16)
             return {time == 0 and FAdmin.PlayerActions.commonTimes[time] or string.format("for %s", FAdmin.PlayerActions.commonTimes[time] or (time .. " seconds"))}

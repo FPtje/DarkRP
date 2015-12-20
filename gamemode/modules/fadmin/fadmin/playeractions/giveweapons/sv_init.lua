@@ -20,7 +20,7 @@ local function GiveWeapon(ply, cmd, args)
         end
     end
     FAdmin.Messages.ActionMessage(ply, targets, "You gave %s a " .. weapon, "%s gave you a " .. weapon, "Gave %s a " .. weapon)
-    FAdmin.Messages.FireNotification("giveweapon", ply, targets, weapon)
+    FAdmin.Messages.FireNotification("giveweapon", ply, targets, {weapon})
 
     return true, targets, weapon
 end
@@ -44,7 +44,7 @@ local function GiveAmmo(ply, cmd, args)
         end
     end
 
-    FAdmin.Messages.FireNotification("giveammo", ply, targets, {amount = amount, ammo = ammo})
+    FAdmin.Messages.FireNotification("giveammo", ply, targets, {amount, ammo})
 
     return true, targets, ammo, amount
 end

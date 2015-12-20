@@ -224,7 +224,7 @@ FAdmin.StartHooks["AccessFunctions"] = function()
         hasTarget = true,
         message = {"instigator", " set the usergroup of ", "targets", " to ", "extraInfo.1"},
         receivers = "everyone",
-        writeExtraInfo = net.WriteString,
+        writeExtraInfo = function(i) net.WriteString(i[1]) end,
         readExtraInfo = function() return {net.ReadString()} end,
         extraInfoColors = {Color(255, 102, 0)}
     }
