@@ -12,10 +12,10 @@ Requires fn library (https://github.com/FPtje/GModFunctional),
 
 Example:
 ```lua
-local schema = tc.assertTable{
-    name   = tc.assert(isstring, "The name must be a string!"),
-    id     = tc.assert(isnumber, "The id must be a number!"),
-    gender = tc.assert(tc.oneOf{"male", "female", "carp"}, "Gender missing or not recognised!", {"Perhaps you are a carp?"}),
+local schema = tc.checkTable{
+    name   = tc.addHint(isstring, "The name must be a string!"),
+    id     = tc.addHint(isnumber, "The id must be a number!"),
+    gender = tc.addHint(tc.oneOf{"male", "female", "carp"}, "Gender missing or not recognised!", {"Perhaps you are a carp?"}),
 }
 
 local correct, err, hints = schema({name = "Dick", id = 3, gender = "carp"})
@@ -63,10 +63,10 @@ weapon                 = FindMetaTable("Weapon")
 
 -- Assert function, asserts a property and returns the error if false.
 -- Allows f to override err and hints by simply returning them
-assert = function(f, err, hints) return function(...)
+addHint = function(f, err, hints) return function(...)
     local res = {f(...)}
-    table.insert(res, err)
-    table.insert(res, hints)
+    res[2] = err
+    res[3] = hints
 
     return unpack(res)
 end end
@@ -74,7 +74,7 @@ end end
 --[[ Validates a table against a schema
 Capable of nesting
 --]]
-function assertTable(schema)
+function checkTable(schema)
     return function(tbl)
         if not istable(tbl) then
             return false, "Not a table!"
@@ -115,11 +115,11 @@ server = function() return SERVER end
 -- Optional value, when filled in it must meet the conditions
 optional = function(...) return fn.FOr{isnil, ...} end
 
--- Default value, implies optional. Only works in combination with assertTable
--- Note that the tc.assert is to be the second parameter of default.
---      tc.assert(default(x)) does NOT work, default(x, tc.assert(...)) does.
--- example: tcassertTable{test = default(3, tc.assert(isnumber, "must be a number"))}
--- example: tcassertTable{test = default(3)}
+-- Default value, implies optional. Only works in combination with tc.checkTable
+-- Note that the tc.addHint is to be the second parameter of default.
+--      tc.addHint(tc.default(x)) does NOT work, default(x, tc.addHint(...)) does.
+-- example: tc.checkTable{test = tc.default(3, tc.addHint(isnumber, "must be a number"))}
+-- example: tc.checkTable{test = tc.default(3)}
 default = function(def, f)
     return function(val)
         if val == nil then
@@ -206,7 +206,7 @@ function unitTests()
     --[[
     Simple value schema. Checks whether the input is a number.
     ]]
-    local simpleSchema = tc.assert(isnumber, "Must be a number!")
+    local simpleSchema = tc.addHint(isnumber, "Must be a number!")
 
     -- This is how a schema is to be used. Just call it with the value you want to check.
     -- In further unit tests, the schema function is immediately called inside the checkCorrect/checIncorrect call for brevity
@@ -218,18 +218,18 @@ function unitTests()
     --[[
     Simple table schema
     ]]
-    local simpleTableSchema = tc.assertTable{
-        name        = tc.assert(isstring, "The name must be a string!"),
-        id          = tc.assert(isnumber, "The id must be a number!"),
-        gender      = tc.assert(tc.oneOf{"male", "female", "carp"}, "Gender missing or not recognised!", {"Perhaps you are a carp?"}),
-        nilthing    = tc.assert(tc.isnil, "nilthing must be nil"),
-        nonEmpty    = tc.assert(tc.nonEmpty(tc.tableOf(isnumber)), "nonEmpty not table of numbers"),
-        optnum      = tc.assert(tc.optional(isnumber), "optnum given, but not a number"),
-        strnum      = tc.assert(fn.FOr{isstring, isnumber}, "strnum must either be a string or a number"),
-        minmax      = tc.assert(fn.FAnd{tc.min(5), tc.max(10)}),
-        pos         = tc.assert(tc.optional(tc.positive)),
-        regx        = tc.assert(tc.optional(tc.regex("[a-z]+"))),
-        letters     = tc.assert(tc.optional(tc.alphanum)),
+    local simpleTableSchema = tc.checkTable{
+        name        = tc.addHint(isstring, "The name must be a string!"),
+        id          = tc.addHint(isnumber, "The id must be a number!"),
+        gender      = tc.addHint(tc.oneOf{"male", "female", "carp"}, "Gender missing or not recognised!", {"Perhaps you are a carp?"}),
+        nilthing    = tc.addHint(tc.isnil, "nilthing must be nil"),
+        nonEmpty    = tc.addHint(tc.nonEmpty(tc.tableOf(isnumber)), "nonEmpty not table of numbers"),
+        optnum      = tc.addHint(tc.optional(isnumber), "optnum given, but not a number"),
+        strnum      = tc.addHint(fn.FOr{isstring, isnumber}, "strnum must either be a string or a number"),
+        minmax      = tc.addHint(fn.FAnd{tc.min(5), tc.max(10)}),
+        pos         = tc.addHint(tc.optional(tc.positive)),
+        regx        = tc.addHint(tc.optional(tc.regex("[a-z]+"))),
+        letters     = tc.addHint(tc.optional(tc.alphanum)),
     }
 
     checkCorrect(simpleTableSchema({name = "Dick", id = 3, gender = "carp", nonEmpty = {1,2,3}, strnum = "str", minmax = 5, regx = "asdf", letters = "asdfj", pos = 3}))
@@ -258,18 +258,18 @@ function unitTests()
     --[[
     Table Schema with no explicit keys
     ]]
-    local nokeysSchema = tc.assertTable{
-        tc.assert(isstring, "The first value must be a string."),
-        tc.assert(isnumber, "The second value must be a number!"),
+    local nokeysSchema = tc.checkTable{
+        tc.addHint(isstring, "The first value must be a string."),
+        tc.addHint(isnumber, "The second value must be a number!"),
     }
     checkCorrect(nokeysSchema({"string", 3}))
 
     --[[
     Nested table schema
     ]]
-    local nestedSchema = tc.assertTable{
-        nested = tc.assertTable{
-            val = tc.assert(isnumber, "'val' must be a number!")
+    local nestedSchema = tc.checkTable{
+        nested = tc.checkTable{
+            val = tc.addHint(isnumber, "'val' must be a number!")
         }
     }
 
@@ -280,11 +280,11 @@ function unitTests()
     Combining schemas using the fn library
     ]]
     local andSchema = fn.FAnd{
-        tc.assertTable{
-            num = tc.assert(isnumber, "num is not a number")
+        tc.checkTable{
+            num = tc.addHint(isnumber, "num is not a number")
         },
-        tc.assertTable{
-            str = tc.assert(isstring, "str is not a string")
+        tc.checkTable{
+            str = tc.addHint(isstring, "str is not a string")
         }
     }
 
@@ -293,11 +293,11 @@ function unitTests()
     checkIncorrect(andSchema({str = "string!"}))
 
     local orSchema = fn.FOr{
-        tc.assertTable{
-            num = tc.assert(isnumber, "num is not a number")
+        tc.checkTable{
+            num = tc.addHint(isnumber, "num is not a number")
         },
-        tc.assertTable{
-            str = tc.assert(isstring, "str is not a string")
+        tc.checkTable{
+            str = tc.addHint(isstring, "str is not a string")
         }
     }
     checkCorrect(orSchema({num = 1}))
@@ -306,8 +306,8 @@ function unitTests()
     --[[
     Default value with a check
     ]]
-    local withDefaultSchema = tc.assertTable{
-        value = tc.default(10, tc.assert(isnumber, "must be a number!"))
+    local withDefaultSchema = tc.checkTable{
+        value = tc.default(10, tc.addHint(isnumber, "must be a number!"))
     }
     checkCorrect(withDefaultSchema({value = 30}))
     checkIncorrect(withDefaultSchema({value = "string"}))
@@ -323,7 +323,7 @@ function unitTests()
     --[[
     Default value with no checks
     ]]
-    local withDefaultNoCheck = tc.assertTable{
+    local withDefaultNoCheck = tc.checkTable{
         value = tc.default(10)
     }
     checkCorrect(withDefaultNoCheck({}))
@@ -331,20 +331,20 @@ function unitTests()
 
     --[[
     Creating your own checker function that returns an error message
-    When both the function and the tc.assert define error messages, there's a conflict
+    When both the function and the tc.addHint define error messages, there's a conflict
     ]]
     local function customCheck(val)
         return false, "function error message", {"function hint"}
     end
 
-    local customCheckSchema = tc.assertTable{
-        value = tc.assert(customCheck, "conflicting error message", {"conflicting hint"})
+    local customCheckSchema = tc.checkTable{
+        value = tc.addHint(customCheck, "added error message", {"added hint"})
     }
     checkIncorrect(customCheckSchema{value = 1})
     checkIncorrect(customCheckSchema{})
 
     _, err, hints = customCheckSchema{value = 2}
-    if err ~= "function error message" or hints[1] ~= "function hint" then
+    if err ~= "added error message" or hints[1] ~= "added hint" then
         print("Wrong conflict solution", err, hints[1])
     else
         print("Conflict solution OK!")

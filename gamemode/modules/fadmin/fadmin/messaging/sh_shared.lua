@@ -45,31 +45,31 @@ end
 
 FAdmin.Notifications = {}
 
-local validNotification = tc.assertTable{
+local validNotification = tc.checkTable{
     -- A name to identify the notification by
     name =
-        tc.assert(
+        tc.addHint(
             isstring,
             "The name must be a string!"
         ),
 
     -- Whether the notification applies to some kind of target
     hasTarget =
-        tc.assert(
+        tc.addHint(
             tc.optional(isbool),
             "hasTarget must either be true, false or nil!"
         ),
 
     -- Who receives the notification. Can be either one of the list or a function that returns a table of players
     receivers =
-        tc.assert(
+        tc.addHint(
             fn.FOr{tc.client, isfunction, tc.oneOf{"everyone", "admins", "superadmins", "self", "targets", "involved", "involved+admins", "involved+superadmins"}},
             "receivers must either be a function returning a table of players or one of 'admins', 'superadmins', 'everyone', 'self', 'targets', 'involved', 'involved+admins', 'involved+superadmins'"
         ),
 
     -- A table containing the message in parts. There are special strings
     message =
-        tc.assert(
+        tc.addHint(
             tc.tableOf(isstring),
             "The message field must be a table of strings! with special strings 'targets', 'you', 'instigator', 'extraInfo.#', with # a number."
         ),
@@ -78,28 +78,28 @@ local validNotification = tc.assertTable{
     msgType =
         tc.default(
             "NOTIFY",
-            tc.assert(
+            tc.addHint(
                 tc.oneOf{"ERROR", "NOTIFY", "QUESTION", "GOOD", "BAD"}, "msgType must be one of 'ERROR', 'NOTIFY', 'QUESTION', 'GOOD', 'BAD'"
             )
         ),
 
     -- A function that writes extra data in the net message
     writeExtraInfo =
-        tc.assert(
+        tc.addHint(
             tc.optional(isfunction),
             "writeExtraInfo must be a function"
         ),
 
     -- A function that reads the written data, formats it and puts it in a table
     readExtraInfo =
-        tc.assert(
+        tc.addHint(
             tc.optional(isfunction),
             "writeExtraInfo must be a function"
         ),
 
     -- When using extra information, this table contains the colours of the extraInfo messages
     extraInfoColors =
-        tc.assert(
+        tc.addHint(
             tc.optional(tc.tableOf(tc.iscolor)),
             "extraInfoColors must be a table of colours!"
         ),
@@ -107,7 +107,7 @@ local validNotification = tc.assertTable{
     -- Whether the notification is to be logged to console
     logging =
         tc.default(true,
-            tc.assert(
+            tc.addHint(
                 isbool,
                 "logging must be a boolean!"
             )
