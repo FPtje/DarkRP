@@ -2,7 +2,7 @@ function GM:SetupMove(ply, mv, cmd)
     if ply:isArrested() then
         mv:SetMaxClientSpeed(self.Config.arrestspeed)
     end
-    return self.Sandbox:SetupMove(ply, mv, cmd)
+    return self.Sandbox.SetupMove(self, ply, mv, cmd)
 end
 
 function GM:StartCommand(ply, usrcmd)

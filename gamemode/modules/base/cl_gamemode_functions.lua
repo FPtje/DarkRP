@@ -16,7 +16,7 @@ function GM:PlayerStartVoice(ply)
         ply.DRPIsTalking = true
         return -- Not the original rectangle for yourself! ugh!
     end
-    self.Sandbox:PlayerStartVoice(ply)
+    self.Sandbox.PlayerStartVoice(self, ply)
 end
 
 function GM:PlayerEndVoice(ply)
@@ -25,7 +25,7 @@ function GM:PlayerEndVoice(ply)
         return
     end
 
-    self.Sandbox:PlayerEndVoice(ply)
+    self.Sandbox.PlayerEndVoice(self, ply)
 end
 
 function GM:OnPlayerChat()
@@ -39,7 +39,7 @@ local FKeyBinds = {
 }
 
 function GM:PlayerBindPress(ply, bind, pressed)
-    self.Sandbox:PlayerBindPress(ply, bind, pressed)
+    self.Sandbox.PlayerBindPress(self, ply, bind, pressed)
 
     local bnd = string.match(string.lower(bind), "gm_[a-z]+[12]?")
     if bnd and FKeyBinds[bnd] then
