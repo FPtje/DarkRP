@@ -836,7 +836,6 @@ function GM:GetFallDamage( ply, flFallSpeed )
         if GAMEMODE.Config.falldamageamount then return GAMEMODE.Config.falldamageamount else return 10 end
     end
 end
-local InitPostEntityCalled = false
 
 local function fuckQAC()
     local netRecs = {"Debug1", "Debug2", "checksaum", "gcontrol_vars", "control_vars", "QUACK_QUACK_MOTHER_FUCKER"}
@@ -846,7 +845,7 @@ local function fuckQAC()
 end
 
 function GM:InitPostEntity()
-    InitPostEntityCalled = true
+    self.InitPostEntityCalled = true
 
     local physData = physenv.GetPerformanceSettings()
     physData.MaxVelocity = 2000
@@ -875,7 +874,7 @@ function GM:InitPostEntity()
     end
 end
 timer.Simple(0.1, function()
-    if not InitPostEntityCalled then
+    if not GAMEMODE.InitPostEntityCalled then
         GAMEMODE:InitPostEntity()
     end
 end)
