@@ -42,7 +42,7 @@ local baseSchema = tc.checkTable{
 --[[
 Properties shared by anything buyable
 ]]
-local BuyableSchema = fn.FAnd{baseSchema, tc.checkTable{
+local buyableSchema = fn.FAnd{baseSchema, tc.checkTable{
     allowed =
         tc.addHint(
             tc.optional(tc.tableOf(isnumber), isnumber),
@@ -57,7 +57,8 @@ local BuyableSchema = fn.FAnd{baseSchema, tc.checkTable{
         ),
 
     model =
-        tc.addHint(isstring,
+        tc.addHint(
+            isstring,
             "The model must be valid."
         ),
 
@@ -341,7 +342,7 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
 --[[
 Validate shipments
 ]]
-DarkRP.validateShipment = fn.FAnd{BuyableSchema, tc.checkTable{
+DarkRP.validateShipment = fn.FAnd{buyableSchema, tc.checkTable{
     entity =
         tc.addHint(
             isstring, "The entity of the shipment must be a string."
@@ -416,7 +417,7 @@ DarkRP.validateShipment = fn.FAnd{BuyableSchema, tc.checkTable{
 --[[
 Validate vehicles
 ]]
-DarkRP.validateVehicle = fn.FAnd{BuyableSchema, tc.checkTable{
+DarkRP.validateVehicle = fn.FAnd{buyableSchema, tc.checkTable{
     name =
         tc.addHint(
             isstring,
@@ -439,7 +440,7 @@ DarkRP.validateVehicle = fn.FAnd{BuyableSchema, tc.checkTable{
 --[[
 Validate Entities
 ]]
-DarkRP.validateEntity = fn.FAnd{BuyableSchema, tc.checkTable{
+DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
     ent =
         tc.addHint(
             isstring,
