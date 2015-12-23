@@ -29,7 +29,7 @@ local function createShipment(ply, args)
         end
     end
 
-    if not shipID then
+    if not shipID or ent.USED then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/makeshipment", ""))
         return
     end
@@ -66,7 +66,7 @@ local function splitShipment(ply, args)
         return
     end
 
-    if ent:Getcount() < 2 or ent.locked then
+    if ent:Getcount() < 2 or ent.locked or ent.USED then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("shipment_cannot_split"))
         return
     end
