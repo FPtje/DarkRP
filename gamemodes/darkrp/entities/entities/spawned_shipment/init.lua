@@ -83,15 +83,15 @@ function ENT:Use(activator, caller)
         return self.PlayerUse
     end
 
-    if not self.locked then
-        self.locked = true -- One activation per second
-        self.sparking = true
-        self:Setgunspawn(CurTime() + 1)
-        timer.Create(self:EntIndex() .. "crate", 1, 1, function()
-            if not IsValid(self) then return end
-            self.SpawnItem(self)
-        end)
-    end
+    if self.locked or self.USED then return end
+
+    self.locked = true -- One activation per second
+    self.sparking = true
+    self:Setgunspawn(CurTime() + 1)
+    timer.Create(self:EntIndex() .. "crate", 1, 1, function()
+        if not IsValid(self) then return end
+        self.SpawnItem(self)
+    end)
 end
 
 function ENT:SpawnItem()

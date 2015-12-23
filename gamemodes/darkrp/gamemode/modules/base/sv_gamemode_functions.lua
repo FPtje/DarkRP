@@ -5,7 +5,7 @@ local queuedForRemoval = {}
 DarkRP hooks
 ---------------------------------------------------------------------------*/
 function GM:Initialize()
-    self.Sandbox:Initialize()
+    self.Sandbox.Initialize(self)
 end
 
 function GM:playerBuyDoor(ply, ent)
@@ -111,11 +111,11 @@ function GM:PlayerSpawnProp(ply, model)
         jobTable.PlayerSpawnProp(ply, model)
     end
 
-    return self.Sandbox:PlayerSpawnProp(ply, model)
+    return self.Sandbox.PlayerSpawnProp(self, ply, model)
 end
 
 function GM:PlayerSpawnedProp(ply, model, ent)
-    self.Sandbox:PlayerSpawnedProp(ply, model, ent)
+    self.Sandbox.PlayerSpawnedProp(self, ply, model, ent)
     ent.SID = ply.SID
     ent:CPPISetOwner(ply)
 
@@ -155,11 +155,11 @@ local function checkAdminSpawn(ply, configVar, errorStr)
 end
 
 function GM:PlayerSpawnSENT(ply, class)
-    return checkAdminSpawn(ply, "adminsents", "gm_spawnsent") and self.Sandbox:PlayerSpawnSENT(ply, class) and not ply:isArrested()
+    return checkAdminSpawn(ply, "adminsents", "gm_spawnsent") and self.Sandbox.PlayerSpawnSENT(self, ply, class) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedSENT(ply, ent)
-    self.Sandbox:PlayerSpawnedSENT(ply, ent)
+    self.Sandbox.PlayerSpawnedSENT(self, ply, ent)
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned SENT " .. ent:GetClass(), Color(255, 255, 0))
 end
 
@@ -174,46 +174,46 @@ local function canSpawnWeapon(ply)
 end
 
 function GM:PlayerSpawnSWEP(ply, class, info)
-    return canSpawnWeapon(ply) and self.Sandbox:PlayerSpawnSWEP(ply, class, info) and not ply:isArrested()
+    return canSpawnWeapon(ply) and self.Sandbox.PlayerSpawnSWEP(self, ply, class, info) and not ply:isArrested()
 end
 
 function GM:PlayerGiveSWEP(ply, class, info)
-    return canSpawnWeapon(ply) and self.Sandbox:PlayerGiveSWEP(ply, class, info) and not ply:isArrested()
+    return canSpawnWeapon(ply) and self.Sandbox.PlayerGiveSWEP(self, ply, class, info) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnEffect(ply, model)
-    return self.Sandbox:PlayerSpawnEffect(ply, model) and not ply:isArrested()
+    return self.Sandbox.PlayerSpawnEffect(self, ply, model) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnVehicle(ply, model, class, info)
-    return checkAdminSpawn(ply, "adminvehicles", "gm_spawnvehicle") and self.Sandbox:PlayerSpawnVehicle(ply, model, class, info) and not ply:isArrested()
+    return checkAdminSpawn(ply, "adminvehicles", "gm_spawnvehicle") and self.Sandbox.PlayerSpawnVehicle(self, ply, model, class, info) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
-    self.Sandbox:PlayerSpawnedVehicle(ply, ent)
+    self.Sandbox.PlayerSpawnedVehicle(self, ply, ent)
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass(), Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
-    return checkAdminSpawn(ply, "adminnpcs", "gm_spawnnpc") and self.Sandbox:PlayerSpawnNPC(ply, type, weapon) and not ply:isArrested()
+    return checkAdminSpawn(ply, "adminnpcs", "gm_spawnnpc") and self.Sandbox.PlayerSpawnNPC(self, ply, type, weapon) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedNPC(ply, ent)
-    self.Sandbox:PlayerSpawnedNPC(ply, ent)
+    self.Sandbox.PlayerSpawnedNPC(self, ply, ent)
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned NPC " .. ent:GetClass(), Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnRagdoll(ply, model)
-    return self.Sandbox:PlayerSpawnRagdoll(ply, model) and not ply:isArrested()
+    return self.Sandbox.PlayerSpawnRagdoll(self, ply, model) and not ply:isArrested()
 end
 
 function GM:PlayerSpawnedRagdoll(ply, model, ent)
-    self.Sandbox:PlayerSpawnedRagdoll(ply, model, ent)
+    self.Sandbox.PlayerSpawnedRagdoll(self, ply, model, ent)
     ent.SID = ply.SID
 end
 
 function GM:EntityRemoved(ent)
-    self.Sandbox:EntityRemoved(ent)
+    self.Sandbox.EntityRemoved(self, ent)
     if ent:IsVehicle() then
         local found = ent:CPPIGetOwner()
         if IsValid(found) then
@@ -266,7 +266,7 @@ function GM:OnNPCKilled(victim, ent, weapon)
 end
 
 function GM:KeyPress(ply, code)
-    self.Sandbox:KeyPress(ply, code)
+    self.Sandbox.KeyPress(self, ply, code)
 end
 
 local function IsInRoom(listener, talker) -- IsInRoom function to see if the player is in the same room.
@@ -312,7 +312,7 @@ function GM:PlayerCanHearPlayersVoice(listener, talker)
 end
 
 function GM:CanTool(ply, trace, mode)
-    if not self.Sandbox:CanTool(ply, trace, mode) then return false end
+    if not self.Sandbox.CanTool(self, ply, trace, mode) then return false end
 
     if IsValid(trace.Entity) then
         if trace.Entity.onlyremover then
@@ -387,7 +387,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
     if (GAMEMODE.Config.dropweapondeath or ply.dropWeaponOnDeath) and IsValid(weapon) and canDrop then
         ply:dropDRPWeapon(weapon)
     end
-    self.Sandbox:DoPlayerDeath(ply, attacker, dmginfo, ...)
+    self.Sandbox.DoPlayerDeath(self, ply, attacker, dmginfo, ...)
 end
 
 function GM:PlayerDeath(ply, weapon, killer)
@@ -403,7 +403,7 @@ function GM:PlayerDeath(ply, weapon, killer)
     if weapon:IsVehicle() and weapon:GetDriver():IsPlayer() then killer = weapon:GetDriver() end
 
     if GAMEMODE.Config.showdeaths then
-        self.Sandbox:PlayerDeath(ply, weapon, killer)
+        self.Sandbox.PlayerDeath(self, ply, weapon, killer)
     end
 
     ply:Extinguish()
@@ -506,7 +506,7 @@ function GM:PlayerSetModel(ply)
         ply:SetModel(ply:getPreferredModel(ply:Team()) or modelname)
     end
 
-    self.Sandbox:PlayerSetModel(ply)
+    self.Sandbox.PlayerSetModel(self, ply)
 
     ply:SetupHands()
 end
@@ -564,7 +564,7 @@ local function restoreReconnectedEnts(ply)
 end
 
 function GM:PlayerInitialSpawn(ply)
-    self.Sandbox:PlayerInitialSpawn(ply)
+    self.Sandbox.PlayerInitialSpawn(self, ply)
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has joined the game", Color(0, 130, 255))
     ply.DarkRPVars = ply.DarkRPVars or {}
     ply:restorePlayerData()
@@ -583,7 +583,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerSelectSpawn(ply)
-    local spawn = self.Sandbox:PlayerSelectSpawn(ply)
+    local spawn = self.Sandbox.PlayerSelectSpawn(self, ply)
 
     local jobTable = ply:getJobTable()
     if jobTable.PlayerSelectSpawn then
@@ -678,7 +678,7 @@ function GM:PlayerSpawn(ply)
 end
 
 function GM:PlayerLoadout(ply)
-    self.Sandbox:PlayerLoadout(ply)
+    self.Sandbox.PlayerLoadout(self, ply)
 
     if ply:isArrested() then return end
 
@@ -785,7 +785,7 @@ local function collectRemoveEntities(ply)
 end
 
 function GM:PlayerDisconnected(ply)
-    self.Sandbox:PlayerDisconnected(ply)
+    self.Sandbox.PlayerDisconnected(self, ply)
     timer.Remove(ply:UniqueID() .. "jobtimer")
     timer.Remove(ply:UniqueID() .. "propertytax")
 
@@ -836,7 +836,6 @@ function GM:GetFallDamage( ply, flFallSpeed )
         if GAMEMODE.Config.falldamageamount then return GAMEMODE.Config.falldamageamount else return 10 end
     end
 end
-local InitPostEntityCalled = false
 
 local function fuckQAC()
     local netRecs = {"Debug1", "Debug2", "checksaum", "gcontrol_vars", "control_vars", "QUACK_QUACK_MOTHER_FUCKER"}
@@ -846,7 +845,7 @@ local function fuckQAC()
 end
 
 function GM:InitPostEntity()
-    InitPostEntityCalled = true
+    self.InitPostEntityCalled = true
 
     local physData = physenv.GetPerformanceSettings()
     physData.MaxVelocity = 2000
@@ -875,7 +874,7 @@ function GM:InitPostEntity()
     end
 end
 timer.Simple(0.1, function()
-    if not InitPostEntityCalled then
+    if not GAMEMODE.InitPostEntityCalled then
         GAMEMODE:InitPostEntity()
     end
 end)
@@ -899,7 +898,7 @@ function GM:PlayerLeaveVehicle(ply, vehicle)
     if GAMEMODE.Config.autovehiclelock and vehicle:isKeysOwnedBy(ply) then
         vehicle:keysLock()
     end
-    self.Sandbox:PlayerLeaveVehicle(ply, vehicle)
+    self.Sandbox.PlayerLeaveVehicle(self, ply, vehicle)
 end
 
 local function ClearDecals()

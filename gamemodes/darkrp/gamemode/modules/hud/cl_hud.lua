@@ -357,7 +357,7 @@ Drawing death notices
 ---------------------------------------------------------------------------*/
 function GM:DrawDeathNotice(x, y)
     if not GAMEMODE.Config.showdeaths then return end
-    self.Sandbox:DrawDeathNotice(x, y)
+    self.Sandbox.DrawDeathNotice(self, x, y)
 end
 
 /*---------------------------------------------------------------------------
@@ -383,7 +383,7 @@ function GM:HUDShouldDraw(name)
         (HelpToggled and name == "CHudChat") then
             return false
     else
-        return self.Sandbox:HUDShouldDraw(name)
+        return self.Sandbox.HUDShouldDraw(self, name)
     end
 end
 
@@ -404,5 +404,5 @@ function GM:HUDPaint()
     DrawHUD()
     DrawEntityDisplay()
 
-    self.Sandbox:HUDPaint()
+    self.Sandbox.HUDPaint(self)
 end
