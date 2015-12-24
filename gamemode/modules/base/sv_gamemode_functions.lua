@@ -466,7 +466,9 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 
     local jobTable = ply:getJobTable()
     if jobTable.PlayerCanPickupWeapon then
-        jobTable.PlayerCanPickupWeapon(ply, weapon)
+        local val = jobTable.PlayerCanPickupWeapon(ply, weapon)
+
+        return val == nil or val
     end
     return true
 end
