@@ -89,7 +89,7 @@ function SWEP:PrimaryAttack()
 
     if SERVER or not IsFirstTimePredicted() then return end
     
-    hook.Call( "playerWeaponsChecked", nil, trace.Entity, self:GetOwner() )
+    hook.Call("playerWeaponsChecked", nil, trace.Entity, self:GetOwner())
     
     local result = {}
     self:GetStrippableWeapons(trace.Entity, function(wep)
