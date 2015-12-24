@@ -88,7 +88,9 @@ function SWEP:PrimaryAttack()
     self:SetNextSoundTime(CurTime() + 0.3)
 
     if SERVER or not IsFirstTimePredicted() then return end
-
+    
+    hook.Run("onPlayerWeaponsChecked",trace.Entity,self:GetOwner())
+    
     local result = {}
     self:GetStrippableWeapons(trace.Entity, function(wep)
         table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
