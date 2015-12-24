@@ -89,7 +89,7 @@ function SWEP:PrimaryAttack()
 
     if SERVER or not IsFirstTimePredicted() then return end
     
-    hook.Run("playerWeaponsChecked",trace.Entity,self:GetOwner())
+    hook.Call( "playerWeaponsChecked", GAMEMODE, trace.Entity, self:GetOwner() )
     
     local result = {}
     self:GetStrippableWeapons(trace.Entity, function(wep)
