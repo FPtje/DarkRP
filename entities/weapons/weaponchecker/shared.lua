@@ -136,7 +136,7 @@ function SWEP:SecondaryAttack()
         self.NextDotsTime = CurTime() + 0.5
     end
 end
-h
+
 function SWEP:Reload()
     if CLIENT or CurTime() < (self.NextReloadTime or 0) then return end
     self.NextReloadTime = CurTime() + 1
