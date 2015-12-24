@@ -89,7 +89,7 @@ function SWEP:PrimaryAttack()
 
     if SERVER or not IsFirstTimePredicted() then return end
     
-    hook.Run("onPlayerWeaponsChecked",trace.Entity,self:GetOwner())
+    hook.Run("playerWeaponsChecked",trace.Entity,self:GetOwner())
     
     local result = {}
     self:GetStrippableWeapons(trace.Entity, function(wep)
@@ -136,7 +136,7 @@ function SWEP:SecondaryAttack()
         self.NextDotsTime = CurTime() + 0.5
     end
 end
-
+h
 function SWEP:Reload()
     if CLIENT or CurTime() < (self.NextReloadTime or 0) then return end
     self.NextReloadTime = CurTime() + 1
