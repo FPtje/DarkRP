@@ -31,6 +31,78 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
+DarkRP.hookStub{
+    name = "playerWeaponsChecked",
+    description = "Called when a player with a weapon checker has checked another player's weapons. Note: Only called when the player looks at the weapons without confiscating. Please see playerWeaponsConfiscated for when weapons are actually confiscated.",
+    parameters = {
+        {
+            name = "checker",
+            description = "The player holding the weapon checker.",
+            type = "Player"
+        },
+        {
+            name = "target",
+            description = "The player whose weapons have been checked.",
+            type = "Player"
+        },
+        {
+            name = "weapons",
+            description = "The weapons that have been checked.",
+            type = "table"
+        },
+    },
+    returns = {},
+    realm = "Shared"
+}
+
+DarkRP.hookStub{
+    name = "playerWeaponsReturned",
+    description = "Called when a player with a weapon checker has returned another player's weapons.",
+    parameters = {
+        {
+            name = "checker",
+            description = "The player holding the weapon checker.",
+            type = "Player"
+        },
+        {
+            name = "target",
+            description = "The player whose weapons have been returned.",
+            type = "Player"
+        },
+        {
+            name = "weapons",
+            description = "The weapons that have been returned.",
+            type = "table"
+        },
+    },
+    returns = {},
+    realm = "Server"
+}
+
+DarkRP.hookStub{
+    name = "playerWeaponsConfiscated",
+    description = "Called when a player with a weapon checker has confiscated another player's weapons.",
+    parameters = {
+        {
+            name = "checker",
+            description = "The player holding the weapon checker.",
+            type = "Player"
+        },
+        {
+            name = "target",
+            description = "The player whose weapons have been confiscated.",
+            type = "Player"
+        },
+        {
+            name = "weapons",
+            description = "The weapons that have been confiscated.",
+            type = "table"
+        },
+    },
+    returns = {},
+    realm = "Server"
+}
+
 function SWEP:Initialize()
     self:SetHoldType("normal")
 end
@@ -87,28 +159,37 @@ function SWEP:PrimaryAttack()
     self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
     self:SetNextSoundTime(CurTime() + 0.3)
 
-    if SERVER or not IsFirstTimePredicted() then return end
-    
-    hook.Call("playerWeaponsChecked", nil, trace.Entity, self:GetOwner())
-    
+
+    if not IsFirstTimePredicted() then return end
+
     local result = {}
+    local weps = {}
     self:GetStrippableWeapons(trace.Entity, function(wep)
-        table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
+        table.insert(weps, wep)
     end)
+
+    hook.Call("playerWeaponsChecked", nil, self:GetOwner(), trace.Entity, weps)
+
+    if SERVER then return end
+    for _, wep in pairs(weps) do
+        table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
+    end
+
     result = table.concat(result, ", ")
 
     if result == "" then
         self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
-    else
-        self:GetOwner():ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
-        if string.len(result) >= 126 then
-            local amount = math.ceil(string.len(result) / 126)
-            for i = 1, amount, 1 do
-                self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
-            end
-        else
-            self:GetOwner():ChatPrint(result)
+        return
+    end
+
+    self:GetOwner():ChatPrint(DarkRP.getPhrase("persons_weapons", trace.Entity:Nick()))
+    if string.len(result) >= 126 then
+        local amount = math.ceil(string.len(result) / 126)
+        for i = 1, amount, 1 do
+            self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
         end
+    else
+        self:GetOwner():ChatPrint(result)
     end
 end
 
@@ -152,16 +233,18 @@ function SWEP:Reload()
         return
     else
         for k,v in pairs(trace.Entity.ConfiscatedWeapons) do
-            local wep = trace.Entity:Give(v[1])
+            local wep = trace.Entity:Give(v.class)
             trace.Entity:RemoveAllAmmo()
-            trace.Entity:SetAmmo(v[2], v[3], false)
-            trace.Entity:SetAmmo(v[4], v[5], false)
+            trace.Entity:SetAmmo(v.primaryAmmoCount, v.primaryAmmoType, false)
+            trace.Entity:SetAmmo(v.secondaryAmmoCount, v.secondaryAmmoType, false)
 
-            wep:SetClip1(v[6])
-            wep:SetClip2(v[7])
+            wep:SetClip1(v.clip1)
+            wep:SetClip2(v.clip2)
 
         end
         DarkRP.notify(self:GetOwner(), 2, 4, DarkRP.getPhrase("returned_persons_weapons", trace.Entity:Nick()))
+
+        hook.Call("playerWeaponsReturned", nil, self:GetOwner(), trace.Entity, trace.Entity.ConfiscatedWeapons)
         trace.Entity.ConfiscatedWeapons = nil
     end
 end
@@ -184,29 +267,30 @@ function SWEP:Succeed()
     self:GetStrippableWeapons(trace.Entity, function(wep)
         trace.Entity:StripWeapon(wep:GetClass())
         table.insert(result, wep:GetClass())
-        table.insert(stripped, {wep:GetClass(), trace.Entity:GetAmmoCount(wep:GetPrimaryAmmoType()),
-        wep:GetPrimaryAmmoType(), trace.Entity:GetAmmoCount(wep:GetSecondaryAmmoType()), wep:GetSecondaryAmmoType(),
-        wep:Clip1(), wep:Clip2()})
+        stripped[wep:GetClass()] = {
+            class = wep:GetClass(),
+            primaryAmmoCount = trace.Entity:GetAmmoCount(wep:GetPrimaryAmmoType()),
+            primaryAmmoType = wep:GetPrimaryAmmoType(),
+            secondaryAmmoCount = trace.Entity:GetAmmoCount(wep:GetSecondaryAmmoType()),
+            secondaryAmmoType = wep:GetSecondaryAmmoType(),
+            clip1 = wep:Clip1(),
+            clip2 = wep:Clip2()
+        }
     end)
     result = table.concat(result, ", ")
 
     if not trace.Entity.ConfiscatedWeapons then
         if next(stripped) ~= nil then trace.Entity.ConfiscatedWeapons = stripped end
     else
+        -- Merge stripped weapons into confiscated weapons
         for k,v in pairs(stripped) do
-            local found = false
-            for a,b in pairs(trace.Entity.ConfiscatedWeapons) do
-                if b[1] == v[1] then
-                    found = true
-                    break
-                end
-            end
+            if trace.Entity.ConfiscatedWeapons[k] then continue end
 
-            if not found then
-                table.insert(trace.Entity.ConfiscatedWeapons, v)
-            end
+            trace.Entity.ConfiscatedWeapons[k] = v
         end
     end
+
+    hook.Call("playerWeaponsConfiscated", nil, self:GetOwner(), trace.Entity, trace.Entity.ConfiscatedWeapons)
 
     if result == "" then
         self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", trace.Entity:Nick()))
