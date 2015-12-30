@@ -771,7 +771,7 @@ local function collectRemoveEntities(ply)
     end
 
     for k, v in pairs(ents.GetAll()) do
-        if v.SID ~= ply.SID or not v:IsVehicle() and not remClasses[string.lower(v:GetClass())] then continue end
+        if v.SID ~= ply.SID or not v:IsVehicle() and not remClasses[string.lower(v:GetClass() or "")] then continue end
 
         table.insert(collect, v)
     end
