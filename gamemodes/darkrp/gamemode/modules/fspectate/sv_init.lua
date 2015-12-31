@@ -86,6 +86,9 @@ local function setSpectatePos(ply, cmd, args)
         local x, y, z = tonumber(args[1] or 0), tonumber(args[2] or 0), tonumber(args[3] or 0)
 
         ply.FSpectatePos = Vector(x, y, z)
+
+        -- A position update request implies that the spectator is not spectating another player (anymore)
+        ply.FSpectatingEnt = nil
     end)
 end
 concommand.Add("_FSpectatePosUpdate", setSpectatePos)
@@ -98,11 +101,19 @@ end
 concommand.Add("FSpectate_StopSpectating", endSpectate)
 
 local function playerVoice(listener, talker)
-    if not IsValid(listener.FSpectatingEnt) then return end
+    if not listener.FSpectating then return end
+
+    local canHearLocal, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
+
+    if not IsValid(listener.FSpectatingEnt) then
+        if not DarkRP or not GAMEMODE.Config.voiceradius or not listener.FSpectatePos then return end
+
+        -- Return whether the listener can hear the talker locally or distance smaller than 550
+        return canHearLocal or listener.FSpectatePos:DistToSqr(talker:GetShootPos()) < 302500, surround
+    end
 
     -- You can hear someone if your spectate target can hear them
-    local canHear, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener.FSpectatingEnt, talker)
-    local canHearLocal = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
+    local canHear = GAMEMODE:PlayerCanHearPlayersVoice(listener.FSpectatingEnt, talker)
 
     -- you can always hear the person you're spectating
     return canHear or canHearLocal or listener.FSpectatingEnt == talker, surround
@@ -123,7 +134,7 @@ local function playerSay(talker, message)
         if ply == talker or not ply.FSpectating then continue end
 
         -- the person is saying it close to where you are roaming
-        if ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 400 and
+        if ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 600 and
             ply:GetShootPos():Distance(talker:GetShootPos()) > 250 then -- Make sure you don't get it twice
 
             DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
