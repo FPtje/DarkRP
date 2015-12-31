@@ -193,7 +193,7 @@ hook.Add("OnPhysgunFreeze", "FPP.Protect.PhysgunFreeze", FPP.PhysgunFreeze)
 function FPP.Protect.GravGunPickup(ply, ent)
     if not tobool(FPP.Settings.FPP_GRAVGUN1.toggle) then return end
 
-    if not IsValid(ent) then return end-- You don't want a cross when looking at the floor while holding right mouse
+    if not IsValid(ent) then return end -- You don't want a cross when looking at the floor while holding right mouse
 
     if ent:IsPlayer() then return end
 
@@ -215,6 +215,26 @@ function FPP.Protect.GravGunPickup(ply, ent)
     if cantouch == false then DropEntityIfHeld(ent) end
 end
 hook.Add("GravGunOnPickedUp", "FPP.Protect.GravGunPickup", FPP.Protect.GravGunPickup)
+
+function FPP.Protect.CanGravGunPickup(ply, ent)
+    if not tobool(FPP.Settings.FPP_GRAVGUN1.toggle) or not IsValid(ent) then return end
+
+    if type(ent.GravGunPickup) == "function" then
+        local val = ent:GravGunPickup(ply, ent)
+        if val ~= nil then
+            if val == false then return false end
+            return
+        end
+    elseif ent.GravGunPickup ~= nil then
+        if ent.GravGunPickup == false then return false end
+        return
+    end
+
+    local cantouch = FPP.plyCanTouchEnt(ply, ent, "Gravgun")
+
+    if cantouch == false then return false end
+end
+hook.Add("GravGunPickupAllowed", "FPP.Protect.CanGravGunPickup", FPP.Protect.CanGravGunPickup)
 
 --Gravgun punting
 function FPP.Protect.GravGunPunt(ply, ent)

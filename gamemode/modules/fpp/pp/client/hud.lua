@@ -21,6 +21,13 @@ hook.Add("PhysgunPickup", "FPP_CL_PhysgunPickup", function(ply, ent)
     end
 end)
 
+-- Makes sure the client doesn't think they can punt props
+hook.Add("GravGunPunt", "FPP_CL_GravGunPunt", function(ply, ent)
+    if tobool(FPP.Settings.FPP_GRAVGUN1.noshooting) then return false end
+    if IsValid(ent) and not FPP.canTouchEnt(ent, "Gravgun") then
+        return false
+    end
+end)
 
 
 local HUDNote_c = 0
