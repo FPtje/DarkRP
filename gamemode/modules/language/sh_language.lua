@@ -94,12 +94,12 @@ local function printMissingChatTranslations()
     for k,v in pairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
 
     for k,v in pairs(cmds) do
-        text[k] = string.format([=[["%s"]%s=\t"%s",]=], v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description)
+        text[k] = string.format([=[["%s"]%s=    "%s",]=], v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description)
     end
 
     MsgC(Color(0, 255, 0), string.format("%s untranslated chat command descriptions!\n", #cmds))
 
-    text = table.concat(text, "\n\t")
+    text = table.concat(text, "\n    ")
     SetClipboardText(text)
 
     MsgC(Color(0, 255, 0), "text copied to clipboard!\n")
