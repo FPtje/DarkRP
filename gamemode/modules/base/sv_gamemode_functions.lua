@@ -475,6 +475,10 @@ end
 
 function GM:PlayerSetModel(ply)
     local jobTable = ply:getJobTable()
+
+    -- Invalid job, return to Sandbox behaviour
+    if not jobTable then return self.Sandbox.PlayerSetModel(ply) end
+
     if jobTable.PlayerSetModel then
         local model = jobTable.PlayerSetModel(ply)
         if model then ply:SetModel(model) return end

@@ -432,7 +432,7 @@ DarkRP.getJobByCommand = function(cmd)
     if not jobByCmd[cmd] then return nil, nil end
     return RPExtraTeams[jobByCmd[cmd]], jobByCmd[cmd]
 end
-plyMeta.getJobTable = fn.FOr{fn.Compose{fn.Curry(fn.Flip(fn.GetValue), 2)(RPExtraTeams), plyMeta.Team}, fn.Curry(fn.Id, 2)({})}
+plyMeta.getJobTable = function(ply) return RPExtraTeams[ply:Team()] end
 local jobCount = 0
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
     local tableSyntaxUsed = not IsColor(colorOrTable)
