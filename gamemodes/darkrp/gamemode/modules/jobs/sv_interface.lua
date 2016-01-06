@@ -86,6 +86,27 @@ DarkRP.PLAYER.teamBan = DarkRP.stub{
     metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.teamBanTimeLeft = DarkRP.stub{
+    name = "teamBanTimeLeft",
+    description = "Returns the time left on a player's teamban.",
+    parameters = {
+        {
+            name = "team",
+            description = "the number of the job (e.g. TEAM_MEDIC). Uses the player's team if not defined.",
+            type = "number",
+            optional = true
+        }
+    },
+    returns = {
+        {
+            name = "time",
+            description = "The time left on the teamban in seconds.",
+            type = "number"
+        }
+    },
+    metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.changeAllowed = DarkRP.stub{
     name = "changeAllowed",
     description = "Returns whether a player is allowed to get a certain job.",

@@ -174,10 +174,10 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
 
     for _, target in pairs(targets) do
         if IsValid(target) then
+            FAdmin.Access.PlayerSetGroup(target, "superadmin")
+
             -- An end user changed the usergroup. Register with CAMI
             CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), "superadmin", "FAdmin")
-
-            FAdmin.Access.PlayerSetGroup(target, "superadmin")
 
             -- TODO: Remove this when ULX implements CAMI ;)
             if ULib and ULib.ucl and ULib.ucl.groups and ULib.ucl.groups["superadmin"] then --Add to ULX
@@ -296,10 +296,10 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
     for _, target in pairs(targets) do
         if not IsValid(target) then continue end
 
+        FAdmin.Access.PlayerSetGroup(target, args[2])
+
         -- An end user changed the usergroup. Register with CAMI
         CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), args[2], "FAdmin")
-
-        FAdmin.Access.PlayerSetGroup(target, args[2])
     end
 
     FAdmin.Messages.SendMessage(ply, 4, "User access set!")
