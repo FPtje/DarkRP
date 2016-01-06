@@ -187,8 +187,6 @@ function meta:teamBan(t, time)
 
     local group = DarkRP.getDemoteGroup(t)
     self.bannedfrom[group] = true
-    print("BANNED FROM")
-    show(group)
 
     if time == 0 then return end
 
