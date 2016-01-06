@@ -178,8 +178,10 @@ local function addTeamCommands(CTeam, max)
                 return ""
             end
 
-            if not ply:changeAllowed(k) then
-                DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/vote" .. CTeam.command, DarkRP.getPhrase("banned_or_demoted")))
+            local allowed, time = ply:changeAllowed(k)
+            if not allowed then
+                local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(k), DarkRP.getPhrase("banned_or_demoted"))
+                DarkRP.notify(ply, 1, 4, notif)
 
                 return ""
             end

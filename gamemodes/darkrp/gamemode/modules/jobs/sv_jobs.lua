@@ -14,7 +14,7 @@ function meta:changeTeam(t, force, suppressNotification)
 
     local allowed, time = self:changeAllowed(t)
     if t ~= GAMEMODE.DefaultTeam and not allowed and not force then
-        local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, banned/demoted") or DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted")
+        local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(t), DarkRP.getPhrase("banned_or_demoted"))
         notify(self, 1, 4, notif)
         return false
     end
@@ -188,9 +188,13 @@ function meta:teamBan(t, time)
     local group = DarkRP.getDemoteGroup(t)
     self.bannedfrom[group] = true
 
+    local timerid = "teamban" .. self:UserID() .. "," .. group.value
+
+    timer.Remove(timerid)
+
     if time == 0 then return end
 
-    timer.Create("teamban" .. self:UserID() .. "," .. group.value, time or GAMEMODE.Config.demotetime, 1, function()
+    timer.Create(timerid, time or GAMEMODE.Config.demotetime, 1, function()
         if not IsValid(self) then return end
         self:teamUnBan(t)
     end)
