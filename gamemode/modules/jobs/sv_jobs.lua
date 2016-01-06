@@ -187,10 +187,15 @@ function meta:teamBan(t, time)
     self.bannedfrom[group] = true
 
     if time == 0 then return end
-    timer.Simple(time or GAMEMODE.Config.demotetime, function()
+
+    timer.Create("teamban" .. self:UserID() .. "," .. t, time or GAMEMODE.Config.demotetime, 1, function()
         if not IsValid(self) then return end
         self:teamUnBan(t)
     end)
+end
+
+function meta:teamBanTimeLeft(t)
+    return timer.TimeLeft("teamban" .. self:UserID() .. "," .. t)
 end
 
 function meta:changeAllowed(t)
