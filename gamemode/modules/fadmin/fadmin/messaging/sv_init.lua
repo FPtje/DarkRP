@@ -106,6 +106,7 @@ function FAdmin.Messages.FireNotification(name, instigator, targets, extraInfo)
     end
 
     local notification = FAdmin.Notifications[notId]
+    local targets = table.Copy(targets)
     local receivers = receiversToPlayers[notification.receivers]
     receivers = receivers and receivers(instigator, targets) or notification.receivers(instigator, targets)
 
