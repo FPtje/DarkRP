@@ -452,10 +452,17 @@ function GM:PlayerDeath(ply, weapon, killer)
     DarkRP.log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, Color(255, 190, 0))
 end
 
+local adminCopWeapons = {
+    ["door_ram"] = true,
+    ["arrest_stick"] = true,
+    ["unarrest_stick"] = true,
+    ["stunstick"] = true,
+    ["weaponchecker"] = true,
+}
 function GM:PlayerCanPickupWeapon(ply, weapon)
     if ply:isArrested() then return false end
     if weapon.PlayerUse == false then return false end
-    if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons then return true end
+    if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons and adminCopWeapons[weapon:GetClass()] then return true end
 
     if GAMEMODE.Config.license and not ply:getDarkRPVar("HasGunlicense") and not ply.RPLicenseSpawn then
         if GAMEMODE.NoLicense[string.lower(weapon:GetClass())] or not weapon:IsWeapon() then
