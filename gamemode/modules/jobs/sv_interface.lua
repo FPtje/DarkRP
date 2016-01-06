@@ -92,9 +92,9 @@ DarkRP.PLAYER.teamBanTimeLeft = DarkRP.stub{
     parameters = {
         {
             name = "team",
-            description = "the number of the job (e.g. TEAM_MEDIC).",
+            description = "the number of the job (e.g. TEAM_MEDIC). Uses the player's team if not defined.",
             type = "number",
-            optional = false
+            optional = true
         }
     },
     returns = {

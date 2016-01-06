@@ -12,8 +12,10 @@ function meta:changeTeam(t, force, suppressNotification)
         return false
     end
 
-    if t ~= GAMEMODE.DefaultTeam and not self:changeAllowed(t) and not force then
-        notify(self, 1, 4, DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted"))
+    local allowed, time = self:changeAllowed(t)
+    if t ~= GAMEMODE.DefaultTeam and not allowed and not force then
+        local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, banned/demoted") or DarkRP.getPhrase("unable", team.GetName(t), "banned/demoted")
+        notify(self, 1, 4, notif)
         return false
     end
 
@@ -185,23 +187,27 @@ function meta:teamBan(t, time)
 
     local group = DarkRP.getDemoteGroup(t)
     self.bannedfrom[group] = true
+    print("BANNED FROM")
+    show(group)
 
     if time == 0 then return end
 
-    timer.Create("teamban" .. self:UserID() .. "," .. t, time or GAMEMODE.Config.demotetime, 1, function()
+    timer.Create("teamban" .. self:UserID() .. "," .. group.value, time or GAMEMODE.Config.demotetime, 1, function()
         if not IsValid(self) then return end
         self:teamUnBan(t)
     end)
 end
 
 function meta:teamBanTimeLeft(t)
-    return timer.TimeLeft("teamban" .. self:UserID() .. "," .. t)
+    local group = DarkRP.getDemoteGroup(t or self:Team())
+    return timer.TimeLeft("teamban" .. self:UserID() .. "," .. (group and group.value or ""))
 end
 
 function meta:changeAllowed(t)
     local group = DarkRP.getDemoteGroup(t)
-    if not self.bannedfrom then return true end
-    if self.bannedfrom[group] then return false else return true end
+    if self.bannedfrom and self.bannedfrom[group] then return false, self:teamBanTimeLeft(t) end
+
+    return true
 end
 
 function GM:canChangeJob(ply, args)
