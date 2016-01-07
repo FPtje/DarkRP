@@ -33,7 +33,8 @@ function FAdmin.TargetsToString(targets)
     if #targets == #player.GetAll() and #targets ~= 1 then
         return "everyone"
     end
-
+    
+    local targets = table.Copy(targets)
     local names = fn.Map(FAdmin.PlayerName, targets)
 
     if #names == 1 then
