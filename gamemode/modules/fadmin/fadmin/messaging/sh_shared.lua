@@ -34,7 +34,7 @@ function FAdmin.TargetsToString(targets)
         return "everyone"
     end
     
-    local targets = table.Copy(targets)
+    targets = table.Copy(targets)
     local names = fn.Map(FAdmin.PlayerName, targets)
 
     if #names == 1 then
