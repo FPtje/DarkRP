@@ -143,7 +143,7 @@ local function spectateLookingAt()
 
     if not IsValid(foundPly) then return end
 
-    RunConsoleCommand("FSpectate", foundPly:SteamID())
+    RunConsoleCommand("FSpectate", foundPly:UserID())
 end
 
 /*---------------------------------------------------------------------------
