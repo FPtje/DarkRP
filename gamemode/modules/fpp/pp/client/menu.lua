@@ -186,7 +186,7 @@ function FPP.AdminMenu(Panel)
     addchk("Freeze disconnected players's entities", {"FPP_GLOBALSETTINGS1", "freezedisconnected"}, general)
     addchk("Cleanup disconnected players's entities", {"FPP_GLOBALSETTINGS1", "cleanupdisconnected"}, general)
     addchk("Cleanup admin's entities on disconnect", {"FPP_GLOBALSETTINGS1", "cleanupadmin"}, general)
-    addsldr(300, {"FPP_GLOBALSETTINGS1", "cleanupdisconnectedtime"}, "Deletion time", general, 0)
+    addsldr(600, {"FPP_GLOBALSETTINGS1", "cleanupdisconnectedtime"}, "Deletion time", general, 0)
     addchk("Anti E2 mingery (mass killing with E2)", {"FPP_GLOBALSETTINGS1", "antie2minge"}, general)
 
     local delnow = general:Add("DButton")
