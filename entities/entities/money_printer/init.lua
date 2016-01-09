@@ -90,12 +90,12 @@ end
 
 function ENT:CreateMoneybag()
     if not IsValid(self) or self:IsOnFire() then return end
-
-    local MoneyPos = self:GetPos()
+    
     local amount = self.MoneyCount or (GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250)
     local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)
     if prevent == true then return end
-
+    
+    local MoneyPos = self:GetPos()
     amount = hookAmount or amount
 
     if self.OverheatChance and self.OverheatChance > 0 then
