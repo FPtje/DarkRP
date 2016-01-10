@@ -143,6 +143,9 @@ local function spectateLookingAt()
 
     if not IsValid(foundPly) then return end
 
+    isRoaming = false
+    specEnt = foundPly
+
     RunConsoleCommand("FSpectate", foundPly:UserID())
 end
 
