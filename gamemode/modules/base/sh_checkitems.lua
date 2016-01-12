@@ -485,14 +485,16 @@ DarkRP.validateAgenda = tc.checkTable{
         ),
 
     Listeners =
-        tc.addHint(
-            tc.nonEmpty(tc.tableOf(isnumber)),
-            "The Listeners must be a non-empty table of existing teams.",
-            {
-                "Is there a job here that doesn't exist (anymore)?",
-                "Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
-                [[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
-            }
+        tc.default({},
+            tc.addHint(
+                tc.tableOf(isnumber),
+                "The Listeners must be a table of existing teams.",
+                {
+                    "Is there a job here that doesn't exist (anymore)?",
+                    "Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
+                    [[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
+                }
+            )
         )
 }
 
