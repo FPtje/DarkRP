@@ -121,22 +121,28 @@ optional = function(...) return fn.FOr{isnil, ...} end
 -- example: tc.checkTable{test = tc.default(3, tc.addHint(isnumber, "must be a number"))}
 -- example: tc.checkTable{test = tc.default(3)}
 default = function(def, f)
-    return function(val)
+    return function(val, ...)
         if val == nil then
             -- second return value is the default value. Expects parent function to actually change the value
             return true, nil, nil, true, def
         end
         -- Return in if statement rather than "return f and f(val) or true" to allow multiple return values
-        if f then return f(val) else return true end
+        if f then return f(val, ...) else return true end
     end
 end
 
 -- A table of which each element must meet condition f
 -- i.e. "this must be a table of xxx"
 -- example: tc.tableOf(isnumber) demands that the table contains only numbers
-tableOf = function(f) return function(tbl)
+tableOf = function(f) return function(tbl, parentTbl)
     if not istable(tbl) then return false end
-    for k,v in pairs(tbl) do if not f(v) then return false end end
+    for k,v in pairs(tbl) do
+        local res = {f(v, parentTbl)}
+        if not res[1] then
+            return unpack(res)
+        end
+    end
+
     return true
 end end
 
@@ -147,7 +153,7 @@ oneOf = function(f) return fp{table.HasValue, f} end
 -- A table that is non-empty, also useful for wrapping around tableOf
 -- example: tc.nonEmpty(tc.tableOf(isnumber))
 -- example: tc.nonEmpty() -- just checks that the table is non-empty
-nonEmpty = function(f) return function(tbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl)) end end
+nonEmpty = function(f) return function(tbl, parentTbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl, parentTbl)) end end
 
 -- Number check: minimum
 min = function(n) return fn.FAnd{isnumber, fp{fn.Lte, n}} end
