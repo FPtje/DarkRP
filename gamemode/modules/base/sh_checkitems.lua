@@ -508,19 +508,25 @@ DarkRP.validateAgenda = tc.checkTable{
             "The title must be a string."
         ),
 
-    Manager =
-        fn.FOr{
-            -- Either a non-empty table of jobs that do not already have an agenda assigned
-            tc.nonEmpty(
-                tc.tableOf(
-                    fn.FAnd{managerNumberCheck, overlappingAgendaCheck}
-                )
-            ),
+    -- Custom function to ensure the right error message is thrown
+    Manager = function(manager, tbl)
+            -- Check whether the manager is an existing team
+            -- that does not already have an agenda assigned
+            if isnumber(manager) then
+                return fn.FAnd{overlappingAgendaCheck}(manager, tbl)
 
-            -- Or a single such job
-            fn.FAnd{fc{fn.Not, istable}, managerNumberCheck, overlappingAgendaCheck}
-        },
+            -- Check whether the manager is a table of existing teams
+            -- and that none of the teams already have agendas assigned
+            elseif istable(manager) then
+                return tc.nonEmpty(
+                    tc.tableOf(
+                        fn.FAnd{managerNumberCheck, overlappingAgendaCheck}
+                    )
+                )(manager, tbl)
+            end
 
+            return managerNumberCheck(manager, tbl)
+        end,
     Listeners =
         tc.default({}, -- Default to empty table
             fn.FAnd{ -- Checks for a table of valid teams that do not already have an agenda assigned
