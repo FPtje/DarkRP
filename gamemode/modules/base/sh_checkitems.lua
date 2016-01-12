@@ -467,9 +467,40 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
         ),
 }}
 
+
+-- Checks whether a team already has an agenda assigned.
+-- Jobs cannot have multiple agendas.
+
+local overlappingAgendaCheck = function(t, tbl)
+    local agenda = DarkRP.getAgendas()[t]
+
+    if agenda == nil then return true end
+
+    local teamName = team.GetName(t)
+    local err = "At least one job has multiple agendas assigned to them"
+    local hints = {
+        string.format([[The problem lies with the job called "%s"]], teamName),
+        string.format([[It is assigned to agendas "%s" and "%s"]], agenda.Title or "unknown", tbl.Title or "unknown"),
+        [[A job can only have ONE agenda. Otherwise things would become confusing, since only ONE agenda is always drawn on the screen.]]
+    }
+
+    if agenda.Title == tbl.Title then
+        table.insert(hints, "The titles of the two agendas are the same. It looks like perhaps you've made the same agenda more than once.")
+        table.insert(hints, "Removing one of them should get rid of this error.")
+    end
+
+    return false, err, hints
+end
+
 --[[
 Validate Agendas
 ]]
+local managerNumberCheck = tc.addHint(
+    isnumber,
+    "The Manager must either be a single team or a non-empty table of existing teams.",
+    {"Is there a job here that doesn't exist (anymore)?"}
+)
+
 DarkRP.validateAgenda = tc.checkTable{
     Title =
         tc.addHint(
@@ -478,23 +509,32 @@ DarkRP.validateAgenda = tc.checkTable{
         ),
 
     Manager =
-        tc.addHint(
-            fn.FOr{isnumber, tc.nonEmpty(tc.tableOf(isnumber))},
-            "The Manager must either be a single team or a non-empty table of existing teams.",
-            {"Is there a job here that doesn't exist (anymore)?"}
-        ),
+        fn.FOr{
+            -- Either a non-empty table of jobs that do not already have an agenda assigned
+            tc.nonEmpty(
+                tc.tableOf(
+                    fn.FAnd{managerNumberCheck, overlappingAgendaCheck}
+                )
+            ),
+
+            -- Or a single such job
+            fn.FAnd{fc{fn.Not, istable}, managerNumberCheck, overlappingAgendaCheck}
+        },
 
     Listeners =
-        tc.default({},
-            tc.addHint(
-                tc.tableOf(isnumber),
-                "The Listeners must be a table of existing teams.",
-                {
-                    "Is there a job here that doesn't exist (anymore)?",
-                    "Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
-                    [[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
-                }
-            )
+        tc.default({}, -- Default to empty table
+            fn.FAnd{ -- Checks for a table of valid teams that do not already have an agenda assigned
+                tc.addHint(
+                    tc.tableOf(isnumber),
+                    "The Listeners must be a table of existing teams.",
+                    {
+                        "Is there a job here that doesn't exist (anymore)?",
+                        "Are you trying to have multiple manager jobs in this agenda? In that case you must put the list of manager jobs in curly braces.",
+                        [[Like so: DarkRP.createAgenda("Some agenda", {TEAM_MANAGER1, TEAM_MANAGER2}, {TEAM_LISTENER1, TEAM_LISTENER2})]]
+                    }
+                ),
+                tc.tableOf(overlappingAgendaCheck)
+            }
         )
 }
 
