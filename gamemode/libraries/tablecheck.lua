@@ -153,7 +153,11 @@ oneOf = function(f) return fp{table.HasValue, f} end
 -- A table that is non-empty, also useful for wrapping around tableOf
 -- example: tc.nonEmpty(tc.tableOf(isnumber))
 -- example: tc.nonEmpty() -- just checks that the table is non-empty
-nonEmpty = function(f) return function(tbl, parentTbl) return istable(tbl) and #tbl > 0 and (not f or f(tbl, parentTbl)) end end
+nonEmpty = function(f) return function(tbl, parentTbl)
+    if not istable(tbl) or #tbl == 0 then return false end
+    if not f then return true end
+    return f(tbl, parentTbl)
+end end
 
 -- Number check: minimum
 min = function(n) return fn.FAnd{isnumber, fp{fn.Lte, n}} end
