@@ -451,7 +451,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["jobs"][CustomTeam.command] then return end
 
     local valid, err, hints = DarkRP.validateJob(CustomTeam)
-    if not valid then DarkRP.error(string.format("Corrupt team: %s!\n%s", CustomTeam.name or "", err), 3, hints) end
+    if not valid then DarkRP.error(string.format("Corrupt team: %s!\n%s", CustomTeam.name or "", err), 2, hints) end
 
     jobCount = jobCount + 1
     CustomTeam.team = jobCount
@@ -562,7 +562,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
     if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["shipments"][customShipment.name] then return end
 
     local valid, err, hints = DarkRP.validateShipment(customShipment)
-    if not valid then DarkRP.error(string.format("Corrupt shipment: %s!\n%s", name or "", err), 3, hints) end
+    if not valid then DarkRP.error(string.format("Corrupt shipment: %s!\n%s", name or "", err), 2, hints) end
 
     customShipment.spawn = customShipment.spawn and fp{DarkRP.simplerrRun, customShipment.spawn}
     customShipment.allowed = isnumber(customShipment.allowed) and {customShipment.allowed} or customShipment.allowed
@@ -597,9 +597,9 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
     end
 
     local valid, err, hints = DarkRP.validateVehicle(vehicle)
-    if not valid then DarkRP.error(string.format("Corrupt vehicle: %s!\n%s", vehicle.name or "", err), 3, hints) end
+    if not valid then DarkRP.error(string.format("Corrupt vehicle: %s!\n%s", vehicle.name or "", err), 2, hints) end
 
-    if not found then DarkRP.error("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.", 3) end
+    if not found then DarkRP.error("Vehicle invalid: " .. vehicle.name .. ". Unknown vehicle name.", 2) end
 
     vehicle.customCheck = vehicle.customCheck and fp{DarkRP.simplerrRun, vehicle.customCheck}
     vehicle.CustomCheckFailMsg = isfunction(vehicle.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, vehicle.CustomCheckFailMsg} or vehicle.CustomCheckFailMsg
@@ -641,7 +641,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
     end
 
     local valid, err, hints = DarkRP.validateEntity(tblEnt)
-    if not valid then DarkRP.error(string.format("Corrupt entity: %s!\n%s", name or "", err), 3, hints) end
+    if not valid then DarkRP.error(string.format("Corrupt entity: %s!\n%s", name or "", err), 2, hints) end
 
     tblEnt.customCheck = tblEnt.customCheck and fp{DarkRP.simplerrRun, tblEnt.customCheck}
     tblEnt.CustomCheckFailMsg = isfunction(tblEnt.CustomCheckFailMsg) and fp{DarkRP.simplerrRun, tblEnt.CustomCheckFailMsg} or tblEnt.CustomCheckFailMsg
@@ -911,7 +911,7 @@ local function mergeCategories(customs, catKind, path)
         local catName = v.default and GAMEMODE.Config.CategoryOverride[catKind][v.name] or v.category or "Other"
         local cat = catByName[catName]
         if not cat then
-            DarkRP.errorNoHalt(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 1, {
+            DarkRP.errorNoHalt(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 3, {
                 "Make sure the category is created with DarkRP.createCategory.",
                 "The category name is case sensitive!",
                 "Categories must be created before DarkRP finished loading."
