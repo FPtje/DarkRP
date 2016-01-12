@@ -180,11 +180,12 @@ end
 
 FOr = function(fns)
     return function(...)
+        local val
         for _, f in pairs(fns) do
-            local val = {f(...)}
+            val = {f(...)}
             if val[1] then return unpack(val) end
         end
-        return false
+        return false, unpack(val, 2)
     end
 end
 
