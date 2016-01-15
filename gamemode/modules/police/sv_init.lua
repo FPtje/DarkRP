@@ -302,7 +302,7 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
 
     gamemode.Call("PlayerLoadout", ply)
     if GAMEMODE.Config.telefromjail then
-        local ent, pos = GAMEMODE:PlayerSelectSpawn(ply)
+        local ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)
         timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
     end
 
