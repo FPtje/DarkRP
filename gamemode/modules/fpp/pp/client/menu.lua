@@ -267,6 +267,7 @@ function FPP.AdminMenu(Panel)
     addchk("Admins can use world entities", {"FPP_PLAYERUSE1", "adminworldprops"}, playeruse)
     addchk("People can use blocked entities", {"FPP_PLAYERUSE1", "canblocked"}, playeruse)
     addchk("Admins can use blocked entities", {"FPP_PLAYERUSE1", "admincanblocked"}, playeruse)
+    addchk("The blocked list is a white list", {"FPP_PLAYERUSE1", "iswhitelist"}, playeruse)
     addblock(playeruse, "PlayerUse1")
 
     local _, damage = MakeOption("Entity damage options")
