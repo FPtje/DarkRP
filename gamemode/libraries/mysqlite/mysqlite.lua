@@ -122,7 +122,7 @@ local moduleLoaded
 local function loadMySQLModule()
     if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 
-    moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
+    local moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
 
     if not moo and not tmsql then
         error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.")
@@ -152,9 +152,7 @@ function initialize(config)
     loadMySQLModule()
 
     if MySQLite_config.EnableMySQL then
-        timer.Simple(1, function()
-            connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-        end)
+        connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
     else
         timer.Simple(0, function()
             GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
@@ -337,7 +335,7 @@ end
 msOOConnect = function(host, username, password, database_name, database_port)
     databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
 
-    if timer.Exists("darkrp_check_mysql_status") then timer.Destroy("darkrp_check_mysql_status") end
+    if timer.Exists("darkrp_check_mysql_status") then timer.Remove("darkrp_check_mysql_status") end
 
     databaseObject.onConnectionFailed = function(_, msg)
         timer.Simple(5, function()
