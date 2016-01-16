@@ -188,6 +188,8 @@ end
 local function LockDown()
     local chbxX, chboxY = chat.GetChatBoxPos()
     if GetGlobalBool("DarkRP_LockDown") then
+        local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LockdownHUD")
+        if shouldDraw == false then return end
         local cin = (math.sin(CurTime()) + 1) / 2
         local chatBoxSize = math.floor(Scrh / 4)
         draw.DrawNonParsedText(DarkRP.getPhrase("lockdown_started"), "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
@@ -201,6 +203,9 @@ usermessage.Hook("GotArrested", function(msg)
     local ArrestedUntil = msg:ReadFloat()
 
     Arrested = function()
+        local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ArrestedHUD")
+        if shouldDraw == false then return end
+
         if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
             draw.DrawNonParsedText(DarkRP.getPhrase("youre_arrested", math.ceil(ArrestedUntil - (CurTime() - StartArrested))), "DarkRPHUD1", Scrw / 2, Scrh - Scrh / 12, colors.white, 1)
         elseif not localplayer:getDarkRPVar("Arrested") then
