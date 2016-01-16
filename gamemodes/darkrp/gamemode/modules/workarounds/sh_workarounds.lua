@@ -135,6 +135,13 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
         concommand.Remove("gm_save")
     end
 
+    -- Remove that weird rooftop spawn in rp_downtown_v4c_v2
+    if game.GetMap() == "rp_downtown_v4c_v2" then
+        for k,v in pairs(ents.FindByClass("info_player_terrorist")) do
+            v:Remove()
+        end
+    end
+
     -- Fuck up URS.
     -- https://github.com/Aaron113/URS
     -- It fucks up every other mod that denies the spawning of entities

@@ -13,7 +13,7 @@ DarkRP.errorNoHalt = fc{
     simplerr.wrapHook,
     simplerr.wrapLog,
     simplerr.runError,
-    function(msg, err, ...) return msg, err and err + 1 or 2, ... end -- Raise error level one higher
+    function(msg, err, ...) return msg, err and err + 3 or 4, ... end -- Raise error level one higher
 }
 
 -- error: throw a runtime error

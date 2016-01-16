@@ -152,18 +152,16 @@ local function DropMoney(ply, args)
     ply.anim_DroppingItem = true
 
     timer.Simple(1, function()
-        if IsValid(ply) then
-            local trace = {}
-            trace.start = ply:EyePos()
-            trace.endpos = trace.start + ply:GetAimVector() * 85
-            trace.filter = ply
+        if not IsValid(ply) then return end
 
-            local tr = util.TraceLine(trace)
-            DarkRP.createMoneyBag(tr.HitPos, amount)
-            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has dropped " .. DarkRP.formatMoney(amount))
-        else
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/dropmoney", ""))
-        end
+        local trace = {}
+        trace.start = ply:EyePos()
+        trace.endpos = trace.start + ply:GetAimVector() * 85
+        trace.filter = ply
+
+        local tr = util.TraceLine(trace)
+        DarkRP.createMoneyBag(tr.HitPos, amount)
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has dropped " .. DarkRP.formatMoney(amount))
     end)
 
     return ""

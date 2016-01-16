@@ -681,8 +681,8 @@ function GM:PlayerSpawn(ply)
     hook.Call("PlayerLoadout", self, ply)
     hook.Call("PlayerSetModel", self, ply)
 
-    local _, pos = self:PlayerSelectSpawn(ply)
-    ply:SetPos(pos)
+    local ent, pos = hook.Call("PlayerSelectSpawn", self, ply)
+    ply:SetPos(pos or ent:GetPos())
 
     if jobTable.PlayerSpawn then
         jobTable.PlayerSpawn(ply)
