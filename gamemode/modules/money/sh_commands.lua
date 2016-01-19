@@ -43,10 +43,3 @@ DarkRP.declareChatCommand{
     delay = 0.5,
     tableArgs = true
 }
-
-DarkRP.declareChatCommand{
-    command = "setsalary",
-    description = "Set a player's salary.",
-    delay = 0.5,
-    tableArgs = true
-}

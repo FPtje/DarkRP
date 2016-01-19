@@ -286,37 +286,3 @@ local function ccAddMoney(ply, args)
     end
 end
 DarkRP.definePrivilegedChatCommand("addmoney", "DarkRP_SetMoney", ccAddMoney)
-
-local function ccSetSalary(ply, args)
-    if not tonumber(args[2]) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-        return
-    end
-
-    local amount = math.floor(tonumber(args[2]))
-
-    if amount < 0 or amount > 150 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), tostring(args[2]) .. " (0-150)"))
-        return
-    end
-
-    local target = DarkRP.findPlayer(args[1])
-
-    if target then
-        DarkRP.storeSalary(target, amount)
-        target:setSelfDarkRPVar("salary", amount)
-
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_set_x_salary", target:Nick(), DarkRP.formatMoney(amount), ""))
-
-        DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_salary", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(amount), ""))
-        if ply:EntIndex() == 0 then
-            DarkRP.log("Console set " .. target:SteamName() .. "'s salary to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
-        else
-            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s salary to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
-        end
-    else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args[1])))
-        return
-    end
-end
-DarkRP.definePrivilegedChatCommand("setsalary", "DarkRP_SetMoney", ccSetSalary)
