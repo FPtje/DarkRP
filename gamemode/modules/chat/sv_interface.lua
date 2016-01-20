@@ -121,7 +121,7 @@ DarkRP.hookStub{
         },
         {
             name = "arguments",
-            description = "The arguments of the chat command, given as one string.",
+            description = "The arguments of the chat command, given either as one string or a table of strings. That depends on whether the command is declared to use table arguments.",
             type = "string"
         },
         {
