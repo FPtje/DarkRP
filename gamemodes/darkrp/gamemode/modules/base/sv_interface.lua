@@ -132,7 +132,8 @@ DarkRP.storeMoney = DarkRP.stub{
 
 DarkRP.storeSalary = DarkRP.stub{
     name = "storeSalary",
-    description = "Internal function. Store a player's salary in the database. Do not call this if you just want to set someone's salary, the player will not see the change!",
+    description = "Internal and deprecated function. Used to store a player's salary in the database.",
+    deprecated = "Use the ply:setSelfDarkRPVar(\"salary\", value) function instead.",
     parameters = {
         {
             name = "ply",
@@ -169,12 +170,17 @@ DarkRP.retrieveSalary = DarkRP.stub{
         },
         {
             name = "callback",
-            description = "The function that receives the salary.",
+            description = "The function that receives the salary. Deprecated, use the return value.",
             type = "function",
             optional = false
         }
     },
     returns = {
+        {
+            name = "salary",
+            description = "The salary.",
+            type = "number"
+        }
     },
     metatable = DarkRP
 }

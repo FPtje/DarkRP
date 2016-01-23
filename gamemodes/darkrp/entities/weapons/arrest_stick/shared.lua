@@ -48,35 +48,6 @@ DarkRP.hookStub{
     realm = "Server"
 }
 
-local hookCanArrest = {canArrest = function(_, arrester, arrestee)
-    if IsValid(arrestee) and arrestee:IsPlayer() and arrestee:isCP() and not GAMEMODE.Config.cpcanarrestcp then
-        return false, DarkRP.getPhrase("cant_arrest_other_cp")
-    end
-
-    if arrestee:GetClass() == "prop_ragdoll" then
-        for k,v in pairs(player.GetAll()) do
-            if arrestee.OwnerINT and arrestee.OwnerINT == v:EntIndex() and GAMEMODE.KnockoutToggle then
-                DarkRP.toggleSleep(v, true)
-                return false, nil
-            end
-        end
-    end
-
-    if not GAMEMODE.Config.npcarrest and arrestee:IsNPC() then
-        return false, DarkRP.getPhrase("unable", "arrest", "NPC")
-    end
-
-    if GAMEMODE.Config.needwantedforarrest and not arrestee:IsNPC() and not arrestee:getDarkRPVar("wanted") then
-        return false, DarkRP.getPhrase("must_be_wanted_for_arrest")
-    end
-
-    if FAdmin and arrestee:IsPlayer() and arrestee:FAdmin_GetGlobal("fadmin_jailed") then
-        return false, DarkRP.getPhrase("cant_arrest_fadmin_jailed")
-    end
-
-    return true
-end}
-
 function SWEP:Deploy()
     self.Switched = true
     return BaseClass.Deploy(self)
@@ -90,6 +61,7 @@ function SWEP:PrimaryAttack()
     self:GetOwner():LagCompensation(true)
     local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
     self:GetOwner():LagCompensation(false)
+
     if IsValid(trace.Entity) and trace.Entity.onArrestStickUsed then
         trace.Entity:onArrestStickUsed(self:GetOwner())
         return
@@ -101,32 +73,23 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    local canArrest, message = hook.Call("canArrest", hookCanArrest, self:GetOwner(), ent)
+    local canArrest, message = hook.Call("canArrest", DarkRP.hooks, self:GetOwner(), ent)
     if not canArrest then
         if message then DarkRP.notify(self:GetOwner(), 1, 5, message) end
         return
     end
 
-    local jpc = DarkRP.jailPosCount()
+    -- Send NPCs to Jail
+    if ent:IsNPC() then
+        ent:SetPos(DarkRP.retrieveJailPos())
+        return
+    end
 
-    if not jpc or jpc == 0 then
-        DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("cant_arrest_no_jail_pos"))
-    else
-        -- Send NPCs to Jail
-        if ent:IsNPC() then
-            ent:SetPos(DarkRP.retrieveJailPos())
-        else
-            if not ent.Babygod then
-                ent:arrest(nil, self:GetOwner())
-                DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self:GetOwner():Nick()))
+    ent:arrest(nil, self:GetOwner())
+    DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self:GetOwner():Nick()))
 
-                if self:GetOwner().SteamName then
-                    DarkRP.log(self:GetOwner():Nick() .. " (" .. self:GetOwner():SteamID() .. ") arrested " .. ent:Nick(), Color(0, 255, 255))
-                end
-            else
-                DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("cant_arrest_spawning_players"))
-            end
-        end
+    if self:GetOwner().SteamName then
+        DarkRP.log(self:GetOwner():Nick() .. " (" .. self:GetOwner():SteamID() .. ") arrested " .. ent:Nick(), Color(0, 255, 255))
     end
 end
 

@@ -239,7 +239,7 @@ local deprecated = {
     {command = "rp_tell",               alternative = "admintell"               },
     {command = "rp_teamunban",          alternative = "teamunban"               },
     {command = "rp_teamban",            alternative = "teamban"                 },
-    {command = "rp_setsalary",          alternative = "setsalary"               },
+    {command = "rp_setsalary",          alternative = "setmoney"                },
     {command = "rp_setmoney",           alternative = "setmoney"                },
     {command = "rp_revokelicense",      alternative = "unsetlicense"            },
     {command = "rp_givelicense",        alternative = "setlicense"              },

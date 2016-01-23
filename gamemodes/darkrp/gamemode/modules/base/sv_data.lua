@@ -279,25 +279,20 @@ concommand.Add("rp_resetallmoney", resetAllMoney)
 function DarkRP.storeSalary(ply, amount)
     ply:setSelfDarkRPVar("salary", math.floor(amount))
 
-    MySQLite.query([[UPDATE darkrp_player SET salary = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
-
     return amount
 end
 
 function DarkRP.retrieveSalary(ply, callback)
     if not IsValid(ply) then return 0 end
 
-    if ply:getDarkRPVar("salary") then return callback and callback(ply:getDarkRPVar("salary")) end -- First check the cache.
+    local val =
+        ply:getJobTable() and ply:getJobTable().salary or
+        RPExtraTeams[GAMEMODE.DefaultTeam].salary or
+        (GM or GAMEMODE).Config.normalsalary
 
-    MySQLite.queryValue("SELECT salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", function(r)
-        local normal = GAMEMODE.Config.normalsalary
-        if not r then
-            ply:setSelfDarkRPVar("salary", normal)
-            callback(normal)
-        else
-            callback(r)
-        end
-    end)
+    if callback then callback(val) end
+
+    return val
 end
 
 /*---------------------------------------------------------------------------
@@ -317,7 +312,7 @@ function meta:restorePlayerData()
         if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
 
         info.wallet = info.wallet or GAMEMODE.Config.startingmoney
-        info.salary = info.salary or GAMEMODE.Config.normalsalary
+        info.salary = DarkRP.retrieveSalary(self)
 
         self:setDarkRPVar("money", tonumber(info.wallet))
         self:setSelfDarkRPVar("salary", tonumber(info.salary))
@@ -331,7 +326,7 @@ function meta:restorePlayerData()
         self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
-        self:setSelfDarkRPVar("salary", GAMEMODE.Config.normalsalary)
+        self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
         self:setDarkRPVar("rpname", string.gsub(self:SteamName(), "\\\"", "\""))
 
         error("Failed to retrieve player information from MySQL server")

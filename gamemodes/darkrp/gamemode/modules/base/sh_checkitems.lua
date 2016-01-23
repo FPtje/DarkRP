@@ -219,9 +219,11 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
         ),
 
     candemote =
-        tc.addHint(
-            tc.optional(isbool),
-            "The candemote value must be either true or false."
+        tc.default(true,
+            tc.addHint(
+                isbool,
+                "The candemote value must be either true or false."
+            )
         ),
 
     mayor =
