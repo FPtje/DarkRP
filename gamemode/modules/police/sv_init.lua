@@ -271,6 +271,37 @@ end
 /*---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------*/
+
+function DarkRP.hooks:canArrest(arrester, arrestee)
+    if IsValid(arrestee) and arrestee:IsPlayer() and arrestee:isCP() and not GAMEMODE.Config.cpcanarrestcp then
+        return false, DarkRP.getPhrase("cant_arrest_other_cp")
+    end
+
+    if not GAMEMODE.Config.npcarrest and arrestee:IsNPC() then
+        return false, DarkRP.getPhrase("unable", "arrest", "NPC")
+    end
+
+    if GAMEMODE.Config.needwantedforarrest and not arrestee:IsNPC() and not arrestee:getDarkRPVar("wanted") then
+        return false, DarkRP.getPhrase("must_be_wanted_for_arrest")
+    end
+
+    if FAdmin and arrestee:IsPlayer() and arrestee:FAdmin_GetGlobal("fadmin_jailed") then
+        return false, DarkRP.getPhrase("cant_arrest_fadmin_jailed")
+    end
+
+    local jpc = DarkRP.jailPosCount()
+
+    if not jpc or jpc == 0 then
+        return false, DarkRP.getPhrase("cant_arrest_no_jail_pos")
+    end
+
+    if arrestee.Babygod then
+        return false, DarkRP.getPhrase("cant_arrest_spawning_players")
+    end
+
+    return true
+end
+
 function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isWanted() then ply:unWanted(arrester) end
     ply:setDarkRPVar("HasGunlicense", nil)
@@ -296,7 +327,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
 end
 
 function DarkRP.hooks:playerUnArrested(ply, actor)
-    if ply.Sleeping and GAMEMODE.KnockoutToggle then
+    if ply.Sleeping then
         DarkRP.toggleSleep(ply, "force")
     end
 

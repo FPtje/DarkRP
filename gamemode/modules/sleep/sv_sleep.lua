@@ -13,6 +13,25 @@ local function stopSleep(ply)
     end
 end
 
+local function onRagdollArrested(arrestee, _, arrester)
+    DarkRP.toggleSleep(arrestee, "force")
+
+    -- onArrestStickUsed
+    local canArrest, message = hook.Call("canArrest", DarkRP.hooks, arrester, arrestee)
+    if not canArrest then
+        if message then DarkRP.notify(arrester, 1, 5, message) end
+        return
+    end
+
+    arrestee:arrest(nil, arrester)
+
+    DarkRP.notify(arrestee, 0, 20, DarkRP.getPhrase("youre_arrested_by", arrester:Nick()))
+
+    if arrester.SteamName then
+        DarkRP.log(arrester:Nick() .. " (" .. arrester:SteamID() .. ") arrested " .. arrestee:Nick(), Color(0, 255, 255))
+    end
+end
+
 function DarkRP.toggleSleep(player, command)
     if player:InVehicle() then return end
 
@@ -132,6 +151,7 @@ function DarkRP.toggleSleep(player, command)
         ragdoll.OwnerINT = player:EntIndex()
         ragdoll.PhysgunPickup = false
         ragdoll.CanTool = false
+        ragdoll.onArrestStickUsed = fp{onRagdollArrested, player}
         player:StripWeapons()
         player:Spectate(OBS_MODE_CHASE)
         player:SpectateEntity(ragdoll)
