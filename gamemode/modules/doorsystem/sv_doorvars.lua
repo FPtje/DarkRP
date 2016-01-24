@@ -135,12 +135,9 @@ function plyMeta:sendDoorData()
         net.WriteTable(res)
     net.Send(self)
 end
-concommand.Add("_sendAllDoorData", function(ply)
-    if ply.doorDataSent and ply.doorDataSent > (CurTime() - 3) then return end -- prevent spammers
-    ply.doorDataSent = CurTime()
+concommand.Add("_sendAllDoorData", fn.Id) -- Backwards compatibility
 
-    ply:sendDoorData()
-end)
+hook.Add("PlayerInitialSpawn", "DarkRP_DoorData", plyMeta.sendDoorData)
 
 function DarkRP.updateDoorData(door, member)
     if not IsValid(door) or not door:getDoorData() then error("Calling updateDoorData on a door that has no data!") end

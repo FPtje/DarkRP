@@ -104,7 +104,6 @@ local function retrieveAllDoorData(len)
     DarkRP.doorData = data
 end
 net.Receive("DarkRP_AllDoorData", retrieveAllDoorData)
-hook.Add("InitPostEntity", "DoorData", fp{RunConsoleCommand, "_sendAllDoorData"})
 
 /*---------------------------------------------------------------------------
 Update changed variables
