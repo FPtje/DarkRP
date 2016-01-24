@@ -19,7 +19,7 @@ function eMeta:setKeysNonOwnable(ownable)
 end
 
 function eMeta:setKeysTitle(title)
-    self:getDoorData().title = title
+    self:getDoorData().title = title ~= "" and title or nil
     DarkRP.updateDoorData(self, "title")
 end
 
