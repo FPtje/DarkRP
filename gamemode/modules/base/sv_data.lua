@@ -352,8 +352,11 @@ function setUpNonOwnableDoors()
         for _, row in pairs(r) do
             local e = DarkRP.doorIndexToEnt(tonumber(row.idx))
 
-            if IsValid(e) and e:isKeysOwnable() then
-                e:setKeysNonOwnable(tobool(row.isDisabled))
+            if not IsValid(e) then continue end
+            if e:isKeysOwnable() then
+                if tobool(row.isDisabled) then
+                    e:setKeysNonOwnable(tobool(row.isDisabled))
+                end
                 if row.isLocked ~= nil then
                     if row.isLocked ~= "NULL" then e:Fire((tobool(row.isLocked) and "" or "un") .. "lock", "", 0) end
                 end
