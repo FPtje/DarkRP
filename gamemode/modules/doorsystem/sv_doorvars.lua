@@ -14,7 +14,7 @@ function eMeta:getDoorData()
 end
 
 function eMeta:setKeysNonOwnable(ownable)
-    self:getDoorData().nonOwnable = ownable
+    self:getDoorData().nonOwnable = ownable or nil
     DarkRP.updateDoorData(self, "nonOwnable")
 end
 
