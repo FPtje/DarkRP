@@ -167,11 +167,6 @@ local function ReplaceChatHooks()
         GAMEMODE.OldChatHooks[k] = v
         hook.Remove("PlayerSay", k)
     end
-    for a,b in pairs(GAMEMODE.OldChatHooks) do
-        if type(b) ~= "function" then
-            GAMEMODE.OldChatHooks[a] = nil
-        end
-    end
 
     -- give warnings for undeclared chat commands
     local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
@@ -211,6 +206,22 @@ local function ReplaceChatHooks()
         return
     end
     setmetatable(hookTbl.PlayerSay, mt)
+
+    -- Of course ULib already doesn't play nice.
+    -- Their little hook thing never did make it in mainstream gmod
+    if not hook.GetULibTable then return end
+    local ulibTbl = hook.GetULibTable()
+
+    ulibTbl.PlayerSay = ulibTbl.PlayerSay or {[-2] = {}, [-1] = {}, [0] = {}, [1] = {}, [2] = {}}
+
+    for priority, hooks in pairs(ulibTbl.PlayerSay) do
+        for hookName, func in pairs(hooks) do
+            hooks[hookName] = nil
+            GAMEMODE.OldChatHooks[hookName] = v
+        end
+
+        setmetatable(hooks, mt)
+    end
 end
 hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
