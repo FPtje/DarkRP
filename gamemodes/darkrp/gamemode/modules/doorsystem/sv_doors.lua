@@ -93,10 +93,9 @@ function meta:keysUnOwn(ply)
 
     if self:isMasterOwner(ply) then
         local doorData = self:getDoorData()
-        doorData.owner = nil
-        doorData.extraOwners = {}
+        self:removeAllKeysExtraOwners()
         self:setKeysTitle(nil)
-        DarkRP.updateDoorData(self, "extraOwners")
+        doorData.owner = nil
         DarkRP.updateDoorData(self, "owner")
     else
         self:removeKeysDoorOwner(ply)

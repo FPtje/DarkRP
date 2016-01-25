@@ -512,10 +512,15 @@ function DarkRP.removeJob(i)
 end
 
 RPExtraTeamDoors = {}
+RPExtraTeamDoorIDs = {}
+local maxTeamDoorID = 0
 function DarkRP.createEntityGroup(name, ...)
     if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["doorgroups"][name] then return end
     RPExtraTeamDoors[name] = {...}
     RPExtraTeamDoors[name].name = name
+
+    maxTeamDoorID = maxTeamDoorID + 1
+    RPExtraTeamDoorIDs[name] = maxTeamDoorID
 end
 AddDoorGroup = DarkRP.createEntityGroup
 

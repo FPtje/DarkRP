@@ -476,7 +476,8 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
 local overlappingAgendaCheck = function(t, tbl)
     local agenda = DarkRP.getAgendas()[t]
 
-    if agenda == nil then return true end
+    -- Team being -1 means the job is disabled
+    if agenda == nil or t == -1 then return true end
 
     local teamName = team.GetName(t)
     local err = "At least one job has multiple agendas assigned to them"

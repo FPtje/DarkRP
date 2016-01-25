@@ -100,11 +100,21 @@ Networking
 Retrieve all the data for all doors
 ---------------------------------------------------------------------------*/
 local function retrieveAllDoorData(len)
-    local data = net.ReadTable()
-    DarkRP.doorData = data
+    local count = net.ReadUInt(16)
+
+    for i = 1, count do
+        local ix = net.ReadUInt(16)
+        local varCount = net.ReadUInt(8)
+
+        DarkRP.doorData[ix] = DarkRP.doorData[ix] or {}
+
+        for vc = 1, varCount do
+            local name, value = DarkRP.readNetDoorVar()
+            DarkRP.doorData[ix][name] = value
+        end
+    end
 end
 net.Receive("DarkRP_AllDoorData", retrieveAllDoorData)
-hook.Add("InitPostEntity", "DoorData", fp{RunConsoleCommand, "_sendAllDoorData"})
 
 /*---------------------------------------------------------------------------
 Update changed variables
@@ -114,13 +124,25 @@ local function updateDoorData()
 
     DarkRP.doorData[door] = DarkRP.doorData[door] or {}
 
-    local var = net.ReadString()
-    local valueType = net.ReadUInt(8)
-    local value = net.ReadType(valueType)
+    local var, value = DarkRP.readNetDoorVar()
 
     DarkRP.doorData[door][var] = value
 end
 net.Receive("DarkRP_UpdateDoorData", updateDoorData)
+
+/*---------------------------------------------------------------------------
+Set a value of a single doorvar to nil
+---------------------------------------------------------------------------*/
+local function removeDoorVar()
+    local door = net.ReadUInt(16)
+    local id = net.ReadUInt(8)
+
+    local name = id == 0 and net.ReadString() or DarkRP.getDoorVars()[id].name
+
+    if not DarkRP.doorData[door] then return end
+    DarkRP.doorData[door][name] = nil
+end
+net.Receive("DarkRP_RemoveDoorVar", removeDoorVar)
 
 /*---------------------------------------------------------------------------
 Remove doordata of removed entity

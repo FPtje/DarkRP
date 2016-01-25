@@ -1,5 +1,6 @@
 util.AddNetworkString("DarkRP_UpdateDoorData")
 util.AddNetworkString("DarkRP_RemoveDoorData")
+util.AddNetworkString("DarkRP_RemoveDoorVar")
 util.AddNetworkString("DarkRP_AllDoorData")
 
 /*---------------------------------------------------------------------------
@@ -14,12 +15,12 @@ function eMeta:getDoorData()
 end
 
 function eMeta:setKeysNonOwnable(ownable)
-    self:getDoorData().nonOwnable = ownable
+    self:getDoorData().nonOwnable = ownable or nil
     DarkRP.updateDoorData(self, "nonOwnable")
 end
 
 function eMeta:setKeysTitle(title)
-    self:getDoorData().title = title
+    self:getDoorData().title = title ~= "" and title or nil
     DarkRP.updateDoorData(self, "title")
 end
 
@@ -120,6 +121,7 @@ end
 /*---------------------------------------------------------------------------
 Networking
 ---------------------------------------------------------------------------*/
+
 local plyMeta = FindMetaTable("Player")
 function plyMeta:sendDoorData()
     if self:EntIndex() == 0 then return end
@@ -132,22 +134,45 @@ function plyMeta:sendDoorData()
     end
 
     net.Start("DarkRP_AllDoorData")
-        net.WriteTable(res)
+        net.WriteUInt(table.Count(res), 16)
+
+        for ix, vars in pairs(res) do
+            net.WriteUInt(ix, 16)
+
+            net.WriteUInt(table.Count(vars), 8)
+
+            for varName, value in pairs(vars) do
+                DarkRP.writeNetDoorVar(varName, value)
+            end
+        end
     net.Send(self)
 end
-concommand.Add("_sendAllDoorData", function(ply)
-    if ply.doorDataSent and ply.doorDataSent > (CurTime() - 3) then return end -- prevent spammers
-    ply.doorDataSent = CurTime()
+concommand.Add("_sendAllDoorData", fn.Id) -- Backwards compatibility
 
-    ply:sendDoorData()
-end)
+hook.Add("PlayerInitialSpawn", "DarkRP_DoorData", plyMeta.sendDoorData)
 
 function DarkRP.updateDoorData(door, member)
     if not IsValid(door) or not door:getDoorData() then error("Calling updateDoorData on a door that has no data!") end
 
+    local value = door:getDoorData()[member]
+
+    if value == nil then
+        local doorvar = DarkRP.getDoorVarsByName()[member]
+        net.Start("DarkRP_RemoveDoorVar")
+            net.WriteUInt(door:EntIndex(), 16)
+            if not doorvar then
+                net.WriteUInt(0, 8)
+                net.WriteString(member)
+            else
+                net.WriteUInt(doorvar.id, 8)
+            end
+        net.Broadcast()
+
+        return
+    end
+
     net.Start("DarkRP_UpdateDoorData")
         net.WriteUInt(door:EntIndex(), 32)
-        net.WriteString(member)
-        net.WriteType(door:getDoorData()[member])
-    net.Send(player.GetAll())
+        DarkRP.writeNetDoorVar(member, value)
+    net.Broadcast()
 end

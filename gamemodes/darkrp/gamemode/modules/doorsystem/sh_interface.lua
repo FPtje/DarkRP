@@ -268,6 +268,66 @@ DarkRP.PLAYER.canKeysUnlock = DarkRP.stub{
     metatable = DarkRP.PLAYER
 }
 
+DarkRP.registerDoorVar = DarkRP.stub{
+    name = "registerDoorVar",
+    description = "Register a door variable by name. You should definitely register door variables. Registering DarkRPVars will make networking much more efficient.",
+    parameters = {
+        {
+            name = "name",
+            description = "The name of the door var.",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "writeFn",
+            description = "The function that writes a value for this door var. Examples: net.WriteString, function(val) net.WriteUInt(val, 8) end.",
+            type = "function",
+            optional = false
+        },
+        {
+            name = "readFn",
+            description = "The function that reads and returns a value for this door var. Examples: net.ReadString, function() return net.ReadUInt(8) end.",
+            type = "function",
+            optional = false
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
+}
+
+DarkRP.getDoorVars = DarkRP.stub{
+    name = "getDoorVars",
+    description = "Internal function, retrieves all the registered door variables.",
+    parameters = {
+
+    },
+    returns = {
+        {
+            name = "doorvars",
+            description = "The door variables, indexed by number",
+            type = "table"
+        }
+    },
+    metatable = DarkRP
+}
+
+DarkRP.getDoorVarsByName = DarkRP.stub{
+    name = "getDoorVarsByName",
+    description = "Internal function, retrieves all the registered door variables, indeded by their names.",
+    parameters = {
+
+    },
+    returns = {
+        {
+            name = "doorvars",
+            description = "The door variables, indexed by name",
+            type = "table"
+        }
+    },
+    metatable = DarkRP
+}
+
 DarkRP.hookStub{
     name = "canKeysLock",
     description = "Whether the player can lock a given door. This hook is run when ply:canKeysLock is called.",

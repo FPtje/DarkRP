@@ -40,6 +40,28 @@ DarkRP.doorIndexToEnt = DarkRP.stub{
     metatable = DarkRP
 }
 
+DarkRP.writeNetDoorVar = DarkRP.stub{
+    name = "writeNetDoorVar",
+    description = "Internal function. You probably shouldn't need this. DarkRP calls this function when sending DoorVar net messages. This function writes the net data for a specific DoorVar.",
+    parameters = {
+        {
+            name = "name",
+            description = "The name of the DoorVar.",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "value",
+            description = "The value of the DoorVar.",
+            type = "any",
+            optional = false
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
+}
+
 DarkRP.ENTITY.doorIndex = DarkRP.stub{
     name = "doorIndex",
     description = "Get the door index of a door. Use this to store door information in the database.",
