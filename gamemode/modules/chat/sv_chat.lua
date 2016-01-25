@@ -154,9 +154,16 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
     return ""
 end
 
+-- DarkRP has local chat and all sorts of who-sees-what chat modifiers
+-- In order for chat hooks to abide by those rules, we have to make sure that
+-- the DarkRP chat hook (which is the gamemode function) runs first and last
+-- All other chat hooks must be run within DarkRP's function for it to play
+-- nicely with its chat rules.
 local function ReplaceChatHooks()
-    if not hook.GetTable().PlayerSay then return end
-    for k,v in pairs(hook.GetTable().PlayerSay) do -- Remove all PlayerSay hooks, they all interfere with DarkRP's PlayerSay
+    local hookTbl = hook.GetTable()
+
+    if not hookTbl.PlayerSay then return end
+    for k,v in pairs(hookTbl.PlayerSay) do
         GAMEMODE.OldChatHooks[k] = v
         hook.Remove("PlayerSay", k)
     end
@@ -166,17 +173,44 @@ local function ReplaceChatHooks()
         end
     end
 
-    table.sort(GAMEMODE.OldChatHooks, function(a, b)
-        if type(a) == "string" and type(b) == "string" then
-            return a > b
-        end
-
-        return true
-    end)
-
     -- give warnings for undeclared chat commands
     local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
     fn.ForEach(warning, DarkRP.getIncompleteChatCommands())
+
+
+    -- Make sure the PlayerSay hook table exists
+    hookTbl.PlayerSay = hookTbl.PlayerSay or {}
+
+    -- Set the metatable of the PlayerSay hook table
+    -- This will monitor any hooks that get added or removed
+    -- This is more efficient than overriding hook.Add and hook.Remove because it only adds logic to the PlayerSay hooks.
+    -- If a previous metatable exists, then add this one to the "chain"
+    local mt
+    local oldMetatable = getmetatable(hookTbl.PlayerSay)
+    if istable(oldMetatable) then
+        local oldNI = oldMetatable.__newindex or function() end
+
+        mt = oldMetatable
+        mt.__newindex = function(t, k, v)
+            GAMEMODE.OldChatHooks[k] = v
+            oldNI(t, k, v)
+        end
+    else
+        mt = {
+            __newindex = function(_, k, v)
+                GAMEMODE.OldChatHooks[k] = v
+            end
+        }
+    end
+
+    -- Someone preventing metatable changes
+    -- My metatable swap should be compatible.
+    -- This is a public table. Play nice, you cunt.
+    if oldMetatable ~= nil then
+        DarkRP.errorNoHalt("Some addon is fucking up DarkRP's chat hook reorganising mechanism. Start getting rid of scripts and addons until you don't see this error on startup anymore.")
+        return
+    end
+    setmetatable(hookTbl.PlayerSay, mt)
 end
 hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
