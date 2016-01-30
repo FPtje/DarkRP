@@ -22,6 +22,7 @@ local function PM(ply, args)
         local col = team.GetColor(ply:Team())
         DarkRP.talkToPerson(target, col, "(PM) " .. ply:Nick(), Color(255, 255, 255, 255), msg, ply)
         DarkRP.talkToPerson(ply, col, "(PM) " .. ply:Nick(), Color(255, 255, 255, 255), msg, ply)
+        hook.Call("PlayerSayEx", nil, {ply = ply, target = target, type = "pm", text = msg })
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(name)))
     end
@@ -36,7 +37,8 @@ local function Whisper(ply, args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return ""
         end
-        DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("whisper") .. ") " .. ply:Nick(), text, 90)
+        local targets = DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("whisper") .. ") " .. ply:Nick(), text, 90)
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "whisper", range = 90, targets = targets, text = text })
     end
     return args, DoSay
 end
@@ -48,7 +50,8 @@ local function Yell(ply, args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return ""
         end
-        DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("yell") .. ") " .. ply:Nick(), text, 550)
+        local targets = DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("yell") .. ") " .. ply:Nick(), text, 550)
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "yell", range = 550, targets = targets, text = text })
     end
     return args, DoSay
 end
@@ -69,8 +72,10 @@ local function Me(ply, args)
             for _, target in pairs(player.GetAll()) do
                 DarkRP.talkToPerson(target, team.GetColor(ply:Team()), ply:Nick() .. " " .. text)
             end
+            hook.Call("PlayerSayEx", nil, {ply = ply, type = "me", text = text })
         else
-            DarkRP.talkToRange(ply, ply:Nick() .. " " .. text, "", 250)
+            local targets = DarkRP.talkToRange(ply, ply:Nick() .. " " .. text, "", 250)
+            hook.Call("PlayerSayEx", nil, {ply = ply, type = "me", range = 250, targets = targets, text = text })
         end
     end
     return args, DoSay
@@ -97,6 +102,7 @@ local function OOC(ply, args)
         for k,v in pairs(player.GetAll()) do
             DarkRP.talkToPerson(v, col, "(" .. DarkRP.getPhrase("ooc") .. ") " .. ply:Name(), col2, text, ply)
         end
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "ooc", targets = player.GetAll(), text = text })
     end
     return args, DoSay
 end
@@ -118,6 +124,7 @@ local function PlayerAdvertise(ply, args)
             local col = team.GetColor(ply:Team())
             DarkRP.talkToPerson(v, col, DarkRP.getPhrase("advert") .. " " .. ply:Nick(), Color(255, 255, 0, 255), text, ply)
         end
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "advert", targets = player.GetAll(), text = text })
     end
     return args, DoSay
 end
@@ -138,6 +145,7 @@ local function MayorBroadcast(ply, args)
             local col = team.GetColor(ply:Team())
             DarkRP.talkToPerson(v, col, DarkRP.getPhrase("broadcast") .. " " .. ply:Nick(), Color(170, 0, 0, 255), text, ply)
         end
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "broadcast", targets = player.GetAll(), text = text })
     end
     return args, DoSay
 end
@@ -165,11 +173,14 @@ local function SayThroughRadio(ply,args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return
         end
-        for k,v in pairs(player.GetAll()) do
+        local targets = {}
+        for _,v in pairs(player.GetAll()) do
             if v.RadioChannel == ply.RadioChannel then
+                table.insert(targets, v)
                 DarkRP.talkToPerson(v, Color(180,180,180,255), DarkRP.getPhrase("radio_x", ply.RadioChannel), Color(180,180,180,255), text, ply)
             end
         end
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "radio", channel = ply.RadioChannel, targets = targets, text = text })
     end
     return args, DoSay
 end
@@ -194,15 +205,20 @@ local function GroupMsg(ply, args)
 
         if #groupChats == 0 then return "" end
 
+        local targets = {}
+
         for _, target in pairs(player.GetAll()) do
             -- The target is in any of the group chats
             for k, func in pairs(groupChats) do
                 if not func(target, ply) then continue end
 
+                table.insert(targets, target)
                 DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
                 break
             end
         end
+
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "group", targets = targets, text = text })
     end
     return args, DoSay
 end

@@ -69,6 +69,8 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
         net.WriteUInt(255, 8)
         net.WriteString(Message)
     net.Send(filter)
+
+    return filter
 end
 
 function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
