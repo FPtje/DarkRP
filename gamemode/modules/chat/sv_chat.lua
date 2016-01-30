@@ -222,6 +222,7 @@ local function ReplaceChatHooks()
 
         setmetatable(hooks, mt)
     end
+    hook.Add("PlayerSay", "DarkRPRemovesAllPlayerSayHooksBecauseThatIsSuddenlyAProblemThatNeedsFixingNowOfAllTimes", function() end)
 end
 hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
