@@ -106,8 +106,10 @@ local function RP_ActualDoSay(ply, text, callback)
         for k, v in pairs(player.GetAll()) do
             DarkRP.talkToPerson(v, col, callback .. ply:Name(), col2, text, ply)
         end
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "alltalk", targets = player.GetAll(), text = text })
     else
-        DarkRP.talkToRange(ply, callback .. ply:Name(), text, 250)
+        local targets = DarkRP.talkToRange(ply, callback .. ply:Name(), text, 250)
+        hook.Call("PlayerSayEx", nil, {ply = ply, type = "local", range = 250, targets = targets, text = text })
     end
     return ""
 end
