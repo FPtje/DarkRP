@@ -1,11 +1,12 @@
+AddCSLuaFile()
+
 if SERVER then
-	AddCSLuaFile("shared.lua")
-	AddCSLuaFile("cl_menu.lua")
-	include("sv_init.lua")
+    AddCSLuaFile("cl_menu.lua")
+    include("sv_init.lua")
 end
 
 if CLIENT then
-	include("cl_menu.lua")
+    include("cl_menu.lua")
 end
 
 SWEP.PrintName = "Pocket"
@@ -20,12 +21,14 @@ SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to pick up\nRight click to drop\nReload to open the menu"
 SWEP.Contact = ""
 SWEP.Purpose = ""
+SWEP.IsDarkRPPocket = true
+
 SWEP.IconLetter = ""
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
-SWEP.AnimPrefix	 = "rpg"
-SWEP.WorldModel	= ""
+SWEP.AnimPrefix  = "rpg"
+SWEP.WorldModel = ""
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
@@ -41,75 +44,75 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("normal")
+    self:SetHoldType("normal")
 end
 
 function SWEP:Deploy()
-	return true
+    return true
 end
 
 function SWEP:DrawWorldModel() end
 
 function SWEP:PreDrawViewModel(vm)
-	return true
+    return true
 end
 
 function SWEP:Holster()
-	if not SERVER then return true end
+    if not SERVER then return true end
 
-	self.Owner:DrawViewModel(true)
-	self.Owner:DrawWorldModel(true)
+    self:GetOwner():DrawViewModel(true)
+    self:GetOwner():DrawWorldModel(true)
 
-	return true
+    return true
 end
 
 function SWEP:PrimaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
+    self:SetNextPrimaryFire(CurTime() + 0.2)
 
-	if not SERVER then return end
+    if not SERVER then return end
 
-	local ent = self.Owner:GetEyeTrace().Entity
-	local canPickup, message = hook.Call("canPocket", nil, self.Owner, ent)
+    local ent = self:GetOwner():GetEyeTrace().Entity
+    local canPickup, message = hook.Call("canPocket", GAMEMODE, self:GetOwner(), ent)
 
-	if not canPickup then
-		if message then DarkRP.notify(self.Owner, 1, 4, message) end
-		return
-	end
+    if not canPickup then
+        if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
+        return
+    end
 
-	self.Owner:addPocketItem(ent)
+    self:GetOwner():addPocketItem(ent)
 end
 
 function SWEP:SecondaryAttack()
-	if not SERVER then return end
+    if not SERVER then return end
 
-	local item = #self.Owner:getPocketItems()
-	if item <= 0 then
-		DarkRP.notify(self.Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
-		return
-	end
+    local item = #self:GetOwner():getPocketItems()
+    if item <= 0 then
+        DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("pocket_no_items"))
+        return
+    end
 
-	self.Owner:dropPocketItem(item)
+    self:GetOwner():dropPocketItem(item)
 end
 
 function SWEP:Reload()
-	if not CLIENT then return end
+    if not CLIENT then return end
 
-	DarkRP.openPocketMenu()
+    DarkRP.openPocketMenu()
 end
 
 local meta = FindMetaTable("Player")
 DarkRP.stub{
-	name = "getPocketItems",
-	description = "Get a player's pocket items.",
-	parameters = {
-	},
-	returns = {
-		{
-			name = "items",
-			description = "A table containing crucial information about the items in the pocket.",
-			type = "table"
-		}
-	},
-	metatable = meta,
-	realm = "Shared"
+    name = "getPocketItems",
+    description = "Get a player's pocket items.",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "items",
+            description = "A table containing crucial information about the items in the pocket.",
+            type = "table"
+        }
+    },
+    metatable = meta,
+    realm = "Shared"
 }

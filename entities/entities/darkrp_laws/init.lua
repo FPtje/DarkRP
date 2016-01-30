@@ -7,150 +7,188 @@ local Laws = {}
 local FixedLaws = {}
 
 timer.Simple(0, function()
-	Laws = table.Copy(GAMEMODE.Config.DefaultLaws)
-	FixedLaws = table.Copy(Laws)
+    Laws = table.Copy(GAMEMODE.Config.DefaultLaws)
+    FixedLaws = table.Copy(Laws)
 end)
 
+local hookCanEditLaws = {canEditLaws = function(_, ply, action, args)
+    if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
+        return false, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. action)
+    end
+    return true
+end}
+
 function ENT:Initialize()
-	self:SetModel("models/props/cs_assault/Billboard.mdl")
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
+    self:SetModel("models/props/cs_assault/Billboard.mdl")
+    self:PhysicsInit(SOLID_VPHYSICS)
+    self:SetMoveType(MOVETYPE_VPHYSICS)
+    self:SetSolid(SOLID_VPHYSICS)
 
-	local phys = self:GetPhysicsObject()
+    local phys = self:GetPhysicsObject()
 
-	if phys and phys:IsValid() then
-		phys:Wake()
-		phys:EnableMotion(false)
-	end
+    if phys and phys:IsValid() then
+        phys:Wake()
+        phys:EnableMotion(false)
+    end
 end
 
-local function AddLaw(ply, args)
-	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "addlaw"))
-		return ""
-	end
+local function addLaw(ply, args)
+    local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "addLaw", args)
 
-	if not args or args == "" then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		return ""
-	end
+    if not canEdit then
+        DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "addLaw", ""))
+        return ""
+    end
 
-	if string.len(args) < 3 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
-		return ""
-	end
+    if not args or args == "" then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+        return ""
+    end
 
-	if #Laws >= 12 then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("laws_full"))
-		return ""
-	end
+    if string.len(args) < 3 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("law_too_short"))
+        return ""
+    end
 
-	local num = table.insert(Laws, args)
+    if #Laws >= 12 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("laws_full"))
+        return ""
+    end
 
-	umsg.Start("DRP_AddLaw")
-		umsg.String(args)
-	umsg.End()
+    local num = table.insert(Laws, args)
 
-	hook.Run("addLaw", num, args)
+    umsg.Start("DRP_AddLaw")
+        umsg.String(args)
+    umsg.End()
 
-	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_added"))
+    hook.Run("addLaw", num, args)
 
-	return ""
+    DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_added"))
+
+    return ""
 end
-DarkRP.defineChatCommand("addlaw", AddLaw)
+DarkRP.defineChatCommand("addLaw", addLaw)
 
-local function RemoveLaw(ply, args)
-	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "removelaw"))
-		return ""
-	end
+local function removeLaw(ply, args)
+    local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "removeLaw", args)
 
-	local i = tonumber(args)
+    if not canEdit then
+        DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "removeLaw", ""))
+        return ""
+    end
 
-	if not i or not Laws[i] then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
-		return ""
-	end
+    local i = tonumber(args)
 
-	if FixedLaws[i] then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
-		return ""
-	end
+    if not i or not Laws[i] then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
+        return ""
+    end
 
-	local law = Laws[i]
+    if FixedLaws[i] then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("default_law_change_denied"))
+        return ""
+    end
 
-	table.remove(Laws, i)
+    local law = Laws[i]
 
-	umsg.Start("DRP_RemoveLaw")
-		umsg.Short(i)
-	umsg.End()
+    table.remove(Laws, i)
 
-	hook.Run("removeLaw", i, law)
+    umsg.Start("DRP_RemoveLaw")
+        umsg.Short(i)
+    umsg.End()
 
-	DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_removed"))
+    hook.Run("removeLaw", i, law)
 
-	return ""
+    DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_removed"))
+
+    return ""
 end
-DarkRP.defineChatCommand("removelaw", RemoveLaw)
+DarkRP.defineChatCommand("removeLaw", removeLaw)
+
+function DarkRP.resetLaws()
+    Laws = table.Copy(FixedLaws)
+
+    umsg.Start("DRP_ResetLaws")
+    umsg.End()
+end
+
+local function resetLaws(ply, args)
+    local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "resetLaws", args)
+
+    if not canEdit then
+        DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "resetLaws", ""))
+        return ""
+    end
+
+    hook.Run("resetLaws", ply)
+
+    DarkRP.resetLaws()
+
+    DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_reset"))
+
+    return ""
+end
+DarkRP.defineChatCommand("resetLaws", resetLaws)
 
 local numlaws = 0
-local function PlaceLaws(ply, args)
-	if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
-		return ""
-	end
+local function placeLaws(ply, args)
+    local canEdit, message = hook.Call("canEditLaws", hookCanEditLaws, ply, "placeLaws", args)
 
-	if numlaws >= GAMEMODE.Config.maxlawboards then
-		DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placelaws"))
-		return ""
-	end
+    if not canEdit then
+        DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "placeLaws", ""))
+        return ""
+    end
 
-	local trace = {}
-	trace.start = ply:EyePos()
-	trace.endpos = trace.start + ply:GetAimVector() * 85
-	trace.filter = ply
+    if numlaws >= GAMEMODE.Config.maxlawboards then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "placeLaws"))
+        return ""
+    end
 
-	local tr = util.TraceLine(trace)
+    local trace = {}
+    trace.start = ply:EyePos()
+    trace.endpos = trace.start + ply:GetAimVector() * 85
+    trace.filter = ply
 
-	local ent = ents.Create("darkrp_laws")
-	ent:SetPos(tr.HitPos + Vector(0, 0, 100))
+    local tr = util.TraceLine(trace)
 
-	local ang = ply:GetAngles()
-	ang:RotateAroundAxis(ang:Up(), 180)
-	ent:SetAngles(ang)
+    local ent = ents.Create("darkrp_laws")
+    ent:SetPos(tr.HitPos + Vector(0, 0, 100))
 
-	ent:CPPISetOwner(ply)
-	ent.SID = ply.SID
+    local ang = ply:GetAngles()
+    ang:RotateAroundAxis(ang:Up(), 180)
+    ent:SetAngles(ang)
 
-	ent:Spawn()
-	ent:Activate()
+    ent:CPPISetOwner(ply)
+    ent.SID = ply.SID
 
-	if IsValid(ent) then
-		numlaws = numlaws + 1
-	end
+    ent:Spawn()
+    ent:Activate()
 
-	ply.lawboards = ply.lawboards or {}
-	table.insert(ply.lawboards, ent)
+    if IsValid(ent) then
+        numlaws = numlaws + 1
+    end
 
-	return ""
+    ply.lawboards = ply.lawboards or {}
+    table.insert(ply.lawboards, ent)
+
+    return ""
 end
-DarkRP.defineChatCommand("placelaws", PlaceLaws)
+DarkRP.defineChatCommand("placeLaws", placeLaws)
 
 function ENT:OnRemove()
-	numlaws = numlaws - 1
+    numlaws = numlaws - 1
 end
 
 hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
-	for i, law in pairs(Laws) do
-		if FixedLaws[i] then continue end
+    for i, law in pairs(Laws) do
+        if FixedLaws[i] then continue end
 
-		umsg.Start("DRP_AddLaw", ply)
-			umsg.String(law)
-		umsg.End()
-	end
+        umsg.Start("DRP_AddLaw", ply)
+            umsg.String(law)
+        umsg.End()
+    end
 end)
 
 function DarkRP.getLaws()
-	return Laws
+    return Laws
 end

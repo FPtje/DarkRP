@@ -1,7 +1,8 @@
 "UnlitGeneric"
 {
-	"$basetexture"		"FAdmin/icons/ragdoll"
-	"$ignorez"		1
-	"$vertexcolor" 		1
-	"$vertexalpha" 		1
+	"$basetexture"		"fadmin/icons/ragdoll"
+	"$ignorez"			1
+	"$vertexcolor"		1
+	"$vertexalpha"		1
+	"$nolod"			1
 }

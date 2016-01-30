@@ -1,10 +1,9 @@
-ENT.Type = "anim"
-ENT.Base = "base_gmodentity"
+ENT.Base = "lab_base"
 ENT.PrintName = "Microwave"
-ENT.Author = "Pcwizdan"
-ENT.Spawnable = false
 
-function ENT:SetupDataTables()
-	self:NetworkVar("Int",0,"price")
-	self:NetworkVar("Entity",1,"owning_ent")
+function ENT:initVars()
+    self.model = "models/props/cs_office/microwave.mdl"
+    self.initialPrice = GAMEMODE.Config.microwavefoodcost
+    self.labPhrase = DarkRP.getPhrase("microwave")
+    self.itemPhrase = string.lower(DarkRP.getPhrase("food"))
 end

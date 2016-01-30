@@ -1,22 +1,44 @@
 local PLAYER_CLASS = {}
 
-PLAYER_CLASS.DisplayName = "DarkRP Player Class"
+-- Value of -1 = set to config value, if a corresponding setting exists
+PLAYER_CLASS.DisplayName = "DarkRP Base Player Class"
+PLAYER_CLASS.WalkSpeed = -1
+PLAYER_CLASS.RunSpeed = -1
+PLAYER_CLASS.DuckSpeed = 0.3
+PLAYER_CLASS.UnDuckSpeed = 0.3
+PLAYER_CLASS.TeammateNoCollide = false
+PLAYER_CLASS.StartHealth = -1
 
-local models = {}
+function PLAYER_CLASS:Loadout()
+    -- Let gamemode decide
+end
 
--- Collect model names by their model
-for name, mdl in pairs(player_manager.AllValidModels()) do
-	models[string.lower(mdl)] = name
+function PLAYER_CLASS:SetModel()
+    -- Let gamemode decide
+end
+
+function PLAYER_CLASS:ShouldDrawLocal()
+    -- Let gamemode decide
+end
+
+function PLAYER_CLASS:CreateMove(cmd)
+    -- Let gamemode decide
+end
+
+function PLAYER_CLASS:CalcView(view)
+    -- Let gamemode decide
 end
 
 function PLAYER_CLASS:GetHandsModel()
-	local job = self.Player:Team()
-	if not RPExtraTeams[job] then return end
-
-	local model = istable(RPExtraTeams[job].model) and RPExtraTeams[job].model[1] or RPExtraTeams[job].model
-	local name = models[string.lower(model)]
-
-	return player_manager.TranslatePlayerHands(name)
+    -- Let gamemode decide
 end
 
-player_manager.RegisterClass("player_DarkRP", PLAYER_CLASS, "player_default")
+function PLAYER_CLASS:StartMove(mv, cmd)
+    -- Let gamemode decide
+end
+
+function PLAYER_CLASS:FinishMove(mv)
+    -- Let gamemode decide
+end
+
+player_manager.RegisterClass("player_darkrp", PLAYER_CLASS, "player_sandbox")

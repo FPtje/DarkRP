@@ -1,15 +1,13 @@
-if SERVER then
-	AddCSLuaFile("shared.lua")
-end
+AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "P228"
-	SWEP.Author = "DarkRP Developers"
-	SWEP.Slot = 1
-	SWEP.SlotPos = 1
-	SWEP.IconLetter = "y"
+    SWEP.PrintName = "P228"
+    SWEP.Author = "DarkRP Developers"
+    SWEP.Slot = 1
+    SWEP.SlotPos = 1
+    SWEP.IconLetter = "y"
 
-	killicon.AddFont("weapon_p228", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+    killicon.AddFont("weapon_p2282", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
 SWEP.Base = "weapon_cs_base2"

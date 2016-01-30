@@ -3,8 +3,6 @@
 -- To disable them completely, set GM.Config.chatsounds to false
 -- TODO: Add female sounds & detect gender of model, and use combine sounds for CPs
 
--- DaCoolboy: I sorted the entries alphabetically for better overview
-
 local sounds = {}
 sounds[ "ammo" ] = { "vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav", "vo/npc/male01/ammo05.wav" }
 
@@ -13,6 +11,7 @@ sounds[ "behind you" ] = { "vo/npc/male01/behindyou01.wav", "vo/npc/male01/behin
 sounds[ "better reload" ] = { "vo/npc/male01/youdbetterreload01.wav" }
 
 sounds[ "bullshit" ] = { "vo/npc/male01/question26.wav" }
+sounds[ "bull shit"] = sounds[ "bullshit" ]
 
 sounds[ "cheese" ] = { "vo/npc/male01/question06.wav" }
 
@@ -103,6 +102,7 @@ sounds[ "it is okay" ] = { "vo/npc/male01/answer02.wav" }
 sounds[ "it's okay" ] = sounds[ "it is okay" ]
 
 sounds[ "kay" ] = { "vo/npc/male01/ok01.wav", "vo/npc/male01/ok02.wav" }
+sounds[ "kk" ] = sounds[ "kay" ]
 
 sounds[ "lead the way" ] = { "vo/npc/male01/leadtheway01.wav", "vo/npc/male01/leadtheway02.wav" }
 sounds[ "lead on" ] = sounds[ "lead the way" ]
@@ -159,6 +159,7 @@ sounds[ "stop that" ] = sounds[ "cut it" ]
 sounds[ "stop looking at me" ] = { "vo/npc/male01/vquestion01.wav" }
 
 sounds[ "sorry" ] = { "vo/npc/male01/sorry01.wav", "vo/npc/male01/sorry02.wav", "vo/npc/male01/sorry03.wav" }
+sounds[ "sry" ] = sounds[ "sorry" ]
 
 sounds[ "take cover" ] = { "vo/npc/male01/takecover02.wav" }
 
@@ -219,43 +220,124 @@ sounds[ "you never know" ] = { "vo/npc/male01/answer22.wav" }
 
 sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
 
+DarkRP.hookStub{
+    name = "canChatSound",
+    description = "Whether a chat sound can be played.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who triggered the chat sound.",
+            type = "Player"
+        },
+        {
+            name = "chatPhrase",
+            description = "The chat sound phrase that has been detected.",
+            type = "string"
+        },
+        {
+            name = "chatText",
+            description = "The whole chat text the player sent that contains the chat sound phrase.",
+            type = "string"
+        }
+    },
+    returns = {
+        {
+            name = "canChatSound",
+            description = "False if the chat sound should not be played.",
+            type = "boolean"
+        }
+    }
+}
+
+DarkRP.hookStub{
+    name = "onChatSound",
+    description = "When a chat sound is played.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who triggered the chat sound.",
+            type = "Player"
+        },
+        {
+            name = "chatPhrase",
+            description = "The chat sound phrase that was detected.",
+            type = "string"
+        },
+        {
+            name = "chatText",
+            description = "The whole chat text the player sent that contains the chat sound phrase.",
+            type = "string"
+        }
+    },
+    returns = {
+    }
+}
+
 local function CheckChat(ply, text)
-	if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
-	local prefix = string.sub(text, 0, 1)
-	if prefix == "/" or prefix == "!" or prefix == "@" then return end -- should cover most chat commands for various mods/addons
-	for k, v in pairs(sounds) do
-		local res1, res2 = string.find(string.lower(text), k)
-		if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
-			ply:EmitSound(table.Random(v), 80, 100)
-			ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
-			break
-		end
-	end
+    if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
+    local prefix = string.sub(text, 0, 1)
+    if prefix == "/" or prefix == "!" or prefix == "@" then return end -- should cover most chat commands for various mods/addons
+    for k, v in pairs(sounds) do
+        local res1, res2 = string.find(string.lower(text), k)
+        if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
+            local canChatSound = hook.Call("canChatSound", nil, ply, k, text)
+            if canChatSound == false then return end
+            ply:EmitSound(table.Random(v), 80, 100)
+            ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
+            hook.Call("onChatSound", nil, ply, k, text)
+            break
+        end
+    end
 end
 hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
 
+DarkRP.getChatSound = DarkRP.stub{
+    name = "getChatSound",
+    description = "Get a chat sound (play a noise when someone says something) associated with the given phrase.",
+    parameters = {
+        {
+            name = "text",
+            description = "The text that triggers the chat sound.",
+            type = "string",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "soundPaths",
+            description = "A table of string sound paths associated with the given text.",
+            type = "table"
+        }
+    },
+    metatable = DarkRP
+}
+
+function DarkRP.getChatSound(text)
+    return sounds[string.lower(text or "")]
+end
+
 DarkRP.setChatSound = DarkRP.stub{
-	name = "setChatSound",
-	description = "Set a chat sound (play a noise when someone says something)",
-	parameters = {
-		{
-			name = "text",
-			description = "The text that should trigger the sound.",
-			type = "string",
-			optional = false
-		},
-		{
-			name = "sounds",
-			description = "A table of string sound paths.",
-			type = "table",
-			optional = false
-		}
-	},
-	returns = {
-	},
-	metatable = DarkRP
+    name = "setChatSound",
+    description = "Set a chat sound (play a noise when someone says something)",
+    parameters = {
+        {
+            name = "text",
+            description = "The text that should trigger the sound.",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "sounds",
+            description = "A table of string sound paths.",
+            type = "table",
+            optional = false
+        }
+    },
+    returns = {
+    },
+    metatable = DarkRP
 }
 
 function DarkRP.setChatSound(text, sndTable)
-	sounds[string.lower(text or "")] = sndTable
+    sounds[string.lower(text or "")] = sndTable
 end

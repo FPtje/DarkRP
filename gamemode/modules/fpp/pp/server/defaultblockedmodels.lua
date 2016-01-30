@@ -17,6 +17,7 @@ local defaultblocked = {
 "models/props_buildings/building_002a.mdl",
 "models/props_buildings/collapsedbuilding01a.mdl",
 "models/props_buildings/project_building01.mdl",
+"models/props_buildings/row_church_fullscale.mdl",
 "models/props_c17/consolebox01a.mdl",
 "models/props_c17/oildrum001_explosive.mdl",
 "models/props_c17/paper01.mdl",
@@ -52,11 +53,15 @@ local defaultblocked = {
 "models/props_wasteland/cargo_container01b.mdl",
 "models/props_wasteland/cargo_container01c.mdl",
 "models/props_wasteland/depot.mdl",
+"models/xqm/coastertrack/special_full_corkscrew_left_4.mdl",
 }
 
 -- Add to SQLite database
 function FPP.AddDefaultBlockedModels()
-	for k,v in pairs(defaultblocked) do
-		MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. MySQLite.SQLStr(v) .. ");")
-	end
+    MySQLite.begin()
+    for k,v in pairs(defaultblocked) do
+        FPP.BlockedModels[v] = true
+        MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. MySQLite.SQLStr(v) .. ");")
+    end
+    MySQLite.commit()
 end

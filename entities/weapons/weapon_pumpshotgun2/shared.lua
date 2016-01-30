@@ -1,18 +1,16 @@
-if SERVER then
-	AddCSLuaFile("shared.lua")
-end
+AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Pump Shotgun"
-	SWEP.Author = "DarkRP Developers"
-	SWEP.Slot = 2
-	SWEP.SlotPos = 0
-	SWEP.IconLetter = "k"
+    SWEP.PrintName = "Pump Shotgun"
+    SWEP.Author = "DarkRP Developers"
+    SWEP.Slot = 2
+    SWEP.SlotPos = 0
+    SWEP.IconLetter = "k"
 
-	killicon.AddFont("weapon_pumpshotgun", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
+    killicon.AddFont("weapon_pumpshotgun2", "CSKillIcons", SWEP.IconLetter, Color(255, 80, 0, 255))
 end
 
-SWEP.Base = "weapon_cs_base2"
+DEFINE_BASECLASS("weapon_cs_base2")
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -46,66 +44,78 @@ SWEP.Secondary.Ammo = "none"
 SWEP.IronSightsPos = Vector(-7.64, -8, 3.56)
 SWEP.IronSightsAng = Vector(-0.1, 0.02, 0)
 
-function SWEP:Reload()
-	-- Already reloading
-	if self.Weapon.reloading then return end
+function SWEP:SetupDataTables()
+    BaseClass.SetupDataTables(self)
+    -- Float 0 = LastPrimaryAttack
+    -- Float 1 = ReloadEndTime
+    -- Float 2 = BurstTime
+    -- Float 3 = LastNonBurst
+    self:NetworkVar("Float", 4, "QueuedAttackTime")
+    -- Bool 0 = Ironsights
+    -- Bool 1 = Reloading
+    self:NetworkVar("Bool", 2, "AttackQueued")
+end
 
-	-- Start reloading if we can
-	if self.Weapon:Clip1() < self.Primary.ClipSize and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
-		self.Weapon.reloading = true
-		self.Weapon:SetVar("reloadtimer", CurTime() + 0.3)
-		self.Weapon:SendWeaponAnim(ACT_VM_RELOAD)
-		self:SetIronsights(false)
-		self:NewSetWeaponHoldType(self.HoldType)
-		self.Owner:SetAnimation(PLAYER_RELOAD)
-		self:NewSetWeaponHoldType("normal")
-	end
+function SWEP:Reload()
+    -- Already reloading
+    if self:GetReloading() then return end
+
+    -- Start reloading if we can
+    if self:Clip1() < self.Primary.ClipSize and self:GetOwner():GetAmmoCount(self.Primary.Ammo) > 0 then
+        self:SetReloading(true)
+        self:SetReloadEndTime(CurTime() + 0.3)
+        self:SendWeaponAnim(ACT_VM_RELOAD)
+        self:SetIronsights(false)
+        self:SetHoldType(self.HoldType)
+        self.Owner:SetAnimation(PLAYER_RELOAD)
+        self:SetHoldType("normal")
+    end
 end
 
 function SWEP:Think()
-	if self.Weapon.reloading then
-		if self.Weapon:GetVar("reloadtimer", 0) < CurTime() then
-			-- Finsished reload -
-			if self.Weapon:Clip1() >= self.Primary.ClipSize or self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then
-				self.Weapon.reloading = false
-				return
-			end
+    if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
+        -- Finsished reload -
+        if self:Clip1() >= self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then
+            self:SetReloading(false)
+            self:SetReloadEndTime(0)
+            return
+        end
 
-			if self.queueattack then
-				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
-				self.Weapon.reloading = false
-				self.Weapon.queueattack = false
-				timer.Simple(0.8, function()
-					if not IsValid(self) then return end
-					self:PrimaryAttack()
-				end)
-				return
-			end
+        if self:GetAttackQueued() then
+            self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
+            self:SetReloading(false)
+            self:SetReloadEndTime(0)
+            self:SetAttackQueued(false)
+            self:SetQueuedAttackTime(CurTime() + 0.8)
+            return
+        end
 
-			-- Next cycle
-			self.Weapon:SetVar("reloadtimer", CurTime() + 0.3)
-			self.Weapon:SendWeaponAnim(ACT_VM_RELOAD)
+        -- Next cycle
+        self:SetReloadEndTime(CurTime() + 0.3)
+        self:SendWeaponAnim(ACT_VM_RELOAD)
 
-			-- Add ammo
-			self.Owner:RemoveAmmo(1, self.Primary.Ammo, false)
-			self.Weapon:SetClip1(self.Weapon:Clip1() + 1)
+        -- Add ammo
+        self:GetOwner():RemoveAmmo(1, self.Primary.Ammo, false)
+        self:SetClip1(self:Clip1() + 1)
 
-			-- Finish filling, final pump
-			if self.Weapon:Clip1() >= self.Primary.ClipSize or self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then
-				self.Weapon:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
-			end
-		end
-	end
-	self.BaseClass.Think(self)
+        -- Finish filling, final pump
+        if self:Clip1() >= self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then
+            self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
+        end
+    end
+    if self:GetQueuedAttackTime() ~= 0 and CurTime() >= self:GetQueuedAttackTime() then
+        self:SetQueuedAttackTime(0)
+        self:PrimaryAttack()
+    end
 end
 
 function SWEP:PrimaryAttack()
-	if self.queueattack then return end
+    if self:GetAttackQueued() then return end
 
-	if self.Weapon.reloading then
-		self.queueattack = true -- this way it doesn't interupt the reload animation
-		return
-	end
+    if self:GetReloading() then
+        self:SetAttackQueued(true) -- this way it doesn't interupt the reload animation
+        return
+    end
 
-	self.BaseClass.PrimaryAttack(self)
+    BaseClass.PrimaryAttack(self)
 end

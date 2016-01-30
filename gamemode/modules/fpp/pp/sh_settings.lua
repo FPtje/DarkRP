@@ -67,6 +67,7 @@ FPP.Settings.FPP_ENTITYDAMAGE1 = {
 	checkconstrained = 0,
 	iswhitelist = 0}
 FPP.Settings.FPP_GLOBALSETTINGS1 = {
+	freezedisconnected = 0,
 	cleanupdisconnected = 1,
 	cleanupdisconnectedtime = 120,
 	cleanupadmin = 1,
@@ -74,6 +75,7 @@ FPP.Settings.FPP_GLOBALSETTINGS1 = {
 FPP.Settings.FPP_ANTISPAM1 = {
 	toggle = 1,
 	antispawninprop = 0,
+	bigpropantispam = 1,
 	bigpropsize = 5.85,
 	bigpropwait = 1.5,
 	smallpropdowngradecount = 3,
@@ -87,9 +89,25 @@ FPP.Settings.FPP_BLOCKMODELSETTINGS1 = {
 	iswhitelist = 0
 }
 
-
-for Protection, Settings in pairs(FPP.Settings) do
-	for Option, value in pairs(Settings) do
-		CreateConVar("_"..Protection.."_"..Option, value, {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+function FPP.ForAllSettings(fn)
+	-- Loop in sorted pairs for deterministic order
+	for kind, sets in SortedPairs(FPP.Settings) do
+		for setting, val in SortedPairs(sets) do
+			if fn(kind, setting, val) then break end
+		end
 	end
 end
+
+/*---------------------------------------------------------------------------
+CAMI
+Register the CAMI privilege
+---------------------------------------------------------------------------*/
+CAMI.RegisterPrivilege{
+	Name = "FPP_Settings",
+	MinAccess = "superadmin" -- By default only superadmins can change settings
+}
+
+CAMI.RegisterPrivilege{
+	Name = "FPP_Cleanup",
+	MinAccess = "admin"
+}
