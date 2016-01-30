@@ -198,6 +198,10 @@ local function ReplaceChatHooks()
         }
     end
 
+    mt.__index = function(tbl, k)
+        return GAMEMODE.OldChatHooks[k]
+    end
+
     -- Someone preventing metatable changes
     -- My metatable swap should be compatible.
     -- This is a public table. Play nice, you cunt.
