@@ -17,7 +17,6 @@ function ENT:Initialize()
     end
 
     phys:Wake()
-    self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
 
     if self:Getamount() == 0 then
         self:Setamount(1)
@@ -84,5 +83,34 @@ function ENT:Use(activator, caller)
     activator:SetAmmo(newAmmo, ammoType)
 
     self:DecreaseAmount()
+end
 
+function ENT:Touch(ent)
+    -- the .USED var is also used in other mods for the same purpose
+    if ent.IsSpawnedWeapon ~= true or
+        self:GetWeaponClass() ~= ent:GetWeaponClass() or
+        self.hasMerged or ent.hasMerged then return end
+
+    ent.hasMerged = true
+    ent.USED = true
+
+    local selfAmount, entAmount = self:Getamount(), ent:Getamount()
+    local totalAmount = selfAmount + entAmount
+    self.ammoadd, ent.ammoadd = self.ammoadd or 0, ent.ammoadd or 0
+
+    -- ammoAdd will be the floored average of both weapons' ammoadd
+    -- Some ammo might get lost there.
+    self.ammoadd = math.floor((self.ammoadd * selfAmount + ent.ammoadd * entAmount) / totalAmount)
+
+    -- If neither have a clip, use default clip, otherwise merge the two
+    if self.clip1 or ent.clip1 then
+        self.clip1 = math.floor(((self.clip1 or 0) * selfAmount + (ent.clip1 or 0) * entAmount) / totalAmount)
+    end
+
+    if self.clip2 or ent.clip2 then
+        self.clip2 = math.floor(((self.clip2 or 0) * selfAmount + (ent.clip2 or 0) * entAmount) / totalAmount)
+    end
+
+    self:Setamount(totalAmount)
+    ent:Remove()
 end
