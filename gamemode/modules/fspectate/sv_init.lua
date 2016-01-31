@@ -80,7 +80,7 @@ hook.Add("SetupPlayerVisibility", "FSpectate", SpectateVisibility)
 
 local function setSpectatePos(ply, cmd, args)
     CAMI.PlayerHasAccess(ply, "FSpectate", function(b, _)
-        if not b then ply:ChatPrint("No Access!") return end
+        if not b then return end
 
         if not ply.FSpectating or not args[3] then return end
         local x, y, z = tonumber(args[1] or 0), tonumber(args[2] or 0), tonumber(args[3] or 0)
