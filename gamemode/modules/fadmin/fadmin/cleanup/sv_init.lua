@@ -23,16 +23,7 @@ end
 local function CleanUp(ply, cmd, args)
     if not FAdmin.Access.PlayerHasPrivilege(ply, "CleanUp") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
-    local List = cleanup.GetList()
-    for k, owner in pairs(List) do
-        for _, cleanupType in pairs(owner) do
-            for _, ent in pairs(cleanupType) do
-                if not IsValid(ent) then continue end
-                ent:Remove()
-            end
-        end
-        List[k] = nil
-    end
+    game.CleanUpMap()
     FAdmin.Messages.ActionMessage(ply, player.GetAll(), "You have cleaned up the map", "The map has been cleaned up", "Cleaned up the map")
 
     return true
