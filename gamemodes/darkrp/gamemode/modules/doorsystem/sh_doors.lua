@@ -19,6 +19,7 @@ function meta:isDoor()
     if class == "func_door" or
         class == "func_door_rotating" or
         class == "prop_door_rotating" or
+        class == "func_movelinear" or
         class == "prop_dynamic" then
         return true
     end
