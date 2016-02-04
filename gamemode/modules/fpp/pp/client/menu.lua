@@ -159,22 +159,36 @@ function FPP.AdminMenu(Panel)
     end
 
     local function addsldr(max, command, text, plist, decimals)
+        local label = plist:Add("DLabel")
+        label:SetText(text)
+        label:SetTextColor(Color(0, 0, 0, 255))
+        label:SizeToContents()
+
         local sldr = plist:Add("DNumSlider")
+        sldr.Label:SetVisible(false)
         sldr:SetMinMax(0, max)
         decimals = decimals or 1
         sldr:SetDecimals(decimals)
-        sldr:SetText(text)
         sldr:SetDark(true)
         sldr:SetValue(FPP.Settings[command[1]][command[2]])
         function sldr.Slider:OnMouseReleased()
-            self:SetDragging( false )
-            self:MouseCapture( false )
+            self:SetDragging(false)
+            self:MouseCapture(false)
             if not canEditSettings then
                 sldr:SetValue(FPP.Settings[command[1]][command[2]])
                 return
             end
             RunConsoleCommand("FPP_Setting", command[1], command[2], sldr:GetValue())
         end
+
+        function sldr.TextArea:OnEnter()
+            if not canEditSettings then
+                sldr:SetValue(FPP.Settings[command[1]][command[2]])
+                return
+            end
+            RunConsoleCommand("FPP_Setting", command[1], command[2], sldr:GetValue())
+        end
+
         local KnobMouseReleased = sldr.Slider.Knob.OnMouseReleased
         function sldr.Slider.Knob:OnMouseReleased(...)
             KnobMouseReleased(self, ...)
