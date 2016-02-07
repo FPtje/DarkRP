@@ -39,7 +39,7 @@ local function MsgDoVote(msg)
     end
 
     function panel:Think()
-        self:SetTitle("Time: " .. tostring(math.Clamp(math.ceil(timeleft - (CurTime() - OldTime)), 0, 9999)))
+        self:SetTitle(DarkRP.getPhrase("time", math.Clamp(math.ceil(timeleft - (CurTime() - OldTime)), 0, 9999)))
         if timeleft - (CurTime() - OldTime) <= 0 then
             panel:Close()
         end
