@@ -137,7 +137,6 @@ end
 function FAdmin.Access.PlayerSetGroup(ply, group)
     if not FAdmin.Access.Groups[group] then return end
     ply = isstring(ply) and FAdmin.FindPlayer(ply) and FAdmin.FindPlayer(ply)[1] or ply
-    local SteamID = type(ply) ~= "string" and IsValid(ply) and ply:SteamID() or ply
 
     if type(ply) ~= "string" and IsValid(ply) then
         ply:SetUserGroup(group)
@@ -145,14 +144,6 @@ function FAdmin.Access.PlayerSetGroup(ply, group)
 end
 
 hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn") -- Remove Garry's usergroup setter.
-
-local oldSetUsergroup = plyMeta.SetUserGroup
-function plyMeta:SetUserGroup(group, ...)
-    -- TODO: Move this call to the function above when the main admin mods have implemented CAMI
-    MySQLite.query("REPLACE INTO FAdmin_PlayerGroup VALUES(" .. MySQLite.SQLStr(self:SteamID()) .. ", " .. MySQLite.SQLStr(group) .. ");")
-
-    return oldSetUsergroup(self, group, ...)
-end
 
 -- Update the database only when an end users indicates that a player's usergroup is to be changed.
 hook.Add("CAMI.PlayerUsergroupChanged", "FAdmin", function(ply, old, new, source)
