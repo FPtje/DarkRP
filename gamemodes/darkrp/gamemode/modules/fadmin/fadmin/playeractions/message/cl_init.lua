@@ -60,6 +60,7 @@ local function MessageGui(ply)
     OK:AlignBottom(20)
     function OK:DoClick()
         frame:Close()
+        if not IsValid(ply) then return end
         RunConsoleCommand("_FAdmin", "Message", ply:SteamID(), MsgType, TextBox:GetValue())
     end
 end
