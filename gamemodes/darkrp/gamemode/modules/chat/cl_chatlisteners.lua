@@ -136,15 +136,15 @@ local function loadChatReceivers()
     DarkRP.addChatReceiver("", DarkRP.getPhrase("talk"), function(ply)
         if GAMEMODE.Config.alltalk then return nil end
 
-        return LocalPlayer():GetPos():Distance(ply:GetPos()) < 250
+        return LocalPlayer():GetPos():DistToSqr(ply:GetPos()) < 62500
     end)
 
     DarkRP.addChatReceiver("/ooc", DarkRP.getPhrase("speak_in_ooc"), function(ply) return true end)
     DarkRP.addChatReceiver("//", DarkRP.getPhrase("speak_in_ooc"), function(ply) return true end)
     DarkRP.addChatReceiver("/a", DarkRP.getPhrase("speak_in_ooc"), function(ply) return true end)
-    DarkRP.addChatReceiver("/w", DarkRP.getPhrase("whisper"), function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 90 end)
-    DarkRP.addChatReceiver("/y", DarkRP.getPhrase("yell"), function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 550 end)
-    DarkRP.addChatReceiver("/me", DarkRP.getPhrase("perform_your_action"), function(ply) return LocalPlayer():GetPos():Distance(ply:GetPos()) < 250 end)
+    DarkRP.addChatReceiver("/w", DarkRP.getPhrase("whisper"), function(ply) return LocalPlayer():GetPos():DistToSqr(ply:GetPos()) < 8100 end)
+    DarkRP.addChatReceiver("/y", DarkRP.getPhrase("yell"), function(ply) return LocalPlayer():GetPos():DistToSqr(ply:GetPos()) < 302500 end)
+    DarkRP.addChatReceiver("/me", DarkRP.getPhrase("perform_your_action"), function(ply) return LocalPlayer():GetPos():DistToSqr(ply:GetPos()) < 62500 end)
     DarkRP.addChatReceiver("/g", DarkRP.getPhrase("talk_to_your_group"), function(ply)
         for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
             if func(LocalPlayer()) and func(ply) then
@@ -169,7 +169,7 @@ local function loadChatReceivers()
     ---------------------------------------------------------------------------*/
     DarkRP.addChatReceiver("speak", DarkRP.getPhrase("speak"), function(ply)
         if not LocalPlayer().DRPIsTalking then return nil end
-        if LocalPlayer():GetPos():Distance(ply:GetPos()) > 550 then return false end
+        if LocalPlayer():GetPos():DistToSqr(ply:GetPos()) > 302500 then return false end
 
         return not GAMEMODE.Config.dynamicvoice or ply:isInRoom()
     end)
