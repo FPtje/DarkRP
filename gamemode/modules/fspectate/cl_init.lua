@@ -113,19 +113,20 @@ local function findNearestPlayer()
     local aimvec = LocalPlayer():GetAimVector()
 
     local foundPly, foundDot = nil, 0
+    local fromPos = isRoaming and roamPos or specEnt:EyePos()
 
     for _, ply in pairs(player.GetAll()) do
         if ply == LocalPlayer() then continue end
 
         local pos = ply:GetShootPos()
-        local dot = (pos - roamPos):GetNormalized():Dot(aimvec)
+        local dot = (pos - fromPos):GetNormalized():Dot(aimvec)
 
         -- Discard players you're not looking at
         if dot < 0.97 then continue end
         -- not a better alternative
         if dot < foundDot then continue end
 
-        local trace = util.QuickTrace(roamPos, pos - roamPos, ply)
+        local trace = util.QuickTrace(fromPos, pos - fromPos, ply)
 
         if trace.Hit then continue end
 
