@@ -1,4 +1,5 @@
 util.AddNetworkString("FSpectate")
+util.AddNetworkString("FSpectateTarget")
 
 local function findPlayer(info)
     if not info or info == "" then return nil end
@@ -22,6 +23,23 @@ local function findPlayer(info)
     return nil
 end
 
+local function startSpectating(ply, target)
+    ply.FSpectatingEnt = target
+    ply.FSpectating = true
+
+    ply:ExitVehicle()
+
+    net.Start("FSpectate")
+        net.WriteBool(target == nil)
+        if IsValid(ply.FSpectatingEnt) then
+            net.WriteEntity(ply.FSpectatingEnt)
+        end
+    net.Send(ply)
+
+    local targetText = IsValid(target) and target:IsPlayer() and (target:Nick() .. " (" .. target:SteamID() .. ")") or IsValid(target) and "an entity" or ""
+    ply:ChatPrint("You are now spectating " .. targetText)
+end
+
 local function Spectate(ply, cmd, args)
     CAMI.PlayerHasAccess(ply, "FSpectate", function(b, _)
         if not b then ply:ChatPrint("No Access!") return end
@@ -29,23 +47,18 @@ local function Spectate(ply, cmd, args)
         local target = findPlayer(args[1])
         if target == ply then ply:ChatPrint("Invalid target!") return end
 
-        ply.FSpectatingEnt = target
-        ply.FSpectating = true
-
-        ply:ExitVehicle()
-
-        net.Start("FSpectate")
-            net.WriteBool(target == nil)
-            if IsValid(ply.FSpectatingEnt) then
-                net.WriteEntity(ply.FSpectatingEnt)
-            end
-        net.Send(ply)
-
-        local targetText = IsValid(target) and (target:Nick() .. " (" .. target:SteamID() .. ")") or ""
-        ply:ChatPrint("You are now spectating " .. targetText)
+        startSpectating(ply, target)
     end)
 end
 concommand.Add("FSpectate", Spectate)
+
+net.Receive("FSpectateTarget", function(_, ply)
+    CAMI.PlayerHasAccess(ply, "FSpectate", function(b, _)
+        if not b then ply:ChatPrint("No Access!") return end
+
+        startSpectating(ply, net.ReadEntity())
+    end)
+end)
 
 local function TPToPos(ply, cmd, args)
     CAMI.PlayerHasAccess(ply, "FSpectateTeleport", function(b, _)
@@ -69,7 +82,7 @@ local function SpectateVisibility(ply, viewEnt)
     if not ply.FSpectating then return end
 
     if IsValid(ply.FSpectatingEnt) then
-        AddOriginToPVS(ply.FSpectatingEnt:GetShootPos())
+        AddOriginToPVS(ply.FSpectatingEnt:IsPlayer() and ply.FSpectatingEnt:GetShootPos() or ply.FSpectatingEnt:GetPos())
     end
 
     if ply.FSpectatePos then
@@ -105,11 +118,12 @@ local function playerVoice(listener, talker)
 
     local canHearLocal, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
 
-    if not IsValid(listener.FSpectatingEnt) then
-        if not DarkRP or not GAMEMODE.Config.voiceradius or not listener.FSpectatePos then return end
+    if not IsValid(listener.FSpectatingEnt) or not listener.FSpectatingEnt:IsPlayer() then
+        local spectatePos = IsValid(listener.FSpectatingEnt) and listener.FSpectatingEnt:GetPos() or listener.FSpectatePos
+        if not DarkRP or not GAMEMODE.Config.voiceradius or not spectatePos then return end
 
         -- Return whether the listener can hear the talker locally or distance smaller than 550
-        return canHearLocal or listener.FSpectatePos:DistToSqr(talker:GetShootPos()) < 302500, surround
+        return canHearLocal or spectatePos:DistToSqr(talker:GetShootPos()) < 302500, surround
     end
 
     -- You can hear someone if your spectate target can hear them
@@ -133,20 +147,26 @@ local function playerSay(talker, message)
     for _, ply in pairs(player.GetAll()) do
         if ply == talker or not ply.FSpectating then continue end
 
-        -- the person is saying it close to where you are roaming
-        if ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 600 and
-            ply:GetShootPos():Distance(talker:GetShootPos()) > 250 then -- Make sure you don't get it twice
+
+        if
+            -- Make sure you don't get it twice
+            ply:GetShootPos():Distance(talker:GetShootPos()) > 250 and
+            (
+                -- the person is saying it close to where you are roaming
+                ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 600 or
+
+                -- The person you're spectating or someone near the person you're spectating is saying it
+                (IsValid(ply.FSpectatingEnt) and ply.FSpectatingEnt:IsPlayer() and
+                talker:GetShootPos():Distance(ply.FSpectatingEnt:GetShootPos()) <= 300) or
+
+                -- Close to the object you're spectating
+                (IsValid(ply.FSpectatingEnt) and not ply.FSpectatingEnt:IsPlayer() and
+                talker:GetPos():Distance(ply.FSpectatingEnt:GetPos()) <= 300
+                )
+            ) then
 
             DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
             return
-        end
-
-        -- The person you're spectating or someone near the person you're spectating is saying it
-        if IsValid(ply.FSpectatingEnt) and
-            talker:GetShootPos():Distance(ply.FSpectatingEnt:GetShootPos()) <= 300 and
-            talker:GetShootPos():Distance(ply:GetShootPos()) > 250 then
-
-            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
         end
     end
 end
