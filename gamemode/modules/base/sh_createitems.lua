@@ -434,7 +434,24 @@ DarkRP.getJobByCommand = function(cmd)
     if not jobByCmd[cmd] then return nil, nil end
     return RPExtraTeams[jobByCmd[cmd]], jobByCmd[cmd]
 end
-plyMeta.getJobTable = function(ply) return RPExtraTeams[ply:Team()] end
+plyMeta.getJobTable = function(ply)
+    local tbl = RPExtraTeams[ply:Team()]
+    -- don't error when the player has not fully joined yet
+    if not tbl and ply.DarkRPInitialised then
+        DarkRP.error(
+            string.format("There is a player with an invalid team!\n\nThe player's name is %s, their team number is \"%s\", which has the name \"%s\"",
+                ply == Entity(0) and "Console" or IsValid(ply) and ply:Nick() or "unknown",
+                ply:Team(),
+                team.GetName(ply:Team())),
+            1,
+            {
+                "It is the server owner's responsibility to figure out why that player has no valid team.",
+                "This error is very likely to be caused by an earlier error. If you don't see any errors in your own console. Look at the server console."
+            }
+        )
+    end
+    return tbl
+end
 local jobCount = 0
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
     local tableSyntaxUsed = not IsColor(colorOrTable)
