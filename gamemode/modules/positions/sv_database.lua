@@ -84,18 +84,18 @@ end
 function DarkRP.storeTeamSpawnPos(t, pos)
     local map = string.lower(game.GetMap())
 
-    MySQLite.query([[DELETE FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND id IN (SELECT id FROM darkrp_jobspawn WHERE team = ]] .. t .. [[)]])
-
-    MySQLite.query([[INSERT INTO darkrp_position(map, type, x, y, z) VALUES(]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
-        , function()
-        MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
-            if not id then return end
-            MySQLite.query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
-            table.insert(teamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
+    DarkRP.removeTeamSpawnPos(t, function()
+        MySQLite.query([[INSERT INTO darkrp_position(map, type, x, y, z) VALUES(]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
+            , function()
+            MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
+                if not id then return end
+                MySQLite.query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. t .. [[);]])
+                table.insert(teamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], team = t})
+            end)
         end)
-    end)
 
-    print(DarkRP.getPhrase("created_spawnpos", team.GetName(t)))
+        print(DarkRP.getPhrase("created_spawnpos", team.GetName(t)))
+    end)
 end
 
 function DarkRP.addTeamSpawnPos(t, pos)
@@ -113,6 +113,12 @@ end
 
 function DarkRP.removeTeamSpawnPos(t, callback)
     local map = string.lower(game.GetMap())
+    for k,v in pairs(teamSpawns) do
+        if tonumber(v.team) == t then
+            teamSpawns[k] = nil
+        end
+    end
+
     MySQLite.query([[SELECT darkrp_position.id FROM darkrp_position
         NATURAL JOIN darkrp_jobspawn
         WHERE map = ]] .. MySQLite.SQLStr(map) .. [[
@@ -123,16 +129,8 @@ function DarkRP.removeTeamSpawnPos(t, callback)
             -- The trigger will make sure the values get deleted from the jobspawn as well
             MySQLite.query([[DELETE FROM darkrp_position WHERE id = ]] .. v.id .. [[;]])
         end
-        MySQLite.commit()
+        MySQLite.commit(callback)
     end)
-
-    for k,v in pairs(teamSpawns) do
-        if tonumber(v.team) == t then
-            teamSpawns[k] = nil
-        end
-    end
-
-    if callback then callback() end
 end
 
 function DarkRP.retrieveTeamSpawnPos(t)
