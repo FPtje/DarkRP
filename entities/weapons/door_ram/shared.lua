@@ -66,7 +66,8 @@ end
 -- Ram action when ramming a door
 local function ramDoor(ply, trace, ent)
     if ply:EyePos():Distance(trace.HitPos) > 45 or (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) then return false end
-
+    local canRam = hook.Run("canRamDoor", self, ent)
+    if canRam then return canRam end
     local allowed = false
 
     -- if we need a warrant to get in
