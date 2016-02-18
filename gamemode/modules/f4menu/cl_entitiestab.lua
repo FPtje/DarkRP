@@ -14,23 +14,19 @@ function PANEL:Rebuild()
     local lHeight, rHeight = 0, 0
     local height = 0
     local k = 0
+    local visibleCount = 0
     local lastVisible = 0
     for i, item in pairs(self.Items) do
-        if item:IsVisible() then lastVisible = i end
+        if item:IsVisible() then
+            visibleCount = visibleCount + 1
+            lastVisible = i
+        end
     end
 
     for i, item in pairs(self.Items) do
         if not item:IsVisible() then continue end
         k = k + 1
         local goRight = k % 2 == 0
-
-        -- Make last item stretch if it's the first and last
-        if k == lastVisible and k == 1 then
-            item:SetWide(self:GetWide())
-            item:SetPos(0, lHeight)
-            lHeight = lHeight + item:GetTall() + 2
-            break
-        end
 
         item:SetWide(self:GetWide() / 2 - 10)
         local x = goRight and self:GetWide() / 2 or 0
@@ -39,6 +35,12 @@ function PANEL:Rebuild()
         rHeight = goRight and rHeight + item:GetTall() + 2 or rHeight
         lHeight = goRight and lHeight or lHeight + item:GetTall() + 2
     end
+
+    -- Make the category stretch if it's the only one
+    if visibleCount == 1 then
+        self.Items[lastVisible]:SetWide(self:GetWide())
+    end
+
     height = math.max(lHeight, rHeight)
     self:GetCanvas():SetTall(height)
 end
