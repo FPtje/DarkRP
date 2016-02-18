@@ -546,6 +546,7 @@ local function initPlayer(ply)
     ply.LastVoteCop = CurTime() - 61
 
     ply:SetTeam(GAMEMODE.DefaultTeam)
+    ply.DarkRPInitialised = true
 
     -- Whether or not a player is being prevented from joining
     -- a specific team for a certain length of time
