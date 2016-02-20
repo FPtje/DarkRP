@@ -440,6 +440,7 @@ function setUpGroupDoors()
                 continue
             end
 
+            if not RPExtraTeamDoorIDs[row.doorgroup] then continue end
             ent:setDoorGroup(row.doorgroup)
         end
     end)
