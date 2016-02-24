@@ -158,8 +158,10 @@ function initialize(config)
     if MySQLite_config.EnableMySQL then
         connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
     else
-        GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
-        hook.Call("DatabaseInitialized", GAMEMODE)
+        timer.Simple(0, function()
+            GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
+            hook.Call("DatabaseInitialized", GAMEMODE)
+        end)
     end
 end
 
