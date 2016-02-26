@@ -143,7 +143,7 @@ local function warrantCommand(ply, args)
 
     local canRequest, message = hook.Call("canRequestWarrant", DarkRP.hooks, target, ply, reason)
     if not canRequest then
-        DarkRP.notify(ply, 1, 4, message)
+        if message then DarkRP.notify(ply, 1, 4, message) end
         return ""
     end
 
@@ -176,7 +176,7 @@ local function wantedCommand(ply, args)
 
     local canWanted, message = hook.Call("canWanted", DarkRP.hooks, target, ply, reason)
     if not canWanted then
-        DarkRP.notify(ply, 1, 4, message)
+        if message then DarkRP.notify(ply, 1, 4, message) end
         return ""
     end
 
@@ -191,7 +191,7 @@ local function unwantedCommand(ply, args)
 
     local canUnwant, message = hook.Call("canUnwant", DarkRP.hooks, target, ply)
     if not canUnwant then
-        DarkRP.notify(ply, 1, 4, message)
+        if message then DarkRP.notify(ply, 1, 4, message) end
         return ""
     end
 
