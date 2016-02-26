@@ -22,7 +22,7 @@ function ENT:Use(activator,caller)
     self.USED = true
     local amount = self:Getamount()
 
-    hook.Call("playerPickedUpMoney", nil, activator, amount or 0)
+    hook.Call("playerPickedUpMoney", nil, activator, amount or 0, self)
 
     activator:addMoney(amount or 0)
     DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_money", DarkRP.formatMoney(self:Getamount())))
@@ -54,3 +54,28 @@ function ENT:StartTouch(ent)
         timer.Adjust("RemoveEnt" .. self:EntIndex(), GAMEMODE.Config.moneyRemoveTime, 1, fn.Partial(SafeRemoveEntity, self))
     end
 end
+
+DarkRP.hookStub{
+    name = "playerPickedUpMoney",
+    description = "Called when a player picked up money.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player who picked up the money.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "The amount of money picked up.",
+            type = "number"
+        },
+        {
+            name = "entity",
+            description = "The entity of the money picked up itself.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+    realm = "Server"
+}

@@ -160,7 +160,8 @@ local function DropMoney(ply, args)
         trace.filter = ply
 
         local tr = util.TraceLine(trace)
-        DarkRP.createMoneyBag(tr.HitPos, amount)
+        local moneybag = DarkRP.createMoneyBag(tr.HitPos, amount)
+        hook.Call("playerDroppedMoney", nil, ply, amount, moneybag)
         DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has dropped " .. DarkRP.formatMoney(amount))
     end)
 
@@ -210,9 +211,11 @@ local function CreateCheque(ply, args)
             Cheque:SetPos(tr.HitPos)
             Cheque:Setowning_ent(ply)
             Cheque:Setrecipient(recipient)
-
-            Cheque:Setamount(math.Min(amount, 2147483647))
+            
+            local min_amount = math.Min(amount, 2147483647)
+            Cheque:Setamount(min_amount)
             Cheque:Spawn()
+            hook.Call("playerDroppedCheque", nil, ply, recipient, min_amount, Cheque)
         else
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/cheque", ""))
         end
@@ -286,3 +289,58 @@ local function ccAddMoney(ply, args)
     end
 end
 DarkRP.definePrivilegedChatCommand("addmoney", "DarkRP_SetMoney", ccAddMoney)
+
+DarkRP.hookStub{
+    name = "playerDroppedMoney",
+    description = "Called when a player drops some money.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player who dropped the money.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "The amount of money dropped.",
+            type = "number"
+        },
+        {
+            name = "entity",
+            description = "The entity of the money that was dropped.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+    realm = "Server"
+}
+
+DarkRP.hookStub{
+    name = "playerDroppedCheque",
+    description = "Called when a player drops a cheque.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player who dropped the cheque.",
+            type = "Player"
+        },
+        {
+            name = "player",
+            description = "The player the cheque was written to.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "The amount of money the cheque has.",
+            type = "number"
+        },
+        {
+            name = "entity",
+            description = "The entity of the cheque that was dropped.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+    realm = "Server"
+}
