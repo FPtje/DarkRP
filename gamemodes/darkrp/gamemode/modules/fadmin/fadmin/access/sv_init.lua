@@ -170,11 +170,6 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
             -- An end user changed the usergroup. Register with CAMI
             CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), "superadmin", "FAdmin")
 
-            -- TODO: Remove this when ULX implements CAMI ;)
-            if ULib and ULib.ucl and ULib.ucl.groups and ULib.ucl.groups["superadmin"] then --Add to ULX
-                ULib.ucl.addUser(target:SteamID(), nil, nil, "superadmin")
-            end
-
             FAdmin.Messages.SendMessage(ply, 2, "User set to superadmin!")
         end
     end

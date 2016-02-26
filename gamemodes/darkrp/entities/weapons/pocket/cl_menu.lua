@@ -30,7 +30,7 @@ function DarkRP.openPocketMenu()
     if frame and frame:IsValid() and frame:IsVisible() then return end
     if LocalPlayer():GetActiveWeapon():GetClass() ~= "pocket" then return end
     if not pocket then pocket = {} return end
-    if #pocket <= 0 then return end
+    if table.Count(pocket) == 0 then return end
     frame = vgui.Create("DFrame")
 
     frame:SetTitle(DarkRP.getPhrase("drop_item"))

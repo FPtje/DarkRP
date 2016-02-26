@@ -74,7 +74,6 @@ for _, folder in SortedPairs(folders, true) do
     end
 end
 
-MySQLite.initialize()
 
 DarkRP.DARKRP_LOADING = true
 include("config/jobrelated.lua")
@@ -85,3 +84,4 @@ DarkRP.DARKRP_LOADING = nil
 DarkRP.finish()
 
 hook.Call("DarkRPFinishedLoading", GM)
+MySQLite.initialize()
