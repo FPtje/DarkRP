@@ -6,13 +6,14 @@ local file = file
 local hook = hook
 local include = include
 local isfunction = isfunction
+local isstring = isstring
 local math = math
 local os = os
-local pcall = pcall
 local string = string
 local table = table
 local tonumber = tonumber
 local unpack = unpack
+local xpcall = xpcall
 
 -- Template for syntax errors
 -- The [ERROR] start of it cannot be removed, because that would make the
@@ -343,7 +344,8 @@ local runErrs = {
 module("simplerr")
 
 -- Get a nicely formatted stack trace. Start is where to start numbering
-local function getStack(i, start)
+-- stackMod allows the caller to modify the stack before it is numbered
+local function getStack(i, start, stackMod)
     i = i or 1
     start = start or 1
     local stack = {}
@@ -353,7 +355,21 @@ local function getStack(i, start)
         local info = debug.getinfo(i + count, "Sln")
         if not info then break end
 
-        table.insert(stack, string.format("\t%i. %s on line %s", start + count - 1, info.short_src, info.currentline or "unknown"))
+        local line = info.currentline or "unknown"
+        if line == -1 and info.name then
+            table.insert(stack, string.format("function '%s'", info.name))
+        else
+            table.insert(stack, string.format("%s on line %s", info.short_src, line))
+        end
+    end
+
+    -- Allow modification of the stack
+    if stackMod then stack = stackMod(stack) end
+
+    -- add the numbering
+    for count = 1, #stack do
+        local stackLevel = start + count - 1
+        stack[count] = string.format("\t%i. %s", stackLevel, stack[count])
     end
 
     return table.concat(stack, "\n")
@@ -367,7 +383,7 @@ function runError(msg, stackNr, hints, path, line, stack)
     hints = "\t- " .. table.concat(hints, "\n\t- ")
 
     if not path and not line then
-        local info = debug.getinfo(stackNr + 1, "Sln")
+        local info = debug.getinfo(stackNr + 1, "Sln") or debug.getinfo(stackNr, "Sln")
         path = info.short_src
         line = info.currentline
     end
@@ -407,30 +423,60 @@ local function translateError(path, err, translation, errs, stack)
     return res
 end
 
--- Call a function and catch immediate runtime errors
-function safeCall(f, ...)
-    local res = {pcall(f, ...)}
-    local succ, err = res[1], res[2]
 
-    if succ then return unpack(res) end
+-- safeCall uses xpcall, which has the downside that both xpcall and
+-- the safeCall function itself end up in the stack trace.
+-- This function removes them from the stack trace
+local function removeXpcall(stack)
+    for i = #stack, 1, -1 do
+        if stack[i] == "function 'xpcall'" then
+            table.remove(stack, i)
+            table.remove(stack, i) -- also remove the simplerr safeCall call
 
-    local info = debug.getinfo(f)
-    local path = info.short_src
+            return stack
+        end
+    end
+
+    return stack
+end
+
+-- Used as the error handler in safeCall
+local function errorHandler(err, func)
+    local debugInfo = debug.getinfo(func or 3)
+    local path = debugInfo.short_src
 
     -- Investigate the stack. Not using path in match because calls to error can give a different path
     local line = string.match(err, ".*:([0-9-]+)")
-    local stack = string.format("\t1. %s on line %s\n", path, line) .. getStack(2, 2) -- add called func to stack
+    local stack = string.format("\t1. %s on line %s\n", path, line) .. getStack(func and 3 or 4, 2, removeXpcall) -- add called func to stack
 
     -- Line and source info aren't always in the error
     if not line then
-        line = info.currentline
+        line = debugInfo.currentline
         err = string.format("%s:%s: %s", path, line, err)
     end
 
+    return {err, path, stack}
+end
+
+-- Call a function and catch immediate runtime errors
+function safeCall(f, ...)
+    -- Use xpcall so fetching of debug info is in the stack of the error rather than after it is unwound
+    local res = {xpcall(f, errorHandler, ...)}
+
+    local succ, errInfo = res[1], res[2]
+
+    if succ then return unpack(res) end
+
+    -- This will only happen if the error is "not enough memory" or "error in error handling".
+    -- The former tends to crash the game and the latter will mean it'll probably error in the next line.
+    -- But we will try anyway.
+    -- Note: stack trace will be less accurate.
+    if isstring(errInfo) then errInfo = errorHandler(errInfo, f) end
+
     -- Skip translation if the error is already a simplerr error
     -- This prevents nested simplerr errors when runError is called by a file loaded by runFile
-    local mustTranslate = not string.find(err, "------- End of Simplerr error -------")
-    return false, mustTranslate and translateError(path, err, runErrTranslation, runErrs, stack) or err
+    local mustTranslate = not string.find(errInfo[1], "------- End of Simplerr error -------")
+    return false, mustTranslate and translateError(errInfo[2], errInfo[1], runErrTranslation, runErrs, errInfo[3]) or errInfo[1]
 end
 
 -- Run a file or explain its syntax errors in layman's terms
@@ -447,11 +493,11 @@ function runFile(path)
     -- Catch syntax errors with CompileString
     local err = CompileString(contents, path, false)
 
-	-- CompileString returns the following string whenever a file is empty: Invalid script - or too short.
-	--		It also prints: Not running script <path> - it's too short.
-	-- If so, do nothing.
-	if err == "Invalid script - or too short." then return true end	
-	
+    -- CompileString returns the following string whenever a file is empty: Invalid script - or too short.
+    --		It also prints: Not running script <path> - it's too short.
+    -- If so, do nothing.
+    if err == "Invalid script - or too short." then return true end
+
     -- No syntax errors, check for immediate runtime errors using CompileFile
     -- Using the function CompileString returned leads to relative path trouble
     if isfunction(err) then return safeCall(CompileFile(path), path) end
