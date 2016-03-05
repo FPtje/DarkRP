@@ -428,8 +428,8 @@ end
 -- the safeCall function itself end up in the stack trace.
 -- This function removes them from the stack trace
 local function removeXpcall(stack)
-    for i = #stack, 1, -1 do
-        if stack[i] == "function 'xpcall'" then
+    for i = #stack - 1, 1, -1 do
+        if stack[i] == "function 'xpcall'" and string.find(stack[i + 1], "simplerr") then
             table.remove(stack, i)
             table.remove(stack, i) -- also remove the simplerr safeCall call
 
