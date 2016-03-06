@@ -33,26 +33,21 @@ end
 local function addLaw(inLaw)
     local law = DarkRP.textWrap(inLaw, "TargetID", 522)
 
-    Laws[#Laws + 1] = law
+    local lawNumber = table.insert(Laws, law)
+    hook.Run("addLaw", lawNumber, inLaw)
 end
 
 local function umAddLaw(um)
     local law = um:ReadString()
     timer.Simple(0, fn.Curry(addLaw, 2)(law))
-    hook.Run("addLaw", #Laws + 1, law)
 end
 usermessage.Hook("DRP_AddLaw", umAddLaw)
 
 local function umRemoveLaw(um)
     local i = um:ReadShort()
 
-    hook.Run("removeLaw", i, Laws[i])
-
-    while i < #Laws do
-        Laws[i] = Laws[i + 1]
-        i = i + 1
-    end
-    Laws[i] = nil
+    local removed = table.remove(Laws, i)
+    hook.Run("removeLaw", i, removed)
 end
 usermessage.Hook("DRP_RemoveLaw", umRemoveLaw)
 
