@@ -38,7 +38,7 @@ The best help I can give you is this:
 Hints:
 %s
 
-The responsibility for this error lies with (the authors of) one (or more) of these files:
+The responsibility for the error above lies with (the authors of) one (or more) of these files:
 %s
 ------- End of Simplerr error -------
 ]=]
