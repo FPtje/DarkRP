@@ -140,7 +140,7 @@ function DarkRP.lockdown(ply)
     end
 
     if not GAMEMODE.Config.lockdown then
-        show(ply, 1, 4, DarkRP.getPhrase("disabled", "lockdown", ""))
+        show(DarkRP.getPhrase("disabled", "lockdown", ""))
         return ""
     end
 
