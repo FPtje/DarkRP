@@ -131,22 +131,22 @@ function DarkRP.lockdown(ply)
     local show = ply:EntIndex() == 0 and print or fp{DarkRP.notify, ply, 1, 4}
     if GetGlobalBool("DarkRP_LockDown") then
         show(DarkRP.getPhrase("unable", "/lockdown", DarkRP.getPhrase("stop_lockdown")))
-        return ""
+        return
     end
 
     if ply:EntIndex() ~= 0 and not ply:isMayor() then
         show(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
-        return ""
+        return
     end
 
     if not GAMEMODE.Config.lockdown then
         show(DarkRP.getPhrase("disabled", "lockdown", ""))
-        return ""
+        return
     end
 
     if lastLockdown > CurTime() - GAMEMODE.Config.lockdowndelay then
         show(DarkRP.getPhrase("wait_with_that"))
-        return ""
+        return
     end
 
     for _, v in pairs(player.GetAll()) do
@@ -157,7 +157,7 @@ function DarkRP.lockdown(ply)
     SetGlobalBool("DarkRP_LockDown", true)
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
 
-    return ""
+    return true
 end
 DarkRP.defineChatCommand("lockdown", DarkRP.lockdown)
 
