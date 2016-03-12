@@ -27,7 +27,7 @@ end
 local disallowedNames = {["ooc"] = true, ["shared"] = true, ["world"] = true, ["world prop"] = true}
 function GM:CanChangeRPName(ply, RPname)
     if disallowedNames[string.lower(RPname)] then return false, "Forbidden name." end
-    if not string.match(RPname, "^[a-zA-Z0-9 ]+$") then return false, "Illegal characters." end
+    if not string.match(RPname, "^[a-zA-Zа-яА-Я0-9 ]+$") then return false, "Illegal characters." end
 
     local len = string.len(RPname)
     if len > 30 then return false, "Too long." end

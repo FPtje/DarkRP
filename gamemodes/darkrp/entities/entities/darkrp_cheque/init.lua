@@ -28,12 +28,15 @@ function ENT:Use(activator, caller)
         owner = (IsValid(owner) and owner:Nick()) or DarkRP.getPhrase("disconnected_player")
         DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("found_cheque", DarkRP.formatMoney(amount), "", owner))
         activator:addMoney(amount)
+        hook.Call("playerPickedUpCheque", nil, activator, recipient, amount or 0, true, self)
         self:Remove()
     elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then
         DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_details", recipient:Name()))
+        hook.Call("playerPickedUpCheque", nil, activator, recipient, amount or 0, false, self)
     elseif IsValid(owner) and owner == activator then
         DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_torn"))
         owner:addMoney(self:Getamount()) -- return the money on the cheque to the owner.
+        hook.Call("playerToreUpCheque", nil, activator, recipient, amount, self)
         self:Remove()
     elseif not IsValid(recipient) then self:Remove()
     end
@@ -69,3 +72,68 @@ function ENT:onPlayerDisconnected(ply)
         self:Remove()
     end
 end
+
+DarkRP.hookStub{
+    name = "playerPickedUpCheque",
+    description = "Called when a player picks up a cheque.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player who attempted to pick up the cheque.",
+            type = "Player"
+        },
+        {
+            name = "player",
+            description = "The player who the cheque was written to.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "The amount of money the cheque has.",
+            type = "number"
+        },
+        {
+            name = "success",
+            description = "Whether the player was allowed to cash the cheque.",
+            type = "bool"
+        },
+        {
+            name = "entity",
+            description = "The entity of the cheque.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+    realm = "Server"
+}
+
+DarkRP.hookStub{
+    name = "playerToreUpCheque",
+    description = "Called when a player tears up a cheque.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player who tore up the cheque.",
+            type = "Player"
+        },
+        {
+            name = "player",
+            description = "The player who the cheque was written to.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "The amount of money the cheque has.",
+            type = "number"
+        },
+        {
+            name = "entity",
+            description = "The entity of the cheque.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+    realm = "Server"
+}

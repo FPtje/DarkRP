@@ -190,7 +190,7 @@ end
 function FPP.recalculateCanTouch(players, entities)
     for k,v in pairs(entities) do
         if not IsValid(v) then entities[k] = nil continue end
-        if v:GetSolid() == 0 or v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
+        if v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
         if blockedEnts[v:GetClass()] then entities[k] = nil continue end
     end
 
@@ -370,7 +370,7 @@ On entity removed
 function FPP.RecalculateConstrainedEntities(players, entities)
     for i, ent in pairs(entities) do
         if not IsValid(ent) then entities[i] = nil continue end
-        if ent:GetSolid() == 0 or ent:IsEFlagSet(EFL_SERVER_ONLY) then entities[i] = nil continue end
+        if ent:IsEFlagSet(EFL_SERVER_ONLY) then entities[i] = nil continue end
         if blockedEnts[ent:GetClass()] then entities[i] = nil continue end
 
         ent.FPPRestrictConstraint = ent.FPPRestrictConstraint or {}
@@ -388,6 +388,7 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 
         for _, ent in pairs(entities) do
             if discovered[ent] then continue end -- We've seen this ent in a graph
+            ent.FPPCanTouch = ent.FPPCanTouch or {}
             ent.FPPCanTouch[ply] = ent.FPPCanTouch[ply] or 0
 
             local left, right = 1, 2

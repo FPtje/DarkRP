@@ -25,18 +25,27 @@ DarkRP.error = fc{
 
 -- Print errors from the server in the console and show a message in chat
 if CLIENT then
-    net.Receive("DarkRP_simplerrError", function()
-        local count = net.ReadUInt(16)
-
+    local function showError(count, errs)
         local one = count == 1
         chat.AddText(Color(255, 0, 0), string.format("There %s %i Lua problem%s!", one and "is" or "are", count, one and "" or 's'))
         chat.AddText(Color(255, 255, 255), "\tPlease check your console for more information!")
 
         for i = 1, count do
-            local err = net.ReadString()
-            MsgC(Color(137, 222, 255), err .. "\n")
+            MsgC(Color(137, 222, 255), errs[i] .. "\n")
         end
+    end
+
+    net.Receive("DarkRP_simplerrError", function()
+        local count = net.ReadUInt(16)
+        local errs = {}
+
+        for i = 1, count do
+            table.insert(errs, net.ReadString())
+        end
+
+        showError(count, errs)
     end)
+    hook.Add("onSimplerrError", "DarkRP_Simplerr", function(err) showError(1, {err}) end)
 
     return
 end

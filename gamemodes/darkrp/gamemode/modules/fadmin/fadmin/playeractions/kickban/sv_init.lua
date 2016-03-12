@@ -177,7 +177,7 @@ local function Ban(ply, cmd, args)
 
             local TimeText = FAdmin.PlayerActions.ConvertBanTime(time)
 
-            if type(target) ~= "string" and  IsValid(target) then
+            if type(target) ~= "string" and IsValid(target) then
                 for k,v in pairs(StartBannedUsers) do
                     if v == target:SteamID() then
                         table.remove(StartBannedUsers, k)
@@ -188,9 +188,7 @@ local function Ban(ply, cmd, args)
                 SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
 
                 Reason = string.gsub(Reason, ";", " ")
-
-                game.ConsoleCommand("banid " .. time .. " " .. target:SteamID() .. "\n")
-                game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), " banned by " .. nick .. " for " .. TimeText .. " (" .. Reason .. ")"))
+                target:Kick("banned by " .. nick .. " for " .. TimeText .. " (" .. Reason .. ")")
             else
                 for k,v in pairs(StartBannedUsers) do
                     if v == args[1] then
@@ -200,7 +198,6 @@ local function Ban(ply, cmd, args)
                 end
 
                 SaveBan(target, nil, time, Reason ~= "" and Reason, ply.Nick and ply:Nick() or "console", ply.SteamID and ply:SteamID() or "Console") -- Again default to one hour
-                game.ConsoleCommand("banid " .. time .. " " .. target .. "\n")
             end
             ply.FAdminKickReason = nil
         end
@@ -282,13 +279,33 @@ hook.Add("DarkRPDBInitialized", "FAdmin_Retrievebans", function()
                 continue
             end
 
-            if v.time == 0 then
-                game.ConsoleCommand("banid 0 " .. k .. "\n")
-            else
-                game.ConsoleCommand("banid " .. (v.time - os.time()) / 60 .. " " .. k .. "\n")
-            end
             hook.Call("FAdmin_StoreBan", nil, string.upper(k), v.name, (v.time - os.time()) / 60, v.reason, v.adminname, v.adminsteam)
         end
         file.Delete("FAdmin/Bans.txt", "DATA")
+    end
+end)
+
+local function canJoin(steamID)
+    local ban = FAdmin.BANS[string.upper(steamID)]
+
+    if not ban then return end
+
+    if ban.time ~= 0 and ban.time < os.time() then
+        FAdmin.BANS[string.upper(steamID)] = nil
+        return
+    end
+
+    local timeText = FAdmin.PlayerActions.ConvertBanTime((ban.time - os.time()) / 60)
+
+    return false, "banned by " .. (ban.adminname or "<Unknown>") .. " for " .. timeText .. " (" .. (ban.reason or "no reason") .. ")"
+end
+hook.Add("CheckPassword", "FAdmin_Bans", fc{canJoin, util.SteamIDFrom64})
+
+-- When the bans haven't loaded yet, or when the player passes
+-- CheckPassword when banned, they'll be caught on InitialSpawn
+hook.Add("PlayerInitialSpawn", "FAdmin_Bans", function(ply)
+    local allowedIn, reason = canJoin(ply:SteamID())
+    if allowedIn == false then
+        ply:Kick(reason)
     end
 end)
