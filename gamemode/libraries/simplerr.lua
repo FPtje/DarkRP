@@ -413,16 +413,28 @@ local function translateMsg(msg, path, line, errs)
 end
 
 -- Translate an error into a language understandable by non-programmers
-local function translateError(path, err, translation, errs, stack)
+local function translateError(path, line, err, translation, errs, stack)
     -- Using .* instead of path because path may be wrong when error is called
-    local line, msg = string.match(err, ".*:([0-9-]+): (.*)")
-    line = tonumber(line)
+    local msg = string.match(err, ".*:[0-9-]+: (.*)")
 
     local msg, hints = translateMsg(msg, path, line, errs)
     local res = string.format(translation, path, line, msg, hints, stack)
     return res
 end
 
+
+-- Trims the [C] functions at the beginning of the stack
+local function trimStart(stack)
+    while true do
+        if string.StartWith(stack[1], "function ") then
+            table.remove(stack, 1)
+        else
+            break
+        end
+    end
+
+    return stack
+end
 
 -- safeCall uses xpcall, which has the downside that both xpcall and
 -- the safeCall function itself end up in the stack trace.
@@ -440,22 +452,23 @@ local function removeXpcall(stack)
     return stack
 end
 
+-- Combines the two above functions
+local function stackModAggregate(stack)
+    stack = trimStart(stack)
+    return removeXpcall(stack)
+end
+
 -- Used as the error handler in safeCall
 local function errorHandler(err, func)
-    local debugInfo = debug.getinfo(func or 3)
-    local path = debugInfo.short_src
+    -- Investigate the stack. Not using err matching because calls to error can give a different path and line
+    local stack = getStack(func and 1 or 2, 1, stackModAggregate) -- add called func to stack
 
-    -- Investigate the stack. Not using path in match because calls to error can give a different path
-    local line = string.match(err, ".*:([0-9-]+)")
-    local stack = string.format("\t1. %s on line %s\n", path, line) .. getStack(func and 3 or 4, 2, removeXpcall) -- add called func to stack
+    -- Fetch the path and line number from the top of the stack
+    local firstLine = string.sub(stack, 1, string.match(stack, "()\n") - 1)
+    local path, line = string.match(firstLine, "\t[0-9-]+%. (.*) on line ([0-9-]+)")
+    line = tonumber(line)
 
-    -- Line and source info aren't always in the error
-    if not line then
-        line = debugInfo.currentline
-        err = string.format("%s:%s: %s", path, line, err)
-    end
-
-    return {err, path, stack}
+    return {err, path, line, stack}
 end
 
 -- Call a function and catch immediate runtime errors
@@ -476,7 +489,7 @@ function safeCall(f, ...)
     -- Skip translation if the error is already a simplerr error
     -- This prevents nested simplerr errors when runError is called by a file loaded by runFile
     local mustTranslate = not string.find(errInfo[1], "------- End of Simplerr error -------")
-    return false, mustTranslate and translateError(errInfo[2], errInfo[1], runErrTranslation, runErrs, errInfo[3]) or errInfo[1]
+    return false, mustTranslate and translateError(errInfo[2], errInfo[3], errInfo[1], runErrTranslation, runErrs, errInfo[4]) or errInfo[1]
 end
 
 -- Run a file or explain its syntax errors in layman's terms
@@ -494,7 +507,7 @@ function runFile(path)
     local err = CompileString(contents, path, false)
 
     -- CompileString returns the following string whenever a file is empty: Invalid script - or too short.
-    --		It also prints: Not running script <path> - it's too short.
+    -- It also prints: Not running script <path> - it's too short.
     -- If so, do nothing.
     if err == "Invalid script - or too short." then return true end
 
@@ -502,7 +515,11 @@ function runFile(path)
     -- Using the function CompileString returned leads to relative path trouble
     if isfunction(err) then return safeCall(CompileFile(path), path) end
 
-    return false, translateError(path, err, synErrTranslation, synErrs)
+    -- Fetch the line number from the error
+    local line = string.match(err, ".*:([0-9-]+): .*")
+    line = tonumber(line)
+
+    return false, translateError(path, line, err, synErrTranslation, synErrs)
 end
 
 -- Error wrapper: decorator for runFile and safeCall that throws an error on failure.
