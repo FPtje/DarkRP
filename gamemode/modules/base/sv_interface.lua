@@ -69,7 +69,7 @@ DarkRP.retrievePlayerData = DarkRP.stub{
             optional = false
         },
         {
-            name = "callback",
+            name = "failure",
             description = "The function that is called when the information cannot be retrieved.",
             type = "function",
             optional = false
@@ -97,7 +97,7 @@ DarkRP.offlinePlayerData = DarkRP.stub{
             optional = false
         },
         {
-            name = "callback",
+            name = "failure",
             description = "The function that is called when the information cannot be retrieved.",
             type = "function",
             optional = false
