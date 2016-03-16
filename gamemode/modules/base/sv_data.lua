@@ -238,8 +238,8 @@ end
 
 function DarkRP.offlinePlayerData(steamid, callback, failed)
     steamid = steamid:upper()
-    if !steamid:find( "^STEAM_%d:%d:%d+$" ) then failed() return end
-    local uniqueid = util.CRC( "gm_" .. steamid .. "_gm" )
+    if not steamid:find("^STEAM_%d:%d:%d+$") then failed() return end
+    local uniqueid = util.CRC("gm_" .. steamid .. "_gm")
 
     MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(uniqueid), MySQLite.SQLStr(steamid)))
 
