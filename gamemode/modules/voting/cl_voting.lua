@@ -20,6 +20,8 @@ local function MsgDoVote(msg)
     panel:SetSize(140, 140)
     panel:SetSizable(false)
     panel.btnClose:SetVisible(false)
+    panel.btnMaxim:SetVisible(false)
+    panel.btnMinim:SetVisible(false)
     panel:SetDraggable(false)
     function panel:Close()
         PanelNum = PanelNum - 140
@@ -62,7 +64,7 @@ local function MsgDoVote(msg)
     label:SizeToContents()
     label:SetVisible(true)
 
-    local nextHeight = label:GetTall() > 78 and label:GetTall() - 78 or 0 -- make panel taller for divider and buttons
+    local nextHeight = label:GetTall() > 78 and label:GetTall() - 78 or 0 -- Make panel taller for divider and buttons
     panel:SetTall(panel:GetTall() + nextHeight)
 
     local divider = vgui.Create("Divider")
@@ -120,10 +122,12 @@ local function MsgDoQuestion(msg)
     local OldTime = CurTime()
     LocalPlayer():EmitSound("Town.d1_town_02_elevbell1", 100, 100)
     local panel = vgui.Create("DFrame")
-    panel:SetPos(3 + PanelNum, ScrH() / 2 - 50) --Times 140 because if the quesion is the second screen, the first screen is always a vote screen.
+    panel:SetPos(3 + PanelNum, ScrH() / 2 - 50) -- Times 140 because if the question is the second screen, the first screen is always a vote screen.
     panel:SetSize(300, 140)
     panel:SetSizable(false)
     panel.btnClose:SetVisible(false)
+    panel.btnMaxim:SetVisible(false)
+    panel.btnMinim:SetVisible(false)
     panel:SetKeyboardInputEnabled(false)
     panel:SetMouseInputEnabled(true)
     panel:SetVisible(true)

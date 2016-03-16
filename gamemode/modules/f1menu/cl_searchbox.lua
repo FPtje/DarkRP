@@ -6,15 +6,18 @@ function PANEL:Init()
     self.BaseClass.Init(self)
     self.F1Down = true
     self:SetFont("DarkRPHUD2")
-    self:SetTextColor(Color(255,255,255,255))
-    self:SetCursorColor(Color(255,255,255,255))
 
     self.lblSearch = vgui.Create("DLabel", self)
     self.lblSearch:SetFont("DarkRPHUD2")
-    self.lblSearch:SetColor(Color(200, 200, 200, 200))
     self.lblSearch:SetText(DarkRP.getPhrase("f1Search"))
     self.lblSearch:SizeToContents()
     self.lblSearch:SetPos(5)
+
+    if GAMEMODE.Config.DarkRPSkin == "DarkRP" then
+        self:SetTextColor(Color(255,255,255,255))
+        self:SetCursorColor(Color(255,255,255,255))
+        self.lblSearch:SetColor(Color(200, 200, 200, 200))
+    end
 end
 
 function PANEL:OnLoseFocus()
