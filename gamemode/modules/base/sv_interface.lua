@@ -67,10 +67,43 @@ DarkRP.retrievePlayerData = DarkRP.stub{
             description = "The function that receives the information.",
             type = "function",
             optional = false
+        },
+        {
+            name = "callback",
+            description = "The function that is called when the information cannot be retrieved.",
+            type = "function",
+            optional = false
         }
     },
     returns = {
     },
+    metatable = DarkRP
+}
+
+DarkRP.offlinePlayerData = DarkRP.stub{
+    name = "offlinePlayerData",
+    description = "Get a player's information from the database using a SteamID for use when the player is offline.",
+    parameters = {
+        {
+            name = "steamid",
+            description = "The SteamID of the player to get the data for.",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "callback",
+            description = "The function that receives the information.",
+            type = "function",
+            optional = false
+        },
+        {
+            name = "callback",
+            description = "The function that is called when the information cannot be retrieved.",
+            type = "function",
+            optional = false
+        }
+    },
+    returns = {},
     metatable = DarkRP
 }
 
