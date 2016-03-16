@@ -237,9 +237,9 @@ function DarkRP.retrieveRPNames(name, callback)
 end
 
 function DarkRP.offlinePlayerData(steamid, callback, failed)
-    local split = string.Explode(":",steamid:gsub("STEAM_",""))
-    if (not split[1] or not split[2] or not split[3]) then failed() return end
-    local uniqueid = util.CRC("gm_STEAM_" .. split[1] .. ":" .. split[2] .. ":" .. split[3] .. "_gm")
+    steamid = steamid:upper()
+    if !steamid:find( "^STEAM_%d:%d:%d+$" ) then failed() return end
+    local uniqueid = util.CRC( "gm_" .. steamid .. "_gm" )
 
     MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(uniqueid), MySQLite.SQLStr(steamid)))
 
