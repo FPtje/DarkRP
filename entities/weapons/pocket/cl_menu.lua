@@ -34,6 +34,8 @@ function DarkRP.openPocketMenu()
     frame = vgui.Create("DFrame")
 
     frame:SetTitle(DarkRP.getPhrase("drop_item"))
+    frame.btnMaxim:SetVisible(false)
+    frame.btnMinim:SetVisible(false)
     frame:SetVisible(true)
     frame:MakePopup()
 
