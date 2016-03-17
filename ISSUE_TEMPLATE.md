@@ -1,6 +1,7 @@
 
-[//]: # (Github is not the place to ask for help or just to ask questions.)
-[//]: # (That's what the forums (http://forum.darkrp.com/) are for instead.)
+[//]: # (DO NOT REMOVE THIS TEMPLATE.)
+[//]: # (GITHUB ISSUES ARE **NOT** FOR HELP)
+[//]: # (GO TO THE FORUMS INSTEAD: http://forum.darkrp.com/ )
 
 ### Description of the bug
 [//]: # (Describe the issue as accurately as possible)
