@@ -236,6 +236,16 @@ function DarkRP.retrieveRPNames(name, callback)
     end)
 end
 
+function DarkRP.offlinePlayerData(steamid, callback, failed)
+    steamid = steamid:upper()
+    if not steamid:find("^STEAM_%d:%d:%d+$") then failed() return end
+    local uniqueid = util.CRC("gm_" .. steamid .. "_gm")
+
+    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(uniqueid), MySQLite.SQLStr(steamid)))
+
+    MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. uniqueid .. ";", callback, failed)
+end
+
 function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
     attempts = attempts or 0
 
