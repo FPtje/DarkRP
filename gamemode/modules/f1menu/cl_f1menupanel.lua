@@ -8,6 +8,11 @@ function PANEL:Init()
 
     self:SetPos(-self:GetWide(), ScrH() * 0.05)
 
+    -- Can be removed once https://github.com/garrynewman/garrysmod/pull/1141 is merged.
+    -- It is here so it is set BEFORE the following panels are created.
+    -- Normally, it is set in DarkRP.openF1Menu().
+    self:SetSkin(GAMEMODE.Config.DarkRPSkin)
+
     self.slideInTime = self.slideInTime or 0.3
     self.toggled = false
 
