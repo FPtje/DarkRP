@@ -27,8 +27,6 @@ function DarkRP.toggleF4Menu()
     end
 end
 
-GM.ShowSpare2 = DarkRP.toggleF4Menu
-
 function DarkRP.getF4MenuPanel()
     return f4Frame
 end
