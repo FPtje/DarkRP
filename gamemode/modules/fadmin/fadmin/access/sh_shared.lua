@@ -130,9 +130,13 @@ hook.Add("CAMI.OnPrivilegeUnregistered", "FAdmin", function(privilege)
     FAdmin.Access.Privileges[privilege.Name] = nil
 end)
 
+function FAdmin.Access.PlayerIsHost(ply)
+    return ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost())
+end
+
 function FAdmin.Access.PlayerHasPrivilege(ply, priv, target, ignoreImmunity)
     -- This is the server console
-    if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end
+    if FAdmin.Access.PlayerIsHost(ply) then return true end
     -- Privilege does not exist
     if not FAdmin.Access.Privileges[priv] then return ply:IsAdmin() end
 
