@@ -279,6 +279,7 @@ local function SetDoorTeamOwnable(ply, arg)
     end
 
     arg = tonumber(arg)
+    if not arg then DarkRP.notify(ply, 1, 10, DarkRP.getPhrase("job_doesnt_exist")) return "" end
     if not RPExtraTeams[arg] and arg ~= nil then DarkRP.notify(ply, 1, 10, DarkRP.getPhrase("job_doesnt_exist")) return "" end
     if IsValid(ent:getDoorOwner()) then
         ent:keysUnOwn(ent:getDoorOwner())
