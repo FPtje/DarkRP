@@ -155,7 +155,11 @@ hook.Add("CAMI.SteamIDUsergroupChanged", "FAdmin", function(steamId, old, new, s
 end)
 
 function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets the player to superadmin
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then
+        FAdmin.Messages.SendMessage(ply, 5, "No access!")
+        FAdmin.Messages.SendMessage(ply, 5, "Please use RCon to set yourself to superadmin if you are the owner of the server")
+        return false
+    end
 
     local group = FAdmin.Access.Groups["superadmin"]
     local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
@@ -190,15 +194,27 @@ end
 
 -- AddGroup <Groupname> <Adminstatus> <Privileges>
 local function AddGroup(ply, cmd, args)
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "ManageGroups") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     local admin = tonumber(args[2])
     if not args[1] or not admin then FAdmin.Messages.SendMessage(ply, 5, "Incorrect arguments!") return false end
     local privs = {}
+
     for priv, am in SortedPairs(FAdmin.Access.Privileges) do
+        -- The user cannot create groups with privileges they don't have
+        if not FAdmin.Access.PlayerHasPrivilege(ply, priv) then continue end
         if am <= admin + 1 then privs[priv] = true end
     end
 
-    FAdmin.Access.AddGroup(args[1], admin, privs, FAdmin.Access.Groups[FAdmin.Access.ADMIN[admin + 1]].immunity) -- Add new group
+    local immunity = FAdmin.Access.Groups[FAdmin.Access.ADMIN[admin + 1]].immunity
+
+    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+
+    if (not plyGroup or immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
+        FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to create usergroups with a higher rank than your own")
+        return false
+    end
+
+    FAdmin.Access.AddGroup(args[1], admin, privs, immunity) -- Add new group
     FAdmin.Messages.SendMessage(ply, 4, "Group created")
     FAdmin.Access.SendGroups()
 
@@ -206,11 +222,26 @@ local function AddGroup(ply, cmd, args)
 end
 
 local function AddPrivilege(ply, cmd, args)
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "ManagePrivileges") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
     local group, priv = args[1], args[2]
+
     if not FAdmin.Access.Groups[group] or not FAdmin.Access.Privileges[priv] then
         FAdmin.Messages.SendMessage(ply, 5, "Invalid arguments")
+        return false
+    end
+
+    -- The player cannot add privileges that they themselves do not have
+    if not FAdmin.Access.PlayerHasPrivilege(ply, priv) then
+        FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to assign privileges that you don't have yourself")
+        return false
+    end
+
+    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+
+    -- Setting a group with a higher rank than one's own
+    if (not plyGroup or FAdmin.Access.Groups[group].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
+        FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to manage the privileges of a usergroup with a higher rank than your own")
         return false
     end
 
@@ -224,11 +255,19 @@ local function AddPrivilege(ply, cmd, args)
 end
 
 local function RemovePrivilege(ply, cmd, args)
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "ManagePrivileges") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
     local group, priv = args[1], args[2]
     if not FAdmin.Access.Groups[group] or not FAdmin.Access.Privileges[priv] then
         FAdmin.Messages.SendMessage(ply, 5, "Invalid arguments")
+        return false
+    end
+
+    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+
+    -- Setting a group with a higher rank than one's own
+    if (not plyGroup or FAdmin.Access.Groups[group].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
+        FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to manage the privileges of a usergroup with a higher rank than your own")
         return false
     end
 
@@ -333,8 +372,8 @@ hook.Add("PlayerInitialSpawn", "FAdmin_SetAccess", function(ply)
 end)
 
 local function toggleImmunity(ply, cmd, args)
-    -- SetAccess privilege because they can handle immunity settings
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    -- ManageGroups privilege because they can handle immunity settings
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "ManageGroups") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
     if not args[1] then FAdmin.Messages.SendMessage(ply, 5, "Invalid argument!") return false end
     RunConsoleCommand("_FAdmin_immunity", args[1])
@@ -346,7 +385,7 @@ end
 
 
 local function setImmunity(ply, cmd, args)
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "ManageGroups") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     local group, immunity = args[1], tonumber(args[2])
 
     if not FAdmin.Access.Groups[group] or not immunity then return false end
@@ -356,6 +395,11 @@ local function setImmunity(ply, cmd, args)
     -- Setting a group with a higher rank than one's own
     if (not plyGroup or FAdmin.Access.Groups[group].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
         FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to change the immunity of a group with a higher rank than your")
+        return false
+    end
+
+    if immunity > plyGroup.immunity and not FAdmin.Access.PlayerIsHost(ply) then
+        FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to set the immunity to any value higher than your own group's immunity")
         return false
     end
 
