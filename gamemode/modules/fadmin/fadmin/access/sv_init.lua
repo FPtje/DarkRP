@@ -74,8 +74,8 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
             FAdmin.Access.AddGroup("noaccess", 0, privs.noaccess, 0)
         end
 
-        MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_PRIVILEGES;", function(val)
-            if tonumber(val) ~= 0 then return createGroups{} end
+        MySQLite.query("SELECT DISTINCT PRIVILEGE FROM FADMIN_PRIVILEGES;", function(privTbl)
+            if #privTbl == 0 then return createGroups{} end
 
             local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
@@ -86,6 +86,23 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
                     privs[hasPrivs[i]][priv] = true
                 end
             end
+
+
+            -- Check for newly created privileges and assign them to the default usergroups
+            local privSet = {}
+            for _, priv in ipairs(privTbl) do
+                privSet[priv.PRIVILEGE] = true
+            end
+
+            for priv, access in pairs(FAdmin.Access.Privileges) do
+                if privSet[priv] then continue end
+
+                for i = access + 1, #hasPrivs do
+                    MySQLite.query(("REPLACE INTO FADMIN_PRIVILEGES VALUES(%s, %s);"):format(MySQLite.SQLStr(hasPrivs[i]), MySQLite.SQLStr(priv)))
+                end
+
+            end
+
             createGroups(privs)
         end)
     end)

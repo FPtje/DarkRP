@@ -18,6 +18,11 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
         }, "FAdmin")
     end
 
+    -- Add newly created privileges on server reload
+    for p, _ in pairs(privs or {}) do
+        FAdmin.Access.Groups[name].PRIVS[p] = true
+    end
+
     if not SERVER then return end
 
     MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = " .. MySQLite.SQLStr(name) .. ";", function(val)
