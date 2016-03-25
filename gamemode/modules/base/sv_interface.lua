@@ -470,7 +470,7 @@ DarkRP.talkToPerson = DarkRP.stub{
 
 DarkRP.isEmpty = DarkRP.stub{
     name = "isEmpty",
-    description = "Check whether the given position is empty.",
+    description = "Check whether the given position is empty. If you want the function not to ignore your entity, set the variable NotEmptyPos (ex. ENT.NotEmptyPos = true)",
     parameters = {
         {
             name = "pos",
