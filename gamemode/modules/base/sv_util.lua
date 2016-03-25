@@ -103,7 +103,7 @@ function DarkRP.isEmpty(vector, ignore)
     local b = true
 
     for k,v in pairs(ents.FindInSphere(vector, 35)) do
-        if (v:IsNPC() or v:IsPlayer() or v:GetClass() == "prop_physics") and not table.HasValue(ignore, v) then
+        if (v:IsNPC() or v:IsPlayer() or v:GetClass() == "prop_physics" or v.NotEmptyPos) and not table.HasValue(ignore, v) then
             b = false
             break
         end
