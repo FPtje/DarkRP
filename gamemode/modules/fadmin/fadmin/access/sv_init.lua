@@ -75,7 +75,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
         end
 
         MySQLite.query("SELECT DISTINCT PRIVILEGE FROM FADMIN_PRIVILEGES;", function(privTbl)
-            if #privTbl == 0 then return createGroups{} end
+            if not privTbl or #privTbl == 0 then return createGroups{} end
 
             local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
