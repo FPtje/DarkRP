@@ -17,24 +17,11 @@ FAdmin.StartHooks["Logging"] = function()
     logging = GetConVar("FAdmin_logging")
 end
 
-local LogFile
 function FAdmin.Log(text)
     if not text or text == "" then return end
     if not logging or not logging:GetBool() then return end
 
-    if not LogFile then
-        -- The log file of this session, if it's not there then make it!
-        if not file.IsDir("fadmin_logs", "DATA") then
-            file.CreateDir("fadmin_logs")
-        end
-
-        LogFile = "fadmin_logs/" .. os.date("%m_%d_%Y %I_%M %p") .. ".txt"
-        file.Write(LogFile, os.date() .. "\t" .. text)
-
-        return
-    end
-
-    file.Append(LogFile, "\n" .. os.date() .. "\t" .. text)
+    ServerLog("[FAdmin] " .. text .. "\n")
 end
 
 hook.Add("PlayerGiveSWEP", "FAdmin_Log", function(ply, class)
