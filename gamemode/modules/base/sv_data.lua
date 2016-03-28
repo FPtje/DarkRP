@@ -271,6 +271,10 @@ function DarkRP.storeMoney(ply, amount)
     MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
 end
 
+function DarkRP.storeOfflineMoney(uid, amount)
+    MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. uid)
+end
+
 local function resetAllMoney(ply,cmd,args)
     if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
     MySQLite.query("UPDATE darkrp_player SET wallet = " .. GAMEMODE.Config.startingmoney .. " ;")

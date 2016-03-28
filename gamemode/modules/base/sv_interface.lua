@@ -107,6 +107,27 @@ DarkRP.offlinePlayerData = DarkRP.stub{
     metatable = DarkRP
 }
 
+DarkRP.storeOfflineMoney = DarkRP.stub{
+    name = "storeOfflineMoney",
+    description = "Store the wallet amount of an offline player. Use DarkRP.offlinePlayerData to fetch the current wallet amount.",
+    parameters = {
+        {
+            name = "uid",
+            description = "The UniqueID of the player to set the wallet of.",
+            type = "number",
+            optional = false
+        },
+        {
+            name = "amount",
+            description = "The amount of money.",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {},
+    metatable = DarkRP
+}
+
 DarkRP.createPlayerData = DarkRP.stub{
     name = "createPlayerData",
     description = "Internal function: creates an entry in the database for a player who has joined for the first time.",
