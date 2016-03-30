@@ -42,7 +42,7 @@ function ENT:Use(activator, caller)
     end
 end
 
-function ENT:Touch(ent)
+function ENT:StartTouch(ent)
     -- the .USED var is also used in other mods for the same purpose
     if ent:GetClass() ~= "darkrp_cheque" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
     if ent.dt.owning_ent ~= self.dt.owning_ent then return end
