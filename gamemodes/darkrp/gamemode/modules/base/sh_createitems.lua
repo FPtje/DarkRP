@@ -371,7 +371,7 @@ local function addEntityCommands(tblEnt)
     local function buythis(ply, args)
         if ply:isArrested() then return "" end
         if type(tblEnt.allowed) == "table" and not table.HasValue(tblEnt.allowed, ply:Team()) then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", tblEnt.cmd))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", tblEnt.name))
             return ""
         end
 
@@ -384,7 +384,7 @@ local function addEntityCommands(tblEnt)
         end
 
         if ply:customEntityLimitReached(tblEnt) then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", tblEnt.cmd))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", tblEnt.name))
             return ""
         end
 
@@ -393,7 +393,7 @@ local function addEntityCommands(tblEnt)
         local cost = price or tblEnt.getPrice and tblEnt.getPrice(ply, tblEnt.price) or tblEnt.price
 
         if not ply:canAfford(cost) then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.cmd))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", tblEnt.name))
             return ""
         end
 

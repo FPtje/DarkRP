@@ -1,6 +1,12 @@
 local GUIToggled = false
 local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 function GM:ShowSpare1()
+    local jobTable = LocalPlayer():getJobTable()
+
+    if jobTable.ShowSpare1 then
+        return jobTable.ShowSpare1(LocalPlayer())
+    end
+
     GUIToggled = not GUIToggled
 
     if GUIToggled then
@@ -9,6 +15,16 @@ function GM:ShowSpare1()
         mouseX, mouseY = gui.MousePos()
     end
     gui.EnableScreenClicker(GUIToggled)
+end
+
+function GM:ShowSpare2()
+    local jobTable = LocalPlayer():getJobTable()
+
+    if jobTable.ShowSpare2 then
+        return jobTable.ShowSpare2(LocalPlayer())
+    end
+
+    DarkRP.toggleF4Menu()
 end
 
 function GM:PlayerStartVoice(ply)

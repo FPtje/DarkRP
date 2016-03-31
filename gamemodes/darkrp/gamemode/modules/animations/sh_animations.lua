@@ -180,6 +180,8 @@ local function AnimationMenu()
     AnimFrame:SetSize(130, Height)
     AnimFrame:SetPos(ScrW() / 2 + ScrW() * 0.1, ScrH() / 2 - (Height / 2))
     AnimFrame:SetTitle(DarkRP.getPhrase("custom_animation"))
+    AnimFrame.btnMaxim:SetVisible(false)
+    AnimFrame.btnMinim:SetVisible(false)
     AnimFrame:SetVisible(true)
     AnimFrame:MakePopup()
 

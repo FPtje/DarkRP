@@ -67,10 +67,64 @@ DarkRP.retrievePlayerData = DarkRP.stub{
             description = "The function that receives the information.",
             type = "function",
             optional = false
+        },
+        {
+            name = "failure",
+            description = "The function that is called when the information cannot be retrieved.",
+            type = "function",
+            optional = false
         }
     },
     returns = {
     },
+    metatable = DarkRP
+}
+
+DarkRP.offlinePlayerData = DarkRP.stub{
+    name = "offlinePlayerData",
+    description = "Get a player's information from the database using a SteamID for use when the player is offline.",
+    parameters = {
+        {
+            name = "steamid",
+            description = "The SteamID of the player to get the data for.",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "callback",
+            description = "The function that receives the information.",
+            type = "function",
+            optional = false
+        },
+        {
+            name = "failure",
+            description = "The function that is called when the information cannot be retrieved.",
+            type = "function",
+            optional = false
+        }
+    },
+    returns = {},
+    metatable = DarkRP
+}
+
+DarkRP.storeOfflineMoney = DarkRP.stub{
+    name = "storeOfflineMoney",
+    description = "Store the wallet amount of an offline player. Use DarkRP.offlinePlayerData to fetch the current wallet amount.",
+    parameters = {
+        {
+            name = "uid",
+            description = "The UniqueID of the player to set the wallet of.",
+            type = "number",
+            optional = false
+        },
+        {
+            name = "amount",
+            description = "The amount of money.",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -437,7 +491,7 @@ DarkRP.talkToPerson = DarkRP.stub{
 
 DarkRP.isEmpty = DarkRP.stub{
     name = "isEmpty",
-    description = "Check whether the given position is empty.",
+    description = "Check whether the given position is empty. If you want the function not to ignore your entity, set the variable NotEmptyPos (ex. ENT.NotEmptyPos = true)",
     parameters = {
         {
             name = "pos",

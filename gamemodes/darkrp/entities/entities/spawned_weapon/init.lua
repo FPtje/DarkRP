@@ -85,7 +85,7 @@ function ENT:Use(activator, caller)
     self:DecreaseAmount()
 end
 
-function ENT:Touch(ent)
+function ENT:StartTouch(ent)
     -- the .USED var is also used in other mods for the same purpose
     if ent.IsSpawnedWeapon ~= true or
         self:GetWeaponClass() ~= ent:GetWeaponClass() or

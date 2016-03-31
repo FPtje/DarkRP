@@ -236,6 +236,15 @@ function DarkRP.retrieveRPNames(name, callback)
     end)
 end
 
+function DarkRP.offlinePlayerData(steamid, callback, failed)
+    steamid = steamid:upper()
+    local uniqueid = util.CRC("gm_" .. steamid .. "_gm")
+
+    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(uniqueid), MySQLite.SQLStr(steamid)))
+
+    MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. uniqueid .. ";", callback, failed)
+end
+
 function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
     attempts = attempts or 0
 
@@ -260,6 +269,10 @@ function DarkRP.storeMoney(ply, amount)
     if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then return end
 
     MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
+end
+
+function DarkRP.storeOfflineMoney(uid, amount)
+    MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. uid)
 end
 
 local function resetAllMoney(ply,cmd,args)

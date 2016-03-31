@@ -18,6 +18,11 @@ function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 
         }, "FAdmin")
     end
 
+    -- Add newly created privileges on server reload
+    for p, _ in pairs(privs or {}) do
+        FAdmin.Access.Groups[name].PRIVS[p] = true
+    end
+
     if not SERVER then return end
 
     MySQLite.queryValue("SELECT COUNT(*) FROM FADMIN_GROUPS WHERE NAME = " .. MySQLite.SQLStr(name) .. ";", function(val)
@@ -70,10 +75,18 @@ function FAdmin.Access.OnUsergroupUnregistered(usergroup, source)
 end
 
 function FAdmin.Access.RemoveGroup(ply, cmd, args)
-    if not FAdmin.Access.PlayerHasPrivilege(ply, "SetAccess") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if not FAdmin.Access.PlayerHasPrivilege(ply, "ManageGroups") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     if not args[1] then return false end
 
+    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+
     if not FAdmin.Access.Groups[args[1]] or table.HasValue({"superadmin", "admin", "user"}, string.lower(args[1])) then return true, args[1] end
+
+    -- Setting a group with a higher rank than one's own
+    if (not plyGroup or FAdmin.Access.Groups[args[1]].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
+        FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to remove usergroups with a higher rank than your own")
+        return false
+    end
 
     CAMI.UnregisterUsergroup(args[1], "FAdmin")
 
@@ -130,9 +143,13 @@ hook.Add("CAMI.OnPrivilegeUnregistered", "FAdmin", function(privilege)
     FAdmin.Access.Privileges[privilege.Name] = nil
 end)
 
+function FAdmin.Access.PlayerIsHost(ply)
+    return ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost())
+end
+
 function FAdmin.Access.PlayerHasPrivilege(ply, priv, target, ignoreImmunity)
     -- This is the server console
-    if ply:EntIndex() == 0 or game.SinglePlayer() or (ply.IsListenServerHost and ply:IsListenServerHost()) then return true end
+    if FAdmin.Access.PlayerIsHost(ply) then return true end
     -- Privilege does not exist
     if not FAdmin.Access.Privileges[priv] then return ply:IsAdmin() end
 
@@ -230,6 +247,8 @@ FAdmin.StartHooks["AccessFunctions"] = function()
     }
 
     FAdmin.Access.AddPrivilege("SetAccess", 3) -- AddPrivilege is shared, run on both client and server
+    FAdmin.Access.AddPrivilege("ManagePrivileges", 3)
+    FAdmin.Access.AddPrivilege("ManageGroups", 3)
     FAdmin.Access.AddPrivilege("SeeAdmins", 1)
     FAdmin.Commands.AddCommand("RemoveGroup", FAdmin.Access.RemoveGroup)
 

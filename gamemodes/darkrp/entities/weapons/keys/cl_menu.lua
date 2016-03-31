@@ -50,7 +50,9 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
 
     KeyFrameVisible = true
     local Frame = vgui.Create("DFrame")
-    Frame:SetSize(200, 30) -- base size
+    Frame:SetSize(200, 30) -- Base size
+    Frame.btnMaxim:SetVisible(false)
+    Frame.btnMinim:SetVisible(false)
     Frame:SetVisible(true)
     Frame:MakePopup()
 

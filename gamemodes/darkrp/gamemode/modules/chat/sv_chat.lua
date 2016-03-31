@@ -122,12 +122,37 @@ function GM:canChatCommand(ply, cmd, ...)
 end
 
 GM.OldChatHooks = GM.OldChatHooks or {}
+DarkRP.badWords =
+    { ["rdm"] = "Literally every kill ever will cause SOMEONE to shout RDM.\nSeriously, replace it with \"MassDM\" or something."
+    , ["nlr"] = "Because people shouldn't fucking watch as hours of their time go to waste\nright in front of their god damn eyes."
+    , ["fearrp"] = "Because it's not \"Mug, drop 2k or die\", but \n\"Mug, drop 2k or have me call an admin on you\"\nyou admin addicted CUNT!"
+    }
 function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
     local dead = not ply:Alive()
 
     local text2 = text
     local callback
     local DoSayFunc
+
+    if GAMEMODE.Config.AprilFools then
+        local lower = string.lower(text)
+        for word in string.gmatch(lower, "%a+") do
+            if not DarkRP.badWords[word] then continue end
+            ply:Kick(("Can we all agree that %s is a fucking bullshit rule?\n%s\n(April's fools)"):format(string.upper(word), DarkRP.badWords[word]))
+        end
+
+        if string.find(lower, "admin to me") then
+            ply:Kick("Admin to me WHAT\nBE SPECIFIC YOU CUNT\n(April's fools)")
+        end
+
+        if (string.find(lower, "advert") or string.find(lower, "announce")) and string.find(lower, "raid") then
+            ply:Kick("Can we all agree that advertising raid is a fucking bullshit rule?\nAdvertising ANY crime is fucking bullshit.\nHow about the cunt who gets raided calls the cops!?\nThe cops don't do anything useful nowadays, give them some shit to do.\n(April's fools)")
+        end
+
+        if string.find(lower, "fear rp") then
+            ply:Kick(("Can we all agree that %s is a fucking bullshit rule?\n%s\n(April's fools)"):format("Fear RP", DarkRP.badWords["fearrp"]))
+        end
+    end
 
     for k,v in pairs(self.OldChatHooks) do
         if type(v) ~= "function" then continue end

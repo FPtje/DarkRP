@@ -176,7 +176,7 @@ function ENT:Destruct()
     self:Remove()
 end
 
-function ENT:Touch(ent)
+function ENT:StartTouch(ent)
     -- the .USED var is also used in other mods for the same purpose
     if not ent.IsSpawnedShipment or
         self:Getcontents() ~= ent:Getcontents() or

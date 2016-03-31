@@ -3,18 +3,18 @@ local PANEL = {}
 function PANEL:Init()
     self:SetWide(300)
     self:SetKeyboardInputEnabled(true)
-    self.BaseClass.Init(self)
     self.F1Down = true
     self:SetFont("DarkRPHUD2")
-    self:SetTextColor(Color(255,255,255,255))
-    self:SetCursorColor(Color(255,255,255,255))
 
+    -- This will eventually be gone when placeholder support is added to GMod
     self.lblSearch = vgui.Create("DLabel", self)
     self.lblSearch:SetFont("DarkRPHUD2")
-    self.lblSearch:SetColor(Color(200, 200, 200, 200))
     self.lblSearch:SetText(DarkRP.getPhrase("f1Search"))
     self.lblSearch:SizeToContents()
     self.lblSearch:SetPos(5)
+    function self.lblSearch:UpdateColours(skin)
+        self:SetTextStyleColor(skin.colTextEntryTextPlaceholder or Color(169, 169, 169))
+    end
 end
 
 function PANEL:OnLoseFocus()
