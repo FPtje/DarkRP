@@ -168,10 +168,6 @@ GM.Config.weaponCheckerHideDefault      = true
 -- weaponCheckerHideNoLicense - Hide weapons that do not require a license.
 GM.Config.weaponCheckerHideNoLicense    = false
 
--- YESSSSSSS I'M FUCKING YOU OVER YESSSSSSSSSSSSS HAHAHAHAHA
--- FOR ONE DAY I CAN FUCK YOU ALL OVER AND GET AWAY WITH IT
-GM.Config.AprilFools                    = true
-
 --[[
 Value settings
 ]]
