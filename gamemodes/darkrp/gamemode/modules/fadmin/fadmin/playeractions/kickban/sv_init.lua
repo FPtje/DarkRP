@@ -47,28 +47,6 @@ local function Kick(ply, cmd, args)
         FAdmin.Messages.FireNotification("kick", ply, nil, {targets, Reason})
     end
 
-    -- Code duplication, but who gives a shit. It will only live for a day.
-    if GAMEMODE.Config.AprilFools then
-        local lower = string.lower(Reason or "")
-        for word in string.gmatch(lower, "%a+") do
-            if not DarkRP.badWords[word] then continue end
-            ply:Kick(("Can we all agree that %s is a fucking bullshit rule?\n%s\n(April's fools)"):format(string.upper(word), DarkRP.badWords[word]))
-        end
-
-        if string.find(lower, "admin to me") then
-            ply:Kick("Admin to me WHAT\nBE SPECIFIC YOU CUNT\n(April's fools)")
-        end
-
-        if (string.find(lower, "advert") or string.find(lower, "announce")) and string.find(lower, "raid") then
-            ply:Kick("Can we all agree that advertising raid is a fucking bullshit rule?\nAdvertising ANY crime is fucking bullshit.\nHow about the cunt who gets raided calls the cops!?\nThe cops don't do anything useful nowadays, give them some shit to do.\n(April's fools)")
-        end
-
-        if string.find(lower, "fear rp") then
-            ply:Kick(("Can we all agree that %s is a fucking bullshit rule?\n%s\n(April's fools)"):format("Fear RP", DarkRP.badWords["fearrp"]))
-        end
-    end
-
-
     return true, targets, stage, Reason
 end
 
