@@ -168,8 +168,7 @@ function DarkRP.initDatabase()
             if MySQLite.isMySQL() then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
                                         --so he walks around with the settings from the SQLite database
                 for k,v in pairs(player.GetAll()) do
-                    local UniqueID = MySQLite.SQLStr(v:UniqueID())
-                    MySQLite.query([[SELECT * FROM darkrp_player WHERE uid = ]] .. UniqueID .. [[;]], function(data)
+                    DarkRP.offlinePlayerData(v:SteamID(), function(data)
                         if not data or not data[1] then return end
 
                         local Data = data[1]
@@ -227,7 +226,8 @@ function DarkRP.storeRPName(ply, name)
     hook.Call("onPlayerChangedName", nil, ply, ply:getDarkRPVar("rpname"), name)
     ply:setDarkRPVar("rpname", name)
 
-    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
+    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:SteamID64() .. ";")
+    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name .. utf8.char(8203)) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
 function DarkRP.retrieveRPNames(name, callback)
@@ -237,28 +237,77 @@ function DarkRP.retrieveRPNames(name, callback)
 end
 
 function DarkRP.offlinePlayerData(steamid, callback, failed)
-    steamid = steamid:upper()
-    local uniqueid = util.CRC("gm_" .. steamid .. "_gm")
+    local sid64 = util.SteamIDTo64(steamid)
+    local uniqueid = util.CRC("gm_" .. string.upper(steamid) .. "_gm")
 
-    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(uniqueid), MySQLite.SQLStr(steamid)))
+    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(sid64), MySQLite.SQLStr(steamid)))
 
-    MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. uniqueid .. ";", callback, failed)
+    local query = [[
+    SELECT rpname, wallet, salary, "SID64" AS kind
+    FROM darkrp_player
+    where uid = %s
+
+    UNION
+
+    SELECT rpname, wallet, salary, "UniqueID" AS kind
+    FROM darkrp_player
+    where uid = %s
+    ;
+    ]]
+
+    MySQLite.query(
+        query:format(sid64, uniqueid),
+        function(data, ...)
+            -- The database has no record of the player data in SteamID64 form
+            -- Otherwise the first row would have kind SID64
+            if data[1].kind == "UniqueID" then
+                -- The rpname must be unique
+                -- adding a new row with uid = SteamID64, but the same rpname will remove the uid=UniqueID row
+                local changeOldName = [[
+                UPDATE darkrp_player
+                SET rpname = ]]  .. (MySQLite.isMySQL() and [[CONCAT(rpname, "]] .. utf8.char(8203) .. [[")]] or [[rpname || "]] .. utf8.char(8203) .. [["]]) .. [[
+                WHERE uid = %s
+                ]]
+
+                local replquery = [[
+                REPLACE INTO darkrp_player(uid, rpname, wallet, salary)
+                VALUES (%s, %s, %s, %s)
+                ]]
+
+                MySQLite.begin()
+                MySQLite.queueQuery(changeOldName:format(uniqueid), nil, failed)
+                MySQLite.queueQuery(
+                    replquery:format(
+                        sid64,
+                        data[1].rpname == "NULL" and "NULL" or MySQLite.SQLStr(data[1].rpname),
+                        data[1].wallet,
+                        data[1].salary
+                        ),
+                    nil,
+                    failed
+                    )
+                MySQLite.commit()
+            end
+
+            return callback and callback(data, ...)
+        end
+        , failed
+        )
 end
 
 function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
     attempts = attempts or 0
 
     if attempts > 3 then return failed() end
-    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(ply:UniqueID()), MySQLite.SQLStr(ply:SteamID())))
 
-    MySQLite.query("SELECT rpname, wallet, salary FROM darkrp_player WHERE uid = " .. ply:UniqueID() .. ";", callback, function()
+    DarkRP.offlinePlayerData(ply:SteamID(), callback, function()
         DarkRP.retrievePlayerData(ply, callback, failed, attempts + 1)
     end)
 end
 
 function DarkRP.createPlayerData(ply, name, wallet, salary)
     MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
-            ply:UniqueID() .. [[, ]] ..
+            ply:SteamID64() .. [[, ]] ..
             MySQLite.SQLStr(name)  .. [[, ]] ..
             salary  .. [[, ]] ..
             wallet .. ");")
@@ -268,11 +317,26 @@ function DarkRP.storeMoney(ply, amount)
     if not IsValid(ply) then return end
     if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then return end
 
-    MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID())
+    -- Also keep deprecated UniqueID data at least somewhat up to date
+    MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID() .. [[ OR uid = ]] .. ply:SteamID64())
 end
 
-function DarkRP.storeOfflineMoney(uid, amount)
-    MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. uid)
+function DarkRP.storeOfflineMoney(sid64, amount)
+    if isnumber(sid64) or isstring(sid64) and string.len(sid64) < 18 then -- smaller than 76561197960265728 is not a SteamID64
+        DarkRP.errorNoHalt([[Some addon is giving DarkRP.storeOfflineMoney a UniqueID as its first argument, but this function now expects a SteamID64]], 2,
+            { "The function used to take UniqueIDs, but it does not anymore."
+            , "If you are a server owner, please look closely to the files mentioned in this error"
+            , "After all, these files will tell you WHICH addon is doing it"
+            , "This is NOT a DarkRP bug!"
+            , "Your server will continue working normally"
+            , "But whichever addon just tried to store an offline player's money"
+            , "Will NOT take effect!"
+            })
+    end
+
+    -- Also store on deprecated UniqueID
+    local uniqueid = util.CRC("gm_" .. string.upper(util.SteamIDFrom64(sid64)) .. "_gm")
+    MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. uniqueid .. [[ OR uid = ]] .. sid64)
 end
 
 local function resetAllMoney(ply,cmd,args)

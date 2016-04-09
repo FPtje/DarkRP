@@ -112,8 +112,8 @@ DarkRP.storeOfflineMoney = DarkRP.stub{
     description = "Store the wallet amount of an offline player. Use DarkRP.offlinePlayerData to fetch the current wallet amount.",
     parameters = {
         {
-            name = "uid",
-            description = "The UniqueID of the player to set the wallet of.",
+            name = "sid64",
+            description = "The SteamID64 of the player to set the wallet of. NOTE: THIS USED TO BE THE UNIQUEID, BUT THIS CHANGED!",
             type = "number",
             optional = false
         },

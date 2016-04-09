@@ -5,7 +5,7 @@ In this file you can find a manual for MySQL configuration and the MySQL config 
  ]]
 
 
-RP_MySQLConfig.EnableMySQL = false -- Set to true if you want to use an external MySQL database, false if you want to use the built in SQLite database (garrysmod/sv.db) of Garry's mod.
+RP_MySQLConfig.EnableMySQL = true -- Set to true if you want to use an external MySQL database, false if you want to use the built in SQLite database (garrysmod/sv.db) of Garry's mod.
 RP_MySQLConfig.Host = "127.0.0.1" -- This is the IP address of the MySQL host. Make sure the IP address is correct and in quotation marks (" ")
 RP_MySQLConfig.Username = "user" -- This is the username to log in on the MySQL server.
                                 -- contact the owner of the server about the username and password. Make sure it's in quotation marks! (" ")
