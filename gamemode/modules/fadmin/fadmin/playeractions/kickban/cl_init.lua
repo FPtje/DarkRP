@@ -343,17 +343,27 @@ FAdmin.StartHooks["CL_KickBan"] = function()
         end
 
     local function RetrieveBans(len)
-        local bans = net.ReadTable()
-        for k,v in pairs(bans) do               local Line = BanList:AddLine(
-                    k,
-                    v.name or "N/A",
-                    (tonumber(v.time or "") and FAdmin.PlayerActions.ConvertBanTime((tonumber(v.time) - os.time()) / 60)) or "N/A",
-                    v.reason or "",
-                    v.adminname or "",
-                    v.adminsteam or "")
-                Line.name = v.name
-                Line.time = v.time
-                Line.reason = v.reason
+        local banCount = net.ReadUInt(32)
+
+        for i = 1, banCount do
+            local steamid = net.ReadString()
+            local time = net.ReadUInt(32)
+            local name = net.ReadString()
+            local reason = net.ReadString()
+            local adminname = net.ReadString()
+            local adminsteam = net.ReadString()
+
+
+            local Line = BanList:AddLine(
+                    steamid,
+                    name or "N/A",
+                    (tonumber(time or "") and FAdmin.PlayerActions.ConvertBanTime((tonumber(time) - os.time()) / 60)) or "N/A",
+                    reason or "",
+                    adminname or "",
+                    adminsteam or "")
+                Line.name = name
+                Line.time = time
+                Line.reason = reason
 
                 function Line:OnSelect()
                     selectedLine = self

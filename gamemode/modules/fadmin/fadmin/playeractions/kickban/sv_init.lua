@@ -63,7 +63,16 @@ FAdmin.BANS = FAdmin.BANS or {}
 local function RequestBans(ply, cmd, args)
     if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     net.Start("FAdmin_retrievebans")
-        net.WriteTable(FAdmin.BANS)
+        net.WriteUInt(table.Count(FAdmin.BANS), 32)
+
+        for k, v in pairs(FAdmin.BANS) do
+            net.WriteString(k or "") -- SteamID
+            net.WriteUInt(v.time or 0, 32)
+            net.WriteString(v.name or "")
+            net.WriteString(v.reason or "")
+            net.WriteString(v.adminname or "")
+            net.WriteString(v.adminsteam or "")
+        end
     net.Send(ply)
 
     return true, FAdmin.BANS
