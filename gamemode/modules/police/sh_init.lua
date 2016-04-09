@@ -40,6 +40,17 @@ function DarkRP.hooks:canRequestWarrant(target, actor, reason)
     return true
 end
 
+function DarkRP.hooks:canRemoveWarrant(target, actor)
+    if not IsValid(target) then return false, DarkRP.getPhrase("suspect_doesnt_exist") end
+    if not IsValid(actor) then return false, DarkRP.getPhrase("actor_doesnt_exist") end
+    if not actor:Alive() then return false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("remove_a_warrant")) end
+    if not target.warranted then return false, DarkRP.getPhrase("not_warranted") end
+    if not actor:isCP() then return false, DarkRP.getPhrase("incorrect_job", DarkRP.getPhrase("remove_a_warrant")) end
+    if actor:isArrested() then return false, DarkRP.getPhrase("unable", DarkRP.getPhrase("remove_a_warrant"), "") end
+
+    return true
+end
+
 function DarkRP.hooks:canWanted(target, actor, reason)
     if not reason or string.len(reason) == 0 then return false, DarkRP.getPhrase("vote_specify_reason") end
     if not IsValid(target) then return false, DarkRP.getPhrase("suspect_doesnt_exist") end
@@ -76,6 +87,14 @@ DarkRP.declareChatCommand{
 DarkRP.declareChatCommand{
     command = "warrant",
     description = "Get a search warrant for a certain player. With this warrant you can search their house.",
+    delay = 1.5,
+    condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}},
+    tableArgs = true
+}
+
+DarkRP.declareChatCommand{
+    command = "unwarrant",
+    description = "Remove a search warrant for a certain player. With a warrant you can search their house.",
     delay = 1.5,
     condition = fn.FAnd{plyMeta.Alive, plyMeta.isCP, fn.Compose{fn.Not, plyMeta.isArrested}},
     tableArgs = true
