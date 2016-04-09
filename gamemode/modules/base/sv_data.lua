@@ -311,6 +311,13 @@ function DarkRP.createPlayerData(ply, name, wallet, salary)
             MySQLite.SQLStr(name)  .. [[, ]] ..
             salary  .. [[, ]] ..
             wallet .. ");")
+
+    -- Backwards compatibility
+    MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
+            ply:UniqueID() .. [[, ]] ..
+            MySQLite.SQLStr(name)  .. [[, ]] ..
+            salary  .. [[, ]] ..
+            wallet .. ");")
 end
 
 function DarkRP.storeMoney(ply, amount)
