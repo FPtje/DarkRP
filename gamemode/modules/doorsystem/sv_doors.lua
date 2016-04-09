@@ -76,7 +76,7 @@ function meta:keysOwn(ply)
 
     ply.OwnedNumz = ply.OwnedNumz or 0
     if ply.OwnedNumz == 0 then
-        timer.Create(ply:UniqueID() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
+        timer.Create(ply:SteamID64() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
     end
 
     ply.OwnedNumz = ply.OwnedNumz + 1
@@ -167,10 +167,10 @@ end
 
 function pmeta:initiateTax()
     local taxtime = GAMEMODE.Config.wallettaxtime
-    local uniqueid = self:UniqueID() -- so we can destroy the timer if the player leaves
-    timer.Create("rp_tax_" .. uniqueid, taxtime or 600, 0, function()
+    local uid = self:SteamID64() -- so we can destroy the timer if the player leaves
+    timer.Create("rp_tax_" .. uid, taxtime or 600, 0, function()
         if not IsValid(self) then
-            timer.Remove("rp_tax_" .. uniqueid)
+            timer.Remove("rp_tax_" .. uid)
 
             return
         end
