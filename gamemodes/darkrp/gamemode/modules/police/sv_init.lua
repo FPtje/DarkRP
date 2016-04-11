@@ -170,6 +170,22 @@ local function warrantCommand(ply, args)
 end
 DarkRP.defineChatCommand("warrant", warrantCommand)
 
+local function unwarrantCommand(ply, args)
+    local target = DarkRP.findPlayer(args[1])
+    local reason = table.concat(args, " ", 2)
+
+    local canRemove, message = hook.Call("canRemoveWarrant", DarkRP.hooks, target, ply, reason)
+    if not canRemove then
+        if message then DarkRP.notify(ply, 1, 4, message) end
+        return ""
+    end
+
+    target:unWarrant(ply, reason)
+
+    return ""
+end
+DarkRP.defineChatCommand("unwarrant", unwarrantCommand)
+
 local function wantedCommand(ply, args)
     local target = DarkRP.findPlayer(args[1])
     local reason = table.concat(args, " ", 2)

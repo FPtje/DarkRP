@@ -78,7 +78,7 @@ function FAdmin.Access.RemoveGroup(ply, cmd, args)
     if not FAdmin.Access.PlayerHasPrivilege(ply, "ManageGroups") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     if not args[1] then return false end
 
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     if not FAdmin.Access.Groups[args[1]] or table.HasValue({"superadmin", "admin", "user"}, string.lower(args[1])) then return true, args[1] end
 
