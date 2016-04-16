@@ -179,7 +179,7 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
     end
 
     local group = FAdmin.Access.Groups["superadmin"]
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     -- Setting a group with a higher rank than one's own
     if (not plyGroup or group.immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
@@ -224,7 +224,7 @@ local function AddGroup(ply, cmd, args)
 
     local immunity = FAdmin.Access.Groups[FAdmin.Access.ADMIN[admin + 1]].immunity
 
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     if (not plyGroup or immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
         FAdmin.Messages.SendMessage(ply, 5, "You're not allowed to create usergroups with a higher rank than your own")
@@ -254,7 +254,7 @@ local function AddPrivilege(ply, cmd, args)
         return false
     end
 
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     -- Setting a group with a higher rank than one's own
     if (not plyGroup or FAdmin.Access.Groups[group].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
@@ -280,7 +280,7 @@ local function RemovePrivilege(ply, cmd, args)
         return false
     end
 
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     -- Setting a group with a higher rank than one's own
     if (not plyGroup or FAdmin.Access.Groups[group].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then
@@ -312,7 +312,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
     local targets = FAdmin.FindPlayer(args[1])
     local admin = tonumber(args[3])
     local group = FAdmin.Access.Groups[args[2]]
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     if not args[2] or not group and not admin then
         FAdmin.Messages.SendMessage(ply, 1, "Group not found")
@@ -407,7 +407,7 @@ local function setImmunity(ply, cmd, args)
 
     if not FAdmin.Access.Groups[group] or not immunity then return false end
 
-    local plyGroup = FAdmin.Access.Groups[ply == Entity(0) and "superadmin" or ply:GetUserGroup()]
+    local plyGroup = FAdmin.Access.Groups[ply:EntIndex() == 0 and "superadmin" or ply:GetUserGroup()]
 
     -- Setting a group with a higher rank than one's own
     if (not plyGroup or FAdmin.Access.Groups[group].immunity > plyGroup.immunity) and not FAdmin.Access.PlayerIsHost(ply) then

@@ -440,7 +440,7 @@ plyMeta.getJobTable = function(ply)
     if not tbl and ply.DarkRPInitialised then
         DarkRP.error(
             string.format("There is a player with an invalid team!\n\nThe player's name is %s, their team number is \"%s\", which has the name \"%s\"",
-                ply == Entity(0) and "Console" or IsValid(ply) and ply:Nick() or "unknown",
+                ply:EntIndex() == 0 and "Console" or IsValid(ply) and ply:Nick() or "unknown",
                 ply:Team(),
                 team.GetName(ply:Team())),
             1,

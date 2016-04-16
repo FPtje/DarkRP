@@ -66,11 +66,11 @@ function DarkRP.findPlayer(info)
             return v
         end
 
-        if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
             return v
         end
 
-        if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
             return v
         end
     end

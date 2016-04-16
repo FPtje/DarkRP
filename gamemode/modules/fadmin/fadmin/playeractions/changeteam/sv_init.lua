@@ -4,8 +4,9 @@ local function checkDarkRP(ply, target, t)
     local TEAM = RPExtraTeams[t]
     if not TEAM then return true end
 
-    if TEAM.customCheck and not TEAM.customCheck(target) then
-        return false
+    if TEAM.customCheck then
+        local ret = TEAM.customCheck(target)
+        if ret ~= nil then return ret end
     end
 
     local hookValue = hook.Call("playerCanChangeTeam", nil, target, t, true)

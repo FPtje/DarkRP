@@ -233,7 +233,7 @@ TEAM_MEDIC   = TEAM_MEDIC    or -1
 TEAM_CHIEF   = TEAM_CHIEF    or -1
 TEAM_MAYOR   = TEAM_MAYOR    or -1
 TEAM_HOBO    = TEAM_HOBO     or -1
-
+TEAM_COOK    = TEAM_COOK     or -1
 
 /*
 --------------------------------------------------------
