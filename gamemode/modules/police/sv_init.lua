@@ -129,13 +129,15 @@ local function CombineRequest(ply, args)
         end
         for k, v in pairs(player.GetAll()) do
             if v:isCP() or v == ply then
-                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. ply:Nick(), Color(255, 0, 0, 255), text, ply)
+                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. " " .. ply:Nick(), Color(255, 0, 0, 255), text, ply)
             end
         end
     end
     return args, DoSay
 end
-DarkRP.defineChatCommand("cr", CombineRequest, 1.5)
+for _, cmd in pairs{"cr", "911", "999", "112", "000"} do
+    DarkRP.defineChatCommand(cmd, CombineRequest, 1.5)
+end
 
 local function warrantCommand(ply, args)
     local target = DarkRP.findPlayer(args[1])

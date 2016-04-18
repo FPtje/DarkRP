@@ -78,11 +78,13 @@ end
 /*---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------*/
-DarkRP.declareChatCommand{
-    command = "cr",
-    description = "Cry for help, the police will come (hopefully)!",
-    delay = 1.5
-}
+for _, cmd in pairs{"cr", "911", "999", "112", "000"} do
+    DarkRP.declareChatCommand{
+        command = cmd,
+        description = "Cry for help, the police will come (hopefully)!",
+        delay = 1.5
+    }
+end
 
 DarkRP.declareChatCommand{
     command = "warrant",
