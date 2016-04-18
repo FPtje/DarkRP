@@ -60,6 +60,9 @@ local function Jail(ply, cmd, args)
 
             table.insert(JailProps, {pos = Vector(35,-55,100), ang = Angle(0,300,90), model = "models/props_lab/lockerdoorleft.mdl"})
             table.insert(JailProps, {pos = Vector(35,55,100), ang = Angle(0,240,90), model = "models/props_lab/lockerdoorleft.mdl"})
+        else
+            FAdmin.Messages.SendMessage(ply, 5, "Bad arguments")
+            return
         end
         if not target:FAdmin_GetGlobal("fadmin_jailed") and JailType ~= "unjail" and string.lower(cmd) ~= "unjail"  then
             target:SetMoveType(MOVETYPE_WALK)
