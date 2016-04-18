@@ -453,6 +453,13 @@ GM.Config.allowedProperties = {
     bodygroups = true,
 }
 
+-- Define additional aliases for the /cr command, useful for players to request the aid of police.
+-- /cr will always be the default command, and cannot be removed. These are simply alternatives you can use.
+GM.Config.combineRequestAliases = {
+	["911"] = true,
+	["000"] = true
+}
+
 --[[---------------------------------------------------------------------------
 F4 menu
 ---------------------------------------------------------------------------]]

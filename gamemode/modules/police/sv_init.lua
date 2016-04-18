@@ -137,6 +137,14 @@ local function CombineRequest(ply, args)
 end
 DarkRP.defineChatCommand("cr", CombineRequest, 1.5)
 
+timer.Simple(1, function()
+    for alias, enabled in pairs(GAMEMODE.Config.combineRequestAliases) do
+        if enabled then
+            DarkRP.defineChatCommand(alias, CombineRequest, 1.5)
+        end
+    end
+end)
+
 local function warrantCommand(ply, args)
     local target = DarkRP.findPlayer(args[1])
     local reason = table.concat(args, " ", 2)
