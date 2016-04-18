@@ -124,11 +124,6 @@ hook.Add("PlayerInitialSpawn", "FAdmin_Log", function(ply)
     FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned for the first time")
 end)
 
-hook.Add("PlayerSay", "FAdmin_Log", function(ply, text, teamonly, dead)
-    if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") [" .. (dead and "dead, " or "") .. ((not teamonly and "team only") or "all") .. "] " .. (text and text or ""))
-end)
-
 hook.Add("PlayerSpawn", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
     FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned")
