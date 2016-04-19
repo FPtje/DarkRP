@@ -1,6 +1,6 @@
 hook.Run("DarkRPStartedLoading")
 
-GM.Version = "2.6.2"
+GM.Version = "2.7.1"--the ".1" referring to the master branch being the latest version.
 GM.Name = "DarkRP"
 GM.Author = "By FPtje Falco et al."
 
