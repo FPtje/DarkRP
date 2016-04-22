@@ -260,7 +260,7 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
         function(data, ...)
             -- The database has no record of the player data in SteamID64 form
             -- Otherwise the first row would have kind SID64
-            if data[1].kind == "UniqueID" then
+            if data and data[1] and data[1].kind == "UniqueID" then
                 -- The rpname must be unique
                 -- adding a new row with uid = SteamID64, but the same rpname will remove the uid=UniqueID row
                 local changeOldName = [[
