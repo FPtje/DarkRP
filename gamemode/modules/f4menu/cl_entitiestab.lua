@@ -80,11 +80,15 @@ local function createCategories(self, categories, itemClick, canBuy)
         end)
 
         dCat:SetPerformLayout(function(contents)
+            local anyVisible = false
             for k,v in pairs(contents.Items) do
                 local can, important, _, price = canBuy(v.DarkRPItem)
                 v:SetDisabled(not can, important)
                 v:updatePrice(price)
+                anyVisible = anyVisible or v:IsVisible()
             end
+
+            dCat:SetVisible(anyVisible)
         end)
 
         dCat:SetCategory(cat)
