@@ -145,7 +145,7 @@ hook.Add("EntityRemoved", "FAdmin_Log", function(ent)
     end
 end)
 
-hook.Add("PlayerAuthed", "FAdmin_Log", function(ply, SteamID, UniqueID)
+hook.Add("PlayerAuthed", "FAdmin_Log", function(ply, SteamID, _)
     if not IsValid(ply) then return end
     FAdmin.Log(ply:Nick() .. " (" .. (SteamID or "Unknown Steam ID") .. ") is Authed")
 end)

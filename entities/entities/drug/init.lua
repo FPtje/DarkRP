@@ -5,7 +5,7 @@ include("shared.lua")
 local function UnDrugPlayer(ply)
     if not IsValid(ply) then return end
     ply.isDrugged = false
-    local IDSteam = ply:UniqueID()
+    local IDSteam = ply:SteamID64()
 
     timer.Remove(IDSteam .. "DruggedHealth")
 
@@ -21,7 +21,7 @@ local function DrugPlayer(ply)
 
     ply.isDrugged = true
 
-    local IDSteam = ply:UniqueID()
+    local IDSteam = ply:SteamID64()
 
     if not timer.Exists(IDSteam .. "DruggedHealth") then
         ply:SetHealth(ply:Health() + 100)
