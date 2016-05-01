@@ -52,7 +52,7 @@ function plyMeta:wanted(actor, reason, time)
     self:setDarkRPVar("wanted", true)
     self:setDarkRPVar("wantedReason", reason)
 
-    timer.Create(self:UniqueID() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
+    timer.Create(self:SteamID64() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
         if not IsValid(self) then return end
         self:unWanted()
     end)
@@ -76,7 +76,7 @@ function plyMeta:unWanted(actor)
     self:setDarkRPVar("wanted", nil)
     self:setDarkRPVar("wantedReason", nil)
 
-    timer.Remove(self:UniqueID() .. " wantedtimer")
+    timer.Remove(self:SteamID64() .. " wantedtimer")
 
     if suppressMsg then return end
 
@@ -129,13 +129,15 @@ local function CombineRequest(ply, args)
         end
         for k, v in pairs(player.GetAll()) do
             if v:isCP() or v == ply then
-                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. ply:Nick(), Color(255, 0, 0, 255), text, ply)
+                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. " " .. ply:Nick(), Color(255, 0, 0, 255), text, ply)
             end
         end
     end
     return args, DoSay
 end
-DarkRP.defineChatCommand("cr", CombineRequest, 1.5)
+for _, cmd in pairs{"cr", "911", "999", "112", "000"} do
+    DarkRP.defineChatCommand(cmd, CombineRequest, 1.5)
+end
 
 local function warrantCommand(ply, args)
     local target = DarkRP.findPlayer(args[1])
@@ -333,7 +335,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     end
 
     local steamID = ply:SteamID()
-    timer.Create(ply:UniqueID() .. "jailtimer", time, 1, function()
+    timer.Create(ply:SteamID64() .. "jailtimer", time, 1, function()
         if IsValid(ply) then ply:unArrest() end
         arrestedPlayers[steamID] = nil
     end)
@@ -353,7 +355,7 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
         timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
     end
 
-    timer.Remove(ply:UniqueID() .. "jailtimer")
+    timer.Remove(ply:SteamID64() .. "jailtimer")
     DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
 end
 

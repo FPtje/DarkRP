@@ -1,5 +1,3 @@
-local plyMeta = FindMetaTable("Player")
-
 --Immunity
 cvars.AddChangeCallback("_FAdmin_immunity", function(Cvar, Previous, New)
     FAdmin.SetGlobalSetting("Immunity", (tonumber(New) == 1 and true) or false)
@@ -75,20 +73,25 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
         end
 
         MySQLite.query("SELECT DISTINCT PRIVILEGE FROM FADMIN_PRIVILEGES;", function(privTbl)
-            if not privTbl or #privTbl == 0 then return createGroups{} end
-
+            local privs = {}
             local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
-            local privs = {}
-            for priv, access in pairs(FAdmin.Access.Privileges) do
-                for i = access + 1, #hasPrivs, 1 do
-                    privs[hasPrivs[i]] = privs[hasPrivs[i]] or {}
-                    privs[hasPrivs[i]][priv] = true
+            -- No privileges registered to anyone. Reset everything
+            if not privTbl or #privTbl == 0 then
+                for priv, access in pairs(FAdmin.Access.Privileges) do
+                    for i = access + 1, #hasPrivs, 1 do
+                        privs[hasPrivs[i]] = privs[hasPrivs[i]] or {}
+                        privs[hasPrivs[i]][priv] = true
+                    end
                 end
+
+                createGroups(privs)
+
+                return
             end
 
-
             -- Check for newly created privileges and assign them to the default usergroups
+            -- No privilege can be revoke from every group
             local privSet = {}
             for _, priv in ipairs(privTbl) do
                 privSet[priv.PRIVILEGE] = true
@@ -100,7 +103,6 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
                 for i = access + 1, #hasPrivs do
                     MySQLite.query(("REPLACE INTO FADMIN_PRIVILEGES VALUES(%s, %s);"):format(MySQLite.SQLStr(hasPrivs[i]), MySQLite.SQLStr(priv)))
                 end
-
             end
 
             createGroups(privs)
