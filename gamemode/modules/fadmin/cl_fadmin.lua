@@ -18,9 +18,9 @@ end
 IncludeFolder(GM.FolderName .. "/gamemode/modules/fadmin/fadmin/")
 IncludeFolder(GM.FolderName .. "/gamemode/modules/fadmin/fadmin/playeractions/")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 FAdmin global settings
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 net.Receive("FAdmin_GlobalSetting", function(len)
     local setting, value = net.ReadString(), net.ReadType(net.ReadUInt(8))
 

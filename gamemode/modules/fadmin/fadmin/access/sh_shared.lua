@@ -7,7 +7,7 @@ FAdmin.Access.ADMIN[0] = "user"
 FAdmin.Access.Groups = FAdmin.Access.Groups or {}
 FAdmin.Access.Privileges = FAdmin.Access.Privileges or {}
 
-function FAdmin.Access.AddGroup(name, admin_access/*0 = not admin, 1 = admin, 2 = superadmin*/, privs, immunity, fromCAMI)
+function FAdmin.Access.AddGroup(name, admin_access --[[0 = not admin, 1 = admin, 2 = superadmin]], privs, immunity, fromCAMI)
     FAdmin.Access.Groups[name] = FAdmin.Access.Groups[name] or {ADMIN = admin_access, PRIVS = privs or {}, immunity = immunity}
 
     -- Register custom usergroups with CAMI
@@ -101,7 +101,7 @@ function PLAYER:IsAdmin(...)
 
     if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsAdmin(self, ...) or game.SinglePlayer() end
 
-    if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 1/*1 = admin*/) or (self.IsListenServerHost and self:IsListenServerHost()) then
+    if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 1 --[[1 = admin]]) or (self.IsListenServerHost and self:IsListenServerHost()) then
         return true
     end
 
@@ -114,7 +114,7 @@ local oldplyIsSuperAdmin = PLAYER.IsSuperAdmin
 function PLAYER:IsSuperAdmin(...)
     local usergroup = self:GetUserGroup()
     if not FAdmin or not FAdmin.Access or not FAdmin.Access.Groups or not FAdmin.Access.Groups[usergroup] then return oldplyIsSuperAdmin(self, ...) or game.SinglePlayer() end
-    if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 2/*2 = superadmin*/) or (self.IsListenServerHost and self:IsListenServerHost()) then
+    if (FAdmin.Access.Groups[usergroup] and FAdmin.Access.Groups[usergroup].ADMIN >= 2 --[[2 = superadmin]]) or (self.IsListenServerHost and self:IsListenServerHost()) then
         return true
     end
     if CLIENT and tonumber(self:FAdmin_GetGlobal("FAdmin_admin")) and self:FAdmin_GetGlobal("FAdmin_admin") >= 2 then return true end

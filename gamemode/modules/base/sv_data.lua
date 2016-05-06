@@ -1,14 +1,14 @@
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Functions and variables
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local setUpNonOwnableDoors,
     setUpTeamOwnableDoors,
     setUpGroupDoors,
     migrateDB
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  Database initialize
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 function DarkRP.initDatabase()
     MySQLite.begin()
         -- Gotta love the difference between SQLite and MySQL
@@ -183,10 +183,10 @@ function DarkRP.initDatabase()
         end})
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Database migration
 backwards compatibility with older versions of DarkRP
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function migrateDB(callback)
     -- migrte from darkrp_jobown to darkrp_doorjobs
     MySQLite.tableExists("darkrp_jobown", function(exists)
@@ -218,9 +218,9 @@ function migrateDB(callback)
     end)
 end
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
 Players
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 function DarkRP.storeRPName(ply, name)
     if not name or string.len(name) < 2 then return end
     hook.Call("onPlayerChangedName", nil, ply, ply:getDarkRPVar("rpname"), name)
@@ -379,9 +379,9 @@ function DarkRP.retrieveSalary(ply, callback)
     return val
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Players
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
 function meta:restorePlayerData()
     if not IsValid(self) then return end
@@ -417,9 +417,9 @@ function meta:restorePlayerData()
     end)
 end
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  Doors
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 function DarkRP.storeDoorData(ent)
     if not ent:CreatedByMap() then return end
     local map = string.lower(game.GetMap())

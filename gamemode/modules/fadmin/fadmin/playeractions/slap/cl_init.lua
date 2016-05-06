@@ -1,4 +1,4 @@
-local Damages = {0, 1, 10, 50, 100, 500, 9999999/*for the 12-year-olds*/}
+local Damages = {0, 1, 10, 50, 100, 500, 9999999--[[for the 12-year-olds]]}
 local Repetitions = {[1] = "once", [5] = "5 times", [10] = "10 times", [50] = "50 times", [100] = "100 times"}
 
 FAdmin.StartHooks["Slap"] = function()

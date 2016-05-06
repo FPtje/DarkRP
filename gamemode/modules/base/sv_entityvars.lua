@@ -1,20 +1,20 @@
 local meta = FindMetaTable("Player")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Pooled networking strings
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 util.AddNetworkString("DarkRP_InitializeVars")
 util.AddNetworkString("DarkRP_PlayerVar")
 util.AddNetworkString("DarkRP_PlayerVarRemoval")
 util.AddNetworkString("DarkRP_DarkRPVarDisconnect")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Player vars
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Remove a player's DarkRPVar
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:removeDarkRPVar(var, target)
     hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, nil)
     target = target or player.GetAll()
@@ -28,9 +28,9 @@ function meta:removeDarkRPVar(var, target)
     net.Send(target)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Set a player's DarkRPVar
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:setDarkRPVar(var, value, target)
     if not IsValid(self) then return end
     target = target or player.GetAll()
@@ -47,9 +47,9 @@ function meta:setDarkRPVar(var, value, target)
     net.Send(target)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Set a private DarkRPVar
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:setSelfDarkRPVar(var, value)
     self.privateDRPVars = self.privateDRPVars or {}
     self.privateDRPVars[var] = true
@@ -57,17 +57,17 @@ function meta:setSelfDarkRPVar(var, value)
     self:setDarkRPVar(var, value, self)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Get a DarkRPVar
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:getDarkRPVar(var)
     self.DarkRPVars = self.DarkRPVars or {}
     return self.DarkRPVars[var]
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Send the DarkRPVars to a client
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:sendDarkRPVars()
     if self:EntIndex() == 0 then return end
 
@@ -97,9 +97,9 @@ concommand.Add("_sendDarkRPvars", function(ply)
     ply:sendDarkRPVars()
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Admin DarkRPVar commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function setRPName(ply, args)
     if not args[2] or string.len(args[2]) < 2 or string.len(args[2]) > 30 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2/>30"))
@@ -182,9 +182,9 @@ DarkRP.defineChatCommand("rpname", RPName)
 DarkRP.defineChatCommand("name", RPName)
 DarkRP.defineChatCommand("nick", RPName)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Setting the RP name
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:setRPName(name, firstRun)
     -- Make sure nobody on this server already has this RP name
     local lowername = string.lower(tostring(name))
@@ -211,9 +211,9 @@ function meta:setRPName(name, firstRun)
 end
 
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Maximum entity values
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local maxEntities = {}
 function meta:addCustomEntity(entTable)
     if not entTable then return end

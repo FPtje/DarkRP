@@ -1,9 +1,9 @@
 -- Maintains entities that are to be removed after disconnect
 local queuedForRemoval = {}
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 DarkRP hooks
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:Initialize()
     self.Sandbox.Initialize(self)
 end
@@ -92,9 +92,9 @@ function GM:canSeeLogMessage(ply, message, colour)
     return true
 end
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  Gamemode functions
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 
 function GM:PlayerSpawnProp(ply, model)
     -- No prop spawning means no prop spawning.
@@ -746,9 +746,9 @@ function GM:PlayerLoadout(ply)
     ply:SwitchToDefaultWeapon()
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Remove with a delay if the player doesn't rejoin before the timer has run out
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function removeDelayed(entList, ply)
     local removedelay = GAMEMODE.Config.entremovedelay
 

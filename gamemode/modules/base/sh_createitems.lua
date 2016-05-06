@@ -576,9 +576,9 @@ AddCustomVehicle = DarkRP.createVehicle
 
 DarkRP.removeVehicle = fp{removeCustomItem, CustomVehicles, "vehicles", "onVehicleRemoved", true}
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Decides whether a custom job or shipmet or whatever can be used in a certain map
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:CustomObjFitsMap(obj)
     if not obj or not obj.maps then return true end
 

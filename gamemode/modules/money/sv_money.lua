@@ -1,6 +1,6 @@
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
 function meta:addMoney(amount)
     if not amount then return false end
@@ -51,9 +51,9 @@ function DarkRP.createMoneyBag(pos, amount)
     return moneybag
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function GiveMoney(ply, args)
     if args == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
@@ -211,7 +211,7 @@ local function CreateCheque(ply, args)
             Cheque:SetPos(tr.HitPos)
             Cheque:Setowning_ent(ply)
             Cheque:Setrecipient(recipient)
-            
+
             local min_amount = math.Min(amount, 2147483647)
             Cheque:Setamount(min_amount)
             Cheque:Spawn()

@@ -1,5 +1,4 @@
-/*---------------------------------------------------------------------------
-/*---------------------------------------------------------------------------
+--[[-----------------------------------------------------------------------
 Ammo types
 ---------------------------------------------------------------------------
 Ammo boxes that can be purchased in the F4 menu.
@@ -33,7 +32,7 @@ customCheck: (Optional! Advanced!) a Lua function that describes who can buy the
         ply: the player who is trying to buy the ammo
 
 Examples are below!
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 -- Pistol ammo type. Used by p228, desert eagle and all other pistols
 DarkRP.createAmmoType("pistol", {

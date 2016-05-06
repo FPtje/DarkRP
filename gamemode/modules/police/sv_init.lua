@@ -2,9 +2,9 @@ local plyMeta = FindMetaTable("Player")
 local finishWarrantRequest
 local arrestedPlayers = {}
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Interface functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function plyMeta:warrant(warranter, reason)
     if self.warranted then return end
     local suppressMsg = hook.Call("playerWarranted", GAMEMODE, self, warranter, reason)
@@ -113,9 +113,9 @@ function plyMeta:unArrest(unarrester)
     hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Chat commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function CombineRequest(ply, args)
     if args == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
@@ -219,9 +219,9 @@ local function unwantedCommand(ply, args)
 end
 DarkRP.defineChatCommand("unwanted", unwantedCommand)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Admin commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function ccArrest(ply, args)
     if DarkRP.jailPosCount() == 0 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_jail_pos"))
@@ -273,9 +273,9 @@ local function ccUnarrest(ply, args)
 end
 DarkRP.definePrivilegedChatCommand("unarrest", "DarkRP_AdminCommands", ccUnarrest)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Callback functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
     if not tobool(choice) then
         DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
@@ -286,9 +286,9 @@ function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
     end
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Hooks
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 function DarkRP.hooks:canArrest(arrester, arrestee)
     if IsValid(arrestee) and arrestee:IsPlayer() and arrestee:isCP() and not GAMEMODE.Config.cpcanarrestcp then

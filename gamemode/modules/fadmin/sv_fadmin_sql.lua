@@ -1,6 +1,6 @@
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Create the tables used for banning
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("DatabaseInitialized", "FAdmin_CreateMySQLTables", function()
     MySQLite.query("CREATE TABLE IF NOT EXISTS FAdminBans(SteamID VARCHAR(25) NOT NULL PRIMARY KEY, Nick VARCHAR(40), BanDate DATETIME, UnbanDate DATETIME, Reason VARCHAR(100), AdminName VARCHAR(40), Admin_steam VARCHAR(25));", function()
 
@@ -8,9 +8,9 @@ hook.Add("DatabaseInitialized", "FAdmin_CreateMySQLTables", function()
     end)
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Store a ban in the MySQL tables
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("FAdmin_StoreBan", "MySQLBans", function(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
     local steam = MySQLite.SQLStr(SteamID)
     local nick = Nick and MySQLite.SQLStr(Nick) or "NULL"
@@ -31,19 +31,19 @@ hook.Add("FAdmin_StoreBan", "MySQLBans", function(SteamID, Nick, Duration, Reaso
     return true
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Unban someone
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("FAdmin_UnBan", "FAdmin_MySQLUnban", function(ply, steamID)
     MySQLite.query("DELETE FROM FAdminBans WHERE steamID = " .. MySQLite.SQLStr(steamID))
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Retrieve the bans from the MySQL server and put them into effect
 
 Note: Must be called more than two seconds after InitPostEntity, because
 that's when the database initializes
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
     FAdmin.BANS = FAdmin.BANS or {}
 

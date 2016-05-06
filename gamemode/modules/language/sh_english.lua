@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------
+--[[-----------------------------------------------------------------------
 English (example) language file
 ---------------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ Make sure the language code is right at the bottom of this file
 
 = Using a language =
 Make sure the convar gmod_language is set to your language code. You can do that in a server CFG file.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 local my_language = {
     -- Admin things

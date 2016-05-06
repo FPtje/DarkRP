@@ -28,13 +28,13 @@ function FAdmin.ScoreBoard.Player.Show(ply)
     end
 
     FAdmin.ScoreBoard.Player.Controls.InfoPanel1 = vgui.Create("DListLayout")
-    FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100 + 184 + 5 /* + Avatar size*/)
+    FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100 + 184 + 5 --[[ + Avatar size]])
     FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetSize(184, ScreenHeight * 0.1 + 2)
     FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetVisible(true)
     FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Clear(true)
 
     FAdmin.ScoreBoard.Player.Controls.InfoPanel2 = FAdmin.ScoreBoard.Player.Controls.InfoPanel2 or vgui.Create("FAdminPanelList")
-    FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetPos(FAdmin.ScoreBoard.X + 25 + 184/*+ Avatar*/, FAdmin.ScoreBoard.Y + 100)
+    FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetPos(FAdmin.ScoreBoard.X + 25 + 184 --[[+ Avatar]], FAdmin.ScoreBoard.Y + 100)
     FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetSize(FAdmin.ScoreBoard.Width - 184 - 30 - 10, 184 + 5 + ScreenHeight * 0.1 + 2)
     FAdmin.ScoreBoard.Player.Controls.InfoPanel2:SetVisible(true)
     FAdmin.ScoreBoard.Player.Controls.InfoPanel2:Clear(true)

@@ -2,16 +2,16 @@ local plyMeta = FindMetaTable("Player")
 local hits = {}
 local questionCallback
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Net messages
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 util.AddNetworkString("onHitAccepted")
 util.AddNetworkString("onHitCompleted")
 util.AddNetworkString("onHitFailed")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Interface functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 DarkRP.getHits = fp{fn.Id, hits}
 
 function plyMeta:requestHit(customer, target, price)
@@ -121,9 +121,9 @@ function questionCallback(answer, hitman, customer, target, price)
     hitman:placeHit(customer, target, price)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Chat commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 DarkRP.defineChatCommand("hitprice", function(ply, args)
     if not ply:isHitman() then return "" end
     local price = tonumber(args) or 0
@@ -151,9 +151,9 @@ DarkRP.defineChatCommand("requesthit", function(ply, args)
     return ""
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Hooks
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function DarkRP.hooks:onHitAccepted(hitman, target, customer)
     net.Start("onHitAccepted")
         net.WriteEntity(hitman)

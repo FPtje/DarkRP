@@ -31,9 +31,9 @@ SWEP.IconLetter = ""
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.UseHands = true
 
-/*
+--[[
     Gets which entities are controlled by which keyboard keys
-*/
+]]
 local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
     local targets = {}
     local Owner = keypad:CPPIGetOwner()
@@ -59,9 +59,9 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
     return targets
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Get the entities that are affected by the keypad
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function get_sent_keypad_Info(keypad)
     local keyPass = keypad:GetNWInt("keypad_keygroup1")
     local keyDenied = keypad:GetNWInt("keypad_keygroup2")
@@ -71,9 +71,9 @@ local function get_sent_keypad_Info(keypad)
     return getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Overload for a different keypad addon
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function get_keypad_Info(keypad)
     local keyPass = tonumber(keypad.KeypadData.KeyGranted) or 0
     local keyDenied = tonumber(keypad.KeypadData.KeyDenied) or 0
@@ -84,9 +84,9 @@ local function get_keypad_Info(keypad)
 end
 
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Get the keypads that trigger this entity
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function getEntityKeypad(ent)
     local targets = {}
     local doorKeys = {} -- The numpad keys that activate this entity
@@ -129,9 +129,9 @@ local function getEntityKeypad(ent)
     return targets
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Send the info to the client
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + 0.3)
     if not SERVER then return end
@@ -162,9 +162,9 @@ end
 
 if not SERVER then return end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Registering numpad data
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local oldNumpadUp = numpad.OnUp
 local oldNumpadDown = numpad.OnDown
 

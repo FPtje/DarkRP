@@ -1,8 +1,8 @@
 local meta = FindMetaTable("Player")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Stubs
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 DarkRP.stub{
     name = "dropPocketItem",
     description = "Make the player drop an item from the pocket.",
@@ -123,9 +123,9 @@ DarkRP.hookStub{
     }
 }
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 -- workaround: GetNetworkVars doesn't give entities because the /duplicator/ doesn't want to save entities
 local function getDTVars(ent)
     if not ent.GetNetworkVars then return nil end
@@ -189,9 +189,9 @@ local function sendPocketItems(ply)
     net.Send(ply)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Interface functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function meta:addPocketItem(ent)
     if not IsValid(ent) then DarkRP.error("Entity not valid", 2) end
     if ent.USED then return end
@@ -252,9 +252,9 @@ function meta:getPocketItems()
     return res
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 util.AddNetworkString("DarkRP_spawnPocket")
 net.Receive("DarkRP_spawnPocket", function(len, ply)
     local item = net.ReadFloat()
@@ -262,9 +262,9 @@ net.Receive("DarkRP_spawnPocket", function(len, ply)
     ply:dropPocketItem(item)
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Hooks
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 local function onAdded(ply, ent, serialized)
     if not ent:IsValid() or not ent.DarkRPItem or not ent.Getowning_ent or not IsValid(ent:Getowning_ent()) then return end

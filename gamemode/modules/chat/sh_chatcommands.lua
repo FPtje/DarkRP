@@ -63,9 +63,9 @@ end
 -- chat commands that have been defined, but not declared
 DarkRP.getIncompleteChatCommands = fn.Curry(fn.Filter, 3)(fn.Compose{fn.Not, checkChatCommand})(DarkRP.chatCommands)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Chat commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 DarkRP.declareChatCommand{
     command = "pm",
     description = "Send a private message to someone.",

@@ -133,7 +133,7 @@ function DarkRP.toggleSleep(player, command)
                 player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
                 v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
                 v:Clip1(), v:Clip2()}
-                /*{class, ammocount primary, type primary, ammo count secondary, type secondary, clip primary, clip secondary*/
+                --[[{class, ammocount primary, type primary, ammo count secondary, type secondary, clip primary, clip secondary]]
             end
         end
         local ragdoll = ents.Create("prop_ragdoll")

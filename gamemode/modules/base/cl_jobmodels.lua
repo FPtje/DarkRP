@@ -7,9 +7,9 @@ sql.Query([[CREATE TABLE IF NOT EXISTS darkp_playermodels(
 local preferredModels = {}
 
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Interface functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function DarkRP.setPreferredJobModel(teamNr, model)
     local job = RPExtraTeams[teamNr]
     if not job then return end
@@ -28,9 +28,9 @@ function DarkRP.getPreferredJobModel(teamNr)
     return preferredModels[job.command]
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Load the preferred models
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function sendModels() -- run after the jobs have loaded
     net.Start("DarkRP_preferredjobmodels")
         for _, job in ipairs(RPExtraTeams) do

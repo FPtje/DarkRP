@@ -44,9 +44,9 @@ local function addAgenda(ply, args)
 end
 DarkRP.defineChatCommand("addagenda", addAgenda, 0.1)
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  Mayor stuff
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 local LotteryPeople = {}
 local LotteryON = false
 local LotteryAmount = 0
@@ -184,9 +184,9 @@ function DarkRP.unLockdown(ply)
 end
 DarkRP.defineChatCommand("unlockdown", DarkRP.unLockdown)
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  License
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 local function GrantLicense(answer, Ent, Initiator, Target)
     Initiator.LicenseRequested = nil
     if tobool(answer) then

@@ -3,9 +3,9 @@ util.AddNetworkString("DarkRP_RemoveDoorData")
 util.AddNetworkString("DarkRP_RemoveDoorVar")
 util.AddNetworkString("DarkRP_AllDoorData")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Interface functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local eMeta = FindMetaTable("Entity")
 function eMeta:getDoorData()
     if not self:isKeysOwnable() then return {} end
@@ -118,9 +118,9 @@ function eMeta:removeDoorData()
     net.Send(player.GetAll())
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Networking
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 local plyMeta = FindMetaTable("Player")
 function plyMeta:sendDoorData()

@@ -1,9 +1,9 @@
 local meta = FindMetaTable("Entity")
 local pmeta = FindMetaTable("Player")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 function meta:doorIndex()
     return self:CreatedByMap() and self:MapCreationID() or nil
@@ -210,9 +210,9 @@ function GM:canTax(ply)
     if ply:getDarkRPVar("money") < (GAMEMODE.Config.startingmoney * 2) then return false end
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function SetDoorOwnable(ply)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
