@@ -3,6 +3,7 @@ ENT.Base = "base_gmodentity"
 ENT.PrintName = "Cheque"
 ENT.Author = "Eusion"
 ENT.Spawnable = false
+ENT.IsDarkRPCheque = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Entity", 0, "owning_ent")
