@@ -20,6 +20,12 @@ end
 
 
 function ENT:Use(activator, caller)
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    if canUse == false then
+      if reason then DarkRP.notify(activator, 1, 4, reason) end
+      return
+    end
+
     local owner = self:Getowning_ent()
     local recipient = self:Getrecipient()
     local amount = self:Getamount() or 0
