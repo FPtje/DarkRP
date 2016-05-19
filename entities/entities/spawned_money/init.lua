@@ -17,8 +17,15 @@ function ENT:Initialize()
     phys:Wake()
 end
 
-function ENT:Use(activator,caller)
+function ENT:Use(activator, caller)
     if self.USED or self.hasMerged then return end
+
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    if canUse == false then
+      if reason then DarkRP.notify(activator, 1, 4, reason) end
+      return
+    end
+
     self.USED = true
     local amount = self:Getamount()
 
@@ -78,4 +85,34 @@ DarkRP.hookStub{
     returns = {
     },
     realm = "Server"
+}
+
+DarkRP.hookStub{
+    name = "canDarkRPUse",
+    description = "When a player uses an entity.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who tries to use the entity.",
+            type = "Player"
+        },
+        {
+            name = "entity",
+            description = "The actual entity the player attempts to use.",
+            type = "Entity"
+        },
+    },
+    returns = {
+        {
+            name = "canUse",
+            description = "Whether the entity should be used or not.",
+            type = "boolean"
+        },
+        {
+            name = "reason",
+            description = "Why the entity cannot be used.",
+            optional = true,
+            type = "string"
+        },
+    },
 }
