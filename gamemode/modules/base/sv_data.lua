@@ -231,7 +231,7 @@ function DarkRP.storeRPName(ply, name)
 end
 
 function DarkRP.retrieveRPNames(name, callback)
-    MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = " .. MySQLite.SQLStr(name) .. ";", function(r)
+    MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = " .. MySQLite.SQLStr(name) .. " OR rpname = " .. MySQLite.SQLStr(name .. utf8.char(8203)) .. ";", function(r)
         callback(tonumber(r[1].count) > 0)
     end)
 end
