@@ -1,17 +1,17 @@
 local DarkRPVars = {}
 
-/*---------------------------------------------------------------------------
-interface functions
----------------------------------------------------------------------------*/
+--[[---------------------------------------------------------------------------
+interface"someString"
+---------------------------------------------------------------------------]]
 local pmeta = FindMetaTable("Player")
 function pmeta:getDarkRPVar(var)
     local vars = DarkRPVars[self:UserID()]
     return vars and vars[var] or nil
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Retrieve the information of a player var
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function RetrievePlayerVar(userID, var, value)
     local ply = Player(userID)
     DarkRPVars[userID] = DarkRPVars[userID] or {}
@@ -25,10 +25,10 @@ local function RetrievePlayerVar(userID, var, value)
     end
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Retrieve a player var.
 Read the usermessage and attempt to set the DarkRP var
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function doRetrieve()
     local userID = net.ReadUInt(16)
     local var, value = DarkRP.readNetDarkRPVar()
@@ -37,9 +37,9 @@ local function doRetrieve()
 end
 net.Receive("DarkRP_PlayerVar", doRetrieve)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Retrieve the message to remove a DarkRPVar
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function doRetrieveRemoval()
     local userID = net.ReadUInt(16)
     local vars = DarkRPVars[userID] or {}
@@ -52,9 +52,9 @@ local function doRetrieveRemoval()
 end
 net.Receive("DarkRP_PlayerVarRemoval", doRetrieveRemoval)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Initialize the DarkRPVars at the start of the game
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function InitializeDarkRPVars(len)
     local plyCount = net.ReadUInt(8)
 
@@ -76,9 +76,9 @@ net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     DarkRPVars[userID] = nil
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Request the DarkRPVars when they haven't arrived
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
     for k,v in pairs(player.GetAll()) do
         if v:getDarkRPVar("rpname") then continue end

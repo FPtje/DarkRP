@@ -1,7 +1,7 @@
 -- Shared part
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Sound crash glitch
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 local entity = FindMetaTable("Entity")
 local EmitSound = entity.EmitSound
@@ -88,9 +88,9 @@ end)
 
 -- Clientside part
 if CLIENT then
-    /*---------------------------------------------------------------------------
+    --[[---------------------------------------------------------------------------
     Generic InitPostEntity workarounds
-    ---------------------------------------------------------------------------*/
+    ---------------------------------------------------------------------------]]
     hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
         if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
 
@@ -117,9 +117,9 @@ if CLIENT then
     return
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Generic InitPostEntity workarounds
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
     local commands = concommand.GetTable()
     if commands["durgz_witty_sayings"] then
@@ -158,17 +158,17 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
     end
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Fuck up APAnti. These hooks send unnecessary net messages.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 timer.Simple(3, function()
     hook.Remove("Move", "_APA.Settings.AllowGMSpawn")
     hook.Remove("PlayerSpawnObject", "_APA.Settings.AllowGMSpawn")
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Wire field generator exploit
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("OnEntityCreated", "DRP_WireFieldGenerator", function(ent)
     timer.Simple(0, function()
         if IsValid(ent) and ent:GetClass() == "gmod_wire_field_device" then
@@ -183,10 +183,10 @@ hook.Add("OnEntityCreated", "DRP_WireFieldGenerator", function(ent)
     end)
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Door tool is shitty
 Let's fix that huge class exploit
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("InitPostEntity", "FixDoorTool", function()
     local oldFunc = makedoor
     if oldFunc then
@@ -198,9 +198,9 @@ hook.Add("InitPostEntity", "FixDoorTool", function()
     end
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Anti crash exploit
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 hook.Add("PropBreak", "drp_AntiExploit", function(attacker, ent)
     if IsValid(ent) and ent:GetPhysicsObject():IsValid() then
         constraint.RemoveAll(ent)
@@ -222,9 +222,9 @@ hook.Add("CanTool", "DoorExploit", function(ply, trace, tool)
     end
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Actively deprecate commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local deprecated = {
     {command = "rp_removeletters",      alternative = "removeletters"           },
     {command = "rp_setname",            alternative = "forcerpname"             },

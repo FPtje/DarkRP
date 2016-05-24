@@ -47,9 +47,9 @@ end
 AddCSLuaFolder(GM.FolderName .. "/gamemode/modules/fadmin/fadmin/")
 AddCSLuaFolder(GM.FolderName .. "/gamemode/modules/fadmin/fadmin/playeractions/")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 FAdmin global settings
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function FAdmin.SetGlobalSetting(setting, value)
     if FAdmin.GlobalSetting[setting] == value then return end -- If the value didn't change, we don't need to resend it.
     FAdmin.GlobalSetting[setting] = value

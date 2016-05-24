@@ -1,8 +1,8 @@
 local plyMeta = FindMetaTable("Player")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Interface functions
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function plyMeta:isArrested()
     return self:getDarkRPVar("Arrested")
 end
@@ -25,9 +25,9 @@ plyMeta.isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), plyMeta.getJobTa
 plyMeta.isChief = fn.Compose{fn.Curry(fn.GetValue, 2)("chief"), plyMeta.getJobTable}
 
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Hooks
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 function DarkRP.hooks:canRequestWarrant(target, actor, reason)
     if not reason or string.len(reason) == 0 then return false, DarkRP.getPhrase("vote_specify_reason") end
@@ -75,9 +75,9 @@ function DarkRP.hooks:canUnwant(target, actor)
     return true
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Chat commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 for _, cmd in pairs{"cr", "911", "999", "112", "000"} do
     DarkRP.declareChatCommand{
         command = cmd,

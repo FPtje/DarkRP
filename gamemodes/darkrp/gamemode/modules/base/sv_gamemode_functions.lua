@@ -1,9 +1,11 @@
+local entMeta = FindMetaTable("Entity")
+
 -- Maintains entities that are to be removed after disconnect
 local queuedForRemoval = {}
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 DarkRP hooks
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:Initialize()
     self.Sandbox.Initialize(self)
 end
@@ -92,9 +94,9 @@ function GM:canSeeLogMessage(ply, message, colour)
     return true
 end
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  Gamemode functions
- ---------------------------------------------------------*/
+ ---------------------------------------------------------]]
 
 function GM:PlayerSpawnProp(ply, model)
     -- No prop spawning means no prop spawning.
@@ -632,6 +634,54 @@ function GM:PlayerSelectSpawn(ply)
     return spawn, POS
 end
 
+local oldPlyColor
+local function disableBabyGod(ply)
+    if not IsValid(ply) or not ply.Babygod then return end
+
+    ply.Babygod = nil
+    ply:SetRenderMode(RENDERMODE_NORMAL)
+    ply:GodDisable()
+
+    -- Don't reinstate the SetColor function
+    -- if there are still players who are babygodded
+    local reinstateOldColor = true
+
+    for _, p in pairs(player.GetAll()) do
+        reinstateOldColor = reinstateOldColor and p.Babygod == nil
+    end
+
+    if reinstateOldColor then
+        entMeta.SetColor = oldPlyColor
+        oldPlyColor = nil
+    end
+
+    ply:SetColor(ply.babyGodColor or Color(255, 255, 255, 255))
+
+    ply.babyGodColor = nil
+end
+
+local function enableBabyGod(ply)
+    timer.Remove(ply:EntIndex() .. "babygod")
+
+    ply.Babygod = true
+    ply:GodEnable()
+    ply.babyGodColor = ply:GetColor()
+    ply:SetRenderMode(RENDERMODE_TRANSALPHA)
+
+    if not oldPlyColor then
+        oldPlyColor = entMeta.SetColor
+        entMeta.SetColor = function(p, c, ...)
+            if not p.Babygod then return oldPlyColor(p, c, ...) end
+
+            p.babyGodColor = c
+            oldPlyColor(p, Color(c.r, c.g, c.b, 100))
+        end
+    end
+
+    ply:SetColor(ply.babyGodColor)
+    timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime or 0, 1, fp{disableBabyGod, ply})
+end
+
 function GM:PlayerSpawn(ply)
     ply:CrosshairEnable()
     ply:UnSpectate()
@@ -640,20 +690,7 @@ function GM:PlayerSpawn(ply)
     SendUserMessage("blackScreen", ply, false)
 
     if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
-        timer.Remove(ply:EntIndex() .. "babygod")
-
-        ply.Babygod = true
-        ply:GodEnable()
-        local c = ply:GetColor()
-        ply:SetRenderMode(RENDERMODE_TRANSALPHA)
-        ply:SetColor(Color(c.r, c.g, c.b, 100))
-        timer.Create(ply:EntIndex() .. "babygod", GAMEMODE.Config.babygodtime or 0, 1, function()
-            if not IsValid(ply) or not ply.Babygod then return end
-            ply.Babygod = nil
-            ply:SetRenderMode(RENDERMODE_NORMAL)
-            ply:SetColor(Color(c.r, c.g, c.b, c.a))
-            ply:GodDisable()
-        end)
+        enableBabyGod(ply)
     end
     ply.IsSleeping = false
 
@@ -746,9 +783,9 @@ function GM:PlayerLoadout(ply)
     ply:SwitchToDefaultWeapon()
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Remove with a delay if the player doesn't rejoin before the timer has run out
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function removeDelayed(entList, ply)
     local removedelay = GAMEMODE.Config.entremovedelay
 

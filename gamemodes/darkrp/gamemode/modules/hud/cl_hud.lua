@@ -1,6 +1,6 @@
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 HUD ConVars
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local ConVars = {}
 local HUDWidth
 local HUDHeight
@@ -77,9 +77,9 @@ end
 ReloadConVars()
 
 local Scrw, Scrh, RelativeX, RelativeY
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 HUD separate Elements
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local Health = 0
 local function DrawHealth()
     local maxHealth = localplayer:GetMaxHealth()
@@ -231,9 +231,9 @@ usermessage.Hook("AdminTell", function(msg)
     end)
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Drawing the HUD elements such as Health etc.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function DrawHUD()
     local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
     if shouldDraw == false then return end
@@ -258,9 +258,9 @@ local function DrawHUD()
     AdminTell()
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Entity HUDPaint things
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 -- Draw a player's name, health and/or job above the head
 -- This syntax allows for easy overriding
 plyMeta.drawPlayerInfo = plyMeta.drawPlayerInfo or function(self)
@@ -321,9 +321,9 @@ plyMeta.drawWantedInfo = plyMeta.drawWantedInfo or function(self)
     draw.DrawNonParsedText(wantedText, "DarkRPHUD2", pos.x + 1, pos.y - 41, colors.red, 1)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 The Entity display: draw HUD information about entities
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function DrawEntityDisplay()
     local shouldDraw, players = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
     if shouldDraw == false then return end
@@ -357,17 +357,17 @@ local function DrawEntityDisplay()
     end
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Drawing death notices
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:DrawDeathNotice(x, y)
     if not GAMEMODE.Config.showdeaths then return end
     self.Sandbox.DrawDeathNotice(self, x, y)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Display notifications
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function DisplayNotify(msg)
     local txt = msg:ReadString()
     GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
@@ -378,9 +378,9 @@ local function DisplayNotify(msg)
 end
 usermessage.Hook("_Notify", DisplayNotify)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Remove some elements from the HUD in favour of the DarkRP HUD
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:HUDShouldDraw(name)
     if name == "CHudHealth" or
         name == "CHudBattery" or
@@ -392,16 +392,16 @@ function GM:HUDShouldDraw(name)
     end
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Disable players' names popping up when looking at them
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:HUDDrawTargetID()
     return false
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Actual HUDPaint hook
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function GM:HUDPaint()
     localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
     if not IsValid(localplayer) then return end

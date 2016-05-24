@@ -1,6 +1,6 @@
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 What to do when you have a problem in DarkRP
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 
 There are three kinds of problems that can happen in DarkRP:
 - The problem caused by the end user (think of a bad modification or a bad setting)
@@ -26,9 +26,9 @@ If it's the fault of a third party mod developer, contact them to report the bug
 solve the problems caused by their mod.
 
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Reporting a bug for DarkRP
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 Only report bugs for issues of which you are VERY SURE that it is the fault of DarkRP developers.
 
 To report a bug for DarkRP, you need to follow very strict rules. These rules exist so the bugs can be easily identified and solved.

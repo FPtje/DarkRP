@@ -185,7 +185,7 @@ local function BuyShipment(ply, args)
     if CustomShipments[foundKey].onBought then
         CustomShipments[foundKey].onBought(ply, CustomShipments[foundKey], crate)
     end
-    hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], crate, price)
+    hook.Call("playerBoughtShipment", nil, ply, CustomShipments[foundKey], crate, cost)
 
     if IsValid(crate) then
         ply:addMoney(-cost)

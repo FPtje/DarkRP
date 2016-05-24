@@ -10,15 +10,15 @@ Open an issue on GitHub if there is no
 - DarkRP Hook that allows you to change DarkRP the way you want:
 	http://wiki.darkrp.com/index.php/Category:Hooks
 
-/*---------------------------------------------------------------------------
-            How to configure 
----------------------------------------------------------------------------*/
+--[[---------------------------------------------------------------------------
+            How to configure
+---------------------------------------------------------------------------]]
 Download https://github.com/FPtje/DarkRPModification as an addon and use the
 config folder inside it to configure DarkRP.
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
             How to modify DarkRP without modifying the core files
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 1. Go to darkrpmodification/lua/darkrp_modules
 2. Make a folder with any name, e.g. mydarkrpmod
 	it has to be lowercase

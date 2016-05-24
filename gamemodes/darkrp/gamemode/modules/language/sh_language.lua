@@ -50,9 +50,9 @@ local function getMissingPhrases(ply, cmd, args)
 end
 if CLIENT then concommand.Add("darkrp_getphrases", getMissingPhrases) end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Chat command translating
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local chatCmdDescriptions = {}
 function DarkRP.addChatCommandsLanguage(lang, tbl)
     chatCmdDescriptions[lang] = chatCmdDescriptions[lang] or {}

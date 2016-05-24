@@ -42,9 +42,9 @@ include("libraries/modificationloader.lua")
 include("libraries/mysqlite/mysqlite.lua")
 include("libraries/disjointset.lua")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Loading modules
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local fol = GM.FolderName .. "/gamemode/modules/"
 local files, folders = file.Find(fol .. "*", "LUA")
 

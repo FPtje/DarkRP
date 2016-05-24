@@ -39,9 +39,9 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "smg1"
 SWEP.IronSightsPos = Vector(0, 0, 0) -- this is just to make it disappear so it doesn't show up whilst scoped
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 SetupDataTables
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function SWEP:SetupDataTables()
     BaseClass.SetupDataTables(self)
     -- Int 0 = BurstBulletNum
@@ -49,9 +49,9 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Int", 2, "ScopeLevel")
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Reload
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function SWEP:Reload()
     if not IsValid(self:GetOwner()) then return end
 
@@ -62,9 +62,9 @@ function SWEP:Reload()
     return BaseClass.Reload(self)
 end
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------------------------
 SecondaryAttack
----------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local zoomFOV = {0, 0, 25, 5}
 function SWEP:SecondaryAttack()
     if not IsValid(self:GetOwner()) then return end
@@ -78,9 +78,9 @@ function SWEP:SecondaryAttack()
     self:GetOwner():SetFOV(zoomFOV[self:GetScopeLevel() + 1], 0)
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Holster the weapon
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function SWEP:Holster()
     if not IsValid(self:GetOwner()) then return end
 

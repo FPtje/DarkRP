@@ -1,8 +1,8 @@
 local plyMeta = FindMetaTable("Player")
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Show a black screen
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function blackScreen(um)
     local toggle = um:ReadBool()
     if toggle then
@@ -18,9 +18,9 @@ local function blackScreen(um)
 end
 usermessage.Hook("blackScreen", blackScreen)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Wrap strings to not become wider than the given amount of pixels
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function charWrap(text, pxWidth)
     local total = 0
 
@@ -77,10 +77,10 @@ function DarkRP.textWrap(text, font, pxWidth)
     return text
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Decides whether a given player is in the same room as the local player
 note: uses a heuristic
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 function plyMeta:isInRoom()
     local tracedata = {}
     tracedata.start = LocalPlayer():GetShootPos()
@@ -90,9 +90,9 @@ function plyMeta:isInRoom()
     return not trace.HitWorld
 end
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Key name to key int mapping
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local keyNames
 function input.KeyNameToNumber(str)
     if not keyNames then

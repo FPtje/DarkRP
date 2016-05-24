@@ -1,16 +1,16 @@
 resource.AddFile("sound/earthquake.mp3")
 util.PrecacheSound("earthquake.mp3")
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
 Variables
----------------------------------------------------------*/
+---------------------------------------------------------]]
 local timeLeft = 10
 local stormOn = false
 
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
 Meteor storm
----------------------------------------------------------*/
+---------------------------------------------------------]]
 local function StormStart()
     for k, v in pairs(player.GetAll()) do
         if v:Alive() then
@@ -84,9 +84,9 @@ timer.Create("stormControl", 1, 0, ControlStorm)
 timer.Stop("start")
 timer.Stop("stormControl")
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
 Earthquake
----------------------------------------------------------*/
+---------------------------------------------------------]]
 local lastmagnitudes = {} -- The magnitudes of the last tremors
 
 local tremor = ents.Create("env_physexplosion")
@@ -138,9 +138,9 @@ local function EarthQuakeTest()
 end
 timer.Create("EarthquakeTest", 1, 0, EarthQuakeTest)
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
  Flammable
----------------------------------------------------------*/
+---------------------------------------------------------]]
 local flammablePropsKV = { -- Class names as index
     drug = true,
     drug_lab = true,

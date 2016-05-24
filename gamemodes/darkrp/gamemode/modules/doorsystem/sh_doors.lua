@@ -210,9 +210,9 @@ DarkRP.registerDoorVar("allowedToOwn", writeNumBoolTbl, readNumBoolTbl)
 DarkRP.registerDoorVar("extraOwners", writeNumBoolTbl, readNumBoolTbl)
 DarkRP.registerDoorVar("title", net.WriteString, net.ReadString)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Commands
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 DarkRP.declareChatCommand{
     command = "toggleownable",
     description = "Toggle ownability status on this door.",

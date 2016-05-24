@@ -1,6 +1,6 @@
-/*
+--[[
 WHEN GETTING KICKED
-*/
+]]
 local KickText = ""
 usermessage.Hook("FAdmin_kick_start", function()
     hook.Add("HUDPaint", "FAdmin_kick", function()
@@ -38,9 +38,9 @@ usermessage.Hook("FAdmin_ban_update", function(um)
     BanText = um:ReadString()
 end)
 
-/*---------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------
 Show the window for banning
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function showBanWindow(SteamID, NICK, time, reason)
     local BanTime = time or 60
     NICK = NICK or ""
@@ -188,9 +188,9 @@ local function showBanWindow(SteamID, NICK, time, reason)
     Window:DoModal()
 end
 
-/*
+--[[
 ADD BUTTONS ETC. TO MENU
-*/
+]]
 FAdmin.StartHooks["CL_KickBan"] = function()
     FAdmin.Access.AddPrivilege("Kick", 2)
     FAdmin.Access.AddPrivilege("Ban", 2)

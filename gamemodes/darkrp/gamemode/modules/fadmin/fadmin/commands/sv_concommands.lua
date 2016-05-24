@@ -28,7 +28,7 @@ local function AutoComplete(command, ...)
         for k,v in pairs(FAdmin.Commands.List) do
             table.insert(autocomplete, command .. " " .. k)
         end
-    elseif not args[2]/*FAdmin.Commands.List[string.lower(args[#args])]*/ then
+    elseif not args[2] then
         for k,v in pairs(FAdmin.Commands.List) do
             if string.sub(k, 1, string.len(args[1])) == args[1] then
                 table.insert(autocomplete, command .. " " .. k)

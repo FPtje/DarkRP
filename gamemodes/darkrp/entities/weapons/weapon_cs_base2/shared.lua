@@ -66,8 +66,6 @@ SWEP.MultiMode = false
 
 SWEP.DarkRPBased = true
 
-/*---------------------------------------------------------
----------------------------------------------------------*/
 function SWEP:Initialize()
     if CLIENT and IsValid(self:GetOwner()) then
         local vm = self:GetOwner():GetViewModel()
@@ -100,9 +98,6 @@ function SWEP:SetupDataTables()
     self:NetworkVarNotify("Ironsights", fc{self.IronsightsChanged, fp{fn.Id, self}, fp{select, 4}})
 end
 
-/*---------------------------------------------------------
-Deploy
----------------------------------------------------------*/
 function SWEP:Deploy()
     self:SetHoldType("normal")
 
@@ -137,9 +132,9 @@ function SWEP:OnRemove()
     end
 end
 
-/*---------------------------------------------------------
+--[[---------------------------------------------------------
 Reload does nothing
----------------------------------------------------------*/
+---------------------------------------------------------]]
 function SWEP:Reload()
     if not self:DefaultReload(ACT_VM_RELOAD) then return end
     self:SetReloading(true)
@@ -150,9 +145,6 @@ function SWEP:Reload()
     self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
 end
 
-/*---------------------------------------------------------
-PrimaryAttack
----------------------------------------------------------*/
 function SWEP:PrimaryAttack()
     self.Primary.Automatic = (self:GetFireMode() == "auto")
 
@@ -225,10 +217,6 @@ function SWEP:PrimaryAttack()
     self:GetOwner():ViewPunch(Angle(util.SharedRandom("DarkRP_CSBase" .. self:EntIndex() .. "Mag" .. self:GetTotalUsedMagCount() .. "p" .. self:Clip1(), -1.2, -1.1) * self.Primary.Recoil, util.SharedRandom("DarkRP_CSBase" .. self:EntIndex() .. "Mag" .. self:GetTotalUsedMagCount() .. "y" .. self:Clip1(), -1.1, 1.1) * self.Primary.Recoil, 0))
 end
 
-/*---------------------------------------------------------
-Name: SWEP:PrimaryAttack()
-Desc: +attack1 has been pressed
----------------------------------------------------------*/
 function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
     if not IsValid(self:GetOwner()) then return end
     numbul = numbul or 1
@@ -254,10 +242,6 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
     if CLIENT then self.hasShot = true end
 end
 
-/*---------------------------------------------------------
-Checks the objects before any action is taken
-This is to make sure that the entities haven't been removed
----------------------------------------------------------*/
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
     if self.IconLetter and string.find(self.IconLetter, "^[0-9a-wA-Z]$") then
         draw.DrawNonParsedSimpleText(self.IconLetter, "CSSelectIcons", x + wide / 2, y + tall * 0.2, Color(255, 210, 0, 255), TEXT_ALIGN_CENTER)
@@ -294,10 +278,6 @@ local IRONSIGHT_TIME = 0.25
 
 function SWEP:CalcView() end
 
-/*---------------------------------------------------------
-Name: GetViewModelPosition
-Desc: Allows you to re-position the view model
----------------------------------------------------------*/
 function SWEP:GetViewModelPosition(pos, ang)
     if not self.IronSightsPos then return pos, ang end
 
@@ -381,17 +361,10 @@ function SWEP:GetViewModelPosition(pos, ang)
 end
 
 
-/*---------------------------------------------------------
-IronsightsChanged
----------------------------------------------------------*/
-
 function SWEP:IronsightsChanged(b)
     self:SetHoldType(b and self.HoldType or "normal")
 end
 
-/*---------------------------------------------------------
-SecondaryAttack
----------------------------------------------------------*/
 function SWEP:SecondaryAttack()
     if not self.IronSightsPos then return end
 
@@ -402,10 +375,6 @@ function SWEP:SecondaryAttack()
     self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
-/*---------------------------------------------------------
-onRestore
-    Loaded a saved game
----------------------------------------------------------*/
 function SWEP:OnRestore()
     self:SetNextSecondaryFire(0)
     self.dt.Ironsights = false
