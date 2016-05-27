@@ -243,6 +243,8 @@ DarkRP.declareChatCommand{
     delay = 1.5
 }
 
+DarkRP.chatCommandAlias("unownalldoors", "sellalldoors")
+
 DarkRP.declareChatCommand{
     command = "title",
     description = "Set the title of the door you're looking at.",
