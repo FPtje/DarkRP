@@ -40,8 +40,10 @@ function DarkRP.chatCommandAlias(command, ...)
     for k, v in pairs{...} do
         name = string.lower(v)
 
-        DarkRP.chatCommands[name] = table.Copy(DarkRP.chatCommands[command])
-        DarkRP.chatCommands[name].command = name
+        DarkRP.chatCommands[name] = {command = name}
+        setmetatable(DarkRP.chatCommands[name], {
+            __index = DarkRP.chatCommands[command]
+        })
     end
 end
 
