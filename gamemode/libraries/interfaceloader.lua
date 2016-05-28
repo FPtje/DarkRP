@@ -99,8 +99,7 @@ local function notImplemented(name, args, thisFunc)
     if stubs[name] and stubs[name].metatable[name] ~= thisFunc then -- when calling the not implemented function after the function was implemented
         return stubs[name].metatable[name](unpack(args))
     end
-    delayedCalls[name] = delayedCalls[name] or {}
-    table.insert(delayedCalls[name], args)
+    table.insert(delayedCalls, {name = name, args = args})
 
     return nil -- no return value because the method is not implemented
 end
@@ -156,12 +155,12 @@ Call the cached methods
 ---------------------------------------------------------------------------*/
 function finish()
     local calls = table.Copy(delayedCalls) -- Loop through a copy, so the notImplemented function doesn't get called again
-    for name, log in pairs(calls) do
+    for _, tbl in pairs(calls) do
+        local name = tbl.name
+
         if not stubs[name] then ErrorNoHalt("Calling non-existing stub \"" .. name .. "\"") continue end
 
-        for _, args in pairs(log) do
-            stubs[name].metatable[name](unpack(args))
-        end
+        stubs[name].metatable[name](unpack(tbl.args))
     end
 
     delayedCalls = {}
