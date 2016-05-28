@@ -155,7 +155,7 @@ Call the cached methods
 ---------------------------------------------------------------------------*/
 function finish()
     local calls = table.Copy(delayedCalls) -- Loop through a copy, so the notImplemented function doesn't get called again
-    for _, tbl in pairs(calls) do
+    for _, tbl in ipairs(calls) do
         local name = tbl.name
 
         if not stubs[name] then ErrorNoHalt("Calling non-existing stub \"" .. name .. "\"") continue end
