@@ -240,7 +240,7 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
     local sid64 = util.SteamIDTo64(steamid)
     local uniqueid = util.CRC("gm_" .. string.upper(steamid) .. "_gm")
 
-    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(sid64), MySQLite.SQLStr(steamid)))
+    MySQLite.query(string.format([[REPLACE INTO playerinformation VALUES(%s, %s);]], MySQLite.SQLStr(sid64), MySQLite.SQLStr(steamid)), nil, failed)
 
     local query = [[
     SELECT rpname, wallet, salary, "SID64" AS kind
@@ -295,13 +295,13 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
         )
 end
 
-function DarkRP.retrievePlayerData(ply, callback, failed, attempts)
+function DarkRP.retrievePlayerData(ply, callback, failed, attempts, err)
     attempts = attempts or 0
 
-    if attempts > 3 then return failed() end
+    if attempts > 3 then return failed(err) end
 
-    DarkRP.offlinePlayerData(ply:SteamID(), callback, function()
-        DarkRP.retrievePlayerData(ply, callback, failed, attempts + 1)
+    DarkRP.offlinePlayerData(ply:SteamID(), callback, function(sqlErr)
+        DarkRP.retrievePlayerData(ply, callback, failed, attempts + 1, sqlErr)
     end)
 end
 
@@ -406,14 +406,16 @@ function meta:restorePlayerData()
         if not data then
             DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary)
         end
-    end, function() -- Retrieving data failed, go on without it
+    end, function(err) -- Retrieving data failed, go on without it
         self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
+        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
         self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
-        self:setDarkRPVar("rpname", string.gsub(self:SteamName(), "\\\"", "\""))
+        local name = string.gsub(self:SteamName(), "\\\"", "\"")
+        self:setDarkRPVar("rpname", name)
 
-        error("Failed to retrieve player information from MySQL server")
+        DarkRP.error("Failed to retrieve player information from the database. ", nil, {"This means your database or the connection to your database is fucked.", "This is the error given by the database:\n\t\t" .. tostring(err)})
     end)
 end
 
