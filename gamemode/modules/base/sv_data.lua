@@ -38,10 +38,19 @@ function DarkRP.initDatabase()
 
         if MySQLite.isMySQL() then
             MySQLite.queueQuery([[
-                ALTER TABLE darkrp_jobspawn ADD FOREIGN KEY(id) REFERENCES darkrp_position(id)
-                    ON UPDATE CASCADE
-                    ON DELETE CASCADE;
-            ]])
+                SELECT NULL FROM information_schema.TABLE_CONSTRAINTS WHERE
+                   CONSTRAINT_SCHEMA = DATABASE() AND
+                   CONSTRAINT_NAME   = 'fk_darkrp_jobspawn_position' AND
+                   CONSTRAINT_TYPE   = 'FOREIGN KEY'
+            ]], function(data)
+                if data and data[1] then return end
+
+                MySQLite.query([[
+                    ALTER TABLE darkrp_jobspawn ADD CONSTRAINT `fk_darkrp_jobspawn_position` FOREIGN KEY(id) REFERENCES darkrp_position(id)
+                        ON UPDATE CASCADE
+                        ON DELETE CASCADE;
+                ]])
+            end)
         end
 
         MySQLite.query([[
