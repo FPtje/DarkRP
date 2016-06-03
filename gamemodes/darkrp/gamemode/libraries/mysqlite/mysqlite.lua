@@ -289,13 +289,15 @@ local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
 end
 
 local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
+    sql.m_strError = "" -- reset last error
+
     local lastError = sql.LastError()
     local Result = queryValue and sql.QueryValue(sqlText) or sql.Query(sqlText)
 
     if sql.LastError() and sql.LastError() ~= lastError then
         local err = sql.LastError()
         local supp = errorCallback and errorCallback(err, sqlText)
-        if not supp then error(err .. " (" .. sqlText .. ")") end
+        if supp == false then error(err .. " (" .. sqlText .. ")", 2) end
         return
     end
 

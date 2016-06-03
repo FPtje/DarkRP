@@ -131,6 +131,8 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     hitDistance = hitDistance or 15
     filter = filter or function(p) return p:IsPlayer() and p ~= self end
 
+    self:LagCompensation(true)
+
     local shootPos = self:GetShootPos()
     local entities = ents.FindInSphere(shootPos, searchDistance)
     local aimvec = self:GetAimVector()
@@ -165,6 +167,8 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
             foundEnt = ent
         end
     end
+
+    self:LagCompensation(false)
 
     if smallestDistance < hitDistance then
         return foundEnt, smallestDistance
