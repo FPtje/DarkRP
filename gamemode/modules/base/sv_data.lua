@@ -417,13 +417,13 @@ function meta:restorePlayerData()
         end
     end, function(err) -- Retrieving data failed, go on without it
         self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
-        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
         self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
         local name = string.gsub(self:SteamName(), "\\\"", "\"")
         self:setDarkRPVar("rpname", name)
 
+        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
         DarkRP.error("Failed to retrieve player information from the database. ", nil, {"This means your database or the connection to your database is fucked.", "This is the error given by the database:\n\t\t" .. tostring(err)})
     end)
 end
