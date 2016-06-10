@@ -66,8 +66,7 @@ function DarkRP.initDatabase()
                 uid BIGINT NOT NULL PRIMARY KEY,
                 rpname VARCHAR(45),
                 salary INTEGER NOT NULL DEFAULT 45,
-                wallet INTEGER NOT NULL,
-                UNIQUE(rpname)
+                wallet INTEGER NOT NULL
             );
         ]])
 
@@ -115,7 +114,7 @@ function DarkRP.initDatabase()
         ]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 0 end)
 
         MySQLite.queueQuery([[
-            REPLACE INTO darkrp_dbversion VALUES(20150725)
+            REPLACE INTO darkrp_dbversion VALUES(20160610)
         ]])
 
         -- SQlite doesn't really handle foreign keys strictly, neither does MySQL by default
@@ -197,9 +196,16 @@ Database migration
 backwards compatibility with older versions of DarkRP
 ---------------------------------------------------------------------------]]
 function migrateDB(callback)
+    local migrateCount = 0
+
+    local onFinish = function()
+        migrateCount = migrateCount + 1
+
+        if migrateCount == 2 then callback() end
+    end
     -- migrte from darkrp_jobown to darkrp_doorjobs
     MySQLite.tableExists("darkrp_jobown", function(exists)
-        if not exists then return callback() end
+        if not exists then return onFinish() end
 
         MySQLite.begin()
             -- Create a temporary table that links job IDs to job commands
@@ -223,8 +229,40 @@ function migrateDB(callback)
             -- Clean up the transition table and the old table
             MySQLite.queueQuery("DROP TABLE TempJobCommands;")
             MySQLite.queueQuery("DROP TABLE darkrp_jobown;")
-        MySQLite.commit(callback) -- callback
+        MySQLite.commit(onFinish)
     end)
+
+    if not DarkRP.DBVersion or DarkRP.DBVersion < 20160610 then
+        if not MySQLite.isMySQL() then
+            -- darkrp_player used to have a UNIQUE rpname field.
+            -- This sucks, get rid of it
+            MySQLite.query([[PRAGMA foreign_keys=OFF]])
+
+            MySQLite.query([[
+                CREATE TABLE IF NOT EXISTS new_darkrp_player(
+                    uid BIGINT NOT NULL PRIMARY KEY,
+                    rpname VARCHAR(45),
+                    salary INTEGER NOT NULL DEFAULT 45,
+                    wallet INTEGER NOT NULL
+                );
+            ]])
+
+            MySQLite.query([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
+
+            MySQLite.query([[DROP TABLE darkrp_player]])
+
+            MySQLite.query([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
+
+            MySQLite.query([[PRAGMA foreign_keys=ON]])
+
+            onFinish()
+        else
+            -- if only SQLite were this easy
+            MySQLite.query([[DROP INDEX rpname ON darkrp_player]], onFinish)
+        end
+    else
+        onFinish()
+    end
 end
 
 --[[---------------------------------------------------------
