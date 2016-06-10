@@ -274,11 +274,11 @@ function DarkRP.storeRPName(ply, name)
     ply:setDarkRPVar("rpname", name)
 
     MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:SteamID64() .. ";")
-    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name .. utf8.char(8203)) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
+    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
 function DarkRP.retrieveRPNames(name, callback)
-    MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = " .. MySQLite.SQLStr(name) .. " OR rpname = " .. MySQLite.SQLStr(name .. utf8.char(8203)) .. ";", function(r)
+    MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = " .. MySQLite.SQLStr(name) .. ";", function(r)
         callback(tonumber(r[1].count) > 0)
     end)
 end
@@ -310,11 +310,6 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
             if data and data[1] and data[1].kind == "UniqueID" then
                 -- The rpname must be unique
                 -- adding a new row with uid = SteamID64, but the same rpname will remove the uid=UniqueID row
-                local changeOldName = [[
-                UPDATE darkrp_player
-                SET rpname = ]]  .. (MySQLite.isMySQL() and [[CONCAT(rpname, "]] .. utf8.char(8203) .. [[")]] or [[rpname || "]] .. utf8.char(8203) .. [["]]) .. [[
-                WHERE uid = %s
-                ]]
 
                 local replquery = [[
                 REPLACE INTO darkrp_player(uid, rpname, wallet, salary)
@@ -322,7 +317,6 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
                 ]]
 
                 MySQLite.begin()
-                MySQLite.queueQuery(changeOldName:format(uniqueid), nil, failed)
                 MySQLite.queueQuery(
                     replquery:format(
                         sid64,
