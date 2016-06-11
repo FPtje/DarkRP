@@ -276,8 +276,6 @@ end
 
 local IRONSIGHT_TIME = 0.25
 
-function SWEP:CalcView() end
-
 function SWEP:GetViewModelPosition(pos, ang)
     if not self.IronSightsPos then return pos, ang end
 
