@@ -73,7 +73,7 @@ local my_language = {
     -- Police
     Wanted_text = "Wanted!",
     wanted = "Wanted by Police!\nReason: %s",
-    youre_arrested = "You have been arrested for %d seconds!",
+    youre_arrested = "You have been arrested. Time left: %d seconds!",
     youre_arrested_by = "You have been arrested by %s.",
     youre_unarrested_by = "You were unarrested by %s.",
     hes_arrested = "%s has been arrested for %d seconds!",
