@@ -66,8 +66,7 @@ function DarkRP.initDatabase()
                 uid BIGINT NOT NULL PRIMARY KEY,
                 rpname VARCHAR(45),
                 salary INTEGER NOT NULL DEFAULT 45,
-                wallet INTEGER NOT NULL,
-                UNIQUE(rpname)
+                wallet INTEGER NOT NULL
             );
         ]])
 
@@ -115,7 +114,7 @@ function DarkRP.initDatabase()
         ]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 0 end)
 
         MySQLite.queueQuery([[
-            REPLACE INTO darkrp_dbversion VALUES(20150725)
+            REPLACE INTO darkrp_dbversion VALUES(20160610)
         ]])
 
         -- SQlite doesn't really handle foreign keys strictly, neither does MySQL by default
@@ -197,9 +196,16 @@ Database migration
 backwards compatibility with older versions of DarkRP
 ---------------------------------------------------------------------------]]
 function migrateDB(callback)
+    local migrateCount = 0
+
+    local onFinish = function()
+        migrateCount = migrateCount + 1
+
+        if migrateCount == 2 then callback() end
+    end
     -- migrte from darkrp_jobown to darkrp_doorjobs
     MySQLite.tableExists("darkrp_jobown", function(exists)
-        if not exists then return callback() end
+        if not exists then return onFinish() end
 
         MySQLite.begin()
             -- Create a temporary table that links job IDs to job commands
@@ -223,8 +229,40 @@ function migrateDB(callback)
             -- Clean up the transition table and the old table
             MySQLite.queueQuery("DROP TABLE TempJobCommands;")
             MySQLite.queueQuery("DROP TABLE darkrp_jobown;")
-        MySQLite.commit(callback) -- callback
+        MySQLite.commit(onFinish)
     end)
+
+    if not DarkRP.DBVersion or DarkRP.DBVersion < 20160610 then
+        if not MySQLite.isMySQL() then
+            -- darkrp_player used to have a UNIQUE rpname field.
+            -- This sucks, get rid of it
+            MySQLite.query([[PRAGMA foreign_keys=OFF]])
+
+            MySQLite.query([[
+                CREATE TABLE IF NOT EXISTS new_darkrp_player(
+                    uid BIGINT NOT NULL PRIMARY KEY,
+                    rpname VARCHAR(45),
+                    salary INTEGER NOT NULL DEFAULT 45,
+                    wallet INTEGER NOT NULL
+                );
+            ]])
+
+            MySQLite.query([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
+
+            MySQLite.query([[DROP TABLE darkrp_player]])
+
+            MySQLite.query([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
+
+            MySQLite.query([[PRAGMA foreign_keys=ON]])
+
+            onFinish()
+        else
+            -- if only SQLite were this easy
+            MySQLite.query([[DROP INDEX rpname ON darkrp_player]], onFinish)
+        end
+    else
+        onFinish()
+    end
 end
 
 --[[---------------------------------------------------------
@@ -236,11 +274,11 @@ function DarkRP.storeRPName(ply, name)
     ply:setDarkRPVar("rpname", name)
 
     MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:SteamID64() .. ";")
-    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name .. utf8.char(8203)) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
+    MySQLite.query([[UPDATE darkrp_player SET rpname = ]] .. MySQLite.SQLStr(name) .. [[ WHERE UID = ]] .. ply:UniqueID() .. ";")
 end
 
 function DarkRP.retrieveRPNames(name, callback)
-    MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = " .. MySQLite.SQLStr(name) .. " OR rpname = " .. MySQLite.SQLStr(name .. utf8.char(8203)) .. ";", function(r)
+    MySQLite.query("SELECT COUNT(*) AS count FROM darkrp_player WHERE rpname = " .. MySQLite.SQLStr(name) .. ";", function(r)
         callback(tonumber(r[1].count) > 0)
     end)
 end
@@ -272,11 +310,6 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
             if data and data[1] and data[1].kind == "UniqueID" then
                 -- The rpname must be unique
                 -- adding a new row with uid = SteamID64, but the same rpname will remove the uid=UniqueID row
-                local changeOldName = [[
-                UPDATE darkrp_player
-                SET rpname = ]]  .. (MySQLite.isMySQL() and [[CONCAT(rpname, "]] .. utf8.char(8203) .. [[")]] or [[rpname || "]] .. utf8.char(8203) .. [["]]) .. [[
-                WHERE uid = %s
-                ]]
 
                 local replquery = [[
                 REPLACE INTO darkrp_player(uid, rpname, wallet, salary)
@@ -284,7 +317,6 @@ function DarkRP.offlinePlayerData(steamid, callback, failed)
                 ]]
 
                 MySQLite.begin()
-                MySQLite.queueQuery(changeOldName:format(uniqueid), nil, failed)
                 MySQLite.queueQuery(
                     replquery:format(
                         sid64,
@@ -417,13 +449,13 @@ function meta:restorePlayerData()
         end
     end, function(err) -- Retrieving data failed, go on without it
         self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
-        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
         self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
         local name = string.gsub(self:SteamName(), "\\\"", "\"")
         self:setDarkRPVar("rpname", name)
 
+        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
         DarkRP.error("Failed to retrieve player information from the database. ", nil, {"This means your database or the connection to your database is fucked.", "This is the error given by the database:\n\t\t" .. tostring(err)})
     end)
 end
