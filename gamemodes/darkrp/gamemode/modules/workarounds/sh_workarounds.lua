@@ -4,6 +4,7 @@ Sound crash glitch
 ---------------------------------------------------------------------------]]
 
 local entity = FindMetaTable("Entity")
+local plyMeta = FindMetaTable("Player")
 local EmitSound = entity.EmitSound
 function entity:EmitSound(sound, ...)
     if not sound then DarkRP.error(string.format("The first argument of the ent:EmitSound call is '%s'. It's supposed to be a string.", tostring(sound)), 3) end
@@ -115,6 +116,16 @@ if CLIENT then
     end
 
     return
+end
+
+if game.SinglePlayer() then
+    local sid64 = plyMeta.SteamID64
+
+    function plyMeta:SteamID64(...)
+        local sid = sid64(self, ...)
+
+        return sid or 0
+    end
 end
 
 --[[---------------------------------------------------------------------------
