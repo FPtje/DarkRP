@@ -202,6 +202,8 @@ GM.Config.gunlabweapon                  = "weapon_p2282"
 GM.Config.jailtimer                     = 120
 -- lockdowndelay - The amount of time a mayor must wait before starting the next lockdown
 GM.Config.lockdowndelay                 = 120
+-- maxadvertbillboards - The maximum number of /advert billboards a player can place.
+GM.Config.maxadvertbillboards           = 3
 -- maxdoors - Sets the max amount of doors one can own.
 GM.Config.maxdoors                      = 20
 -- maxdrugs - Sets max drugs.

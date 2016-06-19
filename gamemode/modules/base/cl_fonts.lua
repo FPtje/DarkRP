@@ -40,6 +40,13 @@ local function loadFonts()
         shadow = false,
         font = "Trebuchet MS"})
 
+    surface.CreateFont("Trebuchet48", {
+        size = 48,
+        weight = 500,
+        antialias = true,
+        shadow = false,
+        font = "Trebuchet MS"})
+
     surface.CreateFont("TabLarge", {
         size = tahomaSize(15),
         weight = 700,
