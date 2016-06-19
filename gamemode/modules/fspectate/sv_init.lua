@@ -174,9 +174,13 @@ hook.Add("PlayerSay", "FSpectate", playerSay)
 
 -- ULX' !spectate command conflicts with mine
 -- The concommand "ulx spectate" should still work.
-local function fixULXIncompat()
+local function fixAdminModIncompat()
     if ULib then
         ULib.removeSayCommand("!spectate")
     end
+
+    if serverguard then
+        serverguard.command:Remove("spectate")
+    end
 end
-hook.Add("InitPostEntity", "FSpectate", fixULXIncompat)
+hook.Add("InitPostEntity", "FSpectate", fixAdminModIncompat)
