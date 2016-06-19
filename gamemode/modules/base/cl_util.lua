@@ -54,10 +54,9 @@ function DarkRP.textWrap(text, font, pxWidth)
             local wordlen = surface.GetTextSize(word)
             total = total + wordlen
 
-
             -- Wrap around when the max width is reached
             if wordlen >= pxWidth then -- Split the word if the word is too big
-                local splitWord, splitPoint = charWrap(word, pxWidth)
+                local splitWord, splitPoint = charWrap(word, pxWidth - (total - wordlen))
                 total = splitPoint
                 return splitWord
             elseif total < pxWidth then
