@@ -80,12 +80,12 @@ local function placeBillboard(ply, args)
     end
 
     ply:DeleteOnRemove(ent)
-   
-    undo.Create( " Advert Billboard " )
-        undo.SetPlayer( ply )
-        undo.AddEntity( ent )
+
+    undo.Create("Advert Billboard")
+        undo.SetPlayer(ply)
+        undo.AddEntity(ent)
     undo.Finish()
-    
+
     return ""
 end
 DarkRP.defineChatCommand("advert", placeBillboard)
