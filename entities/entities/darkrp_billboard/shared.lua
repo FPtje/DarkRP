@@ -7,6 +7,8 @@ ENT.Author = "FPtje"
 ENT.Spawnable = false
 ENT.Editable = true
 
+cleanup.Register("advert_billboards")
+
 function ENT:SetupDataTables()
     self:NetworkVar("String", 0, "TopText", {
         KeyName = "toptext",

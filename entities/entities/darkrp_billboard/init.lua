@@ -17,10 +17,6 @@ function ENT:Initialize()
     end
 end
 
-local hookcanAdvert = {canAdvert = function(_, ply, action, args)
-    return true
-end}
-
 function ENT:SetDefaults(txt)
     txt = string.gsub(string.gsub(txt or "", "//", "\n"), "\\n", "\n")
     local split = string.Split(txt, "\n") or {}
@@ -33,15 +29,16 @@ function ENT:SetDefaults(txt)
     self:SetBarColor(Vector(1, 0.5, 0))
 end
 
-local function canEditVariable(_, ent, ply, key, val, editor)
-    return ent:CPPICanPhysgun(ply)
+local function canEditVariable(self, ent, ply, key, val, editor)
+	if self ~= ent then return end
+    return self:CPPICanPhysgun(ply)
 end
 
 local function placeBillboard(ply, args)
-    local canEdit, message = hook.Call("canAdvert", hookcanAdvert, ply, args)
+    local canEdit, message = hook.Call("canAdvert", nil, ply, args)
 
-    if not canEdit then
-        DarkRP.notify(ply, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "advertise", ""))
+    if canEdit == false then
+        DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "advertise", ""))
         return ""
     end
 
@@ -81,10 +78,12 @@ local function placeBillboard(ply, args)
 
     ply:DeleteOnRemove(ent)
 
-    undo.Create("Advert Billboard")
+    undo.Create("advert_billboard")
         undo.SetPlayer(ply)
         undo.AddEntity(ent)
     undo.Finish()
+
+    ply:AddCleanup("advert_billboards", ent)
 
     return ""
 end
@@ -97,5 +96,3 @@ function ENT:OnRemove()
 
     ply.DarkRP_advertboards = (ply.DarkRP_advertboards or 1) - 1
 end
-
-
