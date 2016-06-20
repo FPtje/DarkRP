@@ -30,7 +30,7 @@ function ENT:SetDefaults(txt)
 end
 
 local function canEditVariable(self, ent, ply, key, val, editor)
-	if self ~= ent then return end
+    if self ~= ent then return end
     return self:CPPICanPhysgun(ply)
 end
 
