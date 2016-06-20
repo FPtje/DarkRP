@@ -40,3 +40,6 @@ function ENT:Draw()
     render.PopCustomClipPlane()
     render.EnableClipping(false)
 end
+
+language.Add("Cleanup_advert_billboards", "Advert Billboards")
+language.Add("Undone_advert_billboard", "Undone Advert Billboard")
