@@ -236,7 +236,6 @@ local my_language = {
 
     whisper = "whisper",
     yell = "yell",
-    advert = "[Advert]",
     broadcast = "[Broadcast!]",
     radio = "radio",
     request = "(REQUEST!)",

@@ -118,7 +118,7 @@ if CLIENT then
     return
 end
 
-if game.SinglePlayer() then
+if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
     local sid64 = plyMeta.SteamID64
 
     function plyMeta:SteamID64(...)

@@ -111,12 +111,6 @@ DarkRP.declareChatCommand{
 }
 
 DarkRP.declareChatCommand{
-    command = "advert",
-    description = "Advertise something to everyone in the server.",
-    delay = 1.5
-}
-
-DarkRP.declareChatCommand{
     command = "broadcast",
     description = "Broadcast something as a mayor.",
     delay = 1.5,
