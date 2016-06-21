@@ -13,7 +13,7 @@ function ENT:Initialize()
 
     if phys and phys:IsValid() then
         phys:Wake()
-        phys:EnableMotion(false)
+        phys:EnableMotion(true)
     end
 end
 
