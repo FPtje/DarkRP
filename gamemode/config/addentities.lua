@@ -81,7 +81,6 @@ DarkRP.createShipment("M4", {
     allowed = {TEAM_GUN},
     category = "Rifles",
 })
-
 DarkRP.createShipment("Mac 10", {
     model = "models/weapons/w_smg_mac10.mdl",
     entity = "weapon_mac102",
