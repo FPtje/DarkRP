@@ -6,6 +6,7 @@ ENT.Author = "FPtje"
 
 ENT.Spawnable = false
 ENT.Editable = true
+ENT.IsDarkRPBillboard = true
 
 cleanup.Register("advert_billboards")
 
