@@ -69,7 +69,7 @@ DarkRP.hookStub{
         },
         {
             name = "arguments",
-            description = "Arguments related to editing laws.",
+            description = "The advertisement itself.",
             type = "table"
         }
     },
@@ -85,5 +85,29 @@ DarkRP.hookStub{
             type = "string"
         }
     },
+    realm = "Server"
+}
+
+DarkRP.hookStub{
+    name = "playerAdverted",
+    description = "Called when a player placed an advertisement billboard.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player.",
+            type = "Player"
+        },
+        {
+            name = "arguments",
+            description = "The advertisement itself.",
+            type = "string"
+        },
+        {
+            name = "entity",
+            description = "The placed advertisement billboard.",
+            type = "Entity"
+        }
+    },
+    returns = {},
     realm = "Server"
 }
