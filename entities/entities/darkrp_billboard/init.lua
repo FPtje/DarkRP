@@ -85,6 +85,8 @@ local function placeBillboard(ply, args)
 
     ply:AddCleanup("advert_billboards", ent)
 
+    hook.Call("playerAdverted", nil, ply, args, ent)
+
     return ""
 end
 DarkRP.defineChatCommand("advert", placeBillboard)
