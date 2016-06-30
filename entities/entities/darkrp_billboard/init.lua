@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-    self:SetModel("models/props/cs_assault/Billboard.mdl")
+    self:SetModel(self.Model or "models/props/cs_assault/Billboard.mdl")
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
@@ -84,6 +84,8 @@ local function placeBillboard(ply, args)
     undo.Finish()
 
     ply:AddCleanup("advert_billboards", ent)
+
+    hook.Call("playerAdverted", nil, ply, args, ent)
 
     return ""
 end
