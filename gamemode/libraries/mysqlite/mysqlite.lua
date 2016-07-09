@@ -201,6 +201,7 @@ function commit(onFinished)
 
     if #queuedQueries == 0 then
         queuedQueries = nil
+        if onFinished then onFinished() end
         return
     end
 
