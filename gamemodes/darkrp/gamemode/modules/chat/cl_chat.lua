@@ -32,7 +32,7 @@ local function AddToChat(bits)
             chat.AddNonParsedText(col1, prefixText, col2, ": " .. text)
         end
     else
-        shouldShow = hook.Call("ChatText", GAMEMODE, "0", prefixText, prefixText, "none")
+        shouldShow = hook.Call("ChatText", GAMEMODE, "0", prefixText, prefixText, "darkrp")
 
         if shouldShow ~= true then
             chat.AddNonParsedText(col1, prefixText)
