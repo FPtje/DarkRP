@@ -67,7 +67,7 @@ function ENT:Draw()
 
     self.LastDrawn = CurTime()
     local IsAdmin = LocalPlayer():IsAdmin()
-    local HasPhysgun = (IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "weapon_physgun")
+    local HasPhysgun = IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "weapon_physgun"
     local isUsing = (HasPhysgun and LocalPlayer():KeyDown(IN_ATTACK)) or LocalPlayer():KeyDown(IN_USE)
 
     surface.SetFont("TargetID")
@@ -132,34 +132,33 @@ function ENT:Draw()
 
     --Drawing the actual HTML panel:
 
-    if isUsing and posX > -500 and posX < 500 and posY < 250 and posY > -250 then
-        if not self.Disabled and self.HTML and self.HTML:IsValid() and self.CanClickAgain and CurTime() > self.CanClickAgain then
-            self.CanClickAgain = CurTime() + 1
-            self.HTML:SetPaintedManually(false)
-            self.HTML:SetPos(0, 100)
-            self.HTML:SetSize(ScrW(), ScrH() - 100)
-            gui.EnableScreenClicker(true)
-            -- gui.SetMousePos(posX/1024*ScrW(), posY/512*(ScrH() - 100) + 100)
-            self.HTMLCloseButton = self.HTMLCloseButton or vgui.Create("DButton")
-            self.HTMLCloseButton:SetPos(ScrW() - 100, 0)
-            self.HTMLCloseButton:SetSize(100, 100)
-            self.HTMLCloseButton:SetText("X")
-            self.HTMLCloseButton:SetVisible(true)
-            self.HTML:SetVisible(true)
-            self.HTML:RequestFocus()
-            self.HTML:SetKeyboardInputEnabled(true)
-            self.HTML:MakePopup()
+    if isUsing and posX > -500 and posX < 500 and posY < 250 and posY > -250 and
+    not self.Disabled and self.HTML and self.HTML:IsValid() and self.CanClickAgain and CurTime() > self.CanClickAgain then
+        self.CanClickAgain = CurTime() + 1
+        self.HTML:SetPaintedManually(false)
+        self.HTML:SetPos(0, 100)
+        self.HTML:SetSize(ScrW(), ScrH() - 100)
+        gui.EnableScreenClicker(true)
+        -- gui.SetMousePos(posX/1024*ScrW(), posY/512*(ScrH() - 100) + 100)
+        self.HTMLCloseButton = self.HTMLCloseButton or vgui.Create("DButton")
+        self.HTMLCloseButton:SetPos(ScrW() - 100, 0)
+        self.HTMLCloseButton:SetSize(100, 100)
+        self.HTMLCloseButton:SetText("X")
+        self.HTMLCloseButton:SetVisible(true)
+        self.HTML:SetVisible(true)
+        self.HTML:RequestFocus()
+        self.HTML:SetKeyboardInputEnabled(true)
+        self.HTML:MakePopup()
 
-            function self.HTMLCloseButton.DoClick() -- Revert to drawing on the prop
-                self.HTML:SetPos(-512, -256)
-                self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
-                self.HTML:SetPaintedManually(true)
-                self.HTML:SetKeyboardInputEnabled(false)
-                self.HTML:SetVisible(false)
-                gui.EnableScreenClicker(false)
-                self.HTMLCloseButton:Remove()
-                self.HTMLCloseButton = nil
-            end
+        function self.HTMLCloseButton.DoClick() -- Revert to drawing on the prop
+            self.HTML:SetPos(-512, -256)
+            self.HTML:SetSize(self.HTMLWidth, self.HTMLHeight)
+            self.HTML:SetPaintedManually(true)
+            self.HTML:SetKeyboardInputEnabled(false)
+            self.HTML:SetVisible(false)
+            gui.EnableScreenClicker(false)
+            self.HTMLCloseButton:Remove()
+            self.HTMLCloseButton = nil
         end
     end
 end

@@ -484,8 +484,8 @@ function setUpNonOwnableDoors()
                 if tobool(row.isDisabled) then
                     e:setKeysNonOwnable(tobool(row.isDisabled))
                 end
-                if row.isLocked ~= nil then
-                    if row.isLocked ~= "NULL" then e:Fire((tobool(row.isLocked) and "" or "un") .. "lock", "", 0) end
+                if row.isLocked and row.isLocked ~= "NULL" then
+                    e:Fire((tobool(row.isLocked) and "" or "un") .. "lock", "", 0)
                 end
                 e:setKeysTitle(row.title ~= "NULL" and row.title or nil)
             end

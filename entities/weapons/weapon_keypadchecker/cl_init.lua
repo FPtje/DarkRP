@@ -21,7 +21,7 @@ function SWEP:DrawHUD()
         entMessages[v.ent] = (entMessages[v.ent] or 0) + 1
         local pos = v.ent:LocalToWorld(v.ent:OBBCenter()):ToScreen()
 
-        local name = (v.name and ": " .. v.name:gsub("onDown", DarkRP.getPhrase("keypad_on")):gsub("onUp", DarkRP.getPhrase("keypad_off")) or "")
+        local name = v.name and ": " .. v.name:gsub("onDown", DarkRP.getPhrase("keypad_on")):gsub("onUp", DarkRP.getPhrase("keypad_off")) or ""
 
         draw.WordBox(2, pos.x, pos.y + entMessages[v.ent] * 16, (v.delay and v.delay .. " " .. DarkRP.getPhrase("seconds") .. " " or "") .. v.type .. name, "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
 

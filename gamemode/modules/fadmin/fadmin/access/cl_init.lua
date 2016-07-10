@@ -1,4 +1,3 @@
-local StarterGroups = {"superadmin", "admin", "user", "noaccess"}
 local ContinueNewGroup
 local EditGroups
 
@@ -111,7 +110,6 @@ end
 
 EditGroups = function()
     local frame, SelectedGroup, AddGroup, RemGroup, Privileges, SelectedPrivs, AddPriv, RemPriv, lblImmunity, nmbrImmunity
-    local plyGroup = FAdmin.Access.Groups[LocalPlayer():GetUserGroup()]
 
     frame = vgui.Create("DFrame")
     frame:SetTitle("Create, edit and remove groups")

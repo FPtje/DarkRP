@@ -24,7 +24,7 @@ function ENT:Draw()
         local lastHeight = 0
         for k,v in ipairs(Laws) do
             draw.DrawNonParsedText(string.format("%u. %s", k, v), "TargetID", 5, 35 + lastHeight, col)
-            lastHeight = lastHeight + ((fn.ReverseArgs(string.gsub(v, "\n", ""))) + 1) * 21
+            lastHeight = lastHeight + (fn.ReverseArgs(string.gsub(v, "\n", "")) + 1) * 21
         end
 
     cam.End3D2D()

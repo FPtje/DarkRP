@@ -2,7 +2,7 @@ FAdmin.ScoreBoard.Server.Information = {} -- Compatibility for autoreload
 FAdmin.ScoreBoard.Server.ActionButtons = {} -- Refresh server buttons when reloading gamemode
 
 local function MakeServerOptions()
-    local XPos, YPos, Width = 20, FAdmin.ScoreBoard.Y + 120 + FAdmin.ScoreBoard.Height / 5 + 20, (FAdmin.ScoreBoard.Width - 40) / 3
+    local _, YPos, Width = 20, FAdmin.ScoreBoard.Y + 120 + FAdmin.ScoreBoard.Height / 5 + 20, (FAdmin.ScoreBoard.Width - 40) / 3
 
     FAdmin.ScoreBoard.Server.Controls.ServerActionsCat = FAdmin.ScoreBoard.Server.Controls.ServerActionsCat or vgui.Create("FAdminPlayerCatagory")
     FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetLabel("  Server Actions")
@@ -101,8 +101,6 @@ function FAdmin.ScoreBoard.Server:AddServerSetting(Name, Image, color, Visible, 
 end
 
 function FAdmin.ScoreBoard.Server.Show(ply)
-    local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-
     FAdmin.ScoreBoard.Server.InfoPanels = FAdmin.ScoreBoard.Server.InfoPanels or {}
     for k,v in pairs(FAdmin.ScoreBoard.Server.InfoPanels) do
         if IsValid(v) then
@@ -151,7 +149,6 @@ function FAdmin.ScoreBoard.Server.Show(ply)
             local strLen = string.len(EndText)
 
             if strLen > 40 then
-                local NewLinePoint = math.floor(strLen / 40)
                 local NewValue = string.sub(EndText, 1, 40)
 
                 for i = 40, strLen, 34 do
@@ -160,7 +157,6 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 
                 EndText = NewValue
             else
-                local SpaceSize = 3
                 local MaxWidth = 240
                 surface.SetFont("TabLarge")
                 local TextWidth = surface.GetTextSize(v.name .. ": " .. Value)

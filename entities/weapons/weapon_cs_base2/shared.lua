@@ -146,7 +146,7 @@ function SWEP:Reload()
 end
 
 function SWEP:PrimaryAttack()
-    self.Primary.Automatic = (self:GetFireMode() == "auto")
+    self.Primary.Automatic = self:GetFireMode() == "auto"
 
     if self:GetBurstBulletNum() == 0 and (self:GetLastNonBurst() or 0) > CurTime() - 0.6 then return end
 
@@ -267,7 +267,7 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
         wide = wide - 20
 
         -- Draw that motherfucker
-        surface.DrawTexturedRect(x + (fsin), y - (fsin), wide - fsin * 2, (wide / 2) + (fsin))
+        surface.DrawTexturedRect(x + fsin, y - fsin, wide - fsin * 2, (wide / 2) + fsin)
 
         -- Draw weapon info box
         self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)

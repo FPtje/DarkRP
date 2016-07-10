@@ -42,8 +42,6 @@ function FAdmin.ScoreBoard.ChangeGmodLogo(new)
 end
 
 function FAdmin.ScoreBoard.Background()
-    local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-
     surface.SetDrawColor(0,0,0,200)
     surface.DrawRect(FAdmin.ScoreBoard.X, FAdmin.ScoreBoard.Y, FAdmin.ScoreBoard.Width, FAdmin.ScoreBoard.Height)
 
@@ -65,9 +63,8 @@ end
 function FAdmin.ScoreBoard.ShowScoreBoard()
     FAdmin.ScoreBoard.Visible = true
     FAdmin.ScoreBoard.DontGoBack = input.IsMouseDown(MOUSE_4) or input.IsKeyDown(KEY_BACKSPACE)
-    local ScreenWidth, ScreenHeight = ScrW(), ScrH()
 
-    FAdmin.ScoreBoard.Controls.Hostname = FAdmin.ScoreBoard.Controls.Hostname or vgui.Create("DLabel", self)
+    FAdmin.ScoreBoard.Controls.Hostname = FAdmin.ScoreBoard.Controls.Hostname or vgui.Create("DLabel")
     FAdmin.ScoreBoard.Controls.Hostname:SetText(DarkRP.deLocalise(GetHostName()))
     FAdmin.ScoreBoard.Controls.Hostname:SetFont("ScoreboardHeader")
     FAdmin.ScoreBoard.Controls.Hostname:SetColor(Color(200,200,200,200))

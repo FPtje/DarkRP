@@ -1,6 +1,6 @@
 local function IncludeFolder(fol)
     fol = string.lower(fol)
-    local files, folders = file.Find(fol .. "*", "LUA")
+    local _, folders = file.Find(fol .. "*", "LUA")
 
     for _, folder in SortedPairs(folders, true) do
         if folder ~= "." and folder ~= ".." then

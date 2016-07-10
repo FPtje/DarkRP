@@ -409,7 +409,7 @@ local function UnOwnAll(ply, cmd, args)
         end
     end
     ply.OwnedNumz = 0
-    DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount,DarkRP.formatMoney(amount * math.floor(((GAMEMODE.Config.doorcost * 0.66666666666666) + 0.5)))))
+    DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount,DarkRP.formatMoney(amount * math.floor((GAMEMODE.Config.doorcost * 0.66666666666666) + 0.5))))
     return ""
 end
 DarkRP.defineChatCommand("unownalldoors", UnOwnAll)
