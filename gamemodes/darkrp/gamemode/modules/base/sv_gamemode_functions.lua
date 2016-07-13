@@ -319,7 +319,7 @@ function GM:CanTool(ply, trace, mode)
     if IsValid(trace.Entity) then
         if trace.Entity.onlyremover then
             if mode == "remover" then
-                return (ply:IsAdmin() or ply:IsSuperAdmin())
+                return ply:IsAdmin() or ply:IsSuperAdmin()
             else
                 return false
             end

@@ -84,7 +84,7 @@ function FAdmin.ScoreBoard.Main.Show()
         v.BtnSort:SetPos(X + v:GetWide() + 5, Y + 4)
         function v.BtnSort.DoClick()
             for a,b in pairs(Sort) do
-                b.BtnSort.Depressed = (b.BtnSort == v.BtnSort)
+                b.BtnSort.Depressed = b.BtnSort == v.BtnSort
             end
             v.BtnSort.Type = (v.BtnSort.Type == "Down" and "Up") or "Down"
             v.BtnSort.Paint = function(panel, w, h)

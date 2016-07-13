@@ -1,22 +1,3 @@
-local function ScoreboardAddTeam(Name, color)
-    local ScreenWidth, ScreenHeight = ScrW(), ScrH()
-
-    local cat = FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:Add("FAdminPlayerCatagory")
-    cat:SetLabel("  " .. Name)
-    cat.CatagoryColor = color
-    cat:SetWide((FAdmin.ScoreBoard.Width - 40) / 2)
-
-    function cat:Toggle()
-    end
-
-    local pan = vgui.Create("FAdminPanelList")
-    pan:SizeToContents()
-
-    cat:SetContents(pan)
-
-    return cat, pan
-end
-
 local function SortedPairsByFunction(Table, Sorted, SortDown)
     local CopyTable = {}
     for k,v in pairs(Table) do

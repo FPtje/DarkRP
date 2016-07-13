@@ -56,14 +56,14 @@ local ignoreMaps = {
 hook.Add("PlayerInitialSpawn", "FAdmin_ChangelevelInfo", function(ply)
     local mapList = {}
     local maps = file.Find("maps/*.bsp", "GAME")
-    
+
     for _, v in ipairs(maps) do
         local name = string.lower(string.gsub(v, "%.bsp$", ""))
         if ignoreMaps[name] then continue end
 
         local prefix = string.match(name, "^(.-_)")
         if ignoreMaps[prefix] then continue end
-        
+
         for _, ignore in ipairs(ignorePatterns) do
             if string.find(name, ignore) then
                 goto mapContinue
@@ -100,15 +100,15 @@ hook.Add("PlayerInitialSpawn", "FAdmin_ChangelevelInfo", function(ply)
     local gamemodeList = engine.GetGamemodes()
     net.Start("FAdmin_ChangelevelInfo")
         net.WriteUInt(table.Count(mapList), 16) -- 65536 should be enough
-        for cat,maps in pairs(mapList) do
+        for cat, mps in pairs(mapList) do
             net.WriteString(cat)
-            net.WriteUInt(#maps, 16)
-            for _,map in pairs(maps) do
+            net.WriteUInt(#mps, 16)
+            for _, map in pairs(mps) do
                 net.WriteString(map)
             end
         end
         net.WriteUInt(#gamemodeList, 16)
-        for _,gmInfo in pairs(gamemodeList) do
+        for _, gmInfo in pairs(gamemodeList) do
             net.WriteString(gmInfo.name)
             net.WriteString(gmInfo.title)
         end
@@ -119,10 +119,10 @@ FAdmin.StartHooks["ChangeLevel"] = function()
     FAdmin.Commands.AddCommand("changelevel", ChangeLevel)
 
     FAdmin.Access.AddPrivilege("changelevel", 2)
-    
+
     mapNames = {}
     mapPatterns = {}
-    
+
     mapNames["aoc_"] = "Age of Chivalry"
 
     mapNames["ar_"] = "Counter-Strike"

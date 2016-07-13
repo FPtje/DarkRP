@@ -12,7 +12,7 @@ function FAdmin.Messages.AddMessage(MsgType, Message)
     tab.velx    = 0
     tab.vely    = -5
     surface.SetFont("GModNotify")
-    local w, h  = surface.GetTextSize( Message )
+    local w, _  = surface.GetTextSize( Message )
     tab.x       = ScrW() / 2 + w * 0.5 + (ScrW() / 20)
     tab.y       = ScrH()
     tab.a       = 255

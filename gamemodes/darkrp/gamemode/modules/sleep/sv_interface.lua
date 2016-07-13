@@ -24,3 +24,32 @@ DarkRP.toggleSleep = DarkRP.stub{
     },
     metatable = DarkRP
 }
+
+DarkRP.hookStub{
+    name = "canSleep",
+    description = "Whether someone is allowed to sleep.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player trying to sleep.",
+            type = "Player"
+        },
+        {
+            name = "force",
+            description = "Whether the sleep is being forced.",
+            type = "boolean"
+        }
+    },
+    returns = {
+        {
+            name = "canSleep",
+            description = "A yes or no as to whether the player can sleep.",
+            type = "boolean"
+        },
+        {
+            name = "message",
+            description = "The message that is shown when they can't sleep.",
+            type = "string"
+        }
+    }
+}

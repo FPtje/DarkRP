@@ -59,7 +59,7 @@ local function DropWeapon(ply)
     ply.anim_DroppingItem = true
 
     timer.Simple(1, function()
-        if IsValid(ply) and IsValid(ent) and ent:GetModel() and ent:GetModel() ~= "" then
+        if IsValid(ply) and IsValid(ent) and ply:Alive() and ent:GetModel() and ent:GetModel() ~= "" and not ply:GetObserverTarget() then
             ply:dropDRPWeapon(ent)
         end
     end)

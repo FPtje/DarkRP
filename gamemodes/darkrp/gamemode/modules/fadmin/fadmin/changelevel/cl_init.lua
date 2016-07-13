@@ -30,9 +30,9 @@ FAdmin.StartHooks["ChangeLevel"] = function()
     FAdmin.Access.AddPrivilege("changelevel", 2)
     FAdmin.Commands.AddCommand("changelevel", "[gamemode]", "<map>")
 
-    FAdmin.ScoreBoard.Server:AddServerAction("Changelevel", "icon16/world.png", Color(155, 0, 0, 255), function() return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "changelevel") end,
+    FAdmin.ScoreBoard.Server:AddServerAction("Changelevel", "icon16/world.png", Color(155, 0, 0, 255), true,
     function(ply, button)
-        local refresh = (not Changelevel or table.Count(Changelevel:GetMapList()) ~= table.Count(mapList))
+        local refresh = not Changelevel or table.Count(Changelevel:GetMapList()) ~= table.Count(mapList)
         Changelevel = Changelevel or vgui.Create("FAdmin_Changelevel")
         if refresh then
             Changelevel:SetGamemodeList(gamemodeList)

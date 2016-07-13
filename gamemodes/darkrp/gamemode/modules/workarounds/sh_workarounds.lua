@@ -152,21 +152,6 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
             v:Remove()
         end
     end
-
-    -- Fuck up URS.
-    -- https://github.com/Aaron113/URS
-    -- It fucks up every other mod that denies the spawning of entities
-    local ursthing = URSCheck
-    if ursthing then
-        URSCheck = function(...)
-            local res = ursthing(...)
-            if res == true then
-                ErrorNoHalt("Fucking up URS' spawn check. Please call Aaron113 a lazy ass in this issue: https://github.com/Aaron113/URS/issues/11\n")
-                return
-            end
-            return res
-        end
-    end
 end)
 
 --[[---------------------------------------------------------------------------

@@ -29,7 +29,7 @@ FAdmin.StartHooks["zz_Noclip"] = function()
             return "Disable noclip"
         end
         return "Enable noclip"
-    end, function(ply) return "fadmin/icons/noclip", (EnableDisableNoclip(ply) and "fadmin/icons/disable") end, Color(0, 200, 0, 255),
+    end, function(ply) return "fadmin/icons/noclip", EnableDisableNoclip(ply) and "fadmin/icons/disable" end, Color(0, 200, 0, 255),
 
     function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "SetNoclip") end, function(ply, button)
         if EnableDisableNoclip(ply) then
