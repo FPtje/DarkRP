@@ -32,28 +32,29 @@ local function onRagdollArrested(arrestee, _, arrester)
     end
 end
 
+local hookCanSleep = {canSleep = function(_, ply, force)
+    if not ply:Alive() then return false, DarkRP.getPhrase("must_be_alive_to_do_x", "/sleep") end
+    if (not ply.KnockoutTimer or ply.KnockoutTimer + KnockoutTime >= CurTime()) and not force then return false, DarkRP.getPhrase("have_to_wait", math.ceil((ply.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep") end
+    if ply:IsFrozen() then return false, DarkRP.getPhrase("unable", "/sleep", DarkRP.getPhrase("frozen")) end
+
+    return true
+end}
+
 function DarkRP.toggleSleep(player, command)
     if player:InVehicle() then return end
+
+    local canSleep, message = hook.Call("canSleep", hookCanSleep, player, command == "force")
+
+    if not canSleep then
+        DarkRP.notify(player, 1, 4, message ~= nil and message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "sleep", ""))
+        return ""
+    end
 
     if not player.SleepSound then
         player.SleepSound = CreateSound(player, "npc/ichthyosaur/water_breath.wav")
     end
     local timerName = player:EntIndex() .. "SleepExploit"
 
-    if not player:Alive() then
-        DarkRP.notify(player, 1, 4, DarkRP.getPhrase("must_be_alive_to_do_x", "/sleep"))
-        return ""
-    end
-
-    if (not player.KnockoutTimer or player.KnockoutTimer + KnockoutTime >= CurTime()) and command ~= "force" then
-        DarkRP.notify(player, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil((player.KnockoutTimer + KnockoutTime) - CurTime()), "/sleep"))
-        return ""
-    end
-
-    if player:IsFrozen() then
-        DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", DarkRP.getPhrase("frozen")))
-        return ""
-    end
 
     if player.Sleeping and IsValid(player.SleepRagdoll) then
         local frozen = player:IsFrozen()
@@ -118,7 +119,7 @@ function DarkRP.toggleSleep(player, command)
             GAMEMODE:SetPlayerSpeed(player, GAMEMODE.Config.arrestspeed, GAMEMODE.Config.arrestspeed)
         end
         timer.Remove(timerName)
-    elseif not player:IsFrozen() then
+    else
         if IsValid(player:GetObserverTarget()) then return "" end
         for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
             if v:GetClass() == "func_door" then
