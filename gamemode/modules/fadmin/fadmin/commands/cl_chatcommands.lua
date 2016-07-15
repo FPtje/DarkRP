@@ -99,7 +99,7 @@ hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
 end)
 
 FAdmin.StartHooks["Chatcommands"] = function()
-    FAdmin.ScoreBoard.Server:AddServerSetting("Set FAdmin's chat command prefix", "fadmin/icons/message", Color(0, 0, 155, 255), true, function()
+    FAdmin.ScoreBoard.Server:AddServerSetting("Set FAdmin's chat command prefix", "fadmin/icons/message", Color(0, 0, 155, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(ply, "ServerSetting") end, function()
         local prefix = GetGlobalString("FAdmin_commandprefix")
         prefix = prefix ~= '' and prefix or '/'
         Derma_StringRequest("Set chat command prefix", "Make sure it's only one character!", prefix, fp{RunConsoleCommand, "_Fadmin", "CommandPrefix"})

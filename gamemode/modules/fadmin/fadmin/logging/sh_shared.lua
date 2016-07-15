@@ -7,7 +7,7 @@ FAdmin.StartHooks["Logging"] = function()
 
     FAdmin.ScoreBoard.Server:AddServerSetting(function() return (logging:GetBool() and "Disable" or "Enable") .. " Logging" end,
     function() return "fadmin/icons/message", logging:GetBool() and "fadmin/icons/disable" end,
-    Color(0, 0, 155, 255), true, function(button)
+    Color(0, 0, 155, 255), function(ply) return FAdmin.Access.PlayerHasPrivilege(ply, "Logging") end, function(button)
         button:SetImage2((not logging:GetBool() and "fadmin/icons/disable") or "null")
         button:SetText((not logging:GetBool() and "Disable" or "Enable") .. " Logging")
         button:GetParent():InvalidateLayout()
