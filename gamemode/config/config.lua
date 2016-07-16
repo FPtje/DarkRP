@@ -500,9 +500,3 @@ Hungermod module
 GM.Config.hungerspeed = 2
 -- starverate <Amount> - How much health that is taken away every second the player is starving  (3 is the default).
 GM.Config.starverate = 3
-
---[[---------------------------------------------------------------------------
-DO NOT TOUCH THIS (unless you want broken shit!)
----------------------------------------------------------------------------]]
--- Prepare minHitDistance for DistToSqr
-GM.Config.minHitDistance = GM.Config.minHitDistance ^ 2
