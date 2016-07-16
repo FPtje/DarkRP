@@ -128,7 +128,8 @@ end
 
 function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     searchDistance = searchDistance or 100
-    hitDistance = (hitDistance or 15) ^ 2
+    hitDistance = (hitDistance or 15) * (hitDistance or 15)
+
     filter = filter or function(p) return p:IsPlayer() and p ~= self end
 
     self:LagCompensation(true)
