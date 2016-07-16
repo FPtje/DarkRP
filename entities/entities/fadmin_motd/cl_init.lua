@@ -59,7 +59,7 @@ function ENT:Draw()
     self:DrawModel()
 
     local pos = self:GetPos()
-    if pos:Distance(LocalPlayer():GetShootPos()) > 300 then return end
+    if pos:DistToSqr(LocalPlayer():GetShootPos()) > 90000 then return end
 
     if CurTime() - self.LastDrawn > 0.5 then
         self.Disabled = true --Disable it again when you stop looking at it

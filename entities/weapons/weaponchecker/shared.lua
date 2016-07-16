@@ -152,7 +152,7 @@ function SWEP:PrimaryAttack()
     local trace = self:GetOwner():GetEyeTrace()
     self:GetOwner():LagCompensation(false)
 
-    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self:GetOwner():GetPos()) > 100 then
+    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():DistToSqr(self:GetOwner():GetPos()) > 10000 then
         return
     end
 
@@ -201,7 +201,7 @@ function SWEP:SecondaryAttack()
     local trace = self:GetOwner():GetEyeTrace()
     self:GetOwner():LagCompensation(false)
 
-    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self:GetOwner():GetPos()) > 100 then
+    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():DistToSqr(self:GetOwner():GetPos()) > 10000 then
         return
     end
 
@@ -224,7 +224,7 @@ function SWEP:Reload()
 
     local trace = self:GetOwner():GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(self:GetOwner():GetPos()) > 100 then
+    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():DistToSqr(self:GetOwner():GetPos()) > 10000 then
         return
     end
 
@@ -322,7 +322,7 @@ function SWEP:Think()
         self:GetOwner():LagCompensation(true)
         local trace = self:GetOwner():GetEyeTrace()
         self:GetOwner():LagCompensation(false)
-        if not IsValid(trace.Entity) or trace.HitPos:Distance(self:GetOwner():GetShootPos()) > 100 or not trace.Entity:IsPlayer() then
+        if not IsValid(trace.Entity) or trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or not trace.Entity:IsPlayer() then
             self:Fail()
         end
         if self:GetEndCheckTime() <= CurTime() then

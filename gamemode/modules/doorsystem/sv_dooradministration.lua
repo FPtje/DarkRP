@@ -6,7 +6,7 @@ local function ccDoorUnOwn(ply, args)
 
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or not trace.Entity:getDoorOwner() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or not trace.Entity:getDoorOwner() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -45,7 +45,7 @@ local function ccAddOwner(ply, args)
 
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or trace.Entity:getKeysDoorTeams() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or trace.Entity:getKeysDoorTeams() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -80,7 +80,7 @@ local function ccRemoveOwner(ply, args)
 
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or trace.Entity:getKeysDoorTeams() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or trace.Entity:getKeysDoorTeams() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -115,7 +115,7 @@ local function ccLock(ply, args)
 
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -145,7 +145,7 @@ local function ccUnLock(ply, args)
 
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():Distance(trace.Entity:GetPos()) > 200 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end

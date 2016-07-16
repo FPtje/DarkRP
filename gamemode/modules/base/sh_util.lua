@@ -128,7 +128,7 @@ end
 
 function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     searchDistance = searchDistance or 100
-    hitDistance = hitDistance or 15
+    hitDistance = (hitDistance or 15) ^ 2
     filter = filter or function(p) return p:IsPlayer() and p ~= self end
 
     self:LagCompensation(true)
@@ -152,7 +152,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
 
         -- the point on the model that has the smallest distance to your line of sight
         local nearestPoint = ent:NearestPoint(projected)
-        local distance = nearestPoint:Distance(projected)
+        local distance = nearestPoint:DistToSqr(projected)
 
         if distance < smallestDistance then
             local trace = {
@@ -171,7 +171,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     self:LagCompensation(false)
 
     if smallestDistance < hitDistance then
-        return foundEnt, smallestDistance
+        return foundEnt, math.sqrt(smallestDistance)
     end
 
     return nil

@@ -63,7 +63,7 @@ local function ShowLetter(msg)
         draw.RoundedBox(2, ScrW() * .2, LetterY, ScrW() * .8 - (ScrW() * .2), ScrH(), Color(255, 255, 255, math.Clamp(LetterAlpha, 0, 200)))
         draw.DrawNonParsedText(LetterMsg .. "\n\n\n" .. DarkRP.getPhrase("signed", IsValid(Letter:Getsigned()) and Letter:Getsigned():Nick() or DarkRP.getPhrase("no_one")), font, ScrW() * .25 + 20, LetterY + 80, Color(0, 0, 0, LetterAlpha), 0)
 
-        if LocalPlayer():GetPos():Distance(LetterPos) > 100 then
+        if LocalPlayer():GetPos():DistToSqr(LetterPos) > 10000 then
             LetterY = Lerp(0.1, LetterY, ScrH())
             LetterAlpha = Lerp(0.1, LetterAlpha, 0)
             if frame and frame.Close then frame:Close() end

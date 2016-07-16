@@ -238,7 +238,7 @@ local function RequestLicense(ply)
         return ""
     end
 
-    if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():Distance(ply:GetPos()) > 100 then
+    if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "mayor/chief/cop"))
         return ""
     end
@@ -277,7 +277,7 @@ local function GiveLicense(ply)
     end
 
     local LookingAt = ply:GetEyeTrace().Entity
-    if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():Distance(ply:GetPos()) > 100 then
+    if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
         return ""
     end

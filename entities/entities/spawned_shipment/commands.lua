@@ -14,7 +14,7 @@ local function createShipment(ply, args)
 
     local pos = ent:GetPos()
 
-    if pos:Distance(ply:GetShootPos()) > 130 or not pos:isInSight({ent, ply} , ply) then
+    if pos:DistToSqr(ply:GetShootPos()) > 16900 or not pos:isInSight({ent, ply} , ply) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("distance_too_big"))
         return
     end
@@ -73,7 +73,7 @@ local function splitShipment(ply, args)
 
     local pos = ent:GetPos()
 
-    if pos:Distance(ply:GetShootPos()) > 130 or not pos:isInSight({ent, ply} , ply) then
+    if pos:DistToSqr(ply:GetShootPos()) > 16900 or not pos:isInSight({ent, ply} , ply) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("distance_too_big"))
         return
     end

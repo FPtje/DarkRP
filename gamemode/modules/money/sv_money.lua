@@ -66,7 +66,7 @@ local function GiveMoney(ply, args)
     end
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():Distance(ply:GetPos()) >= 150 then
+    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():DistToSqr(ply:GetPos()) >= 22500 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
         return ""
     end
@@ -104,7 +104,7 @@ local function GiveMoney(ply, args)
         end
 
         local trace2 = ply:GetEyeTrace()
-        if not IsValid(trace2.Entity) or not trace2.Entity:IsPlayer() or trace2.Entity:GetPos():Distance(ply:GetPos()) >= 150 then return end
+        if not IsValid(trace2.Entity) or not trace2.Entity:IsPlayer() or trace2.Entity:GetPos():DistToSqr(ply:GetPos()) >= 22500 then return end
 
         DarkRP.payPlayer(ply, trace2.Entity, amount)
 
