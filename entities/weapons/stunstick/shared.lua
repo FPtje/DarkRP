@@ -67,24 +67,25 @@ function SWEP:DoFlash(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
 
     ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
+    ply:ExitVehicle()
 end
 
 function SWEP:PostDrawViewModel(vm)
-    if self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1 then
-        local attachment = vm:GetAttachment(1)
-        local pos = attachment.Pos
-        cam.Start3D(EyePos(), EyeAngles())
-            render.SetMaterial(Material("effects/stunstick"))
-            render.DrawSprite(pos, 12, 12, Color(180, 180, 180))
-            for i = 1, 3 do
-                local randVec = VectorRand() * 3
-                local offset = (attachment.Ang:Forward() * randVec.x) + (attachment.Ang:Right() * randVec.y) + (attachment.Ang:Up() * randVec.z)
-                render.SetMaterial(Material("!darkrp/stunstick_beam"))
-                render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, Color(180, 180, 180))
-                pos = pos + offset
-            end
-        cam.End3D()
-    end
+    if not (self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1) then return end
+	
+    local attachment = vm:GetAttachment(1)
+    local pos = attachment.Pos
+    cam.Start3D(EyePos(), EyeAngles())
+        render.SetMaterial(Material("effects/stunstick"))
+        render.DrawSprite(pos, 12, 12, Color(180, 180, 180))
+        for i = 1, 3 do
+            local randVec = VectorRand() * 3
+            local offset = (attachment.Ang:Forward() * randVec.x) + (attachment.Ang:Right() * randVec.y) + (attachment.Ang:Up() * randVec.z)
+            render.SetMaterial(Material("!darkrp/stunstick_beam"))
+            render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, Color(180, 180, 180))
+            pos = pos + offset
+        end
+    cam.End3D()
 end
 
 function SWEP:DrawWorldModelTranslucent()
@@ -134,16 +135,16 @@ function SWEP:DoAttack(dmg)
 
     if ent:IsPlayer() or ent:IsNPC() or ent:IsVehicle() then
         self:DoFlash(ent)
-        self:GetOwner():EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
+        self:GetOwner():EmitSound(self.FleshHit[math.random(1, #self.FleshHit)])
     else
-        self:GetOwner():EmitSound(self.Hit[math.random(1,#self.Hit)])
+        self:GetOwner():EmitSound(self.Hit[math.random(1, #self.Hit)])
         if FPP and FPP.plyCanTouchEnt(self:GetOwner(), ent, "EntityDamage") then
             if ent.SeizeReward and not ent.beenSeized and not ent.burningup and self:GetOwner():isCP() and ent.Getowning_ent and self:GetOwner() ~= ent:Getowning_ent() then
                 self:GetOwner():addMoney(ent.SeizeReward)
                 DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(ent.SeizeReward), DarkRP.getPhrase("bonus_destroying_entity")))
                 ent.beenSeized = true
             end
-            ent:TakeDamage(1000-dmg, self:GetOwner(), self) -- for illegal entities
+            ent:TakeDamage(1000 - dmg, self:GetOwner(), self) -- for illegal entities
         end
     end
 end
