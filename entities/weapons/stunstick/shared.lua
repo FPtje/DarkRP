@@ -67,7 +67,7 @@ function SWEP:DoFlash(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
 
     ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
-    ply:ExitVehicle()
+    ply:ExitVehicle() --If player sitting on ground or in uncovered vehicle, get him out (like sitting on ground)
 end
 
 function SWEP:PostDrawViewModel(vm)
