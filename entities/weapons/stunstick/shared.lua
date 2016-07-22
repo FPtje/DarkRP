@@ -72,7 +72,7 @@ end
 
 function SWEP:PostDrawViewModel(vm)
     if not (self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1) then return end
-	
+
     local attachment = vm:GetAttachment(1)
     local pos = attachment.Pos
     cam.Start3D(EyePos(), EyeAngles())
