@@ -67,11 +67,11 @@ function SWEP:DoFlash(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
 
     ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
-    ply:ExitVehicle() --If player sitting on ground or in uncovered vehicle, get him out (like sitting on ground)
+    ply:ExitVehicle() --Get player out of vehicle if we hit him directly
 end
 
 function SWEP:PostDrawViewModel(vm)
-    if not (self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1) then return end
+    if self:GetSeqIdleTime() == 0 and self:GetLastReload() < CurTime() - 0.1 then return end
 
     local attachment = vm:GetAttachment(1)
     local pos = attachment.Pos
