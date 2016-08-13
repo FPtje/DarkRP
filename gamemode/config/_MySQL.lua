@@ -14,20 +14,22 @@ RP_MySQLConfig.Password = "password" -- This is the Password to log in on the My
                                     -- Make sure you know who to trust. Make sure it's in quotation marks (" ")
 RP_MySQLConfig.Database_name = "DarkRP" -- This is the name of the Database on the MySQL server. Contact the MySQL server host to find out what this is
 RP_MySQLConfig.Database_port = 3306 -- This is the port of the MySQL server. Again, contact the MySQL server host if you don't know this.
-RP_MySQLConfig.Preferred_module = "mysqloo" -- Preferred module, case sensitive, must be either "mysqloo" or "tmysql4". Only applies when both are installed.
+RP_MySQLConfig.Preferred_module = "tmysql4" -- Preferred module, case sensitive, must be either "mysqloo" or "tmysql4". Only applies when both are installed.
+RP_MySQLConfig.MultiStatements = false -- Only available in tmysql4: allow multiple SQL statements per query. Has no effect if no scripts use it.
+
 
 --[[
 MANUAL!
 HOW TO USE MySQL FOR DARKRP!
-Download andyvincent's/Drakehawke's gm_MySQL OO module and read the guide here:
-http://www.facepunch.com/showthread.php?t=1220537
+Download tmysql4 and read the guide here:
+https://facepunch.com/showthread.php?t=1442438
 
 
 WHAT TO DO IF YOU CAN'T GET IT TO WORK!
-    - There are always errors on the server, try if you can see those (with HLDS)
+    - There are always errors on the server, try if you can see those (with HLDS/server logs)
     - the same errors are also in the logs if you can't find the errors on the server.
         the logs are at garrysmod/data/DarkRP_logs/ on the SERVER!
         The MySQL lines in the log always precede with "MySQL Error:" (without the quotation marks)
-    - make sure the settings in this file (_MySQL.lua) are correct
-    - make sure the MySQL server is accessible from the outside world
+    - make sure the settings in this file (mysql.lua) are correct
+    - make sure the MySQL server is accessible from the servers IP
 ]]
