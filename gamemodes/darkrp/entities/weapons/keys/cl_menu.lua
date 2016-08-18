@@ -46,7 +46,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
 
     local ent = LocalPlayer():GetEyeTrace().Entity
     -- Don't open the menu if the entity is not ownable, the entity is too far away or the door settings are not loaded yet
-    if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():Distance(LocalPlayer():GetPos()) > 200 then return end
+    if not IsValid(ent) or not ent:isKeysOwnable() or ent:GetPos():DistToSqr(LocalPlayer():GetPos()) > 40000 then return end
 
     KeyFrameVisible = true
     local Frame = vgui.Create("DFrame")
@@ -58,7 +58,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
 
     function Frame:Think()
         local LAEnt = LocalPlayer():GetEyeTrace().Entity
-        if not IsValid(LAEnt) or not LAEnt:isKeysOwnable() or LAEnt:GetPos():Distance(LocalPlayer():GetPos()) > 200 then
+        if not IsValid(LAEnt) or not LAEnt:isKeysOwnable() or LAEnt:GetPos():DistToSqr(LocalPlayer():GetPos()) > 40000 then
             self:Close()
         end
         if not self.Dragging then return end

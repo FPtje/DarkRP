@@ -2,11 +2,11 @@ local MOTDPage = CreateConVar("_FAdmin_MOTDPage", "default", {FCVAR_REPLICATED, 
 
 if CLIENT then -- I can't be bothered to make a cl_init when there's a shared file with just one line in it.
     FAdmin.StartHooks["MOTD"] = function()
-        FAdmin.ScoreBoard.Server:AddServerAction("Place MOTD", "fadmin/icons/motd", Color(155, 0, 0, 255), true, function()
+        FAdmin.ScoreBoard.Server:AddServerAction("Place MOTD", "fadmin/icons/motd", Color(155, 0, 0, 255), function(ply) return ply:IsSuperAdmin() end, function()
             RunConsoleCommand("_FAdmin", "CreateMOTD")
         end)
 
-        FAdmin.ScoreBoard.Server:AddServerSetting("Set MOTD page", "fadmin/icons/motd", Color(0, 0, 155, 255), true, function()
+        FAdmin.ScoreBoard.Server:AddServerSetting("Set MOTD page", "fadmin/icons/motd", Color(0, 0, 155, 255), function(ply) return ply:IsSuperAdmin() end, function()
             local Window = vgui.Create("DFrame")
             Window:SetTitle("Set MOTD page")
             Window:SetDraggable(false)

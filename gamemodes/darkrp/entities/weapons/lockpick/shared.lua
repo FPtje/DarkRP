@@ -74,7 +74,7 @@ function SWEP:PrimaryAttack()
 
     if canLockpick == false then return end
     if canLockpick ~= true and (
-            trace.HitPos:Distance(self:GetOwner():GetShootPos()) > 100 or
+            trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or
             (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
             (not ent:isDoor() and not ent:IsVehicle() and not string.find(string.lower(ent:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not ent.isFadingDoor))
         ) then
@@ -169,7 +169,7 @@ function SWEP:Think()
     end
 
     local trace = self:GetOwner():GetEyeTrace()
-    if not IsValid(trace.Entity) or trace.Entity ~= self:GetLockpickEnt() or trace.HitPos:Distance(self:GetOwner():GetShootPos()) > 100 then
+    if not IsValid(trace.Entity) or trace.Entity ~= self:GetLockpickEnt() or trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 then
         self:Fail()
     elseif self:GetLockpickEndTime() <= CurTime() then
         self:Succeed()

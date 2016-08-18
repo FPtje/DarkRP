@@ -56,34 +56,35 @@ local function MakeServerOptions()
     end
 
     for k, v in ipairs(FAdmin.ScoreBoard.Server.ActionButtons) do
-        if v.Visible == true or (type(v.Visible) == "function" and v.Visible() == true) then
-            local ActionButton = vgui.Create("FAdminActionButton")
-            if type(v.Image) == "string" then
-                ActionButton:SetImage(v.Image or "icon16/exclamation")
-            elseif type(v.Image) == "table" then
-                ActionButton:SetImage(v.Image[1])
-                if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
-            elseif type(v.Image) == "function" then
-                local img1, img2 = v.Image()
-                ActionButton:SetImage(img1)
-                if img2 then ActionButton:SetImage2(img2) end
-            else
-                ActionButton:SetImage("icon16/exclamation")
-            end
-            local name = v.Name
-            if type(name) == "function" then name = name() end
-            ActionButton:SetText(DarkRP.deLocalise(name))
-            ActionButton:SetBorderColor(v.color)
-            ActionButton:Dock(TOP)
+        local visible = v.Visible == true or (type(v.Visible) == "function" and v.Visible(LocalPlayer()) == true)
 
-            function ActionButton:DoClick()
-                return v.Action(self)
-            end
+        local ActionButton = vgui.Create("FAdminActionButton")
+        if type(v.Image) == "string" then
+            ActionButton:SetImage(v.Image or "icon16/exclamation")
+        elseif type(v.Image) == "table" then
+            ActionButton:SetImage(v.Image[1])
+            if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
+        elseif type(v.Image) == "function" then
+            local img1, img2 = v.Image()
+            ActionButton:SetImage(img1)
+            if img2 then ActionButton:SetImage2(img2) end
+        else
+            ActionButton:SetImage("icon16/exclamation")
+        end
+        local name = v.Name
+        if type(name) == "function" then name = name() end
+        ActionButton:SetText(DarkRP.deLocalise(name))
+        ActionButton:SetBorderColor(visible and v.color or Color(120, 120, 120))
+        ActionButton:SetDisabled(not visible)
+        ActionButton:Dock(TOP)
 
-            FAdmin.ScoreBoard.Server.Controls[v.TYPE]:Add(ActionButton)
-            if v.OnButtonCreated then
-                v.OnButtonCreated(ActionButton)
-            end
+        function ActionButton:DoClick()
+            return v.Action(self)
+        end
+
+        FAdmin.ScoreBoard.Server.Controls[v.TYPE]:Add(ActionButton)
+        if v.OnButtonCreated then
+            v.OnButtonCreated(ActionButton)
         end
     end
 end

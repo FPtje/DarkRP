@@ -307,18 +307,12 @@ local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
 end
 
 function query(sqlText, callback, errorCallback)
-    local qFunc = (CONNECTED_TO_MYSQL and
-            mysqlOO and msOOQuery or
-            TMySQL and tmsqlQuery) or
-        SQLiteQuery
+    local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOQuery) or (TMySQL and tmsqlQuery))) or SQLiteQuery
     return qFunc(sqlText, callback, errorCallback, false)
 end
 
 function queryValue(sqlText, callback, errorCallback)
-    local qFunc = (CONNECTED_TO_MYSQL and
-            mysqlOO and msOOQuery or
-            TMySQL and tmsqlQuery) or
-        SQLiteQuery
+    local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOQuery) or (TMySQL and tmsqlQuery))) or SQLiteQuery
     return qFunc(sqlText, callback, errorCallback, true)
 end
 

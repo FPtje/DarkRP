@@ -165,13 +165,13 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
     salary =
         tc.addHint(
             fn.FAnd{isnumber, fp{fn.Lte, 0}},
-            "The salary must be a number greater than zero."
+            "The salary must be a number and it must be greater than zero."
         ),
 
     admin =
         tc.addHint(
             fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}},
-            "The admin value must be a number greater than or equal to zero and smaller than three."
+            "The admin value must be a number and it must be greater than or equal to zero and smaller than three."
         ),
 
     vote =
@@ -352,7 +352,7 @@ DarkRP.validateShipment = fn.FAnd{buyableSchema, tc.checkTable{
 
     amount =
         tc.addHint(
-            fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The amount must be a number greater than zero."
+            fn.FAnd{isnumber, fp{fn.Lte, 0}}, "The amount must be a number and it must be greater than zero."
         ),
 
     separate =
@@ -363,7 +363,7 @@ DarkRP.validateShipment = fn.FAnd{buyableSchema, tc.checkTable{
     pricesep =
         tc.addHint(
             function(v, tbl) return not tbl.separate or isnumber(v) and v >= 0 end,
-            "The pricesep must be a number greater than or equal to zero."
+            "The pricesep must be a number and it must be greater than or equal to zero."
         ),
 
     noship =

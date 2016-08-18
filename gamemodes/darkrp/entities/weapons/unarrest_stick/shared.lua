@@ -70,7 +70,7 @@ function SWEP:PrimaryAttack()
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() end)
     if not ent then return end
 
-    if not IsValid(ent) or not ent:IsPlayer() or (self:GetOwner():EyePos():Distance(ent:GetPos()) > 90) or not ent:getDarkRPVar("Arrested") then
+    if not IsValid(ent) or not ent:IsPlayer() or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > 8100) or not ent:getDarkRPVar("Arrested") then
         return
     end
 

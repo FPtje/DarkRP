@@ -66,50 +66,55 @@ local function GiveMoney(ply, args)
     end
     local trace = ply:GetEyeTrace()
 
-    if IsValid(trace.Entity) and trace.Entity:IsPlayer() and trace.Entity:GetPos():Distance(ply:GetPos()) < 150 then
-        local amount = math.floor(tonumber(args))
+    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():DistToSqr(ply:GetPos()) >= 22500 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
+        return ""
+    end
 
-        if amount < 1 then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">=1"))
+    local amount = math.floor(tonumber(args))
+
+    if amount < 1 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">=1"))
+        return ""
+    end
+
+    if not ply:canAfford(amount) then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
+
+        return ""
+    end
+
+    local RP = RecipientFilter()
+    RP:AddAllPlayers()
+
+    umsg.Start("anim_giveitem", RP)
+        umsg.Entity(ply)
+    umsg.End()
+    ply.anim_GivingItem = true
+
+    timer.Simple(1.2, function()
+        if not IsValid(ply) then
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/give", ""))
             return ""
         end
 
         if not ply:canAfford(amount) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
-
             return ""
         end
 
-        local RP = RecipientFilter()
-        RP:AddAllPlayers()
+        local trace2 = ply:GetEyeTrace()
+        if not IsValid(trace2.Entity) or not trace2.Entity:IsPlayer() or trace2.Entity:GetPos():DistToSqr(ply:GetPos()) >= 22500 then return end
 
-        umsg.Start("anim_giveitem", RP)
-            umsg.Entity(ply)
-        umsg.End()
-        ply.anim_GivingItem = true
+        DarkRP.payPlayer(ply, trace2.Entity, amount)
 
-        timer.Simple(1.2, function()
-            if IsValid(ply) then
-                local trace2 = ply:GetEyeTrace()
-                if IsValid(trace2.Entity) and trace2.Entity:IsPlayer() and trace2.Entity:GetPos():Distance(ply:GetPos()) < 150 then
-                    if not ply:canAfford(amount) then
-                        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", ""))
+        hook.Call("playerGaveMoney", nil, ply, trace2.Entity, amount)
 
-                        return ""
-                    end
-                    DarkRP.payPlayer(ply, trace2.Entity, amount)
+        DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), DarkRP.formatMoney(amount)))
+        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), DarkRP.formatMoney(amount)))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has given " .. DarkRP.formatMoney(amount) .. " to " .. trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+    end)
 
-                    DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), DarkRP.formatMoney(amount)))
-                    DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), DarkRP.formatMoney(amount)))
-                    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has given " .. DarkRP.formatMoney(amount) .. " to " .. trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
-                end
-            else
-                DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/give", ""))
-            end
-        end)
-    else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
-    end
     return ""
 end
 DarkRP.defineChatCommand("give", GiveMoney, 0.2)
@@ -289,6 +294,31 @@ local function ccAddMoney(ply, args)
     end
 end
 DarkRP.definePrivilegedChatCommand("addmoney", "DarkRP_SetMoney", ccAddMoney)
+
+DarkRP.hookStub{
+    name = "playerGaveMoney",
+    description = "Called when a player gives another player money.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player that gives the money.",
+            type = "Player"
+        },
+        {
+            name = "otherPlayer",
+            description = "The player that receives the money.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "The amount of money.",
+            type = "number"
+        }
+    },
+    returns = {
+    },
+    realm = "Server"
+}
 
 DarkRP.hookStub{
     name = "playerDroppedMoney",

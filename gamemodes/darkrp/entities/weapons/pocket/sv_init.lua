@@ -288,7 +288,7 @@ function GAMEMODE:canPocket(ply, item)
     if item:IsNPC() then return false, DarkRP.getPhrase("cannot_pocket_x") end
 
     local trace = ply:GetEyeTrace()
-    if ply:EyePos():Distance(trace.HitPos) > 150 then return false end
+    if ply:EyePos():DistToSqr(trace.HitPos) > 22500 then return false end
 
     local phys = trace.Entity:GetPhysicsObject()
     if not phys:IsValid() then return false end

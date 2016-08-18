@@ -65,7 +65,7 @@ end
 
 -- Ram action when ramming a door
 local function ramDoor(ply, trace, ent)
-    if ply:EyePos():Distance(trace.HitPos) > 45 or (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) then return false end
+    if ply:EyePos():DistToSqr(trace.HitPos) > 2025 or (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) then return false end
 
     local allowed = false
 
@@ -113,7 +113,7 @@ end
 
 -- Ram action when ramming a vehicle
 local function ramVehicle(ply, trace, ent)
-    if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
+    if ply:EyePos():DistToSqr(trace.HitPos) > 10000 then return false end
 
     if CLIENT then return false end -- Ideally this would return true after ent:GetDriver() check
 
@@ -128,7 +128,7 @@ end
 
 -- Ram action when ramming a fading door
 local function ramFadingDoor(ply, trace, ent)
-    if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
+    if ply:EyePos():DistToSqr(trace.HitPos) > 10000 then return false end
 
     local Owner = ent:CPPIGetOwner()
 
@@ -149,7 +149,7 @@ end
 
 -- Ram action when ramming a frozen prop
 local function ramProp(ply, trace, ent)
-    if ply:EyePos():Distance(trace.HitPos) > 100 then return false end
+    if ply:EyePos():DistToSqr(trace.HitPos) > 10000 then return false end
     if ent:GetClass() ~= "prop_physics" then return false end
 
     local Owner = ent:CPPIGetOwner()

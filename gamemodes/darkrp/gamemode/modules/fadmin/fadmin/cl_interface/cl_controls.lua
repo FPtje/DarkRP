@@ -289,12 +289,16 @@ function PANEL6:Paint()
 end
 
 function PANEL6:OnMousePressed(mouse)
+    if self:GetDisabled() then return end
+
     self.m_Image:SetSize(24,24)
     self.m_Image:SetPos(8,8)
     self.Depressed = true
 end
 
 function PANEL6:OnMouseReleased(mouse)
+    if self:GetDisabled() then return end
+
     self.m_Image:SetSize(32,32)
     self.m_Image:SetPos(4,4)
     self.Depressed = false

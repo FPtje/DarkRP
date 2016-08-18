@@ -78,7 +78,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
         menu:Open()
     end)
 
-    FAdmin.ScoreBoard.Server:AddPlayerAction("Edit groups", "fadmin/icons/access", Color(0, 155, 0, 255), true, EditGroups)
+    FAdmin.ScoreBoard.Server:AddPlayerAction("Edit groups", "fadmin/icons/access", Color(0, 155, 0, 255), function() return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "ManageGroups") or FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "ManagePrivileges") end, EditGroups)
 
     -- Admin immunity
     FAdmin.ScoreBoard.Server:AddServerSetting(function()

@@ -99,7 +99,7 @@ local function Bring(ply, cmd, args)
             tracedata.filter = BringTo
 
             local trace = util.TraceLine(tracedata)
-            if trace.HitPos:Distance(BringTo:GetShootPos()) < 45 then
+            if trace.HitPos:DistToSqr(BringTo:GetShootPos()) < 2025 then
                 tracedata.endpos = tracedata.start - BringTo:GetAimVector() * 50
                 trace = util.TraceLine(tracedata)
             end

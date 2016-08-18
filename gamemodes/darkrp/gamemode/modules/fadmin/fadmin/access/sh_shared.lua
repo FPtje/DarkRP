@@ -127,14 +127,14 @@ function FAdmin.Access.AddPrivilege(Name, admin_access)
 end
 
 hook.Add("CAMI.OnPrivilegeRegistered", "FAdmin", function(privilege)
-    FAdmin.Access.AddPrivilege(privilege.Name, table.KeyFromValue(FAdmin.Access.ADMIN, privilege.MinAccess))
+    FAdmin.Access.AddPrivilege(privilege.Name, table.KeyFromValue(FAdmin.Access.ADMIN, CAMI.InheritanceRoot(privilege.MinAccess)) or 3)
 
     -- Register privilege and add to respective usergroups
     if SERVER then FAdmin.Access.RegisterCAMIPrivilege(privilege) end
 end)
 
 for _, camipriv in pairs(CAMI.GetPrivileges()) do
-    FAdmin.Access.AddPrivilege(camipriv.Name, table.KeyFromValue(FAdmin.Access.ADMIN, camipriv.MinAccess))
+    FAdmin.Access.AddPrivilege(camipriv.Name, table.KeyFromValue(FAdmin.Access.ADMIN, CAMI.InheritanceRoot(camipriv.MinAccess)) or 3)
     -- Register if the database has already loaded
     if SERVER and FAdmin.Access.RegisterCAMIPrivilege then FAdmin.Access.RegisterCAMIPrivilege(camipriv) end
 end

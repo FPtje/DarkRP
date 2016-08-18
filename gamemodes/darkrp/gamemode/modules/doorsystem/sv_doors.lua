@@ -217,7 +217,7 @@ local function SetDoorOwnable(ply)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
 
-    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 200 then
+    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -245,7 +245,7 @@ local function SetDoorGroupOwnable(ply, arg)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
 
-    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 200 then
+    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -273,7 +273,7 @@ local function SetDoorTeamOwnable(ply, arg)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
 
-    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():Distance(ent:GetPos()) > 200 then
+    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
@@ -306,7 +306,7 @@ DarkRP.definePrivilegedChatCommand("toggleteamownable", "DarkRP_ChangeDoorSettin
 local function OwnDoor(ply)
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 200 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():DistToSqr(trace.Entity:GetPos()) >= 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
@@ -418,7 +418,7 @@ local function SetDoorTitle(ply, args)
     local trace = ply:GetEyeTrace()
 
     local ent = trace.Entity
-    if not IsValid(ent) or not ent:isKeysOwnable() or ply:GetPos():Distance(ent:GetPos()) >= 110 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ply:GetPos():DistToSqr(ent:GetPos()) >= 12100 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
@@ -453,7 +453,7 @@ DarkRP.defineChatCommand("title", SetDoorTitle)
 local function RemoveDoorOwner(ply, args)
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():DistToSqr(trace.Entity:GetPos()) >= 12100 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
@@ -495,7 +495,7 @@ DarkRP.defineChatCommand("ro", RemoveDoorOwner)
 local function AddDoorOwner(ply, args)
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():Distance(trace.Entity:GetPos()) >= 110 then
+    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():DistToSqr(trace.Entity:GetPos()) >= 12100 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end

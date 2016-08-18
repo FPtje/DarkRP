@@ -150,18 +150,18 @@ local function playerSay(talker, message)
 
         if
             -- Make sure you don't get it twice
-            ply:GetShootPos():Distance(talker:GetShootPos()) > 250 and
+            ply:GetShootPos():DistToSqr(talker:GetShootPos()) > 62500 and
             (
                 -- the person is saying it close to where you are roaming
-                ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 600 or
+                ply.FSpectatePos and talker:GetShootPos():DistToSqr(ply.FSpectatePos) <= 360000 or
 
                 -- The person you're spectating or someone near the person you're spectating is saying it
                 (IsValid(ply.FSpectatingEnt) and ply.FSpectatingEnt:IsPlayer() and
-                talker:GetShootPos():Distance(ply.FSpectatingEnt:GetShootPos()) <= 300) or
+                talker:GetShootPos():DistToSqr(ply.FSpectatingEnt:GetShootPos()) <= 90000) or
 
                 -- Close to the object you're spectating
                 (IsValid(ply.FSpectatingEnt) and not ply.FSpectatingEnt:IsPlayer() and
-                talker:GetPos():Distance(ply.FSpectatingEnt:GetPos()) <= 300
+                talker:GetPos():DistToSqr(ply.FSpectatingEnt:GetPos()) <= 90000
                 )
             ) then
 

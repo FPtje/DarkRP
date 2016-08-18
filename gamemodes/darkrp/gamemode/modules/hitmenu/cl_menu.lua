@@ -1,4 +1,5 @@
 local PANEL
+local minHitDistanceSqr = GM.Config.minHitDistance * GM.Config.minHitDistance
 
 --[[---------------------------------------------------------------------------
 Hitman menu
@@ -49,7 +50,7 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-    if not IsValid(self:GetHitman()) or self:GetHitman():GetPos():Distance(LocalPlayer():GetPos()) > GAMEMODE.Config.minHitDistance then
+    if not IsValid(self:GetHitman()) or self:GetHitman():GetPos():DistToSqr(LocalPlayer():GetPos()) > minHitDistanceSqr then
         self:Remove()
         return
     end

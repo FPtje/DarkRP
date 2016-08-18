@@ -66,9 +66,9 @@ local function lookingAtLockable(ply, ent)
         ent:isKeysOwnable()         and
         not ent:getKeysNonOwnable() and
         (
-            ent:isDoor()    and eyepos:Distance(ent:GetPos()) < 65
+            ent:isDoor()    and eyepos:DistToSqr(ent:GetPos()) < 4225
             or
-            ent:IsVehicle() and eyepos:Distance(ent:NearestPoint(eyepos)) < 100
+            ent:IsVehicle() and eyepos:DistToSqr(ent:NearestPoint(eyepos)) < 10000
         )
 
 end
@@ -138,7 +138,7 @@ end
 
 function SWEP:Reload()
     local trace = self:GetOwner():GetEyeTrace()
-    if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():Distance(trace.HitPos) > 200)) then
+    if not IsValid(trace.Entity) or (IsValid(trace.Entity) and ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():DistToSqr(trace.HitPos) > 40000)) then
         if CLIENT then RunConsoleCommand("_DarkRP_AnimationMenu") end
         return
     end

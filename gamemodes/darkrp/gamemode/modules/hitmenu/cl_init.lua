@@ -4,6 +4,7 @@ local textCol1, textCol2 = Color(0, 0, 0, 200), Color(128, 30, 30, 255)
 local plyMeta = FindMetaTable("Player")
 local activeHitmen = {}
 local postPlayerDraw
+local minHitDistanceSqr = GM.Config.minHitDistance * GM.Config.minHitDistance
 
 --[[---------------------------------------------------------------------------
 Interface functions
@@ -49,7 +50,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
     local x, y
     local ply = localplayer:GetEyeTrace().Entity
 
-    if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and not ply:hasHit() and localplayer:GetPos():Distance(ply:GetPos()) < GAMEMODE.Config.minHitDistance then
+    if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and not ply:hasHit() and localplayer:GetPos():DistToSqr(ply:GetPos()) < minHitDistanceSqr then
         x, y = ScrW() / 2, ScrH() / 2 + 30
 
         draw.DrawNonParsedText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)
@@ -71,7 +72,7 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
     localplayer = localplayer or LocalPlayer()
     local hitman = localplayer:GetEyeTrace().Entity
 
-    if not IsValid(hitman) or not hitman:IsPlayer() or not hitman:isHitman() or localplayer:GetPos():Distance(hitman:GetPos()) > GAMEMODE.Config.minHitDistance then return end
+    if not IsValid(hitman) or not hitman:IsPlayer() or not hitman:isHitman() or localplayer:GetPos():DistToSqr(hitman:GetPos()) > minHitDistanceSqr then return end
 
     local canRequest, message = hook.Call("canRequestHit", DarkRP.hooks, hitman, ply, nil, hitman:getHitPrice())
 
