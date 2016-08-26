@@ -53,6 +53,10 @@ DarkRP.defineChatCommand("afk", function(ply)
         return ""
     end
 
+    local canAFK = hook.Run("canGoAFK", ply, not ply:getDarkRPVar("AFK"))
+
+    if canAFK == false then return "" end
+
     ply.DarkRPLastAFK = CurTime()
     SetAFK(ply)
 
