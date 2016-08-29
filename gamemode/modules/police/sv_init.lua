@@ -349,6 +349,8 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
 end
 
 function DarkRP.hooks:playerUnArrested(ply, actor)
+    if ply:InVehicle() then ply:ExitVehicle() end
+
     if ply.Sleeping then
         DarkRP.toggleSleep(ply, "force")
     end
