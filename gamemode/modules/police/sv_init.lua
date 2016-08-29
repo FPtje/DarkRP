@@ -317,6 +317,10 @@ function DarkRP.hooks:canArrest(arrester, arrestee)
         return false, DarkRP.getPhrase("cant_arrest_spawning_players")
     end
 
+    if arrestee:GetObserverMode() ~= OBS_MODE_NONE then
+        return false, DarkRP.getPhrase("unable", "arrest", "")
+    end
+
     return true
 end
 
