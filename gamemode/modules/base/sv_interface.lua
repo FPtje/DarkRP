@@ -810,6 +810,30 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "onPlayerFirstJoined",
+    description = "Called when a player joins this server for the first time (i.e. no entry for this player exists in the DarkRP database)",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player.",
+            type = "Player"
+        },
+        {
+            name = "data",
+            description = "Contains the default wallet, salary and RPName that will be put in the database",
+            type = "table"
+        }
+    },
+    returns = {
+        {
+            name = "data",
+            description = "Override the data that is to be put in the database.",
+            type = "table"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "playerBoughtPistol",
     description = "Called when a player bought a pistol.",
     parameters = {
