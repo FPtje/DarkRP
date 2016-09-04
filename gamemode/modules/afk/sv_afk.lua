@@ -105,3 +105,12 @@ hook.Add("OnPlayerChangedTeam", "AFKCanChangeTeam", function(ply)
     ply.OldJob = nil
     ply:setSelfDarkRPVar("salary", 0)
 end)
+
+local function unAFKPlayer(ply)
+    if ply:getDarkRPVar("AFK") then
+        SetAFK(ply)
+    end
+end
+
+hook.Add("playerArrested", "DarkRP_AFK", unAFKPlayer)
+hook.Add("playerUnArrested", "DarkRP_AFK", unAFKPlayer)
