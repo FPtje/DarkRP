@@ -198,7 +198,6 @@ local function GetDarkRPAuthors(ply, args)
     local target = DarkRP.findPlayer(args) -- Only send to one player. Prevents spamming
     target = IsValid(target) and target or ply
 
-    print(target)
     if target ~= ply then
         if ply.CreditsWait then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that")) return "" end
         ply.CreditsWait = true
