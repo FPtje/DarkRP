@@ -97,7 +97,7 @@ function SWEP:PrimaryAttack()
 
     if CLIENT then
         self.Dots = ""
-        self.NextDotsTime = CurTime() + 0.5
+        self.NextDotsTime = SysTime() + 0.5
         return
     end
 
@@ -147,6 +147,12 @@ function SWEP:Fail()
     self:SetLockpickEnt(nil)
 end
 
+local dots = {
+    [0] = ".",
+    [1] = "..",
+    [2] = "...",
+    [3] = ""
+}
 function SWEP:Think()
     if not self:GetIsLockpicking() or self:GetLockpickEndTime() == 0 then return end
 
@@ -155,16 +161,11 @@ function SWEP:Think()
         local snd = {1,3,4}
         self:EmitSound("weapons/357/357_reload" .. tostring(snd[math.Round(util.SharedRandom("DarkRP_LockpickSnd" .. CurTime(), 1, #snd))]) .. ".wav", 50, 100)
     end
-    if CLIENT and self.NextDotsTime and CurTime() >= self.NextDotsTime then
-        self.NextDotsTime = CurTime() + 0.5
+    if CLIENT and (not self.NextDotsTime or SysTime() >= self.NextDotsTime) then
+        self.NextDotsTime = SysTime() + 0.5
         self.Dots = self.Dots or ""
         local len = string.len(self.Dots)
-        local dots = {
-            [0] = ".",
-            [1] = "..",
-            [2] = "...",
-            [3] = ""
-        }
+
         self.Dots = dots[len]
     end
 

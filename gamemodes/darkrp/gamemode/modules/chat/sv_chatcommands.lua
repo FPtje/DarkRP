@@ -193,17 +193,17 @@ DarkRP.defineChatCommand("g", GroupMsg, 0)
 -- WARNING: DO NOT EDIT THIS
 -- You can edit DarkRP but you HAVE to credit the original authors!
 -- You even have to credit all the previous authors when you rename the gamemode.
-local CreditsWait = true
+-- local CreditsWait = true
 local function GetDarkRPAuthors(ply, args)
-    local target = DarkRP.findPlayer(args); -- Only send to one player. Prevents spamming
-    if not IsValid(target) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("player_doesnt_exist"))
-        return ""
-    end
+    local target = DarkRP.findPlayer(args) -- Only send to one player. Prevents spamming
+    target = IsValid(target) and target or ply
 
-    if not CreditsWait then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that")) return "" end
-    CreditsWait = false
-    timer.Simple(60, function() CreditsWait = true end) -- so people don't spam it
+    print(target)
+    if target ~= ply then
+        if ply.CreditsWait then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that")) return "" end
+        ply.CreditsWait = true
+        timer.Simple(60, function() if IsValid(ply) then ply.CreditsWait = nil end end) -- so people don't spam it
+    end
 
     local rf = RecipientFilter()
     rf:AddPlayer(target)

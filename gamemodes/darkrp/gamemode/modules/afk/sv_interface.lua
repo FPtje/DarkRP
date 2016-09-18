@@ -50,3 +50,27 @@ DarkRP.hookStub{
     returns = {
     }
 }
+
+DarkRP.hookStub{
+    name = "canGoAFK",
+    description = "When a player can MANUALLY start being AFK by entering the chat command. Note: this hook does NOT get called when a player is set to AFK automatically! That hook will not be added, because I don't want asshole server owners to make AFK rules not apply to admins.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player.",
+            type = "Player"
+        },
+        {
+            name = "afk",
+            description = "True when the player starts being AFK, false when the player stops being AFK.",
+            type = "boolean"
+        }
+    },
+    returns = {
+        {
+            name = "canGoAFK",
+            description = "Whether the player is allowed to go AFK",
+            type = "boolean"
+        }
+    }
+}

@@ -64,7 +64,6 @@ local function lookingAtLockable(ply, ent)
     local eyepos = ply:EyePos()
     return IsValid(ent)             and
         ent:isKeysOwnable()         and
-        not ent:getKeysNonOwnable() and
         (
             ent:isDoor()    and eyepos:DistToSqr(ent:GetPos()) < 4225
             or

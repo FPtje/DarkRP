@@ -56,7 +56,7 @@ function FAdmin.Access.OnUsergroupRegistered(usergroup, source)
     -- Add groups registered to CAMI to FAdmin. Assume privileges from either the usergroup it inherits or its inheritance root.
     -- Immunity is unknown and can be set by the user later. FAdmin immunity only applies to FAdmin anyway.
     local parent = FAdmin.Access.Groups[usergroup.Inherits] or FAdmin.Access.Groups[inheritRoot] or {}
-    FAdmin.Access.AddGroup(usergroup.Name, admin_access, parent.PRIVS or {}, parent.immunity or 10, true)
+    FAdmin.Access.AddGroup(usergroup.Name, admin_access - 1, table.Copy(parent.PRIVS) or {}, parent.immunity or 10, true)
 end
 
 

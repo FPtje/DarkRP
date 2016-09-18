@@ -84,7 +84,7 @@ local uniqueEntity = function(cmd, tbl)
             false,
             "This entity does not have a unique command.",
             {
-                "There must be some other end that has the same thing for 'cmd'.",
+                "There must be some other entity that has the same thing for 'cmd'.",
                 "Fix this by changing the 'cmd' field of your entity to something else."
             }
     end

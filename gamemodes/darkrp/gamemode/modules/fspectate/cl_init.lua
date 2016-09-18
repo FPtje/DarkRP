@@ -1,3 +1,5 @@
+FSpectate = {}
+
 local stopSpectating, startFreeRoam
 local isSpectating = false
 local specEnt
@@ -6,6 +8,17 @@ local isRoaming = false
 local roamPos -- the position when roaming free
 local roamVelocity = Vector(0)
 local thirdPersonDistance = 100
+
+/*---------------------------------------------------------------------------
+Retrieve the current spectated player
+---------------------------------------------------------------------------*/
+function FSpectate.getSpecEnt()
+    if isSpectating and not isRoaming then
+        return IsValid(specEnt) and specEnt or nil
+    else
+        return nil
+    end
+end
 
 /*---------------------------------------------------------------------------
 startHooks
@@ -113,7 +126,7 @@ Find the right player to spectate
 local function findNearestObject()
     local aimvec = LocalPlayer():GetAimVector()
 
-    local fromPos = isRoaming and roamPos or specEnt:EyePos()
+    local fromPos = not isRoaming and IsValid(specEnt) and specEnt:EyePos() or roamPos
 
     local lookingAt = util.QuickTrace(fromPos, aimvec * 5000, LocalPlayer())
 
