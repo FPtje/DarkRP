@@ -195,11 +195,8 @@ DarkRP.defineChatCommand("g", GroupMsg, 0)
 -- You even have to credit all the previous authors when you rename the gamemode.
 local CreditsWait = true
 local function GetDarkRPAuthors(ply, args)
-    local target = DarkRP.findPlayer(args); -- Only send to one player. Prevents spamming
-    if not IsValid(target) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("player_doesnt_exist"))
-        return ""
-    end
+    local target = DarkRP.findPlayer(args) -- Only send to one player. Prevents spamming
+    target = IsValid(target) or ply
 
     if not CreditsWait then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that")) return "" end
     CreditsWait = false
