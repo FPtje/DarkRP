@@ -259,7 +259,8 @@ local function FinishDemote(vote, choice)
     if choice == 1 then
         target:teamBan()
         if target:Alive() then
-            target:changeTeam(GAMEMODE.DefaultTeam, true)
+            local demoteTeam = hook.Call("demoteTeam", nil, target) or GAMEMODE.DefaultTeam
+            target:changeTeam(demoteTeam, true)
             if target:isArrested() then
                 target:arrest()
             end

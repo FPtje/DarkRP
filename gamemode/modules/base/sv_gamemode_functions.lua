@@ -705,7 +705,9 @@ function GM:PlayerSpawn(ply)
 
     if ply.demotedWhileDead then
         ply.demotedWhileDead = nil
-        ply:changeTeam(GAMEMODE.DefaultTeam, true)
+
+        local demoteTeam = hook.Call("demoteTeam", nil, ply) or GAMEMODE.DefaultTeam
+        ply:changeTeam(demoteTeam, true)
     end
 
     local jobTable = ply:getJobTable()
