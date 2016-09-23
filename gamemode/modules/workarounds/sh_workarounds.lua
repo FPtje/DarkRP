@@ -192,6 +192,13 @@ hook.Add("InitPostEntity", "FixDoorTool", function()
             oldFunc(ply, trace, ang, model, open, close, autoclose, closetime, class, hardware, ...)
         end
     end
+	if game.GetMap() == "rp_downtown_v4c_v2" then 
+		for k,v in pairs(ents.GetAll()) do
+			if v:GetClass() == "lua_run" then
+				v:Remove()
+			end
+		end
+	end
 end)
 
 --[[---------------------------------------------------------------------------
