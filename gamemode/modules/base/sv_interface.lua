@@ -1013,6 +1013,25 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "demoteTeam",
+    description = "The team the player is to be demoted to instead of the default team.",
+    parameters = {
+        {
+            name = "target",
+            description = "The player whom is to be demoted.",
+            type = "Player"
+        },
+    },
+    returns = {
+        {
+            name = "demoteTeam",
+            description = "The team the player is to be demoted to.",
+            type = "number"
+        },
+    }
+}
+
+DarkRP.hookStub{
     name = "onPlayerDemoted",
     description = "Called when a player is demoted.",
     parameters = {
