@@ -101,8 +101,6 @@ GM.Config.showjob                       = true
 GM.Config.letters                       = true
 -- license - Enable/disable People need a license to be able to pick up guns.
 GM.Config.license                       = false
--- lockdown - Enable/Disable initiating lockdowns for mayors.
-GM.Config.lockdown                      = true
 -- lockpickfading - Enable/disable the lockpicking of fading doors.
 GM.Config.lockpickfading                = true
 -- logging - Enable/disable logging everything that happens.
