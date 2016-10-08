@@ -111,7 +111,7 @@ GM.Config.logging                       = true
 GM.Config.lottery                       = true
 -- showname - Whether or not to display a player's name above their head in-game.
 GM.Config.showname                      = true
--- showname - Whether or not to display a player's health above their head in-game.
+-- showhealth - Whether or not to display a player's health above their head in-game.
 GM.Config.showhealth                    = true
 -- needwantedforarrest - Enable/disable Cops can only arrest wanted people.
 GM.Config.needwantedforarrest           = false
