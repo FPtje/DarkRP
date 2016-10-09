@@ -111,3 +111,25 @@ CAMI.RegisterPrivilege{
 	Name = "FPP_Cleanup",
 	MinAccess = "admin"
 }
+
+
+CAMI.RegisterPrivilege{
+	Name = "FPP_TouchOtherPlayersProps",
+	MinAccess = "admin"
+}
+
+function FPP.calculatePlayerPrivilege(priv, callback)
+	local plys = player.GetAll()
+	local count = #plys
+
+	for _, ply in pairs(plys) do
+		local function onRes(b)
+			count = count - 1
+			ply.FPP_Privileges = ply.FPPPrivileges or {}
+			ply.FPP_Privileges[priv] = b
+
+			if count == 0 then callback() end
+		end
+		CAMI.PlayerHasAccess(ply, priv, onRes)
+	end
+end
