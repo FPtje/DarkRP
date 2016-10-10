@@ -72,6 +72,7 @@ local hardWhiteListed = { -- things that mess up when not allowed
 local function calculateCanTouchForType(ply, ent, touchType)
     if not IsValid(ent) then return false, 0 end
 
+    ply.FPP_Privileges = ply.FPP_Privileges or {}
     local isAdmin = ply.FPP_Privileges.FPP_TouchOtherPlayersProps
     local class = ent:GetClass()
     local owner = ent:CPPIGetOwner()

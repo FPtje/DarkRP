@@ -59,6 +59,7 @@ local function getSettingsChangedEntities(settingsType, setting)
         end
 
         for k,v in pairs(player.GetAll()) do
+            v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
 
@@ -74,6 +75,7 @@ local function getSettingsChangedEntities(settingsType, setting)
         end
 
         for k,v in pairs(player.GetAll()) do
+            v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
         return setting == "adminworldprops" and plys or player.GetAll(), entities
@@ -85,6 +87,7 @@ local function getSettingsChangedEntities(settingsType, setting)
         end
 
         for k,v in pairs(player.GetAll()) do
+            v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
         return setting == "admincanblocked" and plys or player.GetAll(), entities
