@@ -1,7 +1,8 @@
 local OverrideScoreboard = CreateClientConVar("FAdmin_OverrideScoreboard", 0, true, false) -- Set if it's a scoreboard or not
 
 function FAdmin.ScoreBoard.ChangeView(newView, ...)
-    if FAdmin.ScoreBoard.CurrentView == newView then return end
+    if FAdmin.ScoreBoard.CurrentView == newView or not FAdmin.ScoreBoard.Visible then return end
+
     for k,v in pairs(FAdmin.ScoreBoard[FAdmin.ScoreBoard.CurrentView].Controls) do
         v:SetVisible(false)
     end
