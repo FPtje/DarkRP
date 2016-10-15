@@ -72,7 +72,8 @@ local hardWhiteListed = { -- things that mess up when not allowed
 local function calculateCanTouchForType(ply, ent, touchType)
     if not IsValid(ent) then return false, 0 end
 
-    local isAdmin = ply.FPPIsAdmin or ply:IsAdmin() -- small optimisation
+    ply.FPP_Privileges = ply.FPP_Privileges or {}
+    local isAdmin = ply.FPP_Privileges.FPP_TouchOtherPlayersProps
     local class = ent:GetClass()
     local owner = ent:CPPIGetOwner()
     local setting, tablename = getSetting(touchType)
@@ -187,7 +188,7 @@ function FPP.calculateCanTouch(ply, ent)
 end
 
 -- try not to call this with both player.GetAll() and ents.GetAll()
-function FPP.recalculateCanTouch(players, entities)
+local function recalculateCanTouch(players, entities)
     for k,v in pairs(entities) do
         if not IsValid(v) then entities[k] = nil continue end
         if v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
@@ -197,7 +198,7 @@ function FPP.recalculateCanTouch(players, entities)
     for _, ply in pairs(players) do
         if not IsValid(ply) then continue end
         -- optimisations
-        ply.FPPIsAdmin = ply:IsAdmin()
+        ply.FPPIsAdmin = ply.FPP_Privileges.FPP_TouchOtherPlayersProps
         ply.FPP_PrivateSettings_OtherPlayerProps = ply:GetInfo("FPP_PrivateSettings_OtherPlayerProps")
         ply.cl_pickupplayers = ply:GetInfo("cl_pickupplayers")
         ply.FPP_PrivateSettings_BlockedProps = ply:GetInfo("FPP_PrivateSettings_BlockedProps")
@@ -220,6 +221,10 @@ function FPP.recalculateCanTouch(players, entities)
         ply.FPP_PrivateSettings_WorldProps = nil
         ply.FPPIsAdmin = nil
     end
+end
+
+function FPP.recalculateCanTouch(plys, ens)
+    FPP.calculatePlayerPrivilege("FPP_TouchOtherPlayersProps", function() recalculateCanTouch(plys, ens) end)
 end
 
 /*---------------------------------------------------------------------------

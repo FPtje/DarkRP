@@ -59,7 +59,8 @@ local function getSettingsChangedEntities(settingsType, setting)
         end
 
         for k,v in pairs(player.GetAll()) do
-            if v:IsAdmin() then table.insert(plys, v) end
+            v.FPP_Privileges = v.FPP_Privileges or {}
+            if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
 
         return plys, entities
@@ -74,7 +75,8 @@ local function getSettingsChangedEntities(settingsType, setting)
         end
 
         for k,v in pairs(player.GetAll()) do
-            if v:IsAdmin() then table.insert(plys, v) end
+            v.FPP_Privileges = v.FPP_Privileges or {}
+            if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
         return setting == "adminworldprops" and plys or player.GetAll(), entities
     elseif setting == "canblocked" or setting == "admincanblocked" then
@@ -85,14 +87,14 @@ local function getSettingsChangedEntities(settingsType, setting)
         end
 
         for k,v in pairs(player.GetAll()) do
-            if v:IsAdmin() then table.insert(plys, v) end
+            v.FPP_Privileges = v.FPP_Privileges or {}
+            if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
         return setting == "admincanblocked" and plys or player.GetAll(), entities
     elseif setting == "iswhitelist" then
         return player.GetAll(), ents.GetAll()
     end
 end
-
 
 util.AddNetworkString("FPP_Settings")
 local function SendSettings(ply)
@@ -153,9 +155,12 @@ local function FPP_SetSetting(ply, cmd, args)
         FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " set " .. string.lower(string.gsub(args[1], "FPP_", "")) .. " " .. args[2] .. " to " .. tostring(args[3]), tobool(tonumber(args[3])))
     end)
 
-    local plys, entities = getSettingsChangedEntities(args[1], args[2])
-    if not plys or not entities or #plys == 0 or #entities == 0 then return end
-    FPP.recalculateCanTouch(plys, entities)
+    FPP.calculatePlayerPrivilege("FPP_TouchOtherPlayersProps", function()
+        local plys, entities = getSettingsChangedEntities(args[1], args[2])
+        if not plys or not entities or #plys == 0 or #entities == 0 then return end
+
+        FPP.recalculateCanTouch(plys, entities)
+    end)
 end
 concommand.Add("FPP_setting", runIfAccess("FPP_Settings", FPP_SetSetting))
 
@@ -711,6 +716,27 @@ local function SendRestrictedTools(ply, cmd, args)
     net.Send(ply)
 end
 concommand.Add("FPP_SendRestrictTool", SendRestrictedTools)
+
+-- Fallback owner, will own entities after disconnect
+local function setFallbackOwner(ply, fallback)
+    ply.FPPFallbackOwner = fallback:SteamID()
+end
+
+local function changeFallbackOwner(ply, _, args)
+    local fallback = tonumber(args[1]) and Player(tonumber(args[1]))
+
+    if tonumber(args[1]) == -1 then
+        ply.FPPFallbackOwner = nil
+        FPP.Notify(ply, "Fallback owner set", true)
+        return
+    end
+
+    if not IsValid(fallback) or not fallback:IsPlayer() or fallback == ply then FPP.Notify(ply, "Player invalid", false) return end
+
+    setFallbackOwner(ply, fallback)
+    FPP.Notify(ply, "Fallback owner set", true)
+end
+concommand.Add("FPP_FallbackOwner", changeFallbackOwner)
 
 --Buddies!
 local function changeBuddies(ply, buddy, settings)

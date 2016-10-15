@@ -44,14 +44,6 @@ hook.Add("PlayerSpawnProp", "FPP_SpawnProp", propSpawn) -- PlayerSpawnObject isn
 hook.Add("PlayerSpawnEffect", "FPP_SpawnEffect", propSpawn)
 hook.Add("PlayerSpawnRagdoll", "FPP_SpawnEffect", propSpawn)
 
---------------------------------------------------------------------------------------
---Helper function to get a setting from a player
---------------------------------------------------------------------------------------
-local function getPlySetting(ply, settingName)
-    local info = ply:GetInfo(settingName)
-    return info ~= "" and tobool(info)
-end
-
 /*---------------------------------------------------------------------------
 Setting owner when someone spawns something
 ---------------------------------------------------------------------------*/
@@ -565,6 +557,39 @@ function FPP.PlayerDisconnect(ply)
         freezeDisconnected(ply)
     end
 
+    if ply.FPPFallbackOwner then
+        -- FPP.DisconnectedOriginalOwners = FPP.DisconnectedOriginalOwners or {}
+        -- FPP.DisconnectedOriginalOwners[SteamID] = {props = {}}
+
+
+        local fallback = player.GetBySteamID(ply.FPPFallbackOwner)
+        for k,v in pairs(ents.GetAll()) do
+            if not IsValid(v) or v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
+
+            v.FPPFallbackOwner = ply.FPPFallbackOwner
+
+            if IsValid(fallback) then
+                v:CPPISetOwner(fallback)
+            end
+
+            -- table.insert(FPP.DisconnectedOriginalOwners[SteamID].props, v)
+
+            -- Only set when not set already
+            -- this prevents the original owner being set again
+            -- when the fallback hands their props over to a second
+            -- (or third, or nth) fallback
+            if v:GetNWString("FPP_OriginalOwner", "") == "" then
+                v:SetNWString("FPP_OriginalOwner", SteamID)
+            end
+        end
+
+        -- Create disconnect timer if fallback is not in server
+        -- ownership is transferred immediately when fallback is in server
+        if IsValid(fallback) then
+            return
+        end
+    end
+
     if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) or
     not FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime then
         return
@@ -592,6 +617,7 @@ hook.Add("PlayerDisconnected", "FPP.PlayerDisconnect", FPP.PlayerDisconnect)
 -- PlayerInitialspawn, the props he had left before will now be theirs again
 function FPP.PlayerInitialSpawn(ply)
     local RP = RecipientFilter()
+    local SteamID = ply:SteamID()
 
     timer.Simple(5, function()
         if not IsValid(ply) then return end
@@ -603,11 +629,16 @@ function FPP.PlayerInitialSpawn(ply)
     end)
 
     local entities = {}
-    if FPP.DisconnectedPlayers[ply:SteamID()] then -- Check if the player has rejoined within the auto remove time
+    if FPP.DisconnectedPlayers[SteamID] then -- Check if the player has rejoined within the auto remove time
         for k,v in pairs(ents.GetAll()) do
-            if IsValid(v) and v.FPPOwnerID == ply:SteamID() then
+            if IsValid(v) and (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNWString("FPP_OriginalOwner") == SteamID) then
+                v.FPPFallbackOwner = nil
                 v:CPPISetOwner(ply)
                 table.insert(entities, v)
+
+                if v:GetNWString("FPP_OriginalOwner", "") ~= "" then
+                    v:SetNWString("FPP_OriginalOwner", "")
+                end
             end
         end
     end

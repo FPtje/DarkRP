@@ -17,7 +17,7 @@ function ENT:Draw()
     local text = DarkRP.formatMoney(self:Getamount())
     local TextWidth = surface.GetTextSize(text)
 
-    cam.Start3D2D(Pos + Ang:Up() * 0.9, Ang, 0.1)
+    cam.Start3D2D(Pos + Ang:Up() * 0.82, Ang, 0.1)
         draw.WordBox(2, -TextWidth * 0.5, -10, text, "ChatFont", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
     cam.End3D2D()
 

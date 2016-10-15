@@ -167,6 +167,9 @@ local function HUDPaint()
     local touchType = weaponClassTouchTypes[class] or "EntityDamage"
     local reason = FPP.entGetTouchReason(LAEnt, touchType)
     if not reason then return end
+    local originalOwner = LAEnt:GetNWString("FPP_OriginalOwner")
+    originalOwner = originalOwner ~= "" and (" (previous owner: %s)"):format(originalOwner) or ""
+    reason = reason .. originalOwner
 
     surface.SetFont("Default")
     local w,h = surface.GetTextSize(reason)

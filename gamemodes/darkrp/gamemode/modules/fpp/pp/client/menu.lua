@@ -237,7 +237,7 @@ function FPP.AdminMenu(Panel)
 
     local _, physgun = MakeOption("Physgun options")
     addchk("Physgun protection enabled", {"FPP_PHYSGUN1", "toggle"}, physgun)
-    addchk("Admins can physgun all entities", {"FPP_PHYSGUN1", "adminall"}, physgun)
+    addchk("Privileged users can physgun all entities", {"FPP_PHYSGUN1", "adminall"}, physgun)
     addchk("People can physgun world entities", {"FPP_PHYSGUN1", "worldprops"}, physgun)
     addchk("Admins can physgun world entities", {"FPP_PHYSGUN1", "adminworldprops"}, physgun)
     addchk("People can physgun blocked entities", {"FPP_PHYSGUN1", "canblocked"}, physgun)
@@ -248,7 +248,7 @@ function FPP.AdminMenu(Panel)
 
     local _, gravgun = MakeOption("Gravity gun options")
     addchk("Gravity gun protection enabled", {"FPP_GRAVGUN1", "toggle"}, gravgun)
-    addchk("Admins can gravgun all entities", {"FPP_GRAVGUN1", "adminall"}, gravgun)
+    addchk("Privileged users can gravgun all entities", {"FPP_GRAVGUN1", "adminall"}, gravgun)
     addchk("People can gravgun world entities", {"FPP_GRAVGUN1", "worldprops"}, gravgun)
     addchk("Admins can gravgun world entities", {"FPP_GRAVGUN1", "adminworldprops"}, gravgun)
     addchk("People can gravgun blocked entities", {"FPP_GRAVGUN1", "canblocked"}, gravgun)
@@ -276,7 +276,7 @@ function FPP.AdminMenu(Panel)
 
     local _, playeruse = MakeOption("Player use options")
     addchk("Use protection enabled", {"FPP_PLAYERUSE1", "toggle"}, playeruse)
-    addchk("Admins can use all entities", {"FPP_PLAYERUSE1", "adminall"}, playeruse)
+    addchk("Privileged users can use all entities", {"FPP_PLAYERUSE1", "adminall"}, playeruse)
     addchk("People can use world entities", {"FPP_PLAYERUSE1", "worldprops"}, playeruse)
     addchk("Admins can use world entities", {"FPP_PLAYERUSE1", "adminworldprops"}, playeruse)
     addchk("People can use blocked entities", {"FPP_PLAYERUSE1", "canblocked"}, playeruse)
@@ -291,7 +291,7 @@ function FPP.AdminMenu(Panel)
 
     addchk("Damage protection enabled", {"FPP_ENTITYDAMAGE1", "toggle"}, damage)
     addchk("Protect against damage by props", {"FPP_ENTITYDAMAGE1", "protectpropdamage"}, damage)
-    addchk("Admins can damage all entities", {"FPP_ENTITYDAMAGE1", "adminall"}, damage)
+    addchk("Privileged users can damage all entities", {"FPP_ENTITYDAMAGE1", "adminall"}, damage)
     addchk("People can damage world entities", {"FPP_ENTITYDAMAGE1", "worldprops"}, damage)
     addchk("Admins can damage world entities", {"FPP_ENTITYDAMAGE1", "adminworldprops"}, damage)
     addchk("People can damage blocked entities", {"FPP_ENTITYDAMAGE1", "canblocked"}, damage)
@@ -1088,7 +1088,13 @@ function FPP.getPrivateSetting(setting)
     return privateSettingVars[setting]:GetBool()
 end
 
+local PrivateSettingsPanel
 function FPP.PrivateSettings(Panel)
+    PrivateSettingsPanel = PrivateSettingsPanel or Panel
+
+    Panel:ClearControls()
+    PrivateSettingsPanel:Clear()
+
     Panel:AddControl("Label", {Text = "\nPrivate settings menu\nUse to set settings that override server settings\n\nThese settings can only restrict you further.\n"})
     for k,v in pairs(PrivateSettings) do
         local box = vgui.Create("DCheckBoxLabel")
@@ -1106,6 +1112,19 @@ function FPP.PrivateSettings(Panel)
         Panel:AddItem(box)
     end
     Panel:AddControl("CheckBox", {Label = "I want to pick up players", Command = "cl_pickupplayers"})
+
+    local fallbackChoice = Panel:ComboBox("Fallback player")
+    fallbackChoice:AddChoice("None", -1, true)
+
+    for k, v in pairs(player.GetAll()) do
+        if v == LocalPlayer() then continue end
+        fallbackChoice:AddChoice(v:Nick(), v:UserID(), PrivateSettingsPanel.FallbackSelected == v:UserID())
+    end
+
+    fallbackChoice.OnSelect = function(_, _, nick, uid)
+        RunConsoleCommand("FPP_FallbackOwner", uid)
+        PrivateSettingsPanel.FallbackSelected = uid
+    end
 end
 
 local function makeMenus()
@@ -1121,6 +1140,9 @@ local function UpdateMenus()
     end
     if IsValid(BuddiesPanel) then
         FPP.BuddiesMenu(BuddiesPanel)
+    end
+    if IsValid(PrivateSettingsPanel) then
+        FPP.PrivateSettings(PrivateSettingsPanel)
     end
 end
 hook.Add("SpawnMenuOpen", "FPPMenus", UpdateMenus)
