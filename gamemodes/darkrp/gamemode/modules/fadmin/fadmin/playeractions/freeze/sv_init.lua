@@ -73,8 +73,7 @@ FAdmin.StartHooks["Freeze"] = function()
     FAdmin.Access.AddPrivilege("Freeze", 2)
 end
 
-hook.Add("PlayerSpawnObject", "FAdmin_jail", function(ply)
-    if ply:FAdmin_GetGlobal("FAdmin_frozen") then
-        return false
-    end
-end)
+local disallow = function(ply) if ply:FAdmin_GetGlobal("FAdmin_frozen") then return false end end
+
+hook.Add("PlayerSpawnObject", "FAdmin_jail", disallow)
+hook.Add("CanPlayerSuicide", "FAdmin_jail", disallow)
