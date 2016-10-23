@@ -265,6 +265,8 @@ Entity HUDPaint things
 -- This syntax allows for easy overriding
 plyMeta.drawPlayerInfo = plyMeta.drawPlayerInfo or function(self)
     local pos = self:EyePos()
+    local shouldDraw = hook.Call("ShouldDrawPlayerInfo", GAMEMODE, self)
+    if shouldDraw == false then return end
 
     pos.z = pos.z + 10 -- The position we want is a bit above the position of the eyes
     pos = pos:ToScreen()
