@@ -265,8 +265,6 @@ Entity HUDPaint things
 -- This syntax allows for easy overriding
 plyMeta.drawPlayerInfo = plyMeta.drawPlayerInfo or function(self)
     local pos = self:EyePos()
-    local shouldDraw = hook.Call("ShouldDrawPlayerInfo", GAMEMODE, self)
-    if shouldDraw == false then return end
 
     pos.z = pos.z + 10 -- The position we want is a bit above the position of the eyes
     pos = pos:ToScreen()
@@ -334,7 +332,7 @@ local function DrawEntityDisplay()
     local aimVec = localplayer:GetAimVector()
 
     for k, ply in pairs(players or player.GetAll()) do
-        if ply == localplayer or not ply:Alive() or ply:GetNoDraw() then continue end
+        if ply == localplayer or not ply:Alive() or ply:GetNoDraw() or hook.Call("ShouldDrawPlayerInfo", GAMEMODE, ply) == false then continue end
         local hisPos = ply:GetShootPos()
         if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 
