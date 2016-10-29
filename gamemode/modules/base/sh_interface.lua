@@ -546,6 +546,27 @@ DarkRP.hookStub{
 --[[---------------------------------------------------------------------------
 Creating custom items
 ---------------------------------------------------------------------------]]
+DarkRP.getJobTable = DarkRP.stub{
+    name = "getJobTable",
+    description = "Get a job table by its id",
+    parameters = {
+        {
+            name = "jobId",
+            description = "The TEAM_ number of the job. Also the index of the job in RPExtraTeams.",
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "job",
+            description = "Table with the job information, false otherwise.",
+            type = "table, boolean"
+        }
+    },
+    metatable = DarkRP
+}
+
 DarkRP.createJob = DarkRP.stub{
     name = "createJob",
     description = "Create a job for DarkRP.",
