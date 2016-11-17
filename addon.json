@@ -1,0 +1,24 @@
+{
+    "author": "Current developer: Falco A.K.A. FPtje Atheos (STEAM_0:0:8944068)",
+    "default_changelog": "Please see https://github.com/FPtje/DarkRP/commits/master for the changes",
+    "description": "This is an experimental, yet offical addon version of DarkRP. You can modify DarkRP with the DarkRPMod, which can be found here: https://github.com/FPtje/darkrpmodification",
+    "ignore": [
+        ".git*",
+        "*.md",
+        "*.jpg",
+        "HELP/*.txt",
+        "DON'T TOUCH ANY OF THESE FILES.txt",
+        "gamemodes/darkrp/gamemode/config/DO NOT TOUCH THESE FILES.txt",
+        "gamemodes/darkrp/gamemode/modules/DO NOT TOUCH THESE MODULES.txt",
+        "LICENSE.txt",
+        "data/fadmin/MOTD.txt"
+
+    ],
+    "tags": [
+        "roleplay",
+        "build"
+    ],
+    "title": "DarkRP",
+    "type": "gamemode",
+    "workshopid": 248302805
+}
