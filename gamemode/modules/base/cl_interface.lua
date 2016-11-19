@@ -74,8 +74,7 @@ DarkRP.setPreferredJobModel = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -116,7 +115,5 @@ DarkRP.hookStub{
             type = "number"
         }
     },
-    returns = {
-
-    }
+    returns = {}
 }

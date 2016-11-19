@@ -2,12 +2,13 @@ function GM:SetupMove(ply, mv, cmd)
     if ply:isArrested() then
         mv:SetMaxClientSpeed(self.Config.arrestspeed)
     end
+
     return self.Sandbox.SetupMove(self, ply, mv, cmd)
 end
 
 function GM:StartCommand(ply, usrcmd)
-    -- Used in arrest_stick and unarrest_stick but addons can use it too!
     local wep = ply:GetActiveWeapon()
+
     if IsValid(wep) and isfunction(wep.startDarkRPCommand) then
         wep:startDarkRPCommand(usrcmd)
     end
@@ -19,16 +20,21 @@ function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
     end
 
     if CLIENT then return end
-
     local agenda = ply:getAgendaTable()
 
-    -- Remove agenda text when last manager left
     if agenda and agenda.ManagersByKey[oldTeam] then
         local found = false
+
         for man, _ in pairs(agenda.ManagersByKey) do
-            if team.NumPlayers(man) > 0 then found = true break end
+            if team.NumPlayers(man) > 0 then
+                found = true
+                break
+            end
         end
-        if not found then agenda.text = nil end
+
+        if not found then
+            agenda.text = nil
+        end
     end
 
     ply:setSelfDarkRPVar("agenda", agenda and agenda.text or nil)
@@ -70,13 +76,17 @@ hook.Add("loadCustomDarkRPItems", "CAMI privs", function()
         MinAccess = "superadmin"
     }
 
-    for k,v in pairs(RPExtraTeams) do
+    for k, v in pairs(RPExtraTeams) do
         if not v.vote or v.admin and v.admin > 1 then continue end
 
-        local toAdmin = {[0] = "admin", [1] = "superadmin"}
+        local toAdmin = {
+            [0] = "admin",
+            [1] = "superadmin"
+        }
+
         CAMI.RegisterPrivilege{
             Name = "DarkRP_GetJob_" .. v.command,
-            MinAccess = toAdmin[v.admin or 0]-- Add privileges for the teams that are voted for
+            MinAccess = toAdmin[v.admin or 0]
         }
     end
 end)
