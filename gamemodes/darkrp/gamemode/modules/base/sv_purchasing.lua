@@ -131,6 +131,10 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
         return false, false, DarkRP.getPhrase("cant_afford", "shipment")
     end
 
+    if not ply:Alive() then
+        return false, false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", DarkRP.getPhrase("shipments")):lower())
+    end
+
     return true
 end
 
