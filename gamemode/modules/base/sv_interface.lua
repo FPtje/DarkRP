@@ -1,10 +1,8 @@
 DarkRP.initDatabase = DarkRP.stub{
     name = "initDatabase",
     description = "Initialize the DarkRP database.",
-    parameters = {
-    },
-    returns = {
-    },
+    parameters = {},
+    returns = {},
     metatable = DarkRP
 }
 
@@ -25,8 +23,7 @@ DarkRP.storeRPName = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -47,8 +44,7 @@ DarkRP.retrieveRPNames = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -75,8 +71,7 @@ DarkRP.retrievePlayerData = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -157,8 +152,7 @@ DarkRP.createPlayerData = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -179,8 +173,7 @@ DarkRP.storeMoney = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -242,10 +235,8 @@ DarkRP.retrieveSalary = DarkRP.stub{
 DarkRP.restorePlayerData = DarkRP.stub{
     name = "restorePlayerData",
     description = "Internal function that restores a player's DarkRP information when they join.",
-    parameters = {
-    },
-    returns = {
-    },
+    parameters = {},
+    returns = {},
     metatable = DarkRP
 }
 
@@ -260,8 +251,7 @@ DarkRP.storeDoorData = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -276,8 +266,7 @@ DarkRP.storeTeamDoorOwnability = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -298,8 +287,7 @@ DarkRP.storeDoorGroup = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -332,8 +320,7 @@ DarkRP.notify = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -360,8 +347,7 @@ DarkRP.notifyAll = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -382,8 +368,7 @@ DarkRP.printMessageAll = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -404,8 +389,7 @@ DarkRP.printConsoleMessage = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -438,8 +422,7 @@ DarkRP.talkToRange = DarkRP.stub{
             optional = false
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -484,8 +467,7 @@ DarkRP.talkToPerson = DarkRP.stub{
             optional = true
         }
     },
-    returns = {
-    },
+    returns = {},
     metatable = DarkRP
 }
 
@@ -515,6 +497,7 @@ DarkRP.isEmpty = DarkRP.stub{
     },
     metatable = DarkRP
 }
+
 -- findEmptyPos(pos, ignore, distance, step, area) -- returns pos
 DarkRP.findEmptyPos = DarkRP.stub{
     name = "findEmptyPos",
@@ -648,8 +631,7 @@ DarkRP.PLAYER.setSelfDarkRPVar = DarkRP.stub{
 DarkRP.PLAYER.sendDarkRPVars = DarkRP.stub{
     name = "sendDarkRPVars",
     description = "Internal function. Sends all visibleDarkRPVars of all players to this player.",
-    parameters = {
-    },
+    parameters = {},
     returns = {},
     metatable = DarkRP.PLAYER
 }
@@ -750,10 +732,8 @@ DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
 DarkRP.hookStub{
     name = "DarkRPDBInitialized",
     description = "Called when DarkRP is done initializing the database.",
-    parameters = {
-    },
-    returns = {
-    }
+    parameters = {},
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -805,8 +785,7 @@ DarkRP.hookStub{
             type = "string"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -858,8 +837,7 @@ DarkRP.hookStub{
             type = "number"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -887,8 +865,7 @@ DarkRP.hookStub{
             type = "number"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -916,8 +893,7 @@ DarkRP.hookStub{
             type = "number"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -945,8 +921,7 @@ DarkRP.hookStub{
             type = "number"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -974,8 +949,7 @@ DarkRP.hookStub{
             type = "number"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
@@ -1020,14 +994,14 @@ DarkRP.hookStub{
             name = "target",
             description = "The player whom is to be demoted.",
             type = "Player"
-        },
+        }
     },
     returns = {
         {
             name = "demoteTeam",
             description = "The team the player is to be demoted to.",
             type = "number"
-        },
+        }
     }
 }
 
@@ -1051,8 +1025,7 @@ DarkRP.hookStub{
             type = "string"
         }
     },
-    returns = {
-    }
+    returns = {}
 }
 
 DarkRP.hookStub{
