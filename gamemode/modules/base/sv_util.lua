@@ -90,6 +90,7 @@ function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
 end
 
 function DarkRP.isEmpty(vector, ignore)
+    if not vector then return end
     ignore = ignore or {}
 
     local point = util.PointContents(vector)
