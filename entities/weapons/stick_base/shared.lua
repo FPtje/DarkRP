@@ -105,11 +105,6 @@ function SWEP:Holster()
     return true
 end
 
-function SWEP:OnRemove()
-    BaseClass.OnRemove(self)
-    self:ResetStick(true)
-end
-
 function SWEP:Think()
     if self:GetSeqIdling() then
         self:SetSeqIdling(false)
