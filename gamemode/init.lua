@@ -42,6 +42,28 @@ include("libraries/modificationloader.lua")
 include("libraries/mysqlite/mysqlite.lua")
 include("libraries/disjointset.lua")
 
+resource.AddFile("materials/vgui/entities/arrest_stick.vmt")
+resource.AddFile("materials/vgui/entities/door_ram.vmt")
+resource.AddFile("materials/vgui/entities/keys.vmt")
+resource.AddFile("materials/vgui/entities/lockpick.vmt")
+resource.AddFile("materials/vgui/entities/ls_sniper.vmt")
+resource.AddFile("materials/vgui/entities/med_kit.vmt")
+resource.AddFile("materials/vgui/entities/pocket.vmt")
+resource.AddFile("materials/vgui/entities/stunstick.vmt")
+resource.AddFile("materials/vgui/entities/unarrest_stick.vmt")
+resource.AddFile("materials/vgui/entities/weapon_ak472.vmt")
+resource.AddFile("materials/vgui/entities/weapon_deagle2.vmt")
+resource.AddFile("materials/vgui/entities/weapon_fiveseven2.vmt")
+resource.AddFile("materials/vgui/entities/weapon_glock2.vmt")
+resource.AddFile("materials/vgui/entities/weapon_keypadchecker.vmt")
+resource.AddFile("materials/vgui/entities/weapon_m42.vmt")
+resource.AddFile("materials/vgui/entities/weapon_mac102.vmt")
+resource.AddFile("materials/vgui/entities/weapon_mp52.vmt")
+resource.AddFile("materials/vgui/entities/weapon_p2282.vmt")
+resource.AddFile("materials/vgui/entities/weapon_pumpshotgun2.vmt")
+resource.AddFile("materials/vgui/entities/weaponchecker.vmt")
+
+
 --[[---------------------------------------------------------------------------
 Loading modules
 ---------------------------------------------------------------------------]]
