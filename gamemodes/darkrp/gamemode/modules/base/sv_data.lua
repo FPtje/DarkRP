@@ -232,7 +232,7 @@ function migrateDB(callback)
         MySQLite.commit(onFinish)
     end)
 
-    if not DarkRP.DBVersion or DarkRP.DBVersion < 20160610 then
+    if not DarkRP.DBVersion or (DarkRP.DBVersion < 20160610 and DarkRP.DBVersion ~= 0) then
         if not MySQLite.isMySQL() then
             -- darkrp_player used to have a UNIQUE rpname field.
             -- This sucks, get rid of it

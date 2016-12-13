@@ -79,12 +79,6 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    -- Send NPCs to Jail
-    if ent:IsNPC() then
-        ent:SetPos(DarkRP.retrieveJailPos())
-        return
-    end
-
     ent:arrest(nil, self:GetOwner())
     DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self:GetOwner():Nick()))
 

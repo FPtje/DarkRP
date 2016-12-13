@@ -113,6 +113,8 @@ end
 usermessage.Hook("KillVoteVGUI", KillVoteVGUI)
 
 local function MsgDoQuestion(msg)
+    if not IsValid(LocalPlayer()) then return end
+
     local question = msg:ReadString()
     local quesid = msg:ReadString()
     local timeleft = msg:ReadFloat()
