@@ -13,7 +13,8 @@ local function AddToChat(bits)
     local prefixText = net.ReadString()
     local ply = net.ReadEntity()
     ply = IsValid(ply) and ply or LocalPlayer()
-    ply = IsValid(ply) and ply or "unknown"
+
+    if not IsValid(ply) then return end
 
     if prefixText == "" or not prefixText then
         prefixText = ply:Nick()
