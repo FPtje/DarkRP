@@ -169,6 +169,8 @@ function ENT:Destruct()
     weapon:SetWeaponClass(class)
     weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
     weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
+    weapon.clip1 = self.clip1
+    weapon.clip2 = self.clip2
     weapon.nodupe = true
     weapon:Spawn()
     weapon.dt.amount = count
