@@ -337,6 +337,8 @@ end
 DarkRP.defineChatCommand("demote", Demote)
 
 local function ExecSwitchJob(answer, ent, ply, target)
+    if not IsValid(ply) or not IsValid(target) then return end
+
     ply.RequestedJobSwitch = nil
     if not tobool(answer) then return end
     local Pteam = ply:Team()
