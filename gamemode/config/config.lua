@@ -33,6 +33,8 @@ GM.Config.allowvehicleowning            = true
 GM.Config.allowvnocollide               = false
 -- alltalk - Enable for global chat, disable for local chat.
 GM.Config.alltalk                       = false
+-- antimultirun - Disallow people joining your server(s) twice on the same account
+GM.Config.antimultirun                  = true
 -- autovehiclelock - Enable/Disable automatic locking of a vehicle when a player exits it.
 GM.Config.autovehiclelock               = false
 -- babygod - people spawn godded (prevent spawn killing).
