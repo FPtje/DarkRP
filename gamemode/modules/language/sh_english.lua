@@ -176,6 +176,7 @@ local my_language = {
     drugs = "Drugs",
     drug_lab = "Drug Lab",
     gun_lab = "Gun Lab",
+    any_lab = "any lab",
     gun = "gun",
     microwave = "Microwave",
     food = "Food",

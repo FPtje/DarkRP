@@ -428,7 +428,7 @@ local function SetPrice(ply, args)
     if IsValid(tr.Entity) and tr.Entity.CanSetPrice and tr.Entity.SID == ply.SID then
         tr.Entity:Setprice(b)
     else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "any lab"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("any_lab")))
     end
     return ""
 end
