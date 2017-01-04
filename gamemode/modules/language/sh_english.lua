@@ -471,9 +471,12 @@ local my_language = {
     buy_x = "Buy %s",
 
     -- F4menu
+    ammo = "ammo",
+    weapon = "weapon",
     no_extra_weapons = "This job has no extra weapons.",
     become_job = "Become job",
     create_vote_for_job = "Create vote",
+    shipment = "shipment",
     shipments = "Shipments",
     F4guns = "Weapons",
     F4entities = "Miscellaneous",
