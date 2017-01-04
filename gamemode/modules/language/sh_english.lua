@@ -173,13 +173,15 @@ local my_language = {
     sold_x_doors = "You have sold %d doors for %s!",
 
     -- Entities
-    drugs = "Drugs",
+    drugs = "drugs",
+    Drugs = "Drugs",
     drug_lab = "Drug Lab",
     gun_lab = "Gun Lab",
     any_lab = "any lab",
     gun = "gun",
     microwave = "Microwave",
-    food = "Food",
+    food = "food",
+    Food = "Food",
     money_printer = "Money Printer",
 
     sign_this_letter = "Sign this letter",
@@ -472,12 +474,13 @@ local my_language = {
 
     -- F4menu
     ammo = "ammo",
-    weapon = "weapon",
+    weapon_ = "weapon",
     no_extra_weapons = "This job has no extra weapons.",
     become_job = "Become job",
     create_vote_for_job = "Create vote",
     shipment = "shipment",
-    shipments = "Shipments",
+    Shipments = "Shipments",
+    shipments = "shipments",
     F4guns = "Weapons",
     F4entities = "Miscellaneous",
     F4ammo = "Ammo",

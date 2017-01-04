@@ -46,7 +46,7 @@ local function BuyPistol(ply, args)
 
     local shipment = DarkRP.getShipmentByName(args)
     if not shipment or not shipment.separate then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", DarkRP.getPhrase("weapon")))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", DarkRP.getPhrase("weapon_")))
         return ""
     end
 
@@ -132,7 +132,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     end
 
     if not ply:Alive() then
-        return false, false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", DarkRP.getPhrase("shipments")):lower())
+        return false, false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", DarkRP.getPhrase("shipments")))
     end
 
     return true

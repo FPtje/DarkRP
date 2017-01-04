@@ -59,7 +59,7 @@ function DarkRP.hooks.F4MenuTabs()
 
     local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
     if table.Count(shipments) > 0 then
-        DarkRP.addF4MenuTab(DarkRP.getPhrase("shipments"), vgui.Create("F4MenuShipments"))
+        DarkRP.addF4MenuTab(DarkRP.getPhrase("Shipments"), vgui.Create("F4MenuShipments"))
     end
 
     local guns = fn.Filter(fn.Curry(fn.GetValue, 2)("separate"), CustomShipments)
