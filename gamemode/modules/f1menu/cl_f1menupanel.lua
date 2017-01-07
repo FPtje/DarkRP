@@ -5,7 +5,6 @@ function PANEL:Init()
     self:SetFocusTopLevel(true)
     self:SetSize(ScrW() * 0.9, ScrH() * 0.9)
     self:SetBackgroundColor(Color(0, 0, 0, 220))
-    self:ParentToHUD()
 
     self:SetPos(-self:GetWide(), ScrH() * 0.05)
 
