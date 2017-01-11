@@ -95,7 +95,7 @@ local function DrawHealth()
     draw.DrawNonParsedText(math.Max(0, math.Round(myHealth)), "DarkRPHUD2", RelativeX + 4 + (HUDWidth - 8) / 2, RelativeY - 32, ConVars.HealthText, 1)
 
     -- Armor
-    local armor = localplayer:Armor()
+    local armor = math.Clamp(localplayer:Armor(), 0, 100)
     if armor ~= 0 then
         draw.RoundedBox(2, RelativeX + 4, RelativeY - 15, (HUDWidth - 8) * armor / 100, 5, colors.blue)
     end
