@@ -366,6 +366,11 @@ hook.Add("PlayerInitialSpawn", "Arrested", function(ply)
     local time = GAMEMODE.Config.jailtimer
     -- Delay the actual arrest by a single frame to allow
     -- the player to initialise
-    timer.Simple(0, fp{ply.arrest, ply, time})
+    timer.Simple(0, function()
+        -- In case the timer ended right this tick
+        if not IsValid(ply) or not arrestedPlayers[ply:SteamID()] then return end
+
+        ply:arrest(time)
+    end)
     DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("jail_punishment", time))
 end)
