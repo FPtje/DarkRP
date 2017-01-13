@@ -300,7 +300,7 @@ GM.Config.lockdownsound = "npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.w
 GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
-GM.Config.F1MenuHelpPage = "http://wiki.darkrp.com/index.php/Main_Page"
+GM.Config.F1MenuHelpPage = "https://docs.google.com/document/d/10pvotowOA3EA7K5BMgdaKVOYjbrbx6dxrQn4LWxm30A/edit#heading=h.e5iaqteza8x7"
 GM.Config.F1MenuHelpPageTitle = "Wiki page"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
