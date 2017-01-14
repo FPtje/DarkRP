@@ -301,7 +301,7 @@ GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "https://docs.google.com/document/d/10pvotowOA3EA7K5BMgdaKVOYjbrbx6dxrQn4LWxm30A/edit#heading=h.e5iaqteza8x7"
-GM.Config.F1MenuHelpPageTitle = "Wiki page"
+GM.Config.F1MenuHelpPageTitle = "Server tips"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {
