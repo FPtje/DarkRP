@@ -134,6 +134,14 @@ DarkRP.createEntity("Money printer", {
     cmd = "buymoneyprinter"
 })
 
+DarkRP.createEntity("Tip Jar", {
+    ent = "tip_jar",
+    model = "models/props_lab/jar01a.mdl",
+    price = 0,
+    max = 2,
+    cmd = "tipjar"
+})
+
 DarkRP.createEntity("Gun lab", {
     ent = "gunlab",
     model = "models/props_c17/TrapPropeller_Engine.mdl",

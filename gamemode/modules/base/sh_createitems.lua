@@ -363,7 +363,11 @@ local function addEntityCommands(tblEnt)
 
         hook.Call("playerBoughtCustomEntity", nil, ply, tblEnt, ent, cost)
 
-        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(cost), ""))
+        if cost == 0 then
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_got_yourself", tblEnt.name))
+        else
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", tblEnt.name, DarkRP.formatMoney(cost), ""))
+        end
 
         ply:addCustomEntity(tblEnt)
         return ""
