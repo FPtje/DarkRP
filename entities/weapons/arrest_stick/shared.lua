@@ -48,6 +48,10 @@ DarkRP.hookStub{
     realm = "Server"
 }
 
+function SWEP:Initialize()
+    self.ArrestRange = 90
+end
+
 function SWEP:Deploy()
     self.Switched = true
     return BaseClass.Deploy(self)
@@ -69,7 +73,7 @@ function SWEP:PrimaryAttack()
 
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() end)
 
-    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > 8100) or not ent:IsPlayer() then
+    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > (self.ArrestRange * self.ArrestRange)) or not ent:IsPlayer() then
         return
     end
 
@@ -96,4 +100,12 @@ function SWEP:startDarkRPCommand(usrcmd)
     else
         self.Switched = false
     end
+end
+
+function SWEP:setArrestRange(amount)
+    self.ArrestRange = amount
+end
+
+function SWEP:getArrestRange()
+    return self.ArrestRange
 end
