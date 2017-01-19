@@ -10,6 +10,7 @@ DEFINE_BASECLASS("stick_base")
 
 SWEP.Instructions = "Left click to arrest\nRight click to switch batons"
 SWEP.IsDarkRPArrestStick = true
+SWEP.ArrestRange = 8100
 
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
@@ -69,7 +70,7 @@ function SWEP:PrimaryAttack()
 
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() end)
 
-    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > 8100) or not ent:IsPlayer() then
+    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > self.ArrestRange) or not ent:IsPlayer() then
         return
     end
 
