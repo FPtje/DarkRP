@@ -71,7 +71,7 @@ function SWEP:Deploy()
 
     local vm = self:GetOwner():GetViewModel()
     if not IsValid(vm) then return true end
-    self:PreDrawViewModel()
+    self:PreDrawViewModel(vm)
     vm:SendViewModelMatchingSequence(vm:LookupSequence("idle01"))
     return true
 end
