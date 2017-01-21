@@ -118,7 +118,7 @@ onModelUpdate("amount", function(new, _)
     local localply = LocalPlayer()
     if not IsValid(localply) then return end
 
-    local ownMoney = localply:getDarkRPVar("money")
+    local ownMoney = localply:getDarkRPVar("money") or 0
 
     if new < 0 or new % 1 ~= 0 or new > ownMoney then
         local amount = math.abs(math.floor(new))
