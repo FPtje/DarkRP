@@ -38,6 +38,8 @@ SWEP.Secondary.Ammo = ""
 function SWEP:Initialize()
     self:SetHoldType("normal")
 
+    self.stickRange = 90
+
     if SERVER then return end
 
     CreateMaterial("darkrp/" .. self:GetClass(), "VertexLitGeneric", {
