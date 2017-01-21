@@ -119,7 +119,7 @@ function SWEP:DoAttack(dmg)
 
     self.WaitingForAttackEffect = true
 
-    local ent = self:GetOwner():getEyeSightHitEntity(100, 15, fn.FAnd{fp{fn.Neq, self:GetOwner()}, fc{IsValid, entMeta.GetPhysicsObject}})
+    local ent = self:GetOwner():getEyeSightHitEntity(self.stickRange, 15, fn.FAnd{fp{fn.Neq, self:GetOwner()}, fc{IsValid, entMeta.GetPhysicsObject}})
 
     if not IsValid(ent) then return end
     if ent:IsPlayer() and not ent:Alive() then return end

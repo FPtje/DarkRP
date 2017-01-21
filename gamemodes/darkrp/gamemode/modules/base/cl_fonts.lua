@@ -109,6 +109,13 @@ local function loadFonts()
         antialias = true,
         shadow = false,
         font = "Akbar"})
+
+    surface.CreateFont("DarkRP_tipjar", {
+        size = 100,
+        weight = 500,
+        antialias = true,
+        shadow = true,
+        font = "ChatFont"})
 end
 loadFonts()
 -- Load twice because apparently once is not enough

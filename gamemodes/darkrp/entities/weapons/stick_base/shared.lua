@@ -38,6 +38,8 @@ SWEP.Secondary.Ammo = ""
 function SWEP:Initialize()
     self:SetHoldType("normal")
 
+    self.stickRange = 90
+
     if SERVER then return end
 
     CreateMaterial("darkrp/" .. self:GetClass(), "VertexLitGeneric", {
@@ -71,8 +73,9 @@ function SWEP:Deploy()
 
     local vm = self:GetOwner():GetViewModel()
     if not IsValid(vm) then return true end
-    self:PreDrawViewModel()
+
     vm:SendViewModelMatchingSequence(vm:LookupSequence("idle01"))
+
     return true
 end
 
