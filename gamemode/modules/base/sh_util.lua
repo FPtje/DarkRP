@@ -31,6 +31,10 @@ end
 function DarkRP.formatMoney(n)
     if not n then return attachCurrency("0") end
 
+    if type(n) ~= "number" then
+        n = tonumber(n.."")
+    end
+
     if n >= 1e14 then return attachCurrency(tostring(n)) end
     if n <= -1e14 then return "-" .. attachCurrency(tostring(math.abs(n))) end
 
