@@ -244,6 +244,7 @@ local function ccSetMoney(ply, args)
     end
 
     local amount = math.floor(tonumber(args[2]))
+    amount = hook.Call("playerWalletChanged", GAMEMODE, ply, amount - ply:getDarkRPVar("money"), ply:getDarkRPVar("money")) or amount
 
     if target then
         DarkRP.storeMoney(target, amount)
