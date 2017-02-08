@@ -11,7 +11,6 @@ hook.Add("loadCustomDarkRPItems", "loadAnimations", function()
     Anims[ACT_GMOD_GESTURE_AGREE] = DarkRP.getPhrase("thumbs_up")
     Anims[ACT_GMOD_GESTURE_WAVE] = DarkRP.getPhrase("wave")
     Anims[ACT_GMOD_TAUNT_DANCE] = DarkRP.getPhrase("dance")
-
 end)
 
 function DarkRP.addPlayerGesture(anim, text)
