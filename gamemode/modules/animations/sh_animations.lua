@@ -3,13 +3,15 @@ local Anims = {}
 -- Load animations after the languages for translation purposes
 hook.Add("loadCustomDarkRPItems", "loadAnimations", function()
     Anims[ACT_GMOD_GESTURE_BOW] = DarkRP.getPhrase("bow")
-    Anims[ACT_GMOD_TAUNT_MUSCLE] = DarkRP.getPhrase("dance")
+    Anims[ACT_GMOD_TAUNT_MUSCLE] = DarkRP.getPhrase("sexy_dance")
     Anims[ACT_GMOD_GESTURE_BECON] = DarkRP.getPhrase("follow_me")
     Anims[ACT_GMOD_TAUNT_LAUGH] = DarkRP.getPhrase("laugh")
     Anims[ACT_GMOD_TAUNT_PERSISTENCE] = DarkRP.getPhrase("lion_pose")
     Anims[ACT_GMOD_GESTURE_DISAGREE] = DarkRP.getPhrase("nonverbal_no")
     Anims[ACT_GMOD_GESTURE_AGREE] = DarkRP.getPhrase("thumbs_up")
     Anims[ACT_GMOD_GESTURE_WAVE] = DarkRP.getPhrase("wave")
+    Anims[ACT_GMOD_TAUNT_DANCE] = DarkRP.getPhrase("dance")
+
 end)
 
 function DarkRP.addPlayerGesture(anim, text)
