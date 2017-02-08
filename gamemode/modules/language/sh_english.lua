@@ -400,13 +400,14 @@ local my_language = {
     -- Animations
     custom_animation = "Custom animation!",
     bow = "Bow",
-    dance = "Dance",
+    sexy_dance = "Sexy dance",
     follow_me = "Follow me!",
     laugh = "Laugh",
     lion_pose = "Lion pose",
     nonverbal_no = "Non-verbal no",
     thumbs_up = "Thumbs up",
     wave = "Wave",
+    dance = "Dance",
 
     -- Hungermod
     starving = "Starving!",
