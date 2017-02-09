@@ -325,6 +325,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     ply:setDarkRPVar("HasGunlicense", nil)
 
     ply:StripWeapons()
+    ply:StripAmmo()
 
     if ply:isArrested() then return end -- hasn't been arrested before
 
