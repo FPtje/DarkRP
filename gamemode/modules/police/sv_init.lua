@@ -21,7 +21,7 @@ function plyMeta:warrant(warranter, reason)
     local centerMessage = DarkRP.getPhrase("warrant_approved", self:Nick(), reason, warranterNick)
     local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Nick(), reason)
 
-    for a, b in pairs(player.GetAll()) do
+    for _, b in pairs(player.GetAll()) do
         b:PrintMessage(HUD_PRINTCENTER, centerMessage)
         b:PrintMessage(HUD_PRINTCONSOLE, printMessage)
     end
@@ -127,7 +127,8 @@ local function CombineRequest(ply, args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return
         end
-        for k, v in pairs(player.GetAll()) do
+
+        for _, v in pairs(player.GetAll()) do
             if v:isCP() or v == ply then
                 DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. " " .. ply:Nick(), Color(255, 0, 0, 255), text, ply)
             end
@@ -235,7 +236,7 @@ local function ccArrest(ply, args)
         return
     end
 
-    for k, target in pairs(targets) do
+    for _, target in pairs(targets) do
         local length = tonumber(args[2])
         if length then
             target:arrest(length, ply)
@@ -330,7 +331,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isArrested() then return end -- hasn't been arrested before
 
     ply:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("youre_arrested", time))
-    for k, v in pairs(player.GetAll()) do
+    for _, v in pairs(player.GetAll()) do
         if v == ply then continue end
         v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("hes_arrested", ply:Name(), time))
     end
