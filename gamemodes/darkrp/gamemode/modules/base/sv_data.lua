@@ -370,7 +370,7 @@ function DarkRP.storeMoney(ply, amount)
 end
 
 function DarkRP.storeOfflineMoney(sid64, amount)
-    if isnumber(sid64) or isstring(sid64) and string.len(sid64) < 18 then -- smaller than 76561197960265728 is not a SteamID64
+    if isnumber(sid64) or isstring(sid64) and string.len(sid64) < 17 then -- smaller than 76561197960265728 is not a SteamID64
         DarkRP.errorNoHalt([[Some addon is giving DarkRP.storeOfflineMoney a UniqueID as its first argument, but this function now expects a SteamID64]], 2,
             { "The function used to take UniqueIDs, but it does not anymore."
             , "If you are a server owner, please look closely to the files mentioned in this error"
