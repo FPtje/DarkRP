@@ -77,7 +77,3 @@ end
 function ENT:ClearDonations()
     table.Empty(self.madeDonations)
 end
-
-function ENT:CanTool(ply, trace, tool)
-    if tool == "remover" and ply == self:Getowning_ent() then return true end
-end
