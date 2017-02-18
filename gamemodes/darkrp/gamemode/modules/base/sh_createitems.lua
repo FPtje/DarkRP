@@ -355,7 +355,7 @@ local function addEntityCommands(tblEnt)
         local tr = util.TraceLine(trace)
 
         local ent = (tblEnt.spawn or defaultSpawn)(ply, tr, tblEnt)
-        ent.onlyremover = true
+        ent.onlyremover = not tblEnt.allowTools
         -- Repeat these properties to alleviate work in tblEnt.spawn:
         ent.SID = ply.SID
         ent.allowed = tblEnt.allowed

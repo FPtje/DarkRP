@@ -139,7 +139,8 @@ DarkRP.createEntity("Tip Jar", {
     model = "models/props_lab/jar01a.mdl",
     price = 0,
     max = 2,
-    cmd = "tipjar"
+    cmd = "tipjar",
+    allowTools = true,
 })
 
 DarkRP.createEntity("Gun lab", {

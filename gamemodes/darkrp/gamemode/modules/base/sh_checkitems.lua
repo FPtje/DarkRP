@@ -467,6 +467,14 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
             isstring,
             "The name must be a valid string."
         ),
+
+    allowTools =
+        tc.default(false,
+            tc.addHint(
+                tc.optional(isbool),
+                "The vote must be either true or false."
+            )
+        ),
 }}
 
 
