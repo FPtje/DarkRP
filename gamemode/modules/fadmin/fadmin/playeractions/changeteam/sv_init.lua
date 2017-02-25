@@ -9,9 +9,6 @@ local function checkDarkRP(ply, target, t)
         if ret ~= nil then return ret end
     end
 
-    local hookValue = hook.Call("playerCanChangeTeam", nil, target, t, true)
-    if hookValue == false then return false end
-
     local a = TEAM.admin
     if a > 0 and not target:IsAdmin()
     or a > 1 and not target:IsSuperAdmin()
@@ -32,7 +29,7 @@ local function SetTeam(ply, cmd, args)
             for _, target in pairs(targets) do
                 if not FAdmin.Access.PlayerHasPrivilege(ply, "SetTeam", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
                 local setTeam = target.changeTeam or target.SetTeam -- DarkRP compatibility
-                if IsValid(target) and checkDarkRP(ply, target, k) then
+                if IsValid(target) then
                     setTeam(target, k, true)
                 end
             end
