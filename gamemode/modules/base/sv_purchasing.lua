@@ -244,8 +244,16 @@ local function BuyVehicle(ply, args)
     end
 
     local found = false
+    -- Allow people to have multiple vehicles with the same name
+    -- vehicles are bought through the command
     for k,v in pairs(CustomVehicles) do
-        if string.lower(v.name) == string.lower(args) then found = CustomVehicles[k] break end
+        if string.lower(v.command) == string.lower(args) then found = CustomVehicles[k] break end
+    end
+
+    if not found then
+        for k,v in pairs(CustomVehicles) do
+            if string.lower(v.name) == string.lower(args) then found = CustomVehicles[k] break end
+        end
     end
 
     if not found then
