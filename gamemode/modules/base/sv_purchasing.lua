@@ -210,7 +210,7 @@ function DarkRP.hooks:canBuyVehicle(ply, vehicle)
     end
 
     if ply:isArrested() then
-        return false, false, DarkRP.getPhrase("unable", "/buyammo", "")
+        return false, false, DarkRP.getPhrase("unable", "/buyvehicle", "")
     end
 
     if vehicle.allowed and not table.HasValue(vehicle.allowed, ply:Team()) then
