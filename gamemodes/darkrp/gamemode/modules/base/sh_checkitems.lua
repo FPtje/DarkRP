@@ -472,7 +472,7 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
         tc.default(false,
             tc.addHint(
                 tc.optional(isbool),
-                "The vote must be either true or false."
+                "The allowTools must be either true or false."
             )
         ),
 }}

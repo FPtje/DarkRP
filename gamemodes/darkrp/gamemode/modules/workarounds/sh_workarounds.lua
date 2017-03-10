@@ -118,6 +118,28 @@ if CLIENT then
     return
 end
 
+-- https://github.com/FPtje/DarkRP/issues/2640
+local entsCreate = ents.Create
+local entsCreateError = [[
+Unable to create entity.
+
+The server has come to a point where it has become impossible to create new
+entities. The entity limit has been hit. Try cleaning up the server or
+changing level. In the meantime, expect lots of errors coming from a lot of
+addons.
+
+If you do decide to send a bug report to ANY addon, please include this
+message.]]
+function ents.Create(name, ...)
+    local res = { entsCreate(name, ...) }
+
+    if res[1] == NULL and #ents.GetAll() >= 8024 then
+        DarkRP.error(entsCreateError, 2, { string.format("Affected entity: '%s'", name) })
+    end
+
+    return unpack(res)
+end
+
 if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
     local sid64 = plyMeta.SteamID64
 

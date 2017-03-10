@@ -244,22 +244,19 @@ local function ccSetMoney(ply, args)
     end
 
     local amount = math.floor(tonumber(args[2]))
-    amount = hook.Call("playerWalletChanged", GAMEMODE, ply, amount - ply:getDarkRPVar("money"), ply:getDarkRPVar("money")) or amount
+    amount = hook.Call("playerWalletChanged", GAMEMODE, target, amount - target:getDarkRPVar("money"), target:getDarkRPVar("money")) or amount
 
-    if target then
-        DarkRP.storeMoney(target, amount)
-        target:setDarkRPVar("money", amount)
+    DarkRP.storeMoney(target, amount)
+    target:setDarkRPVar("money", amount)
 
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_set_x_money", target:Nick(), DarkRP.formatMoney(amount), ""))
+    DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_set_x_money", target:Nick(), DarkRP.formatMoney(amount), ""))
 
-        DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(amount), ""))
-        if ply:EntIndex() == 0 then
-            DarkRP.log("Console set " .. target:SteamName() .. "'s money to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
-        else
-            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s money to " ..  DarkRP.formatMoney(amount), Color(30, 30, 30))
-        end
+    DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(amount), ""))
+
+    if ply:EntIndex() == 0 then
+        DarkRP.log("Console set " .. target:SteamName() .. "'s money to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
     else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args[1]))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s money to " ..  DarkRP.formatMoney(amount), Color(30, 30, 30))
     end
 end
 DarkRP.definePrivilegedChatCommand("setmoney", "DarkRP_SetMoney", ccSetMoney)

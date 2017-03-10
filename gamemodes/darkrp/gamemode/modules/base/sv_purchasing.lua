@@ -210,7 +210,7 @@ function DarkRP.hooks:canBuyVehicle(ply, vehicle)
     end
 
     if ply:isArrested() then
-        return false, false, DarkRP.getPhrase("unable", "/buyammo", "")
+        return false, false, DarkRP.getPhrase("unable", "/buyvehicle", "")
     end
 
     if vehicle.allowed and not table.HasValue(vehicle.allowed, ply:Team()) then
@@ -244,8 +244,19 @@ local function BuyVehicle(ply, args)
     end
 
     local found = false
+    -- Allow people to have multiple vehicles with the same name
+    -- vehicles are bought through the command
     for k,v in pairs(CustomVehicles) do
-        if string.lower(v.name) == string.lower(args) then found = CustomVehicles[k] break end
+        if v.command and string.lower(v.command) == string.lower(args) then
+            found = CustomVehicles[k]
+            break
+        end
+    end
+
+    if not found then
+        for k,v in pairs(CustomVehicles) do
+            if string.lower(v.name) == string.lower(args) then found = CustomVehicles[k] break end
+        end
     end
 
     if not found then

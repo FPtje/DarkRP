@@ -284,7 +284,7 @@ end
 function PANEL:generateButtons()
     local categories = DarkRP.getCategories().vehicles
 
-    createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyvehicle", item.name) end, canBuyVehicle)
+    createCategories(self, categories, function(item) RunConsoleCommand("DarkRP", "buyvehicle", item.command or item.name) end, canBuyVehicle)
 end
 
 derma.DefineControl("F4MenuVehicles", "", PANEL, "F4MenuEntitiesBase")
