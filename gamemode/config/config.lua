@@ -212,6 +212,8 @@ GM.Config.maxdoors                      = 20
 GM.Config.maxdrugs                      = 2
 -- maxfoods - Sets the max food cartons per Microwave owner.
 GM.Config.maxfoods                      = 2
+-- maxfooditems - Sets the max amount of food items a player can buy from the F4 menu
+GM.Config.maxfooditems                  = 20
 -- maxlawboards - The maximum number of law boards the mayor can place.
 GM.Config.maxlawboards                  = 2
 -- maxletters - Sets max letters.
