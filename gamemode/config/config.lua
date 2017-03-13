@@ -33,7 +33,7 @@ GM.Config.allowvehicleowning            = true
 GM.Config.allowvnocollide               = false
 -- alltalk - Enable for global chat, disable for local chat.
 GM.Config.alltalk                       = false
--- antimultirun - Disallow people joining your server(s) twice on the same account
+-- antimultirun - Disallow people joining your server(s) twice on the same account.
 GM.Config.antimultirun                  = true
 -- autovehiclelock - Enable/Disable automatic locking of a vehicle when a player exits it.
 GM.Config.autovehiclelock               = false
@@ -202,7 +202,7 @@ GM.Config.entremovedelay                = 0
 GM.Config.gunlabweapon                  = "weapon_p2282"
 -- jailtimer - Sets the jailtimer (in seconds).
 GM.Config.jailtimer                     = 120
--- lockdowndelay - The amount of time a mayor must wait before starting the next lockdown
+-- lockdowndelay - The amount of time a mayor must wait before starting the next lockdown.
 GM.Config.lockdowndelay                 = 120
 -- maxadvertbillboards - The maximum number of /advert billboards a player can place.
 GM.Config.maxadvertbillboards           = 3
@@ -212,7 +212,7 @@ GM.Config.maxdoors                      = 20
 GM.Config.maxdrugs                      = 2
 -- maxfoods - Sets the max food cartons per Microwave owner.
 GM.Config.maxfoods                      = 2
--- maxfooditems - Sets the max amount of food items a player can buy from the F4 menu
+-- maxfooditems - Sets the max amount of food items a player can buy from the F4 menu.
 GM.Config.maxfooditems                  = 20
 -- maxlawboards - The maximum number of law boards the mayor can place.
 GM.Config.maxlawboards                  = 2
