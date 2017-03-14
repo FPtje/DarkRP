@@ -502,7 +502,6 @@ local my_language = {
     request_gunlicense = "Request gunlicense",
     demote_player_menu = "Demote a player",
 
-
     searchwarrantbutton = "Make a player wanted",
     unwarrantbutton = "Remove the wanted status from a player",
     noone_available = "No one available",
