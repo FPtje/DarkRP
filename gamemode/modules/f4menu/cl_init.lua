@@ -31,10 +31,10 @@ function DarkRP.getF4MenuPanel()
     return f4Frame
 end
 
-function DarkRP.addF4MenuTab(name, panel)
+function DarkRP.addF4MenuTab(name, panel, order)
     if not f4Frame then DarkRP.error("DarkRP.addF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.", 2) end
 
-    return f4Frame:createTab(name, panel)
+    return f4Frame:createTab(name, panel, order)
 end
 
 function DarkRP.removeF4MenuTab(name)
