@@ -90,26 +90,26 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip,
 
     panel:SetParent(self)
 
-	local index = #self.Items + 1
-	if order then
-		table.insert(self.Items, order, sheet)
-		index = order
-	else
-		table.insert(self.Items, sheet)
-	end
+    local index = #self.Items + 1
+    if order then
+        table.insert(self.Items, order, sheet)
+        index = order
+    else
+        table.insert(self.Items, sheet)
+    end
 
     if not self:GetActiveTab() then
         self:SetActiveTab(sheet.Tab)
         sheet.Panel:SetVisible(true)
     end
 
-	if order then
-		table.insert(self.tabScroller.Panels, order, sheet.Tab)
-		sheet.Tab:SetParent(self.tabScroller.pnlCanvas)
-		self.tabScroller:InvalidateLayout(true)
-	else
-		self.tabScroller:AddPanel(sheet.Tab)
-	end
+    if order then
+        table.insert(self.tabScroller.Panels, order, sheet.Tab)
+        sheet.Tab:SetParent(self.tabScroller.pnlCanvas)
+        self.tabScroller:InvalidateLayout(true)
+    else
+        self.tabScroller:AddPanel(sheet.Tab)
+    end
 
     if panel.Refresh then panel:Refresh() end
 
