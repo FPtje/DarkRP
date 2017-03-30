@@ -55,6 +55,7 @@ function PANEL:Init()
     self:SetVisible(true)
     self:MakePopup()
     self:SetupCloseButton(fn.Curry(self.Hide, 2)(self))
+    self:ParentToHUD()
 end
 
 function PANEL:SetupCloseButton(func)
@@ -67,7 +68,7 @@ function PANEL:SetupCloseButton(func)
     self.CloseButton:SetSize(32, 32)
 end
 
-function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
+function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip, order)
     if not IsValid(panel) then return end
 
     local sheet = {}
@@ -89,15 +90,26 @@ function PANEL:AddSheet(label, panel, material, NoStretchX, NoStretchY, Tooltip)
 
     panel:SetParent(self)
 
-    table.insert(self.Items, sheet)
-    local index = #self.Items
+    local index = #self.Items + 1
+    if order then
+        table.insert(self.Items, order, sheet)
+        index = order
+    else
+        table.insert(self.Items, sheet)
+    end
 
     if not self:GetActiveTab() then
         self:SetActiveTab(sheet.Tab)
         sheet.Panel:SetVisible(true)
     end
 
-    self.tabScroller:AddPanel(sheet.Tab)
+    if order then
+        table.insert(self.tabScroller.Panels, order, sheet.Tab)
+        sheet.Tab:SetParent(self.tabScroller.pnlCanvas)
+        self.tabScroller:InvalidateLayout(true)
+    else
+        self.tabScroller:AddPanel(sheet.Tab)
+    end
 
     if panel.Refresh then panel:Refresh() end
 
@@ -153,8 +165,8 @@ function PANEL:Close()
     self:Hide()
 end
 
-function PANEL:createTab(name, panel)
-    local sheet, index = self:AddSheet(name, panel)
+function PANEL:createTab(name, panel, order)
+    local sheet, index = self:AddSheet(name, panel, nil, nil, nil, nil, order)
     return index, sheet
 end
 

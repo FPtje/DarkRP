@@ -69,19 +69,13 @@ function SWEP:PrimaryAttack()
 
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() end)
 
-    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > 8100) or not ent:IsPlayer() then
+    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > self.stickRange * self.stickRange) or not ent:IsPlayer() then
         return
     end
 
     local canArrest, message = hook.Call("canArrest", DarkRP.hooks, self:GetOwner(), ent)
     if not canArrest then
         if message then DarkRP.notify(self:GetOwner(), 1, 5, message) end
-        return
-    end
-
-    -- Send NPCs to Jail
-    if ent:IsNPC() then
-        ent:SetPos(DarkRP.retrieveJailPos())
         return
     end
 

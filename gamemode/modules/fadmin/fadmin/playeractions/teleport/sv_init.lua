@@ -93,6 +93,7 @@ local function Bring(ply, cmd, args)
             PHYSGUN = true
         end
         timer.Simple(0, function()
+            if not IsValid(target) then return end
             local tracedata = {}
             tracedata.start = BringTo:GetShootPos()
             tracedata.endpos = tracedata.start + BringTo:GetAimVector() * 50

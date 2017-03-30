@@ -31,10 +31,10 @@ function DarkRP.getF4MenuPanel()
     return f4Frame
 end
 
-function DarkRP.addF4MenuTab(name, panel)
+function DarkRP.addF4MenuTab(name, panel, order)
     if not f4Frame then DarkRP.error("DarkRP.addF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.", 2) end
 
-    return f4Frame:createTab(name, panel)
+    return f4Frame:createTab(name, panel, order)
 end
 
 function DarkRP.removeF4MenuTab(name)
@@ -59,7 +59,7 @@ function DarkRP.hooks.F4MenuTabs()
 
     local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
     if table.Count(shipments) > 0 then
-        DarkRP.addF4MenuTab(DarkRP.getPhrase("shipments"), vgui.Create("F4MenuShipments"))
+        DarkRP.addF4MenuTab(DarkRP.getPhrase("Shipments"), vgui.Create("F4MenuShipments"))
     end
 
     local guns = fn.Filter(fn.Curry(fn.GetValue, 2)("separate"), CustomShipments)

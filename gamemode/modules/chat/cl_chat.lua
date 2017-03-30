@@ -14,6 +14,8 @@ local function AddToChat(bits)
     local ply = net.ReadEntity()
     ply = IsValid(ply) and ply or LocalPlayer()
 
+    if not IsValid(ply) then return end
+
     if prefixText == "" or not prefixText then
         prefixText = ply:Nick()
         prefixText = prefixText ~= "" and prefixText or ply:SteamName()

@@ -40,6 +40,6 @@ derma.DefineControl("F4MenuFood", "DarkRP F4 Food Tab", PANEL, "F4MenuEntitiesBa
 
 hook.Add("F4MenuTabs", "HungerMod_F4Tabs", function()
     if #FoodItems > 0 then
-        DarkRP.addF4MenuTab(DarkRP.getPhrase("food"), vgui.Create("F4MenuFood"))
+        DarkRP.addF4MenuTab(DarkRP.getPhrase("Food"), vgui.Create("F4MenuFood"))
     end
 end)

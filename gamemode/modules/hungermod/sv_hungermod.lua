@@ -61,10 +61,20 @@ local function BuyFood(ply, args)
             return ""
         end
 
+        ply.maxFoodItems = ply.maxFoodItems or 0
+
+        if ply.maxFoodItems > GAMEMODE.Config.maxfooditems then
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "buyfood"))
+
+            return ""
+        end
+
+        ply.maxFoodItems = ply.maxFoodItems + 1
+
         local cost = v.price
 
         if not ply:canAfford(cost) then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", string.lower(DarkRP.getPhrase("food"))))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("food")))
             return ""
         end
         ply:addMoney(-cost)
@@ -76,6 +86,11 @@ local function BuyFood(ply, args)
         SpawnedFood.onlyremover = true
         SpawnedFood.SID = ply.SID
         SpawnedFood:SetModel(v.model)
+
+        SpawnedFood:CallOnRemove("maxFoodItems", function()
+            if not IsValid(ply) then return end
+            ply.maxFoodItems = ply.maxFoodItems - 1
+        end)
 
         -- for backwards compatibility
         SpawnedFood.FoodName = v.name

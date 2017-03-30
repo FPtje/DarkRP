@@ -38,6 +38,8 @@ SWEP.Secondary.Ammo = ""
 function SWEP:Initialize()
     self:SetHoldType("normal")
 
+    self.stickRange = 90
+
     if SERVER then return end
 
     CreateMaterial("darkrp/" .. self:GetClass(), "VertexLitGeneric", {
@@ -71,8 +73,9 @@ function SWEP:Deploy()
 
     local vm = self:GetOwner():GetViewModel()
     if not IsValid(vm) then return true end
-    self:PreDrawViewModel()
+
     vm:SendViewModelMatchingSequence(vm:LookupSequence("idle01"))
+
     return true
 end
 
@@ -88,9 +91,8 @@ function SWEP:ViewModelDrawn(vm)
     vm:SetSubMaterial() -- clear sub-materials
 end
 
-function SWEP:ResetStick(force)
-    if game.SinglePlayer() then force = true end
-    if not IsValid(self:GetOwner()) or (not force and (not IsValid(self:GetOwner():GetActiveWeapon()) or self:GetOwner():GetActiveWeapon():GetClass() ~= self:GetClass())) then return end
+function SWEP:ResetStick()
+    if not IsValid(self:GetOwner()) then return end
     if SERVER then
         self:SetMaterial() -- clear material
     end
@@ -101,13 +103,8 @@ end
 
 function SWEP:Holster()
     BaseClass.Holster(self)
-    self:ResetStick(false)
+    self:ResetStick()
     return true
-end
-
-function SWEP:OnRemove()
-    BaseClass.OnRemove(self)
-    self:ResetStick(true)
 end
 
 function SWEP:Think()

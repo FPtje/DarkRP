@@ -46,7 +46,7 @@ local function BuyPistol(ply, args)
 
     local shipment = DarkRP.getShipmentByName(args)
     if not shipment or not shipment.separate then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "weapon"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", DarkRP.getPhrase("weapon_")))
         return ""
     end
 
@@ -128,7 +128,11 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     local cost = shipment.getPrice and shipment.getPrice(ply, shipment.price) or shipment.price
 
     if not ply:canAfford(cost) then
-        return false, false, DarkRP.getPhrase("cant_afford", "shipment")
+        return false, false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("shipment"))
+    end
+
+    if not ply:Alive() then
+        return false, false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", DarkRP.getPhrase("shipments")))
     end
 
     return true
@@ -142,7 +146,7 @@ local function BuyShipment(ply, args)
 
     local found, foundKey = DarkRP.getShipmentByName(args)
     if not found or found.noship or not GAMEMODE:CustomObjFitsMap(found) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "shipment"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", DarkRP.getPhrase("shipment")))
         return ""
     end
 
@@ -206,7 +210,7 @@ function DarkRP.hooks:canBuyVehicle(ply, vehicle)
     end
 
     if ply:isArrested() then
-        return false, false, DarkRP.getPhrase("unable", "/buyammo", "")
+        return false, false, DarkRP.getPhrase("unable", "/buyvehicle", "")
     end
 
     if vehicle.allowed and not table.HasValue(vehicle.allowed, ply:Team()) then
@@ -222,12 +226,12 @@ function DarkRP.hooks:canBuyVehicle(ply, vehicle)
 
     ply.Vehicles = ply.Vehicles or 0
     if GAMEMODE.Config.maxvehicles and ply.Vehicles >= GAMEMODE.Config.maxvehicles then
-        return false, false, DarkRP.getPhrase("limit", "vehicle")
+        return false, false, DarkRP.getPhrase("limit", DarkRP.getPhrase("vehicle"))
     end
 
     local cost = vehicle.getPrice and vehicle.getPrice(ply, vehicle.price) or vehicle.price
     if not ply:canAfford(cost) then
-        return false, false, DarkRP.getPhrase("cant_afford", "vehicle")
+        return false, false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("vehicle"))
     end
 
     return true
@@ -240,12 +244,23 @@ local function BuyVehicle(ply, args)
     end
 
     local found = false
+    -- Allow people to have multiple vehicles with the same name
+    -- vehicles are bought through the command
     for k,v in pairs(CustomVehicles) do
-        if string.lower(v.name) == string.lower(args) then found = CustomVehicles[k] break end
+        if v.command and string.lower(v.command) == string.lower(args) then
+            found = CustomVehicles[k]
+            break
+        end
     end
 
     if not found then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "vehicle"))
+        for k,v in pairs(CustomVehicles) do
+            if string.lower(v.name) == string.lower(args) then found = CustomVehicles[k] break end
+        end
+    end
+
+    if not found then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", DarkRP.getPhrase("vehicle")))
         return ""
     end
 
@@ -333,7 +348,7 @@ function DarkRP.hooks:canBuyAmmo(ply, ammo)
 
     local cost = ammo.getPrice and ammo.getPrice(ply, ammo.price) or ammo.price
     if not ply:canAfford(cost) then
-        return false, false, DarkRP.getPhrase("cant_afford", "ammo")
+        return false, false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("ammo"))
     end
 
     return true
@@ -346,7 +361,7 @@ local function BuyAmmo(ply, args)
     end
 
     if GAMEMODE.Config.noguns then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", "ammo", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("disabled", DarkRP.getPhrase("ammo"), ""))
         return ""
     end
 
@@ -364,7 +379,7 @@ local function BuyAmmo(ply, args)
     end
 
     if not found then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", "ammo"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unavailable", DarkRP.getPhrase("ammo")))
         return ""
     end
 
@@ -424,7 +439,7 @@ local function SetPrice(ply, args)
     if IsValid(tr.Entity) and tr.Entity.CanSetPrice and tr.Entity.SID == ply.SID then
         tr.Entity:Setprice(b)
     else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "any lab"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("any_lab")))
     end
     return ""
 end

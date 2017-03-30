@@ -111,6 +111,12 @@ end
 Validate jobs
 ]]
 DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
+    name =
+        tc.addHint(
+            isstring,
+            "The name must be a valid string."
+        ),
+
     color =
         tc.addHint(
             tc.tableOf(isnumber),
@@ -345,6 +351,12 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
 Validate shipments
 ]]
 DarkRP.validateShipment = fn.FAnd{buyableSchema, tc.checkTable{
+    name =
+        tc.addHint(
+            isstring,
+            "The name must be a valid string."
+        ),
+
     entity =
         tc.addHint(
             isstring, "The entity of the shipment must be a string."
@@ -446,7 +458,7 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
     ent =
         tc.addHint(
             isstring,
-            "The name of the entity must be a string."
+            "The ent field must be a string."
         ),
 
     max =
@@ -466,6 +478,14 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
         tc.addHint(
             isstring,
             "The name must be a valid string."
+        ),
+
+    allowTools =
+        tc.default(false,
+            tc.addHint(
+                tc.optional(isbool),
+                "The allowTools must be either true or false."
+            )
         ),
 }}
 
