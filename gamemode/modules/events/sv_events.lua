@@ -88,13 +88,18 @@ timer.Stop("stormControl")
 Earthquake
 ---------------------------------------------------------]]
 local lastmagnitudes = {} -- The magnitudes of the last tremors
+local tremor
 
-local tremor = ents.Create("env_physexplosion")
-tremor:SetPos(Vector(0,0,0))
-tremor:SetKeyValue("radius",9999999999)
-tremor:SetKeyValue("spawnflags", 7)
-tremor.nodupe = true
-tremor:Spawn()
+local function createTremor()
+    tremor = ents.Create("env_physexplosion")
+    tremor:SetPos(Vector(0,0,0))
+    tremor:SetKeyValue("radius",9999999999)
+    tremor:SetKeyValue("spawnflags", 7)
+    tremor.nodupe = true
+    tremor:Spawn()
+end
+createTremor()
+hook.Add("PostCleanupMap", "DarkRP_events", createTremor)
 
 local function TremorReport()
     local mag = table.remove(lastmagnitudes, 1)
