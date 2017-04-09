@@ -7,6 +7,11 @@ if CLIENT then
     SWEP.RenderGroup = RENDERGROUP_BOTH
 
     killicon.AddAlias("stunstick", "weapon_stunstick")
+
+    CreateMaterial("darkrp/stunstick_beam", "UnlitGeneric", {
+        ["$basetexture"] = "sprites/lgtning",
+        ["$additive"] = 1
+    })
 end
 
 DEFINE_BASECLASS("stick_base")
@@ -31,13 +36,6 @@ function SWEP:Initialize()
         Sound("weapons/stunstick/stunstick_fleshhit1.wav"),
         Sound("weapons/stunstick/stunstick_fleshhit2.wav")
     }
-
-    if SERVER then return end
-
-    CreateMaterial("darkrp/stunstick_beam", "UnlitGeneric", {
-        ["$basetexture"] = "sprites/lgtning",
-        ["$additive"] = 1
-    })
 end
 
 function SWEP:SetupDataTables()
