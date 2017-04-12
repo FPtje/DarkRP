@@ -156,5 +156,6 @@ hook.Add("PlayerNoClip", "FAdmin_Log", function(ply)
 end)
 
 hook.Add("ShutDown", "FAdmin_Log", function()
+    FAdmin.shuttingDown = true
     FAdmin.Log("Server succesfully shut down.")
 end)

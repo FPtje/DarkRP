@@ -35,6 +35,7 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
+local stunstickMaterials
 function SWEP:Initialize()
     self:SetHoldType("normal")
 
@@ -42,7 +43,12 @@ function SWEP:Initialize()
 
     if SERVER then return end
 
-    CreateMaterial("darkrp/" .. self:GetClass(), "VertexLitGeneric", {
+    stunstickMaterials = stunstickMaterials or {}
+
+    local materialName = "darkrp/" .. self:GetClass()
+    if stunstickMaterials[materialName] then return end
+
+    CreateMaterial(materialName, "VertexLitGeneric", {
         ["$basetexture"] = "models/debug/debugwhite",
         ["$surfaceprop"] = "metal",
         ["$envmap"] = "env_cubemap",
@@ -50,6 +56,8 @@ function SWEP:Initialize()
         ["$selfillum"] = 0,
         ["$model"] = 1
     }):SetVector("$color2", self.StickColor:ToVector())
+
+    stunstickMaterials[materialName] = true
 end
 
 function SWEP:SetupDataTables()
