@@ -692,6 +692,9 @@ local function SendBlockedModels(ply, cmd, args)
     for k,v in pairs(FPP.BlockedModels) do table.insert(models, k) end
 
     local data = util.Compress(table.concat(models, "\0"))
+
+    if not data then return end
+
     net.Start("FPP_BlockedModels")
         net.WriteData(data, #data)
     net.Send(ply)
