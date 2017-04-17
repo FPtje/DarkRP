@@ -89,7 +89,7 @@ hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
         elseif string.find(text, " ") then
             plyIndex = plyIndex + 1
 
-            if plyIndex > #player.GetAll() then
+            if plyIndex > player.GetCount() then
                 plyIndex = 1
             end
 
