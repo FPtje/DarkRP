@@ -683,6 +683,20 @@ local function enableBabyGod(ply)
 end
 
 function GM:PlayerSpawn(ply)
+    if not ply.DarkRPInitialised then
+        DarkRP.errorNoHalt(
+            string.format("DarkRP was unable to introduce player \"%s\" to the game. Expect further errors and shit generally being fucked!",
+                IsValid(ply) and ply:Nick() or "unknown"),
+            1,
+            {
+                "This error most likely does not stand on its own, and previous serverside errors have a very good chance of telling you the cause.",
+                "Note that errors from another addon could cause this. Specifically when they're thrown during 'PlayerInitialSpawn'.",
+                "This error can also be caused by some other addon returning a value in 'PlayerInitialSpawn', though that is less likely.",
+                "Errors in your DarkRP configuration (jobs, shipments, etc.) could also cause this. Earlier errors should tell you when this is the case."
+            }
+        )
+    end
+
     ply:CrosshairEnable()
     ply:UnSpectate()
 
@@ -945,6 +959,10 @@ function GM:loadCustomDarkRPItems()
         -- Gotta be totally clear here
         local stack = "\tjobs.lua, settings.lua, disabled_defaults.lua or any of your other custom files."
         DarkRP.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/darkrp_customthings/jobs.lua", -1, stack)
+
+        -- Re-set to first available team to hopefully prevent further errors.
+        -- Because this error is more important than any that follow because of it.
+        GAMEMODE.DefaultTeam = next(RPExtraTeams)
     end
 end
 
