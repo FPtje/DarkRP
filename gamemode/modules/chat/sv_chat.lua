@@ -167,6 +167,7 @@ local function ReplaceChatHooks()
         GAMEMODE.OldChatHooks[k] = v
         hook.Remove("PlayerSay", k)
     end
+    hook.Add("PlayerSay", "DarkRPRemovesAllPlayerSayHooksBecauseThatIsSuddenlyAProblemThatNeedsFixingNowOfAllTimes", function() end)
 
     -- give warnings for undeclared chat commands
     local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
