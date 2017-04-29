@@ -14,7 +14,7 @@ SWEP.IsDarkRPArrestStick = true
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
 
-SWEP.StickColor = Color(255, 0, 0)
+SWEP.StickColor = Color(0, 0, 0, 0)
 
 SWEP.Switched = true
 
@@ -24,12 +24,12 @@ DarkRP.hookStub{
     parameters = {
         {
             name = "arrester",
-            description = "The player trying to arrest someone.",
+            description = "The player is trying to arrest someone.",
             type = "Player"
         },
         {
             name = "arrestee",
-            description = "The player being arrested.",
+            description = "The player is being arrested.",
             type = "Player"
         }
     },
