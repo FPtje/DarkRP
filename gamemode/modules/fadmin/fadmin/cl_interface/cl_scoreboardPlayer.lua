@@ -1,6 +1,18 @@
 FAdmin.ScoreBoard.Player.Information = {}
 FAdmin.ScoreBoard.Player.ActionButtons = {}
 
+local SetClipboardText=function(txt) //UNICODE HAX
+	local _,count=txt:gsub("\n","\n")
+	txt=txt..('_'):rep(count)
+
+	local box=vgui.Create'DTextEntry'
+		box:SetVisible(false)
+		box:SetText(txt)
+		box:SelectAllText()
+		box:CutSelected()
+		box:Remove()
+end
+
 function FAdmin.ScoreBoard.Player.Show(ply)
     ply = ply or FAdmin.ScoreBoard.Player.Player
     FAdmin.ScoreBoard.Player.Player = ply
