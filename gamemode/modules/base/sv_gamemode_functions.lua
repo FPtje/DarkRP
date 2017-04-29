@@ -627,7 +627,10 @@ function GM:PlayerSelectSpawn(ply)
     if ply:isArrested() then
         POS = DarkRP.retrieveJailPos() or ply.DeathPos -- If we can't find a jail pos then we'll use where they died as a last resort
     end
-
+    -- Allow overwriting spawn at a basic level
+    if ply.CustomSpawn then
+        POS = ply.CustomSpawn
+    end
     -- Make sure the player doesn't get stuck in something
     POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
 
