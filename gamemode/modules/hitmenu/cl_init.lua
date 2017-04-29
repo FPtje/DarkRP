@@ -94,6 +94,7 @@ hook.Add("InitPostEntity", "HitmanMenu", function()
 end)
 
 function postPlayerDraw(ply)
+    if not GAMEMODE.Config.showHitMessage then return end
     if not activeHitmen[ply] then return end
     local pos, ang = ply:GetShootPos(), ply:EyeAngles()
     ang.p = 0
