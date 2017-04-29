@@ -50,4 +50,4 @@ DarkRP.DARKRP_LOADING = nil
 
 DarkRP.finish()
 
-hook.Call("DarkRPFinishedLoading", GM)
+hook.Run("DarkRPFinishedLoading", GM)
