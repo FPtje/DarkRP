@@ -127,19 +127,20 @@ end
 
 function SWEP:GetStrippableWeapons(ent, callback)
     CAMI.PlayerHasAccess(ent, "DarkRP_GetAdminWeapons", function(access)
-        for k,v in pairs(ent:GetWeapons()) do
-            if not v:IsValid() then continue end
-            local class = v:GetClass()
+        for _,w in pairs(ent:GetWeapons()) do
+            if not w:IsValid() then continue end
+            local class = w:GetClass()
+            local illegal = hook.Call("weaponIllegal", nil, w)
 
             if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
                 access and table.HasValue(GAMEMODE.Config.AdminWeapons, class) or
-                ent:getJobTable() and ent:getJobTable().weapons and table.HasValue(ent:getJobTable().weapons, class)) then
+                ent:getJobTable() and ent:getJobTable().weapons and table.HasValue(ent:getJobTable().weapons, class) or illegal) then
                 continue
             end
 
             if (GAMEMODE.Config.weaponCheckerHideNoLicense and GAMEMODE.NoLicense[class]) or GAMEMODE.Config.noStripWeapons[class] then continue end
 
-            callback(v)
+            callback(w)
         end
     end)
 end
