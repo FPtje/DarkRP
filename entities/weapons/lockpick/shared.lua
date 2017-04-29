@@ -70,9 +70,14 @@ function SWEP:PrimaryAttack()
     local ent = trace.Entity
 
     if not IsValid(ent) or ent.DarkRPCanLockpick == false then return end
-    local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent, trace)
+    local canLockpick, returnMsg = hook.Call("canLockpick", nil, self:GetOwner(), ent, trace)
 
-    if canLockpick == false then return end
+    if canLockpick == false then
+        if returnMsg then
+            DarkRP.notify(self:GetOwner(), 1, 4, returnMsg)
+        end
+        return
+    end
     if canLockpick ~= true and (
             trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or
             (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
@@ -226,6 +231,11 @@ DarkRP.hookStub{
             name = "allowed",
             description = "Whether the entity can be lockpicked",
             type = "boolean"
+        },
+        {
+            name = "returnMsg",
+            description = "Printed notification if entity cannot be lockpicked",
+            type = "string"
         }
     },
     realm = "Shared"
