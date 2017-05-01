@@ -40,6 +40,9 @@ include("libraries/interfaceloader.lua")
 include("libraries/disjointset.lua")
 
 include("libraries/modificationloader.lua")
+
+hook.Call("DarkRPPreLoadModules", GM)
+
 LoadModules()
 
 DarkRP.DARKRP_LOADING = true

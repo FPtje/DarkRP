@@ -64,6 +64,9 @@ resource.AddFile("materials/vgui/entities/weapon_pumpshotgun2.vmt")
 resource.AddFile("materials/vgui/entities/weaponchecker.vmt")
 
 
+hook.Call("DarkRPPreLoadModules", GM)
+
+
 --[[---------------------------------------------------------------------------
 Loading modules
 ---------------------------------------------------------------------------]]
