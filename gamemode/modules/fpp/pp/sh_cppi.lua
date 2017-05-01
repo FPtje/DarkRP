@@ -40,6 +40,8 @@ end
 
 if SERVER then
 	function ENTITY:CPPISetOwner(ply)
+		if ply == self.FPPOwner then return end
+
 		local valid = IsValid(ply) and ply:IsPlayer()
 		local steamId = valid and ply:SteamID() or nil
 		local canSetOwner = hook.Run("CPPIAssignOwnership", ply, self, valid and ply:UniqueID() or ply)
