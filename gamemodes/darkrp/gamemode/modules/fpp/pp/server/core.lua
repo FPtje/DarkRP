@@ -646,9 +646,7 @@ function FPP.PlayerInitialSpawn(ply)
     local plys = {}
     for k,v in pairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
 
-    FPP.recalculateCanTouch(plys, entities)
-    timer.Simple(0, function() -- wait until the player's usergroup is initialized
-        if not IsValid(ply) then return end
+    timer.Create("FPP_recalculate_cantouch_" .. ply:UserID(), 0, 1, function()
         FPP.recalculateCanTouch({ply}, ents.GetAll())
     end)
 end

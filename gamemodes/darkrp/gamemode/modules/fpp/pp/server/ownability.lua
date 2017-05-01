@@ -73,12 +73,9 @@ local function calculateCanTouchForType(ply, ent, touchType)
     if not IsValid(ent) then return false, 0 end
 
     ply.FPP_Privileges = ply.FPP_Privileges or {}
-    local isAdmin = ply.FPP_Privileges.FPP_TouchOtherPlayersProps
     local class = ent:GetClass()
-    local owner = ent:CPPIGetOwner()
     local setting, tablename = getSetting(touchType)
     local FPPSettings = FPP.Settings[tablename]
-    local noTouchOtherPlayerProps = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
 
     -- hard white list
     if hardWhiteListed[class] then return true, reasonNumbers.world end
@@ -89,51 +86,53 @@ local function calculateCanTouchForType(ply, ent, touchType)
     end
 
     -- blocked entity
-    local whitelist = tobool(FPPSettings.iswhitelist)
+    local whitelist = FPPSettings.iswhitelist ~= 0
     local isInList = FPP.Blocked[setting][string.lower(class)] or false
 
+    local isAdmin = ply.FPP_Privileges.FPP_TouchOtherPlayersProps
     local isBlocked = whitelist ~= isInList -- XOR
-    local adminsCanTouchBlocked = tobool(FPPSettings.admincanblocked)
-    local playersCanBlocked = tobool(FPPSettings.canblocked)
-    local noTouchBlocked = getPlySetting(ply, "FPP_PrivateSettings_BlockedProps")
 
-    if isBlocked and not noTouchBlocked and (playersCanBlocked or isAdmin and adminsCanTouchBlocked) then
+    if isBlocked then
+        local adminsCanTouchBlocked = FPPSettings.admincanblocked ~= 0
+        local playersCanBlocked = FPPSettings.canblocked ~= 0
 
-        return true, reasonNumbers.blocked -- you can touch blocked entities
-    elseif isBlocked then
-        return false, reasonNumbers.blocked
+        return (playersCanBlocked or isAdmin and adminsCanTouchBlocked) and not getPlySetting(ply, "FPP_PrivateSettings_BlockedProps"),
+               reasonNumbers.blocked
     end
 
     -- touch own props
-    if owner == ply then return not getPlySetting(ply, "FPP_PrivateSettings_OwnProps"), reasonNumbers.owner end
+    local owner = ent.FPPOwner -- Circumvent CPPI for micro-optimisation
+    if owner == ply then
+        return not getPlySetting(ply, "FPP_PrivateSettings_OwnProps"),
+               reasonNumbers.owner
+    end
+
+    local noTouchOtherPlayerProps = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
 
     -- Shared entity
     if ent["Share" .. setting] then return not noTouchOtherPlayerProps, reasonNumbers.shared end
 
-    -- Player is buddies with the owner of the entity
-    if IsValid(owner) and owner.Buddies and owner.Buddies[ply] and owner.Buddies[ply][touchType] then return not noTouchOtherPlayerProps, reasonNumbers.buddy end
+    if IsValid(owner) then
+        -- Player is buddies with the owner of the entity
+        if owner.Buddies and owner.Buddies[ply] and owner.Buddies[ply][touchType] then return not noTouchOtherPlayerProps, reasonNumbers.buddy end
 
-    -- World prop
-    local adminWorldProps = tobool(FPPSettings.adminworldprops)
-    local peopleWorldProps = tobool(FPPSettings.worldprops)
+        -- Someone else's prop
+        local adminProps = FPPSettings.adminall ~= 0
+        return isAdmin and adminProps and not noTouchOtherPlayerProps, reasonNumbers.owner
+    end
+
+    -- World props and disconnected players' props
+    local adminWorldProps = FPPSettings.adminworldprops ~= 0
+    local peopleWorldProps = FPPSettings.worldprops ~= 0
     local restrictWorld = getPlySetting(ply, "FPP_PrivateSettings_WorldProps")
-    if owner == nil then
 
-        return not restrictWorld and (peopleWorldProps or (isAdmin and adminWorldProps)), reasonNumbers.world
-    end
-
-    -- Disconnected player's props. Same rules as world props.
-    if not IsValid(owner) then
-        return not restrictWorld and (peopleWorldProps or isAdmin and adminWorldProps), reasonNumbers.disconnected
-    end
-
-    -- Someone else's prop
-    local adminProps = tobool(FPPSettings.adminall)
-    return isAdmin and adminProps and not noTouchOtherPlayerProps, reasonNumbers.owner
+    return not restrictWorld and (peopleWorldProps or (isAdmin and adminWorldProps)),
+           owner == nil and reasonNumbers.world or reasonNumbers.disconnected
 end
 
 local blockedEnts = {
     ["ai_network"] = true,
+    ["network"] = true, -- alternative name for ai_network
     ["ambient_generic"] = true,
     ["beam"] = true,
     ["bodyque"] = true,
@@ -142,6 +141,7 @@ local blockedEnts = {
     ["env_sun"] = true,
     ["env_tonemap_controller"] = true,
     ["func_useableladder"] = true,
+    ["gmod_hands"] = true,
     ["info_ladder_dismount"] = true,
     ["info_player_start"] = true,
     ["info_player_terrorist"] = true,
@@ -193,6 +193,7 @@ local function recalculateCanTouch(players, entities)
         if not IsValid(v) then entities[k] = nil continue end
         if v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
         if blockedEnts[v:GetClass()] then entities[k] = nil continue end
+        if v:IsWeapon() and IsValid(v.Owner) then entities[k] = nil continue end
     end
 
     for _, ply in pairs(players) do
@@ -337,6 +338,8 @@ local function onEntitiesCreated(ents)
         if ent:GetSolid() == 0 or ent:IsEFlagSet(EFL_SERVER_ONLY) then
             continue
         end
+
+        if blockedEnts[ent:GetClass()] then continue end
 
         for _, ply in pairs(player.GetAll()) do
             FPP.calculateCanTouch(ply, ent)
@@ -490,33 +493,33 @@ hook.Add("PlayerDisconnected", "FPP_PlayerDisconnected", playerDisconnected)
 /*---------------------------------------------------------------------------
 Usergroup changed
 ---------------------------------------------------------------------------*/
-local setUserGroup = plyMeta.SetUserGroup
 local function userGroupRecalculate(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
 
-    timer.Simple(0, function()
+    timer.Create("FPP_recalculate_cantouch_" .. ply:UserID(), 0, 1, function()
         FPP.recalculateCanTouch({ply}, ents.GetAll())
     end)
 end
 
+FPP.oldSetUserGroup = FPP.oldSetUserGroup or plyMeta.SetUserGroup
 function plyMeta:SetUserGroup(group)
     userGroupRecalculate(self)
 
-    return setUserGroup(self, group)
+    return FPP.oldSetUserGroup(self, group)
 end
 
-local oldSetNWString = entMeta.SetNWString
+FPP.oldSetNWString = FPP.oldSetNWString or entMeta.SetNWString
 function entMeta:SetNWString(str, val)
-    if str ~= "usergroup" then return oldSetNWString(self, str, val) end
+    if str ~= "usergroup" then return FPP.oldSetNWString(self, str, val) end
 
     userGroupRecalculate(self)
-    return oldSetNWString(self, str, val)
+    return FPP.oldSetNWString(self, str, val)
 end
 
-local oldSetNetworkedString = entMeta.SetNetworkedString
+FPP.oldSetNetworkedString = FPP.oldSetNetworkedString or entMeta.SetNetworkedString
 function entMeta:SetNetworkedString(str, val)
-    if str ~= "usergroup" then return oldSetNetworkedString(self, str, val) end
+    if str ~= "usergroup" then return FPP.oldSetNetworkedString(self, str, val) end
 
     userGroupRecalculate(self)
-    return oldSetNetworkedString(self, str, val)
+    return FPP.oldSetNetworkedString(self, str, val)
 end
