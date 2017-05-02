@@ -117,6 +117,17 @@ DarkRP.createShipment("Sniper rifle", {
     category = "Snipers",
 })
 
+DarkRP.createShipment("Python", {
+    model = ""models/weapons/w_colt_python.mdl",
+    entity = "m9k_coltpython",
+    price = 500,
+    amount = 10,
+    separate = false,
+    pricesep = nil,
+    noship = false,
+    allowed = {TEAM_GUN},
+    category = "Pistols",
+]}
 DarkRP.createEntity("Drug lab", {
     ent = "drug_lab",
     model = "models/props_lab/crematorcase.mdl",
