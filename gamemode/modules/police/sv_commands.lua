@@ -138,7 +138,7 @@ function DarkRP.lockdown(ply)
         return ""
     end
 
-    if ply:EntIndex() ~= 0 and not ply:isMayor() then
+    if ply:EntIndex() ~= 0 and not ply:isMayor() or ply:IsAdmin() then
         show(DarkRP.getPhrase("incorrect_job", "/lockdown", ""))
         return ""
     end
@@ -152,6 +152,7 @@ function DarkRP.lockdown(ply)
         show(DarkRP.getPhrase("wait_with_that"))
         return ""
     end
+    
 
     for _, v in pairs(player.GetAll()) do
         v:ConCommand("play " .. GAMEMODE.Config.lockdownsound .. "\n")
@@ -173,7 +174,7 @@ function DarkRP.unLockdown(ply)
         return ""
     end
 
-    if ply:EntIndex() ~= 0 and not ply:isMayor() then
+    if ply:EntIndex() ~= 0 and not ply:isMayor() or ply:IsAdmin() then
         show(DarkRP.getPhrase("incorrect_job", "/unlockdown", ""))
         return ""
     end
