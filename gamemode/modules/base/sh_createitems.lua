@@ -377,10 +377,16 @@ end
 
 RPExtraTeams = {}
 local jobByCmd = {}
+
+function DarkRP.getJobTable(jobId)
+    return RPExtraTeams[jobId] or false
+end
+
 DarkRP.getJobByCommand = function(cmd)
     if not jobByCmd[cmd] then return nil, nil end
     return RPExtraTeams[jobByCmd[cmd]], jobByCmd[cmd]
 end
+
 plyMeta.getJobTable = function(ply)
     local tbl = RPExtraTeams[ply:Team()]
     -- don't error when the player has not fully joined yet
