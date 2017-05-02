@@ -353,6 +353,11 @@ function GM:CanPlayerSuicide(ply)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
         return false
     end
+    
+    if ply:FAdmin_GetGlobal("FAdmin_frozen") then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "suicide", ""))
+        return false
+    end
 
     local jobTable = ply:getJobTable()
     if jobTable.CanPlayerSuicide then
