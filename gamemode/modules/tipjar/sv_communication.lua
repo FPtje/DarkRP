@@ -10,6 +10,7 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
     local amount = net.ReadUInt(32)
 
     if not IsValid(tipjar) then return end
+    if not tipjar.IsTipjar then return end
 
     local owner = tipjar:Getowning_ent()
     if not IsValid(owner) then return end
@@ -55,6 +56,7 @@ net.Receive("DarkRP_TipJarUpdate", function(_, ply)
     local amount = net.ReadUInt(32)
 
     if not IsValid(tipjar) then return end
+    if not tipjar.IsTipjar then return end
 
     -- Larger margin of distance, to prevent false positives
     if tipjar:GetPos():DistToSqr(ply:GetPos()) > 150 * 150 then
@@ -116,6 +118,7 @@ net.Receive("DarkRP_TipJarExit", function(_, ply)
     local tipjar = net.ReadEntity()
 
     if not IsValid(tipjar) then return end
+    if not tipjar.IsTipjar then return end
 
     tipjar:ExitActiveDonation(ply)
 end)
