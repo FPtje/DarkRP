@@ -89,6 +89,10 @@ local function RP_PlayerChat(ply, text, teamonly)
         callback = callback or "" .. " "
     end
 
+    local command = tblCmd and tblCmd.command or ""
+    local overrideTxt = hook.Run("onPlayerSay", ply, command, text, teamonly)
+    if overrideTxt then return overrideTxt, callback, DoSayFunc end
+
     return text, callback, DoSayFunc;
 end
 
