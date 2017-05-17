@@ -3,6 +3,7 @@ ENT.Base = "base_gmodentity"
 ENT.PrintName = "Tip Jar"
 ENT.Author = "FPtje"
 ENT.Spawnable = false
+ENT.IsTipjar = true
 
 function ENT:initVars()
     self.model = "models/props_lab/jar01a.mdl"
