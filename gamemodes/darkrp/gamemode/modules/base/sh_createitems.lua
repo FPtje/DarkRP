@@ -877,7 +877,7 @@ local function mergeCategories(customs, catKind, path)
     for k,v in pairs(cats) do catByName[v.name] = v end
     for k,v in pairs(customs) do
         -- Override default thing categories:
-        local catName = v.default and GAMEMODE.Config.CategoryOverride[catKind][v.name] or v.category or "Other"
+        local catName = v.default and (GAMEMODE.Config.CategoryOverride[catKind] or {})[v.name] or v.category or "Other"
         local cat = catByName[catName]
         if not cat then
             DarkRP.errorNoHalt(string.format([[The category of "%s" ("%s") does not exist!]], v.name, catName), 3, {
