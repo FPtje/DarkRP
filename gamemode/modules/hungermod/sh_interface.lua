@@ -10,7 +10,7 @@ DarkRP.createFood = DarkRP.stub{
         },
         {
             name = "tbl",
-            description = "Table containing the information for the food.",
+            description = "Table containing information for the food.",
             type = "table",
             optional = false
         }
