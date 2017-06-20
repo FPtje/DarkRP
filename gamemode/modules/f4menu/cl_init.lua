@@ -38,13 +38,13 @@ function DarkRP.addF4MenuTab(name, panel, order)
 end
 
 function DarkRP.removeF4MenuTab(name)
-    if not f4Frame then DarkRP.error("DarkRP.addF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.", 2) end
+    if not f4Frame then DarkRP.error("DarkRP.removeF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.", 2) end
 
     f4Frame:removeTab(name)
 end
 
 function DarkRP.switchTabOrder(tab1, tab2)
-    if not f4Frame then DarkRP.error("DarkRP.addF4MenuTab called at the wrong time. Please call in the F4MenuTabs hook.", 2) end
+    if not f4Frame then DarkRP.error("DarkRP.switchTabOrder called at the wrong time. Please call in the F4MenuTabs hook.", 2) end
 
     f4Frame:switchTabOrder(tab1, tab2)
 end
