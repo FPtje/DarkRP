@@ -40,17 +40,20 @@ DarkRP.textWrap = DarkRP.stub{
         {
             name = "text",
             description = "The text to wrap.",
-            type = "string"
+            type = "string",
+            optional = false
         },
         {
             name = "font",
             description = "The font of the text.",
-            type = "string"
+            type = "string",
+            optional = false
         },
         {
             name = "width",
             description = "The maximum width in pixels.",
-            type = "number"
+            type = "number",
+            optional = false
         }
     },
     returns = {
