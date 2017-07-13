@@ -243,22 +243,4 @@ SKIN.Colours.Category.LineAlt.Button            = GWEN.TextureColor(4 + 8 * 25, 
 SKIN.Colours.Category.LineAlt.Button_Hover      = GWEN.TextureColor(4 + 8 * 24, 500)
 SKIN.Colours.Category.LineAlt.Button_Selected   = GWEN.TextureColor(4 + 8 * 25, 500)
 
--- Remove the following two functions when https://github.com/garrynewman/garrysmod/pull/1141 is merged
-function SKIN:PaintTextEntry(panel, w, h)
-    if panel.m_bBackground then
-        if panel:GetDisabled() then
-            self.tex.TextBox_Disabled(0, 0, w, h)
-        elseif panel:HasFocus() then
-            self.tex.TextBox_Focus(0, 0, w, h)
-        else
-            self.tex.TextBox(0, 0, w, h)
-        end
-    end
-
-    panel:DrawTextEntryText(panel.m_colText or self.colTextEntryText, panel.m_colHighlight or self.colTextEntryTextHighlight, panel.m_colCursor or self.colTextEntryTextCursor)
-end
-
-function SKIN:SchemeTextEntry()
-end
-
 derma.DefineSkin("DarkRP", "The official SKIN for DarkRP", SKIN)
