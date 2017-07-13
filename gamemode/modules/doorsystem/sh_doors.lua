@@ -1,11 +1,24 @@
 local meta = FindMetaTable("Entity")
 local plyMeta = FindMetaTable("Player")
 
+local doorClasses = {
+	"func_door",
+	"func_door_rotating",
+	"prop_door_rotating",
+	"func_movelinear",
+	"prop_dynamic",
+}
+
+local ownableDoorClasses = {
+	"func_door",
+	"func_door_rotating",
+	"prop_door_rotating",
+}
+
 function meta:isKeysOwnable()
     if not IsValid(self) then return false end
-    local class = self:GetClass()
 
-    if ((class == "func_door" or class == "func_door_rotating" or class == "prop_door_rotating") or
+    if (table.HasValue(ownableDoorClasses, self:GetClass()) or
             (GAMEMODE.Config.allowvehicleowning and self:IsVehicle() and (not IsValid(self:GetParent()) or not self:GetParent():IsVehicle()))) then
             return true
         end
@@ -14,13 +27,8 @@ end
 
 function meta:isDoor()
     if not IsValid(self) then return false end
-    local class = self:GetClass()
 
-    if class == "func_door" or
-        class == "func_door_rotating" or
-        class == "prop_door_rotating" or
-        class == "func_movelinear" or
-        class == "prop_dynamic" then
+    if table.HasValue(doorClasses, self:GetClass()) then
         return true
     end
     return false
