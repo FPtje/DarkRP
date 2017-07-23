@@ -36,22 +36,31 @@ DarkRP.deLocalise = DarkRP.stub{
 DarkRP.textWrap = DarkRP.stub{
     name = "textWrap",
     description = "Wrap a text around when reaching a certain width.",
-    parameters = {},
-    returns = {
+    parameters = {
         {
             name = "text",
             description = "The text to wrap.",
-            type = "string"
+            type = "string",
+            optional = false
         },
         {
             name = "font",
             description = "The font of the text.",
-            type = "string"
+            type = "string",
+            optional = false
         },
         {
             name = "width",
             description = "The maximum width in pixels.",
-            type = "number"
+            type = "number",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "text",
+            description = "The wrapped string.",
+            type = "string"
         }
     },
     metatable = DarkRP

@@ -103,6 +103,8 @@ end
 
 function FPP.AntiSpam.DuplicatorSpam(ply)
     if not tobool(FPP.Settings.FPP_ANTISPAM1.toggle) then return true end
+    if FPP.Settings.FPP_ANTISPAM1.duplicatorlimit == 0 then return true end
+
     ply.FPPAntiSpamLastDuplicate = ply.FPPAntiSpamLastDuplicate or 0
     ply.FPPAntiSpamLastDuplicate = ply.FPPAntiSpamLastDuplicate + 1
 
