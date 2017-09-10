@@ -133,7 +133,7 @@ message.]]
 function ents.Create(name, ...)
     local res = { entsCreate(name, ...) }
 
-    if res[1] == NULL and #ents.GetAll() >= 8024 then
+    if res[1] == NULL and ents.GetEdictCount() >= 8176 then
         DarkRP.error(entsCreateError, 2, { string.format("Affected entity: '%s'", name) })
     end
 
