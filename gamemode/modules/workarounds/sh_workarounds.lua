@@ -114,9 +114,9 @@ if CLIENT then
 
     function cam.Start(...) camStarted = camStarted + 1 return camstart(...) end
 
-    function cam.End3D() decrease() return camend3D() end
-    function cam.End2D() decrease() return camend2D() end
-    function cam.End() decrease() return camend() end
+    function cam.End3D(...) decrease() return camend3D(...) end
+    function cam.End2D(...) decrease() return camend2D(...) end
+    function cam.End(...) decrease() return camend(...) end
 
     return
 end
