@@ -142,12 +142,6 @@ hook.Add("PlayerSpawn", "FAdmin_jail", function(ply)
     end
 end)
 
-hook.Add("PlayerNoClip", "FAdmin_jail", function(ply)
-    if ply:FAdmin_GetGlobal("fadmin_jailed") then
-        return false
-    end
-end)
-
 hook.Add("PlayerSpawnObject", "FAdmin_jailed", function(ply)
     if ply:FAdmin_GetGlobal("fadmin_jailed") then
         return false

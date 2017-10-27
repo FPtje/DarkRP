@@ -10,6 +10,12 @@ hook.Add("CanTool", "FAdmin_jailed", function(ply) -- shared so it doesn't look 
     end
 end)
 
+hook.Add("PlayerNoClip", "FAdmin_jail", function(ply)
+    if ply:FAdmin_GetGlobal("fadmin_jailed") then
+        return false
+    end
+end)
+
 FAdmin.StartHooks["Jailing"] = function()
     FAdmin.Messages.RegisterNotification{
         name = "jail",
