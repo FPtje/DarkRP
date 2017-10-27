@@ -103,6 +103,7 @@ if CLIENT then
     local camStarted = 0
     local camend3D = cam.End3D
     local camend2D = cam.End2D
+    local camstart3D2D, camend3D2D = cam.Start3D2D, cam.End3D2D
     local camstart, camend = cam.Start, cam.End
 
     local function decrease()
@@ -113,9 +114,11 @@ if CLIENT then
     end
 
     function cam.Start(...) camStarted = camStarted + 1 return camstart(...) end
+    function cam.Start3D2D(...) camStarted = camStarted + 1 return camstart3D2D(...) end
 
     function cam.End3D(...) decrease() return camend3D(...) end
     function cam.End2D(...) decrease() return camend2D(...) end
+    function cam.End3D2D(...) decrease() return camend3D2D(...) end
     function cam.End(...) decrease() return camend(...) end
 
     return
