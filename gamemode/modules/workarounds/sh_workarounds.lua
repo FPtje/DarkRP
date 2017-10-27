@@ -100,20 +100,23 @@ if CLIENT then
         hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
     end)
 
-    local camstart3D = cam.Start3D
+    local camStarted = 0
     local camend3D = cam.End3D
-    local cam3DStarted = 0
-    function cam.Start3D(a,b,c,d,e,f,g,h,i,j)
-        cam3DStarted = cam3DStarted + 1
-        return camstart3D(a,b,c,d,e,f,g,h,i,j)
+    local camend2D = cam.End2D
+    local camstart, camend = cam.Start, cam.End
+
+    local function decrease()
+        if not camStarted or camStarted <= 0 then
+            DarkRP.error("A cam.End function was called without corresponding cam.Start.", 3, {"This may cause the game to look glitchy."})
+        end
+        camStarted = camStarted - 1
     end
 
-    -- cam.End3D should not crash a player when 3D hasn't been started
-    function cam.End3D()
-        if not cam3DStarted or cam3DStarted <= 0 then return end
-        cam3DStarted = cam3DStarted - 1
-        return camend3D()
-    end
+    function cam.Start(...) camStarted = camStarted + 1 return camstart(...) end
+
+    function cam.End3D() decrease() return camend3D() end
+    function cam.End2D() decrease() return camend2D() end
+    function cam.End() decrease() return camend() end
 
     return
 end
