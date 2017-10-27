@@ -134,7 +134,7 @@ function ents.Create(name, ...)
 end
 
 if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
-	local plyMeta = FindMetaTable("Player")
+    local plyMeta = FindMetaTable("Player")
     local sid64 = plyMeta.SteamID64
 
     function plyMeta:SteamID64(...)
