@@ -73,10 +73,16 @@ function ENT:OnTakeDamage(dmg)
     end
 end
 
-function ENT:Use(activator,caller)
+function ENT:Use(activator, caller)
     if not self.CanUse then return end
     local Owner = self:Getowning_ent()
     if not IsValid(Owner) then return end
+
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    if canUse == false then
+      if reason then DarkRP.notify(activator, 1, 4, reason) end
+      return
+    end
 
     if activator ~= Owner then
         if not activator:canAfford(self:Getprice()) then return end

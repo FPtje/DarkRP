@@ -32,6 +32,12 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(ply)
+    local canUse, reason = hook.Call("canDarkRPUse", nil, ply, self)
+    if canUse == false then
+      if reason then DarkRP.notify(ply, 1, 4, reason) end
+      return
+    end
+
     net.Start("DarkRP_TipJarUI")
         net.WriteEntity(self)
     net.Send(ply)
