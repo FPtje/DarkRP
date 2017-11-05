@@ -1,17 +1,4 @@
 -- Shared part
---[[---------------------------------------------------------------------------
-Sound crash glitch
----------------------------------------------------------------------------]]
-
-local entity = FindMetaTable("Entity")
-local plyMeta = FindMetaTable("Player")
-local EmitSound = entity.EmitSound
-function entity:EmitSound(sound, ...)
-    if not sound then DarkRP.error(string.format("The first argument of the ent:EmitSound call is '%s'. It's supposed to be a string.", tostring(sound)), 3) end
-    if string.find(sound, "??", 0, true) then return end
-    return EmitSound(self, sound, ...)
-end
-
 
 function DarkRP.getAvailableVehicles()
     local vehicles = list.Get("Vehicles")
@@ -147,6 +134,7 @@ function ents.Create(name, ...)
 end
 
 if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
+    local plyMeta = FindMetaTable("Player")
     local sid64 = plyMeta.SteamID64
 
     function plyMeta:SteamID64(...)
