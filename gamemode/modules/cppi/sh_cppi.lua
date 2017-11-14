@@ -3,7 +3,7 @@ CPPI = {}
 CPPI.CPPI_DEFER = 100100 --\100\100 = dd
 CPPI.CPPI_NOTIMPLEMENTED = 7080
 
-function CPPI:GetNick()
+function CPPI:GetName()
     return "DarkRP"
 end
 

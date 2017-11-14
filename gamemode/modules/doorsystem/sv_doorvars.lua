@@ -157,7 +157,7 @@ function DarkRP.updateDoorData(door, member)
     local value = door:getDoorData()[member]
 
     if value == nil then
-        local doorvar = DarkRP.getDoorVarsByNick()[member]
+        local doorvar = DarkRP.getDoorVarsByName()[member]
         net.Start("DarkRP_RemoveDoorVar")
             net.WriteUInt(door:EntIndex(), 16)
             if not doorvar then

@@ -66,7 +66,7 @@ function FAdmin.ScoreBoard.ShowScoreBoard()
     FAdmin.ScoreBoard.DontGoBack = input.IsMouseDown(MOUSE_4) or input.IsKeyDown(KEY_BACKSPACE)
 
     FAdmin.ScoreBoard.Controls.Hostname = FAdmin.ScoreBoard.Controls.Hostname or vgui.Create("DLabel")
-    FAdmin.ScoreBoard.Controls.Hostname:SetText(DarkRP.deLocalise(GetHostNick()))
+    FAdmin.ScoreBoard.Controls.Hostname:SetText(DarkRP.deLocalise(GetHostName()))
     FAdmin.ScoreBoard.Controls.Hostname:SetFont("ScoreboardHeader")
     FAdmin.ScoreBoard.Controls.Hostname:SetColor(Color(200,200,200,200))
     FAdmin.ScoreBoard.Controls.Hostname:SetPos(FAdmin.ScoreBoard.X + 90, FAdmin.ScoreBoard.Y + 20)
