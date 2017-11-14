@@ -398,7 +398,7 @@ local function DoTeamBan(ply, args)
     end
 
     local found = false
-    for k,v in ipairs(RPExtraTeams) do
+    for k,v in pairs(RPExtraTeams) do
         if string.lower(v.name) == string.lower(Team) or string.lower(v.command) == string.lower(Team) or k == tonumber(Team or -1) then
             Team = k
             found = true
@@ -439,7 +439,7 @@ local function DoTeamUnBan(ply, args)
     end
 
     local found = false
-    for k,v in ipairs(RPExtraTeams) do
+    for k,v in pairs(RPExtraTeams) do
         if string.lower(v.name) == string.lower(Team) or  string.lower(v.command) == string.lower(Team) then
             Team = k
             found = true

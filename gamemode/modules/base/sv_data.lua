@@ -212,14 +212,14 @@ function migrateDB(callback)
             MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
             if MySQLite.isMySQL() then
                 local jobCommands = {}
-                for k,v in ipairs(RPExtraTeams) do
+                for k,v in pairs(RPExtraTeams) do
                     table.insert(jobCommands, "(" .. k .. "," .. MySQLite.SQLStr(v.command) .. ")")
                 end
 
                 -- This WOULD work with SQLite if the implementation in GMod wasn't out of date.
                 MySQLite.queueQuery("INSERT IGNORE INTO TempJobCommands VALUES " .. table.concat(jobCommands, ",") .. ";")
             else
-                for k,v in ipairs(RPExtraTeams) do
+                for k,v in pairs(RPExtraTeams) do
                     MySQLite.queueQuery("INSERT INTO TempJobCommands VALUES(" .. k .. ", " .. MySQLite.SQLStr(v.command) .. ");")
                 end
             end

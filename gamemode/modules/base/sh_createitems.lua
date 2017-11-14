@@ -5,7 +5,7 @@ local plyMeta = FindMetaTable("Player")
 -----------------------------------------------------------
 local function declareTeamCommands(CTeam)
     local k = 0
-    for num,v in ipairs(RPExtraTeams) do
+    for num,v in pairs(RPExtraTeams) do
         if v.command == CTeam.command then
             k = num
         end
@@ -71,7 +71,7 @@ local function addTeamCommands(CTeam, max)
 
     if not GAMEMODE:CustomObjFitsMap(CTeam) then return end
     local k = 0
-    for num,v in ipairs(RPExtraTeams) do
+    for num,v in pairs(RPExtraTeams) do
         if v.command == CTeam.command then
             k = num
         end
