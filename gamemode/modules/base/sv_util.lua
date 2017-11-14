@@ -10,7 +10,7 @@ function DarkRP.notify(ply, msgtype, len, msg)
     end
 
     local rcp = RecipientFilter()
-    for k, v in pairs(ply) do
+    for _, v in pairs(ply) do
         rcp:AddPlayer(v)
     end
 
@@ -30,7 +30,7 @@ function DarkRP.notifyAll(msgtype, len, msg)
 end
 
 function DarkRP.printMessageAll(msgtype, msg)
-    for k, v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         v:PrintMessage(msgtype, msg)
     end
 end

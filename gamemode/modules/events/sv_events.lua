@@ -13,7 +13,7 @@ Meteor storm
 ---------------------------------------------------------]]
 local function StormStart()
     local phrase = DarkRP.getPhrase("meteor_approaching")
-    for k, v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:Alive() then
             v:PrintMessage(HUD_PRINTCENTER, phrase)
             v:PrintMessage(HUD_PRINTTALK, phrase)
@@ -23,7 +23,7 @@ end
 
 local function StormEnd()
     local phrase = DarkRP.getPhrase("meteor_passing")
-    for k, v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:Alive() then
             v:PrintMessage(HUD_PRINTCENTER, phrase)
             v:PrintMessage(HUD_PRINTTALK, phrase)
@@ -36,12 +36,12 @@ local function ControlStorm()
 
     if timeLeft < 1 then
         if stormOn then
-            timeLeft = math.random(300,500)
+            timeLeft = math.random(300, 500)
             stormOn = false
             timer.Stop("start")
             StormEnd()
         else
-            timeLeft = math.random(60,90)
+            timeLeft = math.random(60, 90)
             stormOn = true
             timer.Start("start")
             StormStart()
@@ -57,8 +57,8 @@ local function AttackEnt(ent)
 end
 
 local function StartShower()
-    timer.Adjust("start", math.random(.1,1), 0, StartShower)
-    for k, v in ipairs(player.GetAll()) do
+    timer.Adjust("start", math.random(0.1, 1), 0, StartShower)
+    for _, v in ipairs(player.GetAll()) do
         if math.random(0, 2) == 0 and v:Alive() then
             AttackEnt(v)
         end
@@ -124,17 +124,17 @@ local function EarthQuakeTest()
         local force = math.random(10, 1000)
         tremor:SetKeyValue("magnitude", force / 6)
 
-        for k, v in ipairs(plys) do
+        for _, v in ipairs(plys) do
             v:EmitSound("earthquake.mp3", force / 6, 100)
         end
         tremor:Fire("explode","",0.5)
         util.ScreenShake(Vector(0, 0, 0), force, math.random(25, 50), math.random(5, 12), 9999999999)
         table.insert(lastmagnitudes, math.floor((force / 10) + .5) / 10)
         timer.Simple(10, function() TremorReport() end)
-        for k,e in ipairs(en) do
+        for _, e in ipairs(en) do
             local rand = math.random(650, 1000)
             if rand < force and rand % 2 == 0 then
-                e:Fire("enablemotion","",0)
+                e:Fire("enablemotion", "", 0)
                 constraint.RemoveAll(e)
             end
             if e:IsOnGround() then

@@ -101,7 +101,7 @@ local function OOC(ply, args)
 
         local phrase = DarkRP.getPhrase("ooc")
         local name = ply:Nick()
-        for k,v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             DarkRP.talkToPerson(v, col, "(" .. phrase .. ") " .. name, col2, text, ply)
         end
     end
@@ -128,7 +128,7 @@ local function MayorBroadcast(ply, args)
         local col2 = Color(170, 0, 0, 255)
         local phrase = DarkRP.getPhrase("broadcast")
         local name = ply:Nick()
-        for k,v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             DarkRP.talkToPerson(v, col, phrase .. " " .. name, col2, text, ply)
         end
     end
@@ -161,7 +161,7 @@ local function SayThroughRadio(ply,args)
         end
         local col = Color(180, 180, 180, 255)
         local phrase = DarkRP.getPhrase("radio_x", radioChannel)
-        for k,v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v.RadioChannel == radioChannel then
                 DarkRP.talkToPerson(v, col, phrase, col, text, ply)
             end
@@ -195,7 +195,7 @@ local function GroupMsg(ply, args)
         local color = Color(255, 255, 255, 255)
         for _, target in ipairs(player.GetAll()) do
             -- The target is in any of the group chats
-            for k, func in pairs(groupChats) do
+            for k, func in ipairs(groupChats) do
                 if not func(target, ply) then continue end
 
                 DarkRP.talkToPerson(target, col, phrase .. " " .. name, color, text, ply)

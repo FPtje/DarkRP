@@ -62,8 +62,8 @@ function meta:drawOwnableInfo()
     end
 
     if self:IsVehicle() then
-        for k,v in ipairs(player.GetAll()) do
-            if v:GetVehicle() ~= self then continue end
+        for _, v in ipairs(player.GetAll()) do
+            if not IsValid(v) or v:GetVehicle() ~= self then continue end
 
             table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
             break

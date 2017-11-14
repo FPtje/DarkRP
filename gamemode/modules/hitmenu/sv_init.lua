@@ -234,7 +234,7 @@ end)
 hook.Add("playerArrested", "Hitman system", function(ply)
     if not hits[ply] or not IsValid(hits[ply].customer) then return end
 
-    for k, v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if not GAMEMODE.CivilProtection[v:Team()] then continue end
 
         DarkRP.notify(v, 0, 8, DarkRP.getPhrase("x_had_hit_ordered_by_y", ply:Nick(), hits[ply].customer:Nick()))

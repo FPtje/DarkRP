@@ -4,7 +4,7 @@ local function updateAgenda(ply, agenda, text)
     agenda.text = txt or text
 
     local phrase = DarkRP.getPhrase("agenda_updated")
-    for k,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:getAgendaTable() ~= agenda then continue end
 
         v:setSelfDarkRPVar("agenda", agenda.text)
@@ -98,7 +98,7 @@ local function DoLottery(ply, amount)
         return ""
     end
 
-    if #player.GetAll() <= 2 or LotteryON then
+    if player.GetCount() <= 2 or LotteryON then
         DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "/lottery", ""))
         return ""
     end
@@ -122,7 +122,7 @@ local function DoLottery(ply, amount)
     LotteryPeople = {}
 
     local phrase = DarkRP.getPhrase("lottery_has_started", DarkRP.formatMoney(LotteryAmount))
-    for k,v in ipairs(player.GetAll()) do
+    for k, v in ipairs(player.GetAll()) do
         if v ~= ply then
             DarkRP.createQuestion(phrase, "lottery" .. tostring(k), v, 30, EnterLottery, ply, v)
         end
@@ -215,7 +215,7 @@ local function RequestLicense(ply)
     local ismayor--first look if there's a mayor
     local ischief-- then if there's a chief
     local iscop-- and then if there's a cop to ask
-    for k,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:isMayor() and not v:getDarkRPVar("AFK") then
             ismayor = true
             break
@@ -223,7 +223,7 @@ local function RequestLicense(ply)
     end
 
     if not ismayor then
-        for k,v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:isChief() and not v:getDarkRPVar("AFK") then
                 ischief = true
                 break
@@ -232,7 +232,7 @@ local function RequestLicense(ply)
     end
 
     if not ischief and not ismayor then
-        for k,v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:isCP() then
                 iscop = true
                 break

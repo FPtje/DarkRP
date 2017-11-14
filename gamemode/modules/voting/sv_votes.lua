@@ -30,7 +30,7 @@ function Vote:handleNewVote(ply, choice)
     local excludeCount = table.Count(self.exclude)
     local voteCount = table.Count(self.voters)
 
-    if voteCount >= #player.GetAll() - excludeCount then
+    if voteCount >= player.GetCount() - excludeCount then
         self:handleEnd()
     end
 end
@@ -52,7 +52,7 @@ end
 function Vote:getFilter()
     local filter = RecipientFilter()
 
-    for k,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if self.exclude[v] then continue end
         local canVote = hook.Call("canVote", GAMEMODE, v, self)
 

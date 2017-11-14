@@ -64,9 +64,10 @@ function meta:changeTeam(t, force, suppressNotification)
             return false
         end
         local max = TEAM.max
+        local numPlayers = team.NumPlayers(t)
         if max ~= 0 and -- No limit
-        (max >= 1 and team.NumPlayers(t) >= max or -- absolute maximum
-        max < 1 and (team.NumPlayers(t) + 1) / #player.GetAll() > max) then -- fractional limit (in percentages)
+        (max >= 1 and numPlayers >= max or -- absolute maximum
+        max < 1 and (numPlayers + 1) / player.GetCount() > max) then -- fractional limit (in percentages)
             notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
             return false
         end

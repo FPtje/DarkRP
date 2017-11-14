@@ -116,7 +116,7 @@ function PANEL:AddPlayerRows()
         return aTeam == bTeam and aNick < bNick or aTeam < bTeam
     end)
 
-    for k, v in pairs(players) do
+    for _, v in ipairs(players) do
         local canRequest = hook.Call("canRequestHit", DarkRP.hooks, self:GetHitman(), LocalPlayer(), v, self:GetHitman():getHitPrice())
         if not canRequest then continue end
 

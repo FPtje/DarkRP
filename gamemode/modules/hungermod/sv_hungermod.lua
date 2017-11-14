@@ -4,7 +4,7 @@ end
 hook.Add("PlayerSpawn", "HMPlayerSpawn", HMPlayerSpawn)
 
 local function HMThink()
-    for k, v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if not v:Alive() then continue end
         v:hungerUpdate()
     end

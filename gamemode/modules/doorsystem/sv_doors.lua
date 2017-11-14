@@ -120,12 +120,10 @@ function pmeta:keysUnOwnAll()
         end
     end
 
-    for k, v in ipairs(player.GetAll()) do
-        if v.Ownedz then
-            for n, m in pairs(v.Ownedz) do
-                if IsValid(m) and m:isKeysAllowedToOwn(self) then
-                    m:removeKeysAllowedToOwn(self)
-                end
+    for _, v in ipairs(player.GetAll()) do
+        for n, m in pairs(v.Ownedz or {}) do
+            if IsValid(m) and m:isKeysAllowedToOwn(self) then
+                m:removeKeysAllowedToOwn(self)
             end
         end
     end

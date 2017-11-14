@@ -144,28 +144,32 @@ local function playerSay(talker, message)
 
     if not DarkRP then return end
 
+    local talkerTeam = team.GetColor(talker:Team())
+    local talkerName = talker:Nick()
+    local col = Color(255, 255, 255, 255)
     for _, ply in ipairs(player.GetAll()) do
         if ply == talker or not ply.FSpectating then continue end
 
-
+        local shootPos = talker:GetShootPos()
+        local FSpectatingEnt = ply.FSpectatingEnt
         if
             -- Make sure you don't get it twice
-            ply:GetShootPos():Distance(talker:GetShootPos()) > 250 and
+            ply:GetShootPos():DistToSqr(shootPos) > 62500 and
             (
                 -- the person is saying it close to where you are roaming
-                ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 600 or
+                ply.FSpectatePos and shootPos:DistToSqr(ply.FSpectatePos) <= 360000 or
 
                 -- The person you're spectating or someone near the person you're spectating is saying it
-                (IsValid(ply.FSpectatingEnt) and ply.FSpectatingEnt:IsPlayer() and
-                talker:GetShootPos():Distance(ply.FSpectatingEnt:GetShootPos()) <= 300) or
+                (IsValid(FSpectatingEnt) and FSpectatingEnt:IsPlayer() and
+                shootPos:DistToSqr(FSpectatingEnt:GetShootPos()) <= 90000) or
 
                 -- Close to the object you're spectating
-                (IsValid(ply.FSpectatingEnt) and not ply.FSpectatingEnt:IsPlayer() and
-                talker:GetPos():Distance(ply.FSpectatingEnt:GetPos()) <= 300
+                (IsValid(FSpectatingEnt) and not FSpectatingEnt:IsPlayer() and
+                talker:GetPos():DistToSqr(FSpectatingEnt:GetPos()) <= 90000
                 )
             ) then
 
-            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
+            DarkRP.talkToPerson(ply, talkerTeam, talkerName, col, message, talker)
             return
         end
     end

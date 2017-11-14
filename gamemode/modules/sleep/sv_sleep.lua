@@ -198,7 +198,7 @@ local function DamageSleepers(ent, dmginfo)
     local ownerint = ent.OwnerINT
     if not ownerint or ownerint == 0 then return end
 
-    for k,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:EntIndex() ~= ownerint then continue end
 
         if attacker == game.GetWorld() then

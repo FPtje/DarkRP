@@ -20,7 +20,8 @@ local function declareTeamCommands(CTeam)
         if istable(CTeam.NeedToChangeFrom) and not table.HasValue(CTeam.NeedToChangeFrom, plyTeam) then return false end
         if CTeam.customCheck and CTeam.customCheck(ply) == false then return false end
         if ply:isArrested() then return false end
-        if CTeam.max ~= 0 and ((CTeam.max % 1 == 0 and team.NumPlayers(k) >= CTeam.max) or (CTeam.max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > CTeam.max)) then return false end
+        local numPlayers = team.NumPlayers(k)
+        if CTeam.max ~= 0 and ((CTeam.max % 1 == 0 and numPlayers >= CTeam.max) or (CTeam.max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > CTeam.max)) then return false end
         if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then return false end
         if ply.LastVoteCop and CurTime() - ply.LastVoteCop < 80 then return false end
 
@@ -139,7 +140,8 @@ local function addTeamCommands(CTeam, max)
                 return ""
             end
 
-            if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(k) >= max) or (max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > max)) then
+            local numPlayers = team.NumPlayers(k)
+            if max ~= 0 and ((max % 1 == 0 and numPlayers >= max) or (max % 1 ~= 0 and (tnumPlayers + 1) / player.GetCount() > max)) then
                 DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("team_limit_reached", CTeam.name))
 
                 return ""

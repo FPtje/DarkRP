@@ -84,7 +84,7 @@ local function getMaxOfTeam(job)
     if not job.max or job.max == 0 then return "∞" end
     if job.max % 1 == 0 then return tostring(job.max) end
 
-    return tostring(math.floor(job.max * #player.GetAll()))
+    return tostring(math.floor(job.max * player.GetCount()))
 end
 
 local function canGetJob(job)
@@ -94,7 +94,8 @@ local function canGetJob(job)
     if istable(job.NeedToChangeFrom) and not table.HasValue(job.NeedToChangeFrom, ply:Team()) then return false, true end
     if job.customCheck and not job.customCheck(ply) then return false, true end
     if ply:Team() == job.team then return false, true end
-    if job.max ~= 0 and ((job.max % 1 == 0 and team.NumPlayers(job.team) >= job.max) or (job.max % 1 ~= 0 and (team.NumPlayers(job.team) + 1) / #player.GetAll() > job.max)) then return false, false end
+    local numPlayers = team.NumPlayers(job.team)
+    if job.max ~= 0 and ((job.max % 1 == 0 and numPlayers >= job.max) or (job.max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > job.max)) then return false, false end
     if job.admin == 1 and not ply:IsAdmin() then return false, true end
     if job.admin > 1 and not ply:IsSuperAdmin() then return false, true end
 

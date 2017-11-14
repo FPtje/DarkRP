@@ -213,7 +213,8 @@ function FPP.AdminMenu(Panel)
     other:SetTextColor(Color(0, 0, 0, 255))
 
     local areplayers = false
-    for k,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
+        if not IsValid(v) then continue end
         areplayers = true
         local rm = general:Add("DButton")
         rm:SetText(v:Nick())
@@ -447,7 +448,7 @@ function FPP.AdminMenu(Panel)
         local lines = FPP.multirestricttoollist:GetLines()
         local EditTable = {}
         if #lines > 0 then
-            for k,v in pairs(lines) do
+            for _,v in ipairs(lines) do
                 table.insert(EditTable, v.Columns[1].Value)
             end
             RetrieveRestrictedTool(EditTable)
@@ -561,7 +562,7 @@ function FPP.AdminMenu(Panel)
             return
         end
 
-        for k,v in pairs(GroupMembers:GetSelected()) do
+        for k, v in pairs(GroupMembers:GetSelected()) do
             timer.Simple(k / 10, function() RunConsoleCommand("FPP_SetPlayerGroup", v.Columns[1]:GetValue(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()) end)
         end
     end
@@ -578,7 +579,8 @@ function FPP.AdminMenu(Panel)
         local menu = DermaMenu()
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for a,b in ipairs(player.GetAll()) do
+        for _, b in ipairs(player.GetAll()) do
+            if not IsValid(b) then continue end
             menu:AddOption(b:Nick(), function()
                 RunConsoleCommand("FPP_SetPlayerGroup", b:UserID(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
                 PressLoadFirst:SetText("List might be corrupted, reload is recommended")
@@ -596,7 +598,7 @@ function FPP.AdminMenu(Panel)
     local function RetrieveGroups(len)
         FPP.Groups = net.ReadTable()
         GroupList:Clear()
-        for k,v in pairs(FPP.Groups) do
+        for k, _ in pairs(FPP.Groups) do
             GroupList:AddLine(k)
         end
         GroupList:SelectFirstItem()
@@ -608,7 +610,7 @@ function FPP.AdminMenu(Panel)
     local function RetrieveGroupMembers(len)
         FPP.GroupMembers = net.ReadTable()
         GroupMembers:Clear()
-        for k,v in pairs(FPP.GroupMembers) do
+        for _, v in pairs(FPP.GroupMembers) do
             local name = "Unknown"
             for _, ply in ipairs(player.GetAll()) do
                 if ply:SteamID() == k then
@@ -747,7 +749,8 @@ RetrieveRestrictedTool = function(um)
         local menu = DermaMenu(self)
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for k, v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
+            if not IsValid(v) then continue end
             local submenu = menu:AddSubMenu(v:Nick())
 
 
@@ -1004,7 +1007,8 @@ function FPP.BuddiesMenu(Panel)
 
     Panel:AddControl("Label", {Text = "\nAdd buddy:"})
     local AvailablePlayers = false
-    for k,v in SortedPairs(player.GetAll(), function(a,b) return a:Nick() > b:Nick() end) do
+    for _, v in SortedPairs(player.GetAll(), function(a,b) return a:Nick() > b:Nick() end) do
+        if not IsValid(v) then continue end
         local cantadd = false
         if v == LocalPlayer() then cantadd = true end
         for a,b in pairs(FPP.Buddies) do
@@ -1203,11 +1207,11 @@ function FPP.SharedMenu(um)
         end
     end
 
-    if #player.GetAll() ~= 1 then
+    if player.GetCount() ~= 1 then
         count = count + 1
     end
-    for k,v in ipairs(player.GetAll()) do
-        if v ~= LocalPlayer() and v:IsValid() then
+    for _, v in ipairs(player.GetAll()) do
+        if IsValid(v) and v ~= LocalPlayer() then
             local IsShared = false
             if table.HasValue(SharedWith, v) then
                 IsShared = true

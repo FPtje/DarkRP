@@ -94,7 +94,7 @@ function DarkRP.findPlayers(info)
         end
     end
 
-    for _, PlayerInfo in pairs(InfoPlayers) do
+    for _, PlayerInfo in ipairs(InfoPlayers) do
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
@@ -106,7 +106,7 @@ function DarkRP.findPlayers(info)
             continue
         end
 
-        for k, v in pairs(pls) do
+        for _, v in ipairs(pls) do
             -- Prevend duplicates
             if found[v] then continue end
 

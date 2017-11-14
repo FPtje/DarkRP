@@ -25,11 +25,11 @@ local function AutoComplete(command, ...)
     local args = string.Explode(" ", ...)
     table.remove(args, 1) --Remove the first space
     if args[1] == "" then
-        for k,v in pairs(FAdmin.Commands.List) do
+        for k, _ in pairs(FAdmin.Commands.List) do
             table.insert(autocomplete, command .. " " .. k)
         end
     elseif not args[2] then
-        for k,v in pairs(FAdmin.Commands.List) do
+        for k, _ in pairs(FAdmin.Commands.List) do
             if string.sub(k, 1, string.len(args[1])) == args[1] then
                 table.insert(autocomplete, command .. " " .. k)
             end
@@ -59,7 +59,7 @@ FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
         return true
     end
     FAdmin.Messages.SendMessage(ply, 2, "FAdmin by (FPtje) Falco, STEAM_0:0:8944068")
-    for k,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:SteamID() == "STEAM_0:0:8944068" then
             FAdmin.Messages.SendMessage(ply, 4, "(FPtje) Falco is in the server at this moment")
             return true

@@ -135,7 +135,7 @@ local function findNearestObject()
     local foundPly, foundDot = nil, 0
 
     for _, ply in ipairs(player.GetAll()) do
-        if ply == LocalPlayer() then continue end
+        if not IsValid(ply) or ply == LocalPlayer() then continue end
 
         local pos = ply:GetShootPos()
         local dot = (pos - fromPos):GetNormalized():Dot(aimvec)
@@ -273,6 +273,7 @@ local function specThink()
     local skip = 0
     for i = 0, #pls - 1 do
         local p = pls[i + 1]
+        if not IsValid(p) then continue end
         if not isRoaming and p == specEnt and not thirdperson then skip = skip + 3 continue end
 
         local tr = p:GetEyeTrace()
@@ -343,6 +344,7 @@ local function drawHelp()
     local pls = player.GetAll()
     for i = 1, #pls do
         local ply = pls[i]
+        if not IsValid(ply) then continue end
         if not isRoaming and ply == specEnt then continue end
 
         local pos = ply:GetShootPos():ToScreen()

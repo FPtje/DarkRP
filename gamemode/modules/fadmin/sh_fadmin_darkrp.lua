@@ -22,7 +22,7 @@ function FAdmin.FindPlayer(info)
         end
     end
 
-    for _, PlayerInfo in pairs(InfoPlayers) do
+    for _, PlayerInfo in ipairs(InfoPlayers) do
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
@@ -32,7 +32,7 @@ function FAdmin.FindPlayer(info)
             continue
         end
 
-        for k, v in ipairs(pls) do
+        for _, v in ipairs(pls) do
             -- Find by Steam ID
             if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not found[v]  then
                 found[v] = true

@@ -221,6 +221,6 @@ FAdmin.ScoreBoard.Server:AddInformation("Hostname", GetHostName)
 FAdmin.ScoreBoard.Server:AddInformation("Gamemode", function() return GAMEMODE.Name end)
 FAdmin.ScoreBoard.Server:AddInformation("Author", function() return GAMEMODE.Author end)
 FAdmin.ScoreBoard.Server:AddInformation("Map", game.GetMap)
-FAdmin.ScoreBoard.Server:AddInformation("Players", function() return #player.GetAll() .. "/" .. game.MaxPlayers() end)
+FAdmin.ScoreBoard.Server:AddInformation("Players", function() return player.GetCount() .. "/" .. game.MaxPlayers() end)
 FAdmin.ScoreBoard.Server:AddInformation("Ping", function() return LocalPlayer():Ping() end)
 
