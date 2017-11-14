@@ -54,6 +54,7 @@ function SWEP:Deploy()
     return BaseClass.Deploy(self)
 end
 
+local distance = SWEP.stickRange * SWEP.stickRange
 function SWEP:PrimaryAttack()
     BaseClass.PrimaryAttack(self)
 
@@ -62,15 +63,17 @@ function SWEP:PrimaryAttack()
     self:GetOwner():LagCompensation(true)
     local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
     self:GetOwner():LagCompensation(false)
-    if IsValid(trace.Entity) and trace.Entity.onUnArrestStickUsed then
-        trace.Entity:onUnArrestStickUsed(self:GetOwner())
+
+    local ent = trace.Entity
+    if IsValid(ent) and ent.onUnArrestStickUsed then
+        ent:onUnArrestStickUsed(self:GetOwner())
         return
     end
 
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() and p:IsSolid() end)
     if not ent then return end
 
-    if not IsValid(ent) or not ent:IsPlayer() or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > self.stickRange * self.stickRange) or not ent:getDarkRPVar("Arrested") then
+    if not IsValid(ent) or not ent:IsPlayer() or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > distance) or not ent:getDarkRPVar("Arrested") then
         return
     end
 

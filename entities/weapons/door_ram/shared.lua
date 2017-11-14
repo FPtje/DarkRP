@@ -73,7 +73,7 @@ local function ramDoor(ply, trace, ent)
     if GAMEMODE.Config.doorwarrants and ent:isKeysOwned() and not ent:isKeysOwnedBy(ply) then
         -- if anyone who owns this door has a warrant for their arrest
         -- allow the police to smash the door in
-        for k, v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if ent:isKeysOwnedBy(v) and canRam(v) then
                 allowed = true
                 break
@@ -85,14 +85,18 @@ local function ramDoor(ply, trace, ent)
     end
 
     -- Be able to open the door if any member of the door group is warranted
-    if GAMEMODE.Config.doorwarrants and ent:getKeysDoorGroup() and RPExtraTeamDoors[ent:getKeysDoorGroup()] then
-        allowed = false
-        for k,v in pairs(player.GetAll()) do
-            if table.HasValue(RPExtraTeamDoors[ent:getKeysDoorGroup()], v:Team()) and canRam(v) then
-                allowed = true
-                break
-            end
-        end
+    local keysDoorGroup = ent:getKeysDoorGroup()
+    if GAMEMODE.Config.doorwarrants and keysDoorGroup then
+		local teamDoors = RPExtraTeamDoors[keysDoorGroup]
+        if teamDoors then
+			allowed = false
+			for _, v in ipairs(player.GetAll()) do
+				if table.HasValue(teamDoors, v:Team()) and canRam(v) then
+					allowed = true
+					break
+				end
+			end
+		end
     end
 
     if CLIENT then return allowed end
@@ -303,7 +307,7 @@ end
 
 hook.Add("SetupMove", "DarkRP_DoorRamJump", function(ply, mv)
     local wep = ply:GetActiveWeapon()
-    if not IsValid(wep) or not wep.GetIronsights or not wep:GetIronsights() or wep:GetClass() ~= "door_ram" then return end
+    if not wep:IsValid() or not wep.GetIronsights or not wep:GetIronsights() or wep:GetClass() ~= "door_ram" then return end
 
     mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 end)

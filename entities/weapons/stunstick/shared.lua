@@ -106,12 +106,14 @@ function SWEP:DoAttack(dmg)
     self:GetOwner():LagCompensation(true)
     local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
     self:GetOwner():LagCompensation(false)
-    if IsValid(trace.Entity) and trace.Entity.onStunStickUsed then
-        trace.Entity:onStunStickUsed(self:GetOwner())
+    
+    local ent = trace.Entity
+    if IsValid(ent) and ent.onStunStickUsed then
+        ent:onStunStickUsed(self:GetOwner())
         return
-    elseif IsValid(trace.Entity) and trace.Entity:GetClass() == "func_breakable_surf" then
-        trace.Entity:Fire("Shatter")
-        self:GetOwner():EmitSound(self.Hit[math.random(1,#self.Hit)])
+    elseif IsValid(ent) and ent:GetClass() == "func_breakable_surf" then
+        ent:Fire("Shatter")
+        self:GetOwner():EmitSound(self.Hit[math.random(#self.Hit)])
         return
     end
 
@@ -140,9 +142,9 @@ function SWEP:DoAttack(dmg)
 
     if ent:IsPlayer() or ent:IsNPC() or ent:IsVehicle() then
         self:DoFlash(ent)
-        self:GetOwner():EmitSound(self.FleshHit[math.random(1,#self.FleshHit)])
+        self:GetOwner():EmitSound(self.FleshHit[math.random(#self.FleshHit)])
     else
-        self:GetOwner():EmitSound(self.Hit[math.random(1,#self.Hit)])
+        self:GetOwner():EmitSound(self.Hit[math.random(#self.Hit)])
         if FPP and FPP.plyCanTouchEnt(self:GetOwner(), ent, "EntityDamage") then
             if ent.SeizeReward and not ent.beenSeized and not ent.burningup and self:GetOwner():isCP() and ent.Getowning_ent and self:GetOwner() ~= ent:Getowning_ent() then
                 local amount = isfunction(ent.SeizeReward) and ent:SeizeReward(self:GetOwner(), dmg) or ent.SeizeReward

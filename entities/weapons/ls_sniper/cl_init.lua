@@ -10,7 +10,7 @@ function SWEP:DrawHUD()
     draw.RoundedBox(1, ScrW() / 2, ScrH() / 2 - 54, 1, 50, color_black)
     draw.RoundedBox(1, ScrW() / 2, ScrH() / 2 + 4, 1, 50, color_black)
 
-    for _,v in pairs(deltas) do
+    for _, v in ipairs(deltas) do
         draw.RoundedBox(1, ScrW() / 2 + v, ScrH() / 2 - 5, 1, 11, color_black)
         draw.RoundedBox(1, ScrW() / 2 - 5, ScrH() / 2 + v, 11, 1, color_black)
     end
