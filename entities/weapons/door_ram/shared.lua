@@ -89,14 +89,14 @@ local function ramDoor(ply, trace, ent)
     if GAMEMODE.Config.doorwarrants and keysDoorGroup then
         local teamDoors = RPExtraTeamDoors[keysDoorGroup]
         if teamDoors then
-			allowed = false
-			for _, v in ipairs(player.GetAll()) do
-				if table.HasValue(teamDoors, v:Team()) and canRam(v) then
-					allowed = true
-					break
-				end
-			end
-		end
+            allowed = false
+            for _, v in ipairs(player.GetAll()) do
+                if table.HasValue(teamDoors, v:Team()) and canRam(v) then
+                    allowed = true
+                    break
+                end
+            end
+        end
     end
 
     if CLIENT then return allowed end
