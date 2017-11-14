@@ -5,7 +5,7 @@ local view = {
     znear = 1
 }
 
-local deathpov = GAMEMODE.Config.deathpov
+local deathpov = GM.Config.deathpov
 hook.Add("CalcView", "rp_deathPOV", function(ply, origin, angles, fov)
     -- Entity:Alive() is being slow as hell, we might actually see ourselves from third person for frame or two
     if not deathpov or ply:Health() > 0 then return end
