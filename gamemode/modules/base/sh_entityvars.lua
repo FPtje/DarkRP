@@ -101,7 +101,7 @@ RP name override
 ---------------------------------------------------------------------------]]
 local pmeta = FindMetaTable("Player")
 pmeta.SteamName = pmeta.SteamName or pmeta.Name
-function pmeta:Name()
+function pmeta:Nick()
     if not self:IsValid() then DarkRP.error("Attempt to call Name/Nick/GetName on a non-existing player!", SERVER and 1 or 2) end
     return GAMEMODE.Config.allowrpnames and self:getDarkRPVar("rpname")
         or self:SteamName()

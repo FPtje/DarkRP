@@ -166,7 +166,7 @@ local function CancelVote(ply)
     local result = DarkRP.destroyLastVote()
 
     if result then
-        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", ply:EntIndex() ~= 0 and ply:Name() or "Console"))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", ply:EntIndex() ~= 0 and ply:Nick() or "Console"))
         if ply:EntIndex() == 0 then
             print(DarkRP.getPhrase("x_cancelled_vote", "Console"))
         end

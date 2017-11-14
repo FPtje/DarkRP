@@ -110,9 +110,9 @@ local function GiveMoney(ply, args)
 
         hook.Call("playerGaveMoney", nil, ply, trace2.Entity, amount)
 
-        DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Name(), DarkRP.formatMoney(amount)))
-        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Name(), DarkRP.formatMoney(amount)))
-        DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") has given " .. DarkRP.formatMoney(amount) .. " to " .. trace2.Entity:Name() .. " (" .. trace2.Entity:SteamID() .. ")")
+        DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), DarkRP.formatMoney(amount)))
+        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), DarkRP.formatMoney(amount)))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has given " .. DarkRP.formatMoney(amount) .. " to " .. trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
     end)
 
     return ""
@@ -167,7 +167,7 @@ local function DropMoney(ply, args)
         local tr = util.TraceLine(trace)
         local moneybag = DarkRP.createMoneyBag(tr.HitPos, amount)
         hook.Call("playerDroppedMoney", nil, ply, amount, moneybag)
-        DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") has dropped " .. DarkRP.formatMoney(amount))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has dropped " .. DarkRP.formatMoney(amount))
     end)
 
     return ""
@@ -249,14 +249,14 @@ local function ccSetMoney(ply, args)
     DarkRP.storeMoney(target, amount)
     target:setDarkRPVar("money", amount)
 
-    DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_set_x_money", target:Name(), DarkRP.formatMoney(amount), ""))
+    DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_set_x_money", target:Nick(), DarkRP.formatMoney(amount), ""))
 
-    DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Name(), DarkRP.formatMoney(amount), ""))
+    DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(amount), ""))
 
     if ply:EntIndex() == 0 then
         DarkRP.log("Console set " .. target:SteamName() .. "'s money to " .. DarkRP.formatMoney(amount), Color(30, 30, 30))
     else
-        DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s money to " ..  DarkRP.formatMoney(amount), Color(30, 30, 30))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") set " .. target:SteamName() .. "'s money to " ..  DarkRP.formatMoney(amount), Color(30, 30, 30))
     end
 end
 DarkRP.definePrivilegedChatCommand("setmoney", "DarkRP_SetMoney", ccSetMoney)
@@ -279,13 +279,13 @@ local function ccAddMoney(ply, args)
     if target then
         target:addMoney(amount)
 
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_gave", target:Name(), DarkRP.formatMoney(amount)))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("you_gave", target:Nick(), DarkRP.formatMoney(amount)))
 
-        DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Name(), DarkRP.formatMoney(target:getDarkRPVar("money")), ""))
+        DarkRP.notify(target, 0, 4, DarkRP.getPhrase("x_set_your_money", ply:EntIndex() == 0 and "Console" or ply:Nick(), DarkRP.formatMoney(target:getDarkRPVar("money")), ""))
         if ply:EntIndex() == 0 then
             DarkRP.log("Console added " .. DarkRP.formatMoney(amount) .. " to " .. target:SteamName() .. "'s wallet", Color(30, 30, 30))
         else
-            DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") added " .. DarkRP.formatMoney(amount) .. " to " .. target:SteamName() .. "'s wallet", Color(30, 30, 30))
+            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") added " .. DarkRP.formatMoney(amount) .. " to " .. target:SteamName() .. "'s wallet", Color(30, 30, 30))
         end
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args[1]))

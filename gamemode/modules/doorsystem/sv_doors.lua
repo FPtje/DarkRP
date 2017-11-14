@@ -521,7 +521,7 @@ local function AddDoorOwner(ply, args)
     end
 
     if ent:isKeysOwnedBy(target) or ent:isKeysAllowedToOwn(target) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target:Name()))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target:Nick()))
         return ""
     end
 

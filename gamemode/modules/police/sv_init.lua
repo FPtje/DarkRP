@@ -17,9 +17,9 @@ function plyMeta:warrant(warranter, reason)
 
     if suppressMsg then return end
 
-    local warranterNick = IsValid(warranter) and warranter:Name() or DarkRP.getPhrase("disconnected_player")
-    local centerMessage = DarkRP.getPhrase("warrant_approved", self:Name(), reason, warranterNick)
-    local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Name(), reason)
+    local warranterNick = IsValid(warranter) and warranter:Nick() or DarkRP.getPhrase("disconnected_player")
+    local centerMessage = DarkRP.getPhrase("warrant_approved", self:Nick(), reason, warranterNick)
+    local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Nick(), reason)
 
     for _, b in ipairs(player.GetAll()) do
         b:PrintMessage(HUD_PRINTCENTER, centerMessage)
@@ -38,11 +38,11 @@ function plyMeta:unWarrant(unwarranter)
 
     if suppressMsg then return end
 
-    DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Name()))
+    DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
 end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
-    local question = DarkRP.getPhrase("warrant_request", actor:Name(), suspect:Name(), reason)
+    local question = DarkRP.getPhrase("warrant_request", actor:Nick(), suspect:Nick(), reason)
     DarkRP.createQuestion(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
@@ -59,9 +59,9 @@ function plyMeta:wanted(actor, reason, time)
 
     if suppressMsg then return end
 
-    local actorNick = IsValid(actor) and actor:Name() or DarkRP.getPhrase("disconnected_player")
-    local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Name(), reason, actorNick)
-    local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Name(), reason)
+    local actorNick = IsValid(actor) and actor:Nick() or DarkRP.getPhrase("disconnected_player")
+    local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
+    local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Nick(), reason)
 
     for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCENTER, centerMessage)
@@ -80,8 +80,8 @@ function plyMeta:unWanted(actor)
 
     if suppressMsg then return end
 
-    local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Name(), actor:Name() or "") or
-        DarkRP.getPhrase("wanted_expired", self:Name())
+    local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
+        DarkRP.getPhrase("wanted_expired", self:Nick())
 
     DarkRP.log(string.Replace(expiredMessage, "\n", " "), Color(0, 150, 255))
 
@@ -128,15 +128,19 @@ local function CombineRequest(ply, args)
             return
         end
 
+        local col = team.GetColor(ply:Team())
+        local col2 = Color(255, 0, 0, 255)
+        local phrase = DarkRP.getPhrase("request")
+        local name = ply:Nick()
         for _, v in ipairs(player.GetAll()) do
             if v:isCP() or v == ply then
-                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. " " .. ply:Name(), Color(255, 0, 0, 255), text, ply)
+                DarkRP.talkToPerson(v, col, phrase .. " " .. name, col2, text, ply)
             end
         end
     end
     return args, DoSay
 end
-for _, cmd in pairs{"cr", "911", "999", "112", "000"} do
+for _, cmd in ipairs{"cr", "911", "999", "112", "000"} do
     DarkRP.defineChatCommand(cmd, CombineRequest, 1.5)
 end
 
@@ -150,7 +154,8 @@ local function warrantCommand(ply, args)
         return ""
     end
 
-    if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then -- No need to search through all the teams if the player is a mayor
+    local Team = ply:Team()
+    if not RPExtraTeams[Team] or not RPExtraTeams[Team].mayor then -- No need to search through all the teams if the player is a mayor
         local mayors = {}
 
         for k,v in ipairs(RPExtraTeams) do
@@ -162,7 +167,7 @@ local function warrantCommand(ply, args)
         if #mayors > 0 then -- Request a warrant if there's a mayor
             local mayor = table.Random(mayors)
             mayor:requestWarrant(target, ply, reason)
-            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Name()))
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Nick()))
             return ""
         end
     end
@@ -247,7 +252,7 @@ local function ccArrest(ply, args)
         if ply:EntIndex() == 0 then
             DarkRP.log("Console force-arrested " .. target:SteamName(), Color(0, 255, 255))
         else
-            DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-arrested " .. target:SteamName(), Color(0, 255, 255))
+            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-arrested " .. target:SteamName(), Color(0, 255, 255))
         end
     end
 end
@@ -268,7 +273,7 @@ local function ccUnarrest(ply, args)
         if ply:EntIndex() == 0 then
             DarkRP.log("Console force-unarrested " .. target:SteamName(), Color(0, 255, 255))
         else
-            DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-unarrested " .. target:SteamName(), Color(0, 255, 255))
+            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unarrested " .. target:SteamName(), Color(0, 255, 255))
         end
     end
 end
@@ -279,7 +284,7 @@ Callback functions
 ---------------------------------------------------------------------------]]
 function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
     if not tobool(choice) then
-        DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Name()))
+        DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
         return
     end
     if IsValid(suspect) then
@@ -331,9 +336,11 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isArrested() then return end -- hasn't been arrested before
 
     ply:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("youre_arrested", time))
+
+    local phrase = DarkRP.getPhrase("hes_arrested", ply:Nick(), time)
     for _, v in ipairs(player.GetAll()) do
         if v == ply then continue end
-        v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("hes_arrested", ply:Name(), time))
+        v:PrintMessage(HUD_PRINTCENTER, phrase)
     end
 
     local steamID = ply:SteamID()
@@ -360,7 +367,7 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
     end
 
     timer.Remove(ply:SteamID64() .. "jailtimer")
-    DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Name()))
+    DarkRP.notifyAll(0, 4, DarkRP.getPhrase("hes_unarrested", ply:Nick()))
 end
 
 hook.Add("PlayerInitialSpawn", "Arrested", function(ply)

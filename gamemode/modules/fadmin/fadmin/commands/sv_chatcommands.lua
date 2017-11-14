@@ -41,7 +41,7 @@ FAdmin.StartHooks["Chatcommands"] = function()
         if not FAdmin.Access.PlayerHasPrivilege(ply, "ServerSetting") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if not args[1] or string.len(args[1]) ~= 1 then return end
 
-        FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Name() .. " set FAdmin's chat command prefix to " .. args[1], "FAdmin's chat command prefix has been set to " .. args[1], "Chat command prefix set to" .. args[1])
+        FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Nick() .. " set FAdmin's chat command prefix to " .. args[1], "FAdmin's chat command prefix has been set to " .. args[1], "Chat command prefix set to" .. args[1])
 
         RunConsoleCommand("FAdmin_commandprefix", args[1])
 

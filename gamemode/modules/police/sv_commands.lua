@@ -3,19 +3,19 @@ local function updateAgenda(ply, agenda, text)
 
     agenda.text = txt or text
 
+    local phrase = DarkRP.getPhrase("agenda_updated")
     for k,v in ipairs(player.GetAll()) do
         if v:getAgendaTable() ~= agenda then continue end
 
         v:setSelfDarkRPVar("agenda", agenda.text)
-        DarkRP.notify(v, 2, 4, DarkRP.getPhrase("agenda_updated"))
+        DarkRP.notify(v, 2, 4, phrase)
     end
 end
 
 local function CreateAgenda(ply, args)
     local agenda = ply:getAgendaTable()
-    local plyTeam = ply:Team()
 
-    if not agenda or not agenda.ManagersByKey[plyTeam] then
+    if not agenda or not agenda.ManagersByKey[ply:Team()] then
         DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
         return ""
     end
@@ -28,9 +28,8 @@ DarkRP.defineChatCommand("agenda", CreateAgenda, 0.1)
 
 local function addAgenda(ply, args)
     local agenda = ply:getAgendaTable()
-    local plyTeam = ply:Team()
 
-    if not agenda or not agenda.ManagersByKey[plyTeam] then
+    if not agenda or not agenda.ManagersByKey[ply:Team()] then
         DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
         return ""
     end
@@ -52,7 +51,8 @@ local LotteryON = false
 local LotteryAmount = 0
 local CanLottery = CurTime()
 local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
-    if tobool(answer) and not table.HasValue(LotteryPeople, target) then
+    local hasEntered = table.HasValue(LotteryPeople, target)
+    if tobool(answer) and not hasEntered then
         if not target:canAfford(LotteryAmount) then
             DarkRP.notify(target, 1,4, DarkRP.getPhrase("cant_afford", "lottery"))
 
@@ -62,7 +62,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
         target:addMoney(-LotteryAmount)
         DarkRP.notify(target, 0,4, DarkRP.getPhrase("lottery_entered", DarkRP.formatMoney(LotteryAmount)))
         hook.Run("playerEnteredLottery", target)
-    elseif IsValid(target) and answer ~= nil and not table.HasValue(LotteryPeople, target) then
+    elseif IsValid(target) and answer ~= nil and not hasEntered then
         DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", "You"))
     end
 
@@ -74,15 +74,16 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
             if not IsValid(LotteryPeople[i]) then table.remove(LotteryPeople, i) end
         end
 
-        if table.Count(LotteryPeople) == 0 then
+        if #LotteryPeople == 0 then
             DarkRP.notifyAll(1, 4, DarkRP.getPhrase("lottery_noone_entered"))
-            hook.Run("lotteryEnded", LotteryPeople, nil)
+            hook.Run("lotteryEnded", LotteryPeople)
             return
         end
         local chosen = LotteryPeople[math.random(1, #LotteryPeople)]
-        hook.Run("lotteryEnded", LotteryPeople, chosen, #LotteryPeople * LotteryAmount)
-        chosen:addMoney(#LotteryPeople * LotteryAmount)
-        DarkRP.notifyAll(0, 10, DarkRP.getPhrase("lottery_won", chosen:Name(), DarkRP.formatMoney(#LotteryPeople * LotteryAmount)))
+        local amt = #LotteryPeople * LotteryAmount
+        hook.Run("lotteryEnded", LotteryPeople, chosen, amt)
+        chosen:addMoney(amt)
+        DarkRP.notifyAll(0, 10, DarkRP.getPhrase("lottery_won", chosen:Nick(), DarkRP.formatMoney(amt)))
     end
 end
 
@@ -119,9 +120,11 @@ local function DoLottery(ply, amount)
 
     LotteryON = true
     LotteryPeople = {}
+
+    local phrase = DarkRP.getPhrase("lottery_has_started", DarkRP.formatMoney(LotteryAmount))
     for k,v in ipairs(player.GetAll()) do
         if v ~= ply then
-            DarkRP.createQuestion(DarkRP.getPhrase("lottery_has_started", DarkRP.formatMoney(LotteryAmount)), "lottery" .. tostring(k), v, 30, EnterLottery, ply, v)
+            DarkRP.createQuestion(phrase, "lottery" .. tostring(k), v, 30, EnterLottery, ply, v)
         end
     end
     timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
@@ -194,11 +197,11 @@ DarkRP.defineChatCommand("unlockdown", DarkRP.unLockdown)
 local function GrantLicense(answer, Ent, Initiator, Target)
     Initiator.LicenseRequested = nil
     if tobool(answer) then
-        DarkRP.notify(Initiator, 0, 4, DarkRP.getPhrase("gunlicense_granted", Target:Name(), Initiator:Name()))
-        DarkRP.notify(Target, 0, 4, DarkRP.getPhrase("gunlicense_granted", Target:Name(), Initiator:Name()))
+        DarkRP.notify(Initiator, 0, 4, DarkRP.getPhrase("gunlicense_granted", Target:Nick(), Initiator:Nick()))
+        DarkRP.notify(Target, 0, 4, DarkRP.getPhrase("gunlicense_granted", Target:Nick(), Initiator:Nick()))
         Initiator:setDarkRPVar("HasGunlicense", true)
     else
-        DarkRP.notify(Initiator, 1, 4, DarkRP.getPhrase("gunlicense_denied", Target:Name(), Initiator:Name()))
+        DarkRP.notify(Initiator, 1, 4, DarkRP.getPhrase("gunlicense_denied", Target:Nick(), Initiator:Nick()))
     end
 end
 
@@ -259,8 +262,8 @@ local function RequestLicense(ply)
     end
 
     ply.LicenseRequested = true
-    DarkRP.notify(ply, 3, 4, DarkRP.getPhrase("gunlicense_requested", ply:Name(), LookingAt:Name()))
-    DarkRP.createQuestion(DarkRP.getPhrase("gunlicense_question_text", ply:Name()), "Gunlicense" .. ply:EntIndex(), LookingAt, 20, GrantLicense, ply, LookingAt)
+    DarkRP.notify(ply, 3, 4, DarkRP.getPhrase("gunlicense_requested", ply:Nick(), LookingAt:Nick()))
+    DarkRP.createQuestion(DarkRP.getPhrase("gunlicense_question_text", ply:Nick()), "Gunlicense" .. ply:EntIndex(), LookingAt, 20, GrantLicense, ply, LookingAt)
     return ""
 end
 DarkRP.defineChatCommand("requestlicense", RequestLicense)
@@ -286,8 +289,8 @@ local function GiveLicense(ply)
         return ""
     end
 
-    DarkRP.notify(LookingAt, 0, 4, DarkRP.getPhrase("gunlicense_granted", ply:Name(), LookingAt:Name()))
-    DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("gunlicense_granted", ply:Name(), LookingAt:Name()))
+    DarkRP.notify(LookingAt, 0, 4, DarkRP.getPhrase("gunlicense_granted", ply:Nick(), LookingAt:Nick()))
+    DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("gunlicense_granted", ply:Nick(), LookingAt:Nick()))
     LookingAt:setDarkRPVar("HasGunlicense", true)
 
     return ""
@@ -306,18 +309,18 @@ local function rp_GiveLicense(ply, arg)
 
     local nick, steamID
     if ply:EntIndex() ~= 0 then
-        nick = ply:Name()
+        nick = ply:Nick()
         steamID = ply:SteamID()
     else
         nick = "Console"
         steamID = "Console"
     end
 
-    DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Name()))
+    DarkRP.notify(target, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
     if ply ~= target then
-        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Name()))
+        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("gunlicense_granted", nick, target:Nick()))
     end
-    DarkRP.log(nick .. " (" .. steamID .. ") force-gave " .. target:Name() .. " a gun license", Color(30, 30, 30))
+    DarkRP.log(nick .. " (" .. steamID .. ") force-gave " .. target:Nick() .. " a gun license", Color(30, 30, 30))
 end
 DarkRP.definePrivilegedChatCommand("setlicense", "DarkRP_SetLicense", rp_GiveLicense)
 
@@ -333,18 +336,18 @@ local function rp_RevokeLicense(ply, arg)
 
     local nick, steamID
     if ply:EntIndex() ~= 0 then
-        nick = ply:Name()
+        nick = ply:Nick()
         steamID = ply:SteamID()
     else
         nick = "Console"
         steamID = "Console"
     end
 
-    DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Name()))
+    DarkRP.notify(target, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
     if ply ~= target then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Name()))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("gunlicense_denied", nick, target:Nick()))
     end
-    DarkRP.log(nick .. " (" .. steamID .. ") force-removed " .. target:Name() .. "'s gun license", Color(30, 30, 30))
+    DarkRP.log(nick .. " (" .. steamID .. ") force-removed " .. target:Nick() .. "'s gun license", Color(30, 30, 30))
 end
 DarkRP.definePrivilegedChatCommand("unsetlicense", "DarkRP_SetLicense", rp_RevokeLicense)
 
@@ -353,9 +356,9 @@ local function FinishRevokeLicense(vote, win)
         vote.target:setDarkRPVar("HasGunlicense", nil)
         vote.target:StripWeapons()
         gamemode.Call("PlayerLoadout", vote.target)
-        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_removed", vote.target:Name()))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_removed", vote.target:Nick()))
     else
-        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_not_removed", vote.target:Name()))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_not_removed", vote.target:Nick()))
     end
 end
 
@@ -382,7 +385,7 @@ local function VoteRemoveLicense(ply, args)
         if ply:getDarkRPVar("HasGunlicense") then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demotelicense", ""))
         else
-            local voteInfo = DarkRP.createVote(p:Name() .. ":\n" .. DarkRP.getPhrase("gunlicense_remove_vote_text2", reason), "removegunlicense", p, 20, FinishRevokeLicense, {
+            local voteInfo = DarkRP.createVote(p:Nick() .. ":\n" .. DarkRP.getPhrase("gunlicense_remove_vote_text2", reason), "removegunlicense", p, 20, FinishRevokeLicense, {
                 [p] = true,
                 [ply] = true
             }, nil, nil, {
@@ -391,7 +394,7 @@ local function VoteRemoveLicense(ply, args)
 
             if voteInfo then
                 -- Vote has started
-                DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_remove_vote_text", ply:Name(), p:Name()))
+                DarkRP.notifyAll(0, 4, DarkRP.getPhrase("gunlicense_remove_vote_text", ply:Nick(), p:Nick()))
             end
             ply.LastVoteCop = CurTime()
         end

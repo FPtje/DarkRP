@@ -13,7 +13,7 @@ local function ccDoorUnOwn(ply, args)
 
     trace.Entity:Fire("unlock", "", 0)
     trace.Entity:keysUnOwn()
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-unowned a door with forceunown", Color(30, 30, 30))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unowned a door with forceunown", Color(30, 30, 30))
     DarkRP.notify(ply, 0, 4, "Forcefully unowned")
 end
 DarkRP.definePrivilegedChatCommand("forceunown", "DarkRP_SetDoorOwner", ccDoorUnOwn)
@@ -28,12 +28,12 @@ local function unownAll(ply, args)
     target:keysUnOwnAll()
 
     if ply:EntIndex() == 0 then
-        DarkRP.log("Console force-unowned all doors owned by " .. target:Name(), Color(30, 30, 30))
+        DarkRP.log("Console force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
     else
-        DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-unowned all doors owned by " .. target:Name(), Color(30, 30, 30))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unowned all doors owned by " .. target:Nick(), Color(30, 30, 30))
     end
 
-    DarkRP.notify(ply, 0, 4, "All doors of " .. target:Name() .. " are now unowned")
+    DarkRP.notify(ply, 0, 4, "All doors of " .. target:Nick() .. " are now unowned")
 end
 DarkRP.definePrivilegedChatCommand("forceunownall", "DarkRP_SetDoorOwner", unownAll)
 
@@ -67,8 +67,8 @@ local function ccAddOwner(ply, args)
     end
     trace.Entity:keysOwn(target)
 
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-added a door owner with forceown", Color(30, 30, 30))
-    DarkRP.notify(ply, 0, 4, "Forcefully added " .. target:Name())
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-added a door owner with forceown", Color(30, 30, 30))
+    DarkRP.notify(ply, 0, 4, "Forcefully added " .. target:Nick())
 end
 DarkRP.definePrivilegedChatCommand("forceown", "DarkRP_SetDoorOwner", ccAddOwner)
 
@@ -102,8 +102,8 @@ local function ccRemoveOwner(ply, args)
         trace.Entity:removeKeysDoorOwner(target)
     end
 
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-removed a door owner with forceremoveowner", Color(30, 30, 30))
-    DarkRP.notify(ply, 0, 4, "Forcefully removed " .. target:Name())
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-removed a door owner with forceremoveowner", Color(30, 30, 30))
+    DarkRP.notify(ply, 0, 4, "Forcefully removed " .. target:Nick())
 end
 DarkRP.definePrivilegedChatCommand("forceremoveowner", "DarkRP_SetDoorOwner", ccRemoveOwner)
 
@@ -132,7 +132,7 @@ local function ccLock(ply, args)
         trace.Entity:getKeysNonOwnable() and 1 or 0
         ))
 
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-locked a door with forcelock (locked door is saved)", Color(30, 30, 30))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-locked a door with forcelock (locked door is saved)", Color(30, 30, 30))
     DarkRP.notify(ply, 0, 4, "Forcefully locked")
 end
 DarkRP.definePrivilegedChatCommand("forcelock", "DarkRP_ChangeDoorSettings", ccLock)
@@ -161,7 +161,7 @@ local function ccUnLock(ply, args)
         trace.Entity:getKeysNonOwnable() and 1 or 0
         ))
 
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-unlocked a door with forcelock (unlocked door is saved)", Color(30, 30, 30))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unlocked a door with forcelock (unlocked door is saved)", Color(30, 30, 30))
     DarkRP.notify(ply, 0, 4, "Forcefully unlocked")
 end
 DarkRP.definePrivilegedChatCommand("forceunlock", "DarkRP_ChangeDoorSettings", ccUnLock)

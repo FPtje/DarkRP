@@ -16,7 +16,7 @@ local function AutoComplete(command, args)
     elseif not args[3] and FAdmin.Commands.List[string.lower(args[1])] and FAdmin.Commands.List[string.lower(args[1])].ExtraArgs[1] == "<Player>" then
         for k,v in ipairs(player.GetAll()) do
             if args[2] == "" or table.HasValue(FAdmin.FindPlayer(args[2]) or {}, v) then
-                table.insert(autocomplete, command .. " " .. args[1] .. " " .. v:Name())
+                table.insert(autocomplete, command .. " " .. args[1] .. " " .. v:Nick())
             end
         end
     end

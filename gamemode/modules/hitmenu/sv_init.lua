@@ -23,7 +23,7 @@ function plyMeta:requestHit(customer, target, price)
         return false
     end
 
-    DarkRP.createQuestion(DarkRP.getPhrase("accept_hit_request", customer:Name(), target:Name(), DarkRP.formatMoney(price)),
+    DarkRP.createQuestion(DarkRP.getPhrase("accept_hit_request", customer:Nick(), target:Nick(), DarkRP.formatMoney(price)),
         "hit" .. self:UserID() .. "|" .. customer:UserID() .. "|" .. target:UserID(),
         self,
         20,
@@ -164,7 +164,7 @@ function DarkRP.hooks:onHitAccepted(hitman, target, customer)
     DarkRP.notify(customer, 0, 8, DarkRP.getPhrase("hit_accepted"))
     customer.lastHitAccepted = CurTime()
 
-    DarkRP.log("Hitman " .. hitman:Name() .. " accepted a hit on " .. target:Name() .. ", ordered by " .. customer:Name() .. " for " .. DarkRP.formatMoney(hits[hitman].price), Color(255, 0, 255))
+    DarkRP.log("Hitman " .. hitman:Nick() .. " accepted a hit on " .. target:Nick() .. ", ordered by " .. customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price), Color(255, 0, 255))
 end
 
 function DarkRP.hooks:onHitCompleted(hitman, target, customer)
@@ -174,11 +174,11 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
         net.WriteEntity(customer)
     net.Broadcast()
 
-    DarkRP.notifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Name()))
+    DarkRP.notifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Nick()))
 
-    local targetname = IsValid(target) and target:Name() or "disconnected player"
+    local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
-    DarkRP.log("Hitman " .. hitman:Name() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Name() .. " for " .. DarkRP.formatMoney(hits[hitman].price),
+    DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price),
         Color(255, 0, 255))
 
     target:setDarkRPVar("lastHitTime", CurTime())
@@ -193,7 +193,7 @@ function DarkRP.hooks:onHitFailed(hitman, target, reason)
         net.WriteString(reason)
     net.Broadcast()
 
-    local targetname = IsValid(target) and target:Name() or "disconnected player"
+    local targetname = IsValid(target) and target:Nick() or "disconnected player"
 
     DarkRP.log("Hit on " .. targetname .. " failed. Reason: " .. reason, Color(255, 0, 255))
 end
@@ -237,7 +237,7 @@ hook.Add("playerArrested", "Hitman system", function(ply)
     for k, v in ipairs(player.GetAll()) do
         if not GAMEMODE.CivilProtection[v:Team()] then continue end
 
-        DarkRP.notify(v, 0, 8, DarkRP.getPhrase("x_had_hit_ordered_by_y", ply:Name(), hits[ply].customer:Name()))
+        DarkRP.notify(v, 0, 8, DarkRP.getPhrase("x_had_hit_ordered_by_y", ply:Nick(), hits[ply].customer:Nick()))
     end
 
     ply:abortHit(DarkRP.getPhrase("hitman_arrested"))

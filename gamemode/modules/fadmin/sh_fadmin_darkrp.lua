@@ -39,7 +39,7 @@ function FAdmin.FindPlayer(info)
             end
 
             -- Find by Partial Nick
-            if string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
+            if string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
                 found[v] = true
             end
 

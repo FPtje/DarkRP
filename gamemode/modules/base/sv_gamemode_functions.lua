@@ -162,7 +162,7 @@ end
 
 function GM:PlayerSpawnedSENT(ply, ent)
     self.Sandbox.PlayerSpawnedSENT(self, ply, ent)
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") spawned SENT " .. ent:GetClass(), Color(255, 255, 0))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned SENT " .. ent:GetClass(), Color(255, 255, 0))
 end
 
 local function canSpawnWeapon(ply)
@@ -193,7 +193,7 @@ end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
     self.Sandbox.PlayerSpawnedVehicle(self, ply, ent)
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass(), Color(255, 255, 0))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass(), Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
@@ -202,7 +202,7 @@ end
 
 function GM:PlayerSpawnedNPC(ply, ent)
     self.Sandbox.PlayerSpawnedNPC(self, ply, ent)
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") spawned NPC " .. ent:GetClass(), Color(255, 255, 0))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned NPC " .. ent:GetClass(), Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnRagdoll(ply, model)
@@ -418,7 +418,7 @@ function GM:PlayerDeath(ply, weapon, killer)
     if ply:isArrested() and not GAMEMODE.Config.respawninjail  then
         -- If the player died in jail, make sure they can't respawn until their jail sentance is over
         ply.NextSpawnTime = CurTime() + math.ceil(GAMEMODE.Config.jailtimer - (CurTime() - ply.LastJailed)) + 1
-        DarkRP.printMessageAll(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Name()))
+        DarkRP.printMessageAll(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
         DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
     else
         -- Normal death, respawning.
@@ -446,7 +446,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 
     ply.ConfiscatedWeapons = nil
 
-    local KillerName = (killer:IsPlayer() and killer:Name()) or tostring(killer)
+    local KillerName = (killer:IsPlayer() and killer:Nick()) or tostring(killer)
     local WeaponName = IsValid(weapon) and ((weapon:IsPlayer() and weapon:GetActiveWeapon():IsValid() and weapon:GetActiveWeapon():GetClass()) or weapon:GetClass()) or "unknown"
 
     if killer == ply then
@@ -454,7 +454,7 @@ function GM:PlayerDeath(ply, weapon, killer)
         WeaponName = "suicide trick"
     end
 
-    DarkRP.log(ply:Name() .. " was killed by " .. KillerName .. " with a " .. WeaponName, Color(255, 190, 0))
+    DarkRP.log(ply:Nick() .. " was killed by " .. KillerName .. " with a " .. WeaponName, Color(255, 190, 0))
 end
 
 local adminCopWeapons = {
@@ -587,7 +587,7 @@ end
 function GM:PlayerInitialSpawn(ply)
     self.Sandbox.PlayerInitialSpawn(self, ply)
     local sid = ply:SteamID()
-    DarkRP.log(ply:Name() .. " (" .. sid .. ") has joined the game", Color(0, 130, 255))
+    DarkRP.log(ply:Nick() .. " (" .. sid .. ") has joined the game", Color(0, 130, 255))
     ply.DarkRPVars = ply.DarkRPVars or {}
     ply:restorePlayerData()
     initPlayer(ply)
@@ -691,7 +691,7 @@ function GM:PlayerSpawn(ply)
     if not ply.DarkRPInitialised then
         DarkRP.errorNoHalt(
             string.format("DarkRP was unable to introduce player \"%s\" to the game. Expect further errors and shit generally being fucked!",
-                IsValid(ply) and ply:Name() or "unknown"),
+                IsValid(ply) and ply:Nick() or "unknown"),
             1,
             {
                 "This error most likely does not stand on its own, and previous serverside errors have a very good chance of telling you the cause.",
@@ -749,7 +749,7 @@ function GM:PlayerSpawn(ply)
         jobTable.PlayerSpawn(ply)
     end
 
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") spawned")
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned")
 end
 
 function GM:PlayerLoadout(ply)
@@ -885,7 +885,7 @@ function GM:PlayerDisconnected(ply)
     end
 
     ply:keysUnOwnAll()
-    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") disconnected", Color(0, 130, 255))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") disconnected", Color(0, 130, 255))
 
     local agenda = ply:getAgendaTable()
 

@@ -2,7 +2,7 @@ CPPI = CPPI or {}
 CPPI.CPPI_DEFER = 102112 --\102\112 = fp
 CPPI.CPPI_NOTIMPLEMENTED = 7080 --\70\80 = FP
 
-function CPPI:GetName()
+function CPPI:GetNick()
 	return "Falco's prop protection"
 end
 

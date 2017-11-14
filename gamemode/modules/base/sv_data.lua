@@ -394,7 +394,7 @@ local function resetAllMoney(ply,cmd,args)
         v:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
     end
     if ply:IsPlayer() then
-        DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Name()))
+        DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
     else
         DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
     end

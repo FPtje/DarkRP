@@ -25,10 +25,10 @@ local function onRagdollArrested(arrestee, _, arrester)
 
     arrestee:arrest(nil, arrester)
 
-    DarkRP.notify(arrestee, 0, 20, DarkRP.getPhrase("youre_arrested_by", arrester:Name()))
+    DarkRP.notify(arrestee, 0, 20, DarkRP.getPhrase("youre_arrested_by", arrester:Nick()))
 
     if arrester.SteamName then
-        DarkRP.log(arrester:Name() .. " (" .. arrester:SteamID() .. ") arrested " .. arrestee:Name(), Color(0, 255, 255))
+        DarkRP.log(arrester:Nick() .. " (" .. arrester:SteamID() .. ") arrested " .. arrestee:Nick(), Color(0, 255, 255))
     end
 end
 

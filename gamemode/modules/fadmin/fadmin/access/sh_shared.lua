@@ -255,7 +255,7 @@ FAdmin.StartHooks["AccessFunctions"] = function()
     FAdmin.Commands.AddCommand("Admins", function(ply)
         if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return false end
         for k,v in ipairs(player.GetAll()) do
-            ply:PrintMessage(HUD_PRINTCONSOLE, v:Name() .. "\t|\t" .. v:GetUserGroup())
+            ply:PrintMessage(HUD_PRINTCONSOLE, v:Nick() .. "\t|\t" .. v:GetUserGroup())
         end
         return true
     end

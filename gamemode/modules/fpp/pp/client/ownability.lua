@@ -83,9 +83,9 @@ function FPP.entGetTouchReason(ent, touchType)
     local owner = ent:CPPIGetOwner()
 
     if reasonNr == 1 then -- convert owner to the actual player
-        return not isnumber(owner) and IsValid(owner) and owner:Name() or "Unknown player"
+        return not isnumber(owner) and IsValid(owner) and owner:Nick() or "Unknown player"
     elseif reasonNr == 6 then
-        return "Buddy (" .. (IsValid(owner) and owner:Name() or "Unknown player") .. ")"
+        return "Buddy (" .. (IsValid(owner) and owner:Nick() or "Unknown player") .. ")"
     end
 
     return reason

@@ -12,8 +12,8 @@ function FPP.LoadBuddies()
             for num,ply in ipairs(player.GetAll()) do --If the buddies are in the server then add them serverside
                 if ply:SteamID() == v.steamid then
                     -- update the name
-                    sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Name()) .. " WHERE steamid = " .. sql.SQLStr(v.steamid) .. ";")
-                    FPP.Buddies[v.steamid].name = ply:Name()
+                    sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Nick()) .. " WHERE steamid = " .. sql.SQLStr(v.steamid) .. ";")
+                    FPP.Buddies[v.steamid].name = ply:Nick()
                     RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
                 end
             end
@@ -89,9 +89,9 @@ function FPP.NewBuddy(um)
 
         RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
         -- update the name
-        sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Name()) .. " WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
+        sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Nick()) .. " WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
         FPP.Buddies[SteamID] = FPP.Buddies[SteamID] or {}
-        FPP.Buddies[SteamID].name = ply:Name()
+        FPP.Buddies[SteamID].name = ply:Nick()
     end
 end
 usermessage.Hook("FPP_CheckBuddy", FPP.NewBuddy)

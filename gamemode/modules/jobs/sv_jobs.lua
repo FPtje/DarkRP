@@ -93,7 +93,7 @@ function meta:changeTeam(t, force, suppressNotification)
     end
     self:updateJob(TEAM.name)
     self:setSelfDarkRPVar("salary", TEAM.salary)
-    notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Name(), TEAM.name))
+    notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
 
 
     if self:getDarkRPVar("HasGunlicense") and GAMEMODE.Config.revokeLicenseOnJobChange then
@@ -137,7 +137,7 @@ function meta:changeTeam(t, force, suppressNotification)
 
     self:SetTeam(t)
     hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
-    DarkRP.log(self:Name() .. " (" .. self:SteamID() .. ") changed to " .. team.GetName(t), nil, Color(100, 0, 255))
+    DarkRP.log(self:Nick() .. " (" .. self:SteamID() .. ") changed to " .. team.GetName(t), nil, Color(100, 0, 255))
     if self:InVehicle() then self:ExitVehicle() end
     if GAMEMODE.Config.norespawn and self:Alive() then
         self:StripWeapons()
@@ -246,7 +246,7 @@ local function ChangeJob(ply, args)
     end
 
     local job = replace or args
-    DarkRP.notifyAll(2, 4, DarkRP.getPhrase("job_has_become", ply:Name(), job))
+    DarkRP.notifyAll(2, 4, DarkRP.getPhrase("job_has_become", ply:Nick(), job))
     ply:updateJob(job)
     return ""
 end
@@ -269,9 +269,9 @@ local function FinishDemote(vote, choice)
         end
 
         hook.Call("onPlayerDemoted", nil, vote.info.source, target, vote.info.reason)
-        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demoted", target:Name()))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demoted", target:Nick()))
     else
-        DarkRP.notifyAll(1, 4, DarkRP.getPhrase("demoted_not", target:Name()))
+        DarkRP.notifyAll(1, 4, DarkRP.getPhrase("demoted_not", target:Nick()))
     end
 end
 
@@ -311,9 +311,9 @@ local function Demote(ply, args)
     if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
     else
-        DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Name(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
+        DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Nick(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
 
-        local voteInfo = DarkRP.createVote(p:Name() .. ":\n" .. DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote, {
+        local voteInfo = DarkRP.createVote(p:Nick() .. ":\n" .. DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote, {
             [p] = true,
             [ply] = true
         }, function(vote)
@@ -326,8 +326,8 @@ local function Demote(ply, args)
 
         if voteInfo then
             -- Vote has started
-            DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Name(), p:Name()))
-            DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Name(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Name(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
+            DarkRP.notifyAll(0, 4, DarkRP.getPhrase("demote_vote_started", ply:Nick(), p:Nick()))
+            DarkRP.log(DarkRP.getPhrase("demote_vote_started", string.format("%s(%s)[%s]", ply:Nick(), ply:SteamID(), team.GetName(ply:Team())), string.format("%s(%s)[%s] for %s", p:Nick(), p:SteamID(), team.GetName(p:Team()), reason)), Color(255, 128, 255, 255))
             p.IsBeingDemoted = true
         end
         ply.LastVoteCop = CurTime()
@@ -372,7 +372,7 @@ local function SwitchJob(ply) --Idea by Godness.
     end
 
     ply.RequestedJobSwitch = true
-    DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Name()), "switchjob" .. tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+    DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob" .. tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_requested"))
 
     return ""
@@ -417,9 +417,9 @@ local function DoTeamBan(ply, args)
     if ply:EntIndex() == 0 then
         nick = "Console"
     else
-        nick = ply:Name()
+        nick = ply:Nick()
     end
-    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Name(), team.GetName(tonumber(Team))))
+    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 end
 DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
@@ -462,8 +462,8 @@ local function DoTeamUnBan(ply, args)
     if ply:EntIndex() == 0 then
         nick = "Console"
     else
-        nick = ply:Name()
+        nick = ply:Nick()
     end
-    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Name(), team.GetName(tonumber(Team))))
+    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teamunbanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
 end
 DarkRP.definePrivilegedChatCommand("teamunban", "DarkRP_AdminCommands", DoTeamUnBan)

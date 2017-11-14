@@ -17,7 +17,7 @@ local function AddToChat(bits)
     if not IsValid(ply) then return end
 
     if prefixText == "" or not prefixText then
-        prefixText = ply:Name()
+        prefixText = ply:Nick()
         prefixText = prefixText ~= "" and prefixText or ply:SteamName()
     end
 
@@ -83,8 +83,8 @@ People who have contributed (ordered by commits, with at least two commits)
 ]]
 
 local function credits(um)
-    chat.AddNonParsedText(Color(255,0,0,255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255,0,0,255), "] ", Color(255, 255, 255, 255), DarkRP.getPhrase("credits_see_console"))
+    chat.AddNonParsedText(Color(255, 0, 0, 255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255, 0, 0, 255), "] ", Color(255, 255, 255, 255), DarkRP.getPhrase("credits_see_console"))
 
-    MsgC(Color(255,0,0,255), DarkRP.getPhrase("credits_for", GAMEMODE.Name), Color(255,255,255,255), creds)
+    MsgC(Color(255, 0, 0, 255), DarkRP.getPhrase("credits_for", GAMEMODE.Name), Color(255, 255, 255, 255), creds)
 end
 usermessage.Hook("DarkRP_Credits", credits)

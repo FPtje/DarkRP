@@ -152,7 +152,7 @@ local function FPP_SetSetting(ply, cmd, args)
             MySQLite.query("UPDATE " .. args[1] .. " SET setting = " .. args[3] .. " WHERE var = " .. sql.SQLStr(args[2]) .. ";")
         end
 
-        FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " set " .. string.lower(string.gsub(args[1], "FPP_", "")) .. " " .. args[2] .. " to " .. tostring(args[3]), tobool(tonumber(args[3])))
+        FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " set " .. string.lower(string.gsub(args[1], "FPP_", "")) .. " " .. args[2] .. " to " .. tostring(args[3]), tobool(tonumber(args[3])))
     end)
 
     FPP.calculatePlayerPrivilege("FPP_TouchOtherPlayersProps", function()
@@ -172,7 +172,7 @@ local function AddBlocked(ply, cmd, args)
 
     MySQLite.query(string.format("INSERT INTO FPP_BLOCKED1 (var, setting) VALUES(%s, %s);", sql.SQLStr(args[1]), sql.SQLStr(args[2])))
 
-    FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " added " .. args[2] .. " to the " .. args[1] .. " black/whitelist", true)
+    FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " added " .. args[2] .. " to the " .. args[1] .. " black/whitelist", true)
 
     FPP.recalculateCanTouch(player.GetAll(), ents.FindByClass(args[2]))
 end
@@ -200,7 +200,7 @@ local function AddBlockedModel(ply, cmd, args)
         if FPP.BlockedModels[model] then FPP.Notify(ply, string.format([["%s" is already in the black/whitelist]], model), false) continue end
         FPP.BlockedModels[model] = true
         MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. sql.SQLStr(model) .. ");")
-        FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " added " .. model .. " to the blocked models black/whitelist", true)
+        FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " added " .. model .. " to the blocked models black/whitelist", true)
     end
 end
 concommand.Add("FPP_AddBlockedModel", runIfAccess("FPP_Settings", AddBlockedModel))
@@ -211,7 +211,7 @@ local function RemoveBlocked(ply, cmd, args)
     FPP.Blocked[args[1]][args[2]] = nil
 
     MySQLite.query("DELETE FROM FPP_BLOCKED1 WHERE var = " .. sql.SQLStr(args[1]) .. " AND setting = " .. sql.SQLStr(args[2]) .. ";")
-    FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " removed " .. args[2] .. " from the " .. args[1] .. " black/whitelist", false)
+    FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed " .. args[2] .. " from the " .. args[1] .. " black/whitelist", false)
     FPP.recalculateCanTouch(player.GetAll(), ents.FindByClass(args[2]))
 end
 concommand.Add("FPP_RemoveBlocked", runIfAccess("FPP_Settings", RemoveBlocked))
@@ -224,7 +224,7 @@ local function RemoveBlockedModel(ply, cmd, args)
         FPP.BlockedModels[model] = nil
 
         MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = " .. sql.SQLStr(model) .. ";")
-        FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " removed " .. model .. " from the blocked models black/whitelist", false)
+        FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed " .. model .. " from the blocked models black/whitelist", false)
     end
 end
 concommand.Add("FPP_RemoveBlockedModel", runIfAccess("FPP_Settings", RemoveBlockedModel))
@@ -260,12 +260,12 @@ local function ShareProp(ply, cmd, args)
         else
             if toggle and not table.HasValue(ent.AllowedPlayers, target) then
                 table.insert(ent.AllowedPlayers, target)
-                FPP.Notify(target, ply:Name() .. " shared an entity with you!", true)
+                FPP.Notify(target, ply:Nick() .. " shared an entity with you!", true)
             elseif not toggle then
                 for k, v in pairs(ent.AllowedPlayers) do
                     if v == target then
                         table.remove(ent.AllowedPlayers, k)
-                        FPP.Notify(target, ply:Name() .. " unshared an entity with you!", false)
+                        FPP.Notify(target, ply:Nick() .. " unshared an entity with you!", false)
                     end
                 end
             end
@@ -787,7 +787,7 @@ local function CleanupDisconnected(ply, cmd, args)
                 v:Remove()
             end
         end
-        FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " removed all disconnected players' props", true)
+        FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed all disconnected players' props", true)
         return
     elseif not tonumber(args[1]) or not IsValid(Player(tonumber(args[1]))) then
         FPP.Notify(ply, "Invalid player", false)
@@ -800,7 +800,7 @@ local function CleanupDisconnected(ply, cmd, args)
             v:Remove()
         end
     end
-    FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " removed " .. Player(args[1]):Name() .. "'s entities", true)
+    FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed " .. Player(args[1]):Nick() .. "'s entities", true)
 end
 concommand.Add("FPP_Cleanup", runIfAccess("FPP_Cleanup", CleanupDisconnected))
 
@@ -817,7 +817,7 @@ local function SetToolRestrict(ply, cmd, args)
 
         --Save to database!
         MySQLite.query("REPLACE INTO FPP_TOOLADMINONLY VALUES(" .. sql.SQLStr(toolname) .. ", " .. sql.SQLStr(args[3]) .. ");")
-        FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " changed the admin status of " .. toolname , true)
+        FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " changed the admin status of " .. toolname , true)
     elseif RestrictWho == "team" then
         FPP.RestrictedTools[toolname]["team"] = FPP.RestrictedTools[toolname]["team"] or {}
         if teamtoggle == 0 then
@@ -832,10 +832,10 @@ local function SetToolRestrict(ply, cmd, args)
         end--Remove from the table if it's in there AND it's 0 otherwise do nothing
 
         if tobool(teamtoggle) then -- if the team restrict is enabled
-            FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " restricted " .. toolname .. " to certain teams", true)
+            FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " restricted " .. toolname .. " to certain teams", true)
             MySQLite.query("REPLACE INTO FPP_TOOLTEAMRESTRICT VALUES(" .. sql.SQLStr(toolname) .. ", " .. tonumber(args[3]) .. ");")
         else -- otherwise if the restriction for the team is being removed
-            FPP.NotifyAll(((ply.Nick and ply:Name()) or "Console") .. " removed teamrestrictions from " .. toolname, true)
+            FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " removed teamrestrictions from " .. toolname, true)
             MySQLite.query("DELETE FROM FPP_TOOLTEAMRESTRICT WHERE toolname = " .. sql.SQLStr(toolname) .. " AND team = " .. tonumber(args[3]))
         end
     end

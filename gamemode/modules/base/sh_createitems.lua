@@ -159,14 +159,14 @@ local function addTeamCommands(CTeam, max)
                 return ""
             end
 
-            DarkRP.createVote(DarkRP.getPhrase("wants_to_be", ply:Name(), CTeam.name), "job", ply, 20, function(vote, choice)
+            DarkRP.createVote(DarkRP.getPhrase("wants_to_be", ply:Nick(), CTeam.name), "job", ply, 20, function(vote, choice)
                 local target = vote.target
                 if not IsValid(target) then return end
 
                 if choice >= 0 then
                     target:changeTeam(k)
                 else
-                    DarkRP.notifyAll(1, 4, DarkRP.getPhrase("has_not_been_made_team", target:Name(), CTeam.name))
+                    DarkRP.notifyAll(1, 4, DarkRP.getPhrase("has_not_been_made_team", target:Nick(), CTeam.name))
                 end
             end, nil, nil, {
                 targetTeam = k
@@ -264,7 +264,7 @@ local function addTeamCommands(CTeam, max)
         target:changeTeam(k, true)
         local nick
         if (ply:EntIndex() ~= 0) then
-            nick = ply:Name()
+            nick = ply:Nick()
         else
             nick = "Console"
         end
@@ -387,7 +387,7 @@ plyMeta.getJobTable = function(ply)
     if not tbl and (ply.DarkRPInitialised or ply.DarkRPDataRetrievalFailed) then
         DarkRP.error(
             string.format("There is a player with an invalid team!\n\nThe player's name is %s, their team number is \"%s\", which has the name \"%s\"",
-                ply:EntIndex() == 0 and "Console" or IsValid(ply) and ply:Name() or "unknown",
+                ply:EntIndex() == 0 and "Console" or IsValid(ply) and ply:Nick() or "unknown",
                 ply:Team(),
                 team.GetName(ply:Team())),
             1,

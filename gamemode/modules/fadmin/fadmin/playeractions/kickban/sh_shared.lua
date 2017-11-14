@@ -55,7 +55,7 @@ FAdmin.StartHooks["kickbanning"] = function()
                     continue
                 end
 
-                net.WriteString(target:Name())
+                net.WriteString(target:Nick())
             end
 
             net.WriteString(info[2])
@@ -93,7 +93,7 @@ FAdmin.StartHooks["kickbanning"] = function()
                     continue
                 end
 
-                net.WriteString(target:Name())
+                net.WriteString(target:Nick())
             end
 
             net.WriteUInt(info[2], 32)

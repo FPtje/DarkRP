@@ -2,7 +2,8 @@ local function storeJail(ply, add, hasAccess)
     if not IsValid(ply) then return end
 
     -- Admin or Chief can set the Jail Position
-    if (RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].chief and GAMEMODE.Config.chiefjailpos) or hasAccess then
+    local Team = ply:Team()
+    if (RPExtraTeams[Team] and RPExtraTeams[Team].chief and GAMEMODE.Config.chiefjailpos) or hasAccess then
         DarkRP.storeJailPos(ply, add)
     else
         local str = DarkRP.getPhrase("admin_only")

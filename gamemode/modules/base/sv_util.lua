@@ -56,7 +56,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
         end
     end
 
-    if PlayerName == ply:Name() then PlayerName = "" end -- If it's just normal chat, why not cut down on networking and get the name on the client
+    if PlayerName == ply:Nick() then PlayerName = "" end -- If it's just normal chat, why not cut down on networking and get the name on the client
 
     net.Start("DarkRP_Chat")
         net.WriteUInt(col.r, 8)
@@ -191,7 +191,7 @@ local function LookPersonUp(ply, cmd, args)
         DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
         return
     end
-    DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("name", P:Name()))
+    DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("name", P:Nick()))
     DarkRP.printConsoleMessage(ply, "Steam " .. DarkRP.getPhrase("name", P:SteamName()))
     DarkRP.printConsoleMessage(ply, "Steam ID: " .. P:SteamID())
     DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("job", team.GetName(P:Team())))

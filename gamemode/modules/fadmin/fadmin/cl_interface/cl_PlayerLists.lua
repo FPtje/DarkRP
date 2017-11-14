@@ -1,7 +1,7 @@
 local function SortedPairsByFunction(Table, Sorted, SortDown)
     local CopyTable = {}
     for k,v in pairs(Table) do
-        table.insert(CopyTable, {NAME = tostring(v:Name()), PLY = v})
+        table.insert(CopyTable, {NAME = tostring(v:Nick()), PLY = v})
     end
     table.SortByMember(CopyTable, "NAME", SortDown)
 

@@ -35,9 +35,9 @@ end
 
 function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarget, LogMSG)
     if not target then return end
-    local Targets = (target.IsPlayer and target:IsPlayer() and target:Name()) or ""
+    local Targets = (target.IsPlayer and target:IsPlayer() and target:Nick()) or ""
 
-    local plyNick = IsValid(ply) and ply:IsPlayer() and ply:Name() or "Console"
+    local plyNick = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
     local plySteamID = IsValid(ply) and ply:IsPlayer() and ply:SteamID() or "Console"
     local bad = false
 
@@ -46,7 +46,7 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
             if #target == 0 then Targets = "no one" bad = true end
             for k,v in pairs(target) do
                 local suffix = ((k == #target-1) and " and ") or (k ~= #target and ", ") or ""
-                local Name = (v == ply and "yourself") or v:Name()
+                local Name = (v == ply and "yourself") or v:Nick()
 
                 if v ~= ply then FAdmin.Messages.SendMessage(v, 2, string.format(MessageToTarget, plyNick)) end
                 Targets = Targets .. Name .. suffix

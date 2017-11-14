@@ -64,7 +64,7 @@ function DarkRP.findPlayer(info)
             return v
         end
 
-        if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:Nick()), string.lower(tostring(info)), 1, true) ~= nil then
             return v
         end
 
@@ -113,7 +113,7 @@ function DarkRP.findPlayers(info)
             -- Find by Steam ID
             if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") or
             -- Find by Partial Nick
-            string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
+            string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
             -- Find by steam name
             (v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
                 found[v] = true
@@ -211,7 +211,7 @@ Convenience function to return the players sorted by name
 ---------------------------------------------------------------------------]]
 function DarkRP.nickSortedPlayers()
     local plys = player.GetAll()
-    table.sort(plys, function(a,b) return a:Name() < b:Name() end)
+    table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
     return plys
 end
 

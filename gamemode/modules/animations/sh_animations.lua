@@ -63,7 +63,8 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 
     -- Hobo throwing poop!
     local Weapon = ply:GetActiveWeapon()
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].hobo and not ply.ThrewPoop and Weapon:IsValid() and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
+    local Team = ply:Team()
+    if RPExtraTeams[Team] and RPExtraTeams[Team].hobo and not ply.ThrewPoop and Weapon:IsValid() and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
         ply.ThrewPoop = true
         ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
 

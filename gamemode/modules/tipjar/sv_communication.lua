@@ -35,14 +35,14 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
 
     DarkRP.payPlayer(ply, owner, amount)
 
-    tipjar:AddDonation(ply:Name(), amount)
+    tipjar:AddDonation(ply:Nick(), amount)
 
     tipjar:EmitSound("ambient/alarms/warningbell1.wav")
 
     local strAmount = DarkRP.formatMoney(amount)
 
-    DarkRP.notify(ply,   NOTIFY_HINT, 4, DarkRP.getPhrase("you_donated", strAmount, owner:Name()))
-    DarkRP.notify(owner, NOTIFY_HINT, 4, DarkRP.getPhrase("has_donated", ply:Name(),   strAmount))
+    DarkRP.notify(ply,   NOTIFY_HINT, 4, DarkRP.getPhrase("you_donated", strAmount, owner:Nick()))
+    DarkRP.notify(owner, NOTIFY_HINT, 4, DarkRP.getPhrase("has_donated", ply:Nick(),   strAmount))
 
     net.Start("DarkRP_TipJarDonate")
         net.WriteEntity(tipjar)

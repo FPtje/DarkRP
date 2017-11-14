@@ -172,7 +172,7 @@ function SWEP:PrimaryAttack()
 
     if SERVER then return end
     for _, wep in pairs(weps) do
-        table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
+        table.insert(result, wep:GetPrintNick() and language.GetPhrase(wep:GetPrintNick()) or wep:GetClass())
     end
 
     result = table.concat(result, ", ")

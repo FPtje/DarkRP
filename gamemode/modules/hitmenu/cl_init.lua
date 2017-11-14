@@ -59,7 +59,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
 
     if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
         x, y = chat.GetChatBoxPos()
-        local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Name())
+        local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Nick())
         draw.DrawNonParsedText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
         draw.DrawNonParsedText(text, "HUDNumber5", x, y, textCol2, 0)
     end

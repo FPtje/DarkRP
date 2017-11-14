@@ -47,7 +47,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
 
         for k,v in pairs(FAdmin.FindPlayer(Args[#Args]) or {}) do
             if not IsValid(v) then continue end
-            table.insert(players, v:Name())
+            table.insert(players, v:Nick())
         end
 
         targets = table.concat(players, ", ")
@@ -93,7 +93,7 @@ hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
                 plyIndex = 1
             end
 
-            return string.sub(command, 1, string.find(command, " ")) .. " " .. string.sub(player.GetAll()[plyIndex]:Name(), 1, string.find(player.GetAll()[plyIndex]:Name(), " "))
+            return string.sub(command, 1, string.find(command, " ")) .. " " .. string.sub(player.GetAll()[plyIndex]:Nick(), 1, string.find(player.GetAll()[plyIndex]:Nick(), " "))
         end
     end
 end)
