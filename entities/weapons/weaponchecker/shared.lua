@@ -171,8 +171,8 @@ function SWEP:PrimaryAttack()
     hook.Call("playerWeaponsChecked", nil, self:GetOwner(), trace.Entity, weps)
 
     if SERVER then return end
-    for _, wep in pairs(weps) do
-        table.insert(result, wep:GetPrintNick() and language.GetPhrase(wep:GetPrintNick()) or wep:GetClass())
+    for _, wep in ipairs(weps) do
+        table.insert(result, wep:PrintName() and language.GetPhrase(wep:PrintName()) or wep:GetClass())
     end
 
     result = table.concat(result, ", ")
