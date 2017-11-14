@@ -153,7 +153,7 @@ local function warrantCommand(ply, args)
     if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then -- No need to search through all the teams if the player is a mayor
         local mayors = {}
 
-        for k,v in pairs(RPExtraTeams) do
+        for k,v in ipairs(RPExtraTeams) do
             if v.mayor then
                 table.Add(mayors, team.GetPlayers(k))
             end

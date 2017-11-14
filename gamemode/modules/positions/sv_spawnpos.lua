@@ -2,7 +2,7 @@ local function SetSpawnPos(ply, args)
     local pos = ply:GetPos()
     local t
 
-    for k,v in pairs(RPExtraTeams) do
+    for k,v in ipairs(RPExtraTeams) do
         if args == v.command then
             t = k
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("created_spawnpos", v.name))
@@ -21,7 +21,7 @@ local function AddSpawnPos(ply, args)
     local pos = ply:GetPos()
     local t
 
-    for k,v in pairs(RPExtraTeams) do
+    for k,v in ipairs(RPExtraTeams) do
         if args == v.command then
             t = k
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("updated_spawnpos", v.name))
@@ -39,7 +39,7 @@ DarkRP.definePrivilegedChatCommand("addspawn", "DarkRP_AdminCommands", AddSpawnP
 local function RemoveSpawnPos(ply, args)
     local t
 
-    for k,v in pairs(RPExtraTeams) do
+    for k,v in ipairs(RPExtraTeams) do
         if args == v.command then
             t = k
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("updated_spawnpos", v.name))

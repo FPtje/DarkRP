@@ -26,13 +26,6 @@ local function HMAFKHook(ply, afk)
 end
 hook.Add("playerSetAFK", "Hungermod", HMAFKHook)
 
-timer.Simple(0, function()
-    for k, v in ipairs(player.GetAll()) do
-        if v:getDarkRPVar("Energy") ~= nil then continue end
-        v:newHungerData()
-    end
-end)
-
 local function BuyFood(ply, args)
     if args == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
