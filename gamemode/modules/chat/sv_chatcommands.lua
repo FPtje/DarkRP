@@ -116,7 +116,8 @@ local function MayorBroadcast(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-    if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then DarkRP.notify(ply, 1, 4, "You have to be mayor") return "" end
+    local Team = ply:Team()
+    if not RPExtraTeams[Team] or not RPExtraTeams[Team].mayor then DarkRP.notify(ply, 1, 4, "You have to be mayor") return "" end
     local DoSay = function(text)
         if text == "" then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
