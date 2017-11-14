@@ -223,5 +223,5 @@ function DarkRP.openHitMenu(hitman)
     frame:AddPlayerRows()
     frame:SetVisible(true)
     frame:MakePopup()
-	frame:ParentToHUD()
+    frame:ParentToHUD()
 end
