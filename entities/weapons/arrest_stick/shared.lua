@@ -53,7 +53,6 @@ function SWEP:Deploy()
     return BaseClass.Deploy(self)
 end
 
-local distance = SWEP.stickRange * SWEP.stickRange
 function SWEP:PrimaryAttack()
     BaseClass.PrimaryAttack(self)
 
@@ -71,7 +70,8 @@ function SWEP:PrimaryAttack()
 
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() and p:IsSolid() end)
 
-    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > distance) or not ent:IsPlayer() then
+    local stickRange = self.stickRange * self.stickRange
+    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > stickRange * stickRange) or not ent:IsPlayer() then
         return
     end
 
