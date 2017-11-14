@@ -55,7 +55,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
     Frame.btnMinim:SetVisible(false)
     Frame:SetVisible(true)
     Frame:MakePopup()
-	Frame:ParentToHUD()
+    Frame:ParentToHUD()
 
     function Frame:Think()
         local LAEnt = LocalPlayer():GetEyeTrace().Entity

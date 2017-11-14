@@ -87,7 +87,7 @@ local function ramDoor(ply, trace, ent)
     -- Be able to open the door if any member of the door group is warranted
     local keysDoorGroup = ent:getKeysDoorGroup()
     if GAMEMODE.Config.doorwarrants and keysDoorGroup then
-		local teamDoors = RPExtraTeamDoors[keysDoorGroup]
+        local teamDoors = RPExtraTeamDoors[keysDoorGroup]
         if teamDoors then
 			allowed = false
 			for _, v in ipairs(player.GetAll()) do
