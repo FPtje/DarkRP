@@ -195,7 +195,7 @@ local function GroupMsg(ply, args)
         local color = Color(255, 255, 255, 255)
         for _, target in ipairs(player.GetAll()) do
             -- The target is in any of the group chats
-            for k, func in ipairs(groupChats) do
+            for _, func in ipairs(groupChats) do
                 if not func(target, ply) then continue end
 
                 DarkRP.talkToPerson(target, col, phrase .. " " .. name, color, text, ply)

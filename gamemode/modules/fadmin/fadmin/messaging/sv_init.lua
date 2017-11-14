@@ -44,7 +44,7 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
     if ply ~= target then
         if type(target) == "table" then
             if #target == 0 then Targets = "no one" bad = true end
-            for k,v in pairs(target) do
+            for k, v in pairs(target) do
                 local suffix = ((k == #target-1) and " and ") or (k ~= #target and ", ") or ""
                 local Name = (v == ply and "yourself") or v:Nick()
 

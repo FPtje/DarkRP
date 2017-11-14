@@ -162,7 +162,7 @@ local flammablePropsKV = { -- Class names as index
 }
 
 local flammableProps = {} -- Numbers as index
-for k,v in pairs(flammablePropsKV) do table.insert(flammableProps, k) end
+for k in pairs(flammablePropsKV) do table.insert(flammableProps, k) end
 
 
 local function IsFlammable(ent)
@@ -182,7 +182,7 @@ local function FireSpread(ent, chanceDiv)
     if rand > 1 then return end
     local en = ents.FindInSphere(ent:GetPos(), math.random(20, 90))
 
-    for k, v in ipairs(en) do
+    for _, v in ipairs(en) do
         if not IsFlammable(v) or v == ent then continue end
 
         if not v.burned then
@@ -197,7 +197,7 @@ local function FireSpread(ent, chanceDiv)
         if (color.b - 51) >= 0 then color.b = color.b - 51 end
         v:SetColor(color)
         if (color.r + color.g + color.b) < 103 and math.random(1, 100) < 35 then
-            v:Fire("enablemotion","",0)
+            v:Fire("enablemotion", "", 0)
             constraint.RemoveAll(v)
         end
     end

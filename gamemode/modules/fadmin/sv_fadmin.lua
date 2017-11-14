@@ -15,7 +15,7 @@ local function AddDir(dir)
         end
     end
 
-    for k, v in pairs(files) do
+    for _, v in pairs(files) do
         resource.AddFile(dir .. "/" .. v)
     end
 end

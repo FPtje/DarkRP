@@ -32,7 +32,7 @@ FAdmin.StartHooks["Slap"] = function()
         Title:SetTextColor(color_black)
         menu:AddPanel(Title)
 
-        for k,v in ipairs(Damages) do
+        for _, v in ipairs(Damages) do
             local SubMenu = menu:AddSubMenu(v, function() RunConsoleCommand("_FAdmin", "slap", ply:UserID(), v) end)
 
             local SubMenuTitle = vgui.Create("DLabel")

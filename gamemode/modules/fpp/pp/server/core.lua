@@ -107,7 +107,7 @@ if undo then
 
     function undo.Finish(...)
         if IsValid(UndoPlayer) then
-            for k,v in pairs(Undo) do
+            for _, v in pairs(Undo) do
                 v:CPPISetOwner(UndoPlayer)
             end
         end
@@ -348,7 +348,7 @@ local allweapons = {
 ["weapon_bugbait"] = true}
 
 timer.Simple(5, function()
-    for _,v in ipairs(weapons.GetList()) do
+    for _, v in ipairs(weapons.GetList()) do
         if v.ClassName then allweapons[string.lower(v.ClassName or "")] = true end
     end
 end)
@@ -486,7 +486,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
     if not EntTable then return end
 
 
-    for k,v in pairs(EntTable) do
+    for k, v in pairs(EntTable) do
         local lowerClass = string.lower(v.Class)
 
         if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then

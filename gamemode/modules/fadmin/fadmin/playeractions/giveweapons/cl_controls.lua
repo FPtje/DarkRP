@@ -93,7 +93,7 @@ function PANEL2:BuildList()
         AmmoPan:SetPadding(2)
         AmmoPan:SetAutoSize(true)
 
-        for k, v in SortedPairs(FAdmin.AmmoTypes) do
+        for k in SortedPairs(FAdmin.AmmoTypes) do
             local Icon = vgui.CreateFromTable(WeaponIcon, self)
             Icon:Setup(k, k, "spawnicons/models/items/boxmrounds60x60.png", false, self, true) -- Gets created clientside by GMOD when someone is after that model, or trying to buy ammo.
             AmmoPan:AddItem(Icon)
@@ -141,7 +141,7 @@ function PANEL2:BuildList()
         Content:SetPadding(2)
         Content:SetAutoSize(true)
 
-        for k, WeaponTable in SortedPairsByMemberValue(v, "PrintName") do
+        for _, WeaponTable in SortedPairsByMemberValue(v, "PrintName") do
             local Icon = vgui.CreateFromTable(WeaponIcon, self)
             Icon:Setup(WeaponTable.PrintName or WeaponTable.ClassName, WeaponTable.ClassName, WeaponTable.SpawnMenuIcon, WeaponTable.AdminSpawnable and not WeaponTable.Spawnable, self)
 

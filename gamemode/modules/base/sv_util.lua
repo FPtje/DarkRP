@@ -50,7 +50,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local col = team.GetColor(ply:Team())
     local filter = {}
 
-    for k, v in ipairs(ents) do
+    for _, v in ipairs(ents) do
         if v:IsPlayer() then
             table.insert(filter, v)
         end
@@ -102,7 +102,7 @@ function DarkRP.isEmpty(vector, ignore)
 
     local b = true
 
-    for k,v in ipairs(ents.FindInSphere(vector, 35)) do
+    for _, v in ipairs(ents.FindInSphere(vector, 35)) do
         if (v:IsNPC() or v:IsPlayer() or v:GetClass() == "prop_physics" or v.NotEmptyPos) and not table.HasValue(ignore, v) then
             b = false
             break

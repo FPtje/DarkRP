@@ -51,7 +51,7 @@ function FAdmin.FindPlayer(info)
 
     local players = {}
     local empty = true
-    for k, v in pairs(found or {}) do
+    for k in pairs(found or {}) do
         empty = false
         table.insert(players, k)
     end
@@ -75,8 +75,8 @@ FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
     This way there will be no hassle with which plugin loads first, which one next etc.
 ]]
 timer.Simple(0, function()
-    for k,v in pairs(FAdmin.StartHooks) do if type(k) ~= "string" then FAdmin.StartHooks[k] = nil end end
-    for k,v in SortedPairs(FAdmin.StartHooks) do
+    for k in pairs(FAdmin.StartHooks) do if type(k) ~= "string" then FAdmin.StartHooks[k] = nil end end
+    for _, v in SortedPairs(FAdmin.StartHooks) do
         v()
     end
 end)

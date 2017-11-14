@@ -16,7 +16,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
     FAdmin.ScoreBoard.Player.Controls.AvatarBackground:SetVisible(true)
 
     FAdmin.ScoreBoard.Player.InfoPanels = FAdmin.ScoreBoard.Player.InfoPanels or {}
-    for k,v in pairs(FAdmin.ScoreBoard.Player.InfoPanels) do
+    for k, v in pairs(FAdmin.ScoreBoard.Player.InfoPanels) do
         if IsValid(v) then
             v:Remove()
             FAdmin.ScoreBoard.Player.InfoPanels[k] = nil
@@ -130,7 +130,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
     FAdmin.ScoreBoard.Player.Controls.ButtonPanel:DockMargin(5, 5, 5, 5)
 
 
-    for k,v in ipairs(FAdmin.ScoreBoard.Player.ActionButtons) do
+    for _, v in ipairs(FAdmin.ScoreBoard.Player.ActionButtons) do
         if v.Visible == true or (type(v.Visible) == "function" and v.Visible(FAdmin.ScoreBoard.Player.Player) == true) then
             local ActionButton = vgui.Create("FAdminActionButton")
             if type(v.Image) == "string" then

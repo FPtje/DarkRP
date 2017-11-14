@@ -126,7 +126,7 @@ function DarkRP.initDatabase()
             MySQLite.query("show triggers", function(data)
                 -- Check if the trigger exists first
                 if data then
-                    for k,v in pairs(data) do
+                    for _, v in ipairs(data) do
                         if v.Trigger == "JobPositionFKDelete" then
                             return
                         end
@@ -136,11 +136,11 @@ function DarkRP.initDatabase()
                 MySQLite.query("SHOW PRIVILEGES", function(privs)
                     if not privs then return end
 
-                    local found;
-                    for k,v in pairs(privs) do
+                    local found
+                    for _, v in ipairs(privs) do
                         if v.Privilege == "Trigger" then
                             found = true
-                            break;
+                            break
                         end
                     end
 
@@ -212,14 +212,14 @@ function migrateDB(callback)
             MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
             if MySQLite.isMySQL() then
                 local jobCommands = {}
-                for k,v in pairs(RPExtraTeams) do
+                for k, v in pairs(RPExtraTeams) do
                     table.insert(jobCommands, "(" .. k .. "," .. MySQLite.SQLStr(v.command) .. ")")
                 end
 
                 -- This WOULD work with SQLite if the implementation in GMod wasn't out of date.
                 MySQLite.queueQuery("INSERT IGNORE INTO TempJobCommands VALUES " .. table.concat(jobCommands, ",") .. ";")
             else
-                for k,v in pairs(RPExtraTeams) do
+                for k, v in pairs(RPExtraTeams) do
                     MySQLite.queueQuery("INSERT INTO TempJobCommands VALUES(" .. k .. ", " .. MySQLite.SQLStr(v.command) .. ");")
                 end
             end
@@ -515,7 +515,7 @@ function DarkRP.storeTeamDoorOwnability(ent)
     local map = string.lower(game.GetMap())
 
     MySQLite.query("DELETE FROM darkrp_doorjobs WHERE idx = " .. ent:doorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
-    for k,v in pairs(ent:getKeysDoorTeams() or {}) do
+    for k in pairs(ent:getKeysDoorTeams() or {}) do
         MySQLite.query("INSERT INTO darkrp_doorjobs VALUES(" .. ent:doorIndex() .. ", " .. MySQLite.SQLStr(map) .. ", " .. MySQLite.SQLStr(RPExtraTeams[k].command) .. ");")
     end
 end

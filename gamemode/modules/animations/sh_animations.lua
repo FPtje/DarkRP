@@ -195,7 +195,7 @@ local function AnimationMenu()
     end
 
     local i = 0
-    for k,v in SortedPairs(Anims) do
+    for k, v in SortedPairs(Anims) do
         i = i + 1
         local button = vgui.Create("DButton", AnimFrame)
         button:SetPos(10, (i - 1) * 55 + 30)

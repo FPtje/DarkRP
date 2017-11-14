@@ -47,7 +47,7 @@ function PANEL:Init()
 end
 
 function PANEL:Refresh()
-    for _,gmInfo in ipairs(self:GetGamemodeList()) do
+    for _, gmInfo in ipairs(self:GetGamemodeList()) do
         self.gmComboBox:AddChoice(gmInfo.title, gmInfo.name)
     end
     self.gmComboBox:SetValue("(current)")
@@ -62,12 +62,12 @@ function PANEL:Refresh()
         return fn, tbl
     end
 
-    for catName,maps in rpFirstSortedPairs(self:GetMapList()) do
+    for catName, maps in rpFirstSortedPairs(self:GetMapList()) do
         local cat = self.catList:Add(catName)
         local iconLayout = vgui.Create("DIconLayout")
         iconLayout:SetSpaceX(5)
         iconLayout:SetSpaceY(5)
-        for _,map in ipairs(maps) do
+        for _, map in ipairs(maps) do
             local icon = iconLayout:Add("FAdmin_MapIcon")
             icon:SetText(map)
             icon:SetDark(true)

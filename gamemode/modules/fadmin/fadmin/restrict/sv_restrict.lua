@@ -5,7 +5,7 @@ Restricted.Weapons = {}
 
 local function RetrieveRestricted()
     local Query = sql.Query("SELECT * FROM FADMIN_RESTRICTEDENTS") or {}
-    for k,v in pairs(Query) do
+    for _, v in ipairs(Query) do
         if Restricted[v.TYPE] then
             Restricted[v.TYPE][v.ENTITY] = v.ADMIN_GROUP
         end

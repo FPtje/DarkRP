@@ -10,7 +10,7 @@ local function onDBInitialized()
     end)
 
     MySQLite.query([[SELECT * FROM darkrp_position WHERE type = 'J' AND map = ]] .. map .. [[;]], function(data)
-        for k, v in ipairs(data or {}) do
+        for _, v in ipairs(data or {}) do
             table.insert(jailPos, Vector(v.x, v.y, v.z))
         end
     end)
@@ -113,7 +113,7 @@ end
 
 function DarkRP.removeTeamSpawnPos(t, callback)
     local map = string.lower(game.GetMap())
-    for k,v in pairs(teamSpawns) do
+    for k, v in pairs(teamSpawns) do
         if tonumber(v.team) == t then
             teamSpawns[k] = nil
         end
@@ -125,7 +125,7 @@ function DarkRP.removeTeamSpawnPos(t, callback)
         AND team = ]] .. t .. [[;]], function(data)
 
         MySQLite.begin()
-        for k,v in ipairs(data or {}) do
+        for _, v in ipairs(data or {}) do
             -- The trigger will make sure the values get deleted from the jobspawn as well
             MySQLite.query([[DELETE FROM darkrp_position WHERE id = ]] .. v.id .. [[;]])
         end

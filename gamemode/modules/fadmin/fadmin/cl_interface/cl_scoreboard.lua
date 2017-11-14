@@ -3,7 +3,7 @@ local OverrideScoreboard = CreateClientConVar("FAdmin_OverrideScoreboard", 0, tr
 function FAdmin.ScoreBoard.ChangeView(newView, ...)
     if FAdmin.ScoreBoard.CurrentView == newView or not FAdmin.ScoreBoard.Visible then return end
 
-    for k,v in pairs(FAdmin.ScoreBoard[FAdmin.ScoreBoard.CurrentView].Controls) do
+    for _, v in pairs(FAdmin.ScoreBoard[FAdmin.ScoreBoard.CurrentView].Controls) do
         v:SetVisible(false)
     end
 
@@ -128,11 +128,11 @@ function FAdmin.ScoreBoard.HideScoreBoard()
     gui.EnableScreenClicker(false)
     hook.Remove("HUDPaint", "FAdmin_ScoreBoard")
 
-    for k,v in pairs(FAdmin.ScoreBoard[FAdmin.ScoreBoard.CurrentView].Controls) do
+    for _, v in pairs(FAdmin.ScoreBoard[FAdmin.ScoreBoard.CurrentView].Controls) do
         v:SetVisible(false)
     end
 
-    for k,v in pairs(FAdmin.ScoreBoard.Controls) do
+    for _, v in pairs(FAdmin.ScoreBoard.Controls) do
         v:SetVisible(false)
     end
     return true

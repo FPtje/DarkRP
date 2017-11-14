@@ -132,7 +132,7 @@ function FAdmin.Access.RegisterCAMIPrivileges()
     MySQLite.query([[SELECT privname FROM FAdmin_CAMIPrivileges]], function(data)
         FAdmin.CAMIPrivs = {}
 
-        for _, row in pairs(data or {}) do
+        for _, row in ipairs(data or {}) do
             FAdmin.CAMIPrivs[row.privname] = true
         end
 

@@ -130,7 +130,7 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
     local callback
     local DoSayFunc
 
-    for k,v in pairs(self.OldChatHooks) do
+    for k, v in pairs(self.OldChatHooks) do
         if type(v) ~= "function" then continue end
 
         if type(k) == "Entity" or type(k) == "Player" then
@@ -164,7 +164,7 @@ local function ReplaceChatHooks()
     local hookTbl = hook.GetTable()
 
     if not hookTbl.PlayerSay then return end
-    for k,v in pairs(hookTbl.PlayerSay) do
+    for k, v in pairs(hookTbl.PlayerSay) do
         GAMEMODE.OldChatHooks[k] = v
         hook.Remove("PlayerSay", k)
     end
@@ -219,8 +219,8 @@ local function ReplaceChatHooks()
 
     ulibTbl.PlayerSay = ulibTbl.PlayerSay or {[-2] = {}, [-1] = {}, [0] = {}, [1] = {}, [2] = {}}
 
-    for priority, hooks in pairs(ulibTbl.PlayerSay) do
-        for hookName, func in pairs(hooks) do
+    for _, hooks in pairs(ulibTbl.PlayerSay) do
+        for hookName in pairs(hooks) do
             hooks[hookName] = nil
             GAMEMODE.OldChatHooks[hookName] = v
         end

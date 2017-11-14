@@ -77,7 +77,7 @@ function GM:canDropWeapon(ply, weapon)
 
     if not GAMEMODE.Config.restrictdrop then return true end
 
-    for k,v in pairs(CustomShipments) do
+    for _, v in pairs(CustomShipments) do
         if v.entity ~= class then continue end
 
         return true
@@ -302,7 +302,7 @@ hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
 end)
 hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
     if not ply.DrpCanHear then return end
-    for _,v in ipairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if not v.DrpCanHear then continue end
         v.DrpCanHear[ply] = nil
     end
@@ -505,7 +505,7 @@ function GM:PlayerSetModel(ply)
             local ChosenModel = string.lower(ply:getPreferredModel(ply:Team()) or "")
 
             local found
-            for _,Models in pairs(jobTable.model) do
+            for _, Models in pairs(jobTable.model) do
                 if ChosenModel == string.lower(Models) then
                     EndModel = Models
                     found = true
@@ -721,7 +721,7 @@ function GM:PlayerSpawn(ply)
         activeWeapon:Extinguish()
     end
 
-    for k,v in ipairs(ents.FindByClass("predicted_viewmodel")) do -- Money printer ignite fix
+    for _, v in ipairs(ents.FindByClass("predicted_viewmodel")) do -- Money printer ignite fix
         v:Extinguish()
     end
 
@@ -766,7 +766,7 @@ function GM:PlayerLoadout(ply)
 
     local jobTable = ply:getJobTable()
 
-    for k,v in pairs(jobTable.weapons or {}) do
+    for _, v in pairs(jobTable.weapons or {}) do
         ply:Give(v)
     end
 
@@ -784,14 +784,14 @@ function GM:PlayerLoadout(ply)
         end
     end
 
-    for k, v in pairs(self.Config.DefaultWeapons) do
+    for _, v in pairs(self.Config.DefaultWeapons) do
         ply:Give(v)
     end
 
     CAMI.PlayerHasAccess(ply, "DarkRP_GetAdminWeapons", function(access)
         if not access or not IsValid(ply) then return end
 
-        for k,v in pairs(GAMEMODE.Config.AdminWeapons) do
+        for _, v in pairs(GAMEMODE.Config.AdminWeapons) do
             ply:Give(v)
         end
 
@@ -844,7 +844,7 @@ local function collectRemoveEntities(ply)
         remClasses[string.lower(customEnt.ent)] = true
     end
 
-    for k, v in ipairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         if v.SID ~= ply.SID or not v:IsVehicle() and not remClasses[string.lower(v:GetClass() or "")] then continue end
 
         table.insert(collect, v)
@@ -893,7 +893,7 @@ function GM:PlayerDisconnected(ply)
     -- Clear agenda
     if agenda and ply:Team() == agenda.Manager and team.NumPlayers(ply:Team()) <= 1 then
         agenda.text = nil
-        for k,v in ipairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:getAgendaTable() ~= agenda then continue end
             v:setSelfDarkRPVar("agenda", agenda.text)
         end
@@ -915,7 +915,7 @@ end
 
 local function fuckQAC()
     local netRecs = {"Debug1", "Debug2", "checksaum", "gcontrol_vars", "control_vars", "QUACK_QUACK_MOTHER_FUCKER"}
-    for k,v in pairs(netRecs) do
+    for _, v in pairs(netRecs) do
         net.Receivers[v] = fn.Id
     end
 end
@@ -943,7 +943,7 @@ function GM:InitPostEntity()
     game.ConsoleCommand("sv_alltalk 0\n")
 
     if GAMEMODE.Config.unlockdoorsonstart then
-        for k, v in ipairs(ents.GetAll()) do
+        for _, v in ipairs(ents.GetAll()) do
             if not v:isDoor() then continue end
             v:Fire("unlock", "", 0)
         end

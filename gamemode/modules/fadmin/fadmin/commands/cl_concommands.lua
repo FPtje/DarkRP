@@ -3,7 +3,7 @@ local function AutoComplete(command, args)
     args = string.Explode(" ", args)
     table.remove(args, 1) --Remove the first space
     if args[1] == "" then
-        for k, v in pairs(FAdmin.Commands.List) do
+        for k in pairs(FAdmin.Commands.List) do
             table.insert(autocomplete, command .. " " .. k)
         end
     elseif not args[2] or args[3] then

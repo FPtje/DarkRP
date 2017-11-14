@@ -141,7 +141,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     local smallestDistance = math.huge
     local foundEnt
 
-    for k, ent in pairs(entities) do
+    for _, ent in pairs(entities) do
         if not IsValid(ent) or filter(ent) == false then continue end
 
         local center = ent:GetPos()
@@ -186,7 +186,7 @@ local function GetAvailableVehicles(ply)
     local print = SERVER and ServerLog or Msg
 
     print(DarkRP.getPhrase("rp_getvehicles") .. "\n")
-    for k,v in pairs(DarkRP.getAvailableVehicles()) do
+    for k in pairs(DarkRP.getAvailableVehicles()) do
         print("\"" .. k .. "\"" .. "\n")
     end
 end

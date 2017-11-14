@@ -39,7 +39,7 @@ local function BuyFood(ply, args)
 
     local tr = util.TraceLine(trace)
 
-    for _,v in pairs(FoodItems) do
+    for _, v in pairs(FoodItems) do
         if string.lower(args) ~= string.lower(v.name) then continue end
 
         if (v.requiresCook == nil or v.requiresCook == true) and not ply:isCook() then

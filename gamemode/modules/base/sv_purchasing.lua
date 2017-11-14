@@ -114,7 +114,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     end
 
     local canbecome = false
-    for a,b in pairs(shipment.allowed) do
+    for _, b in pairs(shipment.allowed) do
         if ply:Team() == b then
             canbecome = true
             break
@@ -246,7 +246,7 @@ local function BuyVehicle(ply, args)
     local found = false
     -- Allow people to have multiple vehicles with the same name
     -- vehicles are bought through the command
-    for k,v in pairs(CustomVehicles) do
+    for k, v in pairs(CustomVehicles) do
         if v.command and string.lower(v.command) == string.lower(args) then
             found = CustomVehicles[k]
             break
@@ -370,7 +370,7 @@ local function BuyAmmo(ply, args)
     if num and GAMEMODE.AmmoTypes[num] then
         found = GAMEMODE.AmmoTypes[num]
     else
-        for k,v in pairs(GAMEMODE.AmmoTypes) do
+        for _, v in pairs(GAMEMODE.AmmoTypes) do
             if v.ammoType ~= args then continue end
 
             found = v

@@ -48,7 +48,7 @@ timer.Create("FAdmin_CleanPlayerSettings", 300, 0, function()
     -- Anything lower than the maximal UserID can be culled
     -- This prevents data from joining players from being removed
     -- New players always get a strictly higher UserID than any player before them
-    for uid, settings in pairs(FAdmin.PlayerSettings) do
+    for uid in pairs(FAdmin.PlayerSettings) do
         if IsValid(Player(uid)) or uid > max then continue end
 
         FAdmin.PlayerSettings[uid] = nil

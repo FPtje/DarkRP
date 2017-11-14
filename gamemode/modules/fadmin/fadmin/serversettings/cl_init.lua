@@ -14,7 +14,7 @@ local function SetLimits()
     Form:SetName("")
 
     local Settings = util.KeyValuesToTable(file.Read("gamemodes/sandbox/sandbox.txt", "GAME")) -- All SBox limits are in here :D
-    for k, v in SortedPairs(Settings.settings or {}) do
+    for _, v in SortedPairs(Settings.settings or {}) do
         if v.type == "Numeric" then
             local left, _ = Form:NumberWang(v.text, nil, v.low or 0, v.high or 1000, v.decimals or 0)
             left:SetFloatValue(GetConVar(v.name):GetFloat())

@@ -16,7 +16,7 @@ local function MakeServerOptions()
     FAdmin.ScoreBoard.Server.Controls.ServerActions = FAdmin.ScoreBoard.Server.Controls.ServerActions or vgui.Create("FAdminPanelList")
     FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.ServerActions)
     FAdmin.ScoreBoard.Server.Controls.ServerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-    for k,v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerActions:GetChildren()) do
+    for k, v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerActions:GetChildren()) do
         if k == 1 then continue end
         v:Remove()
     end
@@ -33,7 +33,7 @@ local function MakeServerOptions()
     FAdmin.ScoreBoard.Server.Controls.PlayerActions = FAdmin.ScoreBoard.Server.Controls.PlayerActions or vgui.Create("FAdminPanelList")
     FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.PlayerActions)
     FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-    for k,v in pairs(FAdmin.ScoreBoard.Server.Controls.PlayerActions:GetChildren()) do
+    for k, v in pairs(FAdmin.ScoreBoard.Server.Controls.PlayerActions:GetChildren()) do
         if k == 1 then continue end
         v:Remove()
     end
@@ -50,7 +50,7 @@ local function MakeServerOptions()
     FAdmin.ScoreBoard.Server.Controls.ServerSettings = FAdmin.ScoreBoard.Server.Controls.ServerSettings or vgui.Create("FAdminPanelList")
     FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.ServerSettings)
     FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-    for k,v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerSettings:GetChildren()) do
+    for k, v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerSettings:GetChildren()) do
         if k == 1 then continue end
         v:Remove()
     end
@@ -103,7 +103,7 @@ end
 
 function FAdmin.ScoreBoard.Server.Show(ply)
     FAdmin.ScoreBoard.Server.InfoPanels = FAdmin.ScoreBoard.Server.InfoPanels or {}
-    for k,v in pairs(FAdmin.ScoreBoard.Server.InfoPanels) do
+    for k, v in pairs(FAdmin.ScoreBoard.Server.InfoPanels) do
         if IsValid(v) then
             v:Remove()
             FAdmin.ScoreBoard.Server.InfoPanels[k] = nil
@@ -131,7 +131,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 
     local SelectedPanel = AddInfoPanel() -- Make first panel to put the first things in
 
-    for k, v in pairs(FAdmin.ScoreBoard.Server.Information) do
+    for _, v in pairs(FAdmin.ScoreBoard.Server.Information) do
         local Text = vgui.Create("DLabel")
         Text:SetFont("TabLarge")
         Text:SetColor(Color(255,255,255,200))

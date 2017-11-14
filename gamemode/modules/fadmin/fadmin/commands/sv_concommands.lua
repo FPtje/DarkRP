@@ -25,11 +25,11 @@ local function AutoComplete(command, ...)
     local args = string.Explode(" ", ...)
     table.remove(args, 1) --Remove the first space
     if args[1] == "" then
-        for k, _ in pairs(FAdmin.Commands.List) do
+        for k in pairs(FAdmin.Commands.List) do
             table.insert(autocomplete, command .. " " .. k)
         end
     elseif not args[2] then
-        for k, _ in pairs(FAdmin.Commands.List) do
+        for k in pairs(FAdmin.Commands.List) do
             if string.sub(k, 1, string.len(args[1])) == args[1] then
                 table.insert(autocomplete, command .. " " .. k)
             end

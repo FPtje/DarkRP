@@ -106,7 +106,7 @@ function meta:keysUnOwn(ply)
 end
 
 function pmeta:keysUnOwnAll()
-    for k, v in ipairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         if v:isKeysOwnable() and v:isKeysOwnedBy(self) == true then
             v:Fire("unlock", "", 0.6)
         end
@@ -121,7 +121,7 @@ function pmeta:keysUnOwnAll()
     end
 
     for _, v in ipairs(player.GetAll()) do
-        for n, m in pairs(v.Ownedz or {}) do
+        for _, m in pairs(v.Ownedz or {}) do
             if IsValid(m) and m:isKeysAllowedToOwn(self) then
                 m:removeKeysAllowedToOwn(self)
             end
@@ -397,7 +397,7 @@ DarkRP.defineChatCommand("toggleown", OwnDoor)
 
 local function UnOwnAll(ply, cmd, args)
     local amount = 0
-    for k,v in ipairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         if v:isKeysOwnedBy(ply) and v:isDoor() and not IsValid(v.EntOwner) then -- EntOwner is from SCARs
             amount = amount + 1
             v:Fire("unlock", "", 0)

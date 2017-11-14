@@ -338,8 +338,8 @@ function FPP.FillDefaultBlocked()
     -- All values that are to be inserted
     local allValues = {}
 
-    for k,v in pairs(defaultBlocked) do
-        for a,b in pairs(v) do
+    for k, v in pairs(defaultBlocked) do
+        for a in pairs(v) do
             FPP.Blocked[k][a] = true
             count = count + 1
 
@@ -410,7 +410,7 @@ local function RetrieveBlockedModels()
         -- That's about the maximum it can receive properly at once
         for i = 0, count, 1000 do
             MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1 LIMIT 1000 OFFSET " .. i .. ";", function(data)
-                for k, v in pairs(data or {}) do
+                for _, v in ipairs(data or {}) do
                     FPP.BlockedModels[v.model] = true
                 end
             end)

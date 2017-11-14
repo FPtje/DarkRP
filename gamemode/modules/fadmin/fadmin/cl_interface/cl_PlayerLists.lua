@@ -20,7 +20,7 @@ local function SortedPairsByFunction(Table, Sorted, SortDown)
 
     CopyTable = {}
     for _, v in pairs(SecondSort) do
-        for a,b in pairs(v) do
+        for _, b in pairs(v) do
             table.insert(CopyTable, b)
         end
     end

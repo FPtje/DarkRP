@@ -79,7 +79,7 @@ local function RequestBans(ply, cmd, args)
 end
 
 timer.Create("FAdminCheckBans", 60, 0, function()
-    for k,v in pairs(FAdmin.BANS) do
+    for k, v in pairs(FAdmin.BANS) do
         if v.time and type(v.time) ~= "string" and tonumber(v.time) < os.time() and v.time ~= 0 then
             FAdmin.BANS[k] = nil
         end
@@ -156,7 +156,7 @@ local function Ban(ply, cmd, args)
                 SendUserMessage("FAdmin_ban_cancel", target) -- No I changed my mind, you can stay
                 target:UnLock()
                 target:Spawn()
-                for k,v in pairs(StartBannedUsers) do
+                for k, v in pairs(StartBannedUsers) do
                     if v == target:SteamID() then
                         table.remove(StartBannedUsers, k)
                     end
@@ -187,7 +187,7 @@ local function Ban(ply, cmd, args)
             local TimeText = FAdmin.PlayerActions.ConvertBanTime(time)
 
             if type(target) ~= "string" and IsValid(target) then
-                for k,v in pairs(StartBannedUsers) do
+                for k, v in pairs(StartBannedUsers) do
                     if v == target:SteamID() then
                         table.remove(StartBannedUsers, k)
                         break
@@ -199,7 +199,7 @@ local function Ban(ply, cmd, args)
                 Reason = string.gsub(Reason, ";", " ")
                 target:Kick("banned by " .. nick .. " for " .. TimeText .. " (" .. Reason .. ")")
             else
-                for k,v in pairs(StartBannedUsers) do
+                for k, v in pairs(StartBannedUsers) do
                     if v == args[1] then
                         table.remove(StartBannedUsers, k)
                         break
@@ -228,7 +228,7 @@ local function UnBan(ply, cmd, args)
 
     hook.Call("FAdmin_UnBan", nil, ply, SteamID)
 
-    for k,v in pairs(FAdmin.BANS) do
+    for k, v in pairs(FAdmin.BANS) do
         if string.upper(k) == SteamID then
             nick = FAdmin.BANS[k].name or nick
             FAdmin.BANS[k] = nil
@@ -236,7 +236,7 @@ local function UnBan(ply, cmd, args)
         end
     end
 
-    for k,v in pairs(StartBannedUsers) do
+    for k, v in pairs(StartBannedUsers) do
         if string.upper(v) == SteamID then
             StartBannedUsers[k] = nil
             break
@@ -266,7 +266,7 @@ hook.Add("DarkRPDBInitialized", "FAdmin_Retrievebans", function()
         local RetrieveBans = hook.Call("FAdmin_RetrieveBans", nil)
 
         if RetrieveBans then
-            for k,v in pairs(RetrieveBans) do
+            for k, v in pairs(RetrieveBans) do
                 FAdmin.BANS[string.upper(k)] = v
             end
             return
@@ -275,11 +275,11 @@ hook.Add("DarkRPDBInitialized", "FAdmin_Retrievebans", function()
 
     if file.Exists("FAdmin/Bans.txt", "DATA") then
         local bans = util.KeyValuesToTable(file.Read("FAdmin/bans.txt", "DATA") or {})
-        for k,v in pairs(bans) do
+        for k, v in pairs(bans) do
             FAdmin.BANS[string.upper(k)] = v
         end
 
-        for k,v in pairs(FAdmin.BANS) do
+        for k, v in pairs(FAdmin.BANS) do
             v.time = tonumber(v.time)
             if v.time and v.time < os.time() then
                 FAdmin.BANS[string.upper(k)] = nil
