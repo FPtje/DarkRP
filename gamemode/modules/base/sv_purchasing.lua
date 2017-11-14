@@ -436,8 +436,10 @@ local function SetPrice(ply, args)
 
     local tr = util.TraceLine(trace)
 
-    if IsValid(tr.Entity) and tr.Entity.CanSetPrice and tr.Entity.SID == ply.SID then
-        tr.Entity:Setprice(b)
+    local ent = tr.Entity
+
+    if IsValid(ent) and ent.CanSetPrice and ent.SID == ply.SID then
+        ent:Setprice(b)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("any_lab")))
     end

@@ -9,11 +9,11 @@ function FPP.LoadBuddies()
     if data then
         for k,v in pairs(data) do
             FPP.Buddies[v.steamid] = {name = v.name, physgun = v.physgun, gravgun = v.gravgun, toolgun = v.toolgun, playeruse = v.playeruse, entitydamage = v.entitydamage} --Put all the buddies in the table
-            for num,ply in pairs(player.GetAll()) do --If the buddies are in the server then add them serverside
+            for num,ply in ipairs(player.GetAll()) do --If the buddies are in the server then add them serverside
                 if ply:SteamID() == v.steamid then
                     -- update the name
-                    sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Nick()) .. " WHERE steamid = " .. sql.SQLStr(v.steamid) .. ";")
-                    FPP.Buddies[v.steamid].name = ply:Nick()
+                    sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Name()) .. " WHERE steamid = " .. sql.SQLStr(v.steamid) .. ";")
+                    FPP.Buddies[v.steamid].name = ply:Name()
                     RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
                 end
             end
@@ -26,7 +26,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     if Type == "remove" then
         FPP.Buddies[SteamID] = nil
         sql.Query("DELETE FROM FPP_Buddies WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
-        for k,v in pairs(player.GetAll()) do
+        for k,v in ipairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 RunConsoleCommand("FPP_SetBuddy", v:UserID(), "0", "0", "0", "0", "0")
             end
@@ -48,7 +48,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     end
 
     --Let the server know of your changes
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         if v:SteamID() == SteamID then -- If the person you're adding is in the server then add him serverside
             RunConsoleCommand("FPP_SetBuddy", v:UserID(), FPP.Buddies[SteamID].physgun, FPP.Buddies[SteamID].gravgun, FPP.Buddies[SteamID].toolgun, FPP.Buddies[SteamID].playeruse, FPP.Buddies[SteamID].entitydamage)
             --Don't break because there can be people(bots actually) with the same steam ID
@@ -66,7 +66,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     if ShouldRemove then -- If everything = 0 then he's not your friend anymore
         FPP.Buddies[SteamID] = nil
         sql.Query("DELETE FROM FPP_Buddies WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
-        for k,v in pairs(player.GetAll()) do
+        for k,v in ipairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 RunConsoleCommand("FPP_SetBuddy", v:UserID(), "0", "0", "0", "0", "0")
             end
@@ -89,9 +89,9 @@ function FPP.NewBuddy(um)
 
         RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
         -- update the name
-        sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Nick()) .. " WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
+        sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Name()) .. " WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
         FPP.Buddies[SteamID] = FPP.Buddies[SteamID] or {}
-        FPP.Buddies[SteamID].name = ply:Nick()
+        FPP.Buddies[SteamID].name = ply:Name()
     end
 end
 usermessage.Hook("FPP_CheckBuddy", FPP.NewBuddy)

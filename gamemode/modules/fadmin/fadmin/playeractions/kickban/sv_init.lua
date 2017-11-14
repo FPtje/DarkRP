@@ -32,7 +32,7 @@ local function Kick(ply, cmd, args)
                 ply.FAdminKickReason = args[3]
                 SendUserMessage("FAdmin_kick_update", target, args[3])
             else
-                local name = IsValid(ply) and ply:IsPlayer() and ply:Nick() or "Console"
+                local name = IsValid(ply) and ply:IsPlayer() and ply:Name() or "Console"
 
                 Reason = Reason and string.gsub(Reason, ";", " ") or "No reason provided"
 
@@ -193,8 +193,8 @@ local function Ban(ply, cmd, args)
                         break
                     end
                 end
-                local nick = ply.Nick and ply:Nick() or "console"
-                SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
+                local nick = ply.Nick and ply:Name() or "console"
+                SaveBan(target:SteamID(), target:Name(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
 
                 Reason = string.gsub(Reason, ";", " ")
                 target:Kick("banned by " .. nick .. " for " .. TimeText .. " (" .. Reason .. ")")
@@ -206,7 +206,7 @@ local function Ban(ply, cmd, args)
                     end
                 end
 
-                SaveBan(target, nil, time, Reason ~= "" and Reason, ply.Nick and ply:Nick() or "console", ply.SteamID and ply:SteamID() or "Console") -- Again default to one hour
+                SaveBan(target, nil, time, Reason ~= "" and Reason, ply.Nick and ply:Name() or "console", ply.SteamID and ply:SteamID() or "Console") -- Again default to one hour
             end
             ply.FAdminKickReason = nil
         end

@@ -25,10 +25,10 @@ local function onRagdollArrested(arrestee, _, arrester)
 
     arrestee:arrest(nil, arrester)
 
-    DarkRP.notify(arrestee, 0, 20, DarkRP.getPhrase("youre_arrested_by", arrester:Nick()))
+    DarkRP.notify(arrestee, 0, 20, DarkRP.getPhrase("youre_arrested_by", arrester:Name()))
 
     if arrester.SteamName then
-        DarkRP.log(arrester:Nick() .. " (" .. arrester:SteamID() .. ") arrested " .. arrestee:Nick(), Color(0, 255, 255))
+        DarkRP.log(arrester:Name() .. " (" .. arrester:SteamID() .. ") arrested " .. arrestee:Name(), Color(0, 255, 255))
     end
 end
 
@@ -198,7 +198,7 @@ local function DamageSleepers(ent, dmginfo)
     local ownerint = ent.OwnerINT
     if not ownerint or ownerint == 0 then return end
 
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         if v:EntIndex() ~= ownerint then continue end
 
         if attacker == game.GetWorld() then

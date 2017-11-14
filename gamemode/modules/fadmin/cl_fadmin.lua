@@ -41,7 +41,7 @@ timer.Create("FAdmin_CleanPlayerSettings", 300, 0, function()
 
     -- find highest userID
     local max = math.huge
-    for k, v in pairs(player.GetAll()) do
+    for k, v in ipairs(player.GetAll()) do
         if v:UserID() > max then max = v:UserID() end
     end
 

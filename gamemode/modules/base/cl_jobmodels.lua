@@ -44,7 +44,7 @@ end
 
 do
     local models = sql.Query([[SELECT jobcmd, model FROM darkp_playermodels;]])
-    for k,v in pairs(models or {}) do
+    for k,v in ipairs(models or {}) do
         preferredModels[v.jobcmd] = v.model
     end
 

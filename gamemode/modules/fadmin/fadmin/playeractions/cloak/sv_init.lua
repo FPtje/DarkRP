@@ -49,7 +49,7 @@ local function UnCloak(ply, cmd, args)
             target.FAdmin_CloakWeapon = nil
 
             local RemoveThink = true
-            for k,v in pairs(player.GetAll()) do
+            for k,v in ipairs(player.GetAll()) do
                 if v:FAdmin_GetGlobal("FAdmin_cloaked") then
                     RemoveThink = false
                     break
@@ -71,14 +71,14 @@ FAdmin.StartHooks["Cloak"] = function()
 end
 
 function CloakThink()
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         local ActiveWeapon = v:GetActiveWeapon()
-        if v:FAdmin_GetGlobal("FAdmin_cloaked") and IsValid(ActiveWeapon) and ActiveWeapon ~= v.FAdmin_CloakWeapon then
+        if v:FAdmin_GetGlobal("FAdmin_cloaked") and ActiveWeapon:IsValid() and ActiveWeapon ~= v.FAdmin_CloakWeapon then
             v.FAdmin_CloakWeapon = ActiveWeapon
             ActiveWeapon:SetNoDraw(true)
 
             if ActiveWeapon:GetClass() == "weapon_physgun" then
-                for a,b in pairs(ents.FindByClass("physgun_beam")) do
+                for a,b in ipairs(ents.FindByClass("physgun_beam")) do
                     if b:GetParent() == v then
                         b:SetNoDraw(true)
                     end

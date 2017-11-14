@@ -213,10 +213,10 @@ function FPP.AdminMenu(Panel)
     other:SetTextColor(Color(0, 0, 0, 255))
 
     local areplayers = false
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         areplayers = true
         local rm = general:Add("DButton")
-        rm:SetText(v:Nick())
+        rm:SetText(v:Name())
         rm:SetConsoleCommand("FPP_Cleanup", v:UserID())
         rm:SetDisabled(not canCleanup)
     end
@@ -578,8 +578,8 @@ function FPP.AdminMenu(Panel)
         local menu = DermaMenu()
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for a,b in pairs(player.GetAll()) do
-            menu:AddOption(b:Nick(), function()
+        for a,b in ipairs(player.GetAll()) do
+            menu:AddOption(b:Name(), function()
                 RunConsoleCommand("FPP_SetPlayerGroup", b:UserID(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
                 PressLoadFirst:SetText("List might be corrupted, reload is recommended")
             end)
@@ -610,9 +610,9 @@ function FPP.AdminMenu(Panel)
         GroupMembers:Clear()
         for k,v in pairs(FPP.GroupMembers) do
             local name = "Unknown"
-            for _, ply in pairs(player.GetAll()) do
+            for _, ply in ipairs(player.GetAll()) do
                 if ply:SteamID() == k then
-                    name = ply:Nick()
+                    name = ply:Name()
                     break
                 end
             end
@@ -747,8 +747,8 @@ RetrieveRestrictedTool = function(um)
         local menu = DermaMenu(self)
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for k, v in pairs(player.GetAll()) do
-            local submenu = menu:AddSubMenu(v:Nick())
+        for k, v in ipairs(player.GetAll()) do
+            local submenu = menu:AddSubMenu(v:Name())
 
 
             submenu:AddOption( "Default", function()
@@ -1004,7 +1004,7 @@ function FPP.BuddiesMenu(Panel)
 
     Panel:AddControl("Label", {Text = "\nAdd buddy:"})
     local AvailablePlayers = false
-    for k,v in SortedPairs(player.GetAll(), function(a,b) return a:Nick() > b:Nick() end) do
+    for k,v in SortedPairs(player.GetAll(), function(a,b) return a:Name() > b:Name() end) do
         local cantadd = false
         if v == LocalPlayer() then cantadd = true end
         for a,b in pairs(FPP.Buddies) do
@@ -1016,9 +1016,9 @@ function FPP.BuddiesMenu(Panel)
 
         if not cantadd then
             local add = vgui.Create("DButton")
-            add:SetText(v:Nick())
+            add:SetText(v:Name())
             add.DoClick = function()
-                FPP.SetBuddyMenu(v:SteamID(), v:Nick())
+                FPP.SetBuddyMenu(v:SteamID(), v:Name())
             end
             BuddiesPanel:AddPanel(add)
             AvailablePlayers = true
@@ -1116,9 +1116,9 @@ function FPP.PrivateSettings(Panel)
     local fallbackChoice = Panel:ComboBox("Fallback player")
     fallbackChoice:AddChoice("None", -1, true)
 
-    for k, v in pairs(player.GetAll()) do
+    for k, v in ipairs(player.GetAll()) do
         if v == LocalPlayer() then continue end
-        fallbackChoice:AddChoice(v:Nick(), v:UserID(), PrivateSettingsPanel.FallbackSelected == v:UserID())
+        fallbackChoice:AddChoice(v:Name(), v:UserID(), PrivateSettingsPanel.FallbackSelected == v:UserID())
     end
 
     fallbackChoice.OnSelect = function(_, _, nick, uid)
@@ -1162,7 +1162,7 @@ function FPP.SharedMenu(um)
         if type(name) == "string" then
             box:SetText(name .. " share this entity")
         elseif name:IsPlayer() and name:IsValid() then
-            box:SetText(name:Nick() .. " can touch this")
+            box:SetText(name:Name() .. " can touch this")
         else
             return
         end
@@ -1206,7 +1206,7 @@ function FPP.SharedMenu(um)
     if #player.GetAll() ~= 1 then
         count = count + 1
     end
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         if v ~= LocalPlayer() and v:IsValid() then
             local IsShared = false
             if table.HasValue(SharedWith, v) then

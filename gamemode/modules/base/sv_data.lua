@@ -175,7 +175,7 @@ function DarkRP.initDatabase()
 
             if MySQLite.isMySQL() then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
                                         --so he walks around with the settings from the SQLite database
-                for k,v in pairs(player.GetAll()) do
+                for k,v in ipairs(player.GetAll()) do
                     DarkRP.offlinePlayerData(v:SteamID(), function(data)
                         if not data or not data[1] then return end
 
@@ -390,11 +390,11 @@ end
 local function resetAllMoney(ply,cmd,args)
     if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
     MySQLite.query("UPDATE darkrp_player SET wallet = " .. GAMEMODE.Config.startingmoney .. " ;")
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         v:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
     end
     if ply:IsPlayer() then
-        DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
+        DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Name()))
     else
         DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
     end

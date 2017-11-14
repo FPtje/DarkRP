@@ -52,7 +52,7 @@ function DarkRP.definePrivilegedChatCommand(cmd, priv, callback, extraInfoTbl)
 end
 
 local function RP_PlayerChat(ply, text, teamonly)
-    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. "): " .. text)
+    DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. "): " .. text)
     local callback = ""
     local DoSayFunc
     local groupSay = DarkRP.getChatCommand("g")
@@ -96,15 +96,16 @@ local function RP_ActualDoSay(ply, text, callback)
     callback = callback or ""
     if text == "" then return "" end
     local col = team.GetColor(ply:Team())
-    local col2 = Color(255,255,255,255)
+    local col2 = Color(255, 255, 255, 255)
     if not ply:Alive() then
-        col2 = Color(255,200,200,255)
+        col2 = Color(255, 200, 200, 255)
         col = col2
     end
 
     if GAMEMODE.Config.alltalk then
-        for k, v in pairs(player.GetAll()) do
-            DarkRP.talkToPerson(v, col, callback .. ply:Name(), col2, text, ply)
+        local name = ply:Name()
+        for k, v in ipairs(player.GetAll()) do
+            DarkRP.talkToPerson(v, col, callback .. name, col2, text, ply)
         end
     else
         DarkRP.talkToRange(ply, callback .. ply:Name(), text, 250)
@@ -144,7 +145,7 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
     if not self.Config.deadtalk and dead then return "" end
 
     if game.IsDedicated() then
-        ServerLog("\"" .. ply:Nick() .. "<" .. ply:UserID() .. ">" .. "<" .. ply:SteamID() .. ">" .. "<" .. team.GetName(ply:Team()) .. ">\" say \"" .. text .. "\"\n" .. "\n")
+        ServerLog("\"" .. ply:Name() .. "<" .. ply:UserID() .. ">" .. "<" .. ply:SteamID() .. ">" .. "<" .. team.GetName(ply:Team()) .. ">\" say \"" .. text .. "\"\n" .. "\n")
     end
 
     if DoSayFunc then DoSayFunc(text2) return "" end

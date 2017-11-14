@@ -538,7 +538,7 @@ hook.Add("CanDrive", "FPP.Protect.CanDrive", FPP.Protect.CanDrive)
 local function freezeDisconnected(ply)
     local SteamID = ply:SteamID()
 
-    for _, ent in pairs(ents.GetAll()) do
+    for _, ent in ipairs(ents.GetAll()) do
         local physObj = ent:GetPhysicsObject()
         if not IsValid(ent) or ent.FPPOwnerID ~= SteamID or ent:GetPersistent() or not physObj:IsValid() then continue end
 
@@ -563,7 +563,7 @@ function FPP.PlayerDisconnect(ply)
 
 
         local fallback = player.GetBySteamID(ply.FPPFallbackOwner)
-        for k,v in pairs(ents.GetAll()) do
+        for k,v in ipairs(ents.GetAll()) do
             if not IsValid(v) or v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
 
             v.FPPFallbackOwner = ply.FPPFallbackOwner
@@ -600,12 +600,12 @@ function FPP.PlayerDisconnect(ply)
     timer.Simple(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime, function()
         if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) then return end -- Settings can change in time.
 
-        for k,v in pairs(player.GetAll()) do
+        for k,v in ipairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 return
             end
         end
-        for k,v in pairs(ents.GetAll()) do
+        for k,v in ipairs(ents.GetAll()) do
             if not IsValid(v) or v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
             v:Remove()
         end
@@ -630,7 +630,7 @@ function FPP.PlayerInitialSpawn(ply)
 
     local entities = {}
     if FPP.DisconnectedPlayers[SteamID] then -- Check if the player has rejoined within the auto remove time
-        for k,v in pairs(ents.GetAll()) do
+        for k,v in ipairs(ents.GetAll()) do
             if IsValid(v) and (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNWString("FPP_OriginalOwner") == SteamID) then
                 v.FPPFallbackOwner = nil
                 v:CPPISetOwner(ply)
@@ -644,7 +644,7 @@ function FPP.PlayerInitialSpawn(ply)
     end
 
     local plys = {}
-    for k,v in pairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
+    for k,v in ipairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
 
     timer.Create("FPP_recalculate_cantouch_" .. ply:UserID(), 0, 1, function()
         FPP.recalculateCanTouch({ply}, ents.GetAll())

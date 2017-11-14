@@ -134,7 +134,7 @@ local function findNearestObject()
 
     local foundPly, foundDot = nil, 0
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         if ply == LocalPlayer() then continue end
 
         local pos = ply:GetShootPos()
@@ -351,7 +351,7 @@ local function drawHelp()
         local x, y = pos.x, pos.y
 
         draw.RoundedBox(2, x, y - 6, 12, 12, team.GetColor(ply:Team()))
-        draw.WordBox(2, x, y - 66, ply:Nick(), "UiBold", uiBackground, uiForeground)
+        draw.WordBox(2, x, y - 66, ply:Name(), "UiBold", uiBackground, uiForeground)
         draw.WordBox(2, x, y - 46, "Health: " .. ply:Health(), "UiBold", uiBackground, uiForeground)
         draw.WordBox(2, x, y - 26, ply:GetUserGroup(), "UiBold", uiBackground, uiForeground)
     end

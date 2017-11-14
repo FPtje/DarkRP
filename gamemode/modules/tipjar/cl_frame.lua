@@ -209,7 +209,7 @@ function DONATE_LIST:RebuildLines(tipjar)
         -- Don't show the owner looking at this page
         if ply == tipjar:Getowning_ent() then continue end
 
-        self.activeLines[ply:Nick()] = DarkRP.formatMoney(amount)
+        self.activeLines[ply:Name()] = DarkRP.formatMoney(amount)
     end
 
     for name, amount in SortedPairs(self.activeLines) do

@@ -30,7 +30,7 @@ function DarkRP.notifyAll(msgtype, len, msg)
 end
 
 function DarkRP.printMessageAll(msgtype, msg)
-    for k, v in pairs(player.GetAll()) do
+    for k, v in ipairs(player.GetAll()) do
         v:PrintMessage(msgtype, msg)
     end
 end
@@ -50,13 +50,13 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local col = team.GetColor(ply:Team())
     local filter = {}
 
-    for k, v in pairs(ents) do
+    for k, v in ipairs(ents) do
         if v:IsPlayer() then
             table.insert(filter, v)
         end
     end
 
-    if PlayerName == ply:Nick() then PlayerName = "" end -- If it's just normal chat, why not cut down on networking and get the name on the client
+    if PlayerName == ply:Name() then PlayerName = "" end -- If it's just normal chat, why not cut down on networking and get the name on the client
 
     net.Start("DarkRP_Chat")
         net.WriteUInt(col.r, 8)
@@ -102,7 +102,7 @@ function DarkRP.isEmpty(vector, ignore)
 
     local b = true
 
-    for k,v in pairs(ents.FindInSphere(vector, 35)) do
+    for k,v in ipairs(ents.FindInSphere(vector, 35)) do
         if (v:IsNPC() or v:IsPlayer() or v:GetClass() == "prop_physics" or v.NotEmptyPos) and not table.HasValue(ignore, v) then
             b = false
             break
@@ -191,7 +191,7 @@ local function LookPersonUp(ply, cmd, args)
         DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("could_not_find", tostring(args[1])))
         return
     end
-    DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("name", P:Nick()))
+    DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("name", P:Name()))
     DarkRP.printConsoleMessage(ply, "Steam " .. DarkRP.getPhrase("name", P:SteamName()))
     DarkRP.printConsoleMessage(ply, "Steam ID: " .. P:SteamID())
     DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("job", team.GetName(P:Team())))

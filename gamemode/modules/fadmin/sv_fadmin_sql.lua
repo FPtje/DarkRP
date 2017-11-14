@@ -56,7 +56,7 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
     MySQLite.query("SELECT SteamID, Nick, " .. diffSeconds .. " AS duration, Reason, AdminName, Admin_steam FROM FAdminBans WHERE (UnbanDate > " .. now .. " OR UnbanDate IS NULL);", function(data)
         if not data then return end
 
-        for k, v in pairs(data) do
+        for k, v in ipairs(data) do
             if tonumber(v.SteamID) or not v.SteamID then continue end
             local duration = (not v.duration or v.duration == "NULL") and 0 or (os.time() + v.duration)
 
@@ -69,7 +69,7 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
             }
         end
 
-        for k, v in pairs(player.GetAll()) do
+        for k, v in ipairs(player.GetAll()) do
             if not FAdmin.BANS[string.upper(v:SteamID())] then continue end
 
             v:Kick("FAdmin ban evasion")

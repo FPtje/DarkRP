@@ -47,25 +47,26 @@ local function drawChatReceivers()
     local x, y = chat.GetChatBoxPos()
     y = y - 21
 
+    local receiversCount = #receivers
     -- No one hears you
-    if #receivers == 0 then
+    if receiversCount == 0 then
         draw.WordBox(2, x, y, DarkRP.getPhrase("hear_noone", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
         return
     -- Everyone hears you
-    elseif #receivers == #player.GetAll() - 1 then
+    elseif receiversCount == player.GetCount() - 1 then
         draw.WordBox(2, x, y, DarkRP.getPhrase("hear_everyone"), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
         return
     end
 
-    draw.WordBox(2, x, y - (#receivers * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
-    for i = 1, #receivers, 1 do
+    draw.WordBox(2, x, y - (receiversCount * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+    for i = 1, receiversCount, 1 do
         if not IsValid(receivers[i]) then
             receivers[i] = receivers[#receivers]
             receivers[#receivers] = nil
             continue
         end
 
-        draw.WordBox(2, x, y - (i - 1) * 21, receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), Color(255, 255, 255, 255))
+        draw.WordBox(2, x, y - (i - 1) * 21, receivers[i]:Name(), "DarkRPHUD1", Color(0, 0, 0, 160), Color(255, 255, 255, 255))
     end
 end
 
@@ -76,8 +77,8 @@ local function chatGetRecipients()
     if not currentConfig then return end
 
     receivers = {}
-    for _, ply in pairs(player.GetAll()) do
-        if not IsValid(ply) or ply == LocalPlayer() then continue end
+    for _, ply in ipairs(player.GetAll()) do
+        if ply == LocalPlayer() then continue end
         if ply:GetNoDraw() then continue end
 
         local val = currentConfig.hearFunc(ply, currentChatText)
@@ -157,7 +158,7 @@ local function loadChatReceivers()
         if not isstring(text[2]) then return false end
         text[2] = string.lower(tostring(text[2]))
 
-        return string.find(string.lower(ply:Nick()), text[2], 1, true) ~= nil or
+        return string.find(string.lower(ply:Name()), text[2], 1, true) ~= nil or
             string.find(string.lower(ply:SteamName()), text[2], 1, true) ~= nil or
             string.lower(ply:SteamID()) == text[2]
     end)

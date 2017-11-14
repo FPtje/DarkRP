@@ -17,11 +17,11 @@ function plyMeta:warrant(warranter, reason)
 
     if suppressMsg then return end
 
-    local warranterNick = IsValid(warranter) and warranter:Nick() or DarkRP.getPhrase("disconnected_player")
-    local centerMessage = DarkRP.getPhrase("warrant_approved", self:Nick(), reason, warranterNick)
-    local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Nick(), reason)
+    local warranterNick = IsValid(warranter) and warranter:Name() or DarkRP.getPhrase("disconnected_player")
+    local centerMessage = DarkRP.getPhrase("warrant_approved", self:Name(), reason, warranterNick)
+    local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Name(), reason)
 
-    for _, b in pairs(player.GetAll()) do
+    for _, b in ipairs(player.GetAll()) do
         b:PrintMessage(HUD_PRINTCENTER, centerMessage)
         b:PrintMessage(HUD_PRINTCONSOLE, printMessage)
     end
@@ -38,11 +38,11 @@ function plyMeta:unWarrant(unwarranter)
 
     if suppressMsg then return end
 
-    DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Nick()))
+    DarkRP.notify(unwarranter, 2, 4, DarkRP.getPhrase("warrant_expired", self:Name()))
 end
 
 function plyMeta:requestWarrant(suspect, actor, reason)
-    local question = DarkRP.getPhrase("warrant_request", actor:Nick(), suspect:Nick(), reason)
+    local question = DarkRP.getPhrase("warrant_request", actor:Name(), suspect:Name(), reason)
     DarkRP.createQuestion(question, suspect:EntIndex() .. "warrant", self, 40, finishWarrantRequest, actor, suspect, reason)
 end
 
@@ -59,11 +59,11 @@ function plyMeta:wanted(actor, reason, time)
 
     if suppressMsg then return end
 
-    local actorNick = IsValid(actor) and actor:Nick() or DarkRP.getPhrase("disconnected_player")
-    local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
-    local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Nick(), reason)
+    local actorNick = IsValid(actor) and actor:Name() or DarkRP.getPhrase("disconnected_player")
+    local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Name(), reason, actorNick)
+    local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Name(), reason)
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCENTER, centerMessage)
         ply:PrintMessage(HUD_PRINTCONSOLE, printMessage)
     end
@@ -80,12 +80,12 @@ function plyMeta:unWanted(actor)
 
     if suppressMsg then return end
 
-    local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Nick(), actor:Nick() or "") or
-        DarkRP.getPhrase("wanted_expired", self:Nick())
+    local expiredMessage = IsValid(actor) and DarkRP.getPhrase("wanted_revoked", self:Name(), actor:Name() or "") or
+        DarkRP.getPhrase("wanted_expired", self:Name())
 
     DarkRP.log(string.Replace(expiredMessage, "\n", " "), Color(0, 150, 255))
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCENTER, expiredMessage)
         ply:PrintMessage(HUD_PRINTCONSOLE, expiredMessage)
     end
@@ -128,9 +128,9 @@ local function CombineRequest(ply, args)
             return
         end
 
-        for _, v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:isCP() or v == ply then
-                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. " " .. ply:Nick(), Color(255, 0, 0, 255), text, ply)
+                DarkRP.talkToPerson(v, team.GetColor(ply:Team()), DarkRP.getPhrase("request") .. " " .. ply:Name(), Color(255, 0, 0, 255), text, ply)
             end
         end
     end
@@ -162,7 +162,7 @@ local function warrantCommand(ply, args)
         if #mayors > 0 then -- Request a warrant if there's a mayor
             local mayor = table.Random(mayors)
             mayor:requestWarrant(target, ply, reason)
-            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Nick()))
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Name()))
             return ""
         end
     end
@@ -247,7 +247,7 @@ local function ccArrest(ply, args)
         if ply:EntIndex() == 0 then
             DarkRP.log("Console force-arrested " .. target:SteamName(), Color(0, 255, 255))
         else
-            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-arrested " .. target:SteamName(), Color(0, 255, 255))
+            DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-arrested " .. target:SteamName(), Color(0, 255, 255))
         end
     end
 end
@@ -268,7 +268,7 @@ local function ccUnarrest(ply, args)
         if ply:EntIndex() == 0 then
             DarkRP.log("Console force-unarrested " .. target:SteamName(), Color(0, 255, 255))
         else
-            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unarrested " .. target:SteamName(), Color(0, 255, 255))
+            DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") force-unarrested " .. target:SteamName(), Color(0, 255, 255))
         end
     end
 end
@@ -279,7 +279,7 @@ Callback functions
 ---------------------------------------------------------------------------]]
 function finishWarrantRequest(choice, mayor, initiator, suspect, reason)
     if not tobool(choice) then
-        DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Nick()))
+        DarkRP.notify(initiator, 1, 4, DarkRP.getPhrase("warrant_denied", mayor:Name()))
         return
     end
     if IsValid(suspect) then
@@ -331,7 +331,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isArrested() then return end -- hasn't been arrested before
 
     ply:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("youre_arrested", time))
-    for _, v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v == ply then continue end
         v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("hes_arrested", ply:Name(), time))
     end

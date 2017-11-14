@@ -294,7 +294,7 @@ local function handleConstraintCreation(ent)
         i = i + 1
     end
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         local touch1, touch2 = FPP.plyCanTouchEnt(ply, ent1), FPP.plyCanTouchEnt(ply, ent2)
 
         -- The constrained entities have the same touching rights.
@@ -341,13 +341,13 @@ local function onEntitiesCreated(ents)
 
         if blockedEnts[ent:GetClass()] then continue end
 
-        for _, ply in pairs(player.GetAll()) do
+        for _, ply in ipairs(player.GetAll()) do
             FPP.calculateCanTouch(ply, ent)
         end
         table.insert(send, ent)
     end
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         FPP.plySendTouchData(ply, send)
     end
 end
@@ -480,7 +480,7 @@ Player disconnected
 ---------------------------------------------------------------------------*/
 local function playerDisconnected(ply)
     local ownedEnts = {}
-    for _, ent in pairs(ents.GetAll()) do
+    for _, ent in ipairs(ents.GetAll()) do
         if ent:CPPIGetOwner() == ply then
             table.insert(ownedEnts, ent)
         end

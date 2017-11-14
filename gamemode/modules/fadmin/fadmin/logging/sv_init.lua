@@ -6,7 +6,7 @@ FAdmin.StartHooks["Logging"] = function()
         if not tonumber(args[1]) then return end
 
         local OnOff = (tobool(tonumber(args[1])) and "on") or "off"
-        FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Nick() .. " turned logging " .. OnOff, "Logging has been turned " .. OnOff, "Turned logging " .. OnOff)
+        FAdmin.Messages.ActionMessage(ply, player.GetAll(), ply:Name() .. " turned logging " .. OnOff, "Logging has been turned " .. OnOff, "Turned logging " .. OnOff)
 
         RunConsoleCommand("FAdmin_logging", args[1])
 
@@ -26,69 +26,69 @@ end
 
 hook.Add("PlayerGiveSWEP", "FAdmin_Log", function(ply, class)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Gave himself a " .. (class or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Gave himself a " .. (class or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedSENT", "FAdmin_Log", function(ply, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (ent:GetClass() or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (ent:GetClass() or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnSWEP", "FAdmin_Log", function(ply, class)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (class or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (class or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedProp", "FAdmin_Log", function(ply, model, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
 
-    for k, v in pairs(player.GetAll()) do
+    for k, v in ipairs(player.GetAll()) do
         if v:IsAdmin() then
-            v:PrintMessage(HUD_PRINTCONSOLE, ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
+            v:PrintMessage(HUD_PRINTCONSOLE, ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
         end
     end
 
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedNPC", "FAdmin_Log", function(ply, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (ent:GetClass() or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (ent:GetClass() or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedVehicle", "FAdmin_Log", function(ply, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (ent:GetClass() or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (ent:GetClass() or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedEffect", "FAdmin_Log", function(ply, model, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not model then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedRagdoll", "FAdmin_Log", function(ply, model, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
 end)
 
 hook.Add("CanTool", "FAdmin_Log", function(ply, tr, toolclass)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Attempted to use tool " .. (toolclass or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Attempted to use tool " .. (toolclass or "Unknown"))
 end)
 
 hook.Add("PlayerLeaveVehicle", "FAdmin_Log", function(ply, vehicle)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") exited a " .. (IsValid(vehicle) and vehicle:GetClass() or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") exited a " .. (IsValid(vehicle) and vehicle:GetClass() or "Unknown"))
 end)
 
 hook.Add("OnNPCKilled", "FAdmin_Log", function(NPC, Killer, Weapon)
     if not IsValid(NPC) then return end
-    FAdmin.Log(NPC:GetClass() .. " was killed by " .. (IsValid(Killer) and (Killer:IsPlayer() and Killer:Nick() or Killer:GetClass()) or "Unknown") .. " with a " .. (IsValid(Weapon) and Weapon:GetClass() or "Unknown"))
+    FAdmin.Log(NPC:GetClass() .. " was killed by " .. (IsValid(Killer) and (Killer:IsPlayer() and Killer:Name() or Killer:GetClass()) or "Unknown") .. " with a " .. (IsValid(Weapon) and Weapon:GetClass() or "Unknown"))
 end)
 
 hook.Add("OnPlayerChangedTeam", "FAdmin_Log", function(ply, oldteam, newteam)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") changed from " .. team.GetName(oldteam) .. " to " .. team.GetName(newteam))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") changed from " .. team.GetName(oldteam) .. " to " .. team.GetName(newteam))
 end)
 
 hook.Add("WeaponEquip", "FAdmin_Log", function(weapon)
@@ -96,14 +96,14 @@ hook.Add("WeaponEquip", "FAdmin_Log", function(weapon)
         if not IsValid(weapon) then return end
         local ply = weapon:GetOwner()
         if not IsValid(ply) or not ply:IsPlayer() then return end
-        FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Attempted to pick up a " .. weapon:GetClass())
+        FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Attempted to pick up a " .. weapon:GetClass())
     end)
 end)
 
 hook.Add("PlayerDeath", "FAdmin_Log", function(ply, inflictor, Killer)
-    local Nick = IsValid(ply) and ply:Nick() or "N/A"
+    local Nick = IsValid(ply) and ply:Name() or "N/A"
     local SteamID = IsValid(ply) and ply:SteamID() or "N/A"
-    local KillerName = IsValid(Killer) and (Killer:IsPlayer() and Killer:Nick() or Killer:GetClass()) or "N/A"
+    local KillerName = IsValid(Killer) and (Killer:IsPlayer() and Killer:Name() or Killer:GetClass()) or "N/A"
     local InflictorName =  IsValid(inflictor) and inflictor:GetClass() or "N/A"
 
     FAdmin.Log(Nick .. " (" .. SteamID .. ") Got killed by " .. KillerName .. " with a " .. InflictorName)
@@ -111,32 +111,32 @@ end)
 
 hook.Add("PlayerSilentDeath", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Got killed silently")
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Got killed silently")
 end)
 
 hook.Add("PlayerDisconnected", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Disconnected")
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Disconnected")
 end)
 
 hook.Add("PlayerInitialSpawn", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned for the first time")
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned for the first time")
 end)
 
 hook.Add("PlayerSpawn", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned")
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Spawned")
 end)
 
 hook.Add("PlayerSpray", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Sprayed his spray")
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Sprayed his spray")
 end)
 
 hook.Add("PlayerEnteredVehicle", "FAdmin_Log", function(ply, vehicle)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Entered " .. (IsValid(vehicle) and vehicle:GetClass() or "Unknown"))
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Entered " .. (IsValid(vehicle) and vehicle:GetClass() or "Unknown"))
 end)
 
 hook.Add("EntityRemoved", "FAdmin_Log", function(ent)
@@ -147,12 +147,12 @@ end)
 
 hook.Add("PlayerAuthed", "FAdmin_Log", function(ply, SteamID, _)
     if not IsValid(ply) then return end
-    FAdmin.Log(ply:Nick() .. " (" .. (SteamID or "Unknown Steam ID") .. ") is Authed")
+    FAdmin.Log(ply:Name() .. " (" .. (SteamID or "Unknown Steam ID") .. ") is Authed")
 end)
 
 hook.Add("PlayerNoClip", "FAdmin_Log", function(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Attempted to switch noclip")
+    FAdmin.Log(ply:Name() .. " (" .. ply:SteamID() .. ") Attempted to switch noclip")
 end)
 
 hook.Add("ShutDown", "FAdmin_Log", function()

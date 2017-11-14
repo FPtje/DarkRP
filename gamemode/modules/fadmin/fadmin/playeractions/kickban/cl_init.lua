@@ -205,7 +205,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
         if IsValid(Panel) then Panel:Remove() end
     end)
     FAdmin.ScoreBoard.Main.AddPlayerRightClick("Ban", function(ply, Panel)
-        showBanWindow(ply:SteamID(), ply:Nick())
+        showBanWindow(ply:SteamID(), ply:Name())
         if IsValid(Panel) then Panel:Remove() end
     end)
 
@@ -214,7 +214,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
     FAdmin.ScoreBoard.Player:AddActionButton("Kick", "fadmin/icons/kick", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Kick", ply) end, function(ply)
         if not IsValid(ply) then return end
         local UserID = ply:UserID()
-        local NICK = ply:Nick()
+        local NICK = ply:Name()
 
         RunConsoleCommand("FAdmin", "kick", UserID, "start")
         local Window = vgui.Create("DFrame")
@@ -294,7 +294,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
     -- Ban button
     FAdmin.ScoreBoard.Player:AddActionButton("Ban", "fadmin/icons/ban", nil, function(ply) return FAdmin.Access.PlayerHasPrivilege(LocalPlayer(), "Ban", ply) end, function(ply)
         local SteamID = ply:SteamID()
-        local NICK = ply:Nick()
+        local NICK = ply:Name()
 
         if ply:IsBot() then SteamID = "BOT" end
         showBanWindow(SteamID, NICK)

@@ -171,7 +171,7 @@ function FAdmin.ScoreBoard.Player:AddActionButton(Name, Image, color, Visible, A
     table.insert(FAdmin.ScoreBoard.Player.ActionButtons, {Name = Name, Image = Image, color = color, Visible = Visible, Action = Action, OnButtonCreated = OnButtonCreated})
 end
 
-FAdmin.ScoreBoard.Player:AddInformation("Name", function(ply) return ply:Nick() end)
+FAdmin.ScoreBoard.Player:AddInformation("Name", function(ply) return ply:Name() end)
 FAdmin.ScoreBoard.Player:AddInformation("Kills", function(ply) return ply:Frags() end)
 FAdmin.ScoreBoard.Player:AddInformation("Deaths", function(ply) return ply:Deaths() end)
 FAdmin.ScoreBoard.Player:AddInformation("Health", function(ply) return ply:Health() end)

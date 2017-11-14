@@ -59,7 +59,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
 
     if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
         x, y = chat.GetChatBoxPos()
-        local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Nick())
+        local text = DarkRP.getPhrase("current_hit", localplayer:getHitTarget():Name())
         draw.DrawNonParsedText(text, "HUDNumber5", x + 1, y + 1, textCol1, 0)
         draw.DrawNonParsedText(text, "HUDNumber5", x, y, textCol2, 0)
     end
@@ -86,7 +86,7 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
 end)
 
 hook.Add("InitPostEntity", "HitmanMenu", function()
-    for k, v in pairs(player.GetAll()) do
+    for k, v in ipairs(player.GetAll()) do
         if v:isHitman() and v:hasHit() then
             v:drawHitInfo()
         end

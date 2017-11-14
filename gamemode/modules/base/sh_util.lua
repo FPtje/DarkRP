@@ -211,7 +211,7 @@ Convenience function to return the players sorted by name
 ---------------------------------------------------------------------------]]
 function DarkRP.nickSortedPlayers()
     local plys = player.GetAll()
-    table.sort(plys, function(a,b) return a:Nick() < b:Nick() end)
+    table.sort(plys, function(a,b) return a:Name() < b:Name() end)
     return plys
 end
 

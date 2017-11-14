@@ -88,8 +88,8 @@ hook.Add("PlayerInitialSpawn", "FAdmin_GlobalSettings", function(ply)
             net.WriteType(v)
         end
 
-        net.WriteUInt(#player.GetAll(), 8)
-        for _, target in pairs(player.GetAll()) do
+        net.WriteUInt(player.GetCount(), 8)
+        for _, target in ipairs(player.GetAll()) do
             local targetSettings = target.GlobalSetting or {}
 
             net.WriteUInt(target:UserID(), 16)

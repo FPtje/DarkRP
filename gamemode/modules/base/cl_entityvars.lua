@@ -80,7 +80,7 @@ end)
 Request the DarkRPVars when they haven't arrived
 ---------------------------------------------------------------------------]]
 timer.Create("DarkRPCheckifitcamethrough", 15, 0, function()
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         if v:getDarkRPVar("rpname") then continue end
 
         RunConsoleCommand("_sendDarkRPvars")

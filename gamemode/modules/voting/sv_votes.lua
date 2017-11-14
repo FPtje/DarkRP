@@ -52,7 +52,7 @@ end
 function Vote:getFilter()
     local filter = RecipientFilter()
 
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         if self.exclude[v] then continue end
         local canVote = hook.Call("canVote", GAMEMODE, v, self)
 
@@ -166,7 +166,7 @@ local function CancelVote(ply)
     local result = DarkRP.destroyLastVote()
 
     if result then
-        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", ply:EntIndex() ~= 0 and ply:Nick() or "Console"))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("x_cancelled_vote", ply:EntIndex() ~= 0 and ply:Name() or "Console"))
         if ply:EntIndex() == 0 then
             print(DarkRP.getPhrase("x_cancelled_vote", "Console"))
         end

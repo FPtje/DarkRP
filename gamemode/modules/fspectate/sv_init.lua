@@ -36,7 +36,7 @@ local function startSpectating(ply, target)
         end
     net.Send(ply)
 
-    local targetText = IsValid(target) and target:IsPlayer() and (target:Nick() .. " (" .. target:SteamID() .. ")") or IsValid(target) and "an entity" or ""
+    local targetText = IsValid(target) and target:IsPlayer() and (target:Name() .. " (" .. target:SteamID() .. ")") or IsValid(target) and "an entity" or ""
     ply:ChatPrint("You are now spectating " .. targetText)
 end
 
@@ -144,7 +144,7 @@ local function playerSay(talker, message)
 
     if not DarkRP then return end
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         if ply == talker or not ply.FSpectating then continue end
 
 
@@ -165,7 +165,7 @@ local function playerSay(talker, message)
                 )
             ) then
 
-            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
+            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Name(), Color(255, 255, 255, 255), message, talker)
             return
         end
     end

@@ -1,7 +1,7 @@
 local function ClearDecals(ply, cmd, args)
     if not FAdmin.Access.PlayerHasPrivilege(ply, "CleanUp") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
-    for k,v in pairs(player.GetAll()) do
+    for k,v in ipairs(player.GetAll()) do
         v:ConCommand("r_cleardecals")
     end
     FAdmin.Messages.ActionMessage(ply, player.GetAll(), "You have removed all decals. NOTE: this does NOT make the server ANY less laggy!", "All decals have been removed. NOTE: this does NOT make the server ANY less laggy!", "Removed all decals.")

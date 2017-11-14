@@ -32,7 +32,7 @@ function FAdmin.FindPlayer(info)
             continue
         end
 
-        for k, v in pairs(pls) do
+        for k, v in ipairs(pls) do
             -- Find by Steam ID
             if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not found[v]  then
                 found[v] = true

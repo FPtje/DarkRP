@@ -78,7 +78,7 @@ function PANEL:PerformLayout()
     self.title:SizeToContents(true)
 
     self.name:SizeToContents(true)
-    self.name:SetText(DarkRP.getPhrase("name", self:GetHitman():Nick()))
+    self.name:SetText(DarkRP.getPhrase("name", self:GetHitman():Name()))
     self.name:SetPos(20 + 128 + 20, 20 + self.title:GetTall())
 
     self.price:SetFont("HUDNumber5")
@@ -112,7 +112,7 @@ function PANEL:AddPlayerRows()
     local players = table.Copy(player.GetAll())
 
     table.sort(players, function(a, b)
-        local aTeam, bTeam, aNick, bNick = team.GetName(a:Team()), team.GetName(b:Team()), string.lower(a:Nick()), string.lower(b:Nick())
+        local aTeam, bTeam, aNick, bNick = team.GetName(a:Team()), team.GetName(b:Team()), string.lower(a:Name()), string.lower(b:Name())
         return aTeam == bTeam and aNick < bNick or aTeam < bTeam
     end)
 
@@ -192,7 +192,7 @@ function PANEL:PerformLayout()
     if not IsValid(ply) then self:Remove() return end
 
     self.lblName:SetFont("UiBold")
-    self.lblName:SetText(DarkRP.deLocalise(ply:Nick()))
+    self.lblName:SetText(DarkRP.deLocalise(ply:Name()))
     self.lblName:SizeToContents()
     self.lblName:SetPos(10, 1)
 
@@ -223,4 +223,5 @@ function DarkRP.openHitMenu(hitman)
     frame:AddPlayerRows()
     frame:SetVisible(true)
     frame:MakePopup()
+	frame:ParentToHUD()
 end

@@ -18,7 +18,7 @@ local function ccTell(ply, args)
         if ply:EntIndex() == 0 then
             DarkRP.log("Console did admintell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
         else
-            DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") did admintell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
+            DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") did admintell \"" .. msg .. "\" on " .. target:SteamName(), Color(30, 30, 30))
         end
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args[1])))
@@ -34,7 +34,7 @@ local function ccTellAll(ply, args)
     if ply:EntIndex() == 0 then
         DarkRP.log("Console did admintellall \"" .. args .. "\"", Color(30, 30, 30))
     else
-        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") did admintellall \"" .. args .. "\"", Color(30, 30, 30))
+        DarkRP.log(ply:Name() .. " (" .. ply:SteamID() .. ") did admintellall \"" .. args .. "\"", Color(30, 30, 30))
     end
 
 end

@@ -77,8 +77,11 @@ local function AFKTimer(ply, key)
 end
 hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)
 
+local next_think = 0
 local function KillAFKTimer()
-    for id, ply in pairs(player.GetAll()) do
+    if next_think > CurTime() then return end
+    next_think = CurTime() + 1
+    for id, ply in ipairs(player.GetAll()) do
         if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getDarkRPVar("AFK") then
             SetAFK(ply)
             AFKDemote(ply)
