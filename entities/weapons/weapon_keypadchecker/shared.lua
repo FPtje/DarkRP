@@ -38,7 +38,7 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
     local targets = {}
     local Owner = keypad:CPPIGetOwner()
 
-    for k,v in pairs(numpad.OnDownItems or {}) do
+    for _, v in pairs(numpad.OnDownItems or {}) do
         if v.key == keyPass and v.ply == Owner then
             table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_entering_right_pass"), name = v.name, ent = v.ent, original = keypad})
         end
@@ -47,7 +47,7 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
         end
     end
 
-    for k,v in pairs(numpad.OnUpItems or {}) do
+    for _, v in pairs(numpad.OnUpItems or {}) do
         if v.key == keyPass and v.ply == Owner then
             table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_after_right_pass"), name = v.name, delay = math.Round(delayPass, 2), ent = v.ent, original = keypad})
         end
@@ -92,19 +92,19 @@ local function getEntityKeypad(ent)
     local doorKeys = {} -- The numpad keys that activate this entity
     local entOwner = ent:CPPIGetOwner()
 
-    for k,v in pairs(numpad.OnDownItems or {}) do
+    for _, v in pairs(numpad.OnDownItems or {}) do
         if v.ent == ent then
             table.insert(doorKeys, v.key)
         end
     end
 
-    for k,v in pairs(numpad.OnUpItems or {}) do
+    for _, v in pairs(numpad.OnUpItems or {}) do
         if v.ent == ent then
             table.insert(doorKeys, v.key)
         end
     end
 
-    for k,v in pairs(ents.FindByClass("sent_keypad")) do
+    for _, v in ipairs(ents.FindByClass("sent_keypad")) do
         local vOwner = v:CPPIGetOwner()
 
         if vOwner == entOwner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup1")) then
@@ -115,7 +115,7 @@ local function getEntityKeypad(ent)
         end
     end
 
-    for k,v in pairs(ents.FindByClass("keypad")) do
+    for _, v in ipairs(ents.FindByClass("keypad")) do
         local vOwner = v:CPPIGetOwner()
 
         if vOwner == entOwner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then

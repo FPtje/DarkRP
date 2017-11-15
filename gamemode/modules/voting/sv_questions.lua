@@ -57,7 +57,7 @@ function DarkRP.destroyQuestion(id)
 end
 
 function DarkRP.destroyQuestionsWithEnt(ent)
-    for k, v in pairs(Questions) do
+    for _, v in pairs(Questions) do
         if v.Ent == ent then
             DarkRP.destroyQuestion(v.ID)
         end

@@ -8,7 +8,7 @@ local received = {}
 net.Receive("DarkRP_preferredjobmodels", function(len, ply)
     preferredJobModels[ply] = {}
 
-    for i, job in ipairs(RPExtraTeams) do
+    for i in pairs(RPExtraTeams) do
         if net.ReadBit() == 0 then continue end
 
         preferredJobModels[ply][i] = net.ReadString()

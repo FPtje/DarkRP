@@ -126,7 +126,7 @@ function DarkRP.initDatabase()
             MySQLite.query("show triggers", function(data)
                 -- Check if the trigger exists first
                 if data then
-                    for k,v in pairs(data) do
+                    for _, v in ipairs(data) do
                         if v.Trigger == "JobPositionFKDelete" then
                             return
                         end
@@ -136,11 +136,11 @@ function DarkRP.initDatabase()
                 MySQLite.query("SHOW PRIVILEGES", function(privs)
                     if not privs then return end
 
-                    local found;
-                    for k,v in pairs(privs) do
+                    local found
+                    for _, v in ipairs(privs) do
                         if v.Privilege == "Trigger" then
                             found = true
-                            break;
+                            break
                         end
                     end
 
@@ -175,7 +175,7 @@ function DarkRP.initDatabase()
 
             if MySQLite.isMySQL() then -- In a listen server, the connection with the external database is often made AFTER the listen server host has joined,
                                         --so he walks around with the settings from the SQLite database
-                for k,v in pairs(player.GetAll()) do
+                for _, v in ipairs(player.GetAll()) do
                     DarkRP.offlinePlayerData(v:SteamID(), function(data)
                         if not data or not data[1] then return end
 
@@ -212,14 +212,14 @@ function migrateDB(callback)
             MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
             if MySQLite.isMySQL() then
                 local jobCommands = {}
-                for k,v in pairs(RPExtraTeams) do
+                for k, v in pairs(RPExtraTeams) do
                     table.insert(jobCommands, "(" .. k .. "," .. MySQLite.SQLStr(v.command) .. ")")
                 end
 
                 -- This WOULD work with SQLite if the implementation in GMod wasn't out of date.
                 MySQLite.queueQuery("INSERT IGNORE INTO TempJobCommands VALUES " .. table.concat(jobCommands, ",") .. ";")
             else
-                for k,v in pairs(RPExtraTeams) do
+                for k, v in pairs(RPExtraTeams) do
                     MySQLite.queueQuery("INSERT INTO TempJobCommands VALUES(" .. k .. ", " .. MySQLite.SQLStr(v.command) .. ");")
                 end
             end
@@ -390,13 +390,13 @@ end
 local function resetAllMoney(ply,cmd,args)
     if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
     MySQLite.query("UPDATE darkrp_player SET wallet = " .. GAMEMODE.Config.startingmoney .. " ;")
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         v:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
     end
     if ply:IsPlayer() then
-        DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", ply:Nick()))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("reset_money", ply:Nick()))
     else
-        DarkRP.notifyAll(0,4, DarkRP.getPhrase("reset_money", "Console"))
+        DarkRP.notifyAll(0, 4, DarkRP.getPhrase("reset_money", "Console"))
     end
 end
 concommand.Add("rp_resetallmoney", resetAllMoney)
@@ -515,7 +515,7 @@ function DarkRP.storeTeamDoorOwnability(ent)
     local map = string.lower(game.GetMap())
 
     MySQLite.query("DELETE FROM darkrp_doorjobs WHERE idx = " .. ent:doorIndex() .. " AND map = " .. MySQLite.SQLStr(map) .. ";")
-    for k,v in pairs(ent:getKeysDoorTeams() or {}) do
+    for k in pairs(ent:getKeysDoorTeams() or {}) do
         MySQLite.query("INSERT INTO darkrp_doorjobs VALUES(" .. ent:doorIndex() .. ", " .. MySQLite.SQLStr(map) .. ", " .. MySQLite.SQLStr(RPExtraTeams[k].command) .. ");")
     end
 end

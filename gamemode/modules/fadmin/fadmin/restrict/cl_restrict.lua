@@ -2,7 +2,7 @@ local function FillMenu(menu, SpawnName, GroupName)
     menu:AddOption("unrestrict", function() RunConsoleCommand("_FAdmin", "UnRestrictWeapon", SpawnName) end)
 
     menu:AddSpacer("")
-    for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
+    for k in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
         menu:AddOption(k, function() RunConsoleCommand("_FAdmin", "RestrictWeapon", SpawnName, k) end)
     end
 end

@@ -1,12 +1,10 @@
 local meta = FindMetaTable("Player")
 
 function meta:newHungerData()
-    if not IsValid(self) then return end
     self:setSelfDarkRPVar("Energy", 100)
 end
 
 function meta:hungerUpdate()
-    if not IsValid(self) then return end
     if not GAMEMODE.Config.hungerspeed then return end
 
     local energy = self:getDarkRPVar("Energy")

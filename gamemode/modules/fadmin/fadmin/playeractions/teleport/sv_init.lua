@@ -61,7 +61,7 @@ local function Teleport(ply, cmd, args)
             target:SetPos(InitialPosition)
 
             zapEffect(target)
-            FAdmin.Log(string.format("FAdmin: %s (%s) teleported %s", ply:Nick(), ply:SteamID(), target:Name()))
+            FAdmin.Log(string.format("FAdmin: %s (%s) teleported %s", ply:Nick(), ply:SteamID(), target:Nick()))
         end
     end
 

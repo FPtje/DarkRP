@@ -55,6 +55,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
     Frame.btnMinim:SetVisible(false)
     Frame:SetVisible(true)
     Frame:MakePopup()
+    Frame:ParentToHUD()
 
     function Frame:Think()
         local LAEnt = LocalPlayer():GetEyeTrace().Entity
@@ -90,7 +91,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
         AddOwner.DoClick = function()
             local menu = DermaMenu()
             menu.found = false
-            for k,v in pairs(DarkRP.nickSortedPlayers()) do
+            for _, v in pairs(DarkRP.nickSortedPlayers()) do
                 if not ent:isKeysOwnedBy(v) and not ent:isKeysAllowedToOwn(v) then
                     local steamID = v:SteamID()
                     menu.found = true
@@ -107,7 +108,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
         RemoveOwner:SetText(DarkRP.getPhrase("remove_owner"))
         RemoveOwner.DoClick = function()
             local menu = DermaMenu()
-            for k,v in pairs(DarkRP.nickSortedPlayers()) do
+            for _, v in pairs(DarkRP.nickSortedPlayers()) do
                 if (ent:isKeysOwnedBy(v) and not ent:isMasterOwner(v)) or ent:isKeysAllowedToOwn(v) then
                     local steamID = v:SteamID()
                     menu.found = true
@@ -165,7 +166,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
                 if IsValid(Frame) then Frame:Close() end
             end)
 
-            for k,v in pairs(RPExtraTeamDoors) do
+            for k in pairs(RPExtraTeamDoors) do
                 groups:AddOption(k, function()
                     RunConsoleCommand("darkrp", "togglegroupownable", k)
                     if IsValid(Frame) then Frame:Close() end
@@ -173,7 +174,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
             end
 
             local doorTeams = ent:getKeysDoorTeams()
-            for k,v in pairs(RPExtraTeams) do
+            for k, v in pairs(RPExtraTeams) do
                 local which = (not doorTeams or not doorTeams[k]) and add or remove
                 which:AddOption(v.name, function()
                     RunConsoleCommand("darkrp", "toggleteamownable", k)

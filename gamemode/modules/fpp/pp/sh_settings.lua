@@ -122,7 +122,7 @@ function FPP.calculatePlayerPrivilege(priv, callback)
 	local plys = player.GetAll()
 	local count = #plys
 
-	for _, ply in pairs(plys) do
+	for _, ply in ipairs(plys) do
 		local function onRes(b)
 			count = count - 1
 			ply.FPP_Privileges = ply.FPPPrivileges or {}

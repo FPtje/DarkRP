@@ -40,7 +40,7 @@ function FAdmin.Access.AddGroup(name, admin_access --[[0 = not admin, 1 = admin,
     end
 
     if FAdmin.Access.SendGroups and privs then
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             FAdmin.Access.SendGroups(v)
         end
     end
@@ -69,7 +69,7 @@ function FAdmin.Access.OnUsergroupUnregistered(usergroup, source)
 
     MySQLite.query("DELETE FROM FADMIN_GROUPS WHERE NAME = " .. MySQLite.SQLStr(usergroup.Name) .. ";")
 
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         FAdmin.Access.SendGroups(v)
     end
 end
@@ -254,7 +254,7 @@ FAdmin.StartHooks["AccessFunctions"] = function()
 
     FAdmin.Commands.AddCommand("Admins", function(ply)
         if not FAdmin.Access.PlayerHasPrivilege(ply, "SeeAdmins") then return false end
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             ply:PrintMessage(HUD_PRINTCONSOLE, v:Nick() .. "\t|\t" .. v:GetUserGroup())
         end
         return true

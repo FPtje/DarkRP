@@ -189,7 +189,7 @@ end
 
 -- try not to call this with both player.GetAll() and ents.GetAll()
 local function recalculateCanTouch(players, entities)
-    for k,v in pairs(entities) do
+    for k, v in pairs(entities) do
         if not IsValid(v) then entities[k] = nil continue end
         if v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
         if blockedEnts[v:GetClass()] then entities[k] = nil continue end
@@ -294,7 +294,7 @@ local function handleConstraintCreation(ent)
         i = i + 1
     end
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         local touch1, touch2 = FPP.plyCanTouchEnt(ply, ent1), FPP.plyCanTouchEnt(ply, ent2)
 
         -- The constrained entities have the same touching rights.
@@ -326,7 +326,7 @@ On entity created
 local function onEntitiesCreated(ents)
     local send = {}
 
-    for k, ent in pairs(ents) do
+    for _, ent in pairs(ents) do
         if not IsValid(ent) then continue end
 
         if isConstraint(ent) then
@@ -341,13 +341,13 @@ local function onEntitiesCreated(ents)
 
         if blockedEnts[ent:GetClass()] then continue end
 
-        for _, ply in pairs(player.GetAll()) do
+        for _, ply in ipairs(player.GetAll()) do
             FPP.calculateCanTouch(ply, ent)
         end
         table.insert(send, ent)
     end
 
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         FPP.plySendTouchData(ply, send)
     end
 end
@@ -429,7 +429,7 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 
             -- now update the ents to the client
             local updated = {}
-            for e, b in pairs(black) do
+            for e in pairs(black) do
                 if FPP.plyCanTouchEnt(ply, e) ~= FPP_CanTouch then
                     e.FPPRestrictConstraint = e.FPPRestrictConstraint or {}
                     e.FPPRestrictConstraint[ply] = e.FPPCanTouch[ply] ~= FPP_CanTouch and FPP_CanTouch or nil
@@ -480,7 +480,7 @@ Player disconnected
 ---------------------------------------------------------------------------*/
 local function playerDisconnected(ply)
     local ownedEnts = {}
-    for _, ent in pairs(ents.GetAll()) do
+    for _, ent in ipairs(ents.GetAll()) do
         if ent:CPPIGetOwner() == ply then
             table.insert(ownedEnts, ent)
         end

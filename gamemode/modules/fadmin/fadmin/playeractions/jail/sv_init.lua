@@ -22,7 +22,7 @@ local function Jail(ply, cmd, args)
         local JailProps = {}
         if JailType == "unjail" or string.lower(cmd) == "unjail" then
             if target.FAdminJailProps then
-                for k,v in pairs(target.FAdminJailProps) do
+                for k in pairs(target.FAdminJailProps) do
                     if not IsValid(k) then continue end
                     k:SetCanRemove(true)
                     k:Remove()
@@ -71,8 +71,9 @@ local function Jail(ply, cmd, args)
             target.FAdminJailPos = target:GetPos()
             target.FAdminJailProps = {}
 
-            for k,v in pairs(JailProps) do
+            for _, v in pairs(JailProps) do
                 local JailProp = ents.Create("fadmin_jail")
+                if not IsValid(JailProp) then return end
                 JailProp:SetPos(target.FAdminJailPos + v.pos)
                 JailProp:SetAngles(v.ang)
                 JailProp:SetModel(v.model)
@@ -91,7 +92,7 @@ local function Jail(ply, cmd, args)
                     timer.Remove("FAdmin_jail_watch" .. target:UserID())
                     target:FAdmin_SetGlobal("fadmin_jailed", false)
 
-                    for k, v in pairs(target.FAdminJailProps) do
+                    for k in pairs(target.FAdminJailProps) do
                         if not IsValid(k) then continue end
                         k:SetCanRemove(true)
                         k:Remove()

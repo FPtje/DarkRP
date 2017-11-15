@@ -22,7 +22,7 @@ function FAdmin.FindPlayer(info)
         end
     end
 
-    for _, PlayerInfo in pairs(InfoPlayers) do
+    for _, PlayerInfo in ipairs(InfoPlayers) do
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
@@ -32,14 +32,14 @@ function FAdmin.FindPlayer(info)
             continue
         end
 
-        for k, v in pairs(pls) do
+        for _, v in ipairs(pls) do
             -- Find by Steam ID
             if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not found[v]  then
                 found[v] = true
             end
 
             -- Find by Partial Nick
-            if string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
+            if string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
                 found[v] = true
             end
 
@@ -51,7 +51,7 @@ function FAdmin.FindPlayer(info)
 
     local players = {}
     local empty = true
-    for k, v in pairs(found or {}) do
+    for k in pairs(found or {}) do
         empty = false
         table.insert(players, k)
     end
@@ -75,8 +75,8 @@ FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
     This way there will be no hassle with which plugin loads first, which one next etc.
 ]]
 timer.Simple(0, function()
-    for k,v in pairs(FAdmin.StartHooks) do if type(k) ~= "string" then FAdmin.StartHooks[k] = nil end end
-    for k,v in SortedPairs(FAdmin.StartHooks) do
+    for k in pairs(FAdmin.StartHooks) do if type(k) ~= "string" then FAdmin.StartHooks[k] = nil end end
+    for _, v in SortedPairs(FAdmin.StartHooks) do
         v()
     end
 end)

@@ -152,6 +152,7 @@ end
 
 local function deserialize(ply, item)
     local ent = ents.Create(item.Class)
+    if not IsValid(ent) then return end
     duplicator.DoGeneric(ent, item)
     ent:Spawn()
     ent:Activate()
@@ -177,7 +178,7 @@ local function deserialize(ply, item)
 end
 
 local function dropAllPocketItems(ply)
-    for k,v in pairs(ply.darkRPPocket or {}) do
+    for k in pairs(ply.darkRPPocket or {}) do
         ply:dropPocketItem(k)
     end
 end
@@ -242,7 +243,7 @@ function meta:getPocketItems()
     self.darkRPPocket = self.darkRPPocket or {}
 
     local res = {}
-    for k,v in pairs(self.darkRPPocket) do
+    for k, v in pairs(self.darkRPPocket) do
         res[k] = {
             model = v.Model,
             class = v.Class
@@ -290,10 +291,11 @@ function GAMEMODE:canPocket(ply, item)
     local trace = ply:GetEyeTrace()
     if ply:EyePos():DistToSqr(trace.HitPos) > 22500 then return false end
 
-    local phys = trace.Entity:GetPhysicsObject()
+    local ent = trace.Entity
+    local phys = ent:GetPhysicsObject()
     if not phys:IsValid() then return false end
 
-    local mass = trace.Entity.RPOriginalMass and trace.Entity.RPOriginalMass or phys:GetMass()
+    local mass = ent.RPOriginalMass and ent.RPOriginalMass or phys:GetMass()
     if mass > 100 then return false, DarkRP.getPhrase("object_too_heavy") end
 
     local job = ply:Team()

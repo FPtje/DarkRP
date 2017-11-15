@@ -18,6 +18,7 @@ hook.Add("InitPostEntity", "PlaceMOTD", function()
     MOTD = MOTD[1] or MOTD["1"]
 
     local ent = ents.Create("fadmin_motd")
+    if not IsValid(ent) then return end
     ent:SetPos(Vector(MOTD.x, MOTD.y, MOTD.z))
     ent:SetAngles(Angle(MOTD.pitch % 360, MOTD.yaw % 360, MOTD.roll % 360))
     ent:Spawn()
@@ -79,6 +80,7 @@ end
 local function CreateMOTD(ply)
     if ply ~= game.GetWorld() and not ply:IsSuperAdmin() then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     local MOTDEnt = ents.Create("fadmin_motd")
+    if not IsValid(MOTDEnt) then return end
     MOTDEnt:SpawnFunction(ply, ply:GetEyeTrace())
 
     return true, MOTDEnt

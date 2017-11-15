@@ -15,7 +15,7 @@ local function findPlayer(info)
             return v
         end
 
-        if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:Nick()), string.lower(tostring(info)), 1, true) ~= nil then
             return v
         end
     end
@@ -113,24 +113,26 @@ local function endSpectate(ply, cmd, args)
 end
 concommand.Add("FSpectate_StopSpectating", endSpectate)
 
+local vrad = GM.Config.voiceradius
 local function playerVoice(listener, talker)
     if not listener.FSpectating then return end
 
     local canHearLocal, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
 
-    if not IsValid(listener.FSpectatingEnt) or not listener.FSpectatingEnt:IsPlayer() then
-        local spectatePos = IsValid(listener.FSpectatingEnt) and listener.FSpectatingEnt:GetPos() or listener.FSpectatePos
-        if not DarkRP or not GAMEMODE.Config.voiceradius or not spectatePos then return end
+    local FSpectatingEnt = listener.FSpectatingEnt
+    if not IsValid(FSpectatingEnt) or not FSpectatingEnt:IsPlayer() then
+        local spectatePos = IsValid(FSpectatingEnt) and FSpectatingEnt:GetPos() or listener.FSpectatePos
+        if not DarkRP or not vrad or not spectatePos then return end
 
         -- Return whether the listener can hear the talker locally or distance smaller than 550
         return canHearLocal or spectatePos:DistToSqr(talker:GetShootPos()) < 302500, surround
     end
 
     -- You can hear someone if your spectate target can hear them
-    local canHear = GAMEMODE:PlayerCanHearPlayersVoice(listener.FSpectatingEnt, talker)
+    local canHear = GAMEMODE:PlayerCanHearPlayersVoice(FSpectatingEnt, talker)
 
     -- you can always hear the person you're spectating
-    return canHear or canHearLocal or listener.FSpectatingEnt == talker, surround
+    return canHear or canHearLocal or FSpectatingEnt == talker, surround
 end
 hook.Add("PlayerCanHearPlayersVoice", "FSpectate", playerVoice)
 
@@ -144,28 +146,32 @@ local function playerSay(talker, message)
 
     if not DarkRP then return end
 
-    for _, ply in pairs(player.GetAll()) do
+    local talkerTeam = team.GetColor(talker:Team())
+    local talkerName = talker:Nick()
+    local col = Color(255, 255, 255, 255)
+    for _, ply in ipairs(player.GetAll()) do
         if ply == talker or not ply.FSpectating then continue end
 
-
+        local shootPos = talker:GetShootPos()
+        local FSpectatingEnt = ply.FSpectatingEnt
         if
             -- Make sure you don't get it twice
-            ply:GetShootPos():Distance(talker:GetShootPos()) > 250 and
+            ply:GetShootPos():DistToSqr(shootPos) > 62500 and
             (
                 -- the person is saying it close to where you are roaming
-                ply.FSpectatePos and talker:GetShootPos():Distance(ply.FSpectatePos) <= 600 or
+                ply.FSpectatePos and shootPos:DistToSqr(ply.FSpectatePos) <= 360000 or
 
                 -- The person you're spectating or someone near the person you're spectating is saying it
-                (IsValid(ply.FSpectatingEnt) and ply.FSpectatingEnt:IsPlayer() and
-                talker:GetShootPos():Distance(ply.FSpectatingEnt:GetShootPos()) <= 300) or
+                (IsValid(FSpectatingEnt) and FSpectatingEnt:IsPlayer() and
+                shootPos:DistToSqr(FSpectatingEnt:GetShootPos()) <= 90000) or
 
                 -- Close to the object you're spectating
-                (IsValid(ply.FSpectatingEnt) and not ply.FSpectatingEnt:IsPlayer() and
-                talker:GetPos():Distance(ply.FSpectatingEnt:GetPos()) <= 300
+                (IsValid(FSpectatingEnt) and not FSpectatingEnt:IsPlayer() and
+                talker:GetPos():DistToSqr(FSpectatingEnt:GetPos()) <= 90000
                 )
             ) then
 
-            DarkRP.talkToPerson(ply, team.GetColor(talker:Team()), talker:Nick(), Color(255, 255, 255, 255), message, talker)
+            DarkRP.talkToPerson(ply, talkerTeam, talkerName, col, message, talker)
             return
         end
     end

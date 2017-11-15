@@ -60,7 +60,7 @@ FAdmin.StartHooks["God"] = function()
 end
 
 hook.Add("PlayerSpawn", "FAdmin_God", function()
-    for _, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         if ply:FAdmin_GetGlobal("FAdmin_godded") then
             ply:GodEnable()
         end

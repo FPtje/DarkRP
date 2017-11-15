@@ -17,7 +17,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
 
 
     local optionsCount = 0
-    for k,v in pairs(FAdmin.Commands.List) do
+    for k, v in pairs(FAdmin.Commands.List) do
         if string.find(string.lower(k), Command, 1, true) ~= 1 then continue end
 
         Options[prefix .. k] = table.Copy(v.ExtraArgs)
@@ -30,7 +30,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     local DidMakeShorter = false
     table.sort(Options)
     local i = 1
-    for k,v in pairs(Options) do
+    for k in pairs(Options) do
         local Pos = ChatBoxPosY + i * 24
         if Pos + 24 > ScrH() then
             Options[k] = nil
@@ -45,7 +45,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     if optionsCount == 1 and firstVal[#Args] and string.match(firstVal[#Args], ".Player.") then
         local players = {}
 
-        for k,v in pairs(FAdmin.FindPlayer(Args[#Args]) or {}) do
+        for _, v in pairs(FAdmin.FindPlayer(Args[#Args]) or {}) do
             if not IsValid(v) then continue end
             table.insert(players, v:Nick())
         end
@@ -83,13 +83,13 @@ local plyIndex = 1
 hook.Add("OnChatTab", "FAdmin_Chat_autocomplete", function(text)
     if not FAdmin.GlobalSetting.FAdmin then return end
 
-    for command, _ in pairs(Options) do
+    for command in pairs(Options) do
         if string.find(text, " ") == nil then
             return string.sub(command, 1, string.find(command, " "))
         elseif string.find(text, " ") then
             plyIndex = plyIndex + 1
 
-            if plyIndex > #player.GetAll() then
+            if plyIndex > player.GetCount() then
                 plyIndex = 1
             end
 

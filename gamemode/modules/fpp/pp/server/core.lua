@@ -107,7 +107,7 @@ if undo then
 
     function undo.Finish(...)
         if IsValid(UndoPlayer) then
-            for k,v in pairs(Undo) do
+            for _, v in pairs(Undo) do
                 v:CPPISetOwner(UndoPlayer)
             end
         end
@@ -348,7 +348,7 @@ local allweapons = {
 ["weapon_bugbait"] = true}
 
 timer.Simple(5, function()
-    for k,v in pairs(weapons.GetList()) do
+    for _, v in ipairs(weapons.GetList()) do
         if v.ClassName then allweapons[string.lower(v.ClassName or "")] = true end
     end
 end)
@@ -486,7 +486,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
     if not EntTable then return end
 
 
-    for k,v in pairs(EntTable) do
+    for k, v in pairs(EntTable) do
         local lowerClass = string.lower(v.Class)
 
         if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
@@ -538,9 +538,9 @@ hook.Add("CanDrive", "FPP.Protect.CanDrive", FPP.Protect.CanDrive)
 local function freezeDisconnected(ply)
     local SteamID = ply:SteamID()
 
-    for _, ent in pairs(ents.GetAll()) do
+    for _, ent in ipairs(ents.GetAll()) do
         local physObj = ent:GetPhysicsObject()
-        if not IsValid(ent) or ent.FPPOwnerID ~= SteamID or ent:GetPersistent() or not physObj:IsValid() then continue end
+        if ent.FPPOwnerID ~= SteamID or ent:GetPersistent() or not physObj:IsValid() then continue end
 
         physObj:EnableMotion(false)
     end
@@ -563,8 +563,8 @@ function FPP.PlayerDisconnect(ply)
 
 
         local fallback = player.GetBySteamID(ply.FPPFallbackOwner)
-        for k,v in pairs(ents.GetAll()) do
-            if not IsValid(v) or v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
+        for _, v in ipairs(ents.GetAll()) do
+            if v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
 
             v.FPPFallbackOwner = ply.FPPFallbackOwner
 
@@ -600,13 +600,13 @@ function FPP.PlayerDisconnect(ply)
     timer.Simple(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime, function()
         if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) then return end -- Settings can change in time.
 
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 return
             end
         end
-        for k,v in pairs(ents.GetAll()) do
-            if not IsValid(v) or v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
+        for _, v in ipairs(ents.GetAll()) do
+            if v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
             v:Remove()
         end
         FPP.DisconnectedPlayers[SteamID] = nil -- Player out of the Disconnect table
@@ -630,8 +630,8 @@ function FPP.PlayerInitialSpawn(ply)
 
     local entities = {}
     if FPP.DisconnectedPlayers[SteamID] then -- Check if the player has rejoined within the auto remove time
-        for k,v in pairs(ents.GetAll()) do
-            if IsValid(v) and (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNWString("FPP_OriginalOwner") == SteamID) then
+        for _, v in ipairs(ents.GetAll()) do
+            if (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNWString("FPP_OriginalOwner") == SteamID) then
                 v.FPPFallbackOwner = nil
                 v:CPPISetOwner(ply)
                 table.insert(entities, v)
@@ -644,7 +644,7 @@ function FPP.PlayerInitialSpawn(ply)
     end
 
     local plys = {}
-    for k,v in pairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
+    for _, v in ipairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
 
     timer.Create("FPP_recalculate_cantouch_" .. ply:UserID(), 0, 1, function()
         FPP.recalculateCanTouch({ply}, ents.GetAll())

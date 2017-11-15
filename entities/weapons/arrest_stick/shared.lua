@@ -62,14 +62,16 @@ function SWEP:PrimaryAttack()
     local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
     self:GetOwner():LagCompensation(false)
 
-    if IsValid(trace.Entity) and trace.Entity.onArrestStickUsed then
-        trace.Entity:onArrestStickUsed(self:GetOwner())
+    local ent = trace.Entity
+    if IsValid(ent) and ent.onArrestStickUsed then
+        ent:onArrestStickUsed(self:GetOwner())
         return
     end
 
     local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() and p:IsSolid() end)
 
-    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > self.stickRange * self.stickRange) or not ent:IsPlayer() then
+    local stickRange = self.stickRange * self.stickRange
+    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > stickRange * stickRange) or not ent:IsPlayer() then
         return
     end
 

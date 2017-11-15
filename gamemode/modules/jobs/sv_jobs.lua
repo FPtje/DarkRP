@@ -57,16 +57,17 @@ function meta:changeTeam(t, force, suppressNotification)
             return false
         elseif type(TEAM.NeedToChangeFrom) == "table" and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
             local teamnames = ""
-            for a, b in pairs(TEAM.NeedToChangeFrom) do
+            for _, b in pairs(TEAM.NeedToChangeFrom) do
                 teamnames = teamnames .. " or " .. team.GetName(b)
             end
             notify(self, 1,4, string.format(string.sub(teamnames, 5), team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
             return false
         end
         local max = TEAM.max
+        local numPlayers = team.NumPlayers(t)
         if max ~= 0 and -- No limit
-        (max >= 1 and team.NumPlayers(t) >= max or -- absolute maximum
-        max < 1 and (team.NumPlayers(t) + 1) / #player.GetAll() > max) then -- fractional limit (in percentages)
+        (max >= 1 and numPlayers >= max or -- absolute maximum
+        max < 1 and (numPlayers + 1) / player.GetCount() > max) then -- fractional limit (in percentages)
             notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
             return false
         end
@@ -106,17 +107,17 @@ function meta:changeTeam(t, force, suppressNotification)
     self.LastJob = CurTime()
 
     if GAMEMODE.Config.removeclassitems then
-        for k, v in pairs(DarkRPEntities) do
+        for _, v in pairs(DarkRPEntities) do
             if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
             if not v.allowed then continue end
             if type(v.allowed) == "table" and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
-            for _, e in pairs(ents.FindByClass(v.ent)) do
+            for _, e in ipairs(ents.FindByClass(v.ent)) do
                 if e.SID == self.SID then e:Remove() end
             end
         end
 
         if not GAMEMODE.Config.preventClassItemRemoval["spawned_shipment"] then
-            for k,v in pairs(ents.FindByClass("spawned_shipment")) do
+            for _, v in ipairs(ents.FindByClass("spawned_shipment")) do
                 if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
                 if v.SID == self.SID then v:Remove() end
             end
@@ -308,7 +309,8 @@ local function Demote(ply, args)
         return ""
     end
 
-    if not RPExtraTeams[p:Team()] or RPExtraTeams[p:Team()].candemote == false then
+    local Team = p:Team()
+    if not RPExtraTeams[Team] or RPExtraTeams[Team].candemote == false then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
     else
         DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Nick(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
@@ -398,7 +400,7 @@ local function DoTeamBan(ply, args)
     end
 
     local found = false
-    for k,v in pairs(RPExtraTeams) do
+    for k, v in pairs(RPExtraTeams) do
         if string.lower(v.name) == string.lower(Team) or string.lower(v.command) == string.lower(Team) or k == tonumber(Team or -1) then
             Team = k
             found = true
@@ -439,7 +441,7 @@ local function DoTeamUnBan(ply, args)
     end
 
     local found = false
-    for k,v in pairs(RPExtraTeams) do
+    for k, v in pairs(RPExtraTeams) do
         if string.lower(v.name) == string.lower(Team) or  string.lower(v.command) == string.lower(Team) then
             Team = k
             found = true

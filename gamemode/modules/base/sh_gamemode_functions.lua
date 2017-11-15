@@ -70,7 +70,7 @@ hook.Add("loadCustomDarkRPItems", "CAMI privs", function()
         MinAccess = "superadmin"
     }
 
-    for k,v in pairs(RPExtraTeams) do
+    for _, v in pairs(RPExtraTeams) do
         if not v.vote or v.admin and v.admin > 1 then continue end
 
         local toAdmin = {[0] = "admin", [1] = "superadmin"}

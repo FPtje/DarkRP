@@ -65,7 +65,7 @@ function FAdmin.ScoreBoard.Main.Show()
 
     FAdmin.ScoreBoard.Main.PlayerListView(sortBy, SortDown:GetBool())
 
-    for k,v in pairs(Sort) do
+    for _, v in pairs(Sort) do
         v:SetFont("Trebuchet20")
         v:SizeToContents()
 
@@ -83,7 +83,7 @@ function FAdmin.ScoreBoard.Main.Show()
         v.BtnSort:SetSize(16, 16)
         v.BtnSort:SetPos(X + v:GetWide() + 5, Y + 4)
         function v.BtnSort.DoClick()
-            for a,b in pairs(Sort) do
+            for _, b in pairs(Sort) do
                 b.BtnSort.Depressed = b.BtnSort == v.BtnSort
             end
             v.BtnSort.Type = (v.BtnSort.Type == "Down" and "Up") or "Down"

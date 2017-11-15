@@ -106,7 +106,7 @@ function meta:keysUnOwn(ply)
 end
 
 function pmeta:keysUnOwnAll()
-    for k, v in pairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         if v:isKeysOwnable() and v:isKeysOwnedBy(self) == true then
             v:Fire("unlock", "", 0.6)
         end
@@ -120,12 +120,10 @@ function pmeta:keysUnOwnAll()
         end
     end
 
-    for k, v in pairs(player.GetAll()) do
-        if v.Ownedz then
-            for n, m in pairs(v.Ownedz) do
-                if IsValid(m) and m:isKeysAllowedToOwn(self) then
-                    m:removeKeysAllowedToOwn(self)
-                end
+    for _, v in ipairs(player.GetAll()) do
+        for _, m in pairs(v.Ownedz or {}) do
+            if IsValid(m) and m:isKeysAllowedToOwn(self) then
+                m:removeKeysAllowedToOwn(self)
             end
         end
     end
@@ -305,26 +303,27 @@ DarkRP.definePrivilegedChatCommand("toggleteamownable", "DarkRP_ChangeDoorSettin
 
 local function OwnDoor(ply)
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():DistToSqr(trace.Entity:GetPos()) >= 40000 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ply:GetPos():DistToSqr(ent:GetPos()) >= 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
 
-    local Owner = trace.Entity:CPPIGetOwner()
+    local Owner = ent:CPPIGetOwner()
 
     if ply:isArrested() then
         DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unown_arrested"))
         return ""
     end
 
-    if trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or not fn.Null(trace.Entity:getKeysDoorTeams() or {}) then
+    if ent:getKeysNonOwnable() or ent:getKeysDoorGroup() or not fn.Null(ent:getKeysDoorTeams() or {}) then
         DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("door_unownable"))
         return ""
     end
 
-    if trace.Entity:isKeysOwnedBy(ply) then
-        local bAllowed, strReason = hook.Call("playerSell" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
+    if ent:isKeysOwnedBy(ply) then
+        local bAllowed, strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
 
         if bAllowed == false then
             if strReason and strReason ~= "" then
@@ -334,35 +333,35 @@ local function OwnDoor(ply)
             return ""
         end
 
-        if trace.Entity:isMasterOwner(ply) then
-            trace.Entity:removeAllKeysExtraOwners()
-            trace.Entity:removeAllKeysAllowedToOwn()
-            trace.Entity:Fire("unlock", "", 0)
+        if ent:isMasterOwner(ply) then
+            ent:removeAllKeysExtraOwners()
+            ent:removeAllKeysAllowedToOwn()
+            ent:Fire("unlock", "", 0)
         end
 
-        trace.Entity:keysUnOwn(ply)
-        trace.Entity:setKeysTitle(nil)
-        local GiveMoneyBack = math.floor((hook.Call("get" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity) * 0.666) + 0.5)
-        hook.Call("playerKeysSold", GAMEMODE, ply, trace.Entity, GiveMoneyBack)
+        ent:keysUnOwn(ply)
+        ent:setKeysTitle(nil)
+        local GiveMoneyBack = math.floor((hook.Call("get" .. (ent:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent) * 0.666) + 0.5)
+        hook.Call("playerKeysSold", GAMEMODE, ply, ent, GiveMoneyBack)
         ply:addMoney(GiveMoneyBack)
-        local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, trace.Entity)
+        local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, ent)
         if not bSuppress then
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("door_sold", DarkRP.formatMoney(GiveMoneyBack)))
         end
 
     else
-        if trace.Entity:isKeysOwned() and not trace.Entity:isKeysAllowedToOwn(ply) then
+        if ent:isKeysOwned() and not ent:isKeysAllowedToOwn(ply) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_already_owned"))
             return ""
         end
 
-        local iCost = hook.Call("get" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, trace.Entity)
+        local iCost = hook.Call("get" .. (ent:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent)
         if not ply:canAfford(iCost) then
-            DarkRP.notify(ply, 1, 4, trace.Entity:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
+            DarkRP.notify(ply, 1, 4, ent:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
             return ""
         end
 
-        local bAllowed, strReason, bSuppress = hook.Call("playerBuy" .. (trace.Entity:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity)
+        local bAllowed, strReason, bSuppress = hook.Call("playerBuy" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
         if bAllowed == false then
             if strReason and strReason ~= "" then
                 DarkRP.notify(ply, 1, 4, strReason)
@@ -371,7 +370,7 @@ local function OwnDoor(ply)
             return ""
         end
 
-        local bVehicle = trace.Entity:IsVehicle()
+        local bVehicle = ent:IsVehicle()
 
         if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and Owner ~= ply then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", DarkRP.getPhrase("vehicle")))
@@ -388,8 +387,8 @@ local function OwnDoor(ply)
             DarkRP.notify(ply, 0, 4, bVehicle and DarkRP.getPhrase("vehicle_bought", DarkRP.formatMoney(iCost), "") or DarkRP.getPhrase("door_bought", DarkRP.formatMoney(iCost), ""))
         end
 
-        trace.Entity:keysOwn(ply)
-        hook.Call("playerBought" .. (bVehicle and "Vehicle" or "Door"), GAMEMODE, ply, trace.Entity, iCost)
+        ent:keysOwn(ply)
+        hook.Call("playerBought" .. (bVehicle and "Vehicle" or "Door"), GAMEMODE, ply, ent, iCost)
     end
 
     return ""
@@ -398,7 +397,7 @@ DarkRP.defineChatCommand("toggleown", OwnDoor)
 
 local function UnOwnAll(ply, cmd, args)
     local amount = 0
-    for k,v in pairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         if v:isKeysOwnedBy(ply) and v:isDoor() and not IsValid(v.EntOwner) then -- EntOwner is from SCARs
             amount = amount + 1
             v:Fire("unlock", "", 0)
@@ -452,15 +451,16 @@ DarkRP.defineChatCommand("title", SetDoorTitle)
 
 local function RemoveDoorOwner(ply, args)
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():DistToSqr(trace.Entity:GetPos()) >= 12100 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ply:GetPos():DistToSqr(ent:GetPos()) >= 12100 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
 
     local target = DarkRP.findPlayer(args)
 
-    if trace.Entity:getKeysNonOwnable() then
+    if ent:getKeysNonOwnable() then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_rem_owners_unownable"))
         return ""
     end
@@ -470,21 +470,21 @@ local function RemoveDoorOwner(ply, args)
         return ""
     end
 
-    if not trace.Entity:isKeysOwnedBy(ply) then
+    if not ent:isKeysOwnedBy(ply) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
         return ""
     end
 
 
-    local canDo = hook.Call("onAllowedToOwnRemoved", nil, ply, trace.Entity, target)
+    local canDo = hook.Call("onAllowedToOwnRemoved", nil, ply, ent, target)
     if canDo == false then return "" end
 
-    if trace.Entity:isKeysAllowedToOwn(target) then
-        trace.Entity:removeKeysAllowedToOwn(target)
+    if ent:isKeysAllowedToOwn(target) then
+        ent:removeKeysAllowedToOwn(target)
     end
 
-    if trace.Entity:isKeysOwnedBy(target) then
-        trace.Entity:removeKeysDoorOwner(target)
+    if ent:isKeysOwnedBy(target) then
+        ent:removeKeysDoorOwner(target)
     end
 
     return ""
@@ -494,15 +494,16 @@ DarkRP.defineChatCommand("ro", RemoveDoorOwner)
 
 local function AddDoorOwner(ply, args)
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:GetPos():DistToSqr(trace.Entity:GetPos()) >= 12100 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ply:GetPos():DistToSqr(ent:GetPos()) >= 12100 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
 
     local target = DarkRP.findPlayer(args)
 
-    if trace.Entity:getKeysNonOwnable() then
+    if ent:getKeysNonOwnable() then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("door_add_owners_unownable"))
         return ""
     end
@@ -512,20 +513,20 @@ local function AddDoorOwner(ply, args)
         return ""
     end
 
-    if not trace.Entity:isKeysOwnedBy(ply) then
+    if not ent:isKeysOwnedBy(ply) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("do_not_own_ent"))
         return ""
     end
 
-    if trace.Entity:isKeysOwnedBy(target) or trace.Entity:isKeysAllowedToOwn(target) then
+    if ent:isKeysOwnedBy(target) or ent:isKeysAllowedToOwn(target) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target:Nick()))
         return ""
     end
 
-    local canDo = hook.Call("onAllowedToOwnAdded", nil, ply, trace.Entity, target)
+    local canDo = hook.Call("onAllowedToOwnAdded", nil, ply, ent, target)
     if canDo == false then return "" end
 
-    trace.Entity:addKeysAllowedToOwn(target)
+    ent:addKeysAllowedToOwn(target)
 
 
     return ""

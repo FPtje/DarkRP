@@ -75,7 +75,7 @@ function meta:sendDarkRPVars()
 
     net.Start("DarkRP_InitializeVars")
         net.WriteUInt(#plys, 8)
-        for _, target in pairs(plys) do
+        for _, target in ipairs(plys) do
             net.WriteUInt(target:UserID(), 16)
 
             local DarkRPVars = {}
