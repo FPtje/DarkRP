@@ -113,24 +113,26 @@ local function endSpectate(ply, cmd, args)
 end
 concommand.Add("FSpectate_StopSpectating", endSpectate)
 
+local vrad = GM.Config.voiceradius
 local function playerVoice(listener, talker)
     if not listener.FSpectating then return end
 
     local canHearLocal, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
 
-    if not IsValid(listener.FSpectatingEnt) or not listener.FSpectatingEnt:IsPlayer() then
-        local spectatePos = IsValid(listener.FSpectatingEnt) and listener.FSpectatingEnt:GetPos() or listener.FSpectatePos
-        if not DarkRP or not GAMEMODE.Config.voiceradius or not spectatePos then return end
+    local FSpectatingEnt = listener.FSpectatingEnt
+    if not IsValid(FSpectatingEnt) or not FSpectatingEnt:IsPlayer() then
+        local spectatePos = IsValid(FSpectatingEnt) and FSpectatingEnt:GetPos() or listener.FSpectatePos
+        if not DarkRP or not vrad or not spectatePos then return end
 
         -- Return whether the listener can hear the talker locally or distance smaller than 550
         return canHearLocal or spectatePos:DistToSqr(talker:GetShootPos()) < 302500, surround
     end
 
     -- You can hear someone if your spectate target can hear them
-    local canHear = GAMEMODE:PlayerCanHearPlayersVoice(listener.FSpectatingEnt, talker)
+    local canHear = GAMEMODE:PlayerCanHearPlayersVoice(FSpectatingEnt, talker)
 
     -- you can always hear the person you're spectating
-    return canHear or canHearLocal or listener.FSpectatingEnt == talker, surround
+    return canHear or canHearLocal or FSpectatingEnt == talker, surround
 end
 hook.Add("PlayerCanHearPlayersVoice", "FSpectate", playerVoice)
 
