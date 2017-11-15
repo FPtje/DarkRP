@@ -26,7 +26,7 @@ end
 function ENT:createItem(activator)
     local drugPos = self:GetPos()
     local drug = ents.Create("drug")
-    if not IsValid(ent) then return end
+    if not IsValid(drug) then return end
     drug:SetPos(Vector(drugPos.x, drugPos.y, drugPos.z + 35))
     drug:Setowning_ent(activator)
     drug.SID = activator.SID
