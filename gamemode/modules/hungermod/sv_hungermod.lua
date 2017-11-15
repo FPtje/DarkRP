@@ -74,6 +74,7 @@ local function BuyFood(ply, args)
         DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", v.name, DarkRP.formatMoney(cost), ""))
 
         local SpawnedFood = ents.Create("spawned_food")
+        if not IsValid(SpawnedFood) then return end
         SpawnedFood:Setowning_ent(ply)
         SpawnedFood:SetPos(tr.HitPos)
         SpawnedFood.onlyremover = true

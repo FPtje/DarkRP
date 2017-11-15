@@ -41,6 +41,7 @@ end
 
 function DarkRP.createMoneyBag(pos, amount)
     local moneybag = ents.Create(GAMEMODE.Config.MoneyClass)
+    if not IsValid(moneybag) then return end
     moneybag:SetPos(pos)
     moneybag:Setamount(math.Min(amount, 2147483647))
     moneybag:Spawn()
@@ -213,6 +214,7 @@ local function CreateCheque(ply, args)
 
             local tr = util.TraceLine(trace)
             local Cheque = ents.Create("darkrp_cheque")
+            if not IsValid(Cheque) then return end
             Cheque:SetPos(tr.HitPos)
             Cheque:Setowning_ent(ply)
             Cheque:Setrecipient(recipient)

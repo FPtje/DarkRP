@@ -1,4 +1,3 @@
-AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
@@ -27,6 +26,7 @@ end
 function ENT:createItem(activator)
     local drugPos = self:GetPos()
     local drug = ents.Create("drug")
+    if not IsValid(ent) then return end
     drug:SetPos(Vector(drugPos.x, drugPos.y, drugPos.z + 35))
     drug:Setowning_ent(activator)
     drug.SID = activator.SID

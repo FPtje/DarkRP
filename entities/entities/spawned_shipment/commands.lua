@@ -22,7 +22,7 @@ local function createShipment(ply, args)
     ent.PlayerUse = false
 
     local shipID
-    for k,v in pairs(CustomShipments) do
+    for k, v in pairs(CustomShipments) do
         if v.entity == ent:GetWeaponClass() then
             shipID = k
             break
@@ -35,6 +35,7 @@ local function createShipment(ply, args)
     end
 
     local crate = ents.Create(CustomShipments[shipID].shipmentClass or "spawned_shipment")
+    if not IsValid(crate) then return end
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())
     crate.nodupe = true
@@ -84,6 +85,7 @@ local function splitShipment(ply, args)
     ent:StartSpawning()
 
     local crate = ents.Create("spawned_shipment")
+    if not IsValid(crate) then return end
     crate.locked = true
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())
