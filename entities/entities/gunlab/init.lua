@@ -1,10 +1,10 @@
-AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
 function ENT:createItem()
     local gun = ents.Create("spawned_weapon")
+    if not IsValid(gun) then return end
 
     local wep = weapons.Get(GAMEMODE.Config.gunlabweapon)
     gun:SetModel(wep and wep.WorldModel or "models/weapons/w_pist_p228.mdl")

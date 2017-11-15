@@ -97,7 +97,7 @@ local function Ragdoll(ply, cmd, args)
                     if target.FAdminRagdoll.SetCanRemove then target.FAdminRagdoll:SetCanRemove(true) end
                     target.FAdminRagdoll:Remove()
                 elseif type(target.FAdminRagdoll) == "table" then
-                    for k,v in pairs(target.FAdminRagdoll) do
+                    for _, v in pairs(target.FAdminRagdoll) do
                         if IsValid(v) then
                             if v.SetCanRemove then v:SetCanRemove(true) end
                             v:Remove()
@@ -108,6 +108,7 @@ local function Ragdoll(ply, cmd, args)
             elseif RagdollType == "normal" or RagdollType == "ragdoll" then
                 if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
                 local Ragdoll = ents.Create("prop_ragdoll")
+                if not IsValid(Ragdoll) then return end
 
                 Ragdoll:SetModel(target:GetModel())
                 Ragdoll:SetPos(target:GetPos())
@@ -125,6 +126,7 @@ local function Ragdoll(ply, cmd, args)
                 target.FAdminRagdoll = {}
 
                 local Ragdoll = ents.Create("prop_ragdoll")
+                if not IsValid(Ragdoll) then return end
 
                 Ragdoll:SetModel(target:GetModel())
                 Ragdoll:SetPos(target:GetPos())
@@ -140,6 +142,7 @@ local function Ragdoll(ply, cmd, args)
                 local HangOn
                 for k,v in ipairs(HangProps) do
                     local prop = ents.Create("fadmin_jail")
+                    if not IsValid(prop) then return end
                     prop.target = prop
                     prop:SetModel(v.model)
                     prop:SetPos(v.pos + target:GetPos())
@@ -148,7 +151,7 @@ local function Ragdoll(ply, cmd, args)
                     prop:Activate()
 
                     local phys = prop:GetPhysicsObject()
-                    if phys:IsValid() then phys:EnableMotion(false) end
+                    if IsValid(phys) then phys:EnableMotion(false) end
 
                     table.insert(target.FAdminRagdoll, prop)
                     HangOn = prop -- Hang on the last prop
@@ -160,6 +163,7 @@ local function Ragdoll(ply, cmd, args)
             elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
                 if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
                 local Ragdoll = ents.Create("prop_ragdoll")
+                if not IsValid(Ragdoll) then return end
 
                 Ragdoll:SetModel(target:GetModel())
                 Ragdoll:SetPos(target:GetPos())
@@ -186,6 +190,7 @@ local function Ragdoll(ply, cmd, args)
                 local aimVec = Vector(target:GetAimVector().x, target:GetAimVector().y, 0)
                 local kickerPos = target:GetPos() - aimVec * 35 + Vector(0, 0, 5)
                 local Kicker = ents.Create("prop_ragdoll")
+                if not IsValid(Kicker) then return end
                 Kicker:SetModel("models/Police.mdl")
                 Kicker:SetPos(kickerPos)
                 Kicker:Spawn()
@@ -323,7 +328,7 @@ hook.Add("PlayerDisconnected", "FAdmin_ragdoll", function(ply)
 
     if type(ply.FAdminRagdoll) ~= "table" then return end
 
-    for k,v in pairs(ply.FAdminRagdoll or {}) do
-            if IsValid(v) then v:Remove() end
+    for _, v in pairs(ply.FAdminRagdoll or {}) do
+        if IsValid(v) then v:Remove() end
     end
 end)

@@ -66,7 +66,7 @@ function FindSet(x)
 
     -- Path compression, update all parents to refer to the top parent
     if listParents then
-        for k,v in pairs(listParents) do
+        for _, v in ipairs(listParents) do
             v.parent = parent
         end
     end

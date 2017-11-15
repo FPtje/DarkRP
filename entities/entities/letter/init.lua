@@ -44,7 +44,7 @@ function ENT:Use(ply)
             umsg.Vector(self:GetPos())
             local numParts = self.numPts
             umsg.Short(numParts)
-            for a,b in pairs(self.Parts) do umsg.String(b) end
+            for _, b in pairs(self.Parts) do umsg.String(b) end
         umsg.End()
     else
         umsg.Start("KillLetter", ply)
@@ -73,12 +73,12 @@ local function removeLetters(ply, args)
     local target = DarkRP.findPlayer(args)
 
     if target then
-        for k, v in pairs(ents.FindByClass("letter")) do
+        for _, v in ipairs(ents.FindByClass("letter")) do
             if v.SID == target.SID then v:Remove() end
         end
     else
         -- Remove ALL letters
-        for k, v in pairs(ents.FindByClass("letter")) do
+        for _, v in ipairs(ents.FindByClass("letter")) do
             v:Remove()
         end
     end

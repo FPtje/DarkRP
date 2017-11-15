@@ -28,7 +28,7 @@ function meta:drawOwnableInfo()
 
     if playerOwned then
         if self:isKeysOwned() then table.insert(doorInfo, self:getDoorOwner():Nick()) end
-        for k,v in pairs(self:getKeysCoOwners() or {}) do
+        for k in pairs(self:getKeysCoOwners() or {}) do
             local ent = Player(k)
             if not IsValid(ent) or not ent:IsPlayer() then continue end
             table.insert(doorInfo, ent:Nick())
@@ -38,7 +38,7 @@ function meta:drawOwnableInfo()
         if allowedCoOwn and not fn.Null(allowedCoOwn) then
             table.insert(doorInfo, DarkRP.getPhrase("keys_other_allowed"))
 
-            for k,v in pairs(allowedCoOwn) do
+            for k  in pairs(allowedCoOwn) do
                 local ent = Player(k)
                 if not IsValid(ent) or not ent:IsPlayer() then continue end
                 table.insert(doorInfo, ent:Nick())
@@ -62,8 +62,8 @@ function meta:drawOwnableInfo()
     end
 
     if self:IsVehicle() then
-        for k,v in pairs(player.GetAll()) do
-            if v:GetVehicle() ~= self then continue end
+        for _, v in ipairs(player.GetAll()) do
+            if not IsValid(v) or v:GetVehicle() ~= self then continue end
 
             table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
             break

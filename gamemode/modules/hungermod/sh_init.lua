@@ -8,7 +8,7 @@ function DarkRP.createFood(name, mdl, energy, price)
 
     if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["food"][name] then return end
 
-    for k,v in pairs(validFood) do
+    for k, v in pairs(validFood) do
         local isFunction = isfunction(v)
 
         if (isFunction and not v(foodItem[k])) or (not isFunction and foodItem[v] == nil) then

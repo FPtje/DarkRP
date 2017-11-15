@@ -20,8 +20,10 @@ local function PM(ply, args)
 
     if target then
         local col = team.GetColor(ply:Team())
-        DarkRP.talkToPerson(target, col, "(PM) " .. ply:Nick(), Color(255, 255, 255, 255), msg, ply)
-        DarkRP.talkToPerson(ply, col, "(PM) " .. ply:Nick(), Color(255, 255, 255, 255), msg, ply)
+        local pname = ply:Nick()
+        local col2 = Color(255, 255, 255, 255)
+        DarkRP.talkToPerson(target, col, "(PM) " .. pname, col2, msg, ply)
+        DarkRP.talkToPerson(ply, col, "(PM) " .. pname, col2, msg, ply)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(name)))
     end
@@ -66,8 +68,10 @@ local function Me(ply, args)
             return ""
         end
         if GAMEMODE.Config.alltalk then
-            for _, target in pairs(player.GetAll()) do
-                DarkRP.talkToPerson(target, team.GetColor(ply:Team()), ply:Nick() .. " " .. text)
+            local col = team.GetColor(ply:Team())
+            local name = ply:Nick()
+            for _, target in ipairs(player.GetAll()) do
+                DarkRP.talkToPerson(target, col, name .. " " .. text)
             end
         else
             DarkRP.talkToRange(ply, ply:Nick() .. " " .. text, "", 250)
@@ -89,13 +93,16 @@ local function OOC(ply, args)
             return ""
         end
         local col = team.GetColor(ply:Team())
-        local col2 = Color(255,255,255,255)
+        local col2 = Color(255, 255, 255, 255)
         if not ply:Alive() then
-            col2 = Color(255,200,200,255)
+            col2 = Color(255, 200, 200, 255)
             col = col2
         end
-        for k,v in pairs(player.GetAll()) do
-            DarkRP.talkToPerson(v, col, "(" .. DarkRP.getPhrase("ooc") .. ") " .. ply:Name(), col2, text, ply)
+
+        local phrase = DarkRP.getPhrase("ooc")
+        local name = ply:Nick()
+        for _, v in ipairs(player.GetAll()) do
+            DarkRP.talkToPerson(v, col, "(" .. phrase .. ") " .. name, col2, text, ply)
         end
     end
     return args, DoSay
@@ -109,15 +116,20 @@ local function MayorBroadcast(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-    if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then DarkRP.notify(ply, 1, 4, "You have to be mayor") return "" end
+    local Team = ply:Team()
+    if not RPExtraTeams[Team] or not RPExtraTeams[Team].mayor then DarkRP.notify(ply, 1, 4, "You have to be mayor") return "" end
     local DoSay = function(text)
         if text == "" then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return
         end
-        for k,v in pairs(player.GetAll()) do
-            local col = team.GetColor(ply:Team())
-            DarkRP.talkToPerson(v, col, DarkRP.getPhrase("broadcast") .. " " .. ply:Nick(), Color(170, 0, 0, 255), text, ply)
+
+        local col = team.GetColor(ply:Team())
+        local col2 = Color(170, 0, 0, 255)
+        local phrase = DarkRP.getPhrase("broadcast")
+        local name = ply:Nick()
+        for _, v in ipairs(player.GetAll()) do
+            DarkRP.talkToPerson(v, col, phrase .. " " .. name, col2, text, ply)
         end
     end
     return args, DoSay
@@ -137,6 +149,7 @@ DarkRP.defineChatCommand("channel", SetRadioChannel)
 
 local function SayThroughRadio(ply,args)
     if not ply.RadioChannel then ply.RadioChannel = 1 end
+    local radioChannel = ply.RadioChannel
     if not args or args == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
@@ -146,9 +159,11 @@ local function SayThroughRadio(ply,args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
             return
         end
-        for k,v in pairs(player.GetAll()) do
-            if v.RadioChannel == ply.RadioChannel then
-                DarkRP.talkToPerson(v, Color(180,180,180,255), DarkRP.getPhrase("radio_x", ply.RadioChannel), Color(180,180,180,255), text, ply)
+        local col = Color(180, 180, 180, 255)
+        local phrase = DarkRP.getPhrase("radio_x", radioChannel)
+        for _, v in ipairs(player.GetAll()) do
+            if v.RadioChannel == radioChannel then
+                DarkRP.talkToPerson(v, col, phrase, col, text, ply)
             end
         end
     end
@@ -175,12 +190,15 @@ local function GroupMsg(ply, args)
 
         if #groupChats == 0 then return "" end
 
-        for _, target in pairs(player.GetAll()) do
+        local phrase = DarkRP.getPhrase("group")
+        local name = ply:Nick()
+        local color = Color(255, 255, 255, 255)
+        for _, target in ipairs(player.GetAll()) do
             -- The target is in any of the group chats
-            for k, func in pairs(groupChats) do
+            for _, func in ipairs(groupChats) do
                 if not func(target, ply) then continue end
 
-                DarkRP.talkToPerson(target, col, DarkRP.getPhrase("group") .. " " .. ply:Nick(), Color(255,255,255,255), text, ply)
+                DarkRP.talkToPerson(target, col, phrase .. " " .. name, color, text, ply)
                 break
             end
         end

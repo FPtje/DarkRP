@@ -10,7 +10,7 @@ function DarkRP.notify(ply, msgtype, len, msg)
     end
 
     local rcp = RecipientFilter()
-    for k, v in pairs(ply) do
+    for _, v in pairs(ply) do
         rcp:AddPlayer(v)
     end
 
@@ -30,7 +30,7 @@ function DarkRP.notifyAll(msgtype, len, msg)
 end
 
 function DarkRP.printMessageAll(msgtype, msg)
-    for k, v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         v:PrintMessage(msgtype, msg)
     end
 end
@@ -50,7 +50,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local col = team.GetColor(ply:Team())
     local filter = {}
 
-    for k, v in pairs(ents) do
+    for _, v in ipairs(ents) do
         if v:IsPlayer() then
             table.insert(filter, v)
         end
@@ -102,7 +102,7 @@ function DarkRP.isEmpty(vector, ignore)
 
     local b = true
 
-    for k,v in pairs(ents.FindInSphere(vector, 35)) do
+    for _, v in ipairs(ents.FindInSphere(vector, 35)) do
         if (v:IsNPC() or v:IsPlayer() or v:GetClass() == "prop_physics" or v.NotEmptyPos) and not table.HasValue(ignore, v) then
             b = false
             break

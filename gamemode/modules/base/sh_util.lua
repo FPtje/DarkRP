@@ -64,7 +64,7 @@ function DarkRP.findPlayer(info)
             return v
         end
 
-        if string.find(string.lower(v:Name()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:Nick()), string.lower(tostring(info)), 1, true) ~= nil then
             return v
         end
 
@@ -94,7 +94,7 @@ function DarkRP.findPlayers(info)
         end
     end
 
-    for _, PlayerInfo in pairs(InfoPlayers) do
+    for _, PlayerInfo in ipairs(InfoPlayers) do
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
@@ -106,14 +106,14 @@ function DarkRP.findPlayers(info)
             continue
         end
 
-        for k, v in pairs(pls) do
+        for _, v in ipairs(pls) do
             -- Prevend duplicates
             if found[v] then continue end
 
             -- Find by Steam ID
             if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") or
             -- Find by Partial Nick
-            string.find(string.lower(v:Name()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
+            string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
             -- Find by steam name
             (v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
                 found[v] = true
@@ -141,7 +141,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     local smallestDistance = math.huge
     local foundEnt
 
-    for k, ent in pairs(entities) do
+    for _, ent in pairs(entities) do
         if not IsValid(ent) or filter(ent) == false then continue end
 
         local center = ent:GetPos()
@@ -186,7 +186,7 @@ local function GetAvailableVehicles(ply)
     local print = SERVER and ServerLog or Msg
 
     print(DarkRP.getPhrase("rp_getvehicles") .. "\n")
-    for k,v in pairs(DarkRP.getAvailableVehicles()) do
+    for k in pairs(DarkRP.getAvailableVehicles()) do
         print("\"" .. k .. "\"" .. "\n")
     end
 end

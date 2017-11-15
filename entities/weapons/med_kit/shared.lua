@@ -41,12 +41,14 @@ function SWEP:PrimaryAttack()
     local lastDot = -1 -- the opposite of what you're looking at
     self:GetOwner():LagCompensation(true)
     local aimVec = self:GetOwner():GetAimVector()
+    local shootPos = self:GetOwner():GetShootPos()
 
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         local maxhealth = v:GetMaxHealth() or 100
-        if v == self:GetOwner() or v:GetShootPos():DistToSqr(self:GetOwner():GetShootPos()) > 7225 or v:Health() >= maxhealth or not v:Alive() then continue end
+        local targetShootPos = v:GetShootPos()
+        if v == self:GetOwner() or targetShootPos:DistToSqr(shootPos) > 7225 or v:Health() >= maxhealth or not v:Alive() then continue end
 
-        local direction = v:GetShootPos() - self:GetOwner():GetShootPos()
+        local direction = targetShootPos - shootPos
         direction:Normalize()
         local dot = direction:Dot(aimVec)
 

@@ -22,7 +22,7 @@ function ENT:Draw()
 
         local col = Color(255, 255, 255, 255)
         local lastHeight = 0
-        for k,v in ipairs(Laws) do
+        for k, v in ipairs(Laws) do
             draw.DrawNonParsedText(string.format("%u. %s", k, v), "TargetID", 5, 35 + lastHeight, col)
             lastHeight = lastHeight + (fn.ReverseArgs(string.gsub(v, "\n", "")) + 1) * 21
         end

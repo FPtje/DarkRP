@@ -12,19 +12,21 @@ local stormOn = false
 Meteor storm
 ---------------------------------------------------------]]
 local function StormStart()
-    for k, v in pairs(player.GetAll()) do
+    local phrase = DarkRP.getPhrase("meteor_approaching")
+    for _, v in ipairs(player.GetAll()) do
         if v:Alive() then
-            v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("meteor_approaching"))
-            v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("meteor_approaching"))
+            v:PrintMessage(HUD_PRINTCENTER, phrase)
+            v:PrintMessage(HUD_PRINTTALK, phrase)
         end
     end
 end
 
 local function StormEnd()
-    for k, v in pairs(player.GetAll()) do
+    local phrase = DarkRP.getPhrase("meteor_passing")
+    for _, v in ipairs(player.GetAll()) do
         if v:Alive() then
-            v:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("meteor_passing"))
-            v:PrintMessage(HUD_PRINTTALK, DarkRP.getPhrase("meteor_passing"))
+            v:PrintMessage(HUD_PRINTCENTER, phrase)
+            v:PrintMessage(HUD_PRINTTALK, phrase)
         end
     end
 end
@@ -34,12 +36,12 @@ local function ControlStorm()
 
     if timeLeft < 1 then
         if stormOn then
-            timeLeft = math.random(300,500)
+            timeLeft = math.random(300, 500)
             stormOn = false
             timer.Stop("start")
             StormEnd()
         else
-            timeLeft = math.random(60,90)
+            timeLeft = math.random(60, 90)
             stormOn = true
             timer.Start("start")
             StormStart()
@@ -49,14 +51,15 @@ end
 
 local function AttackEnt(ent)
     local meteor = ents.Create("meteor")
+    if not IsValid(meteor) then return end
     meteor.nodupe = true
     meteor:Spawn()
     meteor:SetMeteorTarget(ent)
 end
 
 local function StartShower()
-    timer.Adjust("start", math.random(.1,1), 0, StartShower)
-    for k, v in pairs(player.GetAll()) do
+    timer.Adjust("start", math.random(0.1, 1), 0, StartShower)
+    for _, v in ipairs(player.GetAll()) do
         if math.random(0, 2) == 0 and v:Alive() then
             AttackEnt(v)
         end
@@ -92,8 +95,9 @@ local tremor
 
 local function createTremor()
     tremor = ents.Create("env_physexplosion")
-    tremor:SetPos(Vector(0,0,0))
-    tremor:SetKeyValue("radius",9999999999)
+    if not IsValid(tremor) then return end
+    tremor:SetPos(Vector(0, 0, 0))
+    tremor:SetKeyValue("radius", 9999999999)
     tremor:SetKeyValue("spawnflags", 7)
     tremor.nodupe = true
     tremor:Spawn()
@@ -119,20 +123,20 @@ local function EarthQuakeTest()
         local en = ents.FindByClass("prop_physics")
         local plys = player.GetAll()
 
-        local force = math.random(10,1000)
+        local force = math.random(10, 1000)
         tremor:SetKeyValue("magnitude", force / 6)
 
-        for k, v in pairs(plys) do
+        for _, v in ipairs(plys) do
             v:EmitSound("earthquake.mp3", force / 6, 100)
         end
         tremor:Fire("explode","",0.5)
-        util.ScreenShake(Vector(0,0,0), force, math.random(25,50), math.random(5,12), 9999999999)
+        util.ScreenShake(Vector(0, 0, 0), force, math.random(25, 50), math.random(5, 12), 9999999999)
         table.insert(lastmagnitudes, math.floor((force / 10) + .5) / 10)
         timer.Simple(10, function() TremorReport() end)
-        for k,e in pairs(en) do
-            local rand = math.random(650,1000)
+        for _, e in ipairs(en) do
+            local rand = math.random(650, 1000)
             if rand < force and rand % 2 == 0 then
-                e:Fire("enablemotion","",0)
+                e:Fire("enablemotion", "", 0)
                 constraint.RemoveAll(e)
             end
             if e:IsOnGround() then
@@ -160,7 +164,7 @@ local flammablePropsKV = { -- Class names as index
 }
 
 local flammableProps = {} -- Numbers as index
-for k,v in pairs(flammablePropsKV) do table.insert(flammableProps, k) end
+for k in pairs(flammablePropsKV) do table.insert(flammableProps, k) end
 
 
 local function IsFlammable(ent)
@@ -180,7 +184,7 @@ local function FireSpread(ent, chanceDiv)
     if rand > 1 then return end
     local en = ents.FindInSphere(ent:GetPos(), math.random(20, 90))
 
-    for k, v in pairs(en) do
+    for _, v in ipairs(en) do
         if not IsFlammable(v) or v == ent then continue end
 
         if not v.burned then
@@ -195,7 +199,7 @@ local function FireSpread(ent, chanceDiv)
         if (color.b - 51) >= 0 then color.b = color.b - 51 end
         v:SetColor(color)
         if (color.r + color.g + color.b) < 103 and math.random(1, 100) < 35 then
-            v:Fire("enablemotion","",0)
+            v:Fire("enablemotion", "", 0)
             constraint.RemoveAll(v)
         end
     end

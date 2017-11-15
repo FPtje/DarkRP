@@ -136,7 +136,7 @@ end
 -- example: tc.tableOf(isnumber) demands that the table contains only numbers
 tableOf = function(f) return function(tbl, parentTbl)
     if not istable(tbl) then return false end
-    for k,v in pairs(tbl) do
+    for _, v in pairs(tbl) do
         local res = {f(v, parentTbl)}
         if not res[1] then
             return unpack(res)

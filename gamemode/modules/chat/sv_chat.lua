@@ -96,18 +96,19 @@ local function RP_ActualDoSay(ply, text, callback)
     callback = callback or ""
     if text == "" then return "" end
     local col = team.GetColor(ply:Team())
-    local col2 = Color(255,255,255,255)
+    local col2 = Color(255, 255, 255, 255)
     if not ply:Alive() then
-        col2 = Color(255,200,200,255)
+        col2 = Color(255, 200, 200, 255)
         col = col2
     end
 
     if GAMEMODE.Config.alltalk then
-        for k, v in pairs(player.GetAll()) do
-            DarkRP.talkToPerson(v, col, callback .. ply:Name(), col2, text, ply)
+        local name = ply:Nick()
+        for _, v in ipairs(player.GetAll()) do
+            DarkRP.talkToPerson(v, col, callback .. name, col2, text, ply)
         end
     else
-        DarkRP.talkToRange(ply, callback .. ply:Name(), text, 250)
+        DarkRP.talkToRange(ply, callback .. ply:Nick(), text, 250)
     end
     return ""
 end
@@ -129,7 +130,7 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
     local callback
     local DoSayFunc
 
-    for k,v in pairs(self.OldChatHooks) do
+    for k, v in pairs(self.OldChatHooks) do
         if type(v) ~= "function" then continue end
 
         if type(k) == "Entity" or type(k) == "Player" then
@@ -163,7 +164,7 @@ local function ReplaceChatHooks()
     local hookTbl = hook.GetTable()
 
     if not hookTbl.PlayerSay then return end
-    for k,v in pairs(hookTbl.PlayerSay) do
+    for k, v in pairs(hookTbl.PlayerSay) do
         GAMEMODE.OldChatHooks[k] = v
         hook.Remove("PlayerSay", k)
     end
@@ -218,8 +219,8 @@ local function ReplaceChatHooks()
 
     ulibTbl.PlayerSay = ulibTbl.PlayerSay or {[-2] = {}, [-1] = {}, [0] = {}, [1] = {}, [2] = {}}
 
-    for priority, hooks in pairs(ulibTbl.PlayerSay) do
-        for hookName, func in pairs(hooks) do
+    for _, hooks in pairs(ulibTbl.PlayerSay) do
+        for hookName in pairs(hooks) do
             hooks[hookName] = nil
             GAMEMODE.OldChatHooks[hookName] = v
         end

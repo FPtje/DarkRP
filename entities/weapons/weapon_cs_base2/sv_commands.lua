@@ -16,6 +16,7 @@ function meta:dropDRPWeapon(weapon)
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
 
     local ent = ents.Create("spawned_weapon")
+    if not IsValid(ent) then return end
     local model = (weapon:GetModel() == "models/weapons/v_physcannon.mdl" and "models/weapons/w_physics.mdl") or weapon:GetModel()
     model = util.IsValidModel(model) and model or "models/weapons/w_rif_ak47.mdl"
 

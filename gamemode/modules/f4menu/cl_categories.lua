@@ -37,7 +37,7 @@ function PANEL:Rebuild()
 
     local height = 0
     local k = 0
-    for i, item in pairs(self.Items) do
+    for _, item in pairs(self.Items) do
         if not item:IsVisible() then continue end
         k = k + 1
         item:SetWide(self:GetWide() - 10)
@@ -50,7 +50,7 @@ end
 
 
 function PANEL:Refresh()
-    for k,v in pairs(self.Items) do
+    for _, v in pairs(self.Items) do
         if v.Refresh then v:Refresh() end
     end
     self:InvalidateLayout()
@@ -108,7 +108,7 @@ end
 
 function PANEL:Fill()
     self.Contents:Clear(true)
-    for k, v in ipairs(self.category.members) do
+    for _, v in ipairs(self.category.members) do
         local pnl = self.buttonFactory(v, self.Contents)
         self.Contents:AddItem(pnl)
     end

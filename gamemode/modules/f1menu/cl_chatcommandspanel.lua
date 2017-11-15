@@ -11,7 +11,7 @@ end
 
 function PANEL:fillLabels(tbl)
     self:Clear()
-    for i, cmd in ipairs(tbl) do
+    for _, cmd in ipairs(tbl) do
         local lbl = vgui.Create("F1ChatCommandLabel")
         lbl:setChatCommand(cmd)
         lbl.OnMousePressed = self.OnMousePressed

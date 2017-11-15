@@ -10,7 +10,7 @@ local validChatCommand = {
 }
 
 local checkChatCommand = function(tbl)
-    for k,v in pairs(validChatCommand) do
+    for k in pairs(validChatCommand) do
         if not validChatCommand[k](tbl[k]) then
             return false, k
         end

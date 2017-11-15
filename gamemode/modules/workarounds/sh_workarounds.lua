@@ -2,7 +2,7 @@
 
 function DarkRP.getAvailableVehicles()
     local vehicles = list.Get("Vehicles")
-    for k, v in pairs(list.Get("SCarsList") or {}) do
+    for _, v in pairs(list.Get("SCarsList") or {}) do
         vehicles[v.PrintName] = {
             Name = v.PrintName,
             Class = v.ClassName,
@@ -164,7 +164,7 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 
     -- Remove that weird rooftop spawn in rp_downtown_v4c_v2
     if game.GetMap() == "rp_downtown_v4c_v2" then
-        for k,v in pairs(ents.FindByClass("info_player_terrorist")) do
+        for _, v in pairs(ents.FindByClass("info_player_terrorist")) do
             v:Remove()
         end
     end

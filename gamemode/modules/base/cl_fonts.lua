@@ -118,5 +118,3 @@ local function loadFonts()
         font = "ChatFont"})
 end
 loadFonts()
--- Load twice because apparently once is not enough
-hook.Add("InitPostEntity", "DarkRP_LoadFonts", loadFonts)

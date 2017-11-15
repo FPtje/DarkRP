@@ -78,7 +78,7 @@ end
 hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)
 
 local function KillAFKTimer()
-    for id, ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getDarkRPVar("AFK") then
             SetAFK(ply)
             AFKDemote(ply)
@@ -86,7 +86,9 @@ local function KillAFKTimer()
         end
     end
 end
-hook.Add("Think", "DarkRPKeyPressedCheck", KillAFKTimer)
+timer.Create("DarkRPKeyPressedCheck",  1, 0, function()
+    KillAFKTimer()
+end)
 
 local function BlockAFKTeamChange(ply, t, force)
     if ply:getDarkRPVar("AFK") and (not force or t ~= GAMEMODE.DefaultTeam) then

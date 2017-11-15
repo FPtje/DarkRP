@@ -27,7 +27,7 @@ local function SetTeam(ply, cmd, args)
         return false
     end
 
-    for k,v in pairs(team.GetAllTeams()) do
+    for k, v in pairs(team.GetAllTeams()) do
         if k == tonumber(args[2]) or string.lower(v.Name) == string.lower(args[2] or "") then
             for _, target in pairs(targets) do
                 if not FAdmin.Access.PlayerHasPrivilege(ply, "SetTeam", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end

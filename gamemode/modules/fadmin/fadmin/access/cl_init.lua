@@ -4,7 +4,7 @@ local EditGroups
 local function RetrievePRIVS(len)
     FAdmin.Access.Groups = net.ReadTable()
 
-    for k,v in pairs(FAdmin.Access.Groups) do
+    for k, v in pairs(FAdmin.Access.Groups) do
         if CAMI.GetUsergroup(k) then continue end
 
         CAMI.RegisterUsergroup({
@@ -14,7 +14,7 @@ local function RetrievePRIVS(len)
     end
 
     -- Remove any groups that are removed from FAdmin from CAMI.
-    for k,v in pairs(CAMI.GetUsergroups()) do
+    for k in pairs(CAMI.GetUsergroups()) do
         if FAdmin.Access.Groups[k] then continue end
 
         CAMI.UnregisterUsergroup(k, "FAdmin")
@@ -67,7 +67,7 @@ FAdmin.StartHooks["1SetAccess"] = function() -- 1 in hook name so it will be exe
 
         menu:AddPanel(Title)
 
-        for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
+        for k in SortedPairsByMemberValue(FAdmin.Access.Groups, "ADMIN", true) do
             menu:AddOption(k, function()
                 if not IsValid(ply) then return end
                 RunConsoleCommand("_FAdmin", "setaccess", ply:UserID(), k)
@@ -122,10 +122,10 @@ EditGroups = function()
     SelectedGroup:SetPos(5, 30)
     SelectedGroup:SetWidth(145)
 
-    for k,v in pairs(FAdmin.Access.Groups) do
+    for _, v in pairs(FAdmin.Access.Groups) do
         v.immunity = v.immunity or 0
     end
-    for k,v in SortedPairsByMemberValue(FAdmin.Access.Groups, "immunity", true) do
+    for k in SortedPairsByMemberValue(FAdmin.Access.Groups, "immunity", true) do
         SelectedGroup:AddChoice(k)
     end
 
@@ -162,7 +162,7 @@ EditGroups = function()
     RemGroup.DoClick = function()
         RunConsoleCommand("_FAdmin", "RemoveGroup", SelectedGroup:GetValue())
 
-        for k,v in pairs(SelectedGroup.Choices) do
+        for k, v in pairs(SelectedGroup.Choices) do
             if v ~= SelectedGroup:GetValue() then continue end
 
             SelectedGroup.Choices[k] = nil
@@ -222,7 +222,7 @@ EditGroups = function()
     AddPriv:SetSize(25, 25)
     AddPriv:SetText(">")
     AddPriv.DoClick = function()
-        for k,v in pairs(Privileges:GetSelected()) do
+        for _, v in pairs(Privileges:GetSelected()) do
             local priv = v.Columns[1]:GetValue()
             RunConsoleCommand("FAdmin", "AddPrivilege", SelectedGroup:GetValue(), priv)
             SelectedPrivs:AddLine(priv)
@@ -235,7 +235,7 @@ EditGroups = function()
     RemPriv:SetSize(25, 25)
     RemPriv:SetText("<")
     RemPriv.DoClick = function()
-        for k,v in pairs(SelectedPrivs:GetSelected()) do
+        for _, v in pairs(SelectedPrivs:GetSelected()) do
             local priv = v.Columns[1]:GetValue()
             if SelectedGroup:GetValue() == LocalPlayer():GetUserGroup() and priv == "ManagePrivileges" then
                 return Derma_Message("You shouldn't be removing ManagePrivileges. It will make you unable to edit the groups. This is preventing you from locking yourself out of the system.", "Clever move.")

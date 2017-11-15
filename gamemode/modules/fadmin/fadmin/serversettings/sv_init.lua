@@ -9,7 +9,7 @@ end
 
 hook.Add("InitPostEntity", "FAdmin_Settings", function()
     local Settings = sql.Query("SELECT * FROM FAdmin_ServerSettings;") or {}
-    for k,v in pairs(Settings) do
+    for _, v in pairs(Settings) do
         RunConsoleCommand(v.setting, v.value)
     end
 end)
@@ -19,7 +19,7 @@ local function ServerSetting(ply, cmd, args)
     if not args[2] then FAdmin.Messages.SendMessage(ply, 5, "Incorrect argument") return false end
 
     local found = false
-    for k,v in pairs(Whitelist) do
+    for _, v in pairs(Whitelist) do
         if string.match(args[1], v) then
             found = true
             break

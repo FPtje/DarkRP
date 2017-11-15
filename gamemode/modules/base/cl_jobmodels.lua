@@ -33,7 +33,7 @@ Load the preferred models
 ---------------------------------------------------------------------------]]
 local function sendModels() -- run after the jobs have loaded
     net.Start("DarkRP_preferredjobmodels")
-        for _, job in ipairs(RPExtraTeams) do
+        for _, job in pairs(RPExtraTeams) do
             if not preferredModels[job.command] then net.WriteBit(false) continue end
 
             net.WriteBit(true)
@@ -44,7 +44,7 @@ end
 
 do
     local models = sql.Query([[SELECT jobcmd, model FROM darkp_playermodels;]])
-    for k,v in pairs(models or {}) do
+    for _, v in ipairs(models or {}) do
         preferredModels[v.jobcmd] = v.model
     end
 

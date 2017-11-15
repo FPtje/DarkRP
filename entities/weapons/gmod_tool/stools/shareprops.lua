@@ -4,40 +4,42 @@ TOOL.Command            = nil
 TOOL.ConfigName         = ""
 
 function TOOL:RightClick(trace)
-    if not IsValid(trace.Entity) or CLIENT then return true end
+    local ent = trace.Entity
+    if not IsValid(ent) or CLIENT then return true end
 
-    trace.Entity.SharePhysgun1 = nil
-    trace.Entity.ShareGravgun1 = nil
-    trace.Entity.SharePlayerUse1 = nil
-    trace.Entity.ShareEntityDamage1 = nil
-    trace.Entity.ShareToolgun1 = nil
+    ent.SharePhysgun1 = nil
+    ent.ShareGravgun1 = nil
+    ent.SharePlayerUse1 = nil
+    ent.ShareEntityDamage1 = nil
+    ent.ShareToolgun1 = nil
 
-    trace.Entity.AllowedPlayers = nil
+    ent.AllowedPlayers = nil
     return true
 end
 
 function TOOL:LeftClick(trace)
-    if not IsValid(trace.Entity) or CLIENT then return true end
+    local ent = trace.Entity
+    if not IsValid(ent) or CLIENT then return true end
 
     local ply = self:GetOwner()
 
-    local Physgun = trace.Entity.SharePhysgun1 or false
-    local GravGun = trace.Entity.ShareGravgun1 or false
-    local PlayerUse = trace.Entity.SharePlayerUse1 or false
-    local Damage = trace.Entity.ShareEntityDamage1 or false
-    local Toolgun = trace.Entity.ShareToolgun1 or false
+    local Physgun = ent.SharePhysgun1 or false
+    local GravGun = ent.ShareGravgun1 or false
+    local PlayerUse = ent.SharePlayerUse1 or false
+    local Damage = ent.ShareEntityDamage1 or false
+    local Toolgun = ent.ShareToolgun1 or false
 
     -- This big usermessage will be too big if you select 63 players, since that will not happen I can't be arsed to solve it
     umsg.Start("FPP_ShareSettings", ply)
-        umsg.Entity(trace.Entity)
+        umsg.Entity(ent)
         umsg.Bool(Physgun)
         umsg.Bool(GravGun)
         umsg.Bool(PlayerUse)
         umsg.Bool(Damage)
         umsg.Bool(Toolgun)
-        if trace.Entity.AllowedPlayers then
-            umsg.Long(#trace.Entity.AllowedPlayers)
-            for k,v in pairs(trace.Entity.AllowedPlayers) do
+        if ent.AllowedPlayers then
+            umsg.Long(#ent.AllowedPlayers)
+            for k,v in pairs(ent.AllowedPlayers) do
                 umsg.Entity(v)
             end
         end

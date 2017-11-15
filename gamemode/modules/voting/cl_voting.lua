@@ -28,12 +28,12 @@ local function MsgDoVote(msg)
         VoteVGUI[voteid .. "vote"] = nil
 
         local num = 0
-        for k,v in SortedPairs(VoteVGUI) do
+        for _, v in SortedPairs(VoteVGUI) do
             v:SetPos(num, ScrH() / 2 - 50)
             num = num + 140
         end
 
-        for k,v in SortedPairs(QuestionVGUI) do
+        for _, v in SortedPairs(QuestionVGUI) do
             v:SetPos(num, ScrH() / 2 - 50)
             num = num + 300
         end
@@ -138,12 +138,12 @@ local function MsgDoQuestion(msg)
         PanelNum = PanelNum - 300
         QuestionVGUI[quesid .. "ques"] = nil
         local num = 0
-        for k,v in SortedPairs(VoteVGUI) do
+        for _, v in SortedPairs(VoteVGUI) do
             v:SetPos(num, ScrH() / 2 - 50)
             num = num + 140
         end
 
-        for k,v in SortedPairs(QuestionVGUI) do
+        for _, v in SortedPairs(QuestionVGUI) do
             v:SetPos(num, ScrH() / 2 - 50)
             num = num + 300
         end
@@ -215,7 +215,7 @@ local function DoVoteAnswerQuestion(ply, cmd, args)
     local vote = 0
     if tonumber(args[1]) == 1 or string.lower(args[1]) == "yes" or string.lower(args[1]) == "true" then vote = 1 end
 
-    for k,v in pairs(VoteVGUI) do
+    for k, v in pairs(VoteVGUI) do
         if IsValid(v) then
             local ID = string.sub(k, 1, -5)
             VoteVGUI[k]:Close()
@@ -224,7 +224,7 @@ local function DoVoteAnswerQuestion(ply, cmd, args)
         end
     end
 
-    for k,v in pairs(QuestionVGUI) do
+    for k, v in pairs(QuestionVGUI) do
         if IsValid(v) then
             local ID = string.sub(k, 1, -5)
             QuestionVGUI[k]:Close()

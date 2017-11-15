@@ -28,7 +28,7 @@ FAdmin.StartHooks["zzSetTeam"] = function()
         Title:SetTextColor(color_black)
 
         menu:AddPanel(Title)
-        for k,v in SortedPairsByMemberValue(team.GetAllTeams(), "Name") do
+        for k, v in SortedPairsByMemberValue(team.GetAllTeams(), "Name") do
             local uid = ply:UserID()
             menu:AddOption(v.Name, function() RunConsoleCommand("_FAdmin", "setteam", uid, k) end)
         end

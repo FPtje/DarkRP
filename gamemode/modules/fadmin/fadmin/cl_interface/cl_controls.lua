@@ -132,7 +132,7 @@ function PANEL:Paint()
 
     local hooks = hook.GetTable().FAdmin_PlayerRowColour
     if hooks then
-        for k,v in pairs(hooks) do
+        for _, v in pairs(hooks) do
             color = (v and v(self.Player, color)) or color
             break
         end

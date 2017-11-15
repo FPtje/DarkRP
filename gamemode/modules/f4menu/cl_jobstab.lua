@@ -94,7 +94,7 @@ function PANEL:Rebuild()
     if #self.iconList.Items == 0 then return end
 
     local x = 0
-    for i, item in pairs(self.iconList.Items) do
+    for _, item in pairs(self.iconList.Items) do
         item:SetPos(x)
 
         x = x + item:GetWide() + 2
@@ -162,7 +162,7 @@ function PANEL:Paint(w, h)
 end
 
 function PANEL:onSelected(item)
-    for k,v in pairs(self.iconList.Items) do
+    for _,v in pairs(self.iconList.Items) do
         if v == item then continue end
         v:SetSelected(false)
         v.model:SetSize(60, 60)
@@ -175,7 +175,7 @@ function PANEL:updateInfo(job)
     if not istable(job.model) then return end
 
     local preferredModel = DarkRP.getPreferredJobModel(job.team)
-    for i, mdl in ipairs(job.model) do
+    for _, mdl in ipairs(job.model) do
         local btn = vgui.Create("F4MenuChooseJobModelIcon", self.iconList)
         btn:updateInfo(job, mdl, self)
         if preferredModel == mdl then
@@ -206,7 +206,7 @@ function PANEL:Init()
 end
 
 function PANEL:Refresh()
-    for k,v in pairs(self.Items) do
+    for _,v in pairs(self.Items) do
         if v.Refresh then v:Refresh() end
     end
     self:InvalidateLayout()
@@ -355,7 +355,7 @@ function PANEL:Refresh()
 
     local job
     for _, cat in ipairs(self.pnlLeft:GetItems()) do
-        for k,v in pairs(cat:GetItems()) do
+        for _, v in pairs(cat:GetItems()) do
             if v:GetDisabled() then continue end
             job = v.DarkRPItem
             goto break2

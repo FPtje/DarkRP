@@ -68,6 +68,7 @@ local function BuyPistol(ply, args)
     local tr = util.TraceLine(trace)
 
     local weapon = ents.Create("spawned_weapon")
+    if not IsValid(weapon) then return end
     weapon:SetModel(shipment.model)
     weapon:SetWeaponClass(shipment.entity)
     weapon:SetPos(tr.HitPos)
@@ -114,7 +115,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     end
 
     local canbecome = false
-    for a,b in pairs(shipment.allowed) do
+    for _, b in pairs(shipment.allowed) do
         if ply:Team() == b then
             canbecome = true
             break
@@ -168,6 +169,7 @@ local function BuyShipment(ply, args)
     local tr = util.TraceLine(trace)
 
     local crate = ents.Create(found.shipmentClass or "spawned_shipment")
+    if not IsValid(crate) then return end
     crate.SID = ply.SID
     crate:Setowning_ent(ply)
     crate:SetContents(foundKey, found.amount)
@@ -246,7 +248,7 @@ local function BuyVehicle(ply, args)
     local found = false
     -- Allow people to have multiple vehicles with the same name
     -- vehicles are bought through the command
-    for k,v in pairs(CustomVehicles) do
+    for k, v in pairs(CustomVehicles) do
         if v.command and string.lower(v.command) == string.lower(args) then
             found = CustomVehicles[k]
             break
@@ -287,7 +289,7 @@ local function BuyVehicle(ply, args)
     local tr = util.TraceLine(trace)
 
     local ent = ents.Create(Vehicle.Class)
-    if not ent then
+    if not IsValid(ent) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyvehicle", ""))
         return ""
     end
@@ -370,7 +372,7 @@ local function BuyAmmo(ply, args)
     if num and GAMEMODE.AmmoTypes[num] then
         found = GAMEMODE.AmmoTypes[num]
     else
-        for k,v in pairs(GAMEMODE.AmmoTypes) do
+        for _, v in pairs(GAMEMODE.AmmoTypes) do
             if v.ammoType ~= args then continue end
 
             found = v
@@ -404,6 +406,7 @@ local function BuyAmmo(ply, args)
     local tr = util.TraceLine(trace)
 
     local ammo = ents.Create("spawned_ammo")
+    if not IsValid(ammo) then return end
     ammo:SetModel(found.model)
     ammo:SetPos(tr.HitPos)
     ammo.nodupe = true
@@ -436,8 +439,10 @@ local function SetPrice(ply, args)
 
     local tr = util.TraceLine(trace)
 
-    if IsValid(tr.Entity) and tr.Entity.CanSetPrice and tr.Entity.SID == ply.SID then
-        tr.Entity:Setprice(b)
+    local ent = tr.Entity
+
+    if IsValid(ent) and ent.CanSetPrice and ent.SID == ply.SID then
+        ent:Setprice(b)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("any_lab")))
     end

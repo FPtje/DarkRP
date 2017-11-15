@@ -118,7 +118,7 @@ function FPP.AdminMenu(Panel)
         RemoveSelected:SetText("Remove Selected items from the list")
         RemoveSelected:SetDisabled(not canEditSettings)
         RemoveSelected.DoClick = function()
-            for k,v in pairs(lview.Lines) do
+            for k, v in pairs(lview.Lines) do
                 if v:IsLineSelected() then
                     local text = v.text
                     timer.Simple(k / 10, function() RunConsoleCommand("FPP_RemoveBlocked", Type, text) end)
@@ -136,7 +136,7 @@ function FPP.AdminMenu(Panel)
         AddLA.DoClick = function()
             local ent = LocalPlayer():GetEyeTraceNoCursor().Entity
             if not IsValid(ent) then return end
-            for k,v in pairs(lview.Lines) do
+            for _, v in pairs(lview.Lines) do
                 if v.text == string.lower(ent:GetClass()) then return end
             end
             RunConsoleCommand("FPP_AddBlocked", Type, ent:GetClass())
@@ -213,7 +213,8 @@ function FPP.AdminMenu(Panel)
     other:SetTextColor(Color(0, 0, 0, 255))
 
     local areplayers = false
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
+        if not IsValid(v) then continue end
         areplayers = true
         local rm = general:Add("DButton")
         rm:SetText(v:Nick())
@@ -369,24 +370,24 @@ function FPP.AdminMenu(Panel)
 
     if not FPP.DtreeToolRestrict.Items then
         FPP.DtreeToolRestrict.Items = true
-        for a,b in pairs(spawnmenu.GetTools()) do
-            for c,d in pairs(spawnmenu.GetTools()[a].Items) do
+        for a, b in pairs(spawnmenu.GetTools()) do
+            for c, d in pairs(spawnmenu.GetTools()[a].Items) do
                 local addnodes = {}
-                for e,f in pairs(spawnmenu.GetTools()[a].Items[c]) do
+                for _, f in pairs(spawnmenu.GetTools()[a].Items[c]) do
                     if type(f) == "table" and string.find(f.Command, "gmod_tool") then
                         table.insert(addnodes, {f.Text, f.ItemName})
                     end
                 end
                 if #addnodes ~= 0 then
                     local node1 = FPP.DtreeToolRestrict:AddNode(d.ItemName)
-                    for e,f in pairs(addnodes) do
+                    for _, f in pairs(addnodes) do
                         local node2 = node1:AddNode(f[1])
                         node2.Icon:SetImage("gui/silkicons/wrench")
                         node2.Tool = f[2]
                         function node2:DoClick()
                             FPP.SELECTEDRESTRICTNODE = self.Tool
 
-                            for k,v in pairs(weapons.Get("gmod_tool").Tool) do
+                            for k, v in pairs(weapons.Get("gmod_tool").Tool) do
                                 if v.Mode and v.Mode == FPP.SELECTEDRESTRICTNODE then
                                     --Add to DListView
                                     for a,b in pairs(FPP.multirestricttoollist:GetLines()) do
@@ -409,7 +410,7 @@ function FPP.AdminMenu(Panel)
     SingleEditTool:SetText("Edit/view selected tool restrictions")
     SingleEditTool:SetTooltip("Edit or view the restrictions of the selected tool!")
     SingleEditTool.DoClick = function()
-        for k,v in pairs(weapons.Get("gmod_tool").Tool) do
+        for _, v in pairs(weapons.Get("gmod_tool").Tool) do
             if v.Mode and v.Mode == FPP.SELECTEDRESTRICTNODE then
                 RunConsoleCommand("FPP_SendRestrictTool", k)
                 return
@@ -447,7 +448,7 @@ function FPP.AdminMenu(Panel)
         local lines = FPP.multirestricttoollist:GetLines()
         local EditTable = {}
         if #lines > 0 then
-            for k,v in pairs(lines) do
+            for _, v in ipairs(lines) do
                 table.insert(EditTable, v.Columns[1].Value)
             end
             RetrieveRestrictedTool(EditTable)
@@ -561,7 +562,7 @@ function FPP.AdminMenu(Panel)
             return
         end
 
-        for k,v in pairs(GroupMembers:GetSelected()) do
+        for k, v in pairs(GroupMembers:GetSelected()) do
             timer.Simple(k / 10, function() RunConsoleCommand("FPP_SetPlayerGroup", v.Columns[1]:GetValue(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()) end)
         end
     end
@@ -578,7 +579,8 @@ function FPP.AdminMenu(Panel)
         local menu = DermaMenu()
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for a,b in pairs(player.GetAll()) do
+        for _, b in ipairs(player.GetAll()) do
+            if not IsValid(b) then continue end
             menu:AddOption(b:Nick(), function()
                 RunConsoleCommand("FPP_SetPlayerGroup", b:UserID(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
                 PressLoadFirst:SetText("List might be corrupted, reload is recommended")
@@ -596,7 +598,7 @@ function FPP.AdminMenu(Panel)
     local function RetrieveGroups(len)
         FPP.Groups = net.ReadTable()
         GroupList:Clear()
-        for k,v in pairs(FPP.Groups) do
+        for k, _ in pairs(FPP.Groups) do
             GroupList:AddLine(k)
         end
         GroupList:SelectFirstItem()
@@ -608,9 +610,9 @@ function FPP.AdminMenu(Panel)
     local function RetrieveGroupMembers(len)
         FPP.GroupMembers = net.ReadTable()
         GroupMembers:Clear()
-        for k,v in pairs(FPP.GroupMembers) do
+        for _, v in pairs(FPP.GroupMembers) do
             local name = "Unknown"
-            for _, ply in pairs(player.GetAll()) do
+            for _, ply in ipairs(player.GetAll()) do
                 if ply:SteamID() == k then
                     name = ply:Nick()
                     break
@@ -711,10 +713,10 @@ RetrieveRestrictedTool = function(um)
     end
     pan:AddItem(adminsCHKboxes[3])
 
-    for k,v in pairs(adminsCHKboxes) do
+    for k in pairs(adminsCHKboxes) do
         adminsCHKboxes[k].Button.Toggle = function()
             if adminsCHKboxes[k].Button:GetChecked() == nil or not adminsCHKboxes[k].Button:GetChecked() then
-                for a,b in pairs(adminsCHKboxes) do
+                for a in pairs(adminsCHKboxes) do
                     adminsCHKboxes[a].Button:SetValue(false)
                 end
                 adminsCHKboxes[k].Button:SetValue( true )
@@ -722,7 +724,7 @@ RetrieveRestrictedTool = function(um)
                     RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
                 else
                     local i = 0
-                    for a,b in pairs(tool) do
+                    for _, b in pairs(tool) do
                         i = i + 1
                         timer.Simple(i / 10, function() -- Timer to prevent lag of executing multiple commands at the same time.
                             RunConsoleCommand("FPP_restricttool", b, "admin", adminsCHKboxes[k].GoodValue)
@@ -747,7 +749,8 @@ RetrieveRestrictedTool = function(um)
         local menu = DermaMenu(self)
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for k, v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
+            if not IsValid(v) then continue end
             local submenu = menu:AddSubMenu(v:Nick())
 
 
@@ -755,7 +758,7 @@ RetrieveRestrictedTool = function(um)
                 if type(tool) ~= "table" then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 2)
                 else
-                    for a,b in pairs(tool) do
+                    for a, b in pairs(tool) do
                         timer.Simple(a / 10, function()
                             RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 2)
                         end)
@@ -768,7 +771,7 @@ RetrieveRestrictedTool = function(um)
                 if type(tool) ~= "table" then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 1)
                 else
-                    for a,b in pairs(tool) do
+                    for a, b in pairs(tool) do
                         timer.Simple(a / 10, function()
                             RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 1)
                         end)
@@ -781,7 +784,7 @@ RetrieveRestrictedTool = function(um)
                 if type(tool) ~= "table" then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 0)
                 else
-                    for a,b in pairs(tool) do
+                    for a, b in pairs(tool) do
                         timer.Simple(a / 10, function()
                             RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 0)
                         end)
@@ -793,8 +796,9 @@ RetrieveRestrictedTool = function(um)
     end
 
     local Tpan = vgui.Create("DPanelList", frame)
-    Tpan:SetPos(10, #adminsCHKboxes * 20 + 65)
-    Tpan:SetSize(230, 325 - #adminsCHKboxes * 20)
+    local count = #adminsCHKboxes
+    Tpan:SetPos(10, count * 20 + 65)
+    Tpan:SetSize(230, 325 - count * 20)
     Tpan:SetSpacing(5)
     Tpan:EnableHorizontal(false)
     Tpan:EnableVerticalScrollbar(true)
@@ -848,7 +852,7 @@ EditGroupTools = function(groupname)
     GroupTools:SetSize(295, 450)
     GroupTools:AddColumn("Tools currently in " .. groupname)
 
-    for k,v in pairs(tools or {}) do
+    for _, v in pairs(tools or {}) do
         GroupTools:AddLine(v)
     end
 
@@ -860,10 +864,10 @@ EditGroupTools = function(groupname)
     ToolList:SetPos(5, 45)
     ToolList:SetSize(300, 430)
 
-    for a,b in pairs(spawnmenu.GetTools()) do
+    for a in pairs(spawnmenu.GetTools()) do
         for c,d in pairs(spawnmenu.GetTools()[a].Items) do
             local addnodes = {}
-            for g,h in pairs(weapons.Get("gmod_tool").Tool) do
+            for g, h in pairs(weapons.Get("gmod_tool").Tool) do
                 if h.Category and h.Category == d.ItemName then
                     table.insert(addnodes, {h.Name, g})
                 end
@@ -872,7 +876,7 @@ EditGroupTools = function(groupname)
             if #addnodes ~= 0 then
                 local node1 = ToolList:AddNode(d.ItemName)
                 node1.Tool = d.ItemName
-                for e,f in pairs(addnodes) do
+                for _, f in pairs(addnodes) do
                     local node2 = node1:AddNode(f[1])
                     node2.Icon:SetImage("icon16/wrench.png")
                     node2.Tool = f[2]
@@ -891,7 +895,7 @@ EditGroupTools = function(groupname)
         local SelectedTool = string.lower(ToolList.m_pSelectedItem.Tool)
 
         if not ToolList.m_pSelectedItem.ChildNodes then -- if it's not a folder
-            for k,v in pairs(GroupTools:GetLines()) do
+            for _, v in pairs(GroupTools:GetLines()) do
                 if v.Columns[1]:GetValue() == SelectedTool then
                     return
                 end
@@ -899,9 +903,9 @@ EditGroupTools = function(groupname)
             RunConsoleCommand("FPP_AddGroupTool", groupname, SelectedTool)
             GroupTools:AddLine(SelectedTool)
         else--if it's a folder:
-            for k,v in pairs(ToolList.m_pSelectedItem.ChildNodes:GetChildren()) do
+            for k, v in pairs(ToolList.m_pSelectedItem.ChildNodes:GetChildren()) do
                 local found = false
-                for a,b in pairs(GroupTools:GetLines()) do
+                for _, b in pairs(GroupTools:GetLines()) do
                     if b.Columns[1]:GetValue() == string.lower(v.Tool) then
                         found = true
                         break
@@ -922,7 +926,7 @@ EditGroupTools = function(groupname)
     RemTool:SetSize(25, 25)
     RemTool:SetText("<")
     RemTool.DoClick = function()
-        for k,v in pairs(GroupTools:GetSelected()) do
+        for k, v in pairs(GroupTools:GetSelected()) do
             local toolname = v.Columns[1]:GetValue()
             timer.Simple(k / 10, function()
                 RunConsoleCommand("FPP_RemoveGroupTool", groupname, toolname)
@@ -957,7 +961,7 @@ function FPP.BuddiesMenu(Panel)
     BuddiesList:SetTall(150)
     BuddiesList:SetMultiSelect(false)
     BuddiesPanel:AddPanel(BuddiesList)
-    for k,v in pairs(FPP.Buddies) do
+    for k, v in pairs(FPP.Buddies) do
         BuddiesList:AddLine(k, v.name)
     end
     BuddiesList:SelectFirstItem()
@@ -1004,10 +1008,11 @@ function FPP.BuddiesMenu(Panel)
 
     Panel:AddControl("Label", {Text = "\nAdd buddy:"})
     local AvailablePlayers = false
-    for k,v in SortedPairs(player.GetAll(), function(a,b) return a:Nick() > b:Nick() end) do
+    for _, v in SortedPairs(player.GetAll(), function(a, b) return a:Nick() > b:Nick() end) do
+        if not IsValid(v) then continue end
         local cantadd = false
         if v == LocalPlayer() then cantadd = true end
-        for a,b in pairs(FPP.Buddies) do
+        for a in pairs(FPP.Buddies) do
             if a == v:SteamID() then
                 cantadd = true
                 break
@@ -1079,7 +1084,7 @@ local PrivateSettings = {
 }
 
 local privateSettingVars = {}
-for k,v in pairs(PrivateSettings) do
+for _, v in pairs(PrivateSettings) do
     privateSettingVars[v] = CreateClientConVar("FPP_PrivateSettings_" .. v, 0, true, true)
 end
 CreateClientConVar("cl_pickupplayers", 1, true, true)
@@ -1096,7 +1101,7 @@ function FPP.PrivateSettings(Panel)
     PrivateSettingsPanel:Clear()
 
     Panel:AddControl("Label", {Text = "\nPrivate settings menu\nUse to set settings that override server settings\n\nThese settings can only restrict you further.\n"})
-    for k,v in pairs(PrivateSettings) do
+    for k, v in pairs(PrivateSettings) do
         local box = vgui.Create("DCheckBoxLabel")
         box:SetText("I don't want to " .. k)
         box:SetValue(GetConVar("FPP_PrivateSettings_" .. v):GetBool())
@@ -1116,7 +1121,7 @@ function FPP.PrivateSettings(Panel)
     local fallbackChoice = Panel:ComboBox("Fallback player")
     fallbackChoice:AddChoice("None", -1, true)
 
-    for k, v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v == LocalPlayer() then continue end
         fallbackChoice:AddChoice(v:Nick(), v:UserID(), PrivateSettingsPanel.FallbackSelected == v:UserID())
     end
@@ -1203,11 +1208,11 @@ function FPP.SharedMenu(um)
         end
     end
 
-    if #player.GetAll() ~= 1 then
+    if player.GetCount() ~= 1 then
         count = count + 1
     end
-    for k,v in pairs(player.GetAll()) do
-        if v ~= LocalPlayer() and v:IsValid() then
+    for _, v in ipairs(player.GetAll()) do
+        if IsValid(v) and v ~= LocalPlayer() then
             local IsShared = false
             if table.HasValue(SharedWith, v) then
                 IsShared = true

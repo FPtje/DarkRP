@@ -1,4 +1,3 @@
-AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
@@ -14,6 +13,7 @@ end
 function ENT:createItem(activator)
     local foodPos = self:GetPos()
     local food = ents.Create("food")
+    if not IsValid(food) then return end
     food:SetPos(Vector(foodPos.x, foodPos.y, foodPos.z + 23))
     food:Setowning_ent(activator)
     food.nodupe = true

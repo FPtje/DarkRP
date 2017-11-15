@@ -26,11 +26,12 @@ function FAdmin.TargetsToString(targets)
         return FAdmin.PlayerName(targets)
     end
 
-    if #targets == 0 then
+    local targetCount = #targets
+    if targetCount == 0 then
         return "no one"
     end
 
-    if #targets == #player.GetAll() and #targets ~= 1 then
+    if targetCount == player.GetCount() and targetCount ~= 1 then
         return "everyone"
     end
 
