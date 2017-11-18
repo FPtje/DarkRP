@@ -23,7 +23,6 @@ function ENT:Initialize()
     -- Create a serverside gun model
     -- it's required serverside to be able to get OBB information clientside
     self:SetgunModel(IsValid(self:GetgunModel()) and self:GetgunModel() or ents.Create("prop_physics"))
-    if not IsValid(self:GetgunModel()) then return end
     self:GetgunModel():SetModel(contents.model)
     self:GetgunModel():SetPos(self:GetPos())
     self:GetgunModel():Spawn()
@@ -113,7 +112,6 @@ function ENT:SpawnItem()
     if CustomShipments[contents] and CustomShipments[contents].spawn then self.USED = false return CustomShipments[contents].spawn(self, CustomShipments[contents]) end
 
     local weapon = ents.Create("spawned_weapon")
-    if not IsValid(weapon) then return end
 
     local weaponAng = self:GetAngles()
     local weaponPos = self:GetAngles():Up() * 40 + weaponAng:Up() * (math.sin(CurTime() * 3) * 8)
@@ -173,7 +171,6 @@ function ENT:Destruct()
 
 
     local weapon = ents.Create("spawned_weapon")
-    if not IsValid(weapon) then return end
     weapon:SetModel(model)
     weapon:SetWeaponClass(class)
     weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))

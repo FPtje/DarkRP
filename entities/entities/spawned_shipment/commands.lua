@@ -35,7 +35,6 @@ local function createShipment(ply, args)
     end
 
     local crate = ents.Create(CustomShipments[shipID].shipmentClass or "spawned_shipment")
-    if not IsValid(crate) then return end
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())
     crate.nodupe = true
@@ -85,7 +84,6 @@ local function splitShipment(ply, args)
     ent:StartSpawning()
 
     local crate = ents.Create("spawned_shipment")
-    if not IsValid(crate) then return end
     crate.locked = true
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())

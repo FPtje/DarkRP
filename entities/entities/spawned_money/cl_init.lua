@@ -24,3 +24,6 @@ function ENT:Draw()
         draw.WordBox(2, -TextWidth * 0.5, -10, text, "ChatFont", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
     cam.End3D2D()
 end
+
+function ENT:Think()
+end

@@ -31,7 +31,6 @@ local function MakeLetter(ply, args, type)
     local trace = util.TraceLine(tr)
 
     local letter = ents.Create("letter")
-    if not IsValid(letter) then return end
     letter:SetModel("models/props_c17/paper01.mdl")
     letter:Setowning_ent(ply)
     letter:SetPos(trace.HitPos)

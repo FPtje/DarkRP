@@ -152,7 +152,6 @@ local function placeLaws(ply, args)
     local tr = util.TraceLine(trace)
 
     local ent = ents.Create("darkrp_laws")
-    if not IsValid(ent) then return end
     ent:SetPos(tr.HitPos + Vector(0, 0, 100))
 
     local ang = ply:GetAngles()

@@ -73,7 +73,6 @@ local function Jail(ply, cmd, args)
 
             for _, v in pairs(JailProps) do
                 local JailProp = ents.Create("fadmin_jail")
-                if not IsValid(JailProp) then return end
                 JailProp:SetPos(target.FAdminJailPos + v.pos)
                 JailProp:SetAngles(v.ang)
                 JailProp:SetModel(v.model)

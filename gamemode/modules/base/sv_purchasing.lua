@@ -68,7 +68,6 @@ local function BuyPistol(ply, args)
     local tr = util.TraceLine(trace)
 
     local weapon = ents.Create("spawned_weapon")
-    if not IsValid(weapon) then return end
     weapon:SetModel(shipment.model)
     weapon:SetWeaponClass(shipment.entity)
     weapon:SetPos(tr.HitPos)
@@ -169,7 +168,6 @@ local function BuyShipment(ply, args)
     local tr = util.TraceLine(trace)
 
     local crate = ents.Create(found.shipmentClass or "spawned_shipment")
-    if not IsValid(crate) then return end
     crate.SID = ply.SID
     crate:Setowning_ent(ply)
     crate:SetContents(foundKey, found.amount)
@@ -289,10 +287,8 @@ local function BuyVehicle(ply, args)
     local tr = util.TraceLine(trace)
 
     local ent = ents.Create(Vehicle.Class)
-    if not IsValid(ent) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyvehicle", ""))
-        return ""
-    end
+    if not ent:IsValid() then error("Vehicle '" .. Vehicle.Class .. "' does not exist or is not valid.") end
+
     ent:SetModel(Vehicle.Model)
     if Vehicle.KeyValues then
         for k, v in pairs(Vehicle.KeyValues) do
@@ -406,7 +402,6 @@ local function BuyAmmo(ply, args)
     local tr = util.TraceLine(trace)
 
     local ammo = ents.Create("spawned_ammo")
-    if not IsValid(ammo) then return end
     ammo:SetModel(found.model)
     ammo:SetPos(tr.HitPos)
     ammo.nodupe = true

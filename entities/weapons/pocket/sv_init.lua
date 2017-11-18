@@ -152,7 +152,6 @@ end
 
 local function deserialize(ply, item)
     local ent = ents.Create(item.Class)
-    if not IsValid(ent) then return end
     duplicator.DoGeneric(ent, item)
     ent:Spawn()
     ent:Activate()

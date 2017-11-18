@@ -51,7 +51,6 @@ end
 
 local function AttackEnt(ent)
     local meteor = ents.Create("meteor")
-    if not IsValid(meteor) then return end
     meteor.nodupe = true
     meteor:Spawn()
     meteor:SetMeteorTarget(ent)
@@ -95,7 +94,6 @@ local tremor
 
 local function createTremor()
     tremor = ents.Create("env_physexplosion")
-    if not IsValid(tremor) then return end
     tremor:SetPos(Vector(0, 0, 0))
     tremor:SetKeyValue("radius", 9999999999)
     tremor:SetKeyValue("spawnflags", 7)

@@ -138,7 +138,6 @@ function DarkRP.toggleSleep(player, command)
             end
         end
         local ragdoll = ents.Create("prop_ragdoll")
-        if not IsValid(ragdoll) then return end
         ragdoll:SetPos(player:GetPos())
         ragdoll:SetAngles(Angle(0,player:GetAngles().Yaw,0))
         local model = player:GetModel()

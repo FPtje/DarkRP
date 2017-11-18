@@ -108,7 +108,6 @@ local function Ragdoll(ply, cmd, args)
             elseif RagdollType == "normal" or RagdollType == "ragdoll" then
                 if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
                 local Ragdoll = ents.Create("prop_ragdoll")
-                if not IsValid(Ragdoll) then return end
 
                 Ragdoll:SetModel(target:GetModel())
                 Ragdoll:SetPos(target:GetPos())
@@ -126,7 +125,6 @@ local function Ragdoll(ply, cmd, args)
                 target.FAdminRagdoll = {}
 
                 local Ragdoll = ents.Create("prop_ragdoll")
-                if not IsValid(Ragdoll) then return end
 
                 Ragdoll:SetModel(target:GetModel())
                 Ragdoll:SetPos(target:GetPos())
@@ -142,7 +140,6 @@ local function Ragdoll(ply, cmd, args)
                 local HangOn
                 for k,v in ipairs(HangProps) do
                     local prop = ents.Create("fadmin_jail")
-                    if not IsValid(prop) then return end
                     prop.target = prop
                     prop:SetModel(v.model)
                     prop:SetPos(v.pos + target:GetPos())
@@ -163,7 +160,6 @@ local function Ragdoll(ply, cmd, args)
             elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
                 if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
                 local Ragdoll = ents.Create("prop_ragdoll")
-                if not IsValid(Ragdoll) then return end
 
                 Ragdoll:SetModel(target:GetModel())
                 Ragdoll:SetPos(target:GetPos())
@@ -190,7 +186,6 @@ local function Ragdoll(ply, cmd, args)
                 local aimVec = Vector(target:GetAimVector().x, target:GetAimVector().y, 0)
                 local kickerPos = target:GetPos() - aimVec * 35 + Vector(0, 0, 5)
                 local Kicker = ents.Create("prop_ragdoll")
-                if not IsValid(Kicker) then return end
                 Kicker:SetModel("models/Police.mdl")
                 Kicker:SetPos(kickerPos)
                 Kicker:Spawn()

@@ -25,7 +25,6 @@ util.AddNetworkString("DarkRP_ToggleChat")
 local function ToggleChatIndicator(len, ply)
     if not IsValid(ply.ChatIndicator) then
         ply.ChatIndicator = ents.Create("chatindicator")
-        if not IsValid(ply.ChatIndicator) then return end
         ply.ChatIndicator.ply = ply -- plyception
         ply.ChatIndicator:SetPos(ply:GetPos() + Vector(0, 0, 85))
         ply.ChatIndicator:SetNoDraw(ply:GetNoDraw())

@@ -296,7 +296,6 @@ local function addEntityCommands(tblEnt)
     -- used if tblEnt.spawn is not defined
     local function defaultSpawn(ply, tr, tblE)
         local ent = ents.Create(tblE.ent)
-        if not IsValid(ent) then return end
         if not ent:IsValid() then error("Entity '" .. tblE.ent .. "' does not exist or is not valid.") end
         ent.dt = ent.dt or {}
         ent.dt.owning_ent = ply
