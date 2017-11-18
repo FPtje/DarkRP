@@ -152,8 +152,8 @@ function SWEP:DoAttack(dmg)
                 self:GetOwner():addMoney(amount)
                 DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(amount), DarkRP.getPhrase("bonus_destroying_entity")))
                 ent.beenSeized = true
+                ent:TakeDamage(1000 - dmg, self:GetOwner(), self) -- for illegal entities
             end
-            ent:TakeDamage(1000-dmg, self:GetOwner(), self) -- for illegal entities
         end
     end
 end
