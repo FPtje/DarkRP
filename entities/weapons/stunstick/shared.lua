@@ -67,17 +67,19 @@ function SWEP:DoFlash(ply)
     ply:ScreenFade(SCREENFADE.IN, color_white, 1.2, 0)
 end
 
+local stunstickMaterial = Material("effects/stunstick")
+local stunstickBeam     = Material("!darkrp/stunstick_beam")
 function SWEP:PostDrawViewModel(vm)
     if self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1 then
         local attachment = vm:GetAttachment(1)
         local pos = attachment.Pos
         cam.Start3D(EyePos(), EyeAngles())
-            render.SetMaterial(Material("effects/stunstick"))
+            render.SetMaterial(stunstickMaterial)
             render.DrawSprite(pos, 12, 12, Color(180, 180, 180))
             for i = 1, 3 do
                 local randVec = VectorRand() * 3
                 local offset = (attachment.Ang:Forward() * randVec.x) + (attachment.Ang:Right() * randVec.y) + (attachment.Ang:Up() * randVec.z)
-                render.SetMaterial(Material("!darkrp/stunstick_beam"))
+                render.SetMaterial(stunstickBeam)
                 render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, Color(180, 180, 180))
                 pos = pos + offset
             end
@@ -85,6 +87,7 @@ function SWEP:PostDrawViewModel(vm)
     end
 end
 
+local light_glow02_add = Material("sprites/light_glow02_add")
 function SWEP:DrawWorldModelTranslucent()
     if CurTime() <= self:GetLastReload() + 0.1 then
         local bone = self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand")
@@ -92,7 +95,7 @@ function SWEP:DrawWorldModelTranslucent()
         local bonePos, boneAng = self:GetOwner():GetBonePosition(bone)
         if bonePos then
             local pos = bonePos + (boneAng:Up() * -16) + (boneAng:Right() * 3) + (boneAng:Forward() * 6.5)
-            render.SetMaterial(Material("sprites/light_glow02_add"))
+            render.SetMaterial(light_glow02_add)
             render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
         end
     end
@@ -106,7 +109,7 @@ function SWEP:DoAttack(dmg)
     self:GetOwner():LagCompensation(true)
     local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
     self:GetOwner():LagCompensation(false)
-    
+
     local ent = trace.Entity
     if IsValid(ent) and ent.onStunStickUsed then
         ent:onStunStickUsed(self:GetOwner())
