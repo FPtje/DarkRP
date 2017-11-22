@@ -78,7 +78,7 @@ function ENT:Use(activator, caller)
     local Owner = self:Getowning_ent()
     if not IsValid(Owner) then return end
 
-    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
     if canUse == false then
       if reason then DarkRP.notify(activator, 1, 4, reason) end
       return

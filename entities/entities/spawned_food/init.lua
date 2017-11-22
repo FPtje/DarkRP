@@ -17,7 +17,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator, caller)
-    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
     if canUse == false then
       if reason then DarkRP.notify(activator, 1, 4, reason) end
       return

@@ -20,7 +20,7 @@ end
 function ENT:Use(activator, caller)
     if self.USED or self.hasMerged then return end
 
-    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
     if canUse == false then
       if reason then DarkRP.notify(activator, 1, 4, reason) end
       return
@@ -101,6 +101,11 @@ DarkRP.hookStub{
             description = "The actual entity the player attempts to use.",
             type = "Entity"
         },
+        {
+            name = "caller",
+            description = "The entity that directly triggered the input.",
+            type = "Player"
+        }
     },
     returns = {
         {
