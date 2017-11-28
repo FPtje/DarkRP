@@ -192,11 +192,11 @@ function FPP.Protect.GravGunPickup(ply, ent)
     if type(ent.GravGunPickup) == "function" then
         local val = ent:GravGunPickup(ply, ent)
         if val ~= nil then
-            if val == false then DropEntityIfHeld(ent) end
+            if not val then DropEntityIfHeld(ent) end
             return
         end
     elseif ent.GravGunPickup ~= nil then
-        if ent.GravGunPickup == false then DropEntityIfHeld(ent) end
+        if not ent.GravGunPickup then DropEntityIfHeld(ent) end
         return
     end
 
@@ -204,7 +204,7 @@ function FPP.Protect.GravGunPickup(ply, ent)
 
 
     if FPP.UnGhost and cantouch then FPP.UnGhost(ply, ent) end
-    if cantouch == false then DropEntityIfHeld(ent) end
+    if not cantouch then DropEntityIfHeld(ent) end
 end
 hook.Add("GravGunOnPickedUp", "FPP.Protect.GravGunPickup", FPP.Protect.GravGunPickup)
 
@@ -214,17 +214,17 @@ function FPP.Protect.CanGravGunPickup(ply, ent)
     if type(ent.GravGunPickup) == "function" then
         local val = ent:GravGunPickup(ply, ent)
         if val ~= nil then
-            if val == false then return false end
+            if not val then return false end
             return
         end
     elseif ent.GravGunPickup ~= nil then
-        if ent.GravGunPickup == false then return false end
+        if not ent.GravGunPickup then return false end
         return
     end
 
     local cantouch = FPP.plyCanTouchEnt(ply, ent, "Gravgun")
 
-    if cantouch == false then return false end
+    if not cantouch then return false end
 end
 hook.Add("GravGunPickupAllowed", "FPP.Protect.CanGravGunPickup", FPP.Protect.CanGravGunPickup)
 
@@ -237,11 +237,11 @@ function FPP.Protect.GravGunPunt(ply, ent)
     if type(ent.GravGunPunt) == "function" then
         local val = ent:GravGunPunt(ply, ent)
         if val ~= nil then
-            if val == false then DropEntityIfHeld(ent) end
+            if not val then DropEntityIfHeld(ent) end
             return val
         end
     elseif ent.GravGunPunt ~= nil then
-        if ent.GravGunPunt == false then DropEntityIfHeld(ent) end
+        if not ent.GravGunPunt then DropEntityIfHeld(ent) end
         return ent.GravGunPunt
     end
 
@@ -249,7 +249,7 @@ function FPP.Protect.GravGunPunt(ply, ent)
 
 
     if FPP.UnGhost and cantouch then FPP.UnGhost(ply, ent) end
-    if cantouch == false then DropEntityIfHeld(ent) end
+    if not cantouch then DropEntityIfHeld(ent) end
     return cantouch
 end
 hook.Add("GravGunPunt", "FPP.Protect.GravGunPunt", FPP.Protect.GravGunPunt)
@@ -395,10 +395,10 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 
     FPP.RestrictedToolsPlayers = FPP.RestrictedToolsPlayers or {}
     if FPP.RestrictedToolsPlayers[tool] and FPP.RestrictedToolsPlayers[tool][SteamID] ~= nil then--Player specific
-        if FPP.RestrictedToolsPlayers[tool][SteamID] == false then
+        if not FPP.RestrictedToolsPlayers[tool][SteamID] then
             FPP.Notify(ply, "Toolgun restricted for you!", false)
             return false
-        elseif FPP.RestrictedToolsPlayers[tool][SteamID] == true then
+        elseif FPP.RestrictedToolsPlayers[tool][SteamID] then
             ignoreGeneralRestrictTool = true --If someone is allowed, then he's allowed even though he's not admin, so don't check for further restrictions
         end
     end

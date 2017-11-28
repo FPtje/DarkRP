@@ -85,7 +85,7 @@ end
 
 function ENT:StartTouch(ent)
     -- the .USED var is also used in other mods for the same purpose
-    if ent.IsSpawnedWeapon ~= true or
+    if not ent.IsSpawnedWeapon or
         self:GetWeaponClass() ~= ent:GetWeaponClass() or
         self.hasMerged or ent.hasMerged then return end
 

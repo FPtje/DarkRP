@@ -33,7 +33,7 @@ end
 
 function ENT:Use(ply, caller)
     local canUse, reason = hook.Call("canDarkRPUse", nil, ply, self, caller)
-    if canUse == false then
+    if not canUse then
       if reason then DarkRP.notify(ply, 1, 4, reason) end
       return
     end

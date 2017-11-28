@@ -8,7 +8,7 @@ local function Kick(ply, cmd, args)
 
     local CanKick = hook.Call("FAdmin_CanKick", nil, ply, targets)
 
-    if CanKick == false then return false end
+    if not CanKick then return false end
 
     local stage = args[2] or ""
     stage = string.lower(stage)
@@ -104,8 +104,6 @@ local function SaveBan(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
         FAdmin.BANS[SteamID].adminname = AdminName
         FAdmin.BANS[SteamID].adminsteam = Admin_steam
     end
-
-    if StoreBans == true then return end
 end
 
 local function Ban(ply, cmd, args)
@@ -132,7 +130,7 @@ local function Ban(ply, cmd, args)
 
     local CanBan = hook.Call("FAdmin_CanBan", nil, ply, targets)
 
-    if CanBan == false then return false end
+    if not CanBan then return false end
 
     local stage = string.lower(args[2])
     local stages = {"start", "cancel", "update", "execute"}
@@ -314,7 +312,7 @@ hook.Add("CheckPassword", "FAdmin_Bans", fc{canJoin, util.SteamIDFrom64})
 -- CheckPassword when banned, they'll be caught on InitialSpawn
 hook.Add("PlayerInitialSpawn", "FAdmin_Bans", function(ply)
     local allowedIn, reason = canJoin(ply:SteamID())
-    if allowedIn == false then
+    if not allowedIn then
         ply:Kick(reason)
     end
 end)

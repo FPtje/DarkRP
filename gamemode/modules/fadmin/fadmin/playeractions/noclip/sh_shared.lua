@@ -31,7 +31,7 @@ hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
     -- Disallow if other hooks say no
     for k, v in pairs(hook.GetTable().PlayerNoClip) do
         if k == "FAdmin_noclip" then continue end
-        if v(ply) == false then return false end
+        if not v(ply) then return false end
     end
 
     sendNoclipMessage(ply)

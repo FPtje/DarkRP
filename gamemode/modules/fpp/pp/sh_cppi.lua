@@ -66,7 +66,7 @@ if SERVER then
 
 	function ENTITY:CPPICanTool(ply, tool)
 		local Value = FPP.Protect.CanTool(ply, nil, tool, self)
-		if Value ~= false and Value ~= true then Value = true end
+		if not isbool( Value ) then Value = true end
 		return Value
 	end
 
@@ -92,13 +92,13 @@ if SERVER then
 
 	function ENTITY:CPPIDrive(ply)
 		local Value = FPP.Protect.CanDrive(ply, self)
-		if Value ~= false and Value ~= true then Value = true end
+		if not isbool( Value ) then Value = true end
 		return Value
 	end
 
 	function ENTITY:CPPICanProperty(ply, property)
 		local Value = FPP.Protect.CanProperty(ply, property, self)
-		if Value ~= false and Value ~= true then Value = true end
+		if not isbool( Value ) then Value = true end
 		return Value
 	end
 

@@ -130,8 +130,8 @@ function FAdmin.ScoreBoard.Player.Show(ply)
     FAdmin.ScoreBoard.Player.Controls.ButtonPanel:DockMargin(5, 5, 5, 5)
 
 
-    for _, v in ipairs(FAdmin.ScoreBoard.Player.ActionButtons) do
-        if v.Visible == true or (type(v.Visible) == "function" and v.Visible(FAdmin.ScoreBoard.Player.Player) == true) then
+    for k,v in ipairs(FAdmin.ScoreBoard.Player.ActionButtons) do
+        if v.Visible or (type(v.Visible) == "function" and v.Visible(FAdmin.ScoreBoard.Player.Player)) then
             local ActionButton = vgui.Create("FAdminActionButton")
             if type(v.Image) == "string" then
                 ActionButton:SetImage(v.Image or "icon16/exclamation")

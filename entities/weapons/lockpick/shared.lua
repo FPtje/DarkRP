@@ -69,15 +69,14 @@ function SWEP:PrimaryAttack()
     self:GetOwner():LagCompensation(false)
     local ent = trace.Entity
 
-    if not IsValid(ent) or ent.DarkRPCanLockpick == false then return end
+    if not IsValid(ent) or not ent.DarkRPCanLockpick then return end
     local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent, trace)
 
-    if canLockpick == false then return end
-    if canLockpick ~= true and (
-            trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or
+    if not canLockpick then return end
+    if trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or
             (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
             (not ent:isDoor() and not ent:IsVehicle() and not string.find(string.lower(ent:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not ent.isFadingDoor))
-        ) then
+      then
         return
     end
 

@@ -10,7 +10,7 @@ local function checkDarkRP(ply, target, t)
     end
 
     local hookValue = hook.Call("playerCanChangeTeam", nil, target, t, true)
-    if hookValue == false then return false end
+    if not hookValue then return false end
 
     local a = TEAM.admin
     if a > 0 and not target:IsAdmin()

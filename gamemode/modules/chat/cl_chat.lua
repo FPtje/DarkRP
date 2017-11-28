@@ -30,13 +30,13 @@ local function AddToChat(bits)
             shouldShow = hook.Call("OnPlayerChat", GAMEMODE, ply, text, false, not ply:Alive(), prefixText, col1, col2)
         end
 
-        if shouldShow ~= true then
+        if not shouldShow then
             chat.AddNonParsedText(col1, prefixText, col2, ": " .. text)
         end
     else
         shouldShow = hook.Call("ChatText", GAMEMODE, "0", prefixText, prefixText, "darkrp")
 
-        if shouldShow ~= true then
+        if not shouldShow then
             chat.AddNonParsedText(col1, prefixText)
         end
     end

@@ -106,7 +106,7 @@ function DarkRP.toggleSleep(player, command)
 
         SendUserMessage("blackScreen", player, false)
 
-        if command == true then
+        if command then
             player:arrest()
         end
         player.Sleeping = false

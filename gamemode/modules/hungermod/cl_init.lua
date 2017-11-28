@@ -58,7 +58,7 @@ timer.Simple(0, ReloadConVars)
 
 local function HMHUD()
     local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Hungermod")
-    if shouldDraw == false then return end
+    if not shouldDraw then return end
 
     local energy = math.ceil(LocalPlayer():getDarkRPVar("Energy") or 0)
 

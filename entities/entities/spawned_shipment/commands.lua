@@ -7,7 +7,7 @@ local function createShipment(ply, args)
 
     ent = IsValid(ent) and ent or ply:GetEyeTrace().Entity
 
-    if not IsValid(ent) or not ent.IsSpawnedWeapon or ent.PlayerUse == false then
+    if not IsValid(ent) or not ent.IsSpawnedWeapon or not ent.PlayerUse then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return
     end

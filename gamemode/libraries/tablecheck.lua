@@ -91,7 +91,7 @@ function checkTable(schema)
             end
 
             -- Update the value
-            if correct and replace == true and replaceWith then
+            if correct and replace and replaceWith then
                 tbl[k] = replaceWith
             end
         end
@@ -192,7 +192,7 @@ function unitTests()
     local function checkCorrect(correct, err, hints)
         id = id + 1
 
-        if correct ~= true then
+        if not correct then
             print(id, "Incorrect value that should be correct!", correct, err, hints)
             if hints then PrintTable(hints) end
             return
