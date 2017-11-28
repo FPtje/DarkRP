@@ -132,7 +132,7 @@ end
 local agendaText
 local function Agenda()
     local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
-    if shouldDraw == false then return end
+    if not shouldDraw then return end
 
     local agenda = localplayer:getAgendaTable()
     if not agenda then return end
@@ -189,7 +189,7 @@ local function LockDown()
     local chbxX, chboxY = chat.GetChatBoxPos()
     if GetGlobalBool("DarkRP_LockDown") then
         local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LockdownHUD")
-        if shouldDraw == false then return end
+        if not shouldDraw then return end
         local cin = (math.sin(CurTime()) + 1) / 2
         local chatBoxSize = math.floor(Scrh / 4)
         draw.DrawNonParsedText(DarkRP.getPhrase("lockdown_started"), "ScoreboardSubtitle", chbxX, chboxY + chatBoxSize, Color(cin * 255, 0, 255 - (cin * 255), 255), TEXT_ALIGN_LEFT)
@@ -204,7 +204,7 @@ usermessage.Hook("GotArrested", function(msg)
 
     Arrested = function()
         local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ArrestedHUD")
-        if shouldDraw == false then return end
+        if not shouldDraw then return end
 
         if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
             draw.DrawNonParsedText(DarkRP.getPhrase("youre_arrested", math.ceil((ArrestedUntil - (CurTime() - StartArrested)) * 1 / game.GetTimeScale())), "DarkRPHUD1", Scrw / 2, Scrh - Scrh / 12, colors.white, 1)
@@ -236,14 +236,13 @@ Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------]]
 local function DrawHUD()
     local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
-    if shouldDraw == false then return end
+    if not shouldDraw then return end
 
     Scrw, Scrh = ScrW(), ScrH()
     RelativeX, RelativeY = 0, Scrh
 
     shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
-    shouldDraw = shouldDraw ~= false
-    if shouldDraw then
+    if not shouldDraw then
         --Background
         draw.RoundedBox(6, 0, Scrh - HUDHeight, HUDWidth, HUDHeight, ConVars.background)
         DrawHealth()
@@ -326,7 +325,7 @@ The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------]]
 local function DrawEntityDisplay()
     local shouldDraw, players = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
-    if shouldDraw == false then return end
+    if not shouldDraw then return end
 
     local shootPos = localplayer:GetShootPos()
     local aimVec = localplayer:GetAimVector()

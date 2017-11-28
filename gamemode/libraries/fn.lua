@@ -296,28 +296,28 @@ end
 
 And = function(xs)
     for _, v in pairs(xs) do
-        if v ~= true then return false end
+        if not v then return false end
     end
     return true
 end
 
 Or = function(xs)
     for _, v in pairs(xs) do
-        if v == true then return true end
+        if not v then return true end
     end
     return false
 end
 
 Any = function(func, xs)
     for _, v in pairs(xs) do
-        if func(v) == true then return true end
+        if func(v) then return true end
     end
     return false
 end
 
 All = function(func, xs)
     for _, v in pairs(xs) do
-        if func(v) ~= true then return false end
+        if not func(v) then return false end
     end
     return true
 end

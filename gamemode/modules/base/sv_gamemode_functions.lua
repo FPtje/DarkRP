@@ -467,7 +467,7 @@ local adminCopWeapons = {
 }
 function GM:PlayerCanPickupWeapon(ply, weapon)
     if ply:isArrested() then return false end
-    if weapon.PlayerUse == false then return false end
+    if not weapon.PlayerUse then return false end
     local weaponClass = weapon:GetClass()
     if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons and adminCopWeapons[weaponClass] then return true end
 
@@ -772,7 +772,7 @@ function GM:PlayerLoadout(ply)
 
     if jobTable.PlayerLoadout then
         local val = jobTable.PlayerLoadout(ply)
-        if val == true then
+        if val then
             ply:SwitchToDefaultWeapon()
             return
         end

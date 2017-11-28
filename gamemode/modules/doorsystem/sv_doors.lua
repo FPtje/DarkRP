@@ -107,7 +107,7 @@ end
 
 function pmeta:keysUnOwnAll()
     for _, v in ipairs(ents.GetAll()) do
-        if v:isKeysOwnable() and v:isKeysOwnedBy(self) == true then
+        if v:isKeysOwnable() and v:isKeysOwnedBy(self) then
             v:Fire("unlock", "", 0.6)
         end
     end
@@ -144,7 +144,7 @@ function pmeta:doPropertyTax()
 
     local shouldTax, taxOverride = hook.Run("canPropertyTax", self, tax)
 
-    if shouldTax == false then return end
+    if not shouldTax then return end
 
     tax = taxOverride or tax
 
@@ -191,7 +191,7 @@ function pmeta:initiateTax()
 
         local shouldTax, amount = hook.Run("canTax", self, taxAmount)
 
-        if shouldTax == false then return end
+        if not shouldTax then return end
 
         taxAmount = amount or taxAmount
         taxAmount = math.Max(0, taxAmount)
@@ -325,7 +325,7 @@ local function OwnDoor(ply)
     if ent:isKeysOwnedBy(ply) then
         local bAllowed, strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
 
-        if bAllowed == false then
+        if not bAllowed then
             if strReason and strReason ~= "" then
                 DarkRP.notify(ply, 1, 4, strReason)
             end
@@ -362,7 +362,7 @@ local function OwnDoor(ply)
         end
 
         local bAllowed, strReason, bSuppress = hook.Call("playerBuy" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
-        if bAllowed == false then
+        if not bAllowed then
             if strReason and strReason ~= "" then
                 DarkRP.notify(ply, 1, 4, strReason)
             end
@@ -477,7 +477,7 @@ local function RemoveDoorOwner(ply, args)
 
 
     local canDo = hook.Call("onAllowedToOwnRemoved", nil, ply, ent, target)
-    if canDo == false then return "" end
+    if not canDo then return "" end
 
     if ent:isKeysAllowedToOwn(target) then
         ent:removeKeysAllowedToOwn(target)
@@ -524,7 +524,7 @@ local function AddDoorOwner(ply, args)
     end
 
     local canDo = hook.Call("onAllowedToOwnAdded", nil, ply, ent, target)
-    if canDo == false then return "" end
+    if not canDo then return "" end
 
     ent:addKeysAllowedToOwn(target)
 

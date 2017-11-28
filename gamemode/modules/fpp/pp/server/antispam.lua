@@ -49,7 +49,7 @@ function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
     if not phys:IsValid() then return end
 
     local shouldRegister = hook.Call("FPP_ShouldRegisterAntiSpam", nil, ply, ent, IsDuplicate)
-    if shouldRegister == false then return end
+    if not shouldRegister then return end
 
     local class = ent:GetClass()
     -- I power by ten because the volume of a prop can vary between 65 and like a few billion

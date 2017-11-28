@@ -81,7 +81,7 @@ function meta:changeTeam(t, force, suppressNotification)
     end
 
     local hookValue, reason = hook.Call("playerCanChangeTeam", nil, self, t, force)
-    if hookValue == false then
+    if not hookValue then
         if reason then
             notify(self, 1, 4, reason)
         end
@@ -241,7 +241,7 @@ local function ChangeJob(ply, args)
     end
 
     local canChangeJob, message, replace = gamemode.Call("canChangeJob", ply, args)
-    if canChangeJob == false then
+    if not canChangeJob then
         DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "/job", ""))
         return ""
     end
@@ -294,7 +294,7 @@ local function Demote(ply, args)
     end
 
     local canDemote, message = hook.Call("canDemote", GAMEMODE, ply, p, reason)
-    if canDemote == false then
+    if not canDemote then
         DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "demote", ""))
         return ""
     end
@@ -310,7 +310,7 @@ local function Demote(ply, args)
     end
 
     local Team = p:Team()
-    if not RPExtraTeams[Team] or RPExtraTeams[Team].candemote == false then
+    if not RPExtraTeams[Team] or not RPExtraTeams[Team].candemote then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
     else
         DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Nick(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)

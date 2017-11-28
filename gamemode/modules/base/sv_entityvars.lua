@@ -169,7 +169,7 @@ local function RPName(ply, args)
     args = args:find"^%s*$" and '' or args:match"^%s*(.*%S)"
 
     local canChangeName, reason = hook.Call("CanChangeRPName", GAMEMODE, ply, args)
-    if canChangeName == false then
+    if not canChangeName then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", reason or ""))
         return ""
     end

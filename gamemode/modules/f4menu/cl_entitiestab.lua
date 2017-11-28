@@ -111,7 +111,7 @@ local function canBuyEntity(item)
     local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
     if not ply:canAfford(cost) then return false, false, message, cost end
 
-    if canbuy == false then
+    if not canbuy then
         return false, suppress, message, cost
     end
 
@@ -150,7 +150,7 @@ local function canBuyShipment(ship)
 
     if not ply:canAfford(cost) then return false, false, message, cost end
 
-    if canbuy == false then
+    if not canbuy then
         return false, suppress, message, cost
     end
 
@@ -192,7 +192,7 @@ local function canBuyGun(ship)
 
     if not ply:canAfford(cost) then return false, false, message, cost end
 
-    if canbuy == false then
+    if not canbuy then
         return false, suppress, message, cost
     end
 
@@ -233,7 +233,7 @@ local function canBuyAmmo(item)
     local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
     if not ply:canAfford(cost) then return false, false, message, cost end
 
-    if canbuy == false then
+    if not canbuy then
         return false, suppress, message, price
     end
 
@@ -274,7 +274,7 @@ local function canBuyVehicle(item)
 
     if not ply:canAfford(cost) then return false, false, message, cost end
 
-    if canbuy == false then
+    if not canbuy then
         return false, suppress, message, cost
     end
 

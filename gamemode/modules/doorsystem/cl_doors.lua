@@ -8,7 +8,7 @@ function meta:drawOwnableInfo()
 
     -- Look, if you want to change the way door ownership is drawn, don't edit this file, use the hook instead!
     local doorDrawing = hook.Call("HUDDrawDoorData", nil, self)
-    if doorDrawing == true then return end
+    if doorDrawing then return end
 
     local blocked = self:getKeysNonOwnable()
     local superadmin = LocalPlayer():IsSuperAdmin()

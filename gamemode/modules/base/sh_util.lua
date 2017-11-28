@@ -142,7 +142,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     local foundEnt
 
     for _, ent in pairs(entities) do
-        if not IsValid(ent) or filter(ent) == false then continue end
+        if not IsValid(ent) or not filter(ent) then continue end
 
         local center = ent:GetPos()
 

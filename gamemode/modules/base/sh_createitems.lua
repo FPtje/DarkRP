@@ -18,7 +18,7 @@ local function declareTeamCommands(CTeam)
         if CTeam.admin == 1 and not ply:IsAdmin() or CTeam.admin == 2 and not ply:IsSuperAdmin() then return false end
         if isnumber(CTeam.NeedToChangeFrom) and plyTeam ~= CTeam.NeedToChangeFrom then return false end
         if istable(CTeam.NeedToChangeFrom) and not table.HasValue(CTeam.NeedToChangeFrom, plyTeam) then return false end
-        if CTeam.customCheck and CTeam.customCheck(ply) == false then return false end
+        if CTeam.customCheck and not CTeam.customCheck(ply) then return false end
         if ply:isArrested() then return false end
         local numPlayers = team.NumPlayers(k)
         if CTeam.max ~= 0 and ((CTeam.max % 1 == 0 and numPlayers >= CTeam.max) or (CTeam.max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > CTeam.max)) then return false end
@@ -51,7 +51,7 @@ local function declareTeamCommands(CTeam)
                     local requiresVote = CTeam.RequiresVote and CTeam.RequiresVote(ply, k)
 
                     if requiresVote then return false end
-                    if requiresVote ~= false and CTeam.admin == 0 and not ply:IsAdmin() or CTeam.admin == 1 and not ply:IsSuperAdmin() then return false end
+                    if CTeam.admin == 0 and not ply:IsAdmin() or CTeam.admin == 1 and not ply:IsSuperAdmin() then return false end
                     if CTeam.canStartVote and not CTeam.canStartVote(ply) then return false end
 
                     return chatcommandCondition(ply)
@@ -284,7 +284,7 @@ local function addEntityCommands(tblEnt)
                 if ply:isArrested() then return false end
                 if istable(tblEnt.allowed) and not table.HasValue(tblEnt.allowed, ply:Team()) then return false end
                 if not ply:canAfford(tblEnt.price) then return false end
-                if tblEnt.customCheck and tblEnt.customCheck(ply) == false then return false end
+                if tblEnt.customCheck and not tblEnt.customCheck(ply) then return false end
 
                 return true
             end
@@ -342,7 +342,7 @@ local function addEntityCommands(tblEnt)
             return ""
         end
 
-        if canbuy == false then
+        if not canbuy then
             if not suppress and message then DarkRP.notify(ply, 1, 4, message) end
             return ""
         end

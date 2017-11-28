@@ -6,7 +6,7 @@ local function AFKDemote(ply)
     local shouldDemote, demoteTeam, suppressMsg, msg = hook.Call("playerAFKDemoted", nil, ply)
     demoteTeam = demoteTeam or GAMEMODE.DefaultTeam
 
-    if ply:Team() ~= demoteTeam and shouldDemote ~= false then
+    if ply:Team() ~= demoteTeam and shouldDemote then
         local rpname = ply:getDarkRPVar("rpname")
         ply:changeTeam(demoteTeam, true)
         if not suppressMsg then DarkRP.notifyAll(0, 5, msg or DarkRP.getPhrase("hes_afk_demoted", rpname)) end
@@ -55,7 +55,7 @@ DarkRP.defineChatCommand("afk", function(ply)
 
     local canAFK = hook.Run("canGoAFK", ply, not ply:getDarkRPVar("AFK"))
 
-    if canAFK == false then return "" end
+    if not canAFK then return "" end
 
     ply.DarkRPLastAFK = CurTime()
     SetAFK(ply)

@@ -86,7 +86,7 @@ local function chatGetRecipients()
         if val == nil then
             receivers = nil
             return
-        elseif val == true then
+        elseif val then
             table.insert(receivers, ply)
         end
     end

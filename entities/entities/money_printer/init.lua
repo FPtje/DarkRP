@@ -64,7 +64,7 @@ function ENT:Destruct()
 end
 
 function ENT:BurstIntoFlames()
-    if hook.Run("moneyPrinterCatchFire", self) == true then return end
+    if hook.Run("moneyPrinterCatchFire", self) then return end
 
     if IsValid(self:Getowning_ent()) then DarkRP.notify(self:Getowning_ent(), 0, 4, DarkRP.getPhrase("money_printer_overheating")) end
     self.burningup = true
@@ -93,7 +93,7 @@ function ENT:CreateMoneybag()
 
     local amount = self.MoneyCount or (GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250)
     local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)
-    if prevent == true then return end
+    if prevent then return end
 
     local MoneyPos = self:GetPos()
     amount = hookAmount or amount

@@ -14,7 +14,7 @@ local function ccDoVote(ply, cmd, args)
 
     local canVote, message = hook.Call("canVote", GAMEMODE, ply, vote)
 
-    if vote.voters[ply] or vote.exclude[ply] or canVote == false then
+    if vote.voters[ply] or vote.exclude[ply] or not canVote then
         DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("you_cannot_vote"))
         return
     end
@@ -56,7 +56,7 @@ function Vote:getFilter()
         if self.exclude[v] then continue end
         local canVote = hook.Call("canVote", GAMEMODE, v, self)
 
-        if canVote == false then
+        if not canVote then
             self.exclude[v] = true
             continue
         end

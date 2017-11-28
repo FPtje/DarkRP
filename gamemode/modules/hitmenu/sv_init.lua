@@ -18,7 +18,7 @@ function plyMeta:requestHit(customer, target, price)
     local canRequest, msg, cost = hook.Call("canRequestHit", DarkRP.hooks, self, customer, target, price)
     price = cost or price
 
-    if canRequest == false then
+    if not canRequest then
         DarkRP.notify(customer, 1, 4, msg)
         return false
     end

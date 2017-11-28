@@ -26,7 +26,7 @@ function ENT:SetMeteorTarget(ent)
     for a = 1, 30, 1 do
         zPos = zPos + 100
         foundSky = util.IsInWorld(Vector(ent:GetPos().x ,ent:GetPos().y ,zPos))
-        if (foundSky == false) then
+        if not foundSky then
             zPos = zPos - 120
             break
         end

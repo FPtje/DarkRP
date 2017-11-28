@@ -38,7 +38,7 @@ end
 local function placeBillboard(ply, args)
     local canEdit, message = hook.Call("canAdvert", nil, ply, args)
 
-    if canEdit == false then
+    if not canEdit then
         DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", GAMEMODE.Config.chatCommandPrefix .. "advertise", ""))
         return ""
     end
