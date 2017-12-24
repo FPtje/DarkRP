@@ -1,5 +1,5 @@
 local function onBought(ply, ent)
-    for k,v in pairs(ent.Seats or {}) do
+    for _, v in pairs(ent.Seats or {}) do
         if not IsValid(v) or not v:isKeysOwnable() then continue end
         v:keysOwn(ply)
     end
@@ -10,14 +10,14 @@ hook.Add("playerBoughtCustomVehicle", "PassengerModCompatibility", function(ply,
 
 local function onLocked(ent)
     -- Passenger mod
-    for k,v in pairs(ent.Seats or {}) do
+    for _, v in pairs(ent.Seats or {}) do
         v:Fire("lock", "", 0)
     end
 
     -- VUMod compatibility
     -- Locks passenger seats when the vehicle is locked.
     if ent:IsVehicle() and ent.VehicleTable and ent.VehicleTable.Passengers then
-        for k,v in pairs(ent.VehicleTable.Passengers) do
+        for _, v in pairs(ent.VehicleTable.Passengers) do
             v.Ent:Fire("lock", "", 0)
         end
     end
@@ -31,13 +31,13 @@ hook.Add("onKeysLocked", "PassengerModCompatibility", onLocked)
 
 local function onUnlocked(ent)
     -- Passenger mod
-    for k,v in pairs(ent.Seats or {}) do
+    for _, v in pairs(ent.Seats or {}) do
         v:Fire("unlock", "", 0)
     end
 
     -- VUMod
     if ent:IsVehicle() and ent.VehicleTable and ent.VehicleTable.Passengers then
-        for k,v in pairs(ent.VehicleTable.Passengers) do
+        for _ ,v in pairs(ent.VehicleTable.Passengers) do
             v.Ent:Fire("unlock", "", 0)
         end
     end
@@ -51,10 +51,11 @@ end
 hook.Add("onKeysUnlocked", "PassengerModCompatibility", onUnlocked)
 
 local function ejectOnRam(success, ply, trace)
-    if not success or not IsValid(trace.Entity) or not trace.Entity:IsVehicle() then return end
-    if not trace.Entity.VehicleTable or not trace.Entity.VehicleTable.Passengers then return end
+    local ent = trace.Entity
+    if not success or not IsValid(ent) or not ent:IsVehicle() then return end
+    if not ent.VehicleTable or not ent.VehicleTable.Passengers then return end
 
-    for k, v in pairs(trace.Entity.VehicleTable.Passengers) do
+    for _, v in pairs(ent.VehicleTable.Passengers) do
         local passenger = v:GetDriver()
         if IsValid(passenger) then passenger:ExitVehicle() end
     end

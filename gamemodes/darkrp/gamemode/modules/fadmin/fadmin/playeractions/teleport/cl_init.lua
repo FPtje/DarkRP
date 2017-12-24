@@ -52,8 +52,8 @@ FAdmin.StartHooks["zz_Teleport"] = function()
 
         local uid = ply:UserID()
         menu:AddOption("Yourself", function() RunConsoleCommand("_FAdmin", "bring", uid) end)
-        for k, v in pairs(DarkRP.nickSortedPlayers()) do
-            if v ~= LocalPlayer() then
+        for _, v in pairs(DarkRP.nickSortedPlayers()) do
+            if IsValid(v) and v ~= LocalPlayer() then
                 local vUid = v:UserID()
                 menu:AddOption(v:Nick(), function() RunConsoleCommand("_FAdmin", "bring", uid, vUid) end)
             end

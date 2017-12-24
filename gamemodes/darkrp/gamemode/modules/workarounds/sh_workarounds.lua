@@ -1,21 +1,8 @@
 -- Shared part
---[[---------------------------------------------------------------------------
-Sound crash glitch
----------------------------------------------------------------------------]]
-
-local entity = FindMetaTable("Entity")
-local plyMeta = FindMetaTable("Player")
-local EmitSound = entity.EmitSound
-function entity:EmitSound(sound, ...)
-    if not sound then DarkRP.error(string.format("The first argument of the ent:EmitSound call is '%s'. It's supposed to be a string.", tostring(sound)), 3) end
-    if string.find(sound, "??", 0, true) then return end
-    return EmitSound(self, sound, ...)
-end
-
 
 function DarkRP.getAvailableVehicles()
     local vehicles = list.Get("Vehicles")
-    for k, v in pairs(list.Get("SCarsList") or {}) do
+    for _, v in pairs(list.Get("SCarsList") or {}) do
         vehicles[v.PrintName] = {
             Name = v.PrintName,
             Class = v.ClassName,
@@ -100,20 +87,26 @@ if CLIENT then
         hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
     end)
 
-    local camstart3D = cam.Start3D
+    local camStarted = 0
     local camend3D = cam.End3D
-    local cam3DStarted = 0
-    function cam.Start3D(a,b,c,d,e,f,g,h,i,j)
-        cam3DStarted = cam3DStarted + 1
-        return camstart3D(a,b,c,d,e,f,g,h,i,j)
+    local camend2D = cam.End2D
+    local camstart3D2D, camend3D2D = cam.Start3D2D, cam.End3D2D
+    local camstart, camend = cam.Start, cam.End
+
+    local function decrease()
+        if not camStarted or camStarted <= 0 then
+            DarkRP.error("A cam.End function was called without corresponding cam.Start.", 3, {"This may cause the game to look glitchy."})
+        end
+        camStarted = camStarted - 1
     end
 
-    -- cam.End3D should not crash a player when 3D hasn't been started
-    function cam.End3D()
-        if not cam3DStarted or cam3DStarted <= 0 then return end
-        cam3DStarted = cam3DStarted - 1
-        return camend3D()
-    end
+    function cam.Start(...) camStarted = camStarted + 1 return camstart(...) end
+    function cam.Start3D2D(...) camStarted = camStarted + 1 return camstart3D2D(...) end
+
+    function cam.End3D(...) decrease() return camend3D(...) end
+    function cam.End2D(...) decrease() return camend2D(...) end
+    function cam.End3D2D(...) decrease() return camend3D2D(...) end
+    function cam.End(...) decrease() return camend(...) end
 
     return
 end
@@ -133,7 +126,7 @@ message.]]
 function ents.Create(name, ...)
     local res = { entsCreate(name, ...) }
 
-    if res[1] == NULL and #ents.GetAll() >= 8024 then
+    if res[1] == NULL and ents.GetEdictCount() >= 8176 then
         DarkRP.error(entsCreateError, 2, { string.format("Affected entity: '%s'", name) })
     end
 
@@ -141,6 +134,7 @@ function ents.Create(name, ...)
 end
 
 if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
+    local plyMeta = FindMetaTable("Player")
     local sid64 = plyMeta.SteamID64
 
     function plyMeta:SteamID64(...)
@@ -170,7 +164,7 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 
     -- Remove that weird rooftop spawn in rp_downtown_v4c_v2
     if game.GetMap() == "rp_downtown_v4c_v2" then
-        for k,v in pairs(ents.FindByClass("info_player_terrorist")) do
+        for _, v in pairs(ents.FindByClass("info_player_terrorist")) do
             v:Remove()
         end
     end

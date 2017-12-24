@@ -97,7 +97,7 @@ local function Ragdoll(ply, cmd, args)
                     if target.FAdminRagdoll.SetCanRemove then target.FAdminRagdoll:SetCanRemove(true) end
                     target.FAdminRagdoll:Remove()
                 elseif type(target.FAdminRagdoll) == "table" then
-                    for k,v in pairs(target.FAdminRagdoll) do
+                    for _, v in pairs(target.FAdminRagdoll) do
                         if IsValid(v) then
                             if v.SetCanRemove then v:SetCanRemove(true) end
                             v:Remove()
@@ -148,7 +148,7 @@ local function Ragdoll(ply, cmd, args)
                     prop:Activate()
 
                     local phys = prop:GetPhysicsObject()
-                    if phys:IsValid() then phys:EnableMotion(false) end
+                    if IsValid(phys) then phys:EnableMotion(false) end
 
                     table.insert(target.FAdminRagdoll, prop)
                     HangOn = prop -- Hang on the last prop
@@ -323,7 +323,7 @@ hook.Add("PlayerDisconnected", "FAdmin_ragdoll", function(ply)
 
     if type(ply.FAdminRagdoll) ~= "table" then return end
 
-    for k,v in pairs(ply.FAdminRagdoll or {}) do
-            if IsValid(v) then v:Remove() end
+    for _, v in pairs(ply.FAdminRagdoll or {}) do
+        if IsValid(v) then v:Remove() end
     end
 end)

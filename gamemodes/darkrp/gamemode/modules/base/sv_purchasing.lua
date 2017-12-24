@@ -114,7 +114,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     end
 
     local canbecome = false
-    for a,b in pairs(shipment.allowed) do
+    for _, b in pairs(shipment.allowed) do
         if ply:Team() == b then
             canbecome = true
             break
@@ -246,7 +246,7 @@ local function BuyVehicle(ply, args)
     local found = false
     -- Allow people to have multiple vehicles with the same name
     -- vehicles are bought through the command
-    for k,v in pairs(CustomVehicles) do
+    for k, v in pairs(CustomVehicles) do
         if v.command and string.lower(v.command) == string.lower(args) then
             found = CustomVehicles[k]
             break
@@ -287,10 +287,8 @@ local function BuyVehicle(ply, args)
     local tr = util.TraceLine(trace)
 
     local ent = ents.Create(Vehicle.Class)
-    if not ent then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyvehicle", ""))
-        return ""
-    end
+    if not ent:IsValid() then error("Vehicle '" .. Vehicle.Class .. "' does not exist or is not valid.") end
+
     ent:SetModel(Vehicle.Model)
     if Vehicle.KeyValues then
         for k, v in pairs(Vehicle.KeyValues) do
@@ -370,7 +368,7 @@ local function BuyAmmo(ply, args)
     if num and GAMEMODE.AmmoTypes[num] then
         found = GAMEMODE.AmmoTypes[num]
     else
-        for k,v in pairs(GAMEMODE.AmmoTypes) do
+        for _, v in pairs(GAMEMODE.AmmoTypes) do
             if v.ammoType ~= args then continue end
 
             found = v
@@ -436,8 +434,10 @@ local function SetPrice(ply, args)
 
     local tr = util.TraceLine(trace)
 
-    if IsValid(tr.Entity) and tr.Entity.CanSetPrice and tr.Entity.SID == ply.SID then
-        tr.Entity:Setprice(b)
+    local ent = tr.Entity
+
+    if IsValid(ent) and ent.CanSetPrice and ent.SID == ply.SID then
+        ent:Setprice(b)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("any_lab")))
     end

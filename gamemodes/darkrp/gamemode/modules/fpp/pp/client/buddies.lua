@@ -7,9 +7,9 @@ FPP.Buddies = {}
 function FPP.LoadBuddies()
     local data = sql.Query("SELECT * FROM FPP_Buddies")
     if data then
-        for k,v in pairs(data) do
+        for _, v in pairs(data) do
             FPP.Buddies[v.steamid] = {name = v.name, physgun = v.physgun, gravgun = v.gravgun, toolgun = v.toolgun, playeruse = v.playeruse, entitydamage = v.entitydamage} --Put all the buddies in the table
-            for num,ply in pairs(player.GetAll()) do --If the buddies are in the server then add them serverside
+            for _, ply in ipairs(player.GetAll()) do --If the buddies are in the server then add them serverside
                 if ply:SteamID() == v.steamid then
                     -- update the name
                     sql.Query("UPDATE FPP_Buddies SET name = " .. sql.SQLStr(ply:Nick()) .. " WHERE steamid = " .. sql.SQLStr(v.steamid) .. ";")
@@ -26,7 +26,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     if Type == "remove" then
         FPP.Buddies[SteamID] = nil
         sql.Query("DELETE FROM FPP_Buddies WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 RunConsoleCommand("FPP_SetBuddy", v:UserID(), "0", "0", "0", "0", "0")
             end
@@ -48,7 +48,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     end
 
     --Let the server know of your changes
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:SteamID() == SteamID then -- If the person you're adding is in the server then add him serverside
             RunConsoleCommand("FPP_SetBuddy", v:UserID(), FPP.Buddies[SteamID].physgun, FPP.Buddies[SteamID].gravgun, FPP.Buddies[SteamID].toolgun, FPP.Buddies[SteamID].playeruse, FPP.Buddies[SteamID].entitydamage)
             --Don't break because there can be people(bots actually) with the same steam ID
@@ -56,7 +56,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     end
 
     local ShouldRemove = true -- Remove the buddy if he isn't buddy in anything anymore
-    for k,v in pairs(FPP.Buddies[SteamID]) do
+    for _, v in pairs(FPP.Buddies[SteamID]) do
         if v == 1 or v == "1" then
             ShouldRemove = false
             break
@@ -66,7 +66,7 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     if ShouldRemove then -- If everything = 0 then he's not your friend anymore
         FPP.Buddies[SteamID] = nil
         sql.Query("DELETE FROM FPP_Buddies WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 RunConsoleCommand("FPP_SetBuddy", v:UserID(), "0", "0", "0", "0", "0")
             end
@@ -83,7 +83,7 @@ function FPP.NewBuddy(um)
     local data = sql.Query("SELECT * FROM FPP_Buddies")
     if not data then return end
 
-    for k,v in pairs(data) do
+    for _, v in pairs(data) do
         -- make the player buddy if they're in your buddies list
         if v.steamid ~= SteamID then continue end
 

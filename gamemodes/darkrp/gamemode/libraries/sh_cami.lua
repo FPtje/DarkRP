@@ -417,7 +417,7 @@ extraInfoTbl)
 		if countdown == 0 then callback(allowedPlys) end
 	end
 
-	for _, ply in pairs(allPlys) do
+	for _, ply in ipairs(allPlys) do
 		CAMI.PlayerHasAccess(ply, privilegeName,
 			function(...) onResult(ply, ...) end,
 			targetPly, extraInfoTbl)

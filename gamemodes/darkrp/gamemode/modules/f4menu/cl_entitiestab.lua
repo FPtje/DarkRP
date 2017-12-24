@@ -23,7 +23,7 @@ function PANEL:Rebuild()
         end
     end
 
-    for i, item in pairs(self.Items) do
+    for _, item in pairs(self.Items) do
         if not item:IsVisible() then continue end
         k = k + 1
         local goRight = k % 2 == 0
@@ -58,7 +58,7 @@ function PANEL:shouldHide()
 end
 
 function PANEL:Refresh()
-    for k,v in pairs(self.Items) do
+    for _,v in pairs(self.Items) do
         if v.Refresh then v:Refresh() end
     end
     self:InvalidateLayout()
@@ -81,7 +81,7 @@ local function createCategories(self, categories, itemClick, canBuy)
 
         dCat:SetPerformLayout(function(contents)
             local anyVisible = false
-            for k,v in pairs(contents.Items) do
+            for _, v in pairs(contents.Items) do
                 local can, important, _, price = canBuy(v.DarkRPItem)
                 v:SetDisabled(not can, important)
                 v:updatePrice(price)
@@ -125,7 +125,7 @@ function PANEL:generateButtons()
 end
 
 function PANEL:shouldHide()
-    for k,v in pairs(DarkRPEntities) do
+    for _, v in pairs(DarkRPEntities) do
         local canBuy, important = canBuyEntity(v)
         if not self:isItemHidden(not canBuy, important) then return false end
     end
@@ -166,7 +166,7 @@ end
 function PANEL:shouldHide()
     local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
 
-    for k,v in pairs(shipments) do
+    for _, v in pairs(shipments) do
         local canBuy, important = canBuyShipment(v)
         if not self:isItemHidden(not canBuy, important) then return false end
     end
@@ -208,7 +208,7 @@ end
 function PANEL:shouldHide()
     local shipments = fn.Filter(fn.Curry(fn.GetValue, 2)("separate"), CustomShipments)
 
-    for k,v in pairs(shipments) do
+    for _, v in pairs(shipments) do
         local canBuy, important = canBuyGun(v)
 
         if not self:isItemHidden(not canBuy, important) then return false end
@@ -247,7 +247,7 @@ function PANEL:generateButtons()
 end
 
 function PANEL:shouldHide()
-    for k,v in pairs(GAMEMODE.AmmoTypes) do
+    for _, v in pairs(GAMEMODE.AmmoTypes) do
         local canBuy, important = canBuyAmmo(v)
         if not self:isItemHidden(not canBuy, important) then return false end
     end

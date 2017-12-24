@@ -13,7 +13,7 @@ local function MessageGui(ply)
     local i = 0
     local TypeButtons = {}
     local MsgTypeNames = {ERROR = 1, NOTIFY = 2, QUESTION = 3, GOOD = 4, BAD = 5}
-    for k,v in pairs(FAdmin.Messages.MsgTypes) do
+    for k, v in pairs(FAdmin.Messages.MsgTypes) do
 
 
         local MsgTypeButton = vgui.Create("DCheckBox", frame)

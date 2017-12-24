@@ -9,12 +9,13 @@ local function setScale(ply, scale)
 end
 
 local function onLoadout(ply)
-    if not RPExtraTeams[ply:Team()] or not tonumber(RPExtraTeams[ply:Team()].modelScale) then
+    local Team = ply:Team()
+    if not RPExtraTeams[Team] or not tonumber(RPExtraTeams[Team].modelScale) then
         setScale(ply, 1)
         return
     end
 
-    local modelScale = tonumber(RPExtraTeams[ply:Team()].modelScale)
+    local modelScale = tonumber(RPExtraTeams[Team].modelScale)
 
     setScale(ply, modelScale)
 end

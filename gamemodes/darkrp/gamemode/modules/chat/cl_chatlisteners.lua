@@ -47,18 +47,19 @@ local function drawChatReceivers()
     local x, y = chat.GetChatBoxPos()
     y = y - 21
 
+    local receiversCount = #receivers
     -- No one hears you
-    if #receivers == 0 then
+    if receiversCount == 0 then
         draw.WordBox(2, x, y, DarkRP.getPhrase("hear_noone", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
         return
     -- Everyone hears you
-    elseif #receivers == #player.GetAll() - 1 then
+    elseif receiversCount == player.GetCount() - 1 then
         draw.WordBox(2, x, y, DarkRP.getPhrase("hear_everyone"), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
         return
     end
 
-    draw.WordBox(2, x, y - (#receivers * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
-    for i = 1, #receivers, 1 do
+    draw.WordBox(2, x, y - (receiversCount * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+    for i = 1, receiversCount, 1 do
         if not IsValid(receivers[i]) then
             receivers[i] = receivers[#receivers]
             receivers[#receivers] = nil
@@ -76,9 +77,8 @@ local function chatGetRecipients()
     if not currentConfig then return end
 
     receivers = {}
-    for _, ply in pairs(player.GetAll()) do
-        if not IsValid(ply) or ply == LocalPlayer() then continue end
-        if ply:GetNoDraw() then continue end
+    for _, ply in ipairs(player.GetAll()) do
+        if not IsValid(ply) or ply == LocalPlayer() or ply:GetNoDraw() then continue end
 
         local val = currentConfig.hearFunc(ply, currentChatText)
 

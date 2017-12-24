@@ -26,7 +26,7 @@ Methods that check whether certain fields are valid
 ---------------------------------------------------------------------------]]
 isreturns = function(tbl)
     if not istable(tbl) then return false end
-    for k,v in pairs(tbl) do
+    for _, v in pairs(tbl) do
         if not checkStub(v, returnsLayout) then return false end
     end
     return true
@@ -34,7 +34,7 @@ end
 
 isparameters = function(tbl)
     if not istable(tbl) then return false end
-    for k,v in pairs(tbl) do
+    for _, v in pairs(tbl) do
         if not checkStub(v, parameterLayout) then return false end
     end
     return true

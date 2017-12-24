@@ -63,7 +63,8 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
 
     -- Hobo throwing poop!
     local Weapon = ply:GetActiveWeapon()
-    if RPExtraTeams[ply:Team()] and RPExtraTeams[ply:Team()].hobo and not ply.ThrewPoop and IsValid(Weapon) and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
+    local Team = ply:Team()
+    if RPExtraTeams[Team] and RPExtraTeams[Team].hobo and not ply.ThrewPoop and Weapon:IsValid() and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
         ply.ThrewPoop = true
         ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
 
@@ -79,7 +80,7 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
     end
 
     -- Saying hi/hello to a player
-    if not ply.SaidHi and IsValid(Weapon) and Weapon:GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
+    if not ply.SaidHi and Weapon:IsValid() and Weapon:GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
         local ent = ply:GetEyeTrace().Entity
         if IsValid(ent) and ent:IsPlayer() then
             ply.SaidHi = true
@@ -185,6 +186,7 @@ local function AnimationMenu()
     AnimFrame.btnMinim:SetVisible(false)
     AnimFrame:SetVisible(true)
     AnimFrame:MakePopup()
+    AnimFrame:ParentToHUD()
 
     function AnimFrame:Close()
         Panel:Remove()
@@ -193,7 +195,7 @@ local function AnimationMenu()
     end
 
     local i = 0
-    for k,v in SortedPairs(Anims) do
+    for k, v in SortedPairs(Anims) do
         i = i + 1
         local button = vgui.Create("DButton", AnimFrame)
         button:SetPos(10, (i - 1) * 55 + 30)

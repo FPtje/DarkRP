@@ -73,7 +73,7 @@ Loading modules
 local fol = GM.FolderName .. "/gamemode/modules/"
 local files, folders = file.Find(fol .. "*", "LUA")
 
-for k, v in pairs(files) do
+for _, v in pairs(files) do
     if DarkRP.disabledDefaults["modules"][v:Left(-5)] then continue end
     if string.GetExtensionFromFilename(v) ~= "lua" then continue end
     include(fol .. v)

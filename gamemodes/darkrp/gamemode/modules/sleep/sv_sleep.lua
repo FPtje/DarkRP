@@ -79,7 +79,7 @@ function DarkRP.toggleSleep(player, command)
         ragdoll:Remove()
         ragdoll.OwnerINT = 0
         if player.WeaponsForSleep and player:GetTable().BeforeSleepTeam == player:Team() then
-            for k,v in pairs(player.WeaponsForSleep) do
+            for _, v in pairs(player.WeaponsForSleep) do
                 local wep = player:Give(v[1])
                 player:RemoveAllAmmo()
                 player:SetAmmo(v[2], v[3], false)
@@ -121,7 +121,7 @@ function DarkRP.toggleSleep(player, command)
         timer.Remove(timerName)
     else
         if IsValid(player:GetObserverTarget()) then return "" end
-        for k,v in pairs(ents.FindInSphere(player:GetPos(), 30)) do
+        for _, v in ipairs(ents.FindInSphere(player:GetPos(), 30)) do
             if v:GetClass() == "func_door" then
                 DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
                 return ""
@@ -130,7 +130,7 @@ function DarkRP.toggleSleep(player, command)
 
         if not player:isArrested() then
             player.WeaponsForSleep = {}
-            for k,v in pairs(player:GetWeapons()) do
+            for k, v in ipairs(player:GetWeapons()) do
                 player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
                 v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
                 v:Clip1(), v:Clip2()}
@@ -198,7 +198,7 @@ local function DamageSleepers(ent, dmginfo)
     local ownerint = ent.OwnerINT
     if not ownerint or ownerint == 0 then return end
 
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if v:EntIndex() ~= ownerint then continue end
 
         if attacker == game.GetWorld() then

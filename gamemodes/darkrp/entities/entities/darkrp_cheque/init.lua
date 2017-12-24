@@ -20,7 +20,7 @@ end
 
 
 function ENT:Use(activator, caller)
-    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self)
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
     if canUse == false then
       if reason then DarkRP.notify(activator, 1, 4, reason) end
       return
@@ -37,7 +37,7 @@ function ENT:Use(activator, caller)
         hook.Call("playerPickedUpCheque", nil, activator, recipient, amount or 0, true, self)
         self:Remove()
     elseif (IsValid(owner) and IsValid(recipient)) and owner ~= activator then
-        DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_details", recipient:Name()))
+        DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_details", recipient:Nick()))
         hook.Call("playerPickedUpCheque", nil, activator, recipient, amount or 0, false, self)
     elseif IsValid(owner) and owner == activator then
         DarkRP.notify(activator, 0, 4, DarkRP.getPhrase("cheque_torn"))

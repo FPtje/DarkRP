@@ -6,7 +6,7 @@ function DarkRP.addLanguage(name, tbl)
     rp_languages[name] = tbl
 
     -- Merge the language with the translations added by DarkRP.addPhrase
-    for k,v in pairs(old) do
+    for k, v in pairs(old) do
         if rp_languages[name][k] then continue end
         rp_languages[name][k] = v
     end
@@ -29,7 +29,7 @@ function DarkRP.getMissingPhrases(lang)
     local res = {}
     local format = "%s = \"%s\","
 
-    for k,v in pairs(rp_languages.en) do
+    for k, v in pairs(rp_languages.en) do
         if rp_languages[lang][k] then continue end
         table.insert(res, string.format(format, k, v))
     end
@@ -42,7 +42,7 @@ local function getMissingPhrases(ply, cmd, args)
     local lang = rp_languages[args[1]]
     if not lang then print("This language does not exist! Make sure the casing is right.")
         print("Available languages:")
-        for k,v in pairs(rp_languages) do print(k) end
+        for k in pairs(rp_languages) do print(k) end
         return
     end
 
@@ -91,9 +91,9 @@ local function printMissingChatTranslations()
     local text = {}
 
     local maxCmdLength = 0
-    for k,v in pairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
+    for _, v in pairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
 
-    for k,v in pairs(cmds) do
+    for k, v in pairs(cmds) do
         text[k] = string.format([=[["%s"]%s=    "%s",]=], v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description)
     end
 

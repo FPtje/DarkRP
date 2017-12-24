@@ -5,7 +5,7 @@ local plyMeta = FindMetaTable("Player")
 -----------------------------------------------------------
 local function declareTeamCommands(CTeam)
     local k = 0
-    for num,v in pairs(RPExtraTeams) do
+    for num, v in pairs(RPExtraTeams) do
         if v.command == CTeam.command then
             k = num
         end
@@ -20,7 +20,8 @@ local function declareTeamCommands(CTeam)
         if istable(CTeam.NeedToChangeFrom) and not table.HasValue(CTeam.NeedToChangeFrom, plyTeam) then return false end
         if CTeam.customCheck and CTeam.customCheck(ply) == false then return false end
         if ply:isArrested() then return false end
-        if CTeam.max ~= 0 and ((CTeam.max % 1 == 0 and team.NumPlayers(k) >= CTeam.max) or (CTeam.max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > CTeam.max)) then return false end
+        local numPlayers = team.NumPlayers(k)
+        if CTeam.max ~= 0 and ((CTeam.max % 1 == 0 and numPlayers >= CTeam.max) or (CTeam.max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > CTeam.max)) then return false end
         if ply.LastJob and 10 - (CurTime() - ply.LastJob) >= 0 then return false end
         if ply.LastVoteCop and CurTime() - ply.LastVoteCop < 80 then return false end
 
@@ -71,7 +72,7 @@ local function addTeamCommands(CTeam, max)
 
     if not GAMEMODE:CustomObjFitsMap(CTeam) then return end
     local k = 0
-    for num,v in pairs(RPExtraTeams) do
+    for num, v in pairs(RPExtraTeams) do
         if v.command == CTeam.command then
             k = num
         end
@@ -109,7 +110,7 @@ local function addTeamCommands(CTeam, max)
             elseif type(CTeam.NeedToChangeFrom) == "table" and not table.HasValue(CTeam.NeedToChangeFrom, ply:Team()) then
                 local teamnames = ""
 
-                for a, b in pairs(CTeam.NeedToChangeFrom) do
+                for _, b in pairs(CTeam.NeedToChangeFrom) do
                     teamnames = teamnames .. " or " .. team.GetName(b)
                 end
 
@@ -139,7 +140,8 @@ local function addTeamCommands(CTeam, max)
                 return ""
             end
 
-            if max ~= 0 and ((max % 1 == 0 and team.NumPlayers(k) >= max) or (max % 1 ~= 0 and (team.NumPlayers(k) + 1) / #player.GetAll() > max)) then
+            local numPlayers = team.NumPlayers(k)
+            if max ~= 0 and ((max % 1 == 0 and numPlayers >= max) or (max % 1 ~= 0 and (tnumPlayers + 1) / player.GetCount() > max)) then
                 DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("team_limit_reached", CTeam.name))
 
                 return ""
@@ -449,7 +451,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     -- Precache model here. Not right before the job change is done
     if type(CustomTeam.model) == "table" then
-        for k,v in pairs(CustomTeam.model) do util.PrecacheModel(v) end
+        for _, v in pairs(CustomTeam.model) do util.PrecacheModel(v) end
     else
         util.PrecacheModel(CustomTeam.model)
     end
@@ -519,7 +521,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
 
     if customShipment.allowed == nil then
         customShipment.allowed = {}
-        for k,v in pairs(team.GetAllTeams()) do
+        for k in pairs(team.GetAllTeams()) do
             table.insert(customShipment.allowed, k)
         end
     end
@@ -561,7 +563,7 @@ function DarkRP.createVehicle(Name_of_vehicle, model, price, Jobs_that_can_buy_i
     if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["vehicles"][vehicle.name] then return end
 
     local found = false
-    for k,v in pairs(DarkRP.getAvailableVehicles()) do
+    for k in pairs(DarkRP.getAvailableVehicles()) do
         if string.lower(k) == string.lower(vehicle.name) then found = true break end
     end
 
@@ -587,7 +589,7 @@ function GM:CustomObjFitsMap(obj)
     if not obj or not obj.maps then return true end
 
     local map = string.lower(game.GetMap())
-    for k,v in pairs(obj.maps) do
+    for _, v in pairs(obj.maps) do
         if string.lower(v) == map then return true end
     end
     return false
@@ -653,11 +655,11 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
     local valid, err, hints = DarkRP.validateAgenda(agenda)
     if not valid then DarkRP.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
 
-    for k,v in pairs(agenda.Listeners) do
+    for _, v in pairs(agenda.Listeners) do
         agendas[v] = agenda
     end
 
-    for k,v in pairs(istable(agenda.Manager) and agenda.Manager or {agenda.Manager}) do
+    for _, v in pairs(istable(agenda.Manager) and agenda.Manager or {agenda.Manager}) do
         agendas[v] = agenda
         DarkRPAgendas[v] = agenda -- backwards compat
         agenda.ManagersByKey[v] = true
@@ -674,14 +676,14 @@ AddAgenda = DarkRP.createAgenda
 
 function DarkRP.removeAgenda(title)
     local agenda
-    for k,v in pairs(agendas) do
+    for k, v in pairs(agendas) do
         if v.Title == title then
             agenda = v
             agendas[k] = nil
         end
     end
 
-    for k,v in pairs(DarkRPAgendas) do
+    for k, v in pairs(DarkRPAgendas) do
         if v.Title == title then agendas[k] = nil end
     end
     hook.Run("onAgendaRemoved", title, agenda)
@@ -761,7 +763,7 @@ end
 
 function DarkRP.removeDemoteGroup(name)
     local foundSet
-    for k,v in pairs(demoteGroups) do
+    for k, v in pairs(demoteGroups) do
         local set = disjoint.FindSet(v)
         if set.name == name then
             foundSet = set
@@ -874,8 +876,8 @@ end
 local function mergeCategories(customs, catKind, path)
     local cats = categories[catKind]
     local catByName = {}
-    for k,v in pairs(cats) do catByName[v.name] = v end
-    for k,v in pairs(customs) do
+    for _, v in pairs(cats) do catByName[v.name] = v end
+    for _, v in pairs(customs) do
         -- Override default thing categories:
         local catName = v.default and (GAMEMODE.Config.CategoryOverride[catKind] or {})[v.name] or v.category or "Other"
         local cat = catByName[catName]
@@ -893,7 +895,7 @@ local function mergeCategories(customs, catKind, path)
     end
 
     -- Sort category members
-    for k,v in pairs(cats) do table.sort(v.members, categoryOrder) end
+    for _, v in pairs(cats) do table.sort(v.members, categoryOrder) end
 end
 
 hook.Add("loadCustomDarkRPItems", "mergeCategories", function()

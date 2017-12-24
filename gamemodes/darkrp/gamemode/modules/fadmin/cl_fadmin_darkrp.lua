@@ -60,7 +60,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 
         local command = "teamban"
         local uid = ply:UserID()
-        for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
+        for k, v in SortedPairsByMemberValue(RPExtraTeams, "name") do
             local submenu = menu:AddSubMenu(v.name)
             submenu:AddOption("2 minutes",     function() RunConsoleCommand("darkrp", command, uid, k, 120)  end)
             submenu:AddOption("Half an hour",  function() RunConsoleCommand("darkrp", command, uid, k, 1800) end)
@@ -89,7 +89,7 @@ FAdmin.StartHooks["DarkRP"] = function()
 
         local command = "teamunban"
         local uid = ply:UserID()
-        for k,v in SortedPairsByMemberValue(RPExtraTeams, "name") do
+        for k, v in SortedPairsByMemberValue(RPExtraTeams, "name") do
             menu:AddOption(v.name, function() RunConsoleCommand("darkrp", command, uid, k) end)
         end
         menu:Open()

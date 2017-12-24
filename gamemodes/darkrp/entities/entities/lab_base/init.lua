@@ -86,6 +86,12 @@ function ENT:Use(activator, caller)
 
     if not self:canUse(activator) then return end
 
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
+    if canUse == false then
+      if reason then DarkRP.notify(activator, 1, 4, reason) end
+      return
+    end
+
     self.Once = true
     self.sparking = true
 

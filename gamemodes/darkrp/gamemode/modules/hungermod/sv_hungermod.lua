@@ -4,7 +4,7 @@ end
 hook.Add("PlayerSpawn", "HMPlayerSpawn", HMPlayerSpawn)
 
 local function HMThink()
-    for k, v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if not v:Alive() then continue end
         v:hungerUpdate()
     end
@@ -26,13 +26,6 @@ local function HMAFKHook(ply, afk)
 end
 hook.Add("playerSetAFK", "Hungermod", HMAFKHook)
 
-timer.Simple(0, function()
-    for k, v in pairs(player.GetAll()) do
-        if v:getDarkRPVar("Energy") ~= nil then continue end
-        v:newHungerData()
-    end
-end)
-
 local function BuyFood(ply, args)
     if args == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
@@ -46,7 +39,7 @@ local function BuyFood(ply, args)
 
     local tr = util.TraceLine(trace)
 
-    for _,v in pairs(FoodItems) do
+    for _, v in pairs(FoodItems) do
         if string.lower(args) ~= string.lower(v.name) then continue end
 
         if (v.requiresCook == nil or v.requiresCook == true) and not ply:isCook() then

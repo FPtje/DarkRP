@@ -50,8 +50,6 @@ function ENT:Use(activator, caller)
     local class = self:GetWeaponClass()
     local weapon = ents.Create(class)
 
-    if not weapon:IsValid() then return false end
-
     if not weapon:IsWeapon() then
         weapon:SetPos(self:GetPos())
         weapon:SetAngles(self:GetAngles())

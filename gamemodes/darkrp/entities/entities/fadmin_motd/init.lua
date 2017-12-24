@@ -34,7 +34,7 @@ end
 
 function ENT:SpawnFunction(ply, tr)
     if not tr.Hit then return end
-    for k,v in pairs(ents.FindByClass("fadmin_motd")) do
+    for _, v in ipairs(ents.FindByClass("fadmin_motd")) do
         v.CanRemove = true
         v:Remove() --There can only be one motd per level
     end

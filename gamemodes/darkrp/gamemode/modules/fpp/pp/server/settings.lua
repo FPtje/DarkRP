@@ -38,7 +38,7 @@ function FPP.NotifyAll(text, bool)
         umsg.String(text)
         umsg.Bool(bool)
     umsg.End()
-    for _,ply in pairs(player.GetAll()) do
+    for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCONSOLE, text)
     end
 end
@@ -53,40 +53,38 @@ local function getSettingsChangedEntities(settingsType, setting)
     blockedString = blockedString == "Entitydamage1" and "EntityDamage1" or blockedString -- dirty hack for stupid naming system.
 
     if setting == "adminall" then
-        for k,v in pairs(ents.GetAll()) do
+        for _, v in ipairs(ents.GetAll()) do
+            if not IsValid(v) then continue end
             local owner = v:CPPIGetOwner()
             if IsValid(owner) then table.insert(entities, v) end
         end
 
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
 
         return plys, entities
     elseif setting == "worldprops" or setting == "adminworldprops" then
-        for k,v in pairs(ents.GetAll()) do
-            if not IsValid(v) then continue end
-
+        for _, v in ipairs(ents.GetAll()) do
             if FPP.Blocked[blockedString][string.lower(v:GetClass())] then continue end
 
             local owner = v:CPPIGetOwner()
             if not IsValid(owner) then table.insert(entities, v) end
         end
 
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
         return setting == "adminworldprops" and plys or player.GetAll(), entities
     elseif setting == "canblocked" or setting == "admincanblocked" then
-        for k,v in pairs(ents.GetAll()) do
-            if not IsValid(v) then continue end
+        for _, v in ipairs(ents.GetAll()) do
             if not FPP.Blocked[blockedString][string.lower(v:GetClass())] then continue end
             table.insert(entities, v)
         end
 
-        for k,v in pairs(player.GetAll()) do
+        for _, v in ipairs(player.GetAll()) do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
@@ -196,7 +194,7 @@ local function AddBlockedModel(ply, cmd, args)
 
     local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
-    for k, model in pairs(models) do
+    for _, model in pairs(models) do
         if FPP.BlockedModels[model] then FPP.Notify(ply, string.format([["%s" is already in the black/whitelist]], model), false) continue end
         FPP.BlockedModels[model] = true
         MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. sql.SQLStr(model) .. ");")
@@ -220,7 +218,7 @@ local function RemoveBlockedModel(ply, cmd, args)
     if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
     local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
-    for k, model in pairs(models) do
+    for _, model in pairs(models) do
         FPP.BlockedModels[model] = nil
 
         MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = " .. sql.SQLStr(model) .. ";")
@@ -340,8 +338,8 @@ function FPP.FillDefaultBlocked()
     -- All values that are to be inserted
     local allValues = {}
 
-    for k,v in pairs(defaultBlocked) do
-        for a,b in pairs(v) do
+    for k, v in pairs(defaultBlocked) do
+        for a in pairs(v) do
             FPP.Blocked[k][a] = true
             count = count + 1
 
@@ -363,7 +361,7 @@ end
 local function RetrieveBlocked()
     MySQLite.query("SELECT * FROM FPP_BLOCKED1;", function(data)
         if type(data) == "table" then
-            for k,v in pairs(data) do
+            for _, v in pairs(data) do
                 if not FPP.Blocked[v.var] then
                     ErrorNoHalt((v.var or "(nil var)") .. " blocked type does not exist! (Setting: " .. (v.setting or "") .. ")")
                     continue
@@ -391,7 +389,7 @@ function FPP.AddDefaultBlocked(types, classname)
         return
     end
 
-    for k,v in pairs(types) do
+    for _, v in pairs(types) do
         defaultBlocked[v] = defaultBlocked[v] or {}
         defaultBlocked[v][classname] = true
     end
@@ -412,7 +410,7 @@ local function RetrieveBlockedModels()
         -- That's about the maximum it can receive properly at once
         for i = 0, count, 1000 do
             MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1 LIMIT 1000 OFFSET " .. i .. ";", function(data)
-                for k, v in pairs(data or {}) do
+                for _, v in ipairs(data or {}) do
                     FPP.BlockedModels[v.model] = true
                 end
             end)
@@ -427,7 +425,7 @@ local function RetrieveBlockedModels()
             FPP.AddDefaultBlockedModels() -- Load the default blocked models on first run
         end
 
-        for k,v in pairs(data or {}) do
+        for _, v in ipairs(data or {}) do
             if not v.model then continue end
             FPP.BlockedModels[v.model] = true
         end
@@ -437,7 +435,7 @@ end
 local function RetrieveRestrictedTools()
     MySQLite.query("SELECT * FROM FPP_TOOLADMINONLY;", function(data)
         if type(data) == "table" then
-            for k,v in pairs(data) do
+            for _, v in ipairs(data) do
                 FPP.RestrictedTools[v.toolname] = {}
                 FPP.RestrictedTools[v.toolname]["admin"] = tonumber(v.adminonly)
             end
@@ -446,7 +444,7 @@ local function RetrieveRestrictedTools()
 
     MySQLite.query("SELECT * FROM FPP_TOOLRESTRICTPERSON1;", function(perplayerData)
         if type(perplayerData) ~= "table" then return end
-        for k,v in pairs(perplayerData) do
+        for _, v in ipairs(perplayerData) do
             FPP.RestrictedToolsPlayers[v.toolname] = FPP.RestrictedToolsPlayers[v.toolname] or {}
             FPP.RestrictedToolsPlayers[v.toolname][v.steamid] = tobool(v.allow)
         end
@@ -455,7 +453,7 @@ local function RetrieveRestrictedTools()
     MySQLite.query("SELECT * FROM FPP_TOOLTEAMRESTRICT;", function(data)
         if not data then return end
 
-        for k,v in pairs(data) do
+        for _, v in ipairs(data) do
             FPP.RestrictedTools[v.toolname] = FPP.RestrictedTools[v.toolname] or {}
             FPP.RestrictedTools[v.toolname]["team"] = FPP.RestrictedTools[v.toolname]["team"] or {}
 
@@ -474,7 +472,7 @@ local function RetrieveGroups()
             return
         end -- if there are no groups then there isn't much to load
 
-        for k,v in pairs(data) do
+        for _, v in ipairs(data) do
             FPP.Groups[v.groupname] = {}
             FPP.Groups[v.groupname].tools = {}
             FPP.Groups[v.groupname].allowdefault = tobool(v.allowdefault)
@@ -483,7 +481,7 @@ local function RetrieveGroups()
         MySQLite.query("SELECT * FROM FPP_GROUPTOOL;", function(grouptooldata)
             if not grouptooldata then return end
 
-            for k,v in pairs(grouptooldata) do
+            for _, v in ipairs(grouptooldata) do
                 FPP.Groups[v.groupname] = FPP.Groups[v.groupname] or {}
                 FPP.Groups[v.groupname].tools = FPP.Groups[v.groupname].tools or {}
 
@@ -493,7 +491,7 @@ local function RetrieveGroups()
 
         MySQLite.query("SELECT * FROM FPP_GROUPMEMBERS1;", function(members)
             if type(members) ~= "table" then return end
-            for _,v in pairs(members) do
+            for _, v in ipairs(members) do
                 FPP.GroupMembers[v.steamid] = v.groupname
             end
         end)
@@ -523,7 +521,7 @@ concommand.Add("FPP_AddGroup", runIfAccess("FPP_Settings", AddGroup))
 
 hook.Add("InitPostEntity", "FPP_Load_FAdmin", function()
     if FAdmin then
-        for k,v in pairs(FAdmin.Access.Groups) do
+        for k, _ in pairs(FAdmin.Access.Groups) do
             if not FPP.Groups[k] then AddGroup(Entity(0), "", {k, 1}) end
         end
     end
@@ -547,7 +545,7 @@ local function RemoveGroup(ply, cmd, args)
     MySQLite.query("DELETE FROM FPP_GROUPS3 WHERE groupname = " .. sql.SQLStr(name) .. ";")
     MySQLite.query("DELETE FROM FPP_GROUPTOOL WHERE groupname = " .. sql.SQLStr(name) .. ";")
 
-    for k,v in pairs(FPP.GroupMembers) do
+    for k, v in pairs(FPP.GroupMembers) do
         if v == name then
             FPP.GroupMembers[k] = nil -- Set group to standard if group is removed
         end
@@ -614,7 +612,7 @@ local function GroupRemoveTool(ply, cmd, args)
         return
     end
 
-    for k,v in pairs(FPP.Groups[name].tools) do
+    for k, v in pairs(FPP.Groups[name].tools) do
         if v == tool then
             table.remove(FPP.Groups[name].tools, k)
         end
@@ -673,7 +671,7 @@ local function SendBlocked(ply, cmd, args)
     if ply.FPPUmsg1[args[1]] > CurTime() - 5 then return end
     ply.FPPUmsg1[args[1]] = CurTime()
 
-    for k,v in pairs(FPP.Blocked[args[1]]) do
+    for k in pairs(FPP.Blocked[args[1]]) do
         umsg.Start("FPP_blockedlist", ply)
             umsg.String(args[1])
             umsg.String(k)
@@ -689,7 +687,7 @@ local function SendBlockedModels(ply, cmd, args)
 
     local models = {}
 
-    for k,v in pairs(FPP.BlockedModels) do table.insert(models, k) end
+    for k in pairs(FPP.BlockedModels) do table.insert(models, k) end
 
     local data = util.Compress(table.concat(models, "\0"))
 
@@ -749,13 +747,13 @@ local function changeBuddies(ply, buddy, settings)
     ply.Buddies[buddy] = settings
 
     local CPPIBuddies = {}
-    for k,v in pairs(ply.Buddies) do if table.HasValue(v, true) then table.insert(CPPIBuddies, k) end end
+    for k, v in pairs(ply.Buddies) do if table.HasValue(v, true) then table.insert(CPPIBuddies, k) end end
     -- Also run at player spawn because clients send their buddies through this command
     hook.Run("CPPIFriendsChanged", ply, CPPIBuddies)
 
     -- Update the prop protection
     local affectedProps = {}
-    for k,v in pairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         local owner = v:CPPIGetOwner()
         if owner ~= ply then continue end
         table.insert(affectedProps, v)
@@ -770,7 +768,7 @@ local function SetBuddy(ply, cmd, args)
     local buddy = tonumber(args[1]) and Player(tonumber(args[1]))
     if not IsValid(buddy) then FPP.Notify(ply, "Player invalid", false) return end
 
-    for k,v in pairs(args) do args[k] = tonumber(v) end
+    for k, v in pairs(args) do args[k] = tonumber(v) end
     local settings = {Physgun = tobool(args[2]), Gravgun = tobool(args[3]), Toolgun = tobool(args[4]), PlayerUse = tobool(args[5]), EntityDamage = tobool(args[6])}
 
     -- Antispam measure
@@ -781,7 +779,7 @@ concommand.Add("FPP_SetBuddy", SetBuddy)
 local function CleanupDisconnected(ply, cmd, args)
     if not args[1] then FPP.Notify(ply, "Invalid argument", false) return end
     if args[1] == "disconnected" then
-        for k,v in pairs(ents.GetAll()) do
+        for _, v in ipairs(ents.GetAll()) do
             local Owner = v:CPPIGetOwner()
             if Owner and not IsValid(Owner) then
                 v:Remove()
@@ -794,7 +792,7 @@ local function CleanupDisconnected(ply, cmd, args)
         return
     end
 
-    for k,v in pairs(ents.GetAll()) do
+    for _, v in ipairs(ents.GetAll()) do
         local Owner = v:CPPIGetOwner()
         if Owner == Player(args[1]) and not v:IsWeapon() then
             v:Remove()
@@ -821,7 +819,7 @@ local function SetToolRestrict(ply, cmd, args)
     elseif RestrictWho == "team" then
         FPP.RestrictedTools[toolname]["team"] = FPP.RestrictedTools[toolname]["team"] or {}
         if teamtoggle == 0 then
-            for k,v in pairs(FPP.RestrictedTools[toolname]["team"]) do
+            for k, v in pairs(FPP.RestrictedTools[toolname]["team"]) do
                 if v == tonumber(args[3]) then
                     table.remove(FPP.RestrictedTools[toolname]["team"], k)
                     break
@@ -829,7 +827,7 @@ local function SetToolRestrict(ply, cmd, args)
             end
         elseif not table.HasValue(FPP.RestrictedTools[toolname]["team"], tonumber(args[3])) and teamtoggle == 1 then
             table.insert(FPP.RestrictedTools[toolname]["team"], tonumber(args[3]))
-        end--Remove from the table if it's in there AND it's 0 otherwise do nothing
+        end --Remove from the table if it's in there AND it's 0 otherwise do nothing
 
         if tobool(teamtoggle) then -- if the team restrict is enabled
             FPP.NotifyAll(((ply.Nick and ply:Nick()) or "Console") .. " restricted " .. toolname .. " to certain teams", true)

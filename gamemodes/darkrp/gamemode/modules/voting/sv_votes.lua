@@ -30,7 +30,7 @@ function Vote:handleNewVote(ply, choice)
     local excludeCount = table.Count(self.exclude)
     local voteCount = table.Count(self.voters)
 
-    if voteCount >= #player.GetAll() - excludeCount then
+    if voteCount >= player.GetCount() - excludeCount then
         self:handleEnd()
     end
 end
@@ -52,7 +52,7 @@ end
 function Vote:getFilter()
     local filter = RecipientFilter()
 
-    for k,v in pairs(player.GetAll()) do
+    for _, v in ipairs(player.GetAll()) do
         if self.exclude[v] then continue end
         local canVote = hook.Call("canVote", GAMEMODE, v, self)
 
@@ -68,7 +68,7 @@ function Vote:getFilter()
 end
 
 function DarkRP.hooks:canStartVote(newvote)
-    if #player.GetAll() <= table.Count(newvote.exclude) then
+    if player.GetCount() <= table.Count(newvote.exclude) then
         local ply = istable(newvote.info) and isentity(newvote.info.source) and newvote.info.source or newvote.target
         if ply and ply:IsPlayer() then
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_alone"))
