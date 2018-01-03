@@ -684,7 +684,7 @@ function DarkRP.removeAgenda(title)
     end
 
     for k, v in pairs(DarkRPAgendas) do
-        if v.Title == title then agendas[k] = nil end
+        if v.Title == title then DarkRPAgendas[k] = nil end
     end
     hook.Run("onAgendaRemoved", title, agenda)
 end
