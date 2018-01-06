@@ -31,7 +31,7 @@ if system.IsWindows() then
             argError(Val, 1, "string")
         end
 
-        if (not isnumber(time) and (not isstring(time) or tonumber(time) == nil)) then
+        if (not (time == nil or isnumber(time)) and (not isstring(time) or tonumber(time) == nil)) then
             argError(Val, 2, "number")
         end
 
@@ -98,7 +98,7 @@ if game.SinglePlayer() then
     end
 
     local aid = plyMeta.AccountID
-    
+
     function plyMeta:AccountID(...)
         return aid(self, ...) or 0
     end
@@ -117,7 +117,7 @@ if CLIENT then
 
         if (tbl.type == "3D") then
             cams3D = cams3D + 1
-        if (tbl.type == "2D") then
+        elseif (tbl.type == "2D") then
             cams2D = cams2D + 1
         else
             error("bad argument #1 to '%s' (bad key 'type' - 2D or 3D expected, got %s)", debug.getinfo(1, "n").name, tbl.type, 2)
@@ -216,7 +216,7 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
             v:Remove()
         end
     end
-    
+
     if CLIENT then
         hook.Remove("HUDPaint","drawHudVital") -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
 
