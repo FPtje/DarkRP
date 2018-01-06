@@ -2,7 +2,7 @@
 
 function DarkRP.getAvailableVehicles()
     local vehicles = list.Get("Vehicles")
-    for _, v in pairs(list.Get("SCarsList") or {}) do
+    for _, v in pairs(list.Get("SCarsList")) do
         vehicles[v.PrintName] = {
             Name = v.PrintName,
             Class = v.ClassName,
@@ -13,23 +13,35 @@ function DarkRP.getAvailableVehicles()
     return vehicles
 end
 
-local osdate = os.date
+local function argError(Val, iArg, sType)
+    error(string.format("bad argument #%u to '%s' (%s expected, got %s)", iArg, debug.getinfo(2, "n").name, sType, type(Val)), 3)
+end
+
 if system.IsWindows() then
+    local osdate = os.date
     local replace = function(txt)
         if txt == "%%" then return txt end -- Edge case, %% is allowed
         return ""
     end
 
-    function os.date(format, time)
-        if format then format = string.gsub(format, "%%[^aAbBcdHIjmMpSUwWxXyYz]", replace) end
+    function os.date(format, time, ...)
+        if (isstring(format) or isnumber(format)) then
+            format = string.gsub(format, "%%[^aAbBcdHIjmMpSUwWxXyYz]", replace)
+        elseif (format ~= nil) then
+            argError(Val, 1, "string")
+        end
 
-        return osdate(format, time)
+        if (not isnumber(time) and (not isstring(time) or tonumber(time) == nil)) then
+            argError(Val, 2, "number")
+        end
+
+        return osdate(format, time, ...)
     end
 end
 
 timer.Simple(3, function()
     -- Malicious addons that kicks players this one person doesn't like.
-    if Skid then
+    if istable(Skid) then
         Skid.Check = fn.Id
         hook.Remove("CheckPassword", "Skid.CheckPassword")
 
@@ -74,39 +86,81 @@ timer.Simple(3, function()
     end
 end)
 
--- Clientside part
-if CLIENT then
-    --[[---------------------------------------------------------------------------
-    Generic InitPostEntity workarounds
-    ---------------------------------------------------------------------------]]
-    hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
-        if hook.GetTable().HUDPaint then hook.Remove("HUDPaint","drawHudVital") end -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
+if game.SinglePlayer() then
+    local plyMeta = FindMetaTable("Player")
 
-        -- Fuck up APAnti
-        net.Receivers.sblockgmspawn = nil
-        hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
-    end)
+    if SERVER then
+        local sid64 = plyMeta.SteamID64
 
-    local camStarted = 0
-    local camend3D = cam.End3D
-    local camend2D = cam.End2D
-    local camstart3D2D, camend3D2D = cam.Start3D2D, cam.End3D2D
-    local camstart, camend = cam.Start, cam.End
-
-    local function decrease()
-        if not camStarted or camStarted <= 0 then
-            DarkRP.error("A cam.End function was called without corresponding cam.Start.", 3, {"This may cause the game to look glitchy."})
+        function plyMeta:SteamID64(...)
+            return sid64(self, ...) or "0"
         end
-        camStarted = camStarted - 1
     end
 
-    function cam.Start(...) camStarted = camStarted + 1 return camstart(...) end
-    function cam.Start3D2D(...) camStarted = camStarted + 1 return camstart3D2D(...) end
+    local aid = plyMeta.AccountID
+    
+    function plyMeta:AccountID(...)
+        return aid(self, ...) or 0
+    end
+end
 
-    function cam.End3D(...) decrease() return camend3D(...) end
-    function cam.End2D(...) decrease() return camend2D(...) end
-    function cam.End3D2D(...) decrease() return camend3D2D(...) end
-    function cam.End(...) decrease() return camend(...) end
+-- Clientside part
+if CLIENT then
+    local cams3D, cams2D = 0, 0
+    local cam_Start = cam.Start
+
+    function cam.Start(tbl, ...)
+        -- https://github.com/Facepunch/garrysmod-issues/issues/3361
+        if (not istable(tbl)) then
+           argError(tbl, 1, "table")
+        end
+
+        if (tbl.type == "3D") then
+            cams3D = cams3D + 1
+        if (tbl.type == "2D") then
+            cams2D = cams2D + 1
+        else
+            error("bad argument #1 to '%s' (bad key 'type' - 2D or 3D expected, got %s)", debug.getinfo(1, "n").name, tbl.type, 2)
+        end
+
+        -- Could pcall this but it'd be impossible to
+        -- tell if a render instance was created or not.
+        -- Assume creation/deletion
+        return cam_Start(tbl, ...)
+    end
+
+    local cam_End3D = cam.End3D
+
+    function cam.End3D(...)
+        if (cams3D == 0) then
+            error("tried to end invalid render instance", 2)
+        end
+
+        cams3D = cams3D - 1
+
+        return cam_End3D(...)
+    end
+
+    local cam_End2D = cam.End2D
+
+    function cam.End2D(...)
+        if (cams2D == 0) then
+            error("tried to end invalid render instance", 2)
+        end
+
+        cams2D = cams2D - 1
+
+        return cam_End2D(...)
+    end
+
+    local cams3D2D = 0
+    local cam_Start3D2D = cam.Start3D2D
+
+    function cam.Start3D2D(...)
+        cams3D2D = cams3D2D + 1
+
+        return cam_Start3D2D(...)
+    end
 
     return
 end
@@ -123,25 +177,19 @@ addons.
 
 If you do decide to send a bug report to ANY addon, please include this
 message.]]
+
+local function varArgsLen(...)
+    return {...}, select("#", ...)
+end
+
 function ents.Create(name, ...)
-    local res = { entsCreate(name, ...) }
+    local res, len = varArgsLen(entsCreate(name, ...))
 
     if res[1] == NULL and ents.GetEdictCount() >= 8176 then
         DarkRP.error(entsCreateError, 2, { string.format("Affected entity: '%s'", name) })
     end
 
-    return unpack(res)
-end
-
-if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
-    local plyMeta = FindMetaTable("Player")
-    local sid64 = plyMeta.SteamID64
-
-    function plyMeta:SteamID64(...)
-        local sid = sid64(self, ...)
-
-        return sid or 0
-    end
+    return unpack(res, 1, len)
 end
 
 --[[---------------------------------------------------------------------------
@@ -158,7 +206,7 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
 
     -- why can people even save multiplayer games?
     -- Lag exploit
-    if SERVER and not game.SinglePlayer() then
+    if not game.SinglePlayer() then
         concommand.Remove("gm_save")
     end
 
@@ -167,6 +215,14 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
         for _, v in pairs(ents.FindByClass("info_player_terrorist")) do
             v:Remove()
         end
+    end
+    
+    if CLIENT then
+        hook.Remove("HUDPaint","drawHudVital") -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
+
+        -- Fuck up APAnti
+        net.Receivers.sblockgmspawn = nil
+        hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
     end
 end)
 
@@ -186,8 +242,8 @@ hook.Add("OnEntityCreated", "DRP_WireFieldGenerator", function(ent)
         if IsValid(ent) and ent:GetClass() == "gmod_wire_field_device" then
             local TriggerInput = ent.TriggerInput
             function ent:TriggerInput(iname, value)
-                if value ~= nil and iname == "Distance" then
-                    value = math.Min(value, 400)
+                if iname == "Distance" and isnumber(value) then
+                    value = math.min(value, 400)
                 end
                 TriggerInput(self, iname, value)
             end
@@ -201,7 +257,7 @@ Let's fix that huge class exploit
 ---------------------------------------------------------------------------]]
 hook.Add("InitPostEntity", "FixDoorTool", function()
     local oldFunc = makedoor
-    if oldFunc then
+    if isfunction(oldFunc) then
         function makedoor(ply, trace, ang, model, open, close, autoclose, closetime, class, hardware, ...)
             if class ~= "prop_dynamic" and class ~= "prop_door_rotating" then return end
 
