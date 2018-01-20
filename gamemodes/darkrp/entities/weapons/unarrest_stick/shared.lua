@@ -69,11 +69,11 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() and p:IsSolid() end)
+    ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() and p:IsSolid() end)
     if not ent then return end
 
     local stickRange = self.stickRange * self.stickRange
-    if not IsValid(ent) or not ent:IsPlayer() or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > stickRange * stickRange) or not ent:getDarkRPVar("Arrested") then
+    if not IsValid(ent) or not ent:IsPlayer() or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > stickRange) or not ent:getDarkRPVar("Arrested") then
         return
     end
 

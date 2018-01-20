@@ -410,7 +410,7 @@ function FPP.AdminMenu(Panel)
     SingleEditTool:SetText("Edit/view selected tool restrictions")
     SingleEditTool:SetTooltip("Edit or view the restrictions of the selected tool!")
     SingleEditTool.DoClick = function()
-        for _, v in pairs(weapons.Get("gmod_tool").Tool) do
+        for k, v in pairs(weapons.Get("gmod_tool").Tool) do
             if v.Mode and v.Mode == FPP.SELECTEDRESTRICTNODE then
                 RunConsoleCommand("FPP_SendRestrictTool", k)
                 return
