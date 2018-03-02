@@ -343,7 +343,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
         return false
     end
 
-    if not targets and (string.find(args[1], "STEAM_") and #args == 5 or args[1] == "BOT") then
+    if not targets and (string.find(args[1], "STEAM_") and #args == 6 or args[1] == "BOT") then
         local target, groupname = args[1], args[2]
         -- The console splits arguments on colons. Very annoying.
         if args[1] == "STEAM_0" then
