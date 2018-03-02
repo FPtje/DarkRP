@@ -116,7 +116,12 @@ concommand.Add("+FAdmin_menu", FAdmin.ScoreBoard.ShowScoreBoard)
 
 hook.Add("ScoreboardShow", "FAdmin_scoreboard", function()
     if FAdmin.GlobalSetting.FAdmin or OverrideScoreboard:GetBool() then -- Don't show scoreboard when FAdmin is not installed on server
-        return FAdmin.ScoreBoard.ShowScoreBoard()
+		if DarkRP.disabledDefaults["modules"]["scoreboard"] then
+			hook.Remove("ScoreboardHide", "FAdmin_scoreboard")
+			hook.Remove("ScoreboardShow", "FAdmin_scoreboard")
+		else
+			return FAdmin.ScoreBoard.ShowScoreBoard()
+		end
     end
 end)
 
