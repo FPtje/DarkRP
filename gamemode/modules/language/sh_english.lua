@@ -231,7 +231,7 @@ local my_language = {
     no_weapons_confiscated = "%s had no weapons confiscated!",
     no_illegal_weapons = "%s had no illegal weapons.",
     confiscated_these_weapons = "Confiscated these weapons:",
-    checking_weapons = "Checking weapons",
+    checking_weapons = "Confiscating weapons",
 
     shipment_antispam_wait = "Please wait before spawning another shipment.",
     shipment_cannot_split = "Cannot split this shipment.",
