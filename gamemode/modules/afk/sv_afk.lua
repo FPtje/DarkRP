@@ -49,7 +49,7 @@ end
 
 DarkRP.defineChatCommand("afk", function(ply)
     if ply.DarkRPLastAFK and not ply:getDarkRPVar("AFK") and ply.DarkRPLastAFK > CurTime() - GAMEMODE.Config.AFKDelay then
-        DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("unable", "go AFK", "Spam prevention."))
+        DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("unable_afk_spam_prevention"))
         return ""
     end
 

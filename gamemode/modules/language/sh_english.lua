@@ -414,6 +414,7 @@ local my_language = {
 
     -- AFK
     afk_mode = "AFK Mode",
+    unable_afk_spam_prevention = "Please wait before going AFK again.",
     salary_frozen = "Your salary has been frozen.",
     salary_restored = "Welcome back, your salary has now been restored.",
     no_auto_demote = "You will not be auto-demoted.",
