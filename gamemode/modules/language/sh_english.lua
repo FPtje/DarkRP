@@ -68,8 +68,8 @@ local my_language = {
     cheque_pay = "Pay: %s",
     signed = "Signed: %s",
 
-    found_cash = "You have found %s%d!", -- backwards compatibility
-    found_money = "You have found %s!",
+    found_cash = "You have picked up %s%d!", -- backwards compatibility
+    found_money = "You have picked up %s!",
 
     owner_poor = "The %s owner is too poor to subsidize this sale!",
 
