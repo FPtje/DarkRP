@@ -249,7 +249,7 @@ function PANEL:Init()
 
     self.lblWeapons = vgui.Create("DLabel")
     self.lblWeapons:SetFont("F4MenuFont02")
-    self.lblWeapons:SetText("Weapons")
+    self.lblWeapons:SetText(DarkRP.getPhrase("F4guns"))
     self.lblWeapons:SizeToContents()
     self.lblWeapons:SetTall(50)
     self.innerPanel:AddItem(self.lblWeapons)
