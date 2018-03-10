@@ -160,10 +160,8 @@ function SWEP:PrimaryAttack()
     self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
     self:SetNextSoundTime(CurTime() + 0.3)
 
-
     if not IsFirstTimePredicted() then return end
 
-    local result = {}
     local weps = {}
     self:GetStrippableWeapons(ent, function(wep)
         table.insert(weps, wep)
@@ -171,27 +169,9 @@ function SWEP:PrimaryAttack()
 
     hook.Call("playerWeaponsChecked", nil, self:GetOwner(), ent, weps)
 
-    if SERVER then return end
-    for _, wep in ipairs(weps) do
-        table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
-    end
+    if not CLIENT then return end
 
-    result = table.concat(result, ", ")
-
-    if result == "" then
-        self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", ent:Nick()))
-        return
-    end
-
-    self:GetOwner():ChatPrint(DarkRP.getPhrase("persons_weapons", ent:Nick()))
-    if string.len(result) >= 126 then
-        local amount = math.ceil(string.len(result) / 126)
-        for i = 1, amount, 1 do
-            self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
-        end
-    else
-        self:GetOwner():ChatPrint(result)
-    end
+    self:PrintWeapons(ent, DarkRP.getPhrase("persons_weapons", ent:Nick()))
 end
 
 function SWEP:SecondaryAttack()
@@ -262,16 +242,20 @@ function SWEP:Succeed()
     if not IsValid(self:GetOwner()) then return end
     self:SetIsWeaponChecking(false)
 
-    if CLIENT then return end
-    local result = {}
-    local stripped = {}
     local trace = self:GetOwner():GetEyeTrace()
     local ent = trace.Entity
-
     if not IsValid(ent) or not ent:IsPlayer() then return end
+
+    if CLIENT then
+        if not IsFirstTimePredicted() then return end
+        self:PrintWeapons(ent, DarkRP.getPhrase("confiscated_these_weapons"))
+        return
+    end
+
+    local stripped = {}
+
     self:GetStrippableWeapons(ent, function(wep)
         ent:StripWeapon(wep:GetClass())
-        table.insert(result, wep:GetClass())
         stripped[wep:GetClass()] = {
             class = wep:GetClass(),
             primaryAmmoCount = ent:GetAmmoCount(wep:GetPrimaryAmmoType()),
@@ -282,7 +266,6 @@ function SWEP:Succeed()
             clip2 = wep:Clip2()
         }
     end)
-    result = table.concat(result, ", ")
 
     if not ent.ConfiscatedWeapons then
         if next(stripped) ~= nil then ent.ConfiscatedWeapons = stripped end
@@ -297,22 +280,41 @@ function SWEP:Succeed()
 
     hook.Call("playerWeaponsConfiscated", nil, self:GetOwner(), ent, ent.ConfiscatedWeapons)
 
-    if result == "" then
-        self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", ent:Nick()))
+    if next(stripped) ~= nil then
         self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
         self:SetNextSoundTime(CurTime() + 0.3)
     else
         self:EmitSound("ambient/energy/zap1.wav", 50, 100)
-        self:GetOwner():ChatPrint(DarkRP.getPhrase("confiscated_these_weapons"))
-        if string.len(result) >= 126 then
-            local amount = math.ceil(string.len(result) / 126)
-            for i = 1, amount, 1 do
-                self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
-            end
-        else
-            self:GetOwner():ChatPrint(result)
-        end
         self:SetNextSoundTime(0)
+    end
+end
+
+function SWEP:PrintWeapons(ent, weaponsFoundPhrase)
+    local result = {}
+    local weps = {}
+    self:GetStrippableWeapons(ent, function(wep)
+        table.insert(weps, wep)
+    end)
+
+    for _, wep in ipairs(weps) do
+        table.insert(result, wep:GetPrintName() and language.GetPhrase(wep:GetPrintName()) or wep:GetClass())
+    end
+
+    result = table.concat(result, ", ")
+
+    if result == "" then
+        self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", ent:Nick()))
+        return
+    end
+
+    self:GetOwner():ChatPrint(weaponsFoundPhrase)
+    if string.len(result) >= 126 then
+        local amount = math.ceil(string.len(result) / 126)
+        for i = 1, amount, 1 do
+            self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
+        end
+    else
+        self:GetOwner():ChatPrint(result)
     end
 end
 
