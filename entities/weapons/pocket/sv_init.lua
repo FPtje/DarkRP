@@ -146,7 +146,7 @@ end
 local function serialize(ent)
     local serialized = duplicator.CopyEntTable(ent)
     serialized.DT = getDTVars(ent)
-
+    if ent:IsWeapon() then serialized.Weapon = nil end
     return serialized
 end
 
