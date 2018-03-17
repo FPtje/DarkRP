@@ -420,7 +420,7 @@ local my_language = {
     no_auto_demote = "You will not be auto-demoted.",
     youre_afk_demoted = "You were demoted for being AFK for too long. Next time use /afk.",
     hes_afk_demoted = "%s has been demoted for being AFK for too long.",
-    afk_cmd_to_exit = "Type /afk again to exit AFK mode.",
+    afk_cmd_to_exit = "Type /afk to exit AFK mode.",
     player_now_afk = "%s is now AFK.",
     player_no_longer_afk = "%s is no longer AFK.",
 
