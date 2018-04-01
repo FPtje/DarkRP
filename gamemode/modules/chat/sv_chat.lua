@@ -108,7 +108,7 @@ local function RP_ActualDoSay(ply, text, callback)
             DarkRP.talkToPerson(v, col, callback .. name, col2, text, ply)
         end
     else
-        DarkRP.talkToRange(ply, callback .. ply:Nick(), text, 250)
+        DarkRP.talkToRange(ply, callback .. ply:Nick(), text, GAMEMODE.Config.talkDistance)
     end
     return ""
 end
