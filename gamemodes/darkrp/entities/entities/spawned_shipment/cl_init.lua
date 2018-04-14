@@ -147,7 +147,6 @@ properties.Add("splitShipment",
     MenuIcon    =   "icon16/arrow_divide.png",
 
     Filter      =   function(self, ent, ply)
-                        print("FILTER", self, ent, ply, IsValid(ent))
                         if not IsValid(ent) then return false end
                         return ent.IsSpawnedShipment
                     end,
