@@ -417,8 +417,9 @@ function GM:PlayerDeath(ply, weapon, killer)
     ply:ExitVehicle()
 
     if ply:isArrested() and not GAMEMODE.Config.respawninjail  then
-        -- If the player died in jail, make sure they can't respawn until their jail sentance is over
-        ply.NextSpawnTime = CurTime() + math.ceil(GAMEMODE.Config.jailtimer - (CurTime() - ply.LastJailed)) + 1
+        -- If the player died in jail, make sure they can't respawn until their jail sentence is over
+        -- NextSpawnTime is set to CurTime() on unarrest
+        ply.NextSpawnTime = math.huge
         DarkRP.printMessageAll(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
         DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
     else
