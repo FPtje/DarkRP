@@ -172,10 +172,10 @@ end
 
 DarkRP.registerDoorVar("groupOwn",
     function(val)
-        net.WriteUInt(RPExtraTeamDoorIDs[val], 10)
+        net.WriteUInt(RPExtraTeamDoorIDs[val], 16)
     end,
     function()
-        local id = net.ReadUInt(10)
+        local id = net.ReadUInt(16)
         for name, id2 in pairs(RPExtraTeamDoorIDs) do
             if id == id2 then return name end
         end
@@ -187,7 +187,7 @@ local function writeNumBoolTbl(tbl)
     net.WriteUInt(table.Count(tbl), 10)
 
     for num, _ in pairs(tbl) do
-        net.WriteUInt(num, 10)
+        net.WriteUInt(num, 16)
     end
 end
 
@@ -197,7 +197,7 @@ local function readNumBoolTbl(tbl)
     local count = net.ReadUInt(10)
 
     for i = 1, count do
-        res[net.ReadUInt(10)] = true
+        res[net.ReadUInt(16)] = true
     end
 
     return res
