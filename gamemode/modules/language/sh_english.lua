@@ -234,6 +234,8 @@ local my_language = {
     checking_weapons = "Confiscating weapons",
 
     shipment_antispam_wait = "Please wait before spawning another shipment.",
+    createshipment = "Create a shipment",
+    splitshipment = "Split this shipment",
     shipment_cannot_split = "Cannot split this shipment.",
 
     -- Talking

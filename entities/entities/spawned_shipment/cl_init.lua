@@ -142,11 +142,12 @@ Create a shipment from a spawned_weapon
 ---------------------------------------------------------------------------]]
 properties.Add("splitShipment",
 {
-    MenuLabel   =   "Split this shipment",
+    MenuLabel   =   DarkRP.getPhrase("splitshipment"),
     Order       =   2003,
     MenuIcon    =   "icon16/arrow_divide.png",
 
     Filter      =   function(self, ent, ply)
+                        print("FILTER", self, ent, ply, IsValid(ent))
                         if not IsValid(ent) then return false end
                         return ent.IsSpawnedShipment
                     end,
