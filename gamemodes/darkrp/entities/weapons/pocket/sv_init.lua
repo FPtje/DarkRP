@@ -159,6 +159,9 @@ local function deserialize(ply, item)
     duplicator.DoGenericPhysics(ent, ply, item)
     table.Merge(ent:GetTable(), item)
 
+    if ent:IsWeapon() and ent.Weapon ~= nil and not ent.Weapon:IsValid() then ent.Weapon = ent end
+    if ent.Entity ~= nil and not ent.Entity:IsValid() then ent.Entity = ent end
+
     local pos, mins = ent:GetPos(), ent:WorldSpaceAABB()
     local offset = pos.z - mins.z
 

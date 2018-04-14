@@ -578,8 +578,8 @@ function FPP.PlayerDisconnect(ply)
             -- this prevents the original owner being set again
             -- when the fallback hands their props over to a second
             -- (or third, or nth) fallback
-            if v:GetNWString("FPP_OriginalOwner", "") == "" then
-                v:SetNWString("FPP_OriginalOwner", SteamID)
+            if v:GetNW2String("FPP_OriginalOwner", "") == "" then
+                v:SetNW2String("FPP_OriginalOwner", SteamID)
             end
         end
 
@@ -631,13 +631,13 @@ function FPP.PlayerInitialSpawn(ply)
     local entities = {}
     if FPP.DisconnectedPlayers[SteamID] then -- Check if the player has rejoined within the auto remove time
         for _, v in ipairs(ents.GetAll()) do
-            if (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNWString("FPP_OriginalOwner") == SteamID) then
+            if (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNW2String("FPP_OriginalOwner") == SteamID) then
                 v.FPPFallbackOwner = nil
                 v:CPPISetOwner(ply)
                 table.insert(entities, v)
 
-                if v:GetNWString("FPP_OriginalOwner", "") ~= "" then
-                    v:SetNWString("FPP_OriginalOwner", "")
+                if v:GetNW2String("FPP_OriginalOwner", "") ~= "" then
+                    v:SetNW2String("FPP_OriginalOwner", "")
                 end
             end
         end

@@ -16,7 +16,7 @@ local function CreateAgenda(ply, args)
     local agenda = ply:getAgendaTable()
 
     if not agenda or not agenda.ManagersByKey[ply:Team()] then
-        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("incorrect_job", "agenda"))
         return ""
     end
 
@@ -30,7 +30,7 @@ local function addAgenda(ply, args)
     local agenda = ply:getAgendaTable()
 
     if not agenda or not agenda.ManagersByKey[ply:Team()] then
-        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "agenda", "Incorrect team"))
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("incorrect_job", "agenda"))
         return ""
     end
 

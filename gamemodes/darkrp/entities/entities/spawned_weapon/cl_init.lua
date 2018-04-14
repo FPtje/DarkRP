@@ -31,21 +31,22 @@ end
 Create a shipment from a spawned_weapon
 ---------------------------------------------------------------------------]]
 properties.Add("createShipment",
-{
-    MenuLabel   =   "Create a shipment",
-    Order       =   2002,
-    MenuIcon    =   "icon16/add.png",
+    {
+        MenuLabel   =   DarkRP.getPhrase("createshipment"),
+        Order       =   2002,
+        MenuIcon    =   "icon16/add.png",
 
-    Filter      =   function(self, ent, ply)
-                        if not IsValid(ent) then return false end
-                        return ent.IsSpawnedWeapon
-                    end,
+        Filter      =   function(self, ent, ply)
+                            if not IsValid(ent) then return false end
+                            return ent.IsSpawnedWeapon
+                        end,
 
-    Action      =   function(self, ent)
-                        if not IsValid(ent) then return end
-                        RunConsoleCommand("darkrp", "makeshipment", ent:EntIndex())
-                    end
-})
+        Action      =   function(self, ent)
+                            if not IsValid(ent) then return end
+                            RunConsoleCommand("darkrp", "makeshipment", ent:EntIndex())
+                        end
+    }
+)
 
 --[[---------------------------------------------------------------------------
 Interface

@@ -86,7 +86,7 @@ timer.Simple(3, function()
     end
 end)
 
-if game.SinglePlayer() then
+if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
     local plyMeta = FindMetaTable("Player")
 
     if SERVER then

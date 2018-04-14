@@ -19,17 +19,17 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
     ply.DarkRPLastTip = ply.DarkRPLastTip or -1
 
     if ply.DarkRPLastTip > CurTime() - 0.5 then
-        DarkRP.notify(ply, NOTIFY_ERROR, 4, DarkRP.getPhrase("wait_with_that"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that"))
         return
     end
 
     if not ply:canAfford(amount) then
-        DarkRP.notify(activator, NOTIFY_ERROR, 4, DarkRP.getPhrase("cant_afford", amount))
+        DarkRP.notify(activator, 1, 4, DarkRP.getPhrase("cant_afford", amount))
         return
     end
 
     if tipjar:GetPos():DistToSqr(ply:GetPos()) > 100 * 100 then
-        DarkRP.notify(ply, NOTIFY_ERROR, 4, DarkRP.getPhrase("distance_too_big"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("distance_too_big"))
         return
     end
 
@@ -41,8 +41,8 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
 
     local strAmount = DarkRP.formatMoney(amount)
 
-    DarkRP.notify(ply,   NOTIFY_HINT, 4, DarkRP.getPhrase("you_donated", strAmount, owner:Nick()))
-    DarkRP.notify(owner, NOTIFY_HINT, 4, DarkRP.getPhrase("has_donated", ply:Nick(),   strAmount))
+    DarkRP.notify(ply,   3, 4, DarkRP.getPhrase("you_donated", strAmount, owner:Nick()))
+    DarkRP.notify(owner, 3, 4, DarkRP.getPhrase("has_donated", ply:Nick(),   strAmount))
 
     net.Start("DarkRP_TipJarDonate")
         net.WriteEntity(tipjar)

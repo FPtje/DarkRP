@@ -13,6 +13,8 @@ ENT.itemPhrase = ""
 ENT.noIncome = false
 ENT.camMul = -30
 
+ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+
 function ENT:initVars()
     -- Implement this to set the above variables
 end

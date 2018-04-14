@@ -158,16 +158,18 @@ local function HUDPaint()
     if FPP.getPrivateSetting("HideOwner") then return end
 
     --Show the owner:
-    local LAEnt = LocalPlayer():GetEyeTraceNoCursor().Entity
+    local ply = LocalPlayer()
+
+    local LAEnt = ply:GetEyeTraceNoCursor().Entity
     if not IsValid(LAEnt) then return end
 
-    local weapon = LocalPlayer():GetActiveWeapon()
+    local weapon = ply:GetActiveWeapon()
     local class = weapon:IsValid() and weapon:GetClass() or ""
 
     local touchType = weaponClassTouchTypes[class] or "EntityDamage"
     local reason = FPP.entGetTouchReason(LAEnt, touchType)
     if not reason then return end
-    local originalOwner = LAEnt:GetNWString("FPP_OriginalOwner")
+    local originalOwner = LAEnt:GetNW2String("FPP_OriginalOwner")
     originalOwner = originalOwner ~= "" and (" (previous owner: %s)"):format(originalOwner) or ""
     reason = reason .. originalOwner
 

@@ -360,6 +360,10 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
         DarkRP.toggleSleep(ply, "force")
     end
 
+    if not ply:Alive() and not GAMEMODE.Config.respawninjail then
+        ply.NextSpawnTime = CurTime()
+    end
+
     gamemode.Call("PlayerLoadout", ply)
     if GAMEMODE.Config.telefromjail then
         local ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)

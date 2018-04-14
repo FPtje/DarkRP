@@ -4,7 +4,7 @@ function ENT:Initialize()
     self:initVars()
 end
 
-function ENT:Draw()
+function ENT:DrawTranslucent()
     self:DrawModel()
 
     local Pos = self:GetPos()
