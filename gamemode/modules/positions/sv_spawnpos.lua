@@ -5,7 +5,7 @@ local function SetSpawnPos(ply, args)
     for k, v in pairs(RPExtraTeams) do
         if args == v.command then
             t = k
-            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("created_spawnpos", v.name))
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("updated_spawnpos", v.name))
         end
     end
 
@@ -24,7 +24,7 @@ local function AddSpawnPos(ply, args)
     for k, v in pairs(RPExtraTeams) do
         if args == v.command then
             t = k
-            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("updated_spawnpos", v.name))
+            DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("created_spawnpos", v.name))
         end
     end
 
