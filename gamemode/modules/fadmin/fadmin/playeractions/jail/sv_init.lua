@@ -13,10 +13,11 @@ local function Jail(ply, cmd, args)
     local time = ""
 
     for _, target in pairs(targets) do
-        if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if not IsValid(target) then continue end
-        local jailDistance = 50
+        if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
+        local jailDistance
+        
         ply:ExitVehicle()
 
         local JailProps = {}
@@ -33,8 +34,8 @@ local function Jail(ply, cmd, args)
             timer.Remove("FAdmin_jail" .. target:UserID())
             timer.Remove("FAdmin_jail_watch" .. target:UserID())
             target:FAdmin_SetGlobal("fadmin_jailed", false)
-
         elseif JailType == "small" then
+            jailDistance = 50
             table.insert(JailProps, {pos = Vector(0,0,58), ang = Angle(0,0,0), model = "models/props_wasteland/laundry_dryer001.mdl"})
         elseif JailType == "normal" then
             jailDistance = 70
