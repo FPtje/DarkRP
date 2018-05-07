@@ -167,7 +167,9 @@ end
 
 local function canSpawnWeapon(ply)
     if (GAMEMODE.Config.adminweapons == 0 and ply:IsAdmin()) or
-    (GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) then
+    (GAMEMODE.Config.adminweapons == 1 and ply:IsSuperAdmin()) or
+    -- Can't use 2 to maintain compatibility
+    (GAMEMODE.Config.adminweapons == 3) then
         return true
     end
     DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_spawn_weapons"))
