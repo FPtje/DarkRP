@@ -60,7 +60,7 @@ function meta:changeTeam(t, force, suppressNotification)
             for _, b in pairs(TEAM.NeedToChangeFrom) do
                 teamnames = teamnames .. " or " .. team.GetName(b)
             end
-            notify(self, 1,4, string.format(string.sub(teamnames, 5), team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
+            notify(self, 1, 8, DarkRP.getPhrase("need_to_be_before", string.sub(teamnames, 5), TEAM.name))
             return false
         end
         local max = TEAM.max
