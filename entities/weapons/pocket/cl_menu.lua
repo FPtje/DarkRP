@@ -28,7 +28,7 @@ end
 
 function DarkRP.openPocketMenu()
     if IsValid(frame) and frame:IsVisible() then return end
-	local wep = LocalPlayer():GetActiveWeapon()
+    local wep = LocalPlayer():GetActiveWeapon()
     if not wep:IsValid() or wep:GetClass() ~= "pocket" then return end
     if not pocket then pocket = {} return end
     if table.Count(pocket) == 0 then return end
