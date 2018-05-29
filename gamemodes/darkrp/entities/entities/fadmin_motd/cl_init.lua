@@ -59,16 +59,17 @@ function ENT:Draw()
     self:DrawModel()
 
     local pos = self:GetPos()
-    if pos:DistToSqr(LocalPlayer():GetShootPos()) > 90000 then return end
+    local ply = LocalPlayer()
+    if pos:DistToSqr(ply:GetShootPos()) > 90000 then return end
 
     if CurTime() - self.LastDrawn > 0.5 then
         self.Disabled = true --Disable it again when you stop looking at it
     end
 
     self.LastDrawn = CurTime()
-    local IsAdmin = LocalPlayer():IsAdmin()
-    local HasPhysgun = IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "weapon_physgun"
-    local isUsing = (HasPhysgun and LocalPlayer():KeyDown(IN_ATTACK)) or LocalPlayer():KeyDown(IN_USE)
+    local IsAdmin = ply:IsAdmin()
+    local HasPhysgun = ply:GetActiveWeapon():IsValid() and ply:GetActiveWeapon():GetClass() == "weapon_physgun"
+    local isUsing = (HasPhysgun and ply:KeyDown(IN_ATTACK)) or ply:KeyDown(IN_USE)
 
     surface.SetFont("TargetID")
     local TextPosX = surface.GetTextSize("Physgun/use the button to see the MOTD!") * (-0.5)
@@ -77,7 +78,7 @@ function ENT:Draw()
     ang:RotateAroundAxis(ang:Right(), -90)
     ang:RotateAroundAxis(ang:Up(), 90)
 
-    local posX, posY = WorldToScreen(LocalPlayer():GetEyeTrace().HitPos, self:GetPos() + ang:Up() * 3, 0.25, ang)
+    local posX, posY = WorldToScreen(ply:GetEyeTrace().HitPos, self:GetPos() + ang:Up() * 3, 0.25, ang)
     render.SuppressEngineLighting(true)
     cam.Start3D2D(self:GetPos() + ang:Up() * 3, ang, 0.25)
 
