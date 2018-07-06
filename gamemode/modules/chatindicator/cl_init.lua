@@ -34,7 +34,10 @@ hook.Add("CreateClientsideRagdoll", "DarkRP_ChatIndicator", function(ent, ragdol
     
     local oldRenderOverride = ragdoll.RenderOverride -- Just in case - best be safe
     ragdoll.RenderOverride = function(self)
-        drawIndicator(ent)
+        if ent:IsValid() then
+            drawIndicator(ent)
+        end
+
         if oldRenderOverride then
             oldRenderOverride(self)
         else
