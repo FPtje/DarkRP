@@ -12,7 +12,7 @@ local function drawIndicator(ply)
     ply.indicator:SetModelScale(0.6)
 
     local ragdoll = ply:GetRagdollEntity()
-    if ragdoll:IsValid() then
+    if IsValid(ragdoll) then
         local maxs = ragdoll:OBBMaxs()
         ply.indicator:SetPos(ragdoll:GetPos() + Vector(0, 0, maxs.z) + Vector(0, 0, 12))
     else
@@ -31,7 +31,7 @@ end
 hook.Add("PostPlayerDraw", "DarkRP_ChatIndicator", drawIndicator)
 hook.Add("CreateClientsideRagdoll", "DarkRP_ChatIndicator", function(ent, ragdoll)
     if not ent:IsPlayer() then return end
-    
+
     local oldRenderOverride = ragdoll.RenderOverride -- Just in case - best be safe
     ragdoll.RenderOverride = function(self)
         if ent:IsValid() then
