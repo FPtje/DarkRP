@@ -52,17 +52,7 @@ function PANEL:Refresh()
     end
     self.gmComboBox:SetValue("(current)")
 
-    local function rpFirstSortedPairs(inTbl)
-        -- Sorts the table by key but putting "Roleplay" as the first key
-        local fn, tbl = SortedPairs(inTbl)
-        if table.HasValue(tbl.__SortedIndex, "Roleplay") then
-            table.remove(tbl.__SortedIndex, table.KeyFromValue(tbl.__SortedIndex, "Roleplay"))
-            table.insert(tbl.__SortedIndex, 1, "Roleplay")
-        end
-        return fn, tbl
-    end
-
-    for catName, maps in rpFirstSortedPairs(self:GetMapList()) do
+    for catName, maps in pairs(self:GetMapList()) do
         local cat = self.catList:Add(catName)
         local iconLayout = vgui.Create("DIconLayout")
         iconLayout:SetSpaceX(5)
