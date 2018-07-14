@@ -227,7 +227,7 @@ function GM:EntityRemoved(ent)
     end
 
     local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID or 0)
-    if ent.DarkRPItem and IsValid(owner) then owner:removeCustomEntity(ent.DarkRPItem) end
+    if ent.DarkRPItem and IsValid(owner) and not ent.IsPocketing then owner:removeCustomEntity(ent.DarkRPItem) end
     if ent.isKeysOwnable and ent:isKeysOwnable() then ent:removeDoorData() end
 end
 
