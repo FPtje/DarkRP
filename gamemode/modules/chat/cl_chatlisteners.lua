@@ -78,7 +78,7 @@ local function chatGetRecipients()
 
     receivers = {}
     for _, ply in ipairs(player.GetAll()) do
-        hidePly = hook.Run("chatHideRecipient", ply)
+        local hidePly = hook.Run("chatHideRecipient", ply)
         if not IsValid(ply) or ply == LocalPlayer() or ply:GetNoDraw() or hidePly then continue end
 
         local val = currentConfig.hearFunc(ply, currentChatText)
