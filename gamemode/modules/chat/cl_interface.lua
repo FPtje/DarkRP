@@ -39,3 +39,18 @@ DarkRP.removeChatReceiver = DarkRP.stub{
     returns = {},
     metatable = DarkRP
 }
+
+DarkRP.hookStub{
+    name = "chatHideRecipient",
+    description = "Hide a receipent from who can hear/see your text GUI.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who spoke.",
+            type = "Player"
+        }
+    },
+    returns = {
+
+    }
+}
