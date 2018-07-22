@@ -22,6 +22,7 @@ function ENT:OnRemove()
     if FAdmin.shuttingDown or self.CanRemove or not IsValid(self.target) then return end
 
     local Replace = ents.Create("fadmin_jail")
+    if (not Replace:IsValid()) then return end
 
     Replace:SetPos(self.SolidPos)
     Replace:SetAngles(self.SolidAng)
