@@ -99,10 +99,9 @@ local function BlockAFKTeamChange(ply, t, force)
 end
 hook.Add("playerCanChangeTeam", "AFKCanChangeTeam", BlockAFKTeamChange)
 
--- Freeze player's salary
 hook.Add("playerGetSalary", "AFKGetSalary", function(ply, amount)
     if ply:getDarkRPVar("AFK") then
-        return true, "", 0 -- false, DarkRP.getPhrase("salary_frozen"), 0
+        return true, "", 0
     end
 end)
 
