@@ -167,9 +167,10 @@ local function loadChatReceivers()
     --[[---------------------------------------------------------------------------
         Voice chat receivers
         ---------------------------------------------------------------------------]]
+    local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
     DarkRP.addChatReceiver("speak", DarkRP.getPhrase("speak"), function(ply)
         if not LocalPlayer().DRPIsTalking then return nil end
-        if LocalPlayer():GetPos():DistToSqr(ply:GetPos()) > 302500 then return false end
+        if LocalPlayer():GetPos():DistToSqr(ply:GetPos()) > voiceDistance then return false end
 
         return not GAMEMODE.Config.dynamicvoice or ply:isInRoom()
     end)
