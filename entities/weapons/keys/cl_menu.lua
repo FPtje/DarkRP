@@ -45,9 +45,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
     if KeyFrameVisible then return end
     local trace = LocalPlayer():GetEyeTrace()
     local ent = trace.Entity
-    LocalPlayer():ChatPrint(tostring(trace.HitPos:DistToSqr(LocalPlayer():EyePos())))
     -- Don't open the menu if the entity is not ownable, the entity is too far away or the door settings are not loaded yet
-    print( IsValid(ent), ent:isKeysOwnable())
     if not IsValid(ent) or not ent:isKeysOwnable() or trace.HitPos:DistToSqr(LocalPlayer():EyePos()) > 40000 then return end
 
     KeyFrameVisible = true
