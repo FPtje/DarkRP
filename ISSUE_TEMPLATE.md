@@ -1,7 +1,7 @@
 
 [//]: # (DO NOT REMOVE THIS TEMPLATE.)
 [//]: # (GITHUB ISSUES ARE **NOT** FOR HELP)
-[//]: # (GO TO THE FORUMS INSTEAD: http://forum.darkrp.com/ )
+[//]: # (GO TO THE FORUMS INSTEAD: https://forum.darkrp.com/ )
 
 ### Description of the bug
 [//]: # (Describe the issue as accurately as possible)
