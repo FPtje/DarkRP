@@ -60,16 +60,15 @@ function SWEP:PreDrawViewModel()
     return true
 end
 
-local function lookingAtLockable(ply, ent)
+local function lookingAtLockable(ply, ent, hitpos)
     local eyepos = ply:EyePos()
     return IsValid(ent)             and
         ent:isKeysOwnable()         and
         (
-            ent:isDoor()    and eyepos:DistToSqr(ent:GetPos()) < 4225
+            ent:isDoor()    and eyepos:DistToSqr(hitpos) < 2000
             or
-            ent:IsVehicle() and eyepos:DistToSqr(ent:NearestPoint(eyepos)) < 10000
+            ent:IsVehicle() and eyepos:DistToSqr(hitpos) < 4000
         )
-
 end
 
 local function lockUnlockAnimation(ply, snd)
@@ -100,7 +99,7 @@ end
 function SWEP:PrimaryAttack()
     local trace = self:GetOwner():GetEyeTrace()
 
-    if not lookingAtLockable(self:GetOwner(), trace.Entity) then return end
+    if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
 
     self:SetNextPrimaryFire(CurTime() + 0.3)
 
@@ -119,7 +118,7 @@ end
 function SWEP:SecondaryAttack()
     local trace = self:GetOwner():GetEyeTrace()
 
-    if not lookingAtLockable(self:GetOwner(), trace.Entity) then return end
+    if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
 
     self:SetNextSecondaryFire(CurTime() + 0.3)
 
@@ -137,7 +136,7 @@ end
 
 function SWEP:Reload()
     local trace = self:GetOwner():GetEyeTrace()
-    if not IsValid(trace.Entity) or (((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():DistToSqr(trace.HitPos) > 40000)) then
+    if not IsValid(trace.Entity) or ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():DistToSqr(trace.HitPos) > 40000) then
         if CLIENT and not DarkRP.disabledDefaults["modules"]["animations"] then RunConsoleCommand("_DarkRP_AnimationMenu") end
         return
     end
