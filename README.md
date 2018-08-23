@@ -7,12 +7,12 @@ Manually downloading DarkRP or using SVN is possible, but not recommended.
 
 The workshop version of DarkRP can be found here:
 
-http://steamcommunity.com/sharedfiles/filedetails/?id=248302805
+https://steamcommunity.com/sharedfiles/filedetails/?id=248302805
 
 ## Modifying DarkRP
 Check out the wiki!
 
-http://wiki.darkrp.com/index.php/Main_Page
+https://wiki.darkrp.com/index.php/Main_Page
 
 Make sure to download the DarkRPMod:
 
@@ -28,6 +28,6 @@ Just whatever you do, don't touch DarkRP's core files.
 ## Getting help
 Please head to the forums!
 
-http://forum.darkrp.com/
+https://forum.darkrp.com/
 
 

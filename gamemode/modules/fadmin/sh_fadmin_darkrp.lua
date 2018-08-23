@@ -59,7 +59,7 @@ function FAdmin.FindPlayer(info)
 end
 
 function FAdmin.SteamToProfile(ply) -- Thanks decodaman
-    return "http://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
+    return "https://steamcommunity.com/profiles/" .. (ply:SteamID64() or "BOT")
 end
 
 --[[
