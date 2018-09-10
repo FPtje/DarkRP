@@ -179,5 +179,5 @@ function SWEP:Reload()
 
     if self:GetLastReload() + 0.1 > CurTime() then self:SetLastReload(CurTime()) return end
     self:SetLastReload(CurTime())
-    self:EmitSound("weapons/stunstick/spark" .. math.random(1, 3) .. ".wav")
+    self:GetOwner():EmitSound("weapons/stunstick/spark" .. math.random(1, 3) .. ".wav")
 end
