@@ -57,7 +57,7 @@ function ENT:SignLetter(ply)
 end
 
 function ENT:onPlayerDisconnected(ply)
-    if self.dt.owning_ent == ply then
+    if self:Getowning_ent() == ply then
         self:Remove()
     end
 end

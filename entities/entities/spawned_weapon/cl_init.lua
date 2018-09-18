@@ -5,11 +5,12 @@ function ENT:Draw()
     if ret ~= nil then return end
     self:DrawModel()
 
-    if self.dt.amount == 1 then return end
+	local amount = self:Getamount()
+    if amount == 1 then return end
 
     local Pos = self:GetPos()
     local Ang = self:GetAngles()
-    local text = DarkRP.getPhrase("amount") .. self.dt.amount
+    local text = DarkRP.getPhrase("amount") .. amount
 
     surface.SetFont("HUDNumber5")
     local TextWidth = surface.GetTextSize(text)

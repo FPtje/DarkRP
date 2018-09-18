@@ -179,7 +179,7 @@ function ENT:Destruct()
     weapon.clip2 = self.clip2
     weapon.nodupe = true
     weapon:Spawn()
-    weapon.dt.amount = count
+    weapon:Setamount(count)
 
     self:Remove()
 end

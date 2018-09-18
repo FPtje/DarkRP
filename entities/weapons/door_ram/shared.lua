@@ -53,7 +53,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Holster()
-    self.dt.Ironsights = false
+    self:SetIronsights(false)
 
     return true
 end

@@ -51,8 +51,8 @@ end
 function ENT:StartTouch(ent)
     -- the .USED var is also used in other mods for the same purpose
     if ent:GetClass() ~= "darkrp_cheque" or self.USED or ent.USED or self.hasMerged or ent.hasMerged then return end
-    if ent.dt.owning_ent ~= self.dt.owning_ent then return end
-    if ent.dt.recipient ~= self.dt.recipient then return end
+    if ent:Getowning_ent() ~= self:Getowning_ent() then return end
+    if ent:Getrecipient() ~= self:Getrecipient() then return end
 
     -- Both hasMerged and USED are used by third party mods. Keep both in.
     ent.USED = true
@@ -74,7 +74,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:onPlayerDisconnected(ply)
-    if self.dt.owning_ent == ply or self.dt.recipient == ply then
+    if self:Getowning_ent() == ply or self:Getrecipient() == ply then
         self:Remove()
     end
 end
