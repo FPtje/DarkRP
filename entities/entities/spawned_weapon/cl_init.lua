@@ -5,7 +5,7 @@ function ENT:Draw()
     if ret ~= nil then return end
     self:DrawModel()
 
-	local amount = self:Getamount()
+    local amount = self:Getamount()
     if amount == 1 then return end
 
     local Pos = self:GetPos()
