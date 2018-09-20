@@ -297,8 +297,6 @@ local function addEntityCommands(tblEnt)
     local function defaultSpawn(ply, tr, tblE)
         local ent = ents.Create(tblE.ent)
         if not ent:IsValid() then error("Entity '" .. tblE.ent .. "' does not exist or is not valid.") end
-        ent.dt = ent.dt or {}
-        ent.dt.owning_ent = ply
         if ent.Setowning_ent then ent:Setowning_ent(ply) end
         ent:SetPos(tr.HitPos)
         -- These must be set before :Spawn()

@@ -38,7 +38,7 @@ local function createShipment(ply, args)
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())
     crate.nodupe = true
-    crate:SetContents(shipID, ent.dt.amount)
+    crate:SetContents(shipID, ent:Getamount())
     crate:Spawn()
     crate:SetPlayer(ply)
     crate.clip1 = ent.clip1

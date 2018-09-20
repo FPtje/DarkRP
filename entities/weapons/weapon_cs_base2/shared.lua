@@ -79,9 +79,9 @@ function SWEP:Initialize()
         self:SetNPCFireRate(0.01)
     end
 
-    self.dt.Ironsights = false
-    self.dt.TotalUsedMagCount = 0
-    self.dt.FireMode = self.Primary.Automatic and "auto" or "semi"
+    self:SetIronsights(false)
+    self:SetTotalUsedMagCount(0)
+    self:SetFireMode(self.Primary.Automatic and "auto" or "semi")
 end
 
 function SWEP:SetupDataTables()
@@ -111,7 +111,7 @@ function SWEP:OwnerChanged()
 end
 
 function SWEP:Holster()
-    self.dt.Ironsights = false
+    self:SetIronsights(false)
     if CLIENT then self.hasShot = false end
 
     if not IsValid(self:GetOwner()) then return true end
@@ -124,7 +124,7 @@ function SWEP:Holster()
 end
 
 function SWEP:OnRemove()
-    self.dt.Ironsights = false
+    self:SetIronsights(false)
 
     if CLIENT and IsValid(self:GetOwner()) then
         local vm = self:GetOwner():GetViewModel()
@@ -375,7 +375,7 @@ end
 
 function SWEP:OnRestore()
     self:SetNextSecondaryFire(0)
-    self.dt.Ironsights = false
+    self:SetIronsights(false)
 end
 
 function SWEP:OnDrop()
