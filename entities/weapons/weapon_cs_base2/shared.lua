@@ -180,7 +180,7 @@ function SWEP:PrimaryAttack()
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
 
     if self:Clip1() <= 0 then
-        self:GetOwner():EmitSound("weapons/clipempty_rifle.wav")
+        self:EmitSound("weapons/clipempty_rifle.wav")
         self:SetNextPrimaryFire(CurTime() + 2)
         return
     end
@@ -188,7 +188,7 @@ function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then self:SetIronsights(false) return end
     if not self:GetIronsights() and GAMEMODE.Config.ironshoot then return end
     -- Play shoot sound
-    self:GetOwner():EmitSound(self.Primary.Sound)
+    self:EmitSound(self.Primary.Sound)
 
     -- Shoot the bullet
     self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil + 3, self.Primary.NumShots, self.Primary.Cone + .05)

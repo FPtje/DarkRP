@@ -157,7 +157,7 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    self:GetOwner():EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+    self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
     self:SetNextSoundTime(CurTime() + 0.3)
 
     if not IsFirstTimePredicted() then return end
@@ -281,10 +281,10 @@ function SWEP:Succeed()
     hook.Call("playerWeaponsConfiscated", nil, self:GetOwner(), ent, ent.ConfiscatedWeapons)
 
     if next(stripped) ~= nil then
-        self:GetOwner():EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+        self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
         self:SetNextSoundTime(CurTime() + 0.3)
     else
-        self:GetOwner():EmitSound("ambient/energy/zap1.wav", 50, 100)
+        self:EmitSound("ambient/energy/zap1.wav", 50, 100)
         self:SetNextSoundTime(0)
     end
 end
@@ -339,10 +339,10 @@ function SWEP:Think()
     if self:GetNextSoundTime() ~= 0 and CurTime() >= self:GetNextSoundTime() then
         if self:GetIsWeaponChecking() then
             self:SetNextSoundTime(CurTime() + 0.5)
-            self:GetOwner():EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
+            self:EmitSound("npc/combine_soldier/gear5.wav", 100, 100)
         else
             self:SetNextSoundTime(0)
-            self:GetOwner():EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
+            self:EmitSound("npc/combine_soldier/gear5.wav", 50, 100)
         end
     end
     if CLIENT and self.NextDotsTime and CurTime() >= self.NextDotsTime then

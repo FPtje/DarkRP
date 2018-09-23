@@ -121,7 +121,7 @@ function SWEP:Think()
 
         if not IsValid(self:GetOwner()) then return end
         self:GetOwner():SetAnimation(PLAYER_ATTACK1)
-        self:GetOwner():EmitSound(self.Sound)
+        self:EmitSound(self.Sound)
 
         local vm = self:GetOwner():GetViewModel()
         if not IsValid(vm) then return end
