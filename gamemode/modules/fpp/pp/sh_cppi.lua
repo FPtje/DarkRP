@@ -42,6 +42,8 @@ if SERVER then
 	function ENTITY:CPPISetOwner(ply)
 		if ply == self.FPPOwner then return end
 
+		assert(ply == nil or IsEntity(ply), "The owner of an entity must be set to either nil, NULL or a valid entity.")
+
 		local valid = IsValid(ply) and ply:IsPlayer()
 		local steamId = valid and ply:SteamID() or nil
 		local canSetOwner = hook.Run("CPPIAssignOwnership", ply, self, valid and ply:UniqueID() or ply)
