@@ -5,8 +5,8 @@ local texts = {
     "You need to mount CSS",
     "DarkRP will not work without it",
     "Read these pages:",
-    "http://wiki.garrysmod.com/page/Retrieving_content_to_be_mounted_on_a_Dedicated_Server",
-    "http://wiki.garrysmod.com/page/Mounting_Content_on_a_DS"
+    "https://wiki.garrysmod.com/page/Retrieving_content_to_be_mounted_on_a_Dedicated_Server",
+    "https://wiki.garrysmod.com/page/Mounting_Content_on_a_DS"
 }
 
 hook.Add("PlayerInitialSpawn", "CSSCheck", function(ply)

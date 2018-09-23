@@ -206,6 +206,7 @@ function meta:addPocketItem(ent)
 
     hook.Call("onPocketItemAdded", nil, self, ent, serialized)
 
+    ent.IsPocketing = true
     ent:Remove()
 
     self.darkRPPocket = self.darkRPPocket or {}
@@ -268,16 +269,6 @@ end)
 --[[---------------------------------------------------------------------------
 Hooks
 ---------------------------------------------------------------------------]]
-
-local function onAdded(ply, ent, serialized)
-    if not ent:IsValid() or not ent.DarkRPItem or not ent.Getowning_ent or not IsValid(ent:Getowning_ent()) then return end
-
-    ply = ent:Getowning_ent()
-
-    ply:addCustomEntity(ent.DarkRPItem)
-end
-hook.Add("onPocketItemAdded", "defaultImplementation", onAdded)
-
 function GAMEMODE:canPocket(ply, item)
     if not IsValid(item) then return false end
     local class = item:GetClass()

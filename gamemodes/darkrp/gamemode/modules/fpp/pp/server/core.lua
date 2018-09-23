@@ -518,6 +518,13 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 end
 hook.Add("CanTool", "FPP.Protect.CanTool", FPP.Protect.CanTool)
 
+function FPP.Protect.CanEditVariable(ent, ply, key, val, editTbl)
+    local val = FPP.Protect.CanProperty(ply, "editentity", ent)
+    if val ~= false and val ~= true then val = true end
+    return val
+end
+hook.Add("CanEditVariable", "FPP.Protect.CanEditVariable", FPP.Protect.CanEditVariable)
+
 function FPP.Protect.CanProperty(ply, property, ent)
     -- Use Toolgun because I'm way too lazy to make a new type
     local cantouch = FPP.plyCanTouchEnt(ply, ent, "Toolgun")

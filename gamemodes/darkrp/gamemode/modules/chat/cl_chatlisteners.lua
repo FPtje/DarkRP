@@ -78,7 +78,8 @@ local function chatGetRecipients()
 
     receivers = {}
     for _, ply in ipairs(player.GetAll()) do
-        if not IsValid(ply) or ply == LocalPlayer() or ply:GetNoDraw() then continue end
+        local hidePly = hook.Run("chatHideRecipient", ply)
+        if not IsValid(ply) or ply == LocalPlayer() or ply:GetNoDraw() or hidePly then continue end
 
         local val = currentConfig.hearFunc(ply, currentChatText)
 
@@ -166,9 +167,10 @@ local function loadChatReceivers()
     --[[---------------------------------------------------------------------------
         Voice chat receivers
         ---------------------------------------------------------------------------]]
+    local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
     DarkRP.addChatReceiver("speak", DarkRP.getPhrase("speak"), function(ply)
         if not LocalPlayer().DRPIsTalking then return nil end
-        if LocalPlayer():GetPos():DistToSqr(ply:GetPos()) > 302500 then return false end
+        if LocalPlayer():GetPos():DistToSqr(ply:GetPos()) > voiceDistance then return false end
 
         return not GAMEMODE.Config.dynamicvoice or ply:isInRoom()
     end)

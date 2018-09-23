@@ -24,11 +24,10 @@ function ENT:Initialize()
 end
 
 function ENT:DecreaseAmount()
-    local amount = self.dt.amount
+    local amount = self:Getamount() - 1
+    self:Setamount(amount)
 
-    self.dt.amount = amount - 1
-
-    if self.dt.amount <= 0 then
+    if amount <= 0 then
         self:Remove()
         self.PlayerUse = false
         self.Removed = true -- because it is not removed immediately

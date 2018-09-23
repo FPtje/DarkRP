@@ -227,7 +227,7 @@ function GM:EntityRemoved(ent)
     end
 
     local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID or 0)
-    if ent.DarkRPItem and IsValid(owner) then owner:removeCustomEntity(ent.DarkRPItem) end
+    if ent.DarkRPItem and IsValid(owner) and not ent.IsPocketing then owner:removeCustomEntity(ent.DarkRPItem) end
     if ent.isKeysOwnable and ent:isKeysOwnable() then ent:removeDoorData() end
 end
 
@@ -286,6 +286,7 @@ local threed = GM.Config.voice3D
 local vrad = GM.Config.voiceradius
 local dynv = GM.Config.dynamicvoice
 local deadv = GM.Config.deadvoice
+local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
@@ -295,7 +296,7 @@ local function calcPlyCanHearPlayerVoice(listener)
     for _, talker in ipairs(player.GetAll()) do
         local talkerShootPos = talker:GetShootPos()
         listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
-            (shootPos:DistToSqr(talkerShootPos) < 302500 and -- voiceradius is on and the two are within hearing distance
+            (shootPos:DistToSqr(talkerShootPos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
                 (not dynv or IsInRoom(shootPos, talkerShootPos))) -- Dynamic voice is on and players are in the same room
     end
 end

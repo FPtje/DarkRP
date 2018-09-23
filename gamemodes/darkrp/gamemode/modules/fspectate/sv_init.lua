@@ -114,6 +114,7 @@ end
 concommand.Add("FSpectate_StopSpectating", endSpectate)
 
 local vrad = GM.Config.voiceradius
+local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
 local function playerVoice(listener, talker)
     if not listener.FSpectating then return end
 
@@ -125,7 +126,7 @@ local function playerVoice(listener, talker)
         if not DarkRP or not vrad or not spectatePos then return end
 
         -- Return whether the listener can hear the talker locally or distance smaller than 550
-        return canHearLocal or spectatePos:DistToSqr(talker:GetShootPos()) < 302500, surround
+        return canHearLocal or spectatePos:DistToSqr(talker:GetShootPos()) < voiceDistance, surround
     end
 
     -- You can hear someone if your spectate target can hear them

@@ -66,8 +66,7 @@ timer.Simple(3, function()
         arbitrary groups, /friends/ of people he doesn't like and many, many more.
 
         I'm not pulling this out of my ass either, you can check everything here:
-        http://facepunch.com/showthread.php?t=1483607
-
+        https://forum.facepunch.com//f/gmoddev/nujl/PSA-Hex-SkidCheck-global-banlist-is-a-thing-and-people-actually-use-it/1/
 
         On a somewhat unrelated note, HeX has been known to be malicious for quite some time:
         He used to have an anticheat (called HAC) on his server, which not only misfired from
@@ -76,7 +75,7 @@ timer.Simple(3, function()
         their friends list.
 
         That too can be fact checked right here:
-        http://facepunch.com/showthread.php?t=1416320
+        https://forum.facepunch.com//f/gmoddev/lrbf/So-hac-got-released/1/
 
         DO NOT trust this guy to decide who gets banned from your server. In fact,
         DO NOT EVER TRUST ANYONE with that power. No one ever should have the power
