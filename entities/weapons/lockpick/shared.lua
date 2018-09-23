@@ -159,7 +159,7 @@ function SWEP:Think()
     if CurTime() >= self:GetNextSoundTime() then
         self:SetNextSoundTime(CurTime() + 1)
         local snd = {1,3,4}
-        self:GetOwner():EmitSound("weapons/357/357_reload" .. tostring(snd[math.Round(util.SharedRandom("DarkRP_LockpickSnd" .. CurTime(), 1, #snd))]) .. ".wav", 50, 100)
+        self:EmitSound("weapons/357/357_reload" .. tostring(snd[math.Round(util.SharedRandom("DarkRP_LockpickSnd" .. CurTime(), 1, #snd))]) .. ".wav", 50, 100)
     end
     if CLIENT and (not self.NextDotsTime or SysTime() >= self.NextDotsTime) then
         self.NextDotsTime = SysTime() + 0.5
