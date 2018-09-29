@@ -264,6 +264,11 @@ local function checkDatabase(ply)
             net.Send(ply)
         end
 
+    if SERVER and not ply:IsSuperAdmin() then
+        display("You must be superadmin")
+        return
+    end
+
     if MySQLite and MySQLite.isMySQL() then
         display(string.format([[WARNING: DarkRP is using MySQL. This only
     checks the local SQLite database stored in the %s file in the
