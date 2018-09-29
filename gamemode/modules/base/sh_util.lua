@@ -248,3 +248,57 @@ function DarkRP.explodeArg(arg)
 
     return args
 end
+
+--[[-------------------------------------------------------------------------
+Check the database for integrity errors. Use in cases when stuff doesn't load
+on restart, or you get corruption errors.
+---------------------------------------------------------------------------]]
+if SERVER then util.AddNetworkString("DarkRP_databaseCheckMessage") end
+if CLIENT then net.Receive("DarkRP_databaseCheckMessage", fc{print, net.ReadString}) end
+
+local function checkDatabase(ply)
+    local dbFile = SERVER and "sv.db" or "cl.db"
+    local display = CLIENT and print or function(msg)
+            net.Start("DarkRP_databaseCheckMessage")
+            net.WriteString(msg)
+            net.Send(ply)
+        end
+
+    if MySQLite and MySQLite.isMySQL() then
+        display(string.format([[WARNING: DarkRP is using MySQL. This only
+    checks the local SQLite database stored in the %s file in the
+    garrysmod/ folder. The check will continue.]], dbFile))
+    end
+
+    local check = sql.QueryValue("PRAGMA INTEGRITY_CHECK")
+    if check == false then
+        display([[The query to check the database failed. Shit's surely
+    fucked, but the cause is unknown.]])
+        return
+    end
+
+    if check == "ok" then
+        display(string.format("Your %s database file is good.", dbFile))
+        return
+    end
+
+    display(string.format([[There are errors in your %s database file. It's corrupt!
+
+    This can cause the following problems:
+    - Data not loading, think of blocked models, doors, players' money and RP names
+    - Settings resetting to their default values
+    - Lua errors on startup
+
+    The cause of the problem is that the %s file in your garrysmod/ folder on
+    %s is corrupt. How this came to be is unknown, but here's what you can do to solve it:
+
+    - Delete %s, and run a file integrity check. Warning: You will lose ALL data stored in it!
+    - Take the file and try to repair it. This is sadly something that requires some technical knowledge,
+      and may not always succeed.
+
+    The specific error, by the way, is as follows:
+    %s
+    ]], dbFile, dbFile, SERVER and "the server" or "your own computer", dbFile, check))
+
+end
+concommand.Add("darkrp_check_db_" .. (SERVER and "sv" or "cl"), checkDatabase)
