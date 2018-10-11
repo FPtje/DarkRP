@@ -6,7 +6,7 @@ local function checkDarkRP(ply, target, t)
 
     if TEAM.customCheck then
         local ret = TEAM.customCheck(target)
-        if ret ~= nil then return ret end
+        if ret ~= nil and not (ply:IsAdmin() and GAMEMODE.Config.adminBypassJobRestrictions) then return ret end
     end
 
     local hookValue = hook.Call("playerCanChangeTeam", nil, target, t, true)
@@ -27,6 +27,7 @@ local function SetTeam(ply, cmd, args)
         return false
     end
 
+    local targetsSet = {}
     for k, v in pairs(team.GetAllTeams()) do
         if k == tonumber(args[2]) or string.lower(v.Name) == string.lower(args[2] or "") then
             for _, target in pairs(targets) do
@@ -34,10 +35,15 @@ local function SetTeam(ply, cmd, args)
                 local setTeam = target.changeTeam or target.SetTeam -- DarkRP compatibility
                 if IsValid(target) and checkDarkRP(ply, target, k) then
                     setTeam(target, k, true)
+                    table.insert(targetsSet, target)
                 end
             end
 
-            FAdmin.Messages.FireNotification("setteam", ply, targets, {k})
+            if #targetsSet > 0 then
+                FAdmin.Messages.FireNotification("setteam", ply, targetsSet, {k})
+            else
+                FAdmin.Messages.SendMessage(ply, 1, "Could not set team")
+            end
 
             break
         end
