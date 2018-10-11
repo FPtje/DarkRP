@@ -43,12 +43,15 @@ hook.Add("Initialize", "FSpectate", function()
         end)
 
         local canSpectate = false
-        CAMI.PlayerHasAccess(LocalPlayer(), "FSpectate", function(b, _)
-            canSpectate = true
-        end)
+        local function calcAccess()
+            CAMI.PlayerHasAccess(LocalPlayer(), "FSpectate", function(b, _)
+                canSpectate = b
+            end)
+        end
+        calcAccess()
 
         -- Spectate option in player menu
-        FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "fadmin/icons/spectate", Color(0, 200, 0, 255), function(ply) return canSpectate and ply ~= LocalPlayer() end, function(ply)
+        FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "fadmin/icons/spectate", Color(0, 200, 0, 255), function(ply) calcAccess() return canSpectate and ply ~= LocalPlayer() end, function(ply)
             if not IsValid(ply) then return end
             RunConsoleCommand("FSpectate", ply:UserID())
         end)
