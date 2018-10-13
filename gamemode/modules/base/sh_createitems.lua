@@ -500,7 +500,7 @@ DarkRP.getShipmentByName = function(name)
     return CustomShipments[shipByName[name]], shipByName[name]
 end
 
-function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_separately, price_separately, noshipment, classes, shipmodel, CustomCheck)
+function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_separately, price_separately, noshipment, classes, shipmodel, CustomCheck, Category)
     local tableSyntaxUsed = type(model) == "table"
 
     price = tonumber(price)
@@ -509,7 +509,7 @@ function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one
     local customShipment = tableSyntaxUsed and model or
         {model = model, entity = entity, price = price, amount = Amount_of_guns_in_one_shipment,
         seperate = Sold_separately, pricesep = price_separately, noship = noshipment, allowed = classes,
-        shipmodel = shipmentmodel, customCheck = CustomCheck, weight = 5}
+        shipmodel = shipmentmodel, customCheck = CustomCheck, category = Category, weight = 5}
 
     -- The pains of backwards compatibility when dealing with ancient spelling errors...
     if customShipment.separate ~= nil then
