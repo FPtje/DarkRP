@@ -31,27 +31,13 @@ function DarkRP.initDatabase()
         -- team spawns require extra data
         MySQLite.queueQuery([[
             CREATE TABLE IF NOT EXISTS darkrp_jobspawn(
-                id INTEGER NOT NULL PRIMARY KEY,
-                team INTEGER NOT NULL
+                id INTEGER NOT NULL PRIMARY KEY REFERENCES darkrp_position(id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE,
+
+                teamcmd VARCHAR(255) NOT NULL
             );
         ]])
-
-        if MySQLite.isMySQL() then
-            MySQLite.queueQuery([[
-                SELECT NULL FROM information_schema.TABLE_CONSTRAINTS WHERE
-                   CONSTRAINT_SCHEMA = DATABASE() AND
-                   CONSTRAINT_NAME   = 'fk_darkrp_jobspawn_position' AND
-                   CONSTRAINT_TYPE   = 'FOREIGN KEY'
-            ]], function(data)
-                if data and data[1] then return end
-
-                MySQLite.query([[
-                    ALTER TABLE darkrp_jobspawn ADD CONSTRAINT `fk_darkrp_jobspawn_position` FOREIGN KEY(id) REFERENCES darkrp_position(id)
-                        ON UPDATE CASCADE
-                        ON DELETE CASCADE;
-                ]])
-            end)
-        end
 
         MySQLite.query([[
             CREATE TABLE IF NOT EXISTS playerinformation(
@@ -117,56 +103,6 @@ function DarkRP.initDatabase()
             REPLACE INTO darkrp_dbversion VALUES(20160610)
         ]])
 
-        -- SQlite doesn't really handle foreign keys strictly, neither does MySQL by default
-        -- So to keep the DB clean, here's a manual partial foreign key enforcement
-        -- For now it's deletion only, since updating of the common attribute doesn't happen.
-
-        -- MySQL trigger
-        if MySQLite.isMySQL() then
-            MySQLite.query("show triggers", function(data)
-                -- Check if the trigger exists first
-                if data then
-                    for _, v in ipairs(data) do
-                        if v.Trigger == "JobPositionFKDelete" then
-                            return
-                        end
-                    end
-                end
-
-                MySQLite.query("SHOW PRIVILEGES", function(privs)
-                    if not privs then return end
-
-                    local found
-                    for _, v in ipairs(privs) do
-                        if v.Privilege == "Trigger" then
-                            found = true
-                            break
-                        end
-                    end
-
-                    if not found then return end
-                    MySQLite.query([[
-                        CREATE TRIGGER JobPositionFKDelete
-                            AFTER DELETE ON darkrp_position
-                            FOR EACH ROW
-                                IF OLD.type = "T" THEN
-                                    DELETE FROM darkrp_jobspawn WHERE darkrp_jobspawn.id = OLD.id;
-                                END IF
-                        ;
-                    ]])
-                end)
-            end)
-        else -- SQLite triggers, quite a different syntax
-            MySQLite.query([[
-                CREATE TRIGGER IF NOT EXISTS JobPositionFKDelete
-                    AFTER DELETE ON darkrp_position
-                    FOR EACH ROW
-                    WHEN OLD.type = "T"
-                    BEGIN
-                        DELETE FROM darkrp_jobspawn WHERE darkrp_jobspawn.id = OLD.id;
-                    END;
-            ]])
-        end
     MySQLite.commit(fp{migrateDB, -- Migrate the database
         function() -- Initialize the data after all the tables have been created
             setUpNonOwnableDoors()
@@ -203,7 +139,7 @@ function migrateDB(callback)
 
         if migrateCount == 2 then callback() end
     end
-    -- migrte from darkrp_jobown to darkrp_doorjobs
+    -- migrate from darkrp_jobown to darkrp_doorjobs
     MySQLite.tableExists("darkrp_jobown", function(exists)
         if not exists then return onFinish() end
 
@@ -232,37 +168,68 @@ function migrateDB(callback)
         MySQLite.commit(onFinish)
     end)
 
-    if not DarkRP.DBVersion or (DarkRP.DBVersion < 20160610 and DarkRP.DBVersion ~= 0) then
-        if not MySQLite.isMySQL() then
-            -- darkrp_player used to have a UNIQUE rpname field.
-            -- This sucks, get rid of it
-            MySQLite.query([[PRAGMA foreign_keys=OFF]])
+    MySQLite.begin()
 
-            MySQLite.query([[
-                CREATE TABLE IF NOT EXISTS new_darkrp_player(
-                    uid BIGINT NOT NULL PRIMARY KEY,
-                    rpname VARCHAR(45),
-                    salary INTEGER NOT NULL DEFAULT 45,
-                    wallet INTEGER NOT NULL
+    if not DarkRP.DBVersion or (DarkRP.DBVersion < 20160610 and DarkRP.DBVersion ~= 0) then
+        if MySQLite.isMySQL() then
+            -- if only SQLite were this easy
+            MySQLite.queueQuery([[DROP INDEX rpname ON darkrp_player]])
+            return
+        end
+        -- darkrp_player used to have a UNIQUE rpname field.
+        -- This sucks, get rid of it
+        MySQLite.queueQuery([[PRAGMA foreign_keys=OFF]])
+
+        MySQLite.queueQuery([[
+            CREATE TABLE IF NOT EXISTS new_darkrp_player(
+                uid BIGINT NOT NULL PRIMARY KEY,
+                rpname VARCHAR(45),
+                salary INTEGER NOT NULL DEFAULT 45,
+                wallet INTEGER NOT NULL
+            );
+        ]])
+
+        MySQLite.queueQuery([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
+
+        MySQLite.queueQuery([[DROP TABLE darkrp_player]])
+
+        MySQLite.queueQuery([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
+
+        MySQLite.queueQuery([[PRAGMA foreign_keys=ON]])
+
+        DarkRP.DBVersion = 20160610
+    end
+
+    MySQLite.commit(function()
+        if DarkRP.DBVersion >= 20181013 then onFinish() return end
+
+        MySQLite.query([[SELECT * FROM darkrp_jobspawn]], function(oldData)
+            oldData = oldData or {}
+            MySQLite.begin()
+
+            MySQLite.queueQuery([[DROP TABLE darkrp_jobspawn]])
+
+            MySQLite.queueQuery([[
+                CREATE TABLE darkrp_jobspawn(
+                    id INTEGER NOT NULL PRIMARY KEY REFERENCES darkrp_position(id)
+                        ON UPDATE CASCADE
+                        ON DELETE CASCADE,
+
+                    teamcmd VARCHAR(255) NOT NULL
                 );
             ]])
 
-            MySQLite.query([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
+            for i, row in pairs(oldData) do
+                local teamcmd = RPExtraTeams[tonumber(row.team)].command
+                if not teamcmd then continue end
 
-            MySQLite.query([[DROP TABLE darkrp_player]])
+                MySQLite.queueQuery(string.format([[INSERT INTO darkrp_jobspawn(id, teamcmd) VALUES(%s, %s)]], row.id, MySQLite.SQLStr(teamcmd)))
+            end
 
-            MySQLite.query([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
-
-            MySQLite.query([[PRAGMA foreign_keys=ON]])
-
-            onFinish()
-        else
-            -- if only SQLite were this easy
-            MySQLite.query([[DROP INDEX rpname ON darkrp_player]], onFinish)
-        end
-    else
-        onFinish()
-    end
+            MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20181013)]])
+            MySQLite.commit(onFinish)
+        end)
+    end)
 end
 
 --[[---------------------------------------------------------
