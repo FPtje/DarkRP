@@ -174,30 +174,30 @@ function migrateDB(callback)
         if MySQLite.isMySQL() then
             -- if only SQLite were this easy
             MySQLite.queueQuery([[DROP INDEX rpname ON darkrp_player]])
-            return
+        else
+            -- darkrp_player used to have a UNIQUE rpname field.
+            -- This sucks, get rid of it
+            MySQLite.queueQuery([[PRAGMA foreign_keys=OFF]])
+
+            MySQLite.queueQuery([[
+                CREATE TABLE IF NOT EXISTS new_darkrp_player(
+                    uid BIGINT NOT NULL PRIMARY KEY,
+                    rpname VARCHAR(45),
+                    salary INTEGER NOT NULL DEFAULT 45,
+                    wallet INTEGER NOT NULL
+                );
+            ]])
+
+            MySQLite.queueQuery([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
+
+            MySQLite.queueQuery([[DROP TABLE darkrp_player]])
+
+            MySQLite.queueQuery([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
+
+            MySQLite.queueQuery([[PRAGMA foreign_keys=ON]])
+
+            DarkRP.DBVersion = 20160610
         end
-        -- darkrp_player used to have a UNIQUE rpname field.
-        -- This sucks, get rid of it
-        MySQLite.queueQuery([[PRAGMA foreign_keys=OFF]])
-
-        MySQLite.queueQuery([[
-            CREATE TABLE IF NOT EXISTS new_darkrp_player(
-                uid BIGINT NOT NULL PRIMARY KEY,
-                rpname VARCHAR(45),
-                salary INTEGER NOT NULL DEFAULT 45,
-                wallet INTEGER NOT NULL
-            );
-        ]])
-
-        MySQLite.queueQuery([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
-
-        MySQLite.queueQuery([[DROP TABLE darkrp_player]])
-
-        MySQLite.queueQuery([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
-
-        MySQLite.queueQuery([[PRAGMA foreign_keys=ON]])
-
-        DarkRP.DBVersion = 20160610
     end
 
     MySQLite.commit(function()
