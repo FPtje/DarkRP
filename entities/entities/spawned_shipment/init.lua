@@ -102,7 +102,6 @@ function ENT:Use(activator, caller)
 end
 
 function ENT:SpawnItem()
-    if not IsValid(self) then return end
     timer.Remove(self:EntIndex() .. "crate")
     self.sparking = false
     local count = self:Getcount()

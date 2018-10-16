@@ -175,7 +175,6 @@ function meta:updateJob(job)
 end
 
 function meta:teamUnBan(Team)
-    if not IsValid(self) then return end
     self.bannedfrom = self.bannedfrom or {}
 
     local group = DarkRP.getDemoteGroup(Team)
@@ -361,20 +360,22 @@ local function SwitchJob(ply) --Idea by Godness.
     if ply.RequestedJobSwitch then return end
 
     local eyetrace = ply:GetEyeTrace()
-    if not eyetrace or not eyetrace.Entity or not eyetrace.Entity:IsPlayer() then return "" end
+    local ent = eyetrace.Entity
+
+    if not IsValid(ent) or not ent:IsPlayer() then return "" end
 
     local team1 = RPExtraTeams[ply:Team()]
-    local team2 = RPExtraTeams[eyetrace.Entity:Team()]
+    local team2 = RPExtraTeams[ent:Team()]
 
     if not team1 or not team2 then return "" end
-    if team1.customCheck and not team1.customCheck(eyetrace.Entity) or team2.customCheck and not team2.customCheck(ply) then
+    if team1.customCheck and not team1.customCheck(ent) or team2.customCheck and not team2.customCheck(ply) then
         -- notify only the player trying to switch
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "switch jobs", ""))
         return ""
     end
 
     ply.RequestedJobSwitch = true
-    DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob" .. tostring(ply:EntIndex()), eyetrace.Entity, 30, ExecSwitchJob, ply, eyetrace.Entity)
+    DarkRP.createQuestion(DarkRP.getPhrase("job_switch_question", ply:Nick()), "switchjob" .. tostring(ply:EntIndex()), ent, 30, ExecSwitchJob, ply, ent)
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("job_switch_requested"))
 
     return ""
@@ -435,7 +436,7 @@ local function DoTeamUnBan(ply, args)
     local Team = args[2]
 
     local target = DarkRP.findPlayer(ent)
-    if not target or not IsValid(target) then
+    if not target then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", ent or ""))
         return
     end

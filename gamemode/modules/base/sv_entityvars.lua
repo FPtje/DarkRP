@@ -21,7 +21,6 @@ function meta:removeDarkRPVar(var, target)
     self.DarkRPVars = self.DarkRPVars or {}
     self.DarkRPVars[var] = nil
 
-
     net.Start("DarkRP_PlayerVarRemoval")
         net.WriteUInt(self:UserID(), 16)
         DarkRP.writeNetDarkRPVarRemoval(var)
@@ -32,7 +31,6 @@ end
 Set a player's DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:setDarkRPVar(var, value, target)
-    if not IsValid(self) then return end
     target = target or player.GetAll()
 
     if value == nil then return self:removeDarkRPVar(var, target) end
@@ -46,6 +44,10 @@ function meta:setDarkRPVar(var, value, target)
         DarkRP.writeNetDarkRPVar(var, value)
     net.Send(target)
 end
+
+--[[---------------------------------------------------------------------------
+Network all DarkRPVars
+---------------------------------------------------------------------------]]
 
 --[[---------------------------------------------------------------------------
 Set a private DarkRPVar

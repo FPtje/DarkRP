@@ -113,9 +113,9 @@ function DarkRP.initDatabase()
                                         --so he walks around with the settings from the SQLite database
                 for _, v in ipairs(player.GetAll()) do
                     DarkRP.offlinePlayerData(v:SteamID(), function(data)
-                        if not data or not data[1] then return end
+                        local Data = data and data[1]
+                        if not IsValid(v) or not Data then return end
 
-                        local Data = data[1]
                         v:setDarkRPVar("rpname", Data.rpname)
                         v:setSelfDarkRPVar("salary", Data.salary)
                         v:setDarkRPVar("money", Data.wallet)
@@ -375,8 +375,6 @@ function DarkRP.storeSalary(ply, amount)
 end
 
 function DarkRP.retrieveSalary(ply, callback)
-    if not IsValid(ply) then return 0 end
-
     local val =
         ply:getJobTable() and ply:getJobTable().salary or
         RPExtraTeams[GAMEMODE.DefaultTeam].salary or
@@ -392,7 +390,6 @@ Players
 ---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
 function meta:restorePlayerData()
-    if not IsValid(self) then return end
     self.DarkRPUnInitialized = true
 
     DarkRP.retrievePlayerData(self, function(data)
