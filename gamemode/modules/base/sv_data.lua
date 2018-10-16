@@ -414,6 +414,7 @@ function meta:restorePlayerData()
             DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary)
         end
     end, function(err) -- Retrieving data failed, go on without it
+        if not IsValid(self) then return end
         self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
