@@ -307,7 +307,7 @@ end
 
 hook.Add("SetupMove", "DarkRP_DoorRamJump", function(ply, mv)
     local wep = ply:GetActiveWeapon()
-    if not wep:IsValid() or not wep.GetIronsights or not wep:GetIronsights() or wep:GetClass() ~= "door_ram" then return end
+    if not wep:IsValid() or wep:GetClass() ~= "door_ram" or not wep.GetIronsights or not wep:GetIronsights() then return end
 
     mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 end)
