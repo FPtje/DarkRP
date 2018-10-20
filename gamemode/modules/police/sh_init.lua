@@ -16,9 +16,7 @@ function plyMeta:getWantedReason()
 end
 
 function plyMeta:isCP()
-    if not IsValid(self) then return false end
-    local Team = self:Team()
-    return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[Team] or false
+    return GAMEMODE.CivilProtection and GAMEMODE.CivilProtection[self:Team()] or false
 end
 
 plyMeta.isMayor = fn.Compose{fn.Curry(fn.GetValue, 2)("mayor"), plyMeta.getJobTable}

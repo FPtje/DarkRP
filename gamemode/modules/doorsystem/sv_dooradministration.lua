@@ -5,14 +5,15 @@ local function ccDoorUnOwn(ply, args)
     end
 
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or not trace.Entity:getDoorOwner() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or not ent:getDoorOwner() or ply:EyePos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
 
-    trace.Entity:Fire("unlock", "", 0)
-    trace.Entity:keysUnOwn()
+    ent:Fire("unlock", "", 0)
+    ent:keysUnOwn()
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unowned a door with forceunown", Color(30, 30, 30))
     DarkRP.notify(ply, 0, 4, "Forcefully unowned")
 end
@@ -45,7 +46,8 @@ local function ccAddOwner(ply, args)
 
     local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or trace.Entity:getKeysDoorTeams() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
+    local ent = trace.Entity
+    if not IsValid(ent) or not ent:isKeysOwnable() or ent:getKeysNonOwnable() or ent:getKeysDoorGroup() or ent:getKeysDoorTeams() or ply:EyePos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -57,15 +59,15 @@ local function ccAddOwner(ply, args)
         return
     end
 
-    if trace.Entity:isKeysOwned() then
-        if not trace.Entity:isKeysOwnedBy(target) and not trace.Entity:isKeysAllowedToOwn(target) then
-            trace.Entity:addKeysAllowedToOwn(target)
+    if ent:isKeysOwned() then
+        if not ent:isKeysOwnedBy(target) and not ent:isKeysAllowedToOwn(target) then
+            ent:addKeysAllowedToOwn(target)
         else
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("rp_addowner_already_owns_door", target))
         end
         return
     end
-    trace.Entity:keysOwn(target)
+    ent:keysOwn(target)
 
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-added a door owner with forceown", Color(30, 30, 30))
     DarkRP.notify(ply, 0, 4, "Forcefully added " .. target:Nick())
@@ -79,8 +81,9 @@ local function ccRemoveOwner(ply, args)
     end
 
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or trace.Entity:getKeysNonOwnable() or trace.Entity:getKeysDoorGroup() or trace.Entity:getKeysDoorTeams() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ent:getKeysNonOwnable() or ent:getKeysDoorGroup() or ent:getKeysDoorTeams() or ply:EyePos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -92,14 +95,14 @@ local function ccRemoveOwner(ply, args)
         return
     end
 
-    if trace.Entity:isKeysAllowedToOwn(target) then
-        trace.Entity:removeKeysAllowedToOwn(target)
+    if ent:isKeysAllowedToOwn(target) then
+        ent:removeKeysAllowedToOwn(target)
     end
 
-    if trace.Entity:isMasterOwner(target) then
-        trace.Entity:keysUnOwn()
-    elseif trace.Entity:isKeysOwnedBy(target) then
-        trace.Entity:removeKeysDoorOwner(target)
+    if ent:isMasterOwner(target) then
+        ent:keysUnOwn()
+    elseif ent:isKeysOwnedBy(target) then
+       ent:removeKeysDoorOwner(target)
     end
 
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-removed a door owner with forceremoveowner", Color(30, 30, 30))
@@ -114,22 +117,23 @@ local function ccLock(ply, args)
     end
 
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ply:EyePos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
 
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("locked"))
 
-    trace.Entity:keysLock()
+    ent:keysLock()
 
-    if not trace.Entity:CreatedByMap() then return end
+    if not ent:CreatedByMap() then return end
     MySQLite.query(string.format([[REPLACE INTO darkrp_door VALUES(%s, %s, %s, 1, %s);]],
-        MySQLite.SQLStr(trace.Entity:doorIndex()),
+        MySQLite.SQLStr(ent:doorIndex()),
         MySQLite.SQLStr(string.lower(game.GetMap())),
-        MySQLite.SQLStr(trace.Entity:getKeysTitle() or ""),
-        trace.Entity:getKeysNonOwnable() and 1 or 0
+        MySQLite.SQLStr(ent:getKeysTitle() or ""),
+        ent:getKeysNonOwnable() and 1 or 0
         ))
 
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-locked a door with forcelock (locked door is saved)", Color(30, 30, 30))
@@ -144,21 +148,22 @@ local function ccUnLock(ply, args)
     end
 
     local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
 
-    if not IsValid(trace.Entity) or not trace.Entity:isKeysOwnable() or ply:EyePos():DistToSqr(trace.Entity:GetPos()) > 40000 then
+    if not IsValid(ent) or not ent:isKeysOwnable() or ply:EyePos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
 
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("unlocked"))
-    trace.Entity:keysUnLock()
+    ent:keysUnLock()
 
-    if not trace.Entity:CreatedByMap() then return end
+    if not ent:CreatedByMap() then return end
     MySQLite.query(string.format([[REPLACE INTO darkrp_door VALUES(%s, %s, %s, 0, %s);]],
-        MySQLite.SQLStr(trace.Entity:doorIndex()),
+        MySQLite.SQLStr(ent:doorIndex()),
         MySQLite.SQLStr(string.lower(game.GetMap())),
-        MySQLite.SQLStr(trace.Entity:getKeysTitle() or ""),
-        trace.Entity:getKeysNonOwnable() and 1 or 0
+        MySQLite.SQLStr(ent:getKeysTitle() or ""),
+        ent:getKeysNonOwnable() and 1 or 0
         ))
 
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") force-unlocked a door with forcelock (unlocked door is saved)", Color(30, 30, 30))

@@ -113,9 +113,9 @@ function DarkRP.initDatabase()
                                         --so he walks around with the settings from the SQLite database
                 for _, v in ipairs(player.GetAll()) do
                     DarkRP.offlinePlayerData(v:SteamID(), function(data)
-                        if not data or not data[1] then return end
+                        local Data = data and data[1]
+                        if not IsValid(v) or not Data then return end
 
-                        local Data = data[1]
                         v:setDarkRPVar("rpname", Data.rpname)
                         v:setSelfDarkRPVar("salary", Data.salary)
                         v:setDarkRPVar("money", Data.wallet)
@@ -309,6 +309,8 @@ function DarkRP.retrievePlayerData(ply, callback, failed, attempts, err)
     if attempts > 3 then return failed(err) end
 
     DarkRP.offlinePlayerData(ply:SteamID(), callback, function(sqlErr)
+        if not IsValid(ply) then return end
+
         DarkRP.retrievePlayerData(ply, callback, failed, attempts + 1, sqlErr)
     end)
 end
@@ -329,7 +331,6 @@ function DarkRP.createPlayerData(ply, name, wallet, salary)
 end
 
 function DarkRP.storeMoney(ply, amount)
-    if not IsValid(ply) then return end
     if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then return end
 
     -- Also keep deprecated UniqueID data at least somewhat up to date
@@ -354,7 +355,7 @@ function DarkRP.storeOfflineMoney(sid64, amount)
     MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. uniqueid .. [[ OR uid = ]] .. sid64)
 end
 
-local function resetAllMoney(ply,cmd,args)
+local function resetAllMoney(ply, cmd, args)
     if ply:EntIndex() ~= 0 and not ply:IsSuperAdmin() then return end
     MySQLite.query("UPDATE darkrp_player SET wallet = " .. GAMEMODE.Config.startingmoney .. " ;")
     for _, v in ipairs(player.GetAll()) do
@@ -375,8 +376,6 @@ function DarkRP.storeSalary(ply, amount)
 end
 
 function DarkRP.retrieveSalary(ply, callback)
-    if not IsValid(ply) then return 0 end
-
     local val =
         ply:getJobTable() and ply:getJobTable().salary or
         RPExtraTeams[GAMEMODE.DefaultTeam].salary or
@@ -392,7 +391,6 @@ Players
 ---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
 function meta:restorePlayerData()
-    if not IsValid(self) then return end
     self.DarkRPUnInitialized = true
 
     DarkRP.retrievePlayerData(self, function(data)
@@ -416,6 +414,7 @@ function meta:restorePlayerData()
             DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary)
         end
     end, function(err) -- Retrieving data failed, go on without it
+        if not IsValid(self) then return end
         self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)

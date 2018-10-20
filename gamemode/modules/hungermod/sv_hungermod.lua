@@ -20,7 +20,7 @@ local function HMAFKHook(ply, afk)
     if afk then
         ply.preAFKHunger = ply:getDarkRPVar("Energy")
     else
-        ply:setDarkRPVar("Energy", ply.preAFKHunger or 100)
+        ply:setSelfDarkRPVar("Energy", ply.preAFKHunger or 100)
         ply.preAFKHunger = nil
     end
 end

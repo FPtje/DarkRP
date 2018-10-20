@@ -16,11 +16,11 @@ Player vars
 Remove a player's DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:removeDarkRPVar(var, target)
-    hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, nil)
+    local vars = self.DarkRPVars
+    hook.Call("DarkRPVarChanged", nil, self, var, (vars and vars[var]) or nil, nil)
     target = target or player.GetAll()
-    self.DarkRPVars = self.DarkRPVars or {}
-    self.DarkRPVars[var] = nil
-
+    vars = vars or {}
+    vars[var] = nil
 
     net.Start("DarkRP_PlayerVarRemoval")
         net.WriteUInt(self:UserID(), 16)
@@ -32,14 +32,14 @@ end
 Set a player's DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:setDarkRPVar(var, value, target)
-    if not IsValid(self) then return end
     target = target or player.GetAll()
 
     if value == nil then return self:removeDarkRPVar(var, target) end
-    hook.Call("DarkRPVarChanged", nil, self, var, (self.DarkRPVars and self.DarkRPVars[var]) or nil, value)
+    local vars = self.DarkRPVars
+    hook.Call("DarkRPVarChanged", nil, self, var, (vars and vars[var]) or nil, value)
 
-    self.DarkRPVars = self.DarkRPVars or {}
-    self.DarkRPVars[var] = value
+    vars = vars or {}
+    vars[var] = value
 
     net.Start("DarkRP_PlayerVar")
         net.WriteUInt(self:UserID(), 16)
@@ -51,8 +51,10 @@ end
 Set a private DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:setSelfDarkRPVar(var, value)
-    self.privateDRPVars = self.privateDRPVars or {}
-    self.privateDRPVars[var] = true
+    local vars = self.privateDRPVars
+
+    vars = vars or {}
+    vars[var] = true
 
     self:setDarkRPVar(var, value, self)
 end
@@ -61,8 +63,10 @@ end
 Get a DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:getDarkRPVar(var)
-    self.DarkRPVars = self.DarkRPVars or {}
-    return self.DarkRPVars[var]
+    local vars = self.DarkRPVars
+
+    vars = vars or {}
+    return vars[var]
 end
 
 --[[---------------------------------------------------------------------------
@@ -84,8 +88,9 @@ function meta:sendDarkRPVars()
                 table.insert(DarkRPVars, var)
             end
 
-            net.WriteUInt(#DarkRPVars, DarkRP.DARKRP_ID_BITS + 2) -- Allow for three times as many unknown DarkRPVars than the limit
-            for i = 1, #DarkRPVars, 1 do
+            local vars_cnt = #DarkRPVars
+            net.WriteUInt(vars_cnt, DarkRP.DARKRP_ID_BITS + 2) -- Allow for three times as many unknown DarkRPVars than the limit
+            for i = 1, vars_cnt, 1 do
                 DarkRP.writeNetDarkRPVar(DarkRPVars[i], target.DarkRPVars[DarkRPVars[i]])
             end
         end
@@ -118,6 +123,8 @@ local function setRPName(ply, args)
     local oldname = target:Nick()
 
     DarkRP.retrieveRPNames(name, function(taken)
+        if not IsValid(target) then return end
+
         if taken then
             DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("unable", "RPname", DarkRP.getPhrase("already_taken")))
             return
@@ -189,7 +196,7 @@ function meta:setRPName(name, firstRun)
     -- Make sure nobody on this server already has this RP name
     local lowername = string.lower(tostring(name))
     DarkRP.retrieveRPNames(name, function(taken)
-        if string.len(lowername) < 2 and not firstrun then return end
+        if not IsValid(self) or string.len(lowername) < 2 and not firstrun then return end
         -- If we found that this name exists for another player
         if taken then
             if firstRun then
@@ -209,7 +216,6 @@ function meta:setRPName(name, firstRun)
         end
     end)
 end
-
 
 --[[---------------------------------------------------------------------------
 Maximum entity values
