@@ -91,7 +91,7 @@ function meta:keysUnOwn(ply, tax)
     end
 
     if tax then
-        local isAllowed = hook.Call("canTaxRemove", nil, ply, self, tax)
+        local isAllowed = hook.Call("canTaxRemove", nil, ply, self)
         if isAllowed == false then return end
     end
 
