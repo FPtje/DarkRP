@@ -46,9 +46,6 @@ function meta:keysOwn(ply)
         return
     end
 
-    local isAllowed = hook.Call("canOwn" .. (self:IsVehicle() and "Vehicle" or "Door"), nil, ply, self)
-    if isAllowed == false then return end
-
     local Owner = self:CPPIGetOwner()
 
     -- Increase vehicle count
@@ -83,7 +80,6 @@ function meta:keysOwn(ply)
     end
 
     ply.OwnedNumz = ply.OwnedNumz + 1
-
     ply.Ownedz[self:EntIndex()] = self
 end
 
@@ -94,8 +90,10 @@ function meta:keysUnOwn(ply, tax)
         if not IsValid(ply) then return end
     end
 
-    local isAllowed = hook.Call("canUnOwn" .. (self:IsVehicle() and "Vehicle" or "Door"), nil, ply, self, tax)
-    if isAllowed == false then return end
+    if tax then
+        local isAllowed = hook.Call("canTaxRemove" .. (self:IsVehicle() and "Vehicle" or "Door"), nil, ply, self, tax)
+        if isAllowed == false then return end
+    end
 
     if self:isMasterOwner(ply) then
         local doorData = self:getDoorData()
