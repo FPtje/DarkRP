@@ -408,7 +408,7 @@ local function UnOwnAll(ply, cmd, args)
     if ply.Ownedz then
         for k, v in pairs(ply.Ownedz) do
             if not v:isKeysOwnable() then ply.Ownedz[k] = nil continue end
-            local bAllowed, strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
+            local bAllowed, strReason = hook.Call("playerSell" .. (v:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, v)
 
             if bAllowed == false then
                 if strReason and strReason ~= "" then
