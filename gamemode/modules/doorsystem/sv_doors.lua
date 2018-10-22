@@ -112,11 +112,14 @@ function meta:keysUnOwn(ply, tax)
 end
 
 function pmeta:keysUnOwnAll(tax)
+    local count = 0
+
     if self.Ownedz then
         for k, v in pairs(self.Ownedz) do
             if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
             v:Fire("unlock", "", 0.6)
             v:keysUnOwn(self, tax)
+            count = count + 1
         end
     end
 
@@ -129,6 +132,8 @@ function pmeta:keysUnOwnAll(tax)
     end
 
     self.OwnedNumz = 0
+
+    return count > 0 and true or false
 end
 
 function pmeta:doPropertyTax()
@@ -156,8 +161,9 @@ function pmeta:doPropertyTax()
             DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
         end
     else
-        DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
-        self:keysUnOwnAll()
+        if self:keysUnOwnAll(true) then
+            DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
+        end
     end
 
     hook.Call("onPropertyTax", GAMEMODE, self, tax, canAfford)
