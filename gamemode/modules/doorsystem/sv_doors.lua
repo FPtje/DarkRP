@@ -46,7 +46,7 @@ function meta:keysOwn(ply)
         return
     end
 
-    local isAllowed = hook.Call("canOwn" .. (self:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, self)
+    local isAllowed = hook.Call("canOwn" .. (self:IsVehicle() and "Vehicle" or "Door"), nil, ply, self)
     if isAllowed == false then return end
 
     local Owner = self:CPPIGetOwner()
@@ -94,7 +94,7 @@ function meta:keysUnOwn(ply, tax)
         if not IsValid(ply) then return end
     end
 
-    local isAllowed = hook.Call("canUnOwn" .. (self:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, self, tax)
+    local isAllowed = hook.Call("canUnOwn" .. (self:IsVehicle() and "Vehicle" or "Door"), nil, ply, self, tax)
     if isAllowed == false then return end
 
     if self:isMasterOwner(ply) then
@@ -147,7 +147,7 @@ function pmeta:doPropertyTax()
     local price = 10
     local tax = price * numowned + math.random(-5, 5)
 
-    local shouldTax, taxOverride = hook.Call("canPropertyTax", GAMEMODE, self, tax)
+    local shouldTax, taxOverride = hook.Call("canPropertyTax", nil, self, tax)
 
     if shouldTax == false then return end
 
@@ -166,7 +166,7 @@ function pmeta:doPropertyTax()
         end
     end
 
-    hook.Call("onPropertyTax", GAMEMODE, self, tax, canAfford)
+    hook.Call("onPropertyTax", nil, self, tax, canAfford)
 end
 
 function pmeta:initiateTax()
@@ -195,7 +195,7 @@ function pmeta:initiateTax()
 
         local taxAmount = tax * money
 
-        local shouldTax, amount = hook.Call("canTax", GAMEMODE, self, taxAmount)
+        local shouldTax, amount = hook.Call("canTax", nil, self, taxAmount)
 
         if shouldTax == false then return end
 
