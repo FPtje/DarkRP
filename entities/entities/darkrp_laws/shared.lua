@@ -73,6 +73,11 @@ DarkRP.hookStub{
             name = "law",
             description = "Law string",
             type = "string"
+        },
+        {
+            name = "player",
+            description = "The player who added the law",
+            type = "Player"
         }
     },
     returns = {
@@ -93,6 +98,11 @@ DarkRP.hookStub{
             name = "law",
             description = "Law string",
             type = "string"
+        },
+        {
+            name = "player",
+            description = "The player who removed the law",
+            type = "Player"
         }
     },
     returns = {
