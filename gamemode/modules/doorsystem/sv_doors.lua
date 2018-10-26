@@ -83,16 +83,11 @@ function meta:keysOwn(ply)
     ply.Ownedz[self:EntIndex()] = self
 end
 
-function meta:keysUnOwn(ply, tax)
+function meta:keysUnOwn(ply)
     if not ply then
         ply = self:getDoorOwner()
 
         if not IsValid(ply) then return end
-    end
-
-    if tax then
-        local isAllowed = hook.Call("canTaxRemove", nil, ply, self)
-        if isAllowed == false then return end
     end
 
     if self:isMasterOwner(ply) then
@@ -115,8 +110,12 @@ function pmeta:keysUnOwnAll(tax)
     if self.Ownedz then
         for k, v in pairs(self.Ownedz) do
             if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
+            if tax then
+                local isAllowed = hook.Call("canTaxUnOwn", nil, self, v)
+                if isAllowed == false then return end
+            end
             v:Fire("unlock", "", 0.6)
-            v:keysUnOwn(self, tax)
+            v:keysUnOwn(self)
             count = count + 1
         end
     end
