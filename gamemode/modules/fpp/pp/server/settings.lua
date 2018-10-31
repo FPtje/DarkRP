@@ -138,8 +138,17 @@ local function runIfAccess(priv, f)
 end
 
 local function FPP_SetSetting(ply, cmd, args)
-    if not args[1] or not args[3] or not FPP.Settings[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
-    if not FPP.Settings[args[1]][args[2]] then FPP.Notify(ply, "Argument invalid",false) return end
+    if not args[1] then FPP.Notify(ply, "FPP_setting: First argument (setting name) not given!", false) return end
+    if not args[3] then FPP.Notify(ply, "FPP_setting: Third argument (the value of the setting) not given", false) return end
+    if not FPP.Settings[args[1]] then
+        FPP.Notify(ply, ("FPP_setting: Setting %s does not exist! Settings that DO exist:"):format(args[1]), false)
+
+        for setting, _ in pairs(FPP.Settings) do
+            FPP.Notify(ply, setting, false)
+        end
+        return
+    end
+    if not FPP.Settings[args[1]][args[2]] then FPP.Notify(ply, ("FPP_setting: Setting %s.%s does not exist!"):format(args[1], args[2]), false) return end
 
     updateFPPSetting(args[1], args[2], tonumber(args[3]))
 
@@ -163,7 +172,10 @@ end
 concommand.Add("FPP_setting", runIfAccess("FPP_Settings", FPP_SetSetting))
 
 local function AddBlocked(ply, cmd, args)
-    if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+    if not args[1]              then FPP.Notify(ply, "FPP_AddBlocked: Block list not given", false) return end
+    if not args[2]              then FPP.Notify(ply, "FPP_AddBlocked: Entity to block not given", false) return end
+    if not FPP.Blocked[args[1]] then FPP.Notify(ply, ("FPP_AddBlocked: Block list %s does not exist"):format(args[1]), false) return end
+
     args[2] = string.lower(args[2])
     if FPP.Blocked[args[1]][args[2]] then return end
     FPP.Blocked[args[1]][args[2]] = true
@@ -190,7 +202,7 @@ local function getIntendedBlockedModels(model, ent)
 end
 
 local function AddBlockedModel(ply, cmd, args)
-    if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+    if not args[1] then FPP.Notify(ply, "FPP_AddBlockedModel: Model not given", false) return end
 
     local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
@@ -204,7 +216,9 @@ end
 concommand.Add("FPP_AddBlockedModel", runIfAccess("FPP_Settings", AddBlockedModel))
 
 local function RemoveBlocked(ply, cmd, args)
-    if not args[1] or not args[2] or not FPP.Blocked[args[1]] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+    if not args[1]              then FPP.Notify(ply, "FPP_RemoveBlocked: Block list not given", false) return end
+    if not args[2]              then FPP.Notify(ply, "FPP_RemoveBlocked: Entity to block not given", false) return end
+    if not FPP.Blocked[args[1]] then FPP.Notify(ply, ("FPP_RemoveBlocked: Block list %s does not exist"):format(args[1]), false) return end
 
     FPP.Blocked[args[1]][args[2]] = nil
 
@@ -215,7 +229,7 @@ end
 concommand.Add("FPP_RemoveBlocked", runIfAccess("FPP_Settings", RemoveBlocked))
 
 local function RemoveBlockedModel(ply, cmd, args)
-    if not args[1] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+    if not args[1] then FPP.Notify(ply, "FPP_RemoveBlockedModel: Model not given", false) return end
     local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
     for _, model in pairs(models) do
@@ -235,7 +249,10 @@ local allowedShares = {
     ShareToolgun1 = true
 }
 local function ShareProp(ply, cmd, args)
-    if not args[1] or not IsValid(Entity(args[1])) or not args[2] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+    if not args[1]                  then FPP.Notify(ply, "FPP_ShareProp: Entity not given", false) return end
+    if not IsValid(Entity(args[1])) then FPP.Notify(ply, "FPP_ShareProp: Entity not valid", false) return end
+    if not args[2]                  then FPP.Notify(ply, "FPP_ShareProp: Player to share with not given", false) return end
+
     local ent = Entity(args[1])
 
     if ent:CPPIGetOwner() ~= ply then
@@ -245,7 +262,7 @@ local function ShareProp(ply, cmd, args)
 
     if not tonumber(args[2]) or not IsValid(Player(tonumber(args[2]))) then -- This is for sharing prop per utility
         if not allowedShares[args[2]] then
-            FPP.Notify(ply, "Argument(s) invalid", false)
+            FPP.Notify(ply, "FPP_ShareProp: Player to share with doesn't exist", false)
             return
         end
         ent[args[2]] = tobool(args[3])
@@ -764,7 +781,7 @@ local function changeBuddies(ply, buddy, settings)
 end
 
 local function SetBuddy(ply, cmd, args)
-    if not args[6] then FPP.Notify(ply, "Argument(s) invalid", false) return end
+    if not args[6] then FPP.Notify(ply, "FPP_SetBuddy: Not enough arguments given!", false) return end
     local buddy = tonumber(args[1]) and Player(tonumber(args[1]))
     if not IsValid(buddy) then FPP.Notify(ply, "Player invalid", false) return end
 
