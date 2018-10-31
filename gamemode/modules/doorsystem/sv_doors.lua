@@ -76,7 +76,7 @@ function meta:keysOwn(ply)
 
     ply.OwnedNumz = ply.OwnedNumz or 0
     if ply.OwnedNumz == 0 and GAMEMODE.Config.propertytax then
-        timer.Create(ply:SteamID64() .. "propertytax", 270, 0, function() ply.doPropertyTax(ply) end)
+        timer.Create(ply:SteamID64() .. "propertytax", 270, 0, function() ply:doPropertyTax() end)
     end
 
     ply.OwnedNumz = ply.OwnedNumz + 1
@@ -131,17 +131,55 @@ function pmeta:keysUnOwnAll()
     self.OwnedNumz = 0
 end
 
+-- Fixed point algorithm that lets addon writers decide which entities get
+-- taxed
+local function decideTaxables(ply, ownedEnts)
+    local taxables = {}
+
+    -- Simplified equality function
+    local eq = function(a, b)
+        for k, _ in pairs(a) do
+            if a[k] == true and b[k] ~= true then return false end
+        end
+        for k, _ in pairs(b) do
+            if b[k] == true and a[k] ~= true then return false end
+        end
+        return true
+    end
+
+    for k, v in pairs(ownedEnts) do
+        taxables[v] = true
+    end
+
+    local listeners = hook.GetTable().taxableEntities or {}
+
+    -- Limit the fixpoint algorithm arbitrarily
+    local iterations = 0
+
+    local newTaxables = taxables
+    repeat
+        iterations = iterations + 1
+        taxables = newTaxables
+        newTaxables = table.Copy(newTaxables)
+        for _, listener in pairs(listeners) do
+            newTaxables = listener(ply, newTaxables) or newTaxables
+        end
+    until eq(taxables, newTaxables) or iterations == 5
+
+    return taxables
+end
+
 function pmeta:doPropertyTax()
     if not GAMEMODE.Config.propertytax then return end
     if self:isCP() and GAMEMODE.Config.cit_propertytax then return end
 
-    local numowned = self.OwnedNumz
-
-    if not numowned or numowned <= 0 then return end
-
     local price = 10
-    local tax = price * numowned + math.random(-5, 5)
+    local taxableEntities = decideTaxables(self, self.Ownedz)
+    local numTaxable = table.Count(taxableEntities)
 
+    if numTaxable == 0 then return end
+
+    local tax = price * numTaxable + math.random(-5, 5)
     local shouldTax, taxOverride = hook.Run("canPropertyTax", self, tax)
 
     if shouldTax == false then return end
@@ -157,7 +195,10 @@ function pmeta:doPropertyTax()
         end
     else
         DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
-        self:keysUnOwnAll()
+
+        for _, ent in pairs(taxableEntities) do
+            ent:keysUnOwn()
+        end
     end
 
     hook.Run("onPropertyTax", self, tax, canAfford)

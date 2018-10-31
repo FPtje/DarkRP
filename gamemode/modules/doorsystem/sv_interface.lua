@@ -803,6 +803,30 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "taxableEntities",
+    description = "With this hook you can decide which entities are to be taxed.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player whose property will be taxed.",
+            type = "Player"
+        },
+        {
+            name = "taxables",
+            description = "Table holding entities that will be taxed as keys and 'true' as value. NOTE: Your function may be called different times with different values. Try to use this table to come to your answer. To remove something, please remove entities from the table (as opposed to setting them to 'false')",
+            type = "table"
+        }
+    },
+    returns = {
+        {
+            name = "taxables",
+            description = "Table holding entities that will be taxed as keys and 'true' as value.",
+            type = "table"
+        },
+    }
+}
+
+DarkRP.hookStub{
     name = "onPropertyTax",
     description = "Called right AFTER a player's property is taxed. Please use canPropertyTax if you want to influence the taxing process.",
     parameters = {
