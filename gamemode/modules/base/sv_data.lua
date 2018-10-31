@@ -139,6 +139,11 @@ function migrateDB(callback)
 
         if migrateCount == 2 then callback() end
     end
+
+    if MySQLite.isMySQL() then
+        MySQLite.query([[DROP TRIGGER IF EXISTS JobPositionFKDelete]])
+    end
+
     -- migrate from darkrp_jobown to darkrp_doorjobs
     MySQLite.tableExists("darkrp_jobown", function(exists)
         if not exists then return onFinish() end
