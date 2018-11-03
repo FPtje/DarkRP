@@ -206,6 +206,8 @@ GM.Config.jailtimer                     = 120
 GM.Config.lockdowndelay                 = 120
 -- maxadvertbillboards - The maximum number of /advert billboards a player can place.
 GM.Config.maxadvertbillboards           = 3
+-- maxCheques - The maximum number of cheques someone can write
+GM.Config.maxCheques                    = 5
 -- maxdoors - Sets the max amount of doors one can own.
 GM.Config.maxdoors                      = 20
 -- maxdrugs - Sets max drugs.

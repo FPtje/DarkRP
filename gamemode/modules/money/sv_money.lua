@@ -181,6 +181,11 @@ local function CreateCheque(ply, args)
     local recipient = DarkRP.findPlayer(args[1])
     local amount = tonumber(args[2]) or 0
 
+    local chequeTable =
+        { cmd = "cheque"
+        , max = GAMEMODE.Config.maxCheques
+        }
+
     if not recipient then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "recipient (1)"))
         return ""
@@ -197,6 +202,14 @@ local function CreateCheque(ply, args)
         return ""
     end
 
+    if ply:customEntityLimitReached(chequeTable) then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "cheque"))
+
+        return ""
+    end
+
+    ply:addCustomEntity(chequeTable)
+
     if IsValid(ply) and IsValid(recipient) then
         ply:addMoney(-amount)
     end
@@ -207,25 +220,28 @@ local function CreateCheque(ply, args)
     ply.anim_DroppingItem = true
 
     timer.Simple(1, function()
-        if IsValid(ply) and IsValid(recipient) then
-            local trace = {}
-            trace.start = ply:EyePos()
-            trace.endpos = trace.start + ply:GetAimVector() * 85
-            trace.filter = ply
-
-            local tr = util.TraceLine(trace)
-            local Cheque = ents.Create("darkrp_cheque")
-            Cheque:SetPos(tr.HitPos)
-            Cheque:Setowning_ent(ply)
-            Cheque:Setrecipient(recipient)
-
-            local min_amount = math.Min(amount, 2147483647)
-            Cheque:Setamount(min_amount)
-            Cheque:Spawn()
-            hook.Call("playerDroppedCheque", nil, ply, recipient, min_amount, Cheque)
-        else
+        if not IsValid(ply) then return end
+        if not IsValid(recipient) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/cheque", ""))
+            return
         end
+
+        local trace = {}
+        trace.start = ply:EyePos()
+        trace.endpos = trace.start + ply:GetAimVector() * 85
+        trace.filter = ply
+
+        local tr = util.TraceLine(trace)
+        local Cheque = ents.Create("darkrp_cheque")
+        Cheque.DarkRPItem = chequeTable
+        Cheque:SetPos(tr.HitPos)
+        Cheque:Setowning_ent(ply)
+        Cheque:Setrecipient(recipient)
+
+        local min_amount = math.Min(amount, 2147483647)
+        Cheque:Setamount(min_amount)
+        Cheque:Spawn()
+        hook.Call("playerDroppedCheque", nil, ply, recipient, min_amount, Cheque)
     end)
     return ""
 end
