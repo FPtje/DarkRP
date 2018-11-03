@@ -127,13 +127,46 @@ function pmeta:keysUnOwnAll()
     self.OwnedNumz = 0
 end
 
+local function taxesUnOwnAll(ply, taxables)
+    for _, ent in pairs(taxables) do
+        if ent:isMasterOwner(ply) then
+            ent:Fire("unlock", "", 0.6)
+        end
+
+        ent:keysUnOwn(ply)
+    end
+end
+
 function pmeta:doPropertyTax()
     if not GAMEMODE.Config.propertytax then return end
     if self:isCP() and GAMEMODE.Config.cit_propertytax then return end
 
-    local numowned = self.OwnedNumz
+    local taxables = {}
 
-    if not numowned or numowned <= 0 then return end
+    for _, ent in pairs(self.Ownedz or {}) do
+        local isAllowed = hook.Call("canTaxEntity", nil, self, ent)
+        if isAllowed == false then continue end
+
+        table.insert(taxables, ent)
+    end
+
+    -- co-owned doors
+    for _, ply in ipairs(player.GetAll()) do
+        if ply == self then continue end
+
+        for _, ent in pairs(ply.Ownedz or {}) do
+            if not IsValid(ent) or not ent:isKeysOwnedBy(self) then continue end
+
+            local isAllowed = hook.Call("canTaxEntity", nil, self, ent)
+            if isAllowed == false then continue end
+
+            table.insert(taxables, ent)
+        end
+    end
+
+    local numowned = #taxables
+
+    if numowned <= 0 then return end
 
     local price = 10
     local tax = price * numowned + math.random(-5, 5)
@@ -143,17 +176,16 @@ function pmeta:doPropertyTax()
     if shouldTax == false then return end
 
     tax = taxOverride or tax
+    if tax == 0 then return end
 
     local canAfford = self:canAfford(tax)
 
     if canAfford then
-        if tax ~= 0 then
-            self:addMoney(-tax)
-            DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
-        end
+        self:addMoney(-tax)
+        DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
     else
+        taxesUnOwnAll(self, taxables)
         DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
-        self:keysUnOwnAll()
     end
 
     hook.Call("onPropertyTax", nil, self, tax, canAfford)

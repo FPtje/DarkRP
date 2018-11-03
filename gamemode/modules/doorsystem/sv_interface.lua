@@ -774,6 +774,30 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "canTaxEntity",
+    description = "Called right before a player's property is taxed. Decides per entity whether it can be taxed.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player whose property will be taxed.",
+            type = "Player"
+        },
+        {
+            name = "ent",
+            description = "The door or vehicle that is to be taxed",
+            type = "Entity"
+        }
+    },
+    returns = {
+        {
+            name = "shouldTax",
+            description = "Return false here to prevent this specific entity from being taxed.",
+            type = "boolean"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "canPropertyTax",
     description = "Called right before a player's property is taxed. This hook differs from onPropertyTax in that onPropertyTax is called AFTER the taxing. With this hook, one can influence the taxing process.",
     parameters = {
