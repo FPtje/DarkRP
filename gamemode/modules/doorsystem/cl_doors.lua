@@ -4,14 +4,15 @@ local white = Color(255, 255, 255, 200)
 local red = Color(128, 30, 30, 255)
 
 function meta:drawOwnableInfo()
-    if LocalPlayer():InVehicle() then return end
+    local ply = LocalPlayer()
+    if ply:InVehicle() then return end
 
     -- Look, if you want to change the way door ownership is drawn, don't edit this file, use the hook instead!
     local doorDrawing = hook.Call("HUDDrawDoorData", nil, self)
     if doorDrawing == true then return end
 
     local blocked = self:getKeysNonOwnable()
-    local superadmin = LocalPlayer():IsSuperAdmin()
+    local superadmin = ply:IsSuperAdmin()
     local doorTeams = self:getKeysDoorTeams()
     local doorGroup = self:getKeysDoorGroup()
     local playerOwned = self:isKeysOwned() or table.GetFirstValue(self:getKeysCoOwners() or {}) ~= nil

@@ -142,7 +142,7 @@ function pmeta:doPropertyTax()
     local price = 10
     local tax = price * numowned + math.random(-5, 5)
 
-    local shouldTax, taxOverride = hook.Run("canPropertyTax", self, tax)
+    local shouldTax, taxOverride = hook.Call("canPropertyTax", nil, self, tax)
 
     if shouldTax == false then return end
 
@@ -160,7 +160,7 @@ function pmeta:doPropertyTax()
         self:keysUnOwnAll()
     end
 
-    hook.Run("onPropertyTax", self, tax, canAfford)
+    hook.Call("onPropertyTax", nil, self, tax, canAfford)
 end
 
 function pmeta:initiateTax()
@@ -189,7 +189,7 @@ function pmeta:initiateTax()
 
         local taxAmount = tax * money
 
-        local shouldTax, amount = hook.Run("canTax", self, taxAmount)
+        local shouldTax, amount = hook.Call("canTax", GAMEMODE, self, taxAmount)
 
         if shouldTax == false then return end
 
