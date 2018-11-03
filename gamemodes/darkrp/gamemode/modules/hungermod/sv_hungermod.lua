@@ -20,7 +20,7 @@ local function HMAFKHook(ply, afk)
     if afk then
         ply.preAFKHunger = ply:getDarkRPVar("Energy")
     else
-        ply:setDarkRPVar("Energy", ply.preAFKHunger or 100)
+        ply:setSelfDarkRPVar("Energy", ply.preAFKHunger or 100)
         ply.preAFKHunger = nil
     end
 end
@@ -54,15 +54,18 @@ local function BuyFood(ply, args)
             return ""
         end
 
-        ply.maxFoodItems = ply.maxFoodItems or 0
+        local foodTable =
+            { cmd = "buyfood"
+            , max = GAMEMODE.Config.maxfooditems
+            }
 
-        if ply.maxFoodItems > GAMEMODE.Config.maxfooditems then
+        if ply:customEntityLimitReached(foodTable) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "buyfood"))
 
             return ""
         end
 
-        ply.maxFoodItems = ply.maxFoodItems + 1
+        ply:addCustomEntity(foodTable)
 
         local cost = v.price
 
@@ -74,16 +77,12 @@ local function BuyFood(ply, args)
         DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", v.name, DarkRP.formatMoney(cost), ""))
 
         local SpawnedFood = ents.Create("spawned_food")
+        SpawnedFood.DarkRPItem = foodTable
         SpawnedFood:Setowning_ent(ply)
         SpawnedFood:SetPos(tr.HitPos)
         SpawnedFood.onlyremover = true
         SpawnedFood.SID = ply.SID
         SpawnedFood:SetModel(v.model)
-
-        SpawnedFood:CallOnRemove("maxFoodItems", function()
-            if not IsValid(ply) then return end
-            ply.maxFoodItems = ply.maxFoodItems - 1
-        end)
 
         -- for backwards compatibility
         SpawnedFood.FoodName = v.name

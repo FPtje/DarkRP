@@ -117,7 +117,6 @@ function FPP.AntiSpam.DuplicatorSpam(ply)
     return true
 end
 
-
 local function IsEmpty(ent)
     local mins, maxs = ent:LocalToWorld(ent:OBBMins( )), ent:LocalToWorld(ent:OBBMaxs( ))
     local tr = {}

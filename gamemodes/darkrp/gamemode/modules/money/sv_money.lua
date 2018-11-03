@@ -14,13 +14,11 @@ function meta:addMoney(amount)
 end
 
 function DarkRP.payPlayer(ply1, ply2, amount)
-    if not IsValid(ply1) or not IsValid(ply2) then return end
     ply1:addMoney(-amount)
     ply2:addMoney(amount)
 end
 
 function meta:payDay()
-    if not IsValid(self) then return end
     if not self:isArrested() then
         DarkRP.retrieveSalary(self, function(amount)
             amount = math.floor(amount or GAMEMODE.Config.normalsalary)
@@ -64,9 +62,11 @@ local function GiveMoney(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
         return ""
     end
-    local trace = ply:GetEyeTrace()
 
-    if not IsValid(trace.Entity) or not trace.Entity:IsPlayer() or trace.Entity:GetPos():DistToSqr(ply:GetPos()) >= 22500 then
+    local trace = ply:GetEyeTrace()
+    local ent = trace.Entity
+
+    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(ply:GetPos()) >= 22500 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
         return ""
     end
@@ -104,15 +104,17 @@ local function GiveMoney(ply, args)
         end
 
         local trace2 = ply:GetEyeTrace()
-        if not IsValid(trace2.Entity) or not trace2.Entity:IsPlayer() or trace2.Entity:GetPos():DistToSqr(ply:GetPos()) >= 22500 then return end
+        local ent2 = trace2.Entity
 
-        DarkRP.payPlayer(ply, trace2.Entity, amount)
+        if not IsValid(ent2) or not ent2:IsPlayer() or ent2:GetPos():DistToSqr(ply:GetPos()) >= 22500 then return end
 
-        hook.Call("playerGaveMoney", nil, ply, trace2.Entity, amount)
+        DarkRP.payPlayer(ply, ent2, amount)
 
-        DarkRP.notify(trace2.Entity, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), DarkRP.formatMoney(amount)))
-        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", trace2.Entity:Nick(), DarkRP.formatMoney(amount)))
-        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has given " .. DarkRP.formatMoney(amount) .. " to " .. trace2.Entity:Nick() .. " (" .. trace2.Entity:SteamID() .. ")")
+        hook.Call("playerGaveMoney", nil, ply, ent2, amount)
+
+        DarkRP.notify(ent2, 0, 4, DarkRP.getPhrase("has_given", ply:Nick(), DarkRP.formatMoney(amount)))
+        DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_gave", ent2:Nick(), DarkRP.formatMoney(amount)))
+        DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has given " .. DarkRP.formatMoney(amount) .. " to " .. ent2:Nick() .. " (" .. ent2:SteamID() .. ")")
     end)
 
     return ""
@@ -179,6 +181,11 @@ local function CreateCheque(ply, args)
     local recipient = DarkRP.findPlayer(args[1])
     local amount = tonumber(args[2]) or 0
 
+    local chequeTable =
+        { cmd = "cheque"
+        , max = GAMEMODE.Config.maxCheques
+        }
+
     if not recipient then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "recipient (1)"))
         return ""
@@ -195,6 +202,14 @@ local function CreateCheque(ply, args)
         return ""
     end
 
+    if ply:customEntityLimitReached(chequeTable) then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "cheque"))
+
+        return ""
+    end
+
+    ply:addCustomEntity(chequeTable)
+
     if IsValid(ply) and IsValid(recipient) then
         ply:addMoney(-amount)
     end
@@ -205,25 +220,28 @@ local function CreateCheque(ply, args)
     ply.anim_DroppingItem = true
 
     timer.Simple(1, function()
-        if IsValid(ply) and IsValid(recipient) then
-            local trace = {}
-            trace.start = ply:EyePos()
-            trace.endpos = trace.start + ply:GetAimVector() * 85
-            trace.filter = ply
-
-            local tr = util.TraceLine(trace)
-            local Cheque = ents.Create("darkrp_cheque")
-            Cheque:SetPos(tr.HitPos)
-            Cheque:Setowning_ent(ply)
-            Cheque:Setrecipient(recipient)
-
-            local min_amount = math.Min(amount, 2147483647)
-            Cheque:Setamount(min_amount)
-            Cheque:Spawn()
-            hook.Call("playerDroppedCheque", nil, ply, recipient, min_amount, Cheque)
-        else
+        if not IsValid(ply) then return end
+        if not IsValid(recipient) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/cheque", ""))
+            return
         end
+
+        local trace = {}
+        trace.start = ply:EyePos()
+        trace.endpos = trace.start + ply:GetAimVector() * 85
+        trace.filter = ply
+
+        local tr = util.TraceLine(trace)
+        local Cheque = ents.Create("darkrp_cheque")
+        Cheque.DarkRPItem = chequeTable
+        Cheque:SetPos(tr.HitPos)
+        Cheque:Setowning_ent(ply)
+        Cheque:Setrecipient(recipient)
+
+        local min_amount = math.Min(amount, 2147483647)
+        Cheque:Setamount(min_amount)
+        Cheque:Spawn()
+        hook.Call("playerDroppedCheque", nil, ply, recipient, min_amount, Cheque)
     end)
     return ""
 end

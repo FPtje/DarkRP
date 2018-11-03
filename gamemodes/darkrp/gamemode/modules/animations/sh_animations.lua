@@ -39,24 +39,26 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
         ply.anim_GivingItem = nil
     end
 
-    if CLIENT and ply.SaidHi then
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
-        ply.SaidHi = nil
-    end
+    if CLIENT then
+        if ply.SaidHi then
+            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
+            ply.SaidHi = nil
+        end
 
-    if CLIENT and ply.ThrewPoop then
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
-        ply.ThrewPoop = nil
-    end
+        if ply.ThrewPoop then
+            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
+            ply.ThrewPoop = nil
+        end
 
-    if CLIENT and ply.knocking then
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
-        ply.knocking = nil
-    end
+        if ply.knocking then
+            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
+            ply.knocking = nil
+        end
 
-    if CLIENT and ply.usekeys then
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
-        ply.usekeys = nil
+        if ply.usekeys then
+            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
+            ply.usekeys = nil
+        end
     end
 
     if not SERVER then return end
@@ -67,7 +69,6 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
     if RPExtraTeams[Team] and RPExtraTeams[Team].hobo and not ply.ThrewPoop and Weapon:IsValid() and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
         ply.ThrewPoop = true
         ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
-
 
         local RP = RecipientFilter()
         RP:AddAllPlayers()

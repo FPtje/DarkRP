@@ -89,7 +89,7 @@ function ENT:Fireball()
 end
 
 function ENT:CreateMoneybag()
-    if not IsValid(self) or self:IsOnFire() then return end
+    if self:IsOnFire() then return end
 
     local amount = self.MoneyCount or (GAMEMODE.Config.mprintamount ~= 0 and GAMEMODE.Config.mprintamount or 250)
     local prevent, hookAmount = hook.Run("moneyPrinterPrintMoney", self, amount)

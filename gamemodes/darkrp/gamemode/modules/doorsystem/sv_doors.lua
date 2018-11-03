@@ -106,24 +106,20 @@ function meta:keysUnOwn(ply)
 end
 
 function pmeta:keysUnOwnAll()
-    for _, v in ipairs(ents.GetAll()) do
-        if v:isKeysOwnable() and v:isKeysOwnedBy(self) == true then
-            v:Fire("unlock", "", 0.6)
+    for entIndex, ent in pairs(self.Ownedz or {}) do
+        if not ent:isKeysOwnable() then self.Ownedz[entIndex] = nil continue end
+        if ent:IsMasterOwner(self) then
+            ent:Fire("unlock", "", 0.6)
         end
+        ent:keysUnOwn(self)
     end
 
-    if self.Ownedz then
-        for k, v in pairs(self.Ownedz) do
-            if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
-            v:keysUnOwn(self)
-            self.Ownedz[v:EntIndex()] = nil
-        end
-    end
+    for _, ply in ipairs(player.GetAll()) do
+        if ply == self then continue end
 
-    for _, v in ipairs(player.GetAll()) do
-        for _, m in pairs(v.Ownedz or {}) do
-            if IsValid(m) and m:isKeysAllowedToOwn(self) then
-                m:removeKeysAllowedToOwn(self)
+        for _, ent in pairs(ply.Ownedz or {}) do
+            if IsValid(ent) and ent:isKeysAllowedToOwn(self) then
+                ent:removeKeysAllowedToOwn(self)
             end
         end
     end
@@ -131,36 +127,68 @@ function pmeta:keysUnOwnAll()
     self.OwnedNumz = 0
 end
 
+local function taxesUnOwnAll(ply, taxables)
+    for _, ent in pairs(taxables) do
+        if ent:isMasterOwner(ply) then
+            ent:Fire("unlock", "", 0.6)
+        end
+
+        ent:keysUnOwn(ply)
+    end
+end
+
 function pmeta:doPropertyTax()
     if not GAMEMODE.Config.propertytax then return end
     if self:isCP() and GAMEMODE.Config.cit_propertytax then return end
 
-    local numowned = self.OwnedNumz
+    local taxables = {}
 
-    if not numowned or numowned <= 0 then return end
+    for _, ent in pairs(self.Ownedz or {}) do
+        local isAllowed = hook.Call("canTaxEntity", nil, self, ent)
+        if isAllowed == false then continue end
+
+        table.insert(taxables, ent)
+    end
+
+    -- co-owned doors
+    for _, ply in ipairs(player.GetAll()) do
+        if ply == self then continue end
+
+        for _, ent in pairs(ply.Ownedz or {}) do
+            if not IsValid(ent) or not ent:isKeysOwnedBy(self) then continue end
+
+            local isAllowed = hook.Call("canTaxEntity", nil, self, ent)
+            if isAllowed == false then continue end
+
+            table.insert(taxables, ent)
+        end
+    end
+
+    local numowned = #taxables
+
+    if numowned <= 0 then return end
 
     local price = 10
     local tax = price * numowned + math.random(-5, 5)
 
-    local shouldTax, taxOverride = hook.Run("canPropertyTax", self, tax)
+    local shouldTax, taxOverride = hook.Call("canPropertyTax", nil, self, tax)
 
     if shouldTax == false then return end
 
     tax = taxOverride or tax
+    if tax == 0 then return end
 
     local canAfford = self:canAfford(tax)
 
     if canAfford then
-        if tax ~= 0 then
-            self:addMoney(-tax)
-            DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
-        end
+        self:addMoney(-tax)
+        DarkRP.notify(self, 0, 5, DarkRP.getPhrase("property_tax", DarkRP.formatMoney(tax)))
     else
+        taxesUnOwnAll(self, taxables)
         DarkRP.notify(self, 1, 8, DarkRP.getPhrase("property_tax_cant_afford"))
-        self:keysUnOwnAll()
     end
 
-    hook.Run("onPropertyTax", self, tax, canAfford)
+    hook.Call("onPropertyTax", nil, self, tax, canAfford)
 end
 
 function pmeta:initiateTax()
@@ -189,7 +217,7 @@ function pmeta:initiateTax()
 
         local taxAmount = tax * money
 
-        local shouldTax, amount = hook.Run("canTax", self, taxAmount)
+        local shouldTax, amount = hook.Call("canTax", GAMEMODE, self, taxAmount)
 
         if shouldTax == false then return end
 
@@ -397,18 +425,46 @@ DarkRP.defineChatCommand("toggleown", OwnDoor)
 
 local function UnOwnAll(ply, cmd, args)
     local amount = 0
-    for _, v in ipairs(ents.GetAll()) do
-        if v:isKeysOwnedBy(ply) and v:isDoor() and not IsValid(v.EntOwner) then -- EntOwner is from SCARs
-            amount = amount + 1
-            v:Fire("unlock", "", 0)
-            v:keysUnOwn(ply)
-            local cost = (v:IsVehicle() and GAMEMODE.Config.vehiclecost or GAMEMODE.Config.doorcost) * 2 / 3 + 0.5
-            ply:addMoney(math.floor(cost))
-            ply.Ownedz[v:EntIndex()] = nil
+    local cost = 0
+
+    local unownables = {}
+    for entIndex, ent in pairs(ply.Ownedz or {}) do
+        if not ent:isKeysOwnable() then ply.Ownedz[entIndex] = nil continue end
+        table.insert(unownables, ent)
+    end
+
+    for _, otherPly in ipairs(player.GetAll()) do
+        if ply == otherPly then continue end
+
+        for _, ent in pairs(otherPly.Ownedz or {}) do
+            if IsValid(ent) and ent:isKeysOwnedBy(ply) then
+                table.insert(unownables, ent)
+            end
         end
     end
-    ply.OwnedNumz = 0
-    DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount,DarkRP.formatMoney(amount * math.floor((GAMEMODE.Config.doorcost * 0.66666666666666) + 0.5))))
+
+    for entIndex, ent in pairs(unownables) do
+        local bAllowed, _strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
+
+        if bAllowed == false then continue end
+
+        if ent:isMasterOwner(ply) then
+            ent:Fire("unlock", "", 0)
+        end
+
+        ent:keysUnOwn(ply)
+        amount = amount + 1
+
+        local GiveMoneyBack = math.floor((hook.Call("get" .. (ent:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent) * 0.666) + 0.5)
+        hook.Call("playerKeysSold", GAMEMODE, ply, ent, GiveMoneyBack)
+        cost = cost + GiveMoneyBack
+    end
+
+    if amount == 0 then return "" end
+
+    ply:addMoney(math.floor(cost))
+
+    DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("sold_x_doors", amount, DarkRP.formatMoney(math.floor(cost))))
     return ""
 end
 DarkRP.defineChatCommand("unownalldoors", UnOwnAll)
