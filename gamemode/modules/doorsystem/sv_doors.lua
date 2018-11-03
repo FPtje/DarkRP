@@ -104,7 +104,7 @@ function meta:keysUnOwn(ply)
     ply.OwnedNumz = math.Clamp((ply.OwnedNumz or 1) - 1, 0, math.huge)
 end
 
-function pmeta:keysUnOwnAll(tax)
+function pmeta:keysUnOwnAll()
     if self.Ownedz then
         for k, v in pairs(self.Ownedz) do
             if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
@@ -124,31 +124,31 @@ function pmeta:keysUnOwnAll(tax)
     self.OwnedNumz = 0
 end
 
-local function taxesUnOwnAll(self)
-    local count = 0
+local function taxesUnOwnAll(ply)
+    local sold = false
 
-    if self.Ownedz then
-        for k, v in pairs(self.Ownedz) do
-            if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
-            local isAllowed = hook.Call("canTaxUnOwn", nil, self, v)
-            if isAllowed == false then return end
+    if ply.Ownedz then
+        for k, v in pairs(ply.Ownedz) do
+            if not v:isKeysOwnable() then ply.Ownedz[k] = nil continue end
+            local isAllowed = hook.Call("canTaxEntity", nil, ply, v)
+            if isAllowed == false then continue end
             v:Fire("unlock", "", 0.6)
-            v:keysUnOwn(self)
-            count = count + 1
+            v:keysUnOwn(ply)
+            sold = true
         end
     end
 
     for _, v in ipairs(player.GetAll()) do
         for _, m in pairs(v.Ownedz or {}) do
-            if IsValid(m) and m:isKeysAllowedToOwn(self) then
-                m:removeKeysAllowedToOwn(self)
+            if IsValid(m) and m:isKeysAllowedToOwn(ply) then
+                m:removeKeysAllowedToOwn(ply)
             end
         end
     end
 
-    self.OwnedNumz = 0
+    ply.OwnedNumz = 0
 
-    return count > 0 and true or false
+    return sold
 end
 
 function pmeta:doPropertyTax()
