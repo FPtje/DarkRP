@@ -106,24 +106,20 @@ function meta:keysUnOwn(ply)
 end
 
 function pmeta:keysUnOwnAll()
-    for _, v in ipairs(ents.GetAll()) do
-        if v:isKeysOwnable() and v:isKeysOwnedBy(self) == true then
-            v:Fire("unlock", "", 0.6)
+    for entIndex, ent in pairs(self.Ownedz or {}) do
+        if not ent:isKeysOwnable() then self.Ownedz[entIndex] = nil continue end
+        if ent:IsMasterOwner(self) then
+            ent:Fire("unlock", "", 0.6)
         end
+        ent:keysUnOwn(self)
     end
 
-    if self.Ownedz then
-        for k, v in pairs(self.Ownedz) do
-            if not v:isKeysOwnable() then self.Ownedz[k] = nil continue end
-            v:keysUnOwn(self)
-            self.Ownedz[v:EntIndex()] = nil
-        end
-    end
+    for _, ply in ipairs(player.GetAll()) do
+        if ply == self then continue end
 
-    for _, v in ipairs(player.GetAll()) do
-        for _, m in pairs(v.Ownedz or {}) do
-            if IsValid(m) and m:isKeysAllowedToOwn(self) then
-                m:removeKeysAllowedToOwn(self)
+        for _, ent in pairs(ply.Ownedz or {}) do
+            if IsValid(ent) and ent:isKeysAllowedToOwn(self) then
+                ent:removeKeysAllowedToOwn(self)
             end
         end
     end
