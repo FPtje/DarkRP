@@ -893,7 +893,7 @@ local function resetAllSetting(ply)
     MySQLite.queueQuery("DELETE FROM FPP_BLOCKMODELSETTINGS1")
     MySQLite.commit(function()
         FPP.Settings = nil
-        include("fpp/sh_settings.lua")
+        FPP.Settings = table.Copy(FPP.InitialSettings)
         SendSettings(player.GetAll())
 
         if not IsValid(ply) then return end

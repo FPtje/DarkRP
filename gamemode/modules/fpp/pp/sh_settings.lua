@@ -89,6 +89,8 @@ FPP.Settings.FPP_BLOCKMODELSETTINGS1 = {
 	iswhitelist = 0
 }
 
+FPP.InitialSettings = table.Copy(FPP.Settings)
+
 function FPP.ForAllSettings(fn)
 	-- Loop in sorted pairs for deterministic order
 	for kind, sets in SortedPairs(FPP.Settings) do
