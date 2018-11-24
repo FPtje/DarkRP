@@ -610,7 +610,7 @@ function FPP.AdminMenu(Panel)
     local function RetrieveGroupMembers(len)
         FPP.GroupMembers = net.ReadTable()
         GroupMembers:Clear()
-        for _, v in pairs(FPP.GroupMembers) do
+        for k, v in pairs(FPP.GroupMembers) do
             local name = "Unknown"
             for _, ply in ipairs(player.GetAll()) do
                 if ply:SteamID() == k then
