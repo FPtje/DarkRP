@@ -641,8 +641,9 @@ local function GroupRemoveTool(ply, cmd, args)
 end
 concommand.Add("FPP_RemoveGroupTool", runIfAccess("FPP_Settings", GroupRemoveTool))
 
+-- Args: 1 = player, 2 = group
 local function PlayerSetGroup(ply, cmd, args)
-    if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end-- Args: 1 = player, 2 = group
+    if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end
 
     local name = args[1]
     local group = string.lower(args[2])
