@@ -70,7 +70,6 @@ end
 local function addTeamCommands(CTeam, max)
     if CLIENT then return end
 
-    if not GAMEMODE:CustomObjFitsMap(CTeam) then return end
     local k = 0
     for num, v in pairs(RPExtraTeams) do
         if v.command == CTeam.command then
@@ -436,6 +435,8 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     CustomTeam.ShowSpare1            = CustomTeam.ShowSpare1            and fp{DarkRP.simplerrRun, CustomTeam.ShowSpare1}
     CustomTeam.ShowSpare2            = CustomTeam.ShowSpare2            and fp{DarkRP.simplerrRun, CustomTeam.ShowSpare2}
     CustomTeam.canStartVote          = CustomTeam.canStartVote          and fp{DarkRP.simplerrRun, CustomTeam.canStartVote}
+
+    if not (GM or GAMEMODE):CustomObjFitsMap(CustomTeam) then return end
 
     jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
     DarkRP.addToCategory(CustomTeam, "jobs", CustomTeam.category)
