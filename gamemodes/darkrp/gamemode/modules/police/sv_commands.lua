@@ -352,7 +352,7 @@ end
 DarkRP.definePrivilegedChatCommand("unsetlicense", "DarkRP_SetLicense", rp_RevokeLicense)
 
 local function FinishRevokeLicense(vote, win)
-    if choice == 1 then
+    if win == 1 then
         vote.target:setDarkRPVar("HasGunlicense", nil)
         vote.target:StripWeapons()
         gamemode.Call("PlayerLoadout", vote.target)
