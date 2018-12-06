@@ -30,6 +30,7 @@ DarkRP.disabledDefaults["hitmen"]           = {}
 DarkRP.disabledDefaults["jobs"]             = {}
 DarkRP.disabledDefaults["shipments"]        = {}
 DarkRP.disabledDefaults["vehicles"]         = {}
+DarkRP.disabledDefaults["workarounds"]      = {}
 
 -- The client cannot use simplerr.runLuaFile because of restrictions in GMod.
 local doInclude = CLIENT and include or fc{simplerr.wrapError, simplerr.wrapLog, simplerr.runFile}
