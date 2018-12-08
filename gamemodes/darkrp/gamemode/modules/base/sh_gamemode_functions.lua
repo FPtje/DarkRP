@@ -14,6 +14,10 @@ function GM:StartCommand(ply, usrcmd)
 end
 
 function GM:OnPlayerChangedTeam(ply, oldTeam, newTeam)
+    if RPExtraTeams[oldTeam] and RPExtraTeams[oldTeam].OnPlayerLeftTeam then
+        RPExtraTeams[oldTeam].OnPlayerLeftTeam(ply, newTeam)
+    end
+
     if RPExtraTeams[newTeam] and RPExtraTeams[newTeam].OnPlayerChangedTeam then
         RPExtraTeams[newTeam].OnPlayerChangedTeam(ply, oldTeam, newTeam)
     end
