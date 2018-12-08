@@ -400,7 +400,7 @@ DarkRP.hookStub{
         {
             name = "ent",
             description = "The entity that was sold.",
-            type = "Player"
+            type = "Entity"
         },
         {
             name = "GiveMoneyBack",
