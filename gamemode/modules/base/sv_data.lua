@@ -225,7 +225,7 @@ function migrateDB(callback)
             ]])
 
             for i, row in pairs(oldData) do
-                local teamcmd = RPExtraTeams[tonumber(row.team)].command
+                local teamcmd = (RPExtraTeams[tonumber(row.team)] or {}).command
                 if not teamcmd then continue end
 
                 MySQLite.queueQuery(string.format([[INSERT INTO darkrp_jobspawn(id, teamcmd) VALUES(%s, %s)]], row.id, MySQLite.SQLStr(teamcmd)))
