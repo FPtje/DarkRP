@@ -42,7 +42,7 @@ Structures:
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20150902.1
+local version = 20190102
 
 if CAMI and CAMI.Version >= version then return end
 
@@ -170,7 +170,7 @@ CAMI.UsergroupInherits
             The name of the usergroup that is queried.
         usergroupName2
             string
-            The name of the usergroup of which is queried whether usergroupName1
+            The name of the usergroup of which is queried whether usergroupName
             inherits from.
 
     Return value:
@@ -300,8 +300,6 @@ end
 --[[
 CAMI.PlayerHasAccess
     Queries whether a certain player has the right to perform a certain action.
-    Note: this function does NOT return an immediate result!
-    The result is in the callback!
 
     Parameters:
         actorPly
@@ -311,10 +309,14 @@ CAMI.PlayerHasAccess
             string
             The name of the privilege.
         callback
-            function(bool, string)
+            function(bool, string) or nil
             This function will be called with the answer. The bool signifies the
             yes or no answer as to whether the player is allowed. The string
             will optionally give a reason.
+
+            Give an explicit nil here to get an answer immediately
+                Important note: May throw an error when the admin mod doesn't
+                give an answer immediately!
         targetPly
             Optional.
             The player on which the privilege is executed.
@@ -335,8 +337,15 @@ CAMI.PlayerHasAccess
                     Extra arguments that were given to the privilege command.
 
     Return value:
-        None, the answer is given in the callback function in order to allow
-        for the admin mod to perform e.g. a database lookup.
+        If callback is specified:
+            None
+        Otherwise:
+            hasAccess
+                bool
+                Whether the player has access
+            reason
+                Optional.
+                The reason why a player does or does not have access.
 ]]
 -- Default access handler
 local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
@@ -368,8 +377,24 @@ local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 }
 function CAMI.PlayerHasAccess(actorPly, privilegeName, callback, targetPly,
 extraInfoTbl)
+    local hasAccess, reason = nil, nil
+    local callback_ = callback or function(hA, r) hasAccess, reason = hA, r end
+
     hook.Call("CAMI.PlayerHasAccess", defaultAccessHandler, actorPly,
-        privilegeName, callback, targetPly, extraInfoTbl)
+        privilegeName, callback_, targetPly, extraInfoTbl)
+
+    if callback ~= nil then return end
+
+    if hasAccess == nil then
+        local err = [[The function CAMI.PlayerHasAccess was used to find out
+        whether Player %s has privilege "%s", but an admin mod did not give an
+        immediate answer!]]
+        error(string.format(err,
+            actorPly:IsPlayer() and actorPly:Nick() or tostring(actorPly),
+            privilegeName))
+    end
+
+    return hasAccess, reason
 end
 
 --[[
