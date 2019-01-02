@@ -163,7 +163,7 @@ function DarkRP.lockdown(ply)
     DarkRP.printMessageAll(HUD_PRINTTALK, DarkRP.getPhrase("lockdown_started"))
     SetGlobalBool("DarkRP_LockDown", true)
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
-    
+
     hook.Run("lockdownStarted", ply)
 
     return ""
@@ -188,7 +188,7 @@ function DarkRP.unLockdown(ply)
     SetGlobalBool("DarkRP_LockDown", false)
 
     lastLockdown = CurTime()
-    
+
     hook.Run("lockdownEnded", ply)
 
     return ""
