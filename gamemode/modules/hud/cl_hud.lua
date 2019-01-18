@@ -280,7 +280,7 @@ plyMeta.drawPlayerInfo = plyMeta.drawPlayerInfo or function(self)
     end
 
     if GAMEMODE.Config.showhealth then
-        local health = DarkRP.getPhrase("health", self:Health())
+        local health = DarkRP.getPhrase("health", math.max(0, self:Health()))
         draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x + 1, pos.y + 21, colors.black, 1)
         draw.DrawNonParsedText(health, "DarkRPHUD2", pos.x, pos.y + 20, colors.white1, 1)
     end
