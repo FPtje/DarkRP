@@ -99,6 +99,10 @@ function GM:canEarnNPCKillPay(ply, npc)
 end
 
 function GM:calculateNPCKillPay(ply, npc)
+    -- A NPC spawned by an addon might be worth more money than the default
+    if npc.KillValue then
+        return npc.KillValue
+    end
     return GAMEMODE.Config.npckillpay
 end
 
