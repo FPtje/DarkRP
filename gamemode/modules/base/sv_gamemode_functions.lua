@@ -94,6 +94,14 @@ function GM:canSeeLogMessage(ply, message, colour)
     return true
 end
 
+function GM:canEarnNPCKillPay(ply, npc)
+    return GAMEMODE.Config.npckillpay > 0
+end
+
+function GM:calculateNPCKillPay(ply, npc)
+    return GAMEMODE.Config.npckillpay
+end
+
 --[[---------------------------------------------------------
  Gamemode functions
  ---------------------------------------------------------]]
@@ -263,9 +271,10 @@ function GM:OnNPCKilled(victim, ent, weapon)
     end
 
     -- If we know by now who killed the NPC, pay them.
-    if IsValid(ent) and GAMEMODE.Config.npckillpay > 0 then
-        ent:addMoney(GAMEMODE.Config.npckillpay)
-        DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", DarkRP.formatMoney(GAMEMODE.Config.npckillpay)))
+    if IsValid(ent) and hook.Call("canEarnNPCKillPay", GAMEMODE, ent, victim) then
+        local amount = hook.Call("calculateNPCKillPay", GAMEMODE, ent, victim)
+        ent:addMoney(amount)
+        DarkRP.notify(ent, 0, 4, DarkRP.getPhrase("npc_killpay", DarkRP.formatMoney(amount)))
     end
 end
 
