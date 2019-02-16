@@ -34,7 +34,7 @@ end
 function ENT:Destruct()
     local vPoint = self:GetPos()
 
-    util.BlastDamage(self, self, vPoint, 100, 100)
+    util.BlastDamage(self, self, vPoint, self.blastRadius, self.blastDamage)
     util.ScreenShake(vPoint, 512, 255, 1.5, 200)
 
     local effectdata = EffectData()
