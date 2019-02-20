@@ -54,7 +54,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
     local hasEntered = table.HasValue(LotteryPeople, target)
     if tobool(answer) and not hasEntered then
         if not target:canAfford(LotteryAmount) then
-            DarkRP.notify(target, 1,4, DarkRP.getPhrase("cant_afford", "lottery"))
+            DarkRP.notify(target, 1, 4, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("lottery")))
 
             return
         end
@@ -124,7 +124,7 @@ local function DoLottery(ply, amount)
     local phrase = DarkRP.getPhrase("lottery_has_started", DarkRP.formatMoney(LotteryAmount))
     for k, v in ipairs(player.GetAll()) do
         if v ~= ply then
-            DarkRP.createQuestion(phrase, "lottery" .. tostring(k), v, 30, EnterLottery, ply, v)
+            DarkRP.createQuestion(phrase, DarkRP.getPhrase("lottery") .. tostring(k), v, 30, EnterLottery, ply, v)
         end
     end
     timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)

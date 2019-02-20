@@ -399,6 +399,7 @@ local my_language = {
     lottery_not_entered = "%s did not enter the lottery",
     lottery_noone_entered = "No-one has entered the lottery",
     lottery_won = "%s has won the lottery! He has won %s",
+    lottery = "lottery",
 
     -- Animations
     custom_animation = "Custom animation!",
