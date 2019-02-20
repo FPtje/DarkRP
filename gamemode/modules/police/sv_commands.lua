@@ -63,7 +63,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
         DarkRP.notify(target, 0,4, DarkRP.getPhrase("lottery_entered", DarkRP.formatMoney(LotteryAmount)))
         hook.Run("playerEnteredLottery", target)
     elseif IsValid(target) and answer ~= nil and not hasEntered then
-        DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", "You"))
+        DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", target:Nick()))
     end
 
     if TimeIsUp then
