@@ -7,7 +7,7 @@ by FPtje Atheos
 Running time per operation (Union/FindSet): O(a(n)) where a is the inverse of the Ackermann function.
 ---------------------------------------------------------------------------*/
 
-local pairs = pairs
+local ipairs = ipairs
 local setmetatable = setmetatable
 local string = string
 local table = table

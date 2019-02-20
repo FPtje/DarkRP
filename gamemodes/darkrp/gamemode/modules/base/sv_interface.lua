@@ -1212,3 +1212,53 @@ DarkRP.hookStub{
     },
     returns = {}
 }
+
+
+DarkRP.hookStub{
+    name = "canEarnNPCKillPay",
+    description = "If a player should profit from killing a NPC",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who killed the NPC.",
+            type = "Player"
+        },
+        {
+            name = "npc",
+            description = "The NPC that they killed.",
+            type = "Entity"
+        }
+    },
+    returns = {
+        {
+            name = "answer",
+            description = "Whether the player can earn money.",
+            type = "boolean"
+        }
+    }
+}
+
+
+DarkRP.hookStub{
+    name = "calculateNPCKillPay",
+    description = "How much a player should profit from killing a NPC",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who killed the NPC.",
+            type = "Player"
+        },
+        {
+            name = "npc",
+            description = "The NPC that they killed.",
+            type = "Entity"
+        }
+    },
+    returns = {
+        {
+            name = "total",
+            description = "How much money they should earn.",
+            type = "number"
+        }
+    }
+}

@@ -50,7 +50,9 @@ function ENT:Destruct(notexplode)
     effectdata:SetOrigin(vPoint)
     effectdata:SetScale(1)
     util.Effect("Explosion", effectdata)
-    self:Remove()
+    -- You get warnings about changing collision rule when removing immediately
+    -- https://github.com/FPtje/DarkRP/issues/2832
+    timer.Simple(0, fp{SafeRemoveEntity, self})
 end
 
 function ENT:OnTakeDamage(dmg)

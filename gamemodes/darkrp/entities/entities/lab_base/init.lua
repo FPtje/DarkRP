@@ -34,12 +34,15 @@ end
 function ENT:Destruct()
     local vPoint = self:GetPos()
 
-    util.BlastDamage(self, self, vPoint, 200, 200)
+    util.BlastDamage(self, self, vPoint, self.blastRadius, self.blastDamage)
+    util.ScreenShake(vPoint, 512, 255, 1.5, 200)
+
     local effectdata = EffectData()
     effectdata:SetStart(vPoint)
     effectdata:SetOrigin(vPoint)
     effectdata:SetScale(1)
-    util.Effect("Explosion", effectdata)
+    util.Effect(self:WaterLevel() > 1 and "WaterSurfaceExplosion" or "Explosion", effectdata)
+    util.Decal("Scorch", vPoint, vPoint - Vector(0, 0, 25), self)
 end
 
 function ENT:SalePrice(activator)

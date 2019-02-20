@@ -63,7 +63,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
         DarkRP.notify(target, 0,4, DarkRP.getPhrase("lottery_entered", DarkRP.formatMoney(LotteryAmount)))
         hook.Run("playerEnteredLottery", target)
     elseif IsValid(target) and answer ~= nil and not hasEntered then
-        DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", "You"))
+        DarkRP.notify(target, 1,4, DarkRP.getPhrase("lottery_not_entered", target:Nick()))
     end
 
     if TimeIsUp then
@@ -164,6 +164,8 @@ function DarkRP.lockdown(ply)
     SetGlobalBool("DarkRP_LockDown", true)
     DarkRP.notifyAll(0, 3, DarkRP.getPhrase("lockdown_started"))
 
+    hook.Run("lockdownStarted", ply)
+
     return ""
 end
 DarkRP.defineChatCommand("lockdown", DarkRP.lockdown)
@@ -186,6 +188,8 @@ function DarkRP.unLockdown(ply)
     SetGlobalBool("DarkRP_LockDown", false)
 
     lastLockdown = CurTime()
+
+    hook.Run("lockdownEnded", ply)
 
     return ""
 end

@@ -25,6 +25,8 @@ hook.Add("PlayerNoClip", "FAdmin_noclip", function(ply)
         return true
     end
 
+    if not ply:Alive() then return end
+
     -- Has privilege
     if not FAdmin.Access.PlayerHasPrivilege(ply, "Noclip") then return end
 

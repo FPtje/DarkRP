@@ -185,3 +185,29 @@ DarkRP.hookStub{
         }
     }
 }
+
+DarkRP.hookStub{
+    name = "lockdownStarted",
+    description = "When a lockdown has started.",
+    parameters = {
+        {
+            name = "actor",
+            description = "The player who started the lockdown. Note: Can be the world entitity.",
+            type = "Player"
+        }
+    },
+    returns = {}
+}
+
+DarkRP.hookStub{
+    name = "lockdownEnded",
+    description = "When a lockdown has ended.",
+    parameters = {
+        {
+            name = "actor",
+            description = "The player who ended the lockdown. Note: Can be the world entitity.",
+            type = "Player"
+        }
+    },
+    returns = {}
+}

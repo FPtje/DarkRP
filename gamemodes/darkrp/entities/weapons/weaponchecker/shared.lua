@@ -31,6 +31,9 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
+SWEP.MinCheckTime = 5
+SWEP.MaxCheckTime = 10
+
 DarkRP.hookStub{
     name = "playerWeaponsChecked",
     description = "Called when a player with a weapon checker has checked another player's weapons. Note: Only called when the player looks at the weapons without confiscating. Please see playerWeaponsConfiscated for when weapons are actually confiscated.",
@@ -189,7 +192,7 @@ function SWEP:SecondaryAttack()
 
     self:SetIsWeaponChecking(true)
     self:SetStartCheckTime(CurTime())
-    self:SetEndCheckTime(CurTime() + util.SharedRandom("DarkRP_WeaponChecker" .. self:EntIndex() .. "_" .. self:GetTotalWeaponChecks(), 5, 10))
+    self:SetEndCheckTime(CurTime() + util.SharedRandom("DarkRP_WeaponChecker" .. self:EntIndex() .. "_" .. self:GetTotalWeaponChecks(), self.MinCheckTime, self.MaxCheckTime))
     self:SetTotalWeaponChecks(self:GetTotalWeaponChecks() + 1)
 
     self:SetNextSoundTime(CurTime() + 0.5)

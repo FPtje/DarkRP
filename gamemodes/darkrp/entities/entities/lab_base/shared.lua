@@ -12,6 +12,8 @@ ENT.labPhrase = ""
 ENT.itemPhrase = ""
 ENT.noIncome = false
 ENT.camMul = -30
+ENT.blastRadius = 200
+ENT.blastDamage = 200
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
