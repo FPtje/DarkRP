@@ -230,7 +230,7 @@ Commands
 ---------------------------------------------------------------------------]]
 local function ChangeJob(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
@@ -294,7 +294,7 @@ local function Demote(ply, args)
 
     local canDemote, message = hook.Call("canDemote", GAMEMODE, ply, p, reason)
     if canDemote == false then
-        DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "demote", ""))
+        DarkRP.notify(ply, 1, 4, message or DarkRP.getPhrase("unable", "/demote", ""))
         return ""
     end
 
@@ -314,7 +314,7 @@ local function Demote(ply, args)
     else
         DarkRP.talkToPerson(p, team.GetColor(ply:Team()), DarkRP.getPhrase("demote") .. " " .. ply:Nick(), Color(255, 0, 0, 255), DarkRP.getPhrase("i_want_to_demote_you", reason), p)
 
-        local voteInfo = DarkRP.createVote(p:Nick() .. ":\n" .. DarkRP.getPhrase("demote_vote_text", reason), "demote", p, 20, FinishDemote, {
+        local voteInfo = DarkRP.createVote(p:Nick() .. ":\n" .. DarkRP.getPhrase("demote_vote_text", reason), DarkRP.getPhrase("demote_vote"), p, 20, FinishDemote, {
             [p] = true,
             [ply] = true
         }, function(vote)
@@ -370,7 +370,7 @@ local function SwitchJob(ply) --Idea by Godness.
     if not team1 or not team2 then return "" end
     if team1.customCheck and not team1.customCheck(ent) or team2.customCheck and not team2.customCheck(ply) then
         -- notify only the player trying to switch
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "switch jobs", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
         return ""
     end
 
@@ -390,7 +390,7 @@ local function DoTeamBan(ply, args)
     local Team = args[2]
 
     if not Team then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
     end
 
@@ -428,7 +428,7 @@ DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
 local function DoTeamUnBan(ply, args)
     if #args < 2 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "arguments", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
     end
 

@@ -183,7 +183,7 @@ end
 
 local function LookPersonUp(ply, cmd, args)
     if not args[1] then
-        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.printConsoleMessage(ply, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
     end
     local P = DarkRP.findPlayer(args[1])

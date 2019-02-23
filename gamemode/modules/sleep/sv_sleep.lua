@@ -123,7 +123,7 @@ function DarkRP.toggleSleep(player, command)
         if IsValid(player:GetObserverTarget()) then return "" end
         for _, v in ipairs(ents.FindInSphere(player:GetPos(), 30)) do
             if v:GetClass() == "func_door" then
-                DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
+                DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", "func_door exploit"))
                 return ""
             end
         end

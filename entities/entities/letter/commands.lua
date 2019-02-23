@@ -63,7 +63,7 @@ end
 
 local function WriteLetter(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
     MakeLetter(ply, args, 1)
@@ -73,7 +73,7 @@ DarkRP.defineChatCommand("write", WriteLetter)
 
 local function TypeLetter(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
     MakeLetter(ply, args, 2)

@@ -125,6 +125,7 @@ local my_language = {
     deaths = "Deaths: %s",
     rpname_changed = "%s changed their RPName to: %s",
     disconnected_player = "Disconnected player",
+    player = "player",
 
     -- Teams
     need_to_be_before = "You need to be %s first in order to be able to become %s",
@@ -261,6 +262,7 @@ local my_language = {
     talk_to_your_group = "talk to your group",
 
     channel_set_to_x = "Channel set to %s!",
+    channel = "channel",
 
     -- Notifies
     disabled = "%s has been disabled! %s",
@@ -293,6 +295,7 @@ local my_language = {
     job_switch = "Jobs switched successfully!",
     job_switch_question = "Switch jobs with %s?",
     job_switch_requested = "Job switch requested.",
+    switch_jobs = "switch jobs",
 
     cooks_only = "Cooks only.",
 
@@ -318,8 +321,10 @@ local my_language = {
     nlr = "New Life Rule: Do Not Revenge Arrest/Kill.",
     reset_settings = "You have reset all settings!",
     must_be_x = "You must be a %s in order to be able to %s.",
+    agenda = "agenda",
     agenda_updated = "The agenda has been updated",
     job_set = "%s has set his/her job to '%s'",
+    demote_vote = "demote",
     demoted = "%s has been demoted",
     demoted_not = "%s has not been demoted",
     demote_vote_started = "%s has started a vote for the demotion of %s",
@@ -347,6 +352,7 @@ local my_language = {
     admin_only = "Admin only!", -- When doing /addjailpos
     chief_or = "Chief or ",-- When doing /addjailpos
     frozen = "Frozen.",
+    recipient = "recipient",
 
     dead_in_jail = "You now are dead until your jail time is up!",
     died_in_jail = "%s has died in jail!",

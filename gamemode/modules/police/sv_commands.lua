@@ -16,7 +16,7 @@ local function CreateAgenda(ply, args)
     local agenda = ply:getAgendaTable()
 
     if not agenda or not agenda.ManagersByKey[ply:Team()] then
-        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("incorrect_job", "agenda"))
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("incorrect_job", DarkRP.getPhrase("agenda")))
         return ""
     end
 
@@ -30,7 +30,7 @@ local function addAgenda(ply, args)
     local agenda = ply:getAgendaTable()
 
     if not agenda or not agenda.ManagersByKey[ply:Team()] then
-        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("incorrect_job", "agenda"))
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("incorrect_job", DarkRP.getPhrase("agenda")))
         return ""
     end
 
@@ -249,19 +249,38 @@ local function RequestLicense(ply)
         return ""
     end
 
+    local mayors, chiefs, cops = {}, {}, {}
+    for teamNr, jobTable in pairs(RPExtraTeams) do
+        if jobTable.mayor then
+            table.insert(mayors, jobTable.name)
+        end
+
+        if jobTable.chief then
+            table.insert(chiefs, jobTable.name)
+        end
+
+        if GAMEMODE.CivilProtection[teamNr] then
+            table.insert(cops, jobTable.name)
+        end
+
+    end
+    mayors = table.concat(mayors, ", ")
+    chiefs = table.concat(chiefs, ", ")
+    cops  = table.concat(cops, ", ")
+
     if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "mayor/chief/cop"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", cops))
         return ""
     end
 
     if ismayor and not LookingAt:isMayor() then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "mayor"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", mayors))
         return ""
     elseif ischief and not LookingAt:isChief() then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "chief"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", chiefs))
         return ""
     elseif iscop and not LookingAt:isCP() then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "cop"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", cops))
         return ""
     end
 
@@ -289,7 +308,7 @@ local function GiveLicense(ply)
 
     local LookingAt = ply:GetEyeTrace().Entity
     if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("player")))
         return ""
     end
 
