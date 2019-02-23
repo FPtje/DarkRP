@@ -132,8 +132,9 @@ local function findNearestObject()
     local fromPos = not isRoaming and IsValid(specEnt) and specEnt:EyePos() or roamPos
 
     local lookingAt = util.QuickTrace(fromPos, aimvec * 5000, LocalPlayer())
+    local ent = lookingAt.Entity
 
-    if IsValid(lookingAt.Entity) then return lookingAt.Entity end
+    if IsValid(ent) then return ent end
 
     local foundPly, foundDot = nil, 0
 
