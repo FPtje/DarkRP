@@ -78,6 +78,7 @@ local function TPToPos(ply, cmd, args)
         ply:SetPos(pos)
 
         if vx and vy and vz then ply:SetVelocity(vel) end
+        hook.Call("FTPToPos", nil, ply, pos)
     end)
 end
 concommand.Add("FTPToPos", TPToPos)
