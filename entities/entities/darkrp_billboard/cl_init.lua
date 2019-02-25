@@ -55,5 +55,5 @@ function ENT:Draw()
     render.EnableClipping(false)
 end
 
-language.Add("Cleanup_advert_billboards", "Advert Billboards")
+language.Add("Cleaned_advert_billboards", "Cleaned up Advert Billboards")
 language.Add("Undone_advert_billboard", "Undone Advert Billboard")
