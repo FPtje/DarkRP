@@ -40,7 +40,7 @@ function ENT:OnTakeDamage(dmg)
     self:TakePhysicsDamage(dmg)
 
     local typ = dmg:GetDamageType()
-    if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
+    if bit.band(typ, bit.bor(DMG_FALL, DMG_VEHICLE, DMG_DROWN, DMG_RADIATION, DMG_PHYSGUN)) > 0 then return end
 
     self.USED = true
     self.hasMerged = true
