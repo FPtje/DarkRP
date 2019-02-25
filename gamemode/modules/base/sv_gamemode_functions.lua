@@ -975,6 +975,10 @@ end)
 function GM:loadCustomDarkRPItems()
     -- Error when the default team isn't set
     if not GAMEMODE.DefaultTeam or not RPExtraTeams[GAMEMODE.DefaultTeam] then
+        -- Re-set to first available team to hopefully prevent further errors.
+        -- Because this error is more important than any that follow because of it.
+        GAMEMODE.DefaultTeam = next(RPExtraTeams)
+
         local hints = {
             "This may happen when you disable the default citizen job. Make sure you update GAMEMODE.DefaultTeam to the new default team.",
             "GAMEMODE.DefaultTeam may be set to a job that does not exist anymore. Did you remove the job you had set to default?",
@@ -984,10 +988,6 @@ function GM:loadCustomDarkRPItems()
         -- Gotta be totally clear here
         local stack = "\tjobs.lua, settings.lua, disabled_defaults.lua or any of your other custom files."
         DarkRP.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/darkrp_customthings/jobs.lua", -1, stack)
-
-        -- Re-set to first available team to hopefully prevent further errors.
-        -- Because this error is more important than any that follow because of it.
-        GAMEMODE.DefaultTeam = next(RPExtraTeams)
     end
 end
 
