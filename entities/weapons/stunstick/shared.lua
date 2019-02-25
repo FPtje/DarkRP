@@ -40,13 +40,14 @@ end
 
 function SWEP:SetupDataTables()
     BaseClass.SetupDataTables(self)
-    -- Float 0 = LastPrimaryAttack
-    -- Float 1 = ReloadEndTime
-    -- Float 2 = BurstTime
-    -- Float 3 = LastNonBurst
-    -- Float 4 = SeqIdleTime
-    -- Float 5 = HoldTypeChangeTime
-    self:NetworkVar("Float", 6, "LastReload")
+    -- Float 0 = IronsightsTime
+    -- Float 1 = LastPrimaryAttack
+    -- Float 2 = ReloadEndTime
+    -- Float 3 = BurstTime
+    -- Float 4 = LastNonBurst
+    -- Float 5 = SeqIdleTime
+    -- Float 6 = HoldTypeChangeTime
+    self:NetworkVar("Float", 7, "LastReload")
 end
 
 function SWEP:Think()

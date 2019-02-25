@@ -131,19 +131,6 @@ function SWEP:Holster()
     return true
 end
 
---[[---------------------------------------------------------
-Reload does nothing
----------------------------------------------------------]]
-function SWEP:Reload()
-    if not self:DefaultReload(ACT_VM_RELOAD) then return end
-    self:SetReloading(true)
-    self:SetIronsights(false)
-    self:SetHoldType(self.HoldType)
-    self:GetOwner():SetAnimation(PLAYER_RELOAD)
-    self:SetReloadEndTime(CurTime() + 2)
-    self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
-end
-
 function SWEP:PrimaryAttack()
     self.Primary.Automatic = self:GetFireMode() == "auto"
 
@@ -329,6 +316,19 @@ function SWEP:SecondaryAttack()
     self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
+--[[---------------------------------------------------------
+Reload does nothing
+---------------------------------------------------------]]
+function SWEP:Reload()
+    if not self:DefaultReload(ACT_VM_RELOAD) then return end
+    self:SetReloading(true)
+    self:SetIronsights(false)
+    self:SetHoldType(self.HoldType)
+    self:GetOwner():SetAnimation(PLAYER_RELOAD)
+    self:SetReloadEndTime(CurTime() + 2)
+    self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
+end
+
 function SWEP:OnRestore()
     self:SetNextSecondaryFire(0)
     self:SetIronsights(false)
@@ -365,7 +365,7 @@ end
 -- Note that if you override Think in your SWEP, you should call
 -- BaseClass.Think(self) so as not to break ironsights
 function SWEP:Think()
-	 self:CalcViewModel()
+	self:CalcViewModel()
     if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType then
         self:SetHoldType("normal")
     end

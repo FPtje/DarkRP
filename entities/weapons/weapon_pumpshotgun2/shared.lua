@@ -46,14 +46,26 @@ SWEP.IronSightsAng = Vector(-0.1, 0.02, 0)
 
 function SWEP:SetupDataTables()
     BaseClass.SetupDataTables(self)
-    -- Float 0 = LastPrimaryAttack
-    -- Float 1 = ReloadEndTime
-    -- Float 2 = BurstTime
-    -- Float 3 = LastNonBurst
-    self:NetworkVar("Float", 4, "QueuedAttackTime")
-    -- Bool 0 = Ironsights
+    -- Float 0 = IronsightsTime
+    -- Float 1 = LastPrimaryAttack
+    -- Float 2 = ReloadEndTime
+    -- Float 3 = BurstTime
+    -- Float 4 = LastNonBurst
+    self:NetworkVar("Float", 5, "QueuedAttackTime")
+    -- Bool 0 = IronsightsPredicted
     -- Bool 1 = Reloading
     self:NetworkVar("Bool", 2, "AttackQueued")
+end
+
+function SWEP:PrimaryAttack()
+    if self:GetAttackQueued() then return end
+
+    if self:GetReloading() then
+        self:SetAttackQueued(true) -- this way it doesn't interupt the reload animation
+        return
+    end
+
+    BaseClass.PrimaryAttack(self)
 end
 
 function SWEP:Reload()
@@ -73,11 +85,13 @@ function SWEP:Reload()
 end
 
 function SWEP:Think()
+	self:CalcViewModel()
     if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
-        -- Finsished reload -
+        -- Finished reload -
         if self:Clip1() >= self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then
             self:SetReloading(false)
             self:SetReloadEndTime(0)
+            self:SetAttackQueued(false)
             return
         end
 
@@ -107,15 +121,4 @@ function SWEP:Think()
         self:SetQueuedAttackTime(0)
         self:PrimaryAttack()
     end
-end
-
-function SWEP:PrimaryAttack()
-    if self:GetAttackQueued() then return end
-
-    if self:GetReloading() then
-        self:SetAttackQueued(true) -- this way it doesn't interupt the reload animation
-        return
-    end
-
-    BaseClass.PrimaryAttack(self)
 end
