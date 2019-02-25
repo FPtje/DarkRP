@@ -44,9 +44,8 @@ function SWEP:SetupDataTables()
     -- Float 1 = LastPrimaryAttack
     -- Float 2 = ReloadEndTime
     -- Float 3 = BurstTime
-    -- Float 4 = LastNonBurst
-    self:NetworkVar("Float", 5, "SeqIdleTime")
-    self:NetworkVar("Float", 6, "HoldTypeChangeTime")
+    self:NetworkVar("Float", 4, "SeqIdleTime")
+    self:NetworkVar("Float", 5, "HoldTypeChangeTime")
 end
 
 local stunstickMaterials

@@ -94,7 +94,6 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Float", 1, "LastPrimaryAttack")
     self:NetworkVar("Float", 2, "ReloadEndTime")
     self:NetworkVar("Float", 3, "BurstTime")
-    self:NetworkVar("Float", 4, "LastNonBurst")
     self:NetworkVar("Int", 0, "BurstBulletNum")
     self:NetworkVar("Int", 1, "TotalUsedMagCount")
     self:NetworkVar("String", 0, "FireMode")
@@ -109,14 +108,28 @@ function SWEP:Initialize()
         self:SetNPCFireRate(0.01)
     end
 
-    self:SetIronsights(false)
-    self:SetTotalUsedMagCount(0)
     self:SetFireMode(self.Primary.Automatic and "auto" or "semi")
 end
 
 function SWEP:Deploy()
     self:SetHoldType("normal")
     self:SetIronsights(false)
+    self:SetReloading(false)
+    self:SetReloadEndTime(0)
+    self:SetBurstTime(0)
+    self:SetBurstBulletNum(0)
+
+    return true
+end
+
+function SWEP:Holster()
+    self:SetIronsights(false)
+    self:SetReloading(false)
+    self:SetReloadEndTime(0)
+    self:SetBurstTime(0)
+    self:SetBurstBulletNum(0)
+
+    if CLIENT then self.hasShot = false end
 
     return true
 end
@@ -125,16 +138,10 @@ function SWEP:OwnerChanged()
     if IsValid(self:GetOwner()) then self:SetLastOwner(self:GetOwner()) end
 end
 
-function SWEP:Holster()
-    self:SetIronsights(false)
-    if CLIENT then self.hasShot = false end
-    return true
-end
-
 function SWEP:PrimaryAttack()
     self.Primary.Automatic = self:GetFireMode() == "auto"
 
-    if self:GetBurstBulletNum() == 0 and (self:GetLastNonBurst() or 0) > CurTime() - 0.6 then return end
+    if self:GetBurstBulletNum() > 0 and CurTime() < self:GetBurstTime() then return end
 
     if self.MultiMode and self:GetOwner():KeyDown(IN_USE) then
         if self:GetFireMode() == "semi" then
@@ -181,9 +188,6 @@ function SWEP:PrimaryAttack()
 
     if self:GetFireMode() == "burst" then
         self:SetBurstBulletNum(self:GetBurstBulletNum() + 1)
-        if self:GetBurstBulletNum() == 1 then
-            self:SetLastNonBurst(CurTime())
-        end
         if self:GetBurstBulletNum() == 3 then
             self:SetBurstTime(0)
             self:SetBurstBulletNum(0)
@@ -323,6 +327,8 @@ function SWEP:Reload()
     if not self:DefaultReload(ACT_VM_RELOAD) then return end
     self:SetReloading(true)
     self:SetIronsights(false)
+    self:SetBurstTime(0)
+    self:SetBurstBulletNum(0)
     self:SetHoldType(self.HoldType)
     self:GetOwner():SetAnimation(PLAYER_RELOAD)
     self:SetReloadEndTime(CurTime() + 2)

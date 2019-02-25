@@ -44,10 +44,9 @@ function SWEP:SetupDataTables()
     -- Float 1 = LastPrimaryAttack
     -- Float 2 = ReloadEndTime
     -- Float 3 = BurstTime
-    -- Float 4 = LastNonBurst
-    -- Float 5 = SeqIdleTime
-    -- Float 6 = HoldTypeChangeTime
-    self:NetworkVar("Float", 7, "LastReload")
+    -- Float 4 = SeqIdleTime
+    -- Float 5 = HoldTypeChangeTime
+    self:NetworkVar("Float", 6, "LastReload")
 end
 
 function SWEP:Think()

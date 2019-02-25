@@ -46,6 +46,22 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Int", 2, "ScopeLevel")
 end
 
+function SWEP:Deploy()
+    self:GetOwner():SetFOV(0, 0)
+
+    self:SetScopeLevel(0)
+
+    return BaseClass.Deploy(self)
+end
+
+function SWEP:Holster()
+    self:GetOwner():SetFOV(0, 0)
+
+    self:SetScopeLevel(0)
+
+    return BaseClass.Holster(self)
+end
+
 local zoomFOV = {0, 0, 25, 5}
 function SWEP:SecondaryAttack()
     if not self.IronSightsPos then return end
@@ -64,13 +80,4 @@ function SWEP:Reload()
     self:SetScopeLevel(0)
 
     return BaseClass.Reload(self)
-end
-
-function SWEP:Holster()
-    self:GetOwner():SetFOV(0, 0)
-
-    self:SetScopeLevel(0)
-    self:SetIronsights(false)
-
-    return BaseClass.Holster(self)
 end

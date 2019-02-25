@@ -50,11 +50,22 @@ function SWEP:SetupDataTables()
     -- Float 1 = LastPrimaryAttack
     -- Float 2 = ReloadEndTime
     -- Float 3 = BurstTime
-    -- Float 4 = LastNonBurst
-    self:NetworkVar("Float", 5, "QueuedAttackTime")
+    self:NetworkVar("Float", 4, "QueuedAttackTime")
     -- Bool 0 = IronsightsPredicted
     -- Bool 1 = Reloading
     self:NetworkVar("Bool", 2, "AttackQueued")
+end
+
+function SWEP:Deploy()
+    self:SetAttackQueued(false)
+
+    return BaseClass.Deploy(self)
+end
+
+function SWEP:Holster()
+    self:SetAttackQueued(false)
+
+    return BaseClass.Holster(self)
 end
 
 function SWEP:PrimaryAttack()
