@@ -66,12 +66,42 @@ SWEP.MultiMode = false
 
 SWEP.DarkRPBased = true
 
-function SWEP:Initialize()
-    if CLIENT and IsValid(self:GetOwner()) then
-        local vm = self:GetOwner():GetViewModel()
-        self:ResetDarkRPBones(vm)
+function SWEP:SetIronsights(b)
+    if (b ~= self:GetIronsights()) then
+        self:SetIronsightsPredicted(b)
+        self:SetIronsightsTime(CurTime())
+        if CLIENT then
+            self:CalcViewModel()
+        end
     end
+end
 
+function SWEP:GetIronsights()
+    return self:GetIronsightsPredicted()
+end
+
+--- Dummy functions that will be replaced when SetupDataTables runs. These are
+--- here for when that does not happen (due to e.g. stacking base classes)
+function SWEP:GetIronsightsTime() return -1 end
+function SWEP:SetIronsightsTime() end
+function SWEP:GetIronsightsPredicted() return false end
+function SWEP:SetIronsightsPredicted() end
+
+function SWEP:SetupDataTables()
+    self:NetworkVar("Bool", 0, "IronsightsPredicted")
+    self:NetworkVar("Float", 0, "IronsightsTime")
+    self:NetworkVar("Bool", 1, "Reloading")
+    self:NetworkVar("Float", 1, "LastPrimaryAttack")
+    self:NetworkVar("Float", 2, "ReloadEndTime")
+    self:NetworkVar("Float", 3, "BurstTime")
+    self:NetworkVar("Float", 4, "LastNonBurst")
+    self:NetworkVar("Int", 0, "BurstBulletNum")
+    self:NetworkVar("Int", 1, "TotalUsedMagCount")
+    self:NetworkVar("String", 0, "FireMode")
+    self:NetworkVar("Entity", 0, "LastOwner")
+end
+
+function SWEP:Initialize()
     self:SetHoldType("normal")
     if SERVER then
         self:SetNPCMinBurst(30)
@@ -84,24 +114,9 @@ function SWEP:Initialize()
     self:SetFireMode(self.Primary.Automatic and "auto" or "semi")
 end
 
-function SWEP:SetupDataTables()
-    self:NetworkVar("Bool", 0, "Ironsights")
-    self:NetworkVar("Bool", 1, "Reloading")
-    self:NetworkVar("Float", 0, "LastPrimaryAttack")
-    self:NetworkVar("Float", 1, "ReloadEndTime")
-    self:NetworkVar("Float", 2, "BurstTime")
-    self:NetworkVar("Float", 3, "LastNonBurst")
-    self:NetworkVar("Int", 0, "BurstBulletNum")
-    self:NetworkVar("Int", 1, "TotalUsedMagCount")
-    self:NetworkVar("String", 0, "FireMode")
-    self:NetworkVar("Entity", 0, "LastOwner")
-    self:NetworkVarNotify("Ironsights", fc{self.IronsightsChanged, fp{fn.Id, self}, fp{select, 4}})
-end
-
 function SWEP:Deploy()
     self:SetHoldType("normal")
-
-    self:IronsightsChanged(self:GetIronsights())
+    self:SetIronsights(false)
 
     return true
 end
@@ -113,23 +128,7 @@ end
 function SWEP:Holster()
     self:SetIronsights(false)
     if CLIENT then self.hasShot = false end
-
-    if not IsValid(self:GetOwner()) then return true end
-    if CLIENT then
-        local vm = self:GetOwner():GetViewModel()
-        self:ResetDarkRPBones(vm)
-    end
-
     return true
-end
-
-function SWEP:OnRemove()
-    self:SetIronsights(false)
-
-    if CLIENT and IsValid(self:GetOwner()) then
-        local vm = self:GetOwner():GetViewModel()
-        self:ResetDarkRPBones(vm)
-    end
 end
 
 --[[---------------------------------------------------------
@@ -232,14 +231,153 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
     bullet.Damage = dmg
 
     self:GetOwner():FireBullets(bullet)
-    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)      -- View model animation
-    self:GetOwner():MuzzleFlash()        -- Crappy muzzle light
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1)       -- 3rd Person Animation
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)   -- View model animation
+    self:GetOwner():MuzzleFlash()               -- Crappy muzzle light
+    self:GetOwner():SetAnimation(PLAYER_ATTACK1) -- 3rd Person Animation
 
     if self:GetOwner():IsNPC() then return end
 
     -- Part of workaround, different viewmodel position if shots have been fired
     if CLIENT then self.hasShot = true end
+end
+
+local host_timescale = GetConVar("host_timescale")
+local IRONSIGHT_TIME = 0.25
+function SWEP:GetViewModelPosition(pos, ang)
+    if (not self.IronSightsPos) then return pos, ang end
+
+    pos = pos + ang:Forward() * -5
+
+    if (self.bIron == nil) then return pos, ang end
+
+    local bIron = self.bIron
+    local time = self.fCurrentTime + (SysTime() - self.fCurrentSysTime) * game.GetTimeScale() * host_timescale:GetFloat()
+
+    if bIron then
+        self.SwayScale = 0.3
+        self.BobScale = 0.1
+    else
+        self.SwayScale = 1.0
+        self.BobScale = 1.0
+    end
+
+    if GAMEMODE.Config.ironshoot then
+        ang:RotateAroundAxis(ang:Right(), -15)
+    end
+
+    local fIronTime = self.fIronTime
+    if (not bIron) and fIronTime < time - IRONSIGHT_TIME then
+        return pos, ang
+    end
+
+    local mul = 1.0
+
+    if fIronTime > time - IRONSIGHT_TIME then
+        mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
+
+        if not bIron then mul = 1 - mul end
+    end
+
+    local offset = self.IronSightsPos
+
+    if self.IronSightsAng then
+        ang = ang * 1
+        ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
+        ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
+        ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
+    end
+
+    if GAMEMODE.Config.ironshoot then
+        ang:RotateAroundAxis(ang:Right(), mul * 15)
+    else
+        ang:RotateAroundAxis(ang:Right(), mul)
+    end
+
+    pos = pos + offset.x * ang:Right() * mul
+    pos = pos + offset.y * ang:Forward() * mul
+    pos = pos + offset.z * ang:Up() * mul
+
+    if not self.hasShot then
+        if self.IronSightsAngAfterShootingAdjustment then
+            ang:RotateAroundAxis(ang:Right(), self.IronSightsAngAfterShootingAdjustment.x * mul)
+            ang:RotateAroundAxis(ang:Up(), self.IronSightsAngAfterShootingAdjustment.y * mul)
+            ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z * mul)
+        end
+
+        if self.IronSightsPosAfterShootingAdjustment then
+            Offset = self.IronSightsPosAfterShootingAdjustment
+            Right = ang:Right()
+            Up = ang:Up()
+            Forward = ang:Forward()
+
+            pos = pos + Offset.x * Right * mul
+            pos = pos + Offset.y * Forward * mul
+            pos = pos + Offset.z * Up * mul
+        end
+    end
+
+    return pos, ang
+end
+
+function SWEP:SecondaryAttack()
+    if not self.IronSightsPos then return end
+
+    if self:GetReloading() then return end
+
+    self:SetIronsights(not self:GetIronsights())
+
+    self:SetNextSecondaryFire(CurTime() + 0.3)
+end
+
+function SWEP:OnRestore()
+    self:SetNextSecondaryFire(0)
+    self:SetIronsights(false)
+end
+
+function SWEP:Equip(NewOwner)
+    if self.PrimaryClipLeft and self.SecondaryClipLeft and self.PrimaryAmmoLeft and self.SecondaryAmmoLeft then
+        NewOwner:SetAmmo(self.PrimaryAmmoLeft, self:GetPrimaryAmmoType())
+        NewOwner:SetAmmo(self.SecondaryAmmoLeft, self:GetSecondaryAmmoType())
+
+        self:SetClip1(self.PrimaryClipLeft)
+        self:SetClip2(self.SecondaryClipLeft)
+    end
+end
+
+function SWEP:OnDrop()
+    self.PrimaryClipLeft = self:Clip1()
+    self.SecondaryClipLeft = self:Clip2()
+
+    if not IsValid(self:GetLastOwner()) then return end
+    self.PrimaryAmmoLeft = self:GetLastOwner():GetAmmoCount(self:GetPrimaryAmmoType())
+    self.SecondaryAmmoLeft = self:GetLastOwner():GetAmmoCount(self:GetSecondaryAmmoType())
+    self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
+end
+
+function SWEP:CalcViewModel()
+    if (not CLIENT) or (not IsFirstTimePredicted()) then return end
+    self.bIron = self:GetIronsights()
+    self.fIronTime = self:GetIronsightsTime()
+    self.fCurrentTime = CurTime()
+    self.fCurrentSysTime = SysTime()
+end
+
+-- Note that if you override Think in your SWEP, you should call
+-- BaseClass.Think(self) so as not to break ironsights
+function SWEP:Think()
+	 self:CalcViewModel()
+    if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType then
+        self:SetHoldType("normal")
+    end
+    if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
+        self:SetReloadEndTime(0)
+        self:SetReloading(false)
+        self:SetHoldType("normal")
+        if CLIENT then self.hasShot = false end
+    end
+    if self:GetBurstTime() ~= 0 and CurTime() >= self:GetBurstTime() then
+        self:PrimaryAttack()
+    end
 end
 
 function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
@@ -271,209 +409,6 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 
         -- Draw weapon info box
         self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
-    end
-end
-
-local IRONSIGHT_TIME = 0.25
-
-function SWEP:GetViewModelPosition(pos, ang)
-    if not self.IronSightsPos then return pos, ang end
-
-    local bIron = self:GetIronsights()
-
-    if bIron ~= self.bLastIron then
-        self.bLastIron = bIron
-        self.fIronTime = CurTime()
-
-        if bIron then
-            self.SwayScale  = 0.3
-            self.BobScale   = 0.1
-        else
-            self.SwayScale  = 1.0
-            self.BobScale   = 1.0
-        end
-    end
-
-    local fIronTime = self.fIronTime or 0
-
-    pos = pos + ang:Forward() * -5
-    if GAMEMODE.Config.ironshoot then
-        ang:RotateAroundAxis(ang:Right(), -15)
-    end
-
-    if not bIron and fIronTime < CurTime() - IRONSIGHT_TIME then
-        return pos, ang
-    end
-
-    local Mul = 1.0
-
-    if fIronTime > CurTime() - IRONSIGHT_TIME then
-        Mul = math.Clamp((CurTime() - fIronTime) / IRONSIGHT_TIME, 0, 1)
-
-        if not bIron then Mul = 1 - Mul end
-    end
-
-    local Offset    = self.IronSightsPos
-
-    if self.IronSightsAng then
-        ang = ang * 1
-        ang:RotateAroundAxis(ang:Right(),   self.IronSightsAng.x * Mul)
-        ang:RotateAroundAxis(ang:Up(),      self.IronSightsAng.y * Mul)
-        ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * Mul)
-    end
-
-    if GAMEMODE.Config.ironshoot then
-        ang:RotateAroundAxis(ang:Right(), Mul * 15)
-    else
-        ang:RotateAroundAxis(ang:Right(), Mul)
-    end
-
-    local Right     = ang:Right()
-    local Up        = ang:Up()
-    local Forward   = ang:Forward()
-
-    pos = pos + Offset.x * Right * Mul
-    pos = pos + Offset.y * Forward * Mul
-    pos = pos + Offset.z * Up * Mul
-
-    if not self.hasShot then
-        if self.IronSightsAngAfterShootingAdjustment then
-            ang:RotateAroundAxis(ang:Right(),   self.IronSightsAngAfterShootingAdjustment.x * Mul)
-            ang:RotateAroundAxis(ang:Up(),      self.IronSightsAngAfterShootingAdjustment.y * Mul)
-            ang:RotateAroundAxis(ang:Forward(), self.IronSightsAngAfterShootingAdjustment.z * Mul)
-        end
-
-        if self.IronSightsPosAfterShootingAdjustment then
-            Offset = self.IronSightsPosAfterShootingAdjustment
-            Right = ang:Right()
-            Up = ang:Up()
-            Forward = ang:Forward()
-
-            pos = pos + Offset.x * Right * Mul
-            pos = pos + Offset.y * Forward * Mul
-            pos = pos + Offset.z * Up * Mul
-        end
-    end
-
-    return pos, ang
-end
-
-
-function SWEP:IronsightsChanged(b)
-    self:SetHoldType(b and self.HoldType or "normal")
-end
-
-function SWEP:SecondaryAttack()
-    if not self.IronSightsPos then return end
-
-    if self:GetReloading() then return end
-
-    self:SetIronsights(not self:GetIronsights())
-
-    self:SetNextSecondaryFire(CurTime() + 0.3)
-end
-
-function SWEP:OnRestore()
-    self:SetNextSecondaryFire(0)
-    self:SetIronsights(false)
-end
-
-function SWEP:OnDrop()
-    self.PrimaryClipLeft = self:Clip1()
-    self.SecondaryClipLeft = self:Clip2()
-
-    if not IsValid(self:GetLastOwner()) then return end
-    self.PrimaryAmmoLeft = self:GetLastOwner():GetAmmoCount(self:GetPrimaryAmmoType())
-    self.SecondaryAmmoLeft = self:GetLastOwner():GetAmmoCount(self:GetSecondaryAmmoType())
-    self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
-end
-
-function SWEP:Equip(NewOwner)
-    if self.PrimaryClipLeft and self.SecondaryClipLeft and self.PrimaryAmmoLeft and self.SecondaryAmmoLeft then
-        NewOwner:SetAmmo(self.PrimaryAmmoLeft, self:GetPrimaryAmmoType())
-        NewOwner:SetAmmo(self.SecondaryAmmoLeft, self:GetSecondaryAmmoType())
-
-        self:SetClip1(self.PrimaryClipLeft)
-        self:SetClip2(self.SecondaryClipLeft)
-    end
-end
-
-function SWEP:Think()
-    if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType then
-        self:SetHoldType("normal")
-    end
-    if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
-        self:SetReloadEndTime(0)
-        self:SetReloading(false)
-        self:SetHoldType("normal")
-        if CLIENT then self.hasShot = false end
-    end
-    if self:GetBurstTime() ~= 0 and CurTime() >= self:GetBurstTime() then
-        self:PrimaryAttack()
-    end
-end
-
-if CLIENT then
-    function SWEP:ViewModelDrawn(vm)
-        if self.DarkRPViewModelBoneManipulations and not self:GetReloading() then
-            self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
-        else
-            self:ResetDarkRPBones(vm)
-        end
-    end
-
-    function SWEP:UpdateDarkRPBones(vm, manipulations)
-        if not IsValid(vm) or not vm:GetBoneCount() then return end
-
-        -- Fill in missing bone names. Things fuck up when we workaround the scale bug and bones are missing.
-        local bones = {}
-        for i = 0, vm:GetBoneCount() - 1 do
-            local bonename = vm:GetBoneName(i)
-            if manipulations[bonename] then
-                bones[bonename] = manipulations[bonename]
-            else
-                bones[bonename] = {
-                    scale = Vector(1,1,1),
-                    pos = Vector(0,0,0),
-                    angle = Angle(0,0,0)
-                }
-            end
-        end
-
-        for k, v in pairs(bones) do
-            local bone = vm:LookupBone(k)
-            if not bone then continue end
-
-            -- Bone scaling seems to be buggy. Workaround.
-            local scale = Vector(v.scale.x, v.scale.y, v.scale.z)
-            local ms = Vector(1,1,1)
-            local cur = vm:GetBoneParent(bone)
-            while cur >= 0 do
-                local pscale = bones[vm:GetBoneName(cur)].scale
-                ms = ms * pscale
-                cur = vm:GetBoneParent(cur)
-            end
-            scale = scale * ms
-
-            if vm:GetManipulateBoneScale(bone) ~= scale then
-                vm:ManipulateBoneScale(bone, scale)
-            end
-            if vm:GetManipulateBonePosition(bone) ~= v.pos then
-                vm:ManipulateBonePosition(bone, v.pos)
-            end
-            if vm:GetManipulateBoneAngles(bone) ~= v.angle then
-                vm:ManipulateBoneAngles(bone, v.angle)
-            end
-        end
-    end
-
-    function SWEP:ResetDarkRPBones(vm)
-        if not IsValid(vm) or not vm:GetBoneCount() then return end
-        for i = 0, vm:GetBoneCount() - 1 do
-            vm:ManipulateBoneScale(i, Vector(1, 1, 1))
-            vm:ManipulateBoneAngles(i, Angle(0, 0, 0))
-            vm:ManipulateBonePosition(i, Vector(0, 0, 0))
-        end
     end
 end
 
