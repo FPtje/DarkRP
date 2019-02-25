@@ -17,6 +17,7 @@ local function PM(ply, args)
     end
 
     local target = DarkRP.findPlayer(name)
+    if target == ply then return "" end
 
     if target then
         local col = team.GetColor(ply:Team())
