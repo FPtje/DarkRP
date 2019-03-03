@@ -101,6 +101,11 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
+    if CLIENT and IsValid(self:GetOwner()) then
+        local vm = self:GetOwner():GetViewModel()
+        self:ResetDarkRPBones(vm)
+    end
+
     self:SetHoldType("normal")
     if SERVER then
         self:SetNPCMinBurst(30)
@@ -131,7 +136,20 @@ function SWEP:Holster()
 
     if CLIENT then self.hasShot = false end
 
+    if not IsValid(self:GetOwner()) then return true end
+    if CLIENT then
+        local vm = self:GetOwner():GetViewModel()
+        self:ResetDarkRPBones(vm)
+    end
+
     return true
+end
+
+function SWEP:OnRemove()
+    if CLIENT and IsValid(self:GetOwner()) then
+        local vm = self:GetOwner():GetViewModel()
+        self:ResetDarkRPBones(vm)
+    end
 end
 
 function SWEP:OwnerChanged()
@@ -415,6 +433,70 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 
         -- Draw weapon info box
         self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
+    end
+end
+
+if CLIENT then
+    function SWEP:ViewModelDrawn(vm)
+        if self.DarkRPViewModelBoneManipulations and not self:GetReloading() then
+            self:UpdateDarkRPBones(vm, self.DarkRPViewModelBoneManipulations)
+        else
+            self:ResetDarkRPBones(vm)
+        end
+    end
+
+    function SWEP:UpdateDarkRPBones(vm, manipulations)
+        if not IsValid(vm) or not vm:GetBoneCount() then return end
+
+        -- Fill in missing bone names. Things fuck up when we workaround the scale bug and bones are missing.
+        local bones = {}
+        for i = 0, vm:GetBoneCount() - 1 do
+            local bonename = vm:GetBoneName(i)
+            if manipulations[bonename] then
+                bones[bonename] = manipulations[bonename]
+            else
+                bones[bonename] = {
+                    scale = Vector(1,1,1),
+                    pos = Vector(0,0,0),
+                    angle = Angle(0,0,0)
+                }
+            end
+        end
+
+        for k, v in pairs(bones) do
+            local bone = vm:LookupBone(k)
+            if not bone then continue end
+
+            -- Bone scaling seems to be buggy. Workaround.
+            local scale = Vector(v.scale.x, v.scale.y, v.scale.z)
+            local ms = Vector(1,1,1)
+            local cur = vm:GetBoneParent(bone)
+            while cur >= 0 do
+                local pscale = bones[vm:GetBoneName(cur)].scale
+                ms = ms * pscale
+                cur = vm:GetBoneParent(cur)
+            end
+            scale = scale * ms
+
+            if vm:GetManipulateBoneScale(bone) ~= scale then
+                vm:ManipulateBoneScale(bone, scale)
+            end
+            if vm:GetManipulateBonePosition(bone) ~= v.pos then
+                vm:ManipulateBonePosition(bone, v.pos)
+            end
+            if vm:GetManipulateBoneAngles(bone) ~= v.angle then
+                vm:ManipulateBoneAngles(bone, v.angle)
+            end
+        end
+    end
+
+    function SWEP:ResetDarkRPBones(vm)
+        if not IsValid(vm) or not vm:GetBoneCount() then return end
+        for i = 0, vm:GetBoneCount() - 1 do
+            vm:ManipulateBoneScale(i, Vector(1, 1, 1))
+            vm:ManipulateBoneAngles(i, Angle(0, 0, 0))
+            vm:ManipulateBonePosition(i, Vector(0, 0, 0))
+        end
     end
 end
 
