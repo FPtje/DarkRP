@@ -377,7 +377,7 @@ local my_language = {
 
     rp_teamban_hint = "rp_teamban [player name/ID] [team name/id]. Use this to ban a player from a certain team.",
     rp_teamunban_hint = "rp_teamunban [player name/ID] [team name/id]. Use this to unban a player from a certain team.",
-    x_teambanned_y = "%s has banned %s from being a %s.",
+    x_teambanned_y_for_z = "%s has banned %s from being a %s for %s minutes.",
     x_teamunbanned_y = "%s has unbanned %s from being a %s.",
 
     -- Backwards compatibility:

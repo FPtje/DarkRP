@@ -414,7 +414,9 @@ local function DoTeamBan(ply, args)
         return
     end
 
-    target:teamBan(tonumber(Team), tonumber(args[3] or 0))
+    local time = tonumber(args[3] or 0)
+
+    target:teamBan(tonumber(Team), time)
 
     local nick
     if ply:EntIndex() == 0 then
@@ -422,7 +424,7 @@ local function DoTeamBan(ply, args)
     else
         nick = ply:Nick()
     end
-    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y", nick, target:Nick(), team.GetName(tonumber(Team))))
+    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y_for_z", nick, target:Nick(), team.GetName(tonumber(Team)), time/60))
 end
 DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
