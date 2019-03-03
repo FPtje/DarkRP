@@ -353,6 +353,10 @@ local my_language = {
     chief_or = "Chief or ",-- When doing /addjailpos
     frozen = "Frozen.",
     recipient = "recipient",
+    forbidden_name = "Forbidden name.",
+    illegal_characters = "Illegal characters.",
+    too_long = "Too long.",
+    too_short = "Too short.",
 
     dead_in_jail = "You now are dead until your jail time is up!",
     died_in_jail = "%s has died in jail!",
