@@ -130,7 +130,7 @@ end
 
 function SWEP:GetStrippableWeapons(ent, callback)
     CAMI.PlayerHasAccess(ent, "DarkRP_GetAdminWeapons", function(access)
-        for _, v in ipairs(ent:GetWeapons()) do
+        for _, v in pairs(ent:GetWeapons()) do
             if not v:IsValid() then continue end
             local class = v:GetClass()
 

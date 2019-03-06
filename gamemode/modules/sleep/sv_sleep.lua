@@ -130,7 +130,7 @@ function DarkRP.toggleSleep(player, command)
 
         if not player:isArrested() then
             player.WeaponsForSleep = {}
-            for k, v in ipairs(player:GetWeapons()) do
+            for k, v in pairs(player:GetWeapons()) do
                 player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
                 v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
                 v:Clip1(), v:Clip2()}
