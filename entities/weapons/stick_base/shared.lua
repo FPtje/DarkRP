@@ -35,6 +35,19 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
 
+function SWEP:SetupDataTables()
+    BaseClass.SetupDataTables(self)
+    -- Bool 0 = IronsightsPredicted
+    -- Bool 1 = Reloading
+    self:NetworkVar("Bool", 2, "SeqIdling")
+    -- Float 0 = IronsightsTime
+    -- Float 1 = LastPrimaryAttack
+    -- Float 2 = ReloadEndTime
+    -- Float 3 = BurstTime
+    self:NetworkVar("Float", 4, "SeqIdleTime")
+    self:NetworkVar("Float", 5, "HoldTypeChangeTime")
+end
+
 local stunstickMaterials
 function SWEP:Initialize()
     self:SetHoldType("normal")
@@ -58,19 +71,6 @@ function SWEP:Initialize()
     }):SetVector("$color2", self.StickColor:ToVector())
 
     stunstickMaterials[materialName] = true
-end
-
-function SWEP:SetupDataTables()
-    BaseClass.SetupDataTables(self)
-    -- Bool 0 = Ironsights
-    -- Bool 1 = Reloading
-    self:NetworkVar("Bool", 2, "SeqIdling")
-    -- Float 0 = LastPrimaryAttack
-    -- Float 1 = ReloadEndTime
-    -- Float 2 = BurstTime
-    -- Float 3 = LastNonBurst
-    self:NetworkVar("Float", 4, "SeqIdleTime")
-    self:NetworkVar("Float", 5, "HoldTypeChangeTime")
 end
 
 function SWEP:Deploy()

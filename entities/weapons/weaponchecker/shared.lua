@@ -106,10 +106,6 @@ DarkRP.hookStub{
     realm = "Server"
 }
 
-function SWEP:Initialize()
-    self:SetHoldType("normal")
-end
-
 function SWEP:SetupDataTables()
     self:NetworkVar("Bool", 0, "IsWeaponChecking")
     self:NetworkVar("Float", 0, "StartCheckTime")
@@ -118,11 +114,16 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Int", 0, "TotalWeaponChecks")
 end
 
+function SWEP:Initialize()
+    self:SetHoldType("normal")
+end
+
 function SWEP:Deploy()
     return true
 end
 
-function SWEP:DrawWorldModel() end
+function SWEP:DrawWorldModel()
+end
 
 function SWEP:PreDrawViewModel(vm)
     return true
