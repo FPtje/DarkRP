@@ -84,13 +84,7 @@ local function GiveMoney(ply, args)
         return ""
     end
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_giveitem", RP)
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_GivingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_GIVE)
 
     timer.Simple(1.2, function()
         if not IsValid(ply) then
@@ -150,13 +144,7 @@ local function DropMoney(ply, args)
     end
 
     ply:addMoney(-amount)
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_dropitem", RP)
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_DroppingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
     timer.Simple(1, function()
         if not IsValid(ply) then return end

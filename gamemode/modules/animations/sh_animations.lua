@@ -27,18 +27,6 @@ function DarkRP.removePlayerGesture(anim)
 end
 
 hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
-    -- Dropping weapons/money!
-    if ply.anim_DroppingItem then
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_DROP, true)
-        ply.anim_DroppingItem = nil
-    end
-
-    -- Giving items!
-    if ply.anim_GivingItem then
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_GIVE, true)
-        ply.anim_GivingItem = nil
-    end
-
     if CLIENT then
         if ply.SaidHi then
             ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
@@ -116,22 +104,6 @@ if SERVER then
     concommand.Add("_DarkRP_DoAnimation", CustomAnim)
     return
 end
-
-local function DropItem(um)
-    local ply = um:ReadEntity()
-    if not IsValid(ply) then return end
-
-    ply.anim_DroppingItem = true
-end
-usermessage.Hook("anim_dropitem", DropItem)
-
-local function GiveItem(um)
-    local ply = um:ReadEntity()
-    if not IsValid(ply) then return end
-
-    ply.anim_GivingItem = true
-end
-usermessage.Hook("anim_giveitem", GiveItem)
 
 local function ThrowPoop(um)
     local ply = um:ReadEntity()
