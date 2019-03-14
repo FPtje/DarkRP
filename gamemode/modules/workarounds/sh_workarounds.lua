@@ -314,39 +314,41 @@ end
 --[[---------------------------------------------------------------------------
 Actively deprecate commands
 ---------------------------------------------------------------------------]]
-local deprecated = {
-    {command = "rp_removeletters",      alternative = "removeletters"           },
-    {command = "rp_setname",            alternative = "forcerpname"             },
-    {command = "rp_unlock",             alternative = "forceunlock"             },
-    {command = "rp_lock",               alternative = "forcelock"               },
-    {command = "rp_removeowner",        alternative = "forceremoveowner"        },
-    {command = "rp_addowner",           alternative = "forceown"                },
-    {command = "rp_unownall",           alternative = "forceunownall"           },
-    {command = "rp_unown",              alternative = "forceunown"              },
-    {command = "rp_own",                alternative = "forceown"                },
-    {command = "rp_tellall",            alternative = "admintellall"            },
-    {command = "rp_tell",               alternative = "admintell"               },
-    {command = "rp_teamunban",          alternative = "teamunban"               },
-    {command = "rp_teamban",            alternative = "teamban"                 },
-    {command = "rp_setsalary",          alternative = "setmoney"                },
-    {command = "rp_setmoney",           alternative = "setmoney"                },
-    {command = "rp_revokelicense",      alternative = "unsetlicense"            },
-    {command = "rp_givelicense",        alternative = "setlicense"              },
-    {command = "rp_unlockdown",         alternative = "unlockdown"              },
-    {command = "rp_lockdown",           alternative = "lockdown"                },
-    {command = "rp_unarrest",           alternative = "unarrest"                },
-    {command = "rp_arrest",             alternative = "arrest"                  },
-    {command = "rp_cancelvote",         alternative = "forcecancelvote"         },
-}
+if not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] then
+    local deprecated = {
+        {command = "rp_removeletters",      alternative = "removeletters"           },
+        {command = "rp_setname",            alternative = "forcerpname"             },
+        {command = "rp_unlock",             alternative = "forceunlock"             },
+        {command = "rp_lock",               alternative = "forcelock"               },
+        {command = "rp_removeowner",        alternative = "forceremoveowner"        },
+        {command = "rp_addowner",           alternative = "forceown"                },
+        {command = "rp_unownall",           alternative = "forceunownall"           },
+        {command = "rp_unown",              alternative = "forceunown"              },
+        {command = "rp_own",                alternative = "forceown"                },
+        {command = "rp_tellall",            alternative = "admintellall"            },
+        {command = "rp_tell",               alternative = "admintell"               },
+        {command = "rp_teamunban",          alternative = "teamunban"               },
+        {command = "rp_teamban",            alternative = "teamban"                 },
+        {command = "rp_setsalary",          alternative = "setmoney"                },
+        {command = "rp_setmoney",           alternative = "setmoney"                },
+        {command = "rp_revokelicense",      alternative = "unsetlicense"            },
+        {command = "rp_givelicense",        alternative = "setlicense"              },
+        {command = "rp_unlockdown",         alternative = "unlockdown"              },
+        {command = "rp_lockdown",           alternative = "lockdown"                },
+        {command = "rp_unarrest",           alternative = "unarrest"                },
+        {command = "rp_arrest",             alternative = "arrest"                  },
+        {command = "rp_cancelvote",         alternative = "forcecancelvote"         },
+    }
 
-local lastDeprecated = 0
-local function msgDeprecated(cmd, ply)
-    if CurTime() - lastDeprecated < 0.5 then return end
-    lastDeprecated = CurTime()
+    local lastDeprecated = 0
+    local function msgDeprecated(cmd, ply)
+        if CurTime() - lastDeprecated < 0.5 then return end
+        lastDeprecated = CurTime()
 
-    DarkRP.notify(ply, 1, 4, ("This command has been deprecated. Please use 'DarkRP %s' or '/%s' instead."):format(cmd.alternative, cmd.alternative))
-end
+        DarkRP.notify(ply, 1, 4, ("This command has been deprecated. Please use 'DarkRP %s' or '/%s' instead."):format(cmd.alternative, cmd.alternative))
+    end
 
-for _, cmd in pairs(deprecated) do
-    concommand.Add(cmd.command, fp{msgDeprecated, cmd})
+    for _, cmd in pairs(deprecated) do
+        concommand.Add(cmd.command, fp{msgDeprecated, cmd})
+    end
 end
