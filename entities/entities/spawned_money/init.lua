@@ -5,7 +5,7 @@ include("shared.lua")
 
 function ENT:Initialize()
     self:SetModel(GAMEMODE.Config.moneyModel or "models/props/cs_assault/money.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)

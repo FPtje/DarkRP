@@ -5,7 +5,7 @@ include("shared.lua")
 
 function ENT:Initialize()
     self:SetModel(self.Model or "models/props/cs_assault/billboard.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetCollisionGroup(COLLISION_GROUP_WORLD)

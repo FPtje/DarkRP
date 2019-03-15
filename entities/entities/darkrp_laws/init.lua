@@ -20,7 +20,7 @@ end}
 
 function ENT:Initialize()
     self:SetModel("models/props/cs_assault/Billboard.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
 

@@ -249,6 +249,31 @@ function DarkRP.explodeArg(arg)
     return args
 end
 
+--[[---------------------------------------------------------------------------
+Initialize Physics, throw an error on failure
+---------------------------------------------------------------------------]]
+function DarkRP.ValidatedPhysicsInit(ent, solidType)
+    solidType = solidType or SOLID_VPHYSICS
+
+    if ent:PhysicsInit(solidType) then return true end
+
+    local class, model = "", ""
+
+    if IsValid(ent) then
+        class, model = ent:GetClass(), string.format(" (%s)", ent:GetModel() or "Entity has no model at all!")
+    end
+
+    DarkRP.errorNoHalt(string.format("Entity %s has no physics and will thus float in the air or be invisible.", class), 2, {
+        string.format("The most likely cause is that the model%s doesn't exist on the server", model),
+        "Did you type the model name correctly?",
+        "Is the model from an addon that is not installed on the server?",
+        "Is the model from a game that isn't properly mounted? E.g. Counter Strike: Source",
+        "A less likely cause is the engine hitting the PhysObj limit. Are you seeing this error when having many entities in the server?",
+    })
+
+    return false
+end
+
 --[[-------------------------------------------------------------------------
 Check the database for integrity errors. Use in cases when stuff doesn't load
 on restart, or you get corruption errors.

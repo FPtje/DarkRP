@@ -11,7 +11,7 @@ function ENT:Initialize()
 
     self.Destructed = false
     self:SetModel(contents and contents.shipmodel or "models/Items/item_item_crate.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
 

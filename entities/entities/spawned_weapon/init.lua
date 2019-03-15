@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
@@ -12,7 +12,7 @@ function ENT:Initialize()
 
     if not phys:IsValid() then
         self:SetModel("models/weapons/w_rif_ak47.mdl")
-        self:PhysicsInit(SOLID_VPHYSICS)
+        DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
 
         phys = self:GetPhysicsObject()
 

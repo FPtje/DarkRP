@@ -25,7 +25,7 @@ end
 function ENT:Initialize()
     self:initVars()
     self:SetModel(self.model)
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
 

@@ -8,7 +8,7 @@ function ENT:Initialize()
     self:SetModel(self.model)
 
     self:SetModelScale(1.5, 0)
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
     self:SetSolid(SOLID_VPHYSICS)
