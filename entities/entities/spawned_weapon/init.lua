@@ -23,7 +23,6 @@ function ENT:Initialize()
         phys:Wake()
     end
 
-
     if self:Getamount() == 0 then
         self:Setamount(1)
     end
