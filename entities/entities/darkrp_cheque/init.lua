@@ -10,10 +10,13 @@ function ENT:Initialize()
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
 
-    local phys = self:GetPhysicsObject()
-    phys:Wake()
-
     self.nodupe = true
+
+    local phys = self:GetPhysicsObject()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end

@@ -13,7 +13,10 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     self.sparking = false
     self.damage = 100

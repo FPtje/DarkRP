@@ -9,7 +9,10 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 end
 
 function ENT:OnTakeDamage(dmg)

@@ -11,10 +11,13 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
     self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
-    local phys = self:GetPhysicsObject()
     self.nodupe = true
 
-    phys:Wake()
+    local phys = self:GetPhysicsObject()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 end
 
 function ENT:Use(activator, caller)

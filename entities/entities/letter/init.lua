@@ -12,9 +12,13 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 
     self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
+
     local phys = self:GetPhysicsObject()
 
-    phys:Wake()
+    if phys:IsValid() then
+        phys:Wake()
+    end
+
     hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end
 

@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-    self:SetModel(self.Model or "models/props/cs_assault/Billboard.mdl")
+    self:SetModel(self.Model or "models/props/cs_assault/billboard.mdl")
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
@@ -12,8 +12,7 @@ function ENT:Initialize()
 
     local phys = self:GetPhysicsObject()
 
-    if phys and phys:IsValid() then
-        phys:Wake()
+    if phys:IsValid() then
         phys:EnableMotion(false)
     end
 end

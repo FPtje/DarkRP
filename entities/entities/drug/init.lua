@@ -50,7 +50,10 @@ function ENT:Initialize()
     self.CanUse = true
 
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     self.damage = 10
     self:Setprice(self:Getprice() or 100)

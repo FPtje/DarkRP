@@ -7,9 +7,12 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
+
     local phys = self:GetPhysicsObject()
 
-    phys:Wake()
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     self.damage = 10
 end

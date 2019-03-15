@@ -14,8 +14,10 @@ function ENT:Initialize()
     self:SetSolid(SOLID_VPHYSICS)
 
     local phys = self:GetPhysicsObject()
-    phys:Wake()
 
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     self:Activate()
 

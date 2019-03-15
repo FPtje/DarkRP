@@ -8,9 +8,11 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
-    self:Ignite(20,0)
+    self:Ignite(20, 0)
+
     local phys = self:GetPhysicsObject()
-    if phys and phys:IsValid() then
+
+    if phys:IsValid() then
         phys:Wake()
     end
 

@@ -14,9 +14,9 @@ function ENT:Initialize()
         self:SetModel("models/weapons/w_rif_ak47.mdl")
         self:PhysicsInit(SOLID_VPHYSICS)
         phys = self:GetPhysicsObject()
+    else
+        phys:Wake()
     end
-
-    phys:Wake()
 
     if self:Getamount() == 0 then
         self:Setamount(1)
