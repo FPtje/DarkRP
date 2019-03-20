@@ -70,28 +70,28 @@ local function lookingAtLockable(ply, ent, hitpos)
             ent:IsVehicle() and eyepos:DistToSqr(hitpos) < 4000
         )
 end
-
+if SERVER then
+    util.AddNetworkString("anim_keys")
+end
 local function lockUnlockAnimation(ply, snd)
     ply:EmitSound("npc/metropolice/gear" .. math.floor(math.Rand(1,7)) .. ".wav")
     timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_keys", RP)
-        umsg.Entity(ply)
-        umsg.String("usekeys")
-    umsg.End()
+    net.Start("anim_keys")
+        net.WriteEntity(ply)
+        net.WriteString("usekeys")
+    net.Broadcast()
 
     ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
 end
 
 local function doKnock(ply, sound)
     ply:EmitSound(sound, 100, math.random(90, 110))
-    umsg.Start("anim_keys")
-        umsg.Entity(ply)
-        umsg.String("knocking")
-    umsg.End()
+
+    net.Start("anim_keys")
+        net.WriteEntity(ply)
+        net.WriteString("knocking")
+    net.Broadcast()
 
     ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 end
@@ -141,7 +141,7 @@ function SWEP:Reload()
         return
     end
     if SERVER then
-        umsg.Start("KeysMenu", self:GetOwner())
-        umsg.End()
+        net.Start("KeysMenu")
+        net.Send(self:GetOwner())
     end
 end

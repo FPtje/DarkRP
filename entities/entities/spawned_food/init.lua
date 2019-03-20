@@ -34,8 +34,8 @@ function ENT:Use(activator, caller)
     end
 
     activator:setSelfDarkRPVar("Energy", math.Clamp((activator:getDarkRPVar("Energy") or 100) + (self:GetTable().FoodEnergy or 1), 0, 100))
-    umsg.Start("AteFoodIcon", activator)
-    umsg.End()
+    net.Start("AteFoodIcon")
+    net.Send(activator)
     self:Remove()
     activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
 end

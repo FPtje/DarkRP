@@ -2,6 +2,8 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
+util.AddNetworkString("DrugEffects")
+
 local function UnDrugPlayer(ply)
     if not IsValid(ply) then return end
     ply.isDrugged = false
@@ -9,7 +11,9 @@ local function UnDrugPlayer(ply)
 
     timer.Remove(IDSteam .. "DruggedHealth")
 
-    SendUserMessage("DrugEffects", ply, false)
+    net.Start("DrugEffects")
+        net.WriteBool(false)
+    net.Send(ply)
 end
 
 hook.Add("PlayerDeath", "UndrugPlayers", function(ply) if ply.isDrugged then UnDrugPlayer(ply) end end)
@@ -17,7 +21,9 @@ hook.Add("PlayerDeath", "UndrugPlayers", function(ply) if ply.isDrugged then UnD
 local function DrugPlayer(ply)
     if not IsValid(ply) then return end
 
-    SendUserMessage("DrugEffects", ply, true)
+    net.Start("DrugEffects")
+        net.WriteBool(true)
+    net.Send(ply)
 
     ply.isDrugged = true
 

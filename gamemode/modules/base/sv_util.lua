@@ -1,3 +1,4 @@
+util.AddNetworkString("_Notify")
 function DarkRP.notify(ply, msgtype, len, msg)
     if not istable(ply) then
         if not IsValid(ply) then
@@ -14,19 +15,19 @@ function DarkRP.notify(ply, msgtype, len, msg)
         rcp:AddPlayer(v)
     end
 
-    umsg.Start("_Notify", rcp)
-        umsg.String(msg)
-        umsg.Short(msgtype)
-        umsg.Long(len)
-    umsg.End()
+    net.Start("_Notify")
+        net.WriteString(msg)
+        net.WriteInt(msgtype, 16)
+        net.WriteInt(len, 32)
+    net.Send(rcp)
 end
 
 function DarkRP.notifyAll(msgtype, len, msg)
-    umsg.Start("_Notify")
-        umsg.String(msg)
-        umsg.Short(msgtype)
-        umsg.Long(len)
-    umsg.End()
+    net.Start("_Notify")
+        net.WriteString(msg)
+        net.WriteInt(msgtype, 16)
+        net.WriteInt(len, 32)
+    net.Broadcast()
 end
 
 function DarkRP.printMessageAll(msgtype, msg)

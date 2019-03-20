@@ -63,7 +63,7 @@ function FPP.AddNotify( str, type )
     LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 10, 100)
 end
 
-usermessage.Hook("FPP_Notify", function(u) FPP.AddNotify(u:ReadString(), u:ReadBool()) end)
+net.Receive("FPP_Notify", function() FPP.AddNotify(net.ReadString(), net.ReadBool()) end)
 
 local function DrawNotice(k, v, i)
 

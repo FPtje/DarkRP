@@ -165,6 +165,7 @@ end
 DarkRP.defineChatCommand("dropmoney", DropMoney, 0.3)
 DarkRP.defineChatCommand("moneydrop", DropMoney, 0.3)
 
+util.AddNetworkString("anim_dropitem")
 local function CreateCheque(ply, args)
     local recipient = DarkRP.findPlayer(args[1])
     local amount = tonumber(args[2]) or 0
@@ -202,9 +203,9 @@ local function CreateCheque(ply, args)
         ply:addMoney(-amount)
     end
 
-    umsg.Start("anim_dropitem", RecipientFilter():AddAllPlayers())
-        umsg.Entity(ply)
-    umsg.End()
+    net.Start("anim_dropitem")
+        net.WriteEntity(ply)
+    net.Broadcast()
     ply.anim_DroppingItem = true
 
     timer.Simple(1, function()

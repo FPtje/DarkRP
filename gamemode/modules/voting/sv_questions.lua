@@ -24,6 +24,7 @@ function Question:handleNewQuestion(response)
     handleQuestionEnd(self.ID)
 end
 
+util.AddNetworkString("DoQuestion")
 function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, toPly, ...)
     local newques = { }
     for k, v in pairs(Question) do newques[k] = v end
@@ -39,19 +40,19 @@ function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, 
 
     Questions[quesid] = newques
 
-    umsg.Start("DoQuestion", ent)
-        umsg.String(question)
-        umsg.String(quesid)
-        umsg.Float(delay)
-    umsg.End()
+    net.Start("DoQuestion")
+        net.WriteString(question)
+        net.WriteString(quesid)
+        net.WriteFloat(delay)
+    net.Send(ent)
 
     timer.Create(quesid .. "timer", delay, 1, function() handleQuestionEnd(quesid) end)
 end
 
 function DarkRP.destroyQuestion(id)
-    umsg.Start("KillQuestionVGUI", Questions[id].Ent)
-        umsg.String(Questions[id].ID)
-    umsg.End()
+    net.Start("KillQuestionVGUI")
+        net.WriteString(Questions[id].ID)
+    net.Send(Questions[id].Ent)
 
     Questions[id] = nil
 end

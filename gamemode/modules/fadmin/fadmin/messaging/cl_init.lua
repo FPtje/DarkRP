@@ -27,8 +27,7 @@ function FAdmin.Messages.AddMessage(MsgType, Message)
 
     LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 30, 100)
 end
-
-usermessage.Hook("FAdmin_SendMessage", function(u) FAdmin.Messages.AddMessage(u:ReadShort(), u:ReadString()) end)
+net.Receive("FAdmin_SendMessage", function() FAdmin.Messages.AddMessage(net.ReadInt(16), net.ReadString()) end)
 
 
 local function DrawNotice(k, v, i)
@@ -109,10 +108,10 @@ local function HUDPaint()
 end
 hook.Add("HUDPaint", "FAdmin_MessagePaint", HUDPaint)
 
-local function ConsoleMessage(um)
-    MsgC(Color(255, 0, 0, 255), "(FAdmin) ", Color(200, 0, 200, 255), um:ReadString() .. "\n")
+local function ConsoleMessage()
+    MsgC(Color(255, 0, 0, 255), "(FAdmin) ", Color(200, 0, 200, 255), net.ReadString() .. "\n")
 end
-usermessage.Hook("FAdmin_ConsoleMessage", ConsoleMessage)
+net.Receive("FAdmin_ConsoleMessage", ConsoleMessage)
 
 
 local red = Color(255, 0, 0)

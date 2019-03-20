@@ -40,19 +40,20 @@ function ENT:OnRemove()
     ply.maxletters = ply.maxletters - 1
 end
 
+util.AddNetworkString("ShowLetter")
 function ENT:Use(ply)
     if not ply:KeyDown(IN_ATTACK) then
-        umsg.Start("ShowLetter", ply)
-            umsg.Entity(self)
-            umsg.Short(self.type)
-            umsg.Vector(self:GetPos())
+        net.Start("ShowLetter")
+            net.WriteEntity(self)
+            net.WriteInt(self.type, 16)
+            net.WriteVector(self:GetPos())
             local numParts = self.numPts
-            umsg.Short(numParts)
-            for _, b in pairs(self.Parts) do umsg.String(b) end
-        umsg.End()
+            net.WriteInt(numParts, 16)
+            for _, b in pairs(self.Parts) do net.WriteString(b) end
+        net.Send(ply)
     else
-        umsg.Start("KillLetter", ply)
-        umsg.End()
+        net.Start("KillLetter")
+        net.Send(ply)
     end
 end
 

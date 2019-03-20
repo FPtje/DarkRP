@@ -621,6 +621,7 @@ function FPP.PlayerDisconnect(ply)
 end
 hook.Add("PlayerDisconnected", "FPP.PlayerDisconnect", FPP.PlayerDisconnect)
 
+util.AddNetworkString("FPP_CheckBuddy")
 -- PlayerInitialspawn, the props he had left before will now be theirs again
 function FPP.PlayerInitialSpawn(ply)
     local RP = RecipientFilter()
@@ -630,9 +631,9 @@ function FPP.PlayerInitialSpawn(ply)
         if not IsValid(ply) then return end
         RP:AddAllPlayers()
         RP:RemovePlayer(ply)
-        umsg.Start("FPP_CheckBuddy", RP) --Message everyone that a new player has joined
-            umsg.Entity(ply)
-        umsg.End()
+        net.Start("FPP_CheckBuddy")
+            net.WriteEntity(ply)
+        net.Send(RP)
     end)
 
     local entities = {}

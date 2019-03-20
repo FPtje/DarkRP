@@ -50,12 +50,9 @@ local function DropWeapon(ply)
         return ""
     end
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_dropitem", RP)
-        umsg.Entity(ply)
-    umsg.End()
+    net.Start("anim_dropitem")
+        net.WriteEntity(ply)
+    net.Broadcast()
     ply.anim_DroppingItem = true
 
     timer.Simple(1, function()

@@ -936,15 +936,15 @@ EditGroupTools = function(groupname)
     end
 end
 
-local function retrieveblocked(um)
-    local Type = string.lower(um:ReadString())
+local function retrieveblocked()
+    local Type = string.lower(net.ReadString())
     if not BlockedLists[Type] then return end
-    local text = um:ReadString()
+    local text = net.ReadString()
     local line = BlockedLists[Type]:AddLine(text)
     line.text = text
     BlockedLists[Type]:SetTall(18 + #BlockedLists[Type]:GetLines() * 17)
 end
-usermessage.Hook("FPP_blockedlist", retrieveblocked)
+net.Receive("FPP_blockedlist", retrieveblocked)
 
 local BuddiesPanel
 function FPP.BuddiesMenu(Panel)
@@ -1152,8 +1152,8 @@ local function UpdateMenus()
 end
 hook.Add("SpawnMenuOpen", "FPPMenus", UpdateMenus)
 
-function FPP.SharedMenu(um)
-    local ent = um:ReadEntity()
+function FPP.SharedMenu()
+    local ent = net.ReadEntity()
     local frame = vgui.Create("DFrame")
     if not IsValid(ent) then frame:Close() return end
     frame:SetTitle("Share " .. ent:GetClass())
@@ -1193,18 +1193,18 @@ function FPP.SharedMenu(um)
         end
         box:SizeToContents()
     end
-    AddChk("Physgun", "SharePhysgun1", um:ReadBool())
-    AddChk("Gravgun", "ShareGravgun1", um:ReadBool())
-    AddChk("Use", "SharePlayerUse1", um:ReadBool())
-    AddChk("Damage", "ShareEntityDamage1", um:ReadBool())
-    AddChk("Toolgun", "ShareToolgun1", um:ReadBool())
+    AddChk("Physgun", "SharePhysgun1", net.ReadBool())
+    AddChk("Gravgun", "ShareGravgun1", net.ReadBool())
+    AddChk("Use", "SharePlayerUse1", net.ReadBool())
+    AddChk("Damage", "ShareEntityDamage1", net.ReadBool())
+    AddChk("Toolgun", "ShareToolgun1", net.ReadBool())
 
-    local long = um:ReadLong()
+    local long = net.ReadInt(32)
     local SharedWith = {}
 
     if long > 0 then
         for i = 1, long do
-            table.insert(SharedWith, um:ReadEntity())
+            table.insert(SharedWith, net.ReadEntity())
         end
     end
 
@@ -1227,7 +1227,7 @@ function FPP.SharedMenu(um)
     frame:SetSize(math.Min(math.Max(165 + (row - 1) * 165, 165), ScrW()), height)
     frame:Center()
 end
-usermessage.Hook("FPP_ShareSettings", FPP.SharedMenu)
+net.Receive("FPP_ShareSettings", FPP.SharedMenu)
 
 properties.Add("addFPPBlocked",
 {

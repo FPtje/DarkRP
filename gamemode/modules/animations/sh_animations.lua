@@ -50,7 +50,7 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
     end
 
     if not SERVER then return end
-
+    util.AddNetworkString("anim_throwpoop")
     -- Hobo throwing poop!
     local Weapon = ply:GetActiveWeapon()
     local Team = ply:Team()
@@ -58,12 +58,9 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
         ply.ThrewPoop = true
         ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
 
-        local RP = RecipientFilter()
-        RP:AddAllPlayers()
-
-        umsg.Start("anim_throwpoop", RP)
-            umsg.Entity(ply)
-        umsg.End()
+        net.Start("anim_throwpoop")
+            net.WriteEntity(ply)
+        net.Broadcast()
     elseif ply.ThrewPoop and not ply:KeyDown(IN_ATTACK) then
         ply.ThrewPoop = nil
     end
@@ -75,12 +72,9 @@ hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Usi
             ply.SaidHi = true
             ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
 
-            local RP = RecipientFilter()
-            RP:AddAllPlayers()
-
-            umsg.Start("anim_sayhi", RP)
-                umsg.Entity(ply)
-            umsg.End()
+            net.Start("anim_sayhi")
+                net.WriteEntity(ply)
+            net.Broadcast()
         end
     elseif ply.SaidHi and not ply:KeyDown(IN_ATTACK) then
         ply.SaidHi = nil
@@ -93,51 +87,48 @@ if SERVER then
         local Gesture = tonumber(args[1] or 0)
         if not Anims[Gesture] then return end
 
-        local RP = RecipientFilter()
-        RP:AddAllPlayers()
-
-        umsg.Start("_DarkRP_CustomAnim", RP)
-        umsg.Entity(ply)
-        umsg.Short(Gesture)
-        umsg.End()
+        net.Start("_DarkRP_CustomAnim")
+            net.WriteEntity(ply)
+            net.WriteInt(Gesture, 16)
+        net.Broadcast()
     end
     concommand.Add("_DarkRP_DoAnimation", CustomAnim)
     return
 end
 
-local function ThrowPoop(um)
-    local ply = um:ReadEntity()
+local function ThrowPoop()
+    local ply = net.ReadEntity()
     if not IsValid(ply) then return end
 
     ply.ThrewPoop = true
 end
-usermessage.Hook("anim_throwpoop", ThrowPoop)
+net.Receive("anim_throwpoop", ThrowPoop)
 
-local function PhysgunHi(um)
+local function PhysgunHi()
     local ply = um:ReadEntity()
     if not IsValid(ply) then return end
 
     ply.SaidHi = true
 end
-usermessage.Hook("anim_sayhi", PhysgunHi)
+net.Receive("anim_sayhi", PhysgunHi)
 
-local function KeysAnims(um)
-    local ply = um:ReadEntity()
+local function KeysAnims()
+    local ply = net.ReadEntity()
     if not IsValid(ply) then return end
-    local Type = um:ReadString()
+    local Type = net.ReadString()
     ply[Type] = true
 end
-usermessage.Hook("anim_keys", KeysAnims)
+net.Receive("anim_keys", KeysAnims)
 
 
-local function CustomAnimation(um)
-    local ply = um:ReadEntity()
-    local act = um:ReadShort()
+local function CustomAnimation()
+    local ply = net.ReadEntity()
+    local act = net.ReadInt(16)
 
     if not IsValid(ply) then return end
     ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
 end
-usermessage.Hook("_DarkRP_CustomAnim", CustomAnimation)
+net.Receive("_DarkRP_CustomAnim", CustomAnimation)
 
 local AnimFrame
 local function AnimationMenu()

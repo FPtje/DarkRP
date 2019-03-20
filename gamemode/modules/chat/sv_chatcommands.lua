@@ -213,6 +213,7 @@ DarkRP.defineChatCommand("g", GroupMsg, 0)
 -- You can edit DarkRP but you HAVE to credit the original authors!
 -- You even have to credit all the previous authors when you rename the gamemode.
 -- local CreditsWait = true
+util.AddNetworkString("DarkRP_Credits")
 local function GetDarkRPAuthors(ply, args)
     local target = DarkRP.findPlayer(args) -- Only send to one player. Prevents spamming
     target = IsValid(target) and target or ply
@@ -228,9 +229,9 @@ local function GetDarkRPAuthors(ply, args)
     if ply ~= target then
         rf:AddPlayer(ply)
     end
-
-    umsg.Start("DarkRP_Credits", rf)
-    umsg.End()
+    
+    net.Start("DarkRP_Credits")
+    net.Send(rf)
 
     return ""
 end

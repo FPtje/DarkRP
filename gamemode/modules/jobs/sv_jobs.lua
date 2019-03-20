@@ -2,6 +2,7 @@
 Functions
 ---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
+util.AddNetworkString("OnChangedTeam")
 function meta:changeTeam(t, force, suppressNotification)
     local prevTeam = self:Team()
     local notify = suppressNotification and fn.Id or DarkRP.notify
@@ -157,10 +158,10 @@ function meta:changeTeam(t, force, suppressNotification)
         self:KillSilent()
     end
 
-    umsg.Start("OnChangedTeam", self)
-        umsg.Short(prevTeam)
-        umsg.Short(t)
-    umsg.End()
+    net.Start("OnChangedTeam")
+        net.WriteInt(prevTeam, 16)
+        net.WriteInt(t, 16)
+    net.Send(self)
     return true
 end
 
