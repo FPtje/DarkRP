@@ -252,92 +252,70 @@ end
 --[[---------------------------------------------------------------------------
 Initialize Physics, throw an error on failure
 ---------------------------------------------------------------------------]]
+-- Cache missing model states to prevent repetitive disk accesses
+-- 0 = no model file
+-- 1 = no model physics
+-- 2 = has model physics, hit physics limit
 local mdlcache = {}
+local MODEL_NONE = 0
+local MODEL_NOPHYS = 1
+local MODEL_VALID = 2
 
 function DarkRP.ValidatedPhysicsInit(ent, solidType)
     solidType = solidType or SOLID_VPHYSICS
 
     if ent:PhysicsInit(solidType) then return true end
 
+    local mdl = string.lower(ent:GetModel() or "")
     local err, errHints
-    if solidType == SOLID_BSP then
+
+    if mdl == "" then
+        err = string.format("%s has no model or physics", ent)
+        errHints = {
+            "Did you specify a model for your entity?"
+        }
+    elseif solidType == SOLID_BSP then
         err = string.format("%s has no physics and will be motionless", ent)
         errHints = {
             "Is this a brush model? SOLID_BSP physics cannot initialize with studio models",
             "Otherwise, the physics limit was hit"
         }
     elseif solidType == SOLID_VPHYSICS then
-        local mdl = string.lower(ent:GetModel() or "")
+        local mdlState = mdlcache[mdl]
 
-        if mdl == "" then
-            err = string.format("%s has no model or physics", ent)
-            errHints = {
-                "Did you specify a model for your entity?"
-            }
-        else
-            -- Cache missing model states to prevent repetitive disk accesses
-            -- 0 = no model file
-            -- 1 = no model physics
-            -- 2 = has model physics, hit physics limit
-            local mdlstate = mdlcache[mdl]
-            local checkmdl = mdlstate == nil
-
-            if checkmdl then
-                if file.Exists(mdl, "GAME") then
-                    if util.IsValidProp(mdl) then
-                        mdlexists = 2
-                    else
-                        mdlexists = 1
-                    end
-                else
-                    mdlexists = 0
-                end
-
-                mdlcache[mdl] = mdlexists
-            end
-
-            ::ModelError::
-
-            if mdlstate == 0 then
-                err = string.format("%s has missing model \"%s\" and will be invisible and motionless", ent, mdl)
-                errHints = {
-                    "Did you type the model name correctly?",
-                    "Is the model from an addon that is not installed on the server?",
-                    "Is the model from a game that isn't properly mounted? E.g. Counter Strike: Source"
-                }
-            elseif mdlstate == 1 then
-                err = string.format("%s has model \"%s\" with no physics and will be motionless", ent, mdl)
-                errHints = {
-                    "Are you using a viewmodel instead of a worldmodel?",
-                    "Does this model have an associated physics model (modelname.phy)?",
-                    "Is this a studio model? SOLID_VPHYSICS physics cannot initialize with brush models"
-                }
+        if mdlState == nil then
+            if util.IsValidProp(mdl) then
+                -- Has physics, we must have hit the limit
+                mdlState = MODEL_VALID
+            elseif file.Exists(mdl, "GAME") then
+                -- Doesn't have physics but the file exists
+                mdlState = MODEL_NOPHYS
             else
-                -- Re-check the model exists and has physics if we've
-                -- already hit the physics limit with the same model
-                if checkmdl then
-                    if not util.IsValidProp(mdl) then
-                        if file.Exists(mdl, "GAME") then
-                            mdlstate = 1
-                        else
-                            mdlstate = 0
-                        end
-
-                        mdlcache[mdl] = mdlstate
-
-                        -- If our state has changed, refresh the error
-                        goto ModelError
-                    end
-                end
-
-                err = string.format("physics limit hit - %s will be motionless", ent)
+                -- No model file
+                mdlState = MODEL_NONE
             end
+
+            mdlcache[mdl] = mdlState
         end
-    else
-        err = string.format("physics limit hit - %s will be motionless", ent)
+
+        if mdlState == MODEL_NONE then
+            err = string.format("%s has missing model \"%s\" and will be invisible and motionless", ent, mdl)
+            errHints = {
+                "Did you type the model name correctly?",
+                "Is the model from an addon that is not installed on the server?",
+                "Is the model from a game that isn't properly mounted? E.g. Counter Strike: Source"
+            }
+        elseif mdlState == MODEL_NOPHYS then
+            err = string.format("%s has model \"%s\" with no physics and will be motionless", ent, mdl)
+            errHints = {
+                "Does this model have an associated physics model (modelname.phy)?",
+                "Are you using a viewmodel instead of a worldmodel?",
+                "Is this a studio model? SOLID_VPHYSICS physics cannot initialize with brush models"
+            }
+        end
     end
 
-    DarkRP.errorNoHalt(err, 2, errHints)
+    DarkRP.errorNoHalt(err || string.format("physics limit hit - %s will be motionless", ent), 2, errHints)
 
     return false
 end
