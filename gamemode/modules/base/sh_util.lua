@@ -267,7 +267,7 @@ function DarkRP.ValidatedPhysicsInit(ent, solidType)
             "Otherwise, the physics limit was hit"
         }
     elseif solidType == SOLID_VPHYSICS then
-        local mdl = string.lower(ent:GetModel())
+        local mdl = string.lower(ent:GetModel() or "")
 
         if mdl == "" then
             err = string.format("%s has no model or physics", ent)
