@@ -252,24 +252,70 @@ end
 --[[---------------------------------------------------------------------------
 Initialize Physics, throw an error on failure
 ---------------------------------------------------------------------------]]
+-- Cache missing model states to prevent repetitive disk accesses
+-- 0 = no model file
+-- 1 = no model physics
+-- 2 = has model physics, hit physics limit
+local mdlcache = {}
+local MODEL_NONE = 0
+local MODEL_NOPHYS = 1
+local MODEL_VALID = 2
+
 function DarkRP.ValidatedPhysicsInit(ent, solidType)
     solidType = solidType or SOLID_VPHYSICS
 
     if ent:PhysicsInit(solidType) then return true end
 
-    local class, model = "", ""
+    local mdl = string.lower(ent:GetModel() or "")
+    local err, errHints
 
-    if IsValid(ent) then
-        class, model = ent:GetClass(), string.format(" (%s)", ent:GetModel() or "Entity has no model at all!")
+    if mdl == "" then
+        err = string.format("%s has no model or physics", ent)
+        errHints = {
+            "Did you specify a model for your entity?"
+        }
+    elseif solidType == SOLID_BSP then
+        err = string.format("%s has no physics and will be motionless", ent)
+        errHints = {
+            "Is this a brush model? SOLID_BSP physics cannot initialize with studio models",
+            "Otherwise, the physics limit was hit"
+        }
+    elseif solidType == SOLID_VPHYSICS then
+        local mdlState = mdlcache[mdl]
+
+        if mdlState == nil then
+            if util.IsValidProp(mdl) then
+                -- Has physics, we must have hit the limit
+                mdlState = MODEL_VALID
+            elseif file.Exists(mdl, "GAME") then
+                -- Doesn't have physics but the file exists
+                mdlState = MODEL_NOPHYS
+            else
+                -- No model file
+                mdlState = MODEL_NONE
+            end
+
+            mdlcache[mdl] = mdlState
+        end
+
+        if mdlState == MODEL_NONE then
+            err = string.format("%s has missing model \"%s\" and will be invisible and motionless", ent, mdl)
+            errHints = {
+                "Did you type the model name correctly?",
+                "Is the model from an addon that is not installed on the server?",
+                "Is the model from a game that isn't properly mounted? E.g. Counter Strike: Source"
+            }
+        elseif mdlState == MODEL_NOPHYS then
+            err = string.format("%s has model \"%s\" with no physics and will be motionless", ent, mdl)
+            errHints = {
+                "Does this model have an associated physics model (modelname.phy)?",
+                "Are you using a viewmodel instead of a worldmodel?",
+                "Is this a studio model? SOLID_VPHYSICS physics cannot initialize with brush models"
+            }
+        end
     end
 
-    DarkRP.errorNoHalt(string.format("Entity %s has no physics and will thus float in the air or be invisible.", class), 2, {
-        string.format("The most likely cause is that the model%s doesn't exist on the server", model),
-        "Did you type the model name correctly?",
-        "Is the model from an addon that is not installed on the server?",
-        "Is the model from a game that isn't properly mounted? E.g. Counter Strike: Source",
-        "A less likely cause is the engine hitting the PhysObj limit. Are you seeing this error when having many entities in the server?",
-    })
+    DarkRP.errorNoHalt(err || string.format("physics limit hit - %s will be motionless", ent), 2, errHints)
 
     return false
 end
