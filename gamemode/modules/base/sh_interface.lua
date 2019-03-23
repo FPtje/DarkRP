@@ -1071,6 +1071,12 @@ DarkRP.ValidatedPhysicsInit = DarkRP.stub{
             description = "The SOLID_ enum type. By default this is SOLID_VPHYSICS",
             type = "number",
             optional = true
+        },
+        {
+            name = "hint",
+            description = "Optional hint for the error message.",
+            type = "string",
+            optional = true
         }
     },
     returns = {
