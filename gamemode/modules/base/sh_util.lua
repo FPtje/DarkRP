@@ -272,12 +272,19 @@ function DarkRP.ValidatedPhysicsInit(ent, solidType, hint)
     if solidType == SOLID_VPHYSICS then
         local mdl = ent:GetModel()
 
-        if not mdl then
+        if not mdl or mdl == "" then
             DarkRP.errorNoHalt(string.format("Cannot init physics on entity \"%s\" because it has no model", class), 2, {hint})
             return false
         end
 
         mdl = string.lower(mdl)
+
+        if util.IsValidProp(mdl) then
+            -- Has physics, we must have hit the limit
+            DarkRP.errorNoHalt(string.format("physics limit hit - %s will be motionless", class), 2, {hint})
+
+            return false
+        end
 
         if not file.Exists(mdl, "GAME") then
             DarkRP.errorNoHalt(string.format("%s has missing model \"%s\" and will be invisible and motionless", class, mdl), 2, {
@@ -286,13 +293,6 @@ function DarkRP.ValidatedPhysicsInit(ent, solidType, hint)
                 "Is the model from a game that isn't (properly) mounted? E.g. Counter Strike: Source",
                 hint
             })
-
-            return false
-        end
-
-        if util.IsValidProp(mdl) then
-            -- Has physics, we must have hit the limit
-            DarkRP.errorNoHalt(string.format("physics limit hit - %s will be motionless", class), 2, {hint})
 
             return false
         end
