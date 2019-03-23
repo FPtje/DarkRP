@@ -177,8 +177,9 @@ function DarkRP.hooks:onHitCompleted(hitman, target, customer)
     DarkRP.notifyAll(0, 6, DarkRP.getPhrase("hit_complete", hitman:Nick()))
 
     local targetname = IsValid(target) and target:Nick() or "disconnected player"
+    local customername = IsValid(customer) and customer:Nick() or "disconnected player"
 
-    DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. hits[hitman].customer:Nick() .. " for " .. DarkRP.formatMoney(hits[hitman].price), Color(255, 0, 255))
+    DarkRP.log("Hitman " .. hitman:Nick() .. " finished a hit on " .. targetname .. ", ordered by " .. customername .. " for " .. DarkRP.formatMoney(hits[hitman].price), Color(255, 0, 255))
 
     target:setDarkRPVar("lastHitTime", CurTime())
 
