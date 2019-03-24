@@ -202,10 +202,7 @@ local function CreateCheque(ply, args)
         ply:addMoney(-amount)
     end
 
-    umsg.Start("anim_dropitem", RecipientFilter():AddAllPlayers())
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_DroppingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
     timer.Simple(1, function()
         if not IsValid(ply) then return end
