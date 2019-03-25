@@ -32,14 +32,26 @@ function DarkRP.openPocketMenu()
     if not wep:IsValid() or wep:GetClass() ~= "pocket" then return end
     if not pocket then pocket = {} return end
     if table.Count(pocket) == 0 then return end
-    frame = vgui.Create("DFrame")
-
+    frame = vgui.Create( "DFrame" )
+    local count = GAMEMODE.Config.pocketitems or GM.Config.pocketitems
+    frame:SetSize( 345, 32+64*(count/5)+3*(count/5))
     frame:SetTitle(DarkRP.getPhrase("drop_item"))
     frame.btnMaxim:SetVisible(false)
-    frame.btnMinim:SetVisible(false)
-    frame:SetVisible(true)
+    frame.btnMinim:SetVisible(false)	
+    frame:SetDraggable( false )
     frame:MakePopup()
+    frame:Center()
 
+    local Scroll = vgui.Create( "DScrollPanel", frame ) 
+    Scroll:Dock( FILL )
+    local sbar = Scroll:GetVBar()
+    sbar:SetWide(3)
+
+    frame.List = vgui.Create( "DIconLayout", Scroll )
+    frame.List:Dock( FILL )
+    frame.List:SetSpaceY( 3 )
+    frame.List:SetSpaceX( 3 )
+	
     reload()
     frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
@@ -54,16 +66,15 @@ function reload()
 
     local itemCount = table.Count(pocket)
 
-    frame:SetSize(itemCount * 64, 90)
-    frame:Center()
-
+    frame.List:Clear()
     local i = 0
-
     local items = {}
-    for k, v in pairs(pocket) do
 
-        local icon = vgui.Create("SpawnIcon", frame)
-        icon:SetPos(i * 64, 25)
+    for k, v in pairs(pocket) do
+        local ListItem = frame.List:Add( "DPanel" ) 
+        ListItem:SetSize( 64, 64 ) 
+	
+        local icon = vgui.Create("SpawnIcon", ListItem)
         icon:SetModel(v.model)
         icon:SetSize(64, 64)
         icon:SetTooltip()
@@ -98,6 +109,12 @@ function reload()
         table.insert(items, icon)
         i = i + 1
     end
+ 	if itemCount < GAMEMODE.Config.pocketitems then
+		for i=1, GAMEMODE.Config.pocketitems - itemCount do
+			local ListItem = frame.List:Add( "DPanel" ) 
+			ListItem:SetSize( 64, 64 ) 			
+		end
+	end   
 end
 
 local function retrievePocket()
