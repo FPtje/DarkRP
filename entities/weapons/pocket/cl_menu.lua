@@ -34,7 +34,7 @@ function DarkRP.openPocketMenu()
     if table.Count(pocket) == 0 then return end
     frame = vgui.Create( "DFrame" )
     local count = GAMEMODE.Config.pocketitems or GM.Config.pocketitems
-    frame:SetSize( 345, 32+64*(count/5)+3*(count/5))
+    frame:SetSize( 345, 32+64*math.ceil(count/5)+3*math.ceil(count/5))
     frame:SetTitle(DarkRP.getPhrase("drop_item"))
     frame.btnMaxim:SetVisible(false)
     frame.btnMinim:SetVisible(false)	
