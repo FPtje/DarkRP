@@ -539,7 +539,11 @@ concommand.Add("FPP_AddGroup", runIfAccess("FPP_Settings", AddGroup))
 hook.Add("InitPostEntity", "FPP_Load_CAMI", function()
     if not CAMI then return end
     for groupName, _ in pairs(CAMI.GetUsergroups()) do
-        if not FPP.Groups[groupName] then AddGroup(Entity(0), "", {groupName, 1}) end
+        if FPP.Groups[groupName] then continue end
+
+        FPP.Groups[groupName] = {}
+        FPP.Groups[groupName].allowdefault = true
+        FPP.Groups[groupName].tools = {}
     end
 end)
 
@@ -582,7 +586,7 @@ local function GroupChangeAllowDefault(ply, cmd, args)
     end
 
     FPP.Groups[name].allowdefault = tobool(newval)
-    MySQLite.query("UPDATE FPP_GROUPS3 SET allowdefault = " .. sql.SQLStr(newval) .. " WHERE groupname = " .. sql.SQLStr(name) .. ";")
+    MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES(" .. sql.SQLStr(name) .. ", " .. sql.SQLStr(newval) .. ");")
     FPP.Notify(ply, "Group status changed successfully", true)
 end
 concommand.Add("FPP_ChangeGroupStatus", runIfAccess("FPP_Settings", GroupChangeAllowDefault))
