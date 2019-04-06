@@ -25,11 +25,15 @@ end
 function ENT:Initialize()
     self:initVars()
     self:SetModel(self.model)
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
+
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     timer.Simple(math.random(self.MinTimer, self.MaxTimer), function() PrintMore(self) end)
     self:StartSound()

@@ -28,12 +28,12 @@ end
 
 local disallowedNames = {["ooc"] = true, ["shared"] = true, ["world"] = true, ["world prop"] = true}
 function GM:CanChangeRPName(ply, RPname)
-    if disallowedNames[string.lower(RPname)] then return false, "Forbidden name." end
-    if not string.match(RPname, "^[a-zA-ZЀ-џ0-9 ]+$") then return false, "Illegal characters." end
+    if disallowedNames[string.lower(RPname)] then return false, DarkRP.getPhrase("forbidden_name") end
+    if not string.match(RPname, "^[a-zA-ZЀ-џ0-9 ]+$") then return false, DarkRP.getPhrase("illegal_characters") end
 
     local len = string.len(RPname)
-    if len > 30 then return false, "Too long." end
-    if len < 3 then return false, "Too short." end
+    if len > 30 then return false, DarkRP.getPhrase("too_long") end
+    if len < 3 then return false,  DarkRP.getPhrase("too_short") end
 end
 
 function GM:canDemote(ply, target, reason)
@@ -207,7 +207,7 @@ end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
     self.Sandbox.PlayerSpawnedVehicle(self, ply, ent)
-    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass(), Color(255, 255, 0))
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass() .. " (" .. ent:GetVehicleClass() .. ")", Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)
@@ -975,6 +975,10 @@ end)
 function GM:loadCustomDarkRPItems()
     -- Error when the default team isn't set
     if not GAMEMODE.DefaultTeam or not RPExtraTeams[GAMEMODE.DefaultTeam] then
+        -- Re-set to first available team to hopefully prevent further errors.
+        -- Because this error is more important than any that follow because of it.
+        GAMEMODE.DefaultTeam = next(RPExtraTeams)
+
         local hints = {
             "This may happen when you disable the default citizen job. Make sure you update GAMEMODE.DefaultTeam to the new default team.",
             "GAMEMODE.DefaultTeam may be set to a job that does not exist anymore. Did you remove the job you had set to default?",
@@ -984,10 +988,6 @@ function GM:loadCustomDarkRPItems()
         -- Gotta be totally clear here
         local stack = "\tjobs.lua, settings.lua, disabled_defaults.lua or any of your other custom files."
         DarkRP.error("GAMEMODE.DefaultTeam is not set to an existing job.", 1, hints, "lua/darkrp_customthings/jobs.lua", -1, stack)
-
-        -- Re-set to first available team to hopefully prevent further errors.
-        -- Because this error is more important than any that follow because of it.
-        GAMEMODE.DefaultTeam = next(RPExtraTeams)
     end
 end
 

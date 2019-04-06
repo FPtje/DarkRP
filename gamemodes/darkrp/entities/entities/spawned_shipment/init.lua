@@ -11,14 +11,18 @@ function ENT:Initialize()
 
     self.Destructed = false
     self:SetModel(contents and contents.shipmodel or "models/Items/item_item_crate.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
 
     self:StartSpawning()
     self.damage = 100
+
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+	end
 
     -- Create a serverside gun model
     -- it's required serverside to be able to get OBB information clientside
@@ -31,7 +35,8 @@ function ENT:Initialize()
     self:GetgunModel():SetParent(self)
 
     phys = self:GetgunModel():GetPhysicsObject()
-    if IsValid(phys) then
+
+    if phys:IsValid() then
         phys:EnableMotion(false)
     end
 

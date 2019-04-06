@@ -39,14 +39,6 @@ SWEP.Secondary.DefaultClip = -1     -- Default number of bullets in a clip
 SWEP.Secondary.Automatic = false        -- Automatic/Semi Auto
 SWEP.Secondary.Ammo = ""
 
---[[-------------------------------------------------------
-Name: SWEP:Initialize()
-Desc: Called when the weapon is first loaded
----------------------------------------------------------]]
-function SWEP:Initialize()
-    self:SetHoldType("normal")
-end
-
 function SWEP:SetupDataTables()
     self:NetworkVar("Bool", 0, "IsLockpicking")
     self:NetworkVar("Float", 0, "LockpickStartTime")
@@ -56,10 +48,10 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Entity", 0, "LockpickEnt")
 end
 
---[[-------------------------------------------------------
-Name: SWEP:PrimaryAttack()
-Desc: +attack1 has been pressed
----------------------------------------------------------]]
+function SWEP:Initialize()
+    self:SetHoldType("normal")
+end
+
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + 2)
     if self:GetIsLockpicking() then return end

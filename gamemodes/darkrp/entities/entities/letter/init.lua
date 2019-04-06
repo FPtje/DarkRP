@@ -6,15 +6,19 @@ include("commands.lua")
 
 function ENT:Initialize()
     self:SetModel("models/props_c17/paper01.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
 
     self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE_DEBRIS)
+
     local phys = self:GetPhysicsObject()
 
-    phys:Wake()
+    if phys:IsValid() then
+        phys:Wake()
+    end
+
     hook.Add("PlayerDisconnected", self, self.onPlayerDisconnected)
 end
 
@@ -22,7 +26,7 @@ function ENT:OnTakeDamage(dmg)
     self:TakePhysicsDamage(dmg)
 
     local typ = dmg:GetDamageType()
-    if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
+    if bit.band(typ, bit.bor(DMG_FALL, DMG_VEHICLE, DMG_DROWN, DMG_RADIATION, DMG_PHYSGUN)) > 0 then return end
 
     self:Remove()
 end

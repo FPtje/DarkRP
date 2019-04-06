@@ -1056,6 +1056,39 @@ DarkRP.getCategories = DarkRP.stub{
     metatable = DarkRP
 }
 
+DarkRP.ValidatedPhysicsInit = DarkRP.stub{
+    name = "ValidatedPhysicsInit",
+    description = "Initialise the physics of an entity, throw a discriptive error when this fails.",
+    parameters = {
+        {
+            name = "ent",
+            description = "Entity for which to create the PhysObj.",
+            type = "entity",
+            optional = false
+        },
+        {
+            name = "kind",
+            description = "The SOLID_ enum type. By default this is SOLID_VPHYSICS",
+            type = "number",
+            optional = true
+        },
+        {
+            name = "hint",
+            description = "Optional hint for the error message.",
+            type = "string",
+            optional = true
+        }
+    },
+    returns = {
+        {
+            name = "success",
+            description = "Whether creating the PhysObj succeeded",
+            type = "boolean"
+        }
+    },
+    metatable = DarkRP
+}
+
 DarkRP.hookStub{
     name = "DarkRPVarChanged",
     description = "Called when a DarkRPVar was changed.",

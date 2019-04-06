@@ -249,6 +249,68 @@ function DarkRP.explodeArg(arg)
     return args
 end
 
+--[[---------------------------------------------------------------------------
+Initialize Physics, throw an error on failure
+---------------------------------------------------------------------------]]
+function DarkRP.ValidatedPhysicsInit(ent, solidType, hint)
+    solidType = solidType or SOLID_VPHYSICS
+
+    if ent:PhysicsInit(solidType) then return true end
+
+    local class = ent:GetClass()
+
+    if solidType == SOLID_BSP then
+        DarkRP.errorNoHalt(string.format("%s has no physics and will be motionless", class), 2, {
+            "Is this a brush model? SOLID_BSP physics cannot initialize on entities that don't have brush models",
+            "The physics limit may have been hit",
+            hint
+        })
+
+        return false
+    end
+
+    if solidType == SOLID_VPHYSICS then
+        local mdl = ent:GetModel()
+
+        if not mdl or mdl == "" then
+            DarkRP.errorNoHalt(string.format("Cannot init physics on entity \"%s\" because it has no model", class), 2, {hint})
+            return false
+        end
+
+        mdl = string.lower(mdl)
+
+        if util.IsValidProp(mdl) then
+            -- Has physics, we must have hit the limit
+            DarkRP.errorNoHalt(string.format("physics limit hit - %s will be motionless", class), 2, {hint})
+
+            return false
+        end
+
+        if not file.Exists(mdl, "GAME") then
+            DarkRP.errorNoHalt(string.format("%s has missing model \"%s\" and will be invisible and motionless", class, mdl), 2, {
+                "Is the model path correct?",
+                "Is the model from an addon that is not installed?",
+                "Is the model from a game that isn't (properly) mounted? E.g. Counter Strike: Source",
+                hint
+            })
+
+            return false
+        end
+
+        DarkRP.errorNoHalt(string.format("%s has model \"%s\" with no physics and will be motionless", class, mdl), 2, {
+            "Does this model have an associated physics model (modelname.phy)?",
+            "Is this model supposed to have physics? Many models, like effects and view models aren't made to have physics",
+            hint
+        })
+
+        return false
+    end
+
+    DarkRP.errorNoHalt(string.format("Unable to initilize physics on entity \"%s\"", class, {hint}), 2)
+
+    return false
+end
+
 --[[-------------------------------------------------------------------------
 Check the database for integrity errors. Use in cases when stuff doesn't load
 on restart, or you get corruption errors.

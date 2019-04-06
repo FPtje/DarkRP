@@ -123,14 +123,14 @@ function DarkRP.toggleSleep(player, command)
         if IsValid(player:GetObserverTarget()) then return "" end
         for _, v in ipairs(ents.FindInSphere(player:GetPos(), 30)) do
             if v:GetClass() == "func_door" then
-                DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "sleep", "func_door exploit"))
+                DarkRP.notify(player, 1, 4, DarkRP.getPhrase("unable", "/sleep", "func_door exploit"))
                 return ""
             end
         end
 
         if not player:isArrested() then
             player.WeaponsForSleep = {}
-            for k, v in ipairs(player:GetWeapons()) do
+            for k, v in pairs(player:GetWeapons()) do
                 player.WeaponsForSleep[k] = {v:GetClass(), player:GetAmmoCount(v:GetPrimaryAmmoType()),
                 v:GetPrimaryAmmoType(), player:GetAmmoCount(v:GetSecondaryAmmoType()), v:GetSecondaryAmmoType(),
                 v:Clip1(), v:Clip2()}

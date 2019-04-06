@@ -5,12 +5,14 @@ include("shared.lua")
 
 function ENT:Initialize()
     self:SetModel("models/props_junk/Rock001a.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
-    self:Ignite(20,0)
+    self:Ignite(20, 0)
+
     local phys = self:GetPhysicsObject()
-    if phys and phys:IsValid() then
+
+    if phys:IsValid() then
         phys:Wake()
     end
 

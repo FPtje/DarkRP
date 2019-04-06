@@ -4,7 +4,7 @@ Talking
 local function PM(ply, args)
     local namepos = string.find(args, " ")
     if not namepos then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
@@ -12,11 +12,12 @@ local function PM(ply, args)
     local msg = string.sub(args, namepos + 1)
 
     if msg == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
     local target = DarkRP.findPlayer(name)
+    if target == ply then return "" end
 
     if target then
         local col = team.GetColor(ply:Team())
@@ -35,7 +36,7 @@ DarkRP.defineChatCommand("pm", PM, 1.5)
 local function Whisper(ply, args)
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return ""
         end
         DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("whisper") .. ") " .. ply:Nick(), text, GAMEMODE.Config.whisperDistance)
@@ -47,7 +48,7 @@ DarkRP.defineChatCommand("w", Whisper, 1.5)
 local function Yell(ply, args)
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return ""
         end
         DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("yell") .. ") " .. ply:Nick(), text, GAMEMODE.Config.yellDistance)
@@ -58,13 +59,13 @@ DarkRP.defineChatCommand("y", Yell, 1.5)
 
 local function Me(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return ""
         end
         if GAMEMODE.Config.alltalk then
@@ -89,7 +90,7 @@ local function OOC(ply, args)
 
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return ""
         end
         local col = team.GetColor(ply:Team())
@@ -113,14 +114,14 @@ DarkRP.defineChatCommand("ooc", OOC, true, 1.5)
 
 local function MayorBroadcast(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
     local Team = ply:Team()
     if not RPExtraTeams[Team] or not RPExtraTeams[Team].mayor then DarkRP.notify(ply, 1, 4, "You have to be mayor") return "" end
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return
         end
 
@@ -138,7 +139,7 @@ DarkRP.defineChatCommand("broadcast", MayorBroadcast, 1.5)
 
 local function SetRadioChannel(ply,args)
     if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 100 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "0<channel<100"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "0<" .. DarkRP.getPhrase("channel") .. "<100"))
         return ""
     end
     DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("channel_set_to_x", args))
@@ -151,12 +152,12 @@ local function SayThroughRadio(ply,args)
     if not ply.RadioChannel then ply.RadioChannel = 1 end
     local radioChannel = ply.RadioChannel
     if not args or args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return
         end
         local col = Color(180, 180, 180, 255)
@@ -174,7 +175,7 @@ DarkRP.defineChatCommand("radio", SayThroughRadio, 1.5)
 local function GroupMsg(ply, args)
     local DoSay = function(text)
         if text == "" then
-            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return
         end
 

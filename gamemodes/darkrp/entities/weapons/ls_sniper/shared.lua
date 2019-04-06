@@ -39,9 +39,6 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "smg1"
 SWEP.IronSightsPos = Vector(0, 0, 0) -- this is just to make it disappear so it doesn't show up whilst scoped
 
---[[---------------------------------------------------------------------------
-SetupDataTables
----------------------------------------------------------------------------]]
 function SWEP:SetupDataTables()
     BaseClass.SetupDataTables(self)
     -- Int 0 = BurstBulletNum
@@ -49,25 +46,24 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Int", 2, "ScopeLevel")
 end
 
---[[---------------------------------------------------------------------------
-Reload
----------------------------------------------------------------------------]]
-function SWEP:Reload()
-    if not IsValid(self:GetOwner()) then return end
-
+function SWEP:Deploy()
     self:GetOwner():SetFOV(0, 0)
 
     self:SetScopeLevel(0)
 
-    return BaseClass.Reload(self)
+    return BaseClass.Deploy(self)
 end
 
---[[---------------------------------------------------------------------------
-SecondaryAttack
----------------------------------------------------------------------------]]
+function SWEP:Holster()
+    self:GetOwner():SetFOV(0, 0)
+
+    self:SetScopeLevel(0)
+
+    return BaseClass.Holster(self)
+end
+
 local zoomFOV = {0, 0, 25, 5}
 function SWEP:SecondaryAttack()
-    if not IsValid(self:GetOwner()) then return end
     if not self.IronSightsPos then return end
 
     self:SetNextSecondaryFire(CurTime() + 0.1)
@@ -78,16 +74,10 @@ function SWEP:SecondaryAttack()
     self:GetOwner():SetFOV(zoomFOV[self:GetScopeLevel() + 1], 0)
 end
 
---[[---------------------------------------------------------------------------
-Holster the weapon
----------------------------------------------------------------------------]]
-function SWEP:Holster()
-    if not IsValid(self:GetOwner()) then return end
-
+function SWEP:Reload()
     self:GetOwner():SetFOV(0, 0)
 
     self:SetScopeLevel(0)
-    self:SetIronsights(false)
 
-    return BaseClass.Holster(self)
+    return BaseClass.Reload(self)
 end

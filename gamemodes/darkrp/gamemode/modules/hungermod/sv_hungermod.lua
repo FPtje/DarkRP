@@ -28,7 +28,7 @@ hook.Add("playerSetAFK", "Hungermod", HMAFKHook)
 
 local function BuyFood(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
@@ -95,7 +95,7 @@ local function BuyFood(ply, args)
         hook.Call("playerBoughtFood", nil, ply, v, SpawnedFood, cost)
         return ""
     end
-    DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+    DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
     return ""
 end
 DarkRP.defineChatCommand("buyfood", BuyFood)

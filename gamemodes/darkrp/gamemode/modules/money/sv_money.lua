@@ -54,12 +54,12 @@ Commands
 ---------------------------------------------------------------------------]]
 local function GiveMoney(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
     if not tonumber(args) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
@@ -67,14 +67,14 @@ local function GiveMoney(ply, args)
     local ent = trace.Entity
 
     if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(ply:GetPos()) >= 22500 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", "player"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("player")))
         return ""
     end
 
     local amount = math.floor(tonumber(args))
 
     if amount < 1 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">=1"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ">=1"))
         return ""
     end
 
@@ -84,13 +84,7 @@ local function GiveMoney(ply, args)
         return ""
     end
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_giveitem", RP)
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_GivingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_GIVE)
 
     timer.Simple(1.2, function()
         if not IsValid(ply) then
@@ -123,23 +117,23 @@ DarkRP.defineChatCommand("give", GiveMoney, 0.2)
 
 local function DropMoney(ply, args)
     if args == "" then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
 
     if not tonumber(args) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
     local amount = math.floor(tonumber(args))
 
     if amount < 1 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", ">0"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ">0"))
         return ""
     end
 
     if amount >= 2147483647 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "<2,147,483,647"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "<2,147,483,647"))
         return ""
     end
 
@@ -150,13 +144,7 @@ local function DropMoney(ply, args)
     end
 
     ply:addMoney(-amount)
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_dropitem", RP)
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_DroppingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
     timer.Simple(1, function()
         if not IsValid(ply) then return end
@@ -187,12 +175,12 @@ local function CreateCheque(ply, args)
         }
 
     if not recipient then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "recipient (1)"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), DarkRP.getPhrase("recipient") .. " (1)"))
         return ""
     end
 
     if amount <= 1 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", "argument", "amount (2)"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), DarkRP.getPhrase("amount") .. " (2)"))
         return ""
     end
 
@@ -214,10 +202,7 @@ local function CreateCheque(ply, args)
         ply:addMoney(-amount)
     end
 
-    umsg.Start("anim_dropitem", RecipientFilter():AddAllPlayers())
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_DroppingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
     timer.Simple(1, function()
         if not IsValid(ply) then return end

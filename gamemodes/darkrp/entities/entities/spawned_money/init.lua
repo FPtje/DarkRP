@@ -5,16 +5,19 @@ include("shared.lua")
 
 function ENT:Initialize()
     self:SetModel(GAMEMODE.Config.moneyModel or "models/props/cs_assault/money.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
     self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
-    local phys = self:GetPhysicsObject()
     self.nodupe = true
 
-    phys:Wake()
+    local phys = self:GetPhysicsObject()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 end
 
 function ENT:Use(activator, caller)
@@ -40,7 +43,7 @@ function ENT:OnTakeDamage(dmg)
     self:TakePhysicsDamage(dmg)
 
     local typ = dmg:GetDamageType()
-    if bit.band(typ, DMG_BULLET) ~= DMG_BULLET then return end
+    if bit.band(typ, bit.bor(DMG_FALL, DMG_VEHICLE, DMG_DROWN, DMG_RADIATION, DMG_PHYSGUN)) > 0 then return end
 
     self.USED = true
     self.hasMerged = true

@@ -7,13 +7,16 @@ function ENT:Initialize()
     self:initVars()
 
     self:SetModel(self.model)
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
 
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     self.sparking = false
     self.damage = 100

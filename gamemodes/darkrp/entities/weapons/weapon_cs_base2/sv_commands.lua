@@ -50,13 +50,7 @@ local function DropWeapon(ply)
         return ""
     end
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_dropitem", RP)
-        umsg.Entity(ply)
-    umsg.End()
-    ply.anim_DroppingItem = true
+    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
     timer.Simple(1, function()
         if IsValid(ply) and IsValid(ent) and ply:Alive() and ent:GetModel() ~= "" and not IsValid(ply:GetObserverTarget()) then

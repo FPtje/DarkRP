@@ -536,11 +536,14 @@ local function AddGroup(ply, cmd, args)
 end
 concommand.Add("FPP_AddGroup", runIfAccess("FPP_Settings", AddGroup))
 
-hook.Add("InitPostEntity", "FPP_Load_FAdmin", function()
-    if FAdmin then
-        for k, _ in pairs(FAdmin.Access.Groups) do
-            if not FPP.Groups[k] then AddGroup(Entity(0), "", {k, 1}) end
-        end
+hook.Add("InitPostEntity", "FPP_Load_CAMI", function()
+    if not CAMI then return end
+    for groupName, _ in pairs(CAMI.GetUsergroups()) do
+        if FPP.Groups[groupName] then continue end
+
+        FPP.Groups[groupName] = {}
+        FPP.Groups[groupName].allowdefault = true
+        FPP.Groups[groupName].tools = {}
     end
 end)
 
@@ -583,7 +586,7 @@ local function GroupChangeAllowDefault(ply, cmd, args)
     end
 
     FPP.Groups[name].allowdefault = tobool(newval)
-    MySQLite.query("UPDATE FPP_GROUPS3 SET allowdefault = " .. sql.SQLStr(newval) .. " WHERE groupname = " .. sql.SQLStr(name) .. ";")
+    MySQLite.query("REPLACE INTO FPP_GROUPS3 VALUES(" .. sql.SQLStr(name) .. ", " .. sql.SQLStr(newval) .. ");")
     FPP.Notify(ply, "Group status changed successfully", true)
 end
 concommand.Add("FPP_ChangeGroupStatus", runIfAccess("FPP_Settings", GroupChangeAllowDefault))
@@ -643,14 +646,14 @@ concommand.Add("FPP_RemoveGroupTool", runIfAccess("FPP_Settings", GroupRemoveToo
 
 -- Args: 1 = player, 2 = group
 local function PlayerSetGroup(ply, cmd, args)
-    if not args[2] then FPP.Notify(ply, "Invalid argument(s)", false) return end
+    if not args[2] then FPP.Notify(ply, "Group not given", false) return end
 
     local name = args[1]
     local group = string.lower(args[2])
     if IsValid(Player(tonumber(name) or 0)) then name = Player(tonumber(name)):SteamID()
-    elseif not string.find(name, "STEAM") and name ~= "UNKNOWN" then FPP.Notify(ply, "Invalid argument(s)", false) return end
+    elseif not string.find(name, "STEAM") and name ~= "UNKNOWN" and name ~= "BOT" then FPP.Notify(ply, "Player not found", false) return end
 
-    if not FPP.Groups[group] and (not FAdmin or not FAdmin.Access.Groups[group]) then
+    if not FPP.Groups[group] and (not CAMI or not CAMI.GetUsergroup(group)) then
         FPP.Notify(ply, "Group does not exists", false)
         return
     end

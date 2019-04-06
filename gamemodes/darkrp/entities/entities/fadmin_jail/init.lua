@@ -3,12 +3,15 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
+
     local phys = self:GetPhysicsObject()
-    phys:Wake()
-    phys:EnableMotion(false)
+
+    if phys:IsValid() then
+        phys:EnableMotion(false)
+    end
 
     self.SolidPos = self:GetPos()
     self.SolidAng = self:GetAngles()

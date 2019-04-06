@@ -4,18 +4,12 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS,
+        string.format("The issue lies with weapon \"%s\"", self:GetWeaponClass() or "unknown"))
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
     local phys = self:GetPhysicsObject()
-
-    if not phys:IsValid() then
-        self:SetModel("models/weapons/w_rif_ak47.mdl")
-        self:PhysicsInit(SOLID_VPHYSICS)
-        phys = self:GetPhysicsObject()
-    end
-
     phys:Wake()
 
     if self:Getamount() == 0 then

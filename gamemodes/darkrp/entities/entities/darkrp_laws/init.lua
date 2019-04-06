@@ -20,14 +20,13 @@ end}
 
 function ENT:Initialize()
     self:SetModel("models/props/cs_assault/Billboard.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
 
     local phys = self:GetPhysicsObject()
 
-    if phys and phys:IsValid() then
-        phys:Wake()
+    if phys:IsValid() then
         phys:EnableMotion(false)
     end
 end

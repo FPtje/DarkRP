@@ -43,14 +43,17 @@ end
 
 function ENT:Initialize()
     self:SetModel("models/props_lab/jar01a.mdl")
-    self:PhysicsInit(SOLID_VPHYSICS)
+    DarkRP.ValidatedPhysicsInit(self, SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
 
     self.CanUse = true
 
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+
+    if phys:IsValid() then
+        phys:Wake()
+    end
 
     self.damage = 10
     self:Setprice(self:Getprice() or 100)
