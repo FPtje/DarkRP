@@ -52,9 +52,13 @@ end
 
 local StartBannedUsers = {} -- Prevent rejoining before actual ban occurs
 hook.Add("PlayerAuthed", "FAdmin_LeavingBeforeBan", function(ply, SteamID, ...)
-    if table.HasValue(StartBannedUsers, SteamID) then
-        game.ConsoleCommand(string.format("kickid %s %s\n", ply:UserID(), "Getting banned"))
+    if not StartBannedUsers[SteamID] then return end
+    if not IsValid(StartBannedUsers[SteamID].author) then
+        StartBannedUsers[SteamID] = nil
+        return
     end
+
+    game.ConsoleCommand(string.format("kickid %s %s\n", ply:UserID(), "Getting banned"))
 end)
 
 -- Banning
@@ -149,24 +153,16 @@ local function Ban(ply, cmd, args)
             SendUserMessage("FAdmin_ban_start", target) -- Tell him he's getting banned
             target:Lock() -- Make sure he can't remove the hook clientside and keep minging.
             target:KillSilent()
-            table.insert(StartBannedUsers, target:SteamID())
+            StartBannedUsers[target:SteamID()] = { author = ply }
 
         elseif stage == "cancel" then
             if type(target) ~= "string" and IsValid(target) then
                 SendUserMessage("FAdmin_ban_cancel", target) -- No I changed my mind, you can stay
                 target:UnLock()
                 target:Spawn()
-                for k, v in pairs(StartBannedUsers) do
-                    if v == target:SteamID() then
-                        table.remove(StartBannedUsers, k)
-                    end
-                end
+                StartBannedUsers[target:SteamID()] = nil
             else -- If he left and you want to cancel
-                for k,v in pairs(StartBannedUsers) do
-                    if v == args[1] then
-                        table.remove(StartBannedUsers, k)
-                    end
-                end
+                StartBannedUsers[args[1]] = nil
             end
         elseif stage == "update" then -- Update reason text
             if not args[4] or type(target) == "string" or not IsValid(target) then return false end
@@ -187,24 +183,14 @@ local function Ban(ply, cmd, args)
             local TimeText = FAdmin.PlayerActions.ConvertBanTime(time)
 
             if type(target) ~= "string" and IsValid(target) then
-                for k, v in pairs(StartBannedUsers) do
-                    if v == target:SteamID() then
-                        table.remove(StartBannedUsers, k)
-                        break
-                    end
-                end
+                StartBannedUsers[target:SteamID()] = nil
                 local nick = ply.Nick and ply:Nick() or "console"
                 SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")
 
                 Reason = string.gsub(Reason, ";", " ")
                 target:Kick("banned by " .. nick .. " for " .. TimeText .. " (" .. Reason .. ")")
             else
-                for k, v in pairs(StartBannedUsers) do
-                    if v == args[1] then
-                        table.remove(StartBannedUsers, k)
-                        break
-                    end
-                end
+                StartBannedUsers[args[1]] = nil
 
                 SaveBan(target, nil, time, Reason ~= "" and Reason, ply.Nick and ply:Nick() or "console", ply.SteamID and ply:SteamID() or "Console") -- Again default to one hour
             end
@@ -236,12 +222,7 @@ local function UnBan(ply, cmd, args)
         end
     end
 
-    for k, v in pairs(StartBannedUsers) do
-        if string.upper(v) == SteamID then
-            StartBannedUsers[k] = nil
-            break
-        end
-    end
+    StartBannedUsers[SteamID] = nil
 
     game.ConsoleCommand("removeid " .. SteamID .. "\n")
     FAdmin.Messages.FireNotification("unban", ply, nil, {nick, SteamID})
@@ -316,5 +297,17 @@ hook.Add("PlayerInitialSpawn", "FAdmin_Bans", function(ply)
     local allowedIn, reason = canJoin(ply:SteamID())
     if allowedIn == false then
         ply:Kick(reason)
+    end
+end)
+
+hook.Add("PlayerDisconnected", "FAdmin bans", function(ply)
+    for k,v in pairs(StartBannedUsers) do
+        if v.author ~= ply then continue end
+        StartBannedUsers[k] = nil
+        local target = player.GetBySteamID(k)
+        if not IsValid(target) then continue end
+        SendUserMessage("FAdmin_ban_cancel", target)
+        target:UnLock()
+        target:Spawn()
     end
 end)
