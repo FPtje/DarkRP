@@ -221,6 +221,11 @@ function SWEP:Reload()
     else
         for _, v in pairs(ent.ConfiscatedWeapons) do
             local wep = ent:Give(v.class)
+
+            -- :Give returns NULL when the player already has the weapon
+            wep = IsValid(wep) and wep or ent:GetWeapon(v.class)
+            if not IsValid(wep) then continue end
+
             ent:RemoveAllAmmo()
             ent:SetAmmo(v.primaryAmmoCount, v.primaryAmmoType, false)
             ent:SetAmmo(v.secondaryAmmoCount, v.secondaryAmmoType, false)
