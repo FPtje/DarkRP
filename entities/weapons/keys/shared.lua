@@ -32,11 +32,14 @@ SWEP.Spawnable = true
 SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
 SWEP.Sound = "doors/door_latch3.wav"
+
+SWEP.Primary.Delay = 0.3
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = ""
 
+SWEP.Secondary.Delay = 0.3
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
@@ -99,7 +102,7 @@ function SWEP:PrimaryAttack()
 
     if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
 
-    self:SetNextPrimaryFire(CurTime() + 0.3)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
     if CLIENT then return end
 
@@ -118,7 +121,7 @@ function SWEP:SecondaryAttack()
 
     if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
 
-    self:SetNextSecondaryFire(CurTime() + 0.3)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if CLIENT then return end
 
