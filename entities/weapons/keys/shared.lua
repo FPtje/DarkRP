@@ -75,10 +75,7 @@ local function lockUnlockAnimation(ply, snd)
     ply:EmitSound("npc/metropolice/gear" .. math.floor(math.Rand(1,7)) .. ".wav")
     timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_keys", RP)
+    umsg.Start("anim_keys")
         umsg.Entity(ply)
         umsg.String("usekeys")
     umsg.End()
@@ -88,6 +85,7 @@ end
 
 local function doKnock(ply, sound)
     ply:EmitSound(sound, 100, math.random(90, 110))
+
     umsg.Start("anim_keys")
         umsg.Entity(ply)
         umsg.String("knocking")

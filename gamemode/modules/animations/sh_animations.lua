@@ -26,64 +26,40 @@ function DarkRP.removePlayerGesture(anim)
     Anims[anim] = nil
 end
 
-hook.Add("CalcMainActivity", "darkrp_animations", function(ply, velocity) -- Using hook.Add and not GM:CalcMainActivity to prevent animation problems
-    if CLIENT then
-        if ply.SaidHi then
-            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
+local function physGunCheck(ply)
+    hook.Add("Think", "darkrp_anim_physgun_"..ply:EntIndex(), function()
+        if IsValid(ply) and ply:Alive() and ply:GetActiveWeapon():IsValid() and ply:GetActiveWeapon():GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
+            local ent = ply:GetEyeTrace().Entity
+            if IsValid(ent) and ent:IsPlayer() and not ply.SaidHi then
+                ply.SaidHi = true
+                ply:DoAnimationEvent(ACT_SIGNAL_GROUP)
+            end
+        else
             ply.SaidHi = nil
+            hook.Remove("Think", "darkrp_anim_physgun_"..ply:EntIndex())
         end
+    end)
+end
 
-        if ply.ThrewPoop then
-            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
-            ply.ThrewPoop = nil
+hook.Add("KeyPress", "darkrp_animations", function(ply, key)
+    if key == IN_ATTACK then
+        local weapon = ply:GetActiveWeapon()
+
+        if weapon:IsValid() then
+            local class = weapon:GetClass()
+
+            -- Saying hi/hello to a player
+            if class == "weapon_physgun" then
+                physGunCheck(ply)
+
+            -- Hobo throwing poop!
+            elseif class == "weapon_bugbait" then
+                local Team = ply:Team()
+                if RPExtraTeams[Team] and RPExtraTeams[Team].hobo then
+                    ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_THROW)
+                end
+            end
         end
-
-        if ply.knocking then
-            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
-            ply.knocking = nil
-        end
-
-        if ply.usekeys then
-            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
-            ply.usekeys = nil
-        end
-    end
-
-    if not SERVER then return end
-
-    -- Hobo throwing poop!
-    local Weapon = ply:GetActiveWeapon()
-    local Team = ply:Team()
-    if RPExtraTeams[Team] and RPExtraTeams[Team].hobo and not ply.ThrewPoop and Weapon:IsValid() and Weapon:GetClass() == "weapon_bugbait" and ply:KeyDown(IN_ATTACK) then
-        ply.ThrewPoop = true
-        ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_THROW, true)
-
-        local RP = RecipientFilter()
-        RP:AddAllPlayers()
-
-        umsg.Start("anim_throwpoop", RP)
-            umsg.Entity(ply)
-        umsg.End()
-    elseif ply.ThrewPoop and not ply:KeyDown(IN_ATTACK) then
-        ply.ThrewPoop = nil
-    end
-
-    -- Saying hi/hello to a player
-    if not ply.SaidHi and Weapon:IsValid() and Weapon:GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
-        local ent = ply:GetEyeTrace().Entity
-        if IsValid(ent) and ent:IsPlayer() then
-            ply.SaidHi = true
-            ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_SIGNAL_GROUP, true)
-
-            local RP = RecipientFilter()
-            RP:AddAllPlayers()
-
-            umsg.Start("anim_sayhi", RP)
-                umsg.Entity(ply)
-            umsg.End()
-        end
-    elseif ply.SaidHi and not ply:KeyDown(IN_ATTACK) then
-        ply.SaidHi = nil
     end
 end)
 
@@ -105,30 +81,14 @@ if SERVER then
     return
 end
 
-local function ThrowPoop(um)
-    local ply = um:ReadEntity()
-    if not IsValid(ply) then return end
-
-    ply.ThrewPoop = true
-end
-usermessage.Hook("anim_throwpoop", ThrowPoop)
-
-local function PhysgunHi(um)
-    local ply = um:ReadEntity()
-    if not IsValid(ply) then return end
-
-    ply.SaidHi = true
-end
-usermessage.Hook("anim_sayhi", PhysgunHi)
-
 local function KeysAnims(um)
     local ply = um:ReadEntity()
+    local act = um:ReadString()
+
     if not IsValid(ply) then return end
-    local Type = um:ReadString()
-    ply[Type] = true
+    ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act == "usekeys" and ACT_GMOD_GESTURE_ITEM_PLACE or ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 end
 usermessage.Hook("anim_keys", KeysAnims)
-
 
 local function CustomAnimation(um)
     local ply = um:ReadEntity()
