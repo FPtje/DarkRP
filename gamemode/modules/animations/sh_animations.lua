@@ -27,7 +27,8 @@ function DarkRP.removePlayerGesture(anim)
 end
 
 local function physGunCheck(ply)
-    hook.Add("Think", "darkrp_anim_physgun_"..ply:EntIndex(), function()
+    local hookName = "darkrp_anim_physgun_"..ply:EntIndex()
+    hook.Add("Think", hookName, function()
         if IsValid(ply) and ply:Alive() and ply:GetActiveWeapon():IsValid() and ply:GetActiveWeapon():GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
             local ent = ply:GetEyeTrace().Entity
             if IsValid(ent) and ent:IsPlayer() and not ply.SaidHi then
@@ -35,8 +36,10 @@ local function physGunCheck(ply)
                 ply:DoAnimationEvent(ACT_SIGNAL_GROUP)
             end
         else
-            ply.SaidHi = nil
-            hook.Remove("Think", "darkrp_anim_physgun_"..ply:EntIndex())
+            if IsValid(ply) then
+                ply.SaidHi = nil
+            end
+            hook.Remove("Think", hookName)
         end
     end)
 end
