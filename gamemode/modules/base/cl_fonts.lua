@@ -59,14 +59,14 @@ local function loadFonts()
         weight = 800,
         antialias = true,
         shadow = false,
-        font = "Default"})
+        font = "Verdana"})
 
     surface.CreateFont("HUDNumber5", {
         size = 30,
         weight = 800,
         antialias = true,
         shadow = false,
-        font = "Default"})
+        font = "Verdana"})
 
     surface.CreateFont("ScoreboardHeader", {
         size = 32,
@@ -115,6 +115,6 @@ local function loadFonts()
         weight = 500,
         antialias = true,
         shadow = true,
-        font = "ChatFont"})
+        font = "Verdana"})
 end
 loadFonts()
