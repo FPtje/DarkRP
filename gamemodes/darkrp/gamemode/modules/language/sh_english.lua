@@ -469,6 +469,7 @@ local my_language = {
     hitman_arrested = "The hitman was arrested!",
     hitman_changed_team = "The hitman changed team!",
     x_had_hit_ordered_by_y = "%s had an active hit ordered by %s",
+    place_a_hit = "place a hit!",
 
     -- Vote Restrictions
     hobos_no_rights = "Hobos have no voting rights!",

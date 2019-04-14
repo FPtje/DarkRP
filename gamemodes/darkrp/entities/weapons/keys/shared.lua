@@ -32,11 +32,14 @@ SWEP.Spawnable = true
 SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
 SWEP.Sound = "doors/door_latch3.wav"
+
+SWEP.Primary.Delay = 0.3
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = ""
 
+SWEP.Secondary.Delay = 0.3
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
@@ -75,10 +78,7 @@ local function lockUnlockAnimation(ply, snd)
     ply:EmitSound("npc/metropolice/gear" .. math.floor(math.Rand(1,7)) .. ".wav")
     timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
 
-    local RP = RecipientFilter()
-    RP:AddAllPlayers()
-
-    umsg.Start("anim_keys", RP)
+    umsg.Start("anim_keys")
         umsg.Entity(ply)
         umsg.String("usekeys")
     umsg.End()
@@ -88,6 +88,7 @@ end
 
 local function doKnock(ply, sound)
     ply:EmitSound(sound, 100, math.random(90, 110))
+
     umsg.Start("anim_keys")
         umsg.Entity(ply)
         umsg.String("knocking")
@@ -101,7 +102,7 @@ function SWEP:PrimaryAttack()
 
     if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
 
-    self:SetNextPrimaryFire(CurTime() + 0.3)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
     if CLIENT then return end
 
@@ -120,7 +121,7 @@ function SWEP:SecondaryAttack()
 
     if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
 
-    self:SetNextSecondaryFire(CurTime() + 0.3)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if CLIENT then return end
 

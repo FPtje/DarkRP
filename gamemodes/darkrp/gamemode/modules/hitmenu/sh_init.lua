@@ -30,6 +30,7 @@ DarkRP.getHitmanTeams = fp{fn.Id, hitmanTeams}
 function DarkRP.hooks:canRequestHit(hitman, customer, target, price)
     if not hitman:isHitman() then return false, DarkRP.getPhrase("player_not_hitman") end
     if customer:GetPos():DistToSqr(hitman:GetPos()) > minHitDistanceSqr then return false, DarkRP.getPhrase("distance_too_big") end
+    if not customer:Alive() then return false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("place_a_hit")) end
     if hitman == target then return false, DarkRP.getPhrase("hitman_no_suicide") end
     if hitman == customer then return false, DarkRP.getPhrase("hitman_no_self_order") end
     if not customer:canAfford(price) then return false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit")) end
