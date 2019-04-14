@@ -24,6 +24,7 @@ function ENT:InitCsModel()
     self.csModel:SetPos(self:GetPos())
     self.csModel:SetParent(self)
     self.csModel:SetModelScale(1.5, 0)
+    self.csModel:SetNoDraw(true)
     self:CallOnRemove("csModel", fp{SafeRemoveEntity, self.csModel})
 end
 
@@ -44,6 +45,9 @@ function ENT:Draw()
     end
     self.csModel:SetPos(Pos)
     self.csModel:SetAngles(rotAng)
+    if not self:IsDormant() then
+        self.csModel:DrawModel()
+    end
 
 
     local owner = self:Getowning_ent()
