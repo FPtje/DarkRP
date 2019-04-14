@@ -286,10 +286,13 @@ function GM:KeyPress(ply, code)
     self.Sandbox.KeyPress(self, ply, code)
 end
 
-local function IsInRoom(listenerShootPos, talkerShootPos) -- IsInRoom function to see if the player is in the same room.
+-- IsInRoom function to see if the player is in the same room.
+local function IsInRoom(listenerShootPos, talkerShootPos, talker)
     local tracedata = {}
     tracedata.start = talkerShootPos
     tracedata.endpos = listenerShootPos
+    -- Listener needs not be ignored as that's the end of the trace
+    tracedata.filter = talker
     local trace = util.TraceLine(tracedata)
 
     return not trace.HitWorld
@@ -310,7 +313,7 @@ local function calcPlyCanHearPlayerVoice(listener)
         local talkerShootPos = talker:GetShootPos()
         listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
             (shootPos:DistToSqr(talkerShootPos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
-                (not dynv or IsInRoom(shootPos, talkerShootPos))) -- Dynamic voice is on and players are in the same room
+                (not dynv or IsInRoom(shootPos, talkerShootPos, talker))) -- Dynamic voice is on and players are in the same room
     end
 end
 hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
