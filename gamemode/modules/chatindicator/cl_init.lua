@@ -28,34 +28,36 @@ local function drawIndicator(ply)
     ply.indicator:DrawModel()
 end
 
-hook.Add("PostPlayerDraw", "DarkRP_ChatIndicator", drawIndicator)
-hook.Add("CreateClientsideRagdoll", "DarkRP_ChatIndicator", function(ent, ragdoll)
-    if not ent:IsPlayer() then return end
-
-    local oldRenderOverride = ragdoll.RenderOverride -- Just in case - best be safe
-    ragdoll.RenderOverride = function(self)
-        if ent:IsValid() then
-            drawIndicator(ent)
+if not DarkRP.disabledDefaults["modules"]["chatindicator"] then
+    hook.Add("PostPlayerDraw", "DarkRP_ChatIndicator", drawIndicator)
+    hook.Add("CreateClientsideRagdoll", "DarkRP_ChatIndicator", function(ent, ragdoll)
+        if not ent:IsPlayer() then return end
+    
+        local oldRenderOverride = ragdoll.RenderOverride -- Just in case - best be safe
+        ragdoll.RenderOverride = function(self)
+            if ent:IsValid() then
+                drawIndicator(ent)
+            end
+    
+            if oldRenderOverride then
+                oldRenderOverride(self)
+            else
+                self:DrawModel()
+            end
         end
-
-        if oldRenderOverride then
-            oldRenderOverride(self)
-        else
-            self:DrawModel()
+    end)
+    
+    -- CSEnts aren't GC'd.
+    -- https://github.com/Facepunch/garrysmod-issues/issues/1387
+    gameevent.Listen("player_disconnect")
+    hook.Add("player_disconnect", "DarkRP_ChatIndicator", function(data)
+        local ply = Player(data.userid)
+    
+        if not IsValid(ply) then return end -- disconnected while joining
+    
+        if ply.indicator then
+            ply.indicator:Remove()
+            ply.indicator = nil
         end
-    end
-end)
-
--- CSEnts aren't GC'd.
--- https://github.com/Facepunch/garrysmod-issues/issues/1387
-gameevent.Listen("player_disconnect")
-hook.Add("player_disconnect", "DarkRP_ChatIndicator", function(data)
-    local ply = Player(data.userid)
-
-    if not IsValid(ply) then return end -- disconnected while joining
-
-    if ply.indicator then
-        ply.indicator:Remove()
-        ply.indicator = nil
-    end
-end)
+    end)
+end
