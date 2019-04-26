@@ -80,22 +80,18 @@ for _, v in pairs(files) do
 end
 
 for _, folder in SortedPairs(folders, true) do
-    if folder == "." or folder == ".." or DarkRP.disabledDefaults["modules"][folder] then continue end
-
-    for _, File in SortedPairs(file.Find(fol .. folder .. "/sh_*.lua", "LUA"), true) do
-        AddCSLuaFile(fol .. folder .. "/" .. File)
-        if File == "sh_interface.lua" then continue end
-        include(fol .. folder .. "/" .. File)
-    end
-
-    for _, File in SortedPairs(file.Find(fol .. folder .. "/sv_*.lua", "LUA"), true) do
-        if File == "sv_interface.lua" then continue end
-        include(fol .. folder .. "/" .. File)
-    end
-
-    for _, File in SortedPairs(file.Find(fol .. folder .. "/cl_*.lua", "LUA"), true) do
-        if File == "cl_interface.lua" then continue end
-        AddCSLuaFile(fol .. folder .. "/" .. File)
+    if folder == "." or folder == ".." then continue end
+    for _, File in SortedPairs(file.Find(fol .. folder .. "/*.lua", "LUA"), true) do
+        if string.find( File:lower(), "_interface" ) then continue end
+        local prefix = string.sub( File, 1, 3 )
+        if prefix == "sh_" then
+            AddCSLuaFile(fol .. folder .. "/" .. File)
+            include(fol .. folder .. "/" .. File)
+        elseif prefix == "sv_" then
+            include(fol .. folder .. "/" .. File)
+        elseif prefix == "cl_" then
+            AddCSLuaFile(fol .. folder .. "/" .. File)
+        end
     end
 end
 
