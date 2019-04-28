@@ -99,12 +99,10 @@
         Called when a successful connection to the database has been made.
 ]]
 
-local bit = bit
 local debug = debug
 local error = error
 local ErrorNoHalt = ErrorNoHalt
 local hook = hook
-local include = include
 local pairs = pairs
 local require = require
 local sql = sql
@@ -112,7 +110,6 @@ local string = string
 local table = table
 local timer = timer
 local tostring = tostring
-local GAMEMODE = GM or GAMEMODE
 local mysqlOO
 local TMySQL
 local _G = _G
@@ -159,8 +156,8 @@ function initialize(config)
         connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
     else
         timer.Simple(0, function()
-            GAMEMODE.DatabaseInitialized = GAMEMODE.DatabaseInitialized or function() end
-            hook.Call("DatabaseInitialized", GAMEMODE)
+            _G.GAMEMODE.DatabaseInitialized = _G.GAMEMODE.DatabaseInitialized or function() end
+            hook.Call("DatabaseInitialized", _G.GAMEMODE)
         end)
     end
 end
@@ -245,14 +242,14 @@ function queueQuery(sqlText, callback, errorCallback)
 end
 
 local function msOOQuery(sqlText, callback, errorCallback, queryValue)
-    local query = databaseObject:query(sqlText)
+    local queryObject = databaseObject:query(sqlText)
     local data
-    query.onData = function(Q, D)
+    queryObject.onData = function(Q, D)
         data = data or {}
         data[#data + 1] = D
     end
 
-    query.onError = function(Q, E)
+    queryObject.onError = function(Q, E)
         if databaseObject:status() == mysqlOO.DATABASE_NOT_CONNECTED then
             table.insert(cachedQueries, {sqlText, callback, queryValue})
 
@@ -265,11 +262,11 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
         if not supp then error(E .. " (" .. sqlText .. ")") end
     end
 
-    query.onSuccess = function()
+    queryObject.onSuccess = function()
         local res = queryValue and data and data[1] and table.GetFirstValue(data[1]) or not queryValue and data or nil
-        if callback then callback(res, query:lastInsert()) end
+        if callback then callback(res, queryObject:lastInsert()) end
     end
-    query:start()
+    queryObject:start()
 end
 
 local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
@@ -329,8 +326,9 @@ local function onConnected()
         end
     end
     cachedQueries = {}
+    local GM = _G.GAMEMODE or _G.GM
 
-    hook.Call("DatabaseInitialized", GAMEMODE.DatabaseInitialized and GAMEMODE or nil)
+    hook.Call("DatabaseInitialized", GM.DatabaseInitialized and GM or nil)
 end
 
 msOOConnect = function(host, username, password, database_name, database_port)
@@ -364,13 +362,13 @@ function connectToMySQL(host, username, password, database_name, database_port)
     func(host, username, password, database_name, database_port)
 end
 
-function SQLStr(str)
+function SQLStr(sqlStr)
     local escape =
         not CONNECTED_TO_MYSQL and sql.SQLStr or
         mysqlOO                and function(str) return "\"" .. databaseObject:escape(tostring(str)) .. "\"" end or
         TMySQL                 and function(str) return "\"" .. databaseObject:Escape(tostring(str)) .. "\"" end
 
-    return escape(str)
+    return escape(sqlStr)
 end
 
 function tableExists(tbl, callback, errorCallback)
