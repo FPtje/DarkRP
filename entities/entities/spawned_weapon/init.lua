@@ -52,26 +52,25 @@ function ENT:Use(activator, caller)
         return
     end
 
-    local ammoType = weapon:GetPrimaryAmmoType()
+    local primaryAmmoType = weapon:GetPrimaryAmmoType()
+    local secondaryAmmoType = weapon:GetSecondaryAmmoType()
     local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
     local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
     if not CanPickup or ShouldntContinue then return end
 
-    local newAmmo = activator:GetAmmoCount(ammoType) -- Store ammo count before weapon pickup
+    -- Store ammo count before weapon pickup
+    local primAmmo = activator:GetAmmoCount(primaryAmmoType) + (self.clip1 or 0)
+    local secAmmo = activator:GetAmmoCount(secondaryAmmoType) + (self.clip2 or 0)
 
     weapon:Remove()
 
     activator:Give(class)
 
     weapon = activator:GetWeapon(class)
-    newAmmo = newAmmo + (self.ammoadd or 0) -- Gets rid of any ammo given during weapon pickup
+    primAmmo = primAmmo + (self.ammoadd or 0) -- Gets rid of any ammo given during weapon pickup
 
-    if self.clip1 then
-        weapon:SetClip1(self.clip1)
-        weapon:SetClip2(self.clip2 or -1)
-    end
-
-    activator:SetAmmo(newAmmo, ammoType)
+    activator:SetAmmo(primAmmo, primaryAmmoType)
+    activator:SetAmmo(secAmmo, secondaryAmmoType)
 
     self:DecreaseAmount()
 end
