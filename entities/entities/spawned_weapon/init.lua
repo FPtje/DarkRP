@@ -52,26 +52,45 @@ function ENT:Use(activator, caller)
         return
     end
 
-    local ammoType = weapon:GetPrimaryAmmoType()
     local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
     local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
     if not CanPickup or ShouldntContinue then return end
 
-    local newAmmo = activator:GetAmmoCount(ammoType) -- Store ammo count before weapon pickup
-
+    -- Store ammo count before weapon pickup
+    local primaryAmmoType = weapon:GetPrimaryAmmoType()
+    local secondaryAmmoType = weapon:GetSecondaryAmmoType()
     weapon:Remove()
 
-    activator:Give(class)
+    weapon = activator:Give(class)
 
-    weapon = activator:GetWeapon(class)
-    newAmmo = newAmmo + (self.ammoadd or 0) -- Gets rid of any ammo given during weapon pickup
-
-    if self.clip1 then
-        weapon:SetClip1(self.clip1)
-        weapon:SetClip2(self.clip2 or -1)
+    local clip1, clip2 = self.clip1, self.clip2
+    if weapon:IsValid() then
+        if clip1 and clip1 ~= -1 and weapon:Clip1() ~= -1 then
+            weapon:SetClip1(clip1)
+            clip1 = 0
+        end
+        if clip2 and clip2 ~= -1 and weapon:Clip2() ~= -1 then
+            weapon:SetClip2(self.clip2)
+            clip2 = 0
+        end
+    else
+        weapon = activator:GetWeapon(class)
+        if clip2 and clip2 > 0 and weapon:Clip2() ~= -1 then
+            weapon:SetClip2(weapon:Clip2() + clip2)
+            clip2 = 0
+        end
     end
 
-    activator:SetAmmo(newAmmo, ammoType)
+    if primaryAmmoType > 0 then
+        local primAmmo = activator:GetAmmoCount(primaryAmmoType)
+        primAmmo = primAmmo + (self.ammoadd or 0) + (clip1 or 0) -- Gets rid of any ammo given during weapon pickup
+        activator:SetAmmo(primAmmo, primaryAmmoType)
+    end
+
+    if secondaryAmmoType > 0 then
+        local secAmmo = activator:GetAmmoCount(secondaryAmmoType)
+        activator:SetAmmo(secAmmo, secondaryAmmoType)
+    end
 
     self:DecreaseAmount()
 end

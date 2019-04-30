@@ -12,7 +12,7 @@ function meta:dropDRPWeapon(weapon)
         if not found then return end
     end
 
-    local ammo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
+    local primAmmo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
 
     local ent = ents.Create("spawned_weapon")
@@ -26,11 +26,12 @@ function meta:dropDRPWeapon(weapon)
     ent.nodupe = true
     ent.clip1 = weapon:Clip1()
     ent.clip2 = weapon:Clip2()
-    ent.ammoadd = ammo
+    ent.ammoadd = primAmmo
 
     hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
 
-    self:RemoveAmmo(ammo, weapon:GetPrimaryAmmoType())
+    self:RemoveAmmo(primAmmo, weapon:GetPrimaryAmmoType())
+    self:RemoveAmmo(self:GetAmmoCount(weapon:GetSecondaryAmmoType()), weapon:GetSecondaryAmmoType())
 
     ent:Spawn()
 
