@@ -88,7 +88,7 @@ function ENT:Use(activator, caller)
     end
 
     if secondaryAmmoType > 0 then
-        local secAmmo = activator:GetAmmoCount(secondaryAmmoType)
+        local secAmmo = activator:GetAmmoCount(secondaryAmmoType) + (clip2 or 0)
         activator:SetAmmo(secAmmo, secondaryAmmoType)
     end
 
