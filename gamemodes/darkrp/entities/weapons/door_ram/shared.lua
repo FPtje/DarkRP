@@ -201,7 +201,7 @@ Desc: +attack1 has been pressed
 function SWEP:PrimaryAttack()
     if not self:GetIronsights() then return end
 
-    self:SetNextPrimaryFire(CurTime() + 2.5)
+    self:SetNextPrimaryFire(CurTime() + 0.1)
 
     self:GetOwner():LagCompensation(true)
     local trace = self:GetOwner():GetEyeTrace()
@@ -214,6 +214,8 @@ function SWEP:PrimaryAttack()
     end
 
     if not hasRammed then return end
+
+    self:SetNextPrimaryFire(CurTime() + 2.5)
 
     self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
 
