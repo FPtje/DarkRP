@@ -53,7 +53,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-    self:SetNextPrimaryFire(CurTime() + 2)
+    self:SetNextPrimaryFire(CurTime() + 0.5)
     if self:GetIsLockpicking() then return end
 
     self:GetOwner():LagCompensation(true)
