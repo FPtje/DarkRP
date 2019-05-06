@@ -219,16 +219,16 @@ function SWEP:Reload()
         DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("no_weapons_confiscated", ent:Nick()))
         return
     else
+        ent:RemoveAllAmmo()
         for _, v in pairs(ent.ConfiscatedWeapons) do
-            local wep = ent:Give(v.class)
+            local wep = ent:Give(v.class, true)
 
             -- :Give returns NULL when the player already has the weapon
             wep = IsValid(wep) and wep or ent:GetWeapon(v.class)
             if not IsValid(wep) then continue end
 
-            ent:RemoveAllAmmo()
-            ent:SetAmmo(v.primaryAmmoCount, v.primaryAmmoType, false)
-            ent:SetAmmo(v.secondaryAmmoCount, v.secondaryAmmoType, false)
+            ent:GiveAmmo(v.primaryAmmoCount, v.primaryAmmoType, true)
+            ent:GiveAmmo(v.secondaryAmmoCount, v.secondaryAmmoType, true)
 
             wep:SetClip1(v.clip1)
             wep:SetClip2(v.clip2)
