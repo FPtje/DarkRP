@@ -82,7 +82,7 @@ function DarkRP.toggleSleep(player, command)
             player:RemoveAllAmmo()
             for _, v in pairs(player.WeaponsForSleep) do
                 local wep = player:Give(v[1])
-                if !IsValid(wep) then continue end
+                if not IsValid(wep) then continue end
 
                 player:GiveAmmo(v[2], v[3], true)
                 player:GiveAmmo(v[4], v[5], true)
