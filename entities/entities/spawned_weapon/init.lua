@@ -61,7 +61,7 @@ function ENT:Use(activator, caller)
     local secondaryAmmoType = weapon:GetSecondaryAmmoType()
     weapon:Remove()
 
-    weapon = activator:Give(class)
+    weapon = activator:Give(class, true)
 
     local clip1, clip2 = self.clip1, self.clip2
     if weapon:IsValid() then
