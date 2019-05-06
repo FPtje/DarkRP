@@ -79,11 +79,13 @@ function DarkRP.toggleSleep(player, command)
         ragdoll:Remove()
         ragdoll.OwnerINT = 0
         if player.WeaponsForSleep and player:GetTable().BeforeSleepTeam == player:Team() then
+            player:RemoveAllAmmo()
             for _, v in pairs(player.WeaponsForSleep) do
                 local wep = player:Give(v[1])
-                player:RemoveAllAmmo()
-                player:SetAmmo(v[2], v[3], false)
-                player:SetAmmo(v[4], v[5], false)
+                if not IsValid(wep) then continue end
+
+                player:GiveAmmo(v[2], v[3], true)
+                player:GiveAmmo(v[4], v[5], true)
 
                 wep:SetClip1(v[6])
                 wep:SetClip2(v[7])

@@ -67,12 +67,19 @@ local function BuyPistol(ply, args)
 
     local tr = util.TraceLine(trace)
 
+    local defaultClip, clipSize
+    local wep_tbl = weapons.Get(shipment.entity)
+    if wep_tbl and wep_tbl.Primary then
+        defaultClip = wep_tbl.Primary.DefaultClip
+        clipSize = wep_tbl.Primary.ClipSize
+    end
+
     local weapon = ents.Create("spawned_weapon")
     weapon:SetModel(shipment.model)
     weapon:SetWeaponClass(shipment.entity)
     weapon:SetPos(tr.HitPos)
-    weapon.ammoadd = weapons.Get(shipment.entity) and (shipment.spareammo or weapons.Get(shipment.entity).Primary.DefaultClip)
-    weapon.clip1 = shipment.clip1
+    weapon.ammoadd = shipment.spareammo or defaultClip
+    weapon.clip1 = shipment.clip1 or clipSize
     weapon.clip2 = shipment.clip2
     weapon.nodupe = true
     weapon:Spawn()
