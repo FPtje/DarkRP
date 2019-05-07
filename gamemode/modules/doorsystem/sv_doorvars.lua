@@ -128,7 +128,7 @@ function plyMeta:sendDoorData()
 
     local res = {}
     for _, v in ipairs(ents.GetAll()) do
-        if not v:getDoorData() or table.Count(v:getDoorData()) == 0 then continue end
+        if not v:getDoorData() or table.IsEmpty(v:getDoorData()) then continue end
 
         res[v:EntIndex()] = v:getDoorData()
     end

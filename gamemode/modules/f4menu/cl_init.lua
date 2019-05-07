@@ -58,20 +58,20 @@ function DarkRP.hooks.F4MenuTabs()
     DarkRP.addF4MenuTab(DarkRP.getPhrase("F4entities"), vgui.Create("F4MenuEntities"))
 
     local shipments = fn.Filter(fn.Compose{fn.Not, fn.Curry(fn.GetValue, 2)("noship")}, CustomShipments)
-    if table.Count(shipments) > 0 then
+    if not table.IsEmpty(shipments) then
         DarkRP.addF4MenuTab(DarkRP.getPhrase("Shipments"), vgui.Create("F4MenuShipments"))
     end
 
     local guns = fn.Filter(fn.Curry(fn.GetValue, 2)("separate"), CustomShipments)
-    if table.Count(guns) > 0 then
+    if not table.IsEmpty(guns) then
         DarkRP.addF4MenuTab(DarkRP.getPhrase("F4guns"), vgui.Create("F4MenuGuns"))
     end
 
-    if table.Count(GAMEMODE.AmmoTypes) > 0 then
+    if not table.IsEmpty(GAMEMODE.AmmoTypes) then
         DarkRP.addF4MenuTab(DarkRP.getPhrase("F4ammo"), vgui.Create("F4MenuAmmo"))
     end
 
-    if table.Count(CustomVehicles) > 0 then
+    if not table.IsEmpty(CustomVehicles) then
         DarkRP.addF4MenuTab(DarkRP.getPhrase("F4vehicles"), vgui.Create("F4MenuVehicles"))
     end
 end

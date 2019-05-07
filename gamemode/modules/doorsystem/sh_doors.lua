@@ -80,7 +80,7 @@ end
 
 function meta:getKeysDoorTeams()
     local doorData = self:getDoorData()
-    if not doorData or table.Count(doorData.teamOwn or {}) == 0 then return nil end
+    if not doorData or table.IsEmpty(doorData.teamOwn or {}) then return nil end
 
     return doorData.teamOwn
 end
