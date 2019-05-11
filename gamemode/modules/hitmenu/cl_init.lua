@@ -17,7 +17,7 @@ end
 
 function plyMeta:stopHitInfo()
     activeHitmen[self] = nil
-    if table.Count(activeHitmen) == 0 then
+    if table.IsEmpty(activeHitmen) then
         hook.Remove("PostPlayerDraw", "drawHitInfo")
     end
 end

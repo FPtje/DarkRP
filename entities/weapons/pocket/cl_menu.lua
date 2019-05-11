@@ -37,7 +37,7 @@ function DarkRP.openPocketMenu()
         return
     end
 
-    if table.Count(pocket) == 0 then return end
+    if table.IsEmpty(pocket) then return end
     frame = vgui.Create("DFrame")
 
     local count = GAMEMODE.Config.pocketitems or GM.Config.pocketitems

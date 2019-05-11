@@ -351,7 +351,7 @@ function PANEL:Refresh()
     if not self.pnlLeft.Items then self.pnlRight:updateInfo({}) return end
 
     -- don't refresh if still valid
-    if table.Count(self.pnlRight.job) ~= 0 then return end
+    if not table.IsEmpty(self.pnlRight.job) then return end
 
     local job
     for _, cat in ipairs(self.pnlLeft:GetItems()) do

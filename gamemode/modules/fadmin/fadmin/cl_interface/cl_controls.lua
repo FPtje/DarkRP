@@ -191,7 +191,7 @@ function PANEL:DoClick(x, y)
 end
 
 function PANEL:DoRightClick()
-    if table.Count(FAdmin.PlayerIcon.RightClickOptions) < 1 then return end
+    if table.IsEmpty(FAdmin.PlayerIcon.RightClickOptions) then return end
     local menu = DermaMenu()
 
     menu:SetPos(gui.MouseX(), gui.MouseY())

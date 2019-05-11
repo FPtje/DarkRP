@@ -68,7 +68,7 @@ end)
 
 -- Send a tipjar's donation data to a single player
 local function sendJarData(tipjar, ply)
-    if table.Count(tipjar.activeDonations) > 0 then
+    if not table.IsEmpty(tipjar.activeDonations) then
         net.Start("DarkRP_TipJarUpdate")
             net.WriteEntity(tipjar)
 
@@ -79,7 +79,7 @@ local function sendJarData(tipjar, ply)
         net.Send(ply)
     end
 
-    if table.Count(tipjar.madeDonations) > 0 then
+    if not table.IsEmpty(tipjar.madeDonations) then
         net.Start("DarkRP_TipJarDonatedList")
             net.WriteEntity(tipjar)
             net.WriteUInt(#tipjar.madeDonations, 8)
