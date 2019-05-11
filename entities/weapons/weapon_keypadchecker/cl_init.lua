@@ -40,7 +40,7 @@ KeypadCheckerHalos = function()
         table.insert(drawEnts, v.ent)
     end
 
-    if #drawEnts == 0 then return end
+    if table.IsEmpty(drawEnts) then return end
     halo.Add(drawEnts, Color(0, 255, 0, 255), 5, 5, 5, nil, true)
 end
 

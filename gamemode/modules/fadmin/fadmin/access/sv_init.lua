@@ -77,7 +77,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
             local hasPrivs = {"noaccess", "user", "admin", "superadmin"}
 
             -- No privileges registered to anyone. Reset everything
-            if not privTbl or #privTbl == 0 then
+            if not privTbl or table.IsEmpty(privTbl) then
                 for priv, access in pairs(FAdmin.Access.Privileges) do
                     for i = access + 1, #hasPrivs, 1 do
                         privs[hasPrivs[i]] = privs[hasPrivs[i]] or {}

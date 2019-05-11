@@ -189,7 +189,7 @@ local function GroupMsg(ply, args)
             table.insert(groupChats, func)
         end
 
-        if #groupChats == 0 then return "" end
+        if table.IsEmpty(groupChats) then return "" end
 
         local phrase = DarkRP.getPhrase("group")
         local name = ply:Nick()

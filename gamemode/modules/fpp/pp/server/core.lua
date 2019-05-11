@@ -424,7 +424,7 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
                 CanGroup = true -- If the person is not in the BUT has admin access, he should be able to use the tool
             end
 
-            if FPP.RestrictedTools[tool]["team"] and #FPP.RestrictedTools[tool]["team"] > 0 and not table.HasValue(FPP.RestrictedTools[tool]["team"], ply:Team()) then
+            if FPP.RestrictedTools[tool]["team"] and not table.IsEmpty(FPP.RestrictedTools[tool]["team"]) and not table.HasValue(FPP.RestrictedTools[tool]["team"], ply:Team()) then
                 FPP.Notify(ply, "Toolgun restricted! incorrect team!", false)
                 return false
             end

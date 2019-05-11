@@ -74,7 +74,7 @@ local function EnterLottery(answer, ent, initiator, target, TimeIsUp)
             if not IsValid(LotteryPeople[i]) then table.remove(LotteryPeople, i) end
         end
 
-        if #LotteryPeople == 0 then
+        if table.IsEmpty(LotteryPeople) then
             DarkRP.notifyAll(1, 4, DarkRP.getPhrase("lottery_noone_entered"))
             hook.Run("lotteryEnded", LotteryPeople)
             return

@@ -26,11 +26,11 @@ function FAdmin.TargetsToString(targets)
         return FAdmin.PlayerName(targets)
     end
 
-    local targetCount = #targets
-    if targetCount == 0 then
+    if table.IsEmpty(targets) then
         return "no one"
     end
 
+    local targetCount = #targets
     if targetCount == player.GetCount() and targetCount ~= 1 then
         return "everyone"
     end
