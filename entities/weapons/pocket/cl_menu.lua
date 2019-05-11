@@ -110,6 +110,7 @@ function reload()
                     wep:SetHoldType("normal")
                 end
             end)
+            frame:Close()
         end
 
         table.insert(items, icon)
