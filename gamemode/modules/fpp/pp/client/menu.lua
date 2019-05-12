@@ -378,7 +378,7 @@ function FPP.AdminMenu(Panel)
                         table.insert(addnodes, {f.Text, f.ItemName})
                     end
                 end
-                if not table.IsEmpty(addnodes) then
+                if #addnodes ~= 0 then
                     local node1 = FPP.DtreeToolRestrict:AddNode(d.ItemName)
                     for _, f in pairs(addnodes) do
                         local node2 = node1:AddNode(f[1])
