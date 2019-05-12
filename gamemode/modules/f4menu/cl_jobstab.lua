@@ -91,7 +91,7 @@ Choose model panel
 PANEL = {}
 
 function PANEL:Rebuild()
-    if #self.iconList.Items == 0 then return end
+    if table.IsEmpty(self.iconList.Items) then return end
 
     local x = 0
     for _, item in pairs(self.iconList.Items) do

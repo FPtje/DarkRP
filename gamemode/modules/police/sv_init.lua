@@ -164,7 +164,7 @@ local function warrantCommand(ply, args)
             end
         end
 
-        if #mayors > 0 then -- Request a warrant if there's a mayor
+        if not table.IsEmpty(mayors) then -- Request a warrant if there's a mayor
             local mayor = table.Random(mayors)
             mayor:requestWarrant(target, ply, reason)
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("warrant_request2", mayor:Nick()))

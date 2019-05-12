@@ -39,7 +39,7 @@ local function SetTeam(ply, cmd, args)
                 end
             end
 
-            if #targetsSet > 0 then
+            if not table.IsEmpty(targetsSet) then
                 FAdmin.Messages.FireNotification("setteam", ply, targetsSet, {k})
             else
                 FAdmin.Messages.SendMessage(ply, 1, "Could not set team")

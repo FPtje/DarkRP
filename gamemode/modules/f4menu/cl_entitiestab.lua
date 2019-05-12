@@ -9,7 +9,7 @@ function PANEL:Init()
 end
 
 function PANEL:Rebuild()
-    if #self.Items == 0 then return end
+    if table.IsEmpty(self.Items) then return end
 
     local lHeight, rHeight = 0, 0
     local height = 0

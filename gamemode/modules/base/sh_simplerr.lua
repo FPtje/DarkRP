@@ -77,7 +77,7 @@ hook.Add("onSimplerrError", "DarkRP_Simplerr", annoyAdmins)
 local function annoyAdmin(ply)
     if not IsValid(ply) or not ply:IsAdmin() then return end
     local errs = table.Copy(simplerr.getLog())
-    if #errs == 0 then return end
+    if table.IsEmpty(errs) then return end
 
     fn.Map(fp{fn.GetValue, "err"}, errs)
     sendErrors(ply, errs)
