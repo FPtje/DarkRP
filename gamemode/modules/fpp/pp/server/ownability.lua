@@ -268,10 +268,9 @@ local function netWriteEntData(ply, ent)
 end
 
 function FPP.plySendTouchData(ply, ents)
-    
     local count = #ents
+
     if count == 0 then return end
-    
     net.Start("FPP_TouchabilityData")
         for i = 1, count do
             netWriteEntData(ply, ents[i])

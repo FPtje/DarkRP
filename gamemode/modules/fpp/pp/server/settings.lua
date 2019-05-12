@@ -164,7 +164,7 @@ local function FPP_SetSetting(ply, cmd, args)
 
     FPP.calculatePlayerPrivilege("FPP_TouchOtherPlayersProps", function()
         local plys, entities = getSettingsChangedEntities(args[1], args[2])
-        if not plys or not entities or table.IsEmpty(plys) or table.IsEmpty(entities) then return end
+        if not plys or not entities or #plys == 0 or #entities == 0 then return end
 
         FPP.recalculateCanTouch(plys, entities)
     end)
@@ -438,7 +438,7 @@ local function RetrieveBlockedModels()
 
     -- Retrieve the data normally from MySQL
     MySQLite.query("SELECT * FROM FPP_BLOCKEDMODELS1;", function(data)
-        if not data or table.IsEmpty(data) then
+        if not data or #data == 0 then
             FPP.AddDefaultBlockedModels() -- Load the default blocked models on first run
         end
 
