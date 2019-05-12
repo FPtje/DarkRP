@@ -196,7 +196,7 @@ function commit(onFinished)
         error("No queued queries! Call begin() first!")
     end
 
-    if table.IsEmpty(queuedQueries) then
+    if #queuedQueries == 0 then
         queuedQueries = nil
         if onFinished then onFinished() end
         return
@@ -278,7 +278,7 @@ local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
             return
         end
 
-        if not res.data or table.IsEmpty(res.data) then res.data = nil end -- compatibility with other backends
+        if not res.data or #res.data == 0 then res.data = nil end -- compatibility with other backends
         if queryValue and callback then return callback(res.data and res.data[1] and table.GetFirstValue(res.data[1]) or nil) end
         if callback then callback(res.data, res.lastid) end
     end
