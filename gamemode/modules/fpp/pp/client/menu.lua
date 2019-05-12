@@ -447,7 +447,7 @@ function FPP.AdminMenu(Panel)
     StartEditMultiTool.DoClick = function()
         local lines = FPP.multirestricttoollist:GetLines()
         local EditTable = {}
-        if not table.IsEmpty(lines) then
+        if #lines > 0 then
             for _, v in ipairs(lines) do
                 table.insert(EditTable, v.Columns[1].Value)
             end
@@ -602,7 +602,7 @@ function FPP.AdminMenu(Panel)
             GroupList:AddLine(k)
         end
         GroupList:SelectFirstItem()
-        if table.IsEmpty(FPP.Groups) then return end
+        if #FPP.Groups == 0 then return end
         ChkAllowDefault:SetValue(FPP.Groups[GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()].allowdefault)
     end
     net.Receive("FPP_Groups", RetrieveGroups)
@@ -873,7 +873,7 @@ EditGroupTools = function(groupname)
                 end
             end
 
-            if not table.IsEmpty(addnodes) then
+            if #addnodes ~= 0 then
                 local node1 = ToolList:AddNode(d.ItemName)
                 node1.Tool = d.ItemName
                 for _, f in pairs(addnodes) do
