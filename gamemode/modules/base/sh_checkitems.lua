@@ -73,6 +73,11 @@ local buyableSchema = fn.FAnd{baseSchema, tc.checkTable{
             tc.optional(isfunction),
             "The spawn must be a function."
         ),
+    delay =
+        tc.addHint(
+            tc.optional(isnumber),
+            "The delay must be a number."
+        ),
 }}
 
 -- The command of an entity must be unique
