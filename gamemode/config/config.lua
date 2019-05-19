@@ -262,6 +262,8 @@ GM.Config.searchtime                    = 30
 GM.Config.ShipmentSpamTime              = 3
 -- shipmenttime - The number of seconds it takes for a shipment to spawn.
 GM.Config.shipmentspawntime             = 10
+-- entitySpawnDelay - Antispam time between buying entities.
+GM.Config.entitySpawnDelay              = 2
 -- startinghealth - the health when you spawn.
 GM.Config.startinghealth                = 100
 -- startingmoney - your wallet when you join for the first time.
