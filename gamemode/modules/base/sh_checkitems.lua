@@ -73,6 +73,7 @@ local buyableSchema = fn.FAnd{baseSchema, tc.checkTable{
             tc.optional(isfunction),
             "The spawn must be a function."
         ),
+
     delay =
         tc.addHint(
             tc.optional(isnumber),
