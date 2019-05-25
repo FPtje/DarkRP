@@ -14,6 +14,8 @@ function DarkRP.notify(ply, msgtype, len, msg)
         rcp:AddPlayer(v)
     end
 
+    hook.Run("onNotify", ply, msgtype, len, msg)
+
     umsg.Start("_Notify", rcp)
         umsg.String(msg)
         umsg.Short(msgtype)
@@ -22,6 +24,8 @@ function DarkRP.notify(ply, msgtype, len, msg)
 end
 
 function DarkRP.notifyAll(msgtype, len, msg)
+    hook.Run("onNotifyAll", msgtype, len, msg)
+
     umsg.Start("_Notify")
         umsg.String(msg)
         umsg.Short(msgtype)
