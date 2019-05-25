@@ -97,6 +97,8 @@ GM.Config.enforceplayermodel            = true
 GM.Config.globalshow                    = false
 -- ironshoot - Enable/disable whether people need iron sights to shoot.
 GM.Config.ironshoot                     = true
+-- jobBecomeNotification - Whether or not to display the notification notifying everyone about a job switch.
+GM.Config.jobBecomeNotification         = true
 -- showjob - Whether or not to display a player's job above their head in-game.
 GM.Config.showjob                       = true
 -- letters - Enable/disable letter writing / typing.
