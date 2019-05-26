@@ -14,6 +14,8 @@ function DarkRP.notify(ply, msgtype, len, msg)
         rcp:AddPlayer(v)
     end
 
+    if hook.Run("onNotify", rcp:GetPlayers(), msgtype, len, msg) == true then return end
+
     umsg.Start("_Notify", rcp)
         umsg.String(msg)
         umsg.Short(msgtype)
@@ -22,6 +24,8 @@ function DarkRP.notify(ply, msgtype, len, msg)
 end
 
 function DarkRP.notifyAll(msgtype, len, msg)
+    if hook.Run("onNotify", player.GetAll(), msgtype, len, msg) == true then return end
+
     umsg.Start("_Notify")
         umsg.String(msg)
         umsg.Short(msgtype)
