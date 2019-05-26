@@ -277,7 +277,7 @@ local function addEntityCommands(tblEnt)
     DarkRP.declareChatCommand{
         command = tblEnt.cmd,
         description = "Purchase a " .. tblEnt.name,
-        delay = 2,
+        delay = tblEnt.delay or 2,
         condition =
             function(ply)
                 if ply:isArrested() then return false end

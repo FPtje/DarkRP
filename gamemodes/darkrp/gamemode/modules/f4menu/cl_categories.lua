@@ -33,7 +33,7 @@ function PANEL:Init()
 end
 
 function PANEL:Rebuild()
-    if #self.Items == 0 then return end
+    if table.IsEmpty(self.Items) then return end
 
     local height = 0
     local k = 0
@@ -120,7 +120,7 @@ function PANEL:Refresh()
     if IsValid(self.Contents) then self.Contents:Refresh() end
 
     if not self.category then return end
-    local canSee = #self.category.members == 0 or isfunction(self.category.canSee) and not self.category.canSee(LocalPlayer())
+    local canSee = table.IsEmpty(self.category.members) or isfunction(self.category.canSee) and not self.category.canSee(LocalPlayer())
     self:SetVisible(not canSee)
 
     self:InvalidateLayout()

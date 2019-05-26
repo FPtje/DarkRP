@@ -130,10 +130,17 @@ function ENT:SpawnItem()
     local class = CustomShipments[contents].entity
     local model = CustomShipments[contents].model
 
+    local defaultClip, clipSize
+    local wep_tbl = weapons.Get(class)
+    if wep_tbl and wep_tbl.Primary then
+        defaultClip = wep_tbl.Primary.DefaultClip
+        clipSize = wep_tbl.Primary.ClipSize
+    end
+
     weapon:SetWeaponClass(class)
     weapon:SetModel(model)
-    weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
-    weapon.clip1 = self.clip1
+    weapon.ammoadd = self.ammoadd or defaultClip
+    weapon.clip1 = self.clip1 or clipSize
     weapon.clip2 = self.clip2
     weapon:SetPos(self:GetPos() + weaponPos)
     weapon:SetAngles(weaponAng)
@@ -173,13 +180,19 @@ function ENT:Destruct()
         return
     end
 
+    local defaultClip, clipSize
+    local wep_tbl = weapons.Get(class)
+    if wep_tbl and wep_tbl.Primary then
+        defaultClip = wep_tbl.Primary.DefaultClip
+        clipSize = wep_tbl.Primary.ClipSize
+    end
 
     local weapon = ents.Create("spawned_weapon")
     weapon:SetModel(model)
     weapon:SetWeaponClass(class)
     weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
-    weapon.ammoadd = self.ammoadd or (weapons.Get(class) and weapons.Get(class).Primary.DefaultClip)
-    weapon.clip1 = self.clip1
+    weapon.ammoadd = self.ammoadd or defaultClip
+    weapon.clip1 = self.clip1 or clipSize
     weapon.clip2 = self.clip2
     weapon.nodupe = true
     weapon:Spawn()

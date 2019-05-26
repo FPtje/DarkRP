@@ -148,7 +148,7 @@ end
 
 function PANEL:Show()
     self:Refresh()
-    if #self.Items > 0 and self:GetActiveTab() and self:GetActiveTab():GetDisabled() then
+    if not table.IsEmpty(self.Items) and self:GetActiveTab() and self:GetActiveTab():GetDisabled() then
         self:SetActiveTab(self.Items[1].Tab) --Jobs
     end
     self.F4Down = true

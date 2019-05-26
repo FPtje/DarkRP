@@ -154,7 +154,7 @@ oneOf = function(f) return fp{table.HasValue, f} end
 -- example: tc.nonEmpty(tc.tableOf(isnumber))
 -- example: tc.nonEmpty() -- just checks that the table is non-empty
 nonEmpty = function(f) return function(tbl, parentTbl)
-    if not istable(tbl) or #tbl == 0 then return false end
+    if not istable(tbl) or table.IsEmpty(tbl) then return false end
     if not f then return true end
     return f(tbl, parentTbl)
 end end

@@ -31,8 +31,8 @@ local function addHooks()
         local userid = ply:UserID()
 
         MySQLite.queryValue(string.format([[
-            SELECT serverid FROM darkrp_serverplayer WHERE serverid = %s AND uid = %s
-        ]], MySQLite.SQLStr(DarkRP.serverId), uid), function(sid)
+            SELECT serverid FROM darkrp_serverplayer WHERE uid = %s
+        ]], uid), function(sid)
             if sid then
                 game.KickID(userid, kickMessage)
             else

@@ -487,6 +487,12 @@ DarkRP.validateEntity = fn.FAnd{buyableSchema, tc.checkTable{
                 "The allowTools must be either true or false."
             )
         ),
+
+    delay =
+        tc.addHint(
+            tc.optional(isnumber),
+            "The delay must be a number."
+        ),
 }}
 
 

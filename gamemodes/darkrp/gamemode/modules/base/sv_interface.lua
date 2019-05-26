@@ -786,6 +786,40 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "onNotify",
+    description = "Called when a notification is sent.",
+    parameters = {
+        {
+            name = "plys",
+            description = "The table recipients of the notification.",
+            type = "table"
+        },
+        {
+            name = "msgType",
+            description = "The notification type (NOTIFY_ enum)",
+            type = "number"
+        },
+        {
+            name = "duration",
+            description = "How long the notification should stay on screen.",
+            type = "number"
+        },
+        {
+            name = "message",
+            description = "The message of the notification.",
+            type = "string"
+        }
+    },
+    returns = {
+        {
+            name = "suppress",
+            description = "Whether to suppress the notification. Return true to suppress.",
+            type = "boolean"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "onPlayerChangedName",
     description = "Called when a player's DarkRP name has been changed.",
     parameters = {

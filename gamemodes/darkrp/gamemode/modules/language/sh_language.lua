@@ -34,7 +34,7 @@ function DarkRP.getMissingPhrases(lang)
         table.insert(res, string.format(format, k, v))
     end
 
-    return #res == 0 and "No language strings missing!" or table.concat(res, "\n")
+    return table.IsEmpty(res) and "No language strings missing!" or table.concat(res, "\n")
 end
 
 local function getMissingPhrases(ply, cmd, args)

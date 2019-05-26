@@ -39,6 +39,8 @@ function DarkRP.initDatabase()
             );
         ]])
 
+        -- This table is kept for compatibility with older addons and websites
+        -- See https://github.com/FPtje/DarkRP/issues/819
         MySQLite.query([[
             CREATE TABLE IF NOT EXISTS playerinformation(
                 uid BIGINT NOT NULL,

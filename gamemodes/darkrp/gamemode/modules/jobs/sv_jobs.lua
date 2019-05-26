@@ -142,6 +142,7 @@ function meta:changeTeam(t, force, suppressNotification)
     if self:InVehicle() then self:ExitVehicle() end
     if GAMEMODE.Config.norespawn and self:Alive() then
         self:StripWeapons()
+        self:RemoveAllAmmo()
         local vPoint = self:GetShootPos() + Vector(0,0,50)
         local effectdata = EffectData()
         effectdata:SetEntity(self)
