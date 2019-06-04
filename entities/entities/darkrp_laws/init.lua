@@ -12,7 +12,7 @@ timer.Simple(0, function()
 end)
 
 local hookCanEditLaws = {canEditLaws = function(_, ply, action, args)
-    if not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor then
+    if IsValid(ply) and (not RPExtraTeams[ply:Team()] or not RPExtraTeams[ply:Team()].mayor) then
         return false, DarkRP.getPhrase("incorrect_job", GAMEMODE.Config.chatCommandPrefix .. action)
     end
     return true
