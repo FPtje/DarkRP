@@ -352,3 +352,46 @@ if not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] the
         concommand.Add(cmd.command, fp{msgDeprecated, cmd})
     end
 end
+
+--[[---------------------------------------------------------------------------
+so i created this cause CAC is still used by servers, is out
+of date, can be bypassed with one line of code, and actually
+kicks innocent people when they are using the x86-64 gmod branch
+---------------------------------------------------------------------------]]
+hook.Add("InitPostEntity","fuckCAC",function()
+    timer.Simple(1,function()
+        if DarkRP and DarkRP.disabledDefaults.workarounds["CAC"] then return end--option to disable it
+        if CAC then
+            --remove CAC's hooks
+            hook.Remove("CheckPassword","CAC.CheckPassword")
+            hook.Remove("Initialize","CAC.LuaWhitelistController.261b4998")
+            hook.Remove("InitPostEntity","fuckCAC")
+            hook.Remove("OnNPCKilled","CAC.Aimbotdetector")
+            hook.Remove("PlayerDeath","CAC.AimbotDetector")
+            hook.Remove("PlayerInitialSpawn","CAC.PlayerMonitor.PlayerConnected")
+            hook.Remove("PlayerSay","CAC.ChatCommands")
+            hook.Remove("SetupMove","CAC.MoveHandler")
+            hook.Remove("ShutDown","CAC")
+            hook.Remove("Think","CAC.DelayedCalls")
+            hook.Remove("Tick","CAC.PlayerMonitor.ProcessQueue")
+            hook.Remove("player_disconnect","CAC.PlayerMonitor.PlayerDisconnected")
+            --remove CAC's timers
+            timer.Remove("CAC.AdminUIBootstrapper")
+            timer.Remove("CAC.DataUpdater")
+            timer.Remove("CAC.IncidentController")
+            timer.Remove("CAC.LivePlayerSessionController")
+            timer.Remove("CAC.SettingsSaver")
+            --remove CAC's net receivers
+            net.Receivers[CAC.Identifiers.MultiplexedDataChannelName]=nil
+            net.Receivers[CAC.Identifiers.AdminChannelName]=nil
+            timer.Simple(19,function()
+                --finally erase CAC from the _Global table
+                CAC=nil
+                MsgC(Color(255, 0, 0),[[CAC was detected on this server and has been disabled.
+CAC is no longer maintained,
+Worse yet, CAC will kick innocent people when they are using the x86-64 gmod branch
+]])
+            end)
+        end
+    end)
+end)
