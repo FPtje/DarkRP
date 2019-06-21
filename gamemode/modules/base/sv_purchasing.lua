@@ -457,7 +457,7 @@ local function BuyAmmo(ply, args)
     local ammo = ents.Create("spawned_ammo")
     ammo:SetModel(found.model)
     ammo:SetPos(tr.HitPos)
-	ammo:SetAngles(ang)
+    ammo:SetAngles(ang)
     ammo.nodupe = true
     ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
     ammo:Spawn()
