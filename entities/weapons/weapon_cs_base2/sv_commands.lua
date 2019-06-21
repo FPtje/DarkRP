@@ -27,7 +27,7 @@ function meta:dropDRPWeapon(weapon)
 
     local tr = util.TraceLine(trace)
 
-    local ang = ply:EyeAngles()
+    local ang = self:EyeAngles()
     ang.yaw = ang.yaw + 180
     ang.roll = 0
     ang.pitch = 0
