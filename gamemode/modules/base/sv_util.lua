@@ -116,6 +116,21 @@ function DarkRP.isEmpty(vector, ignore)
     return a and b
 end
 
+function DarkRP.unstuckEntity(ent, tr, ply)
+    if IsValid(ply) then
+        local ang = ply:EyeAngles()
+        ang.pitch = 0
+        ang.yaw = ang.yaw + 180
+        ang.roll = 0
+        ent:SetAngles(ang)
+    end
+
+    local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+    vFlushPoint = ent:NearestPoint(vFlushPoint)
+    vFlushPoint = ent:GetPos() - vFlushPoint
+    vFlushPoint = tr.HitPos + vFlushPoint
+    ent:SetPos(vFlushPoint)
+end
 
 --[[---------------------------------------------------------------------------
 Find an empty position near the position given in the first parameter

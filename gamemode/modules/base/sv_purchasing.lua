@@ -84,6 +84,8 @@ local function BuyPistol(ply, args)
     weapon.nodupe = true
     weapon:Spawn()
 
+    DarkRP.unstuckEntity(weapon, tr, ply)
+
     if shipment.onBought then
         shipment.onBought(ply, shipment, weapon)
     end
@@ -186,6 +188,8 @@ local function BuyShipment(ply, args)
     crate.clip2 = found.clip2
     crate:Spawn()
     crate:SetPlayer(ply)
+
+    DarkRP.unstuckEntity(crate, tr, ply)
 
     local phys = crate:GetPhysicsObject()
     phys:Wake()
@@ -303,12 +307,6 @@ local function BuyVehicle(ply, args)
         end
     end
 
-    local Angles = ply:GetAngles()
-    Angles.pitch = 0
-    Angles.roll = 0
-    Angles.yaw = Angles.yaw + 180
-    local angOff = found.angle or Angle(0, 0, 0)
-    ent:SetAngles(Angles + angOff)
     ent:SetPos(tr.HitPos)
     ent.VehicleName = found.name
     ent.VehicleTable = Vehicle
@@ -321,8 +319,15 @@ local function BuyVehicle(ply, args)
     end
     ent:CPPISetOwner(ply)
     ent:keysOwn(ply)
+
+    DarkRP.unstuckEntity(ent, tr, ply)
+
+    local angOff = found.angle or Angle(0, 0, 0)
+    ent:SetAngles(ent:GetAngles() + angOff)
+
     hook.Call("PlayerSpawnedVehicle", GAMEMODE, ply, ent) -- VUMod compatability
     hook.Call("playerBoughtCustomVehicle", nil, ply, found, ent, cost)
+
     if found.onBought then
         found.onBought(ply, found, ent)
     end
@@ -414,6 +419,8 @@ local function BuyAmmo(ply, args)
     ammo.nodupe = true
     ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
     ammo:Spawn()
+
+    DarkRP.unstuckEntity(ammo, tr, ply)
 
     hook.Call("playerBoughtAmmo", nil, ply, found, ammo, cost)
 
