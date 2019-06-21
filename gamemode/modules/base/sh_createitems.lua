@@ -295,14 +295,32 @@ local function addEntityCommands(tblEnt)
     -- used if tblEnt.spawn is not defined
     local function defaultSpawn(ply, tr, tblE)
         local ent = ents.Create(tblE.ent)
+
         if not ent:IsValid() then error("Entity '" .. tblE.ent .. "' does not exist or is not valid.") end
         if ent.Setowning_ent then ent:Setowning_ent(ply) end
+
+        local ang = ply:EyeAngles()
+        ang.yaw = ang.yaw + 180
+        ang.roll = 0
+        ang.pitch = 0
+
         ent:SetPos(tr.HitPos)
+		ent:SetAngles(ang)
         -- These must be set before :Spawn()
         ent.SID = ply.SID
         ent.allowed = tblE.allowed
         ent.DarkRPItem = tblE
         ent:Spawn()
+        ent:Activate()
+
+        if not ent.SpawnFunction then
+            local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+            vFlushPoint = ent:NearestPoint(vFlushPoint)
+            vFlushPoint = ent:GetPos() - vFlushPoint
+            vFlushPoint = tr.HitPos + vFlushPoint
+
+            ent:SetPos(vFlushPoint)
+        end
 
         local phys = ent:GetPhysicsObject()
         if phys:IsValid() then phys:Wake() end

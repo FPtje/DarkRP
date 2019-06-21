@@ -67,6 +67,11 @@ local function BuyPistol(ply, args)
 
     local tr = util.TraceLine(trace)
 
+    local ang = ply:EyeAngles()
+    ang.yaw = ang.yaw + 180
+    ang.roll = 0
+    ang.pitch = 0
+
     local defaultClip, clipSize
     local wep_tbl = weapons.Get(shipment.entity)
     if wep_tbl and wep_tbl.Primary then
@@ -78,11 +83,19 @@ local function BuyPistol(ply, args)
     weapon:SetModel(shipment.model)
     weapon:SetWeaponClass(shipment.entity)
     weapon:SetPos(tr.HitPos)
+    weapon:SetAngles(ang)
     weapon.ammoadd = shipment.spareammo or defaultClip
     weapon.clip1 = shipment.clip1 or clipSize
     weapon.clip2 = shipment.clip2
     weapon.nodupe = true
     weapon:Spawn()
+
+    local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+    vFlushPoint = weapon:NearestPoint(vFlushPoint)
+    vFlushPoint = weapon:GetPos() - vFlushPoint
+    vFlushPoint = tr.HitPos + vFlushPoint
+
+    weapon:SetPos(vFlushPoint)
 
     if shipment.onBought then
         shipment.onBought(ply, shipment, weapon)
@@ -174,18 +187,33 @@ local function BuyShipment(ply, args)
 
     local tr = util.TraceLine(trace)
 
+    local ang = ply:EyeAngles()
+    ang.yaw = ang.yaw + 180
+    ang.roll = 0
+    ang.pitch = 0
+
     local crate = ents.Create(found.shipmentClass or "spawned_shipment")
     crate.SID = ply.SID
     crate:Setowning_ent(ply)
     crate:SetContents(foundKey, found.amount)
 
     crate:SetPos(Vector(tr.HitPos.x, tr.HitPos.y, tr.HitPos.z))
+    crate:SetAngles(ang)
     crate.nodupe = true
     crate.ammoadd = found.spareammo
     crate.clip1 = found.clip1
     crate.clip2 = found.clip2
     crate:Spawn()
     crate:SetPlayer(ply)
+
+    if not crate.SpawnFunction then
+        local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+        vFlushPoint = crate:NearestPoint(vFlushPoint)
+        vFlushPoint = crate:GetPos() - vFlushPoint
+        vFlushPoint = tr.HitPos + vFlushPoint
+
+        crate:SetPos(vFlushPoint)
+    end
 
     local phys = crate:GetPhysicsObject()
     phys:Wake()
@@ -303,13 +331,15 @@ local function BuyVehicle(ply, args)
         end
     end
 
-    local Angles = ply:GetAngles()
-    Angles.pitch = 0
-    Angles.roll = 0
-    Angles.yaw = Angles.yaw + 180
+    local ang = ply:EyeAngles()
+    ang.yaw = ang.yaw + 180
+    ang.roll = 0
+    ang.pitch = 0
+
     local angOff = found.angle or Angle(0, 0, 0)
-    ent:SetAngles(Angles + angOff)
+    ent:SetAngles(ang + angOff)
     ent:SetPos(tr.HitPos)
+    ent:SetAngles(ang)
     ent.VehicleName = found.name
     ent.VehicleTable = Vehicle
     ent:Spawn()
@@ -321,8 +351,19 @@ local function BuyVehicle(ply, args)
     end
     ent:CPPISetOwner(ply)
     ent:keysOwn(ply)
+
+    if not ent.SpawnFunction then
+        local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+        vFlushPoint = ent:NearestPoint(vFlushPoint)
+        vFlushPoint = ent:GetPos() - vFlushPoint
+        vFlushPoint = tr.HitPos + vFlushPoint
+
+        ent:SetPos(vFlushPoint)
+    end
+
     hook.Call("PlayerSpawnedVehicle", GAMEMODE, ply, ent) -- VUMod compatability
     hook.Call("playerBoughtCustomVehicle", nil, ply, found, ent, cost)
+
     if found.onBought then
         found.onBought(ply, found, ent)
     end
@@ -408,12 +449,25 @@ local function BuyAmmo(ply, args)
 
     local tr = util.TraceLine(trace)
 
+    local ang = ply:EyeAngles()
+    ang.yaw = ang.yaw + 180
+    ang.roll = 0
+    ang.pitch = 0
+
     local ammo = ents.Create("spawned_ammo")
     ammo:SetModel(found.model)
     ammo:SetPos(tr.HitPos)
+	ammo:SetAngles(ang)
     ammo.nodupe = true
     ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
     ammo:Spawn()
+
+    local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+    vFlushPoint = ammo:NearestPoint(vFlushPoint)
+    vFlushPoint = ammo:GetPos() - vFlushPoint
+    vFlushPoint = tr.HitPos + vFlushPoint
+
+    ammo:SetPos(vFlushPoint)
 
     hook.Call("playerBoughtAmmo", nil, ply, found, ammo, cost)
 

@@ -16,10 +16,24 @@ function meta:dropDRPWeapon(weapon)
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
 
     local ent = ents.Create("spawned_weapon")
+
     local model = (weapon:GetModel() == "models/weapons/v_physcannon.mdl" and "models/weapons/w_physics.mdl") or weapon:GetModel()
     model = util.IsValidModel(model) and model or "models/weapons/w_rif_ak47.mdl"
 
-    ent:SetPos(self:GetShootPos() + self:GetAimVector() * 30)
+    local trace = {}
+    trace.start = self:GetShootPos()
+    trace.endpos = self:GetShootPos() + self:GetAimVector() * 30
+    trace.filter = self
+
+    local tr = util.TraceLine(trace)
+
+    local ang = ply:EyeAngles()
+    ang.yaw = ang.yaw + 180
+    ang.roll = 0
+    ang.pitch = 0
+
+    ent:SetPos(tr.HitPos)
+    ent:SetAngles(ang)
     ent:SetModel(model)
     ent:SetSkin(weapon:GetSkin() or 0)
     ent:SetWeaponClass(weapon:GetClass())
@@ -27,6 +41,13 @@ function meta:dropDRPWeapon(weapon)
     ent.clip1 = weapon:Clip1()
     ent.clip2 = weapon:Clip2()
     ent.ammoadd = primAmmo
+
+    local vFlushPoint = tr.HitPos - (tr.HitNormal * 512)
+    vFlushPoint = ent:NearestPoint(vFlushPoint)
+    vFlushPoint = ent:GetPos() - vFlushPoint
+    vFlushPoint = tr.HitPos + vFlushPoint
+
+    ent:SetPos(vFlushPoint)
 
     hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
 
