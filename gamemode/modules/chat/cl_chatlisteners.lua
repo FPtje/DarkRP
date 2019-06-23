@@ -44,6 +44,9 @@ Draw the results to the screen
 local function drawChatReceivers()
     if not receivers then return end
 
+    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ChatReceivers")
+    if shouldDraw == false then return end
+
     local x, y = chat.GetChatBoxPos()
     y = y - 21
 
