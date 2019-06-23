@@ -186,6 +186,9 @@ Called when the player starts using their voice
 local function startFindVoice(ply)
     if ply ~= LocalPlayer() then return end
 
+    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ChatReceivers")
+    if shouldDraw == false then return end
+
     currentConfig = receiverConfigs["speak"]
     hook.Add("Think", "DarkRP_chatRecipients", chatGetRecipients)
     hook.Add("HUDPaint", "DarkRP_DrawChatReceivers", drawChatReceivers)
