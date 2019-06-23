@@ -116,7 +116,7 @@ function DarkRP.isEmpty(vector, ignore)
     return a and b
 end
 
-function DarkRP.unstuckEntity(ent, tr, ply)
+function DarkRP.placeEntity(ent, tr, ply)
     if IsValid(ply) then
         local ang = ply:EyeAngles()
         ang.pitch = 0

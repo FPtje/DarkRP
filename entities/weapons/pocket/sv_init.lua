@@ -171,7 +171,7 @@ local function deserialize(ply, item)
 
     ent:SetPos(tr.HitPos)
 
-    DarkRP.unstuckEntity(ent, tr, ply)
+    DarkRP.placeEntity(ent, tr, ply)
 
     local phys = ent:GetPhysicsObject()
     timer.Simple(0, function() if phys:IsValid() then phys:Wake() end end)

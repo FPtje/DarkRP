@@ -92,7 +92,7 @@ local function BuyFood(ply, args)
         SpawnedFood.foodItem = v
         SpawnedFood:Spawn()
 
-        DarkRP.unstuckEntity(SpawnedFood, tr, ply)
+        DarkRP.placeEntity(SpawnedFood, tr, ply)
 
         hook.Call("playerBoughtFood", nil, ply, v, SpawnedFood, cost)
         return ""

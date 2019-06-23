@@ -307,7 +307,7 @@ local function addEntityCommands(tblEnt)
         ent:Spawn()
         ent:Activate()
 
-        DarkRP.unstuckEntity(ent, tr, ply)
+        DarkRP.placeEntity(ent, tr, ply)
 
         local phys = ent:GetPhysicsObject()
         if phys:IsValid() then phys:Wake() end

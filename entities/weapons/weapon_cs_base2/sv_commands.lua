@@ -41,7 +41,7 @@ function meta:dropDRPWeapon(weapon)
     ent:SetPos(tr.HitPos)
     ent:Spawn()
 
-    DarkRP.unstuckEntity(ent, tr, self)
+    DarkRP.placeEntity(ent, tr, self)
 
     hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
 

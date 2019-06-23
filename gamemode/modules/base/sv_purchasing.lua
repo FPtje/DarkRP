@@ -84,7 +84,7 @@ local function BuyPistol(ply, args)
     weapon.nodupe = true
     weapon:Spawn()
 
-    DarkRP.unstuckEntity(weapon, tr, ply)
+    DarkRP.placeEntity(weapon, tr, ply)
 
     if shipment.onBought then
         shipment.onBought(ply, shipment, weapon)
@@ -189,7 +189,7 @@ local function BuyShipment(ply, args)
     crate:Spawn()
     crate:SetPlayer(ply)
 
-    DarkRP.unstuckEntity(crate, tr, ply)
+    DarkRP.placeEntity(crate, tr, ply)
 
     local phys = crate:GetPhysicsObject()
     phys:Wake()
@@ -320,7 +320,7 @@ local function BuyVehicle(ply, args)
     ent:CPPISetOwner(ply)
     ent:keysOwn(ply)
 
-    DarkRP.unstuckEntity(ent, tr, ply)
+    DarkRP.placeEntity(ent, tr, ply)
 
     local angOff = found.angle or Angle(0, 0, 0)
     ent:SetAngles(ent:GetAngles() + angOff)
@@ -420,7 +420,7 @@ local function BuyAmmo(ply, args)
     ammo.amountGiven, ammo.ammoType = found.amountGiven, found.ammoType
     ammo:Spawn()
 
-    DarkRP.unstuckEntity(ammo, tr, ply)
+    DarkRP.placeEntity(ammo, tr, ply)
 
     hook.Call("playerBoughtAmmo", nil, ply, found, ammo, cost)
 
