@@ -44,9 +44,6 @@ Draw the results to the screen
 local function drawChatReceivers()
     if not receivers then return end
 
-    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ChatReceivers")
-    if shouldDraw == false then return end
-
     local x, y = chat.GetChatBoxPos()
     y = y - 21
 
@@ -100,6 +97,9 @@ end
 Called when the player starts typing
 ---------------------------------------------------------------------------]]
 local function startFind()
+    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ChatReceivers")
+    if shouldDraw == false then return end
+
     currentConfig = receiverConfigs[""]
     hook.Add("Think", "DarkRP_chatRecipients", chatGetRecipients)
     hook.Add("HUDPaint", "DarkRP_DrawChatReceivers", drawChatReceivers)
