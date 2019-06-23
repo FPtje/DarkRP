@@ -47,29 +47,12 @@ FAdmin.StartHooks["kickbanning"] = function()
         message = {"instigator", " kicked ", "extraInfo.1", " (", "extraInfo.2", ")"},
         receivers = "everyone",
         writeExtraInfo = function(info)
-            net.WriteUInt(#info[1], 8)
-            -- Manually send targets, because they might be gone from the client when kicked
-            for _, target in pairs(info[1]) do
-                if not IsValid(target) then
-                    net.WriteString("Unknown")
-                    continue
-                end
-
-                net.WriteString(target:Nick())
-            end
-
+            net.WriteString(info[1])
             net.WriteString(info[2])
         end,
 
         readExtraInfo = function()
-            local count = net.ReadUInt(8)
-            local targets = {}
-
-            for i = 1, count do
-                table.insert(targets, net.ReadString())
-            end
-
-            return {table.concat(targets, ", "), net.ReadString()}
+            return {net.ReadString(), net.ReadString()}
         end,
         extraInfoColors = {Color(102, 0, 255), Color(255, 102, 0)}
     }
@@ -80,21 +63,7 @@ FAdmin.StartHooks["kickbanning"] = function()
         message = {"instigator", " banned ", "extraInfo.1", " for ", "extraInfo.2", " (", "extraInfo.3", ")"},
         receivers = "everyone",
         writeExtraInfo = function(info)
-            net.WriteUInt(#info[1], 8)
-            -- Manually send targets, because they might be gone from the client when kicked
-            for _, target in pairs(info[1]) do
-                if isstring(target) then
-                    net.WriteString("Unknown (" .. target .. ")")
-                    continue
-                end
-
-                if not IsValid(target) then
-                    net.WriteString("Unknown")
-                    continue
-                end
-
-                net.WriteString(target:Nick())
-            end
+            net.WriteString(info[1])
 
             net.WriteUInt(info[2], 32)
 
@@ -102,14 +71,7 @@ FAdmin.StartHooks["kickbanning"] = function()
         end,
 
         readExtraInfo = function()
-            local count = net.ReadUInt(8)
-            local targets = {}
-
-            for i = 1, count do
-                table.insert(targets, net.ReadString())
-            end
-
-            return {table.concat(targets, ", "), FAdmin.PlayerActions.ConvertBanTime(net.ReadUInt(32)), net.ReadString()}
+            return {net.ReadString(), FAdmin.PlayerActions.ConvertBanTime(net.ReadUInt(32)), net.ReadString()}
         end,
 
         extraInfoColors = {Color(102, 0, 255), Color(255, 102, 0), Color(255, 102, 0)}
