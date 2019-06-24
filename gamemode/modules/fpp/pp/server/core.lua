@@ -131,7 +131,8 @@ function FPP.Protect.PhysgunPickup(ply, ent)
 
     if type(ent.PhysgunPickup) == "function" then
         local val = ent:PhysgunPickup(ply, ent)
-        if val ~= nil then return val end
+        -- Do not return the value, the gamemode will do this
+        if val ~= nil then return end
     elseif ent.PhysgunPickup ~= nil then
         return ent.PhysgunPickup
     end
@@ -158,7 +159,8 @@ function FPP.Protect.PhysgunReload(weapon, ply)
 
     if type(ent.OnPhysgunReload) == "function" then
         local val = ent:OnPhysgunReload(weapon, ply)
-        if val ~= nil then return val end
+        -- Do not return the value, the gamemode will do this
+        if val ~= nil then return end
     elseif ent.OnPhysgunReload ~= nil then
         return ent.OnPhysgunReload
     end
@@ -174,7 +176,8 @@ hook.Add("OnPhysgunReload", "FPP.Protect.PhysgunReload", FPP.Protect.PhysgunRelo
 function FPP.PhysgunFreeze(weapon, phys, ent, ply)
     if type(ent.OnPhysgunFreeze) == "function" then
         local val = ent:OnPhysgunFreeze(weapon, phys, ent, ply)
-        if val ~= nil then return val end
+        -- Do not return the value, the gamemode will do this
+        if val ~= nil then return end
     elseif ent.OnPhysgunFreeze ~= nil then
         return ent.OnPhysgunFreeze
     end
@@ -212,6 +215,8 @@ function FPP.Protect.CanGravGunPickup(ply, ent)
     if not tobool(FPP.Settings.FPP_GRAVGUN1.toggle) or not IsValid(ent) then return end
 
     if type(ent.GravGunPickup) == "function" then
+        -- Function name different than gamemode's (GravGunPickup vs GravGunPickupAllowed)
+        -- Override FPP's behavior when implemented
         local val = ent:GravGunPickup(ply, ent)
         if val ~= nil then
             if val == false then return false end
@@ -237,8 +242,9 @@ function FPP.Protect.GravGunPunt(ply, ent)
     if type(ent.GravGunPunt) == "function" then
         local val = ent:GravGunPunt(ply, ent)
         if val ~= nil then
+            -- Gamemode does not drop the ent when entity returns false
             if val == false then DropEntityIfHeld(ent) end
-            return val
+            return
         end
     elseif ent.GravGunPunt ~= nil then
         if ent.GravGunPunt == false then DropEntityIfHeld(ent) end
@@ -262,7 +268,8 @@ function FPP.Protect.PlayerUse(ply, ent)
 
     if type(ent.PlayerUse) == "function" then
         local val = ent:PlayerUse(ply, ent)
-        if val ~= nil then return val end
+        -- Do not return the value, the gamemode will do this
+        if val ~= nil then return end
     elseif ent.PlayerUse ~= nil then
         return ent.PlayerUse
     end
@@ -284,7 +291,8 @@ function FPP.Protect.EntityDamage(ent, dmginfo)
 
     if type(ent.EntityDamage) == "function" then
         local val = ent:EntityDamage(ent, inflictor, attacker, amount, dmginfo)
-        if val ~= nil then return val end
+        -- Do not return the value, the gamemode will do this
+        if val ~= nil then return end
     elseif ent.EntityDamage ~= nil then
         return ent.EntityDamage
     end
@@ -464,7 +472,8 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 
     if IsEntity(ent) and type(ent.CanTool) == "function" and ent:GetClass() ~= "gmod_cameraprop" and ent:GetClass() ~= "gmod_rtcameraprop" then
         local val = ent:CanTool(ply, trace, tool, ENT)
-        if val ~= nil then return val end
+        -- Do not return the value, the gamemode will do this
+        if val ~= nil then return end
     elseif IsEntity(ent) and ent.CanTool ~= nil and ent:GetClass() ~= "gmod_cameraprop" and ent:GetClass() ~= "gmod_rtcameraprop" then
         return ent.CanTool
     end
@@ -518,10 +527,9 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
 end
 hook.Add("CanTool", "FPP.Protect.CanTool", FPP.Protect.CanTool)
 
-function FPP.Protect.CanEditVariable(ent, ply, key, val, editTbl)
+function FPP.Protect.CanEditVariable(ent, ply, key, varVal, editTbl)
     local val = FPP.Protect.CanProperty(ply, "editentity", ent)
-    if val ~= false and val ~= true then val = true end
-    return val
+    if val ~= nil then return val end
 end
 hook.Add("CanEditVariable", "FPP.Protect.CanEditVariable", FPP.Protect.CanEditVariable)
 
@@ -670,17 +678,6 @@ function ENTITY:FireBullets(bullet, ...)
     end
     return backup(self, bullet, ...)
 end
-
-hook.Add("EntityRemoved","jeepWorkaround",function(ent)
-    -- Crash workaround, calling IsValid on "Vehicle [DELETED]" will crash the game (gm_mobenix)
-    if string.find(tostring(ent), "DELETED") then
-        return
-    end
-
-    if IsValid(ent) and ent:IsVehicle() and ent.GetPassenger and IsValid(ent:GetPassenger(1)) then
-        ent:GetPassenger(1):ExitVehicle()
-    end
-end)
 
 -- Hydraulic exploit workaround
 -- One should not be able to constrain doors to anything
