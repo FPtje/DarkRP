@@ -49,6 +49,8 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
         net.WriteEntity(ply)
         net.WriteUInt(amount, 32)
     net.Broadcast()
+    
+    ply.DarkRPLastTip = CurTime()
 end)
 
 net.Receive("DarkRP_TipJarUpdate", function(_, ply)
