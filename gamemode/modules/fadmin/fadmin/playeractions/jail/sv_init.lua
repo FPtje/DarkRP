@@ -17,7 +17,7 @@ local function Jail(ply, cmd, args)
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
         local jailDistance
-        
+
         ply:ExitVehicle()
 
         local JailProps = {}
