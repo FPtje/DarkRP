@@ -155,7 +155,11 @@ local function DropMoney(ply, args)
         trace.filter = ply
 
         local tr = util.TraceLine(trace)
+
         local moneybag = DarkRP.createMoneyBag(tr.HitPos, amount)
+
+        DarkRP.placeEntity(moneybag, tr, ply)
+
         hook.Call("playerDroppedMoney", nil, ply, amount, moneybag)
         DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") has dropped " .. DarkRP.formatMoney(amount))
     end)
@@ -217,6 +221,7 @@ local function CreateCheque(ply, args)
         trace.filter = ply
 
         local tr = util.TraceLine(trace)
+
         local Cheque = ents.Create("darkrp_cheque")
         Cheque.DarkRPItem = chequeTable
         Cheque:SetPos(tr.HitPos)
@@ -226,6 +231,9 @@ local function CreateCheque(ply, args)
         local min_amount = math.Min(amount, 2147483647)
         Cheque:Setamount(min_amount)
         Cheque:Spawn()
+
+        DarkRP.placeEntity(Cheque, tr, ply)
+
         hook.Call("playerDroppedCheque", nil, ply, recipient, min_amount, Cheque)
     end)
     return ""

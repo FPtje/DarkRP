@@ -24,22 +24,25 @@ local function MakeLetter(ply, args, type)
 
     local numParts = math.floor(length / 39) + 1
 
-    local tr = {}
-    tr.start = ply:EyePos()
-    tr.endpos = ply:EyePos() + 95 * ply:GetAimVector()
-    tr.filter = ply
-    local trace = util.TraceLine(tr)
+    local trace = {}
+    trace.start = ply:EyePos()
+    trace.endpos = trace.start + ply:GetAimVector() * 85
+    trace.filter = ply
+
+    local tr = util.TraceLine(trace)
 
     local letter = ents.Create("letter")
     letter:SetModel("models/props_c17/paper01.mdl")
+    letter:SetPos(tr.HitPos)
     letter:Setowning_ent(ply)
-    letter:SetPos(trace.HitPos)
     letter.nodupe = true
     letter:Spawn()
 
     letter:GetTable().Letter = true
     letter.type = type
     letter.numPts = numParts
+
+    DarkRP.placeEntity(letter, tr, ply)
 
     local startpos = 1
     local endpos = 39
