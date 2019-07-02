@@ -70,34 +70,39 @@ hook.Call("DarkRPPreLoadModules", GM)
 --[[---------------------------------------------------------------------------
 Loading modules
 ---------------------------------------------------------------------------]]
-local fol = GM.FolderName .. "/gamemode/modules/"
-local files, folders = file.Find(fol .. "*", "LUA")
+local root = GM.FolderName .. "/gamemode/modules/"
 
-for _, v in pairs(files) do
-    if DarkRP.disabledDefaults["modules"][v:Left(-5)] then continue end
-    if string.GetExtensionFromFilename(v) ~= "lua" then continue end
-    include(fol .. v)
+local function FindFiles(directory)
+
+    local files, folders = file.Find(directory .. "*", "LUA")
+    
+    for _, folder in SortedPairs(folders, true) do
+        if folder == "." or folder == ".." or DarkRP.disabledDefaults["modules"][folder] then continue end
+    end
+
+    for _, folder in SortedPairs(folders, true) do
+        
+        for _, File in SortedPairs(file.Find(directory .. folder .. "/sh_*.lua", "LUA"), true) do
+            if File == "sj_interface.lua" then continue end
+            AddCSLuaFile(directory .. folder .. "/" .. File)
+            include(directory .. folder .. "/" .. File)
+        end
+        for _, File in SortedPairs(file.Find(directory .. folder .. "/sv_*.lua", "LUA"), true) do
+            if File == "sv_interface.lua" then continue end
+            include(directory .. folder .. "/" .. File)
+        end
+        for _, File in SortedPairs(file.Find(directory .. folder .. "/cl_*.lua", "LUA"), true) do
+            if File == "cl_interface.lua" then continue end
+            AddCSLuaFile(directory .. folder .. "/" .. File)
+        end
+        
+        FindFiles(directory..folder.."/")
+        
+    end
+
 end
 
-for _, folder in SortedPairs(folders, true) do
-    if folder == "." or folder == ".." or DarkRP.disabledDefaults["modules"][folder] then continue end
-
-    for _, File in SortedPairs(file.Find(fol .. folder .. "/sh_*.lua", "LUA"), true) do
-        AddCSLuaFile(fol .. folder .. "/" .. File)
-        if File == "sh_interface.lua" then continue end
-        include(fol .. folder .. "/" .. File)
-    end
-
-    for _, File in SortedPairs(file.Find(fol .. folder .. "/sv_*.lua", "LUA"), true) do
-        if File == "sv_interface.lua" then continue end
-        include(fol .. folder .. "/" .. File)
-    end
-
-    for _, File in SortedPairs(file.Find(fol .. folder .. "/cl_*.lua", "LUA"), true) do
-        if File == "cl_interface.lua" then continue end
-        AddCSLuaFile(fol .. folder .. "/" .. File)
-    end
-end
+FindFiles(root)
 
 
 DarkRP.DARKRP_LOADING = true
