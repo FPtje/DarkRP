@@ -44,7 +44,7 @@ local function Kick(ply, cmd, args)
     end
 
     if stage ~= "start" and stage ~= "cancel" and stage ~= "update" then
-        FAdmin.Messages.FireNotification("kick", ply, nil, {targets, Reason})
+        FAdmin.Messages.FireNotification("kick", ply, nil, {FAdmin.TargetsToString(targets), Reason})
     end
 
     return true, targets, stage, Reason
@@ -199,7 +199,7 @@ local function Ban(ply, cmd, args)
     end
 
     if stage ~= "start" and stage ~= "cancel" and stage ~= "update" then
-        FAdmin.Messages.FireNotification("ban", ply, nil, {targets, time, Reason})
+        FAdmin.Messages.FireNotification("ban", ply, nil, {FAdmin.TargetsToString(targets), time, Reason})
     end
 
     return true, targets, stage, Reason

@@ -207,7 +207,8 @@ end
 
 function GM:PlayerSpawnedVehicle(ply, ent)
     self.Sandbox.PlayerSpawnedVehicle(self, ply, ent)
-    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass() .. " (" .. ent:GetVehicleClass() .. ")", Color(255, 255, 0))
+    local vehicleClass = ent.GetVehicleClass and " (" .. ent:GetVehicleClass() .. ")" or ""
+    DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned Vehicle " .. ent:GetClass() .. vehicleClass, Color(255, 255, 0))
 end
 
 function GM:PlayerSpawnNPC(ply, type, weapon)

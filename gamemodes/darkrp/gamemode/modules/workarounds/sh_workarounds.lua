@@ -352,3 +352,61 @@ if not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] the
         concommand.Add(cmd.command, fp{msgDeprecated, cmd})
     end
 end
+
+
+--[[-------------------------------------------------------------------------
+CAC tends to kick innocent people when they use the x86_64 branch. Since the
+author is unable to maintain it, it is better to disable the addon altogether.
+---------------------------------------------------------------------------]]
+local disableCacMsg = [[CAC was detected on this server and has been disabled.
+It turns out there is a trivial and very well known way for cheats to bypass
+CAC. Worse yet, CAC tends to kick innocent players who are using the 64 bits
+branch of GMod.
+
+The author of the addon does not maintain CAC anymore, so this is to prevent
+further damage and to warn you of this situation.
+
+If you wish to leave CAC enabled, please open
+
+addons\darkrpmodification\lua\darkrp_config\disabled_defaults.lua
+
+Head to the section about disabled workarounds and make sure the following line is there:
+["disable CAC"]                                  = true,
+]]
+if not DarkRP.disabledDefaults["workarounds"]["disable CAC"] then
+    timer.Create("disable CAC", 2, 1, function()
+        if not CAC then return end
+
+        --remove CAC's hooks
+        hook.Remove("CheckPassword"      , "CAC.CheckPassword")
+        hook.Remove("Initialize"         , "CAC.LuaWhitelistController.261b4998")
+        hook.Remove("OnNPCKilled"        , "CAC.Aimbotdetector")
+        hook.Remove("PlayerDeath"        , "CAC.AimbotDetector")
+        hook.Remove("PlayerInitialSpawn" , "CAC.PlayerMonitor.PlayerConnected")
+        hook.Remove("PlayerSay"          , "CAC.ChatCommands")
+        hook.Remove("SetupMove"          , "CAC.MoveHandler")
+        hook.Remove("ShutDown"           , "CAC")
+        hook.Remove("Think"              , "CAC.DelayedCalls")
+        hook.Remove("Tick"               , "CAC.PlayerMonitor.ProcessQueue")
+        hook.Remove("player_disconnect"  , "CAC.PlayerMonitor.PlayerDisconnected")
+
+        --remove CAC's timers
+        timer.Remove("CAC.AdminUIBootstrapper")
+        timer.Remove("CAC.DataUpdater")
+        timer.Remove("CAC.IncidentController")
+        timer.Remove("CAC.LivePlayerSessionController")
+        timer.Remove("CAC.SettingsSaver")
+
+        --remove CAC's net receivers
+        net.Receivers[CAC.Identifiers.MultiplexedDataChannelName] = nil
+        net.Receivers[CAC.Identifiers.AdminChannelName] = nil
+
+        for k,v in pairs(CAC) do
+            if istable(CAC[k]) and CAC[k].dtor then CAC[k]:dtor() end
+        end
+
+        CAC = nil
+
+        MsgC(Color(0, 255, 0), "Cake Anticheat (CAC)", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(253, 151, 31), disableCacMsg)
+    end)
+end

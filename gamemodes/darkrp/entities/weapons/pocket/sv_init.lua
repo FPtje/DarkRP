@@ -162,16 +162,16 @@ local function deserialize(ply, item)
     if ent:IsWeapon() and ent.Weapon ~= nil and not ent.Weapon:IsValid() then ent.Weapon = ent end
     if ent.Entity ~= nil and not ent.Entity:IsValid() then ent.Entity = ent end
 
-    local pos, mins = ent:GetPos(), ent:WorldSpaceAABB()
-    local offset = pos.z - mins.z
-
     local trace = {}
     trace.start = ply:EyePos()
     trace.endpos = trace.start + ply:GetAimVector() * 85
     trace.filter = ply
 
     local tr = util.TraceLine(trace)
-    ent:SetPos(tr.HitPos + Vector(0, 0, offset))
+
+    ent:SetPos(tr.HitPos)
+
+    DarkRP.placeEntity(ent, tr, ply)
 
     local phys = ent:GetPhysicsObject()
     timer.Simple(0, function() if phys:IsValid() then phys:Wake() end end)

@@ -16,10 +16,10 @@ function meta:dropDRPWeapon(weapon)
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
 
     local ent = ents.Create("spawned_weapon")
+
     local model = (weapon:GetModel() == "models/weapons/v_physcannon.mdl" and "models/weapons/w_physics.mdl") or weapon:GetModel()
     model = util.IsValidModel(model) and model or "models/weapons/w_rif_ak47.mdl"
 
-    ent:SetPos(self:GetShootPos() + self:GetAimVector() * 30)
     ent:SetModel(model)
     ent:SetSkin(weapon:GetSkin() or 0)
     ent:SetWeaponClass(weapon:GetClass())
@@ -28,12 +28,22 @@ function meta:dropDRPWeapon(weapon)
     ent.clip2 = weapon:Clip2()
     ent.ammoadd = primAmmo
 
-    hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
-
     self:RemoveAmmo(primAmmo, weapon:GetPrimaryAmmoType())
     self:RemoveAmmo(self:GetAmmoCount(weapon:GetSecondaryAmmoType()), weapon:GetSecondaryAmmoType())
 
+    local trace = {}
+    trace.start = self:GetShootPos()
+    trace.endpos = trace.start + self:GetAimVector() * 50
+    trace.filter = {self, weapon, ent}
+
+    local tr = util.TraceLine(trace)
+
+    ent:SetPos(tr.HitPos)
     ent:Spawn()
+
+    DarkRP.placeEntity(ent, tr, self)
+
+    hook.Call("onDarkRPWeaponDropped", nil, self, ent, weapon)
 
     weapon:Remove()
 end

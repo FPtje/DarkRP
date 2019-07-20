@@ -32,13 +32,6 @@ local function BuyFood(ply, args)
         return ""
     end
 
-    local trace = {}
-    trace.start = ply:EyePos()
-    trace.endpos = trace.start + ply:GetAimVector() * 85
-    trace.filter = ply
-
-    local tr = util.TraceLine(trace)
-
     for _, v in pairs(FoodItems) do
         if string.lower(args) ~= string.lower(v.name) then continue end
 
@@ -76,6 +69,13 @@ local function BuyFood(ply, args)
         ply:addMoney(-cost)
         DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", v.name, DarkRP.formatMoney(cost), ""))
 
+        local trace = {}
+        trace.start = ply:EyePos()
+        trace.endpos = trace.start + ply:GetAimVector() * 85
+        trace.filter = ply
+
+        local tr = util.TraceLine(trace)
+
         local SpawnedFood = ents.Create("spawned_food")
         SpawnedFood.DarkRPItem = foodTable
         SpawnedFood:Setowning_ent(ply)
@@ -91,6 +91,8 @@ local function BuyFood(ply, args)
 
         SpawnedFood.foodItem = v
         SpawnedFood:Spawn()
+
+        DarkRP.placeEntity(SpawnedFood, tr, ply)
 
         hook.Call("playerBoughtFood", nil, ply, v, SpawnedFood, cost)
         return ""

@@ -18,7 +18,7 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
 
     ply.DarkRPLastTip = ply.DarkRPLastTip or -1
 
-    if ply.DarkRPLastTip > CurTime() - 0.5 then
+    if ply.DarkRPLastTip > CurTime() - 0.1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("wait_with_that"))
         return
     end
@@ -49,6 +49,8 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
         net.WriteEntity(ply)
         net.WriteUInt(amount, 32)
     net.Broadcast()
+
+    ply.DarkRPLastTip = CurTime()
 end)
 
 net.Receive("DarkRP_TipJarUpdate", function(_, ply)
