@@ -110,7 +110,7 @@ local function DoLottery(ply, amount)
 
     amount = tonumber(amount)
     if not amount then
-        DarkRP.notify(ply, 1, 5, string.format("Please specify an entry cost ($%i-%i)", GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost))
+        DarkRP.notify(ply, 1, 5, string.format(DarkRP.getPhrase("lottery_please_specify_an_entry_cost", GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)))
         return ""
     end
 
