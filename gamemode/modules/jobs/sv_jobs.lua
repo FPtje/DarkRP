@@ -364,12 +364,19 @@ local function SwitchJob(ply) --Idea by Godness.
     local eyetrace = ply:GetEyeTrace()
     local ent = eyetrace.Entity
 
-    if not IsValid(ent) or not ent:IsPlayer() then return "" end
+    if not IsValid(ent) or not ent:IsPlayer() then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
+        return ""
+    end
 
     local team1 = RPExtraTeams[ply:Team()]
     local team2 = RPExtraTeams[ent:Team()]
 
     if not team1 or not team2 then return "" end
+    if team1 == team2 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
+        return ""
+    end
     if team1.customCheck and not team1.customCheck(ent) or team2.customCheck and not team2.customCheck(ply) then
         -- notify only the player trying to switch
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
