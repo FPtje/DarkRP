@@ -410,7 +410,7 @@ local my_language = {
     lottery_noone_entered = "No-one has entered the lottery",
     lottery_won = "%s has won the lottery! He has won %s",
     lottery = "lottery",
-    lottery_please_specify_an_entry_cost = "Please specify an entry cost ($%i-%i)",
+    lottery_please_specify_an_entry_cost = "Please specify an entry cost (%s-%s)",
 
     -- Animations
     custom_animation = "Custom animation!",
