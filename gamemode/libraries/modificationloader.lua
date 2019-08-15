@@ -147,5 +147,6 @@ function GM:DarkRPFinishedLoading()
     loadLanguages()
     loadModules()
     loadCustomDarkRPItems()
-    hook.Call("loadCustomDarkRPItems", GAMEMODE)
+    hook.Call("loadCustomDarkRPItems", self)
+    hook.Call("postLoadCustomDarkRPItems", self)
 end
