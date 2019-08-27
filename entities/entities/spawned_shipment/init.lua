@@ -22,7 +22,7 @@ function ENT:Initialize()
 
     if phys:IsValid() then
         phys:Wake()
-	end
+    end
 
     -- Create a serverside gun model
     -- it's required serverside to be able to get OBB information clientside
