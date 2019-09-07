@@ -2,7 +2,7 @@
 Functions
 ---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
-function meta:changeTeam(t, force, suppressNotification)
+function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     local prevTeam = self:Team()
     local notify = suppressNotification and fn.Id or DarkRP.notify
     local notifyAll = suppressNotification and fn.Id or DarkRP.notifyAll
@@ -65,7 +65,8 @@ function meta:changeTeam(t, force, suppressNotification)
         end
         local max = TEAM.max
         local numPlayers = team.NumPlayers(t)
-        if max ~= 0 and -- No limit
+        if not ignoreMaxMembers and
+        max ~= 0 and -- No limit
         (max >= 1 and numPlayers >= max or -- absolute maximum
         max < 1 and (numPlayers + 1) / player.GetCount() > max) then -- fractional limit (in percentages)
             notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
@@ -346,8 +347,8 @@ local function ExecSwitchJob(answer, ent, ply, target)
     local Pteam = ply:Team()
     local Tteam = target:Team()
 
-    if not ply:changeTeam(Tteam) then return end
-    if not target:changeTeam(Pteam) then
+    if not ply:changeTeam(Tteam, nil, nil, true) then return end
+    if not target:changeTeam(Pteam, nil, nil, true) then
         ply:changeTeam(Pteam, true) -- revert job change
         return
     end
@@ -363,12 +364,19 @@ local function SwitchJob(ply) --Idea by Godness.
     local eyetrace = ply:GetEyeTrace()
     local ent = eyetrace.Entity
 
-    if not IsValid(ent) or not ent:IsPlayer() then return "" end
+    if not IsValid(ent) or not ent:IsPlayer() then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
+        return ""
+    end
 
     local team1 = RPExtraTeams[ply:Team()]
     local team2 = RPExtraTeams[ent:Team()]
 
     if not team1 or not team2 then return "" end
+    if team1 == team2 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
+        return ""
+    end
     if team1.customCheck and not team1.customCheck(ent) or team2.customCheck and not team2.customCheck(ply) then
         -- notify only the player trying to switch
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))

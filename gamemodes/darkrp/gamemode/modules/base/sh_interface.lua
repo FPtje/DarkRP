@@ -1494,6 +1494,15 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "postLoadCustomDarkRPItems",
+    description = "Runs right after loadCustomDarkRPItems. All custom DarkRP content will be loaded by this time.",
+    parameters = {
+    },
+    returns = {
+    }
+}
+
+DarkRP.hookStub{
     name = "DarkRPStartedLoading",
     description = "Runs at the very start of loading DarkRP. Not even sandbox has loaded here yet.",
     parameters = {

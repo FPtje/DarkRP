@@ -123,7 +123,7 @@ function PANEL:DoDoubleClick()
     if self:GetDisabled() then return end
 
     local job = self.DarkRPItem
-    if job.vote or job.RequiresVote and job.RequiresVote(LocalPlayer(), job.team) then
+    if (job.RequiresVote == nil and job.vote) or (job.RequiresVote ~= nil and job.RequiresVote(LocalPlayer(), job.team)) then
         RunConsoleCommand("darkrp", "vote" .. job.command)
     else
         RunConsoleCommand("darkrp", job.command)

@@ -14,6 +14,7 @@ function meta:dropDRPWeapon(weapon)
 
     local primAmmo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
+    weapon:SetOwner(self)
 
     local ent = ents.Create("spawned_weapon")
 

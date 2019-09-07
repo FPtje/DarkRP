@@ -96,7 +96,7 @@ function SWEP:Reload()
 end
 
 function SWEP:Think()
-	self:CalcViewModel()
+    self:CalcViewModel()
     if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
         -- Finished reload -
         if self:Clip1() >= self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then

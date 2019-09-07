@@ -385,6 +385,7 @@ function GM:HUDShouldDraw(name)
     if name == "CHudHealth" or
         name == "CHudBattery" or
         name == "CHudSuitPower" or
+        name == "CHUDQuickInfo" or
         (HelpToggled and name == "CHudChat") then
             return false
     else

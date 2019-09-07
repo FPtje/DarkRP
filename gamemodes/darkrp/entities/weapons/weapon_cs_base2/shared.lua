@@ -314,14 +314,14 @@ function SWEP:GetViewModelPosition(pos, ang)
         end
 
         if self.IronSightsPosAfterShootingAdjustment then
-            Offset = self.IronSightsPosAfterShootingAdjustment
-            Right = ang:Right()
-            Up = ang:Up()
-            Forward = ang:Forward()
+            offset = self.IronSightsPosAfterShootingAdjustment
+            local right = ang:Right()
+            local up = ang:Up()
+            local forward = ang:Forward()
 
-            pos = pos + Offset.x * Right * mul
-            pos = pos + Offset.y * Forward * mul
-            pos = pos + Offset.z * Up * mul
+            pos = pos + offset.x * right * mul
+            pos = pos + offset.y * forward * mul
+            pos = pos + offset.z * up * mul
         end
     end
 
@@ -389,7 +389,7 @@ end
 -- Note that if you override Think in your SWEP, you should call
 -- BaseClass.Think(self) so as not to break ironsights
 function SWEP:Think()
-	self:CalcViewModel()
+    self:CalcViewModel()
     if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType then
         self:SetHoldType("normal")
     end
