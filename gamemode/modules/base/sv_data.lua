@@ -54,7 +54,7 @@ function DarkRP.initDatabase()
                 uid BIGINT NOT NULL PRIMARY KEY,
                 rpname VARCHAR(45),
                 salary INTEGER NOT NULL DEFAULT 45,
-                wallet INTEGER NOT NULL
+                wallet BIGINT NOT NULL
             );
         ]])
 
@@ -191,7 +191,7 @@ function migrateDB(callback)
                     uid BIGINT NOT NULL PRIMARY KEY,
                     rpname VARCHAR(45),
                     salary INTEGER NOT NULL DEFAULT 45,
-                    wallet INTEGER NOT NULL
+                    wallet BIGINT NOT NULL
                 );
             ]])
 
