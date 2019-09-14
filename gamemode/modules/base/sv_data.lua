@@ -99,10 +99,10 @@ function DarkRP.initDatabase()
         -- Load the last DBVersion into DarkRP.DBVersion, to allow checks to see whether migration is needed.
         MySQLite.queueQuery([[
             SELECT MAX(version) AS version FROM darkrp_dbversion
-        ]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 0 end)
+        ]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 20190914 end)
 
         MySQLite.queueQuery([[
-            REPLACE INTO darkrp_dbversion VALUES(20160610)
+            REPLACE INTO darkrp_dbversion VALUES(20190914)
         ]])
 
     MySQLite.commit(fp{migrateDB, -- Migrate the database
@@ -146,97 +146,125 @@ function migrateDB(callback)
         MySQLite.query([[DROP TRIGGER IF EXISTS JobPositionFKDelete]])
     end
 
-    -- migrate from darkrp_jobown to darkrp_doorjobs
-    MySQLite.tableExists("darkrp_jobown", function(exists)
-        if not exists then return onFinish() end
-
-        MySQLite.begin()
-            -- Create a temporary table that links job IDs to job commands
-            MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
-            if MySQLite.isMySQL() then
-                local jobCommands = {}
-                for k, v in pairs(RPExtraTeams) do
-                    table.insert(jobCommands, "(" .. k .. "," .. MySQLite.SQLStr(v.command) .. ")")
-                end
-
-                -- This WOULD work with SQLite if the implementation in GMod wasn't out of date.
-                MySQLite.queueQuery("INSERT IGNORE INTO TempJobCommands VALUES " .. table.concat(jobCommands, ",") .. ";")
-            else
-                for k, v in pairs(RPExtraTeams) do
-                    MySQLite.queueQuery("INSERT INTO TempJobCommands VALUES(" .. k .. ", " .. MySQLite.SQLStr(v.command) .. ");")
-                end
-            end
-
-            MySQLite.queueQuery("REPLACE INTO darkrp_doorjobs SELECT darkrp_jobown.idx AS idx, darkrp_jobown.map AS map, TempJobCommands.cmd AS job FROM darkrp_jobown JOIN TempJobCommands ON darkrp_jobown.job = TempJobCommands.id;")
-
-            -- Clean up the transition table and the old table
-            MySQLite.queueQuery("DROP TABLE TempJobCommands;")
-            MySQLite.queueQuery("DROP TABLE darkrp_jobown;")
-        MySQLite.commit(onFinish)
-    end)
-
-    MySQLite.begin()
-
-    if not DarkRP.DBVersion or (DarkRP.DBVersion < 20160610 and DarkRP.DBVersion ~= 0) then
-        if MySQLite.isMySQL() then
-            -- if only SQLite were this easy
-            MySQLite.queueQuery([[DROP INDEX rpname ON darkrp_player]])
-        else
-            -- darkrp_player used to have a UNIQUE rpname field.
-            -- This sucks, get rid of it
-            MySQLite.queueQuery([[PRAGMA foreign_keys=OFF]])
-
-            MySQLite.queueQuery([[
-                CREATE TABLE IF NOT EXISTS new_darkrp_player(
-                    uid BIGINT NOT NULL PRIMARY KEY,
-                    rpname VARCHAR(45),
-                    salary INTEGER NOT NULL DEFAULT 45,
-                    wallet BIGINT NOT NULL
-                );
-            ]])
-
-            MySQLite.queueQuery([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
-
-            MySQLite.queueQuery([[DROP TABLE darkrp_player]])
-
-            MySQLite.queueQuery([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
-
-            MySQLite.queueQuery([[PRAGMA foreign_keys=ON]])
-
-            DarkRP.DBVersion = 20160610
-        end
-    end
-
-    MySQLite.commit(function()
-        if DarkRP.DBVersion >= 20181013 then onFinish() return end
-
-        MySQLite.query([[SELECT * FROM darkrp_jobspawn]], function(oldData)
-            oldData = oldData or {}
+    -- Simple function that checks the database version, migrates if
+    -- necessary, and recurses to perform the next migration, until the last
+    -- migration has been performed.
+    -- Calls onFinish() when the migration is finished or not necessary.
+    local function migrate(version)
+        if version < 20160610 then
             MySQLite.begin()
+                if MySQLite.isMySQL() then
+                    -- if only SQLite were this easy
+                    MySQLite.queueQuery([[DROP INDEX rpname ON darkrp_player]])
+                else
+                    -- darkrp_player used to have a UNIQUE rpname field.
+                    -- This sucks, get rid of it
+                    MySQLite.queueQuery([[PRAGMA foreign_keys=OFF]])
 
-            MySQLite.queueQuery([[DROP TABLE darkrp_jobspawn]])
+                    MySQLite.queueQuery([[
+                        CREATE TABLE IF NOT EXISTS new_darkrp_player(
+                            uid BIGINT NOT NULL PRIMARY KEY,
+                            rpname VARCHAR(45),
+                            salary INTEGER NOT NULL DEFAULT 45,
+                            wallet INTEGER NOT NULL
+                        );
+                    ]])
 
-            MySQLite.queueQuery([[
-                CREATE TABLE darkrp_jobspawn(
-                    id INTEGER NOT NULL PRIMARY KEY REFERENCES darkrp_position(id)
-                        ON UPDATE CASCADE
-                        ON DELETE CASCADE,
+                    MySQLite.queueQuery([[INSERT INTO new_darkrp_player SELECT * FROM darkrp_player]])
 
-                    teamcmd VARCHAR(255) NOT NULL
-                );
-            ]])
+                    MySQLite.queueQuery([[DROP TABLE darkrp_player]])
 
-            for i, row in pairs(oldData) do
-                local teamcmd = (RPExtraTeams[tonumber(row.team)] or {}).command
-                if not teamcmd then continue end
+                    MySQLite.queueQuery([[ALTER TABLE new_darkrp_player RENAME TO darkrp_player]])
 
-                MySQLite.queueQuery(string.format([[INSERT INTO darkrp_jobspawn(id, teamcmd) VALUES(%s, %s)]], row.id, MySQLite.SQLStr(teamcmd)))
-            end
+                    MySQLite.queueQuery([[PRAGMA foreign_keys=ON]])
+                end
+                MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20160610)]])
+            MySQLite.commit(fp{migrate, 20160610})
+            return
+        end
 
-            MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20181013)]])
-            MySQLite.commit(onFinish)
-        end)
-    end)
+        if version < 20181013 then
+            -- migrate from darkrp_jobown to darkrp_doorjobs
+            MySQLite.tableExists("darkrp_jobown", function(exists)
+                if not exists then migrate(20181013) return end
+
+                MySQLite.begin()
+                    -- Create a temporary table that links job IDs to job commands
+                    MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS TempJobCommands(id INT NOT NULL PRIMARY KEY, cmd VARCHAR(255) NOT NULL);")
+                    if MySQLite.isMySQL() then
+                        local jobCommands = {}
+                        for k, v in pairs(RPExtraTeams) do
+                            table.insert(jobCommands, "(" .. k .. "," .. MySQLite.SQLStr(v.command) .. ")")
+                        end
+
+                        -- This WOULD work with SQLite if the implementation in GMod wasn't out of date.
+                        MySQLite.queueQuery("INSERT IGNORE INTO TempJobCommands VALUES " .. table.concat(jobCommands, ",") .. ";")
+                    else
+                        for k, v in pairs(RPExtraTeams) do
+                            MySQLite.queueQuery("INSERT INTO TempJobCommands VALUES(" .. k .. ", " .. MySQLite.SQLStr(v.command) .. ");")
+                        end
+                    end
+
+                    MySQLite.queueQuery("REPLACE INTO darkrp_doorjobs SELECT darkrp_jobown.idx AS idx, darkrp_jobown.map AS map, TempJobCommands.cmd AS job FROM darkrp_jobown JOIN TempJobCommands ON darkrp_jobown.job = TempJobCommands.id;")
+
+                    -- Clean up the transition table and the old table
+                    MySQLite.queueQuery("DROP TABLE TempJobCommands;")
+                    MySQLite.queueQuery("DROP TABLE darkrp_jobown;")
+                    MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20181013)]])
+                MySQLite.commit(fp{migrate, 20181013})
+            end)
+            return
+        end
+
+        if version < 20181014 then
+            MySQLite.query([[SELECT * FROM darkrp_jobspawn]], function(oldData)
+                oldData = oldData or {}
+                MySQLite.begin()
+
+                MySQLite.queueQuery([[DROP TABLE darkrp_jobspawn]])
+
+                MySQLite.queueQuery([[
+                    CREATE TABLE darkrp_jobspawn(
+                        id INTEGER NOT NULL PRIMARY KEY REFERENCES darkrp_position(id)
+                            ON UPDATE CASCADE
+                            ON DELETE CASCADE,
+
+                        teamcmd VARCHAR(255) NOT NULL
+                    );
+                ]])
+
+                for i, row in pairs(oldData) do
+                    local teamcmd = (RPExtraTeams[tonumber(row.team)] or {}).command
+                    if not teamcmd then continue end
+
+                    MySQLite.queueQuery(string.format([[INSERT INTO darkrp_jobspawn(id, teamcmd) VALUES(%s, %s)]], row.id, MySQLite.SQLStr(teamcmd)))
+                end
+
+                MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20181014)]])
+
+                MySQLite.commit(fp{migrate, 20181014})
+            end)
+            return
+        end
+
+        if version < 20190914 then
+            MySQLite.begin()
+                -- Migration not necessary for SQLite, since BIGINT and
+                -- INTEGER are considered the same in SQLite
+                -- https://www.sqlite.org/datatype3.html
+                if MySQLite.isMySQL() then
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_player MODIFY wallet BIGINT;]])
+                end
+                MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20190914)]])
+            MySQLite.commit(fp{migrate, 20190914})
+
+            return
+        end
+
+        -- All migrations finished
+        onFinish()
+    end
+    migrate(DarkRP.DBVersion)
 end
 
 --[[---------------------------------------------------------
