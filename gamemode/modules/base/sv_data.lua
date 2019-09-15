@@ -134,14 +134,6 @@ Database migration
 backwards compatibility with older versions of DarkRP
 ---------------------------------------------------------------------------]]
 function migrateDB(callback)
-    local migrateCount = 0
-
-    local onFinish = function()
-        migrateCount = migrateCount + 1
-
-        if migrateCount == 2 then callback() end
-    end
-
     if MySQLite.isMySQL() then
         MySQLite.query([[DROP TRIGGER IF EXISTS JobPositionFKDelete]])
     end
@@ -149,7 +141,7 @@ function migrateDB(callback)
     -- Simple function that checks the database version, migrates if
     -- necessary, and recurses to perform the next migration, until the last
     -- migration has been performed.
-    -- Calls onFinish() when the migration is finished or not necessary.
+    -- Calls callback when the migration is finished or not necessary.
     local function migrate(version)
         if version < 20160610 then
             MySQLite.begin()
@@ -262,7 +254,7 @@ function migrateDB(callback)
         end
 
         -- All migrations finished
-        onFinish()
+        callback()
     end
     migrate(DarkRP.DBVersion)
 end
