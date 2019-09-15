@@ -134,10 +134,6 @@ Database migration
 backwards compatibility with older versions of DarkRP
 ---------------------------------------------------------------------------]]
 function migrateDB(callback)
-    if MySQLite.isMySQL() then
-        MySQLite.query([[DROP TRIGGER IF EXISTS JobPositionFKDelete]])
-    end
-
     -- Simple function that checks the database version, migrates if
     -- necessary, and recurses to perform the next migration, until the last
     -- migration has been performed.
@@ -245,6 +241,7 @@ function migrateDB(callback)
                 -- INTEGER are considered the same in SQLite
                 -- https://www.sqlite.org/datatype3.html
                 if MySQLite.isMySQL() then
+                    MySQLite.queueQuery([[DROP TRIGGER IF EXISTS JobPositionFKDelete]])
                     MySQLite.queueQuery([[ALTER TABLE darkrp_player MODIFY wallet BIGINT;]])
                 end
                 MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20190914)]])
