@@ -460,7 +460,7 @@ function GM:PlayerDeath(ply, weapon, killer)
         end
     end
 
-    if IsValid(ply) and (ply ~= killer or ply.Slayed) and not ply:isArrested() then
+    if IsValid(ply) and (ply ~= killer or ply.Slayed) and IsValid(killer) and not ply:isArrested() then
         ply:setDarkRPVar("wanted", nil)
         ply.DeathPos = nil
         ply.Slayed = false
