@@ -51,11 +51,13 @@ function plyMeta:wanted(actor, reason, time)
 
     self:setDarkRPVar("wanted", true)
     self:setDarkRPVar("wantedReason", reason)
-
-    timer.Create(self:SteamID64() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
-        if not IsValid(self) then return end
-        self:unWanted()
-    end)
+    
+    if time and time > 0 or GAMEMODE.Config.wantedtime > 0 then
+        timer.Create(self:SteamID64() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
+            if not IsValid(self) then return end
+            self:unWanted()
+        end)
+    end
 
     if suppressMsg then return end
 
