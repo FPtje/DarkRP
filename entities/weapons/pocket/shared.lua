@@ -97,6 +97,14 @@ function SWEP:SecondaryAttack()
         return
     end
 
+    if SERVER then
+        local canPickup, message = hook.Call("canDropPocketItem", nil, self:GetOwner(), maxK, self:GetOwner().darkRPPocket[maxK])
+        if canPickup == false then
+            if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
+            return
+        end
+    end
+
     self:GetOwner():dropPocketItem(maxK)
 end
 
