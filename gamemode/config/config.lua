@@ -159,7 +159,7 @@ GM.Config.unlockdoorsonstart            = false
 GM.Config.voiceradius                   = true
 -- tax - Whether players pay taxes on their wallets.
 GM.Config.wallettax                     = false
--- wantedrespawn
+-- wantedrespawn - Whether players remain wanted on respawn.
 GM.Config.wantedrespawn                 = false
 -- wantedsuicide - Enable/Disable suiciding while you are wanted by the police.
 GM.Config.wantedsuicide                 = false
