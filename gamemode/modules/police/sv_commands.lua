@@ -266,7 +266,7 @@ local function RequestLicense(ply)
     end
     mayors = table.concat(mayors, ", ")
     chiefs = table.concat(chiefs, ", ")
-    cops  = table.concat(cops, ", ")
+    cops   = table.concat(cops, ", ")
 
     if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", cops))

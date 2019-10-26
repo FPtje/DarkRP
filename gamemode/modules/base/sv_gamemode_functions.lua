@@ -436,7 +436,7 @@ function GM:PlayerDeath(ply, weapon, killer)
 
     ply:ExitVehicle()
 
-    if ply:isArrested() and not GAMEMODE.Config.respawninjail  then
+    if ply:isArrested() and not GAMEMODE.Config.respawninjail then
         -- If the player died in jail, make sure they can't respawn until their jail sentence is over
         -- NextSpawnTime is set to CurTime() on unarrest
         ply.NextSpawnTime = math.huge

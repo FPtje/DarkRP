@@ -104,7 +104,7 @@ hook.Add("PlayerDeath", "FAdmin_Log", function(ply, inflictor, Killer)
     local Nick = IsValid(ply) and ply:Nick() or "N/A"
     local SteamID = IsValid(ply) and ply:SteamID() or "N/A"
     local KillerName = IsValid(Killer) and (Killer:IsPlayer() and Killer:Nick() or Killer:GetClass()) or "N/A"
-    local InflictorName =  IsValid(inflictor) and inflictor:GetClass() or "N/A"
+    local InflictorName = IsValid(inflictor) and inflictor:GetClass() or "N/A"
 
     FAdmin.Log(Nick .. " (" .. SteamID .. ") Got killed by " .. KillerName .. " with a " .. InflictorName)
 end)

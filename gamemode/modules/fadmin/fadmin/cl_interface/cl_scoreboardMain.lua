@@ -44,7 +44,7 @@ function FAdmin.ScoreBoard.Main.Show()
 
     Sort.Frags = Sort.Frags or vgui.Create("DLabel")
     Sort.Frags:SetText("Kills")
-    Sort.Frags:SetPos(FAdmin.ScoreBoard.X + FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:GetWide() - 200,  FAdmin.ScoreBoard.Y + 90 + 30)
+    Sort.Frags:SetPos(FAdmin.ScoreBoard.X + FAdmin.ScoreBoard.Main.Controls.FAdminPanelList:GetWide() - 200, FAdmin.ScoreBoard.Y + 90 + 30)
     Sort.Frags.Type = "Frags"
     Sort.Frags:SetVisible(true)
 
