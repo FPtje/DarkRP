@@ -59,7 +59,7 @@ sounds[ "gotta reload" ] = { "vo/npc/male01/gottareload01.wav" }
 
 sounds[ "gtfo" ] = sounds [ "get out" ]
 
-sounds[ "hacks" ] = { "vo/npc/male01/hacks01.wav",  "vo/npc/male01/hacks02.wav", "vo/npc/male01/thehacks01.wav", "vo/npc/male01/thehacks02.wav"}
+sounds[ "hacks" ] = { "vo/npc/male01/hacks01.wav", "vo/npc/male01/hacks02.wav", "vo/npc/male01/thehacks01.wav", "vo/npc/male01/thehacks02.wav"}
 sounds[ "hax" ] = sounds [ "hacks" ]
 sounds[ "haxx" ] = sounds [ "hacks" ]
 
@@ -73,14 +73,14 @@ sounds[ "hi" ] = sounds[ "hello" ]
 
 sounds[ "heads up" ] = { "vo/npc/male01/headsup01.wav", "vo/npc/male01/headsup02.wav" }
 
-sounds[ "he's dead" ] = { "vo/npc/male01/gordead_ques01.wav",  "vo/npc/male01/gordead_ques07.wav" }
+sounds[ "he's dead" ] = { "vo/npc/male01/gordead_ques01.wav", "vo/npc/male01/gordead_ques07.wav" }
 sounds[ "he is dead" ] = sounds[ "he's dead" ]
 
 sounds[ "how about that" ] = { "vo/npc/male01/answer25.wav" }
 
 sounds[ "i know" ] = { "vo/npc/male01/answer08.wav" }
 
-sounds[ "ill stay here" ] = { "vo/npc/male01/illstayhere01.wav", "vo/npc/male01/holddownspot01.wav", "vo/npc/male01/holddownspot02.wav", "vo/npc/male01/imstickinghere01.wav",  "vo/npc/male01/littlecorner01.wav" }
+sounds[ "ill stay here" ] = { "vo/npc/male01/illstayhere01.wav", "vo/npc/male01/holddownspot01.wav", "vo/npc/male01/holddownspot02.wav", "vo/npc/male01/imstickinghere01.wav", "vo/npc/male01/littlecorner01.wav" }
 sounds[ "i'll stay here" ] = sounds[ "ill stay here" ]
 sounds[ "i will stay here" ] = sounds[ "ill stay here" ]
 
@@ -180,7 +180,7 @@ sounds[ "too much info" ] = { "vo/npc/male01/answer26.wav" }
 sounds[ "too much information" ] = sounds[ "too much info" ]
 
 sounds[ "uhoh" ] = { "vo/npc/male01/uhoh.wav" }
-sounds[ "uh oh" ]  = sounds[ "uhoh" ]
+sounds[ "uh oh" ] = sounds[ "uhoh" ]
 
 sounds[ "wait" ] = { "vo/trainyard/man_waitaminute.wav" }
 

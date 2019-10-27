@@ -145,7 +145,7 @@ function PANEL2:BuildList()
             local Icon = vgui.CreateFromTable(WeaponIcon, self)
             Icon:Setup(WeaponTable.PrintName or WeaponTable.ClassName, WeaponTable.ClassName, WeaponTable.SpawnMenuIcon, WeaponTable.AdminSpawnable and not WeaponTable.Spawnable, self)
 
-            local Tooltip =  Format("Name: %s", WeaponTable.PrintName)
+            local Tooltip = Format("Name: %s", WeaponTable.PrintName)
             if WeaponTable.Author ~= "" then Tooltip = Format("%s\nAuthor: %s", Tooltip, WeaponTable.Author) end
             if WeaponTable.Contact ~= "" then Tooltip = Format("%s\nContact: %s", Tooltip, WeaponTable.Contact) end
             if WeaponTable.Instructions ~= "" then Tooltip = Format("%s\n\n%s", Tooltip, WeaponTable.Instructions) end

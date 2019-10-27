@@ -14,7 +14,7 @@ function DarkRP.addLanguage(name, tbl)
 end
 
 function DarkRP.addPhrase(lang, name, phrase)
-    rp_languages[lang] = rp_languages[lang]  or {}
+    rp_languages[lang] = rp_languages[lang] or {}
     rp_languages[lang][name] = phrase
 end
 

@@ -177,7 +177,7 @@ local function Ban(ply, cmd, args)
 
             if stage == "execute" then
                 time = tonumber(args[3]) or 60 --Default to one hour, not permanent.
-                Reason = args[4]  or ""
+                Reason = args[4] or ""
             end
 
             local TimeText = FAdmin.PlayerActions.ConvertBanTime(time)

@@ -14,13 +14,13 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
 
     local allowed, time = self:changeAllowed(t)
     if t ~= GAMEMODE.DefaultTeam and not allowed and not force then
-        local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(t), DarkRP.getPhrase("banned_or_demoted"))
+        local notif = time and DarkRP.getPhrase("have_to_wait", math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(t), DarkRP.getPhrase("banned_or_demoted"))
         notify(self, 1, 4, notif)
         return false
     end
 
     if self.LastJob and GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob) >= 0 and not force then
-        notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
+        notify(self, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
         return false
     end
 
@@ -69,7 +69,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         max ~= 0 and -- No limit
         (max >= 1 and numPlayers >= max or -- absolute maximum
         max < 1 and (numPlayers + 1) / player.GetCount() > max) then -- fractional limit (in percentages)
-            notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
+            notify(self, 1, 4, DarkRP.getPhrase("team_limit_reached", TEAM.name))
             return false
         end
     end
@@ -454,7 +454,7 @@ local function DoTeamUnBan(ply, args)
 
     local found = false
     for k, v in pairs(RPExtraTeams) do
-        if string.lower(v.name) == string.lower(Team) or  string.lower(v.command) == string.lower(Team) then
+        if string.lower(v.name) == string.lower(Team) or string.lower(v.command) == string.lower(Team) then
             Team = k
             found = true
             break

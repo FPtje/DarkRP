@@ -16,7 +16,7 @@ SWEP.IsDarkRPWeaponChecker = true
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
-SWEP.AnimPrefix  = "rpg"
+SWEP.AnimPrefix = "rpg"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = true

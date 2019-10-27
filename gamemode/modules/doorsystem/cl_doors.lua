@@ -39,7 +39,7 @@ function meta:drawOwnableInfo()
         if allowedCoOwn and not fn.Null(allowedCoOwn) then
             table.insert(doorInfo, DarkRP.getPhrase("keys_other_allowed"))
 
-            for k  in pairs(allowedCoOwn) do
+            for k in pairs(allowedCoOwn) do
                 local ent = Player(k)
                 if not IsValid(ent) or not ent:IsPlayer() then continue end
                 table.insert(doorInfo, ent:Nick())
