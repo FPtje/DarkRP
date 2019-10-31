@@ -56,7 +56,7 @@ local function MakeServerOptions()
     end
 
     for k, v in ipairs(FAdmin.ScoreBoard.Server.ActionButtons) do
-        local visible = v.Visible == true or (type(v.Visible) == "function" and v.Visible(LocalPlayer()) == true)
+        local visible = v.Visible == true or (isfunction(v.Visible) and v.Visible(LocalPlayer()) == true)
 
         local ActionButton = vgui.Create("FAdminActionButton")
         if isstring(v.Image) then
@@ -64,7 +64,7 @@ local function MakeServerOptions()
         elseif istable(v.Image) then
             ActionButton:SetImage(v.Image[1])
             if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
-        elseif type(v.Image) == "function" then
+        elseif isfunction(v.Image) then
             local img1, img2 = v.Image()
             ActionButton:SetImage(img1)
             if img2 then ActionButton:SetImage2(img2) end
