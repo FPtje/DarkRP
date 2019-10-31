@@ -133,7 +133,7 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
     for k, v in pairs(self.OldChatHooks) do
         if not isfunction(v) then continue end
 
-        if type(k) == "Entity" or type(k) == "Player" then
+        if isentity(k) or k:IsPlayer() then
             text2 = v(k, ply, text, teamonly, dead) or text2
         else
             text2 = v(ply, text, teamonly, dead) or text2
