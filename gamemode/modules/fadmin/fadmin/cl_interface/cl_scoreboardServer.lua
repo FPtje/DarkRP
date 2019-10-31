@@ -59,9 +59,9 @@ local function MakeServerOptions()
         local visible = v.Visible == true or (type(v.Visible) == "function" and v.Visible(LocalPlayer()) == true)
 
         local ActionButton = vgui.Create("FAdminActionButton")
-        if type(v.Image) == "string" then
+        if isstring(v.Image) then
             ActionButton:SetImage(v.Image or "icon16/exclamation")
-        elseif type(v.Image) == "table" then
+        elseif istable(v.Image) then
             ActionButton:SetImage(v.Image[1])
             if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
         elseif type(v.Image) == "function" then
@@ -72,7 +72,7 @@ local function MakeServerOptions()
             ActionButton:SetImage("icon16/exclamation")
         end
         local name = v.Name
-        if type(name) == "function" then name = name() end
+        if isfunction(name) then name = name() end
         ActionButton:SetText(DarkRP.deLocalise(name))
         ActionButton:SetBorderColor(visible and v.color or Color(120, 120, 120))
         ActionButton:SetDisabled(not visible)

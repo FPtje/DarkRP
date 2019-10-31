@@ -81,7 +81,7 @@ end
 
 function ENT:Use(activator, caller)
     if self.IsPocketed then return end
-    if type(self.PlayerUse) == "function" then
+    if isfunction(self.PlayerUse) then
         local val = self:PlayerUse(activator, caller)
         if val ~= nil then return val end
     elseif self.PlayerUse ~= nil then

@@ -133,9 +133,9 @@ function FAdmin.ScoreBoard.Player.Show(ply)
     for _, v in ipairs(FAdmin.ScoreBoard.Player.ActionButtons) do
         if v.Visible == true or (type(v.Visible) == "function" and v.Visible(FAdmin.ScoreBoard.Player.Player) == true) then
             local ActionButton = vgui.Create("FAdminActionButton")
-            if type(v.Image) == "string" then
+            if isstring(v.Image) then
                 ActionButton:SetImage(v.Image or "icon16/exclamation")
-            elseif type(v.Image) == "table" then
+            elseif istable(v.Image) then
                 ActionButton:SetImage(v.Image[1])
                 if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
             elseif type(v.Image) == "function" then
@@ -146,7 +146,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
                 ActionButton:SetImage("icon16/exclamation")
             end
             local name = v.Name
-            if type(name) == "function" then name = name(FAdmin.ScoreBoard.Player.Player) end
+            if isfunction(name) then name = name(FAdmin.ScoreBoard.Player.Player) end
             ActionButton:SetText(DarkRP.deLocalise(name))
             ActionButton:SetBorderColor(v.color)
 

@@ -131,7 +131,7 @@ function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFT
     local DoSayFunc
 
     for k, v in pairs(self.OldChatHooks) do
-        if type(v) ~= "function" then continue end
+        if not isfunction(v) then continue end
 
         if type(k) == "Entity" or type(k) == "Player" then
             text2 = v(k, ply, text, teamonly, dead) or text2
