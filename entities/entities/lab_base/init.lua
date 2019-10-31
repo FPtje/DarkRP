@@ -52,7 +52,7 @@ function ENT:SalePrice(activator)
     local owner = self:Getowning_ent()
 
     if activator == owner then
-        if self.allowed and type(self.allowed) == "table" and table.HasValue(self.allowed, activator:Team()) then
+        if self.allowed and istable(self.allowed) and table.HasValue(self.allowed, activator:Team()) then
             return math.ceil(self:Getprice() * 0.8)
         else
             return math.ceil(self:Getprice() * 0.9)
