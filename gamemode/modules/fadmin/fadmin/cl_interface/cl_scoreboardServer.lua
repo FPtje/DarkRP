@@ -59,12 +59,13 @@ local function MakeServerOptions()
         local visible = v.Visible == true or (isfunction(v.Visible) and v.Visible(LocalPlayer()) == true)
 
         local ActionButton = vgui.Create("FAdminActionButton")
-        if isstring(v.Image) then
+        local imageType = TypeID(v.Image)
+        if imageType == TYPE_STRING then
             ActionButton:SetImage(v.Image or "icon16/exclamation")
-        elseif istable(v.Image) then
+        elseif imageType == TYPE_TABLE then
             ActionButton:SetImage(v.Image[1])
             if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
-        elseif isfunction(v.Image) then
+        elseif imageType == TYPE_FUNCTION then
             local img1, img2 = v.Image()
             ActionButton:SetImage(img1)
             if img2 then ActionButton:SetImage2(img2) end
