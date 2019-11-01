@@ -130,7 +130,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
     FAdmin.ScoreBoard.Player.Controls.ButtonPanel:DockMargin(5, 5, 5, 5)
 
     for _, v in ipairs(FAdmin.ScoreBoard.Player.ActionButtons) do
-        if v.Visible or (isfunction(v.Visible) and v.Visible(FAdmin.ScoreBoard.Player.Player)) then
+        if v.Visible == true or (isfunction(v.Visible) and v.Visible(FAdmin.ScoreBoard.Player.Player) = true) then
             local ActionButton = vgui.Create("FAdminActionButton")
             local imageType = TypeID(v.Image)
             if imageType == TYPE_STRING then
