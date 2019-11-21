@@ -16,6 +16,8 @@ SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
 SWEP.AnimPrefix = "stunstick"
 
+SWEP.UseHands = false
+
 SWEP.AdminOnly = true
 
 SWEP.StickColor = Color(255, 255, 255)
