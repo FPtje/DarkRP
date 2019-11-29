@@ -3,6 +3,9 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
+util.AddNetworkString("DRP_ResetLaws")
+util.AddNetworkString("DRP_AddLaw")
+util.AddNetworkString("DRP_RemoveLaw")
 local Laws = {}
 local FixedLaws = {}
 
@@ -56,9 +59,9 @@ local function addLaw(ply, args)
 
     local num = table.insert(Laws, args)
 
-    umsg.Start("DRP_AddLaw")
-        umsg.String(args)
-    umsg.End()
+    net.Start("DRP_RemoveLaw")
+        net.WriteString(args)
+    net.Send(ply)
 
     hook.Run("addLaw", num, args, ply)
 
@@ -92,9 +95,9 @@ local function removeLaw(ply, args)
 
     table.remove(Laws, i)
 
-    umsg.Start("DRP_RemoveLaw")
-        umsg.Short(i)
-    umsg.End()
+    net.Start("DRP_RemoveLaw")
+        net.WriteInt(i, 16)
+    net.Send(ply)
 
     hook.Run("removeLaw", i, law, ply)
 
@@ -104,11 +107,11 @@ local function removeLaw(ply, args)
 end
 DarkRP.defineChatCommand("removeLaw", removeLaw)
 
-function DarkRP.resetLaws()
+function DarkRP.resetLaws(ply)
     Laws = table.Copy(FixedLaws)
 
-    umsg.Start("DRP_ResetLaws")
-    umsg.End()
+    net.Start("DRP_RestLaws")
+    net.Send(ply)
 end
 
 local function resetLaws(ply, args)
@@ -121,7 +124,7 @@ local function resetLaws(ply, args)
 
     hook.Run("resetLaws", ply)
 
-    DarkRP.resetLaws()
+    DarkRP.resetLaws(ply)
 
     DarkRP.notify(ply, 0, 2, DarkRP.getPhrase("law_reset"))
 
@@ -181,10 +184,10 @@ end
 hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
     for i, law in pairs(Laws) do
         if FixedLaws[i] then continue end
-
-        umsg.Start("DRP_AddLaw", ply)
-            umsg.String(law)
-        umsg.End()
+        
+        net.Start("DRP_AddLaw")
+            net.WriteString(law)
+        net.Send(ply)
     end
 end)
 
