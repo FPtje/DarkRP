@@ -2,6 +2,8 @@ AddCSLuaFile()
 
 if SERVER then
     AddCSLuaFile("cl_menu.lua")
+    util.AddNetworkString("anim_keys")
+    util.AddNetworkString("KeysMenu")
 end
 
 if CLIENT then
@@ -77,11 +79,11 @@ end
 local function lockUnlockAnimation(ply, snd)
     ply:EmitSound("npc/metropolice/gear" .. math.floor(math.Rand(1,7)) .. ".wav")
     timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
-
-    umsg.Start("anim_keys")
-        umsg.Entity(ply)
-        umsg.String("usekeys")
-    umsg.End()
+    
+    net.Start("anim_keys")
+        net.WriteEntity(ply)
+        net.WriteString("usekeys")
+    net.Send(ply)
 
     ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_ITEM_PLACE, true)
 end
@@ -142,7 +144,7 @@ function SWEP:Reload()
         return
     end
     if SERVER then
-        umsg.Start("KeysMenu", self:GetOwner())
-        umsg.End()
+        net.Start("KeysMenu")
+        net.Send(self:GetOwner())
     end
 end
