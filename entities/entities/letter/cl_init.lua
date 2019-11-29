@@ -11,7 +11,7 @@ local function KillLetter(msg)
     hook.Remove("HUDPaint", "ShowLetter")
     frame:Remove()
 end
-usermessage.Hook("KillLetter", KillLetter)
+net.Receive("KillLetter", KillLetter)
 
 local function ShowLetter(msg)
     if frame then
@@ -73,4 +73,4 @@ local function ShowLetter(msg)
         end
     end)
 end
-usermessage.Hook("ShowLetter", ShowLetter)
+net.Receive("ShowLetter", ShowLetter)
