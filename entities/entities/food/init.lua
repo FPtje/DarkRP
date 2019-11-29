@@ -1,6 +1,7 @@
 AddCSLuaFile("shared.lua")
-
 include("shared.lua")
+
+util.AddNetworkString("AteFoodIcon")
 
 function ENT:Initialize()
     self:SetModel("models/props_junk/garbage_takeoutcarton001a.mdl")
@@ -35,8 +36,8 @@ end
 
 function ENT:Use(activator, caller)
     caller:setSelfDarkRPVar("Energy", math.Clamp((caller:getDarkRPVar("Energy") or 0) + 100, 0, 100))
-    umsg.Start("AteFoodIcon", caller)
-    umsg.End()
+    net.Start("AteFoodIcon")
+    net.Send(caller)
 
     self:Remove()
     activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
