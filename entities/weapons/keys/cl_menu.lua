@@ -207,4 +207,4 @@ function DarkRP.openKeysMenu(um)
         CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_ChangeDoorSettings", fp{openMenu, setDoorOwnerAccess})
     end)
 end
-usermessage.Hook("KeysMenu", DarkRP.openKeysMenu)
+net.Receive("KeysMenu",DarkRP.openKeysMenu)
