@@ -55,7 +55,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local filter = {}
 
     for _, v in ipairs(ents) do
-        if v:IsPlayer() then
+        if v:IsPlayer() and (v == ply or v:IsBot() or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
             table.insert(filter, v)
         end
     end
@@ -76,21 +76,23 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
 end
 
 function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
-    net.Start("DarkRP_Chat")
-        net.WriteUInt(col1.r, 8)
-        net.WriteUInt(col1.g, 8)
-        net.WriteUInt(col1.b, 8)
-        net.WriteString(text1)
+    if IsValid(receiver) and (sender == receiver or receiver:IsBot() or hook.Run("PlayerCanSeePlayersChat", text1 .. ": " .. text2, false, receiver, sender) ~= false) then
+        net.Start("DarkRP_Chat")
+            net.WriteUInt(col1.r, 8)
+            net.WriteUInt(col1.g, 8)
+            net.WriteUInt(col1.b, 8)
+            net.WriteString(text1)
 
-        sender = sender or Entity(0)
-        net.WriteEntity(sender)
+            sender = sender or Entity(0)
+            net.WriteEntity(sender)
 
-        col2 = col2 or Color(0, 0, 0)
-        net.WriteUInt(col2.r, 8)
-        net.WriteUInt(col2.g, 8)
-        net.WriteUInt(col2.b, 8)
-        net.WriteString(text2 or "")
-    net.Send(receiver)
+            col2 = col2 or Color(0, 0, 0)
+            net.WriteUInt(col2.r, 8)
+            net.WriteUInt(col2.g, 8)
+            net.WriteUInt(col2.b, 8)
+            net.WriteString(text2 or "")
+        net.Send(receiver)
+    end
 end
 
 function DarkRP.isEmpty(vector, ignore)
