@@ -55,7 +55,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local filter = {}
 
     for _, v in ipairs(ents) do
-        if v:IsPlayer() and (v == ply or v:IsBot() or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
+        if v:IsPlayer() and not v:IsBot() and (v == ply or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
             table.insert(filter, v)
         end
     end
@@ -76,7 +76,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
 end
 
 function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
-    if IsValid(receiver) and (sender == receiver or receiver:IsBot() or hook.Run("PlayerCanSeePlayersChat", text1 .. ": " .. text2, false, receiver, sender) ~= false) then
+    if IsValid(receiver) and not receiver:IsBot() and (sender == receiver or hook.Run("PlayerCanSeePlayersChat", text1 .. ": " .. text2, false, receiver, sender) ~= false) then
         net.Start("DarkRP_Chat")
             net.WriteUInt(col1.r, 8)
             net.WriteUInt(col1.g, 8)
