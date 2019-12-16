@@ -54,7 +54,10 @@ function ENT:Use(activator, caller)
 
     local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
     local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
-    if not CanPickup or ShouldntContinue then return end
+    if not CanPickup or ShouldntContinue then
+        weapon:Remove()
+        return
+    end
 
     -- Store ammo count before weapon pickup
     local primaryAmmoType = weapon:GetPrimaryAmmoType()
