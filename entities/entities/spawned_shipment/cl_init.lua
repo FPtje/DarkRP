@@ -143,7 +143,7 @@ Create a shipment from a spawned_weapon
 properties.Add("splitShipment",
 {
     MenuLabel   =   DarkRP.getPhrase("splitshipment"),
-    Order       =   2003,
+    Order       =   2004,
     MenuIcon    =   "icon16/arrow_divide.png",
 
     Filter      =   function(self, ent, ply)
