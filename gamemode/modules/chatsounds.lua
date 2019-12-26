@@ -277,17 +277,31 @@ local function CheckChat(ply, text)
     if not GAMEMODE.Config.chatsounds or ply.nextSpeechSound and ply.nextSpeechSound > CurTime() then return end
     local prefix = string.sub(text, 0, 1)
     if prefix == "/" or prefix == "!" or prefix == "@" then return end -- should cover most chat commands for various mods/addons
+    local longestMatch = nil
+    local longestMatchLength = 0
     for k, v in pairs(sounds) do
         local res1, res2 = string.find(string.lower(text), k)
-        if res1 and (not text[res1 - 1] or text[res1 - 1] == "" or text[res1 - 1] == " ") and (not text[res2 + 1] or text[res2 + 1] == "" or text[res2 + 1] == " ") then
-            local canChatSound = hook.Call("canChatSound", nil, ply, k, text)
-            if canChatSound == false then return end
-            ply:EmitSound(table.Random(v), 80, 100)
-            ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
-            hook.Call("onChatSound", nil, ply, k, text)
-            break
+        if not res1 then continue end
+        local charBefore = text[res1 - 1]
+        local charAfter = text[res2 + 1]
+        local length = res2 - res1
+        -- Check whether the match is not part of a larger word (e.g. "no" should not match when "know" is said)
+        if charBefore and charBefore ~= "" and charBefore ~= " " then continue end
+        if charAfter and charAfter ~= "" and charAfter ~= " " then continue end
+
+        if length > longestMatchLength then
+            longestMatch = k
+            longestMatchLength = length
         end
     end
+
+    if not longestMatch then return end
+
+    local canChatSound = hook.Call("canChatSound", nil, ply, longestMatch, text)
+    if canChatSound == false then return end
+    ply:EmitSound(table.Random(sounds[longestMatch]), 80, 100)
+    ply.nextSpeechSound = CurTime() + GAMEMODE.Config.chatsoundsdelay -- make sure they don't spam HAX HAX HAX, if the server owner so desires
+    hook.Call("onChatSound", nil, ply, longestMatch, text)
 end
 hook.Add("PostPlayerSay", "ChatSounds", CheckChat)
 
