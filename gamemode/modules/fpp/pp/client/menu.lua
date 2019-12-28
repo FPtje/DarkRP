@@ -380,7 +380,7 @@ function FPP.AdminMenu(Panel)
             for c, d in pairs(spawnmenu.GetTools()[a].Items) do
                 local addnodes = {}
                 for _, f in pairs(spawnmenu.GetTools()[a].Items[c]) do
-                    if type(f) == "table" and string.find(f.Command, "gmod_tool") then
+                    if istable(f) and string.find(f.Command, "gmod_tool") then
                         table.insert(addnodes, {f.Text, f.ItemName})
                     end
                 end
@@ -664,7 +664,7 @@ net.Receive("FPP_BlockedModels", RetrieveBlockedModels)
 
 RetrieveRestrictedTool = function(um)
     local tool, admin, Teams = um, 0, {}--Settings when it's not a usermessage
-    if type(um) ~= "table" then
+    if not istable(um) then
         tool = net.ReadString()
         admin = net.ReadUInt(2)
         local teamCount = net.ReadUInt(10)
@@ -675,7 +675,7 @@ RetrieveRestrictedTool = function(um)
     end
 
     local frame = vgui.Create("DFrame")
-    if type(tool) == "table" then
+    if istable(tool) then
         frame:SetTitle("Edit multiple tools' restrictions")
     else
         frame:SetTitle("Edit/view " .. tool .. " restrictions")
@@ -726,7 +726,7 @@ RetrieveRestrictedTool = function(um)
                     adminsCHKboxes[a].Button:SetValue(false)
                 end
                 adminsCHKboxes[k].Button:SetValue( true )
-                if type(tool) ~= "table" then
+                if not istable(tool) then
                     RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
                 else
                     local i = 0
@@ -761,7 +761,7 @@ RetrieveRestrictedTool = function(um)
 
 
             submenu:AddOption( "Default", function()
-                if type(tool) ~= "table" then
+                if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 2)
                 else
                     for a, b in pairs(tool) do
@@ -774,7 +774,7 @@ RetrieveRestrictedTool = function(um)
 
 
             submenu:AddOption( "Allow", function()
-                if type(tool) ~= "table" then
+                if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 1)
                 else
                     for a, b in pairs(tool) do
@@ -787,7 +787,7 @@ RetrieveRestrictedTool = function(um)
 
 
             submenu:AddOption( "Disallow", function()
-                if type(tool) ~= "table" then
+                if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 0)
                 else
                     for a, b in pairs(tool) do
@@ -826,7 +826,7 @@ RetrieveRestrictedTool = function(um)
             local tonum = {}
             tonum[false] = "0"
             tonum[true] = "1"
-            if type(tool) ~= "table" then
+            if not istable(tool) then
                 RunConsoleCommand("FPP_restricttool", tool, "team", chkbx.Team, tonum[chkbx.Button:GetChecked()] )
             else
                 for a, b in pairs(tool) do
@@ -1170,7 +1170,7 @@ function FPP.SharedMenu(um)
     local row = 1
     local function AddChk(name, Type, value)
         local box = vgui.Create("DCheckBoxLabel", frame)
-        if type(name) == "string" then
+        if isstring(name) then
             box:SetText(name .. " share this entity")
         elseif name:IsPlayer() and name:IsValid() then
             box:SetText(name:Nick() .. " can touch this")
