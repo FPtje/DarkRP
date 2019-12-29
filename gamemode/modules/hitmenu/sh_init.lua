@@ -70,3 +70,10 @@ DarkRP.declareChatCommand{
     delay = 5,
     condition = fn.Compose{fn.Not, fn.Null, fn.Curry(fn.Filter, 2)(plyMeta.isHitman), player.GetAll}
 }
+
+DarkRP.declareChatCommand{
+    command = "cancelhit",
+    description = "Cancel your on active hit",
+    delay = 5,
+    condition = plyMeta.hasHit
+}
