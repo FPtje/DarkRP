@@ -59,10 +59,8 @@ FAdmin.StartHooks["God"] = function()
     FAdmin.Access.AddPrivilege("God", 2)
 end
 
-hook.Add("PlayerSpawn", "FAdmin_God", function()
-    for _, ply in ipairs(player.GetAll()) do
-        if ply:FAdmin_GetGlobal("FAdmin_godded") then
-            ply:GodEnable()
-        end
+hook.Add("PlayerSpawn", "FAdmin_God", function(ply)
+    if ply:FAdmin_GetGlobal("FAdmin_godded") then
+        ply:GodEnable()
     end
 end)
