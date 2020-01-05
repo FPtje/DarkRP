@@ -29,7 +29,7 @@ local function charWrap(text, pxWidth)
 
         -- Wrap around when the max width is reached
         if total >= pxWidth then
-            total = 0
+            total = surface.GetTextSize(char) -- total needs to include the character width because it's inserted in a new line
             return "\n" .. char
         end
 
