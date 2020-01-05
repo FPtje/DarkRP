@@ -31,7 +31,7 @@ local function charWrap(text, pxWidth)
 
         if total >= pxWidth then
             newText = newText .. ("\n" .. char)
-            -- total needs to include the character size
+            -- total needs to include the character width
             total = surface.GetTextSize(char)
         else
             newText = newText .. char
