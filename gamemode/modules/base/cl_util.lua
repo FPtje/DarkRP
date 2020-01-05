@@ -21,7 +21,7 @@ usermessage.Hook("blackScreen", blackScreen)
 --[[---------------------------------------------------------------------------
 Wrap strings to not become wider than the given amount of pixels
 ---------------------------------------------------------------------------]]
-local function charWrap(text, pxWidth)
+local function charWrap(text, pxWidth, fullWidth)
     local total = 0
 
     text = text:gsub(".", function(char)
@@ -30,6 +30,7 @@ local function charWrap(text, pxWidth)
         -- Wrap around when the max width is reached
         if total >= pxWidth then
             total = surface.GetTextSize(char) -- total needs to include the character width because it's inserted in a new line
+            pxWidth = fullWidth
             return "\n" .. char
         end
 
@@ -56,7 +57,7 @@ function DarkRP.textWrap(text, font, pxWidth)
 
             -- Wrap around when the max width is reached
             if wordlen >= pxWidth then -- Split the word if the word is too big
-                local splitWord, splitPoint = charWrap(word, pxWidth - (total - wordlen))
+                local splitWord, splitPoint = charWrap(word, pxWidth - (total - wordlen), pxWidth)
                 total = splitPoint
                 return splitWord
             elseif total < pxWidth then
