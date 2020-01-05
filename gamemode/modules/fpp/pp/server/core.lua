@@ -67,19 +67,8 @@ if cleanup then
             end
         end
 
-        if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and (not ent.IsVehicle or not ent:IsVehicle()) then
-            -- Workaround: Not all entities created by Adv. Duplicator 2 have type "AdvDupe2"
-            -- Check the stack trace to see if Adv. Duplicator 2 is in there somewhere.
-            -- See https://github.com/FPtje/Falcos-Prop-protection/issues/260
-            local advDupeInTrace = false
-            for i = 1, 15 do
-                local trace = debug.getinfo(i, "nS")
-                if not trace then break end
-                if trace.name == "CreateEntityFromTable" and string.find(trace.short_src, "advdupe2") then
-                    advDupeInTrace = true
-                end
-            end
-            if not advDupeInTrace then FPP.AntiSpam.CreateEntity(ply, ent, Type == "duplicates") end
+        if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and not AdvDupe2.SpawningEntity and (not ent.IsVehicle or not ent:IsVehicle()) then
+            FPP.AntiSpam.CreateEntity(ply, ent, Type == "duplicates")
         end
 
         if ent:GetClass() == "gmod_wire_expression2" then
