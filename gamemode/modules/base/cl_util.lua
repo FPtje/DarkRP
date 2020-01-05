@@ -23,22 +23,20 @@ Wrap strings to not become wider than the given amount of pixels
 ---------------------------------------------------------------------------]]
 local function charWrap(text, pxWidth)
     local total = 0
-    local newText = ""
 
-    for i = 1, #text do
-        local char = text:sub(i, i)
+    text = text:gsub(".", function(char)
         total = total + surface.GetTextSize(char)
 
+        -- Wrap around when the max width is reached
         if total >= pxWidth then
-            newText = newText .. ("\n" .. char)
-            -- total needs to include the character width
-            total = surface.GetTextSize(char)
-        else
-            newText = newText .. char
+            total = surface.GetTextSize(char) -- total needs to include the character width because it's inserted in a new line
+            return "\n" .. char
         end
-    end
 
-    return newText, total
+        return char
+    end)
+
+    return text, total
 end
 
 function DarkRP.textWrap(text, font, pxWidth)
@@ -47,34 +45,35 @@ function DarkRP.textWrap(text, font, pxWidth)
     surface.SetFont(font)
 
     local spaceSize = surface.GetTextSize(' ')
-    local newText = ""
+    text = text:gsub("(%s?[%S]+)", function(word)
+            local char = string.sub(word, 1, 1)
+            if char == "\n" or char == "\t" then
+                total = 0
+            end
 
-    for word in text:gmatch("(%s?[%S]+)") do
-        local char = word:sub(1, 1)
-        if char == "\n" or char == "\t" then
-            total = 0
-        end
+            local wordlen = surface.GetTextSize(word)
+            total = total + wordlen
 
-        local wordlen = surface.GetTextSize(word)
-        total = total + wordlen
+            -- Wrap around when the max width is reached
+            if wordlen >= pxWidth then -- Split the word if the word is too big
+                local splitWord, splitPoint = charWrap(word, pxWidth - (total - wordlen))
+                total = splitPoint
+                return splitWord
+            elseif total < pxWidth then
+                return word
+            end
 
-        -- Wrap around when the max width is reached
-        if wordlen >= pxWidth then -- Split the word if the word is too big
-            local splitWord, splitPoint = charWrap(word, pxWidth - (total - wordlen))
-            total = splitPoint
-            newText = newText .. splitWord
-        elseif total < pxWidth then
-            newText = newText .. word
-        elseif char == ' ' then -- Split before the word
-            total = wordlen - spaceSize
-            newText = newText .. ('\n' .. word:sub(2))
-        else
+            -- Split before the word
+            if char == ' ' then
+                total = wordlen - spaceSize
+                return '\n' .. string.sub(word, 2)
+            end
+
             total = wordlen
-            newText = newText .. ('\n' .. word)
-        end
-    end
+            return '\n' .. word
+        end)
 
-    return newText
+    return text
 end
 
 --[[---------------------------------------------------------------------------
