@@ -330,7 +330,10 @@ end
 
 function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isWanted() then ply:unWanted(arrester) end
-    ply:setDarkRPVar("HasGunlicense", nil)
+    local job = RPExtraTeams[ply:Team()]
+    if not job or not job.hasLicense then
+        ply:setDarkRPVar("HasGunlicense", nil)
+    end
 
     ply:StripWeapons()
     ply:StripAmmo()
