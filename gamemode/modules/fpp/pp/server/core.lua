@@ -67,7 +67,7 @@ if cleanup then
             end
         end
 
-        if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and not AdvDupe2.SpawningEntity and (not ent.IsVehicle or not ent:IsVehicle()) then
+        if FPP.AntiSpam and Type ~= "constraints" and Type ~= "stacks" and Type ~= "AdvDupe2" and (not AdvDupe2 or not AdvDupe2.SpawningEntity) and (not ent.IsVehicle or not ent:IsVehicle()) then
             FPP.AntiSpam.CreateEntity(ply, ent, Type == "duplicates")
         end
 
@@ -148,6 +148,7 @@ function FPP.Protect.PhysgunPickup(ply, ent)
         cantouch = ent.PhysgunPickup
     else
         cantouch = not ent:IsPlayer() and FPP.plyCanTouchEnt(ply, ent, "Physgun")
+        skipReturn = ent:IsPlayer()
     end
 
     if cantouch and FPP.UnGhost then FPP.UnGhost(ply, ent) end

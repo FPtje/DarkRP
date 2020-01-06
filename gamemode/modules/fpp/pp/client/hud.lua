@@ -170,7 +170,7 @@ local function HUDPaint()
     --Show the owner:
     local ply = LocalPlayer()
 
-    local LAEnt2 = ents.FindAlongRay(ply:EyePos(), ply:EyePos() + EyeAngles():Forward() * 400)
+    local LAEnt2 = ents.FindAlongRay(ply:EyePos(), ply:EyePos() + EyeAngles():Forward() * 16384)
 
     local LAEnt = FilterEntityTable(LAEnt2)[1]
     if not IsValid(LAEnt) then return end
