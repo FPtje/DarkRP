@@ -72,11 +72,11 @@ end
 function GM:teamChanged(before, after)
 end
 
-local function OnChangedTeam(um)
-    local oldTeam, newTeam = um:ReadShort(), um:ReadShort()
+local function OnChangedTeam()
+    local oldTeam, newTeam = net.ReadInt(32), net.ReadInt(32)
     hook.Call("teamChanged", GAMEMODE, oldTeam, newTeam) -- backwards compatibility
     hook.Call("OnPlayerChangedTeam", GAMEMODE, LocalPlayer(), oldTeam, newTeam)
 end
-usermessage.Hook("OnChangedTeam", OnChangedTeam)
+net.Receive('OnChangedTeam', OnChangedTeam)
 
 timer.Simple(0, function() GAMEMODE.ShowTeam = DarkRP.openKeysMenu end)

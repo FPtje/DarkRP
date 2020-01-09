@@ -4,6 +4,8 @@ util.AddNetworkString("FPP_Groups")
 util.AddNetworkString("FPP_GroupMembers")
 util.AddNetworkString("FPP_RestrictedToolList")
 util.AddNetworkString("FPP_BlockedModels")
+util.AddNetworkString('FPP_Notify')
+util.AddNetworkString('FPP_blockedlist')
 
 FPP.Blocked = FPP.Blocked or {}
     FPP.Blocked.Physgun1 = FPP.Blocked.Physgun1 or {}
@@ -26,18 +28,18 @@ function FPP.Notify(ply, text, bool)
         ServerLog(text)
         return
     end
-    umsg.Start("FPP_Notify", ply)
-        umsg.String(text)
-        umsg.Bool(bool)
-    umsg.End()
+    net.Start('FPP_Notify')
+        net.WriteString(text)
+        net.WriteBool(bool)
+    net.Send(ply)
     ply:PrintMessage(HUD_PRINTCONSOLE, text)
 end
 
 function FPP.NotifyAll(text, bool)
-    umsg.Start("FPP_Notify")
-        umsg.String(text)
-        umsg.Bool(bool)
-    umsg.End()
+    net.Start('FPP_Notify')
+        net.WriteString(text)
+        net.WriteBool(bool)
+    net.Broadcast()
     for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCONSOLE, text)
     end
@@ -693,10 +695,10 @@ local function SendBlocked(ply, cmd, args)
     ply.FPPUmsg1[args[1]] = CurTime()
 
     for k in pairs(FPP.Blocked[args[1]]) do
-        umsg.Start("FPP_blockedlist", ply)
-            umsg.String(args[1])
-            umsg.String(k)
-        umsg.End()
+        net.Start('FPP_blockedlist')
+            net.WriteString(args[1])
+            net.WriteString(k)
+        net.Send(ply)
     end
 end
 concommand.Add("FPP_sendblocked", SendBlocked)

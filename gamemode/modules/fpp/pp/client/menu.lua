@@ -950,7 +950,7 @@ local function retrieveblocked(um)
     line.text = text
     BlockedLists[Type]:SetTall(18 + #BlockedLists[Type]:GetLines() * 17)
 end
-usermessage.Hook("FPP_blockedlist", retrieveblocked)
+net.Receive('FPP_blockedlist', retrieveblocked)
 
 local BuddiesPanel
 function FPP.BuddiesMenu(Panel)
@@ -1233,7 +1233,7 @@ function FPP.SharedMenu(um)
     frame:SetSize(math.Min(math.Max(165 + (row - 1) * 165, 165), ScrW()), height)
     frame:Center()
 end
-usermessage.Hook("FPP_ShareSettings", FPP.SharedMenu)
+net.Receive('FPP_ShareSettings', FPP.SharedMenu)
 
 properties.Add("addFPPBlocked",
 {

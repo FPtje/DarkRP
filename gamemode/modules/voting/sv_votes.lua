@@ -1,6 +1,9 @@
 local Vote = {}
 local Votes = {}
 
+util.AddNetworkString('KillVoteVGUI')
+util.AddNetworkString('DoVote')
+
 local function ccDoVote(ply, cmd, args)
     if ply:EntIndex() == 0 then
         print(DarkRP.getPhrase("cmd_cant_be_run_server_console"))
@@ -39,9 +42,9 @@ function Vote:handleEnd()
     local win = hook.Call("getVoteResults", nil, self, self.yea, self.nay)
     win = win or self.yea > self.nay and 1 or self.nay > self.yea and -1 or 0
 
-    umsg.Start("KillVoteVGUI", self:getFilter())
-        umsg.String(self.id)
-    umsg.End()
+    net.Start('KillVoteVGUI')
+        net.WriteString(self.id)
+    net.Send(self:getFilter())
 
     Votes[self.id] = nil
     timer.Remove(self.id .. "DarkRPVote")
@@ -119,11 +122,11 @@ function DarkRP.createVote(question, voteType, target, time, callback, excludeVo
         DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_started"))
     end
 
-    umsg.Start("DoVote", newvote:getFilter())
-        umsg.String(question)
-        umsg.Short(newvote.id)
-        umsg.Float(time)
-    umsg.End()
+    net.Start('DoVote')
+        net.WriteString(question)
+        net.WriteInt(newvote.id,16)
+        net.WriteFloat(time)
+    net.Send(newvote:getFilter())
 
     timer.Create(newvote.id .. "DarkRPVote", time, 1, function() newvote:handleEnd() end)
 
@@ -135,9 +138,9 @@ function DarkRP.destroyVotesWithEnt(ent)
         if v.target ~= ent then continue end
 
         timer.Remove(v.id .. "DarkRPVote")
-        umsg.Start("KillVoteVGUI", v:getFilter())
-            umsg.Short(v.id)
-        umsg.End()
+        net.Start('KillVoteVGUI')
+            net.WriteInt(v.id)
+        net.Send(v:getFilter())
 
         v:fail()
 
@@ -151,10 +154,10 @@ function DarkRP.destroyLastVote()
     if not lastVote then return false end
 
     timer.Remove(lastVote.id .. "DarkRPVote")
-    umsg.Start("KillVoteVGUI", lastVote:getFilter())
-        umsg.Short(lastVote.id)
-    umsg.End()
-
+    net.Start('KillViteVGUI')
+        net.WriteInt(lastVote.id, 16)
+    net.Send(lastVote:getFilter())
+    
     lastVote:fail()
 
     Votes[lastVote.id] = nil

@@ -28,7 +28,9 @@ function FAdmin.Messages.AddMessage(MsgType, Message)
     LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 30, 100)
 end
 
-usermessage.Hook("FAdmin_SendMessage", function(u) FAdmin.Messages.AddMessage(u:ReadShort(), u:ReadString()) end)
+net.Receive('FAdmin_SendMessage', function()
+    FAdmin.Messages.AddMessage(net.ReadInt(16), net.ReadString())
+end)
 
 
 local function DrawNotice(k, v, i)

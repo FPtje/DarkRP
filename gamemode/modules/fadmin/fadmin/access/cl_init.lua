@@ -27,12 +27,12 @@ local function addPriv(um)
     FAdmin.Access.Groups[group] = FAdmin.Access.Groups[group] or {}
     FAdmin.Access.Groups[group].PRIVS[um:ReadString()] = true
 end
-usermessage.Hook("FAdmin_AddPriv", addPriv)
+net.Receive('FAdmin_AddPriv', addPriv)
 
 local function removePriv(um)
     FAdmin.Access.Groups[um:ReadString()].PRIVS[um:ReadString()] = nil
 end
-usermessage.Hook("FAdmin_RemovePriv", removePriv)
+net.Receive('FAdmin_RemovePriv', removePriv)
 
 local function addGroupUI(ply, func)
     Derma_StringRequest("Set name",

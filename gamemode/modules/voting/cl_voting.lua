@@ -1,12 +1,12 @@
 local QuestionVGUI = {}
 local PanelNum = 0
 local VoteVGUI = {}
-local function MsgDoVote(msg)
+local function MsgDoVote()
     local _, chatY = chat.GetChatBoxPos()
 
-    local question = msg:ReadString()
-    local voteid = msg:ReadShort()
-    local timeleft = msg:ReadFloat()
+    local question = net.ReadString()
+    local voteid = net.ReadInt(16)
+    local timeleft = net.ReadFloat()
     if timeleft == 0 then
         timeleft = 100
     end
@@ -95,23 +95,23 @@ local function MsgDoVote(msg)
     VoteVGUI[voteid .. "vote"] = panel
     panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-usermessage.Hook("DoVote", MsgDoVote)
+net.Receive('DoVote', MsgDoVote)
 
-local function KillVoteVGUI(msg)
-    local id = msg:ReadShort()
+local function KillVoteVGUI()
+    local id = net.ReadString()
 
     if VoteVGUI[id .. "vote"] and VoteVGUI[id .. "vote"]:IsValid() then
         VoteVGUI[id .. "vote"]:Close()
     end
 end
-usermessage.Hook("KillVoteVGUI", KillVoteVGUI)
+net.Receive('KillVoteVGUI', KillVoteVGUI)
 
-local function MsgDoQuestion(msg)
+local function MsgDoQuestion()
     if not IsValid(LocalPlayer()) then return end
 
-    local question = msg:ReadString()
-    local quesid = msg:ReadString()
-    local timeleft = msg:ReadFloat()
+    local question = net.ReadString()
+    local quesid = net.ReadString()
+    local timeleft = net.ReadFloat()
     if timeleft == 0 then
         timeleft = 100
     end
@@ -192,16 +192,16 @@ local function MsgDoQuestion(msg)
 
     panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-usermessage.Hook("DoQuestion", MsgDoQuestion)
+net.Receive('DoQuestion', MsgDoQuestion)
 
-local function KillQuestionVGUI(msg)
-    local id = msg:ReadString()
+local function KillQuestionVGUI()
+    local id = net.ReadString()
 
     if QuestionVGUI[id .. "ques"] and QuestionVGUI[id .. "ques"]:IsValid() then
         QuestionVGUI[id .. "ques"]:Close()
     end
 end
-usermessage.Hook("KillQuestionVGUI", KillQuestionVGUI)
+net.Receive('KillQuestionVGUI', KillQuestionVGUI)
 
 local function DoVoteAnswerQuestion(ply, cmd, args)
     if not args[1] then return end

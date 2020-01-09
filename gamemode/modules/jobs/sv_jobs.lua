@@ -1,3 +1,4 @@
+util.AddNetworkString('OnChangedTeam')
 --[[---------------------------------------------------------------------------
 Functions
 ---------------------------------------------------------------------------]]
@@ -158,11 +159,10 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     else
         self:KillSilent()
     end
-
-    umsg.Start("OnChangedTeam", self)
-        umsg.Short(prevTeam)
-        umsg.Short(t)
-    umsg.End()
+    net.Start('OnChangedTeam')
+        net.WriteInt(prevTeam, 16)
+        net.WriteInt(t, 16)
+    net.Send(self)
     return true
 end
 

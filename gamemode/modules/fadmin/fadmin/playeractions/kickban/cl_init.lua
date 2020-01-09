@@ -2,40 +2,40 @@
 WHEN GETTING KICKED
 ]]
 local KickText = ""
-usermessage.Hook("FAdmin_kick_start", function()
+net.Receive('FAdmin_kick_start', function()
     hook.Add("HUDPaint", "FAdmin_kick", function()
         draw.RoundedBox(0,0,0, ScrW(), ScrH(), Color(0,0,0,255))
         draw.DrawNonParsedText("You are getting kicked\nReason: " .. KickText .. "\nLeaving voluntarily is also an option.", "HUDNumber5", ScrW() / 2, ScrH() / 2, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
     end)
 end)
 
-usermessage.Hook("FAdmin_kick_cancel", function()
+net.Receive('FAdmin_kick_cancel', function()
     hook.Remove("HUDPaint", "FAdmin_kick")
     FAdmin.Messages.AddMessage(4, "Kick was canceled by admin")
 end)
 
-usermessage.Hook("FAdmin_kick_update", function(um)
-    KickText = um:ReadString()
+net.Receive("FAdmin_kick_update", function(um)
+    KickText = net.ReadString()
 end)
 
 local BanText = "No reason"
 local BanTimeText = "permanent"
 
-usermessage.Hook("FAdmin_ban_start", function()
+net.Receive("FAdmin_ban_start", function()
     hook.Add("HUDPaint", "FAdmin_ban", function()
         draw.RoundedBox(0,0,0, ScrW(), ScrH(), Color(0,0,0,255))
         draw.DrawNonParsedText("You are getting banned\nReason: " .. BanText .. "\nTime: " .. " " .. BanTimeText .. "\nLeaving voluntarily or rejoining will not prevent banning.", "HUDNumber5", ScrW() / 2, ScrH() / 2, Color(0, 0, 255, 255), TEXT_ALIGN_CENTER)
     end)
 end)
 
-usermessage.Hook("FAdmin_ban_cancel", function()
+net.Receive("FAdmin_ban_cancel", function()
     hook.Remove("HUDPaint", "FAdmin_ban")
     FAdmin.Messages.AddMessage(4, "Ban was canceled by admin")
 end)
 
-usermessage.Hook("FAdmin_ban_update", function(um)
-    BanTimeText = FAdmin.PlayerActions.ConvertBanTime(um:ReadLong())
-    BanText = um:ReadString()
+net.Receive("FAdmin_ban_update", function(um)
+    BanTimeText = FAdmin.PlayerActions.ConvertBanTime(net.ReadInt(32))
+    BanText = net.ReadString()
 end)
 
 --[[---------------------------------------------------------------------------

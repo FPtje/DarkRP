@@ -202,7 +202,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
     Frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
 
-function DarkRP.openKeysMenu(um)
+function DarkRP.openKeysMenu()
     CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_SetDoorOwner", function(setDoorOwnerAccess)
         CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_ChangeDoorSettings", fp{openMenu, setDoorOwnerAccess})
     end)

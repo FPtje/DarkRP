@@ -72,8 +72,8 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
     end
 end
 
-function FPP.NewBuddy(um)
-    local ply = um:ReadEntity()
+function FPP.NewBuddy()
+    local ply = net.ReadEntity()
 
     if not IsValid(ply) or not ply:IsPlayer() then return end
     local SteamID = ply:SteamID()
@@ -90,4 +90,4 @@ function FPP.NewBuddy(um)
         FPP.Buddies[SteamID].name = ply:Nick()
     end
 end
-usermessage.Hook("FPP_CheckBuddy", FPP.NewBuddy)
+net.Receive('FPP_CheckBuddy', FPP.NewBuddy)

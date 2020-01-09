@@ -3,6 +3,10 @@ TOOL.Name               = "Share props"
 TOOL.Command            = nil
 TOOL.ConfigName         = ""
 
+if SERVER then
+    util.AddNetworkString('FPP_ShareSettings')
+end
+
 function TOOL:RightClick(trace)
     local ent = trace.Entity
     if not IsValid(ent) or CLIENT then return true end
@@ -30,20 +34,20 @@ function TOOL:LeftClick(trace)
     local Toolgun = ent.ShareToolgun1 or false
 
     -- This big usermessage will be too big if you select 63 players, since that will not happen I can't be arsed to solve it
-    umsg.Start("FPP_ShareSettings", ply)
-        umsg.Entity(ent)
-        umsg.Bool(Physgun)
-        umsg.Bool(GravGun)
-        umsg.Bool(PlayerUse)
-        umsg.Bool(Damage)
-        umsg.Bool(Toolgun)
+    net.Start('FPP_ShareSettings')
+        net.WriteEntity(ent)
+        net.WriteBool(Physgun)
+        net.WriteBool(GravGun)
+        net.WriteBool(PlayerUse)
+        net.WriteBool(Damage)
+        net.WriteBool(Toolgun)
         if ent.AllowedPlayers then
-            umsg.Long(#ent.AllowedPlayers)
+            net.WriteInt(#ent.AllowedPlayers, 32)
             for k,v in pairs(ent.AllowedPlayers) do
-                umsg.Entity(v)
+                net.WriteEntity(v)
             end
         end
-    umsg.End()
+    net.Send(ply)
     return true
 end
 

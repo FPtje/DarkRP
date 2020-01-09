@@ -12,7 +12,7 @@ FAdmin.StartHooks["CleanUp"] = function()
         RunConsoleCommand("_FAdmin", "StopSounds")
     end)
 
-    usermessage.Hook("FAdmin_StopSounds", function()
+    net.Receive("FAdmin_StopSounds", function()
         RunConsoleCommand("stopsound") -- bypass for ConCommand blocking it
     end)
 

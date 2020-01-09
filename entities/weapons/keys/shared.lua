@@ -91,10 +91,10 @@ end
 local function doKnock(ply, sound)
     ply:EmitSound(sound, 100, math.random(90, 110))
 
-    umsg.Start("anim_keys")
-        umsg.Entity(ply)
-        umsg.String("knocking")
-    umsg.End()
+    net.Start('anim_keys')
+        net.WriteEntity(ply)
+        net.WriteString('knocking')
+    net.SendToServer()
 
     ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 end
