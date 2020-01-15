@@ -376,7 +376,7 @@ local function DisplayNotify(msg)
     -- Log to client console
     MsgC(Color(255, 20, 20, 255), "[DarkRP] ", Color(200, 200, 200, 255), txt, "\n")
 end
-usermessage.Hook("_Notify", DisplayNotify)
+net.Receive('_Notify',DisplayNotify)
 
 --[[---------------------------------------------------------------------------
 Remove some elements from the HUD in favour of the DarkRP HUD

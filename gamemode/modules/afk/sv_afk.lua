@@ -2,6 +2,8 @@
 -- If a player uses /afk, they go into AFK mode, they will not be autodemoted and their salary is set to $0 (you can still be killed/vote demoted though!).
 -- If a player does not use /afk, and they don't do anything for the demote time specified, they will be automatically demoted to hobo.
 
+util.AddNetworkString("blackScreen")
+
 local function AFKDemote(ply)
     local shouldDemote, demoteTeam, suppressMsg, msg = hook.Call("playerAFKDemoted", nil, ply)
     demoteTeam = demoteTeam or GAMEMODE.DefaultTeam
@@ -19,8 +21,8 @@ local function SetAFK(ply)
     local rpname = ply:getDarkRPVar("rpname")
     ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
-    net.Start('blackScreen')
-        net.WriteBool(ply:getDarkRPVar('AFK'))
+    net.Start("blackScreen")
+        net.WriteBool(ply:getDarkRPVar("AFK"))
     net.Send(ply)
 
     if ply:getDarkRPVar("AFK") then

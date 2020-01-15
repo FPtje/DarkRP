@@ -1,6 +1,6 @@
 util.AddNetworkString("FAdmin_Notification")
-util.AddNetworkString('FAdmin_SendMessage')
-util.AddNetworkString('FAdmin_ConsoleMessage')
+util.AddNetworkString("FAdmin_SendMessage")
+util.AddNetworkString("FAdmin_ConsoleMessage")
 
 function FAdmin.Messages.SendMessage(ply, MsgType, text)
     if ply:EntIndex() == 0 then
@@ -10,7 +10,7 @@ function FAdmin.Messages.SendMessage(ply, MsgType, text)
         return
     end
 
-    net.Start('FAdmin_SendMessage')
+    net.Start("FAdmin_SendMessage")
         net.WriteInt(MsgType, 16)
         net.WriteString(text)
     net.Send(ply)
@@ -19,7 +19,7 @@ end
 
 function FAdmin.Messages.SendMessageAll(text, MsgType)
     FAdmin.Log("FAdmin message to everyone: " .. text)
-    net.Start('FAdmin_SendMessage')
+    net.Start("FAdmin_SendMessage")
         net.WriteInt(MsgType, 16)
         net.WriteString(text)
     net.Broadcast()
@@ -30,7 +30,7 @@ function FAdmin.Messages.SendMessageAll(text, MsgType)
 end
 
 function FAdmin.Messages.ConsoleNotify(ply, message)
-    net.Start('FAdmin_ConsoleMessage')
+    net.Start("FAdmin_ConsoleMessage")
         net.WriteString(message)
     net.Send(ply)
 end

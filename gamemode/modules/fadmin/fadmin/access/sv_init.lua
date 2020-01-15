@@ -1,3 +1,5 @@
+util.AddNetworkString('FAdmin_AddPriv')
+
 --Immunity
 cvars.AddChangeCallback("_FAdmin_immunity", function(Cvar, Previous, New)
     FAdmin.SetGlobalSetting("Immunity", (tonumber(New) == 1 and true) or false)

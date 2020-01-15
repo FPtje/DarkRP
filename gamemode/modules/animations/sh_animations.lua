@@ -67,12 +67,12 @@ hook.Add("KeyPress", "darkrp_animations", function(ply, key)
 end)
 
 if SERVER then
+    util.AddNetworkString("_DarkRP_CustomAnim")
     local function CustomAnim(ply, cmd, args)
         if ply:EntIndex() == 0 then return end
         local Gesture = tonumber(args[1] or 0)
         if not Anims[Gesture] then return end
-        
-        net.Start('_DarkRP_CustomAnim')
+        net.Start("_DarkRP_CustomAnim")
             net.WriteEntity(ply)
             net.WriteInt(Gesture, 32)
         net.Broadcast()
@@ -88,7 +88,7 @@ local function KeysAnims()
     if not IsValid(ply) then return end
     ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act == "usekeys" and ACT_GMOD_GESTURE_ITEM_PLACE or ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 end
-net.Receive('anim_keys', KeysAnims)
+net.Receive("anim_keys", KeysAnims)
 
 local function CustomAnimation()
     local ply = net.ReadEntity()
@@ -97,7 +97,7 @@ local function CustomAnimation()
     if not IsValid(ply) then return end
     ply:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
 end
-net.Receive('_DarkRP_CustomAnim', CustomAnimation)
+net.Receive("_DarkRP_CustomAnim", CustomAnimation)
 
 local AnimFrame
 local function AnimationMenu()
