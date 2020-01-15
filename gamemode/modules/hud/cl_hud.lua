@@ -368,9 +368,9 @@ end
 --[[---------------------------------------------------------------------------
 Display notifications
 ---------------------------------------------------------------------------]]
-local function DisplayNotify(msg)
-    local txt = msg:ReadString()
-    GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
+local function DisplayNotify()
+    local txt = net.ReadString()
+    GAMEMODE:AddNotify(txt, net.ReadInt(16), net.ReadInt(32))
     surface.PlaySound("buttons/lightswitch2.wav")
 
     -- Log to client console

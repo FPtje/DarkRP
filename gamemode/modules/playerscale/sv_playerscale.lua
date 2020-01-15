@@ -1,12 +1,12 @@
-util.AddNetworkString('darkrp_playerscale')
+util.AddNetworkString("darkrp_playerscale")
 local function setScale(ply, scale)
     ply:SetModelScale(scale, 0)
 
     ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale))
-    net.Start('darkrp_playerscale')
+    net.Start("darkrp_playerscale")
         net.WriteEntity(ply)
         net.WriteFloat(scale)
-    net.Start(ply)
+    net.Send(ply)
 end
 
 local function onLoadout(ply)

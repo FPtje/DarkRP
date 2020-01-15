@@ -56,7 +56,7 @@ local function umResetLaws()
     fn.Foldl(function(val,v) addLaw(v) end, nil, GAMEMODE.Config.DefaultLaws)
     hook.Run("resetLaws")
 end
-net.Receive("DRP_ResetLaws", umResetLaws
+net.Receive("DRP_ResetLaws", umResetLaws)
 
 function DarkRP.getLaws()
     return Laws
