@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Unarrest Baton"
     SWEP.Slot = 1
     SWEP.SlotPos = 3
 end
@@ -11,6 +10,7 @@ DEFINE_BASECLASS("stick_base")
 SWEP.Instructions = "Left click to unarrest\nRight click to switch batons"
 SWEP.IsDarkRPUnarrestStick = true
 
+SWEP.PrintName = "Unarrest Baton"
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
 

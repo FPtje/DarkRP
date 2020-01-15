@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Battering Ram"
     SWEP.Slot = 5
     SWEP.SlotPos = 1
     SWEP.DrawAmmo = false
@@ -11,6 +10,7 @@ end
 -- Variables that are used on both client and server
 DEFINE_BASECLASS("weapon_cs_base2")
 
+SWEP.PrintName = "Battering Ram"
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to break open doors/unfreeze props or get people out of their vehicles\nRight click to raise"
 SWEP.Contact = ""

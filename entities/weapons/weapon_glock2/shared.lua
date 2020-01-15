@@ -2,7 +2,6 @@ AddCSLuaFile()
 
 if CLIENT then
     SWEP.Author = "DarkRP Developers"
-    SWEP.PrintName = "Glock"
     SWEP.Instructions = "Shoot with it"
     SWEP.Slot = 1
     SWEP.SlotPos = 0
@@ -13,6 +12,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.PrintName = "Glock"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"

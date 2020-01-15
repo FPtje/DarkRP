@@ -5,7 +5,6 @@ if CLIENT then
     SWEP.Contact = ""
     SWEP.Purpose = ""
     SWEP.Instructions = ""
-    SWEP.PrintName = "M4"
     SWEP.Instructions = "Hold use and right-click to change firemodes or left-click to attach silencer."
     SWEP.Slot = 2
     SWEP.SlotPos = 0
@@ -16,6 +15,7 @@ end
 
 SWEP.Base = "weapon_cs_base2"
 
+SWEP.PrintName = "M4"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"

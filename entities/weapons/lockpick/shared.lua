@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Lock Pick"
     SWEP.Slot = 5
     SWEP.SlotPos = 1
     SWEP.DrawAmmo = false
@@ -10,6 +9,7 @@ end
 
 -- Variables that are used on both client and server
 
+SWEP.PrintName = "Lock Pick"
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left or right click to pick a lock"
 SWEP.Contact = ""

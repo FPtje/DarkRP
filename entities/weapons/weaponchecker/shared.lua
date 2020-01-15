@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Weapon Checker"
     SWEP.Slot = 1
     SWEP.SlotPos = 9
     SWEP.DrawAmmo = false
@@ -18,6 +17,7 @@ SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
 SWEP.AnimPrefix = "rpg"
 
+SWEP.PrintName = "Weapon Checker"
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
