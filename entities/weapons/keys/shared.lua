@@ -5,7 +5,6 @@ if SERVER then
 end
 
 if CLIENT then
-    SWEP.PrintName = "Keys"
     SWEP.Slot = 1
     SWEP.SlotPos = 1
     SWEP.DrawAmmo = false
@@ -14,6 +13,7 @@ if CLIENT then
     include("cl_menu.lua")
 end
 
+SWEP.PrintName = "Keys"
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to lock\nRight click to unlock\nReload for door settings or animation menu"
 SWEP.Contact = ""

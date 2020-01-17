@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Arrest Baton"
     SWEP.Slot = 1
     SWEP.SlotPos = 3
 end
@@ -11,6 +10,7 @@ DEFINE_BASECLASS("stick_base")
 SWEP.Instructions = "Left click to arrest\nRight click to switch batons"
 SWEP.IsDarkRPArrestStick = true
 
+SWEP.PrintName = "Arrest Baton"
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
 
