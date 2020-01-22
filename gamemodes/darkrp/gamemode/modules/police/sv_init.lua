@@ -52,10 +52,12 @@ function plyMeta:wanted(actor, reason, time)
     self:setDarkRPVar("wanted", true)
     self:setDarkRPVar("wantedReason", reason)
 
-    timer.Create(self:SteamID64() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
-        if not IsValid(self) then return end
-        self:unWanted()
-    end)
+    if time and time > 0 or GAMEMODE.Config.wantedtime > 0 then
+        timer.Create(self:SteamID64() .. " wantedtimer", time or GAMEMODE.Config.wantedtime, 1, function()
+            if not IsValid(self) then return end
+            self:unWanted()
+        end)
+    end
 
     if suppressMsg then return end
 
@@ -328,7 +330,10 @@ end
 
 function DarkRP.hooks:playerArrested(ply, time, arrester)
     if ply:isWanted() then ply:unWanted(arrester) end
-    ply:setDarkRPVar("HasGunlicense", nil)
+    local job = RPExtraTeams[ply:Team()]
+    if not job or not job.hasLicense then
+        ply:setDarkRPVar("HasGunlicense", nil)
+    end
 
     ply:StripWeapons()
     ply:StripAmmo()

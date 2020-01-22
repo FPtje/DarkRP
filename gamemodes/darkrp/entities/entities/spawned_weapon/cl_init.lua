@@ -34,7 +34,7 @@ Create a shipment from a spawned_weapon
 properties.Add("createShipment",
     {
         MenuLabel   =   DarkRP.getPhrase("createshipment"),
-        Order       =   2002,
+        Order       =   2003,
         MenuIcon    =   "icon16/add.png",
 
         Filter      =   function(self, ent, ply)

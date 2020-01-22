@@ -103,8 +103,9 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Holster()
-    self:SetIsLockpicking(false)
-    self:SetLockpickEnt(nil)
+    if self:GetIsLockpicking() and self:GetLockpickEndTime() ~= 0 then
+        self:Fail()
+    end
     return true
 end
 

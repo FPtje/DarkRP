@@ -110,7 +110,7 @@ local function getEntityKeypad(ent)
         if vOwner == entOwner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup1")) then
             table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_right_pass_entered"), ent = v, original = ent})
         end
-        if vOwner == entOwner and  table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup2")) then
+        if vOwner == entOwner and table.HasValue(doorKeys, v:GetNWInt("keypad_keygroup2")) then
             table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_wrong_pass_entered"), ent = v, original = ent})
         end
     end
@@ -121,7 +121,7 @@ local function getEntityKeypad(ent)
         if vOwner == entOwner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyGranted) or 0) then
             table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_right_pass_entered"), ent = v, original = ent})
         end
-        if vOwner == entOwner and  table.HasValue(doorKeys, tonumber(v.KeypadData.KeyDenied) or 0) then
+        if vOwner == entOwner and table.HasValue(doorKeys, tonumber(v.KeypadData.KeyDenied) or 0) then
             table.insert(targets, {type = DarkRP.getPhrase("keypad_checker_wrong_pass_entered"), ent = v, original = ent})
         end
     end

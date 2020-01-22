@@ -42,7 +42,7 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
     local bad = false
 
     if ply ~= target then
-        if type(target) == "table" then
+        if istable(target) then
             if table.IsEmpty(target) then Targets = "no one" bad = true end
             for k, v in pairs(target) do
                 local suffix = ((k == #target-1) and " and ") or (k ~= #target and ", ") or ""

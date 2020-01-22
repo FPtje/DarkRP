@@ -33,7 +33,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator, caller)
-    if type(self.PlayerUse) == "function" then
+    if isfunction(self.PlayerUse) then
         local val = self:PlayerUse(activator, caller)
         if val ~= nil then return val end
     elseif self.PlayerUse ~= nil then
@@ -54,7 +54,10 @@ function ENT:Use(activator, caller)
 
     local CanPickup = hook.Call("PlayerCanPickupWeapon", GAMEMODE, activator, weapon)
     local ShouldntContinue = hook.Call("PlayerPickupDarkRPWeapon", nil, activator, self, weapon)
-    if not CanPickup or ShouldntContinue then return end
+    if not CanPickup or ShouldntContinue then
+        weapon:Remove()
+        return
+    end
 
     -- Store ammo count before weapon pickup
     local primaryAmmoType = weapon:GetPrimaryAmmoType()

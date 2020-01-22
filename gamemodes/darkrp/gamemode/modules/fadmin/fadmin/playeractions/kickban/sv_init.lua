@@ -84,7 +84,7 @@ end
 
 timer.Create("FAdminCheckBans", 60, 0, function()
     for k, v in pairs(FAdmin.BANS) do
-        if v.time and type(v.time) ~= "string" and tonumber(v.time) < os.time() and v.time ~= 0 then
+        if v.time and not isstring(v.time) and tonumber(v.time) < os.time() and v.time ~= 0 then
             FAdmin.BANS[k] = nil
         end
     end
@@ -144,19 +144,19 @@ local function Ban(ply, cmd, args)
     local time
 
     for _, target in pairs(targets) do
-        if (type(target) == "string" and not FAdmin.Access.PlayerHasPrivilege(ply, "Ban")) or
+        if (isstring(target) and not FAdmin.Access.PlayerHasPrivilege(ply, "Ban")) or
         not FAdmin.Access.PlayerHasPrivilege(ply, "Ban", target) then
             FAdmin.Messages.SendMessage(ply, 5, "No access!")
             return false
         end
-        if stage == "start" and type(target) ~= "string" and IsValid(target) then
+        if stage == "start" and not isstring(target) and IsValid(target) then
             SendUserMessage("FAdmin_ban_start", target) -- Tell him he's getting banned
             target:Lock() -- Make sure he can't remove the hook clientside and keep minging.
             target:KillSilent()
             StartBannedUsers[target:SteamID()] = { author = ply }
 
         elseif stage == "cancel" then
-            if type(target) ~= "string" and IsValid(target) then
+            if not isstring(target) and IsValid(target) then
                 SendUserMessage("FAdmin_ban_cancel", target) -- No I changed my mind, you can stay
                 target:UnLock()
                 target:Spawn()
@@ -165,7 +165,7 @@ local function Ban(ply, cmd, args)
                 StartBannedUsers[args[1]] = nil
             end
         elseif stage == "update" then -- Update reason text
-            if not args[4] or type(target) == "string" or not IsValid(target) then return false end
+            if not args[4] or isstring(target) or not IsValid(target) then return false end
             ply.FAdminKickReason = args[4]
             umsg.Start("FAdmin_ban_update", target)
                 umsg.Long(tonumber(args[3]))
@@ -177,12 +177,12 @@ local function Ban(ply, cmd, args)
 
             if stage == "execute" then
                 time = tonumber(args[3]) or 60 --Default to one hour, not permanent.
-                Reason = args[4]  or ""
+                Reason = args[4] or ""
             end
 
             local TimeText = FAdmin.PlayerActions.ConvertBanTime(time)
 
-            if type(target) ~= "string" and IsValid(target) then
+            if not isstring(target) and IsValid(target) then
                 StartBannedUsers[target:SteamID()] = nil
                 local nick = ply.Nick and ply:Nick() or "console"
                 SaveBan(target:SteamID(), target:Nick(), time, Reason, nick, ply.SteamID and ply:SteamID() or "Console")

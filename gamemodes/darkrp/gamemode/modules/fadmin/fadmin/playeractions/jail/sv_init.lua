@@ -65,7 +65,7 @@ local function Jail(ply, cmd, args)
             FAdmin.Messages.SendMessage(ply, 5, "Bad arguments")
             return
         end
-        if not target:FAdmin_GetGlobal("fadmin_jailed") and JailType ~= "unjail" and string.lower(cmd) ~= "unjail"  then
+        if not target:FAdmin_GetGlobal("fadmin_jailed") and JailType ~= "unjail" and string.lower(cmd) ~= "unjail" then
             target:SetMoveType(MOVETYPE_WALK)
 
             target:FAdmin_SetGlobal("fadmin_jailed", true)

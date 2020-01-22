@@ -21,9 +21,9 @@ SWEP.WorldModel = "models/weapons/w_medkit.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Recoil = 0
-SWEP.Primary.ClipSize  = -1
+SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = 1
-SWEP.Primary.Automatic  = true
+SWEP.Primary.Automatic = true
 SWEP.Primary.Delay = 0.1
 SWEP.Primary.Ammo = "none"
 

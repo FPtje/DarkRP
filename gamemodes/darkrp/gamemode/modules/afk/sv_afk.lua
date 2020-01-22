@@ -86,7 +86,7 @@ local function KillAFKTimer()
         end
     end
 end
-timer.Create("DarkRPKeyPressedCheck",  1, 0, function()
+timer.Create("DarkRPKeyPressedCheck", 1, 0, function()
     KillAFKTimer()
 end)
 

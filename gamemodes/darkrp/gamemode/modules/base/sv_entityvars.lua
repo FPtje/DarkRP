@@ -164,7 +164,7 @@ DarkRP.definePrivilegedChatCommand("freerpname", "DarkRP_AdminCommands", freerpn
 
 local function RPName(ply, args)
     if ply.LastNameChange and ply.LastNameChange > (CurTime() - 5) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
         return ""
     end
 

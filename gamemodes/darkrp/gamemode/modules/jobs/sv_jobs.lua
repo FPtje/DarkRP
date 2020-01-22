@@ -14,13 +14,13 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
 
     local allowed, time = self:changeAllowed(t)
     if t ~= GAMEMODE.DefaultTeam and not allowed and not force then
-        local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(t), DarkRP.getPhrase("banned_or_demoted"))
+        local notif = time and DarkRP.getPhrase("have_to_wait", math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(t), DarkRP.getPhrase("banned_or_demoted"))
         notify(self, 1, 4, notif)
         return false
     end
 
     if self.LastJob and GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob) >= 0 and not force then
-        notify(self, 1, 4, DarkRP.getPhrase("have_to_wait",  math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
+        notify(self, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(GAMEMODE.Config.changejobtime - (CurTime() - self.LastJob)), "/job"))
         return false
     end
 
@@ -52,10 +52,10 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     end
 
     if not force then
-        if type(TEAM.NeedToChangeFrom) == "number" and prevTeam ~= TEAM.NeedToChangeFrom then
+        if isnumber(TEAM.NeedToChangeFrom) and prevTeam ~= TEAM.NeedToChangeFrom then
             notify(self, 1,4, DarkRP.getPhrase("need_to_be_before", team.GetName(TEAM.NeedToChangeFrom), TEAM.name))
             return false
-        elseif type(TEAM.NeedToChangeFrom) == "table" and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
+        elseif istable(TEAM.NeedToChangeFrom) and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
             local teamnames = ""
             for _, b in pairs(TEAM.NeedToChangeFrom) do
                 teamnames = teamnames .. " or " .. team.GetName(b)
@@ -69,7 +69,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         max ~= 0 and -- No limit
         (max >= 1 and numPlayers >= max or -- absolute maximum
         max < 1 and (numPlayers + 1) / player.GetCount() > max) then -- fractional limit (in percentages)
-            notify(self, 1, 4,  DarkRP.getPhrase("team_limit_reached", TEAM.name))
+            notify(self, 1, 4, DarkRP.getPhrase("team_limit_reached", TEAM.name))
             return false
         end
     end
@@ -111,7 +111,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         for _, v in pairs(DarkRPEntities) do
             if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
             if not v.allowed then continue end
-            if type(v.allowed) == "table" and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
+            if istable(v.allowed) and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
             for _, e in ipairs(ents.FindByClass(v.ent)) do
                 if e.SID == self.SID then e:Remove() end
             end
@@ -119,7 +119,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
 
         if not GAMEMODE.Config.preventClassItemRemoval["spawned_shipment"] then
             for _, v in ipairs(ents.FindByClass("spawned_shipment")) do
-                if v.allowed and type(v.allowed) == "table" and table.HasValue(v.allowed, t) then continue end
+                if v.allowed and istable(v.allowed) and table.HasValue(v.allowed, t) then continue end
                 if v.SID == self.SID then v:Remove() end
             end
         end
@@ -454,7 +454,7 @@ local function DoTeamUnBan(ply, args)
 
     local found = false
     for k, v in pairs(RPExtraTeams) do
-        if string.lower(v.name) == string.lower(Team) or  string.lower(v.command) == string.lower(Team) then
+        if string.lower(v.name) == string.lower(Team) or string.lower(v.command) == string.lower(Team) then
             Team = k
             found = true
             break

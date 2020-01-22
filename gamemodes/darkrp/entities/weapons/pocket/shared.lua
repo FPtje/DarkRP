@@ -27,7 +27,7 @@ SWEP.IconLetter = ""
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
-SWEP.AnimPrefix  = "rpg"
+SWEP.AnimPrefix = "rpg"
 SWEP.WorldModel = ""
 
 SWEP.Spawnable = true
@@ -95,6 +95,14 @@ function SWEP:SecondaryAttack()
     if maxK == 0 then
         DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("pocket_no_items"))
         return
+    end
+
+    if SERVER then
+        local canPickup, message = hook.Call("canDropPocketItem", nil, self:GetOwner(), maxK, self:GetOwner().darkRPPocket[maxK])
+        if canPickup == false then
+            if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
+            return
+        end
     end
 
     self:GetOwner():dropPocketItem(maxK)

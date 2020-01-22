@@ -55,7 +55,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local filter = {}
 
     for _, v in ipairs(ents) do
-        if v:IsPlayer() then
+        if v:IsPlayer() and not v:IsBot() and (v == ply or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
             table.insert(filter, v)
         end
     end
@@ -76,21 +76,27 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
 end
 
 function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
-    net.Start("DarkRP_Chat")
-        net.WriteUInt(col1.r, 8)
-        net.WriteUInt(col1.g, 8)
-        net.WriteUInt(col1.b, 8)
-        net.WriteString(text1)
+    if not IsValid(receiver) then return end
+    if receiver:IsBot() then return end
+    local concatenatedText = (text1 or "") .. ": " .. (text2 or "")
 
-        sender = sender or Entity(0)
-        net.WriteEntity(sender)
+    if sender == receiver or hook.Run("PlayerCanSeePlayersChat", concatenatedText, false, receiver, sender) ~= false then
+        net.Start("DarkRP_Chat")
+            net.WriteUInt(col1.r, 8)
+            net.WriteUInt(col1.g, 8)
+            net.WriteUInt(col1.b, 8)
+            net.WriteString(text1)
 
-        col2 = col2 or Color(0, 0, 0)
-        net.WriteUInt(col2.r, 8)
-        net.WriteUInt(col2.g, 8)
-        net.WriteUInt(col2.b, 8)
-        net.WriteString(text2 or "")
-    net.Send(receiver)
+            sender = sender or Entity(0)
+            net.WriteEntity(sender)
+
+            col2 = col2 or Color(0, 0, 0)
+            net.WriteUInt(col2.r, 8)
+            net.WriteUInt(col2.g, 8)
+            net.WriteUInt(col2.b, 8)
+            net.WriteString(text2 or "")
+        net.Send(receiver)
+    end
 end
 
 function DarkRP.isEmpty(vector, ignore)

@@ -105,6 +105,40 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "canDropPocketItem",
+    description = "Whether someone is allowed to drop something from their pocket.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The pocket holder.",
+            type = "Player"
+        },
+        {
+            name = "item",
+            description = "The pocket item's index in the pocket.",
+            type = "table"
+        },
+        {
+            name = "serialized",
+            description = "The pocket item.",
+            type = "table"
+        }
+    },
+    returns = {
+        {
+            name = "answer",
+            description = "Whether the item can be dropped.",
+            type = "boolean"
+        },
+        {
+            name = "message",
+            description = "The message to send to the player when the answer is false.",
+            type = "string"
+        }
+    }
+}
+
+DarkRP.hookStub{
     name = "onPocketItemRemoved",
     description = "Called when an item is removed from the pocket.",
     parameters = {
@@ -263,6 +297,12 @@ util.AddNetworkString("DarkRP_spawnPocket")
 net.Receive("DarkRP_spawnPocket", function(len, ply)
     local item = net.ReadFloat()
     if not ply.darkRPPocket or not ply.darkRPPocket[item] then return end
+    local canPickup, message = hook.Call("canDropPocketItem", nil, ply, item, ply.darkRPPocket[item])
+    if canPickup == false then
+        if message then DarkRP.notify(ply, 1, 4, message) end
+        sendPocketItems(ply)
+        return
+    end
     ply:dropPocketItem(item)
 end)
 

@@ -34,16 +34,16 @@ function FAdmin.FindPlayer(info)
 
         for _, v in ipairs(pls) do
             -- Find by Steam ID
-            if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not found[v]  then
+            if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") and not found[v] then
                 found[v] = true
             end
 
             -- Find by Partial Nick
-            if string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
+            if string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v] then
                 found[v] = true
             end
 
-            if v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v]  then
+            if v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil and not found[v] then
                 found[v] = true
             end
         end
@@ -75,7 +75,7 @@ FAdmin.GlobalSetting = FAdmin.GlobalSetting or {}
     This way there will be no hassle with which plugin loads first, which one next etc.
 ]]
 timer.Simple(0, function()
-    for k in pairs(FAdmin.StartHooks) do if type(k) ~= "string" then FAdmin.StartHooks[k] = nil end end
+    for k in pairs(FAdmin.StartHooks) do if not isstring(k) then FAdmin.StartHooks[k] = nil end end
     for _, v in SortedPairs(FAdmin.StartHooks) do
         v()
     end

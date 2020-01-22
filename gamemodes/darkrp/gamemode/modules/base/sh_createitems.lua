@@ -102,11 +102,11 @@ local function addTeamCommands(CTeam, max)
                 return ""
             end
 
-            if type(CTeam.NeedToChangeFrom) == "number" and ply:Team() ~= CTeam.NeedToChangeFrom then
+            if isnumber(CTeam.NeedToChangeFrom) and ply:Team() ~= CTeam.NeedToChangeFrom then
                 DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("need_to_be_before", team.GetName(CTeam.NeedToChangeFrom), CTeam.name))
 
                 return ""
-            elseif type(CTeam.NeedToChangeFrom) == "table" and not table.HasValue(CTeam.NeedToChangeFrom, ply:Team()) then
+            elseif istable(CTeam.NeedToChangeFrom) and not table.HasValue(CTeam.NeedToChangeFrom, ply:Team()) then
                 local teamnames = ""
 
                 for _, b in pairs(CTeam.NeedToChangeFrom) do
@@ -127,7 +127,7 @@ local function addTeamCommands(CTeam, max)
 
             local allowed, time = ply:changeAllowed(k)
             if not allowed then
-                local notif = time and DarkRP.getPhrase("have_to_wait",  math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(k), DarkRP.getPhrase("banned_or_demoted"))
+                local notif = time and DarkRP.getPhrase("have_to_wait", math.ceil(time), "/job, " .. DarkRP.getPhrase("banned_or_demoted")) or DarkRP.getPhrase("unable", team.GetName(k), DarkRP.getPhrase("banned_or_demoted"))
                 DarkRP.notify(ply, 1, 4, notif)
 
                 return ""
@@ -317,7 +317,7 @@ local function addEntityCommands(tblEnt)
 
     local function buythis(ply, args)
         if ply:isArrested() then return "" end
-        if type(tblEnt.allowed) == "table" and not table.HasValue(tblEnt.allowed, ply:Team()) then
+        if istable(tblEnt.allowed) and not table.HasValue(tblEnt.allowed, ply:Team()) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", tblEnt.name))
             return ""
         end
@@ -454,7 +454,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     end)
 
     -- Precache model here. Not right before the job change is done
-    if type(CustomTeam.model) == "table" then
+    if istable(CustomTeam.model) then
         for _, v in pairs(CustomTeam.model) do util.PrecacheModel(v) end
     else
         util.PrecacheModel(CustomTeam.model)
@@ -507,7 +507,7 @@ DarkRP.getShipmentByName = function(name)
 end
 
 function DarkRP.createShipment(name, model, entity, price, Amount_of_guns_in_one_shipment, Sold_separately, price_separately, noshipment, classes, shipmodel, CustomCheck)
-    local tableSyntaxUsed = type(model) == "table"
+    local tableSyntaxUsed = istable(model)
 
     price = tonumber(price)
     local shipmentmodel = shipmodel or "models/Items/item_item_crate.mdl"
@@ -601,7 +601,7 @@ end
 
 DarkRPEntities = {}
 function DarkRP.createEntity(name, entity, model, price, max, command, classes, CustomCheck)
-    local tableSyntaxUsed = type(entity) == "table"
+    local tableSyntaxUsed = istable(entity)
 
     local tblEnt = tableSyntaxUsed and entity or
         {ent = entity, model = model, price = price, max = max,
@@ -611,7 +611,7 @@ function DarkRP.createEntity(name, entity, model, price, max, command, classes, 
 
     if DarkRP.DARKRP_LOADING and DarkRP.disabledDefaults["entities"][tblEnt.name] then return end
 
-    if type(tblEnt.allowed) == "number" then
+    if isnumber(tblEnt.allowed) then
         tblEnt.allowed = {tblEnt.allowed}
     end
 
@@ -703,7 +703,7 @@ function DarkRP.createGroupChat(funcOrTeam, ...)
         if DarkRP.disabledDefaults["groupchat"][groupChatNumber] then return end
     end
     -- People can enter either functions or a list of teams as parameter(s)
-    if type(funcOrTeam) == "function" then
+    if isfunction(funcOrTeam) then
         table.insert(gm.DarkRPGroupChats, fp{DarkRP.simplerrRun, funcOrTeam})
     else
         local teams = {funcOrTeam, ...}

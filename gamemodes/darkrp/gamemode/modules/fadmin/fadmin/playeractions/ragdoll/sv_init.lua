@@ -93,10 +93,10 @@ local function Ragdoll(ply, cmd, args)
                 target:UnSpectate()
                 target:Spawn()
 
-                if type(target.FAdminRagdoll) ~= "table" and IsValid(target.FAdminRagdoll) then
+                if not istable(target.FAdminRagdoll) and IsValid(target.FAdminRagdoll) then
                     if target.FAdminRagdoll.SetCanRemove then target.FAdminRagdoll:SetCanRemove(true) end
                     target.FAdminRagdoll:Remove()
-                elseif type(target.FAdminRagdoll) == "table" then
+                elseif istable(target.FAdminRagdoll) then
                     for _, v in pairs(target.FAdminRagdoll) do
                         if IsValid(v) then
                             if v.SetCanRemove then v:SetCanRemove(true) end
@@ -106,7 +106,7 @@ local function Ragdoll(ply, cmd, args)
                 end
                 target.FAdminRagdoll = nil
             elseif RagdollType == "normal" or RagdollType == "ragdoll" then
-                if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
+                if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
                 local Ragdoll = ents.Create("prop_ragdoll")
 
                 Ragdoll:SetModel(target:GetModel())
@@ -121,7 +121,7 @@ local function Ragdoll(ply, cmd, args)
 
                 target.FAdminRagdoll = Ragdoll
             elseif RagdollType == "hang" then
-                if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
+                if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
                 target.FAdminRagdoll = {}
 
                 local Ragdoll = ents.Create("prop_ragdoll")
@@ -158,7 +158,7 @@ local function Ragdoll(ply, cmd, args)
                 Ragdoll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
                 timer.Simple(0.2, function() constraint.Rope(Ragdoll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
             elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
-                if type(target.FAdminRagdoll) == "table" or IsValid(target.FAdminRagdoll) then return false end
+                if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
                 local Ragdoll = ents.Create("prop_ragdoll")
 
                 Ragdoll:SetModel(target:GetModel())
@@ -290,25 +290,25 @@ FAdmin.StartHooks["Ragdoll"] = function()
 end
 
 hook.Add("PlayerSpawnObject", "FAdmin_ragdoll", function(ply)
-    if type(ply.FAdminRagdoll) == "table" or IsValid(ply.FAdminRagdoll) then
+    if istable(ply.FAdminRagdoll) or IsValid(ply.FAdminRagdoll) then
         return false
     end
 end)
 
 hook.Add("CanPlayerSuicide", "FAdmin_ragdoll", function(ply)
-    if type(ply.FAdminRagdoll) == "table" or IsValid(ply.FAdminRagdoll) then
+    if istable(ply.FAdminRagdoll) or IsValid(ply.FAdminRagdoll) then
         return false
     end
 end)
 
 hook.Add("PlayerDeath", "FAdmin_ragdoll", function(ply)
-    if (type(ply.FAdminRagdoll) == "table" or IsValid(ply.FAdminRagdoll)) and IsValid(ply:GetRagdollEntity()) then
+    if (istable(ply.FAdminRagdoll) or IsValid(ply.FAdminRagdoll)) and IsValid(ply:GetRagdollEntity()) then
         ply:GetRagdollEntity():Remove()
     end
 end)
 
 hook.Add("PlayerDeathThink", "FAdmin_ragdoll", function(ply)
-    if type(ply.FAdminRagdoll) == "table" or IsValid(ply.FAdminRagdoll) then
+    if istable(ply.FAdminRagdoll) or IsValid(ply.FAdminRagdoll) then
         return false
     end
 end)
@@ -321,7 +321,7 @@ hook.Add("PlayerDisconnected", "FAdmin_ragdoll", function(ply)
         return
     end
 
-    if type(ply.FAdminRagdoll) ~= "table" then return end
+    if not istable(ply.FAdminRagdoll) then return end
 
     for _, v in pairs(ply.FAdminRagdoll or {}) do
         if IsValid(v) then v:Remove() end

@@ -50,21 +50,28 @@ hook.Add("DarkRPDBInitialized", "DarkRP_antimultirun", function()
     if not MySQLite.isMySQL() then return end
     if not game.IsDedicated() then return end
 
-    DarkRP.serverId = game.GetIPAddress()
+    -- Wait until game.GetIPAddress() returns a sensible value
+    -- https://github.com/FPtje/DarkRP/issues/2982
+    -- https://github.com/Facepunch/garrysmod-issues/issues/3001
+    hook.Add("Think", "DarkRP_antimultirun", function()
+        DarkRP.serverId = game.GetIPAddress()
+        if string.sub(DarkRP.serverId, 0, 8) == "0.0.0.0:" then return end
+        hook.Remove("Think", "DarkRP_antimultirun")
 
-    MySQLite.query([[
-        CREATE TABLE IF NOT EXISTS darkrp_serverplayer(
-            uid BIGINT NOT NULL,
-            serverid VARCHAR(32) NOT NULL,
-            PRIMARY KEY(uid, serverid)
-        );
-    ]])
+        MySQLite.query([[
+            CREATE TABLE IF NOT EXISTS darkrp_serverplayer(
+                uid BIGINT NOT NULL,
+                serverid VARCHAR(32) NOT NULL,
+                PRIMARY KEY(uid, serverid)
+            );
+        ]])
 
-    -- Clear this server's entries in case the server wasn't cleanly shut down
-    clearServerEntries()
+        -- Clear this server's entries in case the server wasn't cleanly shut down
+        clearServerEntries()
 
-    -- Re-insert players currently in the game
-    fn.Map(insertPlayer, player.GetAll())
+        -- Re-insert players currently in the game
+        fn.Map(insertPlayer, player.GetAll())
 
-    addHooks()
+        addHooks()
+    end)
 end)

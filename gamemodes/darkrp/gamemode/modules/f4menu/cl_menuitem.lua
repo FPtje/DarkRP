@@ -106,9 +106,9 @@ end
 function PANEL:setDarkRPItem(job)
     self.BaseClass.setDarkRPItem(self, job)
 
-    local model =   isfunction(job.PlayerSetModel) and job.PlayerSetModel(LocalPlayer()) or
-                    istable(job.model) and job.model[1] or
-                    job.model
+    local model = isfunction(job.PlayerSetModel) and job.PlayerSetModel(LocalPlayer()) or
+                  istable(job.model) and job.model[1] or
+                  job.model
 
     self:SetBorderColor(job.color)
     self:SetModel(model)

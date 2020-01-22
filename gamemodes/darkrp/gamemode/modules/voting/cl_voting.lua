@@ -51,16 +51,10 @@ local function MsgDoVote(msg)
     panel:SetMouseInputEnabled(true)
     panel:SetVisible(true)
 
-    for i = 22, string.len(question), 22 do
-        if not string.find(string.sub(question, i - 20, i), "\n", 1, true) then
-            question = string.sub(question, 1, i) .. "\n" .. string.sub(question, i + 1, string.len(question))
-        end
-    end
-
     local label = vgui.Create("DLabel")
     label:SetParent(panel)
     label:SetPos(5, 25)
-    label:SetText(DarkRP.deLocalise(question))
+    label:SetText(DarkRP.textWrap(DarkRP.deLocalise(question), "DermaDefault", 130))
     label:SizeToContents()
     label:SetVisible(true)
 

@@ -24,7 +24,7 @@ SWEP.WorldModel = ""
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
-SWEP.AnimPrefix  = "rpg"
+SWEP.AnimPrefix = "rpg"
 
 SWEP.UseHands = true
 
@@ -65,10 +65,10 @@ end
 
 local function lookingAtLockable(ply, ent, hitpos)
     local eyepos = ply:EyePos()
-    return IsValid(ent)             and
-        ent:isKeysOwnable()         and
-        (
-            ent:isDoor()    and eyepos:DistToSqr(hitpos) < 2000
+    return IsValid(ent)
+        and ent:isKeysOwnable()
+        and (
+            ent:isDoor() and eyepos:DistToSqr(hitpos) < 2000
             or
             ent:IsVehicle() and eyepos:DistToSqr(hitpos) < 4000
         )

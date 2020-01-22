@@ -105,7 +105,7 @@ function DarkRP.addTeamSpawnPos(t, pos)
     MySQLite.query([[INSERT INTO darkrp_position(map, type, x, y, z) VALUES(]] .. MySQLite.SQLStr(map) .. [[, "T", ]] .. pos[1] .. [[, ]] .. pos[2] .. [[, ]] .. pos[3] .. [[);]]
         , function()
         MySQLite.queryValue([[SELECT MAX(id) FROM darkrp_position WHERE map = ]] .. MySQLite.SQLStr(map) .. [[ AND type = "T";]], function(id)
-            if type(id) == "boolean" then return end
+            if isbool(id) then return end
             MySQLite.query([[INSERT INTO darkrp_jobspawn VALUES(]] .. id .. [[, ]] .. MySQLite.SQLStr(teamcmd) .. [[);]])
             table.insert(teamSpawns, {id = id, map = map, x = pos[1], y = pos[2], z = pos[3], teamcmd = teamcmd})
         end)

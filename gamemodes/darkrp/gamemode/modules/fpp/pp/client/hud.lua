@@ -137,6 +137,16 @@ local weaponClassTouchTypes = {
     ["gmod_tool"] = "Toolgun",
 }
 
+local function FilterEntityTable(t)
+    local filtered = {}
+
+    for i, ent in ipairs(t) do
+        if (not ent:IsWeapon()) and (not ent:IsPlayer()) then table.insert(filtered, ent) end
+    end
+
+    return filtered
+end
+
 local function HUDPaint()
 
     local i = 0
@@ -160,7 +170,9 @@ local function HUDPaint()
     --Show the owner:
     local ply = LocalPlayer()
 
-    local LAEnt = ply:GetEyeTraceNoCursor().Entity
+    local LAEnt2 = ents.FindAlongRay(ply:EyePos(), ply:EyePos() + EyeAngles():Forward() * 16384)
+
+    local LAEnt = FilterEntityTable(LAEnt2)[1]
     if not IsValid(LAEnt) then return end
 
     local weapon = ply:GetActiveWeapon()

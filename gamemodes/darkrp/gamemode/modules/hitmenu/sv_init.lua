@@ -89,6 +89,18 @@ function plyMeta:abortHit(message)
     self:finishHit()
 end
 
+function plyMeta:cancelHit()
+    if not hits[self] then DarkRP.error("This person has no active hit!", 2) end
+    if not self:canAfford(hits[self].price) then
+        DarkRP.notify(self, 1, 4, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("hit_cancel")))
+        return
+    end
+
+    DarkRP.payPlayer(self, hits[self].customer, hits[self].price)
+
+    self:abortHit(DarkRP.getPhrase("hit_cancelled"))
+end
+
 function plyMeta:finishHit()
     self:setHitCustomer(nil)
     self:setHitTarget(nil)
@@ -149,6 +161,15 @@ DarkRP.defineChatCommand("requesthit", function(ply, args)
     hitman:requestHit(ply, target, hitman:getHitPrice())
 
     return ""
+end)
+
+DarkRP.defineChatCommand("cancelhit", function(ply, args)
+    if not hits[ply] then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_active_hit"))
+        return ""
+    end
+
+    ply:cancelHit()
 end)
 
 --[[---------------------------------------------------------------------------
