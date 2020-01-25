@@ -280,6 +280,7 @@ local function addEntityCommands(tblEnt)
         delay = tblEnt.delay or 2,
         condition =
             function(ply)
+                if not tblEnt.allowPurchaseWhileDead and not ply:Alive() then return false end
                 if ply:isArrested() then return false end
                 if istable(tblEnt.allowed) and not table.HasValue(tblEnt.allowed, ply:Team()) then return false end
                 if not ply:canAfford(tblEnt.price) then return false end
@@ -317,6 +318,10 @@ local function addEntityCommands(tblEnt)
 
     local function buythis(ply, args)
         if ply:isArrested() then return "" end
+        if not tblEnt.allowPurchaseWhileDead and not ply:Alive() then
+            DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", tblEnt.name)))
+            return ""
+        end
         if istable(tblEnt.allowed) and not table.HasValue(tblEnt.allowed, ply:Team()) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", tblEnt.name))
             return ""

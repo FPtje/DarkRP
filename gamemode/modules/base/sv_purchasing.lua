@@ -140,7 +140,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
         return false, false, DarkRP.getPhrase("cant_afford", DarkRP.getPhrase("shipment"))
     end
 
-    if not ply:Alive() then
+    if not shipment.allowPurchaseWhileDead and not ply:Alive() then
         return false, false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", DarkRP.getPhrase("shipments")))
     end
 
@@ -216,6 +216,9 @@ end
 DarkRP.defineChatCommand("buyshipment", BuyShipment)
 
 function DarkRP.hooks:canBuyVehicle(ply, vehicle)
+    if not vehicle.allowPurchaseWhileDead and not ply:Alive() then
+        return false, false, DarkRP.getPhrase("must_be_alive_to_do_x", DarkRP.getPhrase("buy_x", vehicle.name))
+    end
     if not GAMEMODE:CustomObjFitsMap(vehicle) then
         return false, false, "Custom object does not fit map"
     end
