@@ -5,7 +5,7 @@ local red = Color(128, 30, 30, 255)
 
 function meta:drawOwnableInfo()
     local ply = LocalPlayer()
-    if ply:InVehicle() then return end
+    if ply:InVehicle() and not ply:GetAllowWeaponsInVehicle() then return end
 
     -- Look, if you want to change the way door ownership is drawn, don't edit this file, use the hook instead!
     local doorDrawing = hook.Call("HUDDrawDoorData", nil, self)
