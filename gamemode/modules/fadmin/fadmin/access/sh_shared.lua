@@ -13,7 +13,7 @@ function FAdmin.Access.AddGroup(name, admin_access --[[0 = not admin, 1 = admin,
     --Make sure things that come from CAMI come with a CAMIsrc
     assert((fromCAMI and CAMIsrc ~= nil) or ((not fromCAMI) and CAMIsrc == nil))
     --If the CAMIsrc is a string, save it, otherwise save an empty string
-    if type(CAMIsrc) ~= "string" then
+    if not isstring(CAMIsrc) then
         CAMIsrc = ""
     end
 
