@@ -9,6 +9,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
     MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_PlayerGroup(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
     MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_Immunity(groupname VARCHAR(40) NOT NULL, immunity INTEGER NOT NULL, PRIMARY KEY(groupname));")
     MySQLite.query("CREATE TABLE IF NOT EXISTS FAdmin_CAMIPrivileges(privname VARCHAR(255) NOT NULL PRIMARY KEY);")
+    MySQLite.query("CREATE TABLE IF NOT EXISTS FADMIN_GROUPS_SRC(NAME VARCHAR(40) NOT NULL PRIMARY KEY REFERENCES FADMIN_GROUPS(NAME) ON DELETE CASCADE, SRC VARCHAR(40));")
     MySQLite.query([[CREATE TABLE IF NOT EXISTS FADMIN_PRIVILEGES(
         NAME VARCHAR(40),
         PRIVILEGE VARCHAR(100),
@@ -21,7 +22,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
         -- Remove SetAccess workaround
         MySQLite.query([[DELETE FROM FADMIN_PRIVILEGES WHERE NAME = "user" AND PRIVILEGE = "SetAccess";]])
 
-        MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE, i.immunity FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME LEFT OUTER JOIN FAdmin_Immunity i ON g.NAME = i.groupname;", function(data)
+        MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE, i.immunity, s.src FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME LEFT OUTER JOIN FAdmin_Immunity i ON g.NAME = i.groupname LEFT OUTER JOIN FADMIN_GROUPS_SRC s ON g.NAME = s.NAME;", function(data)
             if not data then return end
 
             for _, v in pairs(data) do
@@ -40,8 +41,8 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
 
                 CAMI.RegisterUsergroup({
                     Name = v.NAME,
-                    Inherits = FAdmin.Access.ADMIN[v.ADMIN_ACCESS]
-                }, "FAdmin")
+                    Inherits = FAdmin.Access.ADMIN[v.ADMIN_ACCESS] or "user"
+                }, v.SRC)
             end
 
             -- Send groups to early joiners and listen server hosts
@@ -55,7 +56,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
             for _, v in pairs(CAMI.GetUsergroups()) do
                 if FAdmin.Access.Groups[v.Name] then continue end
 
-                FAdmin.Access.OnUsergroupRegistered(v)
+                FAdmin.Access.OnUsergroupRegistered(v,"")
             end
 
             -- Start listening for CAMI usergroup registrations.
