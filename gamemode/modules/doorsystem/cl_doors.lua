@@ -63,17 +63,16 @@ function meta:drawOwnableInfo()
     end
 
     if self:IsVehicle() then
-        for _, v in ipairs(player.GetAll()) do
-            if not IsValid(v) or v:GetVehicle() ~= self then continue end
-
-            table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
-            break
+        local driver = self:GetDriver()
+        if driver:IsPlayer() then
+            table.insert(doorInfo, DarkRP.getPhrase("driver", driver:Nick()))
         end
     end
 
     local x, y = ScrW() / 2, ScrH() / 2
-    draw.DrawNonParsedText(table.concat(doorInfo, "\n"), "TargetID", x , y + 1 , black, 1)
-    draw.DrawNonParsedText(table.concat(doorInfo, "\n"), "TargetID", x, y, (blocked or owned) and white or red, 1)
+    local text = table.concat(doorInfo, "\n")
+    draw.DrawNonParsedText(text, "TargetID", x , y + 1 , black, 1)
+    draw.DrawNonParsedText(text, "TargetID", x, y, (blocked or owned) and white or red, 1)
 end
 
 

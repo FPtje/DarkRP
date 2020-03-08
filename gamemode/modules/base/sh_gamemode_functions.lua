@@ -8,7 +8,7 @@ end
 function GM:StartCommand(ply, usrcmd)
     -- Used in arrest_stick and unarrest_stick but addons can use it too!
     local wep = ply:GetActiveWeapon()
-    if IsValid(wep) and isfunction(wep.startDarkRPCommand) then
+    if wep:IsValid() and isfunction(wep.startDarkRPCommand) then
         wep:startDarkRPCommand(usrcmd)
     end
 end
