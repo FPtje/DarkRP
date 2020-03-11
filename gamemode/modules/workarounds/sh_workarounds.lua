@@ -110,6 +110,7 @@ end
 if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descriptive errors"] then
     local cams3D, cams2D = 0, 0
     local cam_Start = cam.Start
+
     function cam.Start(tbl, ...)
         -- https://github.com/Facepunch/garrysmod-issues/issues/3361
         if (not istable(tbl)) then
@@ -129,6 +130,7 @@ if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descripti
         -- Assume creation/deletion
         return cam_Start(tbl, ...)
     end
+
     local cam_End3D = cam.End3D
     function cam.End3D(...)
         if (cams3D == 0) then
@@ -137,7 +139,8 @@ if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descripti
         cams3D = cams3D - 1
         return cam_End3D(...)
     end
-    cam.End=cam.End3D
+    cam.End = cam.End3D
+
     local cam_End2D = cam.End2D
     function cam.End2D(...)
         if (cams2D == 0) then
@@ -154,7 +157,8 @@ if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descripti
         cams3D2D = cams3D2D + 1
         return cam_Start3D2D(...)
     end
-    local cam_End3D2D=cam.End3D2D
+
+    local cam_End3D2D = cam.End3D2D
     function cam.End3D2D(...)
         if (cams3D2D == 0) then
             error("tried to end invalid render instance", 2)
