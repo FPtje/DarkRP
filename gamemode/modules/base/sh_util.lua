@@ -43,6 +43,11 @@ function DarkRP.formatMoney(n)
         n = n:sub(1, i) .. "," .. n:sub(i + 1)
     end
 
+    -- Make sure the amount is padded with zeroes
+    if n[#n - 1] == "." then
+        n = n .. "0"
+    end
+
     return (negative and "-" or "") .. attachCurrency(n)
 end
 
