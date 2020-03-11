@@ -37,11 +37,10 @@ function DarkRP.formatMoney(n)
     local negative = n < 0
 
     n = tostring(math.abs(n))
-    local sep = sep or ","
     local dp = string.find(n, "%.") or #n + 1
 
     for i = dp - 4, 1, -3 do
-        n = n:sub(1, i) .. sep .. n:sub(i + 1)
+        n = n:sub(1, i) .. "," .. n:sub(i + 1)
     end
 
     return (negative and "-" or "") .. attachCurrency(n)
