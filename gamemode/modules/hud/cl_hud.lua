@@ -331,7 +331,7 @@ local function DrawEntityDisplay()
     local shootPos = localplayer:GetShootPos()
     local aimVec = localplayer:GetAimVector()
 
-    for _, ply in pairs(players or player.GetAll()) do
+    for _, ply in ipairs(players or player.GetAll()) do
         if not IsValid(ply) or ply == localplayer or not ply:Alive() or ply:GetNoDraw() or ply:IsDormant() then continue end
         local hisPos = ply:GetShootPos()
         if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
@@ -350,10 +350,10 @@ local function DrawEntityDisplay()
         end
     end
 
-    local tr = localplayer:GetEyeTrace()
+    local ent = localplayer:GetEyeTrace().Entity
 
-    if IsValid(tr.Entity) and tr.Entity:isKeysOwnable() and tr.Entity:GetPos():DistToSqr(localplayer:GetPos()) < 40000 then
-        tr.Entity:drawOwnableInfo()
+    if IsValid(ent) and ent:isKeysOwnable() and ent:GetPos():DistToSqr(localplayer:GetPos()) < 40000 then
+        ent:drawOwnableInfo()
     end
 end
 
@@ -381,13 +381,15 @@ usermessage.Hook("_Notify", DisplayNotify)
 --[[---------------------------------------------------------------------------
 Remove some elements from the HUD in favour of the DarkRP HUD
 ---------------------------------------------------------------------------]]
+local noDraw = {
+    ["CHudHealth"] = true,
+    ["CHudBattery"] = true,
+    ["CHudSuitPower"] = true,
+    ["CHUDQuickInfo"] = true
+}
 function GM:HUDShouldDraw(name)
-    if name == "CHudHealth" or
-        name == "CHudBattery" or
-        name == "CHudSuitPower" or
-        name == "CHUDQuickInfo" or
-        (HelpToggled and name == "CHudChat") then
-            return false
+    if noDraw[name] or (HelpToggled and name == "CHudChat") then
+        return false
     else
         return self.Sandbox.HUDShouldDraw(self, name)
     end
@@ -404,8 +406,7 @@ end
 Actual HUDPaint hook
 ---------------------------------------------------------------------------]]
 function GM:HUDPaint()
-    localplayer = localplayer and IsValid(localplayer) and localplayer or LocalPlayer()
-    if not IsValid(localplayer) then return end
+    localplayer = localplayer or LocalPlayer()
 
     DrawHUD()
     DrawEntityDisplay()
