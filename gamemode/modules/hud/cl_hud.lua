@@ -344,7 +344,14 @@ local function DrawEntityDisplay()
             local unitPos = pos:GetNormalized()
             if unitPos:Dot(aimVec) > 0.95 then
                 local trace = util.QuickTrace(shootPos, pos, localplayer)
-                if trace.Hit and trace.Entity ~= ply then break end
+                if trace.Hit and trace.Entity ~= ply then
+                    -- When the trace says you're directly looking at a
+                    -- different player, that means you can draw /their/ info
+                    if trace.Entity:IsPlayer() then
+                        trace.Entity:drawPlayerInfo()
+                    end
+                    break
+                end
                 ply:drawPlayerInfo()
             end
         end
