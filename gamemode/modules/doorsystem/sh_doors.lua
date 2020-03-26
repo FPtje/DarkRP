@@ -14,6 +14,8 @@ local unOwnableDoors = {
     ["prop_dynamic"] = true
 }
 function meta:isKeysOwnable()
+    if not IsValid(self) then return false end
+
     local class = self:GetClass()
 
     if (ownableDoors[class] or
