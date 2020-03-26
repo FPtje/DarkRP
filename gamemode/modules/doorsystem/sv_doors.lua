@@ -430,7 +430,7 @@ local function UnOwnAll(ply, cmd, args)
 
     local unownables = {}
     for entIndex, ent in pairs(ply.Ownedz or {}) do
-        if not ent:isKeysOwnable() then ply.Ownedz[entIndex] = nil continue end
+        if not ent:isKeysOwnable() or ent:IsVehicle() then ply.Ownedz[entIndex] = nil continue end
         table.insert(unownables, ent)
     end
 
