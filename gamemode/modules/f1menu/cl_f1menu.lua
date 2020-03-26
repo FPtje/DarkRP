@@ -5,8 +5,9 @@ local function searchChatCommand(str)
     -- Fuzzy search regex string
     str = string.PatternSafe(str)
     str = ".*" .. str:gsub("[a-zA-Z0-9]", function(a) return a:lower() .. ".*" end)
-    local condition = fn.Compose{fn.Curry(fn.Flip(string.match), 2)(str), fn.Curry(fn.GetValue, 2)("command")}
-    return fn.Compose{table.ClearKeys, fn.Curry(fn.Filter, 2)(condition)}(chatCommands)
+
+    local condition = function(chatCommand) return string.match(chatCommand.command, str) end
+    return table.ClearKeys(fn.Filter(condition, chatCommands))
 end
 
 local F1Menu
