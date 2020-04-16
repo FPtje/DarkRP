@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Stun Stick"
     SWEP.Slot = 0
     SWEP.SlotPos = 5
     SWEP.RenderGroup = RENDERGROUP_BOTH
@@ -19,6 +18,7 @@ DEFINE_BASECLASS("stick_base")
 SWEP.Instructions = "Left click to discipline\nRight click to kill\nHold reload to threaten"
 SWEP.IsDarkRPStunstick = true
 
+SWEP.PrintName = "Stun Stick"
 SWEP.Spawnable = true
 SWEP.Category = "DarkRP (Utility)"
 

@@ -107,7 +107,7 @@ end
 
 function pmeta:keysUnOwnAll()
     for entIndex, ent in pairs(self.Ownedz or {}) do
-        if not ent:isKeysOwnable() then self.Ownedz[entIndex] = nil continue end
+        if not IsValid(ent) or not ent:isKeysOwnable() then self.Ownedz[entIndex] = nil continue end
         if ent:isMasterOwner(self) then
             ent:Fire("unlock", "", 0.6)
         end
@@ -144,7 +144,7 @@ function pmeta:doPropertyTax()
     local taxables = {}
 
     for entIndex, ent in pairs(self.Ownedz or {}) do
-        if not ent:isKeysOwnable() then self.Ownedz[entIndex] = nil continue end
+        if not IsValid(ent) or not ent:isKeysOwnable() then self.Ownedz[entIndex] = nil continue end
         local isAllowed = hook.Call("canTaxEntity", nil, self, ent)
         if isAllowed == false then continue end
 
@@ -430,7 +430,7 @@ local function UnOwnAll(ply, cmd, args)
 
     local unownables = {}
     for entIndex, ent in pairs(ply.Ownedz or {}) do
-        if not ent:isKeysOwnable() then ply.Ownedz[entIndex] = nil continue end
+        if not IsValid(ent) or not ent:isKeysOwnable() then ply.Ownedz[entIndex] = nil continue end
         table.insert(unownables, ent)
     end
 

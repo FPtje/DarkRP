@@ -7,8 +7,15 @@ FAdmin.Access.ADMIN[0] = "user"
 FAdmin.Access.Groups = FAdmin.Access.Groups or {}
 FAdmin.Access.Privileges = FAdmin.Access.Privileges or {}
 
-function FAdmin.Access.AddGroup(name, admin_access --[[0 = not admin, 1 = admin, 2 = superadmin]], privs, immunity, fromCAMI)
+function FAdmin.Access.AddGroup(name, admin_access --[[0 = not admin, 1 = admin, 2 = superadmin]], privs, immunity, fromCAMI, CAMIsrc)
     FAdmin.Access.Groups[name] = FAdmin.Access.Groups[name] or {ADMIN = admin_access, PRIVS = privs or {}, immunity = immunity}
+
+    --Make sure things that come from CAMI come with a CAMIsrc
+    assert((fromCAMI and CAMIsrc ~= nil) or ((not fromCAMI) and CAMIsrc == nil))
+    --If the CAMIsrc is a string, save it, otherwise save an empty string
+    if not isstring(CAMIsrc) then
+        CAMIsrc = ""
+    end
 
     -- Register custom usergroups with CAMI
     if name ~= "user" and name ~= "admin" and name ~= "superadmin" and not fromCAMI then
@@ -31,6 +38,9 @@ function FAdmin.Access.AddGroup(name, admin_access --[[0 = not admin, 1 = admin,
         MySQLite.query("REPLACE INTO FADMIN_GROUPS VALUES(" .. MySQLite.SQLStr(name) .. ", " .. tonumber(admin_access) .. ");", function()
             for priv, _ in pairs(privs or {}) do
                 MySQLite.query("REPLACE INTO FADMIN_PRIVILEGES VALUES(" .. MySQLite.SQLStr(name) .. ", " .. MySQLite.SQLStr(priv) .. ");")
+            end
+            if fromCAMI then
+                MySQLite.query("REPLACE INTO FADMIN_GROUPS_SRC VALUES(" .. MySQLite.SQLStr(name) .. ", " .. MySQLite.SQLStr(CAMIsrc) .. ");")
             end
         end)
     end)
@@ -56,7 +66,7 @@ function FAdmin.Access.OnUsergroupRegistered(usergroup, source)
     -- Add groups registered to CAMI to FAdmin. Assume privileges from either the usergroup it inherits or its inheritance root.
     -- Immunity is unknown and can be set by the user later. FAdmin immunity only applies to FAdmin anyway.
     local parent = FAdmin.Access.Groups[usergroup.Inherits] or FAdmin.Access.Groups[inheritRoot] or {}
-    FAdmin.Access.AddGroup(usergroup.Name, admin_access - 1, table.Copy(parent.PRIVS) or {}, parent.immunity or 10, true)
+    FAdmin.Access.AddGroup(usergroup.Name, admin_access - 1, table.Copy(parent.PRIVS) or {}, parent.immunity or 10, true, source)
 end
 
 

@@ -169,7 +169,7 @@ local function RPName(ply, args)
     end
 
     if not GAMEMODE.Config.allowrpnames then
-        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("disabled", "RPname", ""))
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("disabled", "/rpname", ""))
         return ""
     end
 
@@ -177,7 +177,7 @@ local function RPName(ply, args)
 
     local canChangeName, reason = hook.Call("CanChangeRPName", GAMEMODE, ply, args)
     if canChangeName == false then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "RPname", reason or ""))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/rpname", reason or ""))
         return ""
     end
 
@@ -205,7 +205,7 @@ function meta:setRPName(name, firstRun)
                 DarkRP.storeRPName(self, name .. " 1")
                 DarkRP.notify(self, 0, 12, DarkRP.getPhrase("someone_stole_steam_name"))
             else
-                DarkRP.notify(self, 1, 5, DarkRP.getPhrase("unable", "RPname", DarkRP.getPhrase("already_taken")))
+                DarkRP.notify(self, 1, 5, DarkRP.getPhrase("unable", "/rpname", DarkRP.getPhrase("already_taken")))
                 return ""
             end
         else

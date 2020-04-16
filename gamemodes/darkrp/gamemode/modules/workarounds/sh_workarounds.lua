@@ -87,29 +87,27 @@ timer.Simple(3, function()
 end)
 
 if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() then
-    if DarkRP.disabledDefaults["workarounds"]["nil SteamID64 and AccountID local server fix"] then return
-    end
+    if not DarkRP.disabledDefaults["workarounds"]["nil SteamID64 and AccountID local server fix"] then
+        local plyMeta = FindMetaTable("Player")
 
-    local plyMeta = FindMetaTable("Player")
+        if SERVER then
+            local sid64 = plyMeta.SteamID64
 
-    if SERVER then
-        local sid64 = plyMeta.SteamID64
-
-        function plyMeta:SteamID64(...)
-            return sid64(self, ...) or "0"
+            function plyMeta:SteamID64(...)
+                return sid64(self, ...) or "0"
+            end
         end
-    end
 
-    local aid = plyMeta.AccountID
+        local aid = plyMeta.AccountID
 
-    function plyMeta:AccountID(...)
-        return aid(self, ...) or 0
+        function plyMeta:AccountID(...)
+            return aid(self, ...) or 0
+        end
     end
 end
 
--- Clientside part
-if CLIENT then
-    if DarkRP.disabledDefaults["workarounds"]["Cam function descriptive errors"] then return end
+
+if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descriptive errors"] then
     local cams3D, cams2D = 0, 0
     local cam_Start = cam.Start
 
@@ -134,26 +132,21 @@ if CLIENT then
     end
 
     local cam_End3D = cam.End3D
-
     function cam.End3D(...)
         if (cams3D == 0) then
             error("tried to end invalid render instance", 2)
         end
-
         cams3D = cams3D - 1
-
         return cam_End3D(...)
     end
+    cam.End = cam.End3D
 
     local cam_End2D = cam.End2D
-
     function cam.End2D(...)
         if (cams2D == 0) then
             error("tried to end invalid render instance", 2)
         end
-
         cams2D = cams2D - 1
-
         return cam_End2D(...)
     end
 
@@ -162,14 +155,20 @@ if CLIENT then
 
     function cam.Start3D2D(...)
         cams3D2D = cams3D2D + 1
-
         return cam_Start3D2D(...)
     end
 
-    return
+    local cam_End3D2D = cam.End3D2D
+    function cam.End3D2D(...)
+        if (cams3D2D == 0) then
+            error("tried to end invalid render instance", 2)
+        end
+        cams3D2D = cams3D2D - 1
+        return cam_End3D2D(...)
+    end
 end
 
-if not DarkRP.disabledDefaults["workarounds"]["Error on edict limit"] then
+if SERVER and not DarkRP.disabledDefaults["workarounds"]["Error on edict limit"] then
     -- https://github.com/FPtje/DarkRP/issues/2640
     local entsCreate = ents.Create
     local entsCreateError = [[
@@ -202,6 +201,19 @@ end
 Generic InitPostEntity workarounds
 ---------------------------------------------------------------------------]]
 hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
+    if CLIENT then
+        if not DarkRP.disabledDefaults["workarounds"]["White flashbang flashes"] then
+            -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
+            hook.Remove("HUDPaint","drawHudVital")
+        end
+
+        -- Fuck up APAnti
+        if not DarkRP.disabledDefaults["workarounds"]["APAnti"] then
+            net.Receivers.sblockgmspawn = nil
+            hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
+        end
+        return
+    end
     local commands = concommand.GetTable()
     if not DarkRP.disabledDefaults["workarounds"]["Durgz witty sayings"] and commands["durgz_witty_sayings"] then
         game.ConsoleCommand("durgz_witty_sayings 0\n") -- Deals with the cigarettes exploit. I'm fucking tired of them. I hate having to fix other people's mods, but this mod maker is retarded and refuses to update his mod.
@@ -225,19 +237,6 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
             v:Remove()
         end
     end
-
-    if CLIENT then
-        if not DarkRP.disabledDefaults["workarounds"]["White flashbang flashes"] then
-            -- Removes the white flashes when the server lags and the server has flashbang. Workaround because it's been there for fucking years
-            hook.Remove("HUDPaint","drawHudVital")
-        end
-
-        -- Fuck up APAnti
-        if not DarkRP.disabledDefaults["workarounds"]["APAnti"] then
-            net.Receivers.sblockgmspawn = nil
-            hook.Remove("PlayerBindPress", "_sBlockGMSpawn")
-        end
-    end
 end)
 
 --[[---------------------------------------------------------------------------
@@ -253,7 +252,7 @@ end
 --[[---------------------------------------------------------------------------
 Wire field generator exploit
 ---------------------------------------------------------------------------]]
-if not DarkRP.disabledDefaults["workarounds"]["Wire field generator exploit fix"] then
+if SERVER and not DarkRP.disabledDefaults["workarounds"]["Wire field generator exploit fix"] then
     hook.Add("OnEntityCreated", "DRP_WireFieldGenerator", function(ent)
         timer.Simple(0, function()
             if IsValid(ent) and ent:GetClass() == "gmod_wire_field_device" then
@@ -303,7 +302,7 @@ end
 --[[---------------------------------------------------------------------------
 Anti crash exploit
 ---------------------------------------------------------------------------]]
-if not DarkRP.disabledDefaults["workarounds"]["Constraint crash exploit fix"] then
+if SERVER and not DarkRP.disabledDefaults["workarounds"]["Constraint crash exploit fix"] then
     hook.Add("PropBreak", "drp_AntiExploit", function(attacker, ent)
         if IsValid(ent) and ent:GetPhysicsObject():IsValid() then
             constraint.RemoveAll(ent)
@@ -314,7 +313,7 @@ end
 --[[---------------------------------------------------------------------------
 Actively deprecate commands
 ---------------------------------------------------------------------------]]
-if not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] then
+if SERVER and not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] then
     local deprecated = {
         {command = "rp_removeletters",      alternative = "removeletters"           },
         {command = "rp_setname",            alternative = "forcerpname"             },
@@ -373,7 +372,7 @@ addons\darkrpmodification\lua\darkrp_config\disabled_defaults.lua
 Head to the section about disabled workarounds and make sure the following line is there:
 ["disable CAC"]                                  = true,
 ]]
-if not DarkRP.disabledDefaults["workarounds"]["disable CAC"] then
+if SERVER and not DarkRP.disabledDefaults["workarounds"]["disable CAC"] then
     timer.Create("disable CAC", 2, 1, function()
         if not CAC then return end
 

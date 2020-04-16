@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Pump Shotgun"
     SWEP.Author = "DarkRP Developers"
     SWEP.Slot = 2
     SWEP.SlotPos = 0
@@ -12,6 +11,7 @@ end
 
 DEFINE_BASECLASS("weapon_cs_base2")
 
+SWEP.PrintName = "Pump Shotgun"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.Category = "DarkRP (Weapon)"

@@ -5,7 +5,7 @@ local red = Color(128, 30, 30, 255)
 
 function meta:drawOwnableInfo()
     local ply = LocalPlayer()
-    if ply:InVehicle() then return end
+    if ply:InVehicle() and not ply:GetAllowWeaponsInVehicle() then return end
 
     -- Look, if you want to change the way door ownership is drawn, don't edit this file, use the hook instead!
     local doorDrawing = hook.Call("HUDDrawDoorData", nil, self)
@@ -63,17 +63,16 @@ function meta:drawOwnableInfo()
     end
 
     if self:IsVehicle() then
-        for _, v in ipairs(player.GetAll()) do
-            if not IsValid(v) or v:GetVehicle() ~= self then continue end
-
-            table.insert(doorInfo, DarkRP.getPhrase("driver", v:Nick()))
-            break
+        local driver = self:GetDriver()
+        if driver:IsPlayer() then
+            table.insert(doorInfo, DarkRP.getPhrase("driver", driver:Nick()))
         end
     end
 
     local x, y = ScrW() / 2, ScrH() / 2
-    draw.DrawNonParsedText(table.concat(doorInfo, "\n"), "TargetID", x , y + 1 , black, 1)
-    draw.DrawNonParsedText(table.concat(doorInfo, "\n"), "TargetID", x, y, (blocked or owned) and white or red, 1)
+    local text = table.concat(doorInfo, "\n")
+    draw.DrawNonParsedText(text, "TargetID", x , y + 1 , black, 1)
+    draw.DrawNonParsedText(text, "TargetID", x, y, (blocked or owned) and white or red, 1)
 end
 
 
