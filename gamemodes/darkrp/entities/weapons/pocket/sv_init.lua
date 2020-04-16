@@ -181,6 +181,14 @@ local function serialize(ent)
     local serialized = duplicator.CopyEntTable(ent)
     serialized.DT = getDTVars(ent)
 
+    -- this function is also called in duplicator.CopyEntTable, but some
+    -- entities change the DT vars of a copied entity (e.g. Lexic's moneypot)
+    -- That is undone with the getDTVars function call.
+    -- Re-call OnEntityCopyTableFinish assuming its implementation is pure.
+    if ent.OnEntityCopyTableFinish then
+        ent:OnEntityCopyTableFinish(serialized)
+    end
+
     return serialized
 end
 
@@ -209,6 +217,14 @@ local function deserialize(ply, item)
 
     local phys = ent:GetPhysicsObject()
     timer.Simple(0, function() if phys:IsValid() then phys:Wake() end end)
+
+    if ent.OnDuplicated then
+        ent:OnDuplicated(item)
+    end
+
+    if ent.PostEntityPaste then
+        ent:PostEntityPaste(ply, ent, {ent})
+    end
 
     return ent
 end
@@ -320,6 +336,7 @@ function GAMEMODE:canPocket(ply, item)
     if string.find(class, "func_") then return false, DarkRP.getPhrase("cannot_pocket_x") end
     if item:IsRagdoll() then return false, DarkRP.getPhrase("cannot_pocket_x") end
     if item:IsNPC() then return false, DarkRP.getPhrase("cannot_pocket_x") end
+    if not duplicator.IsAllowed(class) then return false, DarkRP.getPhrase("cannot_pocket_x") end
 
     local trace = ply:GetEyeTrace()
     if ply:EyePos():DistToSqr(trace.HitPos) > 22500 then return false end
