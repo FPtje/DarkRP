@@ -174,6 +174,9 @@ local function HUDPaint()
 
     local LAEnt = FilterEntityTable(LAEnt2)[1]
     if not IsValid(LAEnt) then return end
+    -- Prevent being able to see ownership through walls
+    local eyeTrace = ply:GetEyeTrace()
+    if eyeTrace.HitPos:DistToSqr(eyeTrace.StartPos) < LAEnt:NearestPoint(eyeTrace.StartPos):DistToSqr(eyeTrace.StartPos) then return end
 
     local weapon = ply:GetActiveWeapon()
     local class = weapon:IsValid() and weapon:GetClass() or ""
