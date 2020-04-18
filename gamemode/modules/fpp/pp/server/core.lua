@@ -2,6 +2,9 @@ FPP = FPP or {}
 FPP.DisconnectedPlayers = FPP.DisconnectedPlayers or {}
 
 
+local PLAYER = FindMetaTable("Player")
+local ENTITY = FindMetaTable("Entity")
+
 /*---------------------------------------------------------------------------
 Checks is a model is blocked
 ---------------------------------------------------------------------------*/
@@ -79,8 +82,6 @@ if cleanup then
     end
 end
 
-local PLAYER = FindMetaTable("Player")
-
 if PLAYER.AddCount then
     FPP.oldcount = FPP.oldcount or PLAYER.AddCount
     function PLAYER:AddCount(Type, ent)
@@ -88,6 +89,14 @@ if PLAYER.AddCount then
         --Set the owner of the entity
         ent:CPPISetOwner(self)
         return FPP.oldcount(self, Type, ent)
+    end
+end
+
+local entSetCreator = ENTITY.SetCreator
+if entSetCreator then
+    function ENTITY:SetCreator(ply)
+        self:CPPISetOwner(ply)
+        entSetCreator(self, ply)
     end
 end
 
@@ -678,7 +687,6 @@ function FPP.PlayerInitialSpawn(ply)
 end
 hook.Add("PlayerInitialSpawn", "FPP.PlayerInitialSpawn", FPP.PlayerInitialSpawn)
 
-local ENTITY = FindMetaTable("Entity")
 local backup = ENTITY.FireBullets
 local blockedEffects = {"particleeffect", "smoke", "vortdispel", "helicoptermegabomb"}
 
