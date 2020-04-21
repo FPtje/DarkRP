@@ -380,7 +380,7 @@ function FPP.AdminMenu(Panel)
             for c, d in pairs(spawnmenu.GetTools()[a].Items) do
                 local addnodes = {}
                 for _, f in pairs(spawnmenu.GetTools()[a].Items[c]) do
-                    if istable(f) and string.find(f.Command, "gmod_tool") then
+                    if istable(f) and string.find(f.Command or "", "gmod_tool") then
                         table.insert(addnodes, {f.Text, f.ItemName})
                     end
                 end
