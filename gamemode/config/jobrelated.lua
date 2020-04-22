@@ -302,3 +302,32 @@ DarkRP.createCategory{
     canSee = fp{fn.Id, true},
     sortOrder = 255,
 }
+--[[
+    Generated using: DarkRP | Job Generator
+    https://csite.io/tools/gmod-darkrp-job
+--]]
+TEAM_BLOOD = DarkRP.createJob("BLOOD BOSS", { = DarkRP.createJob("BLOOD BOSS", {
+    color = Color(0, 0, 0, 255),
+    model = {"model={models/player/bloodz/slow_2.mdl}"},
+    description = [[	description = [[er ist der boss von den normalen bloods und gibt befehle]],
+]],
+    weapons = {"weapons={keypad_cracker", "m9k_ump45}"},
+    command = "	command = "examplejobcommand",",
+    max = 2,
+    salary = 1000,
+    admin = 0,
+    vote = true,
+    hasLicense = false,
+    candemote = true,
+    category = "category = "Blood",",
+    NeedToChangeFrom = E.g TEAM_BLOODS,
+    ammo = {
+        ["m9k_ump45"] = 60
+    },
+    PlayerSpawn = function(ply)
+        ply:SetMaxHealth(100)
+        ply:SetHealth(100)
+        ply:SetArmor(50)
+        ply:SetBodygroup(1, 1)
+    end
+})
