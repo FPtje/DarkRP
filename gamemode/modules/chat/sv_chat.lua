@@ -151,7 +151,7 @@ local function callHooks(hooks, canReturn, ...)
             text = f(...)
         end
 
-        if text and canReturn then return text end
+        if text ~= nil and canReturn then return text end
     end
 end
 
@@ -164,11 +164,11 @@ local function callPlayerSayHooks(ply, text, teamonly, dead)
             local canReturn = priority > -2 and priority < 2
 
             local out = callHooks(hooks, canReturn, ply, text, teamonly, dead)
-            if out then return out end
+            if out ~= nil then return out end
         end
     else
         local out = callHooks(GAMEMODE.OldChatHooks, true, ply, text, teamonly, dead)
-        if out then return out end
+        if out ~= nil then return out end
     end
 end
 
