@@ -145,7 +145,7 @@ local function callHooks(hooks, canReturn, ...)
             if IsValid(id) then
                 text = f(id, ...)
             else
-                GAMEMODE.OldChatHooks[id] = nil
+                hooks[id] = nil
             end
         else
             text = f(...)
@@ -163,10 +163,12 @@ local function callPlayerSayHooks(ply, text, teamonly, dead)
             -- Monitor hooks cannot return
             local canReturn = priority > -2 and priority < 2
 
-            callHooks(hooks, canReturn, ply, text, teamonly, dead)
+            local out = callHooks(hooks, canReturn, ply, text, teamonly, dead)
+            if out then return out end
         end
     else
-        callHooks(GAMEMODE.OldChatHooks, true, ply, text, teamonly, dead)
+        local out = callHooks(GAMEMODE.OldChatHooks, true, ply, text, teamonly, dead)
+        if out then return out end
     end
 end
 
@@ -261,12 +263,6 @@ end
 local function ReplaceChatHooks()
     local hookTbl = hook.GetTable()
 
-    if not hookTbl.PlayerSay then return end
-    for k, v in pairs(hookTbl.PlayerSay) do
-        GAMEMODE.OldChatHooks[k] = v
-        hook.Remove("PlayerSay", k)
-    end
-
     -- give warnings for undeclared chat commands
     local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
     fn.ForEach(warning, DarkRP.getIncompleteChatCommands())
@@ -280,7 +276,7 @@ local function ReplaceChatHooks()
         for priority, hooks in pairs(ulibTbl.PlayerSay) do
             GAMEMODE.OldChatHooks[priority] = GAMEMODE.OldChatHooks[priority] or {}
 
-            for hookName in pairs(hooks) do
+            for hookName, v in pairs(hooks) do
                 hooks[hookName] = nil
                 GAMEMODE.OldChatHooks[priority][hookName] = v
             end
@@ -291,6 +287,11 @@ local function ReplaceChatHooks()
     else
         -- Make sure the PlayerSay hook table exists
         hookTbl.PlayerSay = hookTbl.PlayerSay or {}
+
+        for k, v in pairs(hookTbl.PlayerSay) do
+            GAMEMODE.OldChatHooks[k] = v
+            hook.Remove("PlayerSay", k)
+        end
 
         applyHookTable(hookTbl.PlayerSay)
     end
