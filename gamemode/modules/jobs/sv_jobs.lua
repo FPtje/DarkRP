@@ -170,8 +170,13 @@ function meta:updateJob(job)
     self:setDarkRPVar("job", job)
     self.LastJob = CurTime()
 
-    timer.Create(self:SteamID64() .. "jobtimer", GAMEMODE.Config.paydelay, 0, function()
-        if not IsValid(self) then return end
+    local timerid = self:SteamID64() .. "jobtimer"
+    
+    timer.Create(timerid, GAMEMODE.Config.paydelay, 0, function()
+        if not IsValid(self) then
+            timer.Remove(timerid)
+            return
+        end
         self:payDay()
     end)
 end
