@@ -161,10 +161,11 @@ local function callPlayerSayHooks(ply, text, teamonly, dead)
         for priority = -2, 2 do
             local hooks = GAMEMODE.OldChatHooks[priority]
             -- Monitor hooks cannot return
-            local canReturn = priority > -2 and priority < 2
 
-            local out = callHooks(hooks, canReturn, ply, text, teamonly, dead)
-            if out ~= nil then return out end
+            if hooks then
+                local out = callHooks(hooks, priority > -2 and priority < 2, ply, text, teamonly, dead)
+                if out ~= nil then return out end
+            end
         end
     else
         local out = callHooks(GAMEMODE.OldChatHooks, true, ply, text, teamonly, dead)
