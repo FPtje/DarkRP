@@ -450,8 +450,8 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
     DarkRP.addToCategory(CustomTeam, "jobs", CustomTeam.category)
-    team.SetUp(#RPExtraTeams, Name, CustomTeam.color)
     local Team = #RPExtraTeams
+    team.SetUp(Team, Name, CustomTeam.color)
 
     timer.Simple(0, function()
         declareTeamCommands(CustomTeam)
