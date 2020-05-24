@@ -7,7 +7,8 @@ local function drawIndicator(ply)
         return
     end
 
-    ply.indicator = ply.indicator or ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
+    ply.indicator = IsValid(ply.indicator) and ply.indicator or
+        ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
     ply.indicator:SetNoDraw(true)
     ply.indicator:SetModelScale(0.6)
 
