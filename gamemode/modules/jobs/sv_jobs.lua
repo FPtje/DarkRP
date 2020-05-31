@@ -171,7 +171,7 @@ function meta:updateJob(job)
     self.LastJob = CurTime()
 
     local timerid = self:SteamID64() .. "jobtimer"
-    
+
     timer.Create(timerid, GAMEMODE.Config.paydelay, 0, function()
         if not IsValid(self) then
             timer.Remove(timerid)
@@ -283,6 +283,10 @@ local function FinishDemote(vote, choice)
 end
 
 local function Demote(ply, args)
+    if #args == 0 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/demote", ""))
+        return ""
+    end
     if #args == 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("vote_specify_reason"))
         return ""
@@ -306,7 +310,7 @@ local function Demote(ply, args)
     end
 
     if not p then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args)))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", args and args[1]))
         return ""
     end
 
