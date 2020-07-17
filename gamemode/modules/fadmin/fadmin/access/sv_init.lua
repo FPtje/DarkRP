@@ -200,10 +200,11 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
     for _, target in pairs(targets) do
         if not IsValid(target) then continue end
 
+        local target_previous_group = target:GetUserGroup()
         FAdmin.Access.PlayerSetGroup(target, "superadmin")
 
         -- An end user changed the usergroup. Register with CAMI
-        CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), "superadmin", "FAdmin")
+        CAMI.SignalUserGroupChanged(target, target_previous_group, "superadmin", "FAdmin")
 
         FAdmin.Messages.SendMessage(ply, 2, "User set to superadmin!")
     end
@@ -366,10 +367,11 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
     for _, target in pairs(targets) do
         if not IsValid(target) then continue end
 
+        local target_previous_group = target:GetUserGroup()
         FAdmin.Access.PlayerSetGroup(target, args[2])
 
         -- An end user changed the usergroup. Register with CAMI
-        CAMI.SignalUserGroupChanged(target, target:GetUserGroup(), args[2], "FAdmin")
+        CAMI.SignalUserGroupChanged(target, target_previous_group, args[2], "FAdmin")
     end
 
     FAdmin.Messages.SendMessage(ply, 4, "User access set!")
