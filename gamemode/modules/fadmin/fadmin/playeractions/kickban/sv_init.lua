@@ -36,6 +36,7 @@ local function Kick(ply, cmd, args)
 
                 Reason = Reason and string.gsub(Reason, ";", " ") or "No reason provided"
 
+                hook.Call("FAdmin_Kick", nil, ply, target, Reason)
                 game.ConsoleCommand(string.format("kickid %s %s\n", target:UserID(), "Kicked by " .. name ..
                     " (" .. Reason .. ")"))
                 ply.FAdminKickReason = nil
