@@ -12,7 +12,7 @@ function meta:drawOwnableInfo()
     if doorDrawing == true then return end
 
     local blocked = self:getKeysNonOwnable()
-    local superadmin = ply:IsSuperAdmin()
+    local access = CAMI.PlayerHasAccess(ply, "DarkRP_ChangeDoorSettings")
     local doorTeams = self:getKeysDoorTeams()
     local doorGroup = self:getKeysDoorGroup()
     local playerOwned = self:isKeysOwned() or table.GetFirstValue(self:getKeysCoOwners() or {}) ~= nil
@@ -53,11 +53,11 @@ function meta:drawOwnableInfo()
 
             table.insert(doorInfo, RPExtraTeams[k].name)
         end
-    elseif blocked and superadmin then
+    elseif blocked and access then
         table.insert(doorInfo, DarkRP.getPhrase("keys_allow_ownership"))
     elseif not blocked then
         table.insert(doorInfo, DarkRP.getPhrase("keys_unowned"))
-        if superadmin then
+        if access then
             table.insert(doorInfo, DarkRP.getPhrase("keys_disallow_ownership"))
         end
     end
