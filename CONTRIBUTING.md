@@ -1,6 +1,6 @@
 # THE GITHUB ISSUES PAGE IS NOT FOR GETTING HELP!
-Remember that! We've got a forum for that kind of stuff. It can be found here:
-https://forum.darkrp.com/
+Remember that! We've got a Discord for that kind of stuff. It can be found here:
+https://discord.com/invite/DYxVExH
 
 # What to do when you have a problem in DarkRP
 
