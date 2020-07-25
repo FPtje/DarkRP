@@ -1,6 +1,4 @@
 The official DarkRP wiki can be found at
-https://wiki.darkrp.com/index.php/Main_Page
-
-or just https://darkrp.com/
+https://darkrp.miraheze.org/wiki/Main_Page
 
 You can find out how to make custom jobs, shipments and many other things there!
