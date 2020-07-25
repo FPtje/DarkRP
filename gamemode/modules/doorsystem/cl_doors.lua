@@ -12,7 +12,7 @@ function meta:drawOwnableInfo()
     if doorDrawing == true then return end
 
     local blocked = self:getKeysNonOwnable()
-    local access = CAMI.PlayerHasAccess(ply, "DarkRP_ChangeDoorSettings") or ply:IsSuperAdmin()
+    local access = FAdmin.Access.PlayerHasPrivilege(ply, "DarkRP_ChangeDoorSettings")
     local doorTeams = self:getKeysDoorTeams()
     local doorGroup = self:getKeysDoorGroup()
     local playerOwned = self:isKeysOwned() or table.GetFirstValue(self:getKeysCoOwners() or {}) ~= nil
