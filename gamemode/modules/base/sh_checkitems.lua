@@ -195,7 +195,7 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
         tc.addHint(
             tc.optional(tc.tableOf(isnumber)),
             "The ammo must be a table containing numbers.",
-            {"See example on http://wiki.darkrp.com/index.php/DarkRP:CustomJobFields"}
+            {"See example on https://darkrp.miraheze.org/wiki/DarkRP:CustomJobFields"}
         ),
 
     hasLicense =
