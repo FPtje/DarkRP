@@ -2,6 +2,19 @@ local meta = FindMetaTable("Entity")
 local black = Color(0, 0, 0, 255)
 local white = Color(255, 255, 255, 200)
 local red = Color(128, 30, 30, 255)
+local access = false
+
+local function updatePrivs()
+    CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_ChangeDoorSettings", function(b, _)
+        access = b
+    end)
+end
+hook.Add("InitPostEntity", "DarkRP_Doors", updatePrivs)
+
+hook.Add("DarkRPVarChanged", "DarkRP_Doors", function(ply, _, _, _)
+    if ply ~= LocalPlayer() then return end
+    updatePrivs()
+end)
 
 function meta:drawOwnableInfo()
     local ply = LocalPlayer()
@@ -12,7 +25,6 @@ function meta:drawOwnableInfo()
     if doorDrawing == true then return end
 
     local blocked = self:getKeysNonOwnable()
-    local access = FAdmin.Access.PlayerHasPrivilege(ply, "DarkRP_ChangeDoorSettings")
     local doorTeams = self:getKeysDoorTeams()
     local doorGroup = self:getKeysDoorGroup()
     local playerOwned = self:isKeysOwned() or table.GetFirstValue(self:getKeysCoOwners() or {}) ~= nil
