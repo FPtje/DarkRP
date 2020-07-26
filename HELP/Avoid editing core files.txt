@@ -6,9 +6,9 @@ If this isn't possible, it should be MADE possible.
 
 Open an issue on GitHub if there is no
 - DarkRP function that allows you to change DarkRP the way you want:
-	https://wiki.darkrp.com/index.php/Category:Functions
+	https://darkrp.miraheze.org/wiki/Category:Functions
 - DarkRP Hook that allows you to change DarkRP the way you want:
-	https://wiki.darkrp.com/index.php/Category:Hooks
+	https://darkrp.miraheze.org/wiki/Category:Hooks
 
 --[[---------------------------------------------------------------------------
             How to configure
