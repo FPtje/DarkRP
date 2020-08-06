@@ -66,6 +66,9 @@ function ENT:Use(activator, caller)
 
     weapon = activator:Give(class, true)
 
+    hook.Call("darkRPPreGiveWeapon", nil, activator, self, weapon)
+    if not IsValid(weapon) then return end
+
     local clip1, clip2 = self.clip1, self.clip2
     if weapon:IsValid() then
         if clip1 and clip1 ~= -1 and weapon:Clip1() ~= -1 then
@@ -94,6 +97,8 @@ function ENT:Use(activator, caller)
         local secAmmo = activator:GetAmmoCount(secondaryAmmoType) + (clip2 or 0)
         activator:SetAmmo(secAmmo, secondaryAmmoType)
     end
+
+    hook.Call("darkRPPostGiveWeapon", nil, activator, self, weapon)
 
     self:DecreaseAmount()
 end

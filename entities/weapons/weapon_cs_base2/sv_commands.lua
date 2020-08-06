@@ -122,7 +122,36 @@ DarkRP.hookStub{
     parameters = {
         {
             name = "ply",
-            description = "The player who dropped the weapon.",
+            description = "The player who picks up the weapon.",
+            type = "Player"
+        },
+        {
+            name = "spawned_weapon",
+            description = "The spawned_weapon created from the weapon that is dropped.",
+            type = "Entity"
+        },
+        {
+            name = "real_weapon",
+            description = "The weapon entity. This is not the weapon that will be used by the player!",
+            type = "Weapon"
+        }
+    },
+    returns = {
+        {
+            name = "ShouldntContinue",
+            description = "Whether weapon should be picked up or not.",
+            type = "boolean"
+        }
+    }
+}
+
+DarkRP.hookStub{
+    name = "darkRPPreGiveWeapon",
+    description = "When a player picks up a spawned_weapon and target weapon is already given to the player. You can remove the spawned weapon here, but really shouldn't do. Removing the weapon will prevent spawned_weapon count decrease.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who picks up the weapon.",
             type = "Player"
         },
         {
@@ -135,12 +164,27 @@ DarkRP.hookStub{
             description = "The actual weapon that will be used by the player.",
             type = "Weapon"
         }
-    },
-    returns = {
+    }
+}
+
+DarkRP.hookStub{
+    name = "darkRPPostGiveWeapon",
+    description = "When a player picks up a spawned_weapon and target weapon is already given to the player. Called after all spawned_weapon's weapon spawning logic, but before spawned_weapon:DecreaseAmount().",
+    parameters = {
         {
-            name = "ShouldntContinue",
-            description = "Whether weapon should be picked up or not.",
-            type = "boolean"
+            name = "ply",
+            description = "The player who picks up the weapon.",
+            type = "Player"
+        },
+        {
+            name = "spawned_weapon",
+            description = "The spawned_weapon created from the weapon that is dropped.",
+            type = "Entity"
+        },
+        {
+            name = "real_weapon",
+            description = "The actual weapon that will be used by the player.",
+            type = "Weapon"
         }
     }
 }
