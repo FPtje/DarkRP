@@ -324,8 +324,7 @@ end)
 
 hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
     for _, v in ipairs(player.GetAll()) do
-        if not DrpCanHear[v] then continue end
-        DrpCanHear[v] = nil
+        DrpCanHear[v][ply] = nil
     end
     timer.Remove(ply:UserID() .. "DarkRPCanHearPlayersVoice")
 end)
