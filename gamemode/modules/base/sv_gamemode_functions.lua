@@ -304,27 +304,33 @@ local vrad = GM.Config.voiceradius
 local dynv = GM.Config.dynamicvoice
 local deadv = GM.Config.deadvoice
 local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
+local DrpCanHear = {}
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
     if not IsValid(listener) then return end
-    listener.DrpCanHear = listener.DrpCanHear or {}
+    DrpCanHear[listener] = DrpCanHear[listener] or {}
+    if listener:IsBot() then return end
     local shootPos = listener:GetShootPos()
-    for _, talker in ipairs(player.GetAll()) do
+    for _, talker in ipairs(player.GetHumans()) do
         local talkerShootPos = talker:GetShootPos()
-        listener.DrpCanHear[talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
+        DrpCanHear[listener][talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
             (shootPos:DistToSqr(talkerShootPos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
                 (not dynv or IsInRoom(shootPos, talkerShootPos, talker))) -- Dynamic voice is on and players are in the same room
     end
 end
 hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
+    calcPlyCanHearPlayerVoice(ply)
+    if ply:IsBot() then return end
     timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
 end)
+
 hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
-    if not ply.DrpCanHear then return end
-    for _, v in ipairs(player.GetAll()) do
-        if not v.DrpCanHear then continue end
-        v.DrpCanHear[ply] = nil
+    DrpCanHear[ply] = nil
+    if ply:IsBot() then return end
+    for _, v in ipairs(player.GetHumans()) do
+        if not DrpCanHear[v] then continue end
+        DrpCanHear[v][ply] = nil
     end
     timer.Remove(ply:UserID() .. "DarkRPCanHearPlayersVoice")
 end)
@@ -332,8 +338,7 @@ end)
 function GM:PlayerCanHearPlayersVoice(listener, talker)
     if not deadv and not talker:Alive() then return false end
 
-    local canHear = listener.DrpCanHear and listener.DrpCanHear[talker]
-    return canHear, threed
+    return DrpCanHear[listener][talker], threed
 end
 
 function GM:CanTool(ply, trace, mode)
