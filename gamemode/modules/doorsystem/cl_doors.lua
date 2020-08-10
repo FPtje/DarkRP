@@ -10,7 +10,10 @@ local function updatePrivs()
     end)
 end
 -- Timer due to lack of "on privilege changed" hook
-timer.Create("Door changeDoorAccess checker", 3, 0, updatePrivs)
+hook.Add("InitPostEntity", "Load door privileges", function()
+    updatePrivs()
+    timer.Create("Door changeDoorAccess checker", 1, 0, updatePrivs)
+end)
 
 function meta:drawOwnableInfo()
     local ply = LocalPlayer()
