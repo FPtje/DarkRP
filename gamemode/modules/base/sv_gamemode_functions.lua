@@ -309,8 +309,9 @@ local DrpCanHear = {}
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
     DrpCanHear[listener] = DrpCanHear[listener] or {}
+    if listener:IsBot() then return end
     local shootPos = listener:GetShootPos()
-    for _, talker in ipairs(player.GetAll()) do
+    for _, talker in ipairs(player.GetHumans()) do
         local talkerShootPos = talker:GetShootPos()
         DrpCanHear[listener][talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
             (shootPos:DistToSqr(talkerShootPos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
@@ -319,14 +320,16 @@ local function calcPlyCanHearPlayerVoice(listener)
 end
 hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
     calcPlyCanHearPlayerVoice(ply)
+    if ply:IsBot() then return end
     timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 0.5, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
 end)
 
 hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
-    for _, v in ipairs(player.GetAll()) do
+    DrpCanHear[ply] = nil
+    if ply:IsBot() then return end
+    for _, v in ipairs(player.GetHumans()) do
         DrpCanHear[v][ply] = nil
     end
-    DrpCanHear[ply] = nil
     timer.Remove(ply:UserID() .. "DarkRPCanHearPlayersVoice")
 end)
 
