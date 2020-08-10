@@ -308,6 +308,7 @@ local DrpCanHear = {}
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
+    if not IsValid(listener) then return end
     DrpCanHear[listener] = DrpCanHear[listener] or {}
     if listener:IsBot() then return end
     local shootPos = listener:GetShootPos()
