@@ -329,7 +329,7 @@ hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
     DrpCanHear[ply] = nil
     if ply:IsBot() then return end
     for _, v in ipairs(player.GetHumans()) do
-        DrpCanHear[v] = DrpCanHear[v] or {}
+        if not DrpCanHear[v] then continue end
         DrpCanHear[v][ply] = nil
     end
     timer.Remove(ply:UserID() .. "DarkRPCanHearPlayersVoice")
