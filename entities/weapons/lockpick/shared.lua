@@ -55,18 +55,22 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + 0.5)
     if self:GetIsLockpicking() then return end
+    
+    local Owner = self:GetOwner()
+    
+    if not IsValid(Owner) then return end
 
-    self:GetOwner():LagCompensation(true)
-    local trace = self:GetOwner():GetEyeTrace()
-    self:GetOwner():LagCompensation(false)
+    Owner:LagCompensation(true)
+    local trace = Owner:GetEyeTrace()
+    Owner:LagCompensation(false)
     local ent = trace.Entity
 
     if not IsValid(ent) or ent.DarkRPCanLockpick == false then return end
-    local canLockpick = hook.Call("canLockpick", nil, self:GetOwner(), ent, trace)
+    local canLockpick = hook.Call("canLockpick", nil, Owner, ent, trace)
 
     if canLockpick == false then return end
     if canLockpick ~= true and (
-            trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or
+            trace.HitPos:DistToSqr(Owner:GetShootPos()) > 10000 or
             (not GAMEMODE.Config.canforcedooropen and ent:getKeysNonOwnable()) or
             (not ent:isDoor() and not ent:IsVehicle() and not string.find(string.lower(ent:GetClass()), "vehicle") and (not GAMEMODE.Config.lockpickfading or not ent.isFadingDoor))
         ) then
@@ -78,13 +82,13 @@ function SWEP:PrimaryAttack()
     self:SetIsLockpicking(true)
     self:SetLockpickEnt(ent)
     self:SetLockpickStartTime(CurTime())
-    local endDelta = hook.Call("lockpickTime", nil, self:GetOwner(), ent) or util.SharedRandom("DarkRP_Lockpick" .. self:EntIndex() .. "_" .. self:GetTotalLockpicks(), 10, 30)
+    local endDelta = hook.Call("lockpickTime", nil, Owner, ent) or util.SharedRandom("DarkRP_Lockpick" .. self:EntIndex() .. "_" .. self:GetTotalLockpicks(), 10, 30)
     self:SetLockpickEndTime(CurTime() + endDelta)
     self:SetTotalLockpicks(self:GetTotalLockpicks() + 1)
 
 
     if IsFirstTimePredicted() then
-        hook.Call("lockpickStarted", nil, self:GetOwner(), ent, trace)
+        hook.Call("lockpickStarted", nil, Owner, ent, trace)
     end
 
     if CLIENT then
@@ -93,7 +97,7 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    local onFail = function(ply) if ply == self:GetOwner() then hook.Call("onLockpickCompleted", nil, ply, false, ent) end end
+    local onFail = function(ply) if ply == Owner then hook.Call("onLockpickCompleted", nil, ply, false, ent) end end
 
     -- Lockpick fails when dying or disconnecting
     hook.Add("PlayerDeath", self, fc{onFail, fn.Flip(fn.Const)})
