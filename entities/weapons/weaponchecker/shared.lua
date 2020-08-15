@@ -131,8 +131,7 @@ end
 
 function SWEP:GetStrippableWeapons(ent, callback)
     CAMI.PlayerHasAccess(ent, "DarkRP_GetAdminWeapons", function(access)
-        for _, v in pairs(ent:GetWeapons()) do
-            if not v:IsValid() then continue end
+        for _, v in ipairs(ent:GetWeapons()) do
             local class = v:GetClass()
 
             if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or
