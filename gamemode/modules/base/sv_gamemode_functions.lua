@@ -449,7 +449,7 @@ function GM:PlayerDeath(ply, weapon, killer)
         DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
     else
         -- Normal death, respawning.
-        ply.NextSpawnTime = CurTime() + math.Clamp(GAMEMODE.Config.respawntime, 0, 10)
+        ply.NextSpawnTime = CurTime() + GAMEMODE.Config.respawntime
     end
     ply.DeathPos = ply:GetPos()
 
