@@ -18,6 +18,9 @@ function SWEP:DrawHUD()
     draw.WordBox(2, 10, screenCenter + 20, DarkRP.getPhrase("keypad_checker_shoot_entity"), "UiBold", textCol, color_white)
     draw.WordBox(2, 10, screenCenter + 40, DarkRP.getPhrase("keypad_checker_click_to_clear"), "UiBold", textCol, color_white)
 
+    local eyePos = EyePos()
+    local eyeAngles = EyeAngles()
+
     local entMessages = {}
     for k,v in pairs(DrawData or {}) do
         if not IsValid(v.ent) or not IsValid(v.original) then continue end
@@ -29,7 +32,7 @@ function SWEP:DrawHUD()
 
         draw.WordBox(2, pos.x, pos.y + entMessages[v.ent] * 16, (v.delay and v.delay .. " " .. DarkRP.getPhrase("seconds") .. " " or "") .. v.type .. name, "UiBold", textCol, color_white)
 
-        cam.Start3D(EyePos(), EyeAngles())
+        cam.Start3D(eyePos, eyeAngles)
             render.SetMaterial(lineMat)
             render.DrawBeam(v.original:GetPos(), v.ent:GetPos(), 2, 0.01, 20, haloCol)
         cam.End3D()
