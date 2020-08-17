@@ -22,7 +22,7 @@ function SWEP:DrawHUD()
     local eyeAngles = EyeAngles()
 
     local entMessages = {}
-    for k,v in pairs(DrawData or {}) do
+    for k,v in ipairs(DrawData or {}) do
         if not IsValid(v.ent) or not IsValid(v.original) then continue end
         entMessages[v.ent] = (entMessages[v.ent] or 0) + 1
         local obbCenter = v.ent:OBBCenter()
@@ -41,12 +41,9 @@ end
 
 KeypadCheckerHalos = function()
     local drawEnts = {}
-    local i = 1
-    for k,v in pairs(DrawData) do
+    for k,v in ipairs(DrawData) do
         if not IsValid(v.ent) then continue end
-
-        drawEnts[i] = v.ent
-        i = i + 1
+        drawEnts[k] = v.ent
     end
 
     if table.IsEmpty(drawEnts) then return end
