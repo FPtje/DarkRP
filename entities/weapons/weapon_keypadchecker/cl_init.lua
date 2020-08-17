@@ -41,9 +41,12 @@ end
 
 KeypadCheckerHalos = function()
     local drawEnts = {}
+    local i = 1
     for k,v in ipairs(DrawData) do
         if not IsValid(v.ent) then continue end
-        drawEnts[k] = v.ent
+
+        drawEnts[i] = v.ent
+        i = i + 1
     end
 
     if table.IsEmpty(drawEnts) then return end
