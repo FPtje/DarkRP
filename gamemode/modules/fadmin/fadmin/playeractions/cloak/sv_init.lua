@@ -8,7 +8,7 @@ local function Cloak(ply, cmd, args)
         if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_cloaked") then
             target:FAdmin_SetGlobal("FAdmin_cloaked", true)
             target:SetNoDraw(true)
-            for _, v in pairs(target:GetWeapons()) do
+            for _, v in ipairs(target:GetWeapons()) do
                 v:SetNoDraw(true)
             end
 
@@ -36,7 +36,7 @@ local function UnCloak(ply, cmd, args)
 
             target:SetNoDraw(false)
 
-            for _, v in pairs(target:GetWeapons()) do
+            for _, v in ipairs(target:GetWeapons()) do
                 v:SetNoDraw(false)
             end
 
