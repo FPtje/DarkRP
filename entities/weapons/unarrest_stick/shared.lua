@@ -62,7 +62,7 @@ function SWEP:PrimaryAttack()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     Owner:LagCompensation(true)
     local trace = util.QuickTrace(Owner:EyePos(), Owner:GetAimVector() * 90, {Owner})
     Owner:LagCompensation(false)

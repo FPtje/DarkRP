@@ -74,7 +74,7 @@ function SWEP:PrimaryAttack()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     local ent = Owner:GetEyeTrace().Entity
     local canPickup, message = hook.Call("canPocket", GAMEMODE, Owner, ent)
 
@@ -92,7 +92,7 @@ function SWEP:SecondaryAttack()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     local maxK = 0
 
     for k in pairs(Owner:getPocketItems()) do

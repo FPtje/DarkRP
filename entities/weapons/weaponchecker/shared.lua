@@ -155,7 +155,7 @@ function SWEP:PrimaryAttack()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     Owner:LagCompensation(true)
     local trace = Owner:GetEyeTrace()
     Owner:LagCompensation(false)
@@ -189,7 +189,7 @@ function SWEP:SecondaryAttack()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     Owner:LagCompensation(true)
     local trace = Owner:GetEyeTrace()
     Owner:LagCompensation(false)
@@ -219,7 +219,7 @@ function SWEP:Reload()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     local trace = Owner:GetEyeTrace()
 
     local ent = trace.Entity
@@ -314,7 +314,7 @@ function SWEP:PrintWeapons(ent, weaponsFoundPhrase)
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     local result = {}
     local weps = {}
     self:GetStrippableWeapons(ent, function(wep)
@@ -353,7 +353,7 @@ function SWEP:Think()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     if self:GetIsWeaponChecking() and self:GetEndCheckTime() ~= 0 then
         Owner:LagCompensation(true)
         local trace = Owner:GetEyeTrace()

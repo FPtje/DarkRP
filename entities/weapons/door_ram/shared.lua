@@ -202,9 +202,9 @@ function SWEP:PrimaryAttack()
     if not self:GetIronsights() then return end
 
     local Owner = self:GetOwner()
-    
+
     if not IsValid(Owner) then return end
-    
+
     self:SetNextPrimaryFire(CurTime() + 0.1)
 
     Owner:LagCompensation(true)

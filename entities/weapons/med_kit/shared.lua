@@ -36,11 +36,11 @@ SWEP.Secondary.Ammo = "none"
 
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    
+
     local Owner = self:GetOwner()
-    
+
     if not IsValid(Owner) then return end
-    
+
     local found
     local lastDot = -1 -- the opposite of what you're looking at
     Owner:LagCompensation(true)

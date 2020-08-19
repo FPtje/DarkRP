@@ -55,9 +55,9 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + 0.5)
     if self:GetIsLockpicking() then return end
-    
+
     local Owner = self:GetOwner()
-    
+
     if not IsValid(Owner) then return end
 
     Owner:LagCompensation(true)

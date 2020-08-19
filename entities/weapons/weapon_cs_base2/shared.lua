@@ -164,7 +164,7 @@ function SWEP:PrimaryAttack()
     local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     if self.MultiMode and Owner:KeyDown(IN_USE) then
         if self:GetFireMode() == "semi" then
             self:SetFireMode("burst")
@@ -233,7 +233,7 @@ function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
      local Owner = self:GetOwner()
 
     if not IsValid(Owner) then return end
-    
+
     numbul = numbul or 1
     cone = cone or 0.01
 

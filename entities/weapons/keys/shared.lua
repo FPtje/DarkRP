@@ -99,9 +99,9 @@ end
 
 function SWEP:PrimaryAttack()
     local Owner = self:GetOwner()
-    
+
     if not IsValid(Owner) then return end
-    
+
     local trace = Owner:GetEyeTrace()
 
     if not lookingAtLockable(Owner, trace.Entity, trace.HitPos) then return end
@@ -122,9 +122,9 @@ end
 
 function SWEP:SecondaryAttack()
     local Owner = self:GetOwner()
-    
+
     if not IsValid(Owner) then return end
-    
+
     local trace = Owner:GetEyeTrace()
 
     if not lookingAtLockable(Owner, trace.Entity, trace.HitPos) then return end
