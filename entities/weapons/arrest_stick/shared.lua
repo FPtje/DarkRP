@@ -57,9 +57,9 @@ function SWEP:PrimaryAttack()
     BaseClass.PrimaryAttack(self)
 
     if CLIENT then return end
-    
+
     local Owner = self:GetOwner()
-    
+
     if not IsValid(Owner) then return end
 
     Owner:LagCompensation(true)
@@ -96,7 +96,7 @@ end
 function SWEP:startDarkRPCommand(usrcmd)
     local Owner = self:GetOwner()
     if not IsValid(Owner) then return end
-    
+
     if game.SinglePlayer() and CLIENT then return end
     if usrcmd:KeyDown(IN_ATTACK2) then
         if not self.Switched and Owner:HasWeapon("unarrest_stick") then
