@@ -161,19 +161,23 @@ function SWEP:PrimaryAttack()
 
     if self:GetBurstBulletNum() > 0 and CurTime() < self:GetBurstTime() then return end
 
-    if self.MultiMode and self:GetOwner():KeyDown(IN_USE) then
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
+    if self.MultiMode and Owner:KeyDown(IN_USE) then
         if self:GetFireMode() == "semi" then
             self:SetFireMode("burst")
             self.Primary.Automatic = false
-            self:GetOwner():PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
+            Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_burst"))
         elseif self:GetFireMode() == "burst" then
             self:SetFireMode("auto")
             self.Primary.Automatic = true
-            self:GetOwner():PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
+            Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_fully_auto"))
         elseif self:GetFireMode() == "auto" then
             self:SetFireMode("semi")
             self.Primary.Automatic = false
-            self:GetOwner():PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
+            Owner:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("switched_semi_auto"))
         end
         self:SetNextPrimaryFire(CurTime() + 0.5)
         self:SetNextSecondaryFire(CurTime() + 0.5)
@@ -219,32 +223,35 @@ function SWEP:PrimaryAttack()
 
     self:SetLastPrimaryAttack(CurTime())
 
-    if self:GetOwner():IsNPC() then return end
+    if Owner:IsNPC() then return end
 
     -- Punch the player's view
-    self:GetOwner():ViewPunch(Angle(util.SharedRandom("DarkRP_CSBase" .. self:EntIndex() .. "Mag" .. self:GetTotalUsedMagCount() .. "p" .. self:Clip1(), -1.2, -1.1) * self.Primary.Recoil, util.SharedRandom("DarkRP_CSBase" .. self:EntIndex() .. "Mag" .. self:GetTotalUsedMagCount() .. "y" .. self:Clip1(), -1.1, 1.1) * self.Primary.Recoil, 0))
+    Owner:ViewPunch(Angle(util.SharedRandom("DarkRP_CSBase" .. self:EntIndex() .. "Mag" .. self:GetTotalUsedMagCount() .. "p" .. self:Clip1(), -1.2, -1.1) * self.Primary.Recoil, util.SharedRandom("DarkRP_CSBase" .. self:EntIndex() .. "Mag" .. self:GetTotalUsedMagCount() .. "y" .. self:Clip1(), -1.1, 1.1) * self.Primary.Recoil, 0))
 end
 
 function SWEP:CSShootBullet(dmg, recoil, numbul, cone)
-    if not IsValid(self:GetOwner()) then return end
+     local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
     numbul = numbul or 1
     cone = cone or 0.01
 
     local bullet = {}
     bullet.Num = numbul or 1
-    bullet.Src = self:GetOwner():GetShootPos()   -- Source
-    bullet.Dir = (self:GetOwner():GetAimVector():Angle() + self:GetOwner():GetViewPunchAngles()):Forward() -- Dir of bullet
+    bullet.Src = Owner:GetShootPos()   -- Source
+    bullet.Dir = (Owner:GetAimVector():Angle() + Owner:GetViewPunchAngles()):Forward() -- Dir of bullet
     bullet.Spread = Vector(cone, cone, 0)        -- Aim Cone
     bullet.Tracer = 4                            -- Show a tracer on every x bullets
     bullet.Force = 5                             -- Amount of force to give to phys objects
     bullet.Damage = dmg
 
-    self:GetOwner():FireBullets(bullet)
+    Owner:FireBullets(bullet)
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)    -- View model animation
-    self:GetOwner():MuzzleFlash()                -- Crappy muzzle light
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1) -- 3rd Person Animation
+    Owner:MuzzleFlash()                -- Crappy muzzle light
+    Owner:SetAnimation(PLAYER_ATTACK1) -- 3rd Person Animation
 
-    if self:GetOwner():IsNPC() then return end
+    if Owner:IsNPC() then return end
 
     -- Part of workaround, different viewmodel position if shots have been fired
     if CLIENT then self.hasShot = true end

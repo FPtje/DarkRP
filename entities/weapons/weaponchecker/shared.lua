@@ -152,12 +152,16 @@ function SWEP:PrimaryAttack()
     if self:GetIsWeaponChecking() then return end
     self:SetNextPrimaryFire(CurTime() + 0.3)
 
-    self:GetOwner():LagCompensation(true)
-    local trace = self:GetOwner():GetEyeTrace()
-    self:GetOwner():LagCompensation(false)
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
+    Owner:LagCompensation(true)
+    local trace = Owner:GetEyeTrace()
+    Owner:LagCompensation(false)
 
     local ent = trace.Entity
-    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > 10000 then
+    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(Owner:GetPos()) > 10000 then
         return
     end
 
@@ -171,7 +175,7 @@ function SWEP:PrimaryAttack()
         table.insert(weps, wep)
     end)
 
-    hook.Call("playerWeaponsChecked", nil, self:GetOwner(), ent, weps)
+    hook.Call("playerWeaponsChecked", nil, Owner, ent, weps)
 
     if not CLIENT then return end
 
@@ -182,12 +186,16 @@ function SWEP:SecondaryAttack()
     if self:GetIsWeaponChecking() then return end
     self:SetNextSecondaryFire(CurTime() + 0.3)
 
-    self:GetOwner():LagCompensation(true)
-    local trace = self:GetOwner():GetEyeTrace()
-    self:GetOwner():LagCompensation(false)
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
+    Owner:LagCompensation(true)
+    local trace = Owner:GetEyeTrace()
+    Owner:LagCompensation(false)
 
     local ent = trace.Entity
-    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > 10000 then
+    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(Owner:GetPos()) > 10000 then
         return
     end
 
@@ -208,15 +216,19 @@ function SWEP:Reload()
     if CLIENT or CurTime() < (self.NextReloadTime or 0) then return end
     self.NextReloadTime = CurTime() + 1
 
-    local trace = self:GetOwner():GetEyeTrace()
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
+    local trace = Owner:GetEyeTrace()
 
     local ent = trace.Entity
-    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > 10000 then
+    if not IsValid(ent) or not ent:IsPlayer() or ent:GetPos():DistToSqr(Owner:GetPos()) > 10000 then
         return
     end
 
     if not ent.ConfiscatedWeapons then
-        DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("no_weapons_confiscated", ent:Nick()))
+        DarkRP.notify(Owner, 1, 4, DarkRP.getPhrase("no_weapons_confiscated", ent:Nick()))
         return
     else
         ent:RemoveAllAmmo()
@@ -234,9 +246,9 @@ function SWEP:Reload()
             wep:SetClip2(v.clip2)
 
         end
-        DarkRP.notify(self:GetOwner(), 2, 4, DarkRP.getPhrase("returned_persons_weapons", ent:Nick()))
+        DarkRP.notify(Owner, 2, 4, DarkRP.getPhrase("returned_persons_weapons", ent:Nick()))
 
-        hook.Call("playerWeaponsReturned", nil, self:GetOwner(), ent, ent.ConfiscatedWeapons)
+        hook.Call("playerWeaponsReturned", nil, Owner, ent, ent.ConfiscatedWeapons)
         ent.ConfiscatedWeapons = nil
     end
 end
@@ -299,6 +311,10 @@ function SWEP:Succeed()
 end
 
 function SWEP:PrintWeapons(ent, weaponsFoundPhrase)
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
     local result = {}
     local weps = {}
     self:GetStrippableWeapons(ent, function(wep)
@@ -312,18 +328,18 @@ function SWEP:PrintWeapons(ent, weaponsFoundPhrase)
     result = table.concat(result, ", ")
 
     if result == "" then
-        self:GetOwner():ChatPrint(DarkRP.getPhrase("no_illegal_weapons", ent:Nick()))
+        Owner:ChatPrint(DarkRP.getPhrase("no_illegal_weapons", ent:Nick()))
         return
     end
 
-    self:GetOwner():ChatPrint(weaponsFoundPhrase)
+    Owner:ChatPrint(weaponsFoundPhrase)
     if string.len(result) >= 126 then
         local amount = math.ceil(string.len(result) / 126)
         for i = 1, amount, 1 do
-            self:GetOwner():ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
+            Owner:ChatPrint(string.sub(result, (i-1) * 126, i * 126 - 1))
         end
     else
-        self:GetOwner():ChatPrint(result)
+        Owner:ChatPrint(result)
     end
 end
 
@@ -334,11 +350,15 @@ function SWEP:Fail()
 end
 
 function SWEP:Think()
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+    
     if self:GetIsWeaponChecking() and self:GetEndCheckTime() ~= 0 then
-        self:GetOwner():LagCompensation(true)
-        local trace = self:GetOwner():GetEyeTrace()
-        self:GetOwner():LagCompensation(false)
-        if not IsValid(trace.Entity) or trace.HitPos:DistToSqr(self:GetOwner():GetShootPos()) > 10000 or not trace.Entity:IsPlayer() then
+        Owner:LagCompensation(true)
+        local trace = Owner:GetEyeTrace()
+        Owner:LagCompensation(false)
+        if not IsValid(trace.Entity) or trace.HitPos:DistToSqr(Owner:GetShootPos()) > 10000 or not trace.Entity:IsPlayer() then
             self:Fail()
         end
         if self:GetEndCheckTime() <= CurTime() then
