@@ -28,6 +28,6 @@ Just whatever you do, don't touch DarkRP's core files.
 ## Getting help
 Please head to the official Discord!
 
-https://discord.com/invite/DYxVExH
+https://darkrp.page.link/discord
 
 

@@ -1,7 +1,7 @@
 
 [//]: # (DO NOT REMOVE THIS TEMPLATE.)
 [//]: # (GITHUB ISSUES ARE **NOT** FOR HELP)
-[//]: # (GO TO THE DISCORD INSTEAD: https://discord.com/invite/DYxVExH )
+[//]: # (GO TO THE DISCORD INSTEAD: https://darkrp.page.link/discord )
 
 ### Description of the bug
 [//]: # (Describe the issue as accurately as possible)
