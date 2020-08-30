@@ -29,6 +29,13 @@ hook.Add("GravGunPunt", "FPP_CL_GravGunPunt", function(ply, ent)
     end
 end)
 
+local surface_SetFont = surface.SetFont
+local surface_GetTextSize = surface.GetTextSize
+local surface_SetDrawColor = surface.SetDrawColor
+
+local draw_SimpleText = draw.SimpleText
+local draw_DrawText = draw.DrawText
+local draw_RoundedBox = draw.RoundedBox
 
 local HUDNote_c = 0
 local HUDNote_i = 1
@@ -41,8 +48,8 @@ function FPP.AddNotify( str, type )
     tab.recv    = SysTime()
     tab.velx    = 0
     tab.vely    = -5
-    surface.SetFont( "TabLarge" )
-    local w = surface.GetTextSize( str )
+    surface_SetFont( "TabLarge" )
+    local w = surface_GetTextSize( str )
 
     tab.x       = ScrW() / 2 + w * 0.5 + (ScrW() / 20)
     tab.y       = ScrH()
@@ -59,8 +66,10 @@ function FPP.AddNotify( str, type )
     HUDNote_c = HUDNote_c + 1
     HUDNote_i = HUDNote_i + 1
 
-    if not IsValid(LocalPlayer()) then return end -- I honestly got this error
-    LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 10, 100)
+    local ply = LocalPlayer()
+
+    if not IsValid(ply) then return end -- I honestly got this error
+    ply:EmitSound("npc/turret_floor/click1.wav", 10, 100)
 end
 
 usermessage.Hook("FPP_Notify", function(u) FPP.AddNotify(u:ReadString(), u:ReadBool()) end)
@@ -71,8 +80,8 @@ local function DrawNotice(k, v, i)
     local x = v.x - 75 * H
     local y = v.y - 20 * H - 2
 
-    surface.SetFont( "TabLarge" )
-    local w, h = surface.GetTextSize( v.text )
+    surface_SetFont( "TabLarge" )
+    local w, h = surface_GetTextSize( v.text )
 
     w = w
     h = h + 10
@@ -83,17 +92,17 @@ local function DrawNotice(k, v, i)
         col = Color(30, 100, 30, v.a * 0.4)
     end
 
-    draw.RoundedBox(4, x - w - h + 16, y - 8, w + h, h, col)
+    draw_RoundedBox(4, x - w - h + 16, y - 8, w + h, h, col)
 
     -- Draw Icon
 
-    surface.SetDrawColor( 255, 255, 255, v.a )
+    surface_SetDrawColor( 255, 255, 255, v.a )
 
-    draw.SimpleText(v.text, "TabLarge", x + 1, y + 1, Color(0, 0, 0, v.a * 0.8), TEXT_ALIGN_RIGHT)
-    draw.SimpleText(v.text, "TabLarge", x - 1, y - 1, Color(0, 0, 0, v.a * 0.5), TEXT_ALIGN_RIGHT)
-    draw.SimpleText(v.text, "TabLarge", x + 1, y - 1, Color(0, 0, 0, v.a * 0.6), TEXT_ALIGN_RIGHT)
-    draw.SimpleText(v.text, "TabLarge", x - 1, y + 1, Color(0, 0, 0, v.a * 0.6), TEXT_ALIGN_RIGHT)
-    draw.SimpleText(v.text, "TabLarge", x, y, Color(255, 255, 255, v.a), TEXT_ALIGN_RIGHT)
+    draw_SimpleText(v.text, "TabLarge", x + 1, y + 1, Color(0, 0, 0, v.a * 0.8), TEXT_ALIGN_RIGHT)
+    draw_SimpleText(v.text, "TabLarge", x - 1, y - 1, Color(0, 0, 0, v.a * 0.5), TEXT_ALIGN_RIGHT)
+    draw_SimpleText(v.text, "TabLarge", x + 1, y - 1, Color(0, 0, 0, v.a * 0.6), TEXT_ALIGN_RIGHT)
+    draw_SimpleText(v.text, "TabLarge", x - 1, y + 1, Color(0, 0, 0, v.a * 0.6), TEXT_ALIGN_RIGHT)
+    draw_SimpleText(v.text, "TabLarge", x, y, Color(255, 255, 255, v.a), TEXT_ALIGN_RIGHT)
 
     local ideal_y = ScrH() - (HUDNote_c - i) * h
     local ideal_x = ScrW() / 2 + w * 0.5 + (ScrW() / 20)
@@ -188,12 +197,12 @@ local function HUDPaint()
     originalOwner = originalOwner ~= "" and (" (previous owner: %s)"):format(originalOwner) or ""
     reason = reason .. originalOwner
 
-    surface.SetFont("Default")
-    local w,h = surface.GetTextSize(reason)
+    surface_SetFont("Default")
+    local w,h = surface_GetTextSize(reason)
     local col = FPP.canTouchEnt(LAEnt, touchType) and Color(0, 255, 0, 255) or Color(255, 0, 0, 255)
 
-    draw.RoundedBox(4, 0, ScrH() / 2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
-    draw.DrawText(reason, "Default", 5, ScrH() / 2 - h, col, 0)
-    surface.SetDrawColor(255, 255, 255, 255)
+    draw_RoundedBox(4, 0, ScrH() / 2 - h - 2, w + 10, 20, Color(0, 0, 0, 110))
+    draw_DrawText(reason, "Default", 5, ScrH() / 2 - h, col, 0)
+    surface_SetDrawColor(255, 255, 255, 255)
 end
 hook.Add("HUDPaint", "FPP_HUDPaint", HUDPaint)
