@@ -444,7 +444,7 @@ function GM:PlayerDeath(ply, weapon, killer)
     if ply:isArrested() and not GAMEMODE.Config.respawninjail then
         -- If the player died in jail, make sure they can't respawn until their jail sentence is over
         -- NextSpawnTime is set to CurTime() on unarrest
-        ply.NextSpawnTime = math.huge
+        ply.NextSpawnTime = CurTime() + GAMEMODE.Config.jailtimer
         DarkRP.printMessageAll(HUD_PRINTCENTER, DarkRP.getPhrase("died_in_jail", ply:Nick()))
         DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("dead_in_jail"))
     else
