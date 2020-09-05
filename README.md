@@ -12,7 +12,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=248302805
 ## Modifying DarkRP
 Check out the wiki!
 
-https://wiki.darkrp.com/index.php/Main_Page
+https://darkrp.miraheze.org/wiki/Main_Page
 
 Make sure to download the DarkRPMod:
 
@@ -26,8 +26,8 @@ https://github.com/FPtje/DarkRP/releases/tag/derived
 Just whatever you do, don't touch DarkRP's core files.
 
 ## Getting help
-Please head to the forums!
+Please head to the official Discord!
 
-https://forum.darkrp.com/
+https://darkrp.page.link/discord
 
 

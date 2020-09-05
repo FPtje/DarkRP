@@ -67,9 +67,7 @@ function FPP.entGetTouchReason(ent, touchType)
     local idx = FPP.entTouchReasons[ent:EntIndex()] or 0
     ent.FPPCanTouchWhy = idx
 
-    if not touchType then
-        return ent.FPPCanTouchWhy
-    end
+    if not touchType then return idx end
 
     local maxReasonValue = 15
     -- 1111 shifted to the right touch type

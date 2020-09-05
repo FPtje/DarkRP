@@ -9,39 +9,48 @@ net.Receive("DarkRP_keypadData", function(len)
 end)
 
 local lineMat = Material("cable/chain")
+local textCol = Color(0, 0, 0, 120)
+local haloCol = Color(0, 255, 0, 255)
 
 function SWEP:DrawHUD()
-    draw.WordBox(2, 10, ScrH() / 2, DarkRP.getPhrase("keypad_checker_shoot_keypad"), "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-    draw.WordBox(2, 10, ScrH() / 2 + 20, DarkRP.getPhrase("keypad_checker_shoot_entity"), "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
-    draw.WordBox(2, 10, ScrH() / 2 + 40, DarkRP.getPhrase("keypad_checker_click_to_clear"), "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+    local screenCenter = ScrH() / 2
+    draw.WordBox(2, 10, screenCenter, DarkRP.getPhrase("keypad_checker_shoot_keypad"), "UiBold", textCol, color_white)
+    draw.WordBox(2, 10, screenCenter + 20, DarkRP.getPhrase("keypad_checker_shoot_entity"), "UiBold", textCol, color_white)
+    draw.WordBox(2, 10, screenCenter + 40, DarkRP.getPhrase("keypad_checker_click_to_clear"), "UiBold", textCol, color_white)
+
+    local eyePos = EyePos()
+    local eyeAngles = EyeAngles()
 
     local entMessages = {}
-    for k,v in pairs(DrawData or {}) do
+    for k,v in ipairs(DrawData or {}) do
         if not IsValid(v.ent) or not IsValid(v.original) then continue end
         entMessages[v.ent] = (entMessages[v.ent] or 0) + 1
-        local pos = v.ent:LocalToWorld(v.ent:OBBCenter()):ToScreen()
+        local obbCenter = v.ent:OBBCenter()
+        local pos = v.ent:LocalToWorld(obbCenter):ToScreen()
 
         local name = v.name and ": " .. v.name:gsub("onDown", DarkRP.getPhrase("keypad_on")):gsub("onUp", DarkRP.getPhrase("keypad_off")) or ""
 
-        draw.WordBox(2, pos.x, pos.y + entMessages[v.ent] * 16, (v.delay and v.delay .. " " .. DarkRP.getPhrase("seconds") .. " " or "") .. v.type .. name, "UiBold", Color(0,0,0,120), Color(255, 255, 255, 255))
+        draw.WordBox(2, pos.x, pos.y + entMessages[v.ent] * 16, (v.delay and v.delay .. " " .. DarkRP.getPhrase("seconds") .. " " or "") .. v.type .. name, "UiBold", textCol, color_white)
 
-        cam.Start3D(EyePos(), EyeAngles())
+        cam.Start3D(eyePos, eyeAngles)
             render.SetMaterial(lineMat)
-            render.DrawBeam(v.original:GetPos(), v.ent:GetPos(), 2, 0.01, 20, Color(0, 255, 0, 255))
+            render.DrawBeam(v.original:GetPos(), v.ent:GetPos(), 2, 0.01, 20, haloCol)
         cam.End3D()
     end
 end
 
 KeypadCheckerHalos = function()
     local drawEnts = {}
-    for k,v in pairs(DrawData) do
+    local i = 1
+    for k,v in ipairs(DrawData) do
         if not IsValid(v.ent) then continue end
 
-        table.insert(drawEnts, v.ent)
+        drawEnts[i] = v.ent
+        i = i + 1
     end
 
     if table.IsEmpty(drawEnts) then return end
-    halo.Add(drawEnts, Color(0, 255, 0, 255), 5, 5, 5, nil, true)
+    halo.Add(drawEnts, haloCol, 5, 5, 5, nil, true)
 end
 
 function SWEP:SecondaryAttack()

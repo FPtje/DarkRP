@@ -37,16 +37,20 @@ SWEP.Secondary.Ammo = "none"
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+
     local found
     local lastDot = -1 -- the opposite of what you're looking at
-    self:GetOwner():LagCompensation(true)
-    local aimVec = self:GetOwner():GetAimVector()
-    local shootPos = self:GetOwner():GetShootPos()
+    Owner:LagCompensation(true)
+    local aimVec = Owner:GetAimVector()
+    local shootPos = Owner:GetShootPos()
 
     for _, v in ipairs(player.GetAll()) do
         local maxhealth = v:GetMaxHealth() or 100
         local targetShootPos = v:GetShootPos()
-        if v == self:GetOwner() or targetShootPos:DistToSqr(shootPos) > 7225 or v:Health() >= maxhealth or not v:Alive() then continue end
+        if v == Owner or targetShootPos:DistToSqr(shootPos) > 7225 or v:Health() >= maxhealth or not v:Alive() then continue end
 
         local direction = targetShootPos - shootPos
         direction:Normalize()
@@ -58,7 +62,7 @@ function SWEP:PrimaryAttack()
             found = v
         end
     end
-    self:GetOwner():LagCompensation(false)
+    Owner:LagCompensation(false)
 
     if found then
         found:SetHealth(found:Health() + 1)

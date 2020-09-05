@@ -90,7 +90,6 @@ function SWEP:Deploy()
 end
 
 function SWEP:PreDrawViewModel(vm)
-    if not IsValid(vm) then return end
     for i = 9, 15 do
         vm:SetSubMaterial(i, "!darkrp/" .. self:GetClass())
     end

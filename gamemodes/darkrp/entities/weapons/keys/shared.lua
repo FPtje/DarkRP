@@ -75,7 +75,7 @@ local function lookingAtLockable(ply, ent, hitpos)
 end
 
 local function lockUnlockAnimation(ply, snd)
-    ply:EmitSound("npc/metropolice/gear" .. math.floor(math.Rand(1,7)) .. ".wav")
+    ply:EmitSound("npc/metropolice/gear" .. math.random(1, 7) .. ".wav")
     timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
 
     umsg.Start("anim_keys")
@@ -98,40 +98,48 @@ local function doKnock(ply, sound)
 end
 
 function SWEP:PrimaryAttack()
-    local trace = self:GetOwner():GetEyeTrace()
+    local Owner = self:GetOwner()
 
-    if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
+    if not IsValid(Owner) then return end
+
+    local trace = Owner:GetEyeTrace()
+
+    if not lookingAtLockable(Owner, trace.Entity, trace.HitPos) then return end
 
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
     if CLIENT then return end
 
-    if self:GetOwner():canKeysLock(trace.Entity) then
+    if Owner:canKeysLock(trace.Entity) then
         trace.Entity:keysLock() -- Lock the door immediately so it won't annoy people
-        lockUnlockAnimation(self:GetOwner(), self.Sound)
+        lockUnlockAnimation(Owner, self.Sound)
     elseif trace.Entity:IsVehicle() then
-        DarkRP.notify(self:GetOwner(), 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+        DarkRP.notify(Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
     else
-        doKnock(self:GetOwner(), "physics/wood/wood_crate_impact_hard2.wav")
+        doKnock(Owner, "physics/wood/wood_crate_impact_hard2.wav")
     end
 end
 
 function SWEP:SecondaryAttack()
-    local trace = self:GetOwner():GetEyeTrace()
+    local Owner = self:GetOwner()
 
-    if not lookingAtLockable(self:GetOwner(), trace.Entity, trace.HitPos) then return end
+    if not IsValid(Owner) then return end
+
+    local trace = Owner:GetEyeTrace()
+
+    if not lookingAtLockable(Owner, trace.Entity, trace.HitPos) then return end
 
     self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if CLIENT then return end
 
-    if self:GetOwner():canKeysUnlock(trace.Entity) then
+    if Owner:canKeysUnlock(trace.Entity) then
         trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
-        lockUnlockAnimation(self:GetOwner(), self.Sound)
+        lockUnlockAnimation(Owner, self.Sound)
     elseif trace.Entity:IsVehicle() then
-        DarkRP.notify(self:GetOwner(), 1, 3, DarkRP.getPhrase("do_not_own_ent"))
+        DarkRP.notify(Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
     else
-        doKnock(self:GetOwner(), "physics/wood/wood_crate_impact_hard3.wav")
+        doKnock(Owner, "physics/wood/wood_crate_impact_hard3.wav")
     end
 end
 

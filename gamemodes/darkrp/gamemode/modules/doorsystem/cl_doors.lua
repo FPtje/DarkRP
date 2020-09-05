@@ -2,6 +2,18 @@ local meta = FindMetaTable("Entity")
 local black = Color(0, 0, 0, 255)
 local white = Color(255, 255, 255, 200)
 local red = Color(128, 30, 30, 255)
+local changeDoorAccess = false
+
+local function updatePrivs()
+    CAMI.PlayerHasAccess(LocalPlayer(), "DarkRP_ChangeDoorSettings", function(b, _)
+        changeDoorAccess = b
+    end)
+end
+-- Timer due to lack of "on privilege changed" hook
+hook.Add("InitPostEntity", "Load door privileges", function()
+    updatePrivs()
+    timer.Create("Door changeDoorAccess checker", 1, 0, updatePrivs)
+end)
 
 function meta:drawOwnableInfo()
     local ply = LocalPlayer()
@@ -12,7 +24,6 @@ function meta:drawOwnableInfo()
     if doorDrawing == true then return end
 
     local blocked = self:getKeysNonOwnable()
-    local superadmin = ply:IsSuperAdmin()
     local doorTeams = self:getKeysDoorTeams()
     local doorGroup = self:getKeysDoorGroup()
     local playerOwned = self:isKeysOwned() or table.GetFirstValue(self:getKeysCoOwners() or {}) ~= nil
@@ -53,11 +64,11 @@ function meta:drawOwnableInfo()
 
             table.insert(doorInfo, RPExtraTeams[k].name)
         end
-    elseif blocked and superadmin then
+    elseif blocked and changeDoorAccess then
         table.insert(doorInfo, DarkRP.getPhrase("keys_allow_ownership"))
     elseif not blocked then
         table.insert(doorInfo, DarkRP.getPhrase("keys_unowned"))
-        if superadmin then
+        if changeDoorAccess then
             table.insert(doorInfo, DarkRP.getPhrase("keys_disallow_ownership"))
         end
     end

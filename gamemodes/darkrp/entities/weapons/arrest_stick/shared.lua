@@ -58,42 +58,49 @@ function SWEP:PrimaryAttack()
 
     if CLIENT then return end
 
-    self:GetOwner():LagCompensation(true)
-    local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
-    self:GetOwner():LagCompensation(false)
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+
+    Owner:LagCompensation(true)
+    local trace = util.QuickTrace(Owner:EyePos(), Owner:GetAimVector() * 90, {Owner})
+    Owner:LagCompensation(false)
 
     local ent = trace.Entity
     if IsValid(ent) and ent.onArrestStickUsed then
-        ent:onArrestStickUsed(self:GetOwner())
+        ent:onArrestStickUsed(Owner)
         return
     end
 
-    ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() and p:IsSolid() end)
+    ent = Owner:getEyeSightHitEntity(nil, nil, function(p) return p ~= Owner and p:IsPlayer() and p:Alive() and p:IsSolid() end)
 
     local stickRange = self.stickRange * self.stickRange
-    if not IsValid(ent) or (self:GetOwner():EyePos():DistToSqr(ent:GetPos()) > stickRange) or not ent:IsPlayer() then
+    if not IsValid(ent) or (Owner:EyePos():DistToSqr(ent:GetPos()) > stickRange) or not ent:IsPlayer() then
         return
     end
 
-    local canArrest, message = hook.Call("canArrest", DarkRP.hooks, self:GetOwner(), ent)
+    local canArrest, message = hook.Call("canArrest", DarkRP.hooks, Owner, ent)
     if not canArrest then
-        if message then DarkRP.notify(self:GetOwner(), 1, 5, message) end
+        if message then DarkRP.notify(Owner, 1, 5, message) end
         return
     end
 
-    ent:arrest(nil, self:GetOwner())
-    DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", self:GetOwner():Nick()))
+    ent:arrest(nil, Owner)
+    DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", Owner:Nick()))
 
-    if self:GetOwner().SteamName then
-        DarkRP.log(self:GetOwner():Nick() .. " (" .. self:GetOwner():SteamID() .. ") arrested " .. ent:Nick(), Color(0, 255, 255))
+    if Owner.SteamName then
+        DarkRP.log(Owner:Nick() .. " (" .. Owner:SteamID() .. ") arrested " .. ent:Nick(), Color(0, 255, 255))
     end
 end
 
 function SWEP:startDarkRPCommand(usrcmd)
+    local Owner = self:GetOwner()
+    if not IsValid(Owner) then return end
+
     if game.SinglePlayer() and CLIENT then return end
     if usrcmd:KeyDown(IN_ATTACK2) then
-        if not self.Switched and self:GetOwner():HasWeapon("unarrest_stick") then
-            usrcmd:SelectWeapon(self:GetOwner():GetWeapon("unarrest_stick"))
+        if not self.Switched and Owner:HasWeapon("unarrest_stick") then
+            usrcmd:SelectWeapon(Owner:GetWeapon("unarrest_stick"))
         end
     else
         self.Switched = false

@@ -71,41 +71,49 @@ function SWEP:PrimaryAttack()
 
     if not SERVER then return end
 
-    local ent = self:GetOwner():GetEyeTrace().Entity
-    local canPickup, message = hook.Call("canPocket", GAMEMODE, self:GetOwner(), ent)
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+
+    local ent = Owner:GetEyeTrace().Entity
+    local canPickup, message = hook.Call("canPocket", GAMEMODE, Owner, ent)
 
     if not canPickup then
-        if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
+        if message then DarkRP.notify(Owner, 1, 4, message) end
         return
     end
 
-    self:GetOwner():addPocketItem(ent)
+    Owner:addPocketItem(ent)
 end
 
 function SWEP:SecondaryAttack()
     if not SERVER then return end
 
+    local Owner = self:GetOwner()
+
+    if not IsValid(Owner) then return end
+
     local maxK = 0
 
-    for k in pairs(self:GetOwner():getPocketItems()) do
+    for k in pairs(Owner:getPocketItems()) do
         if k < maxK then continue end
         maxK = k
     end
 
     if maxK == 0 then
-        DarkRP.notify(self:GetOwner(), 1, 4, DarkRP.getPhrase("pocket_no_items"))
+        DarkRP.notify(Owner, 1, 4, DarkRP.getPhrase("pocket_no_items"))
         return
     end
 
     if SERVER then
-        local canPickup, message = hook.Call("canDropPocketItem", nil, self:GetOwner(), maxK, self:GetOwner().darkRPPocket[maxK])
+        local canPickup, message = hook.Call("canDropPocketItem", nil, Owner, maxK, Owner.darkRPPocket[maxK])
         if canPickup == false then
-            if message then DarkRP.notify(self:GetOwner(), 1, 4, message) end
+            if message then DarkRP.notify(Owner, 1, 4, message) end
             return
         end
     end
 
-    self:GetOwner():dropPocketItem(maxK)
+    Owner:dropPocketItem(maxK)
 end
 
 function SWEP:Reload()
