@@ -340,6 +340,9 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
 
     if ply:isArrested() then return end -- hasn't been arrested before
 
+    local adjTime = hook.Call("adjustArrest", DarkRP.hooks)
+    time = adjTime or time
+    
     ply:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("youre_arrested", time))
 
     local phrase = DarkRP.getPhrase("hes_arrested", ply:Nick(), time)
