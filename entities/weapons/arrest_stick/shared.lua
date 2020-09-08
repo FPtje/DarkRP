@@ -53,8 +53,13 @@ DarkRP.hookStub{
     description = "Sets arrest time during arrest via the arrest stick",
     parameters = {
         {
-            name = "ent",
-            description = "The player being arrested."
+            name = "arrester",
+            description = "The player trying to arrest someone.",
+            type = "Player"
+        },
+        {
+            name = "arrestee",
+            description = "The player being arrested.",
             type = "Player"
         }
     },
@@ -105,7 +110,7 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    local time = hook.Call("setArrestStickTime", DarkRP.hooks, ent)
+    local time = hook.Call("setArrestStickTime", DarkRP.hooks, Owner, ent)
     ent:arrest(time, Owner)
     DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", Owner:Nick()))
 
