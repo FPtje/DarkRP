@@ -50,8 +50,13 @@ DarkRP.hookStub{
 
 DarkRP.hookStub{
     name = "setArrestStickTime",
-    description = "Sets arrest time during arrest via the arrest stick",
+    description = "Sets arrest time for an arrest made via the arrest stick",
     parameters = {
+        {
+            name = "arrest_stick",
+            description = "The arrest strick weapon with which the arrestee was arrested.",
+            type = "Weapon"
+        },
         {
             name = "arrester",
             description = "The player trying to arrest someone.",
@@ -68,9 +73,9 @@ DarkRP.hookStub{
             name = "time",
             description = "The time to arrest the player.",
             type = "integer"
-        },
-        realm = "Server"
-    }
+        }
+    },
+    realm = "Server"
 }
 
 function SWEP:Deploy()
@@ -110,7 +115,7 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    local time = hook.Call("setArrestStickTime", DarkRP.hooks, Owner, ent)
+    local time = hook.Call("setArrestStickTime", DarkRP.hooks, self, Owner, ent)
     ent:arrest(time, Owner)
     DarkRP.notify(ent, 0, 20, DarkRP.getPhrase("youre_arrested_by", Owner:Nick()))
 
