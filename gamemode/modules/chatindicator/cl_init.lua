@@ -7,7 +7,7 @@ local function drawIndicator(ply)
         return
     end
 
-    local indicator = ply.indicator    
+    local indicator = ply.indicator
     if not IsValid(indicator) then
         indicator = ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
         ply.indicator = indicator
