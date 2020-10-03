@@ -970,7 +970,7 @@ DarkRP.hookStub{
         },
         {
             name = "ent",
-            description = "The spawned vehicle.",
+            description = "The spawned entity.",
             type = "Entity"
         },
         {
