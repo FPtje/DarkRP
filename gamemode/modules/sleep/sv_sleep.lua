@@ -57,6 +57,7 @@ function DarkRP.toggleSleep(player, command)
 
 
     if player.Sleeping and IsValid(player.SleepRagdoll) then
+        player:SetParent()
         local frozen = player:IsFrozen()
         player.OldHunger = player:getDarkRPVar("Energy")
         player.SleepSound:Stop()
@@ -162,6 +163,8 @@ function DarkRP.toggleSleep(player, command)
         player.SleepRagdoll = ragdoll
         player.KnockoutTimer = CurTime()
         player:GetTable().BeforeSleepTeam = player:Team()
+        player:SetMoveType(MOVETYPE_NONE) -- Required for parenting to work properly
+        player:SetParent(ragdoll)
         --Make sure noone can pick it up:
         ragdoll:CPPISetOwner(player)
 
