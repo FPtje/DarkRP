@@ -305,6 +305,13 @@ local dynv = GM.Config.dynamicvoice
 local deadv = GM.Config.deadvoice
 local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
 local DrpCanHear = {}
+
+-- Recreate DrpCanHear after Lua Refresh
+-- This prevents an indexing nil error in PlayerCanHearPlayersVoice
+for _, ply in pairs(player.GetHumans()) do
+    DrpCanHear[ply] = {}
+end
+
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
