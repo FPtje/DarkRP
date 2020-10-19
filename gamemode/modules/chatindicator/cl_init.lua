@@ -10,6 +10,7 @@ local function drawIndicator(ply)
     local indicator = ply.indicator
     if not IsValid(indicator) then
         indicator = ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
+        if not IsValid(indicator) then return end -- In case the non networked entity limit is hit (still prints a red error message, but doesn't spam client console with lua errors)
         ply.indicator = indicator
     end
     indicator:SetNoDraw(true)
