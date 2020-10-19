@@ -10,6 +10,7 @@ local function drawIndicator(ply)
     local indicator = ply.indicator
     if not IsValid(indicator) then
         indicator = ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
+        if not IsValid(indicator) then return end
         ply.indicator = indicator
     end
     indicator:SetNoDraw(true)
