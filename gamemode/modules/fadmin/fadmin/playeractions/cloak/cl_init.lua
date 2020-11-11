@@ -24,3 +24,9 @@ FAdmin.StartHooks["zz_Cloak"] = function()
         button:GetParent():InvalidateLayout()
     end)
 end
+
+hook.Add("DrawPhysgunBeam", "FAdmin_Cloak", function(ply)
+    if not ply:FAdmin_GetGlobal("FAdmin_cloaked") then return end
+
+    return false
+end)
