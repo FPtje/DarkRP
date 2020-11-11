@@ -1,5 +1,3 @@
-local CloakThink
-
 local function Cloak(ply, cmd, args)
     local targets = FAdmin.FindPlayer(args[1]) or {ply}
 
@@ -8,19 +6,10 @@ local function Cloak(ply, cmd, args)
         if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_cloaked") then
             target:FAdmin_SetGlobal("FAdmin_cloaked", true)
             target:SetNoDraw(true)
+
             for _, v in ipairs(target:GetWeapons()) do
                 v:SetNoDraw(true)
             end
-
-            local children = target:GetChildren()
-            for i = 1, #children do
-                if children[i]:GetClass() == "physgun_beam" then
-                    children[i]:SetNoDraw(true)
-                    break
-                end
-            end
-
-            hook.Add("Think", "FAdmin_Cloak", CloakThink)
         end
     end
     FAdmin.Messages.ActionMessage(ply, targets, "You have cloaked %s", "You were cloaked by %s", "Cloaked %s")
@@ -41,25 +30,6 @@ local function UnCloak(ply, cmd, args)
             for _, v in ipairs(target:GetWeapons()) do
                 v:SetNoDraw(false)
             end
-
-            local children = target:GetChildren()
-            for i = 1, #children do
-                if children[i]:GetClass() == "physgun_beam" then
-                    children[i]:SetNoDraw(false)
-                    break
-                end
-            end
-
-            target.FAdmin_CloakWeapon = nil
-
-            local RemoveThink = true
-            for _, v in ipairs(player.GetAll()) do
-                if v:FAdmin_GetGlobal("FAdmin_cloaked") then
-                    RemoveThink = false
-                    break
-                end
-            end
-            if RemoveThink then hook.Remove("Think", "FAdmin_Cloak") end
         end
     end
     FAdmin.Messages.ActionMessage(ply, targets, "You have uncloaked %s", "You were uncloaked by %s", "Uncloaked %s")
@@ -74,22 +44,7 @@ FAdmin.StartHooks["Cloak"] = function()
     FAdmin.Access.AddPrivilege("Cloak", 2)
 end
 
-function CloakThink()
-    for _, v in ipairs(player.GetAll()) do
-        local ActiveWeapon = v:GetActiveWeapon()
-        if v:FAdmin_GetGlobal("FAdmin_cloaked") and ActiveWeapon:IsValid() and ActiveWeapon ~= v.FAdmin_CloakWeapon then
-            v.FAdmin_CloakWeapon = ActiveWeapon
-            ActiveWeapon:SetNoDraw(true)
-
-            if ActiveWeapon:GetClass() == "weapon_physgun" then
-                local children = v:GetChildren()
-                for i = 1, #children do
-                    if children[i]:GetClass() == "physgun_beam" then
-                        children[i]:SetNoDraw(true)
-                        break
-                    end
-                end
-            end
-        end
-    end
-end
+hook.Add("PlayerSwitchWeapon", "FAdmin_Cloak", function(ply, _, weapon)
+    if not ply:FAdmin_GetGlobal("FAdmin_cloaked") or not IsValid(weapon) then return end
+    weapon:SetNoDraw(true)
+end)
