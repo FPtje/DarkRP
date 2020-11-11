@@ -1,5 +1,3 @@
-local CloakThink
-
 local function Cloak(ply, cmd, args)
     local targets = FAdmin.FindPlayer(args[1]) or {ply}
 
@@ -12,13 +10,13 @@ local function Cloak(ply, cmd, args)
                 v:SetNoDraw(true)
             end
 
-            for _, v in ipairs(ents.FindByClass("physgun_beam")) do
-                if v:GetParent() == target then
-                    v:SetNoDraw(true)
+            local children = target:GetChildren()
+            for i = 1, #children do
+                if children[i]:GetClass() == "physgun_beam" then
+                    children[i]:SetNoDraw(true)
+                    break
                 end
             end
-
-            hook.Add("Think", "FAdmin_Cloak", CloakThink)
         end
     end
     FAdmin.Messages.ActionMessage(ply, targets, "You have cloaked %s", "You were cloaked by %s", "Cloaked %s")
@@ -40,9 +38,11 @@ local function UnCloak(ply, cmd, args)
                 v:SetNoDraw(false)
             end
 
-            for _, v in pairs(ents.FindByClass("physgun_beam")) do
-                if v:GetParent() == target then
-                    v:SetNoDraw(false)
+            local children = target:GetChildren()
+            for i = 1, #children do
+                if children[i]:GetClass() == "physgun_beam" then
+                    children[i]:SetNoDraw(true)
+                    break
                 end
             end
 
@@ -70,20 +70,17 @@ FAdmin.StartHooks["Cloak"] = function()
     FAdmin.Access.AddPrivilege("Cloak", 2)
 end
 
-function CloakThink()
-    for _, v in ipairs(player.GetAll()) do
-        local ActiveWeapon = v:GetActiveWeapon()
-        if v:FAdmin_GetGlobal("FAdmin_cloaked") and ActiveWeapon:IsValid() and ActiveWeapon ~= v.FAdmin_CloakWeapon then
-            v.FAdmin_CloakWeapon = ActiveWeapon
-            ActiveWeapon:SetNoDraw(true)
+hook.Add("PlayerSwitchWeapon", "FAdmin_Cloak", function(ply, _, weapon)
+    if not ply:FAdmin_GetGlobal("FAdmin_cloaked") or not IsValid(weapon) then return end
+    weapon:SetNoDraw(true)
 
-            if ActiveWeapon:GetClass() == "weapon_physgun" then
-                for a,b in ipairs(ents.FindByClass("physgun_beam")) do
-                    if b:GetParent() == v then
-                        b:SetNoDraw(true)
-                    end
-                end
-            end
+    if weapon:GetClass() ~= "weapon_physgun" then return end
+
+    local children = ply:GetChildren()
+    for i = 1, #children do
+        if children[i]:GetClass() == "physgun_beam" then
+            children[i]:SetNoDraw(true)
+            break
         end
     end
-end
+end)
