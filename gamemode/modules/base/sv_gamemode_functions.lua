@@ -640,6 +640,8 @@ function GM:PlayerInitialSpawn(ply)
     restoreReconnectedEnts(ply)
 end
 
+local vector_escape = Vector(16, 16, 64)
+
 function GM:PlayerSelectSpawn(ply)
     local spawn = self.Sandbox.PlayerSelectSpawn(self, ply)
 
@@ -670,7 +672,7 @@ function GM:PlayerSelectSpawn(ply)
     end
 
     -- Make sure the player doesn't get stuck in something
-    POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
+    POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, vector_escape)
 
     return spawn, POS
 end
