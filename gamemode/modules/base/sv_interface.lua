@@ -546,7 +546,7 @@ DarkRP.findEmptyPos = DarkRP.stub{
         },
         {
             name = "area",
-            description = "The hull to check, this is Vector(16, 16, 64) for players.",
+            description = "The hull to check, this is Vector(16, 16, 72) for players.",
             type = "Vector",
             optional = false
         }
