@@ -29,7 +29,7 @@ end
 local function physGunCheck(ply)
     local hookName = "darkrp_anim_physgun_"..ply:EntIndex()
     hook.Add("Think", hookName, function()
-        if IsValid(ply) and ply:Alive() and ply:GetActiveWeapon():IsValid() and ply:GetActiveWeapon():GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) then
+        if IsValid(ply) and ply:Alive() and ply:GetActiveWeapon():IsValid() and ply:GetActiveWeapon():GetClass() == "weapon_physgun" and ply:KeyDown(IN_ATTACK) and (not ply:GetAllowWeaponsInVehicle() and not ply:InVehicle()) then
             local ent = ply:GetEyeTrace().Entity
             if IsValid(ent) and ent:IsPlayer() and not ply.SaidHi then
                 ply.SaidHi = true
