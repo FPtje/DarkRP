@@ -53,8 +53,8 @@ hook.Add("HUDPaint", "DrawHitOption", function()
     if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and not ply:hasHit() and localplayer:GetPos():DistToSqr(ply:GetPos()) < minHitDistanceSqr then
         x, y = ScrW() / 2, ScrH() / 2 + 30
 
-        draw.DrawNonParsedText(hudText, "TargetID", x + 1, y + 1, textCol1, 1)
-        draw.DrawNonParsedText(hudText, "TargetID", x, y, textCol2, 1)
+        draw.DrawNonParsedText(hudText, "Target", x + 1, y + 1, textCol1, 1)
+        draw.DrawNonParsedText(hudText, "Target", x, y, textCol2, 1)
     end
 
     if localplayer:isHitman() and localplayer:hasHit() and IsValid(localplayer:getHitTarget()) then
@@ -101,8 +101,8 @@ function postPlayerDraw(ply)
     ang:RotateAroundAxis(ang:Forward(), 90)
 
     cam.Start3D2D(pos, ang, 0.3)
-        draw.DrawNonParsedText(GAMEMODE.Config.hitmanText, "TargetID", 1, -100, textCol1, 1)
-        draw.DrawNonParsedText(GAMEMODE.Config.hitmanText, "TargetID", 0, -101, textCol2, 1)
+        draw.DrawNonParsedText(GAMEMODE.Config.hitmanText, "Target", 1, -100, textCol1, 1)
+        draw.DrawNonParsedText(GAMEMODE.Config.hitmanText, "Target", 0, -101, textCol2, 1)
     cam.End3D2D()
 end
 

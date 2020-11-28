@@ -92,7 +92,7 @@ local function HMHUD()
         FoodAteY = FoodAteY - 150 * FrameTime()
     end
 end
-hook.Add("HUDDrawTargetID", "HMHUD", HMHUD) --HUDDrawTargetID is called after DarkRP HUD is drawn in HUDPaint
+hook.Add("HUDDrawTarget", "HMHUD", HMHUD) --HUDDrawTarget is called after DarkRP HUD is drawn in HUDPaint
 
 local function AteFoodIcon(msg)
     FoodAteAlpha = 1

@@ -405,7 +405,7 @@ end
 --[[---------------------------------------------------------------------------
 Disable players' names popping up when looking at them
 ---------------------------------------------------------------------------]]
-function GM:HUDDrawTargetID()
+function GM:HUDDrawTarget()
     return false
 end
 

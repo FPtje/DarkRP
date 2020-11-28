@@ -71,7 +71,7 @@ function ENT:Draw()
     local HasPhysgun = ply:GetActiveWeapon():IsValid() and ply:GetActiveWeapon():GetClass() == "weapon_physgun"
     local isUsing = (HasPhysgun and ply:KeyDown(IN_ATTACK)) or ply:KeyDown(IN_USE)
 
-    surface.SetFont("TargetID")
+    surface.SetFont("Target")
     local TextPosX = surface.GetTextSize("Physgun/use the button to see the MOTD!") * (-0.5)
 
     local ang = self:GetAngles()

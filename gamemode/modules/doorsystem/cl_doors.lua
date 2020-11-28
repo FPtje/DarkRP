@@ -82,8 +82,8 @@ function meta:drawOwnableInfo()
 
     local x, y = ScrW() / 2, ScrH() / 2
     local text = table.concat(doorInfo, "\n")
-    draw.DrawNonParsedText(text, "TargetID", x , y + 1 , black, 1)
-    draw.DrawNonParsedText(text, "TargetID", x, y, (blocked or owned) and white or red, 1)
+    draw.DrawNonParsedText(text, "Target", x , y + 1 , black, 1)
+    draw.DrawNonParsedText(text, "Target", x, y, (blocked or owned) and white or red, 1)
 end
 
 
