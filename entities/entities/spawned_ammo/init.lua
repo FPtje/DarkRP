@@ -18,6 +18,8 @@ function ENT:Use(activator, caller)
         return
     end
 
+    hook.Call("playerPickedUpAmmo", nil, activator, self.amountGiven, self.ammoType, self)
+
     activator:GiveAmmo(self.amountGiven, self.ammoType)
     self:Remove()
 end
@@ -41,3 +43,32 @@ function ENT:StartTouch(ent)
 
     ent:Remove()
 end
+
+DarkRP.hookStub{
+    name = "playerPickedUpAmmo",
+    description = "When a player picks up ammo.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who picked up ammo.",
+            type = "Player"
+        },
+        {
+            name = "amount",
+            description = "Ammo amount.",
+            type = "number"
+        },
+        {
+            name = "type",
+            description = "Ammo type.",
+            type = "number"
+        },
+        {
+            name = "spawnedAmmo",
+            description = "Entity of spawned ammo.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+}

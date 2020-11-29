@@ -92,9 +92,11 @@ function ENT:Use(activator, caller)
 
     local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
     if canUse == false then
-      if reason then DarkRP.notify(activator, 1, 4, reason) end
-      return
+        if reason then DarkRP.notify(activator, 1, 4, reason) end
+        return
     end
+
+    hook.Call("playerOpenedShipment", nil, activator, self)
 
     self.locked = true -- One activation per second
     self.USED = true
@@ -232,3 +234,22 @@ function ENT:StartTouch(ent)
 
     ent:Remove()
 end
+
+DarkRP.hookStub{
+    name = "playerOpenedShipment",
+    description = "When a player opens a shipment.",
+    parameters = {
+        {
+            name = "player",
+            description = "The player who opens a shipment.",
+            type = "Player"
+        },
+        {
+            name = "entity",
+            description = "Entity of spawned shipment.",
+            type = "Entity"
+        }
+    },
+    returns = {
+    },
+}

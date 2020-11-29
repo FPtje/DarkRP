@@ -34,7 +34,13 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Use(activator, caller)
-    caller:setSelfDarkRPVar("Energy", math.Clamp((caller:getDarkRPVar("Energy") or 0) + 100, 0, 100))
+    local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
+    if canUse == false then
+        if reason then DarkRP.notify(activator, 1, 4, reason) end
+        return
+    end
+
+    caller:setSelfDarkRPVar("Energy", 100)
     umsg.Start("AteFoodIcon", caller)
     umsg.End()
 

@@ -179,7 +179,7 @@ function ENT:OnRemove()
 end
 
 hook.Add("PlayerInitialSpawn", "SendLaws", function(ply)
-    for i, law in pairs(Laws) do
+    for i, law in ipairs(Laws) do
         if FixedLaws[i] then continue end
 
         umsg.Start("DRP_AddLaw", ply)
