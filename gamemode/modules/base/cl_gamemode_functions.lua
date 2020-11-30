@@ -3,7 +3,8 @@ local mouseX, mouseY = ScrW() / 2, ScrH() / 2
 function GM:ShowSpare1()
     local jobTable = LocalPlayer():getJobTable()
 
-    if jobTable.ShowSpare1 then
+    -- We need to check for the existance of jobTable here, because in very rare edge cases, the player's team isn't set, when the getJobTable-function is called here.
+    if jobTable and jobTable.ShowSpare1 then
         return jobTable.ShowSpare1(LocalPlayer())
     end
 
@@ -20,7 +21,8 @@ end
 function GM:ShowSpare2()
     local jobTable = LocalPlayer():getJobTable()
 
-    if jobTable.ShowSpare2 then
+    -- We need to check for the existance of jobTable here, because in very rare edge cases, the player's team isn't set, when the getJobTable-function is called here.
+    if jobTable and jobTable.ShowSpare2 then
         return jobTable.ShowSpare2(LocalPlayer())
     end
 
