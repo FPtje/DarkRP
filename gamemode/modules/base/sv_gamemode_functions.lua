@@ -434,7 +434,8 @@ function GM:PlayerDeath(ply, weapon, killer)
         jobTable.PlayerDeath(ply, weapon, killer)
     end
 
-    if GAMEMODE.Config.deathblack then
+    if GAMEMODE.Config.deathblack and not ply.blackScreen then
+        ply.blackScreen = true
         SendUserMessage("blackScreen", ply, true)
     end
 
@@ -745,7 +746,10 @@ function GM:PlayerSpawn(ply)
     ply:UnSpectate()
 
     -- Kill any colormod
-    SendUserMessage("blackScreen", ply, false)
+    if ply.blackScreen then
+        ply.blackScreen = false
+        SendUserMessage("blackScreen", ply, false)
+    end
 
     if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
         enableBabyGod(ply)
@@ -754,13 +758,9 @@ function GM:PlayerSpawn(ply)
 
     ply:Extinguish()
 
-    local activeWeapon = ply:GetActiveWeapon()
-    if activeWeapon:IsValid() then
-        activeWeapon:Extinguish()
-    end
-
-    for _, v in ipairs(ents.FindByClass("predicted_viewmodel")) do -- Money printer ignite fix
-        v:Extinguish()
+    local vm = ply:GetViewModel()
+    if IsValid(vm) then
+        vm:Extinguish()
     end
 
     if ply.demotedWhileDead then
