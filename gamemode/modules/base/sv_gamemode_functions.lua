@@ -758,9 +758,12 @@ function GM:PlayerSpawn(ply)
 
     ply:Extinguish()
 
-    local vm = ply:GetViewModel()
-    if IsValid(vm) then
-        vm:Extinguish()
+    for i=0, 2 do
+        local vm = ply:GetViewModel(i)
+
+        if IsValid(vm) then
+            vm:Extinguish()
+        end
     end
 
     if ply.demotedWhileDead then
