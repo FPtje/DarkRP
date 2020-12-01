@@ -7,7 +7,7 @@ Hitman menu
 PANEL = {}
 
 AccessorFunc(PANEL, "hitman", "Hitman")
-AccessorFunc(PANEL, "target", "Target")
+AccessorFunc(PANEL, "target", "Roboto20")
 AccessorFunc(PANEL, "selected", "Selected")
 
 function PANEL:Init()
