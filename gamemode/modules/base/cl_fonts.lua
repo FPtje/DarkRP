@@ -15,7 +15,7 @@ local function loadFonts()
         antialias = true,
         shadow = false,
         font = "Roboto"})
-    
+
     surface.CreateFont("Roboto20", {
         size = 20,
         weight = 600,
