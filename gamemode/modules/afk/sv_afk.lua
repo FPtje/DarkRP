@@ -19,10 +19,8 @@ local function SetAFK(ply)
     local rpname = ply:getDarkRPVar("rpname")
     ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
-    if not ply.blackScreen then
-        ply.blackScreen = ply:getDarkRPVar("AFK")
-        SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
-    end
+    ply.blackScreen = ply:getDarkRPVar("AFK")
+    SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
 
     if ply:getDarkRPVar("AFK") then
         DarkRP.retrieveSalary(ply, function(amount) ply.OldSalary = amount end)
