@@ -2,13 +2,6 @@
 The fonts that DarkRP uses
 ---------------------------------------------------------------------------]]
 local function loadFonts()
-    surface.CreateFont("Target", {
-        size = 20,
-        weight = 600,
-        antialias = true,
-        shadow = false,
-        font = "Roboto"})
-
     surface.CreateFont("DarkRPHUD1", {
         size = 20,
         weight = 600,
@@ -19,6 +12,13 @@ local function loadFonts()
     surface.CreateFont("DarkRPHUD2", {
         size = 23,
         weight = 400,
+        antialias = true,
+        shadow = false,
+        font = "Roboto"})
+    
+    surface.CreateFont("Roboto20", {
+        size = 20,
+        weight = 600,
         antialias = true,
         shadow = false,
         font = "Roboto"})

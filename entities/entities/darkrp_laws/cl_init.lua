@@ -18,12 +18,12 @@ function ENT:Draw()
 
         draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
 
-        draw.DrawNonParsedSimpleText(DarkRP.getPhrase("laws_of_the_land"), "Target", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+        draw.DrawNonParsedSimpleText(DarkRP.getPhrase("laws_of_the_land"), "Roboto20", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
 
         local col = Color(255, 255, 255, 255)
         local lastHeight = 0
         for k, v in ipairs(Laws) do
-            draw.DrawNonParsedText(string.format("%u. %s", k, v), "Target", 5, 35 + lastHeight, col)
+            draw.DrawNonParsedText(string.format("%u. %s", k, v), "Roboto20", 5, 35 + lastHeight, col)
             lastHeight = lastHeight + (fn.ReverseArgs(string.gsub(v, "\n", "")) + 1) * 21
         end
 
@@ -31,7 +31,7 @@ function ENT:Draw()
 end
 
 local function addLaw(inLaw)
-    local law = DarkRP.textWrap(inLaw, "Target", 522)
+    local law = DarkRP.textWrap(inLaw, "Roboto20", 522)
 
     local lawNumber = table.insert(Laws, law)
     hook.Run("addLaw", lawNumber, inLaw)

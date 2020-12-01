@@ -244,7 +244,7 @@ function PANEL6:Init()
 
     self.TextLabel = vgui.Create("DLabel", self)
     self.TextLabel:SetColor(Color(200,200,200,200))
-    self.TextLabel:SetFont("Target")
+    self.TextLabel:SetFont("Roboto20")
 
     self.m_Image2 = vgui.Create("DImage", self)
 
