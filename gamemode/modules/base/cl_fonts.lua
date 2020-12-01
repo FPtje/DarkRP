@@ -2,17 +2,15 @@
 The fonts that DarkRP uses
 ---------------------------------------------------------------------------]]
 local function loadFonts()
-    local robotoSize = system.IsLinux() and fp{fn.Flip(fn.Add), 1} or fn.Id
-
     surface.CreateFont("Target", {
-        size = robotoSize(20),
+        size = 20,
         weight = 600,
         antialias = true,
         shadow = false,
         font = "Roboto"})
 
     surface.CreateFont("DarkRPHUD1", {
-        size = robotoSize(20),
+        size = 20,
         weight = 600,
         antialias = true,
         shadow = true,
@@ -54,7 +52,7 @@ local function loadFonts()
         font = "Trebuchet MS"})
 
     surface.CreateFont("TabLarge", {
-        size = robotoSize(18),
+        size = 18,
         weight = 700,
         antialias = true,
         shadow = false,
