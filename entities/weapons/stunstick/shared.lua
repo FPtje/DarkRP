@@ -126,7 +126,7 @@ function SWEP:DoAttack(dmg)
 
     self.WaitingForAttackEffect = true
 
-    local ent = Owner:getEyeSightHitEntity(
+    ent = Owner:getEyeSightHitEntity(
         self.stickRange,
         15,
         fn.FAnd{
@@ -160,7 +160,13 @@ function SWEP:DoAttack(dmg)
                 DarkRP.notify(Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(amount), DarkRP.getPhrase("bonus_destroying_entity")))
                 ent.beenSeized = true
             end
-            ent:TakeDamage(1000-dmg, Owner, self) -- for illegal entities
+            local health = ent:GetMaxHealth() or 1000
+            health = health == 0 and 1000 or health
+
+            local dmgToTake = GAMEMODE.Config.stunstickdamage <= 1 and GAMEMODE.Config.stunstickdamage * health or GAMEMODE.Config.stunstickdamage
+            -- Ceil because health is an integer value
+            dmgToTake = math.max(0, math.ceil(dmgToTake - dmg))
+            ent:TakeDamage(dmgToTake, Owner, self) -- for illegal entities
         end
     end
 end
