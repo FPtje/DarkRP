@@ -160,7 +160,7 @@ function SWEP:DoAttack(dmg)
                 DarkRP.notify(Owner, 1, 4, DarkRP.getPhrase("you_received_x", DarkRP.formatMoney(amount), DarkRP.getPhrase("bonus_destroying_entity")))
                 ent.beenSeized = true
             end
-            local health = ent:GetMaxHealth() or 1000
+            local health = math.max(ent:Health(), ent:GetMaxHealth())
             health = health == 0 and 1000 or health
 
             local dmgToTake = GAMEMODE.Config.stunstickdamage <= 1 and GAMEMODE.Config.stunstickdamage * health or GAMEMODE.Config.stunstickdamage
