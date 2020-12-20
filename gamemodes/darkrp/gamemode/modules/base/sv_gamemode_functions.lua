@@ -305,6 +305,13 @@ local dynv = GM.Config.dynamicvoice
 local deadv = GM.Config.deadvoice
 local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
 local DrpCanHear = {}
+
+-- Recreate DrpCanHear after Lua Refresh
+-- This prevents an indexing nil error in PlayerCanHearPlayersVoice
+for _, ply in pairs(player.GetHumans()) do
+    DrpCanHear[ply] = {}
+end
+
 -- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
 -- causing a lagfest when there are many players
 local function calcPlyCanHearPlayerVoice(listener)
@@ -427,7 +434,8 @@ function GM:PlayerDeath(ply, weapon, killer)
         jobTable.PlayerDeath(ply, weapon, killer)
     end
 
-    if GAMEMODE.Config.deathblack then
+    if GAMEMODE.Config.deathblack and not ply.blackScreen then
+        ply.blackScreen = true
         SendUserMessage("blackScreen", ply, true)
     end
 
@@ -663,7 +671,10 @@ function GM:PlayerSelectSpawn(ply)
     end
 
     -- Make sure the player doesn't get stuck in something
-    POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, Vector(16, 16, 64))
+
+    local _, hull = ply:GetHull()
+
+    POS = DarkRP.findEmptyPos(POS, {ply}, 600, 30, hull)
 
     return spawn, POS
 end
@@ -735,7 +746,10 @@ function GM:PlayerSpawn(ply)
     ply:UnSpectate()
 
     -- Kill any colormod
-    SendUserMessage("blackScreen", ply, false)
+    if ply.blackScreen then
+        ply.blackScreen = false
+        SendUserMessage("blackScreen", ply, false)
+    end
 
     if GAMEMODE.Config.babygod and not ply.IsSleeping and not ply.Babygod then
         enableBabyGod(ply)
@@ -744,13 +758,12 @@ function GM:PlayerSpawn(ply)
 
     ply:Extinguish()
 
-    local activeWeapon = ply:GetActiveWeapon()
-    if activeWeapon:IsValid() then
-        activeWeapon:Extinguish()
-    end
+    for i=0, 2 do
+        local vm = ply:GetViewModel(i)
 
-    for _, v in ipairs(ents.FindByClass("predicted_viewmodel")) do -- Money printer ignite fix
-        v:Extinguish()
+        if IsValid(vm) then
+            vm:Extinguish()
+        end
     end
 
     if ply.demotedWhileDead then

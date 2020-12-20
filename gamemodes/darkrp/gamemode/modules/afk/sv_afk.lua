@@ -19,6 +19,7 @@ local function SetAFK(ply)
     local rpname = ply:getDarkRPVar("rpname")
     ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
+    ply.blackScreen = ply:getDarkRPVar("AFK")
     SendUserMessage("blackScreen", ply, ply:getDarkRPVar("AFK"))
 
     if ply:getDarkRPVar("AFK") then

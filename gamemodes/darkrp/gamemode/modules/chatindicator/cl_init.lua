@@ -7,26 +7,31 @@ local function drawIndicator(ply)
         return
     end
 
-    ply.indicator = IsValid(ply.indicator) and ply.indicator or
-        ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
-    ply.indicator:SetNoDraw(true)
-    ply.indicator:SetModelScale(0.6)
+    local indicator = ply.indicator
+    if not IsValid(indicator) then
+        indicator = ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
+        if not IsValid(indicator) then return end -- In case the non networked entity limit is hit (still prints a red error message, but doesn't spam client console with lua errors)
+        ply.indicator = indicator
+    end
+    indicator:SetNoDraw(true)
+    indicator:SetModelScale(0.6)
 
     local ragdoll = ply:GetRagdollEntity()
     if IsValid(ragdoll) then
         local maxs = ragdoll:OBBMaxs()
-        ply.indicator:SetPos(ragdoll:GetPos() + Vector(0, 0, maxs.z) + Vector(0, 0, 12))
+        indicator:SetPos(ragdoll:GetPos() + Vector(0, 0, maxs.z) + Vector(0, 0, 12))
     else
-        ply.indicator:SetPos(ply:GetPos() + Vector(0, 0, 72 * ply:GetModelScale()) + Vector(0, 0, 12))
+        indicator:SetPos(ply:GetPos() + Vector(0, 0, 72 * ply:GetModelScale()) + Vector(0, 0, 12))
     end
 
-    local angle = ply.indicator:GetAngles()
     local curTime = CurTime()
-    ply.indicator:SetAngles(Angle(angle.p, (angle.y + (360 * (curTime - (ply.indicator.lastDraw or 0)))) % 360, angle.r))
-    ply.indicator.lastDraw = curTime
+    local angle = indicator:GetAngles()
+    angle.y = (angle.y + (360 * (curTime - (indicator.lastDraw or 0)))) % 360
+    indicator:SetAngles(angle)
+    indicator.lastDraw = curTime
 
-    ply.indicator:SetupBones()
-    ply.indicator:DrawModel()
+    indicator:SetupBones()
+    indicator:DrawModel()
 end
 
 hook.Add("PostPlayerDraw", "DarkRP_ChatIndicator", drawIndicator)

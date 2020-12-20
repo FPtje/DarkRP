@@ -57,7 +57,9 @@ local function Teleport(ply, cmd, args)
                 offset = trace.HitNormal * 16
             end
 
-            local InitialPosition = DarkRP.findEmptyPos(trace.HitPos + offset, {ply}, 600, 20, Vector(16, 16, 64))
+            local _, hull = ply:GetHull()
+
+            local InitialPosition = DarkRP.findEmptyPos(trace.HitPos + offset, {ply}, 600, 20, hull)
             target:SetPos(InitialPosition)
 
             zapEffect(target)
@@ -105,7 +107,9 @@ local function Bring(ply, cmd, args)
                 trace = util.TraceLine(tracedata)
             end
 
-            target:SetPos(DarkRP.findEmptyPos(BringTo:GetPos(), {target}, 600, 30, Vector(16, 16, 64)))
+            local _, hull = target:GetHull()
+
+            target:SetPos(DarkRP.findEmptyPos(BringTo:GetPos(), {target}, 600, 30, hull))
 
             zapEffect(target)
 
@@ -129,7 +133,9 @@ local function Goto(ply, cmd, args)
     ply:ExitVehicle()
     if not ply:Alive() then ply:Spawn() end
 
-    ply:SetPos(DarkRP.findEmptyPos(target:GetPos(), {ply}, 600, 30, Vector(16, 16, 64)))
+    local _, hull = ply:GetHull()
+
+    ply:SetPos(DarkRP.findEmptyPos(target:GetPos(), {ply}, 600, 30, hull))
 
     zapEffect(ply)
 

@@ -57,6 +57,7 @@ function DarkRP.toggleSleep(player, command)
 
 
     if player.Sleeping and IsValid(player.SleepRagdoll) then
+        player:SetParent()
         local frozen = player:IsFrozen()
         player.OldHunger = player:getDarkRPVar("Energy")
         player.SleepSound:Stop()
@@ -106,7 +107,10 @@ function DarkRP.toggleSleep(player, command)
             player:Lock()
         end
 
-        SendUserMessage("blackScreen", player, false)
+        if ply.blackScreen then
+            ply.blackScreen = false
+            SendUserMessage("blackScreen", player, false)
+        end
 
         if command == true then
             player:arrest()
@@ -162,10 +166,15 @@ function DarkRP.toggleSleep(player, command)
         player.SleepRagdoll = ragdoll
         player.KnockoutTimer = CurTime()
         player:GetTable().BeforeSleepTeam = player:Team()
+        player:SetMoveType(MOVETYPE_NONE) -- Required for parenting to work properly
+        player:SetParent(ragdoll)
         --Make sure noone can pick it up:
         ragdoll:CPPISetOwner(player)
 
-        SendUserMessage("blackScreen", player, true)
+        if not ply.blackScreen then
+            ply.blackScreen = true
+            SendUserMessage("blackScreen", player, true)
+        end
 
         player.SleepSound = CreateSound(ragdoll, "npc/ichthyosaur/water_breath.wav")
         player.SleepSound:PlayEx(0.10, 100)

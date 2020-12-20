@@ -6,6 +6,7 @@ local function SetSpawnPos(ply, args)
         if args == v.command then
             t = k
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("updated_spawnpos", v.name))
+            break
         end
     end
 
@@ -25,6 +26,7 @@ local function AddSpawnPos(ply, args)
         if args == v.command then
             t = k
             DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("created_spawnpos", v.name))
+            break
         end
     end
 

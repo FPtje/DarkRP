@@ -2,22 +2,26 @@
 The fonts that DarkRP uses
 ---------------------------------------------------------------------------]]
 local function loadFonts()
-    local tahoma = system.IsLinux() and "DejaVu Sans" or "Tahoma"
-    local tahomaSize = system.IsLinux() and fp{fn.Flip(fn.Add), 1} or fn.Id
-
     surface.CreateFont("DarkRPHUD1", {
-        size = tahomaSize(16),
+        size = 20,
         weight = 600,
         antialias = true,
         shadow = true,
-        font = tahoma})
+        font = "Roboto"})
 
     surface.CreateFont("DarkRPHUD2", {
         size = 23,
         weight = 400,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Roboto"})
+
+    surface.CreateFont("Roboto20", {
+        size = 20,
+        weight = 600,
+        antialias = true,
+        shadow = false,
+        font = "Roboto"})
 
     surface.CreateFont("Trebuchet18", {
         size = 18,
@@ -48,11 +52,11 @@ local function loadFonts()
         font = "Trebuchet MS"})
 
     surface.CreateFont("TabLarge", {
-        size = tahomaSize(15),
+        size = 18,
         weight = 700,
         antialias = true,
         shadow = false,
-        font = tahoma})
+        font = "Roboto"})
 
     surface.CreateFont("UiBold", {
         size = 16,
@@ -73,35 +77,35 @@ local function loadFonts()
         weight = 500,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Roboto"})
 
     surface.CreateFont("ScoreboardSubtitle", {
         size = 22,
         weight = 500,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Roboto"})
 
     surface.CreateFont("ScoreboardPlayerName", {
         size = 19,
         weight = 500,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Roboto"})
 
     surface.CreateFont("ScoreboardPlayerName2", {
         size = 15,
         weight = 500,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Roboto"})
 
     surface.CreateFont("ScoreboardPlayerNameBig", {
         size = 22,
         weight = 500,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Roboto"})
 
     surface.CreateFont("AckBarWriting", {
         size = 20,
