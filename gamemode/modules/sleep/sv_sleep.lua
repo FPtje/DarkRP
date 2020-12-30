@@ -107,8 +107,8 @@ function DarkRP.toggleSleep(player, command)
             player:Lock()
         end
 
-        if ply.blackScreen then
-            ply.blackScreen = false
+        if player.blackScreen then
+            player.blackScreen = false
             SendUserMessage("blackScreen", player, false)
         end
 
