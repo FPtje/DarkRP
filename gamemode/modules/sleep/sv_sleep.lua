@@ -171,8 +171,8 @@ function DarkRP.toggleSleep(player, command)
         --Make sure noone can pick it up:
         ragdoll:CPPISetOwner(player)
 
-        if not ply.blackScreen then
-            ply.blackScreen = true
+        if not player.blackScreen then
+            player.blackScreen = true
             SendUserMessage("blackScreen", player, true)
         end
 
