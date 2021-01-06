@@ -211,3 +211,21 @@ DarkRP.hookStub{
     },
     returns = {}
 }
+
+DarkRP.hookStub{
+    name = "playerGotLicense",
+    description = "When a player got a gun license",
+    parameters = {
+        {
+            name = "target",
+            description = "The player who got the license",
+            type = "Player"
+        },
+        {
+            name = "actor",
+            description = "The player who gave the license",
+            type = "Player"
+        }
+    },
+    returns = {}
+}
