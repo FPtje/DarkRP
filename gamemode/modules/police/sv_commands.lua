@@ -316,6 +316,8 @@ local function GiveLicense(ply)
     DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("gunlicense_granted", ply:Nick(), LookingAt:Nick()))
     LookingAt:setDarkRPVar("HasGunlicense", true)
 
+    hook.Run("playerGotLicense", LookingAt, ply)
+
     return ""
 end
 DarkRP.defineChatCommand("givelicense", GiveLicense)
