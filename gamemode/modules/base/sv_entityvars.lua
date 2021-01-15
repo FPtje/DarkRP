@@ -245,6 +245,11 @@ function meta:customEntityLimitReached(entTable)
     return max ~= 0 and maxEntities[self][entTable.cmd] >= max
 end
 
+function meta:customEntityCount(entTable)
+    local entities = maxEntities[self]
+    return (entTable and entities) and entities[entTable.cmd] or 0
+end
+
 hook.Add("PlayerDisconnected", "removeLimits", function(ply)
     maxEntities[ply] = nil
     net.Start("DarkRP_DarkRPVarDisconnect")
