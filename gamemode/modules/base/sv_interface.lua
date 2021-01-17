@@ -726,6 +726,27 @@ DarkRP.PLAYER.customEntityLimitReached = DarkRP.stub{
     metatable = DarkRP.PLAYER
 }
 
+DarkRP.PLAYER.customEntityCount = DarkRP.stub{
+    name = "customEntityCount",
+    description = "Get the count of a custom entity.",
+    parameters = {
+        {
+            name = "tblEnt",
+            description = "The entity table (from the DarkRPEntities table).",
+            type = "table",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "count",
+            description = "The current count of the custom entity.",
+            type = "number"
+        }
+    },
+    metatable = DarkRP.PLAYER
+}
+
 DarkRP.PLAYER.getPreferredModel = DarkRP.stub{
     name = "getPreferredModel",
     description = "Get the preferred model of a player for a job.",

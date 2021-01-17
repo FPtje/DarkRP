@@ -222,16 +222,12 @@ Maximum entity values
 ---------------------------------------------------------------------------]]
 local maxEntities = {}
 function meta:addCustomEntity(entTable)
-    if not entTable then return end
-
     maxEntities[self] = maxEntities[self] or {}
     maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
     maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] + 1
 end
 
 function meta:removeCustomEntity(entTable)
-    if not entTable.cmd then return end
-
     maxEntities[self] = maxEntities[self] or {}
     maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] or 0
     maxEntities[self][entTable.cmd] = maxEntities[self][entTable.cmd] - 1
@@ -243,6 +239,16 @@ function meta:customEntityLimitReached(entTable)
     local max = entTable.getMax and entTable.getMax(self) or entTable.max
 
     return max ~= 0 and maxEntities[self][entTable.cmd] >= max
+end
+
+function meta:customEntityCount(entTable)
+    local entities = maxEntities[self]
+    if entities == nil then return 0 end
+
+    entities = entities[entTable.cmd]
+    if entities == nil then return 0 end
+
+    return entities
 end
 
 hook.Add("PlayerDisconnected", "removeLimits", function(ply)
