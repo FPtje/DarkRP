@@ -107,35 +107,35 @@ local function Ragdoll(ply, cmd, args)
                 target.FAdminRagdoll = nil
             elseif RagdollType == "normal" or RagdollType == "ragdoll" then
                 if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
-                local Ragdoll = ents.Create("prop_ragdoll")
+                local doll = ents.Create("prop_ragdoll")
 
-                Ragdoll:SetModel(target:GetModel())
-                Ragdoll:SetPos(target:GetPos())
-                Ragdoll:SetAngles(target:GetAngles())
-                Ragdoll:Spawn()
-                Ragdoll:Activate()
+                doll:SetModel(target:GetModel())
+                doll:SetPos(target:GetPos())
+                doll:SetAngles(target:GetAngles())
+                doll:Spawn()
+                doll:Activate()
 
                 target:StripWeapons()
                 target:Spectate(OBS_MODE_CHASE)
-                target:SpectateEntity(Ragdoll)
+                target:SpectateEntity(doll)
 
-                target.FAdminRagdoll = Ragdoll
+                target.FAdminRagdoll = doll
             elseif RagdollType == "hang" then
                 if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
                 target.FAdminRagdoll = {}
 
-                local Ragdoll = ents.Create("prop_ragdoll")
+                local doll = ents.Create("prop_ragdoll")
 
-                Ragdoll:SetModel(target:GetModel())
-                Ragdoll:SetPos(target:GetPos())
-                Ragdoll:SetAngles(target:GetAngles())
-                Ragdoll:Spawn()
-                Ragdoll:Activate()
-                table.insert(target.FAdminRagdoll, Ragdoll)
+                doll:SetModel(target:GetModel())
+                doll:SetPos(target:GetPos())
+                doll:SetAngles(target:GetAngles())
+                doll:Spawn()
+                doll:Activate()
+                table.insert(target.FAdminRagdoll, doll)
 
                 target:StripWeapons()
                 target:Spectate(OBS_MODE_CHASE)
-                target:SpectateEntity(Ragdoll)
+                target:SpectateEntity(doll)
 
                 local HangOn
                 for k,v in ipairs(HangProps) do
@@ -155,29 +155,29 @@ local function Ragdoll(ply, cmd, args)
                 end
                 if not HangOn then return false end
 
-                Ragdoll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
-                timer.Simple(0.2, function() constraint.Rope(Ragdoll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
+                doll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
+                timer.Simple(0.2, function() constraint.Rope(doll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
             elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
                 if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
-                local Ragdoll = ents.Create("prop_ragdoll")
+                local doll = ents.Create("prop_ragdoll")
 
-                Ragdoll:SetModel(target:GetModel())
-                Ragdoll:SetPos(target:GetPos())
+                doll:SetModel(target:GetModel())
+                doll:SetPos(target:GetPos())
 
-                Ragdoll:Spawn()
-                Ragdoll:Activate()
+                doll:Spawn()
+                doll:Activate()
 
                 -- The rotation angle (the direction the ragdoll is looking at)
                 local angle = Angle(0, target:EyeAngles().y + 90, 0)
-                for i = 1, Ragdoll:GetPhysicsObjectCount() do
-                    local phys = Ragdoll:GetPhysicsObjectNum(i)
+                for i = 1, doll:GetPhysicsObjectCount() do
+                    local phys = doll:GetPhysicsObjectNum(i)
                     if phys and phys:IsValid() and VictimPos1[i] then
                         phys:EnableMotion(false)
                         -- Copy the vector
                         local pos = Vector(VictimPos1[i].x, VictimPos1[i].y, VictimPos1[i].z)
                         pos:Rotate(angle)
 
-                        phys:SetPos(pos + Ragdoll:GetPos())
+                        phys:SetPos(pos + doll:GetPos())
                         phys:SetAngles(VictimAng1[i] + angle)
                     end
                 end
@@ -218,14 +218,14 @@ local function Ragdoll(ply, cmd, args)
 
                 target:StripWeapons()
                 target:Spectate(OBS_MODE_CHASE)
-                target:SpectateEntity(Ragdoll)
+                target:SpectateEntity(doll)
 
-                target.FAdminRagdoll = Ragdoll
+                target.FAdminRagdoll = doll
 
-                timer.Simple(2.1, function() if IsValid(Ragdoll) then
-                    Ragdoll:EmitSound("physics/body/body_medium_impact_hard6.wav", 100, 100)
-                    for i = 1, Ragdoll:GetPhysicsObjectCount() do
-                        local phys = Ragdoll:GetPhysicsObjectNum(i)
+                timer.Simple(2.1, function() if IsValid(doll) then
+                    doll:EmitSound("physics/body/body_medium_impact_hard6.wav", 100, 100)
+                    for i = 1, doll:GetPhysicsObjectCount() do
+                        local phys = doll:GetPhysicsObjectNum(i)
                         if phys and phys:IsValid() then
                             phys:EnableCollisions(false)
                             phys:EnableMotion(true)
@@ -234,9 +234,9 @@ local function Ragdoll(ply, cmd, args)
                     end
                 end end)
 
-                timer.Simple(2.2, function() if IsValid(Ragdoll) then
-                    for i = 1, Ragdoll:GetPhysicsObjectCount() do
-                        local phys = Ragdoll:GetPhysicsObjectNum(i)
+                timer.Simple(2.2, function() if IsValid(doll) then
+                    for i = 1, doll:GetPhysicsObjectCount() do
+                        local phys = doll:GetPhysicsObjectNum(i)
                         if phys and phys:IsValid() then
                             phys:EnableCollisions(true)
                         end

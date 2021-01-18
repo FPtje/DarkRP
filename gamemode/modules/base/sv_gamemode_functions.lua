@@ -758,7 +758,7 @@ function GM:PlayerSpawn(ply)
 
     ply:Extinguish()
 
-    for i=0, 2 do
+    for i = 0, 2 do
         local vm = ply:GetViewModel(i)
 
         if IsValid(vm) then

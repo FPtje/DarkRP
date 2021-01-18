@@ -27,7 +27,7 @@ function DarkRP.removePlayerGesture(anim)
 end
 
 local function physGunCheck(ply)
-    local hookName = "darkrp_anim_physgun_"..ply:EntIndex()
+    local hookName = "darkrp_anim_physgun_" .. ply:EntIndex()
     hook.Add("Think", hookName, function()
         if IsValid(ply) and
            ply:Alive() and
