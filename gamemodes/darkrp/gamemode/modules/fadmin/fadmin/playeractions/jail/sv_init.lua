@@ -1,3 +1,22 @@
+local function createJailTimer(target, jailTime)
+    if jailTime == 0 then return end
+
+    timer.Create("FAdmin_jail" .. target:UserID(), jailTime, 1, function()
+        if not IsValid(target) then return end
+        if not target:FAdmin_GetGlobal("fadmin_jailed") then return end
+        timer.Remove("FAdmin_jail_watch" .. target:UserID())
+        target:FAdmin_SetGlobal("fadmin_jailed", false)
+
+        for k in pairs(target.FAdminJailProps) do
+            if not IsValid(k) then continue end
+            k:SetCanRemove(true)
+            k:Remove()
+        end
+
+        target.FAdminJailProps = nil
+    end)
+end
+
 local function Jail(ply, cmd, args)
     if not args[1] then return false end
 
@@ -85,22 +104,7 @@ local function Jail(ply, cmd, args)
                 target.FAdminJailProps[JailProp] = true
             end
 
-            if JailTime ~= 0 then
-                timer.Create("FAdmin_jail" .. target:UserID(), JailTime, 1, function()
-                    if not IsValid(target) then return end
-                    if not target:FAdmin_GetGlobal("fadmin_jailed") then return end
-                    timer.Remove("FAdmin_jail_watch" .. target:UserID())
-                    target:FAdmin_SetGlobal("fadmin_jailed", false)
-
-                    for k in pairs(target.FAdminJailProps) do
-                        if not IsValid(k) then continue end
-                        k:SetCanRemove(true)
-                        k:Remove()
-                    end
-
-                    target.FAdminJailProps = nil
-                end)
-            end
+            createJailTimer(target, JailTime)
 
             jailDistance = jailDistance * jailDistance
             local userid = target:UserID()

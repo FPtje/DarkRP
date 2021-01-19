@@ -77,7 +77,7 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
     local canRequest, message = hook.Call("canRequestHit", DarkRP.hooks, hitman, ply, nil, hitman:getHitPrice())
 
     if not canRequest then
-        GAMEMODE:AddNotify(DarkRP.getPhrase("cannot_request_hit", (message or "")), 1, 4)
+        GAMEMODE:AddNotify(DarkRP.getPhrase("cannot_request_hit", message or ""), 1, 4)
         surface.PlaySound("buttons/lightswitch2.wav")
         return
     end
@@ -120,4 +120,3 @@ end)
 net.Receive("onHitFailed", function(len)
     hook.Call("onHitFailed", DarkRP.hooks, net.ReadEntity(), net.ReadEntity(), net.ReadString())
 end)
-

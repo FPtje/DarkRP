@@ -72,6 +72,118 @@ local KickerAng = {
     Angle(-19.616451263428, 81.610832214355, 87.282814025879)
 }
 
+local function unragdoll(target)
+    timer.Remove(target:SteamID() .. "FAdminRagdoll")
+    target:FAdmin_SetGlobal("fadmin_ragdolled", false)
+    target:UnSpectate()
+    target:Spawn()
+
+    if not istable(target.FAdminRagdoll) and IsValid(target.FAdminRagdoll) then
+        if target.FAdminRagdoll.SetCanRemove then target.FAdminRagdoll:SetCanRemove(true) end
+        target.FAdminRagdoll:Remove()
+    elseif istable(target.FAdminRagdoll) then
+        for _, v in pairs(target.FAdminRagdoll) do
+            if not IsValid(v) then continue end
+            if v.SetCanRemove then v:SetCanRemove(true) end
+            v:Remove()
+        end
+    end
+    target.FAdminRagdoll = nil
+end
+
+local function ragdollKick(target)
+    if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
+    local doll = ents.Create("prop_ragdoll")
+
+    doll:SetModel(target:GetModel())
+    doll:SetPos(target:GetPos())
+
+    doll:Spawn()
+    doll:Activate()
+
+    -- The rotation angle (the direction the ragdoll is looking at)
+    local angle = Angle(0, target:EyeAngles().y + 90, 0)
+    for i = 1, doll:GetPhysicsObjectCount() do
+        local phys = doll:GetPhysicsObjectNum(i)
+        if phys and phys:IsValid() and VictimPos1[i] then
+            phys:EnableMotion(false)
+            -- Copy the vector
+            local pos = Vector(VictimPos1[i].x, VictimPos1[i].y, VictimPos1[i].z)
+            pos:Rotate(angle)
+
+            phys:SetPos(pos + doll:GetPos())
+            phys:SetAngles(VictimAng1[i] + angle)
+        end
+    end
+
+    -- The kicker's position is behind the target with distance 35, translated to stand a bit higher
+    local aimVec = Vector(target:GetAimVector().x, target:GetAimVector().y, 0)
+    local kickerPos = target:GetPos() - aimVec * 35 + Vector(0, 0, 5)
+    local Kicker = ents.Create("prop_ragdoll")
+    Kicker:SetModel("models/Police.mdl")
+    Kicker:SetPos(kickerPos)
+    Kicker:Spawn()
+    Kicker:Activate()
+
+    Kicker:EmitSound("npc/combine_soldier/vo/contactconfirmprosecuting.wav", 100, 100)
+
+    for i = 1, Kicker:GetPhysicsObjectCount() do
+        local phys = Kicker:GetPhysicsObjectNum(i)
+        if phys and phys:IsValid() then
+            phys:EnableMotion(false)
+            if i == 8 or i == 9 or i == 14 then
+                phys:EnableCollisions(false)
+                timer.Simple(2, function()
+                    if phys:IsValid() then
+                        phys:EnableMotion(true)
+                        phys:Wake()
+                        phys:SetVelocity(aimVec - Vector(0, 0, 1000))
+                    end
+                end)
+            end
+
+            local pos = Vector(KickerPos[i].x, KickerPos[i].y, KickerPos[i].z)
+            pos:Rotate(angle)
+            phys:SetPos(pos + Kicker:GetPos())
+            phys:SetAngles(KickerAng[i] + angle)
+        end
+
+    end
+
+    target:StripWeapons()
+    target:Spectate(OBS_MODE_CHASE)
+    target:SpectateEntity(doll)
+
+    target.FAdminRagdoll = doll
+
+    timer.Simple(2.1, function() if IsValid(doll) then
+        doll:EmitSound("physics/body/body_medium_impact_hard6.wav", 100, 100)
+        for i = 1, doll:GetPhysicsObjectCount() do
+            local phys = doll:GetPhysicsObjectNum(i)
+            if phys and phys:IsValid() then
+                phys:EnableCollisions(false)
+                phys:EnableMotion(true)
+                phys:SetVelocity((aimVec:GetNormalized() + Vector(0, 0, 1)) * 1000)
+            end
+        end
+    end end)
+
+    timer.Simple(2.2, function() if IsValid(doll) then
+        for i = 1, doll:GetPhysicsObjectCount() do
+            local phys = doll:GetPhysicsObjectNum(i)
+            if phys and phys:IsValid() then
+                phys:EnableCollisions(true)
+            end
+        end
+    end end)
+
+    timer.Simple(5, function()
+        if IsValid(Kicker) then
+            Kicker:Remove()
+        end
+    end)
+end
+
 local function Ragdoll(ply, cmd, args)
     if not args[1] then return false end
 
@@ -86,191 +198,83 @@ local function Ragdoll(ply, cmd, args)
 
     for _, target in pairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Ragdoll", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
-        if IsValid(target) then
-            if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" and target:FAdmin_GetGlobal("fadmin_ragdolled") then
-                timer.Remove(target:SteamID() .. "FAdminRagdoll")
-                target:FAdmin_SetGlobal("fadmin_ragdolled", false)
-                target:UnSpectate()
-                target:Spawn()
+        if not IsValid(target) then continue end
+        if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" and target:FAdmin_GetGlobal("fadmin_ragdolled") then
+            unragdoll(target)
+        elseif RagdollType == "normal" or RagdollType == "ragdoll" then
+            if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
+            local doll = ents.Create("prop_ragdoll")
 
-                if not istable(target.FAdminRagdoll) and IsValid(target.FAdminRagdoll) then
-                    if target.FAdminRagdoll.SetCanRemove then target.FAdminRagdoll:SetCanRemove(true) end
+            doll:SetModel(target:GetModel())
+            doll:SetPos(target:GetPos())
+            doll:SetAngles(target:GetAngles())
+            doll:Spawn()
+            doll:Activate()
+
+            target:StripWeapons()
+            target:Spectate(OBS_MODE_CHASE)
+            target:SpectateEntity(doll)
+
+            target.FAdminRagdoll = doll
+        elseif RagdollType == "hang" then
+            if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
+            target.FAdminRagdoll = {}
+
+            local doll = ents.Create("prop_ragdoll")
+
+            doll:SetModel(target:GetModel())
+            doll:SetPos(target:GetPos())
+            doll:SetAngles(target:GetAngles())
+            doll:Spawn()
+            doll:Activate()
+            table.insert(target.FAdminRagdoll, doll)
+
+            target:StripWeapons()
+            target:Spectate(OBS_MODE_CHASE)
+            target:SpectateEntity(doll)
+
+            local HangOn
+            for k,v in ipairs(HangProps) do
+                local prop = ents.Create("fadmin_jail")
+                prop.target = prop
+                prop:SetModel(v.model)
+                prop:SetPos(v.pos + target:GetPos())
+                prop:SetAngles(v.ang)
+                prop:Spawn()
+                prop:Activate()
+
+                local phys = prop:GetPhysicsObject()
+                if IsValid(phys) then phys:EnableMotion(false) end
+
+                table.insert(target.FAdminRagdoll, prop)
+                HangOn = prop -- Hang on the last prop
+            end
+            if not HangOn then return false end
+
+            doll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
+            timer.Simple(0.2, function() constraint.Rope(doll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
+        elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
+            ragdollKick(target)
+        end
+
+        if time ~= 0 then
+            timer.Create(target:SteamID() .. "FAdminRagdoll", time, 1, function()
+                if not IsValid(target) then return end
+                if IsValid(target.FAdminRagdoll) then
+                    target:SetPos(target.FAdminRagdoll:GetPos())
                     target.FAdminRagdoll:Remove()
                 elseif istable(target.FAdminRagdoll) then
-                    for _, v in pairs(target.FAdminRagdoll) do
-                        if IsValid(v) then
-                            if v.SetCanRemove then v:SetCanRemove(true) end
-                            v:Remove()
-                        end
-                    end
+                    for k, v in pairs(target.FAdminRagdoll) do SafeRemoveEntity(v) end
                 end
+                target:UnSpectate()
+                target:Spawn()
                 target.FAdminRagdoll = nil
-            elseif RagdollType == "normal" or RagdollType == "ragdoll" then
-                if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
-                local Ragdoll = ents.Create("prop_ragdoll")
+                target:FAdmin_SetGlobal("fadmin_ragdolled", false)
+            end)
+        end
 
-                Ragdoll:SetModel(target:GetModel())
-                Ragdoll:SetPos(target:GetPos())
-                Ragdoll:SetAngles(target:GetAngles())
-                Ragdoll:Spawn()
-                Ragdoll:Activate()
-
-                target:StripWeapons()
-                target:Spectate(OBS_MODE_CHASE)
-                target:SpectateEntity(Ragdoll)
-
-                target.FAdminRagdoll = Ragdoll
-            elseif RagdollType == "hang" then
-                if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
-                target.FAdminRagdoll = {}
-
-                local Ragdoll = ents.Create("prop_ragdoll")
-
-                Ragdoll:SetModel(target:GetModel())
-                Ragdoll:SetPos(target:GetPos())
-                Ragdoll:SetAngles(target:GetAngles())
-                Ragdoll:Spawn()
-                Ragdoll:Activate()
-                table.insert(target.FAdminRagdoll, Ragdoll)
-
-                target:StripWeapons()
-                target:Spectate(OBS_MODE_CHASE)
-                target:SpectateEntity(Ragdoll)
-
-                local HangOn
-                for k,v in ipairs(HangProps) do
-                    local prop = ents.Create("fadmin_jail")
-                    prop.target = prop
-                    prop:SetModel(v.model)
-                    prop:SetPos(v.pos + target:GetPos())
-                    prop:SetAngles(v.ang)
-                    prop:Spawn()
-                    prop:Activate()
-
-                    local phys = prop:GetPhysicsObject()
-                    if IsValid(phys) then phys:EnableMotion(false) end
-
-                    table.insert(target.FAdminRagdoll, prop)
-                    HangOn = prop -- Hang on the last prop
-                end
-                if not HangOn then return false end
-
-                Ragdoll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
-                timer.Simple(0.2, function() constraint.Rope(Ragdoll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
-            elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
-                if istable(target.FAdminRagdoll) or IsValid(target.FAdminRagdoll) then return false end
-                local Ragdoll = ents.Create("prop_ragdoll")
-
-                Ragdoll:SetModel(target:GetModel())
-                Ragdoll:SetPos(target:GetPos())
-
-                Ragdoll:Spawn()
-                Ragdoll:Activate()
-
-                -- The rotation angle (the direction the ragdoll is looking at)
-                local angle = Angle(0, target:EyeAngles().y + 90, 0)
-                for i = 1, Ragdoll:GetPhysicsObjectCount() do
-                    local phys = Ragdoll:GetPhysicsObjectNum(i)
-                    if phys and phys:IsValid() and VictimPos1[i] then
-                        phys:EnableMotion(false)
-                        -- Copy the vector
-                        local pos = Vector(VictimPos1[i].x, VictimPos1[i].y, VictimPos1[i].z)
-                        pos:Rotate(angle)
-
-                        phys:SetPos(pos + Ragdoll:GetPos())
-                        phys:SetAngles(VictimAng1[i] + angle)
-                    end
-                end
-
-                -- The kicker's position is behind the target with distance 35, translated to stand a bit higher
-                local aimVec = Vector(target:GetAimVector().x, target:GetAimVector().y, 0)
-                local kickerPos = target:GetPos() - aimVec * 35 + Vector(0, 0, 5)
-                local Kicker = ents.Create("prop_ragdoll")
-                Kicker:SetModel("models/Police.mdl")
-                Kicker:SetPos(kickerPos)
-                Kicker:Spawn()
-                Kicker:Activate()
-
-                Kicker:EmitSound("npc/combine_soldier/vo/contactconfirmprosecuting.wav", 100, 100)
-
-                for i = 1, Kicker:GetPhysicsObjectCount() do
-                    local phys = Kicker:GetPhysicsObjectNum(i)
-                    if phys and phys:IsValid() then
-                        phys:EnableMotion(false)
-                        if i == 8 or i == 9 or i == 14 then
-                            phys:EnableCollisions(false)
-                            timer.Simple(2, function()
-                                if phys:IsValid() then
-                                    phys:EnableMotion(true)
-                                    phys:Wake()
-                                    phys:SetVelocity(aimVec - Vector(0, 0, 1000))
-                                end
-                            end)
-                        end
-
-                        local pos = Vector(KickerPos[i].x, KickerPos[i].y, KickerPos[i].z)
-                        pos:Rotate(angle)
-                        phys:SetPos(pos + Kicker:GetPos())
-                        phys:SetAngles(KickerAng[i] + angle)
-                    end
-
-                end
-
-                target:StripWeapons()
-                target:Spectate(OBS_MODE_CHASE)
-                target:SpectateEntity(Ragdoll)
-
-                target.FAdminRagdoll = Ragdoll
-
-                timer.Simple(2.1, function() if IsValid(Ragdoll) then
-                    Ragdoll:EmitSound("physics/body/body_medium_impact_hard6.wav", 100, 100)
-                    for i = 1, Ragdoll:GetPhysicsObjectCount() do
-                        local phys = Ragdoll:GetPhysicsObjectNum(i)
-                        if phys and phys:IsValid() then
-                            phys:EnableCollisions(false)
-                            phys:EnableMotion(true)
-                            phys:SetVelocity((aimVec:GetNormalized() + Vector(0, 0, 1)) * 1000)
-                        end
-                    end
-                end end)
-
-                timer.Simple(2.2, function() if IsValid(Ragdoll) then
-                    for i = 1, Ragdoll:GetPhysicsObjectCount() do
-                        local phys = Ragdoll:GetPhysicsObjectNum(i)
-                        if phys and phys:IsValid() then
-                            phys:EnableCollisions(true)
-                        end
-                    end
-                end end)
-
-                timer.Simple(5, function()
-
-                    if IsValid(Kicker) then
-                        Kicker:Remove()
-                    end
-                end)
-
-            end
-
-            if time ~= 0 then
-                timer.Create(target:SteamID() .. "FAdminRagdoll", time, 1, function()
-                    if not IsValid(target) then return end
-                    if IsValid(target.FAdminRagdoll) then
-                        target:SetPos(target.FAdminRagdoll:GetPos())
-                        target.FAdminRagdoll:Remove()
-                    elseif istable(target.FAdminRagdoll) then
-                        for k, v in pairs(target.FAdminRagdoll) do SafeRemoveEntity(v) end
-                    end
-                    target:UnSpectate()
-                    target:Spawn()
-                    target.FAdminRagdoll = nil
-                    target:FAdmin_SetGlobal("fadmin_ragdolled", false)
-                end)
-            end
-
-            if RagdollType ~= "unragdoll" and string.lower(cmd) ~= "unragdoll" then
-                target:FAdmin_SetGlobal("fadmin_ragdolled", true)
-            end
+        if RagdollType ~= "unragdoll" and string.lower(cmd) ~= "unragdoll" then
+            target:FAdmin_SetGlobal("fadmin_ragdolled", true)
         end
     end
     if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" then
