@@ -1,4 +1,4 @@
-# DarkRP
+# DarkRP ![run-glualint](https://github.com/FPtje/DarkRP/workflows/run-glualint/badge.svg?branch=master)
 A roleplay gamemode for Garry's Mod.
 
 ## Getting DarkRP
@@ -29,5 +29,3 @@ Just whatever you do, don't touch DarkRP's core files.
 Please head to the official Discord!
 
 https://darkrp.page.link/discord
-
-
