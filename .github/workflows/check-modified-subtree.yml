@@ -1,0 +1,15 @@
+name: check-modified-subtree
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  check-modified-subtree:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Make sure there is access to the master branch
+          fetch-depth: 0
+          clean: false
+      - run: ./.github/scripts/check-modified-subtree.sh
