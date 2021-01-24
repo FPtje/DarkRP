@@ -18,8 +18,8 @@
     "lint_unusedParameters": false,
     "lint_unusedLoopVars": false,
     "lint_ignoreFiles": [
-        "**/gamemode/modules/fpp/pp/**.lua",
-        "**/gamemode/libraries/simplerr.lua"
+        "./gamemode/modules/fpp/pp/**.lua",
+        "./gamemode/libraries/simplerr.lua"
     ],
     "prettyprint_spaceAfterParens": false,
     "prettyprint_spaceAfterBrackets": false,
