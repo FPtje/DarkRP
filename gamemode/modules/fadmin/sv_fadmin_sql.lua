@@ -27,8 +27,6 @@ hook.Add("FAdmin_StoreBan", "MySQLBans", function(SteamID, Nick, Duration, Reaso
     end
 
     MySQLite.query("REPLACE INTO FAdminBans VALUES(" .. steam .. ", " .. nick .. ", " .. bandate .. ", " .. duration .. ", " .. reason .. ", " .. admin .. ", " .. adminsteam .. ");")
-
-    return true
 end)
 
 --[[---------------------------------------------------------------------------
