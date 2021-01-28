@@ -93,6 +93,7 @@ end)
 
 local function SaveBan(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
     local StoreBans = hook.Call("FAdmin_StoreBan", nil, SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
+    if StoreBans == true then return end
 
     if tonumber(Duration) == 0 then
         FAdmin.BANS[SteamID] = {}
@@ -109,8 +110,6 @@ local function SaveBan(SteamID, Nick, Duration, Reason, AdminName, Admin_steam)
         FAdmin.BANS[SteamID].adminname = AdminName
         FAdmin.BANS[SteamID].adminsteam = Admin_steam
     end
-
-    if StoreBans == true then return end
 end
 
 local function Ban(ply, cmd, args)
