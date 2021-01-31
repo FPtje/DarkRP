@@ -98,8 +98,13 @@ local function DoLottery(ply, amount)
         return ""
     end
 
-    if player.GetCount() <= 2 or LotteryON then
-        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("unable", "/lottery", ""))
+    if player.GetCount() <= 2 then
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("too_few_players_for_lottery", 2))
+        return ""
+    end
+
+    if LotteryON then
+        DarkRP.notify(ply, 1, 6, DarkRP.getPhrase("lottery_ongoing"))
         return ""
     end
 
