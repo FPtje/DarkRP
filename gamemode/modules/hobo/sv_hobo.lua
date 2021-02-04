@@ -29,8 +29,7 @@ local function MakeZombieSoundsAsHobo(ply)
 
     ply.nospamtime = CurTime()
 
-    local ran = math.random(1, 3)
-    local snd = sounds[ran]
+    local snd = sounds[1, #sounds]
     ply:EmitSound(snd.path .. math.random(1, snd.range) .. ".wav", 100, 100)
 end
 concommand.Add("_hobo_emitsound", MakeZombieSoundsAsHobo)
