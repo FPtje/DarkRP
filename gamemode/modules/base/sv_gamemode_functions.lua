@@ -304,6 +304,7 @@ local vrad = GM.Config.voiceradius
 local dynv = GM.Config.dynamicvoice
 local deadv = GM.Config.deadvoice
 local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
+local timeDelay = GM.Config.voiceCheckTimeDelay
 local DrpCanHear = {}
 
 -- Recreate DrpCanHear after Lua Refresh
@@ -312,29 +313,38 @@ for _, ply in pairs(player.GetHumans()) do
     DrpCanHear[ply] = {}
 end
 
-local gridSize = GM.Config.voiceDistance*2 -- Grid cell size is equal to the size of the diamater of player talking
+local gridSize = GM.Config.voiceDistance * 2 -- Grid cell size is equal to the size of the diamater of player talking
 local floor = math.floor -- Caching floor as we will need to use it a lot
 
 -- Grid based position check
-timer.Create("DarkRPCanHearPlayersVoice", 1, 0, function()
-    DrpCanHear = {}
+local grid
+local plyToGrid = {
+    {},
+    {}
+}
+
+
+timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
     local players = player.GetHumans()
 
-    -- Create Grid
-    local grid = {}
-    local plyToGrid = {
-        {},
-        {}
-    }
+
+    -- Clear old values
+    plyToGrid[0] = {}
+    plyToGrid[1] = {}
+    grid = {}
 
     -- Get the grid position of every player O(N)
     for _, ply in ipairs(players) do
-        local pos = ply:GetShootPos()
-        local x = floor(pos.x/gridSize)
-        local y = floor(pos.y/gridSize)
-        grid[x] = grid[x] or {}
-        grid[x][y] = grid[x][y] or {}
-        grid[x][y][#grid[x][y] + 1] = ply
+        local pos = ply:GetPos()
+        local x = floor(pos.x / gridSize)
+        local y = floor(pos.y / gridSize)
+
+        local row = grid[x] or {}
+            local cell = row[y] or {}
+                table.insert(cell, ply)
+            row[y] = cell
+        grid[x] = row
+
         plyToGrid[1][ply] = x
         plyToGrid[2][ply] = y
 
@@ -348,22 +358,22 @@ timer.Create("DarkRPCanHearPlayersVoice", 1, 0, function()
         local gridY = plyToGrid[2][ply1]
         local ply1ShootPos
 
-        for x = gridX, gridX+1 do   -- Get every neighbouring cell (including the actual cell) (x axis)
+        for x = gridX, gridX + 1 do   -- Get every neighbouring cell (including the actual cell) (x axis)
             local row = grid[x]
             if not row then continue end
 
-            for y = gridY, gridY+1 do   -- Get every neighbouring cell (including the actual cell) (y axis)
+            for y = gridY, gridY + 1 do   -- Get every neighbouring cell (including the actual cell) (y axis)
                 if x == gridX and y == gridY then continue end -- Exclude the actual cell as it needs a separate computation
                 local cell = row[y]
                 if not cell then continue end -- Check that values exist
 
                 -- Check if every player can talk
                 for _, ply2 in ipairs(cell) do
-                    ply1ShootPos = ply1ShootPos or ply1:GetShootPos()
-                    local ply2ShootPos = ply2:GetShootPos()
+                    ply1Pos = ply1Pos or ply1:GetPos()
+                    local ply2Pos = ply2:GetPos()
                     local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
-                        (ply1ShootPos:DistToSqr(ply2ShootPos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
-                            (not dynv or IsInRoom(ply1ShootPos, ply2ShootPos, ply2))) -- Dynamic voice is on and players are in the same room
+                        (ply1ShootPos:DistToSqr(ply2Pos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
+                            (not dynv or IsInRoom(ply1Pos, ply2Pos, ply2))) -- Dynamic voice is on and players are in the same room
 
                     DrpCanHear[ply1][ply2] = canTalk and (deadv or ply2:Alive())
                     DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive()) -- Take advantage of the symmetry
@@ -375,31 +385,32 @@ timer.Create("DarkRPCanHearPlayersVoice", 1, 0, function()
     -- Doing a pass-through inside every cell to compute the interactions inside of the cells.
     -- Each grid check is O(N(N+1)/2) where N is the number of players inside the cell.
     for _, row in pairs(grid) do
-        for _, cellPlayers in pairs(row) do
-            local count = #cellPlayers
+        for _, cell in pairs(row) do
+            local count = #cell
             for i = 1, count do
                 for j = i + 1, count do
-                    local ply1 = cellPlayers[i]
-                    local ply2 = cellPlayers[j]
-                    local ply1ShootPos = ply1:GetShootPos()
-                    local ply2ShootPos = ply2:GetShootPos()
+                    ply1Pos = ply1Pos or ply1:GetPos()
+                    local ply2Pos = ply2:GetPos()
                     local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
-                        (ply1ShootPos:DistToSqr(ply2ShootPos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
-                            (not dynv or IsInRoom(ply1ShootPos, ply2ShootPos, ply2))) -- Dynamic voice is on and players are in the same room
+                        (ply1ShootPos:DistToSqr(ply2Pos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
+                            (not dynv or IsInRoom(ply1Pos, ply2Pos, ply2))) -- Dynamic voice is on and players are in the same room
 
                     DrpCanHear[ply1][ply2] = canTalk and (deadv or ply2:Alive())
-                    DrpCanHear[ply2] = DrpCanHear[ply2] or {}
-                    DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive())
+                    DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive()) -- Take advantage of the symmetry
                 end
             end
         end
     end
 end)
 
+hook.Add("PlayerDisconnect", "DarkRPCanHear", function(ply)
+    DrpCanHear[ply] = nil -- Clear to avoid memory leaks
+end)
+
 function GM:PlayerCanHearPlayersVoice(listener, talker)
     if not deadv and not talker:Alive() then return false end
 
-    return DrpCanHear[listener][talker], threed
+    return (not vrad) or DrpCanHear[listener][talker] == true, threed
 end
 
 function GM:CanTool(ply, trace, mode)
