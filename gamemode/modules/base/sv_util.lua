@@ -1,3 +1,4 @@
+util.AddNetworkString("_Notify")
 function DarkRP.notify(ply, msgtype, len, msg)
     if not istable(ply) then
         if not IsValid(ply) then
@@ -16,21 +17,22 @@ function DarkRP.notify(ply, msgtype, len, msg)
 
     if hook.Run("onNotify", rcp:GetPlayers(), msgtype, len, msg) == true then return end
 
-    umsg.Start("_Notify", rcp)
-        umsg.String(msg)
-        umsg.Short(msgtype)
-        umsg.Long(len)
-    umsg.End()
+    net.Start("_Notify")
+        net.WriteString(msg)
+        net.WriteInt(msgtype, 4)
+        net.WriteInt(len, 12)
+    net.Send(rcp)
 end
 
 function DarkRP.notifyAll(msgtype, len, msg)
-    if hook.Run("onNotify", player.GetAll(), msgtype, len, msg) == true then return end
+    local allPlayers = player.GetAll()
+    if hook.Run("onNotify", allPlayers, msgtype, len, msg) == true then return end
 
-    umsg.Start("_Notify")
-        umsg.String(msg)
-        umsg.Short(msgtype)
-        umsg.Long(len)
-    umsg.End()
+    net.Start("_Notify")
+        net.WriteString(msg)
+        net.WriteInt(msgtype, 4)
+        net.WriteInt(len, 12)
+    net.Send(allPlayers)
 end
 
 function DarkRP.printMessageAll(msgtype, msg)
