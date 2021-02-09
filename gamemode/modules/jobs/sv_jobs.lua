@@ -137,6 +137,8 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         DarkRP.resetLaws()
     end
 
+    local DoEffect = false
+
     self:SetTeam(t)
     hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
     DarkRP.log(self:Nick() .. " (" .. self:SteamID() .. ") changed to " .. team.GetName(t), nil, Color(100, 0, 255))
@@ -144,26 +146,15 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     if GAMEMODE.Config.norespawn and self:Alive() then
         self:StripWeapons()
         self:RemoveAllAmmo()
-        local vPoint = self:GetShootPos() + Vector(0,0,50)
-        local effectdata = EffectData()
-        effectdata:SetEntity(self)
-        effectdata:SetStart(vPoint) -- Not sure if we need a start and origin (endpoint) for this effect, but whatever
-        effectdata:SetOrigin(vPoint)
-        effectdata:SetScale(1)
-        util.Effect("entity_remove", effectdata)
+
+        DoEffect = true
         player_manager.SetPlayerClass(self, TEAM.playerClass or "player_darkrp")
         self:applyPlayerClassVars(false)
         gamemode.Call("PlayerSetModel", self)
         gamemode.Call("PlayerLoadout", self)
     else
         if GAMEMODE.Config.instantjob then
-            local vPoint = self:GetShootPos() + Vector(0,0,50)
-            local effectdata = EffectData()
-            effectdata:SetEntity(self)
-            effectdata:SetStart(vPoint)
-            effectdata:SetOrigin(vPoint)
-            effectdata:SetScale(1)
-            util.Effect("entity_remove", effectdata)
+            DoEffect = true
 
             self:StripWeapons()
             self:RemoveAllAmmo()
@@ -171,6 +162,16 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         else
             self:KillSilent()
         end
+    end
+
+    if DoEffect then
+        local vPoint = self:GetShootPos() + Vector(0,0,50)
+        local effectdata = EffectData()
+        effectdata:SetEntity(self)
+        effectdata:SetStart(vPoint) -- Not sure if we need a start and origin (endpoint) for this effect, but whatever
+        effectdata:SetOrigin(vPoint)
+        effectdata:SetScale(1)
+        util.Effect("entity_remove", effectdata)
     end
 
     umsg.Start("OnChangedTeam", self)
