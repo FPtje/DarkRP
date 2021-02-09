@@ -156,7 +156,21 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         gamemode.Call("PlayerSetModel", self)
         gamemode.Call("PlayerLoadout", self)
     else
-        self:KillSilent()
+        if GAMEMODE.Config.instantjob then
+            local vPoint = self:GetShootPos() + Vector(0,0,50)
+            local effectdata = EffectData()
+            effectdata:SetEntity(self)
+            effectdata:SetStart(vPoint)
+            effectdata:SetOrigin(vPoint)
+            effectdata:SetScale(1)
+            util.Effect("entity_remove", effectdata)
+
+            self:StripWeapons()
+            self:RemoveAllAmmo()
+            self:Spawn()
+        else
+            self:KillSilent()
+        end
     end
 
     umsg.Start("OnChangedTeam", self)
@@ -442,7 +456,7 @@ local function DoTeamBan(ply, args)
     else
         nick = ply:Nick()
     end
-    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y_for_z", nick, target:Nick(), team.GetName(tonumber(Team)), time / 60))
+    DarkRP.notifyAll(0, 5, DarkRP.getPhrase("x_teambanned_y_for_z", nick, target:Nick(), team.GetName(tonumber(Team)), time/60))
 end
 DarkRP.definePrivilegedChatCommand("teamban", "DarkRP_AdminCommands", DoTeamBan)
 
