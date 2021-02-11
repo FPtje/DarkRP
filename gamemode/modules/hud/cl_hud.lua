@@ -375,7 +375,7 @@ end
 --[[---------------------------------------------------------------------------
 Display notifications
 ---------------------------------------------------------------------------]]
-local NotificationSound = GM.Config.NotifSound
+local NotificationSound = GM.Config.notificationSound
 local function DisplayNotify()
     local txt = net.ReadString()
     GAMEMODE:AddNotify(txt, net.ReadInt(4), net.ReadInt(12))
