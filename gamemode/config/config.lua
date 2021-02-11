@@ -324,7 +324,7 @@ GM.Config.F1MenuHelpPage = "https://darkrp.miraheze.org/wiki/Main_Page"
 GM.Config.F1MenuHelpPageTitle = "DarkRP Wiki"
 
 -- The sound that plays when you get a DarkRP notification
-GM.Config.NotifSound = "buttons/lightswitch2.wav"
+GM.Config.notificationSound = "buttons/lightswitch2.wav"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {
