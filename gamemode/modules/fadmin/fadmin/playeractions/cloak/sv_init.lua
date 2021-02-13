@@ -40,7 +40,7 @@ local function UnCloak(ply, cmd, args)
                 v:SetNoDraw(false)
             end
 
-            for _, v in pairs(ents.FindByClass("physgun_beam")) do
+            for _, v in ipairs(ents.FindByClass("physgun_beam")) do
                 if v:GetParent() == target then
                     v:SetNoDraw(false)
                 end
