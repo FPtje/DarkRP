@@ -53,7 +53,7 @@ function SWEP:Think()
     BaseClass.Think(self)
     if self.WaitingForAttackEffect and self:GetSeqIdleTime() ~= 0 and CurTime() >= self:GetSeqIdleTime() - 0.35 then
         self.WaitingForAttackEffect = false
-        
+
         local Owner = self:GetOwner()
 
         local effectData = EffectData()
