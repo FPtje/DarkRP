@@ -53,10 +53,12 @@ function SWEP:Think()
     BaseClass.Think(self)
     if self.WaitingForAttackEffect and self:GetSeqIdleTime() ~= 0 and CurTime() >= self:GetSeqIdleTime() - 0.35 then
         self.WaitingForAttackEffect = false
+        
+        local Owner = self:GetOwner()
 
         local effectData = EffectData()
-        effectData:SetOrigin(self:GetOwner():GetShootPos() + (self:GetOwner():EyeAngles():Forward() * 45))
-        effectData:SetNormal(self:GetOwner():EyeAngles():Forward())
+        effectData:SetOrigin(Owner:GetShootPos() + (Owner:EyeAngles():Forward() * 45))
+        effectData:SetNormal(Owner:EyeAngles():Forward())
         util.Effect("StunstickImpact", effectData)
     end
 end
