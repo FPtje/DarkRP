@@ -329,8 +329,8 @@ timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
 
 
     -- Clear old values
-    plyToGrid[0] = {}
     plyToGrid[1] = {}
+    plyToGrid[2] = {}
     grid = {}
 
     -- Get the grid position of every player O(N)
