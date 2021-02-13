@@ -2,6 +2,11 @@ local PANEL = {}
 
 AccessorFunc(PANEL, "borderColor", "BorderColor")
 
+local white = Color(255, 255, 255)
+local black = Color(0, 0, 0, 255)
+local gray = Color(140, 140, 140, 255)
+local darkgray = Color(50, 50, 50, 255)
+
 --[[---------------------------------------------------------------------------
 Generic item
 ---------------------------------------------------------------------------]]
@@ -12,7 +17,7 @@ function PANEL:Init()
     self:SetCursor("hand")
 
     self:SetFont("F4MenuFont01")
-    self:SetTextColor(Color(255, 255, 255, 255))
+    self:SetTextColor(white)
     self:SetTall(60)
     self:DockPadding(0, 0, 10, 5)
 
@@ -23,12 +28,9 @@ function PANEL:Init()
     self.txtRight = self.txtRight or vgui.Create("DLabel", self)
     self.txtRight:SetFont("F4MenuFont01")
     self.txtRight:Dock(RIGHT)
-    self.txtRight:SetTextColor(Color(255, 255, 255, 255))
+    self.txtRight:SetTextColor(white)
 end
 
-local black = Color(0, 0, 0, 255)
-local gray = Color(140, 140, 140, 255)
-local darkgray = Color(50, 50, 50, 255)
 function PANEL:Paint(w, h)
     local disabled = self:GetDisabled()
     local x, y = self.Depressed and 2 or 0, self.Depressed and 2 or 0
