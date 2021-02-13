@@ -392,8 +392,9 @@ timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
         for _, cell in pairs(row) do
             local count = #cell
             for i = 1, count do
+                local ply1 = cell[i]
                 for j = i + 1, count do
-                    local ply1, ply2 = cell[i], cell[j]
+                    local ply2 = cell[j]
                     local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
                         (plyPos[ply1]:DistToSqr(plyPos[ply2]) < voiceDistance and -- voiceradius is on and the two are within hearing distance
                             (not dynv or IsInRoom(eyePos[ply1], eyePos[ply2], ply2))) -- Dynamic voice is on and players are in the same room
