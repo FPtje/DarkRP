@@ -333,9 +333,12 @@ timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
     plyToGrid[2] = {}
     grid = {}
 
+    local plyPos = {}
+
     -- Get the grid position of every player O(N)
     for _, ply in ipairs(players) do
         local pos = ply:GetPos()
+        plyPos[ply] = pos
         local x = floor(pos.x / gridSize)
         local y = floor(pos.y / gridSize)
 
@@ -369,8 +372,8 @@ timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
 
                 -- Check if every player can talk
                 for _, ply2 in ipairs(cell) do
-                    ply1Pos = ply1Pos or ply1:GetPos()
-                    local ply2Pos = ply2:GetPos()
+                    ply1Pos = ply1Pos or plyPos[ply1]
+                    local ply2Pos = plyPos[ply2]
                     local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
                         (ply1ShootPos:DistToSqr(ply2Pos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
                             (not dynv or IsInRoom(ply1Pos, ply2Pos, ply2))) -- Dynamic voice is on and players are in the same room
@@ -390,7 +393,7 @@ timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
             for i = 1, count do
                 for j = i + 1, count do
                     local ply1, ply2 = cell[i], cell[j]
-                    local ply1Pos, ply2Pos = ply1:GetPos(), ply2:GetPos()
+                    local ply1Pos, ply2Pos = plyPos[ply1], plyPos[ply2]
 
                     local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
                         (ply1ShootPos:DistToSqr(ply2Pos) < voiceDistance and -- voiceradius is on and the two are within hearing distance
