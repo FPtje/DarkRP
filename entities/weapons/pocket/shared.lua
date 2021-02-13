@@ -60,8 +60,9 @@ end
 function SWEP:Holster()
     if not SERVER then return true end
 
-    self:GetOwner():DrawViewModel(true)
-    self:GetOwner():DrawWorldModel(true)
+    local Owner = self:GetOwner()
+    Owner:DrawViewModel(true)
+    Owner:DrawWorldModel(true)
 
     return true
 end
