@@ -69,7 +69,7 @@ GM.Config.deadtalk                      = true
 GM.Config.deadvoice                     = true
 -- deathpov - Enable/disable whether people see their death in first person view.
 GM.Config.deathpov                      = false
--- decalcleaner - Enable/Disable clearing ever players decals.
+-- decalcleaner - Enable/Disable clearing every player's decals.
 GM.Config.decalcleaner                  = false
 -- disallowClientsideScripts - Clientside scripts can be very useful for customizing the HUD or to aid in building. This option bans those scripts.
 GM.Config.disallowClientsideScripts     = false
