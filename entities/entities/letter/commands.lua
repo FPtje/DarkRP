@@ -85,7 +85,7 @@ end
 DarkRP.defineChatCommand("type", TypeLetter)
 
 local function RemoveLetters(ply)
-    for k, v in pairs(ents.FindByClass("letter")) do
+    for k, v in ipairs(ents.FindByClass("letter")) do
         if v.SID == ply.SID then v:Remove() end
     end
     DarkRP.notify(ply, 4, 4, DarkRP.getPhrase("cleaned_up", "mails"))
