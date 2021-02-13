@@ -73,7 +73,7 @@ end
 function SWEP:SecondaryAttack()
     self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     local ply = self:GetOwner()
-    local maxhealth = self:GetOwner():GetMaxHealth() or 100
+    local maxhealth = ply:GetMaxHealth() or 100
     if ply:Health() < maxhealth then
         ply:SetHealth(ply:Health() + 1)
         self:EmitSound("hl1/fvox/boop.wav", 150, ply:Health() / ply:GetMaxHealth() * 100, 1, CHAN_AUTO)
