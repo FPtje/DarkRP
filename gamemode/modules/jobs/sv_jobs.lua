@@ -108,7 +108,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     self.LastJob = CurTime()
 
     if GAMEMODE.Config.removeclassitems then
-        for _, v in pairs(DarkRPEntities) do
+        for _, v in ipairs(DarkRPEntities) do
             if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
             if not v.allowed then continue end
             if istable(v.allowed) and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
@@ -126,7 +126,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     end
 
     if isMayor then
-        for _, ent in pairs(self.lawboards or {}) do
+        for _, ent in ipairs(self.lawboards or {}) do
             if IsValid(ent) then
                 ent:Remove()
             end
