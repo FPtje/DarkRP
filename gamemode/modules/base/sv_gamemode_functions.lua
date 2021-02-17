@@ -469,7 +469,8 @@ function GM:PlayerDeath(ply, weapon, killer)
 
         if amount > 0 then
             ply:addMoney(-amount)
-            DarkRP.createMoneyBag(ply:GetPos(), amount)
+            local death_sink = amount * 0.8
+            DarkRP.createMoneyBag(ply:GetPos(), death_sink)
         end
     end
 
