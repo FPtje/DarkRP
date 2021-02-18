@@ -288,15 +288,16 @@ function GM:KeyPress(ply, code)
 end
 
 -- IsInRoom function to see if the player is in the same room.
+local roomTrResult = {}
+local roomTr = { output = roomTrResult }
 local function IsInRoom(listenerShootPos, talkerShootPos, talker)
-    local tracedata = {}
-    tracedata.start = talkerShootPos
-    tracedata.endpos = listenerShootPos
+    roomTr.start = talkerShootPos
+    roomTr.endpos = listenerShootPos
     -- Listener needs not be ignored as that's the end of the trace
-    tracedata.filter = talker
-    local trace = util.TraceLine(tracedata)
+    roomTr.filter = talker
+    util.TraceLine(roomTr)
 
-    return not trace.HitWorld
+    return not roomTrResult.HitWorld
 end
 
 local threed = GM.Config.voice3D
