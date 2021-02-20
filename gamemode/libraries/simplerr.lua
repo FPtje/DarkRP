@@ -415,9 +415,7 @@ end
 -- Translate an error into a language understandable by non-programmers
 local function translateError(path, line, err, translation, errs, stack)
     -- Using .* instead of path because path may be wrong when error is called
-    local msg = string.match(err, ".*:[0-9-]+: (.*)")
-
-    local msg, hints = translateMsg(msg, path, line, errs)
+    local msg, hints = translateMsg(string.match(err, ".*:[0-9-]+: (.*)"), path, line, errs)
     local res = string.format(translation, path, line, msg, hints, stack)
     return res
 end
