@@ -7,6 +7,13 @@ function ENT:Initialize()
     end
 end
 
+local camStart3D2D = cam.Start3D2D
+local drawWordBox = draw.WordBox
+local IsValid = IsValid
+
+local color_red = Color(140,0,0,100)
+local color_white = color_white
+
 function ENT:Draw()
     self:DrawModel()
 
@@ -23,10 +30,10 @@ function ENT:Draw()
 
     Ang:RotateAroundAxis(Ang:Up(), 90)
 
-    cam.Start3D2D(Pos + Ang:Up() * 11.5, Ang, 0.11)
-        draw.WordBox(2, -TextWidth * 0.5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
-        draw.WordBox(2, -TextWidth2 * 0.5, 18, owner, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
-    cam.End3D2D()
+    camStart3D2D(Pos + Ang:Up() * 11.5, Ang, 0.11)
+        drawWordBox(2, -TextWidth * 0.5, -30, text, "HUDNumber5", color_red, color_white)
+        drawWordBox(2, -TextWidth2 * 0.5, 18, owner, "HUDNumber5", color_red, color_white)
+    camEnd3D2D()
 end
 
 function ENT:Think()
