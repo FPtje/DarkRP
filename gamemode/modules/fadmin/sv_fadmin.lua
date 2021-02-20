@@ -4,7 +4,7 @@ util.AddNetworkString("FAdmin_GlobalSetting")
 util.AddNetworkString("FAdmin_PlayerSetting")
 util.AddNetworkString("FAdmin_GlobalPlayerSettings")
 
-local SortedPairs,ipairs,pairs = SortedPairs,ipairs,pairs
+local SortedPairs, ipairs, pairs = SortedPairs, ipairs, pairs
 -- recursively adds everything in a directory to be downloaded by client
 local function AddDir(dir)
     local files, folders = file.Find(dir .. "/*", "GAME")
@@ -88,7 +88,7 @@ hook.Add("PlayerInitialSpawn", "FAdmin_GlobalSettings", function(ply)
             net.WriteString(k)
             net.WriteType(v)
         end
-    
+
         local tPlayers = player.GetAll()
         net.WriteUInt(#tPlayers, 8)
         for _, target in ipairs(tPlayers) do
