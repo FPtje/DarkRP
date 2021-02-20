@@ -133,6 +133,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
                 ent:Remove()
             end
         end
+        self.lawboards = {}
     end
 
     if isMayor and GAMEMODE.Config.shouldResetLaws then
