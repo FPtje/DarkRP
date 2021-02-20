@@ -108,7 +108,9 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     self.LastJob = CurTime()
 
     if GAMEMODE.Config.removeclassitems then
-        for _, v in ipairs(DarkRPEntities) do
+        -- Must not be ipairs, DarkRPEntities might have missing keys when
+        -- DarkRP.removeEntity is called.
+        for _, v in pairs(DarkRPEntities) do
             if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
             if not v.allowed then continue end
             if istable(v.allowed) and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
