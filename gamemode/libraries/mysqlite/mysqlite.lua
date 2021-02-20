@@ -137,11 +137,28 @@ local function loadMySQLModule()
 
     mysqlOO = mysqloo
     TMySQL = tmysql
+
+    if MySQLite_config.Preferred_module == "tmysql4" then
+
+        if not tmysql.Version or tmysql.Version < 4.1 then
+            MsgC(Color(255, 0, 0), "Using older tmysql version, please consider updating!\n")
+            MsgC(Color(255, 0, 0), "Newer Version: https://github.com/SuperiorServers/gm_tmysql4\n")
+        end
+
+        -- Turns tmysql.Connect into tmysql.Initialize if they're using an older version.
+        TMySQL.Connect = (tmysql.Version and tmysql.Version >= 4.1 and TMySQL.Connect or TMySQL.initialize)
+        TMySQL.SetOption = (tmysql.Version and tmysql.Version >= 4.1 and TMySQL.SetOption or TMySQL.Option)
+    end
 end
 loadMySQLModule()
 
 module("MySQLite")
 
+-- Helper function to return the first value found when iterating over a table.
+-- Replaces the now deprecated table.GetFirstValue
+local function arbitraryTableValue(tbl)
+    for _, v in pairs(tbl) do return v end
+end
 
 function initialize(config)
     MySQLite_config = config or MySQLite_config
@@ -263,7 +280,7 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
     end
 
     queryObject.onSuccess = function()
-        local res = queryValue and data and data[1] and table.GetFirstValue(data[1]) or not queryValue and data or nil
+        local res = queryValue and data and data[1] and arbitraryTableValue(data[1]) or not queryValue and data or nil
         if callback then callback(res, queryObject:lastInsert()) end
     end
     queryObject:start()
@@ -279,7 +296,7 @@ local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
         end
 
         if not res.data or #res.data == 0 then res.data = nil end -- compatibility with other backends
-        if queryValue and callback then return callback(res.data and res.data[1] and table.GetFirstValue(res.data[1]) or nil) end
+        if queryValue and callback then return callback(res.data and res.data[1] and arbitraryTableValue(res.data[1]) or nil) end
         if callback then callback(res.data, res.lastid) end
     end
 
@@ -329,6 +346,7 @@ local function onConnected()
     local GM = _G.GAMEMODE or _G.GM
 
     hook.Call("DatabaseInitialized", GM.DatabaseInitialized and GM or nil)
+
 end
 
 msOOConnect = function(host, username, password, database_name, database_port)
@@ -349,11 +367,17 @@ msOOConnect = function(host, username, password, database_name, database_port)
 end
 
 local function tmsqlConnect(host, username, password, database_name, database_port)
-    local db, err = TMySQL.initialize(host, username, password, database_name, database_port, nil, MySQLite_config.MultiStatements and multistatements or nil)
+    local db, err = TMySQL.Connect(host, username, password, database_name, database_port, nil, MySQLite_config.MultiStatements and multistatements or nil)
     if err then error("Connection failed! " .. err ..  "\n") end
 
     databaseObject = db
     onConnected()
+
+    if (TMySQL.Version and TMySQL.Version >= 4.1) then
+        hook.Add("Think", "MySQLite:tmysqlPoll", function()
+            db:Poll()
+        end)
+    end
 end
 
 function connectToMySQL(host, username, password, database_name, database_port)
