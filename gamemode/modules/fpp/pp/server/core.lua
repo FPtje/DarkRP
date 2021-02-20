@@ -518,11 +518,11 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
     for k, v in pairs(EntTable) do
         local lowerClass = string.lower(v.Class)
 
-        if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) then
-            if allweapons[lowerClass] or string.find(lowerClass, "ai_") == 1 or string.find(lowerClass, "item_ammo_") == 1 then
-                FPP.Notify(ply, "Duplicating blocked entity " .. lowerClass, false)
-                EntTable[k] = nil
-            end
+        if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatenoweapons) and
+          (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanweapon))) and
+          (allweapons[lowerClass] or string.find(lowerClass, "ai_") == 1 or string.find(lowerClass, "item_ammo_") == 1) then
+            FPP.Notify(ply, "Duplicating blocked entity " .. lowerClass, false)
+            EntTable[k] = nil
         end
         if tobool(FPP.Settings.FPP_TOOLGUN1.duplicatorprotect) and (not ply:IsAdmin() or (ply:IsAdmin() and not tobool(FPP.Settings.FPP_TOOLGUN1.spawnadmincanblocked))) then
             local setspawning = tobool(FPP.Settings.FPP_TOOLGUN1.spawniswhitelist)
