@@ -6,9 +6,9 @@ on:
   pull_request:
 jobs:
   run-glualint:
-    runs-on: ubuntu-18.04 # 20.04 lacks libffi6, which is used by glualint.
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: wget https://github.com/FPtje/GLuaFixer/releases/download/1.17.1/glualint-1.17.1-linux-stripped.zip
+      - run: wget https://github.com/FPtje/GLuaFixer/releases/download/1.17.2/glualint-1.17.2-linux-stripped.zip
       - run: unzip glualint-*.zip
       - run: ./glualint --output-format github lint .
