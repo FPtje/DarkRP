@@ -364,24 +364,25 @@ timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
         local ply1Pos = plyPos[ply1]
         local ply1EyePos = eyePos[ply1]
 
-        for x = gridX, gridX + 1 do   -- Get every neighbouring cell (including the actual cell) (x axis)
+        for i = 0, 3 do
+            local vOffset = 1 - ((i >= 3) and 1 or 0)
+            local hOffset = -(i % 3-1)
+            local x = gridX + hOffset
+            local y = gridY + vOffset
+
             local row = grid[x]
             if not row then continue end
 
-            for y = gridY, gridY + 1 do   -- Get every neighbouring cell (including the actual cell) (y axis)
-                if x == gridX and y == gridY then continue end -- Exclude the actual cell as it needs a separate computation
-                local cell = row[y]
-                if not cell then continue end -- Check that values exist
+            local cell = row[y]
+            if not cell then continue end
 
-                -- Check if every player can talk
-                for _, ply2 in ipairs(cell) do
-                    local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
-                        (ply1Pos:DistToSqr(plyPos[ply2]) < voiceDistance and -- voiceradius is on and the two are within hearing distance
-                            (not dynv or IsInRoom(ply1EyePos, eyePos[ply2], ply2))) -- Dynamic voice is on and players are in the same room
+            for _, ply2 in ipairs(cell) do
+                local canTalk = not vrad or -- Voiceradius is off, everyone can hear everyone
+                    (ply1Pos:DistToSqr(plyPos[ply2]) < voiceDistance and -- voiceradius is on and the two are within hearing distance
+                        (not dynv or IsInRoom(ply1EyePos, eyePos[ply2], ply2))) -- Dynamic voice is on and players are in the same room
 
-                    DrpCanHear[ply1][ply2] = canTalk and (deadv or ply2:Alive())
-                    DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive()) -- Take advantage of the symmetry
-                end
+                DrpCanHear[ply1][ply2] = canTalk and (deadv or ply2:Alive())
+                DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive()) -- Take advantage of the symmetry
             end
         end
     end
