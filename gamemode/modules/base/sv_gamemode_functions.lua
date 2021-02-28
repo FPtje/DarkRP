@@ -696,6 +696,9 @@ end
 
 function GM:PlayerInitialSpawn(ply)
     self.Sandbox.PlayerInitialSpawn(self, ply)
+    -- Initialize DrpCanHear for player (used for voice radius check)
+    DrpCanHear[ply] = {}
+
     local sid = ply:SteamID()
     DarkRP.log(ply:Nick() .. " (" .. sid .. ") has joined the game", Color(0, 130, 255))
     ply.DarkRPVars = ply.DarkRPVars or {}
