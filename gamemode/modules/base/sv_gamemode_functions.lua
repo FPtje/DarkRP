@@ -295,6 +295,8 @@ local function IsInRoom(listenerShootPos, talkerShootPos, talker)
     roomTr.endpos = listenerShootPos
     -- Listener needs not be ignored as that's the end of the trace
     roomTr.filter = talker
+    roomTr.collisiongroup = COLLISION_GROUP_WORLD
+    roomTr.mask = MASK_SOLID_BRUSHONLY
     util.TraceLine(roomTr)
 
     return not roomTrResult.HitWorld
