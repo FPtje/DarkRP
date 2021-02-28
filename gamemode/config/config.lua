@@ -294,8 +294,6 @@ GM.Config.falldamageamount              = 10
 GM.Config.printeroverheatchance         = 22
 -- printerreward - Reward for destroying a money printer.
 GM.Config.printerreward                 = 950
--- voiceCheckTimeDelay - Sets how frequently to recalculate how frequently people can talk to each other
-GM.Config.voiceCheckTimeDelay           = 0.3
 
 --[[---------------------------------------------------------------------------
 Chat distance settings

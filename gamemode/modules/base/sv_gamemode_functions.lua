@@ -324,8 +324,10 @@ local plyToGrid = {
     {}
 }
 
-
-timer.Create("DarkRPCanHearPlayersVoice", timeDelay, 0, function()
+-- Set DarkRP.voiceCheckTimeDelay before DarkRP is loaded to set the time
+-- between player voice radius checks.
+DarkRP.voiceCheckTimeDelay = DarkRP.voiceCheckTimeDelay or 0.3
+timer.Create("DarkRPCanHearPlayersVoice", DarkRP.voiceCheckTimeDelay, 0, function()
     local players = player.GetHumans()
 
 
