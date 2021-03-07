@@ -24,6 +24,7 @@ SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "smg"
+SWEP.LoweredHoldType = "passive"
 
 SWEP.Primary.Sound = Sound("Weapon_MP5Navy.Single")
 SWEP.Primary.Recoil = 0.5

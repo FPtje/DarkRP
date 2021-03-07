@@ -44,6 +44,7 @@ SWEP.AdminOnly = false
 SWEP.UseHands = true
 
 SWEP.HoldType = "normal"
+SWEP.LoweredHoldType = "normal"
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5
@@ -70,6 +71,9 @@ function SWEP:SetIronsights(b)
     if (b ~= self:GetIronsights()) then
         self:SetIronsightsPredicted(b)
         self:SetIronsightsTime(CurTime())
+        if GAMEMODE.Config.ironshoot then
+            self:SetHoldType(b and self.HoldType or self.LoweredHoldType)
+        end
         if CLIENT then
             self:CalcViewModel()
         end
@@ -106,7 +110,7 @@ function SWEP:Initialize()
         self:ResetDarkRPBones(vm)
     end
 
-    self:SetHoldType("normal")
+    self:SetHoldType(GAMEMODE.Config.ironshoot and self.LoweredHoldType or self.HoldType)
     if SERVER then
         self:SetNPCMinBurst(30)
         self:SetNPCMaxBurst(30)
@@ -117,7 +121,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-    self:SetHoldType("normal")
+    self:SetHoldType(GAMEMODE.Config.ironshoot and self.LoweredHoldType or self.HoldType)
     self:SetIronsights(false)
     self:SetReloading(false)
     self:SetReloadEndTime(0)
@@ -182,10 +186,6 @@ function SWEP:PrimaryAttack()
         self:SetNextPrimaryFire(CurTime() + 0.5)
         self:SetNextSecondaryFire(CurTime() + 0.5)
         return
-    end
-
-    if self:GetHoldType() == "normal" and not GAMEMODE.Config.ironshoot then
-        self:SetHoldType(self.HoldType)
     end
 
     if self:GetFireMode() ~= "burst" then
@@ -354,7 +354,6 @@ function SWEP:Reload()
     self:SetIronsights(false)
     self:SetBurstTime(0)
     self:SetBurstBulletNum(0)
-    self:SetHoldType(self.HoldType)
     self:GetOwner():SetAnimation(PLAYER_RELOAD)
     self:SetReloadEndTime(CurTime() + 2)
     self:SetTotalUsedMagCount(self:GetTotalUsedMagCount() + 1)
@@ -397,13 +396,15 @@ end
 -- BaseClass.Think(self) so as not to break ironsights
 function SWEP:Think()
     self:CalcViewModel()
-    if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType then
-        self:SetHoldType("normal")
+    if self.Primary.ClipSize ~= -1 and not self:GetReloading() and not self:GetIronsights() and self:GetLastPrimaryAttack() + 1 < CurTime() and self:GetHoldType() == self.HoldType and GAMEMODE.Config.ironshoot then
+        self:SetHoldType(self.LoweredHoldType)
     end
     if self:GetReloadEndTime() ~= 0 and CurTime() >= self:GetReloadEndTime() then
         self:SetReloadEndTime(0)
         self:SetReloading(false)
-        self:SetHoldType("normal")
+        if GAMEMODE.Config.ironshoot then
+            self:SetHoldType(self.LoweredHoldType)
+        end
         if CLIENT then self.hasShot = false end
     end
     if self:GetBurstTime() ~= 0 and CurTime() >= self:GetBurstTime() then

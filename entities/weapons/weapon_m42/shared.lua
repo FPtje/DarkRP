@@ -23,6 +23,7 @@ SWEP.Category = "DarkRP (Weapon)"
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.HoldType = "ar2"
+SWEP.LoweredHoldType = "passive"
 SWEP.DarkRPViewModelBoneManipulations = {
     ["ValveBiped.Bip01_Spine4"]     = { scale = Vector(1, 1, 1),       pos = Vector(2, 0, 0),           angle = Angle(0, 0, 0)      },
     ["ValveBiped.Bip01_L_Hand"]     = { scale = Vector(0.7, 0.7, 0.5), pos = Vector(-0.6, -0.6, 0),     angle = Angle(17, -21, 0)   },
