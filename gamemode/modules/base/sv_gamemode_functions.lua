@@ -696,7 +696,9 @@ local function restoreReconnectedEnts(ply)
             e:Setowning_ent(ply)
         end
 
-        ply:addCustomEntity(e.DarkRPItem)
+        if e.DarkRPItem then
+            ply:addCustomEntity(e.DarkRPItem)
+        end
     end
 
     queuedForRemoval[sid] = nil
@@ -969,8 +971,9 @@ local function collectRemoveEntities(ply)
         remClasses[string.lower(customEnt.ent)] = true
     end
 
+    local sid = ply.SID
     for _, v in ipairs(ents.GetAll()) do
-        if v.SID ~= ply.SID or not v:IsVehicle() and not remClasses[string.lower(v:GetClass() or "")] then continue end
+        if v.SID ~= sid or not v:IsVehicle() and not remClasses[string.lower(v:GetClass() or "")] then continue end
 
         table.insert(collect, v)
     end
