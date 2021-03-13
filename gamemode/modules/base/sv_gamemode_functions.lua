@@ -696,6 +696,7 @@ local function restoreReconnectedEnts(ply)
             e:Setowning_ent(ply)
         end
 
+        -- Some entities (e.g. vehicles) have an SID, but do not have a DarkRPItem
         if e.DarkRPItem then
             ply:addCustomEntity(e.DarkRPItem)
         end
