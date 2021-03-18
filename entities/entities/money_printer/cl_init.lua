@@ -8,6 +8,7 @@ function ENT:Initialize()
 end
 
 local camStart3D2D = cam.Start3D2D
+local camEnd3D2D = cam.End3D2D
 local drawWordBox = draw.WordBox
 local IsValid = IsValid
 
