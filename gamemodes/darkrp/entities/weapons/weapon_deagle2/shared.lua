@@ -24,6 +24,7 @@ SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "pistol"
+SWEP.LoweredHoldType = "normal"
 
 SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
 SWEP.Primary.Recoil = 5.1
@@ -43,4 +44,3 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.IronSightsPos = Vector(-6.35, -7.5, 2.02)
 SWEP.IronSightsAng = Vector(0.51, 0, 0)
-

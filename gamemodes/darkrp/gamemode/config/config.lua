@@ -69,7 +69,7 @@ GM.Config.deadtalk                      = true
 GM.Config.deadvoice                     = true
 -- deathpov - Enable/disable whether people see their death in first person view.
 GM.Config.deathpov                      = false
--- decalcleaner - Enable/Disable clearing ever players decals.
+-- decalcleaner - Enable/Disable clearing every player's decals.
 GM.Config.decalcleaner                  = false
 -- disallowClientsideScripts - Clientside scripts can be very useful for customizing the HUD or to aid in building. This option bans those scripts.
 GM.Config.disallowClientsideScripts     = false
@@ -121,6 +121,8 @@ GM.Config.needwantedforarrest           = false
 GM.Config.noguns                        = false
 -- norespawn - Enable/Disable that people don't have to respawn when they change job.
 GM.Config.norespawn                     = true
+-- instantjob - Enable/Disable instantly respawning when norespawn is false
+GM.Config.instantjob                    = false
 -- npcarrest - Enable/disable arresting npc's.
 GM.Config.npcarrest                     = true
 -- ooc - Whether or not OOC tags are enabled.
@@ -322,6 +324,9 @@ GM.Config.currency = "$"
 GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "https://darkrp.miraheze.org/wiki/Main_Page"
 GM.Config.F1MenuHelpPageTitle = "DarkRP Wiki"
+
+-- The sound that plays when you get a DarkRP notification
+GM.Config.notificationSound = "buttons/lightswitch2.wav"
 
 -- Put Steam ID's and ranks in this list, and the players will have that rank when they join.
 GM.Config.DefaultPlayerGroups = {

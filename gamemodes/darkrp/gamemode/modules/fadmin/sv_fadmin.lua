@@ -4,18 +4,19 @@ util.AddNetworkString("FAdmin_GlobalSetting")
 util.AddNetworkString("FAdmin_PlayerSetting")
 util.AddNetworkString("FAdmin_GlobalPlayerSettings")
 
+local SortedPairs, ipairs, pairs = SortedPairs, ipairs, pairs
 -- recursively adds everything in a directory to be downloaded by client
 local function AddDir(dir)
     local files, folders = file.Find(dir .. "/*", "GAME")
 
-    for _, fdir in pairs(folders) do
+    for _, fdir in ipairs(folders) do
         -- don't spam people with useless .svn folders
         if fdir ~= ".svn" then
             AddDir(dir .. "/" .. fdir)
         end
     end
 
-    for _, v in pairs(files) do
+    for _, v in ipairs(files) do
         resource.AddFile(dir .. "/" .. v)
     end
 end
@@ -88,8 +89,9 @@ hook.Add("PlayerInitialSpawn", "FAdmin_GlobalSettings", function(ply)
             net.WriteType(v)
         end
 
-        net.WriteUInt(player.GetCount(), 8)
-        for _, target in ipairs(player.GetAll()) do
+        local tPlayers = player.GetAll()
+        net.WriteUInt(#tPlayers, 8)
+        for _, target in ipairs(tPlayers) do
             local targetSettings = target.GlobalSetting or {}
 
             net.WriteUInt(target:UserID(), 16)

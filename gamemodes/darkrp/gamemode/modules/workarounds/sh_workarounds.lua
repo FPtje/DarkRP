@@ -232,7 +232,7 @@ hook.Add("InitPostEntity", "DarkRP_Workarounds", function()
     -- Remove that weird rooftop spawn in rp_downtown_v4c_v2
     if not DarkRP.disabledDefaults["workarounds"]["rp_downtown_v4c_v2 rooftop spawn"] and
     game.GetMap() == "rp_downtown_v4c_v2" then
-        for _, v in pairs(ents.FindByClass("info_player_terrorist")) do
+        for _, v in ipairs(ents.FindByClass("info_player_terrorist")) do
             v:Remove()
         end
     end

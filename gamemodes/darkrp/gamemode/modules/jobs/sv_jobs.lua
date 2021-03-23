@@ -108,6 +108,8 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     self.LastJob = CurTime()
 
     if GAMEMODE.Config.removeclassitems then
+        -- Must not be ipairs, DarkRPEntities might have missing keys when
+        -- DarkRP.removeEntity is called.
         for _, v in pairs(DarkRPEntities) do
             if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
             if not v.allowed then continue end
@@ -126,16 +128,19 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     end
 
     if isMayor then
-        for _, ent in pairs(self.lawboards or {}) do
+        for _, ent in ipairs(self.lawboards or {}) do
             if IsValid(ent) then
                 ent:Remove()
             end
         end
+        self.lawboards = {}
     end
 
     if isMayor and GAMEMODE.Config.shouldResetLaws then
         DarkRP.resetLaws()
     end
+
+    local DoEffect = false
 
     self:SetTeam(t)
     hook.Call("OnPlayerChangedTeam", GAMEMODE, self, prevTeam, t)
@@ -144,6 +149,25 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     if GAMEMODE.Config.norespawn and self:Alive() then
         self:StripWeapons()
         self:RemoveAllAmmo()
+
+        DoEffect = true
+        player_manager.SetPlayerClass(self, TEAM.playerClass or "player_darkrp")
+        self:applyPlayerClassVars(false)
+        gamemode.Call("PlayerSetModel", self)
+        gamemode.Call("PlayerLoadout", self)
+    else
+        if GAMEMODE.Config.instantjob then
+            DoEffect = true
+
+            self:StripWeapons()
+            self:RemoveAllAmmo()
+            self:Spawn()
+        else
+            self:KillSilent()
+        end
+    end
+
+    if DoEffect then
         local vPoint = self:GetShootPos() + Vector(0,0,50)
         local effectdata = EffectData()
         effectdata:SetEntity(self)
@@ -151,12 +175,6 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
         effectdata:SetOrigin(vPoint)
         effectdata:SetScale(1)
         util.Effect("entity_remove", effectdata)
-        player_manager.SetPlayerClass(self, TEAM.playerClass or "player_darkrp")
-        self:applyPlayerClassVars(false)
-        gamemode.Call("PlayerSetModel", self)
-        gamemode.Call("PlayerLoadout", self)
-    else
-        self:KillSilent()
     end
 
     umsg.Start("OnChangedTeam", self)

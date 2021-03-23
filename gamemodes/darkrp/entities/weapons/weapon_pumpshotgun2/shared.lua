@@ -23,7 +23,8 @@ SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
-SWEP.HoldType = "ar2"
+SWEP.HoldType = "shotgun"
+SWEP.LoweredHoldType = "normal"
 
 SWEP.Primary.Sound = Sound("Weapon_M3.Single")
 SWEP.Primary.Recoil = 1.5

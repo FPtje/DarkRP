@@ -81,7 +81,7 @@ function ENT:Fireball()
     if not self:IsOnFire() then self.burningup = false return end
     local dist = math.random(20, 280) -- Explosion radius
     self:Destruct()
-    for k, v in pairs(ents.FindInSphere(self:GetPos(), dist)) do
+    for k, v in ipairs(ents.FindInSphere(self:GetPos(), dist)) do
         if not v:IsPlayer() and not v:IsWeapon() and v:GetClass() ~= "predicted_viewmodel" and not v.IsMoneyPrinter then
             v:Ignite(math.random(5, 22), 0)
         elseif v:IsPlayer() then

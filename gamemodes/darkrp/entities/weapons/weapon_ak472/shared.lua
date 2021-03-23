@@ -25,6 +25,7 @@ SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
 SWEP.HoldType = "ar2"
+SWEP.LoweredHoldType = "passive"
 
 SWEP.Primary.Sound = Sound("Weapon_AK47.Single")
 SWEP.Primary.Recoil = 1.5

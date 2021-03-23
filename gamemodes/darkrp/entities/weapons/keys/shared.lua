@@ -75,7 +75,7 @@ local function lookingAtLockable(ply, ent, hitpos)
 end
 
 local function lockUnlockAnimation(ply, snd)
-    ply:EmitSound("npc/metropolice/gear" .. math.random(1, 7) .. ".wav")
+    ply:EmitSound("npc/metropolice/gear" .. math.random(1, 6) .. ".wav")
     timer.Simple(0.9, function() if IsValid(ply) then ply:EmitSound(snd) end end)
 
     umsg.Start("anim_keys")

@@ -23,6 +23,7 @@ SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "pistol"
+SWEP.LoweredHoldType = "normal"
 
 SWEP.Primary.Sound = Sound("Weapon_FiveSeven.Single")
 SWEP.Primary.Recoil = .5

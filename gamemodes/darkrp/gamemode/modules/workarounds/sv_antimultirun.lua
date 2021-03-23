@@ -8,16 +8,28 @@ local function clearServerEntries()
     ]], MySQLite.SQLStr(DarkRP.serverId)))
 end
 
-local function insertUid(uid)
-    MySQLite.query(string.format([[
+local function insertSteamid64(steamid64, userid)
+    local query = string.format([[
         INSERT INTO darkrp_serverplayer VALUES(%s, %s)
-    ]], uid, MySQLite.SQLStr(DarkRP.serverId)))
+    ]], steamid64, MySQLite.SQLStr(DarkRP.serverId))
+    MySQLite.query(
+        query,
+        -- Ignore result of successful insertion
+        function() end,
+        -- Attempt to kick the user when insertion fails, as it means that
+        -- the row already exists in the database.
+        function(err)
+            if not string.find(err, "Duplicate entry") then return end
+
+            game.KickID(userid, kickMessage)
+            return true
+        end
+    )
 end
 
 local function insertPlayer(ply)
-    insertUid(ply:SteamID64())
+    insertSteamid64(ply:SteamID64(), ply:UserID())
 end
-
 
 local function removePlayer(ply)
     MySQLite.query(string.format([[
@@ -27,18 +39,7 @@ end
 
 local function addHooks()
     hook.Add("PlayerAuthed", "DarkRP_antimultirun", function(ply, steamId)
-        local uid = util.SteamIDTo64(steamId)
-        local userid = ply:UserID()
-
-        MySQLite.queryValue(string.format([[
-            SELECT serverid FROM darkrp_serverplayer WHERE uid = %s
-        ]], uid), function(sid)
-            if sid then
-                game.KickID(userid, kickMessage)
-            else
-                insertUid(uid)
-            end
-        end, error)
+        insertSteamid64(util.SteamIDTo64(steamId), ply:UserID())
     end)
 
     hook.Add("PlayerDisconnected", "DarkRP_antimultirun", removePlayer)

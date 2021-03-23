@@ -20,6 +20,7 @@ SWEP.Category = "DarkRP (Weapon)"
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_glock18.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_glock18.mdl"
 SWEP.HoldType = "pistol"
+SWEP.LoweredHoldType = "normal"
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false

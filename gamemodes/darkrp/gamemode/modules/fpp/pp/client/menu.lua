@@ -375,6 +375,21 @@ function FPP.AdminMenu(Panel)
     FPP.SELECTEDRESTRICTNODE = FPP.SELECTEDRESTRICTNODE or "weld"
 
     if not FPP.DtreeToolRestrict.Items then
+        local nodeClick = function(self)
+            FPP.SELECTEDRESTRICTNODE = self.Tool
+
+            for k, v in pairs(weapons.Get("gmod_tool").Tool) do
+                if not v.Mode or v.Mode ~= FPP.SELECTEDRESTRICTNODE then continue end
+                --Add to DListView
+                for a, b in pairs(FPP.multirestricttoollist:GetLines()) do
+                    if b.Columns[1].Value == k then
+                        return
+                    end
+                end
+                FPP.multirestricttoollist:AddLine(k)
+                return
+            end
+        end
         FPP.DtreeToolRestrict.Items = true
         for a, b in pairs(spawnmenu.GetTools()) do
             for c, d in pairs(spawnmenu.GetTools()[a].Items) do
@@ -384,29 +399,14 @@ function FPP.AdminMenu(Panel)
                         table.insert(addnodes, {f.Text, f.ItemName})
                     end
                 end
-                if #addnodes ~= 0 then
-                    local node1 = FPP.DtreeToolRestrict:AddNode(d.ItemName)
-                    for _, f in pairs(addnodes) do
-                        local node2 = node1:AddNode(f[1])
-                        node2.Icon:SetImage("gui/silkicons/wrench")
-                        node2.Tool = f[2]
-                        function node2:DoClick()
-                            FPP.SELECTEDRESTRICTNODE = self.Tool
+                if #addnodes == 0 then continue end
 
-                            for k, v in pairs(weapons.Get("gmod_tool").Tool) do
-                                if v.Mode and v.Mode == FPP.SELECTEDRESTRICTNODE then
-                                    --Add to DListView
-                                    for a,b in pairs(FPP.multirestricttoollist:GetLines()) do
-                                        if b.Columns[1].Value == k then
-                                            return
-                                        end
-                                    end
-                                    FPP.multirestricttoollist:AddLine(k)
-                                    return
-                                end
-                            end
-                        end
-                    end
+                local node1 = FPP.DtreeToolRestrict:AddNode(d.ItemName)
+                for _, f in pairs(addnodes) do
+                    local node2 = node1:AddNode(f[1])
+                    node2.Icon:SetImage("gui/silkicons/wrench")
+                    node2.Tool = f[2]
+                    node2.DoClick = nodeClick
                 end
             end
         end
@@ -721,24 +721,23 @@ RetrieveRestrictedTool = function(um)
 
     for k in pairs(adminsCHKboxes) do
         adminsCHKboxes[k].Button.Toggle = function()
-            if adminsCHKboxes[k].Button:GetChecked() == nil or not adminsCHKboxes[k].Button:GetChecked() then
-                for a in pairs(adminsCHKboxes) do
-                    adminsCHKboxes[a].Button:SetValue(false)
-                end
-                adminsCHKboxes[k].Button:SetValue( true )
-                if not istable(tool) then
-                    RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
-                else
-                    local i = 0
-                    for _, b in pairs(tool) do
-                        i = i + 1
-                        timer.Simple(i / 10, function() -- Timer to prevent lag of executing multiple commands at the same time.
-                            RunConsoleCommand("FPP_restricttool", b, "admin", adminsCHKboxes[k].GoodValue)
-                        end)
-                    end
-                end
-            else
+            if adminsCHKboxes[k].Button:GetChecked() then
                 return false -- You can't turn a checkbox off
+            end
+            for a in pairs(adminsCHKboxes) do
+                adminsCHKboxes[a].Button:SetValue(false)
+            end
+            adminsCHKboxes[k].Button:SetValue(true)
+            if not istable(tool) then
+                RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
+            else
+                local i = 0
+                for _, b in pairs(tool) do
+                    i = i + 1
+                    timer.Simple(i / 10, function() -- Timer to prevent lag of executing multiple commands at the same time.
+                        RunConsoleCommand("FPP_restricttool", b, "admin", adminsCHKboxes[k].GoodValue)
+                    end)
+                end
             end
         end
     end
@@ -763,12 +762,12 @@ RetrieveRestrictedTool = function(um)
             submenu:AddOption( "Default", function()
                 if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 2)
-                else
-                    for a, b in pairs(tool) do
-                        timer.Simple(a / 10, function()
-                            RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 2)
-                        end)
-                    end
+                    return
+                end
+                for a, b in pairs(tool) do
+                    timer.Simple(a / 10, function()
+                        RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 2)
+                    end)
                 end
             end)
 
@@ -776,12 +775,12 @@ RetrieveRestrictedTool = function(um)
             submenu:AddOption( "Allow", function()
                 if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 1)
-                else
-                    for a, b in pairs(tool) do
-                        timer.Simple(a / 10, function()
-                            RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 1)
-                        end)
-                    end
+                    return
+                end
+                for a, b in pairs(tool) do
+                    timer.Simple(a / 10, function()
+                        RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 1)
+                    end)
                 end
             end)
 
@@ -789,12 +788,11 @@ RetrieveRestrictedTool = function(um)
             submenu:AddOption( "Disallow", function()
                 if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 0)
-                else
-                    for a, b in pairs(tool) do
-                        timer.Simple(a / 10, function()
-                            RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 0)
-                        end)
-                    end
+                end
+                for a, b in pairs(tool) do
+                    timer.Simple(a / 10, function()
+                        RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 0)
+                    end)
                 end
             end)
         end
@@ -975,7 +973,7 @@ function FPP.BuddiesMenu(Panel)
     local remove = vgui.Create("DButton")
     remove:SetText("Remove selected buddy")
     remove.DoClick = function()
-        local line = BuddiesList:GetLine(BuddiesList:GetSelectedLine())--Select the only selected line
+        local line = BuddiesList:GetLine(BuddiesList:GetSelectedLine()) -- Select the only selected line
         if not line then return end
         FPP.SaveBuddy(line.Columns[1]:GetValue(), line.Columns[2]:GetValue(), "remove")
         FPP.BuddiesMenu(BuddiesPanel) -- Restart the entire menu
@@ -985,7 +983,7 @@ function FPP.BuddiesMenu(Panel)
     local edit = vgui.Create("DButton")
     edit:SetText("Edit selected buddy")
     edit.DoClick = function()
-        local line = BuddiesList:GetLine(BuddiesList:GetSelectedLine())--Select the only selected line
+        local line = BuddiesList:GetLine(BuddiesList:GetSelectedLine()) -- Select the only selected line
         if not line then return end
         local tmp = FPP.Buddies[line.Columns[1]:GetValue()]
         if not tmp then return end
