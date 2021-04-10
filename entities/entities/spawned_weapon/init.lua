@@ -59,8 +59,6 @@ function ENT:Use(activator, caller)
         return
     end
 
-    hook.Call("playerPickedUpWeapon", nil, activator, self)
-
     weapon:Remove()
 
     weapon = activator:Give(class, true)
@@ -69,6 +67,8 @@ function ENT:Use(activator, caller)
     -- valid weapon
     local activatorHadWeapon = not weapon:IsValid()
     weapon = activatorHadWeapon and activator:GetWeapon(class) or weapon
+
+    hook.Call("playerPickedUpWeapon", nil, activator, self, weapon)
 
     self:GivePlayerAmmo(activator, weapon, activatorHadWeapon)
 
@@ -151,6 +151,11 @@ DarkRP.hookStub{
             name = "entity",
             description = "Entity of spawned weapon.",
             type = "Entity"
+        },
+        {
+            name = "weapon",
+            description = "The weapon entity that the player is holding after picking up the weapon.",
+            type = "Weapon"
         }
     },
     returns = {
