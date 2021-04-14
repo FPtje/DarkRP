@@ -66,7 +66,7 @@ function SWEP:PrimaryAttack()
 
     if found then
         found:SetHealth(found:Health() + 1)
-        self:EmitSound("hl1/fvox/boop.wav", 150, found:Health() / found:GetMaxHealth() * 100, 1, CHAN_AUTO)
+        self:EmitSound("hl1/fvox/boop.wav", 150, math.max(found:Health() / found:GetMaxHealth() * 100, 25), 1, CHAN_AUTO)
     end
 end
 
@@ -76,6 +76,6 @@ function SWEP:SecondaryAttack()
     local maxhealth = ply:GetMaxHealth() or 100
     if ply:Health() < maxhealth then
         ply:SetHealth(ply:Health() + 1)
-        self:EmitSound("hl1/fvox/boop.wav", 150, ply:Health() / ply:GetMaxHealth() * 100, 1, CHAN_AUTO)
+        self:EmitSound("hl1/fvox/boop.wav", 150, math.max(ply:Health() / ply:GetMaxHealth() * 100, 25), 1, CHAN_AUTO)
     end
 end
