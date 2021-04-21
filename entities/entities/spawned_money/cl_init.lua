@@ -1,5 +1,8 @@
 include("shared.lua")
 
+local color_1 = Color(140, 0, 0, 100)
+local color_2 = Color(255, 255, 255)
+
 function ENT:Draw()
     self:DrawModel()
 
@@ -15,13 +18,13 @@ function ENT:Draw()
     local TextWidth = surface.GetTextSize(text)
 
     cam.Start3D2D(Pos + Ang:Up() * 0.82, Ang, 0.1)
-        draw.WordBox(2, -TextWidth * 0.5, -10, text, "ChatFont", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
+        draw.WordBox(2, -TextWidth * 0.5, -10, text, "ChatFont", color_1, color_2)
     cam.End3D2D()
 
     Ang:RotateAroundAxis(Ang:Right(), 180)
 
     cam.Start3D2D(Pos, Ang, 0.1)
-        draw.WordBox(2, -TextWidth * 0.5, -10, text, "ChatFont", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
+        draw.WordBox(2, -TextWidth * 0.5, -10, text, "ChatFont", color_1, color_2)
     cam.End3D2D()
 end
 
