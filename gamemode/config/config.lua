@@ -15,6 +15,8 @@ Toggle settings.
 Set to true or false.
 ]]
 
+-- Acts/Taunts - Enable/disable Taunts (e.g. act salute)
+GM.Config.AllowActs                     = false
 -- voice3D - Enable/disable 3DVoice is enabled.
 GM.Config.voice3D                       = true
 -- AdminsCopWeapons - Enable/disable admins spawning with cop weapons.
