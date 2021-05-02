@@ -21,6 +21,8 @@ GM.Config.voice3D                       = true
 GM.Config.AdminsCopWeapons              = true
 -- adminBypassJobCustomCheck - Enable/disable whether an admin can force set a job with whenever customCheck returns false.
 GM.Config.adminBypassJobRestrictions    = true
+-- Acts/Taunts - Enable/disable Taunts (e.g. act salute)
+GM.Config.allowActs                     = false
 -- allow people getting their own custom jobs.
 GM.Config.allowjobswitch                = true
 -- allowrpnames - Allow Players to Set their RP names using the /rpname command.

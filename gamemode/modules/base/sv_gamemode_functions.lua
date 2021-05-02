@@ -496,7 +496,7 @@ function GM:CanProperty(ply, property, ent)
 end
 
 function GM:PlayerShouldTaunt(ply, actid)
-    return false
+    return GAMEMODE.Config.allowActs
 end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo, ...)
