@@ -5,6 +5,7 @@ include("shared.lua")
 DEFINE_BASECLASS("lab_base")
 
 ENT.SeizeReward = 350
+ENT.SpawnOffset = Vector(0, 0, 35)
 
 function ENT:Initialize()
     BaseClass.Initialize(self)
@@ -24,9 +25,9 @@ function ENT:canUse(activator)
 end
 
 function ENT:createItem(activator)
-    local drugPos = self:GetPos()
+    local drugPos = self:GetPos() + self.SpawnOffset
     local drug = ents.Create("drug")
-    drug:SetPos(Vector(drugPos.x, drugPos.y, drugPos.z + 35))
+    drug:SetPos(drugPos)
     drug:Setowning_ent(activator)
     drug.SID = activator.SID
     drug.nodupe = true

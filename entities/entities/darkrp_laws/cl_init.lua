@@ -2,10 +2,16 @@ include("shared.lua")
 
 local Laws = {}
 
+ENT.DrawPos = Vector(1, -111, 58)
+
+local color_navy_200 = Color(0, 0, 70, 200)
+local color_red = Color(255, 0, 0, 255)
+local color_white = color_white
+
 function ENT:Draw()
     self:DrawModel()
 
-    local DrawPos = self:LocalToWorld(Vector(1, -111, 58))
+    local DrawPos = self:LocalToWorld(self.DrawPos)
 
     local DrawAngles = self:GetAngles()
     DrawAngles:RotateAroundAxis(self:GetAngles():Forward(), 90)
@@ -16,14 +22,13 @@ function ENT:Draw()
         surface.SetDrawColor(0, 0, 0, 255)
         surface.DrawRect(0, 0, 558, 290)
 
-        draw.RoundedBox(4, 0, 0, 558, 30, Color(0, 0, 70, 200))
+        draw.RoundedBox(4, 0, 0, 558, 30, color_navy_200)
 
-        draw.DrawNonParsedSimpleText(DarkRP.getPhrase("laws_of_the_land"), "Roboto20", 279, 5, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+        draw.DrawNonParsedSimpleText(DarkRP.getPhrase("laws_of_the_land"), "Roboto20", 279, 5, color_red, TEXT_ALIGN_CENTER)
 
-        local col = Color(255, 255, 255, 255)
         local lastHeight = 0
         for k, v in ipairs(Laws) do
-            draw.DrawNonParsedText(string.format("%u. %s", k, v), "Roboto20", 5, 35 + lastHeight, col)
+            draw.DrawNonParsedText(string.format("%u. %s", k, v), "Roboto20", 5, 35 + lastHeight, color_white)
             lastHeight = lastHeight + (fn.ReverseArgs(string.gsub(v, "\n", "")) + 1) * 21
         end
 

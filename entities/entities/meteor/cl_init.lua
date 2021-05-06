@@ -1,6 +1,8 @@
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
+ENT.ParticleModel = Model("particles/smokey")
+
 include("shared.lua")
 
 language.Add("meteor", "meteor")
@@ -11,20 +13,22 @@ function ENT:Initialize()
     self.emitter = ParticleEmitter(LocalPlayer():GetShootPos())
 end
 
+local color_grey = Color(200, 200, 210)
+
 function ENT:Think()
-    local vOffset = self:LocalToWorld(Vector(math.Rand(-3, 3), math.Rand(-3, 3), math.Rand(-3, 3))) + Vector(math.Rand(-3, 3), math.Rand(-3, 3), math.Rand(-3, 3))
+    local vOffset = self:LocalToWorld(VectorRand(-3, 3)) + VectorRand(-3, 3)
     local vNormal = (vOffset - self:GetPos()):GetNormalized()
 
     if not self.emitter then return end
 
-    local particle = self.emitter:Add(Model("particles/smokey"), vOffset)
+    local particle = self.emitter:Add(self.ParticleModel, vOffset)
     particle:SetVelocity(vNormal * math.Rand(10, 30))
     particle:SetDieTime(2.0)
     particle:SetStartAlpha(math.Rand(50, 150))
     particle:SetStartSize(math.Rand(8, 16))
     particle:SetEndSize(math.Rand(32, 64))
     particle:SetRoll(math.Rand(-0.2, 0.2))
-    particle:SetColor(Color(200, 200, 210))
+    particle:SetColor(color_grey)
 end
 
 function ENT:OnRemove()

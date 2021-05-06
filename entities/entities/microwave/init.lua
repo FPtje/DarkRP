@@ -2,6 +2,8 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
+ENT.SpawnOffset = Vector(0, 0, 23)
+
 function ENT:canUse(activator)
     if activator.maxFoods and activator.maxFoods >= GAMEMODE.Config.maxfoods then
         DarkRP.notify(activator, 1, 3, DarkRP.getPhrase("limit", self.itemPhrase))
@@ -11,9 +13,9 @@ function ENT:canUse(activator)
 end
 
 function ENT:createItem(activator)
-    local foodPos = self:GetPos()
+    local foodPos = self:GetPos() + self.SpawnOffset
     local food = ents.Create("food")
-    food:SetPos(Vector(foodPos.x, foodPos.y, foodPos.z + 23))
+    food:SetPos(foodPos)
     food:Setowning_ent(activator)
     food.nodupe = true
     food:Spawn()
