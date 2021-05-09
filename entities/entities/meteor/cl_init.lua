@@ -1,8 +1,6 @@
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
-ENT.ParticleModel = Model("particles/smokey")
-
 include("shared.lua")
 
 language.Add("meteor", "meteor")
@@ -21,7 +19,7 @@ function ENT:Think()
 
     if not self.emitter then return end
 
-    local particle = self.emitter:Add(self.ParticleModel, vOffset)
+    local particle = self.emitter:Add(Model("particles/smokey"), vOffset)
     particle:SetVelocity(vNormal * math.Rand(10, 30))
     particle:SetDieTime(2.0)
     particle:SetStartAlpha(math.Rand(50, 150))
