@@ -1,5 +1,8 @@
 include("shared.lua")
 
+local color_red = Color(140, 0, 0, 100)
+local color_white = Color(255, 255, 255)
+
 function ENT:Draw()
     local ret = hook.Call("onDrawSpawnedWeapon", nil, self)
     if ret ~= nil then return end
@@ -18,13 +21,13 @@ function ENT:Draw()
     Ang:RotateAroundAxis(Ang:Forward(), 90)
 
     cam.Start3D2D(Pos + Ang:Up(), Ang, 0.11)
-        draw.WordBox(2, 0, -40, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+        draw.WordBox(2, 0, -40, text, "HUDNumber5", color_red, color_white)
     cam.End3D2D()
 
     Ang:RotateAroundAxis(Ang:Right(), 180)
 
     cam.Start3D2D(Pos + Ang:Up() * 3, Ang, 0.11)
-        draw.WordBox(2, -TextWidth, -40, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255,255,255,255))
+        draw.WordBox(2, -TextWidth, -40, text, "HUDNumber5", color_red, color_white)
     cam.End3D2D()
 end
 

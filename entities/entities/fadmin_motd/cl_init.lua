@@ -55,6 +55,9 @@ end
 
 local gripTexture = surface.GetTextureID("sprites/grip")
 local ArrowTexture = surface.GetTextureID("gui/arrow")
+local color_white = color_white
+local color_darkgrey = Color(100, 100, 100, 255)
+
 function ENT:Draw()
     self:DrawModel()
 
@@ -89,7 +92,7 @@ function ENT:Draw()
             surface.SetTextPos( TextPosX, 0 )
             surface.DrawNonParsedText("Physgun/use the button to see the MOTD!")
 
-            draw.WordBox(4, -16, 24, "Click!", "default", Color(100, 100, 100, 255), Color(255, 255, 255, 255))
+            draw.WordBox(4, -16, 24, "Click!", "default", color_darkgrey, color_white)
 
             surface.SetDrawColor(255, 255, 255, 255)
             if IsAdmin and HasPhysgun then

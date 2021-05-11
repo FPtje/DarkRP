@@ -14,8 +14,8 @@ function ENT:CanTool(ply, trace, tool)
     return false
 end
 
+local PickupPos = Vector(1.8079, -0.6743, -62.3193)
 function ENT:PhysgunPickup(ply)
-    local PickupPos = Vector(1.8079, -0.6743, -62.3193)
     if ply:IsAdmin() and PickupPos:DistToSqr(self:WorldToLocal(ply:GetEyeTrace().HitPos)) < 49 then return true end
     return false
 end
