@@ -40,7 +40,7 @@ function ENT:Use(activator, caller)
     umsg.End()
 
     self:Remove()
-    activator:EmitSound("vo/sandwicheat09.mp3", 100, 100)
+    activator:EmitSound(self.EatSound, 100, 100)
 end
 
 DarkRP.hookStub{
