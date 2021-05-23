@@ -45,7 +45,7 @@ function ENT:Use(activator, caller)
     umsg.End()
 
     self:Remove()
-    activator:EmitSound(self.UseSound, 100, 100)
+    activator:EmitSound(self.EatSound, 100, 100)
 end
 
 function ENT:OnRemove()
