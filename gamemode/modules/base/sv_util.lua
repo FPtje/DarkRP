@@ -55,7 +55,7 @@ function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local filter = {}
 
     local plyPos = ply:EyePos()
-    local sizeSqr = size ^ 2
+    local sizeSqr = size * size
 
     for _, v in ipairs(ents) do
         if (v:EyePos():DistToSqr(plyPos) <= sizeSqr) and (v == ply or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
