@@ -50,12 +50,15 @@ end
 util.AddNetworkString("DarkRP_Chat")
 
 function DarkRP.talkToRange(ply, PlayerName, Message, size)
-    local ents = ents.FindInSphere(ply:EyePos(), size)
+    local ents = player.GetHumans()
     local col = team.GetColor(ply:Team())
     local filter = {}
 
+    local plyPos = ply:EyePos()
+    local sizeSqr = size * size
+
     for _, v in ipairs(ents) do
-        if v:IsPlayer() and not v:IsBot() and (v == ply or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
+        if (v:EyePos():DistToSqr(plyPos) <= sizeSqr) and (v == ply or hook.Run("PlayerCanSeePlayersChat", PlayerName .. ": " .. Message, false, v, ply) ~= false) then
             table.insert(filter, v)
         end
     end
