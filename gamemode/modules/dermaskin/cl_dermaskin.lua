@@ -174,6 +174,8 @@ SKIN.tex.CategoryList.Outer     = GWEN.CreateTextureBorder(256, 384, 63, 63, 8, 
 SKIN.tex.CategoryList.Inner     = GWEN.CreateTextureBorder(256 + 64, 384, 63, 63, 8, 21, 8, 8)
 SKIN.tex.CategoryList.Header    = GWEN.CreateTextureBorder(320, 352, 63, 31, 8, 8, 8, 8)
 
+SKIN.tex.Tooltip                = GWEN.CreateTextureBorder(384, 64, 31, 31, 8, 8, 8, 8)
+
 SKIN.Colours = {}
 
 SKIN.Colours.Window = {}
