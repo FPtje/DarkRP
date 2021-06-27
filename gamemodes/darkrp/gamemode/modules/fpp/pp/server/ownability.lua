@@ -110,6 +110,9 @@ local function calculateCanTouchForType(ply, ent, touchType)
     local noTouchOtherPlayerProps = getPlySetting(ply, "FPP_PrivateSettings_OtherPlayerProps")
 
     -- Shared entity
+    if ent.AllowedPlayers and table.HasValue(ent.AllowedPlayers, ply) then
+        return not noTouchOtherPlayerProps, reasonNumbers.shared
+    end
     if ent["Share" .. setting] then return not noTouchOtherPlayerProps, reasonNumbers.shared end
 
     if IsValid(owner) then
@@ -234,6 +237,7 @@ Touch interface
 function FPP.plyCanTouchEnt(ply, ent, touchType)
     ent.FPPCanTouch = ent.FPPCanTouch or {}
     ent.FPPCanTouch[ply] = ent.FPPCanTouch[ply] or 0
+    ent.AllowedPlayers = ent.AllowedPlayers or {}
 
     local canTouch = ent.FPPCanTouch[ply]
     -- if an entity is constrained, return the least of the rights

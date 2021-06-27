@@ -3,6 +3,9 @@ include("shared.lua")
 function ENT:Initialize()
 end
 
+local color_red = Color(140, 0, 0, 100)
+local color_white = color_white
+
 function ENT:Draw()
     self:DrawModel()
 
@@ -24,8 +27,8 @@ function ENT:Draw()
     TextAng:RotateAroundAxis(TextAng:Right(), CurTime() * -180)
 
     cam.Start3D2D(Pos + Ang:Right() * -15, TextAng, 0.1)
-        draw.WordBox(2, -TextWidth * 0.5 + 5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
-        draw.WordBox(2, -TextWidth2 * 0.5 + 5, 18, text2, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
+        draw.WordBox(2, -TextWidth * 0.5 + 5, -30, text, "HUDNumber5", color_red, color_white)
+        draw.WordBox(2, -TextWidth2 * 0.5 + 5, 18, text2, "HUDNumber5", color_red, color_white)
     cam.End3D2D()
 end
 

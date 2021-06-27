@@ -106,6 +106,9 @@ function ENT:drawFloatingGun()
     render.EnableClipping(false)
 end
 
+local color_red = Color(140, 0, 0, 100)
+local color_white = Color(255, 255, 255)
+
 function ENT:drawInfo()
     local Pos = self:GetPos()
     local Ang = self:GetAngles()
@@ -121,8 +124,8 @@ function ENT:drawInfo()
     local TextWidth2 = surface.GetTextSize(contents)
 
     cam.Start3D2D(Pos + Ang:Up() * 25, Ang, 0.2)
-        draw.WordBox(2, -TextWidth * 0.5 + 5, -30, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
-        draw.WordBox(2, -TextWidth2 * 0.5 + 5, 18, contents, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
+        draw.WordBox(2, -TextWidth * 0.5 + 5, -30, text, "HUDNumber5", color_red, color_white)
+        draw.WordBox(2, -TextWidth2 * 0.5 + 5, 18, contents, "HUDNumber5", color_red, color_white)
     cam.End3D2D()
 
     Ang:RotateAroundAxis(Ang:Forward(), 90)
@@ -132,8 +135,8 @@ function ENT:drawInfo()
     TextWidth2 = surface.GetTextSize(self:Getcount())
 
     cam.Start3D2D(Pos + Ang:Up() * 17, Ang, 0.14)
-        draw.WordBox(2, -TextWidth * 0.5 + 5, -150, text, "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
-        draw.WordBox(2, -TextWidth2 * 0.5 + 0, -102, self:Getcount(), "HUDNumber5", Color(140, 0, 0, 100), Color(255, 255, 255, 255))
+        draw.WordBox(2, -TextWidth * 0.5 + 5, -150, text, "HUDNumber5", color_red, color_white)
+        draw.WordBox(2, -TextWidth2 * 0.5 + 0, -102, self:Getcount(), "HUDNumber5", color_red, color_white)
     cam.End3D2D()
 end
 

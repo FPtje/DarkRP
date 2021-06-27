@@ -91,7 +91,7 @@ function SWEP:Reload()
         self:SendWeaponAnim(ACT_VM_RELOAD)
         self:SetIronsights(false)
         self:SetHoldType(self.HoldType)
-        self.Owner:SetAnimation(PLAYER_RELOAD)
+        self:GetOwner():SetAnimation(PLAYER_RELOAD)
         self:SetHoldType("normal")
     end
 end

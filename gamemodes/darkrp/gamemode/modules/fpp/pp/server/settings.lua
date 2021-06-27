@@ -277,7 +277,7 @@ local function ShareProp(ply, cmd, args)
                 table.insert(ent.AllowedPlayers, target)
                 FPP.Notify(target, ply:Nick() .. " shared an entity with you!", true)
             elseif not toggle then
-                for k, v in pairs(ent.AllowedPlayers) do
+                for k, v in pairs(ent.AllowedPlayers or {}) do
                     if v == target then
                         table.remove(ent.AllowedPlayers, k)
                         FPP.Notify(target, ply:Nick() .. " unshared an entity with you!", false)

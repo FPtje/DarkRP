@@ -145,7 +145,7 @@ end
 
 function SWEP:Reload()
     local trace = self:GetOwner():GetEyeTrace()
-    if not IsValid(trace.Entity) or ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self.Owner:EyePos():DistToSqr(trace.HitPos) > 40000) then
+    if not IsValid(trace.Entity) or ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self:GetOwner():EyePos():DistToSqr(trace.HitPos) > 40000) then
         if CLIENT and not DarkRP.disabledDefaults["modules"]["animations"] then RunConsoleCommand("_DarkRP_AnimationMenu") end
         return
     end
