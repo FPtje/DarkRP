@@ -408,7 +408,7 @@ plyMeta.getJobTable = function(ply)
     end
     return tbl
 end
-local jobCount = 0
+
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
     local tableSyntaxUsed = not IsColor(colorOrTable)
 
@@ -428,7 +428,8 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     if not (GM or GAMEMODE):CustomObjFitsMap(CustomTeam) then return end
 
-    jobCount = jobCount + 1
+    local jobCount = #RPExtraTeams + 1
+
     CustomTeam.team = jobCount
 
     CustomTeam.salary = math.floor(CustomTeam.salary)
@@ -450,8 +451,8 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
     DarkRP.addToCategory(CustomTeam, "jobs", CustomTeam.category)
-    local Team = #RPExtraTeams
-    team.SetUp(Team, Name, CustomTeam.color)
+
+    team.SetUp(jobCount, Name, CustomTeam.color)
 
     timer.Simple(0, function()
         declareTeamCommands(CustomTeam)
