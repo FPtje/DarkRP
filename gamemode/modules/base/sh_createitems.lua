@@ -465,7 +465,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     else
         util.PrecacheModel(CustomTeam.model)
     end
-    return Team
+    return jobCount
 end
 AddExtraTeam = DarkRP.createJob
 
