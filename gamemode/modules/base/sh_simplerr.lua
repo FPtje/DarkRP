@@ -29,6 +29,7 @@ if CLIENT then
         local one = count == 1
         chat.AddText(Color(255, 0, 0), string.format("There %s %i Lua problem%s!", one and "is" or "are", count, one and "" or 's'))
         chat.AddText(Color(255, 255, 255), "\tPlease check your console for more information!")
+        chat.AddText(Color(255, 255, 255), "\tNote: This error likely breaks your server. Make sure to solve the error!")
 
         for i = 1, count do
             MsgC(Color(137, 222, 255), errs[i] .. "\n")
