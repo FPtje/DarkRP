@@ -408,7 +408,7 @@ plyMeta.getJobTable = function(ply)
     end
     return tbl
 end
-local jobCount = 0
+
 function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, command, maximum_amount_of_this_class, Salary, admin, Vote, Haslicense, NeedToChangeFrom, CustomCheck)
     local tableSyntaxUsed = not IsColor(colorOrTable)
 
@@ -426,7 +426,10 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     local valid, err, hints = DarkRP.validateJob(CustomTeam)
     if not valid then DarkRP.error(string.format("Corrupt team: %s!\n%s", CustomTeam.name or "", err), 2, hints) end
 
-    jobCount = jobCount + 1
+    if not (GM or GAMEMODE):CustomObjFitsMap(CustomTeam) then return end
+
+    local jobCount = #RPExtraTeams + 1
+
     CustomTeam.team = jobCount
 
     CustomTeam.salary = math.floor(CustomTeam.salary)
@@ -446,12 +449,10 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     CustomTeam.ShowSpare2            = CustomTeam.ShowSpare2            and fp{DarkRP.simplerrRun, CustomTeam.ShowSpare2}
     CustomTeam.canStartVote          = CustomTeam.canStartVote          and fp{DarkRP.simplerrRun, CustomTeam.canStartVote}
 
-    if not (GM or GAMEMODE):CustomObjFitsMap(CustomTeam) then return end
-
     jobByCmd[CustomTeam.command] = table.insert(RPExtraTeams, CustomTeam)
     DarkRP.addToCategory(CustomTeam, "jobs", CustomTeam.category)
-    local Team = #RPExtraTeams
-    team.SetUp(Team, Name, CustomTeam.color)
+
+    team.SetUp(jobCount, Name, CustomTeam.color)
 
     timer.Simple(0, function()
         declareTeamCommands(CustomTeam)
@@ -464,7 +465,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
     else
         util.PrecacheModel(CustomTeam.model)
     end
-    return Team
+    return jobCount
 end
 AddExtraTeam = DarkRP.createJob
 
