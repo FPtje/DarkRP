@@ -118,13 +118,13 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
-    if CLIENT then 
-      DarkRP.openPocketMenu() 
+    if CLIENT then
+      DarkRP.openPocketMenu()
     end
 
     if SERVER then
-        umsg.Start("PocketMenu", self:GetOwner())
-        umsg.End()
+        net.Start("DarkRP_PocketMenu")
+        net.Send(self:GetOwner())
     end
 end
 

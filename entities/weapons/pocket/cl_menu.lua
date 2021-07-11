@@ -61,7 +61,11 @@ function DarkRP.openPocketMenu()
     reload()
     frame:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-usermessage.Hook("PocketMenu", DarkRP.openPocketMenu)
+net.Receive( "DarkRP_PocketMenu", function( len, pl )
+	if not ( IsValid( pl ) and pl:IsPlayer() ) then
+		DarkRP.openPocketMenu()
+	end
+end )
 
 --[[---------------------------------------------------------------------------
 UI
