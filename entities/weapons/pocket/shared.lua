@@ -122,7 +122,7 @@ function SWEP:Reload()
       DarkRP.openPocketMenu()
     end
 
-    if SERVER then
+    if SERVER and game.SinglePlayer() then
         net.Start("DarkRP_PocketMenu")
         net.Send(self:GetOwner())
     end
