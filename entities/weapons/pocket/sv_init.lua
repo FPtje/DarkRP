@@ -242,6 +242,8 @@ local function sendPocketItems(ply)
     net.Send(ply)
 end
 
+util.AddNetworkString("DarkRP_PocketMenu")
+
 --[[---------------------------------------------------------------------------
 Interface functions
 ---------------------------------------------------------------------------]]
