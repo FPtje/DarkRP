@@ -24,7 +24,7 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
     end
 
     if not ply:canAfford(amount) then
-        DarkRP.notify(activator, 1, 4, DarkRP.getPhrase("cant_afford", amount))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cant_afford", amount))
         return
     end
 
