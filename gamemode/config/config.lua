@@ -86,7 +86,7 @@ GM.Config.droppocketdeath               = true
 -- dropweapondeath - Enable/disable whether people drop their current weapon when they die.
 GM.Config.dropweapondeath               = false
 -- Whether players can drop the weapons they spawn with.
-GM.Config.dropspawnedweapons            = true
+GM.Config.dropspawnedweapons            = false
 -- dynamicvoice - Enable/disable whether only people in the same room as you can hear your mic.
 GM.Config.dynamicvoice                  = true
 -- earthquakes - Enable/disable earthquakes.
