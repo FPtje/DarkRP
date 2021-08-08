@@ -481,7 +481,6 @@ end
 function DarkRP.removeJob(i)
     local job = RPExtraTeams[i]
     jobByCmd[job.command] = nil
-    jobCount = jobCount - 1
 
     DarkRP.removeChatCommand("vote" .. job.command)
     removeCustomItem(RPExtraTeams, "jobs", "onJobRemoved", true, i)
