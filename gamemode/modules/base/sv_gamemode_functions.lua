@@ -858,6 +858,7 @@ function GM:PlayerSpawn(ply)
 
         local demoteTeam = hook.Call("demoteTeam", nil, ply) or GAMEMODE.DefaultTeam
         ply:changeTeam(demoteTeam, true)
+        ply:setDarkRPVar("job", team.GetName(demoteTeam))
     end
 
     local jobTable = ply:getJobTable()

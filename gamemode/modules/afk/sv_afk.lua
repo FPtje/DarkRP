@@ -42,8 +42,11 @@ local function SetAFK(ply)
         ply:SetHealth(ply.lastHealth and ply.lastHealth > 0 and ply.lastHealth or 100)
         ply.lastHealth = nil
     end
-    ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
-    ply:setSelfDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
+
+    if not ply.demotedWhileDead then
+        ply:setDarkRPVar("job", ply:getDarkRPVar("AFK") and "AFK" or ply:getDarkRPVar("AFKDemoted") and team.GetName(ply:Team()) or ply.OldJob)
+        ply:setSelfDarkRPVar("salary", ply:getDarkRPVar("AFK") and 0 or ply.OldSalary or 0)
+    end
 
     hook.Run("playerSetAFK", ply, ply:getDarkRPVar("AFK"))
 end
