@@ -1,5 +1,8 @@
 local meta = FindMetaTable("Player")
 
+local DarkRPVars = {}
+local privateDarkRPVars = {}
+
 --[[---------------------------------------------------------------------------
 Pooled networking strings
 ---------------------------------------------------------------------------]]
@@ -16,7 +19,7 @@ Player vars
 Remove a player's DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:removeDarkRPVar(var, target)
-    local vars = self.DarkRPVars
+    local vars = DarkRPVars[self]
     hook.Call("DarkRPVarChanged", nil, self, var, (vars and vars[var]) or nil, nil)
     target = target or player.GetAll()
     vars = vars or {}
@@ -35,7 +38,8 @@ function meta:setDarkRPVar(var, value, target)
     target = target or player.GetAll()
 
     if value == nil then return self:removeDarkRPVar(var, target) end
-    local vars = self.DarkRPVars
+
+    local vars = DarkRPVars[self]
     hook.Call("DarkRPVarChanged", nil, self, var, (vars and vars[var]) or nil, value)
 
     vars = vars or {}
@@ -51,7 +55,7 @@ end
 Set a private DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:setSelfDarkRPVar(var, value)
-    local vars = self.privateDRPVars
+    local vars = privateDarkRPVars[self]
 
     vars = vars or {}
     vars[var] = true
@@ -63,7 +67,7 @@ end
 Get a DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:getDarkRPVar(var)
-    local vars = self.DarkRPVars
+    local vars = DarkRPVars[self]
 
     vars = vars or {}
     return vars[var]
@@ -251,8 +255,12 @@ function meta:customEntityCount(entTable)
     return entities
 end
 
-hook.Add("PlayerDisconnected", "removeLimits", function(ply)
+hook.Add("PlayerDisconnected", "DarkRP_VarRemoval", function(ply)
+	DarkRPVars[ply] = nil
+	privateDarkRPVars[ply] = nil
+
     maxEntities[ply] = nil
+
     net.Start("DarkRP_DarkRPVarDisconnect")
         net.WriteUInt(ply:UserID(), 16)
     net.Broadcast()
