@@ -86,16 +86,16 @@ function meta:sendDarkRPVars()
         for _, target in ipairs(plys) do
             net.WriteUInt(target:UserID(), 16)
 
-            local DarkRPVars = {}
-            for var, value in pairs(target.DarkRPVars) do
-                if self ~= target and (target.privateDRPVars or {})[var] then continue end
-                table.insert(DarkRPVars, var)
+            local vars = {}
+            for var, value in pairs(DarkRPVars[target]) do
+                if self ~= target and (privateDRPVars[target] or {})[var] then continue end
+                table.insert(vars, var)
             end
 
-            local vars_cnt = #DarkRPVars
+            local vars_cnt = #vars
             net.WriteUInt(vars_cnt, DarkRP.DARKRP_ID_BITS + 2) -- Allow for three times as many unknown DarkRPVars than the limit
             for i = 1, vars_cnt, 1 do
-                DarkRP.writeNetDarkRPVar(DarkRPVars[i], target.DarkRPVars[DarkRPVars[i]])
+                DarkRP.writeNetDarkRPVar(vars[i], DarkRPVars[target][vars[i]])
             end
         end
     net.Send(self)
@@ -256,8 +256,8 @@ function meta:customEntityCount(entTable)
 end
 
 hook.Add("PlayerDisconnected", "DarkRP_VarRemoval", function(ply)
-	DarkRPVars[ply] = nil
-	privateDarkRPVars[ply] = nil
+    DarkRPVars[ply] = nil
+    privateDarkRPVars[ply] = nil
 
     maxEntities[ply] = nil
 
