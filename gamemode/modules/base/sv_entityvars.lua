@@ -87,7 +87,7 @@ function meta:sendDarkRPVars()
             net.WriteUInt(target:UserID(), 16)
 
             local vars = {}
-            for var, value in pairs(DarkRPVars[target]) do
+            for var, value in pairs(DarkRPVars[target] or {}) do
                 if self ~= target and (privateDRPVars[target] or {})[var] then continue end
                 table.insert(vars, var)
             end
