@@ -20,10 +20,11 @@ Remove a player's DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:removeDarkRPVar(var, target)
     local vars = DarkRPVars[self]
-    hook.Call("DarkRPVarChanged", nil, self, var, (vars and vars[var]) or nil, nil)
+    hook.Call("DarkRPVarChanged", nil, self, var, vars and vars[var], nil)
     target = target or player.GetAll()
-    vars = vars or {}
-    vars[var] = nil
+
+    DarkRPVars[self] = DarkRPVars[self] or {}
+    DarkRPVars[self][var] = nil
 
     net.Start("DarkRP_PlayerVarRemoval")
         net.WriteUInt(self:UserID(), 16)
@@ -40,10 +41,10 @@ function meta:setDarkRPVar(var, value, target)
     if value == nil then return self:removeDarkRPVar(var, target) end
 
     local vars = DarkRPVars[self]
-    hook.Call("DarkRPVarChanged", nil, self, var, (vars and vars[var]) or nil, value)
+    hook.Call("DarkRPVarChanged", nil, self, var, vars and vars[var], value)
 
-    vars = vars or {}
-    vars[var] = value
+    DarkRPVars[self] = DarkRPVars[self] or {}
+    DarkRPVars[self][var] = value
 
     net.Start("DarkRP_PlayerVar")
         net.WriteUInt(self:UserID(), 16)
@@ -55,10 +56,8 @@ end
 Set a private DarkRPVar
 ---------------------------------------------------------------------------]]
 function meta:setSelfDarkRPVar(var, value)
-    local vars = privateDarkRPVars[self]
-
-    vars = vars or {}
-    vars[var] = true
+    privateDarkRPVars[self] = privateDarkRPVars[self] or {}
+    privateDarkRPVars[self][var] = true
 
     self:setDarkRPVar(var, value, self)
 end
