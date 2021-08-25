@@ -255,12 +255,16 @@ function meta:customEntityCount(entTable)
 end
 
 hook.Add("PlayerDisconnected", "DarkRP_VarRemoval", function(ply)
-    DarkRPVars[ply] = nil
-    privateDarkRPVars[ply] = nil
-
     maxEntities[ply] = nil
 
     net.Start("DarkRP_DarkRPVarDisconnect")
         net.WriteUInt(ply:UserID(), 16)
     net.Broadcast()
+end)
+
+hook.Add("EntityRemoved", "DarkRP_VarRemoval", function(ent) -- We use EntityRemoved to clear players of tables, because it is always called after the PlayerDisconnected hook
+    if ent:IsPlayer() then
+        DarkRPVars[ent] = nil
+        privateDarkRPVars[ent] = nil
+    end
 end)
