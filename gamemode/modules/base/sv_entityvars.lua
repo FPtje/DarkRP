@@ -88,7 +88,7 @@ function meta:sendDarkRPVars()
 
             local vars = {}
             for var, value in pairs(DarkRPVars[target] or {}) do
-                if self ~= target and (privateDRPVars[target] or {})[var] then continue end
+                if self ~= target and (privateDarkRPVars[target] or {})[var] then continue end
                 table.insert(vars, var)
             end
 
