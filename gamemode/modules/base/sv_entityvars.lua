@@ -73,6 +73,18 @@ function meta:getDarkRPVar(var)
 end
 
 --[[---------------------------------------------------------------------------
+Backwards compatibility: Set ply.DarkRPVars attribute
+---------------------------------------------------------------------------]]
+function meta:setDarkRPVarsAttribute()
+    DarkRPVars[self] = DarkRPVars[self] or {}
+    -- With a reference to the table, ply.DarkRPVars should always remain
+    -- up-to-date. One needs only be careful that DarkRPVars[ply] is never
+    -- replaced by a different table.
+    self.DarkRPVars = DarkRPVars[self]
+end
+
+
+--[[---------------------------------------------------------------------------
 Send the DarkRPVars to a client
 ---------------------------------------------------------------------------]]
 function meta:sendDarkRPVars()

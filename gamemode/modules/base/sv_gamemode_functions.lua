@@ -712,7 +712,7 @@ function GM:PlayerInitialSpawn(ply)
 
     local sid = ply:SteamID()
     DarkRP.log(ply:Nick() .. " (" .. sid .. ") has joined the game", Color(0, 130, 255))
-    ply.DarkRPVars = ply.DarkRPVars or {}
+    ply:setDarkRPVarsAttribute()
     ply:restorePlayerData()
     initPlayer(ply)
     ply.SID = ply:UserID()
