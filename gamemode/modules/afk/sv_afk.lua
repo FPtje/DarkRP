@@ -16,6 +16,7 @@ local function AFKDemote(ply)
 end
 
 local function SetAFK(ply)
+    if ply:IsBot() then return end
     local rpname = ply:getDarkRPVar("rpname")
     ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
