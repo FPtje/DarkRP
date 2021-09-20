@@ -423,3 +423,33 @@ DarkRP.hookStub{
         returns = {
         }
 }
+
+
+DarkRP.hookStub{
+    name = "canGiveLicense",
+    description = "Whether a player is allowed to give another player a license.",
+    parameters = {
+            {
+                    name = "ply",
+                    description = "The player who tries to give the license.",
+                    type = "Player"
+            },
+            {
+                    name = "target",
+                    description = "The player who should receive the license.",
+                    type = "Player"
+            }
+    },
+    returns = {
+        {
+            name = "canGiveLicense",
+            description = "Whether the player is allowed to give the target a license.",
+            type = "boolean"
+        },
+        {
+            name = "cantGiveReason",
+            description = "Why the target is not allowed to receive a license from the player.",
+            type = "string"
+        },
+    }
+}
