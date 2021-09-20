@@ -300,6 +300,19 @@ local function GiveLicense(ply)
     local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(ply.isMayor), player.GetAll}
     local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(ply.isChief), player.GetAll}
 
+    local LookingAt = ply:GetEyeTrace().Entity
+    if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("player")))
+        return ""
+    end
+
+    local canGive, cantGiveReason = hook.Call("canGiveLicense", GAMEMODE, ply, LookingAt)
+    if canGive == false then
+        cantGiveReason = isstring(cantGiveReason) and cantGiveReason or ""
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/givelicense", cantGiveReason))
+        return ""
+    end
+
     local canGiveLicense = fn.FOr{
         ply.isMayor, -- Mayors can hand out licenses
         fn.FAnd{ply.isChief, noMayorExists}, -- Chiefs can if there is no mayor
@@ -308,12 +321,6 @@ local function GiveLicense(ply)
 
     if not canGiveLicense(ply) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
-        return ""
-    end
-
-    local LookingAt = ply:GetEyeTrace().Entity
-    if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("player")))
         return ""
     end
 
