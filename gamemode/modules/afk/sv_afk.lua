@@ -16,8 +16,6 @@ local function AFKDemote(ply)
 end
 
 local function SetAFK(ply)
-    if ply:IsBot() then return end
-    
     local rpname = ply:getDarkRPVar("rpname")
     ply:setSelfDarkRPVar("AFK", not ply:getDarkRPVar("AFK"))
 
@@ -85,7 +83,7 @@ hook.Add("KeyPress", "DarkRPKeyReleasedCheck", AFKTimer)
 
 local function KillAFKTimer()
     for _, ply in ipairs(player.GetAll()) do
-        if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getDarkRPVar("AFK") then
+        if ply.AFKDemote and CurTime() > ply.AFKDemote and not ply:getDarkRPVar("AFK") and not ply:IsBot() then
             SetAFK(ply)
             AFKDemote(ply)
             ply.AFKDemote = math.huge
