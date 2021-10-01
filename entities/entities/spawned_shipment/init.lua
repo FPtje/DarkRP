@@ -92,8 +92,8 @@ function ENT:Use(activator, caller)
 
     local canUse, reason = hook.Call("canDarkRPUse", nil, activator, self, caller)
     if canUse == false then
-        if reason then DarkRP.notify(activator, 1, 4, reason) end
-        return
+      if reason then DarkRP.notify(activator, 1, 4, reason) end
+      return
     end
 
     hook.Call("playerOpenedShipment", nil, activator, self)
@@ -106,6 +106,25 @@ function ENT:Use(activator, caller)
         if not IsValid(self) then return end
         self.SpawnItem(self)
     end)
+end
+
+local function calculateAmmo(class, shipment)
+    local clip1, ammoadd = shipment.clip1, shipment.ammoadd
+
+    local defaultClip, clipSize
+    local wep_tbl = weapons.Get(class)
+    if wep_tbl and wep_tbl.Primary then
+        defaultClip = wep_tbl.Primary.DefaultClip
+        clipSize = wep_tbl.Primary.ClipSize
+    end
+    ammoadd = ammoadd or defaultClip
+
+    -- If the clip is empty, fill it with additional bullets
+    if not clip1 then
+        clip1 = (ammoadd > 0) and math.min(clipSize, ammoadd) or 0
+        ammoadd = ammoadd - clip1
+    end
+    return ammoadd, clip1
 end
 
 function ENT:SpawnItem()
@@ -132,17 +151,10 @@ function ENT:SpawnItem()
     local class = CustomShipments[contents].entity
     local model = CustomShipments[contents].model
 
-    local defaultClip, clipSize
-    local wep_tbl = weapons.Get(class)
-    if wep_tbl and wep_tbl.Primary then
-        defaultClip = wep_tbl.Primary.DefaultClip
-        clipSize = wep_tbl.Primary.ClipSize
-    end
-
     weapon:SetWeaponClass(class)
     weapon:SetModel(model)
-    weapon.ammoadd = self.ammoadd or defaultClip
-    weapon.clip1 = self.clip1 or clipSize
+
+    weapon.ammoadd, weapon.clip1 = calculateAmmo(class, self)
     weapon.clip2 = self.clip2
     weapon:SetPos(self:GetPos() + weaponPos)
     weapon:SetAngles(weaponAng)
@@ -182,19 +194,11 @@ function ENT:Destruct()
         return
     end
 
-    local defaultClip, clipSize
-    local wep_tbl = weapons.Get(class)
-    if wep_tbl and wep_tbl.Primary then
-        defaultClip = wep_tbl.Primary.DefaultClip
-        clipSize = wep_tbl.Primary.ClipSize
-    end
-
     local weapon = ents.Create("spawned_weapon")
     weapon:SetModel(model)
     weapon:SetWeaponClass(class)
     weapon:SetPos(Vector(vPoint.x, vPoint.y, vPoint.z + 5))
-    weapon.ammoadd = self.ammoadd or defaultClip
-    weapon.clip1 = self.clip1 or clipSize
+    weapon.ammoadd, weapon.clip1 = calculateAmmo(class, self)
     weapon.clip2 = self.clip2
     weapon.nodupe = true
     weapon:Spawn()
