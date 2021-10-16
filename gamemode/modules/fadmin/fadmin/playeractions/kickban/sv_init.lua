@@ -128,6 +128,7 @@ local function Ban(ply, cmd, args)
             args[1] = targets[1]
             args[2] = args[6]
             args[3] = args[7]
+            targets = FAdmin.FindPlayer(targets[1]) or targets
             for i = 2, #args do
                 if i >= 4 then args[i] = nil end
             end
