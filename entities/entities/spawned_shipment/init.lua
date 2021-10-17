@@ -111,7 +111,7 @@ end
 local function calculateAmmo(class, shipment)
     local clip1, ammoadd = shipment.clip1, shipment.ammoadd
 
-    local defaultClip, clipSize
+    local defaultClip, clipSize = 0, 0
     local wep_tbl = weapons.Get(class)
     if wep_tbl and wep_tbl.Primary then
         defaultClip = wep_tbl.Primary.DefaultClip
