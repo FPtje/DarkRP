@@ -1,14 +1,13 @@
 FPP = FPP or {}
 FPP.DisconnectedPlayers = FPP.DisconnectedPlayers or {}
 
-
 local PLAYER = FindMetaTable("Player")
 local ENTITY = FindMetaTable("Entity")
 
-/*---------------------------------------------------------------------------
-Checks is a model is blocked
----------------------------------------------------------------------------*/
-local function isBlocked(model)
+--[[-------------------------------------------------------------------------
+Checks if a model is blocked
+---------------------------------------------------------------------------]]
+function FPP.IsBlockedModel(model)
     if model == "" or not FPP.Settings or not FPP.Settings.FPP_BLOCKMODELSETTINGS1 or
         not tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.toggle)
         or not FPP.BlockedModels or not model then return end
@@ -32,11 +31,11 @@ local function isBlocked(model)
     return false
 end
 
-/*---------------------------------------------------------------------------
+--[[-------------------------------------------------------------------------
 Prevents spawning a prop or effect when its model is blocked
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 local function propSpawn(ply, model)
-    local blocked, msg = isBlocked(model)
+    local blocked, msg = FPP.IsBlockedModel(model)
     if blocked then
         FPP.Notify(ply, msg, false)
         return false
@@ -47,9 +46,9 @@ hook.Add("PlayerSpawnProp", "FPP_SpawnProp", propSpawn) -- PlayerSpawnObject isn
 hook.Add("PlayerSpawnEffect", "FPP_SpawnEffect", propSpawn)
 hook.Add("PlayerSpawnRagdoll", "FPP_SpawnEffect", propSpawn)
 
-/*---------------------------------------------------------------------------
+--[[-------------------------------------------------------------------------
 Setting owner when someone spawns something
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 if cleanup then
     FPP.oldcleanup = FPP.oldcleanup or cleanup.Add
     function cleanup.Add(ply, Type, ent)
@@ -60,7 +59,7 @@ if cleanup then
 
         if not tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.propsonly) then
             local model = ent.GetModel and ent:GetModel()
-            local blocked, msg = isBlocked(model)
+            local blocked, msg = FPP.IsBlockedModel(model)
 
             if blocked then
                 FPP.Notify(ply, msg, false)
@@ -253,6 +252,8 @@ hook.Add("GravGunPickupAllowed", "FPP.Protect.CanGravGunPickup", FPP.Protect.Can
 --Gravgun punting
 function FPP.Protect.GravGunPunt(ply, ent)
     if tobool(FPP.Settings.FPP_GRAVGUN1.noshooting) then DropEntityIfHeld(ent) return false end
+    -- Do not reason further if gravgun protection is disabled.
+    if not tobool(FPP.Settings.FPP_GRAVGUN1.toggle) then return end
 
     if not IsValid(ent) then DropEntityIfHeld(ent) return end
 
@@ -568,7 +569,6 @@ function FPP.Protect.CanDrive(ply, ent)
     if not cantouch then return false end
 end
 hook.Add("CanDrive", "FPP.Protect.CanDrive", FPP.Protect.CanDrive)
-
 
 local function freezeDisconnected(ply)
     local SteamID = ply:SteamID()

@@ -144,11 +144,20 @@ local weaponClassTouchTypes = {
     ["gmod_tool"] = "Toolgun",
 }
 
-local function FilterEntityTable(t)
-    local filtered = {}
+local function FilterEntityTable(eyepos, t)
+    local filtered = nil
+    local filteredDistance = nil
 
     for i, ent in ipairs(t) do
-        if (not ent:IsWeapon()) and (not ent:IsPlayer()) then table.insert(filtered, ent) end
+        local class = ent:GetClass()
+        if ent:IsWeapon() or ent:IsPlayer() or class == "viewmodel" then continue end
+
+        -- Get the entity that is closest by
+        local distance = ent:NearestPoint(eyepos):DistToSqr(eyepos)
+        if filtered == nil or distance < filteredDistance then
+            filtered = ent
+            filteredDistance = distance
+        end
     end
 
     return filtered
@@ -178,10 +187,10 @@ local function HUDPaint()
 
     --Show the owner:
     local ply = LocalPlayer()
+    local eyepos = ply:EyePos()
+    local LAEnt2 = ents.FindAlongRay(eyepos, eyepos + EyeAngles():Forward() * 16384)
 
-    local LAEnt2 = ents.FindAlongRay(ply:EyePos(), ply:EyePos() + EyeAngles():Forward() * 16384)
-
-    local LAEnt = FilterEntityTable(LAEnt2)[1]
+    local LAEnt = FilterEntityTable(eyepos, LAEnt2)
     if not IsValid(LAEnt) then return end
     -- Prevent being able to see ownership through walls
     local eyeTrace = ply:GetEyeTrace()

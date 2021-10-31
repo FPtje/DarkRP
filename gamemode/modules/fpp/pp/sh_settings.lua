@@ -100,10 +100,10 @@ function FPP.ForAllSettings(fn)
     end
 end
 
-/*---------------------------------------------------------------------------
+--[[-------------------------------------------------------------------------
 CAMI
 Register the CAMI privilege
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------]]
 CAMI.RegisterPrivilege{
     Name = "FPP_Settings",
     MinAccess = "superadmin" -- By default only superadmins can change settings
@@ -113,7 +113,6 @@ CAMI.RegisterPrivilege{
     Name = "FPP_Cleanup",
     MinAccess = "admin"
 }
-
 
 CAMI.RegisterPrivilege{
     Name = "FPP_TouchOtherPlayersProps",
