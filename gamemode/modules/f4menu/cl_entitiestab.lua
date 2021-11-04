@@ -105,7 +105,7 @@ local function canBuyEntity(item)
     local ply = LocalPlayer()
 
     if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
-    if item.customCheck and not item.customCheck(ply) then return false, true end
+    if item.customCheck and not item.customCheck(ply, item) then return false, true end
 
     local canbuy, suppress, message, price = hook.Call("canBuyCustomEntity", nil, ply, item)
     local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
@@ -143,7 +143,7 @@ local function canBuyShipment(ship)
     local ply = LocalPlayer()
 
     if not table.HasValue(ship.allowed, ply:Team()) then return false, true end
-    if ship.customCheck and not ship.customCheck(ply) then return false, true end
+    if ship.customCheck and not ship.customCheck(ply, ship) then return false, true end
 
     local canbuy, suppress, message, price = hook.Call("canBuyShipment", nil, ply, ship)
     local cost = price or ship.getPrice and ship.getPrice(ply, ship.price) or ship.price
@@ -185,7 +185,7 @@ local function canBuyGun(ship)
     local ply = LocalPlayer()
 
     if GAMEMODE.Config.restrictbuypistol and not table.HasValue(ship.allowed, ply:Team()) then return false, true end
-    if ship.customCheck and not ship.customCheck(ply) then return false, true end
+    if ship.customCheck and not ship.customCheck(ply, ship) then return false, true end
 
     local canbuy, suppress, message, price = hook.Call("canBuyPistol", nil, ply, ship)
     local cost = price or ship.getPrice and ship.getPrice(ply, ship.pricesep) or ship.pricesep
@@ -227,7 +227,7 @@ PANEL = {}
 local function canBuyAmmo(item)
     local ply = LocalPlayer()
 
-    if item.customCheck and not item.customCheck(ply) then return false, true end
+    if item.customCheck and not item.customCheck(ply, item) then return false, true end
 
     local canbuy, suppress, message, price = hook.Call("canBuyAmmo", nil, ply, item)
     local cost = price or item.getPrice and item.getPrice(ply, item.price) or item.price
@@ -266,7 +266,7 @@ local function canBuyVehicle(item)
     local cost = item.getPrice and item.getPrice(ply, item.price) or item.price
 
     if istable(item.allowed) and not table.HasValue(item.allowed, ply:Team()) then return false, true end
-    if item.customCheck and not item.customCheck(ply) then return false, true end
+    if item.customCheck and not item.customCheck(ply, item) then return false, true end
 
     local canbuy, suppress, message, price = hook.Call("canBuyVehicle", nil, ply, item)
 
