@@ -94,7 +94,7 @@ local function canGetJob(job)
 
     if isnumber(job.NeedToChangeFrom) and ply:Team() ~= job.NeedToChangeFrom then return false, true end
     if istable(job.NeedToChangeFrom) and not table.HasValue(job.NeedToChangeFrom, ply:Team()) then return false, true end
-    if job.customCheck and not job.customCheck(ply) then return false, true end
+    if job.customCheck and not job.customCheck(ply, job) then return false, true end
     if ply:Team() == job.team then return false, true end
     local numPlayers = team.NumPlayers(job.team)
     if job.max ~= 0 and ((job.max % 1 == 0 and numPlayers >= job.max) or (job.max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > job.max)) then return false, false end
