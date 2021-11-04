@@ -18,7 +18,7 @@ local function declareTeamCommands(CTeam)
         if CTeam.admin == 1 and not ply:IsAdmin() or CTeam.admin == 2 and not ply:IsSuperAdmin() then return false end
         if isnumber(CTeam.NeedToChangeFrom) and plyTeam ~= CTeam.NeedToChangeFrom then return false end
         if istable(CTeam.NeedToChangeFrom) and not table.HasValue(CTeam.NeedToChangeFrom, plyTeam) then return false end
-        if CTeam.customCheck and CTeam.customCheck(ply) == false then return false end
+        if CTeam.customCheck and CTeam.customCheck(ply, CTeam) == false then return false end
         if ply:isArrested() then return false end
         local numPlayers = team.NumPlayers(k)
         if CTeam.max ~= 0 and ((CTeam.max % 1 == 0 and numPlayers >= CTeam.max) or (CTeam.max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > CTeam.max)) then return false end
@@ -118,7 +118,7 @@ local function addTeamCommands(CTeam, max)
                 return ""
             end
 
-            if CTeam.customCheck and not CTeam.customCheck(ply) then
+            if CTeam.customCheck and not CTeam.customCheck(ply, CTeam) then
                 local message = isfunction(CTeam.CustomCheckFailMsg) and CTeam.CustomCheckFailMsg(ply, CTeam) or CTeam.CustomCheckFailMsg or DarkRP.getPhrase("unable", team.GetName(t), "")
                 DarkRP.notify(ply, 1, 4, message)
 
@@ -284,7 +284,7 @@ local function addEntityCommands(tblEnt)
                 if ply:isArrested() then return false end
                 if istable(tblEnt.allowed) and not table.HasValue(tblEnt.allowed, ply:Team()) then return false end
                 if not ply:canAfford(tblEnt.price) then return false end
-                if tblEnt.customCheck and tblEnt.customCheck(ply) == false then return false end
+                if tblEnt.customCheck and tblEnt.customCheck(ply, tblEnt) == false then return false end
 
                 return true
             end
@@ -327,7 +327,7 @@ local function addEntityCommands(tblEnt)
             return ""
         end
 
-        if tblEnt.customCheck and not tblEnt.customCheck(ply) then
+        if tblEnt.customCheck and not tblEnt.customCheck(ply, tblEnt) then
             local message = isfunction(tblEnt.CustomCheckFailMsg) and tblEnt.CustomCheckFailMsg(ply, tblEnt) or
                 tblEnt.CustomCheckFailMsg or
                 DarkRP.getPhrase("not_allowed_to_purchase")
