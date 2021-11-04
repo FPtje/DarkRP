@@ -43,7 +43,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     local TEAM = RPExtraTeams[t]
     if not TEAM then return false end
 
-    if TEAM.customCheck and not TEAM.customCheck(self) and (not force or force and not GAMEMODE.Config.adminBypassJobRestrictions) then
+    if TEAM.customCheck and not TEAM.customCheck(self, TEAM) and (not force or force and not GAMEMODE.Config.adminBypassJobRestrictions) then
         local message = isfunction(TEAM.CustomCheckFailMsg) and TEAM.CustomCheckFailMsg(self, TEAM) or
             TEAM.CustomCheckFailMsg or
             DarkRP.getPhrase("unable", team.GetName(t), "")
@@ -404,7 +404,7 @@ local function SwitchJob(ply) --Idea by Godness.
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
         return ""
     end
-    if team1.customCheck and not team1.customCheck(ent) or team2.customCheck and not team2.customCheck(ply) then
+    if team1.customCheck and not team1.customCheck(ent, team1) or team2.customCheck and not team2.customCheck(ply, team2) then
         -- notify only the player trying to switch
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", DarkRP.getPhrase("switch_jobs"), ""))
         return ""
