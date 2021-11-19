@@ -119,11 +119,8 @@ local function calculateAmmo(class, shipment)
     end
     ammoadd = ammoadd or defaultClip
 
-    -- If the clip is undefined (default behaviour), default it to a full clip
-    -- But remove the bullets used for it.
     if not clip1 then
-        clip1 = (ammoadd > 0) and math.min(clipSize, ammoadd) or 0
-        ammoadd = ammoadd - clip1
+        clip1 = clipSize
     end
     return ammoadd, clip1
 end
