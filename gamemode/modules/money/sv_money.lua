@@ -171,7 +171,7 @@ DarkRP.defineChatCommand("moneydrop", DropMoney, 0.3)
 
 local function CreateCheque(ply, args)
     local recipient = DarkRP.findPlayer(args[1])
-    local amount = tonumber(args[2]) or 0
+    local amount = math.floor(tonumber(args[2]) or 0)
 
     local chequeTable =
         { cmd = "cheque"
