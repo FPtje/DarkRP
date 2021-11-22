@@ -32,13 +32,13 @@ function DONATE_ENTRY:Init()
 end
 
 function DONATE_ENTRY:CheckNumeric(value)
-    if tonumber(value) then return false end
+    if DarkRP.toInt(value) then return false end
 
     return true
 end
 
 function DONATE_ENTRY:OnChange()
-    local value = tonumber(self:GetText())
+    local value = DarkRP.toInt(self:GetText())
 
     if not value then return end
 

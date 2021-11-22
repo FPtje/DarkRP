@@ -76,7 +76,7 @@ local function removeLaw(ply, args)
         return ""
     end
 
-    local i = tonumber(args)
+    local i = DarkRP.toInt(args)
 
     if not i or not Laws[i] then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
