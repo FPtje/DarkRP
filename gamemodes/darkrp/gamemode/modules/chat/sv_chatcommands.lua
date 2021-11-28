@@ -141,12 +141,13 @@ end
 DarkRP.defineChatCommand("broadcast", MayorBroadcast, 1.5)
 
 local function SetRadioChannel(ply,args)
-    if tonumber(args) == nil or tonumber(args) < 0 or tonumber(args) > 100 then
+    local channel = DarkRP.toInt(args)
+    if channel == nil or channel < 0 or channel > 100 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), "0<" .. DarkRP.getPhrase("channel") .. "<100"))
         return ""
     end
     DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("channel_set_to_x", args))
-    ply.RadioChannel = tonumber(args)
+    ply.RadioChannel = channel
     return ""
 end
 DarkRP.defineChatCommand("channel", SetRadioChannel)

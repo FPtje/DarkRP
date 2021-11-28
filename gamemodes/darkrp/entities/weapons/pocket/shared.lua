@@ -118,9 +118,14 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
-    if not CLIENT then return end
+    if CLIENT then
+      DarkRP.openPocketMenu()
+    end
 
-    DarkRP.openPocketMenu()
+    if SERVER and game.SinglePlayer() then
+        net.Start("DarkRP_PocketMenu")
+        net.Send(self:GetOwner())
+    end
 end
 
 local meta = FindMetaTable("Player")

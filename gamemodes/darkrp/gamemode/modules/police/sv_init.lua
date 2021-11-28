@@ -392,3 +392,24 @@ hook.Add("PlayerInitialSpawn", "Arrested", function(ply)
     end)
     DarkRP.notify(ply, 0, 5, DarkRP.getPhrase("jail_punishment", time))
 end)
+
+function DarkRP.hooks:canGiveLicense(ply, target)
+    -- Mayors can hand out licenses
+    if ply:isMayor() then return true end
+
+    local reason = DarkRP.getPhrase("incorrect_job", "/givelicense")
+
+    -- Chiefs can if there is no mayor
+    local mayorExists = #fn.Filter(plyMeta.isMayor, player.GetAll()) > 0
+    if mayorExists then return false, reason end
+
+    if ply:isChief() then return true end
+
+    -- CPs can if there are no chiefs nor mayors
+    local chiefExists = #fn.Filter(plyMeta.isChief, player.GetAll()) > 0
+    if chiefExists then return false, reason end
+
+    if ply:isCP() then return true end
+
+    return false, reason
+end

@@ -4,8 +4,7 @@ if CLIENT then
     SWEP.Author = "DarkRP Developers"
     SWEP.Contact = ""
     SWEP.Purpose = ""
-    SWEP.Instructions = ""
-    SWEP.Instructions = "Hold use and right-click to change firemodes or left-click to attach silencer."
+    SWEP.Instructions = "Hold use and left-click to change firemodes."
     SWEP.Slot = 2
     SWEP.SlotPos = 0
     SWEP.IconLetter = "w"

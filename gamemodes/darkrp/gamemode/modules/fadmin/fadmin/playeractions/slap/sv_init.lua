@@ -21,8 +21,8 @@ local function Slap(ply, cmd, args)
         FAdmin.Messages.SendMessage(ply, 1, "Player not found")
         return false
     end
-    local Amount = tonumber(args[2]) or 10
-    local Repetitions = tonumber(args[3])
+    local Amount = DarkRP.toInt(args[2]) or 10
+    local Repetitions = DarkRP.toInt(args[3])
 
     for _, target in pairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Slap", target) then

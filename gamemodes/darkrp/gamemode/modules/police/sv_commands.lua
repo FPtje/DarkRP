@@ -113,13 +113,13 @@ local function DoLottery(ply, amount)
         return ""
     end
 
-    amount = tonumber(amount)
+    amount = DarkRP.toInt(amount)
     if not amount then
         DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("lottery_please_specify_an_entry_cost", DarkRP.formatMoney(GAMEMODE.Config.minlotterycost), DarkRP.formatMoney(GAMEMODE.Config.maxlotterycost)))
         return ""
     end
 
-    LotteryAmount = math.Clamp(math.floor(amount), GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)
+    LotteryAmount = math.Clamp(amount, GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)
 
     hook.Run("lotteryStarted", ply, LotteryAmount)
 
@@ -297,23 +297,16 @@ end
 DarkRP.defineChatCommand("requestlicense", RequestLicense)
 
 local function GiveLicense(ply)
-    local noMayorExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(ply.isMayor), player.GetAll}
-    local noChiefExists = fn.Compose{fn.Null, fn.Curry(fn.Filter, 2)(ply.isChief), player.GetAll}
-
-    local canGiveLicense = fn.FOr{
-        ply.isMayor, -- Mayors can hand out licenses
-        fn.FAnd{ply.isChief, noMayorExists}, -- Chiefs can if there is no mayor
-        fn.FAnd{ply.isCP, noChiefExists, noMayorExists} -- CP's can if there are no chiefs nor mayors
-    }
-
-    if not canGiveLicense(ply) then
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("incorrect_job", "/givelicense"))
-        return ""
-    end
-
     local LookingAt = ply:GetEyeTrace().Entity
     if not IsValid(LookingAt) or not LookingAt:IsPlayer() or LookingAt:GetPos():DistToSqr(ply:GetPos()) > 10000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("player")))
+        return ""
+    end
+
+    local canGive, cantGiveReason = hook.Call("canGiveLicense", DarkRP.hooks, ply, LookingAt)
+    if canGive == false then
+        cantGiveReason = isstring(cantGiveReason) and cantGiveReason or DarkRP.getPhrase("unable", "/givelicense", "")
+        DarkRP.notify(ply, 1, 4, cantGiveReason)
         return ""
     end
 

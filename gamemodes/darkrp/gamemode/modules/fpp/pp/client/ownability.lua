@@ -54,7 +54,6 @@ function FPP.canTouchEnt(ent, touchType)
     return bit.bor(ent.FPPCanTouch, touchTypes[touchType]) == ent.FPPCanTouch
 end
 
-
 local touchTypeMultiplier = {
     ["Physgun"] = 0,
     ["Gravgun"] = 1,

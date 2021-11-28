@@ -84,8 +84,8 @@ for _, folder in SortedPairs(folders, true) do
     if folder == "." or folder == ".." or DarkRP.disabledDefaults["modules"][folder] then continue end
 
     for _, File in SortedPairs(file.Find(fol .. folder .. "/sh_*.lua", "LUA"), true) do
-        AddCSLuaFile(fol .. folder .. "/" .. File)
         if File == "sh_interface.lua" then continue end
+        AddCSLuaFile(fol .. folder .. "/" .. File)
         include(fol .. folder .. "/" .. File)
     end
 
