@@ -3,8 +3,9 @@ functions
 ---------------------------------------------------------------------------]]
 local meta = FindMetaTable("Player")
 function meta:addMoney(amount)
+    amount = DarkRP.toInt(amount)
     if not amount then return false end
-    local total = self:getDarkRPVar("money") + math.floor(amount)
+    local total = self:getDarkRPVar("money") + amount
     total = hook.Call("playerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
 
     self:setDarkRPVar("money", total)
@@ -58,7 +59,9 @@ local function GiveMoney(ply, args)
         return ""
     end
 
-    if not tonumber(args) then
+    local amount = DarkRP.toInt(args)
+
+    if not amount then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
@@ -70,8 +73,6 @@ local function GiveMoney(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("player")))
         return ""
     end
-
-    local amount = math.floor(tonumber(args))
 
     if amount < 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ">=1"))
@@ -121,11 +122,12 @@ local function DropMoney(ply, args)
         return ""
     end
 
-    if not tonumber(args) then
+    local amount = DarkRP.toInt(args)
+
+    if not amount then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
-    local amount = math.floor(tonumber(args))
 
     if amount < 1 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ">0"))
@@ -171,7 +173,7 @@ DarkRP.defineChatCommand("moneydrop", DropMoney, 0.3)
 
 local function CreateCheque(ply, args)
     local recipient = DarkRP.findPlayer(args[1])
-    local amount = tonumber(args[2]) or 0
+    local amount = DarkRP.toInt(args[2]) or 0
 
     local chequeTable =
         { cmd = "cheque"
@@ -242,7 +244,9 @@ DarkRP.defineChatCommand("cheque", CreateCheque, 0.3)
 DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can't spell
 
 local function ccSetMoney(ply, args)
-    if not tonumber(args[2]) then
+    local amount = DarkRP.toInt(args[2])
+
+    if not amount then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
     end
@@ -254,7 +258,6 @@ local function ccSetMoney(ply, args)
         return
     end
 
-    local amount = math.floor(tonumber(args[2]))
     amount = hook.Call("playerWalletChanged", GAMEMODE, target, amount - target:getDarkRPVar("money"), target:getDarkRPVar("money")) or amount
 
     DarkRP.storeMoney(target, amount)
@@ -273,7 +276,9 @@ end
 DarkRP.definePrivilegedChatCommand("setmoney", "DarkRP_SetMoney", ccSetMoney)
 
 local function ccAddMoney(ply, args)
-    if not tonumber(args[2]) then
+    local amount = DarkRP.toInt(args[2])
+
+    if not amount then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
     end
@@ -284,8 +289,6 @@ local function ccAddMoney(ply, args)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("could_not_find", tostring(args[1])))
         return
     end
-
-    local amount = math.floor(tonumber(args[2]))
 
     if target then
         target:addMoney(amount)

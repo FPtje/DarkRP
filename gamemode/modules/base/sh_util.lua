@@ -315,6 +315,14 @@ function DarkRP.ValidatedPhysicsInit(ent, solidType, hint)
     return false
 end
 
+--[[---------------------------------------------------------------------------
+Like tonumber, but makes sure it's an integer
+---------------------------------------------------------------------------]]
+function DarkRP.toInt(value)
+    value = tonumber(value)
+    return value and math.floor(value)
+end
+
 --[[-------------------------------------------------------------------------
 Check the database for integrity errors. Use in cases when stuff doesn't load
 on restart, or you get corruption errors.

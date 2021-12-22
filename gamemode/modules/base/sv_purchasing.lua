@@ -437,12 +437,12 @@ local function SetPrice(ply, args)
         return ""
     end
 
-    local a = tonumber(args)
-    if not a then
+    local price = DarkRP.toInt(args)
+    if not price then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return ""
     end
-    local b = math.Clamp(math.floor(a), GAMEMODE.Config.pricemin, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 500)
+    price = math.Clamp(price, GAMEMODE.Config.pricemin, (GAMEMODE.Config.pricecap ~= 0 and GAMEMODE.Config.pricecap) or 500)
     local trace = {}
 
     trace.start = ply:EyePos()
@@ -454,7 +454,7 @@ local function SetPrice(ply, args)
     local ent = tr.Entity
 
     if IsValid(ent) and ent.CanSetPrice and ent.SID == ply.SID then
-        ent:Setprice(b)
+        ent:Setprice(price)
     else
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("any_lab")))
     end

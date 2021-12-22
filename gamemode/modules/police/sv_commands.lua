@@ -113,13 +113,13 @@ local function DoLottery(ply, amount)
         return ""
     end
 
-    amount = tonumber(amount)
+    amount = DarkRP.toInt(amount)
     if not amount then
         DarkRP.notify(ply, 1, 5, DarkRP.getPhrase("lottery_please_specify_an_entry_cost", DarkRP.formatMoney(GAMEMODE.Config.minlotterycost), DarkRP.formatMoney(GAMEMODE.Config.maxlotterycost)))
         return ""
     end
 
-    LotteryAmount = math.Clamp(math.floor(amount), GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)
+    LotteryAmount = math.Clamp(amount, GAMEMODE.Config.minlotterycost, GAMEMODE.Config.maxlotterycost)
 
     hook.Run("lotteryStarted", ply, LotteryAmount)
 
