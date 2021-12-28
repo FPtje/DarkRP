@@ -104,11 +104,19 @@ function DarkRP.initDatabase()
         -- Load the last DBVersion into DarkRP.DBVersion, to allow checks to see whether migration is needed.
         MySQLite.queueQuery([[
             SELECT MAX(version) AS version FROM darkrp_dbversion
-        ]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 20211228 end)
-
-        MySQLite.queueQuery([[
-            REPLACE INTO darkrp_dbversion VALUES(20211228)
-        ]])
+        ]], function(data)
+            -- The database is created with the schema of the latest version. On
+            -- initialization the version is not set yet. Set it to the latest
+            -- version.
+            if not data or not data[1] or not tonumber(data[1].version) then
+                DarkRP.DBVersion = 20211228
+                MySQLite.query([[
+                    REPLACE INTO darkrp_dbversion VALUES(20211228)
+                ]])
+            else
+                DarkRP.DBVersion = tonumber(data[1].version)
+            end
+        end)
 
     MySQLite.commit(fp{migrateDB, -- Migrate the database
         function() -- Initialize the data after all the tables have been created
