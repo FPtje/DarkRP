@@ -183,7 +183,7 @@ local function playerSay(talker, message)
 
     local talkerTeam = team.GetColor(talker:Team())
     local talkerName = talker:Nick()
-    local col = Color(255, 255, 255, 255)
+    local col = color_white
     for _, ply in ipairs(player.GetAll()) do
         if ply == talker or not ply.FSpectating then continue end
 
