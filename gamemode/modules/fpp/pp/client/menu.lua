@@ -111,7 +111,7 @@ function FPP.AdminMenu(Panel)
     local function addblock(pan, Type)
         local label = pan:Add("DLabel")
         label:SetText("\n" .. Type .. " black/whitelist entities:")
-        label:SetTextColor(Color(0, 0, 0, 255))
+        label:SetTextColor(color_black)
         label:SizeToContents()
 
         local lview = pan:Add("DListView")
@@ -167,7 +167,7 @@ function FPP.AdminMenu(Panel)
     local function addsldr(max, command, text, plist, decimals)
         local label = plist:Add("DLabel")
         label:SetText(text)
-        label:SetTextColor(Color(0, 0, 0, 255))
+        label:SetTextColor(color_black)
         label:SizeToContents()
 
         local sldr = plist:Add("DNumSlider")
@@ -216,7 +216,7 @@ function FPP.AdminMenu(Panel)
 
     local other = general:Add(Label("\nDelete player's entities:"))
     other:SizeToContents()
-    other:SetTextColor(Color(0, 0, 0, 255))
+    other:SetTextColor(color_black)
 
     local areplayers = false
     for _, v in ipairs(nickSortedPlayers()) do
@@ -293,7 +293,7 @@ function FPP.AdminMenu(Panel)
 
     local _, damage = MakeOption("Entity damage options")
     local antiDMGLabel = Label("Prevents players from damaging other players' props")
-    antiDMGLabel:SetTextColor(Color(0, 0, 0, 255))
+    antiDMGLabel:SetTextColor(color_black)
     damage:Add(antiDMGLabel)
 
     addchk("Damage protection enabled", {"FPP_ENTITYDAMAGE1", "toggle"}, damage)
@@ -309,7 +309,7 @@ function FPP.AdminMenu(Panel)
     local _, blockedmodels = MakeOption("Blocked models options")
     local BlockedModelsLabel = blockedmodels:Add("DLabel")
     BlockedModelsLabel:SetText("\nTo add a model in the blocked models list:\nOpen the spawn menu, right click a prop and\nadd it to the blocked list")
-    BlockedModelsLabel:SetTextColor(Color(0, 0, 0, 255))
+    BlockedModelsLabel:SetTextColor(color_black)
     BlockedModelsLabel:SizeToContents()
 
     addchk("Blocked models enabled", {"FPP_BLOCKMODELSETTINGS1", "toggle"}, blockedmodels)
@@ -432,7 +432,7 @@ function FPP.AdminMenu(Panel)
     end
 
     local multiToolEditLabel = Label("\nMultiple tool editor.\nAdd tools in this list by clicking on them,\nthen click \"Edit multiple tools\"\nto edit multiple tools at once!")
-    multiToolEditLabel:SetTextColor(Color(0, 0, 0, 255))
+    multiToolEditLabel:SetTextColor(color_black)
     local EditToolListLabel = ToolRestrict:Add(multiToolEditLabel)
     EditToolListLabel:SizeToContents()
 
@@ -475,11 +475,11 @@ function FPP.AdminMenu(Panel)
     local _, GroupRestrict = MakeOption("Group tool restriction")
 
     local pressLoadFirstLabel = Label("Press \"Load groups and members\" first!")
-    pressLoadFirstLabel:SetTextColor(Color(0, 0, 0, 255))
+    pressLoadFirstLabel:SetTextColor(color_black)
     local PressLoadFirst = GroupRestrict:Add(pressLoadFirstLabel)
     local  membersLabel = Label("Group Members: NOTE: People who have the\nusergroup that matches with this group\nare automatically in this group!")
     membersLabel:SizeToContents()
-    membersLabel:SetTextColor(Color(0, 0, 0, 255))
+    membersLabel:SetTextColor(color_black)
     GroupRestrict:Add(membersLabel)
 
     local LoadGroups = GroupRestrict:Add("DButton")
@@ -551,7 +551,7 @@ function FPP.AdminMenu(Panel)
     end
 
     local groupMemLabel = Label("Group Members:")
-    groupMemLabel:SetTextColor(Color(0, 0, 0, 255))
+    groupMemLabel:SetTextColor(color_black)
     GroupRestrict:Add(groupMemLabel)
     local GroupMembers = GroupRestrict:Add("DListView")
     GroupMembers:AddColumn("SteamID")
@@ -632,7 +632,7 @@ function FPP.AdminMenu(Panel)
 
     local lbl = Label("\nFalco's Prop Protection\nMade by Falco A.K.A. FPtje")
     lbl:SizeToContents()
-    lbl:SetTextColor(Color(0, 0, 0, 255))
+    lbl:SetTextColor(color_black)
     AdminPanel.contents:Add(lbl)
     AdminPanel:SetContents(AdminPanel.contents)
     AdminPanel:Dock(FILL)

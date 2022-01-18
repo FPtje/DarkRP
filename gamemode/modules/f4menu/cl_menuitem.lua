@@ -2,8 +2,8 @@ local PANEL = {}
 
 AccessorFunc(PANEL, "borderColor", "BorderColor")
 
-local white = Color(255, 255, 255)
-local black = Color(0, 0, 0, 255)
+local white = color_white
+local black = color_black
 local gray = Color(140, 140, 140, 255)
 local darkgray = Color(50, 50, 50, 255)
 

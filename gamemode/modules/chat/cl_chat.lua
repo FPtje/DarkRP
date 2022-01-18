@@ -83,8 +83,8 @@ People who have contributed (ordered by commits, with at least two commits)
 ]]
 
 local function credits(um)
-    chat.AddNonParsedText(Color(255, 0, 0, 255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255, 0, 0, 255), "] ", Color(255, 255, 255, 255), DarkRP.getPhrase("credits_see_console"))
+    chat.AddNonParsedText(Color(255, 0, 0, 255), "[", Color(50,50,50,255), GAMEMODE.Name, Color(255, 0, 0, 255), "] ", color_white, DarkRP.getPhrase("credits_see_console"))
 
-    MsgC(Color(255, 0, 0, 255), DarkRP.getPhrase("credits_for", GAMEMODE.Name), Color(255, 255, 255, 255), creds)
+    MsgC(Color(255, 0, 0, 255), DarkRP.getPhrase("credits_for", GAMEMODE.Name), color_white, creds)
 end
 usermessage.Hook("DarkRP_Credits", credits)

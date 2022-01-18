@@ -9,6 +9,9 @@ local receivers
 local currentChatText = {}
 local receiverConfigs = {}
 local currentConfig = {text = "", hearFunc = fn.Id} -- Default config is not loaded yet
+local colorBackground = Color(0, 0, 0, 160)
+local colorRed = Color(255, 0, 0)
+local colorGreen = Color(0, 255, 0)
 
 --[[---------------------------------------------------------------------------
 addChatReceiver
@@ -50,15 +53,15 @@ local function drawChatReceivers()
     local receiversCount = #receivers
     -- No one hears you
     if receiversCount == 0 then
-        draw.WordBox(2, x, y, DarkRP.getPhrase("hear_noone", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(255,0,0,255))
+        draw.WordBox(2, x, y, DarkRP.getPhrase("hear_noone", currentConfig.text), "DarkRPHUD1", colorBackground, colorRed)
         return
     -- Everyone hears you
     elseif receiversCount == player.GetCount() - 1 then
-        draw.WordBox(2, x, y, DarkRP.getPhrase("hear_everyone"), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+        draw.WordBox(2, x, y, DarkRP.getPhrase("hear_everyone"), "DarkRPHUD1", colorBackground, colorGreen)
         return
     end
 
-    draw.WordBox(2, x, y - (receiversCount * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+    draw.WordBox(2, x, y - (receiversCount * 21), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", colorBackground, colorGreen)
     for i = 1, receiversCount, 1 do
         if not IsValid(receivers[i]) then
             receivers[i] = receivers[#receivers]
@@ -66,7 +69,7 @@ local function drawChatReceivers()
             continue
         end
 
-        draw.WordBox(2, x, y - (i - 1) * 21, receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), Color(255, 255, 255, 255))
+        draw.WordBox(2, x, y - (i - 1) * 21, receivers[i]:Nick(), "DarkRPHUD1", colorBackground, color_white)
     end
 end
 

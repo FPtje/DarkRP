@@ -7,7 +7,7 @@ end
 
 function ENT:initVarsClient()
     self.colorBackground = Color(140, 0, 0, 100)
-    self.colorText = Color(255, 255, 255, 255)
+    self.colorText = color_white
     self.donateAnimColor = Color(20, 100, 20)
 
     self.rotationSpeed = 130

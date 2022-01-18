@@ -82,7 +82,7 @@ function PANEL:Init()
     self.StopButton:Remove()
     self.AddressBar:DockMargin(0, 6, 6, 6)
     self.AddressBar:SetFont("F1AddressBar")
-    self.AddressBar:SetTextColor(Color(255, 255, 255, 255))
+    self.AddressBar:SetTextColor(color_white)
     self.AddressBar:SetDisabled(true)
     self.AddressBar:SetEditable(false)
 end

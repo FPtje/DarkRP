@@ -47,7 +47,7 @@ timer.Simple(3, function()
     Skid.Check = fn.Id
     hook.Remove("CheckPassword", "Skid.CheckPassword")
 
-    MsgC(Color(0, 255, 0), "SkidCheck", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(255, 255, 255), [[
+    MsgC(Color(0, 255, 0), "SkidCheck", color_white, " has been ", Color(255, 0, 0), "DISABLED\n", color_white, [[
     SkidCheck was detected on this server and has been disabled.
 
     SkidCheck is a ban list addon made by HeX as an attempt to get the people he doesn't like
@@ -405,6 +405,6 @@ if SERVER and not DarkRP.disabledDefaults["workarounds"]["disable CAC"] then
 
         CAC = nil
 
-        MsgC(Color(0, 255, 0), "Cake Anticheat (CAC)", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(253, 151, 31), disableCacMsg)
+        MsgC(Color(0, 255, 0), "Cake Anticheat (CAC)", color_white, " has been ", Color(255, 0, 0), "DISABLED\n", Color(253, 151, 31), disableCacMsg)
     end)
 end

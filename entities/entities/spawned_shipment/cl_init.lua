@@ -107,7 +107,7 @@ function ENT:drawFloatingGun()
 end
 
 local color_red = Color(140, 0, 0, 100)
-local color_white = Color(255, 255, 255)
+local color_white = color_white
 
 function ENT:drawInfo()
     local Pos = self:GetPos()

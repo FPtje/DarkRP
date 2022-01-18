@@ -6,10 +6,9 @@ Show a black screen
 local function blackScreen(um)
     local toggle = um:ReadBool()
     if toggle then
-        local black = Color(0, 0, 0)
         local w, h = ScrW(), ScrH()
         hook.Add("HUDPaintBackground", "BlackScreen", function()
-            surface.SetDrawColor(black)
+            surface.SetDrawColor(color_black)
             surface.DrawRect(0, 0, w, h)
         end)
     else

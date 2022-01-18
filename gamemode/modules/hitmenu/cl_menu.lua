@@ -151,7 +151,7 @@ AccessorFunc(PANEL, "btnColor", "ButtonColor")
 function PANEL:PerformLayout()
     self:SetSize(self:GetParent():GetWide() / 2 - 30, 100)
     self:SetFont("HUDNumber5")
-    self:SetTextColor(Color(255, 255, 255, 255))
+    self:SetTextColor(color_white)
 
     self.BaseClass.PerformLayout(self)
 end
