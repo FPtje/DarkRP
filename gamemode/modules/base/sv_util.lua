@@ -93,7 +93,7 @@ function DarkRP.talkToPerson(receiver, col1, text1, col2, text2, sender)
             sender = sender or Entity(0)
             net.WriteEntity(sender)
 
-            col2 = col2 or Color(0, 0, 0)
+            col2 = col2 or color_black
             net.WriteUInt(col2.r, 8)
             net.WriteUInt(col2.g, 8)
             net.WriteUInt(col2.b, 8)

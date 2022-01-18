@@ -787,7 +787,7 @@ local function disableBabyGod(ply)
         oldPlyColor = nil
     end
 
-    ply:SetColor(ply.babyGodColor or Color(255, 255, 255, 255))
+    ply:SetColor(ply.babyGodColor or color_white)
 
     ply.babyGodColor = nil
 end

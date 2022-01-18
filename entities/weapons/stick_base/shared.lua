@@ -20,7 +20,7 @@ SWEP.UseHands = false
 
 SWEP.AdminOnly = true
 
-SWEP.StickColor = Color(255, 255, 255)
+SWEP.StickColor = color_white
 
 SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
 SWEP.WorldModel = Model("models/weapons/w_stunbaton.mdl")

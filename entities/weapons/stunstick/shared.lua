@@ -71,18 +71,20 @@ end
 
 local stunstickMaterial = Material("effects/stunstick")
 local stunstickBeam     = Material("!darkrp/stunstick_beam")
+local spriteColor       = Color(180, 180, 180)
+
 function SWEP:PostDrawViewModel(vm)
     if self:GetSeqIdleTime() ~= 0 or self:GetLastReload() >= CurTime() - 0.1 then
         local attachment = vm:GetAttachment(1)
         local pos = attachment.Pos
         cam.Start3D(EyePos(), EyeAngles())
             render.SetMaterial(stunstickMaterial)
-            render.DrawSprite(pos, 12, 12, Color(180, 180, 180))
+            render.DrawSprite(pos, 12, 12, spriteColor)
             for i = 1, 3 do
                 local randVec = VectorRand() * 3
                 local offset = (attachment.Ang:Forward() * randVec.x) + (attachment.Ang:Right() * randVec.y) + (attachment.Ang:Up() * randVec.z)
                 render.SetMaterial(stunstickBeam)
-                render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, Color(180, 180, 180))
+                render.DrawBeam(pos, pos + offset, 3.25 - i, 1, 1.25, spriteColor)
                 pos = pos + offset
             end
         cam.End3D()
@@ -98,7 +100,7 @@ function SWEP:DrawWorldModelTranslucent()
         if bonePos then
             local pos = bonePos + (boneAng:Up() * -16) + (boneAng:Right() * 3) + (boneAng:Forward() * 6.5)
             render.SetMaterial(light_glow02_add)
-            render.DrawSprite(pos, 32, 32, Color(255, 255, 255))
+            render.DrawSprite(pos, 32, 32, color_white)
         end
     end
     self:DrawModel()
