@@ -27,7 +27,7 @@ local tostring = tostring
 local plyMeta = FindMetaTable("Player")
 
 local colors = {}
-colors.black = Color(0, 0, 0, 255)
+colors.black = color_black
 colors.blue = Color(0, 0, 255, 255)
 colors.brightred = Color(200, 30, 30, 255)
 colors.darkred = Color(0, 0, 70, 100)
@@ -35,7 +35,7 @@ colors.darkblack = Color(0, 0, 0, 200)
 colors.gray1 = Color(0, 0, 0, 155)
 colors.gray2 = Color(51, 58, 51,100)
 colors.red = Color(255, 0, 0, 255)
-colors.white = Color(255, 255, 255, 255)
+colors.white = color_white
 colors.white1 = Color(255, 255, 255, 200)
 
 local function ReloadConVars()

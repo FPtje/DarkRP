@@ -1,5 +1,5 @@
 local meta = FindMetaTable("Entity")
-local black = Color(0, 0, 0, 255)
+local black = color_black
 local white = Color(255, 255, 255, 200)
 local red = Color(128, 30, 30, 255)
 local changeDoorAccess = false

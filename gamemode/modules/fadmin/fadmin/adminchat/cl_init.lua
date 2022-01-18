@@ -6,7 +6,7 @@ net.Receive("FAdmin_ReceiveAdminMessage", function(len)
     local Nick = FromPly:IsPlayer() and FromPly:Nick() or "Console"
     local prefix = (FAdmin.Access.PlayerHasPrivilege(FromPly, "AdminChat") or FromPly:IsAdmin()) and "[Admin Chat] " or "[To admins] "
 
-    chat.AddNonParsedText(Color(255, 0, 0, 255), prefix, team.GetColor(Team), Nick .. ": ", Color(255, 255, 255, 255), Text)
+    chat.AddNonParsedText(Color(255, 0, 0, 255), prefix, team.GetColor(Team), Nick .. ": ", color_white, Text)
 end)
 
 FAdmin.StartHooks["Chatting"] = function()

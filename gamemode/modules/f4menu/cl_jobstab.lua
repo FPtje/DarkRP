@@ -197,7 +197,7 @@ Left panel for the jobs
 PANEL = {}
 
 function PANEL:Init()
-    self:SetBackgroundColor(Color(0, 0, 0, 0))
+    self:SetBackgroundColor(color_transparent)
     self:EnableVerticalScrollbar()
     self:SetSpacing(2)
     self.VBar.Paint = fn.Id
@@ -214,7 +214,7 @@ end
 
 function PANEL:Paint(w, h)
     if not self.category then return end
-    draw.RoundedBox(4, 0, 0, w, h, Color(255,255,255,255))
+    draw.RoundedBox(4, 0, 0, w, h, color_white)
 end
 
 derma.DefineControl("F4EmptyPanel", "", PANEL, "DPanelList")
@@ -244,7 +244,7 @@ function PANEL:Init()
     self.innerPanel:AddItem(self.lblDescription)
 
     self.filler = VGUIRect(0, 0, 0, 20)
-    self.filler:SetColor(Color(0, 0, 0, 0))
+    self.filler:SetColor(color_transparent)
     self.innerPanel:AddItem(self.filler)
 
     self.lblWeapons = vgui.Create("DLabel")
