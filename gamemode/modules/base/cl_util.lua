@@ -105,3 +105,22 @@ function input.KeyNameToNumber(str)
 
     return keyNames[str]
 end
+
+--[[---------------------------------------------------------------------------
+Cache local player's trace every 100 milliseconds
+
+NOTE: The wiki says LocalPlayer():GetEyeTrace() is cached every frame, it's still very expensive
+Using :GetEyeTrace() in "DrawHitOption" hud painting hook costs around 7ms
+Using this workaround in "DrawHitOption" hud painting hook costs 0.65ms
+It's useful to use in rendering hooks
+---------------------------------------------------------------------------]]
+timer.Create("DarkRPCacheLocalTrace", 0.1, 0, function()
+    local lp = LocalPlayer()
+    if (IsValid(lp)) then
+        DarkRP.cachedTrace = lp:GetEyeTrace()
+    end
+end)
+
+function DarkRP.getCachedTrace()
+    return (DarkRP.cachedTrace or LocalPlayer():GetEyeTrace())
+end
