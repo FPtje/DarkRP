@@ -48,7 +48,7 @@ hook.Add("HUDPaint", "DrawHitOption", function()
     localplayer = localplayer or LocalPlayer()
     hudText = hudText or GAMEMODE.Config.hudText
     local x, y
-    local ply = DarkRP.getCachedTrace().Entity
+    local ply = localplayer:GetEyeTrace().Entity
 
     if IsValid(ply) and ply:IsPlayer() and ply:isHitman() and not ply:hasHit() and localplayer:GetPos():DistToSqr(ply:GetPos()) < minHitDistanceSqr then
         x, y = ScrW() / 2, ScrH() / 2 + 30
