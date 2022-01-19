@@ -357,7 +357,7 @@ local function DrawEntityDisplay()
         end
     end
 
-    local ent = localplayer:GetEyeTrace().Entity
+    local ent = DarkRP.getCachedTrace().Entity
 
     if IsValid(ent) and ent:isKeysOwnable() and ent:GetPos():DistToSqr(localplayer:GetPos()) < 40000 then
         ent:drawOwnableInfo()
