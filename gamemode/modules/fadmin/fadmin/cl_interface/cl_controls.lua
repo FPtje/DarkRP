@@ -282,7 +282,7 @@ function PANEL6:Paint()
         BorderColor = Color(math.Min(BorderColor.r + 40, 255), math.Min(BorderColor.g + 40, 255), math.Min(BorderColor.b + 40, 255), BorderColor.a)
     end
     if self.Depressed then
-        BorderColor = Color(0,0,0,0)
+        BorderColor = color_transparent
     end
     draw.RoundedBox(4, 0, 0, self:GetWide(), self:GetTall(), BorderColor)
     draw.RoundedBox(4, 2, 2, self:GetWide() - 4, self:GetTall() - 4, Color(40, 40, 40, 255))

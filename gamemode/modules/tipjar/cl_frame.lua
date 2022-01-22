@@ -139,7 +139,7 @@ function DONATE_LIST:Init()
 
     self:SetSize(480, 465)
 
-    self:SetBackgroundColor(Color(0, 0, 0, 0))
+    self:SetBackgroundColor(color_transparent)
     self:EnableVerticalScrollbar()
     self:SetSpacing(10)
     self.VBar.Paint = fn.Id

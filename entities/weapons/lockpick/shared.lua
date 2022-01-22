@@ -144,6 +144,7 @@ function SWEP:Fail()
     self:SetLockpickEnt(nil)
 end
 
+local colorBackground = Color(10, 10, 10, 120)
 local dots = {
     [0] = ".",
     [1] = "..",
@@ -181,7 +182,7 @@ function SWEP:DrawHUD()
     local w = ScrW()
     local h = ScrH()
     local x, y, width, height = w / 2 - w / 10, h / 2 - 60, w / 5, h / 15
-    draw.RoundedBox(8, x, y, width, height, Color(10,10,10,120))
+    draw.RoundedBox(8, x, y, width, height, colorBackground)
 
     local time = self:GetLockpickEndTime() - self:GetLockpickStartTime()
     local curtime = CurTime() - self:GetLockpickStartTime()
@@ -190,7 +191,7 @@ function SWEP:DrawHUD()
     local cornerRadius = math.Min(8, BarWidth / 3 * 2 - BarWidth / 3 * 2 % 2)
     draw.RoundedBox(cornerRadius, x + 8, y + 8, BarWidth, height - 16, Color(255 - (status * 255), 0 + (status * 255), 0, 255))
 
-    draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w / 2, y + height / 2, Color(255, 255, 255, 255), 1, 1)
+    draw.DrawNonParsedSimpleText(DarkRP.getPhrase("picking_lock") .. self.Dots, "Trebuchet24", w / 2, y + height / 2, color_white, 1, 1)
 end
 
 function SWEP:SecondaryAttack()

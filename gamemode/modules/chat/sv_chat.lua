@@ -96,7 +96,7 @@ local function RP_ActualDoSay(ply, text, callback)
     callback = callback or ""
     if text == "" then return "" end
     local col = team.GetColor(ply:Team())
-    local col2 = Color(255, 255, 255, 255)
+    local col2 = color_white
     if not ply:Alive() then
         col2 = Color(255, 200, 200, 255)
         col = col2

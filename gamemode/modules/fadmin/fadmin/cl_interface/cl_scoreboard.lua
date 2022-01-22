@@ -27,7 +27,7 @@ function FAdmin.ScoreBoard.ChangeView(newView, ...)
 end
 
 --"fadmin/back", gui/gmod_tool
-local GmodLogo, TempGmodLogo, GmodLogoColor = surface.GetTextureID("gui/gmod_logo"), surface.GetTextureID("gui/gmod_logo"), Color(255, 255, 255, 255)
+local GmodLogo, TempGmodLogo, GmodLogoColor = surface.GetTextureID("gui/gmod_logo"), surface.GetTextureID("gui/gmod_logo"), color_white
 function FAdmin.ScoreBoard.ChangeGmodLogo(new)
     if surface.GetTextureID(new) == TempGmodLogo then return end
     TempGmodLogo = surface.GetTextureID(new)

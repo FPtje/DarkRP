@@ -10,7 +10,7 @@ local MotdMessage =
 local endMOTD = "---------------------------------------------------------------------------\n"
 
 local function drawMOTD(text)
-    MsgC(Color(255, 20, 20, 255), MotdMessage, Color(255, 255, 255, 255), text, Color(255, 20, 20, 255), endMOTD)
+    MsgC(Color(255, 20, 20, 255), MotdMessage, color_white, text, Color(255, 20, 20, 255), endMOTD)
 end
 
 local function receiveMOTD(html, len, headers, code)
