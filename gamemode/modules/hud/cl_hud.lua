@@ -333,7 +333,7 @@ local function DrawEntityDisplay()
 
     for _, ply in ipairs(players or player.GetAll()) do
         if not IsValid(ply) or ply == localplayer or not ply:Alive() or ply:GetNoDraw() or ply:IsDormant() or ply:GetNoDraw()
-        or ply:GetColor().a == 0 and ply:GetRenderMode() == RENDERMODE_TRANSALPHA or ply:GetRenderMode() == RENDERMODE_TRANSCOLOR then continue end
+        or (ply:GetColor().a == 0 and ply:GetRenderMode() == RENDERMODE_TRANSALPHA or ply:GetRenderMode() == RENDERMODE_TRANSCOLOR) then continue end
         local hisPos = ply:GetShootPos()
         if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 
