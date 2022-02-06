@@ -337,7 +337,6 @@ local function DrawEntityDisplay()
            or not ply:Alive()
            or ply:GetNoDraw()
            or ply:IsDormant()
-           or ply:GetNoDraw()
            or ply:GetColor().a == 0 and (ply:GetRenderMode() == RENDERMODE_TRANSALPHA or ply:GetRenderMode() == RENDERMODE_TRANSCOLOR) then
            continue
         end
