@@ -5,7 +5,9 @@ surface.CreateFont("TabLarge", {
     weight = 700,
     antialias = true,
     shadow = false,
-    font = "Trebuchet MS"})
+    font = "Trebuchet MS",
+    extended = true,
+})
 
 hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool) -- Prevent client from SEEING his toolgun shoot while it doesn't shoot serverside.
     if IsValid(trace.Entity) and not FPP.canTouchEnt(trace.Entity, "Toolgun") then

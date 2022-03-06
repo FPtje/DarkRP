@@ -3,7 +3,9 @@ surface.CreateFont("F1AddressBar", {
         weight = 400,
         antialias = true,
         shadow = false,
-        font = "Coolvetica"})
+        font = "Coolvetica",
+        extended = true,
+    })
 
 local PANEL = {}
 
