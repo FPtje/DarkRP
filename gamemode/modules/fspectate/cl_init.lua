@@ -30,9 +30,7 @@ hook.Add("Initialize", "FSpectate", function()
         weight = 800,
         antialias = true,
         shadow = false,
-        font = "Verdana",
-        extended = true,
-    })
+        font = "Verdana"})
 
     if not FAdmin then return end
     FAdmin.StartHooks["zzSpectate"] = function()
