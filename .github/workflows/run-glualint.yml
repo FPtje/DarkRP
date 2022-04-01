@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: wget https://github.com/FPtje/GLuaFixer/releases/download/1.17.2/glualint-1.17.2-linux-stripped.zip
+      - run: wget https://github.com/FPtje/GLuaFixer/releases/download/1.20.1/glualint-1.20.1-linux.zip
       - run: unzip glualint-*.zip
       - run: ./glualint --output-format github lint .
