@@ -414,10 +414,11 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     local CustomTeam = tableSyntaxUsed and colorOrTable or
         {color = colorOrTable, model = model, description = Description, weapons = Weapons, command = command,
-            max = maximum_amount_of_this_class, salary = Salary, admin = admin or 0, vote = tobool(Vote), hasLicense = Haslicense,
+            max = maximum_amount_of_this_class, salary = Salary, vote = tobool(Vote), hasLicense = Haslicense,
             NeedToChangeFrom = NeedToChangeFrom, customCheck = CustomCheck
         }
     CustomTeam.name = Name
+    CustomTeam.admin = admin or 0
     CustomTeam.default = DarkRP.DARKRP_LOADING
 
     -- Disabled job
