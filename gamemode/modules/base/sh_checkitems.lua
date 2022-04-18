@@ -180,9 +180,11 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
         ),
 
     admin =
-        tc.addHint(
-            fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}},
-            "The admin value must be a number and it must be greater than or equal to zero and smaller than three."
+        tc.default(0,
+            tc.addHint(
+                fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}},
+                "The admin value must be a number and it must be greater than or equal to zero and smaller than three."
+            )
         ),
 
     vote =
