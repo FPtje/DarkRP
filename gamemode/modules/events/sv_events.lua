@@ -100,8 +100,11 @@ local function createTremor()
     tremor.nodupe = true
     tremor:Spawn()
 end
-createTremor()
-hook.Add("PostCleanupMap", "DarkRP_events", createTremor)
+
+hook.Add("InitPostEntity", "DarkRP_SetupTremor", function()
+    createTremor()
+    hook.Add("PostCleanupMap", "DarkRP_events", createTremor)
+end)
 
 local function TremorReport()
     local mag = table.remove(lastmagnitudes, 1)
