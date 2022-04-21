@@ -168,6 +168,9 @@ end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
 local function DrawVoiceChat()
+    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_VoiceChat")
+    if shouldDraw == false then return end
+    
     if localplayer.DRPIsTalking then
         local _, chboxY = chat.GetChatBoxPos()
 
