@@ -130,8 +130,8 @@ local function GunLicense()
 end
 
 local agendaText
-local function Agenda()
-    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
+local function Agenda(gamemodeTable)
+    local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_Agenda")
     if shouldDraw == false then return end
 
     local agenda = localplayer:getAgendaTable()
@@ -167,10 +167,10 @@ hook.Add("DarkRPVarChanged", "agendaHUD", function(ply, var, _, new)
 end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
-local function DrawVoiceChat()
-    local shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_VoiceChat")
+local function DrawVoiceChat(gamemodeTable)
+    local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_VoiceChat")
     if shouldDraw == false then return end
-    
+
     if localplayer.DRPIsTalking then
         local _, chboxY = chat.GetChatBoxPos()
 
@@ -188,10 +188,10 @@ local function DrawVoiceChat()
     end
 end
 
-local function LockDown()
+local function LockDown(gamemodeTable)
     local chbxX, chboxY = chat.GetChatBoxPos()
     if GetGlobalBool("DarkRP_LockDown") then
-        local shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_LockdownHUD")
+        local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_LockdownHUD")
         if shouldDraw == false then return end
         local cin = (math.sin(CurTime()) + 1) / 2
         local chatBoxSize = math.floor(Scrh / 4)
@@ -205,8 +205,8 @@ usermessage.Hook("GotArrested", function(msg)
     local StartArrested = CurTime()
     local ArrestedUntil = msg:ReadFloat()
 
-    Arrested = function()
-        local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ArrestedHUD")
+    Arrested = function(gamemodeTable)
+        local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_ArrestedHUD")
         if shouldDraw == false then return end
 
         if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
@@ -237,14 +237,14 @@ end)
 --[[---------------------------------------------------------------------------
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------]]
-local function DrawHUD()
-    local shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_HUD")
+local function DrawHUD(gamemodeTable)
+    local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_HUD")
     if shouldDraw == false then return end
 
     Scrw, Scrh = ScrW(), ScrH()
     RelativeX, RelativeY = 0, Scrh
 
-    shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_LocalPlayerHUD")
+    shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_LocalPlayerHUD")
     shouldDraw = shouldDraw ~= false
     if shouldDraw then
         --Background
@@ -253,11 +253,11 @@ local function DrawHUD()
         DrawInfo()
         GunLicense()
     end
-    Agenda()
-    DrawVoiceChat()
-    LockDown()
+    Agenda(gamemodeTable)
+    DrawVoiceChat(gamemodeTable)
+    LockDown(gamemodeTable)
 
-    Arrested()
+    Arrested(gamemodeTable)
     AdminTell()
 end
 
@@ -327,8 +327,8 @@ end
 --[[---------------------------------------------------------------------------
 The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------]]
-local function DrawEntityDisplay()
-    local shouldDraw, players = hook.Call("HUDShouldDraw", self, "DarkRP_EntityDisplay")
+local function DrawEntityDisplay(gamemodeTable)
+    local shouldDraw, players = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_EntityDisplay")
     if shouldDraw == false then return end
 
     local shootPos = localplayer:GetShootPos()
@@ -346,7 +346,7 @@ local function DrawEntityDisplay()
         local hisPos = ply:GetShootPos()
         if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 
-        if self.Config.globalshow then
+        if gamemodeTable.Config.globalshow then
             ply:drawPlayerInfo()
         -- Draw when you're (almost) looking at him
         elseif hisPos:DistToSqr(shootPos) < 160000 then
@@ -426,8 +426,8 @@ Actual HUDPaint hook
 function GM:HUDPaint()
     localplayer = localplayer or LocalPlayer()
 
-    DrawHUD()
-    DrawEntityDisplay()
+    DrawHUD(self)
+    DrawEntityDisplay(self)
 
     self.Sandbox.HUDPaint(self)
 end
