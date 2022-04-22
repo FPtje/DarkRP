@@ -168,7 +168,7 @@ end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
 local function DrawVoiceChat()
-    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_VoiceChat")
+    local shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_VoiceChat")
     if shouldDraw == false then return end
     
     if localplayer.DRPIsTalking then
@@ -191,7 +191,7 @@ end
 local function LockDown()
     local chbxX, chboxY = chat.GetChatBoxPos()
     if GetGlobalBool("DarkRP_LockDown") then
-        local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LockdownHUD")
+        local shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_LockdownHUD")
         if shouldDraw == false then return end
         local cin = (math.sin(CurTime()) + 1) / 2
         local chatBoxSize = math.floor(Scrh / 4)
@@ -238,13 +238,13 @@ end)
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------]]
 local function DrawHUD()
-    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
+    local shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_HUD")
     if shouldDraw == false then return end
 
     Scrw, Scrh = ScrW(), ScrH()
     RelativeX, RelativeY = 0, Scrh
 
-    shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
+    shouldDraw = hook.Call("HUDShouldDraw", self, "DarkRP_LocalPlayerHUD")
     shouldDraw = shouldDraw ~= false
     if shouldDraw then
         --Background
@@ -328,7 +328,7 @@ end
 The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------]]
 local function DrawEntityDisplay()
-    local shouldDraw, players = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
+    local shouldDraw, players = hook.Call("HUDShouldDraw", self, "DarkRP_EntityDisplay")
     if shouldDraw == false then return end
 
     local shootPos = localplayer:GetShootPos()
@@ -346,7 +346,7 @@ local function DrawEntityDisplay()
         local hisPos = ply:GetShootPos()
         if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 
-        if GAMEMODE.Config.globalshow then
+        if self.Config.globalshow then
             ply:drawPlayerInfo()
         -- Draw when you're (almost) looking at him
         elseif hisPos:DistToSqr(shootPos) < 160000 then
@@ -378,7 +378,7 @@ end
 Drawing death notices
 ---------------------------------------------------------------------------]]
 function GM:DrawDeathNotice(x, y)
-    if not GAMEMODE.Config.showdeaths then return end
+    if not self.Config.showdeaths then return end
     self.Sandbox.DrawDeathNotice(self, x, y)
 end
 
