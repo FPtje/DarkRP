@@ -93,8 +93,8 @@ function DarkRP.toggleSleep(player, command)
 
             end
             local cl_defaultweapon = player:GetInfo("cl_defaultweapon")
-            if ( player:HasWeapon( cl_defaultweapon ) ) then
-                player:SelectWeapon( cl_defaultweapon )
+            if player:HasWeapon(cl_defaultweapon) then
+                player:SelectWeapon(cl_defaultweapon)
             end
             player:GetTable().BeforeSleepTeam = nil
             player.WeaponsForSleep = nil

@@ -88,8 +88,8 @@ function ENT:Draw()
         if self.Disabled then
             surface.SetDrawColor(0, 0, 0, 255)
             surface.DrawRect(-512, 256, 1024, -512)
-            surface.SetTextColor( 255, 255, 255, 255 )
-            surface.SetTextPos( TextPosX, 0 )
+            surface.SetTextColor(255, 255, 255, 255)
+            surface.SetTextPos(TextPosX, 0)
             surface.DrawNonParsedText("Physgun/use the button to see the MOTD!")
 
             draw.WordBox(4, -16, 24, "Click!", "default", color_darkgrey, color_white)

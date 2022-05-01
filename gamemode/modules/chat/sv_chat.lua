@@ -56,7 +56,9 @@ local function RP_PlayerChat(ply, text, teamonly)
     local callback = ""
     local DoSayFunc
     local groupSay = DarkRP.getChatCommand("g")
-    local tblCmd = fn.Compose{ -- Extract the chat command
+
+    -- Extract the chat command
+    local tblCmd = fn.Compose{
         DarkRP.getChatCommand,
         string.lower,
         fn.Curry(fn.Flip(string.sub), 2)(2), -- extract prefix

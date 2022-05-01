@@ -565,7 +565,9 @@ DarkRP.validateAgenda = tc.checkTable{
         end,
     Listeners =
         tc.default({}, -- Default to empty table
-            fn.FAnd{ -- Checks for a table of valid teams that do not already have an agenda assigned
+            -- Checks for a table of valid teams that do not already have an
+            -- agenda assigned
+            fn.FAnd{
                 tc.addHint(
                     tc.tableOf(isnumber),
                     "The Listeners must be a table of existing teams.",

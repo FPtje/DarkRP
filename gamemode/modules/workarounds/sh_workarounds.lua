@@ -189,7 +189,7 @@ if SERVER and not DarkRP.disabledDefaults["workarounds"]["Error on edict limit"]
         local res, len = varArgsLen(entsCreate(name, ...))
 
         if res[1] == NULL and ents.GetEdictCount() >= 8176 then
-            DarkRP.error(entsCreateError, 2, { string.format("Affected entity: '%s'", name) })
+            DarkRP.error(entsCreateError, 2, {string.format("Affected entity: '%s'", name)})
         end
 
         return unpack(res, 1, len)
@@ -314,28 +314,28 @@ Actively deprecate commands
 ---------------------------------------------------------------------------]]
 if SERVER and not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] then
     local deprecated = {
-        {command = "rp_removeletters",      alternative = "removeletters"           },
-        {command = "rp_setname",            alternative = "forcerpname"             },
-        {command = "rp_unlock",             alternative = "forceunlock"             },
-        {command = "rp_lock",               alternative = "forcelock"               },
-        {command = "rp_removeowner",        alternative = "forceremoveowner"        },
-        {command = "rp_addowner",           alternative = "forceown"                },
-        {command = "rp_unownall",           alternative = "forceunownall"           },
-        {command = "rp_unown",              alternative = "forceunown"              },
-        {command = "rp_own",                alternative = "forceown"                },
-        {command = "rp_tellall",            alternative = "admintellall"            },
-        {command = "rp_tell",               alternative = "admintell"               },
-        {command = "rp_teamunban",          alternative = "teamunban"               },
-        {command = "rp_teamban",            alternative = "teamban"                 },
-        {command = "rp_setsalary",          alternative = "setmoney"                },
-        {command = "rp_setmoney",           alternative = "setmoney"                },
-        {command = "rp_revokelicense",      alternative = "unsetlicense"            },
-        {command = "rp_givelicense",        alternative = "setlicense"              },
-        {command = "rp_unlockdown",         alternative = "unlockdown"              },
-        {command = "rp_lockdown",           alternative = "lockdown"                },
-        {command = "rp_unarrest",           alternative = "unarrest"                },
-        {command = "rp_arrest",             alternative = "arrest"                  },
-        {command = "rp_cancelvote",         alternative = "forcecancelvote"         },
+        {command = "rp_removeletters",      alternative = "removeletters"},
+        {command = "rp_setname",            alternative = "forcerpname"},
+        {command = "rp_unlock",             alternative = "forceunlock"},
+        {command = "rp_lock",               alternative = "forcelock"},
+        {command = "rp_removeowner",        alternative = "forceremoveowner"},
+        {command = "rp_addowner",           alternative = "forceown"},
+        {command = "rp_unownall",           alternative = "forceunownall"},
+        {command = "rp_unown",              alternative = "forceunown"},
+        {command = "rp_own",                alternative = "forceown"},
+        {command = "rp_tellall",            alternative = "admintellall"},
+        {command = "rp_tell",               alternative = "admintell"},
+        {command = "rp_teamunban",          alternative = "teamunban"},
+        {command = "rp_teamban",            alternative = "teamban"},
+        {command = "rp_setsalary",          alternative = "setmoney"},
+        {command = "rp_setmoney",           alternative = "setmoney"},
+        {command = "rp_revokelicense",      alternative = "unsetlicense"},
+        {command = "rp_givelicense",        alternative = "setlicense"},
+        {command = "rp_unlockdown",         alternative = "unlockdown"},
+        {command = "rp_lockdown",           alternative = "lockdown"},
+        {command = "rp_unarrest",           alternative = "unarrest"},
+        {command = "rp_arrest",             alternative = "arrest"},
+        {command = "rp_cancelvote",         alternative = "forcecancelvote"},
     }
 
     local lastDeprecated = 0

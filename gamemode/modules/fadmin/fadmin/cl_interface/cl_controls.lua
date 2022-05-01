@@ -52,7 +52,7 @@ function PANEL3:Init()
     self.Header = vgui.Create("FAdminPlayerCatagoryHeader", self)
     self.Header:SetSize(20, 25)
     self:SetPadding(5)
-    self.Header:Dock( TOP )
+    self.Header:Dock(TOP)
 
     self:SetExpanded(true)
     self:SetMouseInputEnabled(true)

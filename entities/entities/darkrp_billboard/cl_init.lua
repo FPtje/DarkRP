@@ -27,7 +27,7 @@ function ENT:Draw()
     local bottomText = string.gsub(string.gsub(self:GetBottomText() or "", "//", "\n"), "\\n", "\n")
     bottomText = DarkRP.textWrap(string.Replace(bottomText, "\\n", "\n"), self.BodyFont, self.Width - self.BodyMargin * 2)
 
-    if not self.HeaderFontHeight then self.HeaderFontHeight = draw.GetFontHeight( self.HeaderFont ) end
+    if not self.HeaderFontHeight then self.HeaderFontHeight = draw.GetFontHeight(self.HeaderFont) end
 
     local barHeight = 1
     for _ in string.gmatch(topText, "\n") do barHeight = barHeight + 1 end

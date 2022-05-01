@@ -25,7 +25,7 @@ function Question:handleNewQuestion(response)
 end
 
 function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, toPly, ...)
-    local newques = { }
+    local newques = {}
     for k, v in pairs(Question) do newques[k] = v end
 
     newques.ID = quesid

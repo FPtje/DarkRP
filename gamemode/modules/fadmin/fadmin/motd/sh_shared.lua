@@ -31,17 +31,21 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
                 self:SelectAllText(true)
             end
 
-            local ButtonPanel = vgui.Create("DPanel", Window )
+            local ButtonPanel = vgui.Create("DPanel", Window)
             ButtonPanel:SetPaintBackground(false) -- clear background
-            ButtonPanel:SetTall( 30 )
+            ButtonPanel:SetTall(30)
 
-            local Button = vgui.Create("DButton", ButtonPanel )
-                Button:SetText("OK")
-                Button:SizeToContents()
-                Button:SetTall( 20 )
-                Button:SetWide( Button:GetWide() + 20 )
-                Button:SetPos( 5, 5 )
-                Button.DoClick = function() Window:Close() RunConsoleCommand("_FAdmin", "motdpage", TextEntry:GetValue()) end
+            local Button = vgui.Create("DButton", ButtonPanel)
+            Button:SetText("OK")
+            Button:SizeToContents()
+            Button:SetTall(20)
+            Button:SetWide(Button:GetWide() + 20)
+            Button:SetPos(5, 5)
+
+            Button.DoClick = function()
+                Window:Close()
+                RunConsoleCommand("_FAdmin", "motdpage", TextEntry:GetValue())
+            end
 
             local ButtonDefault = vgui.Create("DButton", ButtonPanel)
                 ButtonDefault:SetText("Default")
@@ -64,23 +68,16 @@ if CLIENT then -- I can't be bothered to make a cl_init when there's a shared fi
             ButtonPanel:SetWide(Button:GetWide() + 5 + ButtonCancel:GetWide() + 10 + ButtonDefault:GetWide() + 5)
 
             local w, h = Text:GetSize()
-            w = math.max( w, 400 )
-
-            Window:SetSize( w + 50, h + 25 + 75 + 10 )
+            w = math.max(w, 400)
+            Window:SetSize(w + 50, h + 25 + 75 + 10)
             Window:Center()
-
-            InnerPanel:StretchToParent( 5, 25, 5, 45 )
-
-            Text:StretchToParent( 5, 5, 5, 35 )
-
-            TextEntry:StretchToParent( 5, nil, 5, nil )
-            TextEntry:AlignBottom( 5 )
-
+            InnerPanel:StretchToParent(5, 25, 5, 45)
+            Text:StretchToParent(5, 5, 5, 35)
+            TextEntry:StretchToParent(5, nil, 5, nil)
+            TextEntry:AlignBottom(5)
             TextEntry:RequestFocus()
-
             ButtonPanel:CenterHorizontal()
-            ButtonPanel:AlignBottom( 8 )
-
+            ButtonPanel:AlignBottom(8)
             Window:MakePopup()
             Window:DoModal()
         end)

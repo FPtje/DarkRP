@@ -175,10 +175,10 @@ local function CreateCheque(ply, args)
     local recipient = DarkRP.findPlayer(args[1])
     local amount = DarkRP.toInt(args[2]) or 0
 
-    local chequeTable =
-        { cmd = "cheque"
-        , max = GAMEMODE.Config.maxCheques
-        }
+    local chequeTable = {
+        cmd = "cheque",
+        max = GAMEMODE.Config.maxCheques
+    }
 
     if not recipient then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), DarkRP.getPhrase("recipient") .. " (1)"))
