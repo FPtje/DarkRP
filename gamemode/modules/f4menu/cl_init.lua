@@ -85,7 +85,8 @@ end)
 --[[---------------------------------------------------------------------------
 Fonts
 ---------------------------------------------------------------------------]]
-surface.CreateFont("Roboto Light", { -- font is not found otherwise
+-- font is not found otherwise
+surface.CreateFont("Roboto Light", {
         size = 19,
         weight = 300,
         antialias = true,

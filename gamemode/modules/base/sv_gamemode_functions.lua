@@ -289,7 +289,7 @@ end
 
 -- IsInRoom function to see if the player is in the same room.
 local roomTrResult = {}
-local roomTr = { output = roomTrResult }
+local roomTr = {output = roomTrResult}
 local function IsInRoom(listenerShootPos, talkerShootPos, talker)
     roomTr.start = talkerShootPos
     roomTr.endpos = listenerShootPos
@@ -1035,7 +1035,7 @@ function GM:PlayerDisconnected(ply)
     end
 end
 
-function GM:GetFallDamage( ply, flFallSpeed )
+function GM:GetFallDamage(ply, flFallSpeed)
     if GetConVar("mp_falldamage"):GetBool() or GAMEMODE.Config.realisticfalldamage then
         if GAMEMODE.Config.falldamagedamper then return flFallSpeed / GAMEMODE.Config.falldamagedamper else return flFallSpeed / 15 end
     else

@@ -151,7 +151,8 @@ timer.Create("EarthquakeTest", 1, 0, EarthQuakeTest)
 --[[---------------------------------------------------------
  Flammable
 ---------------------------------------------------------]]
-local flammablePropsKV = { -- Class names as index
+-- Class names as index
+local flammablePropsKV = {
     drug = true,
     drug_lab = true,
     food = true,

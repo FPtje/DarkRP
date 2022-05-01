@@ -77,8 +77,8 @@ function reload()
     local items = {}
 
     for k, v in pairs(pocket) do
-        local ListItem = frame.List:Add( "DPanel" )
-        ListItem:SetSize( 64, 64 )
+        local ListItem = frame.List:Add("DPanel")
+        ListItem:SetSize(64, 64)
 
         local icon = vgui.Create("SpawnIcon", ListItem)
         icon:SetModel(v.model)

@@ -47,10 +47,10 @@ local function BuyFood(ply, args)
             return ""
         end
 
-        local foodTable =
-            { cmd = "buyfood"
-            , max = GAMEMODE.Config.maxfooditems
-            }
+        local foodTable = {
+            cmd = "buyfood",
+            max = GAMEMODE.Config.maxfooditems
+        }
 
         if ply:customEntityLimitReached(foodTable) then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", GAMEMODE.Config.chatCommandPrefix .. "buyfood"))

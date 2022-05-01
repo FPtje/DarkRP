@@ -12,7 +12,7 @@ function FAdmin.Messages.AddMessage(MsgType, Message)
     tab.velx    = 0
     tab.vely    = -5
     surface.SetFont("GModNotify")
-    local w, _  = surface.GetTextSize( Message )
+    local w, _  = surface.GetTextSize(Message)
     tab.x       = ScrW() / 2 + w * 0.5 + (ScrW() / 20)
     tab.y       = ScrH()
     tab.a       = 255
@@ -20,7 +20,7 @@ function FAdmin.Messages.AddMessage(MsgType, Message)
     if not MsgTypeNames[MsgType] then return end
     tab.col = FAdmin.Messages.MsgTypes[MsgTypeNames[MsgType]].COLOR
 
-    table.insert( HUDNotes, tab )
+    table.insert(HUDNotes, tab)
 
     HUDNote_c = HUDNote_c + 1
     HUDNote_i = HUDNote_i + 1
