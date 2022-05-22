@@ -185,10 +185,11 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
 end
 
 function meta:updateJob(job)
+    if not IsValid(self) then return end
     self:setDarkRPVar("job", job)
     self.LastJob = CurTime()
 
-    local timerid = (self:SteamID64() or "") .. "jobtimer"
+    local timerid = self:SteamID64() .. "jobtimer"
 
     timer.Create(timerid, GAMEMODE.Config.paydelay, 0, function()
         if not IsValid(self) then
