@@ -185,6 +185,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
 end
 
 function meta:updateJob(job)
+    if not IsValid(self) then return end
     self:setDarkRPVar("job", job)
     self.LastJob = CurTime()
 
