@@ -587,7 +587,7 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
     if weapon.PlayerUse == false then return false end
 
     local weaponClass = weapon:GetClass()
-    if ply:HasWeapon(weaponClass) and not GAMEMODE.Config.allowPickupEquippedWeapons then return false end
+    if not GAMEMODE.Config.allowPickupEquippedWeapons and ply:HasWeapon(weaponClass) then return false end
     if ply:IsAdmin() and GAMEMODE.Config.AdminsCopWeapons and adminCopWeapons[weaponClass] then return true end
 
     local jobTable = ply:getJobTable()
