@@ -33,8 +33,6 @@ GM.Config.allowsprays                   = true
 GM.Config.allowvehicleowning            = true
 -- allowvnocollide - Enable/disable the ability to no-collide a vehicle (for security).
 GM.Config.allowvnocollide               = false
--- allowPickupEquippedWeapons - Enable/disable whether players can pick up weapons they already have.
-GM.Config.allowPickupEquippedWeapons    = true
 -- alltalk - Enable for global chat, disable for local chat.
 GM.Config.alltalk                       = false
 -- antimultirun - Disallow people joining your server(s) twice on the same account.
