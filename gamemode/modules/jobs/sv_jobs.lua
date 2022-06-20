@@ -148,7 +148,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     if self:InVehicle() then self:ExitVehicle() end
     if GAMEMODE.Config.norespawn and self:Alive() then
         if GAMEMODE.Config.keepPickedUp then
-            for k, v in pairs(RPExtraTeams[prevTeam].weapons) do
+            for k, v in ipairs(RPExtraTeams[prevTeam].weapons) do
                 self:StripWeapon(v)
             end
         else
