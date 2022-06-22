@@ -121,7 +121,7 @@ if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descripti
         elseif (tbl.type == "2D") then
             cams2D = cams2D + 1
         else
-            error("bad argument #1 to '%s' (bad key 'type' - 2D or 3D expected, got %s)", debug.getinfo(1, "n").name, tbl.type, 2)
+            error(string.format("bad argument #1 to '%s' (bad key 'type' - 2D or 3D expected, got %s)", debug.getinfo(1, "n").name, tbl.type), 2)
         end
 
         -- Could pcall this but it'd be impossible to
