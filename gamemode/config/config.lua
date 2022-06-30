@@ -123,7 +123,7 @@ GM.Config.needwantedforarrest           = false
 GM.Config.noguns                        = false
 -- norespawn - Enable/Disable that people don't have to respawn when they change job.
 GM.Config.norespawn                     = true
--- keepPickedUp - Enable/Disable that people keep weapons and ammo they picked up when they change job.
+-- keepPickedUp - Enable/Disable keeping picked up weapons when switching jobs.
 GM.Config.keepPickedUp                  = false
 -- instantjob - Enable/Disable instantly respawning when norespawn is false
 GM.Config.instantjob                    = false
