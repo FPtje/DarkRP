@@ -147,8 +147,14 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     DarkRP.log(self:Nick() .. " (" .. self:SteamID() .. ") changed to " .. team.GetName(t), nil, Color(100, 0, 255))
     if self:InVehicle() then self:ExitVehicle() end
     if GAMEMODE.Config.norespawn and self:Alive() then
-        self:StripWeapons()
-        self:RemoveAllAmmo()
+        if GAMEMODE.Config.keepPickedUp then
+            for k, v in ipairs(RPExtraTeams[prevTeam].weapons) do
+                self:StripWeapon(v)
+            end
+        else
+            self:StripWeapons()
+            self:RemoveAllAmmo()
+        end
 
         DoEffect = true
         player_manager.SetPlayerClass(self, TEAM.playerClass or "player_darkrp")
