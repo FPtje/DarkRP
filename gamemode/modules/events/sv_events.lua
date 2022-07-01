@@ -101,9 +101,10 @@ local function createTremor()
     tremor:Spawn()
 end
 
+hook.Add("PostCleanupMap", "DarkRP_events", createTremor)
+
 hook.Add("InitPostEntity", "DarkRP_SetupTremor", function()
     createTremor()
-    hook.Add("PostCleanupMap", "DarkRP_events", createTremor)
 end)
 
 local function TremorReport()
