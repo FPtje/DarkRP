@@ -173,6 +173,11 @@ function GM:PlayerSpawnSENT(ply, class)
 end
 
 function GM:PlayerSpawnedSENT(ply, ent)
+	local phys = ent:GetPhysicsObject()
+    if IsValid(phys) then
+        ent.RPOriginalMass = phys:GetMass()
+    end
+
     self.Sandbox.PlayerSpawnedSENT(self, ply, ent)
     DarkRP.log(ply:Nick() .. " (" .. ply:SteamID() .. ") spawned SENT " .. ent:GetClass(), Color(255, 255, 0))
 end
