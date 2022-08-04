@@ -213,7 +213,7 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
-    name = "combineRequest",
+    name = "policeRequest",
     description = "When a player sends a police request.",
     parameters = {
         {
