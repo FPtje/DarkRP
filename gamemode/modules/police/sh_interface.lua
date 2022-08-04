@@ -213,6 +213,24 @@ DarkRP.hookStub{
 }
 
 DarkRP.hookStub{
+    name = "combineRequest",
+    description = "When a player sends a police request.",
+    parameters = {
+        {
+            name = "actor",
+            description = "The player who called the police.",
+            type = "Player"
+        },
+        {
+            name = "message",
+            description = "The message the player sent with the request.",
+            type = "string"
+        }
+    },
+    returns = {}
+}
+
+DarkRP.hookStub{
     name = "playerGotLicense",
     description = "When a player got a gun license",
     parameters = {
