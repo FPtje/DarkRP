@@ -124,6 +124,8 @@ local function CombineRequest(ply, args)
         return ""
     end
 
+    hook.Run("combineRequest", ply, args)
+    
     local DoSay = function(text)
         if text == "" then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
