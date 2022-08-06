@@ -1123,3 +1123,18 @@ timer.Create("RP_DecalCleaner", GM.Config.decaltimer, 0, ClearDecals)
 function GM:PlayerSpray()
     return not GAMEMODE.Config.allowsprays
 end
+
+function GM:GravGunOnPickedUp(ply, ent, ...)
+    self.Sandbox.GravGunOnPickedUp(self, ply, ent, ...)
+    -- Keeping track of who is holding an entity is done to make sure the entity
+    -- cannot be pocketed. This is because holding an entity with the gravgun
+    -- changes some properties. One such property is setting the mass to 1,
+    -- causing the mass check of the pocket to always succeed.
+    ent.DarkRPBeingGravGunHeldBy = ply
+end
+
+function GM:GravGunOnDropped(ply, ent, ...)
+    self.Sandbox.GravGunOnDropped(self, ply, ent, ...)
+    -- See comment at GravGunOnPickedUp
+    ent.DarkRPBeingGravGunHeldBy = nil
+end

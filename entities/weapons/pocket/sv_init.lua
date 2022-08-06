@@ -339,6 +339,11 @@ function GAMEMODE:canPocket(ply, item)
     if item:IsRagdoll() then return false, DarkRP.getPhrase("cannot_pocket_x") end
     if item:IsNPC() then return false, DarkRP.getPhrase("cannot_pocket_x") end
     if not duplicator.IsAllowed(class) then return false, DarkRP.getPhrase("cannot_pocket_x") end
+    -- Entities being held by the gravgun have different properties than
+    -- entities not being held. One such property is mass, which is set to 1.
+    -- The simple solution is to disallow pocketing entities that are being
+    -- held.
+    if item.DarkRPBeingGravGunHeldBy ~= nil then return false, DarkRP.getPhrase("cannot_pocket_gravgunned") end
 
     local trace = ply:GetEyeTrace()
     if ply:EyePos():DistToSqr(trace.HitPos) > 22500 then return false end
