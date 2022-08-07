@@ -14,7 +14,7 @@ function meta:hungerUpdate()
 
     self:setSelfDarkRPVar("Energy", energy and math.Clamp(energy - GAMEMODE.Config.hungerspeed, 0, 100) or 100)
 
-    if self:getDarkRPVar("Energy") == 0 then
+    if energy then
         local health = self:Health()
 
         local dmg = DamageInfo()
