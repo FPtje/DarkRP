@@ -44,8 +44,9 @@ Draw the results to the screen
 local function drawChatReceivers()
     if not receivers then return end
 
+    local fontHeight = draw.GetFontHeight( 'DarkRPHUD1' )
     local x, y = chat.GetChatBoxPos()
-    y = y - 25
+    y = y - fontHeight - 4
 
     local receiversCount = #receivers
     -- No one hears you
@@ -58,7 +59,7 @@ local function drawChatReceivers()
         return
     end
 
-    draw.WordBox(2, x, y - (receiversCount * 25), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+    draw.WordBox(2, x, y - (receiversCount * fontHeight + 4 * receiversCount), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
     for i = 1, receiversCount, 1 do
         if not IsValid(receivers[i]) then
             receivers[i] = receivers[#receivers]
@@ -66,7 +67,7 @@ local function drawChatReceivers()
             continue
         end
 
-        draw.WordBox(2, x, y - (i - 1) * 25, receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), color_white)
+        draw.WordBox(2, x, y - (i - 1) * ( fontHeight + 4 ), receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), color_white)
     end
 end
 
