@@ -59,7 +59,7 @@ local function drawChatReceivers()
         return
     end
 
-    draw.WordBox(2, x, y - (receiversCount * fontHeight + 4 * receiversCount), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
+    draw.WordBox(2, x, y - (receiversCount * (fontHeight + 4)), DarkRP.getPhrase("hear_certain_persons", currentConfig.text), "DarkRPHUD1", Color(0,0,0,160), Color(0,255,0,255))
     for i = 1, receiversCount, 1 do
         if not IsValid(receivers[i]) then
             receivers[i] = receivers[#receivers]
