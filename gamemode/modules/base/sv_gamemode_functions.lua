@@ -77,7 +77,7 @@ function GM:canDropWeapon(ply, weapon)
 
     if not GAMEMODE.Config.restrictdrop then return true end
 
-    for _, v in pairs(CustomShipments) do
+    for _, v in ipairs(CustomShipments) do
         if v.entity ~= class then continue end
 
         return true

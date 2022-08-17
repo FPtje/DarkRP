@@ -22,7 +22,7 @@ local function createShipment(ply, args)
     ent.PlayerUse = false
 
     local shipID
-    for k, v in pairs(CustomShipments) do
+    for k, v in ipairs(CustomShipments) do
         if v.entity == ent:GetWeaponClass() then
             shipID = k
             break
