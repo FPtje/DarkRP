@@ -138,7 +138,7 @@ local function loadMySQLModule()
     mysqlOO = mysqloo
     TMySQL = tmysql
 
-    if MySQLite_config.Preferred_module == "tmysql4" then
+    if MySQLite_config.Preferred_module == "tmysql4" and tmsql then
 
         if not tmysql.Version or tmysql.Version < 4.1 then
             MsgC(Color(255, 0, 0), "Using older tmysql version, please consider updating!\n")
