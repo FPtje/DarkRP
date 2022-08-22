@@ -44,7 +44,7 @@ Draw the results to the screen
 local function drawChatReceivers()
     if not receivers then return end
 
-    local fontHeight = draw.GetFontHeight( 'DarkRPHUD1' )
+    local fontHeight = draw.GetFontHeight("DarkRPHUD1")
     local x, y = chat.GetChatBoxPos()
     y = y - fontHeight - 4
 
@@ -67,7 +67,7 @@ local function drawChatReceivers()
             continue
         end
 
-        draw.WordBox(2, x, y - (i - 1) * ( fontHeight + 4 ), receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), color_white)
+        draw.WordBox(2, x, y - (i - 1) * (fontHeight + 4), receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), color_white)
     end
 end
 
