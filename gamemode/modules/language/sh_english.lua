@@ -267,9 +267,9 @@ local my_language = {
 
     -- Notifies
     disabled = "%s has been disabled! %s",
-    gm_spawnvehicle = "The spawning of vehicles",
-    gm_spawnsent = "The spawning of scripted entities (SENTs)",
-    gm_spawnnpc = "The spawning of Non-Player Characters (NPCs)",
+    gm_spawnvehicle = "spawn vehicles",
+    gm_spawnsent = "spawn scripted entities (SENTs)",
+    gm_spawnnpc = "spawn Non-Player Characters (NPCs)",
     see_settings = "Please see the DarkRP settings.",
     limit = "You have reached the %s limit!",
     have_to_wait = "You need to wait another %d seconds before using %s!",
