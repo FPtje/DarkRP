@@ -73,7 +73,6 @@ function reload()
     local itemCount = table.Count(pocket)
 
     frame.List:Clear()
-    local i = 0
     local items = {}
 
     for k, v in pairs(pocket) do
@@ -113,7 +112,6 @@ function reload()
         end
 
         table.insert(items, icon)
-        i = i + 1
     end
     if itemCount < GAMEMODE.Config.pocketitems then
         for _ = 1, GAMEMODE.Config.pocketitems - itemCount do
