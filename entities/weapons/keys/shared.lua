@@ -104,7 +104,7 @@ function SWEP:PrimaryAttack()
 
     local trace = Owner:GetEyeTrace()
 
-	local ent = trace.Entity
+    local ent = trace.Entity
 
     if not lookingAtLockable(Owner, ent, trace.HitPos) then return end
 
@@ -129,7 +129,7 @@ function SWEP:SecondaryAttack()
 
     local trace = Owner:GetEyeTrace()
 
-	local ent = trace.Entity
+    local ent = trace.Entity
 
     if not lookingAtLockable(Owner, ent, trace.HitPos) then return end
 
@@ -150,7 +150,7 @@ end
 function SWEP:Reload()
     local trace = self:GetOwner():GetEyeTrace()
 
-	local ent = trace.Entity
+    local ent = trace.Entity
 
     if not IsValid(ent) or ((not ent:isDoor() and not ent:IsVehicle()) or self:GetOwner():EyePos():DistToSqr(trace.HitPos) > 40000) then
         if CLIENT and not DarkRP.disabledDefaults["modules"]["animations"] then RunConsoleCommand("_DarkRP_AnimationMenu") end
