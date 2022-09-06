@@ -104,16 +104,18 @@ function SWEP:PrimaryAttack()
 
     local trace = Owner:GetEyeTrace()
 
-    if not lookingAtLockable(Owner, trace.Entity, trace.HitPos) then return end
+	local ent = trace.Entity
+
+    if not lookingAtLockable(Owner, ent, trace.HitPos) then return end
 
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
     if CLIENT then return end
 
-    if Owner:canKeysLock(trace.Entity) then
-        trace.Entity:keysLock() -- Lock the door immediately so it won't annoy people
+    if Owner:canKeysLock(ent) then
+        ent:keysLock() -- Lock the door immediately so it won't annoy people
         lockUnlockAnimation(Owner, self.Sound)
-    elseif trace.Entity:IsVehicle() then
+    elseif ent:IsVehicle() then
         DarkRP.notify(Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
     else
         doKnock(Owner, "physics/wood/wood_crate_impact_hard2.wav")
@@ -127,16 +129,18 @@ function SWEP:SecondaryAttack()
 
     local trace = Owner:GetEyeTrace()
 
-    if not lookingAtLockable(Owner, trace.Entity, trace.HitPos) then return end
+	local ent = trace.Entity
+
+    if not lookingAtLockable(Owner, ent, trace.HitPos) then return end
 
     self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if CLIENT then return end
 
-    if Owner:canKeysUnlock(trace.Entity) then
-        trace.Entity:keysUnLock() -- Unlock the door immediately so it won't annoy people
+    if Owner:canKeysUnlock(ent) then
+        ent:keysUnLock() -- Unlock the door immediately so it won't annoy people
         lockUnlockAnimation(Owner, self.Sound)
-    elseif trace.Entity:IsVehicle() then
+    elseif ent:IsVehicle() then
         DarkRP.notify(Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
     else
         doKnock(Owner, "physics/wood/wood_crate_impact_hard3.wav")
@@ -145,7 +149,10 @@ end
 
 function SWEP:Reload()
     local trace = self:GetOwner():GetEyeTrace()
-    if not IsValid(trace.Entity) or ((not trace.Entity:isDoor() and not trace.Entity:IsVehicle()) or self:GetOwner():EyePos():DistToSqr(trace.HitPos) > 40000) then
+
+	local ent = trace.Entity
+
+    if not IsValid(ent) or ((not ent:isDoor() and not ent:IsVehicle()) or self:GetOwner():EyePos():DistToSqr(trace.HitPos) > 40000) then
         if CLIENT and not DarkRP.disabledDefaults["modules"]["animations"] then RunConsoleCommand("_DarkRP_AnimationMenu") end
         return
     end
