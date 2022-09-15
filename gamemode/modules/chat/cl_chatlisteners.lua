@@ -43,6 +43,7 @@ Draw the results to the screen
 ---------------------------------------------------------------------------]]
 local function drawChatReceivers()
     if not receivers then return end
+    if not (LocalPlayer():IsTyping() or LocalPlayer():IsSpeaking()) then return end
 
     local fontHeight = draw.GetFontHeight("DarkRPHUD1")
     local x, y = chat.GetChatBoxPos()
