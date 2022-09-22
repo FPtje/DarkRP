@@ -175,6 +175,7 @@ local my_language = {
     door_group_set = "Door group set successfully.",
     sold_x_doors_for_y = "You have sold %d doors for %s%d!", -- backwards compatibility
     sold_x_doors = "You have sold %d doors for %s!",
+    no_doors_found = "You don't own any doors!"
 
     -- Entities
     drugs = "drugs",
