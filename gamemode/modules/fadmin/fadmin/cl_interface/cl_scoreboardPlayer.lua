@@ -109,7 +109,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
             CatColor = Color(236, 181, 113, 255)
         end
     end
-    CatColor = hook.Run('FAdmin_PlayerRowColour', ply, CatColor) or CatColor
+    CatColor = hook.Run("FAdmin_PlayerRowColour", ply, CatColor) or CatColor
     
     FAdmin.ScoreBoard.Player.Controls.ButtonCat = FAdmin.ScoreBoard.Player.Controls.ButtonCat or vgui.Create("FAdminPlayerCatagory")
     FAdmin.ScoreBoard.Player.Controls.ButtonCat:SetLabel("  Player options!")
