@@ -2,10 +2,12 @@ local Question = {}
 local Questions = {}
 
 local function ccDoQuestion(ply, cmd, args)
-    if not Questions[args[1]] then return end
+    local q = Questions[args[1]]
+    if not q then return end
     if not tonumber(args[2]) then return end
+    if q.Ent and q.Ent ~= ply then return end
 
-    Questions[args[1]]:handleNewQuestion(tonumber(args[2]))
+    q:handleNewQuestion(tonumber(args[2]))
 end
 concommand.Add("ans", ccDoQuestion)
 
