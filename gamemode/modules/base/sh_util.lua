@@ -40,18 +40,14 @@ function DarkRP.formatMoney(n)
 
     n = tostring(math.abs(n))
 
-    if config.currencyDecimalSeparator ~= "." then
-        n = string.Replace(n, ".", config.currencyDecimalSeparator)
-    end
-
-    local dp = string.find(n, config.currencyDecimalSeparator, 1, true) or #n + 1
+    local dp = string.find(n, ".", 1, true) or #n + 1
 
     for i = dp - 4, 1, -3 do
         n = n:sub(1, i) .. config.currencyThousandSeparator .. n:sub(i + 1)
     end
 
     -- Make sure the amount is padded with zeroes
-    if n[#n - 1] == config.currencyDecimalSeparator then
+    if n[#n - 1] == "." then
         n = n .. "0"
     end
 
