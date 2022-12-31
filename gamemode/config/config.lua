@@ -6,7 +6,7 @@ This is the settings file of DarkRP. Every DarkRP setting is listed here.
 
 Warning:
 If this file is missing settings (because of e.g. an update), DarkRP will assume default values for these settings.
-You need not worry about updating this file. If a new setting is added you can manually add them to this file.
+Don't worry about updating this file. If a new setting is added you can manually add them to this file.
 ---------------------------------------------------------------------------]]
 
 
