@@ -4,8 +4,9 @@ local DarkRPVars = {}
 interface"someString"
 ---------------------------------------------------------------------------]]
 local pmeta = FindMetaTable("Player")
+local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var)
-    local vars = DarkRPVars[self:UserID()]
+    local vars = DarkRPVars[get_user_id(self)]
     return vars and vars[var] or nil
 end
 
