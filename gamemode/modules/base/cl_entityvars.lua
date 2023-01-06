@@ -9,7 +9,7 @@ local pmeta = FindMetaTable("Player")
 local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var)
     local vars = DarkRPVars[get_user_id(self)]
-    if vars == nil return nil end
+    if vars == nil then return nil end
     return vars[var]
 end
 
