@@ -17,7 +17,7 @@ local function concommand_executed(ply, cmd, args)
     end
     table.ClearKeys(args2)
 
-    if hook.Run('FAdmin_CanExecuteCommand', ply, name, args2) == false then return end
+    if hook.Run("FAdmin_CanExecuteCommand", ply, name, args2) == false then return end
 
     local res = {FAdmin.Commands.List[name].callback(ply, name, args2)}
     hook.Call("FAdmin_OnCommandExecuted", nil, ply, name, args2, res)
