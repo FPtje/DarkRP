@@ -100,8 +100,12 @@ local function createTremor()
     tremor.nodupe = true
     tremor:Spawn()
 end
-createTremor()
+
 hook.Add("PostCleanupMap", "DarkRP_events", createTremor)
+
+hook.Add("InitPostEntity", "DarkRP_SetupTremor", function()
+    createTremor()
+end)
 
 local function TremorReport()
     local mag = table.remove(lastmagnitudes, 1)
@@ -148,7 +152,8 @@ timer.Create("EarthquakeTest", 1, 0, EarthQuakeTest)
 --[[---------------------------------------------------------
  Flammable
 ---------------------------------------------------------]]
-local flammablePropsKV = { -- Class names as index
+-- Class names as index
+local flammablePropsKV = {
     drug = true,
     drug_lab = true,
     food = true,

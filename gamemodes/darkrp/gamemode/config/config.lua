@@ -6,7 +6,7 @@ This is the settings file of DarkRP. Every DarkRP setting is listed here.
 
 Warning:
 If this file is missing settings (because of e.g. an update), DarkRP will assume default values for these settings.
-You need not worry about updating this file. If a new setting is added you can manually add them to this file.
+Don't worry about updating this file. If a new setting is added you can manually add them to this file.
 ---------------------------------------------------------------------------]]
 
 
@@ -123,6 +123,8 @@ GM.Config.needwantedforarrest           = false
 GM.Config.noguns                        = false
 -- norespawn - Enable/Disable that people don't have to respawn when they change job.
 GM.Config.norespawn                     = true
+-- keepPickedUp - Enable/Disable keeping picked up weapons when switching jobs.
+GM.Config.keepPickedUp                  = false
 -- instantjob - Enable/Disable instantly respawning when norespawn is false
 GM.Config.instantjob                    = false
 -- npcarrest - Enable/disable arresting npc's.
@@ -323,6 +325,7 @@ GM.Config.lockdownsound = "npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.w
 -- The skin DarkRP uses. Set to "default" to use the GMod default derma theme.
 GM.Config.DarkRPSkin = "DarkRP"
 GM.Config.currency = "$"
+GM.Config.currencyThousandSeparator = ","
 GM.Config.chatCommandPrefix = "/"
 GM.Config.F1MenuHelpPage = "https://darkrp.miraheze.org/wiki/Main_Page"
 GM.Config.F1MenuHelpPageTitle = "DarkRP Wiki"

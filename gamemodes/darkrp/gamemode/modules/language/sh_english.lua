@@ -175,6 +175,7 @@ local my_language = {
     door_group_set = "Door group set successfully.",
     sold_x_doors_for_y = "You have sold %d doors for %s%d!", -- backwards compatibility
     sold_x_doors = "You have sold %d doors for %s!",
+    no_doors_owned = "You don't own any doors!",
 
     -- Entities
     drugs = "drugs",
@@ -201,6 +202,7 @@ local my_language = {
     picking_lock = "Picking lock",
 
     cannot_pocket_x = "You cannot put this in your pocket!",
+    cannot_pocket_gravgunned = "You cannot put this in your pocket: it is being held by a gravgun.",
     object_too_heavy = "This object is too heavy.",
     pocket_full = "Your pocket is full!",
     pocket_no_items = "Your pocket contains no items.",
@@ -266,9 +268,9 @@ local my_language = {
 
     -- Notifies
     disabled = "%s has been disabled! %s",
-    gm_spawnvehicle = "The spawning of vehicles",
-    gm_spawnsent = "The spawning of scripted entities (SENTs)",
-    gm_spawnnpc = "The spawning of Non-Player Characters (NPCs)",
+    gm_spawnvehicle = "spawn vehicles",
+    gm_spawnsent = "spawn scripted entities (SENTs)",
+    gm_spawnnpc = "spawn Non-Player Characters (NPCs)",
     see_settings = "Please see the DarkRP settings.",
     limit = "You have reached the %s limit!",
     have_to_wait = "You need to wait another %d seconds before using %s!",

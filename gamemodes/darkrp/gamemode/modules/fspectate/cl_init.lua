@@ -208,10 +208,10 @@ local function specBinds(ply, bind, pressed)
 
         return true
     elseif isRoaming and not LocalPlayer():KeyDown(IN_USE) then
-        local keybind = string.lower(string.match(bind, "+([a-z A-Z 0-9]+)") or "")
-        if not keybind or keybind == "use" or keybind == "showscores" or string.find(bind, "messagemode") then return end
+        local keybind = string.upper(string.match(bind, "+([a-z A-Z 0-9]+)") or "")
+        if not keybind or keybind == "USE" or keybind == "SHOWSCORES" or string.find(bind, "messagemode") then return end
 
-        keysDown[keybind:upper()] = pressed
+        keysDown[keybind] = pressed
 
         return true
     elseif not isRoaming and thirdperson and (key == "MWHEELDOWN" or key == "MWHEELUP") then

@@ -180,9 +180,11 @@ DarkRP.validateJob = fn.FAnd{baseSchema, tc.checkTable{
         ),
 
     admin =
-        tc.addHint(
-            fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}},
-            "The admin value must be a number and it must be greater than or equal to zero and smaller than three."
+        tc.default(0,
+            tc.addHint(
+                fn.FAnd{isnumber, fp{fn.Lte, 0}, fp{fn.Gte, 2}},
+                "The admin value must be a number and it must be greater than or equal to zero and smaller than three."
+            )
         ),
 
     vote =
@@ -563,7 +565,9 @@ DarkRP.validateAgenda = tc.checkTable{
         end,
     Listeners =
         tc.default({}, -- Default to empty table
-            fn.FAnd{ -- Checks for a table of valid teams that do not already have an agenda assigned
+            -- Checks for a table of valid teams that do not already have an
+            -- agenda assigned
+            fn.FAnd{
                 tc.addHint(
                     tc.tableOf(isnumber),
                     "The Listeners must be a table of existing teams.",

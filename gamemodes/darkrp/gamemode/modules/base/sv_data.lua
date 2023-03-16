@@ -12,7 +12,12 @@ local setUpNonOwnableDoors,
 function DarkRP.initDatabase()
     MySQLite.begin()
         -- Gotta love the difference between SQLite and MySQL
-        local AUTOINCREMENT = MySQLite.isMySQL() and "AUTO_INCREMENT" or "AUTOINCREMENT"
+        local is_mysql = MySQLite.isMySQL()
+        local AUTOINCREMENT = is_mysql and "AUTO_INCREMENT" or "AUTOINCREMENT"
+        -- in MySQL, the engine is set to InnoDB. InnoDB has been the default
+        -- for a while, but people might be running old versions of MySQL.
+        -- SQLite has no database engine, so it is not explicitly set.
+        local ENGINE_INNODB = is_mysql and "ENGINE=InnoDB" or ""
 
         -- Table that holds all position data (jail, spawns etc.)
         -- Queue these queries because other queries depend on the existence of the darkrp_position table
@@ -25,7 +30,7 @@ function DarkRP.initDatabase()
                 x INTEGER NOT NULL,
                 y INTEGER NOT NULL,
                 z INTEGER NOT NULL
-            );
+            ) ]] .. ENGINE_INNODB .. [[;
         ]])
 
         -- team spawns require extra data
@@ -36,30 +41,30 @@ function DarkRP.initDatabase()
                     ON DELETE CASCADE,
 
                 teamcmd VARCHAR(255) NOT NULL
-            );
+            ) ]] .. ENGINE_INNODB .. [[;
         ]])
 
         -- This table is kept for compatibility with older addons and websites
         -- See https://github.com/FPtje/DarkRP/issues/819
-        MySQLite.query([[
+        MySQLite.queueQuery([[
             CREATE TABLE IF NOT EXISTS playerinformation(
                 uid BIGINT NOT NULL,
                 steamID VARCHAR(50) NOT NULL PRIMARY KEY
-            )
+            ) ]] .. ENGINE_INNODB .. [[
         ]])
 
         -- Player information
-        MySQLite.query([[
+        MySQLite.queueQuery([[
             CREATE TABLE IF NOT EXISTS darkrp_player(
                 uid BIGINT NOT NULL PRIMARY KEY,
                 rpname VARCHAR(45),
                 salary INTEGER NOT NULL DEFAULT 45,
                 wallet BIGINT NOT NULL
-            );
+            ) ]] .. ENGINE_INNODB .. [[;
         ]])
 
         -- Door data
-        MySQLite.query([[
+        MySQLite.queueQuery([[
             CREATE TABLE IF NOT EXISTS darkrp_door(
                 idx INTEGER NOT NULL,
                 map VARCHAR(45) NOT NULL,
@@ -67,43 +72,51 @@ function DarkRP.initDatabase()
                 isLocked BOOLEAN,
                 isDisabled BOOLEAN NOT NULL DEFAULT FALSE,
                 PRIMARY KEY(idx, map)
-            );
+            ) ]] .. ENGINE_INNODB .. [[;
         ]])
 
         -- Some doors are owned by certain teams
-        MySQLite.query([[
+        MySQLite.queueQuery([[
             CREATE TABLE IF NOT EXISTS darkrp_doorjobs(
                 idx INTEGER NOT NULL,
                 map VARCHAR(45) NOT NULL,
                 job VARCHAR(255) NOT NULL,
 
                 PRIMARY KEY(idx, map, job)
-            );
+            ) ]] .. ENGINE_INNODB .. [[;
         ]])
 
         -- Door groups
-        MySQLite.query([[
+        MySQLite.queueQuery([[
             CREATE TABLE IF NOT EXISTS darkrp_doorgroups(
                 idx INTEGER NOT NULL,
                 map VARCHAR(45) NOT NULL,
                 doorgroup VARCHAR(100) NOT NULL,
 
                 PRIMARY KEY(idx, map)
-            )
+            ) ]] .. ENGINE_INNODB .. [[
         ]])
 
         MySQLite.queueQuery([[
-            CREATE TABLE IF NOT EXISTS darkrp_dbversion(version INTEGER NOT NULL PRIMARY KEY)
+            CREATE TABLE IF NOT EXISTS darkrp_dbversion(version INTEGER NOT NULL PRIMARY KEY) ]] .. ENGINE_INNODB .. [[
         ]])
 
         -- Load the last DBVersion into DarkRP.DBVersion, to allow checks to see whether migration is needed.
         MySQLite.queueQuery([[
             SELECT MAX(version) AS version FROM darkrp_dbversion
-        ]], function(data) DarkRP.DBVersion = data and data[1] and tonumber(data[1].version) or 20190914 end)
-
-        MySQLite.queueQuery([[
-            REPLACE INTO darkrp_dbversion VALUES(20190914)
-        ]])
+        ]], function(data)
+            -- The database is created with the schema of the latest version. On
+            -- initialization the version is not set yet. Set it to the latest
+            -- version.
+            if not data or not data[1] or not tonumber(data[1].version) then
+                DarkRP.DBVersion = 20211228
+                MySQLite.query([[
+                    REPLACE INTO darkrp_dbversion VALUES(20211228)
+                ]])
+            else
+                DarkRP.DBVersion = tonumber(data[1].version)
+            end
+        end)
 
     MySQLite.commit(fp{migrateDB, -- Migrate the database
         function() -- Initialize the data after all the tables have been created
@@ -250,6 +263,27 @@ function migrateDB(callback)
             return
         end
 
+        if version < 20211228 then
+            MySQLite.begin()
+                -- Migrate all tables to InnoDB if they weren't already.
+                -- See https://github.com/FPtje/DarkRP/issues/3157
+                if MySQLite.isMySQL() then
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_dbversion ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_door ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_doorgroups ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_doorjobs ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_jobspawn ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_player ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE darkrp_position ENGINE = InnoDB;]])
+                    MySQLite.queueQuery([[ALTER TABLE playerinformation ENGINE = InnoDB;]])
+                end
+
+                MySQLite.queueQuery([[REPLACE INTO darkrp_dbversion VALUES(20211228)]])
+            MySQLite.commit(fp{migrate, 20211228})
+
+            return
+        end
+
         -- All migrations finished
         callback()
     end
@@ -363,15 +397,15 @@ end
 
 function DarkRP.storeOfflineMoney(sid64, amount)
     if isnumber(sid64) or isstring(sid64) and string.len(sid64) < 17 then -- smaller than 76561197960265728 is not a SteamID64
-        DarkRP.errorNoHalt([[Some addon is giving DarkRP.storeOfflineMoney a UniqueID as its first argument, but this function now expects a SteamID64]], 2,
-            { "The function used to take UniqueIDs, but it does not anymore."
-            , "If you are a server owner, please look closely to the files mentioned in this error"
-            , "After all, these files will tell you WHICH addon is doing it"
-            , "This is NOT a DarkRP bug!"
-            , "Your server will continue working normally"
-            , "But whichever addon just tried to store an offline player's money"
-            , "Will NOT take effect!"
-            })
+        DarkRP.errorNoHalt([[Some addon is giving DarkRP.storeOfflineMoney a UniqueID as its first argument, but this function now expects a SteamID64]], 2, {
+            "The function used to take UniqueIDs, but it does not anymore.",
+            "If you are a server owner, please look closely to the files mentioned in this error",
+            "After all, these files will tell you WHICH addon is doing it",
+            "This is NOT a DarkRP bug!",
+            "Your server will continue working normally",
+            "But whichever addon just tried to store an offline player's money",
+            "Will NOT take effect!"
+        })
     end
 
     -- Also store on deprecated UniqueID

@@ -34,13 +34,16 @@ function DarkRP.formatMoney(n)
     if n >= 1e14 then return attachCurrency(tostring(n)) end
     if n <= -1e14 then return "-" .. attachCurrency(tostring(math.abs(n))) end
 
+    local config = GAMEMODE.Config
+
     local negative = n < 0
 
     n = tostring(math.abs(n))
-    local dp = string.find(n, "%.") or #n + 1
+
+    local dp = string.find(n, ".", 1, true) or #n + 1
 
     for i = dp - 4, 1, -3 do
-        n = n:sub(1, i) .. "," .. n:sub(i + 1)
+        n = n:sub(1, i) .. config.currencyThousandSeparator .. n:sub(i + 1)
     end
 
     -- Make sure the amount is padded with zeroes

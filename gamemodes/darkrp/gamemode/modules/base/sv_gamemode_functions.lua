@@ -289,7 +289,7 @@ end
 
 -- IsInRoom function to see if the player is in the same room.
 local roomTrResult = {}
-local roomTr = { output = roomTrResult }
+local roomTr = {output = roomTrResult}
 local function IsInRoom(listenerShootPos, talkerShootPos, talker)
     roomTr.start = talkerShootPos
     roomTr.endpos = listenerShootPos
@@ -311,7 +311,7 @@ local DrpCanHear = {}
 
 -- Recreate DrpCanHear after Lua Refresh
 -- This prevents an indexing nil error in PlayerCanHearPlayersVoice
-for _, ply in pairs(player.GetAll()) do
+for _, ply in ipairs(player.GetAll()) do
     DrpCanHear[ply] = {}
 end
 
@@ -787,7 +787,7 @@ local function disableBabyGod(ply)
         oldPlyColor = nil
     end
 
-    ply:SetColor(ply.babyGodColor or Color(255, 255, 255, 255))
+    ply:SetColor(ply.babyGodColor or color_white)
 
     ply.babyGodColor = nil
 end
@@ -1035,7 +1035,7 @@ function GM:PlayerDisconnected(ply)
     end
 end
 
-function GM:GetFallDamage( ply, flFallSpeed )
+function GM:GetFallDamage(ply, flFallSpeed)
     if GetConVar("mp_falldamage"):GetBool() or GAMEMODE.Config.realisticfalldamage then
         if GAMEMODE.Config.falldamagedamper then return flFallSpeed / GAMEMODE.Config.falldamagedamper else return flFallSpeed / 15 end
     else
@@ -1122,4 +1122,19 @@ timer.Create("RP_DecalCleaner", GM.Config.decaltimer, 0, ClearDecals)
 
 function GM:PlayerSpray()
     return not GAMEMODE.Config.allowsprays
+end
+
+function GM:GravGunOnPickedUp(ply, ent, ...)
+    self.Sandbox.GravGunOnPickedUp(self, ply, ent, ...)
+    -- Keeping track of who is holding an entity is done to make sure the entity
+    -- cannot be pocketed. This is because holding an entity with the gravgun
+    -- changes some properties. One such property is setting the mass to 1,
+    -- causing the mass check of the pocket to always succeed.
+    ent.DarkRPBeingGravGunHeldBy = ply
+end
+
+function GM:GravGunOnDropped(ply, ent, ...)
+    self.Sandbox.GravGunOnDropped(self, ply, ent, ...)
+    -- See comment at GravGunOnPickedUp
+    ent.DarkRPBeingGravGunHeldBy = nil
 end

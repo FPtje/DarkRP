@@ -27,7 +27,7 @@ local tostring = tostring
 local plyMeta = FindMetaTable("Player")
 
 local colors = {}
-colors.black = Color(0, 0, 0, 255)
+colors.black = color_black
 colors.blue = Color(0, 0, 255, 255)
 colors.brightred = Color(200, 30, 30, 255)
 colors.darkred = Color(0, 0, 70, 100)
@@ -35,7 +35,7 @@ colors.darkblack = Color(0, 0, 0, 200)
 colors.gray1 = Color(0, 0, 0, 155)
 colors.gray2 = Color(51, 58, 51,100)
 colors.red = Color(255, 0, 0, 255)
-colors.white = Color(255, 255, 255, 255)
+colors.white = color_white
 colors.white1 = Color(255, 255, 255, 200)
 
 local function ReloadConVars()
@@ -130,8 +130,8 @@ local function GunLicense()
 end
 
 local agendaText
-local function Agenda()
-    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_Agenda")
+local function Agenda(gamemodeTable)
+    local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_Agenda")
     if shouldDraw == false then return end
 
     local agenda = localplayer:getAgendaTable()
@@ -167,7 +167,10 @@ hook.Add("DarkRPVarChanged", "agendaHUD", function(ply, var, _, new)
 end)
 
 local VoiceChatTexture = surface.GetTextureID("voice/icntlk_pl")
-local function DrawVoiceChat()
+local function DrawVoiceChat(gamemodeTable)
+    local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_VoiceChat")
+    if shouldDraw == false then return end
+
     if localplayer.DRPIsTalking then
         local _, chboxY = chat.GetChatBoxPos()
 
@@ -185,10 +188,10 @@ local function DrawVoiceChat()
     end
 end
 
-local function LockDown()
+local function LockDown(gamemodeTable)
     local chbxX, chboxY = chat.GetChatBoxPos()
     if GetGlobalBool("DarkRP_LockDown") then
-        local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LockdownHUD")
+        local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_LockdownHUD")
         if shouldDraw == false then return end
         local cin = (math.sin(CurTime()) + 1) / 2
         local chatBoxSize = math.floor(Scrh / 4)
@@ -202,8 +205,8 @@ usermessage.Hook("GotArrested", function(msg)
     local StartArrested = CurTime()
     local ArrestedUntil = msg:ReadFloat()
 
-    Arrested = function()
-        local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_ArrestedHUD")
+    Arrested = function(gamemodeTable)
+        local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_ArrestedHUD")
         if shouldDraw == false then return end
 
         if CurTime() - StartArrested <= ArrestedUntil and localplayer:getDarkRPVar("Arrested") then
@@ -234,14 +237,14 @@ end)
 --[[---------------------------------------------------------------------------
 Drawing the HUD elements such as Health etc.
 ---------------------------------------------------------------------------]]
-local function DrawHUD()
-    local shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_HUD")
+local function DrawHUD(gamemodeTable)
+    local shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_HUD")
     if shouldDraw == false then return end
 
     Scrw, Scrh = ScrW(), ScrH()
     RelativeX, RelativeY = 0, Scrh
 
-    shouldDraw = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_LocalPlayerHUD")
+    shouldDraw = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_LocalPlayerHUD")
     shouldDraw = shouldDraw ~= false
     if shouldDraw then
         --Background
@@ -250,11 +253,11 @@ local function DrawHUD()
         DrawInfo()
         GunLicense()
     end
-    Agenda()
-    DrawVoiceChat()
-    LockDown()
+    Agenda(gamemodeTable)
+    DrawVoiceChat(gamemodeTable)
+    LockDown(gamemodeTable)
 
-    Arrested()
+    Arrested(gamemodeTable)
     AdminTell()
 end
 
@@ -324,19 +327,26 @@ end
 --[[---------------------------------------------------------------------------
 The Entity display: draw HUD information about entities
 ---------------------------------------------------------------------------]]
-local function DrawEntityDisplay()
-    local shouldDraw, players = hook.Call("HUDShouldDraw", GAMEMODE, "DarkRP_EntityDisplay")
+local function DrawEntityDisplay(gamemodeTable)
+    local shouldDraw, players = hook.Call("HUDShouldDraw", gamemodeTable, "DarkRP_EntityDisplay")
     if shouldDraw == false then return end
 
     local shootPos = localplayer:GetShootPos()
     local aimVec = localplayer:GetAimVector()
 
     for _, ply in ipairs(players or player.GetAll()) do
-        if not IsValid(ply) or ply == localplayer or not ply:Alive() or ply:GetNoDraw() or ply:IsDormant() then continue end
+        if not IsValid(ply)
+           or ply == localplayer
+           or not ply:Alive()
+           or ply:GetNoDraw()
+           or ply:IsDormant()
+           or ply:GetColor().a == 0 and (ply:GetRenderMode() == RENDERMODE_TRANSALPHA or ply:GetRenderMode() == RENDERMODE_TRANSCOLOR) then
+           continue
+        end
         local hisPos = ply:GetShootPos()
         if ply:getDarkRPVar("wanted") then ply:drawWantedInfo() end
 
-        if GAMEMODE.Config.globalshow then
+        if gamemodeTable.Config.globalshow then
             ply:drawPlayerInfo()
         -- Draw when you're (almost) looking at him
         elseif hisPos:DistToSqr(shootPos) < 160000 then
@@ -368,7 +378,7 @@ end
 Drawing death notices
 ---------------------------------------------------------------------------]]
 function GM:DrawDeathNotice(x, y)
-    if not GAMEMODE.Config.showdeaths then return end
+    if not self.Config.showdeaths then return end
     self.Sandbox.DrawDeathNotice(self, x, y)
 end
 
@@ -416,8 +426,8 @@ Actual HUDPaint hook
 function GM:HUDPaint()
     localplayer = localplayer or LocalPlayer()
 
-    DrawHUD()
-    DrawEntityDisplay()
+    DrawHUD(self)
+    DrawEntityDisplay(self)
 
     self.Sandbox.HUDPaint(self)
 end

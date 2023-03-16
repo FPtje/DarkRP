@@ -47,7 +47,7 @@ timer.Simple(3, function()
     Skid.Check = fn.Id
     hook.Remove("CheckPassword", "Skid.CheckPassword")
 
-    MsgC(Color(0, 255, 0), "SkidCheck", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(255, 255, 255), [[
+    MsgC(Color(0, 255, 0), "SkidCheck", color_white, " has been ", Color(255, 0, 0), "DISABLED\n", color_white, [[
     SkidCheck was detected on this server and has been disabled.
 
     SkidCheck is a ban list addon made by HeX as an attempt to get the people he doesn't like
@@ -105,68 +105,6 @@ if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() and
     end
 end
 
-
-if CLIENT and not DarkRP.disabledDefaults["workarounds"]["Cam function descriptive errors"] then
-    local cams3D, cams2D = 0, 0
-    local cam_Start = cam.Start
-
-    function cam.Start(tbl, ...)
-        -- https://github.com/Facepunch/garrysmod-issues/issues/3361
-        if (not istable(tbl)) then
-           argError(tbl, 1, "table")
-        end
-
-        if (tbl.type == "3D") then
-            cams3D = cams3D + 1
-        elseif (tbl.type == "2D") then
-            cams2D = cams2D + 1
-        else
-            error("bad argument #1 to '%s' (bad key 'type' - 2D or 3D expected, got %s)", debug.getinfo(1, "n").name, tbl.type, 2)
-        end
-
-        -- Could pcall this but it'd be impossible to
-        -- tell if a render instance was created or not.
-        -- Assume creation/deletion
-        return cam_Start(tbl, ...)
-    end
-
-    local cam_End3D = cam.End3D
-    function cam.End3D(...)
-        if (cams3D == 0) then
-            error("tried to end invalid render instance", 2)
-        end
-        cams3D = cams3D - 1
-        return cam_End3D(...)
-    end
-    cam.End = cam.End3D
-
-    local cam_End2D = cam.End2D
-    function cam.End2D(...)
-        if (cams2D == 0) then
-            error("tried to end invalid render instance", 2)
-        end
-        cams2D = cams2D - 1
-        return cam_End2D(...)
-    end
-
-    local cams3D2D = 0
-    local cam_Start3D2D = cam.Start3D2D
-
-    function cam.Start3D2D(...)
-        cams3D2D = cams3D2D + 1
-        return cam_Start3D2D(...)
-    end
-
-    local cam_End3D2D = cam.End3D2D
-    function cam.End3D2D(...)
-        if (cams3D2D == 0) then
-            error("tried to end invalid render instance", 2)
-        end
-        cams3D2D = cams3D2D - 1
-        return cam_End3D2D(...)
-    end
-end
-
 if SERVER and not DarkRP.disabledDefaults["workarounds"]["Error on edict limit"] then
     -- https://github.com/FPtje/DarkRP/issues/2640
     local entsCreate = ents.Create
@@ -189,7 +127,7 @@ if SERVER and not DarkRP.disabledDefaults["workarounds"]["Error on edict limit"]
         local res, len = varArgsLen(entsCreate(name, ...))
 
         if res[1] == NULL and ents.GetEdictCount() >= 8176 then
-            DarkRP.error(entsCreateError, 2, { string.format("Affected entity: '%s'", name) })
+            DarkRP.error(entsCreateError, 2, {string.format("Affected entity: '%s'", name)})
         end
 
         return unpack(res, 1, len)
@@ -314,28 +252,28 @@ Actively deprecate commands
 ---------------------------------------------------------------------------]]
 if SERVER and not DarkRP.disabledDefaults["workarounds"]["Deprecated console commands"] then
     local deprecated = {
-        {command = "rp_removeletters",      alternative = "removeletters"           },
-        {command = "rp_setname",            alternative = "forcerpname"             },
-        {command = "rp_unlock",             alternative = "forceunlock"             },
-        {command = "rp_lock",               alternative = "forcelock"               },
-        {command = "rp_removeowner",        alternative = "forceremoveowner"        },
-        {command = "rp_addowner",           alternative = "forceown"                },
-        {command = "rp_unownall",           alternative = "forceunownall"           },
-        {command = "rp_unown",              alternative = "forceunown"              },
-        {command = "rp_own",                alternative = "forceown"                },
-        {command = "rp_tellall",            alternative = "admintellall"            },
-        {command = "rp_tell",               alternative = "admintell"               },
-        {command = "rp_teamunban",          alternative = "teamunban"               },
-        {command = "rp_teamban",            alternative = "teamban"                 },
-        {command = "rp_setsalary",          alternative = "setmoney"                },
-        {command = "rp_setmoney",           alternative = "setmoney"                },
-        {command = "rp_revokelicense",      alternative = "unsetlicense"            },
-        {command = "rp_givelicense",        alternative = "setlicense"              },
-        {command = "rp_unlockdown",         alternative = "unlockdown"              },
-        {command = "rp_lockdown",           alternative = "lockdown"                },
-        {command = "rp_unarrest",           alternative = "unarrest"                },
-        {command = "rp_arrest",             alternative = "arrest"                  },
-        {command = "rp_cancelvote",         alternative = "forcecancelvote"         },
+        {command = "rp_removeletters",      alternative = "removeletters"},
+        {command = "rp_setname",            alternative = "forcerpname"},
+        {command = "rp_unlock",             alternative = "forceunlock"},
+        {command = "rp_lock",               alternative = "forcelock"},
+        {command = "rp_removeowner",        alternative = "forceremoveowner"},
+        {command = "rp_addowner",           alternative = "forceown"},
+        {command = "rp_unownall",           alternative = "forceunownall"},
+        {command = "rp_unown",              alternative = "forceunown"},
+        {command = "rp_own",                alternative = "forceown"},
+        {command = "rp_tellall",            alternative = "admintellall"},
+        {command = "rp_tell",               alternative = "admintell"},
+        {command = "rp_teamunban",          alternative = "teamunban"},
+        {command = "rp_teamban",            alternative = "teamban"},
+        {command = "rp_setsalary",          alternative = "setmoney"},
+        {command = "rp_setmoney",           alternative = "setmoney"},
+        {command = "rp_revokelicense",      alternative = "unsetlicense"},
+        {command = "rp_givelicense",        alternative = "setlicense"},
+        {command = "rp_unlockdown",         alternative = "unlockdown"},
+        {command = "rp_lockdown",           alternative = "lockdown"},
+        {command = "rp_unarrest",           alternative = "unarrest"},
+        {command = "rp_arrest",             alternative = "arrest"},
+        {command = "rp_cancelvote",         alternative = "forcecancelvote"},
     }
 
     local lastDeprecated = 0
@@ -405,6 +343,6 @@ if SERVER and not DarkRP.disabledDefaults["workarounds"]["disable CAC"] then
 
         CAC = nil
 
-        MsgC(Color(0, 255, 0), "Cake Anticheat (CAC)", Color(255, 255, 255), " has been ", Color(255, 0, 0), "DISABLED\n", Color(253, 151, 31), disableCacMsg)
+        MsgC(Color(0, 255, 0), "Cake Anticheat (CAC)", color_white, " has been ", Color(255, 0, 0), "DISABLED\n", Color(253, 151, 31), disableCacMsg)
     end)
 end

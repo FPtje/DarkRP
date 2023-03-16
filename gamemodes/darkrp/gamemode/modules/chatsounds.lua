@@ -4,221 +4,241 @@
 -- TODO: Add female sounds & detect gender of model, and use combine sounds for CPs
 
 local sounds = {}
-sounds[ "ammo" ] = { "vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav", "vo/npc/male01/ammo05.wav" }
+sounds["ammo"] = {"vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav", "vo/npc/male01/ammo05.wav"}
 
-sounds[ "behind you" ] = { "vo/npc/male01/behindyou01.wav", "vo/npc/male01/behindyou02.wav" }
+sounds["behind you"] = {"vo/npc/male01/behindyou01.wav", "vo/npc/male01/behindyou02.wav"}
 
-sounds[ "better reload" ] = { "vo/npc/male01/youdbetterreload01.wav" }
+sounds["better reload"] = {"vo/npc/male01/youdbetterreload01.wav"}
 
-sounds[ "bullshit" ] = { "vo/npc/male01/question26.wav" }
-sounds[ "bull shit"] = sounds[ "bullshit" ]
+sounds["bullshit"] = {"vo/npc/male01/question26.wav"}
 
-sounds[ "cheese" ] = { "vo/npc/male01/question06.wav" }
+sounds["bull shit"] = sounds["bullshit"]
 
-sounds[ "combine" ] = { "vo/npc/male01/combine01.wav", "vo/npc/male01/combine02.wav" }
+sounds["cheese"] = {"vo/npc/male01/question06.wav"}
 
-sounds[ "coming" ] = { "vo/npc/male01/squad_approach04.wav" }
+sounds["combine"] = {"vo/npc/male01/combine01.wav", "vo/npc/male01/combine02.wav"}
 
-sounds[ "cops" ] = { "vo/npc/male01/civilprotection01.wav", "vo/npc/male01/civilprotection02.wav", "vo/npc/male01/cps01.wav", "vo/npc/male01/cps02.wav" }
-sounds[ "cp" ] = sounds[ "cops" ]
-sounds[ "cps" ] = sounds[ "cops" ]
+sounds["coming"] = {"vo/npc/male01/squad_approach04.wav"}
 
-sounds[ "cut it" ] = { "vo/trainyard/male01/cit_hit01.wav", "vo/trainyard/male01/cit_hit02.wav", "vo/trainyard/male01/cit_hit03.wav", "vo/trainyard/male01/cit_hit04.wav", "vo/trainyard/male01/cit_hit05.wav" }
+sounds["cops"] = {"vo/npc/male01/civilprotection01.wav", "vo/npc/male01/civilprotection02.wav", "vo/npc/male01/cps01.wav", "vo/npc/male01/cps02.wav"}
 
-sounds[ "dont tell me" ] = { "vo/npc/male01/gordead_ans03.wav" }
+sounds["cp"] = sounds["cops"]
+sounds["cps"] = sounds["cops"]
 
-sounds[ "de ja vu" ] = { "vo/npc/male01/question05.wav" }
-sounds[ "dejavu" ] = sounds[ "de ja vu" ]
+sounds["cut it"] = {"vo/trainyard/male01/cit_hit01.wav", "vo/trainyard/male01/cit_hit02.wav", "vo/trainyard/male01/cit_hit03.wav", "vo/trainyard/male01/cit_hit04.wav", "vo/trainyard/male01/cit_hit05.wav"}
 
-sounds[ "excuse me" ] = { "vo/npc/male01/excuseme01.wav", "vo/npc/male01/excuseme02.wav" }
+sounds["dont tell me"] = {"vo/npc/male01/gordead_ans03.wav"}
 
-sounds[ "fantastic" ] = { "vo/npc/male01/fantastic01.wav", "vo/npc/male01/fantastic02.wav" }
+sounds["de ja vu"] = {"vo/npc/male01/question05.wav"}
 
-sounds[ "figures" ] = { "vo/npc/male01/answer03.wav" }
+sounds["dejavu"] = sounds["de ja vu"]
 
-sounds[ "finally" ] = { "vo/npc/male01/finally.wav" }
+sounds["excuse me"] = {"vo/npc/male01/excuseme01.wav", "vo/npc/male01/excuseme02.wav"}
 
-sounds[ "follow" ] = { "vo/coast/odessa/male01/stairman_follow01.wav", "vo/npc/male01/squad_away03.wav", "vo/coast/cardock/le_followme.wav" }
+sounds["fantastic"] = {"vo/npc/male01/fantastic01.wav", "vo/npc/male01/fantastic02.wav"}
 
-sounds[ "focus" ] = { "vo/npc/male01/answer18.wav", "vo/npc/male01/answer19.wav" }
+sounds["figures"] = {"vo/npc/male01/answer03.wav"}
 
-sounds[ "freeman" ] = { "vo/npc/male01/freeman.wav", "vo/npc/male01/docfreeman01.wav", "vo/npc/male01/docfreeman02.wav" }
+sounds["finally"] = {"vo/npc/male01/finally.wav"}
 
-sounds[ "get down" ] = { "vo/npc/male01/getdown02.wav" }
+sounds["follow"] = {"vo/coast/odessa/male01/stairman_follow01.wav", "vo/npc/male01/squad_away03.wav", "vo/coast/cardock/le_followme.wav"}
 
-sounds[ "get in" ] = { "vo/canals/gunboat_getin.wav" }
+sounds["focus"] = {"vo/npc/male01/answer18.wav", "vo/npc/male01/answer19.wav"}
 
-sounds[ "get out" ] = { "vo/npc/male01/gethellout.wav" }
+sounds["freeman"] = {"vo/npc/male01/freeman.wav", "vo/npc/male01/docfreeman01.wav", "vo/npc/male01/docfreeman02.wav"}
 
-sounds[ "good god" ] = { "vo/npc/male01/goodgod.wav", "vo/npc/male01/gordead_ans04.wav" }
-sounds[ "gosh" ] = sounds[ "good god" ]
+sounds["get down"] = {"vo/npc/male01/getdown02.wav"}
 
-sounds[ "got one" ] = { "vo/npc/male01/gotone01.wav", "vo/npc/male01/gotone01.wav"}
+sounds["get in"] = {"vo/canals/gunboat_getin.wav"}
 
-sounds[ "gotta reload" ] = { "vo/npc/male01/gottareload01.wav" }
+sounds["get out"] = {"vo/npc/male01/gethellout.wav"}
 
-sounds[ "gtfo" ] = sounds [ "get out" ]
+sounds["good god"] = {"vo/npc/male01/goodgod.wav", "vo/npc/male01/gordead_ans04.wav"}
 
-sounds[ "hacks" ] = { "vo/npc/male01/hacks01.wav", "vo/npc/male01/hacks02.wav", "vo/npc/male01/thehacks01.wav", "vo/npc/male01/thehacks02.wav"}
-sounds[ "hax" ] = sounds [ "hacks" ]
-sounds[ "haxx" ] = sounds [ "hacks" ]
+sounds["gosh"] = sounds["good god"]
 
-sounds[ "help" ] = { "vo/npc/male01/help01.wav" }
+sounds["got one"] = {"vo/npc/male01/gotone01.wav", "vo/npc/male01/gotone01.wav"}
 
-sounds[ "here they come" ] = { "vo/npc/male01/heretheycome01.wav", "vo/npc/male01/incoming02.wav" }
+sounds["gotta reload"] = {"vo/npc/male01/gottareload01.wav"}
 
-sounds[ "hello" ] = { "vo/npc/male01/hi01.wav", "vo/npc/male01/hi02.wav" }
-sounds[ "hey" ] = sounds[ "hello" ]
-sounds[ "hi" ] = sounds[ "hello" ]
+sounds["gtfo"] = sounds["get out"]
 
-sounds[ "heads up" ] = { "vo/npc/male01/headsup01.wav", "vo/npc/male01/headsup02.wav" }
+sounds["hacks"] = {"vo/npc/male01/hacks01.wav", "vo/npc/male01/hacks02.wav", "vo/npc/male01/thehacks01.wav", "vo/npc/male01/thehacks02.wav"}
 
-sounds[ "he's dead" ] = { "vo/npc/male01/gordead_ques01.wav", "vo/npc/male01/gordead_ques07.wav" }
-sounds[ "he is dead" ] = sounds[ "he's dead" ]
+sounds["hax"] = sounds["hacks"]
+sounds["haxx"] = sounds["hacks"]
 
-sounds[ "how about that" ] = { "vo/npc/male01/answer25.wav" }
+sounds["help"] = {"vo/npc/male01/help01.wav"}
 
-sounds[ "i know" ] = { "vo/npc/male01/answer08.wav" }
+sounds["here they come"] = {"vo/npc/male01/heretheycome01.wav", "vo/npc/male01/incoming02.wav"}
 
-sounds[ "ill stay here" ] = { "vo/npc/male01/illstayhere01.wav", "vo/npc/male01/holddownspot01.wav", "vo/npc/male01/holddownspot02.wav", "vo/npc/male01/imstickinghere01.wav", "vo/npc/male01/littlecorner01.wav" }
-sounds[ "i'll stay here" ] = sounds[ "ill stay here" ]
-sounds[ "i will stay here" ] = sounds[ "ill stay here" ]
+sounds["hello"] = {"vo/npc/male01/hi01.wav", "vo/npc/male01/hi02.wav"}
 
-sounds[ "im busy" ] = { "vo/npc/male01/busy02.wav" }
-sounds[ "i'm busy" ] = sounds[ "im busy" ]
+sounds["hey"] = sounds["hello"]
+sounds["hi"] = sounds["hello"]
 
-sounds[ "im with you" ] = { "vo/npc/male01/answer13.wav" }
-sounds[ "i'm with you" ] = sounds[ "im with you" ]
+sounds["heads up"] = {"vo/npc/male01/headsup01.wav", "vo/npc/male01/headsup02.wav"}
 
-sounds[ "isnt good" ] = { "vo/trainyard/male01/cit_window_use01.wav" }
-sounds[ "isn't good" ] = sounds[ "isnt good" ]
+sounds["he's dead"] = {"vo/npc/male01/gordead_ques01.wav", "vo/npc/male01/gordead_ques07.wav"}
 
-sounds[ "incoming" ] = sounds[ "here they come" ]
+sounds["he is dead"] = sounds["he's dead"]
 
-sounds[ "it cant be" ] = { "vo/npc/male01/gordead_ques06.wav" }
-sounds[ "it can't be" ] = sounds[ "it cant be" ]
+sounds["how about that"] = {"vo/npc/male01/answer25.wav"}
 
-sounds[ "it is okay" ] = { "vo/npc/male01/answer02.wav" }
-sounds[ "it's okay" ] = sounds[ "it is okay" ]
+sounds["i know"] = {"vo/npc/male01/answer08.wav"}
 
-sounds[ "kay" ] = { "vo/npc/male01/ok01.wav", "vo/npc/male01/ok02.wav" }
-sounds[ "kk" ] = sounds[ "kay" ]
+sounds["ill stay here"] = {"vo/npc/male01/illstayhere01.wav", "vo/npc/male01/holddownspot01.wav", "vo/npc/male01/holddownspot02.wav", "vo/npc/male01/imstickinghere01.wav", "vo/npc/male01/littlecorner01.wav"}
 
-sounds[ "lead the way" ] = { "vo/npc/male01/leadtheway01.wav", "vo/npc/male01/leadtheway02.wav" }
-sounds[ "lead on" ] = sounds[ "lead the way" ]
+sounds["i'll stay here"] = sounds["ill stay here"]
+sounds["i will stay here"] = sounds["ill stay here"]
 
-sounds[ "lets go" ] = { "vo/npc/male01/letsgo01.wav", "vo/npc/male01/letsgo02.wav" }
-sounds[ "let's go" ] = sounds[ "lets go" ]
+sounds["im busy"] = {"vo/npc/male01/busy02.wav"}
 
-sounds[ "never" ] = { "vo/Citadel/eli_nonever.wav" }
+sounds["i'm busy"] = sounds["im busy"]
 
-sounds[ "never can tell" ] = { "vo/npc/male01/answer23.wav" }
+sounds["im with you"] = {"vo/npc/male01/answer13.wav"}
 
-sounds[ "nice" ] = { "vo/npc/male01/nice.wav" }
+sounds["i'm with you"] = sounds["im with you"]
 
-sounds[ "no" ] = { "vo/Citadel/br_no.wav", "vo/Citadel/eli_notobreen.wav" }
+sounds["isnt good"] = {"vo/trainyard/male01/cit_window_use01.wav"}
 
-sounds[ "not good" ] = sounds[ "isnt good" ]
+sounds["isn't good"] = sounds["isnt good"]
+sounds["incoming"] = sounds["here they come"]
 
-sounds[ "not sure" ] = { "vo/npc/male01/answer21.wav" }
+sounds["it cant be"] = {"vo/npc/male01/gordead_ques06.wav"}
 
-sounds[ "now what" ] = { "vo/npc/male01/gordead_ans01.wav", "vo/npc/male01/gordead_ans15.wav" }
+sounds["it can't be"] = sounds["it cant be"]
 
-sounds[ "oh no" ] = { "vo/npc/male01/gordead_ans05.wav", "vo/npc/male01/ohno.wav" }
+sounds["it is okay"] = {"vo/npc/male01/answer02.wav"}
 
-sounds[ "oh my god" ] = sounds[ "good god" ]
-sounds[ "omg" ] = sounds[ "good god" ]
-sounds[ "omfg" ] = sounds[ "good god" ]
+sounds["it's okay"] = sounds["it is okay"]
 
-sounds[ "ok" ] = sounds[ "kay" ]
-sounds[ "okay" ] = sounds[ "kay" ]
+sounds["kay"] = {"vo/npc/male01/ok01.wav", "vo/npc/male01/ok02.wav"}
 
-sounds[ "oops" ] = { "vo/npc/male01/whoops01.wav" }
+sounds["kk"] = sounds["kay"]
 
-sounds[ "over here" ] = { "vo/npc/male01/overhere01.wav", "vo/npc/male01/squad_away02.wav" }
+sounds["lead the way"] = {"vo/npc/male01/leadtheway01.wav", "vo/npc/male01/leadtheway02.wav"}
 
-sounds[ "over there" ] = { "vo/npc/male01/overthere01.wav", "vo/npc/male01/overthere02.wav" }
+sounds["lead on"] = sounds["lead the way"]
 
-sounds[ "pardon me" ] = { "vo/npc/male01/pardonme01.wav", "vo/npc/male01/pardonme02.wav" }
+sounds["lets go"] = {"vo/npc/male01/letsgo01.wav", "vo/npc/male01/letsgo02.wav"}
 
-sounds[ "please no" ] = { "vo/npc/male01/gordead_ans06.wav" }
+sounds["let's go"] = sounds["lets go"]
 
-sounds[ "right on" ] = { "vo/npc/male01/answer18.wav" }
+sounds["never"] = {"vo/Citadel/eli_nonever.wav"}
 
-sounds[ "run" ] = { "vo/npc/male01/strider_run.wav" }
+sounds["never can tell"] = {"vo/npc/male01/answer23.wav"}
 
-sounds[ "same here" ] = { "vo/npc/male01/answer07.wav" }
+sounds["nice"] = {"vo/npc/male01/nice.wav"}
 
-sounds[ "shut up" ] = { "vo/npc/male01/answer17.wav" }
+sounds["no"] = {"vo/Citadel/br_no.wav", "vo/Citadel/eli_notobreen.wav"}
 
-sounds[ "spread the word" ] = { "vo/npc/male01/gordead_ans10.wav" }
+sounds["not good"] = sounds["isnt good"]
 
-sounds[ "stop it" ] = sounds[ "cut it" ]
-sounds[ "stop that" ] = sounds[ "cut it" ]
+sounds["not sure"] = {"vo/npc/male01/answer21.wav"}
 
-sounds[ "stop looking at me" ] = { "vo/npc/male01/vquestion01.wav" }
+sounds["now what"] = {"vo/npc/male01/gordead_ans01.wav", "vo/npc/male01/gordead_ans15.wav"}
 
-sounds[ "sorry" ] = { "vo/npc/male01/sorry01.wav", "vo/npc/male01/sorry02.wav", "vo/npc/male01/sorry03.wav" }
-sounds[ "sry" ] = sounds[ "sorry" ]
+sounds["oh no"] = {"vo/npc/male01/gordead_ans05.wav", "vo/npc/male01/ohno.wav"}
 
-sounds[ "take cover" ] = { "vo/npc/male01/takecover02.wav" }
+sounds["oh my god"] = sounds["good god"]
+sounds["omg"] = sounds["good god"]
+sounds["omfg"] = sounds["good god"]
+sounds["ok"] = sounds["kay"]
+sounds["okay"] = sounds["kay"]
 
-sounds[ "take this medkit" ] = {"vo/npc/male01/health01.wav", "vo/npc/male01/health02.wav", "vo/npc/male01/health03.wav", "vo/npc/male01/health04.wav" }
+sounds["oops"] = {"vo/npc/male01/whoops01.wav"}
 
-sounds[ "task at hand" ] = { "vo/npc/male01/answer18.wav" }
+sounds["over here"] = {"vo/npc/male01/overhere01.wav", "vo/npc/male01/squad_away02.wav"}
 
-sounds[ "talking to me" ] = { "vo/npc/male01/answer30.wav" }
+sounds["over there"] = {"vo/npc/male01/overthere01.wav", "vo/npc/male01/overthere02.wav"}
 
-sounds[ "thats you" ] = { "vo/npc/male01/answer01.wav" }
+sounds["pardon me"] = {"vo/npc/male01/pardonme01.wav", "vo/npc/male01/pardonme02.wav"}
 
-sounds[ "this cant be" ] = sounds[ "it cant be" ]
-sounds[ "this can't be" ] = sounds[ "it cant be" ]
+sounds["please no"] = {"vo/npc/male01/gordead_ans06.wav"}
 
-sounds[ "this is bad" ] = { "vo/npc/male01/gordead_ques10.wav" }
+sounds["right on"] = {"vo/npc/male01/answer18.wav"}
 
-sounds[ "too much info" ] = { "vo/npc/male01/answer26.wav" }
-sounds[ "too much information" ] = sounds[ "too much info" ]
+sounds["run"] = {"vo/npc/male01/strider_run.wav"}
 
-sounds[ "uhoh" ] = { "vo/npc/male01/uhoh.wav" }
-sounds[ "uh oh" ] = sounds[ "uhoh" ]
+sounds["same here"] = {"vo/npc/male01/answer07.wav"}
 
-sounds[ "wait" ] = { "vo/trainyard/man_waitaminute.wav" }
+sounds["shut up"] = {"vo/npc/male01/answer17.wav"}
 
-sounds[ "wait for me" ] = { "vo/npc/male01/squad_reinforce_single04.wav" }
+sounds["spread the word"] = {"vo/npc/male01/gordead_ans10.wav"}
 
-sounds[ "wait for us" ] = { "vo/npc/male01/squad_reinforce_group04.wav" }
+sounds["stop it"] = sounds["cut it"]
+sounds["stop that"] = sounds["cut it"]
 
-sounds[ "wanna bet" ] = { "vo/npc/male01/answer27.wav" }
+sounds["stop looking at me"] = {"vo/npc/male01/vquestion01.wav"}
 
-sounds[ "watch out" ] = { "vo/npc/male01/watchout.wav" }
+sounds["sorry"] = {"vo/npc/male01/sorry01.wav", "vo/npc/male01/sorry02.wav", "vo/npc/male01/sorry03.wav"}
 
-sounds[ "we are done for" ] = { "vo/npc/male01/gordead_ans14.wav" }
-sounds[ "we're done for" ] = sounds[ "we are done for" ]
+sounds["sry"] = sounds["sorry"]
 
-sounds[ "what now" ] = { "vo/npc/male01/gordead_ques16.wav" }
+sounds["take cover"] = {"vo/npc/male01/takecover02.wav"}
 
-sounds[ "whatever you say" ] = { "vo/npc/male01/squad_affirm03.wav" }
+sounds["take this medkit"] = {"vo/npc/male01/health01.wav", "vo/npc/male01/health02.wav", "vo/npc/male01/health03.wav", "vo/npc/male01/health04.wav"}
 
-sounds[ "whats the use" ] = { "vo/npc/male01/gordead_ans11.wav" }
-sounds[ "what's the use" ] = sounds[ "whats the use" ]
+sounds["task at hand"] = {"vo/npc/male01/answer18.wav"}
 
-sounds[ "whats the point" ] = { "vo/npc/male01/gordead_ans12.wav" }
-sounds[ "what's the point" ] = sounds[ "whats the point" ]
+sounds["talking to me"] = {"vo/npc/male01/answer30.wav"}
 
-sounds[ "whoops" ] = sounds[ "oops" ]
+sounds["thats you"] = {"vo/npc/male01/answer01.wav"}
 
-sounds[ "why go on" ] = { "vo/npc/male01/gordead_ans13.wav" }
+sounds["this cant be"] = sounds["it cant be"]
+sounds["this can't be"] = sounds["it cant be"]
 
-sounds[ "why telling me" ] = { "vo/npc/male01/answer24.wav" }
+sounds["this is bad"] = {"vo/npc/male01/gordead_ques10.wav"}
 
-sounds[ "yeah" ] = { "vo/npc/male01/yeah02.wav" }
-sounds[ "yes" ] = sounds[ "yeah" ]
+sounds["too much info"] = {"vo/npc/male01/answer26.wav"}
 
-sounds[ "you and me both" ] = { "vo/npc/male01/answer14.wav" }
+sounds["too much information"] = sounds["too much info"]
 
-sounds[ "you never know" ] = { "vo/npc/male01/answer22.wav" }
+sounds["uhoh"] = {"vo/npc/male01/uhoh.wav"}
 
-sounds[ "you sure" ] = { "vo/npc/male01/answer37.wav" }
+sounds["uh oh"] = sounds["uhoh"]
+
+sounds["wait"] = {"vo/trainyard/man_waitaminute.wav"}
+
+sounds["wait for me"] = {"vo/npc/male01/squad_reinforce_single04.wav"}
+
+sounds["wait for us"] = {"vo/npc/male01/squad_reinforce_group04.wav"}
+
+sounds["wanna bet"] = {"vo/npc/male01/answer27.wav"}
+
+sounds["watch out"] = {"vo/npc/male01/watchout.wav"}
+
+sounds["we are done for"] = {"vo/npc/male01/gordead_ans14.wav"}
+
+sounds["we're done for"] = sounds["we are done for"]
+
+sounds["what now"] = {"vo/npc/male01/gordead_ques16.wav"}
+
+sounds["whatever you say"] = {"vo/npc/male01/squad_affirm03.wav"}
+
+sounds["whats the use"] = {"vo/npc/male01/gordead_ans11.wav"}
+
+sounds["what's the use"] = sounds["whats the use"]
+
+sounds["whats the point"] = {"vo/npc/male01/gordead_ans12.wav"}
+
+sounds["what's the point"] = sounds["whats the point"]
+sounds["whoops"] = sounds["oops"]
+
+sounds["why go on"] = {"vo/npc/male01/gordead_ans13.wav"}
+
+sounds["why telling me"] = {"vo/npc/male01/answer24.wav"}
+
+sounds["yeah"] = {"vo/npc/male01/yeah02.wav"}
+
+sounds["yes"] = sounds["yeah"]
+
+sounds["you and me both"] = {"vo/npc/male01/answer14.wav"}
+
+sounds["you never know"] = {"vo/npc/male01/answer22.wav"}
+
+sounds["you sure"] = {"vo/npc/male01/answer37.wav"}
 
 DarkRP.hookStub{
     name = "canChatSound",

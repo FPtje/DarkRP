@@ -4,9 +4,13 @@ local DarkRPVars = {}
 interface"someString"
 ---------------------------------------------------------------------------]]
 local pmeta = FindMetaTable("Player")
+-- This function is made local to optimise getDarkRPVar, which is called often
+-- enough to warrant optimizing. See https://github.com/FPtje/DarkRP/pull/3212
+local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var)
-    local vars = DarkRPVars[self:UserID()]
-    return vars and vars[var] or nil
+    local vars = DarkRPVars[get_user_id(self)]
+    if vars == nil then return nil end
+    return vars[var]
 end
 
 --[[---------------------------------------------------------------------------

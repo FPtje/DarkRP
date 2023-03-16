@@ -22,7 +22,7 @@ local function PM(ply, args)
     if target then
         local col = team.GetColor(ply:Team())
         local pname = ply:Nick()
-        local col2 = Color(255, 255, 255, 255)
+        local col2 = color_white
         DarkRP.talkToPerson(target, col, "(PM) " .. pname, col2, msg, ply)
         DarkRP.talkToPerson(ply, col, "(PM) " .. pname, col2, msg, ply)
     else
@@ -94,7 +94,7 @@ local function OOC(ply, args)
             return ""
         end
         local col = team.GetColor(ply:Team())
-        local col2 = Color(255, 255, 255, 255)
+        local col2 = color_white
         if not ply:Alive() then
             col2 = Color(255, 200, 200, 255)
             col = col2
@@ -197,7 +197,7 @@ local function GroupMsg(ply, args)
 
         local phrase = DarkRP.getPhrase("group")
         local name = ply:Nick()
-        local color = Color(255, 255, 255, 255)
+        local color = color_white
         for _, target in ipairs(player.GetAll()) do
             -- The target is in any of the group chats
             for _, func in ipairs(groupChats) do

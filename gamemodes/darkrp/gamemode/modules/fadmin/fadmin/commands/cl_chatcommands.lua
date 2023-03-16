@@ -1,5 +1,7 @@
 local Options = {}
 local targets
+local colorBackground = Color(0, 0, 0, 200)
+local colorHighlight = Color(255, 125, 0, 200)
 hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     if not FAdmin.GlobalSetting.FAdmin then return end
     Options = {}
@@ -57,21 +59,21 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     hook.Add("HUDPaint", "FAdmin_Chat_autocomplete", function()
         local j = 0
         for option, args in pairs(Options) do
-            draw.WordBox(4, xPos, ChatBoxPosY + j * 24, option, "UiBold", Color(0, 0, 0, 200), Color(255, 255, 255, 255))
+            draw.WordBox(4, xPos, ChatBoxPosY + j * 24, option, "UiBold", colorBackground, color_white)
 
             for k, arg in pairs(args) do
-                draw.WordBox(4, xPos + k * 130, ChatBoxPosY + j * 24, arg, "UiBold", Color(0, 0, 0, 200), Color(255, 255, 255, 255))
+                draw.WordBox(4, xPos + k * 130, ChatBoxPosY + j * 24, arg, "UiBold", colorBackground, color_white)
             end
 
             j = j + 1
         end
 
         if targets then
-            draw.WordBox(4, xPos, ChatBoxPosY + j * 24, "Targets: " .. targets, "UiBold", Color(255, 125, 0, 200), Color(255, 255, 255, 255))
+            draw.WordBox(4, xPos, ChatBoxPosY + j * 24, "Targets: " .. targets, "UiBold", colorHighlight, color_white)
         end
 
         if DidMakeShorter then
-            draw.WordBox(4, xPos, ChatBoxPosY + j * 24, "...", "UiBold", Color(0, 0, 0, 200), Color(255, 255, 255, 255))
+            draw.WordBox(4, xPos, ChatBoxPosY + j * 24, "...", "UiBold", colorBackground, color_white)
         end
     end)
 end)

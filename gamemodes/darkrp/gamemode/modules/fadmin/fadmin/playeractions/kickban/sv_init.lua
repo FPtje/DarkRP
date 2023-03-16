@@ -154,7 +154,7 @@ local function Ban(ply, cmd, args)
             SendUserMessage("FAdmin_ban_start", target) -- Tell him he's getting banned
             target:Lock() -- Make sure he can't remove the hook clientside and keep minging.
             target:KillSilent()
-            StartBannedUsers[target:SteamID()] = { author = ply }
+            StartBannedUsers[target:SteamID()] = {author = ply}
 
         elseif stage == "cancel" then
             if not isstring(target) and IsValid(target) then

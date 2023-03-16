@@ -461,7 +461,7 @@ local function UnOwnAll(ply, cmd, args)
         cost = cost + GiveMoneyBack
     end
 
-    if amount == 0 then return "" end
+    if amount == 0 then DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("no_doors_owned")) return "" end
 
     ply:addMoney(math.floor(cost))
 

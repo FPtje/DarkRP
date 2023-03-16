@@ -7,8 +7,8 @@ SKIN.DermaVersion       = 1
 SKIN.GwenTexture        = Material("darkrp/darkrpderma.png")
 
 
-SKIN.colTextEntryText               = Color(255, 255, 255)
-SKIN.colTextEntryTextCursor         = Color(255, 255, 255)
+SKIN.colTextEntryText               = color_white
+SKIN.colTextEntryTextCursor         = color_white
 
 SKIN.colTextEntryTextPlaceholder    = Color(200, 200, 200, 200) -- Unofficial but will probably be named this
 

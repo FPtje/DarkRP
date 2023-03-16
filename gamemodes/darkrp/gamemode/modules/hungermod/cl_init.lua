@@ -30,7 +30,9 @@ surface.CreateFont("HungerPlus", {
     weight = 500,
     antialias = true,
     shadow = false,
-    font = "ChatFont"})
+    font = "ChatFont",
+    extended = true,
+})
 
 local function ReloadConVars()
     for name, Colour in pairs(ConVars) do

@@ -129,7 +129,7 @@ local function DoLottery(ply, amount)
     local phrase = DarkRP.getPhrase("lottery_has_started", DarkRP.formatMoney(LotteryAmount))
     for k, v in ipairs(player.GetAll()) do
         if v ~= ply then
-            DarkRP.createQuestion(phrase, DarkRP.getPhrase("lottery") .. tostring(k), v, 30, EnterLottery, ply, v)
+            DarkRP.createQuestion(phrase, "lottery_" .. tostring(k), v, 30, EnterLottery, ply, v)
         end
     end
     timer.Create("Lottery", 30, 1, function() EnterLottery(nil, nil, nil, nil, true) end)
