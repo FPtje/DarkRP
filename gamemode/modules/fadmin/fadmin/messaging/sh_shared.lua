@@ -18,7 +18,9 @@ FAdmin.Messages.MsgTypesByName = {
 function FAdmin.PlayerName(ply)
     if CLIENT and ply == LocalPlayer() then return "you" end
 
-    return isstring(ply) and ply or not IsValid(ply) and "unknown" or ply:EntIndex() == 0 and "Console" or ply:Nick()
+    if isstring(ply) then return ply end
+
+    return isentity(ply) and (ply:EntIndex() == 0 and "Console" or ply:Nick()) or "unknown"
 end
 
 function FAdmin.TargetsToString(targets)
