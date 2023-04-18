@@ -7,6 +7,9 @@ local function drawIndicator(ply)
         return
     end
 
+    local chatIndicator = hook.Call("DrawChatIndicator", nil, ply)
+    if chatIndicator == true then return end
+
     local indicator = ply.indicator
     if not IsValid(indicator) then
         indicator = ClientsideModel("models/extras/info_speech.mdl", RENDERGROUP_OPAQUE)
