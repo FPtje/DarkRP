@@ -7,10 +7,11 @@ local pmeta = FindMetaTable("Player")
 -- This function is made local to optimise getDarkRPVar, which is called often
 -- enough to warrant optimizing. See https://github.com/FPtje/DarkRP/pull/3212
 local get_user_id = pmeta.UserID
-function pmeta:getDarkRPVar(var)
+function pmeta:getDarkRPVar(var, fallback)
+    fallback = fallback or nil
     local vars = DarkRPVars[get_user_id(self)]
-    if vars == nil then return nil end
-    return vars[var]
+    if vars == nil then return fallback end
+    return vars[var] or fallback
 end
 
 --[[---------------------------------------------------------------------------
