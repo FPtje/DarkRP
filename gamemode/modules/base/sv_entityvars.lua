@@ -65,11 +65,14 @@ end
 --[[---------------------------------------------------------------------------
 Get a DarkRPVar
 ---------------------------------------------------------------------------]]
-function meta:getDarkRPVar(var)
+function meta:getDarkRPVar(var, fallback)
     local vars = DarkRPVars[self]
+    if vars == nil then return fallback end
 
-    vars = vars or {}
-    return vars[var]
+    local results = vars[var]
+    if results == nil then return fallback end
+
+    return results
 end
 
 --[[---------------------------------------------------------------------------
