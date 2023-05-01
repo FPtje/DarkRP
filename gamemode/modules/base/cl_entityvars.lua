@@ -1,7 +1,7 @@
 local DarkRPVars = {}
 
 --[[---------------------------------------------------------------------------
-interface"someString"
+Interface
 ---------------------------------------------------------------------------]]
 local pmeta = FindMetaTable("Player")
 -- This function is made local to optimise getDarkRPVar, which is called often
@@ -10,9 +10,11 @@ local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var, fallback)
     local vars = DarkRPVars[get_user_id(self)]
     if vars == nil then return fallback end
+
     local results = vars[var]
-    if results ~= nil then return results end
-    return fallback
+    if results == nil then return fallback end
+
+    return results
 end
 
 --[[---------------------------------------------------------------------------
