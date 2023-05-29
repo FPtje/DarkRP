@@ -107,12 +107,12 @@ function plyMeta:arrest(time, arrester)
     end
 end
 
-function plyMeta:unArrest(unarrester)
+function plyMeta:unArrest(unarrester, teleportOverride)
     if not self:isArrested() then return end
 
     self:setDarkRPVar("Arrested", nil)
     arrestedPlayers[self:SteamID()] = nil
-    hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester)
+    hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester, teleportOverride)
 end
 
 --[[---------------------------------------------------------------------------
@@ -358,7 +358,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     umsg.End()
 end
 
-function DarkRP.hooks:playerUnArrested(ply, actor)
+function DarkRP.hooks:playerUnArrested(ply, actor, teleportOverride)
     if ply:InVehicle() then ply:ExitVehicle() end
 
     if ply.Sleeping then
@@ -370,7 +370,7 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
     end
 
     gamemode.Call("PlayerLoadout", ply)
-    if GAMEMODE.Config.telefromjail then
+    if teleportOverride or (GAMEMODE.Config.telefromjail and teleportOverride ~= false) then
         local ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)
         timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
     end
