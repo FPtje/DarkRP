@@ -370,7 +370,10 @@ function DarkRP.hooks:playerUnArrested(ply, actor, teleportOverride)
     end
 
     gamemode.Call("PlayerLoadout", ply)
-    if teleportOverride or (GAMEMODE.Config.telefromjail and teleportOverride ~= false) then
+    -- teleportOverride can either be nil, false, or a vector. Nil means "do not
+    -- modify behavior", false means "do not teleport", and a vector means
+    -- "teleport to this place instead"
+    if (GAMEMODE.Config.telefromjail or teleportOverride ~= nil) and teleportOverride ~= false then
         local pos
         if isvector(teleportOverride) then
             pos = teleportOverride
