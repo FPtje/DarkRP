@@ -371,11 +371,16 @@ function DarkRP.hooks:playerUnArrested(ply, actor, teleportOverride)
 
     gamemode.Call("PlayerLoadout", ply)
     if teleportOverride or (GAMEMODE.Config.telefromjail and teleportOverride ~= false) then
-        local ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)
+        local pos
         if isvector(teleportOverride) then
             pos = teleportOverride
+        else
+            local ent
+            ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)
+            pos = pos or ent:GetPos()
         end
-        timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
+        -- workaround for SetPos in weapon event bug
+        timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos) end end)
     end
 
     timer.Remove(ply:SteamID64() .. "jailtimer")
