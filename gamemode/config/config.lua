@@ -234,10 +234,10 @@ GM.Config.maxlotterycost                = 250
 GM.Config.maxvehicles                   = 5
 -- microwavefoodcost - Sets the sale price of Microwave Food.
 GM.Config.microwavefoodcost             = 30
--- gunlabguncost - Sets the inital price of a gun from a gunlab. Note that the
+-- gunlabguncost - Sets the initial price of a gun from a gunlab. Note that the
 -- gunlab owner can change this price.
 GM.Config.gunlabguncost                 = 200
--- druglabdrugcost - Sets the inital price of drugs from a drugs lab. Note that
+-- druglabdrugcost - Sets the initial price of drugs from a drugs lab. Note that
 -- the drugs lab owner can change this price.
 GM.Config.druglabdrugcost               = 100
 -- minlotterycost - Minimum payment the mayor can set to join a lottery.
