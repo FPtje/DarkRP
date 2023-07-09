@@ -234,6 +234,12 @@ GM.Config.maxlotterycost                = 250
 GM.Config.maxvehicles                   = 5
 -- microwavefoodcost - Sets the sale price of Microwave Food.
 GM.Config.microwavefoodcost             = 30
+-- gunlabguncost - Sets the initial price of a gun from a gunlab. Note that the
+-- gunlab owner can change this price.
+GM.Config.gunlabguncost                 = 200
+-- druglabdrugcost - Sets the initial price of drugs from a drugs lab. Note that
+-- the drugs lab owner can change this price.
+GM.Config.druglabdrugcost               = 100
 -- minlotterycost - Minimum payment the mayor can set to join a lottery.
 GM.Config.minlotterycost                = 30
 -- Money packets will get removed if they don't get picked up after a while. Set to 0 to disable.
@@ -341,8 +347,8 @@ GM.Config.DefaultPlayerGroups = {
 
 -- Custom modules in this addon that are disabled.
 GM.Config.DisabledCustomModules = {
-       ["hudreplacement"] = false,
-       ["extraf4tab"] = false,
+    ["hudreplacement"] = false,
+    ["extraf4tab"] = false,
 }
 
 -- The list of weapons that players are not allowed to drop. Items set to true are not allowed to be dropped.

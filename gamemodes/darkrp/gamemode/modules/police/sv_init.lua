@@ -107,12 +107,12 @@ function plyMeta:arrest(time, arrester)
     end
 end
 
-function plyMeta:unArrest(unarrester)
+function plyMeta:unArrest(unarrester, teleportOverride)
     if not self:isArrested() then return end
 
     self:setDarkRPVar("Arrested", nil)
     arrestedPlayers[self:SteamID()] = nil
-    hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester)
+    hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester, teleportOverride)
 end
 
 --[[---------------------------------------------------------------------------
@@ -358,7 +358,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     umsg.End()
 end
 
-function DarkRP.hooks:playerUnArrested(ply, actor)
+function DarkRP.hooks:playerUnArrested(ply, actor, teleportOverride)
     if ply:InVehicle() then ply:ExitVehicle() end
 
     if ply.Sleeping then
@@ -370,9 +370,20 @@ function DarkRP.hooks:playerUnArrested(ply, actor)
     end
 
     gamemode.Call("PlayerLoadout", ply)
-    if GAMEMODE.Config.telefromjail then
-        local ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)
-        timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos or ent:GetPos()) end end) -- workaround for SetPos in weapon event bug
+    -- teleportOverride can either be nil, false, or a vector. Nil means "do not
+    -- modify behavior", false means "do not teleport", and a vector means
+    -- "teleport to this place instead"
+    if (GAMEMODE.Config.telefromjail or teleportOverride ~= nil) and teleportOverride ~= false then
+        local pos
+        if isvector(teleportOverride) then
+            pos = teleportOverride
+        else
+            local ent
+            ent, pos = hook.Call("PlayerSelectSpawn", GAMEMODE, ply)
+            pos = pos or ent:GetPos()
+        end
+        -- workaround for SetPos in weapon event bug
+        timer.Simple(0, function() if IsValid(ply) then ply:SetPos(pos) end end)
     end
 
     timer.Remove(ply:SteamID64() .. "jailtimer")

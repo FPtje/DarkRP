@@ -394,6 +394,12 @@ DarkRP.PLAYER.getDarkRPVar = DarkRP.stub{
             description = "The name of the variable.",
             type = "string",
             optional = false
+        },
+        {
+            name = "fallback",
+            description = "The value to return if the DarkRPVar doesn't exist.",
+            type = "any",
+            optional = true
         }
     },
     returns = {
