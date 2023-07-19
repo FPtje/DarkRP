@@ -228,7 +228,7 @@ FAdmin.StartHooks["CL_KickBan"] = function()
         InnerPanel:SetPaintBackground(false)
 
         local Text = vgui.Create("DLabel", InnerPanel)
-            Text:SetText(NICK .. " knows he is getting kicked\nTake all your time entering the reason, he can't do anything anymore")
+            Text:SetText(NICK .. " knows they are getting kicked\nTake all your time entering the reason, they can't do anything anymore")
             Text:SizeToContents()
             Text:SetContentAlignment(5)
             Text:SetTextColor(color_white)

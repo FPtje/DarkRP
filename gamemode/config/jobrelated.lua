@@ -92,8 +92,8 @@ TEAM_MOB = DarkRP.createJob("Mob boss", {
     color = Color(25, 25, 25, 255),
     model = "models/player/gman_high.mdl",
     description = [[The Mob boss is the boss of the criminals in the city.
-        With his power he coordinates the gangsters and forms an efficient crime organization.
-        He has the ability to break into houses by using a lockpick.
+        With their power they coordinate the gangsters and form an efficient crime organization.
+        They have the ability to break into houses by using a lockpick.
         The Mob boss posesses the ability to unarrest you.]],
     weapons = {"lockpick", "unarrest_stick"},
     command = "mobboss",
@@ -145,7 +145,7 @@ TEAM_CHIEF = DarkRP.createJob("Civil Protection Chief", {
         Coordinate the police force to enforce law in the city.
         Hit a player with arrest baton to put them in jail.
         Bash a player with a stunstick and they may learn to obey the law.
-        The Battering Ram can break down the door of a criminal, with a warrant for his/her arrest.
+        The Battering Ram can break down the door of a criminal, with a warrant for their arrest.
         Type /wanted <name> to alert the public to the presence of a criminal.
         Type /jailpos to set the Jail Position]],
     weapons = {"arrest_stick", "unarrest_stick", "weapon_deagle2", "stunstick", "door_ram", "weaponchecker"},
