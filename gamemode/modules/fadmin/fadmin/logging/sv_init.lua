@@ -26,7 +26,7 @@ end
 
 hook.Add("PlayerGiveSWEP", "FAdmin_Log", function(ply, class)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Gave himself a " .. (class or "Unknown"))
+    FAdmin.Log(ply:Nick() .. " (" .. ply:SteamID() .. ") Gave themself a " .. (class or "Unknown"))
 end)
 
 hook.Add("PlayerSpawnedSENT", "FAdmin_Log", function(ply, ent)
