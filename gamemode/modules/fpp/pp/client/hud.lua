@@ -41,13 +41,14 @@ local HUDNote_c = 0
 local HUDNote_i = 1
 local HUDNotes = {}
 
---Notify ripped off the Sandbox notify, changed to my likings
-function FPP.AddNotify( str, type )
+-- Notify ripped off the Sandbox notify, changed to my likings
+function FPP.AddNotify(str, type, total_time)
     local tab = {}
     tab.text    = str
     tab.recv    = SysTime()
     tab.velx    = 0
     tab.vely    = -5
+    tab.time_visible = total_time ~= 0 and total_time or 6
     surface_SetFont( "TabLarge" )
     local w = surface_GetTextSize( str )
 
@@ -72,7 +73,7 @@ function FPP.AddNotify( str, type )
     ply:EmitSound("npc/turret_floor/click1.wav", 10, 100)
 end
 
-usermessage.Hook("FPP_Notify", function(u) FPP.AddNotify(u:ReadString(), u:ReadBool()) end)
+usermessage.Hook("FPP_Notify", function(u) FPP.AddNotify(u:ReadString(), u:ReadBool(), u:ReadFloat()) end)
 
 local function DrawNotice(k, v, i)
 
@@ -104,15 +105,15 @@ local function DrawNotice(k, v, i)
 
     local ideal_y = ScrH() - (HUDNote_c - i) * h
     local ideal_x = ScrW() / 2 + w * 0.5 + (ScrW() / 20)
-    local timeleft = 6 - (SysTime() - v.recv)
+    local timeleft = v.time_visible - (SysTime() - v.recv)
 
     -- Cartoon style about to go thing
-    if (timeleft < 0.8) then
+    if (timeleft < 0.5) then
         ideal_x = ScrW() / 2 + w * 0.5 + 200
     end
 
     -- Gone!
-    if (timeleft < 0.5) then
+    if (timeleft < 0.2) then
         ideal_y = ScrH() + 50
     end
 
@@ -176,7 +177,7 @@ local function HUDPaint()
     end
 
     for k, v in pairs(HUDNotes) do
-        if v ~= 0 and v.recv + 6 < SysTime() then
+        if v ~= 0 and v.recv + v.time_visible < SysTime() then
             HUDNotes[ k ] = 0
             HUDNote_c = HUDNote_c - 1
             if (HUDNote_c == 0) then HUDNotes = {} end

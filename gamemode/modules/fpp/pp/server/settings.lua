@@ -21,7 +21,7 @@ FPP.RestrictedToolsPlayers = FPP.RestrictedToolsPlayers or {}
 FPP.Groups = FPP.Groups or {}
 FPP.GroupMembers = FPP.GroupMembers or {}
 
-function FPP.Notify(ply, text, bool)
+function FPP.Notify(ply, text, bool, total_time)
     if ply:EntIndex() == 0 then
         ServerLog(text)
         return
@@ -29,14 +29,16 @@ function FPP.Notify(ply, text, bool)
     umsg.Start("FPP_Notify", ply)
         umsg.String(text)
         umsg.Bool(bool)
+        umsg.Float(total_time or 6)
     umsg.End()
     ply:PrintMessage(HUD_PRINTCONSOLE, text)
 end
 
-function FPP.NotifyAll(text, bool)
+function FPP.NotifyAll(text, bool, total_time)
     umsg.Start("FPP_Notify")
         umsg.String(text)
         umsg.Bool(bool)
+        umsg.Float(total_time or 6)
     umsg.End()
     for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCONSOLE, text)
