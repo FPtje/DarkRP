@@ -55,27 +55,45 @@ function FPP.AntiSpam.CreateEntity(ply, ent, IsDuplicate)
     -- I power by ten because the volume of a prop can vary between 65 and like a few billion
     if tobool(FPP.Settings.FPP_ANTISPAM1.bigpropantispam) and phys:GetVolume() and phys:GetVolume() > math.pow(10, FPP.Settings.FPP_ANTISPAM1.bigpropsize) and not string.find(class, "constraint") and not string.find(class, "hinge")
     and not string.find(class, "magnet") and not string.find(class, "collision") and not blacklist[class] then
+        ply.FPPAntispamBigProp = ply.FPPAntispamBigProp or 0
+        ply.FPPAntiSpamLastBigProp = ply.FPPAntiSpamLastBigProp or 0
         if not IsDuplicate then
-            ply.FPPAntispamBigProp = (ply.FPPAntispamBigProp or 0) + 1
-            timer.Simple(10 * FPP.Settings.FPP_ANTISPAM1.bigpropwait, function()
-                if not ply:IsValid() then return end
-                ply.FPPAntispamBigProp = ply.FPPAntispamBigProp or 0
-                ply.FPPAntispamBigProp = math.Max(ply.FPPAntispamBigProp - 1, 0)
-            end)
+            ply.FPPAntispamBigProp = ply.FPPAntispamBigProp + 1
         end
 
-        if ply.FPPAntiSpamLastBigProp and ply.FPPAntiSpamLastBigProp > (CurTime() - (FPP.Settings.FPP_ANTISPAM1.bigpropwait * ply.FPPAntispamBigProp)) then
-            FPP.Notify(ply, "Please wait " .. FPP.Settings.FPP_ANTISPAM1.bigpropwait * ply.FPPAntispamBigProp .. " Seconds before spawning a big prop again", false)
-            ply.FPPAntiSpamLastBigProp = CurTime()
+        local curTime = CurTime()
+        local spawningBlockedUntil =
+            ply.FPPAntiSpamLastBigProp + ply.FPPAntispamBigProp * FPP.Settings.FPP_ANTISPAM1.bigpropwait
+
+        if curTime < spawningBlockedUntil then
+            -- The current attempt would have been blocked until
+            -- spawningBlockedUntil. The next attempt will add up to that time.
+            -- The wait time is thus the time the user should wait before the
+            -- next attempt.
+            local waitTime = spawningBlockedUntil + FPP.Settings.FPP_ANTISPAM1.bigpropwait - curTime
+            FPP.Notify(
+                ply,
+                "Please wait " .. math.Round(waitTime, 2) .. " Seconds before spawning a big prop again",
+                false,
+                waitTime
+            )
             ent:Remove()
             return
         end
 
         if not IsDuplicate then
-            ply.FPPAntiSpamLastBigProp = CurTime()
+            ply.FPPAntiSpamLastBigProp = curTime
+            -- Spawning succeeded, reset big prop count to 0
+            ply.FPPAntispamBigProp = 0
         end
+        local waitTime = FPP.Settings.FPP_ANTISPAM1.bigpropwait
         FPP.AntiSpam.GhostFreeze(ent, phys)
-        FPP.Notify(ply, "Your prop is ghosted because it is too big. Interract with it to unghost it.", true)
+        FPP.Notify(
+            ply,
+            "Your prop is ghosted because it is too big. Interract with it to unghost it.",
+            true,
+            waitTime
+        )
         return
     end
 

@@ -4,7 +4,7 @@
 
 FAdmin.PlayerActions.RagdollTypes = {
     [1] = "Normal",
-    [2] = "Kick him in the nuts",
+    [2] = "Kick them in the nuts",
     [3] = "Hang",
     [4] = "Unragdoll"
 }

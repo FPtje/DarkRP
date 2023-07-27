@@ -568,7 +568,7 @@ function GM:PlayerDeath(ply, weapon, killer)
     local WeaponName = IsValid(weapon) and ((weapon:IsPlayer() and weapon:GetActiveWeapon():IsValid() and weapon:GetActiveWeapon():GetClass()) or weapon:GetClass()) or "unknown"
 
     if killer == ply then
-        KillerName = "Himself"
+        KillerName = "Themself"
         WeaponName = "suicide trick"
     end
 
