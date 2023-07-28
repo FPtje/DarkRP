@@ -411,7 +411,6 @@ function DarkRP.hooks:canGiveLicense(ply, target)
     local reason = DarkRP.getPhrase("incorrect_job", "/givelicense")
 
     local players = player.GetAll()
-    
     -- Chiefs can if there is no mayor
     local mayorExists = #fn.Filter(plyMeta.isMayor, players) > 0
     if mayorExists then return false, reason end
