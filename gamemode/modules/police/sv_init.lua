@@ -1,6 +1,6 @@
 local plyMeta = FindMetaTable("Player")
 local finishWarrantRequest
-arrestedPlayers = {}
+local arrestedPlayers = {}
 
 --[[---------------------------------------------------------------------------
 Interface functions
