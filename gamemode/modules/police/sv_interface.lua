@@ -188,6 +188,54 @@ DarkRP.PLAYER.unArrest = DarkRP.stub{
     metatable = DarkRP.PLAYER
 }
 
+DarkRP.iterateArrestedPlayers = DarkRP.stub{
+    name = "iterateArrestedPlayers",
+    description = "An iterator that walks over the arrested players. Use as follows: for arrestedPlayer in DarkRP.iterateArrestedPlayers() do print(arrestedPlayer) end",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "arrestedPlayer",
+            description = "Much like the next function, this returns the next arrested player until the table is fully iterated.",
+            type = "Player"
+        }
+    },
+    metatable = DarkRP,
+    realm = "Server"
+}
+
+DarkRP.arrestedPlayers = DarkRP.stub{
+    name = "arrestedPlayers",
+    description = "Returns a table that contains all arrested players. NOTE: This function is defined using DarkRP.iterateArrestedPlayers. It might be more efficient to use that function instead, because this function builds the table anew.",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "arrestedPlayers",
+            description = "An array of arrested players, in no particular order.",
+            type = "table"
+        }
+    },
+    metatable = DarkRP,
+    realm = "Server"
+}
+
+DarkRP.arrestedPlayerCount = DarkRP.stub{
+    name = "arrestedPlayerCount",
+    description = "Returns the amount of players that are currently arrested.",
+    parameters = {
+    },
+    returns = {
+        {
+            name = "arrestedPlayerCount",
+            description = "The amount of arrested players.",
+            type = "number"
+        }
+    },
+    metatable = DarkRP,
+    realm = "Server"
+}
+
 DarkRP.hookStub{
     name = "playerArrested",
     description = "When a player is arrested.",
