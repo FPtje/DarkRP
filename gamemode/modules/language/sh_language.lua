@@ -24,6 +24,14 @@ function DarkRP.getPhrase(name, ...)
     return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
 end
 
+function DarkRP.getPhraseLocalized(name, ply, ...)
+    local lang = ply and ply:IsValid() and ply:GetInfo("gmod_language") or selectedLanguage
+
+    local langTable = rp_languages[lang] or rp_languages.en
+
+    return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
+end
+
 function DarkRP.getMissingPhrases(lang)
     lang = lang or selectedLanguage
     local res = {}
