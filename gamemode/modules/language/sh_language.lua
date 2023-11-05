@@ -29,7 +29,7 @@ function DarkRP.getPhrase(name, ...)
 end
 
 function DarkRP.getPhraseLocalized(ply, name, ...)
-    local lang = IsValid(ply) and ply:GetInfo("gmod_language") or selectedLanguage
+    local lang = ply:GetInfo("gmod_language") or selectedLanguage
     local langTable = rp_languages[lang] or rp_languages.en
 
     return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
