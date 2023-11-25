@@ -39,7 +39,7 @@ local function Whisper(ply, args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return ""
         end
-        DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("whisper") .. ") " .. ply:Nick(), text, GAMEMODE.Config.whisperDistance)
+        DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("whisper") .. ") " .. ((VWAR and VWAR:NickRP(ply)) or ply:Nick()), text, GAMEMODE.Config.whisperDistance)
     end
     return args, DoSay
 end
@@ -51,7 +51,7 @@ local function Yell(ply, args)
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
             return ""
         end
-        DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("yell") .. ") " .. ply:Nick(), text, GAMEMODE.Config.yellDistance)
+        DarkRP.talkToRange(ply, "(" .. DarkRP.getPhrase("yell") .. ") " .. ((VWAR and VWAR:NickRP(ply)) or ply:Nick()), text, GAMEMODE.Config.yellDistance)
     end
     return args, DoSay
 end
@@ -75,7 +75,7 @@ local function Me(ply, args)
                 DarkRP.talkToPerson(target, col, name .. " " .. text)
             end
         else
-            DarkRP.talkToRange(ply, ply:Nick() .. " " .. text, "", GAMEMODE.Config.meDistance)
+            DarkRP.talkToRange(ply, ((VWAR and VWAR:NickRP(ply)) or ply:Nick()) .. " " .. text, "", GAMEMODE.Config.meDistance)
         end
     end
     return args, DoSay

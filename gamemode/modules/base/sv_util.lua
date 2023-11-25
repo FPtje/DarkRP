@@ -53,7 +53,7 @@ util.AddNetworkString("DarkRP_Chat")
 
 function DarkRP.talkToRange(ply, PlayerName, Message, size)
     local ents = player.GetHumans()
-    local col = team.GetColor(ply:Team())
+    local col = (VWAR and VWAR:JobColor(ply)) or team.GetColor(ply:Team())
     local filter = {}
 
     local plyPos = ply:EyePos()
