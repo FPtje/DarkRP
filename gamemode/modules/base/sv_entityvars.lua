@@ -210,11 +210,16 @@ DarkRP.defineChatCommand("nick", RPName)
 --[[---------------------------------------------------------------------------
 Setting the RP name
 ---------------------------------------------------------------------------]]
-function meta:setRPName(name, firstRun)
+function meta:setRPName(name, firstRun, callback)
+    if not callback then
+        callback = function(success) end
+    end
     -- Make sure nobody on this server already has this RP name
     local lowername = string.lower(tostring(name))
     DarkRP.retrieveRPNames(name, function(taken)
-        if not IsValid(self) or string.len(lowername) < 2 and not firstrun then return end
+        if not IsValid(self) or string.len(lowername) < 2 and not firstrun then
+            return callback(false)
+        end
         -- If we found that this name exists for another player
         if taken then
             if firstRun then
@@ -222,8 +227,10 @@ function meta:setRPName(name, firstRun)
                 -- Put a 1 after our steam name
                 DarkRP.storeRPName(self, name .. " 1")
                 DarkRP.notify(self, 0, 12, DarkRP.getPhrase("someone_stole_steam_name"))
+                callback(true)
             else
                 DarkRP.notify(self, 1, 5, DarkRP.getPhrase("unable", "/rpname", DarkRP.getPhrase("already_taken")))
+                callback(false)
                 return ""
             end
         else
@@ -231,6 +238,7 @@ function meta:setRPName(name, firstRun)
                 DarkRP.notifyAll(2, 6, DarkRP.getPhrase("rpname_changed", self:SteamName(), name))
                 DarkRP.storeRPName(self, name)
             end
+            callback(true)
         end
     end)
 end

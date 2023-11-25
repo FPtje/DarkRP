@@ -67,7 +67,8 @@ local function drawChatReceivers()
             continue
         end
 
-        draw.WordBox(2, x, y - (i - 1) * (fontHeight + 4), receivers[i]:Nick(), "DarkRPHUD1", Color(0, 0, 0, 160), color_white)
+        local nick = (VWAR and VWAR:NickRP(receivers[i])) or receivers[i]:Nick()
+        draw.WordBox(2, x, y - (i - 1) * (fontHeight + 4), nick, "DarkRPHUD1", Color(0, 0, 0, 160), color_white)
     end
 end
 

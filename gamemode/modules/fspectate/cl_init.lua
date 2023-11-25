@@ -332,15 +332,29 @@ Draw help on the screen
 local uiForeground, uiBackground = Color(240, 240, 255, 255), Color(20, 20, 20, 120)
 local red = Color(255, 0, 0, 255)
 local function drawHelp()
+    if (input.IsKeyDown(KEY_F1)) then
+        if (not FSpectateWasF1Down) then
+            FSpectateWasF1Down = true
+            FSpectateVoiceToggle = not (FSpectateVoiceToggle or false)
+            net.Start("FSpectateVoiceToggle")
+            net.WriteBool(FSpectateVoiceToggle)
+            net.SendToServer()
+        end
+    else
+        FSpectateWasF1Down = false
+    end
+
     local scrHalfH = math.floor(ScrH() / 2)
     draw.WordBox(2, 10, scrHalfH, "Left click: (Un)select player to spectate", "UiBold", uiBackground, uiForeground)
     draw.WordBox(2, 10, scrHalfH + 20, isRoaming and "Right click: quickly move forwards" or "Right click: toggle thirdperson", "UiBold", uiBackground, uiForeground)
     draw.WordBox(2, 10, scrHalfH + 40, "Jump: Stop spectating", "UiBold", uiBackground, uiForeground)
     draw.WordBox(2, 10, scrHalfH + 60, "Reload: Stop spectating and teleport", "UiBold", uiBackground, uiForeground)
-
-    if FAdmin then
-        draw.WordBox(2, 10, scrHalfH + 80, "Opening FAdmin's menu while spectating a player", "UiBold", uiBackground, uiForeground)
-        draw.WordBox(2, 10, scrHalfH + 100, "\twill open their page!", "UiBold", uiBackground, uiForeground)
+    if (FSpectateVoiceToggle) then
+        draw.WordBox(2, 10, scrHalfH + 80, "F1: Toggle voice listen (ON)", "UiBold", uiBackground, uiForeground)
+        draw.WordBox(2, 10, scrHalfH + 100, "YOU ARE CURRENTLY LAGGING THE SERVER!", "UiBold", uiBackground, uiForeground)
+    else
+        draw.WordBox(2, 10, scrHalfH + 80, "F1: Toggle voice listen (OFF)", "UiBold", uiBackground, uiForeground)
+        draw.WordBox(2, 10, scrHalfH + 100, "Listening to voice in spectate is laggy!", "UiBold", uiBackground, uiForeground)
     end
 
 
@@ -409,6 +423,11 @@ local function startSpectate(um)
 
     isSpectating = true
     keysDown = {}
+
+    FSpectateVoiceToggle = false
+    net.Start("FSpectateVoiceToggle")
+    net.WriteBool(false)
+    net.SendToServer()
 
     hook.Add("CalcView", "FSpectate", specCalcView)
     hook.Add("PlayerBindPress", "FSpectate", specBinds)

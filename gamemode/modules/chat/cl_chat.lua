@@ -17,7 +17,7 @@ local function AddToChat(bits)
     if not IsValid(ply) then return end
 
     if prefixText == "" or not prefixText then
-        prefixText = ply:Nick()
+        prefixText = (VWAR and tostring(VWAR:NickRP(ply))) or ply:Nick()
         prefixText = prefixText ~= "" and prefixText or ply:SteamName()
     end
 

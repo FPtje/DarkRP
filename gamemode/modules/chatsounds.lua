@@ -4,6 +4,7 @@
 -- TODO: Add female sounds & detect gender of model, and use combine sounds for CPs
 
 local sounds = {}
+sounds[ "aah" ] = { "ambient/voices/f_scream1.wav" }
 sounds["ammo"] = {"vo/npc/male01/ammo03.wav", "vo/npc/male01/ammo04.wav", "vo/npc/male01/ammo05.wav"}
 
 sounds["behind you"] = {"vo/npc/male01/behindyou01.wav", "vo/npc/male01/behindyou02.wav"}

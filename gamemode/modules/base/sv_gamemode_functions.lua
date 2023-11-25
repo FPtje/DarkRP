@@ -287,146 +287,73 @@ function GM:KeyPress(ply, code)
     self.Sandbox.KeyPress(self, ply, code)
 end
 
--- IsInRoom function to see if the player is in the same room.
-local roomTrResult = {}
-local roomTr = {output = roomTrResult}
-local function IsInRoom(listenerShootPos, talkerShootPos, talker)
-    roomTr.start = talkerShootPos
-    roomTr.endpos = listenerShootPos
-    -- Listener needs not be ignored as that's the end of the trace
-    roomTr.filter = talker
-    roomTr.collisiongroup = COLLISION_GROUP_WORLD
-    roomTr.mask = MASK_SOLID_BRUSHONLY
-    util.TraceLine(roomTr)
+function DrpIsInRoom(listenerShootPos, talkerShootPos) -- IsInRoom function to see if the player is in the same room.
+    if (listenerShootPos == talkerShootPos) then
+        return true
+    end
 
-    return not roomTrResult.HitWorld
+    filter = player.GetAll()
+
+    local tracedata = {}
+    tracedata.start = talkerShootPos
+    tracedata.endpos = listenerShootPos
+    tracedata.filter = filter
+    tracedata.mask = MASK_NPCWORLDSTATIC
+    local trace = util.TraceLine(tracedata)
+    
+    return not trace.HitWorld
 end
 
 local threed = GM.Config.voice3D
 local vrad = GM.Config.voiceradius
 local dynv = GM.Config.dynamicvoice
 local deadv = GM.Config.deadvoice
-local voiceDistance = GM.Config.voiceDistance * GM.Config.voiceDistance
 local DrpCanHear = {}
 
--- Recreate DrpCanHear after Lua Refresh
--- This prevents an indexing nil error in PlayerCanHearPlayersVoice
-for _, ply in ipairs(player.GetAll()) do
-    DrpCanHear[ply] = {}
+-- proxy function to take load from PlayerCanHearPlayersVoice, which is called a quadratic amount of times per tick,
+-- causing a lagfest when there are many players
+local function calcPlyCanHearPlayerVoice(listener)
+    listener.isAlive = listener:Alive()
+    
+    if not IsValid(listener) then return end
+    DrpCanHear[listener] = DrpCanHear[listener] or {}
+    local shootPos = listener:GetShootPos()
+    for _, talker in ipairs(player.GetAll()) do
+        if (not talker.isAlive) then
+            DrpCanHear[listener][talker] = false
+            continue
+        end
+        
+        local talkerShootPos = talker:GetShootPos()
+        DrpCanHear[listener][talker] = not vrad or -- Voiceradius is off, everyone can hear everyone
+            (shootPos:DistToSqr(talkerShootPos) < 302500 and -- voiceradius is on and the two are within hearing distance
+                (not dynv or DrpIsInRoom(shootPos, talkerShootPos))) -- Dynamic voice is on and players are in the same room
+    end
 end
 
-local gridSize = GM.Config.voiceDistance -- Grid cell size is equal to the size of the radius of player talking
-local floor = math.floor -- Caching floor as we will need to use it a lot
+local function InitPlayerVoice(ply)
+    DrpCanHear[ply] = {}
+    timer.Create(ply:UserID() .. "DarkRPCanHearPlayersVoice", 1, 0, fn.Curry(calcPlyCanHearPlayerVoice, 2)(ply))
+end
 
--- Grid based position check
-local grid
--- Translate player to grid coordinates. The first table maps players to x
--- coordinates, the second table maps players to y coordinates.
-local plyToGrid = {
-    {},
-    {}
-}
+for k, v in pairs(player.GetAll()) do
+    InitPlayerVoice(v)
+end
 
--- Set DarkRP.voiceCheckTimeDelay before DarkRP is loaded to set the time
--- between player voice radius checks.
-DarkRP.voiceCheckTimeDelay = DarkRP.voiceCheckTimeDelay or 0.3
-timer.Create("DarkRPCanHearPlayersVoice", DarkRP.voiceCheckTimeDelay, 0, function()
-    -- Voiceradius is off, everyone can hear everyone
-    if not vrad then
-        return
-    end
-
-    local players = player.GetHumans()
-
-    -- Clear old values
-    plyToGrid[1] = {}
-    plyToGrid[2] = {}
-    grid = {}
-
-    local plyPos = {}
-    local eyePos = {}
-
-    -- Get the grid position of every player O(N)
-    for _, ply in ipairs(players) do
-        local pos = ply:GetPos()
-        plyPos[ply] = pos
-        eyePos[ply] = ply:EyePos()
-        local x = floor(pos.x / gridSize)
-        local y = floor(pos.y / gridSize)
-
-        local row = grid[x] or {}
-        local cell = row[y] or {}
-
-        table.insert(cell, ply)
-        row[y] = cell
-        grid[x] = row
-
-        plyToGrid[1][ply] = x
-        plyToGrid[2][ply] = y
-
-        DrpCanHear[ply] = {} -- Initialize output variable
-    end
-
-    -- Check all neighbouring cells for every player.
-    -- We are only checking in 1 direction to avoid duplicate check of cells
-    for _, ply1 in ipairs(players) do
-        local gridX = plyToGrid[1][ply1]
-        local gridY = plyToGrid[2][ply1]
-        local ply1Pos = plyPos[ply1]
-        local ply1EyePos = eyePos[ply1]
-
-        for i = 0, 3 do
-            local vOffset = 1 - ((i >= 3) and 1 or 0)
-            local hOffset = -(i % 3-1)
-            local x = gridX + hOffset
-            local y = gridY + vOffset
-
-            local row = grid[x]
-            if not row then continue end
-
-            local cell = row[y]
-            if not cell then continue end
-
-            for _, ply2 in ipairs(cell) do
-                local canTalk =
-                    ply1Pos:DistToSqr(plyPos[ply2]) < voiceDistance and -- voiceradius is on and the two are within hearing distance
-                        (not dynv or IsInRoom(ply1EyePos, eyePos[ply2], ply2)) -- Dynamic voice is on and players are in the same room
-
-                DrpCanHear[ply1][ply2] = canTalk and (deadv or ply2:Alive())
-                DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive()) -- Take advantage of the symmetry
-            end
-        end
-    end
-
-    -- Doing a pass-through inside every cell to compute the interactions inside of the cells.
-    -- Each grid check is O(N(N+1)/2) where N is the number of players inside the cell.
-    for _, row in pairs(grid) do
-        for _, cell in pairs(row) do
-            local count = #cell
-            for i = 1, count do
-                local ply1 = cell[i]
-                for j = i + 1, count do
-                    local ply2 = cell[j]
-                    local canTalk =
-                        plyPos[ply1]:DistToSqr(plyPos[ply2]) < voiceDistance and -- voiceradius is on and the two are within hearing distance
-                            (not dynv or IsInRoom(eyePos[ply1], eyePos[ply2], ply2)) -- Dynamic voice is on and players are in the same room
-
-                    DrpCanHear[ply1][ply2] = canTalk and (deadv or ply2:Alive())
-                    DrpCanHear[ply2][ply1] = canTalk and (deadv or ply1:Alive()) -- Take advantage of the symmetry
-                end
-            end
-        end
-    end
+hook.Add("PlayerInitialSpawn", "DarkRPCanHearVoice", function(ply)
+    InitPlayerVoice(ply)
 end)
-
-hook.Add("PlayerDisconnect", "DarkRPCanHear", function(ply)
-    DrpCanHear[ply] = nil -- Clear to avoid memory leaks
+hook.Add("PlayerDisconnected", "DarkRPCanHearVoice", function(ply)
+    if not DrpCanHear[ply] then return end
+    for _, v in ipairs(player.GetAll()) do
+        if not DrpCanHear[v] then continue end
+        DrpCanHear[v][ply] = nil
+    end
+    timer.Remove(ply:UserID() .. "DarkRPCanHearPlayersVoice")
 end)
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-    if not deadv and not talker:Alive() then return false end
-
-    return not vrad or DrpCanHear[listener][talker] == true, threed
+    return DrpCanHear[listener][talker] == true, true
 end
 
 function GM:CanTool(ply, trace, mode)
@@ -707,8 +634,6 @@ end
 
 function GM:PlayerInitialSpawn(ply)
     self.Sandbox.PlayerInitialSpawn(self, ply)
-    -- Initialize DrpCanHear for player (used for voice radius check)
-    DrpCanHear[ply] = {}
 
     local sid = ply:SteamID()
     DarkRP.log(ply:Nick() .. " (" .. sid .. ") has joined the game", Color(0, 130, 255))

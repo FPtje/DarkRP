@@ -1,3 +1,6 @@
+util.AddNetworkString("DarkRP_DoVote")
+util.AddNetworkString("DarkRP_KillVoteVGUI")
+
 local Vote = {}
 local Votes = {}
 
@@ -39,9 +42,9 @@ function Vote:handleEnd()
     local win = hook.Call("getVoteResults", nil, self, self.yea, self.nay)
     win = win or self.yea > self.nay and 1 or self.nay > self.yea and -1 or 0
 
-    umsg.Start("KillVoteVGUI", self:getFilter())
-        umsg.String(self.id)
-    umsg.End()
+    net.Start("DarkRP_KillVoteVGUI")
+    net.WriteUInt(self.id, 32)
+    net.Send(self:getFilter())
 
     Votes[self.id] = nil
     timer.Remove(self.id .. "DarkRPVote")
@@ -119,11 +122,11 @@ function DarkRP.createVote(question, voteType, target, time, callback, excludeVo
         DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("vote_started"))
     end
 
-    umsg.Start("DoVote", newvote:getFilter())
-        umsg.String(question)
-        umsg.Short(newvote.id)
-        umsg.Float(time)
-    umsg.End()
+    net.Start("DarkRP_DoVote")
+    net.WriteString(question)
+    net.WriteUInt(newvote.id, 32)
+    net.WriteUInt(time, 32)
+    net.Send(newvote:getFilter())
 
     timer.Create(newvote.id .. "DarkRPVote", time, 1, function() newvote:handleEnd() end)
 
@@ -135,9 +138,9 @@ function DarkRP.destroyVotesWithEnt(ent)
         if v.target ~= ent then continue end
 
         timer.Remove(v.id .. "DarkRPVote")
-        umsg.Start("KillVoteVGUI", v:getFilter())
-            umsg.Short(v.id)
-        umsg.End()
+        net.Start("DarkRP_KillVoteVGUI")
+        net.WriteUInt(v.id, 32)
+        net.Send(v:getFilter())
 
         v:fail()
 
@@ -151,9 +154,9 @@ function DarkRP.destroyLastVote()
     if not lastVote then return false end
 
     timer.Remove(lastVote.id .. "DarkRPVote")
-    umsg.Start("KillVoteVGUI", lastVote:getFilter())
-        umsg.Short(lastVote.id)
-    umsg.End()
+    net.Start("DarkRP_KillVoteVGUI")
+    net.WriteUInt(lastVote.id, 32)
+    net.Send(lastVote:getFilter())
 
     lastVote:fail()
 

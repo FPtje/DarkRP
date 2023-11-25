@@ -15,11 +15,17 @@ function meta:addMoney(amount)
 end
 
 function DarkRP.payPlayer(ply1, ply2, amount)
+    if not ply1:canAfford(amount) then
+        return  
+    end
+
+    if not IsValid(ply1) or not IsValid(ply2) then return end
     ply1:addMoney(-amount)
     ply2:addMoney(amount)
 end
 
 function meta:payDay()
+    if not IsValid(self) then return end
     if not self:isArrested() then
         DarkRP.retrieveSalary(self, function(amount)
             amount = math.floor(amount or GAMEMODE.Config.normalsalary)

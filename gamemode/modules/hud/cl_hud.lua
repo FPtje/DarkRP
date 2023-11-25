@@ -386,15 +386,21 @@ end
 Display notifications
 ---------------------------------------------------------------------------]]
 local notificationSound = GM.Config.notificationSound
-local function DisplayNotify(msg)
-    local txt = msg:ReadString()
-    GAMEMODE:AddNotify(txt, msg:ReadShort(), msg:ReadLong())
+local function DisplayNotify(msg, msgtype, len)
+    GAMEMODE:AddNotify(msg, msgtype, len)
     surface.PlaySound(notificationSound)
 
     -- Log to client console
-    MsgC(Color(255, 20, 20, 255), "[DarkRP] ", Color(200, 200, 200, 255), txt, "\n")
+    MsgC(Color(255, 20, 20, 255), "[DarkRP] ", Color(200, 200, 200, 255), msg, "\n")
 end
-usermessage.Hook("_Notify", DisplayNotify)
+
+net.Receive("DarkRP_Notify", function()
+    local msg = net.ReadString()
+    local msgtype = net.ReadUInt(8)
+    local len = net.ReadUInt(32)
+
+    DisplayNotify(msg, msgtype, len)
+end)
 
 --[[---------------------------------------------------------------------------
 Remove some elements from the HUD in favour of the DarkRP HUD

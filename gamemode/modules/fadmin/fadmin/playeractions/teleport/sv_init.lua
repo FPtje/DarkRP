@@ -44,6 +44,10 @@ local function Teleport(ply, cmd, args)
 
     for _, target in pairs(targets) do
         if IsValid(target) and target:Alive() then
+            if ply ~= target and not FAdmin.Access.PlayerHasPrivilege(ply, "Teleport", target) then
+                FAdmin.Messages.SendMessage(ply, 5, "No access to teleport " .. target:Nick())
+                continue
+            end
             target:ExitVehicle()
 
             local tracedata = {}
@@ -143,6 +147,12 @@ local function Goto(ply, cmd, args)
 
     return true, target
 end
+
+hook.Add("FAdmin_CanTarget", "NoTpHigherUps", function(ply, priv, target)
+    if priv == "Teleport" and IsValid(ply) and IsValid(target) and ply:GetRankWeight() < target:GetRankWeight() then
+        return false
+    end
+end)
 
 FAdmin.StartHooks["zz_Teleport"] = function()
     FAdmin.Access.AddPrivilege("Teleport", 2)

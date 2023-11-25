@@ -1,12 +1,5 @@
 AddCSLuaFile()
 
-if CLIENT then
-    SWEP.Slot = 1
-    SWEP.SlotPos = 9
-    SWEP.DrawAmmo = false
-    SWEP.DrawCrosshair = false
-end
-
 SWEP.Author = "DarkRP Developers"
 SWEP.Instructions = "Left click to weapon check\nRight click to confiscate weapons\nReload to give back the weapons"
 SWEP.Contact = ""
@@ -15,9 +8,9 @@ SWEP.IsDarkRPWeaponChecker = true
 
 SWEP.ViewModelFOV = 62
 SWEP.ViewModelFlip = false
-SWEP.AnimPrefix = "rpg"
-
-SWEP.PrintName = "Weapon Checker"
+SWEP.AnimPrefix  = "rpg"
+SWEP.ViewModel = ""
+SWEP.WorldModel = "models/props_c17/tools_wrench01a.mdl"
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
 SWEP.Category = "DarkRP (Utility)"
@@ -34,6 +27,44 @@ SWEP.Secondary.Ammo = ""
 SWEP.MinCheckTime = 5
 SWEP.MaxCheckTime = 10
 
+if CLIENT then
+    SWEP.PrintName = "Weapon Checker"
+    SWEP.Slot = 1
+    SWEP.SlotPos = 9
+    SWEP.DrawAmmo = false
+    SWEP.DrawCrosshair = false
+    local WorldModel = ClientsideModel(SWEP.WorldModel)
+
+	WorldModel:SetSkin(1)
+	WorldModel:SetNoDraw(true)
+
+	function SWEP:DrawWorldModel()
+		local _Owner = self:GetOwner()
+
+		if (IsValid(_Owner)) then
+			local offsetVec = Vector(4, -1.7, -3.4)
+			local offsetAng = Angle(180, 90, 90)
+			
+			local boneid = _Owner:LookupBone("ValveBiped.Bip01_R_Hand")
+			if !boneid then return end
+
+			local matrix = _Owner:GetBoneMatrix(boneid)
+			if !matrix then return end
+
+			local newPos, newAng = LocalToWorld(offsetVec, offsetAng, matrix:GetTranslation(), matrix:GetAngles())
+
+			WorldModel:SetPos(newPos)
+			WorldModel:SetAngles(newAng)
+
+            WorldModel:SetupBones()
+		else
+			WorldModel:SetPos(self:GetPos())
+			WorldModel:SetAngles(self:GetAngles())
+		end
+
+		WorldModel:DrawModel()
+	end
+end
 DarkRP.hookStub{
     name = "playerWeaponsChecked",
     description = "Called when a player with a weapon checker has checked another player's weapons. Note: Only called when the player looks at the weapons without confiscating. Please see playerWeaponsConfiscated for when weapons are actually confiscated.",
@@ -115,23 +146,17 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-    self:SetHoldType("normal")
+    self:SetHoldType("slam")
 end
 
 function SWEP:Deploy()
     return true
 end
 
-function SWEP:DrawWorldModel()
-end
-
-function SWEP:PreDrawViewModel(vm)
-    return true
-end
-
 function SWEP:GetStrippableWeapons(ent, callback)
     CAMI.PlayerHasAccess(ent, "DarkRP_GetAdminWeapons", function(access)
         for _, v in ipairs(ent:GetWeapons()) do
+            if not v:IsValid() then continue end
             local class = v:GetClass()
 
             if GAMEMODE.Config.weaponCheckerHideDefault and (table.HasValue(GAMEMODE.Config.DefaultWeapons, class) or

@@ -96,6 +96,12 @@ end
 function plyMeta:arrest(time, arrester)
     time = time or GAMEMODE.Config.jailtimer or 120
 
+    local newArrestTime = hook.Run("PlayerArrestTime", self, arrester, time)
+
+    if (newArrestTime) then
+        time = newArrestTime
+    end
+
     hook.Call("playerArrested", DarkRP.hooks, self, time, arrester)
     if self:InVehicle() then self:ExitVehicle() end
     self:setDarkRPVar("Arrested", true)

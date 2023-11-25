@@ -11,7 +11,9 @@ hook.Add("playerBoughtCustomVehicle", "PassengerModCompatibility", function(ply,
 local function onLocked(ent)
     -- Passenger mod
     for _, v in pairs(ent.Seats or {}) do
-        v:Fire("lock", "", 0)
+        if (IsValid(v) and v.Fire) then
+            v:Fire("lock", "", 0)
+        end
     end
 
     -- VUMod compatibility

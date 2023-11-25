@@ -71,6 +71,6 @@ FAdmin.StartHooks["VoiceMute"] = function()
     FAdmin.Access.AddPrivilege("Voicemute", 2)
 end
 
-hook.Add("PlayerCanHearPlayersVoice", "FAdmin_Voicemute", function(Listener, Talker)
+--[[hook.Add("PlayerCanHearPlayersVoice", "FAdmin_Voicemute", function(Listener, Talker)
     if Talker:FAdmin_GetGlobal("FAdmin_voicemuted") then return false end
-end)
+end)]]

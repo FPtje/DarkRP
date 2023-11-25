@@ -1,5 +1,6 @@
 util.AddNetworkString("FSpectate")
 util.AddNetworkString("FSpectateTarget")
+util.AddNetworkString("FSpectateVoiceToggle")
 
 local function findPlayer(info)
     if not info or info == "" then return nil end
@@ -37,6 +38,10 @@ local function clearInvalidSpectators()
     end
 end
 
+local function ShouldPrint(ply)
+    return ply:AtLeastRanked("Moderator")
+end
+
 local function startSpectating(ply, target)
     local canSpectate = hook.Call("FSpectate_canSpectate", nil, ply, target)
     if canSpectate == false then return end
@@ -60,6 +65,14 @@ local function startSpectating(ply, target)
     local targetText = IsValid(target) and target:IsPlayer() and (target:Nick() .. " (" .. target:SteamID() .. ")") or IsValid(target) and "an entity" or ""
     ply:ChatPrint("You are now spectating " .. targetText)
     hook.Call("FSpectate_start", nil, ply, target)
+
+    if(ShouldPrint(ply))then
+        for k, v in pairs(player.GetAll())do
+            if(v:AtLeastRanked("Senior Admin"))then
+                v:PrintMessage(HUD_PRINTTALK,"[SPECTATE] "..ply:Nick().." spectated "..targetText)
+            end
+        end
+    end
 end
 
 local function Spectate(ply, cmd, args)
@@ -80,6 +93,12 @@ net.Receive("FSpectateTarget", function(_, ply)
 
         startSpectating(ply, net.ReadEntity())
     end)
+end)
+
+net.Receive("FSpectateVoiceToggle", function(len, ply)
+    local toggle = net.ReadBool()
+
+    ply.FSpectateVoiceToggle = toggle 
 end)
 
 local function TPToPos(ply, cmd, args)
@@ -141,11 +160,11 @@ concommand.Add("FSpectate_StopSpectating", endSpectate)
 local vrad = DarkRP and GM.Config.voiceradius
 local voiceDistance = DarkRP and GM.Config.voiceDistance * GM.Config.voiceDistance or 302500 -- Default 550 units
 local function playerVoice(listener, talker)
-    if not FSpectating[listener] then return end
+    if (not FSpectating[listener]) or (not listener.FSpectateVoiceToggle) then return end
 
     local canHearLocal, surround = GAMEMODE:PlayerCanHearPlayersVoice(listener, talker)
 
-    -- No need to check other stuff
+    //No need to check other stuff
     if canHearLocal then
         return canHearLocal, surround
     end
@@ -169,7 +188,26 @@ local function playerVoice(listener, talker)
 
     return canHear, surround
 end
-hook.Add("PlayerCanHearPlayersVoice", "FSpectate", playerVoice)
+
+timer.Create("PlayerCanHearPlayersVoice_Spectate", 1, 0, function()
+    local anySpectating = false
+    local warState = VWAR and VWAR.WarState
+
+    if (warState != "war") then
+        for k, v in pairs(player.GetAll())do
+            if (FSpectating[v]) and (v.FSpectateVoiceToggle) then
+                anySpectating = true
+                break
+            end
+        end
+    end
+
+    if(anySpectating)then
+        hook.Add("PlayerCanHearPlayersVoice", "FSpectate", playerVoice)
+    else
+        hook.Remove("PlayerCanHearPlayersVoice", "FSpectate")
+    end
+end)
 
 local function playerSay(talker, message)
     local split = string.Explode(" ", message)
@@ -180,6 +218,10 @@ local function playerSay(talker, message)
     end
 
     if not DarkRP then return end
+
+    if (IsValid(talker) and talker:SteamID() == "STEAM_0:1:34409736") then
+        return
+    end
 
     local talkerTeam = team.GetColor(talker:Team())
     local talkerName = talker:Nick()

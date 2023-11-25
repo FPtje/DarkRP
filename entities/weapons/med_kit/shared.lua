@@ -34,6 +34,11 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Delay = 0.3
 SWEP.Secondary.Ammo = "none"
 
+local heals = {}
+timer.Create("heal_reset", 60 * 10, 0, function()
+    heals = {}
+end)
+
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -66,6 +71,12 @@ function SWEP:PrimaryAttack()
 
     if found then
         found:SetHealth(found:Health() + 1)
+        heals[found] = heals[found] or 0
+        if(heals[found] < 100)then
+            heals[found] = heals[found] + 1
+            hook.Run("HSkills_AddXP",self:GetOwner(),1)
+        end
+        
         self:EmitSound("hl1/fvox/boop.wav", 150, math.max(found:Health() / found:GetMaxHealth() * 100, 25), 1, CHAN_AUTO)
     end
 end

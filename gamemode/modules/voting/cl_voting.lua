@@ -1,7 +1,7 @@
 local QuestionVGUI = {}
 local PanelNum = 0
 local VoteVGUI = {}
-local function MsgDoVote(msg)
+local function MsgDoVote(question, voteid, timeleft)
     local _, chatY = chat.GetChatBoxPos()
 
     local question = msg:ReadString()
@@ -95,7 +95,13 @@ local function MsgDoVote(msg)
     VoteVGUI[voteid .. "vote"] = panel
     panel:SetSkin(GAMEMODE.Config.DarkRPSkin)
 end
-usermessage.Hook("DoVote", MsgDoVote)
+net.Receive("DarkRP_DoVote", function()
+    local question = net.ReadString()
+    local id = net.ReadUInt(32)
+    local time = net.ReadUInt(32)
+
+    MsgDoVote(question, id, time)
+end)
 
 local function KillVoteVGUI(msg)
     local id = msg:ReadShort()
@@ -104,7 +110,9 @@ local function KillVoteVGUI(msg)
         VoteVGUI[id .. "vote"]:Close()
     end
 end
-usermessage.Hook("KillVoteVGUI", KillVoteVGUI)
+net.Receive("DarkRP_KillVoteVGUI", function()
+    KillVoteVGUI(net.ReadUInt(32))
+end)
 
 local function MsgDoQuestion(msg)
     if not IsValid(LocalPlayer()) then return end
