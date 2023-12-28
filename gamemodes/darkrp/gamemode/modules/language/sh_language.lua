@@ -1,6 +1,10 @@
 local rp_languages = {}
 local selectedLanguage = GetConVar("gmod_language"):GetString() -- Switch language by setting gmod_language to another language
 
+cvars.AddChangeCallback("gmod_language", function(cv, old, new)
+    selectedLanguage = new
+end)
+
 function DarkRP.addLanguage(name, tbl)
     local old = rp_languages[name] or {}
     rp_languages[name] = tbl
@@ -20,6 +24,13 @@ end
 
 function DarkRP.getPhrase(name, ...)
     local langTable = rp_languages[selectedLanguage] or rp_languages.en
+
+    return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
+end
+
+function DarkRP.getPhraseLocalized(ply, name, ...)
+    local lang = ply:GetInfo("gmod_language") or selectedLanguage
+    local langTable = rp_languages[lang] or rp_languages.en
 
     return (langTable[name] or rp_languages.en[name]) and string.format(langTable[name] or rp_languages.en[name], ...) or nil
 end

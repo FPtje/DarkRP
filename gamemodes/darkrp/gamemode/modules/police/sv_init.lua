@@ -115,6 +115,42 @@ function plyMeta:unArrest(unarrester, teleportOverride)
     hook.Call("playerUnArrested", DarkRP.hooks, self, unarrester, teleportOverride)
 end
 
+function DarkRP.iterateArrestedPlayers()
+    local index = nil
+    local function iterator()
+        local found_player = nil
+        index = next(arrestedPlayers, index)
+
+        if index == nil then return end
+
+        found_player = player.GetBySteamID(index)
+        -- player.GetBySteamID returns false when the player is not in the
+        -- server. In that case, skip the player.
+        if not found_player then return iterator() end
+
+        return found_player
+    end
+    return iterator
+end
+
+function DarkRP.arrestedPlayers()
+    local result = {}
+    for ply in DarkRP.iterateArrestedPlayers() do
+        table.insert(result, ply)
+    end
+
+    return result
+end
+
+
+function DarkRP.arrestedPlayerCount()
+    local count = 0
+
+    for _ in DarkRP.iterateArrestedPlayers() do count = count + 1 end
+
+    return count
+end
+
 --[[---------------------------------------------------------------------------
 Chat commands
 ---------------------------------------------------------------------------]]
@@ -410,14 +446,15 @@ function DarkRP.hooks:canGiveLicense(ply, target)
 
     local reason = DarkRP.getPhrase("incorrect_job", "/givelicense")
 
+    local players = player.GetAll()
     -- Chiefs can if there is no mayor
-    local mayorExists = #fn.Filter(plyMeta.isMayor, player.GetAll()) > 0
+    local mayorExists = #fn.Filter(plyMeta.isMayor, players) > 0
     if mayorExists then return false, reason end
 
     if ply:isChief() then return true end
 
     -- CPs can if there are no chiefs nor mayors
-    local chiefExists = #fn.Filter(plyMeta.isChief, player.GetAll()) > 0
+    local chiefExists = #fn.Filter(plyMeta.isChief, players) > 0
     if chiefExists then return false, reason end
 
     if ply:isCP() then return true end

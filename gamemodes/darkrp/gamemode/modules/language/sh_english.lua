@@ -229,10 +229,10 @@ local my_language = {
     keypad_off = "OFF",
     seconds = "seconds",
 
-    persons_weapons = "%s's illegal weapons:",
+    persons_weapons = "%s's weapons:",
     returned_persons_weapons = "Returned %s's confiscated weapons.",
     no_weapons_confiscated = "%s had no weapons confiscated!",
-    no_illegal_weapons = "%s had no illegal weapons.",
+    no_illegal_weapons = "%s had no weapons.",
     confiscated_these_weapons = "Confiscated these weapons:",
     checking_weapons = "Confiscating weapons",
 

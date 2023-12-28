@@ -75,6 +75,39 @@ DarkRP.getPhrase = DarkRP.stub{
     metatable = DarkRP
 }
 
+DarkRP.getPhraseLocalized = DarkRP.stub{
+    name = "getPhraseLocalized",
+    description = "Translate a phrase using the language setting of a specific player.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player to use the language setting of.",
+            type = "Player",
+            optional = false
+        },
+        {
+            name = "phraseName",
+            description = "The name of the phrase.",
+            type = "string",
+            optional = false
+        },
+        {
+            name = "Phrase parameters",
+            description = "Some phrases need extra information, like in \"PLAYERNAME just won the lottery!\". Not filling in the phrase parameters will cause errors.",
+            type = "vararg",
+            optional = false
+        }
+    },
+    returns = {
+        {
+            name = "phrase",
+            description = "The formatted phrase.",
+            type = "string"
+        }
+    },
+    metatable = DarkRP
+}
+
 DarkRP.getMissingPhrases = DarkRP.stub{
     name = "getMissingPhrases",
     description = "Get all the phrases a language is missing.",

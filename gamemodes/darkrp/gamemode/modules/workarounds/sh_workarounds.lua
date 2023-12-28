@@ -86,25 +86,6 @@ timer.Simple(3, function()
 ]])
 end)
 
-if game.SinglePlayer() or GetConVar("sv_lan"):GetBool() and
-   not DarkRP.disabledDefaults["workarounds"]["nil SteamID64 and AccountID local server fix"] then
-    local plyMeta = FindMetaTable("Player")
-
-    if SERVER then
-        local sid64 = plyMeta.SteamID64
-
-        function plyMeta:SteamID64(...)
-            return sid64(self, ...) or "0"
-        end
-    end
-
-    local aid = plyMeta.AccountID
-
-    function plyMeta:AccountID(...)
-        return aid(self, ...) or 0
-    end
-end
-
 if SERVER and not DarkRP.disabledDefaults["workarounds"]["Error on edict limit"] then
     -- https://github.com/FPtje/DarkRP/issues/2640
     local entsCreate = ents.Create
