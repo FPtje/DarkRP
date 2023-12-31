@@ -389,7 +389,7 @@ function DarkRP.createPlayerData(ply, name, wallet, salary)
 end
 
 function DarkRP.storeMoney(ply, amount)
-    if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then return end
+    assert(isnumber(amount) and amount > 0 and amount < 1 / 0, "Invalid amount of money, something has gone wrong")
 
     -- Also keep deprecated UniqueID data at least somewhat up to date
     MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID() .. [[ OR uid = ]] .. ply:SteamID64())

@@ -246,7 +246,7 @@ DarkRP.defineChatCommand("check", CreateCheque, 0.3) -- for those of you who can
 local function ccSetMoney(ply, args)
     local amount = DarkRP.toInt(args[2])
 
-    if not amount then
+    if not amount or amount < 0 or amount >= 1 / 0 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("invalid_x", DarkRP.getPhrase("arguments"), ""))
         return
     end
