@@ -389,7 +389,17 @@ function DarkRP.createPlayerData(ply, name, wallet, salary)
 end
 
 function DarkRP.storeMoney(ply, amount)
-    if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then ErrorNoHaltWithStack("Trying to save invalid amount of money") return end
+    if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then
+        DarkRP.errorNoHalt("Some addon attempted to store a invalid money amount " .. tostring(amount) .. " for Player " .. ply:Nick() .. " (" .. ply:SteamID() .. ")", 1, {
+            "This money amount will not be stored in the database, but it may be set in the game.",
+            "The database simply stores the last valid, non-negative amount of money.",
+            "Please try to find the very first time this error happened for this player. Then look at the files mentioned in this error.",
+            "That will tell you which addon is causing this.",
+            "IMPORTANT: This is NOT a DarkRP bug!",
+            "Note: The player can simply rejoin to fix their negative money, until whatever causes this happens again."
+        })
+        return
+    end
 
     -- Also keep deprecated UniqueID data at least somewhat up to date
     MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. ply:UniqueID() .. [[ OR uid = ]] .. ply:SteamID64())
