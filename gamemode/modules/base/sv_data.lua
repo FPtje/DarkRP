@@ -418,6 +418,16 @@ function DarkRP.storeOfflineMoney(sid64, amount)
         })
     end
 
+    if not isnumber(amount) or amount < 0 or amount >= 1 / 0 then
+        DarkRP.errorNoHalt("Some addon attempted to store a invalid money amount " .. tostring(amount) .. " for an offline player with steamID64 " .. sid64, 1, {
+            "This money amount will not be stored in the database.",
+            "Please try to find the very first time this error happened for this player. Then look at the files mentioned in this error.",
+            "That will tell you which addon is causing this.",
+            "IMPORTANT: This is NOT a DarkRP bug!"
+        })
+        return
+    end
+
     -- Also store on deprecated UniqueID
     local uniqueid = util.CRC("gm_" .. string.upper(util.SteamIDFrom64(sid64)) .. "_gm")
     MySQLite.query([[UPDATE darkrp_player SET wallet = ]] .. amount .. [[ WHERE uid = ]] .. uniqueid .. [[ OR uid = ]] .. sid64)
