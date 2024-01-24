@@ -48,7 +48,6 @@ hook.Add("Initialize", "FSpectate", function()
                 canSpectate = b
             end)
         end
-        calcAccess()
 
         -- Spectate option in player menu
         FAdmin.ScoreBoard.Player:AddActionButton("Spectate", "fadmin/icons/spectate", Color(0, 200, 0, 255), function(ply) calcAccess() return canSpectate and ply ~= LocalPlayer() end, function(ply)
