@@ -122,11 +122,10 @@ local moduleLoaded
 local function loadMySQLModule()
     if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 
-    local moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
+    local moo, tmsql = util.IsBinaryModuleInstalled("mysqloo"), util.IsBinaryModuleInstalled("tmysql4")
 
     if not moo and not tmsql then
         error("Could not find a suitable MySQL module. Please either:\n  - Install tmysql. It can be obtained from https://github.com/SuperiorServers/gm_tmysql4\n  - Install MySQLOO. It can be obtained from https://github.com/FredyH/MySQLOO\nDue to this error, MySQL is disabled. This means that SQLite is used instead to store data.")
-
     end
     moduleLoaded = true
 
