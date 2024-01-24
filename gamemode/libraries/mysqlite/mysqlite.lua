@@ -123,15 +123,18 @@ local function loadMySQLModule()
     if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 
     local moo, tmsql = util.IsBinaryModuleInstalled("mysqloo"), util.IsBinaryModuleInstalled("tmysql4")
-
+    
     if not moo and not tmsql then
-        error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.")
+        error("Could not find a suitable MySQL module. Please either:\n  - Install tmysql. It can be obtained from https://github.com/SuperiorServers/gm_tmysql4\n  - Install MySQLOO. It can be obtained from https://github.com/FredyH/MySQLOO\nDue to this error, MySQL is disabled. This means that SQLite is used instead to store data.")
+
     end
     moduleLoaded = true
 
-    require(moo and tmsql and MySQLite_config.Preferred_module or
-            moo and "mysqloo"                                  or
-            "tmysql4")
+    require(
+        moo and tmsql and MySQLite_config.Preferred_module or
+        moo and "mysqloo" or
+        tmsql and "tmysql4"
+    )
 
     multistatements = CLIENT_MULTI_STATEMENTS
 
@@ -139,6 +142,10 @@ local function loadMySQLModule()
     TMySQL = tmysql
 
     if MySQLite_config.Preferred_module == "tmysql4" then
+        if not tmsql then
+            ErrorNoHalt("The preferred module for MySQL is selected to be tmysql4. However, tmysql4 does not appear to be installed. Please either:\n  - Install tmysql. It can be obtained from https://github.com/SuperiorServers/gm_tmysql4\n  - Select MySQLOO as the preferred module for MySQL. MySQLOO appears to be installed.")
+            return
+        end
 
         if not tmysql.Version or tmysql.Version < 4.1 then
             MsgC(Color(255, 0, 0), "Using older tmysql version, please consider updating!\n")
@@ -146,8 +153,12 @@ local function loadMySQLModule()
         end
 
         -- Turns tmysql.Connect into tmysql.Initialize if they're using an older version.
-        TMySQL.Connect = (tmysql.Version and tmysql.Version >= 4.1 and TMySQL.Connect or TMySQL.initialize)
-        TMySQL.SetOption = (tmysql.Version and tmysql.Version >= 4.1 and TMySQL.SetOption or TMySQL.Option)
+        TMySQL.Connect = tmysql.Version and tmysql.Version >= 4.1 and TMySQL.Connect or TMySQL.initialize
+        TMySQL.SetOption = tmysql.Version and tmysql.Version >= 4.1 and TMySQL.SetOption or TMySQL.Option
+    else
+        if not moo then
+            ErrorNoHalt("The preferred module for MySQL is selected to be MySQLOO. However, MySQLOO does not appear to be installed. Please either:\n  - Install MySQLOO. It can be obtained from https://github.com/FredyH/MySQLOO\n  - Select tmysql4 as the preferred module for MySQL. tmysql4 appears to be installed.")
+        end
     end
 end
 loadMySQLModule()
