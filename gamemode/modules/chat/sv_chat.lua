@@ -124,182 +124,36 @@ function GM:canChatCommand(ply, cmd, ...)
     return false
 end
 
-GM.OldChatHooks = GM.OldChatHooks or {}
+GM.OldHookCall = GM.OldHookCall or hook.Call
 
-local function callHooks(hooks, canReturn, ...)
-    local text
+local GM = GM
+function hook.Call(name, gm, ply, text, teamonly, ...)
+    if name == "PlayerSay" then
+        local dead = not ply:Alive()
 
-    for id, f in pairs(hooks) do
-        local isString
+        local text2 = text
+        local callback
+        local DoSayFunc
 
-        -- ULib hook tables are {fn = func, isstring = istring(id)}
-        if istable(f) then
-            isString = f.isstring
-            f = f.fn
-        else
-            isString = isstring(id)
+        text2 = GM.OldHookCall(name, gm, ply, text, teamonly, dead) or text2
+
+        text2, callback, DoSayFunc = RP_PlayerChat(ply, text2, teamonly)
+        if tostring(text2) == " " then text2, callback = callback, text2 end
+        if not GM.Config.deadtalk and dead then return "" end
+
+        if game.IsDedicated() then
+            ServerLog("\"" .. ply:Nick() .. "<" .. ply:UserID() .. ">" .. "<" .. ply:SteamID() .. ">" .. "<" .. team.GetName(ply:Team()) .. ">\" say \"" .. text .. "\"\n" .. "\n")
         end
 
-        if not isfunction(f) then continue end
+        if DoSayFunc then DoSayFunc(text2) return "" end
+        RP_ActualDoSay(ply, text2, callback)
 
-        if not isString then
-            -- Non valid hooks are removed, as entities don't become valid after being non-valid
-            if IsValid(id) then
-                text = f(id, ...)
-            else
-                hooks[id] = nil
-            end
-        else
-            text = f(...)
-        end
-
-        if text ~= nil and canReturn then return text end
+        hook.Call("PostPlayerSay", nil, ply, text2, teamonly, dead)
+        return ""
     end
+
+    return GM.OldHookCall(name, gm, ply, text, teamonly, ...)
 end
-
-local function callPlayerSayHooks(ply, text, teamonly, dead)
-    if ULib then
-        -- Run through priorities in order
-        for priority = -2, 2 do
-            local hooks = GAMEMODE.OldChatHooks[priority]
-            -- Monitor hooks cannot return
-
-            if hooks then
-                local out = callHooks(hooks, priority > -2 and priority < 2, ply, text, teamonly, dead)
-                if out ~= nil then return out end
-            end
-        end
-    else
-        local out = callHooks(GAMEMODE.OldChatHooks, true, ply, text, teamonly, dead)
-        if out ~= nil then return out end
-    end
-end
-
-local function applyHookTable(tab, priority)
-    -- Set the metatable of the PlayerSay hook table
-    -- This will monitor any hooks that get added or removed
-    -- This is more efficient than overriding hook.Add and hook.Remove because it only adds logic to the PlayerSay hooks.
-    -- If a previous metatable exists, then add this one to the "chain"
-    local mt
-    local oldMetatable = getmetatable(tab)
-    if istable(oldMetatable) then
-        local oldNI = oldMetatable.__newindex or function() end
-
-        mt = oldMetatable
-        if priority then
-            mt.__newindex = function(t, k, v)
-                GAMEMODE.OldChatHooks[priority][k] = v
-                oldNI(t, k, v)
-            end
-        else
-            mt.__newindex = function(t, k, v)
-                GAMEMODE.OldChatHooks[k] = v
-                oldNI(t, k, v)
-            end
-        end
-    else
-        if priority then
-            mt = {
-                __newindex = function(_, k, v)
-                    GAMEMODE.OldChatHooks[priority][k] = v
-                end
-            }
-        else
-            mt = {
-                __newindex = function(_, k, v)
-                    GAMEMODE.OldChatHooks[k] = v
-                end
-            }
-        end
-    end
-
-    if priority then
-        mt.__index = function(tbl, k)
-            return GAMEMODE.OldChatHooks[priority][k]
-        end
-    else
-        mt.__index = function(tbl, k)
-            return GAMEMODE.OldChatHooks[k]
-        end
-    end
-
-    -- Someone preventing metatable changes
-    -- My metatable swap should be compatible.
-    -- This is a public table. Play nice, you cunt.
-    if oldMetatable ~= nil then
-        DarkRP.errorNoHalt("Some addon is fucking up DarkRP's chat hook reorganising mechanism. Start getting rid of scripts and addons until you don't see this error on startup anymore.")
-        return
-    end
-
-    setmetatable(tab, mt)
-end
-
-function GM:PlayerSay(ply, text, teamonly) -- We will make the old hooks run AFTER DarkRP's playersay has been run.
-    local dead = not ply:Alive()
-
-    local text2 = text
-    local callback
-    local DoSayFunc
-
-    text2 = callPlayerSayHooks(ply, text, teamonly, dead) or text2
-
-    text2, callback, DoSayFunc = RP_PlayerChat(ply, text2, teamonly)
-    if tostring(text2) == " " then text2, callback = callback, text2 end
-    if not self.Config.deadtalk and dead then return "" end
-
-    if game.IsDedicated() then
-        ServerLog("\"" .. ply:Nick() .. "<" .. ply:UserID() .. ">" .. "<" .. ply:SteamID() .. ">" .. "<" .. team.GetName(ply:Team()) .. ">\" say \"" .. text .. "\"\n" .. "\n")
-    end
-
-    if DoSayFunc then DoSayFunc(text2) return "" end
-    RP_ActualDoSay(ply, text2, callback)
-
-    hook.Call("PostPlayerSay", nil, ply, text2, teamonly, dead)
-    return ""
-end
-
--- DarkRP has local chat and all sorts of who-sees-what chat modifiers
--- In order for chat hooks to abide by those rules, we have to make sure that
--- the DarkRP chat hook (which is the gamemode function) runs first and last
--- All other chat hooks must be run within DarkRP's function for it to play
--- nicely with its chat rules.
-local function ReplaceChatHooks()
-    local hookTbl = hook.GetTable()
-
-    -- give warnings for undeclared chat commands
-    local warning = fn.Compose{ErrorNoHalt, fn.Curry(string.format, 2)("Chat command \"%s\" is defined but not declared!\n")}
-    fn.ForEach(warning, DarkRP.getIncompleteChatCommands())
-
-    if ULib then
-        local ulibTbl = hook.GetULibTable()
-        -- Make sure the PlayerSay hook table exists
-        hookTbl.PlayerSay = hookTbl.PlayerSay or {}
-        ulibTbl.PlayerSay = ulibTbl.PlayerSay or {[-2] = {}, [-1] = {}, [0] = {}, [1] = {}, [2] = {}}
-
-        for priority, hooks in pairs(ulibTbl.PlayerSay) do
-            GAMEMODE.OldChatHooks[priority] = GAMEMODE.OldChatHooks[priority] or {}
-
-            for hookName, v in pairs(hooks) do
-                hooks[hookName] = nil
-                GAMEMODE.OldChatHooks[priority][hookName] = v
-            end
-
-            applyHookTable(hooks, priority)
-        end
-
-    else
-        -- Make sure the PlayerSay hook table exists
-        hookTbl.PlayerSay = hookTbl.PlayerSay or {}
-
-        for k, v in pairs(hookTbl.PlayerSay) do
-            GAMEMODE.OldChatHooks[k] = v
-            hook.Remove("PlayerSay", k)
-        end
-
-        applyHookTable(hookTbl.PlayerSay)
-    end
-end
-hook.Add("InitPostEntity", "RemoveChatHooks", ReplaceChatHooks)
 
 local function ConCommand(ply, _, args)
     if not args[1] then return end

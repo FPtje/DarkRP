@@ -22,6 +22,7 @@ AddCSLuaFile("config/config.lua")
 AddCSLuaFile("config/addentities.lua")
 AddCSLuaFile("config/jobrelated.lua")
 AddCSLuaFile("config/ammotypes.lua")
+AddCSLuaFile("config/licenseweapons.lua")
 
 AddCSLuaFile("cl_init.lua")
 

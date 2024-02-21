@@ -38,6 +38,7 @@ include("libraries/fn.lua")
 include("libraries/tablecheck.lua")
 include("libraries/interfaceloader.lua")
 include("libraries/disjointset.lua")
+include("config/licenseweapons.lua")
 
 include("libraries/modificationloader.lua")
 
