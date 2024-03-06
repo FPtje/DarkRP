@@ -1,9 +1,14 @@
-local function doScale(um)
-    local ply = um:ReadEntity()
-    local scale = um:ReadFloat()
+local minHull = Vector(-16, -16, 0)
+local vecScale = Vector(16, 16, 72)
 
-    if not IsValid(ply) then return end
+local function doScale()
+    local ply = net.ReadEntity()
+    if not ply:IsValid() then return end
+    local scale = net.ReadFloat()
+
+    vecScale[3] = 72*scale
+
     ply:SetModelScale(scale, 1)
-    ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72 * scale))
+    ply:SetHull(minHull, vecScale)
 end
-usermessage.Hook("darkrp_playerscale", doScale)
+net.Receive("darkrp_playerscale", doScale)
