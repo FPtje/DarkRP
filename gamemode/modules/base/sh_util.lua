@@ -97,23 +97,25 @@ function DarkRP.findPlayers(info)
     local InfoPlayers = {}
     for A in string.gmatch(info .. ";", "([a-zA-Z0-9:_.]*)[;(,%s)%c]") do
         if A ~= "" then
-            table.insert(InfoPlayers, A)
+            InfoPlayers[#InfoPlayers+1] = A
         end
     end
 
-    for _, PlayerInfo in ipairs(InfoPlayers) do
+    for _ = 1, #InfoPlayers do
+        local PlayerInfo = InfoPlayers[_]
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
             if IsValid(Player(PlayerInfo)) and not found[Player(PlayerInfo)] then
                 found[Player(PlayerInfo)] = true
                 players = players or {}
-                table.insert(players, Player(PlayerInfo))
+                players[#players+1] = Player(PlayerInfo)
             end
             continue
         end
 
-        for _, v in ipairs(pls) do
+        for _ = 1, #pls do
+            local v = pls[_]
             -- Prevend duplicates
             if found[v] then continue end
 
@@ -125,7 +127,7 @@ function DarkRP.findPlayers(info)
             (v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
                 found[v] = true
                 players = players or {}
-                table.insert(players, v)
+                players[#players+1]=v
             end
         end
     end
