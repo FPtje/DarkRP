@@ -97,37 +97,38 @@ function DarkRP.findPlayers(info)
     local InfoPlayers = {}
     for A in string.gmatch(info .. ";", "([a-zA-Z0-9:_.]*)[;(,%s)%c]") do
         if A ~= "" then
-            InfoPlayers[#InfoPlayers+1] = A
+            table.insert(InfoPlayers, A)
         end
     end
 
-    for _ = 1, #InfoPlayers do
-        local PlayerInfo = InfoPlayers[_]
+    for _, PlayerInfo in ipairs(InfoPlayers) do
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
-            if IsValid(Player(PlayerInfo)) and not found[Player(PlayerInfo)] then
-                found[Player(PlayerInfo)] = true
+            local foundPlayer = Player(PlayerInfo)
+            if IsValid(foundPlayer) and not found[foundPlayer] then
+                found[foundPlayer] = true
                 players = players or {}
-                players[#players+1] = Player(PlayerInfo)
+                table.insert(players, foundPlayer)
             end
             continue
         end
 
-        for _ = 1, #pls do
-            local v = pls[_]
-            -- Prevend duplicates
+        local stringPlayerInfo = string.lower(tostring(PlayerInfo))
+        for _, v in ipairs(pls) do
+            -- Prevent duplicates
             if found[v] then continue end
+            local steamId = v:SteamID()
 
             -- Find by Steam ID
-            if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") or
+            if (PlayerInfo == steamId or steamId == "UNKNOWN") or
             -- Find by Partial Nick
-            string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
+            string.find(string.lower(v:Nick()), stringPlayerInfo, 1, true) ~= nil or
             -- Find by steam name
-            (v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
+            (v.SteamName and string.find(string.lower(v:SteamName()), stringPlayerInfo, 1, true) ~= nil) then
                 found[v] = true
                 players = players or {}
-                players[#players+1]=v
+                table.insert(players, v)
             end
         end
     end
