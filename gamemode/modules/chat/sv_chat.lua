@@ -124,7 +124,7 @@ function GM:canChatCommand(ply, cmd, ...)
     return false
 end
 
-GM.OldHookCall = GM.OldHookCall or hook.Call
+g_DarkRPOldHookCall = g_DarkRPOldHookCall or hook.Call
 
 local GM = GM
 function hook.Call(name, gm, ply, text, teamonly, ...)
@@ -135,7 +135,7 @@ function hook.Call(name, gm, ply, text, teamonly, ...)
         local callback
         local DoSayFunc
 
-        text2 = GM.OldHookCall(name, gm, ply, text, teamonly, dead) or text2
+        text2 = g_DarkRPOldHookCall(name, gm, ply, text, teamonly, dead) or text2
 
         text2, callback, DoSayFunc = RP_PlayerChat(ply, text2, teamonly)
         if tostring(text2) == " " then text2, callback = callback, text2 end
@@ -152,7 +152,7 @@ function hook.Call(name, gm, ply, text, teamonly, ...)
         return ""
     end
 
-    return GM.OldHookCall(name, gm, ply, text, teamonly, ...)
+    return g_DarkRPOldHookCall(name, gm, ply, text, teamonly, ...)
 end
 
 local function ConCommand(ply, _, args)
