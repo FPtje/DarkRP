@@ -196,7 +196,7 @@ local function recalculateCanTouch(players, entities)
         if not IsValid(v) then entities[k] = nil continue end
         if v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
         if blockedEnts[v:GetClass()] then entities[k] = nil continue end
-        if v:IsWeapon() and IsValid(v.Owner) then entities[k] = nil continue end
+        if v:IsWeapon() and IsValid(v:GetOwner()) then entities[k] = nil continue end
     end
 
     for _, ply in pairs(players) do
