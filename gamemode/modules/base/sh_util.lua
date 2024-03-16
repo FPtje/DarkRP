@@ -114,7 +114,7 @@ function DarkRP.findPlayers(info)
             continue
         end
 
-        local stringPlayerInfo = string.lower(tostring(PlayerInfo))
+        local stringPlayerInfo = string.lower(PlayerInfo)
         for _, v in ipairs(pls) do
             -- Prevent duplicates
             if found[v] then continue end
