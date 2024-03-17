@@ -40,7 +40,7 @@ function FPP.NotifyAll(text, bool, total_time)
         umsg.Bool(bool)
         umsg.Float(total_time or 6)
     umsg.End()
-    for _, ply in ipairs(player.GetAll()) do
+    for _, ply in player.Iterator() do
         ply:PrintMessage(HUD_PRINTCONSOLE, text)
     end
 end
@@ -60,7 +60,7 @@ local function getSettingsChangedEntities(settingsType, setting)
             if IsValid(owner) then table.insert(entities, v) end
         end
 
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
@@ -74,7 +74,7 @@ local function getSettingsChangedEntities(settingsType, setting)
             if not IsValid(owner) then table.insert(entities, v) end
         end
 
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
@@ -85,7 +85,7 @@ local function getSettingsChangedEntities(settingsType, setting)
             table.insert(entities, v)
         end
 
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end

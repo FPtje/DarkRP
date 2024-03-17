@@ -71,7 +71,7 @@ local function Me(ply, args)
         if GAMEMODE.Config.alltalk then
             local col = team.GetColor(ply:Team())
             local name = ply:Nick()
-            for _, target in ipairs(player.GetAll()) do
+            for _, target in player.Iterator() do
                 DarkRP.talkToPerson(target, col, name .. " " .. text)
             end
         else
@@ -102,7 +102,7 @@ local function OOC(ply, args)
 
         local phrase = DarkRP.getPhrase("ooc")
         local name = ply:Nick()
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             DarkRP.talkToPerson(v, col, "(" .. phrase .. ") " .. name, col2, text, ply)
         end
     end
@@ -132,7 +132,7 @@ local function MayorBroadcast(ply, args)
         local col2 = Color(170, 0, 0, 255)
         local phrase = DarkRP.getPhrase("broadcast")
         local name = ply:Nick()
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             DarkRP.talkToPerson(v, col, phrase .. " " .. name, col2, text, ply)
         end
     end
@@ -166,7 +166,7 @@ local function SayThroughRadio(ply,args)
         end
         local col = Color(180, 180, 180, 255)
         local phrase = DarkRP.getPhrase("radio_x", radioChannel)
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             if v.RadioChannel == radioChannel then
                 DarkRP.talkToPerson(v, col, phrase, col, text, ply)
             end
@@ -198,7 +198,7 @@ local function GroupMsg(ply, args)
         local phrase = DarkRP.getPhrase("group")
         local name = ply:Nick()
         local color = color_white
-        for _, target in ipairs(player.GetAll()) do
+        for _, target in player.Iterator() do
             -- The target is in any of the group chats
             for _, func in ipairs(groupChats) do
                 if not func(target, ply) then continue end

@@ -635,7 +635,7 @@ function FPP.PlayerDisconnect(ply)
     timer.Simple(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime, function()
         if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) then return end -- Settings can change in time.
 
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             if v:SteamID() == SteamID then
                 return
             end
@@ -679,7 +679,7 @@ function FPP.PlayerInitialSpawn(ply)
     end
 
     local plys = {}
-    for _, v in ipairs(player.GetAll()) do if v ~= ply then table.insert(plys, v) end end
+    for _, v in player.Iterator() do if v ~= ply then table.insert(plys, v) end end
 
     timer.Create("FPP_recalculate_cantouch_" .. ply:UserID(), 0, 1, function()
         FPP.recalculateCanTouch({ply}, ents.GetAll())

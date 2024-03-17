@@ -6,7 +6,7 @@ local function ToAdmins(ply, cmd, args)
     local send = {}
 
     if ply ~= game.GetWorld() then table.insert(send, ply) end
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if FAdmin.Access.PlayerHasPrivilege(v, "AdminChat") or v:IsAdmin() then
             table.insert(send, v)
         end

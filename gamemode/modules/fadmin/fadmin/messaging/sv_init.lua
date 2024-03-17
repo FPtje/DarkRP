@@ -22,7 +22,7 @@ function FAdmin.Messages.SendMessageAll(text, MsgType)
         umsg.String(text)
     umsg.End()
 
-    for _, ply in ipairs(player.GetAll()) do
+    for _, ply in player.Iterator() do
         ply:PrintMessage(HUD_PRINTCONSOLE, text)
     end
 end

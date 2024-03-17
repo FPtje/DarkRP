@@ -106,7 +106,7 @@ local function RP_ActualDoSay(ply, text, callback)
 
     if GAMEMODE.Config.alltalk then
         local name = ply:Nick()
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             DarkRP.talkToPerson(v, col, callback .. name, col2, text, ply)
         end
     else

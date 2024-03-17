@@ -311,7 +311,7 @@ local DrpCanHear = {}
 
 -- Recreate DrpCanHear after Lua Refresh
 -- This prevents an indexing nil error in PlayerCanHearPlayersVoice
-for _, ply in ipairs(player.GetAll()) do
+for _, ply in player.Iterator() do
     DrpCanHear[ply] = {}
 end
 
@@ -778,7 +778,7 @@ local function disableBabyGod(ply)
     -- if there are still players who are babygodded
     local reinstateOldColor = true
 
-    for _, p in ipairs(player.GetAll()) do
+    for _, p in player.Iterator() do
         reinstateOldColor = reinstateOldColor and p.Babygod == nil
     end
 
@@ -1023,7 +1023,7 @@ function GM:PlayerDisconnected(ply)
     -- Clear agenda
     if agenda and ply:Team() == agenda.Manager and team.NumPlayers(ply:Team()) <= 1 then
         agenda.text = nil
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             if v:getAgendaTable() ~= agenda then continue end
             v:setSelfDarkRPVar("agenda", agenda.text)
         end
@@ -1113,7 +1113,7 @@ end
 
 local function ClearDecals()
     if GAMEMODE.Config.decalcleaner then
-        for _, p in ipairs(player.GetAll()) do
+        for _, p in player.Iterator() do
             p:ConCommand("r_cleardecals")
         end
     end

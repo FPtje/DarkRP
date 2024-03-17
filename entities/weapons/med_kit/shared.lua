@@ -47,7 +47,7 @@ function SWEP:PrimaryAttack()
     local aimVec = Owner:GetAimVector()
     local shootPos = Owner:GetShootPos()
 
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         local maxhealth = v:GetMaxHealth() or 100
         local targetShootPos = v:GetShootPos()
         if v == Owner or targetShootPos:DistToSqr(shootPos) > 7225 or v:Health() >= maxhealth or not v:Alive() then continue end

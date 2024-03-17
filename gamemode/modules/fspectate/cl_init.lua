@@ -137,7 +137,7 @@ local function findNearestObject()
 
     local foundPly, foundDot = nil, 0
 
-    for _, ply in ipairs(player.GetAll()) do
+    for _, ply in player.Iterator() do
         if not IsValid(ply) or ply == LocalPlayer() then continue end
 
         local pos = ply:GetShootPos()

@@ -21,7 +21,7 @@ function plyMeta:warrant(warranter, reason)
     local centerMessage = DarkRP.getPhrase("warrant_approved", self:Nick(), reason, warranterNick)
     local printMessage = DarkRP.getPhrase("warrant_ordered", warranterNick, self:Nick(), reason)
 
-    for _, b in ipairs(player.GetAll()) do
+    for _, b in player.Iterator() do
         b:PrintMessage(HUD_PRINTCENTER, centerMessage)
         b:PrintMessage(HUD_PRINTCONSOLE, printMessage)
     end
@@ -65,7 +65,7 @@ function plyMeta:wanted(actor, reason, time)
     local centerMessage = DarkRP.getPhrase("wanted_by_police", self:Nick(), reason, actorNick)
     local printMessage = DarkRP.getPhrase("wanted_by_police_print", actorNick, self:Nick(), reason)
 
-    for _, ply in ipairs(player.GetAll()) do
+    for _, ply in player.Iterator() do
         ply:PrintMessage(HUD_PRINTCENTER, centerMessage)
         ply:PrintMessage(HUD_PRINTCONSOLE, printMessage)
     end
@@ -87,7 +87,7 @@ function plyMeta:unWanted(actor)
 
     DarkRP.log(string.Replace(expiredMessage, "\n", " "), Color(0, 150, 255))
 
-    for _, ply in ipairs(player.GetAll()) do
+    for _, ply in player.Iterator() do
         ply:PrintMessage(HUD_PRINTCENTER, expiredMessage)
         ply:PrintMessage(HUD_PRINTCONSOLE, expiredMessage)
     end
@@ -170,7 +170,7 @@ local function CombineRequest(ply, args)
         local col2 = Color(255, 0, 0, 255)
         local phrase = DarkRP.getPhrase("request")
         local name = ply:Nick()
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             if v:isCP() or v == ply then
                 DarkRP.talkToPerson(v, col, phrase .. " " .. name, col2, text, ply)
             end
@@ -379,7 +379,7 @@ function DarkRP.hooks:playerArrested(ply, time, arrester)
     ply:PrintMessage(HUD_PRINTCENTER, DarkRP.getPhrase("youre_arrested", time))
 
     local phrase = DarkRP.getPhrase("hes_arrested", ply:Nick(), time)
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if v == ply then continue end
         v:PrintMessage(HUD_PRINTCENTER, phrase)
     end
