@@ -482,7 +482,7 @@ Player disconnected
 ---------------------------------------------------------------------------]]
 local function playerDisconnected(ply)
     local ownedEnts = {}
-    for _, ent in ipairs(ents.GetAll()) do
+    for _, ent in ents.Iterator() do
         if ent:CPPIGetOwner() == ply then
             table.insert(ownedEnts, ent)
         end

@@ -974,7 +974,7 @@ local function collectRemoveEntities(ply)
     end
 
     local sid = ply.SID
-    for _, v in ipairs(ents.GetAll()) do
+    for _, v in ents.Iterator() do
         if v.SID ~= sid or not v:IsVehicle() and not remClasses[string.lower(v:GetClass() or "")] then continue end
 
         table.insert(collect, v)
@@ -1073,7 +1073,7 @@ function GM:InitPostEntity()
     game.ConsoleCommand("sv_alltalk 0\n")
 
     if GAMEMODE.Config.unlockdoorsonstart then
-        for _, v in ipairs(ents.GetAll()) do
+        for _, v in ents.Iterator() do
             if not v:isDoor() then continue end
             v:Fire("unlock", "", 0)
         end

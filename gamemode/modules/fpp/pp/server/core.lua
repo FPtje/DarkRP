@@ -573,7 +573,7 @@ hook.Add("CanDrive", "FPP.Protect.CanDrive", FPP.Protect.CanDrive)
 local function freezeDisconnected(ply)
     local SteamID = ply:SteamID()
 
-    for _, ent in ipairs(ents.GetAll()) do
+    for _, ent in ents.Iterator() do
         local physObj = ent:GetPhysicsObject()
         if ent.FPPOwnerID ~= SteamID or ent:GetPersistent() or not physObj:IsValid() then continue end
 
@@ -598,7 +598,7 @@ function FPP.PlayerDisconnect(ply)
 
 
         local fallback = player.GetBySteamID(ply.FPPFallbackOwner)
-        for _, v in ipairs(ents.GetAll()) do
+        for _, v in ents.Iterator() do
             if v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
 
             v.FPPFallbackOwner = ply.FPPFallbackOwner
@@ -640,7 +640,7 @@ function FPP.PlayerDisconnect(ply)
                 return
             end
         end
-        for _, v in ipairs(ents.GetAll()) do
+        for _, v in ents.Iterator() do
             if v.FPPOwnerID ~= SteamID or v:GetPersistent() then continue end
             v:Remove()
         end
@@ -665,7 +665,7 @@ function FPP.PlayerInitialSpawn(ply)
 
     local entities = {}
     if FPP.DisconnectedPlayers[SteamID] then -- Check if the player has rejoined within the auto remove time
-        for _, v in ipairs(ents.GetAll()) do
+        for _, v in ents.Iterator() do
             if (v.FPPOwnerID == SteamID or v.FPPFallbackOwner == SteamID or v:GetNW2String("FPP_OriginalOwner") == SteamID) then
                 v.FPPFallbackOwner = nil
                 v:CPPISetOwner(ply)
