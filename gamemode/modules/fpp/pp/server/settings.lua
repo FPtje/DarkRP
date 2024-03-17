@@ -40,7 +40,7 @@ function FPP.NotifyAll(text, bool, total_time)
         umsg.Bool(bool)
         umsg.Float(total_time or 6)
     umsg.End()
-    for _, ply in player.Iterator() do
+    for _, ply in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCONSOLE, text)
     end
 end
@@ -54,38 +54,38 @@ local function getSettingsChangedEntities(settingsType, setting)
     blockedString = blockedString == "Entitydamage1" and "EntityDamage1" or blockedString -- dirty hack for stupid naming system.
 
     if setting == "adminall" then
-        for _, v in ents.Iterator() do
+        for _, v in ipairs(ents.GetAll()) do
             if not IsValid(v) then continue end
             local owner = v:CPPIGetOwner()
             if IsValid(owner) then table.insert(entities, v) end
         end
 
-        for _, v in player.Iterator() do
+        for _, v in ipairs(player.GetAll()) do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
 
         return plys, entities
     elseif setting == "worldprops" or setting == "adminworldprops" then
-        for _, v in ents.Iterator() do
+        for _, v in ipairs(ents.GetAll()) do
             if FPP.Blocked[blockedString][string.lower(v:GetClass())] then continue end
 
             local owner = v:CPPIGetOwner()
             if not IsValid(owner) then table.insert(entities, v) end
         end
 
-        for _, v in player.Iterator() do
+        for _, v in ipairs(player.GetAll()) do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
         return setting == "adminworldprops" and plys or player.GetAll(), entities
     elseif setting == "canblocked" or setting == "admincanblocked" then
-        for _, v in ents.Iterator() do
+        for _, v in ipairs(ents.GetAll()) do
             if not FPP.Blocked[blockedString][string.lower(v:GetClass())] then continue end
             table.insert(entities, v)
         end
 
-        for _, v in player.Iterator() do
+        for _, v in ipairs(player.GetAll()) do
             v.FPP_Privileges = v.FPP_Privileges or {}
             if v.FPP_Privileges.FPP_TouchOtherPlayersProps then table.insert(plys, v) end
         end
@@ -775,7 +775,7 @@ local function changeBuddies(ply, buddy, settings)
 
     -- Update the prop protection
     local affectedProps = {}
-    for _, v in ents.Iterator() do
+    for _, v in ipairs(ents.GetAll()) do
         local owner = v:CPPIGetOwner()
         if owner ~= ply then continue end
         table.insert(affectedProps, v)
@@ -801,7 +801,7 @@ concommand.Add("FPP_SetBuddy", SetBuddy)
 local function CleanupDisconnected(ply, cmd, args)
     if not args[1] then FPP.Notify(ply, "Invalid argument", false) return end
     if args[1] == "disconnected" then
-        for _, v in ents.Iterator() do
+        for _, v in ipairs(ents.GetAll()) do
             local Owner = v:CPPIGetOwner()
             if Owner and not IsValid(Owner) then
                 v:Remove()
@@ -814,7 +814,7 @@ local function CleanupDisconnected(ply, cmd, args)
         return
     end
 
-    for _, v in ents.Iterator() do
+    for _, v in ipairs(ents.GetAll()) do
         local Owner = v:CPPIGetOwner()
         if Owner == Player(args[1]) and not v:IsWeapon() then
             v:Remove()

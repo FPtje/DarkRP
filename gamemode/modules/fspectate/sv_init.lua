@@ -184,7 +184,7 @@ local function playerSay(talker, message)
     local talkerTeam = team.GetColor(talker:Team())
     local talkerName = talker:Nick()
     local col = Color(255, 255, 255, 255)
-    for _, ply in player.Iterator() do
+    for _, ply in ipairs(player.GetAll()) do
         if ply == talker or not ply.FSpectating then continue end
 
         local shootPos = talker:GetShootPos()

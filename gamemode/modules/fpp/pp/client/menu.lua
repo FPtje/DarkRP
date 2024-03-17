@@ -585,7 +585,7 @@ function FPP.AdminMenu(Panel)
         local menu = DermaMenu()
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for _, b in player.Iterator() do
+        for _, b in ipairs(player.GetAll()) do
             if not IsValid(b) then continue end
             menu:AddOption(b:Nick(), function()
                 RunConsoleCommand("FPP_SetPlayerGroup", b:UserID(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue())
@@ -618,7 +618,7 @@ function FPP.AdminMenu(Panel)
         GroupMembers:Clear()
         for k, v in pairs(FPP.GroupMembers) do
             local name = "Unknown"
-            for _, ply in player.Iterator() do
+            for _, ply in ipairs(player.GetAll()) do
                 if ply:SteamID() == k then
                     name = ply:Nick()
                     break
@@ -754,7 +754,7 @@ RetrieveRestrictedTool = function(um)
         local menu = DermaMenu(self)
         menu:SetPos(gui.MouseX(), gui.MouseY())
 
-        for _, v in player.Iterator() do
+        for _, v in ipairs(player.GetAll()) do
             if not IsValid(v) then continue end
             local submenu = menu:AddSubMenu(v:Nick())
 
@@ -1125,7 +1125,7 @@ function FPP.PrivateSettings(Panel)
     local fallbackChoice = Panel:ComboBox("Fallback player")
     fallbackChoice:AddChoice("None", -1, true)
 
-    for _, v in player.Iterator() do
+    for _, v in ipairs(player.GetAll()) do
         if v == LocalPlayer() then continue end
         fallbackChoice:AddChoice(v:Nick(), v:UserID(), PrivateSettingsPanel.FallbackSelected == v:UserID())
     end
@@ -1215,7 +1215,7 @@ function FPP.SharedMenu(um)
     if player.GetCount() ~= 1 then
         count = count + 1
     end
-    for _, v in player.Iterator() do
+    for _, v in ipairs(player.GetAll()) do
         if IsValid(v) and v ~= LocalPlayer() then
             local IsShared = false
             if table.HasValue(SharedWith, v) then
