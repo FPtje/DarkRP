@@ -51,8 +51,7 @@ function check {
 
 
     # Check if any matching files were modified
-    local matched
-    matched=$(
+    local matched=$(
         echo "$files" |
         grep --perl-regexp "$path"
     )
