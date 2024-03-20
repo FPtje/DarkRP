@@ -28,9 +28,9 @@ files=$(
 
 template="
     > [!WARNING]
-    > Files from **[{project}]({repository})** have been modified!  
+    > Files from **[{project}]({repository})** have been modified!
     > ➞ Changes should only be made in its repository
-    > 
+    >
     {files}
     >
 "
@@ -48,10 +48,11 @@ function check {
     local path="^$2"
     local repo="$3"
 
-    
+
     #   Check if any matching files were modified
-    
-    local matched=$( 
+
+    local matched
+    matched=$(
         echo "$files" |
         grep --perl-regexp "$path"
     )
@@ -69,12 +70,12 @@ function check {
     local info="$template"
 
     matched="$(printf -- '> `%s`  \n' "$matched")"
-    
+
     info=${info//\{repository\}/$repo}
     info=${info//\{project\}/$name}
     info=${info//\{files\}/$matched}
 
-    echo "$info" >> $GITHUB_STEP_SUMMARY
+    echo "$info" >> "$GITHUB_STEP_SUMMARY"
 
     failed=true
 }
