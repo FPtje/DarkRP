@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 #
-#   Prints a list of errors for any dependencies that have been edited.
-#   ➞ Dependencies should be edited in their respective repositories
+# Prints a list of errors for any dependencies that have been edited.
+# Dependencies should be edited in their respective repositories
 #
 
 echo 'Checking for any dependency changes.'
@@ -24,18 +24,19 @@ files=$(
 )
 
 
-#   Template for the GitHub summary
+# Template for the GitHub summary
 
 template="
     > [!WARNING]
     > Files from **[{project}]({repository})** have been modified!
-    > ➞ Changes should only be made in its repository
+    > These changes originally come from [{project}]({repository}), but are synchronized to DarkRP.
+    > These files should be edited in the original repositories instead.
     >
     {files}
     >
 "
 
-#   Trim leading space for Markdown compatibility
+# Trim leading space for Markdown compatibility
 
 template="$( echo "$template" | sed 's/^[[:space:]]*//' )"
 
@@ -49,8 +50,7 @@ function check {
     local repo="$3"
 
 
-    #   Check if any matching files were modified
-
+    # Check if any matching files were modified
     local matched
     matched=$(
         echo "$files" |
@@ -58,15 +58,13 @@ function check {
     )
 
 
-    #   Ignore if nothing matched
-
+    # Ignore if nothing matched
     if [ -z "$matched" ] ; then
         return
     fi
 
 
-    #   Append info to GitHub's summary
-
+    # Append info to GitHub's summary
     local info="$template"
 
     matched="$(printf -- '> `%s`  \n' "$matched")"
