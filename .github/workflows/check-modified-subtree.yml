@@ -1,15 +1,28 @@
-name: check-modified-subtree
-on:
-  pull_request:
-    branches:
-      - master
-jobs:
-  check-modified-subtree:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          # Make sure there is access to the master branch
-          fetch-depth: 0
-          clean: false
-      - run: ./.github/scripts/check-modified-subtree.sh
+
+name : Check Modified Subtree
+
+
+on :
+    workflow_dispatch :
+
+    pull_request :
+        branches : [ master ]
+
+
+jobs :
+    check :
+
+        runs-on : ubuntu-latest
+
+        steps :
+
+
+
+            -   name : Checkout Repository
+                uses : actions/checkout@v4
+                with :
+                    fetch-depth : 0 # Fetch complete history
+                    clean : false
+
+            -   name : Check For Differences
+                run : ./.github/scripts/check-modified-subtree.sh
