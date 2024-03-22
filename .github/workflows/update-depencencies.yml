@@ -1,0 +1,27 @@
+
+name : Update Dependencies
+
+on :
+    workflow_dispatch :
+
+permissions :
+    contents : write
+
+jobs :
+    update :
+
+        runs-on : ubuntu-latest
+
+        steps :
+
+            -   name : Checkout Repository
+                uses : actions/checkout@v4
+
+            -   name : Setup Git
+                run : |
+                    git config user.name Dependency-Updater
+                    git config user.email github-actions@github.com
+
+            -   name : Update & Dependencies
+                run : ./.github/scripts/Update-Dependencies.sh
+

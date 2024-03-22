@@ -8,7 +8,6 @@
 echo 'Checking for any dependency changes.'
 
 set -o errexit # Exit for any error
-set -o nounset # Error when referencing unset vars
 
 
 commit=$(
