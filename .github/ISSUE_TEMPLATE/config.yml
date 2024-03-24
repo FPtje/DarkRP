@@ -1,9 +1,6 @@
+blank_issues_enabled: false
 
-blank_issues_enabled : false
-
-contact_links :
-
-    -   about : I need help with DarkRP
-        name : 🚨 Support
-        url : https://darkrp.page.link/discord
-
+contact_links:
+    - about: I need help with DarkRP
+      name: 🚨 Support
+      url: https://darkrp.page.link/discord

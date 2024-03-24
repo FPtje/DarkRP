@@ -1,103 +1,87 @@
-
 #
 #   Check the docs on how to write GitHub forms:
 #   https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/about-issue-and-pull-request-templates
 #
 
-name : '🪳 Bug Report'
+name: "🪳 Bug Report"
+description: I found a bug in DarkRP.
+title: "[ Bug ] <Title>"
+labels: [bug]
+assignees: ["FPtje"]
 
-description : I found a bug in DarkRP.
+body:
+    - type: markdown
 
-title : '[ Bug ] <Title>'
+      attributes:
+          value: |
+              This place is only intended for bug reports,
+              if you need general join the **[DarkRP Discord](https://darkrp.page.link/discord)**
 
-labels : [ bug ]
+    - type: textarea
+      id: problem
 
-assignees : [ 'FPtje' ]
+      validations:
+          required: true
 
-body :
+      attributes:
+          description: |
+              Describe the issue as accurately as possible.
 
-    -   type : markdown
+          placeholder: |
+              I'm unable to do x when ..
 
-        attributes :
-            value : |
-                This place is only intended for bug reports,
-                if you need general join the **[DarkRP Discord](https://darkrp.page.link/discord)**
+          label: Problem
 
+    - type: textarea
+      id: reproduce
 
-    -   type : textarea
-        id : problem
+      validations:
+          required: true
 
-        validations :
-            required : true
+      attributes:
+          description: |
+              Describe how we can reproduce the issue.
 
-        attributes :
+          placeholder: |
+              1. I first do x
+              2. Then I do y and see z
 
-            description : |
-                Describe the issue as accurately as possible.
+          label: Reproduction
 
-            placeholder : |
-                I'm unable to do x when ..
+    - type: markdown
 
-            label : Problem
+      attributes:
+          value: |
+              It's important for us to be able to reproduce your problem
+              so we fix it more easily and be sure it's solved.
 
+    - type: textarea
+      id: errors
 
-    -   type : textarea
-        id : reproduce
+      validations:
+          required: true
 
-        validations :
-            required : true
+      attributes:
+          description: |
+              Describe the issue as accurately as possible.
 
-        attributes :
+          placeholder: |
+              I'm unable to do x when ..
 
-            description : |
-                Describe how we can reproduce the issue.
+          label: Errors
 
-            placeholder : |
-                1. I first do x
-                2. Then I do y and see z
+    - type: markdown
 
-            label : Reproduction
+      attributes:
+          value: |
+              Please always check the startup log of the server for
+              errors, as those can cause more errors down the line.
 
+    - type: textarea
+      id: extra
 
-    -   type : markdown
+      attributes:
+          description: |
+              Any additional information that you can provide.
 
-        attributes :
-            value : |
-                It's important for us to be able to reproduce your problem
-                so we fix it more easily and be sure it's solved.
-
-
-    -   type : textarea
-        id : errors
-
-        validations :
-            required : true
-
-        attributes :
-
-            description : |
-                Describe the issue as accurately as possible.
-
-            placeholder : |
-                I'm unable to do x when ..
-
-            label : Errors
-
-
-    -   type : markdown
-
-        attributes :
-            value : |
-                Please always check the startup log of the server for
-                errors, as those can cause more errors down the line.
-
-
-    -   type : textarea
-        id : extra
-
-        attributes :
-
-            description : |
-                Any additional information that you can provide.
-
-            label : Additional Info
+          label: Additional Info
