@@ -2,6 +2,9 @@ FPP = FPP or {}
 local plyMeta = FindMetaTable("Player")
 local entMeta = FindMetaTable("Entity")
 
+local bit_bor = bit.bor
+local bit_band = bit.band
+
 --[[-------------------------------------------------------------------------
 Entity data explanation.
 Every ent has a field FPPCanTouch. This is a table with one entry per player.
@@ -67,7 +70,13 @@ Touch calculations
 ---------------------------------------------------------------------------]]
 local hardWhiteListed = { -- things that mess up when not allowed
     ["worldspawn"] = true, -- constraints with the world
-    ["gmod_anchor"] = true -- used in slider constraints with world
+    ["gmod_anchor"] = true, -- used in slider constraints with world
+    ["gmod_wire_hologram"] = true, -- created by Expression2, has no physics, but can be constrained to other entities
+    ["phys_spring"] = true, -- https://developer.valvesoftware.com/wiki/Phys_spring
+    ["env_projectedtexture"] = true, -- https://developer.valvesoftware.com/wiki/Env_projectedtexture
+    ["keyframe_rope"] = true, -- https://developer.valvesoftware.com/wiki/Keyframe_rope
+    ["env_skypaint"] = true, -- https://developer.valvesoftware.com/wiki/Env_skypaint
+    ["env_fog_controller"] = true -- https://developer.valvesoftware.com/wiki/Env_fog_controller
 }
 local function calculateCanTouchForType(ply, ent, touchType)
     if not IsValid(ent) then return false, 0 end
@@ -196,7 +205,7 @@ local function recalculateCanTouch(players, entities)
         if not IsValid(v) then entities[k] = nil continue end
         if v:IsEFlagSet(EFL_SERVER_ONLY) then entities[k] = nil continue end
         if blockedEnts[v:GetClass()] then entities[k] = nil continue end
-        if v:IsWeapon() and IsValid(v.Owner) then entities[k] = nil continue end
+        if v:IsWeapon() and IsValid(v:GetOwner()) then entities[k] = nil continue end
     end
 
     for _, ply in pairs(players) do
@@ -235,14 +244,25 @@ end
 Touch interface
 ---------------------------------------------------------------------------]]
 function FPP.plyCanTouchEnt(ply, ent, touchType)
-    ent.FPPCanTouch = ent.FPPCanTouch or {}
-    ent.FPPCanTouch[ply] = ent.FPPCanTouch[ply] or 0
-    ent.AllowedPlayers = ent.AllowedPlayers or {}
+    local entTable = ent:GetTable()
+    local entCanTouch = entTable.FPPCanTouch
+    if not entCanTouch then
+        entCanTouch = {}
+        entTable.FPPCanTouch = entCanTouch
+    end
 
-    local canTouch = ent.FPPCanTouch[ply]
+    entCanTouch[ply] = entCanTouch[ply] or 0
+
+    local allowedPlayers = entTable.AllowedPlayers
+    if not allowedPlayers then
+        entTable.AllowedPlayers = {}
+    end
+
+    local canTouch = entCanTouch[ply]
     -- if an entity is constrained, return the least of the rights
-    if ent.FPPRestrictConstraint and ent.FPPRestrictConstraint[ply] then
-        canTouch = bit.band(ent.FPPRestrictConstraint[ply], ent.FPPCanTouch[ply])
+    local entRestrictConstraint = entTable.FPPRestrictConstraint
+    if entRestrictConstraint and entRestrictConstraint[ply] then
+        canTouch = bit_band(entRestrictConstraint[ply], entCanTouch[ply])
     end
 
     -- return the answer for every touch type if parameter is empty
@@ -250,31 +270,58 @@ function FPP.plyCanTouchEnt(ply, ent, touchType)
         return canTouch
     end
 
-    return bit.bor(canTouch, touchTypes[touchType]) == canTouch
+    return bit_bor(canTouch, touchTypes[touchType]) == canTouch
 end
 
 function FPP.entGetOwner(ent)
-    return ent.FPPOwner
+    return ent:GetTable().FPPOwner
 end
 
 --[[-------------------------------------------------------------------------
 Networking
 ---------------------------------------------------------------------------]]
 util.AddNetworkString("FPP_TouchabilityData")
+-- Sends 13 + 8 + 5 + 20 = 46 bits of ownership data per entity
 local function netWriteEntData(ply, ent)
     -- EntIndex for when it's out of the PVS of the player
-    net.WriteUInt(ent:EntIndex(), 32)
+    net.WriteUInt(ent:EntIndex(), 13)
 
     local owner = ent:CPPIGetOwner()
-    net.WriteUInt(IsValid(owner) and owner:EntIndex() or -1, 32)
-    net.WriteUInt(ent.FPPRestrictConstraint and ent.FPPRestrictConstraint[ply] or ent.FPPCanTouch[ply], 5) -- touchability information
-    net.WriteUInt(ent.FPPConstraintReasons and ent.FPPConstraintReasons[ply] or ent.FPPCanTouchWhy[ply], 20) -- reasons
+    net.WriteUInt(IsValid(owner) and owner:EntIndex() or -1, 8)
+
+    local entTable = ent:GetTable()
+    net.WriteUInt(entTable.FPPRestrictConstraint and entTable.FPPRestrictConstraint[ply] or entTable.FPPCanTouch[ply], 5) -- touchability information
+    net.WriteUInt(entTable.FPPConstraintReasons and entTable.FPPConstraintReasons[ply] or entTable.FPPCanTouchWhy[ply], 20) -- reasons
 end
 
 function FPP.plySendTouchData(ply, ents)
     local count = #ents
 
     if count == 0 then return end
+
+    -- The net message gets too big with 5826 or more entities. In that case,
+    -- break up the input into chunks and recurse per chunk.
+    --
+    -- Note: There is still a limit on the entity count! If there are too many
+    -- entities, the client will disconnect with "Disconnect: Client 0
+    -- overflowed reliable channel..". That limit is above the entity limit of
+    -- 16384, though, so no further work is done to lift that limit.
+    local count_limit = 5825
+    if count > count_limit then
+        local accumulator = {}
+        for i = 1, count do
+            table.insert(accumulator, ents[i])
+            if i % count_limit == 0 then
+                FPP.plySendTouchData(ply, accumulator)
+                table.Empty(accumulator)
+            end
+        end
+        if #accumulator > 0 then
+            FPP.plySendTouchData(ply, accumulator)
+        end
+        return
+    end
+
     net.Start("FPP_TouchabilityData")
         for i = 1, count do
             netWriteEntData(ply, ents[i])
@@ -328,7 +375,8 @@ end
 On entity created
 ---------------------------------------------------------------------------]]
 local function onEntitiesCreated(ents)
-    local send = {}
+    -- Table from player to list of entities that need to be networked
+    local sendToPlayers = {}
 
     for _, ent in pairs(ents) do
         if not IsValid(ent) then continue end
@@ -346,13 +394,16 @@ local function onEntitiesCreated(ents)
         if blockedEnts[ent:GetClass()] then continue end
 
         for _, ply in ipairs(player.GetAll()) do
-            FPP.calculateCanTouch(ply, ent)
+            local changed = FPP.calculateCanTouch(ply, ent)
+            -- Only send data that has been changed
+            if not changed then continue end
+            sendToPlayers[ply] = sendToPlayers[ply] or {}
+            table.insert(sendToPlayers[ply], ent)
         end
-        table.insert(send, ent)
     end
 
-    for _, ply in ipairs(player.GetAll()) do
-        FPP.plySendTouchData(ply, send)
+    for ply, entsToSend in pairs(sendToPlayers) do
+        FPP.plySendTouchData(ply, entsToSend)
     end
 end
 
