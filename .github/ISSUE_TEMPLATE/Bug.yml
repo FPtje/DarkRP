@@ -34,7 +34,7 @@ body:
       id: reproduce
 
       validations:
-          required: true
+          required: false
 
       attributes:
           description: |
