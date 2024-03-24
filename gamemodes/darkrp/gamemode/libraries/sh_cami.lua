@@ -1,129 +1,105 @@
 --[[
 CAMI - Common Admin Mod Interface.
+Copyright 2020 CAMI Contributors
+
 Makes admin mods intercompatible and provides an abstract privilege interface
 for third party addons.
 
 Follows the specification on this page:
-https://docs.google.com/document/d/1QIRVcAgZfAYf1aBl_dNV_ewR6P25wze2KmUVzlbFgMI
+https://github.com/glua/CAMI/blob/master/README.md
 
-Structures:
-    CAMI_USERGROUP, defines the charactaristics of a usergroup:
-    {
-        Name
-            string
-            The name of the usergroup
-        Inherits
-            string
-            The name of the usergroup this usergroup inherits from
-    }
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-    CAMI_PRIVILEGE, defines the charactaristics of a privilege:
-    {
-        Name
-            string
-            The name of the privilege
-        MinAccess
-            string
-            One of the following three: user/admin/superadmin
-        Description
-            string
-            optional
-            A text describing the purpose of the privilege
-        HasAccess
-            function(
-                privilege :: CAMI_PRIVILEGE,
-                actor     :: Player,
-                target    :: Player
-            ) :: bool
-            optional
-            Function that decides whether a player can execute this privilege,
-            optionally on another player (target).
-    }
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
 -- Version number in YearMonthDay format.
-local version = 20190102
+local version = 20211019
 
 if CAMI and CAMI.Version >= version then return end
 
 CAMI = CAMI or {}
 CAMI.Version = version
 
---[[
-usergroups
-    Contains the registered CAMI_USERGROUP usergroup structures.
-    Indexed by usergroup name.
-]]
+
+--- @class CAMI_USERGROUP
+--- defines the charactaristics of a usergroup
+--- @field Name string @The name of the usergroup
+--- @field Inherits string @The name of the usergroup this usergroup inherits from
+--- @field CAMI_Source string @The source specified by the admin mod which registered this usergroup (if any, converted to a string)
+
+--- @class CAMI_PRIVILEGE
+--- defines the charactaristics of a privilege
+--- @field Name string @The name of the privilege
+--- @field MinAccess "'user'" | "'admin'" | "'superadmin'" @Default group that should have this privilege
+--- @field Description string | nil @Optional text describing the purpose of the privilege
+local CAMI_PRIVILEGE = {}
+--- Optional function to check if a player has access to this privilege
+--- (and optionally execute it on another player)
+---
+--- ⚠ **Warning**: This function may not be called by all admin mods
+--- @param actor GPlayer @The player
+--- @param target GPlayer | nil @Optional - the target
+--- @return boolean @If they can or not
+--- @return string | nil @Optional reason
+function CAMI_PRIVILEGE:HasAccess(actor, target)
+end
+
+--- Contains the registered CAMI_USERGROUP usergroup structures.
+--- Indexed by usergroup name.
+--- @type CAMI_USERGROUP[]
 local usergroups = CAMI.GetUsergroups and CAMI.GetUsergroups() or {
     user = {
         Name = "user",
-        Inherits = "user"
+        Inherits = "user",
+        CAMI_Source = "Garry's Mod",
     },
     admin = {
         Name = "admin",
-        Inherits = "user"
+        Inherits = "user",
+        CAMI_Source = "Garry's Mod",
     },
     superadmin = {
         Name = "superadmin",
-        Inherits = "admin"
+        Inherits = "admin",
+        CAMI_Source = "Garry's Mod",
     }
 }
 
---[[
-privileges
-    Contains the registered CAMI_PRIVILEGE privilege structures.
-    Indexed by privilege name.
-]]
+--- Contains the registered CAMI_PRIVILEGE privilege structures.
+--- Indexed by privilege name.
+--- @type CAMI_PRIVILEGE[]
 local privileges = CAMI.GetPrivileges and CAMI.GetPrivileges() or {}
 
---[[
-CAMI.RegisterUsergroup
-    Registers a usergroup with CAMI.
-
-    Parameters:
-        usergroup
-            CAMI_USERGROUP
-            (see CAMI_USERGROUP structure)
-        source
-            any
-            Identifier for your own admin mod. Can be anything.
-            Use this to make sure CAMI.RegisterUsergroup function and the
-            CAMI.OnUsergroupRegistered hook don't cause an infinite loop
-
-
-
-    Return value:
-        CAMI_USERGROUP
-            The usergroup given as argument.
-]]
+--- Registers a usergroup with CAMI.
+---
+--- Use the source parameter to make sure CAMI.RegisterUsergroup function and
+--- the CAMI.OnUsergroupRegistered hook don't cause an infinite loop
+--- @param usergroup CAMI_USERGROUP @The structure for the usergroup you want to register
+--- @param source any @Identifier for your own admin mod. Can be anything.
+--- @return CAMI_USERGROUP @The usergroup given as an argument
 function CAMI.RegisterUsergroup(usergroup, source)
+    if source then
+        usergroup.CAMI_Source = tostring(source)
+    end
     usergroups[usergroup.Name] = usergroup
 
     hook.Call("CAMI.OnUsergroupRegistered", nil, usergroup, source)
     return usergroup
 end
 
---[[
-CAMI.UnregisterUsergroup
-    Unregisters a usergroup from CAMI. This will call a hook that will notify
-    all other admin mods of the removal.
-
-    Call only when the usergroup is to be permanently removed.
-
-    Parameters:
-        usergroupName
-            string
-            The name of the usergroup.
-        source
-            any
-            Identifier for your own admin mod. Can be anything.
-            Use this to make sure CAMI.UnregisterUsergroup function and the
-            CAMI.OnUsergroupUnregistered hook don't cause an infinite loop
-
-    Return value:
-        bool
-            Whether the unregistering succeeded.
-]]
+--- Unregisters a usergroup from CAMI. This will call a hook that will notify
+--- all other admin mods of the removal.
+---
+--- ⚠ **Warning**: Call only when the usergroup is to be permanently removed.
+---
+--- Use the source parameter to make sure CAMI.UnregisterUsergroup function and
+--- the CAMI.OnUsergroupUnregistered hook don't cause an infinite loop
+--- @param usergroupName string @The name of the usergroup.
+--- @param source any @Identifier for your own admin mod. Can be anything.
+--- @return boolean @Whether the unregistering succeeded.
 function CAMI.UnregisterUsergroup(usergroupName, source)
     if not usergroups[usergroupName] then return false end
 
@@ -135,82 +111,52 @@ function CAMI.UnregisterUsergroup(usergroupName, source)
     return true
 end
 
---[[
-CAMI.GetUsergroups
-    Retrieves all registered usergroups.
-
-    Return value:
-        Table of CAMI_USERGROUP, indexed by their names.
-]]
+--- Retrieves all registered usergroups.
+--- @return CAMI_USERGROUP[] @Usergroups indexed by their names.
 function CAMI.GetUsergroups()
     return usergroups
 end
 
---[[
-CAMI.GetUsergroup
-    Receives information about a usergroup.
-
-    Return value:
-        CAMI_USERGROUP
-            Returns nil when the usergroup does not exist.
-]]
+--- Receives information about a usergroup.
+--- @param usergroupName string
+--- @return CAMI_USERGROUP | nil @Returns nil when the usergroup does not exist.
 function CAMI.GetUsergroup(usergroupName)
     return usergroups[usergroupName]
 end
 
---[[
-CAMI.UsergroupInherits
-    Returns true when usergroupName1 inherits usergroupName2.
-    Note that usergroupName1 does not need to be a direct child.
-    Every usergroup trivially inherits itself.
-
-    Parameters:
-        usergroupName1
-            string
-            The name of the usergroup that is queried.
-        usergroupName2
-            string
-            The name of the usergroup of which is queried whether usergroupName
-            inherits from.
-
-    Return value:
-        bool
-            Whether usergroupName1 inherits usergroupName2.
-]]
-function CAMI.UsergroupInherits(usergroupName1, usergroupName2)
+--- Checks to see if potentialAncestor is an ancestor of usergroupName.
+--- All usergroups are ancestors of themselves.
+---
+--- Examples:
+--- * `user` is an ancestor of `admin` and also `superadmin`
+--- * `admin` is an ancestor of `superadmin`, but not `user`
+--- @param usergroupName string @The usergroup to query
+--- @param potentialAncestor string @The ancestor to query
+--- @return boolean @Whether usergroupName inherits potentialAncestor.
+function CAMI.UsergroupInherits(usergroupName, potentialAncestor)
     repeat
-        if usergroupName1 == usergroupName2 then return true end
+        if usergroupName == potentialAncestor then return true end
 
-        usergroupName1 = usergroups[usergroupName1] and
-                         usergroups[usergroupName1].Inherits or
-                         usergroupName1
-    until not usergroups[usergroupName1] or
-          usergroups[usergroupName1].Inherits == usergroupName1
+        usergroupName = usergroups[usergroupName] and
+                         usergroups[usergroupName].Inherits or
+                         usergroupName
+    until not usergroups[usergroupName] or
+          usergroups[usergroupName].Inherits == usergroupName
 
     -- One can only be sure the usergroup inherits from user if the
     -- usergroup isn't registered.
-    return usergroupName1 == usergroupName2 or usergroupName2 == "user"
+    return usergroupName == potentialAncestor or potentialAncestor == "user"
 end
 
---[[
-CAMI.InheritanceRoot
-    All usergroups must eventually inherit either user, admin or superadmin.
-    Regardless of what inheritance mechism an admin may or may not have, this
-    always applies.
-
-    This method always returns either user, admin or superadmin, based on what
-    usergroups eventually inherit.
-
-    Parameters:
-        usergroupName
-            string
-            The name of the usergroup of which the root of inheritance is
-            requested
-
-    Return value:
-        string
-            The name of the root usergroup (either user, admin or superadmin)
-]]
+--- Find the base group a usergroup inherits from.
+---
+--- This function traverses down the inheritence chain, so for example if you have
+--- `user` -> `group1` -> `group2`
+--- this function will return `user` if you pass it `group2`.
+---
+--- ℹ **NOTE**: All usergroups must eventually inherit either user, admin or superadmin.
+--- @param usergroupName string @The name of the usergroup
+--- @return "'user'" | "'admin'" | "'superadmin'" @The name of the root usergroup
 function CAMI.InheritanceRoot(usergroupName)
     if not usergroups[usergroupName] then return end
 
@@ -222,23 +168,12 @@ function CAMI.InheritanceRoot(usergroupName)
     return usergroupName
 end
 
---[[
-CAMI.RegisterPrivilege
-    Registers a privilege with CAMI.
-    Note: do NOT register all your admin mod's privileges with this function!
-    This function is for third party addons to register privileges
-    with admin mods, not for admin mods sharing the privileges amongst one
-    another.
-
-    Parameters:
-        privilege
-            CAMI_PRIVILEGE
-            See CAMI_PRIVILEGE structure.
-
-    Return value:
-        CAMI_PRIVILEGE
-            The privilege given as argument.
-]]
+--- Registers an addon privilege with CAMI.
+---
+--- ⚠ **Warning**: This should only be used by addons. Admin mods must *NOT*
+---  register their privileges using this function.
+--- @param privilege CAMI_PRIVILEGE
+--- @return CAMI_PRIVILEGE @The privilege given as argument.
 function CAMI.RegisterPrivilege(privilege)
     privileges[privilege.Name] = privilege
 
@@ -247,22 +182,12 @@ function CAMI.RegisterPrivilege(privilege)
     return privilege
 end
 
---[[
-CAMI.UnregisterPrivilege
-    Unregisters a privilege from CAMI. This will call a hook that will notify
-    all other admin mods of the removal.
-
-    Call only when the privilege is to be permanently removed.
-
-    Parameters:
-        privilegeName
-            string
-            The name of the privilege.
-
-    Return value:
-        bool
-            Whether the unregistering succeeded.
-]]
+--- Unregisters a privilege from CAMI.
+--- This will call a hook that will notify any admin mods of the removal.
+---
+--- ⚠ **Warning**: Call only when the privilege is to be permanently removed.
+--- @param privilegeName string @The name of the privilege.
+--- @return boolean @Whether the unregistering succeeded.
 function CAMI.UnregisterPrivilege(privilegeName)
     if not privileges[privilegeName] then return false end
 
@@ -274,82 +199,22 @@ function CAMI.UnregisterPrivilege(privilegeName)
     return true
 end
 
---[[
-CAMI.GetPrivileges
-    Retrieves all registered privileges.
-
-    Return value:
-        Table of CAMI_PRIVILEGE, indexed by their names.
-]]
+--- Retrieves all registered privileges.
+--- @return CAMI_PRIVILEGE[] @All privileges indexed by their names.
 function CAMI.GetPrivileges()
     return privileges
 end
 
---[[
-CAMI.GetPrivilege
-    Receives information about a privilege.
-
-    Return value:
-        CAMI_PRIVILEGE when the privilege exists.
-            nil when the privilege does not exist.
-]]
+--- Receives information about a privilege.
+--- @param privilegeName string
+--- @return CAMI_PRIVILEGE | nil
 function CAMI.GetPrivilege(privilegeName)
     return privileges[privilegeName]
 end
 
---[[
-CAMI.PlayerHasAccess
-    Queries whether a certain player has the right to perform a certain action.
-
-    Parameters:
-        actorPly
-            Player
-            The player of which is requested whether they have the privilege.
-        privilegeName
-            string
-            The name of the privilege.
-        callback
-            function(bool, string) or nil
-            This function will be called with the answer. The bool signifies the
-            yes or no answer as to whether the player is allowed. The string
-            will optionally give a reason.
-
-            Give an explicit nil here to get an answer immediately
-                Important note: May throw an error when the admin mod doesn't
-                give an answer immediately!
-        targetPly
-            Optional.
-            The player on which the privilege is executed.
-        extraInfoTbl
-            Optional.
-            Table containing extra information.
-            Officially supported members:
-                Fallback
-                    string
-                    Either of user/admin/superadmin. When no admin mod replies,
-                    the decision is based on the admin status of the user.
-                    Defaults to admin if not given.
-                IgnoreImmunity
-                    bool
-                    Ignore any immunity mechanisms an admin mod might have.
-                CommandArguments
-                    table
-                    Extra arguments that were given to the privilege command.
-
-    Return value:
-        If callback is specified:
-            None
-        Otherwise:
-            hasAccess
-                bool
-                Whether the player has access
-            reason
-                Optional.
-                The reason why a player does or does not have access.
-]]
 -- Default access handler
 local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
-    function(_, actorPly, privilegeName, callback, _, extraInfoTbl)
+    function(_, actorPly, privilegeName, callback, targetPly, extraInfoTbl)
         -- The server always has access in the fallback
         if not IsValid(actorPly) then return callback(true, "Fallback.") end
 
@@ -364,17 +229,43 @@ local defaultAccessHandler = {["CAMI.PlayerHasAccess"] =
 
         if not priv then return callback(fallback, "Fallback.") end
 
-        callback(
+        local hasAccess =
             priv.MinAccess == "user" or
             priv.MinAccess == "admin" and actorPly:IsAdmin() or
             priv.MinAccess == "superadmin" and actorPly:IsSuperAdmin()
-            , "Fallback.")
+
+        if hasAccess and priv.HasAccess then
+            hasAccess = priv:HasAccess(actorPly, targetPly)
+        end
+
+        callback(hasAccess, "Fallback.")
     end,
     ["CAMI.SteamIDHasAccess"] =
     function(_, _, _, callback)
         callback(false, "No information available.")
     end
 }
+
+--- @class CAMI_ACCESS_EXTRA_INFO
+--- @field Fallback "'user'" | "'admin'" | "'superadmin'" @Fallback status for if the privilege doesn't exist. Defaults to `admin`.
+--- @field IgnoreImmunity boolean @Ignore any immunity mechanisms an admin mod might have.
+--- @field CommandArguments table @Extra arguments that were given to the privilege command.
+
+--- Checks if a player has access to a privilege
+--- (and optionally can execute it on targetPly)
+---
+--- This function is designed to be asynchronous but will be invoked
+---  synchronously if no callback is passed.
+---
+--- ⚠ **Warning**: If the currently installed admin mod does not support
+---                 synchronous queries, this function will throw an error!
+--- @param actorPly GPlayer @The player to query
+--- @param privilegeName string @The privilege to query
+--- @param callback fun(hasAccess: boolean, reason: string|nil) @Callback to receive the answer, or nil for synchronous
+--- @param targetPly GPlayer | nil @Optional - target for if the privilege effects another player (eg kick/ban)
+--- @param extraInfoTbl CAMI_ACCESS_EXTRA_INFO | nil @Table of extra information for the admin mod
+--- @return boolean | nil @Synchronous only - if the player has the privilege
+--- @return string | nil @Synchronous only - optional reason from admin mod
 function CAMI.PlayerHasAccess(actorPly, privilegeName, callback, targetPly,
 extraInfoTbl)
     local hasAccess, reason = nil, nil
@@ -397,39 +288,14 @@ extraInfoTbl)
     return hasAccess, reason
 end
 
---[[
-CAMI.GetPlayersWithAccess
-    Finds the list of currently joined players who have the right to perform a
-    certain action.
-    NOTE: this function will NOT return an immediate result!
-    The result is in the callback!
-
-    Parameters:
-        privilegeName
-            string
-            The name of the privilege.
-        callback
-            function(players)
-            This function will be called with the list of players with access.
-        targetPly
-            Optional.
-            The player on which the privilege is executed.
-        extraInfoTbl
-            Optional.
-            Table containing extra information.
-            Officially supported members:
-                Fallback
-                    string
-                    Either of user/admin/superadmin. When no admin mod replies,
-                    the decision is based on the admin status of the user.
-                    Defaults to admin if not given.
-                IgnoreImmunity
-                    bool
-                    Ignore any immunity mechanisms an admin mod might have.
-                CommandArguments
-                    table
-                    Extra arguments that were given to the privilege command.
-]]
+--- Get all the players on the server with a certain privilege
+--- (and optionally who can execute it on targetPly)
+---
+--- ℹ **NOTE**: This is an asynchronous function!
+--- @param privilegeName string @The privilege to query
+--- @param callback fun(players: GPlayer[]) @Callback to receive the answer
+--- @param targetPly GPlayer | nil @Optional - target for if the privilege effects another player (eg kick/ban)
+--- @param extraInfoTbl CAMI_ACCESS_EXTRA_INFO | nil @Table of extra information for the admin mod
 function CAMI.GetPlayersWithAccess(privilegeName, callback, targetPly,
 extraInfoTbl)
     local allowedPlys = {}
@@ -450,101 +316,47 @@ extraInfoTbl)
     end
 end
 
---[[
-CAMI.SteamIDHasAccess
-    Queries whether a player with a steam ID has the right to perform a certain
-    action.
-    Note: the player does not need to be in the server for this to
-    work.
+--- @class CAMI_STEAM_ACCESS_EXTRA_INFO
+--- @field IgnoreImmunity boolean @Ignore any immunity mechanisms an admin mod might have.
+--- @field CommandArguments table @Extra arguments that were given to the privilege command.
 
-    Note: this function does NOT return an immediate result!
-    The result is in the callback!
-
-    Parameters:
-        actorSteam
-            Player
-            The SteamID of the player of which is requested whether they have
-            the privilege.
-        privilegeName
-            string
-            The name of the privilege.
-        callback
-            function(bool, string)
-            This function will be called with the answer. The bool signifies the
-            yes or no answer as to whether the player is allowed. The string
-            will optionally give a reason.
-        targetSteam
-            Optional.
-            The SteamID of the player on which the privilege is executed.
-        extraInfoTbl
-            Optional.
-            Table containing extra information.
-            Officially supported members:
-                IgnoreImmunity
-                    bool
-                    Ignore any immunity mechanisms an admin mod might have.
-                CommandArguments
-                    table
-                    Extra arguments that were given to the privilege command.
-
-    Return value:
-        None, the answer is given in the callback function in order to allow
-        for the admin mod to perform e.g. a database lookup.
-]]
+--- Checks if a (potentially offline) SteamID has access to a privilege
+--- (and optionally if they can execute it on a target SteamID)
+---
+--- ℹ **NOTE**: This is an asynchronous function!
+--- @param actorSteam string | nil @The SteamID to query
+--- @param privilegeName string @The privilege to query
+--- @param callback fun(hasAccess: boolean, reason: string|nil) @Callback to receive  the answer
+--- @param targetSteam string | nil @Optional - target SteamID for if the privilege effects another player (eg kick/ban)
+--- @param extraInfoTbl CAMI_STEAM_ACCESS_EXTRA_INFO | nil @Table of extra information for the admin mod
 function CAMI.SteamIDHasAccess(actorSteam, privilegeName, callback,
 targetSteam, extraInfoTbl)
     hook.Call("CAMI.SteamIDHasAccess", defaultAccessHandler, actorSteam,
         privilegeName, callback, targetSteam, extraInfoTbl)
 end
 
---[[
-CAMI.SignalUserGroupChanged
-    Signify that your admin mod has changed the usergroup of a player. This
-    function communicates to other admin mods what it thinks the usergroup
-    of a player should be.
-
-    Listen to the hook to receive the usergroup changes of other admin mods.
-
-    Parameters:
-        ply
-            Player
-            The player for which the usergroup is changed
-        old
-            string
-            The previous usergroup of the player.
-        new
-            string
-            The new usergroup of the player.
-        source
-            any
-            Identifier for your own admin mod. Can be anything.
-]]
+--- Signify that your admin mod has changed the usergroup of a player. This
+--- function communicates to other admin mods what it thinks the usergroup
+--- of a player should be.
+---
+--- Listen to the hook to receive the usergroup changes of other admin mods.
+--- @param ply GPlayer @The player for which the usergroup is changed
+--- @param old string @The previous usergroup of the player.
+--- @param new string @The new usergroup of the player.
+--- @param source any @Identifier for your own admin mod. Can be anything.
 function CAMI.SignalUserGroupChanged(ply, old, new, source)
     hook.Call("CAMI.PlayerUsergroupChanged", nil, ply, old, new, source)
 end
 
---[[
-CAMI.SignalSteamIDUserGroupChanged
-    Signify that your admin mod has changed the usergroup of a disconnected
-    player. This communicates to other admin mods what it thinks the usergroup
-    of a player should be.
-
-    Listen to the hook to receive the usergroup changes of other admin mods.
-
-    Parameters:
-        ply
-            string
-            The steam ID of the player for which the usergroup is changed
-        old
-            string
-            The previous usergroup of the player.
-        new
-            string
-            The new usergroup of the player.
-        source
-            any
-            Identifier for your own admin mod. Can be anything.
-]]
+--- Signify that your admin mod has changed the usergroup of a disconnected
+--- player. This communicates to other admin mods what it thinks the usergroup
+--- of a player should be.
+---
+--- Listen to the hook to receive the usergroup changes of other admin mods.
+--- @param steamId string @The steam ID of the player for which the usergroup is changed
+--- @param old string @The previous usergroup of the player.
+--- @param new string @The new usergroup of the player.
+--- @param source any @Identifier for your own admin mod. Can be anything.
 function CAMI.SignalSteamIDUserGroupChanged(steamId, old, new, source)
     hook.Call("CAMI.SteamIDUsergroupChanged", nil, steamId, old, new, source)
 end
