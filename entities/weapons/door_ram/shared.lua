@@ -73,7 +73,7 @@ local function ramDoor(ply, trace, ent)
     if GAMEMODE.Config.doorwarrants and ent:isKeysOwned() and not ent:isKeysOwnedBy(ply) then
         -- if anyone who owns this door has a warrant for their arrest
         -- allow the police to smash the door in
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             if ent:isKeysOwnedBy(v) and canRam(v) then
                 allowed = true
                 break
@@ -90,7 +90,7 @@ local function ramDoor(ply, trace, ent)
         local teamDoors = RPExtraTeamDoors[keysDoorGroup]
         if teamDoors then
             allowed = false
-            for _, v in ipairs(player.GetAll()) do
+            for _, v in player.Iterator() do
                 if table.HasValue(teamDoors, v:Team()) and canRam(v) then
                     allowed = true
                     break

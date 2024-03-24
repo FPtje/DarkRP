@@ -13,7 +13,7 @@ Meteor storm
 ---------------------------------------------------------]]
 local function StormStart()
     local phrase = DarkRP.getPhrase("meteor_approaching")
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if v:Alive() then
             v:PrintMessage(HUD_PRINTCENTER, phrase)
             v:PrintMessage(HUD_PRINTTALK, phrase)
@@ -23,7 +23,7 @@ end
 
 local function StormEnd()
     local phrase = DarkRP.getPhrase("meteor_passing")
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if v:Alive() then
             v:PrintMessage(HUD_PRINTCENTER, phrase)
             v:PrintMessage(HUD_PRINTTALK, phrase)
@@ -58,7 +58,7 @@ end
 
 local function StartShower()
     timer.Adjust("start", math.random(0.1, 1), 0, StartShower)
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if math.random(0, 2) == 0 and v:Alive() then
             AttackEnt(v)
         end

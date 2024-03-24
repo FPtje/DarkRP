@@ -46,7 +46,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
             end
 
             -- Send groups to early joiners and listen server hosts
-            for _, v in ipairs(player.GetAll()) do
+            for _, v in player.Iterator() do
                 FAdmin.Access.SendGroups(v)
             end
 

@@ -52,7 +52,7 @@ end
 function Vote:getFilter()
     local filter = RecipientFilter()
 
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if self.exclude[v] then continue end
         local canVote = hook.Call("canVote", GAMEMODE, v, self)
 

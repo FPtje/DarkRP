@@ -42,7 +42,7 @@ end)
 hook.Add("PlayerSpawnedProp", "FAdmin_Log", function(ply, model, ent)
     if not IsValid(ply) or not ply:IsPlayer() or not IsValid(ent) then return end
 
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if v:IsAdmin() then
             v:PrintMessage(HUD_PRINTCONSOLE, ply:Nick() .. " (" .. ply:SteamID() .. ") Spawned a " .. (model or "Unknown"))
         end

@@ -59,7 +59,7 @@ FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
         return true
     end
     FAdmin.Messages.SendMessage(ply, 2, "FAdmin by (FPtje) Falco, STEAM_0:0:8944068")
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if v:SteamID() == "STEAM_0:0:8944068" then
             FAdmin.Messages.SendMessage(ply, 4, "(FPtje) Falco is in the server at this moment")
             return true

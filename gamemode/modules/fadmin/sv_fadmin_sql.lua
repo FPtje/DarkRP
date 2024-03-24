@@ -67,7 +67,7 @@ hook.Add("FAdmin_RetrieveBans", "getMySQLBans", function()
             }
         end
 
-        for _, v in ipairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             if not FAdmin.BANS[string.upper(v:SteamID())] then continue end
 
             v:Kick("FAdmin ban evasion")

@@ -86,7 +86,7 @@ hook.Add("KeyPress", "openHitMenu", function(ply, key)
 end)
 
 hook.Add("InitPostEntity", "HitmanMenu", function()
-    for _, v in ipairs(player.GetAll()) do
+    for _, v in player.Iterator() do
         if IsValid(v) and v:isHitman() and v:hasHit() then
             v:drawHitInfo()
         end
