@@ -11,8 +11,8 @@
         "gamemodes/darkrp/gamemode/config/DO NOT TOUCH THESE FILES.txt",
         "gamemodes/darkrp/gamemode/modules/DO NOT TOUCH THESE MODULES.txt",
         "LICENSE.txt",
-        "data/fadmin/MOTD.txt"
-
+        "data/fadmin/MOTD.txt",
+        ".editorconfig"
     ],
     "tags": [
         "roleplay",
