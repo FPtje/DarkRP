@@ -4,18 +4,16 @@
 #
 
 name: "🪳 Bug Report"
-description: I found a bug in DarkRP.
-title: "[ Bug ] <Title>"
-labels: [bug]
-assignees: ["FPtje"]
+description: Report a bug in DarkRP.
+title: "<Title>"
 
 body:
     - type: markdown
 
       attributes:
           value: |
-              This place is only intended for bug reports,
-              if you need general join the **[DarkRP Discord](https://darkrp.page.link/discord)**
+              This place is only intended for bug reports.
+              If you need help, join the **[DarkRP Discord](https://darkrp.page.link/discord)**
 
     - type: textarea
       id: problem
@@ -59,14 +57,16 @@ body:
       id: errors
 
       validations:
-          required: true
+          required: false
 
       attributes:
           description: |
-              Describe the issue as accurately as possible.
+              Provide any errors. Please make sure to look at both the server
+              console as well as the console when you join the server.
 
           placeholder: |
-              I'm unable to do x when ..
+              attempt to index 'foo' (a nil value)
+              some_file.lua: 123
 
           label: Errors
 
