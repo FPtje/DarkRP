@@ -105,24 +105,27 @@ function DarkRP.findPlayers(info)
         -- Playerinfo is always to be treated as UserID when it's a number
         -- otherwise people with numbers in their names could get confused with UserID's of other players
         if tonumber(PlayerInfo) then
-            if IsValid(Player(PlayerInfo)) and not found[Player(PlayerInfo)] then
-                found[Player(PlayerInfo)] = true
+            local foundPlayer = Player(PlayerInfo)
+            if IsValid(foundPlayer) and not found[foundPlayer] then
+                found[foundPlayer] = true
                 players = players or {}
-                table.insert(players, Player(PlayerInfo))
+                table.insert(players, foundPlayer)
             end
             continue
         end
 
+        local stringPlayerInfo = string.lower(PlayerInfo)
         for _, v in ipairs(pls) do
-            -- Prevend duplicates
+            -- Prevent duplicates
             if found[v] then continue end
+            local steamId = v:SteamID()
 
             -- Find by Steam ID
-            if (PlayerInfo == v:SteamID() or v:SteamID() == "UNKNOWN") or
+            if (PlayerInfo == steamId or steamId == "UNKNOWN") or
             -- Find by Partial Nick
-            string.find(string.lower(v:Nick()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil or
+            string.find(string.lower(v:Nick()), stringPlayerInfo, 1, true) ~= nil or
             -- Find by steam name
-            (v.SteamName and string.find(string.lower(v:SteamName()), string.lower(tostring(PlayerInfo)), 1, true) ~= nil) then
+            (v.SteamName and string.find(string.lower(v:SteamName()), stringPlayerInfo, 1, true) ~= nil) then
                 found[v] = true
                 players = players or {}
                 table.insert(players, v)

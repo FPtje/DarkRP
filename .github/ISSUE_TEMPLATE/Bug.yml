@@ -1,0 +1,87 @@
+#
+#   Check the docs on how to write GitHub forms:
+#   https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/about-issue-and-pull-request-templates
+#
+
+name: "🪳 Bug Report"
+description: Report a bug in DarkRP.
+title: "<Title>"
+
+body:
+    - type: markdown
+
+      attributes:
+          value: |
+              This place is only intended for bug reports.
+              If you need help, join the **[DarkRP Discord](https://darkrp.page.link/discord)**
+
+    - type: textarea
+      id: problem
+
+      validations:
+          required: true
+
+      attributes:
+          description: |
+              Describe the issue as accurately as possible.
+
+          placeholder: |
+              I'm unable to do x when ..
+
+          label: Problem
+
+    - type: textarea
+      id: reproduce
+
+      validations:
+          required: false
+
+      attributes:
+          description: |
+              Describe how we can reproduce the issue.
+
+          placeholder: |
+              1. I first do x
+              2. Then I do y and see z
+
+          label: Reproduction
+
+    - type: markdown
+
+      attributes:
+          value: |
+              It's important for us to be able to reproduce your problem
+              so we fix it more easily and be sure it's solved.
+
+    - type: textarea
+      id: errors
+
+      validations:
+          required: false
+
+      attributes:
+          description: |
+              Provide any errors. Please make sure to look at both the server
+              console as well as the console when you join the server.
+
+          placeholder: |
+              attempt to index 'foo' (a nil value)
+              some_file.lua: 123
+
+          label: Errors
+
+    - type: markdown
+
+      attributes:
+          value: |
+              Please always check the startup log of the server for
+              errors, as those can cause more errors down the line.
+
+    - type: textarea
+      id: extra
+
+      attributes:
+          description: |
+              Any additional information that you can provide.
+
+          label: Additional Info

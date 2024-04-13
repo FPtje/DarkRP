@@ -217,14 +217,14 @@ end
 
 Filter = function(f, xs)
     local res = {}
-    for k, v in pairs(xs) do
+    for k,v in pairs(xs) do
         if f(v) then res[k] = v end
     end
     return res
 end
 
 ForEach = function(f, xs)
-    for k, v in pairs(xs) do
+    for k,v in pairs(xs) do
         local val = f(k, v)
         if val ~= nil then return val end
     end
@@ -253,7 +253,7 @@ GetValue = function(i, xs)
 end
 
 Null = function(xs)
-    for _ in pairs(xs) do
+    for k, v in pairs(xs) do
         return false
     end
     return true
@@ -287,7 +287,7 @@ Foldr = function(func, val, xs)
 end
 
 Foldl = function(func, val, xs)
-    for _, v in ipairs(xs) do
+    for k, v in ipairs(xs) do
         val = func(val, v)
     end
 
@@ -295,28 +295,28 @@ Foldl = function(func, val, xs)
 end
 
 And = function(xs)
-    for _, v in pairs(xs) do
+    for k, v in pairs(xs) do
         if v ~= true then return false end
     end
     return true
 end
 
 Or = function(xs)
-    for _, v in pairs(xs) do
+    for k, v in pairs(xs) do
         if v == true then return true end
     end
     return false
 end
 
 Any = function(func, xs)
-    for _, v in pairs(xs) do
+    for k, v in pairs(xs) do
         if func(v) == true then return true end
     end
     return false
 end
 
 All = function(func, xs)
-    for _, v in pairs(xs) do
+    for k, v in pairs(xs) do
         if func(v) ~= true then return false end
     end
     return true
