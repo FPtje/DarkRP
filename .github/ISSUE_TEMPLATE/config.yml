@@ -1,0 +1,9 @@
+blank_issues_enabled: true
+
+contact_links:
+    - about: Sadly, DarkRP is in maintenance only mode, meaning feature requests are generally not accepted. The best way to get the feature might be to create an addon.
+      name: 🆕 Feature request
+      url: https://darkrp.page.link/discord
+    - about: I need help with DarkRP
+      name: 🚨 Support
+      url: https://darkrp.page.link/discord
