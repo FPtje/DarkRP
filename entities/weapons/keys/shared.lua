@@ -71,6 +71,8 @@ local function lookingAtLockable(ply, ent, hitpos)
             ent:isDoor() and eyepos:DistToSqr(hitpos) < 2000
             or
             ent:IsVehicle() and eyepos:DistToSqr(hitpos) < 4000
+            or
+            ent.isWacAircraft and eyepos:DistToSqr(hitpos) < 4000
         )
 end
 
@@ -115,7 +117,7 @@ function SWEP:PrimaryAttack()
     if Owner:canKeysLock(ent) then
         ent:keysLock() -- Lock the door immediately so it won't annoy people
         lockUnlockAnimation(Owner, self.Sound)
-    elseif ent:IsVehicle() then
+    elseif ent:IsVehicle() or ent.isWacAircraft then
         DarkRP.notify(Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
     else
         doKnock(Owner, "physics/wood/wood_crate_impact_hard2.wav")
@@ -140,7 +142,7 @@ function SWEP:SecondaryAttack()
     if Owner:canKeysUnlock(ent) then
         ent:keysUnLock() -- Unlock the door immediately so it won't annoy people
         lockUnlockAnimation(Owner, self.Sound)
-    elseif ent:IsVehicle() then
+    elseif ent:IsVehicle() or ent.isWacAircraft then
         DarkRP.notify(Owner, 1, 3, DarkRP.getPhrase("do_not_own_ent"))
     else
         doKnock(Owner, "physics/wood/wood_crate_impact_hard3.wav")
@@ -152,7 +154,7 @@ function SWEP:Reload()
 
     local ent = trace.Entity
 
-    if not IsValid(ent) or ((not ent:isDoor() and not ent:IsVehicle()) or self:GetOwner():EyePos():DistToSqr(trace.HitPos) > 40000) then
+    if not IsValid(ent) or ((not ent:isDoor() and not ent:IsVehicle() and not ent.isWacAircraft) or self:GetOwner():EyePos():DistToSqr(trace.HitPos) > 40000) then
         if CLIENT and not DarkRP.disabledDefaults["modules"]["animations"] then RunConsoleCommand("_DarkRP_AnimationMenu") end
         return
     end

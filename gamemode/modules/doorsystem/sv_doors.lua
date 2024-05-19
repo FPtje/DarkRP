@@ -244,7 +244,7 @@ local function SetDoorOwnable(ply)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
 
-    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
+    if not IsValid(ent) or (not ent:isDoor() and not (ent:IsVehicle() or ent.isWacAircraft)) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -272,7 +272,7 @@ local function SetDoorGroupOwnable(ply, arg)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
 
-    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
+    if not IsValid(ent) or (not ent:isDoor() and not (ent:IsVehicle() or ent.isWacAircraft)) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return
     end
@@ -300,7 +300,7 @@ local function SetDoorTeamOwnable(ply, arg)
     local trace = ply:GetEyeTrace()
     local ent = trace.Entity
 
-    if not IsValid(ent) or (not ent:isDoor() and not ent:IsVehicle()) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
+    if not IsValid(ent) or (not ent:isDoor() and not (ent:IsVehicle() or ent.isWacAircraft)) or ply:GetPos():DistToSqr(ent:GetPos()) > 40000 then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("must_be_looking_at", DarkRP.getPhrase("door_or_vehicle")))
         return ""
     end
@@ -352,7 +352,7 @@ local function OwnDoor(ply)
     end
 
     if ent:isKeysOwnedBy(ply) then
-        local bAllowed, strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
+        local bAllowed, strReason = hook.Call("playerSell" .. ((ent:IsVehicle() or ent.isWacAircraft) and "Vehicle" or "Door"), GAMEMODE, ply, ent)
 
         if bAllowed == false then
             if strReason and strReason ~= "" then
@@ -370,7 +370,7 @@ local function OwnDoor(ply)
 
         ent:keysUnOwn(ply)
         ent:setKeysTitle(nil)
-        local GiveMoneyBack = math.floor((hook.Call("get" .. (ent:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent) * 0.666) + 0.5)
+        local GiveMoneyBack = math.floor((hook.Call("get" .. ((ent:IsVehicle() or ent.isWacAircraft) and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent) * 0.666) + 0.5)
         hook.Call("playerKeysSold", GAMEMODE, ply, ent, GiveMoneyBack)
         ply:addMoney(GiveMoneyBack)
         local bSuppress = hook.Call("hideSellDoorMessage", GAMEMODE, ply, ent)
@@ -384,13 +384,13 @@ local function OwnDoor(ply)
             return ""
         end
 
-        local iCost = hook.Call("get" .. (ent:IsVehicle() and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent)
+        local iCost = hook.Call("get" .. ((ent:IsVehicle() or ent.isWacAircraft) and "Vehicle" or "Door") .. "Cost", GAMEMODE, ply, ent)
         if not ply:canAfford(iCost) then
-            DarkRP.notify(ply, 1, 4, ent:IsVehicle() and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
+            DarkRP.notify(ply, 1, 4, (ent:IsVehicle() or ent.isWacAircraft) and DarkRP.getPhrase("vehicle_cannot_afford") or DarkRP.getPhrase("door_cannot_afford"))
             return ""
         end
 
-        local bAllowed, strReason, bSuppress = hook.Call("playerBuy" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
+        local bAllowed, strReason, bSuppress = hook.Call("playerBuy" .. ((ent:IsVehicle() or ent.isWacAircraft) and "Vehicle" or "Door"), GAMEMODE, ply, ent)
         if bAllowed == false then
             if strReason and strReason ~= "" then
                 DarkRP.notify(ply, 1, 4, strReason)
@@ -399,7 +399,7 @@ local function OwnDoor(ply)
             return ""
         end
 
-        local bVehicle = ent:IsVehicle()
+        local bVehicle = (ent:IsVehicle() or ent.isWacAircraft)
 
         if bVehicle and (ply.Vehicles or 0) >= GAMEMODE.Config.maxvehicles and Owner ~= ply then
             DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", DarkRP.getPhrase("vehicle")))
@@ -445,7 +445,7 @@ local function UnOwnAll(ply, cmd, args)
     end
 
     for entIndex, ent in pairs(unownables) do
-        local bAllowed, _strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
+        local bAllowed, _strReason = hook.Call("playerSell" .. ((ent:IsVehicle() or ent.isWacAircraft) and "Vehicle" or "Door"), GAMEMODE, ply, ent)
 
         if bAllowed == false then continue end
 
