@@ -1,5 +1,11 @@
 util.AddNetworkString("DarkRP_Notify")
 
+NOTIFY_GENERIC = 0
+NOTIFY_ERROR = 1
+NOTIFY_UNDO = 2
+NOTIFY_HINT = 3
+NOTIFY_CLEANUP = 4
+
 function DarkRP.notify(ply, msgtype, len, msg)
     if not istable(ply) then
         if not IsValid(ply) then
@@ -10,6 +16,10 @@ function DarkRP.notify(ply, msgtype, len, msg)
 
         ply = {ply}
     end
+
+    msgtype = msgtype or NOTIFY_GENERIC
+    len = len or 4
+    msg = msg or ""
 
     local rcp = RecipientFilter()
     for _, v in pairs(ply) do
@@ -27,6 +37,10 @@ end
 
 function DarkRP.notifyAll(msgtype, len, msg)
     if hook.Run("onNotify", player.GetAll(), msgtype, len, msg) == true then return end
+
+    msgtype = msgtype or NOTIFY_GENERIC
+    len = len or 4
+    msg = msg or ""
 
     net.Start("DarkRP_Notify")
     net.WriteString(msg)
