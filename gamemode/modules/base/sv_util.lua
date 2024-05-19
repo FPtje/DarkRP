@@ -11,6 +11,10 @@ function DarkRP.notify(ply, msgtype, len, msg)
         ply = {ply}
     end
 
+    msgtype = msgtype or NOTIFY_GENERIC
+    len = len or 4
+    msg = msg or ""
+
     local rcp = RecipientFilter()
     for _, v in pairs(ply) do
         rcp:AddPlayer(v)
@@ -27,6 +31,10 @@ end
 
 function DarkRP.notifyAll(msgtype, len, msg)
     if hook.Run("onNotify", player.GetAll(), msgtype, len, msg) == true then return end
+
+    msgtype = msgtype or NOTIFY_GENERIC
+    len = len or 4
+    msg = msg or ""
 
     net.Start("DarkRP_Notify")
     net.WriteString(msg)
