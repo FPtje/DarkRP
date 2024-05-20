@@ -182,13 +182,10 @@ end
 
 DarkRP.registerDoorVar("groupOwn",
     function(val)
-        net.WriteUInt(RPExtraTeamDoorIDs[val], 16)
+        net.WriteString(val)
     end,
     function()
-        local id = net.ReadUInt(16)
-        for name, id2 in pairs(RPExtraTeamDoorIDs) do
-            if id == id2 then return name end
-        end
+        return net.ReadString()
     end
 )
 
