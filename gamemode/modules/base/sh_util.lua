@@ -61,24 +61,54 @@ function DarkRP.findPlayer(info)
     if not info or info == "" then return nil end
     local pls = player.GetAll()
 
-    for k = 1, #pls do -- Proven to be faster than pairs loop.
+    local count = #pls
+    local numberInfo = tonumber(info)
+    local lowerInfo = string.lower(tostring(info))
+
+    if numberInfo then -- since we'll be doing alot of scanning, need to make sure 
+        for k = 1, count do
+            local v = pls[k]
+
+            if numberInfo == v:UserID() then -- darkrp relies on this being first
+                return v
+            end
+        end
+
+        for k = 1, count do -- this loop could likely be combined with the above loop
+            local v = pls[k]
+
+            if info == v:SteamID64() then
+                return v
+            end
+        end
+    end
+
+    if string.StartsWith(lowerInfo, "steam_") then
+        for k = 1, count do
+            local v = pls[k]
+
+            if info == v:SteamID() then
+                return v
+            end
+        end
+    end
+
+    for k = 1, count do
         local v = pls[k]
-        if tonumber(info) == v:UserID() then
-            return v
-        end
 
-        if info == v:SteamID() then
-            return v
-        end
-
-        if string.find(string.lower(v:Nick()), string.lower(tostring(info)), 1, true) ~= nil then
-            return v
-        end
-
-        if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:Nick()), lowerInfo, 1, true) ~= nil then
             return v
         end
     end
+
+    for k = 1, count do
+        local v = pls[k]
+
+        if string.find(string.lower(v:SteamName()), lowerInfo, 1, true) ~= nil then
+            return v
+        end
+    end
+
     return nil
 end
 
