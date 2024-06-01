@@ -71,7 +71,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
         self:SetPos(x, y)
     end
 
-    local entType = DarkRP.getPhrase(ent:IsVehicle() and "vehicle" or "door")
+    local entType = DarkRP.getPhrase((ent:IsVehicle() or ent.isWacAircraft) and "vehicle" or "door")
     Frame:SetTitle(DarkRP.getPhrase("x_options", entType:gsub("^%a", string.upper)))
 
     function Frame:Close()

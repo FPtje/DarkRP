@@ -34,7 +34,9 @@ hook.Add("onKeysLocked", "PassengerModCompatibility", onLocked)
 local function onUnlocked(ent)
     -- Passenger mod
     for _, v in pairs(ent.Seats or {}) do
-        v:Fire("unlock", "", 0)
+        if (v.Fire) then
+            v:Fire("unlock", "", 0)
+        end
     end
 
     -- VUMod

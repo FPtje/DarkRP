@@ -19,7 +19,7 @@ function meta:isKeysOwnable()
     local class = self:GetClass()
 
     if (ownableDoors[class] or
-            (GAMEMODE.Config.allowvehicleowning and self:IsVehicle() and (not IsValid(self:GetParent()) or not self:GetParent():IsVehicle()))) then
+            (GAMEMODE.Config.allowvehicleowning and (self:IsVehicle() or self.isWacAircraft) and (not IsValid(self:GetParent()) or not self:GetParent():IsVehicle()))) then
         return true
     end
 
