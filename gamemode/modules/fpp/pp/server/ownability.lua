@@ -287,7 +287,7 @@ local function netWriteEntData(ply, ent)
     net.WriteUInt(ent:EntIndex(), 13)
 
     local owner = ent:CPPIGetOwner()
-    net.WriteUInt(IsValid(owner) and owner:EntIndex() or -1, 8)
+    net.WriteUInt(IsValid(owner) and owner:EntIndex() or 255, 8)
 
     local entTable = ent:GetTable()
     net.WriteUInt(entTable.FPPRestrictConstraint and entTable.FPPRestrictConstraint[ply] or entTable.FPPCanTouch[ply], 5) -- touchability information
