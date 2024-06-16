@@ -56,6 +56,17 @@ end
 
 --[[---------------------------------------------------------------------------
 Find a player based on given information
+
+Note that there is a searching priority:
+  * UserID
+  * SteamID64
+  * SteamID
+  * Nick
+  * SteamName
+
+Note also that there are _separate_ loops. This is to make sure the function
+gives the same result, regardless of the order in which players are iterated
+over.
 ---------------------------------------------------------------------------]]
 function DarkRP.findPlayer(info)
     if not info or info == "" then return nil end
@@ -63,18 +74,19 @@ function DarkRP.findPlayer(info)
 
     local count = #pls
     local numberInfo = tonumber(info)
-    local lowerInfo = string.lower(tostring(info))
 
-    if numberInfo then -- since we'll be doing alot of scanning, need to make sure 
+    -- First check if the input matches a player by UserID or SteamID64. This is
+    -- only necessary if the input can be parsed as a number.
+    if numberInfo then
         for k = 1, count do
             local v = pls[k]
 
-            if numberInfo == v:UserID() then -- darkrp relies on this being first
+            if numberInfo == v:UserID() then
                 return v
             end
         end
 
-        for k = 1, count do -- this loop could likely be combined with the above loop
+        for k = 1, count do
             local v = pls[k]
 
             if info == v:SteamID64() then
@@ -83,6 +95,7 @@ function DarkRP.findPlayer(info)
         end
     end
 
+    local lowerInfo = string.lower(tostring(info))
     if string.StartsWith(lowerInfo, "steam_") then
         for k = 1, count do
             local v = pls[k]
