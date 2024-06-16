@@ -671,7 +671,7 @@ function FPP.PlayerInitialSpawn(ply)
                 v:CPPISetOwner(ply)
                 table.insert(entities, v)
 
-                if v:GetNW2String("FPP_OriginalOwner", "") ~= "" then
+                if v:GetNW2String("FPP_OriginalOwner") == SteamID then
                     v:SetNW2String("FPP_OriginalOwner", "")
                 end
             end
