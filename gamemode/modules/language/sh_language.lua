@@ -1,8 +1,16 @@
 local rp_languages = {}
-local selectedLanguage = GetConVar("gmod_language"):GetString() -- Switch language by setting gmod_language to another language
+local selectedLanguage = "en" -- Switch language by setting gmod_language to another language
 
 cvars.AddChangeCallback("gmod_language", function(cv, old, new)
     selectedLanguage = new
+end)
+
+hook.Add("Think", "DarkRPSetLanguage", function()
+    gmodLanguage = GetConVar("gmod_language"):GetString()
+    if gmodLanguage != "" then
+        selectedLanguage = gmodLanguage
+    end
+    hook.Remove("Think", "DarkRPSetLanguage")
 end)
 
 function DarkRP.addLanguage(name, tbl)
