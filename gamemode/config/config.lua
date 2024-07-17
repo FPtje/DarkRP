@@ -95,8 +95,6 @@ GM.Config.earthquakes                   = false
 GM.Config.enablebuypistol               = true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
 GM.Config.enforceplayermodel            = true
--- EntitySpamTime - Antispam time between spawning entities.
-GM.Config.EntitySpamTime                = 2
 -- globalshow - Whether or not to display player info above players' heads in-game.
 GM.Config.globalshow                    = false
 -- ironshoot - Enable/disable whether people need iron sights to shoot.
@@ -206,6 +204,8 @@ GM.Config.decaltimer                    = 120
 GM.Config.demotetime                    = 120
 -- doorcost - Sets the cost of a door.
 GM.Config.doorcost                      = 30
+-- EntitySpamTime - Antispam time between spawning entities.
+GM.Config.EntitySpamTime                = 2
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
 GM.Config.entremovedelay                = 0
 -- gunlabweapon - The weapon that the gunlab spawns.
