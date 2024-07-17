@@ -95,6 +95,8 @@ GM.Config.earthquakes                   = false
 GM.Config.enablebuypistol               = true
 -- enforceplayermodel - Whether or not to force players to use their role-defined character models.
 GM.Config.enforceplayermodel            = true
+-- EntitySpamTime - Antispam time between spawning entities.
+GM.Config.EntitySpamTime                = 2
 -- globalshow - Whether or not to display player info above players' heads in-game.
 GM.Config.globalshow                    = false
 -- ironshoot - Enable/disable whether people need iron sights to shoot.
@@ -272,7 +274,7 @@ GM.Config.runspeed                      = 240
 GM.Config.runspeedcp                    = 255
 -- searchtime - Number of seconds for which a search warrant is valid.
 GM.Config.searchtime                    = 30
--- ShipmentSpawnTime - Antispam time between spawning shipments.
+-- ShipmentSpamTime - Antispam time between spawning shipments.
 GM.Config.ShipmentSpamTime              = 3
 -- shipmenttime - The number of seconds it takes for a shipment to spawn.
 GM.Config.shipmentspawntime             = 10
