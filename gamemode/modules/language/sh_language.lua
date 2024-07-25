@@ -5,12 +5,13 @@ cvars.AddChangeCallback("gmod_language", function(cv, old, new)
     selectedLanguage = new
 end)
 
-hook.Add("Think", "DarkRPSetLanguage", function()
-    gmodLanguage = GetConVar("gmod_language"):GetString()
-    if gmodLanguage != "" then
+-- Some server owners experience that the language is not set correctly on
+-- startup. This provides a failsafe in case that happens.
+timer.Simple(0, function()
+    local gmodLanguage = GetConVar("gmod_language"):GetString()
+    if gmodLanguage ~= "" and selectedLanguage ~= gmodLanguage then
         selectedLanguage = gmodLanguage
     end
-    hook.Remove("Think", "DarkRPSetLanguage")
 end)
 
 function DarkRP.addLanguage(name, tbl)
