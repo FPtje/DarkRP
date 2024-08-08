@@ -53,7 +53,7 @@ end
 
 local function DropWeapon(ply)
     local ent = ply:GetActiveWeapon()
-    if not ent:IsValid() or ent:GetModel() == "" then
+    if not ent:IsValid() or ent:GetModel() == "" or ent.IsBeingDarkRPDropped then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
         return ""
     end
@@ -63,6 +63,10 @@ local function DropWeapon(ply)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
         return ""
     end
+
+    -- Mark the weapon as being dropped. This, along with the check above will
+    -- prevent the same weapon from being dropped twice.
+    ent.IsBeingDarkRPDropped = true
 
     ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
