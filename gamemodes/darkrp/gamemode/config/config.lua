@@ -204,6 +204,8 @@ GM.Config.decaltimer                    = 120
 GM.Config.demotetime                    = 120
 -- doorcost - Sets the cost of a door.
 GM.Config.doorcost                      = 30
+-- EntitySpamTime - Antispam time between spawning entities.
+GM.Config.EntitySpamTime                = 2
 -- entremovedelay - how long to wait before removing a bought entity after disconnect.
 GM.Config.entremovedelay                = 0
 -- gunlabweapon - The weapon that the gunlab spawns.
@@ -272,7 +274,7 @@ GM.Config.runspeed                      = 240
 GM.Config.runspeedcp                    = 255
 -- searchtime - Number of seconds for which a search warrant is valid.
 GM.Config.searchtime                    = 30
--- ShipmentSpawnTime - Antispam time between spawning shipments.
+-- ShipmentSpamTime - Antispam time between spawning shipments.
 GM.Config.ShipmentSpamTime              = 3
 -- shipmenttime - The number of seconds it takes for a shipment to spawn.
 GM.Config.shipmentspawntime             = 10

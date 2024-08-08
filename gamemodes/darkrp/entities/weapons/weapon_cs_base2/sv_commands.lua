@@ -1,5 +1,7 @@
 local meta = FindMetaTable("Player")
 function meta:dropDRPWeapon(weapon)
+    if not weapon:IsValid() or weapon:GetOwner() ~= self or weapon.IsBeingDarkRPDropped then return end
+
     if GAMEMODE.Config.restrictdrop then
         local found = false
         for k,v in pairs(CustomShipments) do
@@ -11,6 +13,10 @@ function meta:dropDRPWeapon(weapon)
 
         if not found then return end
     end
+
+    -- Mark the weapon as being dropped. This, along with the check above will
+    -- prevent the same weapon from being dropped twice.
+    weapon.IsBeingDarkRPDropped = true
 
     local primAmmo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel

@@ -277,7 +277,7 @@ local function addEntityCommands(tblEnt)
     DarkRP.declareChatCommand{
         command = tblEnt.cmd,
         description = "Purchase a " .. tblEnt.name,
-        delay = tblEnt.delay or 2,
+        delay = tblEnt.delay or GAMEMODE.Config.EntitySpamTime,
         condition =
             function(ply)
                 if not tblEnt.allowPurchaseWhileDead and not ply:Alive() then return false end
