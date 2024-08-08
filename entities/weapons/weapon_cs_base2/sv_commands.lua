@@ -1,7 +1,6 @@
 local meta = FindMetaTable("Player")
 function meta:dropDRPWeapon(weapon)
-    if not self:IsValid() or not self:IsPlayer() then return end
-    if not weapon:IsValid() or not self:HasWeapon(weapon:GetClass()) then return end
+    if not weapon:IsValid() or weapon:GetOwner() ~= self then return end
 
     if GAMEMODE.Config.restrictdrop then
         local found = false
