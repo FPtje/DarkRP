@@ -1,6 +1,6 @@
 local meta = FindMetaTable("Player")
 function meta:dropDRPWeapon(weapon)
-    if not weapon:IsValid() or weapon:GetOwner() ~= self then return end
+    if not weapon:IsValid() or weapon:GetOwner() ~= self or weapon.IsBeingDarkRPDropped then return end
 
     if GAMEMODE.Config.restrictdrop then
         local found = false
@@ -13,6 +13,10 @@ function meta:dropDRPWeapon(weapon)
 
         if not found then return end
     end
+
+    -- Mark the weapon as being dropped. This, along with the check above will
+    -- prevent the same weapon from being dropped twice.
+    weapon.IsBeingDarkRPDropped = true
 
     local primAmmo = self:GetAmmoCount(weapon:GetPrimaryAmmoType())
     self:DropWeapon(weapon) -- Drop it so the model isn't the viewmodel
@@ -53,7 +57,7 @@ end
 
 local function DropWeapon(ply)
     local ent = ply:GetActiveWeapon()
-    if not ent:IsValid() or ent:GetModel() == "" or ent.IsBeingDarkRPDropped then
+    if not ent:IsValid() or ent:GetModel() == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
         return ""
     end
@@ -63,10 +67,6 @@ local function DropWeapon(ply)
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
         return ""
     end
-
-    -- Mark the weapon as being dropped. This, along with the check above will
-    -- prevent the same weapon from being dropped twice.
-    ent.IsBeingDarkRPDropped = true
 
     ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
