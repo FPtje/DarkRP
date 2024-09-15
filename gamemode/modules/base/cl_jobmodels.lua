@@ -50,11 +50,9 @@ end
 
 timer.Simple(0, function()
     -- run after the jobs have loaded
-    local models = sql.Query([[SELECT jobcmd, model, server FROM darkp_playermodels;]])
+    local models = sql.Query(string.format([[SELECT jobcmd, model FROM darkp_playermodels WHERE server IS NULL OR server = %s;]], sql.SQLStr(game.GetIPAddress())))
 
     for _, v in ipairs(models or {}) do
-        if v.server and v.server ~= game.GetIPAddress() then continue end
-
         local job = DarkRP.getJobByCommand(v.jobcmd)
         if job == nil or not jobHasModel(job, v.model) then continue end
 
