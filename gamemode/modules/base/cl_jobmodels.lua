@@ -56,7 +56,7 @@ timer.Simple(0, function()
         if v.server and v.server ~= game.GetIPAddress() then continue end
 
         local job = DarkRP.getJobByCommand(v.jobcmd)
-        if job == nil or jobHasModel(job, v.model) == false then continue end
+        if job == nil or not jobHasModel(job, v.model) then continue end
 
         preferredModels[v.jobcmd] = v.model
     end
