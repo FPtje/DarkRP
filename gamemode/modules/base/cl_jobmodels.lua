@@ -1,10 +1,31 @@
 -- Create a table for the preferred playermodels
+--
+-- Note: the server column wasn't always there, so players may not have a value
+-- for it, even though the code in this file always adds it. That is why it is
+-- added as a NULLable column.
 sql.Query([[CREATE TABLE IF NOT EXISTS darkp_playermodels(
     jobcmd VARCHAR(45) NOT NULL PRIMARY KEY,
-    model VARCHAR(140) NOT NULL
+    model VARCHAR(140) NOT NULL,
+    server TEXT NULL
 );]])
 
-sql.Query("ALTER TABLE darkp_playermodels ADD COLUMN IF NOT EXISTS server VARCHAR(21);")
+
+-- Migration: the `server` column was added in 2024-09. With the above query
+-- only creating the table if not exists, the table may not have the `server`
+-- column if it was created earlier. This will add it in retrospect.
+local tableInfo = sql.Query("PRAGMA table_info(darkp_playermodels)")
+local serverColumnExists = false
+
+for _, info in ipairs(tableInfo) do
+    if info.name == "server" then
+        serverColumnExists = true
+        break
+    end
+end
+
+if not serverColumnExists then
+    sql.Query("ALTER TABLE darkp_playermodels ADD COLUMN server TEXT;")
+end
 
 local preferredModels = {}
 
