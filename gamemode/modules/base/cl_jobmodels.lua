@@ -1,31 +1,21 @@
 -- Create a table for the preferred playermodels
 --
--- Note: the server column wasn't always there, so players may not have a value
--- for it, even though the code in this file always adds it. That is why it is
--- added as a NULLable column.
-sql.Query([[CREATE TABLE IF NOT EXISTS darkp_playermodels(
-    jobcmd VARCHAR(45) NOT NULL PRIMARY KEY,
-    model VARCHAR(140) NOT NULL,
-    server TEXT NULL
+-- Note: in DarkRP before 2024-09, there was a different table called
+-- `darkp_playermodels` (note the misspelling of "darkp"). This table was
+-- missing the server column, meaning that preferred job models would persist
+-- across multiple servers. To make preferred job models store per server, this
+-- new table (without the spelling mistake) was created.
+--
+-- See the original issue to create the player model preference feature:
+-- https://github.com/FPtje/DarkRP/issues/979 and the subsequent refactor at
+-- https://github.com/FPtje/DarkRP/pull/3266
+sql.Query([[CREATE TABLE IF NOT EXISTS darkrp_playermodels(
+    server TEXT NOT NULL,
+    jobcmd TEXT NOT NULL,
+    model TEXT NOT NULL,
+    PRIMARY KEY (server, jobcmd)
 );]])
 
-
--- Migration: the `server` column was added in 2024-09. With the above query
--- only creating the table if not exists, the table may not have the `server`
--- column if it was created earlier. This will add it in retrospect.
-local tableInfo = sql.Query("PRAGMA table_info(darkp_playermodels)")
-local serverColumnExists = false
-
-for _, info in ipairs(tableInfo) do
-    if info.name == "server" then
-        serverColumnExists = true
-        break
-    end
-end
-
-if not serverColumnExists then
-    sql.Query("ALTER TABLE darkp_playermodels ADD COLUMN server TEXT;")
-end
 
 local preferredModels = {}
 
@@ -37,7 +27,7 @@ function DarkRP.setPreferredJobModel(teamNr, model)
     local job = RPExtraTeams[teamNr]
     if not job then return end
     preferredModels[job.command] = model
-    sql.Query(string.format([[REPLACE INTO darkp_playermodels VALUES(%s, %s, %s);]], sql.SQLStr(job.command), sql.SQLStr(model), sql.SQLStr(game.GetIPAddress())))
+    sql.Query(string.format([[REPLACE INTO darkrp_playermodels(server, jobcmd, model) VALUES(%s, %s, %s);]], sql.SQLStr(game.GetIPAddress()), sql.SQLStr(job.command), sql.SQLStr(model)))
 
     net.Start("DarkRP_preferredjobmodel")
         net.WriteUInt(teamNr, 8)
@@ -71,7 +61,7 @@ end
 
 timer.Simple(0, function()
     -- run after the jobs have loaded
-    local models = sql.Query(string.format([[SELECT jobcmd, model FROM darkp_playermodels WHERE server IS NULL OR server = %s;]], sql.SQLStr(game.GetIPAddress())))
+    local models = sql.Query(string.format([[SELECT jobcmd, model FROM darkrp_playermodels WHERE server = %s;]], sql.SQLStr(game.GetIPAddress())))
 
     for _, v in ipairs(models or {}) do
         local job = DarkRP.getJobByCommand(v.jobcmd)
