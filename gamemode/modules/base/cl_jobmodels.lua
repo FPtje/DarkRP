@@ -59,16 +59,42 @@ local function jobHasModel(job, model)
     return istable(job.model) and table.HasValue(job.model, model) or job.model == model
 end
 
-timer.Simple(0, function()
-    -- run after the jobs have loaded
-    local models = sql.Query(string.format([[SELECT jobcmd, model FROM darkrp_playermodels WHERE server = %s;]], sql.SQLStr(game.GetIPAddress())))
-
-    for _, v in ipairs(models or {}) do
+local function setPreferredModels(models)
+    for _, v in ipairs(models) do
         local job = DarkRP.getJobByCommand(v.jobcmd)
         if job == nil or not jobHasModel(job, v.model) then continue end
 
         preferredModels[v.jobcmd] = v.model
     end
+end
+
+-- The old table, darkp_playermodels, acts as a global mapping of preferred
+-- models for jobs.
+local function setModelsFromOldTable()
+    local oldTableExists = tobool(sql.QueryValue([[SELECT 1 FROM sqlite_master WHERE type='table' AND name='darkp_playermodels']]))
+    if not oldTableExists then return end
+
+    local models = sql.Query([[SELECT jobcmd, model FROM darkp_playermodels;]])
+
+    if not models then return end
+    setPreferredModels(models)
+end
+
+-- The newer table is server specific.
+local function setModelsFromNewTable()
+    local models = sql.Query(string.format([[SELECT jobcmd, model FROM darkrp_playermodels WHERE server = %s;]], sql.SQLStr(game.GetIPAddress())))
+
+    if not models then return end
+    setPreferredModels(models)
+end
+
+timer.Simple(0, function()
+    -- Run after the jobs have loaded, to make sure the jobs can be looked up.
+
+    -- Set models from the old table, before overriding them with data from the
+    -- new table. That way, server specific preferences always have precedence.
+    setModelsFromOldTable()
+    setModelsFromNewTable()
 
     sendModels()
 end)
