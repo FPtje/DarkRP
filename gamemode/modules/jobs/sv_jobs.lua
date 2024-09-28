@@ -1,3 +1,5 @@
+local jobChangeNotification = CreateConVar("darkrp_showjobchange", "1", {FCVAR_ARCHIVE}, "Show a notification when a player changes jobs.")
+
 --[[---------------------------------------------------------------------------
 Functions
 ---------------------------------------------------------------------------]]
@@ -95,7 +97,9 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     end
     self:updateJob(TEAM.name)
     self:setSelfDarkRPVar("salary", TEAM.salary)
-    notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
+    if (jobChangeNotification:GetBool()) then
+        notifyAll(0, 4, DarkRP.getPhrase("job_has_become", self:Nick(), TEAM.name))
+    end
 
 
     if self:getDarkRPVar("HasGunlicense") and GAMEMODE.Config.revokeLicenseOnJobChange then
@@ -277,7 +281,9 @@ local function ChangeJob(ply, args)
     end
 
     local job = replace or args
-    DarkRP.notifyAll(2, 4, DarkRP.getPhrase("job_has_become", ply:Nick(), job))
+    if (jobChangeNotification:GetBool()) then
+        DarkRP.notifyAll(2, 4, DarkRP.getPhrase("job_has_become", ply:Nick(), job))
+    end
     ply:updateJob(job)
     return ""
 end
