@@ -1,4 +1,4 @@
-local DarkRPVars = {}
+DarkRP.ClientsideDarkRPVars = DarkRP.ClientsideDarkRPVars or {}
 
 --[[---------------------------------------------------------------------------
 Interface
@@ -8,7 +8,7 @@ local pmeta = FindMetaTable("Player")
 -- enough to warrant optimizing. See https://github.com/FPtje/DarkRP/pull/3212
 local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var, fallback)
-    local vars = DarkRPVars[get_user_id(self)]
+    local vars = DarkRP.ClientsideDarkRPVars[get_user_id(self)]
     if vars == nil then return fallback end
 
     local results = vars[var]
@@ -22,14 +22,14 @@ Retrieve the information of a player var
 ---------------------------------------------------------------------------]]
 local function RetrievePlayerVar(userID, var, value)
     local ply = Player(userID)
-    DarkRPVars[userID] = DarkRPVars[userID] or {}
+    DarkRP.ClientsideDarkRPVars[userID] = DarkRP.ClientsideDarkRPVars[userID] or {}
 
-    hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID][var], value)
-    DarkRPVars[userID][var] = value
+    hook.Call("DarkRPVarChanged", nil, ply, var, DarkRP.ClientsideDarkRPVars[userID][var], value)
+    DarkRP.ClientsideDarkRPVars[userID][var] = value
 
     -- Backwards compatibility
     if IsValid(ply) then
-        ply.DarkRPVars = DarkRPVars[userID]
+        ply.DarkRPVars = DarkRP.ClientsideDarkRPVars[userID]
     end
 end
 
@@ -50,7 +50,7 @@ Retrieve the message to remove a DarkRPVar
 ---------------------------------------------------------------------------]]
 local function doRetrieveRemoval()
     local userID = net.ReadUInt(16)
-    local vars = DarkRPVars[userID] or {}
+    local vars = DarkRP.ClientsideDarkRPVars[userID] or {}
     local var = DarkRP.readNetDarkRPVarRemoval()
     local ply = Player(userID)
 
@@ -81,7 +81,7 @@ timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     local userID = net.ReadUInt(16)
-    DarkRPVars[userID] = nil
+    DarkRP.ClientsideDarkRPVars[userID] = nil
 end)
 
 --[[---------------------------------------------------------------------------
