@@ -279,7 +279,9 @@ end)
 
 hook.Add("EntityRemoved", "DarkRP_VarRemoval", function(ent) -- We use EntityRemoved to clear players of tables, because it is always called after the PlayerDisconnected hook
     if ent:IsPlayer() then
-        DarkRP.ServerDarkRPVars[ent] = nil
-        DarkRP.ServerPrivateDarkRPVars[ent] = nil
+        timer.Simple(0, function()
+            DarkRP.ServerDarkRPVars[ent] = nil
+            DarkRP.ServerPrivateDarkRPVars[ent] = nil
+        end)
     end
 end)
