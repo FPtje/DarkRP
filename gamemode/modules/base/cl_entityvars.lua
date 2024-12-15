@@ -81,7 +81,7 @@ timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     local userID = net.ReadUInt(16)
-    timer.Simple(10, function()
+    timer.Simple(5, function()
         DarkRP.ClientsideDarkRPVars[userID] = nil
     end)
 end)
