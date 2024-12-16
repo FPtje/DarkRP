@@ -8,7 +8,15 @@ local pmeta = FindMetaTable("Player")
 -- enough to warrant optimizing. See https://github.com/FPtje/DarkRP/pull/3212
 local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var, fallback)
-    local vars = DarkRP.ClientsideDarkRPVars[get_user_id(self)]
+    local user_id = get_user_id(self)
+
+    -- Special case: when in the EntityRemoved hook, UserID returns -1. In this
+    -- case, hope that we still have a stored userID lying around somewhere.
+    if user_id == -1 then
+        user_id = self._darkrp_stored_user_id_for_entity_removed_hook
+    end
+
+    local vars = DarkRP.ClientsideDarkRPVars[user_id]
     if vars == nil then return fallback end
 
     local results = vars[var]
@@ -92,6 +100,15 @@ net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     -- clientside. The net message may come in _much_ earlier than the message
     -- that the player disconnected and should therefore be removed.
     local hook_name = "darkrp_remove_darkrp_var_" .. userID
+
+    -- Workaround: the player's user ID is -1 in the EntityRemoved hook. This
+    -- stores the user ID in a separate variable so that it is still accessible.
+    -- See https://github.com/Facepunch/garrysmod-issues/issues/6117
+    --
+    -- This will allow getDarkRPVar to keep working
+    if IsValid(ply) then
+        ply._darkrp_stored_user_id_for_entity_removed_hook = userID
+    end
 
     hook.Add("EntityRemoved", hook_name, function(ent)
         -- NOTE: ent:UserID() will return -1 in this hook, so there is no use to
