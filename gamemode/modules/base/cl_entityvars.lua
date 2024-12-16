@@ -12,6 +12,7 @@ function pmeta:getDarkRPVar(var, fallback)
 
     -- Special case: when in the EntityRemoved hook, UserID returns -1. In this
     -- case, hope that we still have a stored userID lying around somewhere.
+    -- See https://github.com/FPtje/DarkRP/pull/3270
     if user_id == -1 then
         user_id = self._darkrp_stored_user_id_for_entity_removed_hook
     end
@@ -111,15 +112,12 @@ net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     end
 
     hook.Add("EntityRemoved", hook_name, function(ent)
-        -- NOTE: ent:UserID() will return -1 in this hook, so there is no use to
-        -- compare UserIDs. That also means that getting DarkRPVars in the
-        -- EntityRemoved hook is futile, as the lookup of -1 in
-        -- DarkRP.ClientsideDarkRPVars wil fail.
         if ent ~= ply then return end
         hook.Remove("EntityRemoved", hook_name)
 
         -- Placing this in a timer allows for the rest of the hook runners to
         -- still use the DarkRPVars until the entity is _really_ gone.
+        -- See https://github.com/FPtje/DarkRP/pull/3270
         timer.Simple(0, function()
             DarkRP.ClientsideDarkRPVars[userID] = nil
         end)
