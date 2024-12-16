@@ -81,8 +81,31 @@ timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     local userID = net.ReadUInt(16)
-    timer.Simple(5, function()
+    local ply = Player(userID)
+
+    -- If the player is already gone, then immediately clear the data and move on.
+    if not IsValid(ply) then
         DarkRP.ClientsideDarkRPVars[userID] = nil
+        return
+    end
+    -- Otherwise, we need to wait until the player is actually removed
+    -- clientside. The net message may come in _much_ earlier than the message
+    -- that the player disconnected and should therefore be removed.
+    local hook_name = "darkrp_remove_darkrp_var_" .. userID
+
+    hook.Add("EntityRemoved", hook_name, function(ent)
+        -- NOTE: ent:UserID() will return -1 in this hook, so there is no use to
+        -- compare UserIDs. That also means that getting DarkRPVars in the
+        -- EntityRemoved hook is futile, as the lookup of -1 in
+        -- DarkRP.ClientsideDarkRPVars wil fail.
+        if ent ~= ply then return end
+        hook.Remove("EntityRemoved", hook_name)
+
+        -- Placing this in a timer allows for the rest of the hook runners to
+        -- still use the DarkRPVars until the entity is _really_ gone.
+        timer.Simple(0, function()
+            DarkRP.ClientsideDarkRPVars[userID] = nil
+        end)
     end)
 end)
 

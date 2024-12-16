@@ -269,19 +269,18 @@ function meta:customEntityCount(entTable)
     return entities
 end
 
-hook.Add("PlayerDisconnected", "DarkRP_VarRemoval", function(ply)
-    maxEntities[ply] = nil
+-- We use EntityRemoved to clear players of tables, because it is always called
+-- after the PlayerDisconnected hook. This is called _after_ the GAMEMODE
+-- function, to make sure that all regular hooks can still use DarkRPVars until
+-- the very end. See https://github.com/FPtje/DarkRP/pull/3270
+(GAMEMODE or GM).DarkRPPostEntityRemoved = function(_gm, ent)
+    if not ent:IsPlayer() then return end
+
+    maxEntities[ent] = nil
+    DarkRP.ServerDarkRPVars[ent] = nil
+    DarkRP.ServerPrivateDarkRPVars[ent] = nil
 
     net.Start("DarkRP_DarkRPVarDisconnect")
-        net.WriteUInt(ply:UserID(), 16)
+        net.WriteUInt(ent:UserID(), 16)
     net.Broadcast()
-end)
-
-hook.Add("EntityRemoved", "DarkRP_VarRemoval", function(ent) -- We use EntityRemoved to clear players of tables, because it is always called after the PlayerDisconnected hook
-    if ent:IsPlayer() then
-        timer.Simple(0, function()
-            DarkRP.ServerDarkRPVars[ent] = nil
-            DarkRP.ServerPrivateDarkRPVars[ent] = nil
-        end)
-    end
-end)
+end
