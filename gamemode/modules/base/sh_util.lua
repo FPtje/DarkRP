@@ -381,13 +381,13 @@ if CLIENT then net.Receive("DarkRP_databaseCheckMessage", fc{print, net.ReadStri
 
 local function checkDatabase(ply)
     local dbFile = SERVER and "sv.db" or "cl.db"
-    local display = (CLIENT or ply == game.GetWorld() or not IsValid(ply)) and print or function(msg)
+    local display = (CLIENT or not IsValid(ply)) and print or function(msg)
             net.Start("DarkRP_databaseCheckMessage")
             net.WriteString(msg)
             net.Send(ply)
         end
 
-    if SERVER and IsValid(ply) and ply ~= game.GetWorld() and not ply:IsSuperAdmin() then
+    if SERVER and IsValid(ply) and not ply:IsSuperAdmin() then
         display("You must be superadmin")
         return
     end
