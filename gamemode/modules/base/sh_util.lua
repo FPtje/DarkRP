@@ -387,7 +387,7 @@ local function checkDatabase(ply)
             net.Send(ply)
         end
 
-    if SERVER and ply ~= game.GetWorld() and not ply:IsSuperAdmin() then
+    if SERVER and IsValid(ply) and ply ~= game.GetWorld() and not ply:IsSuperAdmin() then
         display("You must be superadmin")
         return
     end
