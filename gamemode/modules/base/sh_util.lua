@@ -381,7 +381,7 @@ if CLIENT then net.Receive("DarkRP_databaseCheckMessage", fc{print, net.ReadStri
 
 local function checkDatabase(ply)
     local dbFile = SERVER and "sv.db" or "cl.db"
-    local display = (CLIENT or ply == game.GetWorld()) and print or function(msg)
+    local display = (CLIENT or ply == game.GetWorld() or not IsValid(ply)) and print or function(msg)
             net.Start("DarkRP_databaseCheckMessage")
             net.WriteString(msg)
             net.Send(ply)
