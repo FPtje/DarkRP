@@ -1,7 +1,7 @@
 "darkrp"
 {
 	"base"		"sandbox"
-    "title"  "DarkRP"
+    "title"  "MilitaryRP"
     "version"   "2.7.0"
     "menusystem"	"1"
 

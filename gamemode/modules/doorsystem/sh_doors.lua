@@ -19,7 +19,7 @@ function meta:isKeysOwnable()
     local class = self:GetClass()
 
     if (ownableDoors[class] or
-            (GAMEMODE.Config.allowvehicleowning and self:IsVehicle() and (not IsValid(self:GetParent()) or not self:GetParent():IsVehicle()))) then
+            (GAMEMODE.Config.allowvehicleowning and (self:IsVehicle() or self.isWacAircraft) and (not IsValid(self:GetParent()) or not self:GetParent():IsVehicle()))) then
         return true
     end
 
@@ -182,13 +182,10 @@ end
 
 DarkRP.registerDoorVar("groupOwn",
     function(val)
-        net.WriteUInt(RPExtraTeamDoorIDs[val], 16)
+        net.WriteString(val)
     end,
     function()
-        local id = net.ReadUInt(16)
-        for name, id2 in pairs(RPExtraTeamDoorIDs) do
-            if id == id2 then return name end
-        end
+        return net.ReadString()
     end
 )
 

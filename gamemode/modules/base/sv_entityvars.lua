@@ -181,6 +181,11 @@ end
 DarkRP.definePrivilegedChatCommand("freerpname", "DarkRP_AdminCommands", freerpname)
 
 local function RPName(ply, args)
+    if (VWAR) then
+        DarkRP.notify(ply, 1, 5, "Change your character's name instead of your nickname!")
+        return
+    end
+    
     if ply.LastNameChange and ply.LastNameChange > (CurTime() - 5) then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("have_to_wait", math.ceil(5 - (CurTime() - ply.LastNameChange)), "/rpname"))
         return ""
