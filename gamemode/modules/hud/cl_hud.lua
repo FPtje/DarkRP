@@ -390,7 +390,7 @@ local lastSound = 0
 local function DisplayNotify(msg, msgtype, len)
     GAMEMODE:AddNotify(msg, msgtype, len)
 
-    if (SysTime() - lastSound < 0.1) then
+    if (SysTime() - lastSound > 0.1) then
         lastSound = SysTime()
         surface.PlaySound(GAMEMODE.Config.notificationSound or notificationSound)
     end
