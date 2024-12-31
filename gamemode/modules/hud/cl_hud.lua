@@ -386,9 +386,14 @@ end
 Display notifications
 ---------------------------------------------------------------------------]]
 local notificationSound = GM.Config.notificationSound
+local lastSound = 0
 local function DisplayNotify(msg, msgtype, len)
     GAMEMODE:AddNotify(msg, msgtype, len)
-    surface.PlaySound(GAMEMODE.Config.notificationSound or notificationSound)
+
+    if (SysTime() - lastSound < 0.1) then
+        lastSound = SysTime()
+        surface.PlaySound(GAMEMODE.Config.notificationSound or notificationSound)
+    end
 
     -- Log to client console
     MsgC(Color(255, 20, 20, 255), "[DarkRP] ", Color(200, 200, 200, 255), msg, "\n")
