@@ -1,8 +1,21 @@
 -- Create a table for the preferred playermodels
-sql.Query([[CREATE TABLE IF NOT EXISTS darkp_playermodels(
-    jobcmd VARCHAR(45) NOT NULL PRIMARY KEY,
-    model VARCHAR(140) NOT NULL
+--
+-- Note: in DarkRP before 2024-09, there was a different table called
+-- `darkp_playermodels` (note the misspelling of "darkp"). This table was
+-- missing the server column, meaning that preferred job models would persist
+-- across multiple servers. To make preferred job models store per server, this
+-- new table (without the spelling mistake) was created.
+--
+-- See the original issue to create the player model preference feature:
+-- https://github.com/FPtje/DarkRP/issues/979 and the subsequent refactor at
+-- https://github.com/FPtje/DarkRP/pull/3266
+sql.Query([[CREATE TABLE IF NOT EXISTS darkrp_playermodels(
+    server TEXT NOT NULL,
+    jobcmd TEXT NOT NULL,
+    model TEXT NOT NULL,
+    PRIMARY KEY (server, jobcmd)
 );]])
+
 
 local preferredModels = {}
 
@@ -14,7 +27,7 @@ function DarkRP.setPreferredJobModel(teamNr, model)
     local job = RPExtraTeams[teamNr]
     if not job then return end
     preferredModels[job.command] = model
-    sql.Query(string.format([[REPLACE INTO darkp_playermodels VALUES(%s, %s);]], sql.SQLStr(job.command), sql.SQLStr(model)))
+    sql.Query(string.format([[REPLACE INTO darkrp_playermodels(server, jobcmd, model) VALUES(%s, %s, %s);]], sql.SQLStr(game.GetIPAddress()), sql.SQLStr(job.command), sql.SQLStr(model)))
 
     net.Start("DarkRP_preferredjobmodel")
         net.WriteUInt(teamNr, 8)
@@ -31,7 +44,7 @@ end
 --[[---------------------------------------------------------------------------
 Load the preferred models
 ---------------------------------------------------------------------------]]
-local function sendModels() -- run after the jobs have loaded
+local function sendModels()
     net.Start("DarkRP_preferredjobmodels")
         for _, job in pairs(RPExtraTeams) do
             if not preferredModels[job.command] then net.WriteBit(false) continue end
@@ -42,11 +55,46 @@ local function sendModels() -- run after the jobs have loaded
     net.SendToServer()
 end
 
-do
-    local models = sql.Query([[SELECT jobcmd, model FROM darkp_playermodels;]])
-    for _, v in ipairs(models or {}) do
+local function jobHasModel(job, model)
+    return istable(job.model) and table.HasValue(job.model, model) or job.model == model
+end
+
+local function setPreferredModels(models)
+    for _, v in ipairs(models) do
+        local job = DarkRP.getJobByCommand(v.jobcmd)
+        if job == nil or not jobHasModel(job, v.model) then continue end
+
         preferredModels[v.jobcmd] = v.model
     end
-
-    timer.Simple(0, sendModels)
 end
+
+-- The old table, darkp_playermodels, acts as a global mapping of preferred
+-- models for jobs.
+local function setModelsFromOldTable()
+    local oldTableExists = tobool(sql.QueryValue([[SELECT 1 FROM sqlite_master WHERE type='table' AND name='darkp_playermodels']]))
+    if not oldTableExists then return end
+
+    local models = sql.Query([[SELECT jobcmd, model FROM darkp_playermodels;]])
+
+    if not models then return end
+    setPreferredModels(models)
+end
+
+-- The newer table is server specific.
+local function setModelsFromNewTable()
+    local models = sql.Query(string.format([[SELECT jobcmd, model FROM darkrp_playermodels WHERE server = %s;]], sql.SQLStr(game.GetIPAddress())))
+
+    if not models then return end
+    setPreferredModels(models)
+end
+
+timer.Simple(0, function()
+    -- Run after the jobs have loaded, to make sure the jobs can be looked up.
+
+    -- Set models from the old table, before overriding them with data from the
+    -- new table. That way, server specific preferences always have precedence.
+    setModelsFromOldTable()
+    setModelsFromNewTable()
+
+    sendModels()
+end)

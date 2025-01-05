@@ -300,9 +300,10 @@ function SWEP:Succeed()
     local stripped = {}
 
     self:GetStrippableWeapons(ent, function(wep)
-        ent:StripWeapon(wep:GetClass())
-        stripped[wep:GetClass()] = {
-            class = wep:GetClass(),
+        local class = wep:GetClass()
+        ent:StripWeapon(class)
+        stripped[class] = {
+            class = class,
             primaryAmmoCount = ent:GetAmmoCount(wep:GetPrimaryAmmoType()),
             primaryAmmoType = wep:GetPrimaryAmmoType(),
             secondaryAmmoCount = ent:GetAmmoCount(wep:GetSecondaryAmmoType()),

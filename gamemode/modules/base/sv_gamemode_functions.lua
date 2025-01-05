@@ -242,6 +242,12 @@ function GM:EntityRemoved(ent)
     local owner = ent.Getowning_ent and ent:Getowning_ent() or Player(ent.SID or 0)
     if ent.DarkRPItem and IsValid(owner) and not ent.IsPocketing then owner:removeCustomEntity(ent.DarkRPItem) end
     if ent.isKeysOwnable and ent:isKeysOwnable() then ent:removeDoorData() end
+
+    -- Quick workaround for the fact that we don't have a hook ordering system
+    -- built into gmod.
+    if self.DarkRPPostEntityRemoved then
+        self.DarkRPPostEntityRemoved(self, ent)
+    end
 end
 
 function GM:ShowSpare1(ply)

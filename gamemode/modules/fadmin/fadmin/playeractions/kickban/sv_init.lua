@@ -206,29 +206,43 @@ local function Ban(ply, cmd, args)
     return true, targets, stage, Reason
 end
 
+-- Input validation: verify that a steam id is valid
+local function isValidSteamId(steamId)
+    if steamId == "STEAM_ID_PENDING" then return true end
+    if steamId == "UNKNOWN" then return true end
+    if string.match(steamId, "^STEAM_[0-9]:[0-9]:[0-9]+$") then return true end
+    if string.match(steamId, "^[0-9]+$") then return true end
+    return false
+end
+
 -- Unbanning
 local function UnBan(ply, cmd, args)
     if not FAdmin.Access.PlayerHasPrivilege(ply, "UnBan") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     if not args[1] then return false end
-    local SteamID = string.upper(args[1])
+    local steamID = string.upper(args[1])
+
+    if not isValidSteamId(steamID) then
+        FAdmin.Messages.SendMessage(ply, 5, "Player not found")
+        return false
+    end
     local nick = "Unknown"
 
-    hook.Call("FAdmin_UnBan", nil, ply, SteamID)
+    hook.Call("FAdmin_UnBan", nil, ply, steamID)
 
     for k, v in pairs(FAdmin.BANS) do
-        if string.upper(k) == SteamID then
+        if string.upper(k) == steamID then
             nick = FAdmin.BANS[k].name or nick
             FAdmin.BANS[k] = nil
             break
         end
     end
 
-    StartBannedUsers[SteamID] = nil
+    StartBannedUsers[steamID] = nil
 
-    game.ConsoleCommand("removeid " .. SteamID .. "\n")
-    FAdmin.Messages.FireNotification("unban", ply, nil, {nick, SteamID})
+    game.ConsoleCommand("removeid " .. steamID .. "\n")
+    FAdmin.Messages.FireNotification("unban", ply, nil, {nick, steamID})
 
-    return true, SteamID
+    return true, steamID
 end
 
 -- Commands and privileges

@@ -56,29 +56,72 @@ end
 
 --[[---------------------------------------------------------------------------
 Find a player based on given information
+
+Note that there is a searching priority:
+  * UserID
+  * SteamID64
+  * SteamID
+  * Nick
+  * SteamName
+
+Note also that there are _separate_ loops. This is to make sure the function
+gives the same result, regardless of the order in which players are iterated
+over.
 ---------------------------------------------------------------------------]]
 function DarkRP.findPlayer(info)
     if not info or info == "" then return nil end
     local pls = player.GetAll()
 
-    for k = 1, #pls do -- Proven to be faster than pairs loop.
+    local count = #pls
+    local numberInfo = tonumber(info)
+
+    -- First check if the input matches a player by UserID or SteamID64. This is
+    -- only necessary if the input can be parsed as a number.
+    if numberInfo then
+        for k = 1, count do
+            local v = pls[k]
+
+            if numberInfo == v:UserID() then
+                return v
+            end
+        end
+
+        for k = 1, count do
+            local v = pls[k]
+
+            if info == v:SteamID64() then
+                return v
+            end
+        end
+    end
+
+    local lowerInfo = string.lower(tostring(info))
+    if string.StartsWith(lowerInfo, "steam_") then
+        for k = 1, count do
+            local v = pls[k]
+
+            if info == v:SteamID() then
+                return v
+            end
+        end
+    end
+
+    for k = 1, count do
         local v = pls[k]
-        if tonumber(info) == v:UserID() then
-            return v
-        end
 
-        if info == v:SteamID() then
-            return v
-        end
-
-        if string.find(string.lower(v:Nick()), string.lower(tostring(info)), 1, true) ~= nil then
-            return v
-        end
-
-        if string.find(string.lower(v:SteamName()), string.lower(tostring(info)), 1, true) ~= nil then
+        if string.find(string.lower(v:Nick()), lowerInfo, 1, true) ~= nil then
             return v
         end
     end
+
+    for k = 1, count do
+        local v = pls[k]
+
+        if string.find(string.lower(v:SteamName()), lowerInfo, 1, true) ~= nil then
+            return v
+        end
+    end
+
     return nil
 end
 
@@ -338,13 +381,13 @@ if CLIENT then net.Receive("DarkRP_databaseCheckMessage", fc{print, net.ReadStri
 
 local function checkDatabase(ply)
     local dbFile = SERVER and "sv.db" or "cl.db"
-    local display = (CLIENT or ply == game.GetWorld()) and print or function(msg)
+    local display = (CLIENT or not IsValid(ply)) and print or function(msg)
             net.Start("DarkRP_databaseCheckMessage")
             net.WriteString(msg)
             net.Send(ply)
         end
 
-    if SERVER and ply ~= game.GetWorld() and not ply:IsSuperAdmin() then
+    if SERVER and IsValid(ply) and not ply:IsSuperAdmin() then
         display("You must be superadmin")
         return
     end

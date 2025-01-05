@@ -70,14 +70,14 @@ function FAdmin.MOTD.SetMOTDPage(ply, cmd, args)
         return false
     end
     if ply:EntIndex() ~= 0 and (not ply.IsSuperAdmin or not ply:IsSuperAdmin()) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
-    game.ConsoleCommand("_FAdmin_MOTDPage \"" .. args[1] .. "\"\n")
+    RunConsoleCommand("_FAdmin_MOTDPage", args[1])
     file.Write("FAdmin/CurMOTDPage.txt", args[1])
 
     return true, args[1]
 end
 
 local function CreateMOTD(ply)
-    if ply ~= game.GetWorld() and not ply:IsSuperAdmin() then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
+    if IsValid(ply) and not ply:IsSuperAdmin() then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     local MOTDEnt = ents.Create("fadmin_motd")
     MOTDEnt:SpawnFunction(ply, ply:GetEyeTrace())
 
