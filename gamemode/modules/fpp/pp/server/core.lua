@@ -549,6 +549,7 @@ end
 hook.Add("CanTool", "FPP.Protect.CanTool", FPP.Protect.CanTool)
 
 function FPP.Protect.CanEditVariable(ent, ply, key, varVal, editTbl)
+    if not tobool(FPP.Settings.FPP_TOOLGUN1.toggle) then return true end
     local val = FPP.Protect.CanProperty(ply, "editentity", ent)
     if val ~= nil then return val end
 end
@@ -556,6 +557,7 @@ hook.Add("CanEditVariable", "FPP.Protect.CanEditVariable", FPP.Protect.CanEditVa
 
 function FPP.Protect.CanProperty(ply, property, ent)
     -- Use Toolgun because I'm way too lazy to make a new type
+    if not tobool(FPP.Settings.FPP_TOOLGUN1.toggle) then return true end
     local cantouch = FPP.plyCanTouchEnt(ply, ent, "Toolgun")
 
     if not cantouch then return false end
@@ -564,6 +566,7 @@ hook.Add("CanProperty", "FPP.Protect.CanProperty", FPP.Protect.CanProperty)
 
 function FPP.Protect.CanDrive(ply, ent)
     -- Use Toolgun because I'm way too lazy to make a new type
+    if not tobool(FPP.Settings.FPP_TOOLGUN1.toggle) then return true end
     local cantouch = FPP.plyCanTouchEnt(ply, ent, "Toolgun")
 
     if not cantouch then return false end
@@ -688,11 +691,16 @@ end
 hook.Add("PlayerInitialSpawn", "FPP.PlayerInitialSpawn", FPP.PlayerInitialSpawn)
 
 local backup = ENTITY.FireBullets
-local blockedEffects = {"particleeffect", "smoke", "vortdispel", "helicoptermegabomb"}
+local blockedEffects = {
+    ["particleeffect"] = true,
+    ["smoke"] = true,
+    ["vortdispel"] = true,
+    ["helicoptermegabomb"] = true,
+}
 
 function ENTITY:FireBullets(bullet, ...)
     if not bullet.TracerName then return backup(self, bullet, ...) end
-    if table.HasValue(blockedEffects, string.lower(bullet.TracerName)) then
+    if blockedEffects[string.lower(bullet.TracerName)] then
         bullet.TracerName = ""
     end
     return backup(self, bullet, ...)
@@ -710,16 +718,4 @@ function constraint.CanConstrain(ent, bone)
     if IsValid(ent) and disallowedConstraints[string.lower(ent:GetClass())] then return false end
 
     return canConstrain(ent, bone)
-end
-
--- Crash exploit workaround
-local setAngles = ENTITY.SetAngles
-function ENTITY:SetAngles(ang)
-    if not ang then return setAngles(self, ang) end
-
-    ang.p = ang.p % 360
-    ang.y = ang.y % 360
-    ang.r = ang.r % 360
-
-    return setAngles(self, ang)
 end
