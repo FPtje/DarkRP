@@ -62,46 +62,48 @@ if SERVER then
 
     function ENTITY:CPPISetOwnerUID(UID)
         local ply = UID and player.GetByUniqueID(tostring(UID)) or nil
-        if UID and not IsValid(ply) then return false end
+        if UID and not ply then return false end
         return self:CPPISetOwner(ply)
     end
 
     function ENTITY:CPPICanTool(ply, tool)
-        local Value = FPP.Protect.CanTool(ply, nil, tool, self)
-        if Value ~= false and Value ~= true then Value = true end
-        return Value
+        local cantool = FPP.Protect.CanTool(ply, nil, tool, self)
+        return cantool == nil and true or cantool
     end
 
     function ENTITY:CPPICanPhysgun(ply)
+        if not tobool(FPP.Settings.FPP_PHYSGUN1.toggle) then return true end
         return FPP.plyCanTouchEnt(ply, self, "Physgun")
     end
 
     function ENTITY:CPPICanPickup(ply)
+        if not tobool(FPP.Settings.FPP_PHYSGUN1.toggle) then return true end
         return FPP.plyCanTouchEnt(ply, self, "Gravgun")
     end
 
     function ENTITY:CPPICanPunt(ply)
+        if not tobool(FPP.Settings.FPP_GRAVGUN1.toggle) then return true end
         return FPP.plyCanTouchEnt(ply, self, "Gravgun")
     end
 
     function ENTITY:CPPICanUse(ply)
+        if not tobool(FPP.Settings.FPP_PLAYERUSE1.toggle) then return true end
         return FPP.plyCanTouchEnt(ply, self, "PlayerUse")
     end
 
     function ENTITY:CPPICanDamage(ply)
-        return FPP.plyCanTouchEnt(ply,  self, "EntityDamage")
+        if not tobool(FPP.Settings.FPP_ENTITYDAMAGE1.toggle) then return true end
+        return FPP.plyCanTouchEnt(ply, self, "EntityDamage")
     end
 
     function ENTITY:CPPIDrive(ply)
-        local Value = FPP.Protect.CanDrive(ply, self)
-        if Value ~= false and Value ~= true then Value = true end
-        return Value
+        local candrive = FPP.Protect.CanDrive(ply, self)
+        return candrive == nil and true or candrive
     end
 
     function ENTITY:CPPICanProperty(ply, property)
-        local Value = FPP.Protect.CanProperty(ply, property, self)
-        if Value ~= false and Value ~= true then Value = true end
-        return Value
+        local canproperty = FPP.Protect.CanProperty(ply, property, self)
+        return canproperty == nil and true or canproperty
     end
 
     function ENTITY:CPPICanEditVariable(ply, key, val, editTbl)

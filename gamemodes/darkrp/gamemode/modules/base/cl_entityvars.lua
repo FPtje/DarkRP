@@ -1,4 +1,4 @@
-local DarkRPVars = {}
+DarkRP.ClientsideDarkRPVars = DarkRP.ClientsideDarkRPVars or {}
 
 --[[---------------------------------------------------------------------------
 Interface
@@ -8,7 +8,16 @@ local pmeta = FindMetaTable("Player")
 -- enough to warrant optimizing. See https://github.com/FPtje/DarkRP/pull/3212
 local get_user_id = pmeta.UserID
 function pmeta:getDarkRPVar(var, fallback)
-    local vars = DarkRPVars[get_user_id(self)]
+    local user_id = get_user_id(self)
+
+    -- Special case: when in the EntityRemoved hook, UserID returns -1. In this
+    -- case, hope that we still have a stored userID lying around somewhere.
+    -- See https://github.com/FPtje/DarkRP/pull/3270
+    if user_id == -1 then
+        user_id = self._darkrp_stored_user_id_for_entity_removed_hook
+    end
+
+    local vars = DarkRP.ClientsideDarkRPVars[user_id]
     if vars == nil then return fallback end
 
     local results = vars[var]
@@ -22,14 +31,14 @@ Retrieve the information of a player var
 ---------------------------------------------------------------------------]]
 local function RetrievePlayerVar(userID, var, value)
     local ply = Player(userID)
-    DarkRPVars[userID] = DarkRPVars[userID] or {}
+    DarkRP.ClientsideDarkRPVars[userID] = DarkRP.ClientsideDarkRPVars[userID] or {}
 
-    hook.Call("DarkRPVarChanged", nil, ply, var, DarkRPVars[userID][var], value)
-    DarkRPVars[userID][var] = value
+    hook.Call("DarkRPVarChanged", nil, ply, var, DarkRP.ClientsideDarkRPVars[userID][var], value)
+    DarkRP.ClientsideDarkRPVars[userID][var] = value
 
     -- Backwards compatibility
     if IsValid(ply) then
-        ply.DarkRPVars = DarkRPVars[userID]
+        ply.DarkRPVars = DarkRP.ClientsideDarkRPVars[userID]
     end
 end
 
@@ -50,7 +59,7 @@ Retrieve the message to remove a DarkRPVar
 ---------------------------------------------------------------------------]]
 local function doRetrieveRemoval()
     local userID = net.ReadUInt(16)
-    local vars = DarkRPVars[userID] or {}
+    local vars = DarkRP.ClientsideDarkRPVars[userID] or {}
     local var = DarkRP.readNetDarkRPVarRemoval()
     local ply = Player(userID)
 
@@ -81,7 +90,38 @@ timer.Simple(0, fp{RunConsoleCommand, "_sendDarkRPvars"})
 
 net.Receive("DarkRP_DarkRPVarDisconnect", function(len)
     local userID = net.ReadUInt(16)
-    DarkRPVars[userID] = nil
+    local ply = Player(userID)
+
+    -- If the player is already gone, then immediately clear the data and move on.
+    if not IsValid(ply) then
+        DarkRP.ClientsideDarkRPVars[userID] = nil
+        return
+    end
+    -- Otherwise, we need to wait until the player is actually removed
+    -- clientside. The net message may come in _much_ earlier than the message
+    -- that the player disconnected and should therefore be removed.
+    local hook_name = "darkrp_remove_darkrp_var_" .. userID
+
+    -- Workaround: the player's user ID is -1 in the EntityRemoved hook. This
+    -- stores the user ID in a separate variable so that it is still accessible.
+    -- See https://github.com/Facepunch/garrysmod-issues/issues/6117
+    --
+    -- This will allow getDarkRPVar to keep working
+    if IsValid(ply) then
+        ply._darkrp_stored_user_id_for_entity_removed_hook = userID
+    end
+
+    hook.Add("EntityRemoved", hook_name, function(ent)
+        if ent ~= ply then return end
+        hook.Remove("EntityRemoved", hook_name)
+
+        -- Placing this in a timer allows for the rest of the hook runners to
+        -- still use the DarkRPVars until the entity is _really_ gone.
+        -- See https://github.com/FPtje/DarkRP/pull/3270
+        timer.Simple(0, function()
+            DarkRP.ClientsideDarkRPVars[userID] = nil
+        end)
+    end)
 end)
 
 --[[---------------------------------------------------------------------------

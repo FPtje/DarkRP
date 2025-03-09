@@ -77,6 +77,23 @@
 
         The errorCallback format is the same as in MySQLite.query.
 
+    MySQLite.prepare(sqlText :: String, sqlParams :: Table, callback :: function, errorCallback :: function)
+        Calls a prepared statement, faster for queries that are ran multiple times. Params do not need to be escaped.
+        This does not work with SQLite, and will instead call a regular query
+
+        callback format:
+            function(result :: table, lastInsert :: number, rowsChanged :: number)
+            Result is the table with results (nil when there are no results or when the result list is empty)
+            lastInsert is the row number of the last inserted value (use with AUTOINCREMENT)
+            rowsChanged is the amount of rows that were changed with the query
+
+            Note: lastInsert is NOT supported when using SQLite.
+
+        The errorCallback format is the same as in MySQLite.query.
+
+        Example:
+            MySQLite.prepare("UPDATE `darkrp_player` SET `rpname` = ? WHERE  `rpname` = ?", { "players_old_name", "players_new_name"}, success_callback, error_callback)
+
     ----------------------------- Transactions -----------------------------
     MySQLite.begin() :: No value
         Starts a transaction. Use in combination with MySQLite.queueQuery and MySQLite.commit.
@@ -113,6 +130,9 @@ local tostring = tostring
 local mysqlOO
 local TMySQL
 local _G = _G
+local ipairs = ipairs
+local type = type
+local unpack = unpack
 
 local multistatements
 
@@ -296,6 +316,72 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
     queryObject:start()
 end
 
+local preparedStatements = {}
+local paramTypes = {}
+paramTypes["number"] = function(queryObj, paramIndex, paramValue) return queryObj:setNumber(paramIndex, paramValue) end
+paramTypes["string"] = function(queryObj, paramIndex, paramValue) return queryObj:setString(paramIndex, paramValue) end
+paramTypes["boolean"] = function(queryObj, paramIndex, paramValue) return queryObj:setBoolean(paramIndex, paramValue) end
+
+local function msOOPrepare(sqlText, sqlParams, callback, errorCallback)
+    local queryObject
+
+    if preparedStatements[sqlText] then
+        queryObject = preparedStatements[sqlText]
+    else
+        queryObject = databaseObject:prepare(sqlText)
+        preparedStatements[sqlText] = queryObject
+    end
+
+    for i, param in ipairs(sqlParams) do
+        local paramType = type(param)
+
+        if paramTypes[paramType] then
+            paramTypes[paramType](queryObject, i, param)
+        else
+            queryObject:setString(i, param)
+        end
+    end
+
+    queryObject.onError = function(_, E)
+        local supp = errorCallback and errorCallback(E, sqlText)
+        if not supp then error(E .. " (" .. sqlText .. ")") end
+    end
+
+    queryObject.onSuccess = function(_, data)
+        if callback then callback(data, queryObject:lastInsert(), queryObject:affectedRows()) end
+    end
+
+    queryObject:start()
+end
+
+local function tmsqlPrepare(sqlText, sqlParams, callback, errorCallback)
+    local queryObject
+
+    if preparedStatements[sqlText] then
+        queryObject = preparedStatements[sqlText]
+    else
+        queryObject = databaseObject:Prepare(sqlText)
+        preparedStatements[sqlText] = queryObject
+    end
+
+    for i, param in ipairs(sqlParams) do
+        param = SQLStr(param, true)
+    end
+
+    local varcount = queryObject:GetArgCount()
+
+    sqlParams[varcount + 1] = function(results)
+        if results[1].error ~= nil then
+            local supp = errorCallback and errorCallback(E, results[1].error)
+            if not supp then error(E .. " (" .. results[1].error .. ")") end
+        end
+
+        if callback then callback(data, results[1].lastid, results[1].affected) end
+    end
+
+    queryObject:Run(unpack(sqlParams, 1, varcount + 2))
+end
+
 local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
     local call = function(res)
         res = res[1] -- For now only support one result set
@@ -330,6 +416,15 @@ local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
     return Result
 end
 
+-- SQLite doesn't support preparedStatements, so convert it to a regular query.
+local function SQLitePrepare(sqlText, sqlParams, callback, errorCallback)
+    for _, param in ipairs(sqlParams) do
+        sqlText = sqlText:gsub("%?", sql.SQLStr(param), 1)
+    end
+
+    return SQLiteQuery(sqlText, callback, errorCallback, false)
+end
+
 function query(sqlText, callback, errorCallback)
     local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOQuery) or (TMySQL and tmsqlQuery))) or SQLiteQuery
     return qFunc(sqlText, callback, errorCallback, false)
@@ -338,6 +433,11 @@ end
 function queryValue(sqlText, callback, errorCallback)
     local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOQuery) or (TMySQL and tmsqlQuery))) or SQLiteQuery
     return qFunc(sqlText, callback, errorCallback, true)
+end
+
+function prepare(sqlText, sqlParams, callback, errorCallback)
+    local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOPrepare) or (TMySQL and tmsqlPrepare))) or SQLitePrepare
+    return qFunc(sqlText, sqlParams, callback, errorCallback, false)
 end
 
 local function onConnected()
