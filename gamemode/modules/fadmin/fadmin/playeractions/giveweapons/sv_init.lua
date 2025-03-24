@@ -16,7 +16,8 @@ local function GiveWeapon(ply, cmd, args)
 
     for _, target in pairs(targets) do
         if IsValid(target) then
-            target:Give(weapon)
+            local wep = target:Give(weapon)
+            wep.VINVOneTimeUse = true
         end
     end
     FAdmin.Messages.ActionMessage(ply, targets, "You gave %s a " .. weapon, "%s gave you a " .. weapon, "Gave %s a " .. weapon)
