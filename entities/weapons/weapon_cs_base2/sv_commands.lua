@@ -56,6 +56,9 @@ function meta:dropDRPWeapon(weapon)
 end
 
 local function DropWeapon(ply)
+    local curTime = CurTime()
+    if (ply.DelayDropWeapon or 0) >= curTime then return end --Fix Dupe Weapon
+    
     local ent = ply:GetActiveWeapon()
     if not ent:IsValid() or ent:GetModel() == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
@@ -70,6 +73,8 @@ local function DropWeapon(ply)
 
     ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
+    ply.DelayDropWeapon = curTime + 1.1
+    
     timer.Simple(1, function()
         if IsValid(ply) and IsValid(ent) and ply:Alive() and ent:GetModel() ~= "" and not IsValid(ply:GetObserverTarget()) then
             ply:dropDRPWeapon(ent)
@@ -77,6 +82,7 @@ local function DropWeapon(ply)
     end)
     return ""
 end
+
 DarkRP.defineChatCommand("drop", DropWeapon)
 DarkRP.defineChatCommand("dropweapon", DropWeapon)
 DarkRP.defineChatCommand("weapondrop", DropWeapon)
