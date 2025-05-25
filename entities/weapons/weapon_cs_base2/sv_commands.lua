@@ -57,7 +57,7 @@ end
 
 local function DropWeapon(ply)
     local curTime = CurTime()
-    if (ply.DelayDropWeapon or 0) >= curTime then return end --Fix Dupe Weapon
+    if (ply.DelayDropWeapon or 0) >= curTime then return "" end --Fix Dupe Weapon
     
     local ent = ply:GetActiveWeapon()
     if not ent:IsValid() or ent:GetModel() == "" then
