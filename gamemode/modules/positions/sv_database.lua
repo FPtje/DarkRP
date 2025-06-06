@@ -116,7 +116,7 @@ function DarkRP.removeTeamSpawnPos(t, callback)
     local map = string.lower(game.GetMap())
     local teamcmd = RPExtraTeams[tonumber(t)].command
 
-    for k, v in pairs(teamSpawns) do
+    for k, v in ipairs(teamSpawns) do
         if v.teamcmd == teamcmd then
             teamSpawns[k] = nil
         end

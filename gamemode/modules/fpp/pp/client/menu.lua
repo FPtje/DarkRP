@@ -124,7 +124,7 @@ function FPP.AdminMenu(Panel)
         RemoveSelected:SetText("Remove Selected items from the list")
         RemoveSelected:SetDisabled(not canEditSettings)
         RemoveSelected.DoClick = function()
-            for k, v in pairs(lview.Lines) do
+            for k, v in ipairs(lview.Lines) do
                 if v:IsLineSelected() then
                     local text = v.text
                     timer.Simple(k / 10, function() RunConsoleCommand("FPP_RemoveBlocked", Type, text) end)
@@ -142,7 +142,7 @@ function FPP.AdminMenu(Panel)
         AddLA.DoClick = function()
             local ent = LocalPlayer():GetEyeTraceNoCursor().Entity
             if not IsValid(ent) then return end
-            for _, v in pairs(lview.Lines) do
+            for _, v in ipairs(lview.Lines) do
                 if v.text == string.lower(ent:GetClass()) then return end
             end
             RunConsoleCommand("FPP_AddBlocked", Type, ent:GetClass())
@@ -381,7 +381,7 @@ function FPP.AdminMenu(Panel)
             for k, v in pairs(weapons.Get("gmod_tool").Tool) do
                 if not v.Mode or v.Mode ~= FPP.SELECTEDRESTRICTNODE then continue end
                 --Add to DListView
-                for a, b in pairs(FPP.multirestricttoollist:GetLines()) do
+                for a, b in ipairs(FPP.multirestricttoollist:GetLines()) do
                     if b.Columns[1].Value == k then
                         return
                     end
@@ -391,7 +391,7 @@ function FPP.AdminMenu(Panel)
             end
         end
         FPP.DtreeToolRestrict.Items = true
-        for a, b in pairs(spawnmenu.GetTools()) do
+        for a, b in ipairs(spawnmenu.GetTools()) do
             for c, d in pairs(spawnmenu.GetTools()[a].Items) do
                 local addnodes = {}
                 for _, f in pairs(spawnmenu.GetTools()[a].Items[c]) do
@@ -402,7 +402,7 @@ function FPP.AdminMenu(Panel)
                 if #addnodes == 0 then continue end
 
                 local node1 = FPP.DtreeToolRestrict:AddNode(d.ItemName)
-                for _, f in pairs(addnodes) do
+                for _, f in ipairs(addnodes) do
                     local node2 = node1:AddNode(f[1])
                     node2.Icon:SetImage("gui/silkicons/wrench")
                     node2.Tool = f[2]
@@ -568,7 +568,7 @@ function FPP.AdminMenu(Panel)
             return
         end
 
-        for k, v in pairs(GroupMembers:GetSelected()) do
+        for k, v in ipairs(GroupMembers:GetSelected()) do
             timer.Simple(k / 10, function() RunConsoleCommand("FPP_SetPlayerGroup", v.Columns[1]:GetValue(), GroupList:GetLine(GroupList:GetSelectedLine()).Columns[1]:GetValue()) end)
         end
     end
@@ -644,7 +644,7 @@ RetrieveBlockedModels = function(len)
 
     local models = string.Explode('\0', util.Decompress(data))
 
-    for _, model in pairs(models) do
+    for _, model in ipairs(models) do
         local Icon = vgui.Create("SpawnIcon", ShowBlockedModels.pan)
         Icon:SetModel(model, 1)
         Icon:SetSize(64, 64)
@@ -719,12 +719,12 @@ RetrieveRestrictedTool = function(um)
     end
     pan:AddItem(adminsCHKboxes[3])
 
-    for k in pairs(adminsCHKboxes) do
+    for k in ipairs(adminsCHKboxes) do
         adminsCHKboxes[k].Button.Toggle = function()
             if adminsCHKboxes[k].Button:GetChecked() then
                 return false -- You can't turn a checkbox off
             end
-            for a in pairs(adminsCHKboxes) do
+            for a in ipairs(adminsCHKboxes) do
                 adminsCHKboxes[a].Button:SetValue(false)
             end
             adminsCHKboxes[k].Button:SetValue(true)
@@ -732,7 +732,7 @@ RetrieveRestrictedTool = function(um)
                 RunConsoleCommand("FPP_restricttool", tool, "admin", adminsCHKboxes[k].GoodValue)
             else
                 local i = 0
-                for _, b in pairs(tool) do
+                for _, b in ipairs(tool) do
                     i = i + 1
                     timer.Simple(i / 10, function() -- Timer to prevent lag of executing multiple commands at the same time.
                         RunConsoleCommand("FPP_restricttool", b, "admin", adminsCHKboxes[k].GoodValue)
@@ -764,7 +764,7 @@ RetrieveRestrictedTool = function(um)
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 2)
                     return
                 end
-                for a, b in pairs(tool) do
+                for a, b in ipairs(tool) do
                     timer.Simple(a / 10, function()
                         RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 2)
                     end)
@@ -777,7 +777,7 @@ RetrieveRestrictedTool = function(um)
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 1)
                     return
                 end
-                for a, b in pairs(tool) do
+                for a, b in ipairs(tool) do
                     timer.Simple(a / 10, function()
                         RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 1)
                     end)
@@ -789,7 +789,7 @@ RetrieveRestrictedTool = function(um)
                 if not istable(tool) then
                     RunConsoleCommand("FPP_restricttoolplayer", tool, v:UserID(), 0)
                 end
-                for a, b in pairs(tool) do
+                for a, b in ipairs(tool) do
                     timer.Simple(a / 10, function()
                         RunConsoleCommand("FPP_restricttoolplayer", b, v:UserID(), 0)
                     end)
@@ -827,7 +827,7 @@ RetrieveRestrictedTool = function(um)
             if not istable(tool) then
                 RunConsoleCommand("FPP_restricttool", tool, "team", chkbx.Team, tonum[chkbx.Button:GetChecked()] )
             else
-                for a, b in pairs(tool) do
+                for a, b in ipairs(tool) do
                     timer.Simple(a / 10, function()
                         RunConsoleCommand("FPP_restricttool", b, "team", chkbx.Team, tonum[chkbx.Button:GetChecked()])
                     end)
@@ -856,7 +856,7 @@ EditGroupTools = function(groupname)
     GroupTools:SetSize(295, 450)
     GroupTools:AddColumn("Tools currently in " .. groupname)
 
-    for _, v in pairs(tools or {}) do
+    for _, v in ipairs(tools or {}) do
         GroupTools:AddLine(v)
     end
 
@@ -868,7 +868,7 @@ EditGroupTools = function(groupname)
     ToolList:SetPos(5, 45)
     ToolList:SetSize(300, 430)
 
-    for a in pairs(spawnmenu.GetTools()) do
+    for a in ipairs(spawnmenu.GetTools()) do
         for c,d in pairs(spawnmenu.GetTools()[a].Items) do
             local addnodes = {}
             for g, h in pairs(weapons.Get("gmod_tool").Tool) do
@@ -880,7 +880,7 @@ EditGroupTools = function(groupname)
             if #addnodes ~= 0 then
                 local node1 = ToolList:AddNode(d.ItemName)
                 node1.Tool = d.ItemName
-                for _, f in pairs(addnodes) do
+                for _, f in ipairs(addnodes) do
                     local node2 = node1:AddNode(f[1])
                     node2.Icon:SetImage("icon16/wrench.png")
                     node2.Tool = f[2]
@@ -899,7 +899,7 @@ EditGroupTools = function(groupname)
         local SelectedTool = string.lower(ToolList.m_pSelectedItem.Tool)
 
         if not ToolList.m_pSelectedItem.ChildNodes then -- if it's not a folder
-            for _, v in pairs(GroupTools:GetLines()) do
+            for _, v in ipairs(GroupTools:GetLines()) do
                 if v.Columns[1]:GetValue() == SelectedTool then
                     return
                 end
@@ -907,9 +907,9 @@ EditGroupTools = function(groupname)
             RunConsoleCommand("FPP_AddGroupTool", groupname, SelectedTool)
             GroupTools:AddLine(SelectedTool)
         else--if it's a folder:
-            for k, v in pairs(ToolList.m_pSelectedItem.ChildNodes:GetChildren()) do
+            for k, v in ipairs(ToolList.m_pSelectedItem.ChildNodes:GetChildren()) do
                 local found = false
-                for _, b in pairs(GroupTools:GetLines()) do
+                for _, b in ipairs(GroupTools:GetLines()) do
                     if b.Columns[1]:GetValue() == string.lower(v.Tool) then
                         found = true
                         break
@@ -930,7 +930,7 @@ EditGroupTools = function(groupname)
     RemTool:SetSize(25, 25)
     RemTool:SetText("<")
     RemTool.DoClick = function()
-        for k, v in pairs(GroupTools:GetSelected()) do
+        for k, v in ipairs(GroupTools:GetSelected()) do
             local toolname = v.Columns[1]:GetValue()
             timer.Simple(k / 10, function()
                 RunConsoleCommand("FPP_RemoveGroupTool", groupname, toolname)

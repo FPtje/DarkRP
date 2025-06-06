@@ -234,7 +234,7 @@ function migrateDB(callback)
                     );
                 ]])
 
-                for i, row in pairs(oldData) do
+                for i, row in ipairs(oldData) do
                     local teamcmd = (RPExtraTeams[tonumber(row.team)] or {}).command
                     if not teamcmd then continue end
 
@@ -521,7 +521,7 @@ function setUpNonOwnableDoors()
     MySQLite.query("SELECT idx, title, isLocked, isDisabled FROM darkrp_door WHERE map = " .. MySQLite.SQLStr(string.lower(game.GetMap())) .. ";", function(r)
         if not r then return end
 
-        for _, row in pairs(r) do
+        for _, row in ipairs(r) do
             local e = DarkRP.doorIndexToEnt(tonumber(row.idx))
 
             if not IsValid(e) then continue end
@@ -569,7 +569,7 @@ function setUpTeamOwnableDoors()
         if not r then return end
         local map = string.lower(game.GetMap())
 
-        for _, row in pairs(r) do
+        for _, row in ipairs(r) do
             row.idx = tonumber(row.idx)
 
             local e = DarkRP.doorIndexToEnt(row.idx)
@@ -605,7 +605,7 @@ function setUpGroupDoors()
     MySQLite.query("SELECT idx, doorgroup FROM darkrp_doorgroups WHERE map = " .. map, function(data)
         if not data then return end
 
-        for _, row in pairs(data) do
+        for _, row in ipairs(data) do
             local ent = DarkRP.doorIndexToEnt(tonumber(row.idx))
 
             if not IsValid(ent) or not ent:isKeysOwnable() then

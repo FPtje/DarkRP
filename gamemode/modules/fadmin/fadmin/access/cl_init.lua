@@ -222,7 +222,7 @@ EditGroups = function()
     AddPriv:SetSize(25, 25)
     AddPriv:SetText(">")
     AddPriv.DoClick = function()
-        for _, v in pairs(Privileges:GetSelected()) do
+        for _, v in ipairs(Privileges:GetSelected()) do
             local priv = v.Columns[1]:GetValue()
             RunConsoleCommand("FAdmin", "AddPrivilege", SelectedGroup:GetValue(), priv)
             SelectedPrivs:AddLine(priv)
@@ -235,7 +235,7 @@ EditGroups = function()
     RemPriv:SetSize(25, 25)
     RemPriv:SetText("<")
     RemPriv.DoClick = function()
-        for _, v in pairs(SelectedPrivs:GetSelected()) do
+        for _, v in ipairs(SelectedPrivs:GetSelected()) do
             local priv = v.Columns[1]:GetValue()
             if SelectedGroup:GetValue() == LocalPlayer():GetUserGroup() and priv == "ManagePrivileges" then
                 return Derma_Message("You shouldn't be removing ManagePrivileges. It will make you unable to edit the groups. This is preventing you from locking yourself out of the system.", "Clever move.")

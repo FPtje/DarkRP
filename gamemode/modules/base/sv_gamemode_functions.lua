@@ -628,7 +628,7 @@ function GM:PlayerSetModel(ply)
             local ChosenModel = string.lower(ply:getPreferredModel(ply:Team()) or "")
 
             local found
-            for _, Models in pairs(jobTable.model) do
+            for _, Models in ipairs(jobTable.model) do
                 if ChosenModel == string.lower(Models) then
                     EndModel = Models
                     found = true
@@ -901,7 +901,7 @@ function GM:PlayerLoadout(ply)
 
     local jobTable = ply:getJobTable()
 
-    for _, v in pairs(jobTable.weapons or {}) do
+    for _, v in ipairs(jobTable.weapons or {}) do
         ply:Give(v)
     end
 
@@ -919,14 +919,14 @@ function GM:PlayerLoadout(ply)
         end
     end
 
-    for _, v in pairs(self.Config.DefaultWeapons) do
+    for _, v in ipairs(self.Config.DefaultWeapons) do
         ply:Give(v)
     end
 
     CAMI.PlayerHasAccess(ply, "DarkRP_GetAdminWeapons", function(access)
         if not access or not IsValid(ply) then return end
 
-        for _, v in pairs(GAMEMODE.Config.AdminWeapons) do
+        for _, v in ipairs(GAMEMODE.Config.AdminWeapons) do
             ply:Give(v)
         end
 
@@ -949,7 +949,7 @@ local function removeDelayed(entList, ply)
     local removedelay = GAMEMODE.Config.entremovedelay
 
     if removedelay <= 0 then
-        for _, e in pairs(entList) do
+        for _, e in ipairs(entList) do
             SafeRemoveEntity(e)
         end
 
@@ -975,7 +975,7 @@ local function collectRemoveEntities(ply)
     local collect = {}
     -- Get the classes of entities to remove
     local remClasses = {}
-    for _, customEnt in pairs(DarkRPEntities) do
+    for _, customEnt in ipairs(DarkRPEntities) do
         remClasses[string.lower(customEnt.ent)] = true
     end
 
@@ -988,7 +988,7 @@ local function collectRemoveEntities(ply)
 
     if not ply:isMayor() then return collect end
 
-    for _, ent in pairs(ply.lawboards or {}) do
+    for _, ent in ipairs(ply.lawboards or {}) do
         if not IsValid(ent) then continue end
         table.insert(collect, ent)
     end
@@ -1051,7 +1051,7 @@ end
 
 local function fuckQAC()
     local netRecs = {"Debug1", "Debug2", "checksaum", "gcontrol_vars", "control_vars", "QUACK_QUACK_MOTHER_FUCKER"}
-    for _, v in pairs(netRecs) do
+    for _, v in ipairs(netRecs) do
         net.Receivers[v] = fn.Id
     end
 end

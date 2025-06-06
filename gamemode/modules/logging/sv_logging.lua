@@ -1,6 +1,6 @@
 local function AdminLog(message, colour, allowedPlys)
     local RF = RecipientFilter()
-    for _, v in pairs(allowedPlys) do
+    for _, v in ipairs(allowedPlys) do
         local canHear = hook.Call("canSeeLogMessage", GAMEMODE, v, message, colour)
 
         if canHear then

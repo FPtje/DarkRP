@@ -207,7 +207,7 @@ local function AddBlockedModel(ply, cmd, args)
 
     local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
-    for _, model in pairs(models) do
+    for _, model in ipairs(models) do
         if FPP.BlockedModels[model] then FPP.Notify(ply, string.format([["%s" is already in the black/whitelist]], model), false) continue end
         FPP.BlockedModels[model] = true
         MySQLite.query("REPLACE INTO FPP_BLOCKEDMODELS1 VALUES(" .. sql.SQLStr(model) .. ");")
@@ -233,7 +233,7 @@ local function RemoveBlockedModel(ply, cmd, args)
     if not args[1] then FPP.Notify(ply, "FPP_RemoveBlockedModel: Model not given", false) return end
     local models = getIntendedBlockedModels(args[1], tonumber(args[2]) and Entity(args[2]) or nil)
 
-    for _, model in pairs(models) do
+    for _, model in ipairs(models) do
         FPP.BlockedModels[model] = nil
 
         MySQLite.query("DELETE FROM FPP_BLOCKEDMODELS1 WHERE model = " .. sql.SQLStr(model) .. ";")
@@ -278,7 +278,7 @@ local function ShareProp(ply, cmd, args)
                 table.insert(ent.AllowedPlayers, target)
                 FPP.Notify(target, ply:Nick() .. " shared an entity with you!", true)
             elseif not toggle then
-                for k, v in pairs(ent.AllowedPlayers or {}) do
+                for k, v in ipairs(ent.AllowedPlayers or {}) do
                     if v == target then
                         table.remove(ent.AllowedPlayers, k)
                         FPP.Notify(target, ply:Nick() .. " unshared an entity with you!", false)
@@ -298,7 +298,7 @@ local function RetrieveSettings()
         MySQLite.queueQuery("SELECT setting, var FROM " .. k .. ";", function(data)
             if not data then return end
 
-            for _, value in pairs(data) do
+            for _, value in ipairs(data) do
                 if FPP.Settings[k][value.var] == nil then
                     -- Likely an old setting that has since been removed from FPP.
                     -- This setting however still exists in the DB. Time to remove it.
@@ -379,7 +379,7 @@ end
 local function RetrieveBlocked()
     MySQLite.query("SELECT * FROM FPP_BLOCKED1;", function(data)
         if istable(data) then
-            for _, v in pairs(data) do
+            for _, v in ipairs(data) do
                 if not FPP.Blocked[v.var] then
                     ErrorNoHalt((v.var or "(nil var)") .. " blocked type does not exist! (Setting: " .. (v.setting or "") .. ")")
                     continue
@@ -407,7 +407,7 @@ function FPP.AddDefaultBlocked(types, classname)
         return
     end
 
-    for _, v in pairs(types) do
+    for _, v in ipairs(types) do
         defaultBlocked[v] = defaultBlocked[v] or {}
         defaultBlocked[v][classname] = true
     end
@@ -633,7 +633,7 @@ local function GroupRemoveTool(ply, cmd, args)
         return
     end
 
-    for k, v in pairs(FPP.Groups[name].tools) do
+    for k, v in ipairs(FPP.Groups[name].tools) do
         if v == tool then
             table.remove(FPP.Groups[name].tools, k)
         end
@@ -733,7 +733,7 @@ local function SendRestrictedTools(ply, cmd, args)
 
         local teams = FPP.RestrictedTools[args[1]] and FPP.RestrictedTools[args[1]].team or {}
         net.WriteUInt(#teams, 10)
-        for _, t in pairs(teams) do
+        for _, t in ipairs(teams) do
             net.WriteUInt(t, 10)
         end
     net.Send(ply)
@@ -790,7 +790,7 @@ local function SetBuddy(ply, cmd, args)
     local buddy = tonumber(args[1]) and Player(tonumber(args[1]))
     if not IsValid(buddy) then FPP.Notify(ply, "Player invalid", false) return end
 
-    for k, v in pairs(args) do args[k] = tonumber(v) end
+    for k, v in ipairs(args) do args[k] = tonumber(v) end
     local settings = {Physgun = tobool(args[2]), Gravgun = tobool(args[3]), Toolgun = tobool(args[4]), PlayerUse = tobool(args[5]), EntityDamage = tobool(args[6])}
 
     -- Antispam measure
@@ -841,7 +841,7 @@ local function SetToolRestrict(ply, cmd, args)
     elseif RestrictWho == "team" then
         FPP.RestrictedTools[toolname]["team"] = FPP.RestrictedTools[toolname]["team"] or {}
         if teamtoggle == 0 then
-            for k, v in pairs(FPP.RestrictedTools[toolname]["team"]) do
+            for k, v in ipairs(FPP.RestrictedTools[toolname]["team"]) do
                 if v == tonumber(args[3]) then
                     table.remove(FPP.RestrictedTools[toolname]["team"], k)
                     break

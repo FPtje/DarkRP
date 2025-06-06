@@ -150,7 +150,7 @@ local function loadChatReceivers()
     DarkRP.addChatReceiver("/y", DarkRP.getPhrase("yell"), function(ply) return LocalPlayer():GetPos():DistToSqr(ply:GetPos()) < GAMEMODE.Config.yellDistance * GAMEMODE.Config.yellDistance end)
     DarkRP.addChatReceiver("/me", DarkRP.getPhrase("perform_your_action"), function(ply) return LocalPlayer():GetPos():DistToSqr(ply:GetPos()) < GAMEMODE.Config.meDistance * GAMEMODE.Config.meDistance end)
     DarkRP.addChatReceiver("/g", DarkRP.getPhrase("talk_to_your_group"), function(ply)
-        for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
+        for _, func in ipairs(GAMEMODE.DarkRPGroupChats) do
             if func(LocalPlayer()) and func(ply) then
                 return true
             end

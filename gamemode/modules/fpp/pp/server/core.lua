@@ -115,7 +115,7 @@ if undo then
 
     function undo.Finish(...)
         if IsValid(UndoPlayer) then
-            for _, v in pairs(Undo) do
+            for _, v in ipairs(Undo) do
                 v:CPPISetOwner(UndoPlayer)
             end
         end

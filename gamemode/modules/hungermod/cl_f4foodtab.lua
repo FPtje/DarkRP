@@ -12,7 +12,7 @@ local function canBuyFood(food)
 end
 
 function PANEL:generateButtons()
-    for _, v in pairs(FoodItems) do
+    for _, v in ipairs(FoodItems) do
         local pnl = vgui.Create("F4MenuEntityButton", self)
         pnl:setDarkRPItem(v)
         pnl.DoClick = fn.Partial(RunConsoleCommand, "DarkRP", "buyfood", v.name)
@@ -21,7 +21,7 @@ function PANEL:generateButtons()
 end
 
 function PANEL:shouldHide()
-    for _, v in pairs(FoodItems) do
+    for _, v in ipairs(FoodItems) do
         local canBuy, important = canBuyFood(v)
         if not self:isItemHidden(not canBuy, important) then return false end
     end
@@ -29,7 +29,7 @@ function PANEL:shouldHide()
 end
 
 function PANEL:PerformLayout()
-    for _, v in pairs(self.Items) do
+    for _, v in ipairs(self.Items) do
         local canBuy, important = canBuyFood(v.DarkRPItem)
         v:SetDisabled(not canBuy, important)
     end

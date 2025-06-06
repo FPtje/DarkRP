@@ -139,7 +139,7 @@ hook.Add("PlayerBindPress", "DarkRPF4Bind", function(ply, bind, pressed)
 end)
 
 function PANEL:Refresh()
-    for _, v in pairs(self.Items) do
+    for _, v in ipairs(self.Items) do
         if v.Panel.shouldHide and v.Panel:shouldHide() then v.Tab:SetDisabled(true)
         else v.Tab:SetDisabled(false) end
         if v.Panel.Refresh then v.Panel:Refresh() end
@@ -171,7 +171,7 @@ function PANEL:createTab(name, panel, order)
 end
 
 function PANEL:removeTab(name)
-    for _, v in pairs(self.Items) do
+    for _, v in ipairs(self.Items) do
         if v.Tab:GetText() ~= name then continue end
         return self:CloseTab(v.Tab, true)
     end

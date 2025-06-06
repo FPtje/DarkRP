@@ -82,7 +82,7 @@ local function unragdoll(target)
         if target.FAdminRagdoll.SetCanRemove then target.FAdminRagdoll:SetCanRemove(true) end
         target.FAdminRagdoll:Remove()
     elseif istable(target.FAdminRagdoll) then
-        for _, v in pairs(target.FAdminRagdoll) do
+        for _, v in ipairs(target.FAdminRagdoll) do
             if not IsValid(v) then continue end
             if v.SetCanRemove then v:SetCanRemove(true) end
             v:Remove()
@@ -196,7 +196,7 @@ local function Ragdoll(ply, cmd, args)
 
     local time = tonumber(args[3]) or 0
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Ragdoll", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if not IsValid(target) then continue end
         if RagdollType == "unragdoll" or string.lower(cmd) == "unragdoll" and target:FAdmin_GetGlobal("fadmin_ragdolled") then
@@ -264,7 +264,7 @@ local function Ragdoll(ply, cmd, args)
                     target:SetPos(target.FAdminRagdoll:GetPos())
                     target.FAdminRagdoll:Remove()
                 elseif istable(target.FAdminRagdoll) then
-                    for k, v in pairs(target.FAdminRagdoll) do SafeRemoveEntity(v) end
+                    for k, v in ipairs(target.FAdminRagdoll) do SafeRemoveEntity(v) end
                 end
                 target:UnSpectate()
                 target:Spawn()
@@ -327,7 +327,7 @@ hook.Add("PlayerDisconnected", "FAdmin_ragdoll", function(ply)
 
     if not istable(ply.FAdminRagdoll) then return end
 
-    for _, v in pairs(ply.FAdminRagdoll or {}) do
+    for _, v in ipairs(ply.FAdminRagdoll or {}) do
         if IsValid(v) then v:Remove() end
     end
 end)

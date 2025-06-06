@@ -186,7 +186,7 @@ local function GroupMsg(ply, args)
         local col = team.GetColor(ply:Team())
 
         local groupChats = {}
-        for _, func in pairs(GAMEMODE.DarkRPGroupChats) do
+        for _, func in ipairs(GAMEMODE.DarkRPGroupChats) do
             -- not the group of the player
             if not func(ply) then continue end
 

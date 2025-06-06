@@ -208,7 +208,7 @@ local function recalculateCanTouch(players, entities)
         if v:IsWeapon() and IsValid(v:GetOwner()) then entities[k] = nil continue end
     end
 
-    for _, ply in pairs(players) do
+    for _, ply in ipairs(players) do
         if not IsValid(ply) then continue end
         -- optimisations
         ply.FPPIsAdmin = ply.FPP_Privileges.FPP_TouchOtherPlayersProps
@@ -378,7 +378,7 @@ local function onEntitiesCreated(ents)
     -- Table from player to list of entities that need to be networked
     local sendToPlayers = {}
 
-    for _, ent in pairs(ents) do
+    for _, ent in ipairs(ents) do
         if not IsValid(ent) then continue end
 
         if isConstraint(ent) then
@@ -440,7 +440,7 @@ function FPP.RecalculateConstrainedEntities(players, entities)
 
     -- constrained entities form a graph.
     -- and graphs are things you can traverse with BFS
-    for _, ply in pairs(players) do
+    for _, ply in ipairs(players) do
         local discovered = {}
         -- BFS vars
         local BFSQueue = {}

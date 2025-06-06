@@ -206,7 +206,7 @@ function PANEL:Init()
 end
 
 function PANEL:Refresh()
-    for _,v in pairs(self.Items) do
+    for _,v in ipairs(self.Items) do
         if v.Refresh then v:Refresh() end
     end
     self:InvalidateLayout()
@@ -368,7 +368,7 @@ end
 function PANEL:fillData()
     local categories = DarkRP.getCategories().jobs
 
-    for _, cat in pairs(categories) do
+    for _, cat in ipairs(categories) do
         local dCat = vgui.Create("F4MenuCategory", self)
 
         dCat:SetButtonFactory(function(item, ui)

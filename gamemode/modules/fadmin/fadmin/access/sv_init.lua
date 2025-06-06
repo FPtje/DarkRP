@@ -25,7 +25,7 @@ hook.Add("DatabaseInitialized", "InitializeFAdminGroups", function()
         MySQLite.query("SELECT g.NAME, g.ADMIN_ACCESS, p.PRIVILEGE, i.immunity, s.src FROM FADMIN_GROUPS g LEFT OUTER JOIN FADMIN_PRIVILEGES p ON g.NAME = p.NAME LEFT OUTER JOIN FAdmin_Immunity i ON g.NAME = i.groupname LEFT OUTER JOIN FADMIN_GROUPS_SRC s ON g.NAME = s.NAME;", function(data)
             if not data then return end
 
-            for _, v in pairs(data) do
+            for _, v in ipairs(data) do
                 FAdmin.Access.Groups[v.NAME] = FAdmin.Access.Groups[v.NAME] or
                     {ADMIN = tonumber(v.ADMIN_ACCESS), PRIVS = {}}
 
@@ -197,7 +197,7 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not IsValid(target) then continue end
 
         local target_previous_group = target:GetUserGroup()
@@ -364,7 +364,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not IsValid(target) then continue end
 
         local target_previous_group = target:GetUserGroup()

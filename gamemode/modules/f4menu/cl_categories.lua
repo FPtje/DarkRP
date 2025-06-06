@@ -37,7 +37,7 @@ function PANEL:Rebuild()
 
     local height = 0
     local k = 0
-    for _, item in pairs(self.Items) do
+    for _, item in ipairs(self.Items) do
         if not item:IsVisible() then continue end
         k = k + 1
         item:SetWide(self:GetWide() - 10)
@@ -50,7 +50,7 @@ end
 
 
 function PANEL:Refresh()
-    for _, v in pairs(self.Items) do
+    for _, v in ipairs(self.Items) do
         if v.Refresh then v:Refresh() end
     end
     self:InvalidateLayout()

@@ -21,7 +21,7 @@ local function MessageGui(ply)
         if k == "NOTIFY" then MsgTypeButton:SetValue(true) end
 
         function MsgTypeButton:DoClick()
-            for _, B in pairs(TypeButtons) do B:SetValue(false) end
+            for _, B in ipairs(TypeButtons) do B:SetValue(false) end
 
             self:SetValue(true)
             MsgType = MsgTypeNames[k]
@@ -32,7 +32,7 @@ local function MessageGui(ply)
         Icon:SetPos(20 + i * 64 + 16, 30)
         Icon:SetSize(32, 32)
         function Icon:DoClick()
-            for _, B in pairs(TypeButtons) do B:SetValue(false) end
+            for _, B in ipairs(TypeButtons) do B:SetValue(false) end
             MsgTypeButton:SetValue(true)
             MsgType = MsgTypeNames[k]
         end

@@ -16,14 +16,14 @@ function PANEL:Rebuild()
     local k = 0
     local visibleCount = 0
     local lastVisible = 0
-    for i, item in pairs(self.Items) do
+    for i, item in ipairs(self.Items) do
         if item:IsVisible() then
             visibleCount = visibleCount + 1
             lastVisible = i
         end
     end
 
-    for _, item in pairs(self.Items) do
+    for _, item in ipairs(self.Items) do
         if not item:IsVisible() then continue end
         k = k + 1
         local goRight = k % 2 == 0
@@ -58,7 +58,7 @@ function PANEL:shouldHide()
 end
 
 function PANEL:Refresh()
-    for _,v in pairs(self.Items) do
+    for _,v in ipairs(self.Items) do
         if v.Refresh then v:Refresh() end
     end
     self:InvalidateLayout()
@@ -68,7 +68,7 @@ derma.DefineControl("F4MenuEntitiesBase", "", PANEL, "DPanelList")
 
 -- Create categories for an entity tab
 local function createCategories(self, categories, itemClick, canBuy)
-    for _, cat in pairs(categories) do
+    for _, cat in ipairs(categories) do
         local dCat = vgui.Create("F4MenuCategory", self)
 
         dCat:SetButtonFactory(function(item, ui)

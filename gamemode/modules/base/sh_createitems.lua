@@ -461,7 +461,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     -- Precache model here. Not right before the job change is done
     if istable(CustomTeam.model) then
-        for _, v in pairs(CustomTeam.model) do util.PrecacheModel(v) end
+        for _, v in ipairs(CustomTeam.model) do util.PrecacheModel(v) end
     else
         util.PrecacheModel(CustomTeam.model)
     end
@@ -664,11 +664,11 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
     local valid, err, hints = DarkRP.validateAgenda(agenda)
     if not valid then DarkRP.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
 
-    for _, v in pairs(agenda.Listeners) do
+    for _, v in ipairs(agenda.Listeners) do
         agendas[v] = agenda
     end
 
-    for _, v in pairs(istable(agenda.Manager) and agenda.Manager or {agenda.Manager}) do
+    for _, v in ipairs(istable(agenda.Manager) and agenda.Manager or {agenda.Manager}) do
         agendas[v] = agenda
         DarkRPAgendas[v] = agenda -- backwards compat
         agenda.ManagersByKey[v] = true
@@ -760,7 +760,7 @@ function DarkRP.createDemoteGroup(name, tbl)
         set.name = name
     end
 
-    for _, teamNr in pairs(tbl) do
+    for _, teamNr in ipairs(tbl) do
         if demoteGroups[teamNr] then
             -- Unify the sets if there was already one there
             demoteGroups[teamNr] = demoteGroups[teamNr] + set

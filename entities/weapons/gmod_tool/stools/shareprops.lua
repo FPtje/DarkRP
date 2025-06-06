@@ -39,7 +39,7 @@ function TOOL:LeftClick(trace)
         umsg.Bool(Toolgun)
         if ent.AllowedPlayers then
             umsg.Long(#ent.AllowedPlayers)
-            for k,v in pairs(ent.AllowedPlayers) do
+            for k,v in ipairs(ent.AllowedPlayers) do
                 umsg.Entity(v)
             end
         end

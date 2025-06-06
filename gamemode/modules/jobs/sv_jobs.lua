@@ -57,7 +57,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
             return false
         elseif istable(TEAM.NeedToChangeFrom) and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
             local teamnames = ""
-            for _, b in pairs(TEAM.NeedToChangeFrom) do
+            for _, b in ipairs(TEAM.NeedToChangeFrom) do
                 teamnames = teamnames .. " or " .. team.GetName(b)
             end
             notify(self, 1, 8, DarkRP.getPhrase("need_to_be_before", string.sub(teamnames, 5), TEAM.name))
@@ -110,7 +110,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
     if GAMEMODE.Config.removeclassitems then
         -- Must not be ipairs, DarkRPEntities might have missing keys when
         -- DarkRP.removeEntity is called.
-        for _, v in pairs(DarkRPEntities) do
+        for _, v in ipairs(DarkRPEntities) do
             if GAMEMODE.Config.preventClassItemRemoval[v.ent] then continue end
             if not v.allowed then continue end
             if istable(v.allowed) and (table.HasValue(v.allowed, t) or not table.HasValue(v.allowed, prevTeam)) then continue end
