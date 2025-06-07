@@ -128,7 +128,7 @@ function pmeta:keysUnOwnAll()
 end
 
 local function taxesUnOwnAll(ply, taxables)
-    for _, ent in pairs(taxables) do
+    for _, ent in ipairs(taxables) do
         if ent:isMasterOwner(ply) then
             ent:Fire("unlock", "", 0.6)
         end
@@ -444,7 +444,7 @@ local function UnOwnAll(ply, cmd, args)
         end
     end
 
-    for entIndex, ent in pairs(unownables) do
+    for entIndex, ent in ipairs(unownables) do
         local bAllowed, _strReason = hook.Call("playerSell" .. (ent:IsVehicle() and "Vehicle" or "Door"), GAMEMODE, ply, ent)
 
         if bAllowed == false then continue end
