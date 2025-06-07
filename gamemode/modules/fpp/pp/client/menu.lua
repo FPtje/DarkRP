@@ -719,12 +719,12 @@ RetrieveRestrictedTool = function(um)
     end
     pan:AddItem(adminsCHKboxes[3])
 
-    for k in pairs(adminsCHKboxes) do
+    for k in ipairs(adminsCHKboxes) do
         adminsCHKboxes[k].Button.Toggle = function()
             if adminsCHKboxes[k].Button:GetChecked() then
                 return false -- You can't turn a checkbox off
             end
-            for a in pairs(adminsCHKboxes) do
+            for a in ipairs(adminsCHKboxes) do
                 adminsCHKboxes[a].Button:SetValue(false)
             end
             adminsCHKboxes[k].Button:SetValue(true)
