@@ -9,7 +9,7 @@ local function MuteVoice(ply, cmd, args)
 
     local time = tonumber(args[2]) or 0
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Voicemute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_voicemuted") then
             target:FAdmin_SetGlobal("FAdmin_voicemuted", true)
@@ -37,7 +37,7 @@ local function UnMuteVoice(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Voicemute", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if IsValid(target) and target:FAdmin_GetGlobal("FAdmin_voicemuted") then
             target:FAdmin_SetGlobal("FAdmin_voicemuted", false)

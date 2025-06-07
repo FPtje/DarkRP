@@ -12,7 +12,7 @@ local texts = {
 hook.Add("PlayerInitialSpawn", "CSSCheck", function(ply)
     timer.Simple(5, function()
         if not IsValid(ply) then return end
-        for _, text in pairs(texts) do
+        for _, text in ipairs(texts) do
             DarkRP.talkToPerson(ply, Color(255, 0, 0,255), text)
         end
     end)

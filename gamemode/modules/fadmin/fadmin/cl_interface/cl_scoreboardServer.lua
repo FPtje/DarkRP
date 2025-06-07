@@ -16,7 +16,7 @@ local function MakeServerOptions()
     FAdmin.ScoreBoard.Server.Controls.ServerActions = FAdmin.ScoreBoard.Server.Controls.ServerActions or vgui.Create("FAdminPanelList")
     FAdmin.ScoreBoard.Server.Controls.ServerActionsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.ServerActions)
     FAdmin.ScoreBoard.Server.Controls.ServerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-    for k, v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerActions:GetChildren()) do
+    for k, v in ipairs(FAdmin.ScoreBoard.Server.Controls.ServerActions:GetChildren()) do
         if k == 1 then continue end
         v:Remove()
     end
@@ -33,7 +33,7 @@ local function MakeServerOptions()
     FAdmin.ScoreBoard.Server.Controls.PlayerActions = FAdmin.ScoreBoard.Server.Controls.PlayerActions or vgui.Create("FAdminPanelList")
     FAdmin.ScoreBoard.Server.Controls.PlayerActionsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.PlayerActions)
     FAdmin.ScoreBoard.Server.Controls.PlayerActions:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-    for k, v in pairs(FAdmin.ScoreBoard.Server.Controls.PlayerActions:GetChildren()) do
+    for k, v in ipairs(FAdmin.ScoreBoard.Server.Controls.PlayerActions:GetChildren()) do
         if k == 1 then continue end
         v:Remove()
     end
@@ -50,7 +50,7 @@ local function MakeServerOptions()
     FAdmin.ScoreBoard.Server.Controls.ServerSettings = FAdmin.ScoreBoard.Server.Controls.ServerSettings or vgui.Create("FAdminPanelList")
     FAdmin.ScoreBoard.Server.Controls.ServerSettingsCat:SetContents(FAdmin.ScoreBoard.Server.Controls.ServerSettings)
     FAdmin.ScoreBoard.Server.Controls.ServerSettings:SetTall(FAdmin.ScoreBoard.Height - 20 - YPos)
-    for k, v in pairs(FAdmin.ScoreBoard.Server.Controls.ServerSettings:GetChildren()) do
+    for k, v in ipairs(FAdmin.ScoreBoard.Server.Controls.ServerSettings:GetChildren()) do
         if k == 1 then continue end
         v:Remove()
     end
