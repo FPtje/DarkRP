@@ -89,14 +89,14 @@ local function HUDPaint()
     if not HUDNotes then return end
     local i = 0
 
-    for k, v in pairs(HUDNotes) do
+    for k, v in ipairs(HUDNotes) do
         if v ~= 0 then
             i = i + 1
             DrawNotice(k, v, i)
         end
     end
 
-    for k, v in pairs(HUDNotes) do
+    for k, v in ipairs(HUDNotes) do
         if v ~= 0 and v.recv + 6 < SysTime() then
             HUDNotes[k] = 0
             HUDNote_c = HUDNote_c - 1
