@@ -14,7 +14,7 @@ hook.Add("PlayerSay", "FAdminChatCommands", function(ply, text, Team, dead)
     local TExplode = string.Explode(" ", string.sub(text, 2))
     if not TExplode then return end
 
-    for k, v in pairs(TExplode) do
+    for k, v in ipairs(TExplode) do
         if string.sub(v, -1) == "," and TExplode[k + 1] then
             TExplode[k] = (TExplode[k] or "") .. (TExplode[k + 1] or "")
             table.remove(TExplode, k + 1)
