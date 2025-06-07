@@ -7,7 +7,7 @@ local function God(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) and not target:FAdmin_GetGlobal("FAdmin_godded") then
             target:FAdmin_SetGlobal("FAdmin_godded", true)
             target:GodEnable()
@@ -27,7 +27,7 @@ local function Ungod(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) and target:FAdmin_GetGlobal("FAdmin_godded") then
             target:FAdmin_SetGlobal("FAdmin_godded", false)
             target:GodDisable()

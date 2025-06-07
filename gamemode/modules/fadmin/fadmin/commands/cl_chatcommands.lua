@@ -47,7 +47,7 @@ hook.Add("ChatTextChanged", "FAdmin_Chat_autocomplete", function(text)
     if optionsCount == 1 and firstVal[#Args] and string.match(firstVal[#Args], ".Player.") then
         local players = {}
 
-        for _, v in pairs(FAdmin.FindPlayer(Args[#Args]) or {}) do
+        for _, v in ipairs(FAdmin.FindPlayer(Args[#Args]) or {}) do
             if not IsValid(v) then continue end
             table.insert(players, v:Nick())
         end

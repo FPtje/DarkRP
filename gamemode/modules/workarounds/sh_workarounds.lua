@@ -265,7 +265,7 @@ if SERVER and not DarkRP.disabledDefaults["workarounds"]["Deprecated console com
         DarkRP.notify(ply, 1, 4, ("This command has been deprecated. Please use 'DarkRP %s' or '/%s' instead."):format(cmd.alternative, cmd.alternative))
     end
 
-    for _, cmd in pairs(deprecated) do
+    for _, cmd in ipairs(deprecated) do
         concommand.Add(cmd.command, fp{msgDeprecated, cmd})
     end
 end

@@ -10,7 +10,7 @@ local function SetNoclip(ply, cmd, args)
     local Toggle = tobool(tonumber(args[2])) or false
 
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) then
             if Toggle then
                 target:FAdmin_SetGlobal("FADmin_CanNoclip", true)
