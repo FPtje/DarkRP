@@ -760,7 +760,7 @@ function DarkRP.createDemoteGroup(name, tbl)
         set.name = name
     end
 
-    for _, teamNr in pairs(tbl) do
+    for _, teamNr in ipairs(tbl) do
         if demoteGroups[teamNr] then
             -- Unify the sets if there was already one there
             demoteGroups[teamNr] = demoteGroups[teamNr] + set
