@@ -57,7 +57,7 @@ function meta:changeTeam(t, force, suppressNotification, ignoreMaxMembers)
             return false
         elseif istable(TEAM.NeedToChangeFrom) and not table.HasValue(TEAM.NeedToChangeFrom, prevTeam) then
             local teamnames = ""
-            for _, b in pairs(TEAM.NeedToChangeFrom) do
+            for _, b in ipairs(TEAM.NeedToChangeFrom) do
                 teamnames = teamnames .. " or " .. team.GetName(b)
             end
             notify(self, 1, 8, DarkRP.getPhrase("need_to_be_before", string.sub(teamnames, 5), TEAM.name))
