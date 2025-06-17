@@ -477,7 +477,7 @@ function meta:restorePlayerData()
         self.DarkRPUnInitialized = nil
 
         local info = data and data[1] or {}
-        if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
+        if not info.rpname or info.rpname == "NULL" then info.rpname = string.sub(string.gsub(self:SteamName(), "\\\"", "\""), 1, 30) end
 
         info.wallet = info.wallet or GAMEMODE.Config.startingmoney
         info.salary = DarkRP.retrieveSalary(self)
@@ -497,7 +497,7 @@ function meta:restorePlayerData()
 
         self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
         self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
-        local name = string.gsub(self:SteamName(), "\\\"", "\"")
+        local name = string.sub(string.gsub(self:SteamName(), "\\\"", "\""), 1, 30)
         self:setDarkRPVar("rpname", name)
 
         self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
