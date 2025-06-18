@@ -49,7 +49,7 @@ FAdmin.Commands.AddCommand("FAdminCredits", function(ply, cmd, args)
             FAdmin.Messages.SendMessage(ply, 1, "Player not found")
             return false
         end
-        for _, target in pairs(targets) do
+        for _, target in ipairs(targets) do
             if IsValid(target) then
                 concommand_executed(target, "FAdmin", {"FAdminCredits"})
             end

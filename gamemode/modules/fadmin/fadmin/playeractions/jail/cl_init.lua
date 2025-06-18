@@ -39,7 +39,7 @@ FAdmin.StartHooks["Jail"] = function()
 
         menu:AddPanel(Title)
 
-        for k, v in pairs(FAdmin.PlayerActions.JailTypes) do
+        for k, v in ipairs(FAdmin.PlayerActions.JailTypes) do
             if v == "Unjail" then continue end
             FAdmin.PlayerActions.addTimeSubmenu(menu, v .. " jail",
                 function()

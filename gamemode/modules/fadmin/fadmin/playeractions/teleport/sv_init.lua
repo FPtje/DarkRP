@@ -42,7 +42,7 @@ local function Teleport(ply, cmd, args)
         targets = {ply}
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) and target:Alive() then
             target:ExitVehicle()
 
@@ -83,7 +83,7 @@ local function Bring(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not IsValid(target) or target == ply then continue end
 
         target:ExitVehicle()

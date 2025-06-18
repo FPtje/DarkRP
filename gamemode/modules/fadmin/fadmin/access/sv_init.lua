@@ -197,7 +197,7 @@ function FAdmin.Access.SetRoot(ply, cmd, args) -- FAdmin setroot player. Sets th
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not IsValid(target) then continue end
 
         local target_previous_group = target:GetUserGroup()
@@ -364,7 +364,7 @@ function FAdmin.Access.SetAccess(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not IsValid(target) then continue end
 
         local target_previous_group = target:GetUserGroup()

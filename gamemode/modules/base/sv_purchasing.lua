@@ -123,7 +123,7 @@ function DarkRP.hooks:canBuyShipment(ply, shipment)
     end
 
     local canbecome = false
-    for _, b in pairs(shipment.allowed) do
+    for _, b in ipairs(shipment.allowed) do
         if ply:Team() == b then
             canbecome = true
             break

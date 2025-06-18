@@ -31,7 +31,7 @@ local function Jail(ply, cmd, args)
     local JailTime = tonumber(args[3]) or 0
     local time = ""
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not IsValid(target) then continue end
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Jail", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
 
@@ -91,7 +91,7 @@ local function Jail(ply, cmd, args)
             target.FAdminJailPos = target:GetPos()
             target.FAdminJailProps = {}
 
-            for _, v in pairs(JailProps) do
+            for _, v in ipairs(JailProps) do
                 local JailProp = ents.Create("fadmin_jail")
                 JailProp:SetPos(target.FAdminJailPos + v.pos)
                 JailProp:SetAngles(v.ang)

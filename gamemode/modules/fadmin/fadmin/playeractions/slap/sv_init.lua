@@ -24,7 +24,7 @@ local function Slap(ply, cmd, args)
     local Amount = DarkRP.toInt(args[2]) or 10
     local Repetitions = DarkRP.toInt(args[3])
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Slap", target) then
             FAdmin.Messages.SendMessage(ply, 5, "No access!")
 

@@ -111,9 +111,9 @@ local function printMissingChatTranslations()
     local text = {}
 
     local maxCmdLength = 0
-    for _, v in pairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
+    for _, v in ipairs(cmds) do maxCmdLength = math.Max(maxCmdLength, string.len(v.command)) end
 
-    for k, v in pairs(cmds) do
+    for k, v in ipairs(cmds) do
         text[k] = string.format([=[["%s"]%s=    "%s",]=], v.command, string.rep(' ', 4 + maxCmdLength - string.len(v.command)), v.description)
     end
 

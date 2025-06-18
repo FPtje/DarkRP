@@ -44,7 +44,7 @@ function FAdmin.Messages.ActionMessage(ply, target, messageToPly, MessageToTarge
     if ply ~= target then
         if istable(target) then
             if table.IsEmpty(target) then Targets = "no one" bad = true end
-            for k, v in pairs(target) do
+            for k, v in ipairs(target) do
                 local suffix = ((k == #target-1) and " and ") or (k ~= #target and ", ") or ""
                 local Name = (v == ply and "yourself") or v:Nick()
 
@@ -120,7 +120,7 @@ function FAdmin.Messages.FireNotification(name, instigator, targets, extraInfo)
             net.WriteUInt(targetCount, 8)
 
             if istable(targets) then
-                for _, t in pairs(targets) do
+                for _, t in ipairs(targets) do
                     net.WriteEntity(t)
                 end
             else

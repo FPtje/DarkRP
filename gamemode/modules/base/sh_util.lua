@@ -194,7 +194,7 @@ function meta:getEyeSightHitEntity(searchDistance, hitDistance, filter)
     local smallestDistance = math.huge
     local foundEnt
 
-    for _, ent in pairs(entities) do
+    for _, ent in ipairs(entities) do
         if not IsValid(ent) or filter(ent) == false then continue end
 
         local center = ent:GetPos()

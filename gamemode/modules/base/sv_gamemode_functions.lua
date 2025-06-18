@@ -628,7 +628,7 @@ function GM:PlayerSetModel(ply)
             local ChosenModel = string.lower(ply:getPreferredModel(ply:Team()) or "")
 
             local found
-            for _, Models in pairs(jobTable.model) do
+            for _, Models in ipairs(jobTable.model) do
                 if ChosenModel == string.lower(Models) then
                     EndModel = Models
                     found = true
@@ -901,7 +901,7 @@ function GM:PlayerLoadout(ply)
 
     local jobTable = ply:getJobTable()
 
-    for _, v in pairs(jobTable.weapons or {}) do
+    for _, v in ipairs(jobTable.weapons or {}) do
         ply:Give(v)
     end
 
@@ -919,14 +919,14 @@ function GM:PlayerLoadout(ply)
         end
     end
 
-    for _, v in pairs(self.Config.DefaultWeapons) do
+    for _, v in ipairs(self.Config.DefaultWeapons) do
         ply:Give(v)
     end
 
     CAMI.PlayerHasAccess(ply, "DarkRP_GetAdminWeapons", function(access)
         if not access or not IsValid(ply) then return end
 
-        for _, v in pairs(GAMEMODE.Config.AdminWeapons) do
+        for _, v in ipairs(GAMEMODE.Config.AdminWeapons) do
             ply:Give(v)
         end
 
@@ -1051,7 +1051,7 @@ end
 
 local function fuckQAC()
     local netRecs = {"Debug1", "Debug2", "checksaum", "gcontrol_vars", "control_vars", "QUACK_QUACK_MOTHER_FUCKER"}
-    for _, v in pairs(netRecs) do
+    for _, v in ipairs(netRecs) do
         net.Receivers[v] = fn.Id
     end
 end

@@ -92,7 +92,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
         AddOwner.DoClick = function()
             local menu = DermaMenu()
             menu.found = false
-            for _, v in pairs(DarkRP.nickSortedPlayers()) do
+            for _, v in ipairs(DarkRP.nickSortedPlayers()) do
                 if not ent:isKeysOwnedBy(v) and not ent:isKeysAllowedToOwn(v) then
                     local steamID = v:SteamID()
                     menu.found = true
@@ -109,7 +109,7 @@ local function openMenu(setDoorOwnerAccess, doorSettingsAccess)
         RemoveOwner:SetText(DarkRP.getPhrase("remove_owner"))
         RemoveOwner.DoClick = function()
             local menu = DermaMenu()
-            for _, v in pairs(DarkRP.nickSortedPlayers()) do
+            for _, v in ipairs(DarkRP.nickSortedPlayers()) do
                 if (ent:isKeysOwnedBy(v) and not ent:isMasterOwner(v)) or ent:isKeysAllowedToOwn(v) then
                     local steamID = v:SteamID()
                     menu.found = true
