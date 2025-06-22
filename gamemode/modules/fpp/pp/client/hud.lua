@@ -184,7 +184,7 @@ local function HUDPaint()
         end
     end
 
-    if FPP.getPrivateSetting("HideOwner") then return endtest
+    if FPP.getPrivateSetting("HideOwner") then return end
 
     --Show the owner:
     local ply = LocalPlayer()
