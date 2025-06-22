@@ -628,7 +628,7 @@ function GM:PlayerSetModel(ply)
             local ChosenModel = string.lower(ply:getPreferredModel(ply:Team()) or "")
 
             local found
-            for _, Models in ipairs(jobTable.model) do
+            for _, Models in pairs(jobTable.model) do
                 if ChosenModel == string.lower(Models) then
                     EndModel = Models
                     found = true
@@ -901,7 +901,7 @@ function GM:PlayerLoadout(ply)
 
     local jobTable = ply:getJobTable()
 
-    for _, v in ipairs(jobTable.weapons or {}) do
+    for _, v in pairs(jobTable.weapons or {}) do
         ply:Give(v)
     end
 
