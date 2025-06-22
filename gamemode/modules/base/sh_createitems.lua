@@ -664,11 +664,11 @@ function DarkRP.createAgenda(Title, Manager, Listeners)
     local valid, err, hints = DarkRP.validateAgenda(agenda)
     if not valid then DarkRP.error(string.format("Corrupt agenda: %s!\n%s", agenda.Title or "", err), 2, hints) end
 
-    for _, v in ipairs(agenda.Listeners) do
+    for _, v in pairs(agenda.Listeners) do
         agendas[v] = agenda
     end
 
-    for _, v in ipairs(istable(agenda.Manager) and agenda.Manager or {agenda.Manager}) do
+    for _, v in pairs(istable(agenda.Manager) and agenda.Manager or {agenda.Manager}) do
         agendas[v] = agenda
         DarkRPAgendas[v] = agenda -- backwards compat
         agenda.ManagersByKey[v] = true

@@ -919,7 +919,7 @@ function GM:PlayerLoadout(ply)
         end
     end
 
-    for _, v in ipairs(self.Config.DefaultWeapons) do
+    for _, v in pairs(self.Config.DefaultWeapons) do
         ply:Give(v)
     end
 
