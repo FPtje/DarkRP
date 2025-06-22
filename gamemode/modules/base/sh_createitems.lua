@@ -461,7 +461,7 @@ function DarkRP.createJob(Name, colorOrTable, model, Description, Weapons, comma
 
     -- Precache model here. Not right before the job change is done
     if istable(CustomTeam.model) then
-        for _, v in ipairs(CustomTeam.model) do util.PrecacheModel(v) end
+        for _, v in pairs(CustomTeam.model) do util.PrecacheModel(v) end
     else
         util.PrecacheModel(CustomTeam.model)
     end

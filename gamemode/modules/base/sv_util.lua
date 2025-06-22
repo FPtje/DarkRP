@@ -10,7 +10,7 @@ function DarkRP.notify(ply, msgtype, len, msg)
     end
 
     local rcp = RecipientFilter()
-    for _, v in ipairs(ply) do
+    for _, v in pairs(ply) do
         rcp:AddPlayer(v)
     end
 
