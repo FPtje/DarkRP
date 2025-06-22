@@ -169,14 +169,14 @@ local canTouchTextColor = Color(0, 255, 0, 255)
 local cannotTouchTextColor = Color(255, 0, 0, 255)
 local function HUDPaint()
     local i = 0
-    for k, v in ipairs(HUDNotes) do
+    for k, v in pairs(HUDNotes) do
         if v ~= 0 then
             i = i + 1
             DrawNotice(k, v, i)
         end
     end
 
-    for k, v in ipairs(HUDNotes) do
+    for k, v in pairs(HUDNotes) do
         if v ~= 0 and v.recv + v.time_visible < SysTime() then
             HUDNotes[ k ] = 0
             HUDNote_c = HUDNote_c - 1
@@ -184,7 +184,7 @@ local function HUDPaint()
         end
     end
 
-    if FPP.getPrivateSetting("HideOwner") then return end
+    if FPP.getPrivateSetting("HideOwner") then return endtest
 
     --Show the owner:
     local ply = LocalPlayer()

@@ -105,8 +105,11 @@ local function calculateCanTouchForType(ply, ent, touchType)
         local adminsCanTouchBlocked = FPPSettings.admincanblocked ~= 0
         local playersCanBlocked = FPPSettings.canblocked ~= 0
 
-        return (playersCanBlocked or isAdmin and adminsCanTouchBlocked) and not getPlySetting(ply, "FPP_PrivateSettings_BlockedProps"),
-               reasonNumbers.blocked
+        local canPhysgunBlocked = (playersCanBlocked or isAdmin and adminsCanTouchBlocked) and not getPlySetting(ply, "FPP_PrivateSettings_BlockedProps")
+
+        if not canPhysgunBlocked then
+            return canPhysgunBlocked, reasonNumbers.blocked
+        end
     end
 
     -- touch own props
@@ -273,8 +276,10 @@ function FPP.plyCanTouchEnt(ply, ent, touchType)
     return bit_bor(canTouch, touchTypes[touchType]) == canTouch
 end
 
+local GetTable = entMeta.GetTable
+
 function FPP.entGetOwner(ent)
-    return ent:GetTable().FPPOwner
+    return GetTable(ent).FPPOwner
 end
 
 --[[-------------------------------------------------------------------------
@@ -294,31 +299,35 @@ local function netWriteEntData(ply, ent)
     net.WriteUInt(entTable.FPPConstraintReasons and entTable.FPPConstraintReasons[ply] or entTable.FPPCanTouchWhy[ply], 20) -- reasons
 end
 
+-- The net message gets too big with 5826 or more entities. In that case,
+-- break up the input into chunks and recurse per chunk.
+--
+-- Note: There is still a limit on the entity count! If there are too many
+-- entities, the client will disconnect with "Disconnect: Client 0
+-- overflowed reliable channel..". That limit is above the entity limit of
+-- 16384, though, so no further work is done to lift that limit.
+local count_limit = 5825
+
 function FPP.plySendTouchData(ply, ents)
     local count = #ents
-
     if count == 0 then return end
 
-    -- The net message gets too big with 5826 or more entities. In that case,
-    -- break up the input into chunks and recurse per chunk.
-    --
-    -- Note: There is still a limit on the entity count! If there are too many
-    -- entities, the client will disconnect with "Disconnect: Client 0
-    -- overflowed reliable channel..". That limit is above the entity limit of
-    -- 16384, though, so no further work is done to lift that limit.
-    local count_limit = 5825
     if count > count_limit then
         local accumulator = {}
+
         for i = 1, count do
             table.insert(accumulator, ents[i])
+
             if i % count_limit == 0 then
                 FPP.plySendTouchData(ply, accumulator)
-                table.Empty(accumulator)
+                accumulator = {}
             end
         end
+
         if #accumulator > 0 then
             FPP.plySendTouchData(ply, accumulator)
         end
+
         return
     end
 
@@ -378,7 +387,7 @@ local function onEntitiesCreated(ents)
     -- Table from player to list of entities that need to be networked
     local sendToPlayers = {}
 
-    for _, ent in pairs(ents) do
+    for _, ent in ipairs(ents) do
         if not IsValid(ent) then continue end
 
         if isConstraint(ent) then
