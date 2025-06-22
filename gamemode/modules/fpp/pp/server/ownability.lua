@@ -388,7 +388,7 @@ local function onEntitiesCreated(ents)
     local sendToPlayers = {}
 
     for _, ent in ipairs(ents) do
-        if not IsValid(ent) then continue end
+        if not ent:IsValid() then continue end
 
         if isConstraint(ent) then
             handleConstraintCreation(ent)
