@@ -376,14 +376,14 @@ end
 function DarkRP.createPlayerData(ply, name, wallet, salary, onError)
     MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
             ply:SteamID64() .. [[, ]] ..
-            MySQLite.SQLStr(name)  .. [[, ]] ..
+            MySQLite.SQLStr(utf8.force(name))  .. [[, ]] ..
             salary  .. [[, ]] ..
             wallet .. ");", nil, onError)
 
     -- Backwards compatibility
     MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
             ply:UniqueID() .. [[, ]] ..
-            MySQLite.SQLStr(name)  .. [[, ]] ..
+            MySQLite.SQLStr(utf8.force(name))  .. [[, ]] ..
             salary  .. [[, ]] ..
             wallet .. ");", nil, onError)
 end
