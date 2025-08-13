@@ -425,7 +425,7 @@ timer.Create("DarkRPCanHearPlayersVoice", DarkRP.voiceCheckTimeDelay, 0, functio
     end
 end)
 
-hook.Add("PlayerDisconnect", "DarkRPCanHear", function(ply)
+hook.Add("PlayerDisconnected", "DarkRPCanHear", function(ply)
     DrpCanHear[ply] = nil -- Clear to avoid memory leaks
 end)
 
