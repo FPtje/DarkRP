@@ -383,7 +383,7 @@ function runError(msg, stackNr, hints, path, line, stack)
     hints = "\t- " .. table.concat(hints, "\n\t- ")
 
     if not path and not line then
-        local info = debug.getinfo(stackNr + 1, "Sln") or debug.getinfo(stackNr, "Sln")  or debug.getinfo(stackNr - 1, "Sln")
+        local info = debug.getinfo(stackNr + 1, "Sln") or debug.getinfo(stackNr, "Sln") or debug.getinfo(stackNr - 1, "Sln")
         path = info.short_src
         line = info.currentline
     end
