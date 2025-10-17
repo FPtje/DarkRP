@@ -36,24 +36,9 @@ local function readUnknown()
     return net.ReadString(), net.ReadType(net.ReadUInt(8))
 end
 
-local warningsShown = {}
-local function warnRegistration(name)
-    if warningsShown[name] then return end
-    warningsShown[name] = true
-
-    DarkRP.errorNoHalt(string.format([[Warning! DarkRPVar '%s' wasn't registered!
-        Please contact the author of the DarkRP Addon to fix this.
-        Until this is fixed you don't need to worry about anything. Everything will keep working.
-        It's just that registering DarkRPVars would make DarkRP faster.]], name), 4)
-end
-
 function DarkRP.writeNetDarkRPVar(name, value)
     local DarkRPVar = DarkRP.RegisteredDarkRPVars[name]
-    if not DarkRPVar then
-        warnRegistration(name)
-
-        return writeUnknown(name, value)
-    end
+    if not DarkRPVar then return writeUnknown(name, value) end
 
     net.WriteUInt(DarkRPVar.id, DARKRP_ID_BITS)
     return DarkRPVar.writeFn(value)
@@ -62,8 +47,6 @@ end
 function DarkRP.writeNetDarkRPVarRemoval(name)
     local DarkRPVar = DarkRP.RegisteredDarkRPVars[name]
     if not DarkRPVar then
-        warnRegistration(name)
-
         net.WriteUInt(UNKNOWN_DARKRPVAR, 8)
         net.WriteString(name)
         return
