@@ -140,7 +140,7 @@ local function addTeamCommands(CTeam, max)
             end
 
             local numPlayers = team.NumPlayers(k)
-            if max ~= 0 and ((max % 1 == 0 and numPlayers >= max) or (max % 1 ~= 0 and (tnumPlayers + 1) / player.GetCount() > max)) then
+            if max ~= 0 and ((max % 1 == 0 and numPlayers >= max) or (max % 1 ~= 0 and (numPlayers + 1) / player.GetCount() > max)) then
                 DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("team_limit_reached", CTeam.name))
 
                 return ""
