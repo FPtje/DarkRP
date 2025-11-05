@@ -58,14 +58,8 @@ local function MsgDoVote(msg)
     label:SizeToContents()
     label:SetVisible(true)
 
-    local nextHeight = label:GetTall() > 78 and label:GetTall() - 78 or 0 -- Make panel taller for divider and buttons
+    local nextHeight = label:GetTall() > 78 and label:GetTall() - 78 or 0 -- Make panel taller for buttons
     panel:SetTall(panel:GetTall() + nextHeight)
-
-    local divider = vgui.Create("DHorizontalDivider")
-    divider:SetParent(panel)
-    divider:SetPos(2, panel:GetTall() - 30)
-    divider:SetSize(180, 2)
-    divider:SetVisible(true)
 
     local ybutton = vgui.Create("Button")
     ybutton:SetParent(panel)
@@ -156,12 +150,6 @@ local function MsgDoQuestion(msg)
     label:SetSize(380, 40)
     label:SetText(DarkRP.deLocalise(question))
     label:SetVisible(true)
-
-    local divider = vgui.Create("DHorizontalDivider")
-    divider:SetParent(panel)
-    divider:SetPos(2, 80)
-    divider:SetSize(380, 2)
-    divider:SetVisible(true)
 
     local ybutton = vgui.Create("DButton")
     ybutton:SetParent(panel)
