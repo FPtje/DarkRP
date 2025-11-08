@@ -380,9 +380,9 @@ local function ExecSwitchJob(answer, ent, ply, target)
     local Pteam = ply:Team()
     local Tteam = target:Team()
 
-    if not ply:changeTeam(Tteam, nil, nil, true) then return end
-    if not target:changeTeam(Pteam, nil, nil, true) then
-        ply:changeTeam(Pteam, true) -- revert job change
+    if not target:changeTeam(Pteam, nil, nil, true) then return end
+    if not ply:changeTeam(Tteam, nil, nil, true) then
+        target:changeTeam(Tteam, true)
         return
     end
     DarkRP.notify(ply, 2, 4, DarkRP.getPhrase("job_switch"))
