@@ -15,6 +15,20 @@ util.AddNetworkString("DarkRP_DarkRPVarDisconnect")
 Player vars
 ---------------------------------------------------------------------------]]
 
+local warningsShown = {}
+local function checkDarkRPVarRegistration(name)
+    local DarkRPVar = DarkRP.RegisteredDarkRPVars[name]
+    if DarkRPVar then return end
+
+    if warningsShown[name] then return end
+    warningsShown[name] = true
+
+    DarkRP.errorNoHalt(string.format([[Warning! DarkRPVar '%s' wasn't registered!
+        Please contact the author of the DarkRP Addon to fix this.
+        Until this is fixed you don't need to worry about anything. Everything will keep working.
+        It's just that registering DarkRPVars would make DarkRP faster.]], name), 4)
+end
+
 --[[---------------------------------------------------------------------------
 Remove a player's DarkRPVar
 ---------------------------------------------------------------------------]]
@@ -25,6 +39,8 @@ function meta:removeDarkRPVar(var, target)
 
     DarkRP.ServerDarkRPVars[self] = DarkRP.ServerDarkRPVars[self] or {}
     DarkRP.ServerDarkRPVars[self][var] = nil
+
+    checkDarkRPVarRegistration(var)
 
     net.Start("DarkRP_PlayerVarRemoval")
         net.WriteUInt(self:UserID(), 16)
@@ -45,6 +61,8 @@ function meta:setDarkRPVar(var, value, target)
 
     DarkRP.ServerDarkRPVars[self] = DarkRP.ServerDarkRPVars[self] or {}
     DarkRP.ServerDarkRPVars[self][var] = value
+
+    checkDarkRPVarRegistration(var)
 
     net.Start("DarkRP_PlayerVar")
         net.WriteUInt(self:UserID(), 16)

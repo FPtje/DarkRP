@@ -37,7 +37,7 @@ end
 
 function DarkRP.chatCommandAlias(command, ...)
     local name
-    for k, v in pairs{...} do
+    for k, v in ipairs{...} do
         name = string.lower(v)
 
         DarkRP.chatCommands[name] = {command = name}

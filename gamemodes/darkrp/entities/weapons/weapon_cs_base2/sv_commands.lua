@@ -56,6 +56,9 @@ function meta:dropDRPWeapon(weapon)
 end
 
 local function DropWeapon(ply)
+    local curTime = CurTime()
+    if (ply.DelayDropWeapon or 0) >= curTime then return "" end --Fix Dupe Weapon
+
     local ent = ply:GetActiveWeapon()
     if not ent:IsValid() or ent:GetModel() == "" then
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("cannot_drop_weapon"))
@@ -70,6 +73,8 @@ local function DropWeapon(ply)
 
     ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
+    ply.DelayDropWeapon = curTime + 1.1
+
     timer.Simple(1, function()
         if IsValid(ply) and IsValid(ent) and ply:Alive() and ent:GetModel() ~= "" and not IsValid(ply:GetObserverTarget()) then
             ply:dropDRPWeapon(ent)
@@ -77,6 +82,7 @@ local function DropWeapon(ply)
     end)
     return ""
 end
+
 DarkRP.defineChatCommand("drop", DropWeapon)
 DarkRP.defineChatCommand("dropweapon", DropWeapon)
 DarkRP.defineChatCommand("weapondrop", DropWeapon)
@@ -138,7 +144,7 @@ DarkRP.hookStub{
         },
         {
             name = "real_weapon",
-            description = "The actual weapon that will be used by the player.",
+            description = "A temporary weapon entity that is created to gather some data. NOTE: This weapon will be removed immediately after this hook is called! Use the playerPickedUpWeapon hook if you need the weapon entity.",
             type = "Weapon"
         }
     },
@@ -149,4 +155,27 @@ DarkRP.hookStub{
             type = "boolean"
         }
     }
+}
+
+DarkRP.hookStub{
+    name = "playerPickedUpWeapon",
+    description = "Called after a player picks up a spawned_weapon. Note that this calls with the weapon that the player actually holds in their hands, in contrast to the weapon passed to PlayerPickupDarkRPWeapon.",
+    parameters = {
+        {
+            name = "ply",
+            description = "The player who picked up the weapon.",
+            type = "Player"
+        },
+        {
+            name = "spawned_weapon",
+            description = "The spawned_weapon entity on which the player pressed use.",
+            type = "Entity"
+        },
+        {
+            name = "real_weapon",
+            description = "The weapon entity that ends up in the player's hands.",
+            type = "Weapon"
+        }
+    },
+    returns = {}
 }

@@ -41,7 +41,7 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
     local targets = {}
     local Owner = keypad:CPPIGetOwner()
 
-    for _, v in pairs(numpad.OnDownItems or {}) do
+    for _, v in ipairs(numpad.OnDownItems or {}) do
         if v.key == keyPass and v.ply == Owner then
             table_insert(targets, {type = DarkRP.getPhrase("keypad_checker_entering_right_pass"), name = v.name, ent = v.ent, original = keypad})
         end
@@ -50,7 +50,7 @@ local function getTargets(keypad, keyPass, keyDenied, delayPass, delayDenied)
         end
     end
 
-    for _, v in pairs(numpad.OnUpItems or {}) do
+    for _, v in ipairs(numpad.OnUpItems or {}) do
         if v.key == keyPass and v.ply == Owner then
             table_insert(targets, {type = DarkRP.getPhrase("keypad_checker_after_right_pass"), name = v.name, delay = math.Round(delayPass, 2), ent = v.ent, original = keypad})
         end
@@ -95,13 +95,13 @@ local function getEntityKeypad(ent)
     local doorKeys = {} -- The numpad keys that activate this entity
     local entOwner = ent:CPPIGetOwner()
 
-    for _, v in pairs(numpad.OnDownItems or {}) do
+    for _, v in ipairs(numpad.OnDownItems or {}) do
         if v.ent == ent then
             table_insert(doorKeys, v.key)
         end
     end
 
-    for _, v in pairs(numpad.OnUpItems or {}) do
+    for _, v in ipairs(numpad.OnUpItems or {}) do
         if v.ent == ent then
             table_insert(doorKeys, v.key)
         end

@@ -7,7 +7,7 @@ local function Ignite(ply, cmd, args)
 
     local time = tonumber(args[2]) or 10
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Ignite", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if IsValid(target) then
             target:Ignite(time, 0)
@@ -30,7 +30,7 @@ local function UnIgnite(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "Ignite") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if IsValid(target) then
             target:Extinguish()

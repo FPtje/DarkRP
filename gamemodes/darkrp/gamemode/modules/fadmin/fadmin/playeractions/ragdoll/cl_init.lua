@@ -36,7 +36,7 @@ FAdmin.StartHooks["Ragdoll"] = function()
 
         menu:AddPanel(Title)
 
-        for k, v in pairs(FAdmin.PlayerActions.RagdollTypes) do
+        for k, v in ipairs(FAdmin.PlayerActions.RagdollTypes) do
             if v == "Unragdoll" then continue end
             FAdmin.PlayerActions.addTimeSubmenu(menu, v,
                 function()

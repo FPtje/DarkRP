@@ -279,7 +279,7 @@ local function ccArrest(ply, args)
         return
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         local length = tonumber(args[2])
         if length then
             target:arrest(length, ply)
@@ -304,7 +304,7 @@ local function ccUnarrest(ply, args)
         return
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         target:unArrest(ply)
         if not target:Alive() then target:Spawn() end
 

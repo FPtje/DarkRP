@@ -145,6 +145,19 @@ local function DropMoney(ply, args)
         return ""
     end
 
+    local moneyTable = {
+        cmd = "dropmoney",
+        max = GAMEMODE.Config.maxMoneyPiles
+    }
+
+    if ply:customEntityLimitReached(moneyTable) then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("limit", "money piles"))
+
+        return ""
+    end
+
+    ply:addCustomEntity(moneyTable)
+
     ply:addMoney(-amount)
     ply:DoAnimationEvent(ACT_GMOD_GESTURE_ITEM_DROP)
 
@@ -159,6 +172,8 @@ local function DropMoney(ply, args)
         local tr = util.TraceLine(trace)
 
         local moneybag = DarkRP.createMoneyBag(tr.HitPos, amount)
+        moneybag.DarkRPItem = moneyTable
+        moneybag.SID = ply:UserID() -- For some reason setting owning ent on the money doesn't work, so we use this fallback instead
 
         DarkRP.placeEntity(moneybag, tr, ply)
 

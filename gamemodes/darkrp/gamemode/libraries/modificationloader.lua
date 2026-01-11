@@ -48,7 +48,7 @@ local configFiles = {
     "darkrp_config/licenseweapons.lua",
 }
 
-for _, File in pairs(configFiles) do
+for _, File in ipairs(configFiles) do
     if not file.Exists(File, "LUA") then continue end
 
     if SERVER then AddCSLuaFile(File) end
@@ -110,7 +110,7 @@ local function loadLanguages()
     local fol = "darkrp_language/"
 
     local files, _ = file.Find(fol .. "*", "LUA")
-    for _, File in pairs(files) do
+    for _, File in ipairs(files) do
         if SERVER then AddCSLuaFile(fol .. File) end
         doInclude(fol .. File)
     end
@@ -130,7 +130,7 @@ local customFiles = {
     "darkrp_customthings/demotegroups.lua", -- has to be run after jobs.lua
 }
 local function loadCustomDarkRPItems()
-    for _, File in pairs(customFiles) do
+    for _, File in ipairs(customFiles) do
         if not file.Exists(File, "LUA") then continue end
         if File == "darkrp_customthings/food.lua" and DarkRP.disabledDefaults["modules"]["hungermod"] then continue end
 

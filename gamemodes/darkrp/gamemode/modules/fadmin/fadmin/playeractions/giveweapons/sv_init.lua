@@ -14,7 +14,7 @@ local function GiveWeapon(ply, cmd, args)
 
     if not weapon then return false end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) then
             target:Give(weapon)
         end
@@ -38,7 +38,7 @@ local function GiveAmmo(ply, cmd, args)
     local ammo = args[2]
     local amount = tonumber(args[3]) or FAdmin.AmmoTypes[args[2]]
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) then
             target:GiveAmmo(amount, ammo)
         end

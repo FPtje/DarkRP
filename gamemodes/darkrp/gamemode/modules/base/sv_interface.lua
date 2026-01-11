@@ -155,6 +155,12 @@ DarkRP.createPlayerData = DarkRP.stub{
             description = "The salary of the player.",
             type = "number",
             optional = false
+        },
+        {
+            name = "onError",
+            description = "What to do when creating the player data fails. This function will get an argument holding the SQL error",
+            type = "function",
+            optional = true
         }
     },
     returns = {

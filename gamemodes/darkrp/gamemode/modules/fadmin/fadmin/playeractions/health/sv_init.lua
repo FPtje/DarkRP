@@ -11,7 +11,7 @@ local function SetHealth(ply, cmd, args)
         return false
     end
 
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if not FAdmin.Access.PlayerHasPrivilege(ply, "SetHealth", target) then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
         if IsValid(target) then
             target:SetHealth(Health)

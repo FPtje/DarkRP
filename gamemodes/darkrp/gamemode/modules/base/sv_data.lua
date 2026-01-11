@@ -373,19 +373,19 @@ function DarkRP.retrievePlayerData(ply, callback, failed, attempts, err)
     end)
 end
 
-function DarkRP.createPlayerData(ply, name, wallet, salary)
+function DarkRP.createPlayerData(ply, name, wallet, salary, onError)
     MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
             ply:SteamID64() .. [[, ]] ..
-            MySQLite.SQLStr(name)  .. [[, ]] ..
+            MySQLite.SQLStr(utf8.force(name))  .. [[, ]] ..
             salary  .. [[, ]] ..
-            wallet .. ");")
+            wallet .. ");", nil, onError)
 
     -- Backwards compatibility
     MySQLite.query([[REPLACE INTO darkrp_player VALUES(]] ..
             ply:UniqueID() .. [[, ]] ..
-            MySQLite.SQLStr(name)  .. [[, ]] ..
+            MySQLite.SQLStr(utf8.force(name))  .. [[, ]] ..
             salary  .. [[, ]] ..
-            wallet .. ");")
+            wallet .. ");", nil, onError)
 end
 
 function DarkRP.storeMoney(ply, amount)
@@ -471,13 +471,26 @@ local meta = FindMetaTable("Player")
 function meta:restorePlayerData()
     self.DarkRPUnInitialized = true
 
+    local function onError(err)
+        if not IsValid(self) then return end
+        self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
+
+        self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
+        self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
+        local name = string.sub(string.gsub(self:SteamName(), "\\\"", "\""), 1, 30)
+        self:setDarkRPVar("rpname", name)
+
+        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
+        DarkRP.error("Failed to retrieve player information from the database. ", nil, {"This means your database or the connection to your database is fucked.", "This is the error given by the database:\n\t\t" .. tostring(err)})
+    end
+
     DarkRP.retrievePlayerData(self, function(data)
         if not IsValid(self) then return end
 
         self.DarkRPUnInitialized = nil
 
         local info = data and data[1] or {}
-        if not info.rpname or info.rpname == "NULL" then info.rpname = string.gsub(self:SteamName(), "\\\"", "\"") end
+        if not info.rpname or info.rpname == "NULL" then info.rpname = string.sub(string.gsub(self:SteamName(), "\\\"", "\""), 1, 30) end
 
         info.wallet = info.wallet or GAMEMODE.Config.startingmoney
         info.salary = DarkRP.retrieveSalary(self)
@@ -489,20 +502,9 @@ function meta:restorePlayerData()
 
         if not data then
             info = hook.Call("onPlayerFirstJoined", nil, self, info) or info
-            DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary)
+            DarkRP.createPlayerData(self, info.rpname, info.wallet, info.salary, onError)
         end
-    end, function(err) -- Retrieving data failed, go on without it
-        if not IsValid(self) then return end
-        self.DarkRPUnInitialized = true -- no information should be saved from here, or the playerdata might be reset
-
-        self:setDarkRPVar("money", GAMEMODE.Config.startingmoney)
-        self:setSelfDarkRPVar("salary", DarkRP.retrieveSalary(self))
-        local name = string.gsub(self:SteamName(), "\\\"", "\"")
-        self:setDarkRPVar("rpname", name)
-
-        self.DarkRPDataRetrievalFailed = true -- marker on the player that says shit is fucked
-        DarkRP.error("Failed to retrieve player information from the database. ", nil, {"This means your database or the connection to your database is fucked.", "This is the error given by the database:\n\t\t" .. tostring(err)})
-    end)
+    end, onError)
 end
 
 --[[---------------------------------------------------------

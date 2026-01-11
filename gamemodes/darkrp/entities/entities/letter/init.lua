@@ -48,7 +48,7 @@ function ENT:Use(ply)
             umsg.Vector(self:GetPos())
             local numParts = self.numPts
             umsg.Short(numParts)
-            for _, b in pairs(self.Parts) do umsg.String(b) end
+            for _, b in ipairs(self.Parts) do umsg.String(b) end
         umsg.End()
     else
         umsg.Start("KillLetter", ply)

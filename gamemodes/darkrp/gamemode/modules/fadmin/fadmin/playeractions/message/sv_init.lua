@@ -16,7 +16,7 @@ local function DoMessage(ply, cmd, args)
         return false
     end
     local MsgType = tonumber(args[2]) or 2
-    for _, target in pairs(targets) do
+    for _, target in ipairs(targets) do
         if IsValid(target) then
             FAdmin.Messages.SendMessage(target, MsgType, ply:Nick() .. ": " .. args[3])
         end

@@ -108,7 +108,7 @@ hook.Add("PlayerInitialSpawn", "FAdmin_ChangelevelInfo", function(ply)
             end
         end
         net.WriteUInt(#gamemodeList, 16)
-        for _, gmInfo in pairs(gamemodeList) do
+        for _, gmInfo in ipairs(gamemodeList) do
             net.WriteString(gmInfo.name)
             net.WriteString(gmInfo.title)
         end

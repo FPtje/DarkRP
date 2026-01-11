@@ -218,6 +218,8 @@ GM.Config.lockdowndelay                 = 120
 GM.Config.maxadvertbillboards           = 3
 -- maxCheques - The maximum number of cheques someone can write
 GM.Config.maxCheques                    = 5
+-- maxMoneyPiles - The maximum number of piles of money someone can drop
+GM.Config.maxMoneyPiles                 = 20
 -- maxdoors - Sets the max amount of doors one can own.
 GM.Config.maxdoors                      = 20
 -- maxdrugs - Sets max drugs.
