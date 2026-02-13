@@ -75,9 +75,11 @@ function GM:teamChanged(before, after)
 end
 
 local function OnChangedTeam(um)
-    local oldTeam, newTeam = um:ReadShort(), um:ReadShort()
-    hook.Call("teamChanged", GAMEMODE, oldTeam, newTeam) -- backwards compatibility
-    hook.Call("OnPlayerChangedTeam", GAMEMODE, LocalPlayer(), oldTeam, newTeam)
+    local ply, oldTeam, newTeam = um:ReadEntity() ,um:ReadShort(), um:ReadShort()
+    hook.Call("OnPlayerChangedTeam", GAMEMODE, ply, oldTeam, newTeam)
+    if ply == LocalPlayer() then
+        hook.Call("teamChanged", GAMEMODE, oldTeam, newTeam) -- backwards compatibility
+    end
 end
 usermessage.Hook("OnChangedTeam", OnChangedTeam)
 
