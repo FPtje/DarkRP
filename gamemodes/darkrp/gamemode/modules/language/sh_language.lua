@@ -1,5 +1,7 @@
 local rp_languages = {}
-local selectedLanguage = GetConVar("gmod_language"):GetString() -- Switch language by setting gmod_language to another language
+local languageConvar = GetConVar("gmod_language")
+-- Switch language by setting gmod_language to another language
+local selectedLanguage = languageConvar and languageConvar:GetString() or "en"
 
 cvars.AddChangeCallback("gmod_language", function(cv, old, new)
     selectedLanguage = new
@@ -8,7 +10,8 @@ end)
 -- Some server owners experience that the language is not set correctly on
 -- startup. This provides a failsafe in case that happens.
 timer.Simple(0, function()
-    local gmodLanguage = GetConVar("gmod_language"):GetString()
+    languageConvar = GetConVar("gmod_language")
+    local gmodLanguage = languageConvar and languageConvar:GetString() or "en"
     if gmodLanguage ~= "" and selectedLanguage ~= gmodLanguage then
         selectedLanguage = gmodLanguage
     end
