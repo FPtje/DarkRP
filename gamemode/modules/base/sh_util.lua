@@ -369,7 +369,7 @@ Like tonumber, but makes sure it's an integer
 ---------------------------------------------------------------------------]]
 function DarkRP.toInt(value)
     value = tonumber(value)
-    return (value and value == value) and math.floor(value)
+    return value and value == value and math.floor(value)
 end
 
 --[[-------------------------------------------------------------------------
