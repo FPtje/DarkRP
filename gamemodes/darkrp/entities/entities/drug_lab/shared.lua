@@ -1,23 +1,11 @@
-ENT.Type = "anim"
-ENT.Base = "base_gmodentity"
-ENT.PrintName = "Drugs"
-ENT.Author = "Rickster"
-ENT.Spawnable = false
+ENT.Base = "lab_base"
+ENT.PrintName = "Drug Lab"
 
-function ENT:SetupDataTables()
-    self:NetworkVar("Int", 0, "price")
-    self:NetworkVar("Entity", 1, "owning_ent")
+function ENT:initVars()
+    self.model = "models/props_lab/crematorcase.mdl"
+    self.initialPrice = GAMEMODE.Config.druglabdrugcost
+    self.labPhrase = DarkRP.getPhrase("drug_lab")
+    self.itemPhrase = DarkRP.getPhrase("drugs")
+    self.noIncome = true
+    self.camMul = -39
 end
-
-hook.Add("Move", "DruggedPlayer", function(ply, mv)
-    if not ply.isDrugged then return end
-
-    mv:SetMaxSpeed(mv:GetMaxSpeed() * 2)
-    mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * 2)
-
-    if ply:IsOnGround() and mv:KeyPressed(IN_JUMP) then
-        local vec = mv:GetVelocity()
-        vec.z = 100 -- Adds on to the jump power
-        mv:SetVelocity(vec)
-    end
-end)
