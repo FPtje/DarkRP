@@ -75,6 +75,11 @@ local function BuyPistol(ply, args)
     end
 
     local weapon = ents.Create("spawned_weapon")
+    if not IsValid(weapon) then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buy", args))
+        return ""
+    end
+
     weapon:SetModel(shipment.model)
     weapon:SetWeaponClass(shipment.entity)
     weapon:SetPos(tr.HitPos)
@@ -177,6 +182,11 @@ local function BuyShipment(ply, args)
     local tr = util.TraceLine(trace)
 
     local crate = ents.Create(found.shipmentClass or "spawned_shipment")
+    if not IsValid(crate) then
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", args))
+        return ""
+    end
+
     crate.SID = ply.SID
     crate:Setowning_ent(ply)
     crate:SetContents(foundKey, found.amount)
@@ -192,9 +202,9 @@ local function BuyShipment(ply, args)
     DarkRP.placeEntity(crate, tr, ply)
 
     local phys = crate:GetPhysicsObject()
-    phys:Wake()
-    if found.weight then
-        phys:SetMass(found.weight)
+    if phys:IsValid() then
+        phys:Wake()
+        if found.weight then phys:SetMass(found.weight) end
     end
 
     if CustomShipments[foundKey].onBought then
@@ -206,7 +216,7 @@ local function BuyShipment(ply, args)
         ply:addMoney(-cost)
         DarkRP.notify(ply, 0, 4, DarkRP.getPhrase("you_bought", args, DarkRP.formatMoney(cost)))
     else
-        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", arg))
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/buyshipment", args))
     end
 
     ply.LastShipmentSpawn = CurTime()
