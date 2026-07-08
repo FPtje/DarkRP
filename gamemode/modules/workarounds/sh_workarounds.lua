@@ -28,11 +28,11 @@ if not DarkRP.disabledDefaults["workarounds"]["os.date() Windows crash"] and sys
         if (isstring(format) or isnumber(format)) then
             format = string.gsub(format, "%%[^aAbBcdHIjmMpSUwWxXyYz]", replace)
         elseif (format ~= nil) then
-            argError(Val, 1, "string")
+            argError(format, 1, "string")
         end
 
         if (not (time == nil or isnumber(time)) and (not isstring(time) or tonumber(time) == nil)) then
-            argError(Val, 2, "number")
+            argError(time, 2, "number")
         end
 
         return osdate(format, time, ...)
