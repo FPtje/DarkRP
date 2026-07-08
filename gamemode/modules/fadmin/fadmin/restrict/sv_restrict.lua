@@ -31,6 +31,7 @@ end
 local function UnRestrictWeapons(ply, cmd, args)
     if not FAdmin.Access.PlayerHasPrivilege(ply, "Restrict") then FAdmin.Messages.SendMessage(ply, 5, "No access!") return false end
     local Weapon = args[1]
+    if not Weapon then return false end
 
     sql.Query("DELETE FROM FADMIN_RESTRICTEDENTS WHERE ENTITY = " .. sql.SQLStr(Weapon) .. " AND TYPE = " .. sql.SQLStr("Weapons") .. ";")
 

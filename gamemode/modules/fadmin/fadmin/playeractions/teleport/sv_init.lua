@@ -22,13 +22,21 @@ local function TPToPos(ply, cmd, args)
 
     local x, y, z = string.match(args[1] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
     local vx, vy, vz = string.match(args[2] or "", "([-0-9\\.]+),%s?([-0-9\\.]+),%s?([-0-9\\.]+)")
-    local pos = Vector(tonumber(x), tonumber(y), tonumber(z))
-    local vel = Vector(tonumber(vx), tonumber(vy), tonumber(vz))
 
     if not args[1] or not x or not y or not z then return false end
+    x, y, z = tonumber(x), tonumber(y), tonumber(z)
+    if not x or not y or not z then return false end
+
+    local pos = Vector(x, y, z)
+    local vel
+
+    if vx and vy and vz then
+        vx, vy, vz = tonumber(vx), tonumber(vy), tonumber(vz)
+        if vx and vy and vz then vel = Vector(vx, vy, vz) end
+    end
 
     ply:SetPos(pos)
-    if vx and vy and vz then ply:SetVelocity(vel) end
+    if vel then ply:SetVelocity(vel) end
     zapEffect(ply)
 
     return true, pos, vel
@@ -95,7 +103,8 @@ local function Bring(ply, cmd, args)
             PHYSGUN = true
         end
         timer.Simple(0, function()
-            if not IsValid(target) then return end
+            if not IsValid(target) or not IsValid(BringTo) then return end
+
             local tracedata = {}
             tracedata.start = BringTo:GetShootPos()
             tracedata.endpos = tracedata.start + BringTo:GetAimVector() * 50
@@ -113,7 +122,14 @@ local function Bring(ply, cmd, args)
 
             zapEffect(target)
 
-            if PHYSGUN then timer.Simple(0.5, function() target:Give("weapon_physgun") target:SelectWeapon("weapon_physgun") end) end
+            if PHYSGUN then
+                timer.Simple(0.5, function()
+                    if not IsValid(target) then return end
+
+                    target:Give("weapon_physgun")
+                    target:SelectWeapon("weapon_physgun")
+                end)
+            end
         end)
     end
 
