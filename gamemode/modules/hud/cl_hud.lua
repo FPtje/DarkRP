@@ -424,7 +424,8 @@ end
 Actual HUDPaint hook
 ---------------------------------------------------------------------------]]
 function GM:HUDPaint()
-    localplayer = localplayer or LocalPlayer()
+    localplayer = IsValid(localplayer) and localplayer or LocalPlayer()
+    if not IsValid(localplayer) then return end
 
     DrawHUD(self)
     DrawEntityDisplay(self)

@@ -21,6 +21,8 @@ function ENT:SetupDataTables()
 end
 
 function ENT:UpdateActiveDonation(ply, amount)
+    if not IsValid(ply) then return end
+
     local old = self.activeDonations[ply]
     self.activeDonations[ply] = amount
 
@@ -43,7 +45,9 @@ function ENT:ExitActiveDonation(ply)
     self:PruneActiveDonations()
     hook.Call("tipjarExitActiveDonation", DarkRP.hooks, self, ply, old)
 
-    self:RemoveCallOnRemove(self.callOnRemoveId .. ply:UserID())
+    if IsValid(ply) then
+        ply:RemoveCallOnRemove(self.callOnRemoveId .. ply:UserID())
+    end
 end
 
 function ENT:ClearActiveDonations()
