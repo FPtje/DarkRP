@@ -50,5 +50,7 @@ end
 
 function ENT:OnRemove()
     local ply = self:Getowning_ent()
+    if not IsValid(ply) then return end
+
     ply.maxFoods = ply.maxFoods and ply.maxFoods - 1 or 0
 end
