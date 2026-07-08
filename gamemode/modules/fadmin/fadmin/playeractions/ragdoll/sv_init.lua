@@ -252,7 +252,11 @@ local function Ragdoll(ply, cmd, args)
             if not HangOn then return false end
 
             doll:SetPos(HangOn:GetPos() - Vector(-50,0,10))
-            timer.Simple(0.2, function() constraint.Rope(doll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false) end)
+            timer.Simple(0.2, function()
+                if not IsValid(doll) or not IsValid(HangOn) then return end
+
+                constraint.Rope(doll, HangOn, 10, 0, Vector(-2.4,0,-0.6), Vector(0,0,53), 10, 40, 0, 4, "cable/rope", false)
+            end)
         elseif string.find(RagdollType, "kick") == 1 then -- Best ragdoll mod EVER
             ragdollKick(target)
         end
