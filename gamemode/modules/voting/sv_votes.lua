@@ -40,7 +40,7 @@ function Vote:handleEnd()
     win = win or self.yea > self.nay and 1 or self.nay > self.yea and -1 or 0
 
     umsg.Start("KillVoteVGUI", self:getFilter())
-        umsg.Short(self.id)
+        umsg.String(self.id)
     umsg.End()
 
     Votes[self.id] = nil
