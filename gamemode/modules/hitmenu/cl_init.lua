@@ -45,9 +45,7 @@ hook.Add("EntityRemoved", "hitmenu", function(ent)
 end)
 
 hook.Add("HUDPaint", "DrawHitOption", function()
-    localplayer = IsValid(localplayer) and localplayer or LocalPlayer()
-    if not IsValid(localplayer) then return end
-
+    localplayer = localplayer or LocalPlayer()
     hudText = hudText or GAMEMODE.Config.hudText
     local x, y
     local ply = localplayer:GetEyeTrace().Entity
@@ -71,9 +69,7 @@ local lastKeyPress = 0
 hook.Add("KeyPress", "openHitMenu", function(ply, key)
     if key ~= IN_USE or lastKeyPress > CurTime() - 0.2 then return end
     lastKeyPress = CurTime()
-    localplayer = IsValid(localplayer) and localplayer or LocalPlayer()
-    if not IsValid(localplayer) then return end
-
+    localplayer = localplayer or LocalPlayer()
     local hitman = localplayer:GetEyeTrace().Entity
 
     if not IsValid(hitman) or not hitman:IsPlayer() or not hitman:isHitman() or localplayer:GetPos():DistToSqr(hitman:GetPos()) > minHitDistanceSqr then return end
