@@ -27,6 +27,8 @@ local function Slay(ply, cmd, args)
             elseif SlayType == "rocket" then
                 target:SetVelocity(Vector(0,0,1000))
                 timer.Simple(1, function()
+                    if not IsValid(target) then return end
+
                     local effectdata = EffectData()
                     effectdata:SetStart(target:GetPos())
                     effectdata:SetOrigin(target:GetPos())

@@ -1,5 +1,14 @@
 FPP = FPP or {}
 
+-- These tables are indexed by entity index. Note there is no code that removes
+-- anything from these tables. This is because of a nice property of entity
+-- indices: only indices 1 to 2^MAX_EDICT_BITS are used for entity indices.
+-- Whenever an entity is removed, its index can be used again for the next
+-- entity that is created. This provides a hard cap on the size of these tables.
+--
+-- Note that Lua's internal representation of tables only ever grows in size,
+-- and never actually shrinks. That means that removing entries from these
+-- tables would not actually free up memory.
 FPP.entOwners       = FPP.entOwners or {}
 FPP.entTouchability = FPP.entTouchability or {}
 FPP.entTouchReasons = FPP.entTouchReasons or {}
@@ -24,14 +33,16 @@ local reasons = {
     [8] = "player", -- you can't pick up players
 }
 
+local MAX_PLAYER_BITS = math.ceil(math.log(1 + game.MaxPlayers()) / math.log(2))
+
 local function receiveTouchData(len)
     repeat
-        local entIndex = net.ReadUInt(13)
-        local ownerIndex = net.ReadUInt(8)
+        local entIndex = net.ReadUInt(MAX_EDICT_BITS)
+        local ownerIndex = net.ReadUInt(MAX_PLAYER_BITS)
         local touchability = net.ReadUInt(5)
         local reason = net.ReadUInt(20)
 
-        if ownerIndex == 255 then
+        if ownerIndex == 0 then
             ownerIndex = -1
         end
 

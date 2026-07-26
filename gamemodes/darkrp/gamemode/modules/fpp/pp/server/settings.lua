@@ -939,8 +939,12 @@ concommand.Add("_FPP_RefreshPrivatePlayerSettings", refreshPrivatePlayerSettings
 Load all FPP settings
 ---------------------------------------------------------------------------]]
 function FPP.Init(callback)
+    local idColumn = MySQLite.isMySQL()
+        and "id INTEGER AUTO_INCREMENT"
+        or "id INTEGER NOT NULL"
+
     MySQLite.begin()
-        MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(id INTEGER NOT NULL, var VARCHAR(40) NOT NULL, setting VARCHAR(100) NOT NULL, PRIMARY KEY(id));")
+        MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKED1(" .. idColumn .. ", var VARCHAR(40) NOT NULL, setting VARCHAR(100) NOT NULL, PRIMARY KEY(id));")
         MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_PHYSGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
         MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GRAVGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
         MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_TOOLGUN1(var VARCHAR(40) NOT NULL, setting INTEGER NOT NULL, PRIMARY KEY(var));")
@@ -959,10 +963,6 @@ function FPP.Init(callback)
         MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_GROUPMEMBERS1(steamid VARCHAR(40) NOT NULL, groupname VARCHAR(40) NOT NULL, PRIMARY KEY(steamid));")
 
         MySQLite.queueQuery("CREATE TABLE IF NOT EXISTS FPP_BLOCKEDMODELS1(model VARCHAR(140) NOT NULL PRIMARY KEY);")
-
-        if MySQLite.isMySQL() then
-            MySQLite.queueQuery("ALTER TABLE FPP_BLOCKED1 CHANGE id id INTEGER AUTO_INCREMENT;")
-        end
 
     MySQLite.commit(function()
 

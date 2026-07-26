@@ -15,6 +15,7 @@ net.Receive("DarkRP_TipJarDonate", function(_, ply)
     local owner = tipjar:Getowning_ent()
     if not IsValid(owner) then return end
     if owner == ply then return end
+    if amount < 1 then return end
 
     ply.DarkRPLastTip = ply.DarkRPLastTip or -1
 

@@ -51,8 +51,11 @@ function DarkRP.createQuestion(question, quesid, ent, delay, callback, fromPly, 
 end
 
 function DarkRP.destroyQuestion(id)
-    umsg.Start("KillQuestionVGUI", Questions[id].Ent)
-        umsg.String(Questions[id].ID)
+    local question = Questions[id]
+    if not question then return end
+
+    umsg.Start("KillQuestionVGUI", question.Ent)
+        umsg.String(question.ID)
     umsg.End()
 
     Questions[id] = nil

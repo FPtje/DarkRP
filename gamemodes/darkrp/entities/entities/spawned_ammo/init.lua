@@ -8,7 +8,7 @@ function ENT:Initialize()
     self:SetSolid(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
     local phys = self:GetPhysicsObject()
-    phys:Wake()
+    if phys:IsValid() then phys:Wake() end
 end
 
 function ENT:Use(activator, caller)

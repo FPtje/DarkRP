@@ -19,6 +19,7 @@ local function createShipment(ply, args)
         return
     end
 
+    local playerUse = ent.PlayerUse
     ent.PlayerUse = false
 
     local shipID
@@ -30,11 +31,18 @@ local function createShipment(ply, args)
     end
 
     if not shipID or ent.USED then
+        ent.PlayerUse = playerUse
         DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/makeshipment", ""))
         return
     end
 
     local crate = ents.Create(CustomShipments[shipID].shipmentClass or "spawned_shipment")
+    if not IsValid(crate) then
+        ent.PlayerUse = playerUse
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/makeshipment", ""))
+        return
+    end
+
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())
     crate.nodupe = true
@@ -48,7 +56,7 @@ local function createShipment(ply, args)
     SafeRemoveEntity(ent)
 
     local phys = crate:GetPhysicsObject()
-    phys:Wake()
+    if phys:IsValid() then phys:Wake() end
 end
 DarkRP.defineChatCommand("makeshipment", createShipment, 0.3)
 
@@ -81,9 +89,15 @@ local function splitShipment(ply, args)
     local count = math.floor(ent:Getcount() / 2)
     ent:Setcount(ent:Getcount() - count)
 
+    local crate = ents.Create("spawned_shipment")
+    if not IsValid(crate) then
+        ent:Setcount(ent:Getcount() + count)
+        DarkRP.notify(ply, 1, 4, DarkRP.getPhrase("unable", "/splitshipment", ""))
+        return
+    end
+
     ent:StartSpawning()
 
-    local crate = ents.Create("spawned_shipment")
     crate.locked = true
     crate.SID = ply.SID
     crate:SetPos(ent:GetPos())
@@ -98,6 +112,6 @@ local function splitShipment(ply, args)
     crate:Spawn()
 
     local phys = crate:GetPhysicsObject()
-    phys:Wake()
+    if phys:IsValid() then phys:Wake() end
 end
 DarkRP.defineChatCommand("splitshipment", splitShipment, 0.3)

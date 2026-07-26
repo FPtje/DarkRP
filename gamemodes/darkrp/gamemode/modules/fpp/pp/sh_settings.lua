@@ -126,7 +126,12 @@ function FPP.calculatePlayerPrivilege(priv, callback)
     for _, ply in ipairs(plys) do
         local function onRes(b)
             count = count - 1
-            ply.FPP_Privileges = ply.FPPPrivileges or {}
+            if not IsValid(ply) then
+                if count == 0 then callback() end
+                return
+            end
+
+            ply.FPP_Privileges = ply.FPP_Privileges or {}
             ply.FPP_Privileges[priv] = b
 
             if count == 0 then callback() end
